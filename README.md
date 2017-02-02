@@ -1,5 +1,6 @@
 **Tracker Component Library Release 2.0, August 2016**
-Moved to an afficial NRL GitHub site February 2017
+
+Moved to an official NRL GitHub site February 2017
 https://github.com/USNavalResearchLaboratory/TrackerComponentLibrary
 
 These are the release notes for the second release of the Tracker Component
