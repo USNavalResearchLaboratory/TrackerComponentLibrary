@@ -1,0 +1,1353 @@
+<HTML>
+<HEAD>
+<TITLE> BRIEF User's Guide </TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+
+<A NAME="top"></A>
+
+<TABLE STYLE="text-align: left; margin-left: auto; margin-right: auto; width: 800px;" BORDER="0" CELLPADDING="5" CELLSPACING="2">
+<TBODY>
+<TR>
+  <TD STYLE="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+  <DIV ALIGN="right">
+    <SMALL><SMALL><A HREF="index.html">Index Page</A></SMALL></SMALL>
+  </DIV>
+  <B>BRIEF User's Guide</B> </TD>
+</TR>
+<TR>
+  <TD STYLE="vertical-align: top;">
+
+<H2> Table of Contents
+</H2>
+
+<PRE>
+   <A HREF="#BRIEF User's Guide">BRIEF User's Guide</A>
+      <A HREF="#Abstract">Abstract</A>
+      <A HREF="#Summary">Summary</A>
+      <A HREF="#Usage">Usage</A>
+      <A HREF="#Helpful Hints for Those in a Hurry">Helpful Hints for Those in a Hurry</A>
+      <A HREF="#Ways to Provide File Names">Ways to Provide File Names</A>
+      <A HREF="#Default Summary Format">Default Summary Format</A>
+      <A HREF="#Options Controlling Output Summary Format">Options Controlling Output Summary Format</A>
+         <A HREF="#Displaying Centers-of-Motion/Relative-to-Frames (``-c'')">Displaying Centers-of-Motion/Relative-to-Frames (``-c'')</A>
+         <A HREF="#Treating All Files as a Single File (``-a'')">Treating All Files as a Single File (``-a'')</A>
+         <A HREF="#Display Summary in a Tabular Format (``-t'')">Display Summary in a Tabular Format (``-t'')</A>
+         <A HREF="#Displaying Tabular Summary Sorted by Start Time (``-s'')">Displaying Tabular Summary Sorted by Start Time (``-s'')</A>
+         <A HREF="#Displaying Tabular Summary Grouped by Coverage (``-g'')">Displaying Tabular Summary Grouped by Coverage (``-g'')</A>
+         <A HREF="#Displaying Bodies/Frames Using Only Numeric IDs (``-n'')">Displaying Bodies/Frames Using Only Numeric IDs (``-n'')</A>
+         <A HREF="#Displaying Summary Ordered by Body/Frame Name (``-o'')">Displaying Summary Ordered by Body/Frame Name (``-o'')</A>
+         <A HREF="#Specifying Multiple Options Controlling Output Format">Specifying Multiple Options Controlling Output Format</A>
+      <A HREF="#Options Controlling Output Time Format">Options Controlling Output Time Format</A>
+         <A HREF="#Displaying Times as ET Seconds Past J2000 (``-etsec'')">Displaying Times as ET Seconds Past J2000 (``-etsec'')</A>
+         <A HREF="#Displaying Times in UTC Calendar Date Format (``-utc'')">Displaying Times in UTC Calendar Date Format (``-utc'')</A>
+         <A HREF="#Display Times in UTC Day-of-Year Format (``-utcdoy'')">Display Times in UTC Day-of-Year Format (``-utcdoy'')</A>
+         <A HREF="#Display Times ``Rounded Inward'' to Second (``-sec'')">Display Times ``Rounded Inward'' to Second (``-sec'')</A>
+         <A HREF="#Display Times ``Rounded Inward'' to Minute (``-min'')">Display Times ``Rounded Inward'' to Minute (``-min'')</A>
+         <A HREF="#Display Times ``Rounded Inward'' to Hour (``-hour'')">Display Times ``Rounded Inward'' to Hour (``-hour'')</A>
+         <A HREF="#Display Times ``Rounded Inward'' to Day (``-day'')">Display Times ``Rounded Inward'' to Day (``-day'')</A>
+         <A HREF="#Specifying Multiple Options Controlling Time Format">Specifying Multiple Options Controlling Time Format</A>
+      <A HREF="#Options Filtering Summary">Options Filtering Summary</A>
+         <A HREF="#Filtering for a Specified Body/Frame (``-sb[bod]'' or ``-[bod]'')">Filtering for a Specified Body/Frame (``-sb[bod]'' or ``-[bod]'')</A>
+         <A HREF="#Filtering for a Specified Center/Relative-to-Frame (``-sc[cen]'')">Filtering for a Specified Center/Relative-to-Frame (``-sc[cen]'')</A>
+         <A HREF="#Filtering for a Specified Epoch (``-at [time]'')">Filtering for a Specified Epoch (``-at [time]'')</A>
+         <A HREF="#Filtering for a Specified Interval (``-from [beg]'' and ``-to [end]'')">Filtering for a Specified Interval (``-from [beg]'' and ``-to [end]'')</A>
+         <A HREF="#Specifying Multiple Filtering Options">Specifying Multiple Filtering Options</A>
+      <A HREF="#Miscellaneous Options">Miscellaneous Options</A>
+         <A HREF="#Summarizing Kernels Listed in a File (``-f [list]'')">Summarizing Kernels Listed in a File (``-f [list]'')</A>
+         <A HREF="#Displaying Help and Version (``-h'' and ``-v'')">Displaying Help and Version (``-h'' and ``-v'')</A>
+      <A HREF="#Troubleshooting">Troubleshooting</A>
+      <A HREF="#Appendix 1: Matrix of Output Formats">Appendix 1: Matrix of Output Formats</A>
+
+</PRE>
+
+<HR SIZE=3 NOSHADE>
+
+<BR><BR>
+<A NAME="BRIEF User's Guide"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> BRIEF User's Guide
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Last revised on 2010 SEP 08 by B. V. Semenov.
+<P>
+ 
+<BR><BR>
+<A NAME="Abstract"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Abstract
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   BRIEF is a command-line utility program that displays a contents and
+   time coverage summary for one or more binary SPK or binary PCK files.
+<P>
+ 
+<BR><BR>
+<A NAME="Summary"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Summary
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   BRIEF is a command line program that displays summary of the contents
+   and time coverage for one or more binary SPK or binary PCK files. The
+   program can display a summary for each individual file listed on the
+   command line, in a list file, and/or a meta-kernel, or for all files as
+   if they were combined into a single file. It can display coverage
+   boundaries as Ephemeris Times (ET) in calendar format, if requested
+   rounded to the nearest second, minute, hour, or day, as ET seconds past
+   J2000, as UTC times in ``year-month-day'' format , or as UTC times in
+   ``day-of-year'' format. BRIEF can restrict summary display to only
+   specified bodies or frames and/or specified centers-of-motion or
+   relative-to-frames and/or for a specified time or time interval. It can
+   display the summary in a variety of formats, ordered by body or frame
+   names or numeric IDs, with or without showing centers-of-motion or
+   relative-to-frames.
+<P>
+ 
+<BR><BR>
+<A NAME="Usage"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Usage
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   BRIEF is a command line program with the following usage:
+<P>
+ 
+<PRE>
+   &gt; brief [-options] file [file ...]
+</PRE>
+   where [file]s are binary SPK or PCK files, and possibly text kernels
+   needed to support some of the display types. The options are:
+<P>
+ 
+<PRE>
+   -c           display centers-of-motion/relative-to-frames
+   -t           display summary in a tabular format
+   -a           treat all files as a single file
+ 
+   -s           display summary sorted by start time for each body
+   -g           display summary grouped by coverage
+   -n           display bodies/frames using only numeric id-codes
+   -o           display summary ordered by body/frame name
+ 
+   -utc         display times in UTC calendar date format
+   -utcdoy      display times in UTC day-of-year format
+   -etsec       display times as ET seconds past J2000
+ 
+   -sec         display times ``rounded inward'' to second
+   -min         display times ``rounded inward'' to minute
+   -hour        display times ``rounded inward'' to hour
+   -day         display times ``rounded inward'' to day
+ 
+   -&lt;bod&gt;       display summary for body [bod]
+   -sb&lt;bod&gt;     display summary for body [bod]
+   -sc&lt;cen&gt;     display summary for center/relative-to-frame [cen]
+   -at &lt;time&gt;   display summary if coverage contains epoch [time]
+   -from &lt;beg&gt;  display summary if coverage contains interval [beg]:
+   -to &lt;end&gt;    display summary if coverage contains interval :[end]
+ 
+   -f [list&gt;    summarize kernels listed in the [list] file
+ 
+   -h           display help
+   -v           display version
+</PRE>
+   The options can be provided in any order and can appear before, after,
+   or intermixed with file names. The case of option keys is significant --
+   they must be lowercase as shown above. While any option can be provided
+   together with any other option or a combination of options, some options
+   will override others. For specific information on this refer to the
+   sections of this document describing individual options in detail.
+<P>
+ 
+<BR><BR>
+<A NAME="Helpful Hints for Those in a Hurry"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Helpful Hints for Those in a Hurry
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   This list contains a few quick suggestions about options that would be
+   most appropriate for common summary tasks:
+<P>
+ 
+<UL>
+<TT>--</TT> use shell filename substitution capabilities to provide multiple file names
+on the command line, e.g. ``*.bsp'' will be expanded into the list of all
+binary SPK files in the current directory by most shells
+<BR><BR></UL>
+<UL>
+<TT>--</TT> use ``-t'' in combination with any other options for more a legible summary
+format
+<BR><BR></UL>
+<UL>
+<TT>--</TT> use ``-c'' to see centers-of-motion when you need to identify those for
+which a SPICE error message reported lack of ephemeris data
+<BR><BR></UL>
+<UL>
+<TT>--</TT> use ``-t -c -s'' to see when/if a body switches its center-of-motion
+<BR><BR></UL>
+<UL>
+<TT>--</TT> use ``-a'' for a set of kernels that are to be used together
+<BR><BR></UL>
+<UL>
+<TT>--</TT> use ``-a'' when summarizing SPK files in a meta-kernel to see the combined
+set of ephemeris data available to an application that loads that
+meta-kernel
+<BR><BR></UL>
+<UL>
+<TT>--</TT> use ``-utc'' or ``-utcdoy'' and provide an LSK file to display times in UTC
+<BR><BR></UL>
+<UL>
+<TT>--</TT> provide FK files with body name-ID mappings and frame definitions to
+display names of bodies/frames not built into SPICE
+<BR><BR></UL>
+<UL>
+<TT>--</TT> use ``-etsec'' to display times as ET seconds past J2000
+<BR><BR></UL>
+<UL>
+<TT>--</TT> use ``-sb'' to find out which kernels from a set contain data for the body
+of interest
+<BR><BR></UL>
+<UL>
+<TT>--</TT> use ``-at'' or ``-from''/``-to'' to find out which kernels from a set
+provide coverage for the time or the time interval of interest
+<BR><BR></UL>
+<UL>
+<TT>--</TT> use ``-f'' with a list file to summarize large sets of kernels, the names
+of which cannot be listed on the command line all at the same time
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Ways to Provide File Names"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Ways to Provide File Names
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   BRIEF supports three ways to provide names of files to be summarized:
+<P>
+ 
+<UL>
+<TT>1.</TT> by listing them on the command line
+<BR><BR></UL>
+<UL>
+<TT>2.</TT> by getting them from a meta-kernel(s) provided on the command line and/or
+in a list file
+<BR><BR></UL>
+<UL>
+<TT>3.</TT> by listing them in a list file provided with the ``-f'' option (see section
+``Summarizing Kernels Listed in a File'' for more details)
+<BR><BR></UL>
+   While each of these methods by itself or any combination of them may be
+   used, the following two restrictions apply:
+<P>
+ 
+<UL>
+<TT>1.</TT> BRIEF cannot summarize binary SPK files and binary PCK files in the same
+run. If you attempt to do so BRIEF responds with an error message.
+<BR><BR></UL>
+<UL>
+<TT>2.</TT> BRIEF summarizes only SPK files included in a meta-kernel(s). If binary PCK
+files are provided in a meta-kernel(s), BRIEF ignores them.
+<BR><BR></UL>
+   In some cases BRIEF requires text kernels to be provided in addition to
+   the files to be summarized. Such cases include providing an LSK file
+   when times are to be displayed as UTC and providing an FK file when
+   names need to be displayed in addition to numeric IDs for bodies/frames
+   not built into SPICE. The names of text kernels may be provided in the
+   same ways as the names of the files to be summarized -- on the command
+   line, in a list file, or in a meta-kernel(s).
+<P>
+ 
+<BR><BR>
+<A NAME="Default Summary Format"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Default Summary Format
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   By default, when no options are specified, BRIEF displays summary
+   information as a set of blocks, one for each SPK or PCK file, in the
+   order in which the files were provided on the command line. Each block
+   contains one or more tables showing coverage begin and end times for a
+   set of bodies/frames with the same coverage provided by the file. The
+   names and/or numeric IDs of the bodies/frames are listed at the top of
+   each table in one or more columns, ordered by body/frame numeric ID down
+   the columns. The coverage table itself, consisting of the column heading
+   line indicating the time tag type, the line with separating dashes, and
+   the coverage begin and end time, is provided below the body/frame list.
+   The coverage begin and end times are displayed as calendar ET in the
+   ``YYYY MON DD HR:MN:SC.DDD'' format while the body/frame name and
+   numeric ID are displayed in the `NAME (ID)'' format, if numeric IDs can
+   be mapped to names, or in the ``ID'' format, if numeric IDs cannot be
+   mapped to names.
+<P>
+ 
+   Two examples below illustrate BRIEF's default output for SPK and PCK
+   files. These examples should be used as a reference when examining the
+   examples in the later sections of this document discussing various
+   options. To fit in the maximum page width allowed for this User's Guide
+   lines in these examples and all other examples in this document were
+   truncated at 69 characters.
+<P>
+ 
+   If BRIEF is run to display the default summary for two binary SPK files,
+   one of which, called ``stardust.bsp'', contains trajectory data for
+   Stardust covering from 2003-DEC-01 to 2004-JAN-10, ephemerides for Solar
+   System barycenters, Sun, Mercury, Venus, Moon, Earth and Mars covering
+   from 1959-DEC-10 to 2020-JAN-16, and ephemerides for comet Wild 2
+   covering from 2002-JAN-01 to 2007-APR-05 and the other, called
+   ``tempel1.bsp'', contains ephemerides for comet Tempel 1 covering from
+   2000-JAN-01 to 2050-JAN-01, it will generate the following summary:
+<P>
+ 
+<PRE>
+   &gt; brief stardust.bsp tempel1.bsp
+ 
+   BRIEF -- Version 3.0.0, January 14, 2008 -- Toolkit Version N0062
+ 
+ 
+   Summary for: stardust.bsp
+ 
+   Body: SDU (-29)
+         Start of Interval (ET)              End of Interval (ET)
+         -----------------------------       ---------------------------
+         2003 DEC 01 00:01:04.183            2004 JAN 10 01:00:00.000
+ 
+   Bodies: MERCURY BARYCENTER (1)  SATURN BARYCENTER (6)   MERCURY (199)
+           VENUS BARYCENTER (2)    URANUS BARYCENTER (7)   VENUS (299)
+           EARTH BARYCENTER (3)    NEPTUNE BARYCENTER (8)  MOON (301)
+           MARS BARYCENTER (4)     PLUTO BARYCENTER (9)    EARTH (399)
+           JUPITER BARYCENTER (5)  SUN (10)                MARS (499)
+           Start of Interval (ET)              End of Interval (ET)
+           -----------------------------       -------------------------
+           1959 DEC 10 00:00:00.000            2020 JAN 16 00:00:00.000
+ 
+   Body: WILD 2 (1000107)
+         Start of Interval (ET)              End of Interval (ET)
+         -----------------------------       ---------------------------
+         2002 JAN 01 00:00:00.000            2007 APR 05 00:00:00.000
+ 
+ 
+   Summary for: tempel1.bsp
+ 
+   Body: TEMPEL 1 (1000093)
+         Start of Interval (ET)              End of Interval (ET)
+         -----------------------------       ---------------------------
+         2000 JAN 01 00:00:00.000            2050 JAN 01 00:00:00.000
+ 
+</PRE>
+   If BRIEF is run to generate the default summary for a binary PCK file
+   called ``moon_pa_de418.bpc'' containing orientation data for the
+   ``MOON_PA_DE418'' frame with the frame class ID 31004, it will generate
+   the following summary:
+<P>
+ 
+<PRE>
+   &gt; brief moon_pa_de418.bpc
+ 
+   BRIEF -- Version 3.0.0, January 14, 2008 -- Toolkit Version N0062
+ 
+ 
+   Summary for: moon_pa_de418.bpc
+ 
+   Frame: 31004
+          Start of Interval (ET)              End of Interval (ET)
+          -----------------------------       --------------------------
+          1950 JAN 01 00:00:00.000            2050 DEC 31 00:00:00.000
+ 
+</PRE>
+<BR><BR>
+<A NAME="Options Controlling Output Summary Format"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Options Controlling Output Summary Format
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   While the default summary format is adequate in many cases, it starts
+   looking rather cumbersome when many files need to be summarized in one
+   run, or when the file(s) to be summarized contain data for many
+   bodies/frames with varying coverages. Moreover, the default file format
+   does not include one additional summary item that BRIEF is capable of
+   displaying -- centers-of-motion/relative-to-frames for the bodies/frames
+   covered by the file(s). To alter the format and the order of records in
+   the displayed summary BRIEF provides a number of options described in
+   this section.
+<P>
+ 
+<BR><BR>
+<A NAME="Displaying Centers-of-Motion/Relative-to-Frames (``-c'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Displaying Centers-of-Motion/Relative-to-Frames (``-c'')
+</H3><P><BR><BR>
+   The ``-c'' option tells BRIEF to display bodies/frames in the format
+   that shows their centers-of-motion (for SPKs) or relative-to-frames (for
+   binary PCKs), as seen in this example for an SPK file:
+<P>
+ 
+<PRE>
+   &gt; brief -c stardust.bsp
+ 
+   BRIEF -- Version 3.0.0, January 14, 2008 -- Toolkit Version N0062
+ 
+ 
+   Summary for: stardust.bsp
+ 
+   Body: SDU (-29) w.r.t. SUN (10)
+         Start of Interval (ET)              End of Interval (ET)
+         -----------------------------       ---------------------------
+         2003 DEC 01 00:01:04.183            2004 JAN 10 01:00:00.000
+ 
+   Bodies: MERCURY BARYCENTER (1) w.r.t. SOLAR SYSTEM BARYCENTER (0)
+           VENUS BARYCENTER (2) w.r.t. SOLAR SYSTEM BARYCENTER (0)
+           EARTH BARYCENTER (3) w.r.t. SOLAR SYSTEM BARYCENTER (0)
+           MARS BARYCENTER (4) w.r.t. SOLAR SYSTEM BARYCENTER (0)
+           JUPITER BARYCENTER (5) w.r.t. SOLAR SYSTEM BARYCENTER (0)
+           SATURN BARYCENTER (6) w.r.t. SOLAR SYSTEM BARYCENTER (0)
+           URANUS BARYCENTER (7) w.r.t. SOLAR SYSTEM BARYCENTER (0)
+           NEPTUNE BARYCENTER (8) w.r.t. SOLAR SYSTEM BARYCENTER (0)
+           PLUTO BARYCENTER (9) w.r.t. SOLAR SYSTEM BARYCENTER (0)
+           SUN (10) w.r.t. SOLAR SYSTEM BARYCENTER (0)
+           MERCURY (199) w.r.t. MERCURY BARYCENTER (1)
+           VENUS (299) w.r.t. VENUS BARYCENTER (2)
+           MOON (301) w.r.t. EARTH BARYCENTER (3)
+           EARTH (399) w.r.t. EARTH BARYCENTER (3)
+           MARS (499) w.r.t. MARS BARYCENTER (4)
+           Start of Interval (ET)              End of Interval (ET)
+           -----------------------------       -------------------------
+           1959 DEC 10 00:00:00.000            2020 JAN 16 00:00:00.000
+ 
+   Body: WILD 2 (1000107) w.r.t. SUN (10)
+         Start of Interval (ET)              End of Interval (ET)
+         -----------------------------       ---------------------------
+         2002 JAN 01 00:00:00.000            2007 APR 05 00:00:00.000
+ 
+</PRE>
+   When ``-c'' is used each distinct body and center-of-motion, or frame
+   and relative-to-frame, combination present in the file segments is
+   treated as a separate entity for the purpose of summarizing coverage.
+   Knowing the centers-of-motion is usually needed to find out whether an
+   SPK file, or a set of SPK files, contains data for all objects required
+   to compute position of one body of interest with respect to another body
+   of interest.
+<P>
+ 
+   The ``-c'' option changes the default format for bodes/frames from
+   ``NAIF (ID)'' to ``NAME (ID) w.r.t. NAME (ID)''.
+<P>
+ 
+<BR><BR>
+<A NAME="Treating All Files as a Single File (``-a'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Treating All Files as a Single File (``-a'')
+</H3><P><BR><BR>
+   The ``-a'' option tells BRIEF to display combined summary for all files
+   as if all data from these files were merged into a single file, as seen
+   in this example:
+<P>
+ 
+<PRE>
+   &gt; brief -a stardust.bsp tempel1.bsp
+ 
+   BRIEF -- Version 3.0.0, January 14, 2008 -- Toolkit Version N0062
+ 
+ 
+   Summary for all files.
+ 
+   Body: SDU (-29)
+         Start of Interval (ET)              End of Interval (ET)
+         -----------------------------       ---------------------------
+         2003 DEC 01 00:01:04.183            2004 JAN 10 01:00:00.000
+ 
+   Bodies: MERCURY BARYCENTER (1)  SATURN BARYCENTER (6)   MERCURY (199)
+           VENUS BARYCENTER (2)    URANUS BARYCENTER (7)   VENUS (299)
+           EARTH BARYCENTER (3)    NEPTUNE BARYCENTER (8)  MOON (301)
+           MARS BARYCENTER (4)     PLUTO BARYCENTER (9)    EARTH (399)
+           JUPITER BARYCENTER (5)  SUN (10)                MARS (499)
+           Start of Interval (ET)              End of Interval (ET)
+           -----------------------------       -------------------------
+           1959 DEC 10 00:00:00.000            2020 JAN 16 00:00:00.000
+ 
+   Body: TEMPEL 1 (1000093)
+         Start of Interval (ET)              End of Interval (ET)
+         -----------------------------       ---------------------------
+         2000 JAN 01 00:00:00.000            2050 JAN 01 00:00:00.000
+ 
+   Body: WILD 2 (1000107)
+         Start of Interval (ET)              End of Interval (ET)
+         -----------------------------       ---------------------------
+         2002 JAN 01 00:00:00.000            2007 APR 05 00:00:00.000
+ 
+</PRE>
+   When ``-a'' is used the output display includes the ``Summary for all
+   files'' heading to indicate that the displayed summary is for all files.
+<P>
+ 
+<BR><BR>
+<A NAME="Display Summary in a Tabular Format (``-t'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Display Summary in a Tabular Format (``-t'')
+</H3><P><BR><BR>
+   The ``-t'' option tells BRIEF to use a tabular display format in which
+   all coverage information for each file is presented in a single table
+   with bodies/frames provided in the left column rather than in the table
+   header, as seen in this example:
+<P>
+ 
+<PRE>
+   &gt; brief -t stardust.bsp
+ 
+   BRIEF -- Version 3.0.0, January 14, 2008 -- Toolkit Version N0062
+ 
+ 
+   Summary for: stardust.bsp
+ 
+   Bodies                Start of Interval (ET)          End of Interval
+   -------               -----------------------------   ---------------
+   -29 SDU               2003 DEC 01 00:01:04.183        2004 JAN 10 01:
+   1 MERCURY BARYCENTER  1959 DEC 10 00:00:00.000        2020 JAN 16 00:
+   2 VENUS BARYCENTER                Same coverage as previous object
+   3 EARTH BARYCENTER                Same coverage as previous object
+   4 MARS BARYCENTER                 Same coverage as previous object
+   5 JUPITER BARYCENTER              Same coverage as previous object
+   6 SATURN BARYCENTER               Same coverage as previous object
+   7 URANUS BARYCENTER               Same coverage as previous object
+   8 NEPTUNE BARYCENTER              Same coverage as previous object
+   9 PLUTO BARYCENTER                Same coverage as previous object
+   10 SUN                            Same coverage as previous object
+   199 MERCURY                       Same coverage as previous object
+   299 VENUS                         Same coverage as previous object
+   301 MOON                          Same coverage as previous object
+   399 EARTH                         Same coverage as previous object
+   499 MARS                          Same coverage as previous object
+   1000107 WILD 2        2002 JAN 01 00:00:00.000        2007 APR 05 00:
+</PRE>
+   The records in the table are ordered by body/frame numeric ID and
+   bodies/frames are shown in ``ID NAME'' format. The ``Same coverage as
+   previous object'' string is shown for any body/frame that has the same
+   coverage as the body/frame immediately above it.
+<P>
+ 
+<BR><BR>
+<A NAME="Displaying Tabular Summary Sorted by Start Time (``-s'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Displaying Tabular Summary Sorted by Start Time (``-s'')
+</H3><P><BR><BR>
+   The ``-s'' option tells BRIEF to re-order records in the tables of the
+   tabular output in such way that the records for a particular body or
+   frame are grouped together and sorted by the start time within each
+   group. This option is particularly useful for the output including the
+   centers-of-motion (for SPKs) or relative-to-frames (for binary PCKs)
+   because it shows in chronological order when/if a body switches its
+   center-of-motion or a frame switches its relative-to-frame. This option
+   supersedes ``-g'' and has no effect without ``-t''.
+<P>
+ 
+   In this example ``-s'' is used to produce a summary of the CASSINI inner
+   cruise SPK file, which provides CASSINI spacecraft trajectory relative
+   to different centers-of-motion during different time intervals:
+<P>
+ 
+<PRE>
+   &gt; brief -c -t -s cas_inner_cruise.bsp
+ 
+   BRIEF -- Version 4.0.0, September 8, 2010 -- Toolkit Version N0064
+ 
+ 
+   Summary for: cas_inner_cruise.bsp
+ 
+   Bodies                                 Start of Interval (ET)    End
+   -------                                ------------------------  ----
+   -82 CASSINI w.r.t. 10 SUN              1997 NOV 15 00:00:00.000  1998
+   -82 CASSINI w.r.t. 2 VENUS BARYCENTER  1998 APR 25 10:37:10.235  1998
+   -82 CASSINI w.r.t. 10 SUN              1998 APR 27 16:54:58.844  1999
+   -82 CASSINI w.r.t. 2 VENUS BARYCENTER  1999 JUN 24 02:37:43.459  1999
+   -82 CASSINI w.r.t. 10 SUN              1999 JUN 25 14:24:23.301  1999
+                                          1999 JUL 06 16:01:04.183  1999
+   -82 CASSINI w.r.t. 399 EARTH           1999 AUG 17 11:38:55.368  1999
+   -82 CASSINI w.r.t. 10 SUN              1999 AUG 18 19:20:02.623  1999
+</PRE>
+<BR><BR>
+<A NAME="Displaying Tabular Summary Grouped by Coverage (``-g'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Displaying Tabular Summary Grouped by Coverage (``-g'')
+</H3><P><BR><BR>
+   The ``-g'' option tells BRIEF to re-order records in the tables of the
+   tabular output such that all records with the same coverage are grouped
+   together. This option has no effect without ``-t''.
+<P>
+ 
+   No example for ``-g'' is provided in this section because if it were
+   used to summarize ``stardust.bsp'' it would produce the same output as
+   ``-t'' by itself, in which, by chance, records are already grouped by
+   coverage.
+<P>
+ 
+<BR><BR>
+<A NAME="Displaying Bodies/Frames Using Only Numeric IDs (``-n'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Displaying Bodies/Frames Using Only Numeric IDs (``-n'')
+</H3><P><BR><BR>
+   The ``-n'' option tells BRIEF to display bodies/frames using numeric IDs
+   (``ID'') rather than the default name/ID combinations (``NAME (ID)''),
+   as seen in this example:
+<P>
+ 
+<PRE>
+   &gt; brief -n stardust.bsp
+ 
+   BRIEF -- Version 3.0.0, January 14, 2008 -- Toolkit Version N0062
+ 
+ 
+   Summary for: stardust.bsp
+ 
+   Body: -29
+         Start of Interval (ET)              End of Interval (ET)
+         -----------------------------       ---------------------------
+         2003 DEC 01 00:01:04.183            2004 JAN 10 01:00:00.000
+ 
+   Bodies: 1       3       5       7       9       199     301     499
+           2       4       6       8       10      299     399
+           Start of Interval (ET)              End of Interval (ET)
+           -----------------------------       -------------------------
+           1959 DEC 10 00:00:00.000            2020 JAN 16 00:00:00.000
+ 
+   Body: 1000107
+         Start of Interval (ET)              End of Interval (ET)
+         -----------------------------       ---------------------------
+         2002 JAN 01 00:00:00.000            2007 APR 05 00:00:00.000
+ 
+</PRE>
+<BR><BR>
+<A NAME="Displaying Summary Ordered by Body/Frame Name (``-o'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Displaying Summary Ordered by Body/Frame Name (``-o'')
+</H3><P><BR><BR>
+   The ``-o'' option tells BRIEF to order bodies/frames in the table
+   headers in the default display, or in the left columns in the tabular
+   display, by name rather than by numeric ID, as seen in this example:
+<P>
+ 
+<PRE>
+   &gt; brief -o stardust.bsp
+ 
+   BRIEF -- Version 3.0.0, January 14, 2008 -- Toolkit Version N0062
+ 
+ 
+   Summary for: stardust.bsp
+ 
+   Bodies: EARTH (399)             MERCURY (199)           SATURN BARYCE
+           EARTH BARYCENTER (3)    MERCURY BARYCENTER (1)  SUN (10)
+           JUPITER BARYCENTER (5)  MOON (301)              URANUS BARYCE
+           MARS (499)              NEPTUNE BARYCENTER (8)  VENUS (299)
+           MARS BARYCENTER (4)     PLUTO BARYCENTER (9)    VENUS BARYCEN
+           Start of Interval (ET)              End of Interval (ET)
+           -----------------------------       -------------------------
+           1959 DEC 10 00:00:00.000            2020 JAN 16 00:00:00.000
+ 
+   Body: SDU (-29)
+         Start of Interval (ET)              End of Interval (ET)
+         -----------------------------       ---------------------------
+         2003 DEC 01 00:01:04.183            2004 JAN 10 01:00:00.000
+ 
+   Body: WILD 2 (1000107)
+         Start of Interval (ET)              End of Interval (ET)
+         -----------------------------       ---------------------------
+         2002 JAN 01 00:00:00.000            2007 APR 05 00:00:00.000
+ 
+</PRE>
+   For the default format ``-o'' also changes the order in which the tables
+   are displayed by ordering them by the name of the first body/frame
+   appearing in the table headers.
+<P>
+ 
+<BR><BR>
+<A NAME="Specifying Multiple Options Controlling Output Format"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying Multiple Options Controlling Output Format
+</H3><P><BR><BR>
+   When ``-c'', ``-a'', ``-t'', ``-o'', ``-n'', ``-g'', and ``-s'' are
+   provided together their effects are combined, resulting in a large
+   variety of display formats (see ``Appendix 1: Matrix of Output
+   Formats''). They can be provided in any combination and, in general,
+   don't depend on each other, except in these cases:
+<P>
+ 
+<UL>
+<TT>--</TT> ``-o'' is ignored when ``-n'' is specified,
+<BR><BR></UL>
+<UL>
+<TT>--</TT> ``-g'' has effect only when provided together with ``-t''
+<BR><BR></UL>
+<UL>
+<TT>--</TT> ``-s'' has effect only when provided together with ``-t''
+<BR><BR></UL>
+<UL>
+<TT>--</TT> ``-s'' supersedes ``-g''
+<BR><BR></UL>
+<UL>
+<TT>--</TT> ``-g'' regroups tabular display tables already ordered by name (``-o'') or
+by numeric ID (no ``-o'')
+<BR><BR></UL>
+<UL>
+<TT>--</TT> ``-s'' re-sorts tabular display tables already ordered by name (``-o'') or
+by numeric ID (no ``-o'')
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Options Controlling Output Time Format"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Options Controlling Output Time Format
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   By default, BRIEF displays coverage time tags as calendar ET in the
+   ``YYYY MON DD HR:MN:SC.DDD'' format. This section describes options that
+   change this behavior.
+<P>
+ 
+   The first category of options affecting displayed time tags are the
+   options that tell BRIEF to display time tags in a different time system
+   and/or format. These options are ``-etsec'', ``-utc'', and ``-utcdoy''.
+<P>
+ 
+   The second category of options affecting displayed time tags are the
+   options that tell BRIEF to round the default calendar ET time tags
+   inwards. These options are ``-sec'', ``-min'', ``-hour'', and ``-day''.
+   The ``rounding inwards'' performed by these options adjusts both ends of
+   a coverage interval toward the even second, minute, hour, or day
+   boundary nearest to the interval center. For example, the interval
+   ``2007 JAN 12 12:05:06.333 .. 2007 JAN 13 22:45:23.765'' rounded inward
+   to hour becomes ``2007 JAN 12 13:00:00.000 .. 2007 JAN 13
+   22:00:00.000''.
+<P>
+ 
+<BR><BR>
+<A NAME="Displaying Times as ET Seconds Past J2000 (``-etsec'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Displaying Times as ET Seconds Past J2000 (``-etsec'')
+</H3><P><BR><BR>
+   The ``-etsec'' option tells BRIEF to display time tags as ET seconds
+   past J2000 in the ``SSSSSSSSSSSS.DDDDDD'' format, as seen in this
+   example:
+<P>
+ 
+<PRE>
+   &gt; brief -etsec tempel1.bsp
+ 
+   BRIEF -- Version 3.0.0, January 14, 2008 -- Toolkit Version N0062
+ 
+ 
+   Summary for: tempel1.bsp
+ 
+   Body: TEMPEL 1 (1000093)
+         Start of Interval (ET)              End of Interval (ET)
+         -----------------------------       ---------------------------
+                    -43200.000000                   1577880000.000000
+ 
+</PRE>
+<BR><BR>
+<A NAME="Displaying Times in UTC Calendar Date Format (``-utc'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Displaying Times in UTC Calendar Date Format (``-utc'')
+</H3><P><BR><BR>
+   The ``-utc'' option tells BRIEF to display time tags as UTC in the
+   ``YYYY-MON-DD HR:MN:SC.DDD'' format, as seen in this example:
+<P>
+ 
+<PRE>
+   &gt; brief -utc naif0008.tls tempel1.bsp
+ 
+   BRIEF -- Version 3.0.0, January 14, 2008 -- Toolkit Version N0062
+ 
+ 
+   Summary for: tempel1.bsp
+ 
+   Body: TEMPEL 1 (1000093)
+         Start of Interval (UTC)             End of Interval (UTC)
+         -----------------------------       ---------------------------
+         1999-DEC-31 23:58:55.816            2049-DEC-31 23:58:54.816
+ 
+</PRE>
+   An LSK file must be provided to BRIEF in order to display times tags in
+   this format because LSK data are required to convert ET times stored in
+   binary SPK and PCK files to UTC. An LSK file may be provided on the
+   command line, in a list file (specified with the option ``-f'' described
+   later in this document), or in a meta-kernel file given on the command
+   line or in the list file.
+<P>
+ 
+<BR><BR>
+<A NAME="Display Times in UTC Day-of-Year Format (``-utcdoy'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Display Times in UTC Day-of-Year Format (``-utcdoy'')
+</H3><P><BR><BR>
+   The ``-utcdoy'' option tells BRIEF to display time tags as UTC times in
+   the ``YYYY-DOY // HR:MN:SC.DDD'' format, as seen in this example:
+<P>
+ 
+<PRE>
+   &gt; brief -utcdoy naif0008.tls tempel1.bsp
+ 
+   BRIEF -- Version 3.0.0, January 14, 2008 -- Toolkit Version N0062
+ 
+ 
+   Summary for: tempel1.bsp
+ 
+   Body: TEMPEL 1 (1000093)
+         Start of Interval (UTC)             End of Interval (UTC)
+         -----------------------------       ---------------------------
+         1999-365 // 23:58:55.816            2049-365 // 23:58:54.816
+ 
+</PRE>
+   An LSK file must be provided to BRIEF in order to display times tags in
+   this format because LSK data are required to convert ET times stored in
+   binary SPK and PCK files to UTC for output. An LSK file may be provided
+   on the command line, in a list file (specified with the option ``-f''
+   described later in this document), or in a meta-kernel file given on the
+   command line or in the list file.
+<P>
+ 
+<BR><BR>
+<A NAME="Display Times ``Rounded Inward'' to Second (``-sec'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Display Times ``Rounded Inward'' to Second (``-sec'')
+</H3><P><BR><BR>
+   The ``-sec'' option tells BRIEF to display default calendar ET time tags
+   ``rounded inward'' to the nearest second, as seen in this example:
+<P>
+ 
+<PRE>
+   &gt; brief -sec stardust.bsp
+ 
+   BRIEF -- Version 3.0.0, January 14, 2008 -- Toolkit Version N0062
+ 
+ 
+   Summary for: stardust.bsp
+ 
+   Body: SDU (-29)
+         Start of Interval (ET)              End of Interval (ET)
+         -----------------------------       ---------------------------
+         2003 DEC 01 00:01:05.000            2004 JAN 10 01:00:00.000
+ 
+   ...
+</PRE>
+   When this option is applied to a coverage window shorter than one second
+   it produces a singleton interval with the interval's begin time equal to
+   its end time. When such a short interval spans a second boundary, the
+   times are set to the time of that boundary. When such a short interval
+   does not span a second boundary, the times are set to the un-rounded end
+   time of the interval.
+<P>
+ 
+<BR><BR>
+<A NAME="Display Times ``Rounded Inward'' to Minute (``-min'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Display Times ``Rounded Inward'' to Minute (``-min'')
+</H3><P><BR><BR>
+   The ``-min'' option tells BRIEF to display default calendar ET time tags
+   ``rounded inward'' to the nearest minute, as seen in this example:
+<P>
+ 
+<PRE>
+   &gt; brief -min stardust.bsp
+ 
+   BRIEF -- Version 3.0.0, January 14, 2008 -- Toolkit Version N0062
+ 
+ 
+   Summary for: stardust.bsp
+ 
+   Body: SDU (-29)
+         Start of Interval (ET)              End of Interval (ET)
+         -----------------------------       ---------------------------
+         2003 DEC 01 00:02:00.000            2004 JAN 10 01:00:00.000
+ 
+   ...
+</PRE>
+   When this option is applied to a coverage window shorter than one minute
+   it produces a singleton interval with the interval's begin time equal to
+   its end time. When such a short interval spans a minute boundary, the
+   times are set to the time of that boundary. When such a short interval
+   does not span a minute boundary, the times are set to the un-rounded end
+   time of the interval.
+<P>
+ 
+<BR><BR>
+<A NAME="Display Times ``Rounded Inward'' to Hour (``-hour'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Display Times ``Rounded Inward'' to Hour (``-hour'')
+</H3><P><BR><BR>
+   The ``-hour'' option tells BRIEF to display default calendar ET time
+   tags ``rounded inward'' to the nearest hour, as seen in this example:
+<P>
+ 
+<PRE>
+   &gt; brief -hour stardust.bsp
+ 
+   BRIEF -- Version 3.0.0, January 14, 2008 -- Toolkit Version N0062
+ 
+ 
+   Summary for: stardust.bsp
+ 
+   Body: SDU (-29)
+         Start of Interval (ET)              End of Interval (ET)
+         -----------------------------       ---------------------------
+         2003 DEC 01 01:00:00.000            2004 JAN 10 01:00:00.000
+ 
+   ...
+</PRE>
+   When this option is applied to a coverage window shorter than one hour
+   it produces a singleton interval with the interval's begin time equal to
+   its end time. When such a short interval spans ah hour boundary, the
+   times are set to the time of that boundary. When such a short interval
+   does not span an hour boundary, the times are set to the un-rounded end
+   time of the interval.
+<P>
+ 
+<BR><BR>
+<A NAME="Display Times ``Rounded Inward'' to Day (``-day'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Display Times ``Rounded Inward'' to Day (``-day'')
+</H3><P><BR><BR>
+   The ``-day'' option tells BRIEF to display default calendar ET time tags
+   ``rounded inward'' to the nearest day, as seen in this example:
+<P>
+ 
+<PRE>
+   &gt; brief -day stardust.bsp
+ 
+   BRIEF -- Version 3.0.0, January 14, 2008 -- Toolkit Version N0062
+ 
+ 
+   Summary for: stardust.bsp
+ 
+   Body: SDU (-29)
+         Start of Interval (ET)              End of Interval (ET)
+         -----------------------------       ---------------------------
+         2003 DEC 02 00:00:00.000            2004 JAN 10 00:00:00.000
+ 
+   ...
+</PRE>
+   When this option is applied to a coverage window shorter than one day it
+   produces a singleton interval with the interval's begin time equal to
+   its end time. When such a short interval spans a day boundary, the times
+   are set to the time of that boundary. When such a short interval does
+   not span a day boundary, the times are set to the un-rounded end time of
+   the interval.
+<P>
+ 
+<BR><BR>
+<A NAME="Specifying Multiple Options Controlling Time Format"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying Multiple Options Controlling Time Format
+</H3><P><BR><BR>
+   If more than one of the ``-etsec'', ``-utc'', ``-utcdoy'' options is
+   specified, the one provided last on the command line takes precedence.
+<P>
+ 
+   If more than one of the ``-sec'', ``-min'', ``-hour'', and ``-day''
+   options is specified, the one providing the ``highest'' time resolution
+   takes precedence, e.g. when ``-min'' and ``-day'' are specified the
+   times are rounded to minute independently of the placement of these
+   options on the command line.
+<P>
+ 
+   The ``rounding'' options ``-sec'', ``-min'', ``-hour'', and ``-day''
+   have no effect when time tags are displayed in a format other than
+   calendar ET, i.e. when either of the ``-etsec'', ``-utc'', or
+   ``-utcdoy'' options is specified.
+<P>
+ 
+<BR><BR>
+<A NAME="Options Filtering Summary"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Options Filtering Summary
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   In some cases rather than displaying the full summary of data from a
+   single binary SPK or PCK file, or a set of binary SPK or PCK files, it
+   is more desirable to check if the file or files contain data for a
+   specified body/frame or at a specified epoch. To filter summary
+   information based on such criteria BRIEF provides a number of options
+   described in this section.
+<P>
+ 
+<BR><BR>
+<A NAME="Filtering for a Specified Body/Frame (``-sb[bod]'' or ``-[bod]'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Filtering for a Specified Body/Frame (``-sb[bod]'' or ``-[bod]'')
+</H3><P><BR><BR>
+   The ``-sb'' option followed by a body/frame name or numeric ID ``bod''
+   tells BRIEF to display summary information only for the specified
+   body/frame. While ``sb'' can be omitted from the option key permitting
+   one to use just ``-'' followed by the body/frame name or numeric ID,
+   including ``-sb'' is the preferred method as it is slightly more clear.
+   In this example ``-sb'' is used to display data for only the Earth:
+<P>
+ 
+<PRE>
+   &gt; brief -sbEARTH stardust.bsp tempel1.bsp
+ 
+   BRIEF -- Version 3.0.0, January 14, 2008 -- Toolkit Version N0062
+ 
+ 
+   Summary for: stardust.bsp
+ 
+   Body: EARTH (399)
+         Start of Interval (ET)              End of Interval (ET)
+         -----------------------------       ---------------------------
+         1959 DEC 10 00:00:00.000            2020 JAN 16 00:00:00.000
+ 
+ 
+   Summary for: tempel1.bsp
+ 
+ 
+   There is no data:
+     for body 'EARTH'
+ 
+</PRE>
+   The body/frame name or numeric ID must immediately follow ``-sb'', i.e.
+   ``-sbEARTH'', ``-sb-29'', or ``-sb301'' not ``-sb EARTH'', ``-sb -29'',
+   or ``-sb 301''. If the body/frame name contains spaces, these spaces
+   must be replaced with underscores (``_''), i.g.
+   ``-sbMERCURY_BARYCENTER'' must be used instead of ``-sbMERCURY
+   BARYCENTER''.
+<P>
+ 
+   A range of numeric IDs in the form ``-sb[min:max]'' may be used instead
+   of a single name or numeric ID. For example, ``-sb[500:598]'' may be
+   used to see if a given SPK file contain data for any satellites of
+   Jupiter. The range can be open on either end, producing a summary for
+   all numeric IDs greater than the specified value (``-sb[min:]'') or less
+   than the specified value (``-sb[:max]''). For example, ``-sb[11:]'' may
+   be used to see if a given SPK file(s) contains data for any natural
+   bodies while ``-sb[:-1]'' may be used to see if a given SPK file(s)
+   contains data for any spacecraft. In some Unix shells the options
+   providing ranges must be quoted with single or double quotes to avoid
+   errors from parsing ``['' and ``]'' as special shell characters.
+<P>
+ 
+   When a file does not contain any data for the specified body/frame name,
+   numeric ID, or range of numeric IDs, BRIEF displays the ``There is no
+   data: ...'' message instead of the summary table as seen in the example
+   above.
+<P>
+ 
+<BR><BR>
+<A NAME="Filtering for a Specified Center/Relative-to-Frame (``-sc[cen]'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Filtering for a Specified Center/Relative-to-Frame (``-sc[cen]'')
+</H3><P><BR><BR>
+   The ``-sc'' option followed by a body/frame name or numeric ID ``cen''
+   tells BRIEF to display summary information only for the specified
+   center-of-motion/relative-to-frame. In this example ``-sc'' is used to
+   display data only for the bodies that have ephemeris data with respect
+   to the Solar System Barycenter:
+<P>
+ 
+<PRE>
+   &gt; brief -sc0 stardust.bsp tempel1.bsp
+ 
+   BRIEF -- Version 3.0.0, January 14, 2008 -- Toolkit Version N0062
+ 
+ 
+   Summary for: stardust.bsp
+ 
+   Bodies: MERCURY BARYCENTER (1)  JUPITER BARYCENTER (5)  PLUTO BARYCEN
+           VENUS BARYCENTER (2)    SATURN BARYCENTER (6)   SUN (10)
+           EARTH BARYCENTER (3)    URANUS BARYCENTER (7)
+           MARS BARYCENTER (4)     NEPTUNE BARYCENTER (8)
+           Start of Interval (ET)              End of Interval (ET)
+           -----------------------------       -------------------------
+           1959 DEC 10 00:00:00.000            2020 JAN 16 00:00:00.000
+ 
+ 
+   Summary for: tempel1.bsp
+ 
+ 
+   There is no data:
+     w.r.t. center 'SOLAR SYSTEM BARYCENTER'
+ 
+</PRE>
+   All formatting rules for the ``-sb'' option described in the previous
+   section apply to the ``-sc'' option.
+<P>
+ 
+<BR><BR>
+<A NAME="Filtering for a Specified Epoch (``-at [time]'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Filtering for a Specified Epoch (``-at [time]'')
+</H3><P><BR><BR>
+   The ``-at'' option followed by a calendar ET time ``time'' tells BRIEF
+   to display summary information only for the bodies/frames whose coverage
+   intervals contains the specified time. In this example ``-at'' is used
+   to display data only for the bodies that have coverage at ``2030-JAN-01
+   12:00'' ET:
+<P>
+ 
+<PRE>
+   &gt; brief -at 2030-JAN-01/12:00 stardust.bsp tempel1.bsp
+ 
+   BRIEF -- Version 3.0.0, January 14, 2008 -- Toolkit Version N0062
+ 
+ 
+   Summary for: stardust.bsp
+ 
+   There is no data:
+     covering ET '2030 JAN 01 12:00:00.000'
+ 
+ 
+   Summary for: tempel1.bsp
+ 
+   Body: TEMPEL 1 (1000093)
+         Start of Interval (ET)              End of Interval (ET)
+         -----------------------------       ---------------------------
+         2000 JAN 01 00:00:00.000            2050 JAN 01 00:00:00.000
+ 
+</PRE>
+   The time specified after ``-at'' must be separated from ``-at'' by one
+   or more spaces, i.e. ``-at TIME'' not ``-atTIME''. The time can be
+   provided in any format supported by SPICE's TPARSE routine (see
+   <a href="../req/time.html">TIME.REQ</a>) as long as it doesn't contain spaces. A few of the acceptable
+   time formats are ``YYYY-MM-DD/HR:MN:SC.DDD'', ``YYYY-DOY/HR:MN:SC.DDD'',
+   and ``JDNNNNNNNNN.DDDDDD''.
+<P>
+ 
+   When a file does not contain any data for the specified time BRIEF
+   displays the ``There is no data: ...'' message instead of the summary
+   table as seen in the example above.
+<P>
+ 
+<BR><BR>
+<A NAME="Filtering for a Specified Interval (``-from [beg]'' and ``-to [end]'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Filtering for a Specified Interval (``-from [beg]'' and ``-to [end]'')
+</H3><P><BR><BR>
+   The options ``-from'' and ``-to'' followed by calendar ET times ``beg''
+   and ``end'' tell BRIEF to display summary information only for the
+   bodies/frames whose coverages contain the specified time interval. In
+   this example ``-from'' and ``-to'' are used to display data only for the
+   bodies with coverage that contains the interval from ``2025-01-01 ET''
+   to ``2025-02-01 ET''
+<P>
+ 
+<PRE>
+   &gt; brief -from 2025-01-01 -to 2025-02-01 stardust.bsp tempel1.bsp
+ 
+   BRIEF -- Version 3.0.0, January 14, 2008 -- Toolkit Version N0062
+ 
+ 
+   Summary for: stardust.bsp
+ 
+   There is no data:
+     covering from ET '2025 JAN 01 00:00:00.000' to ET '2025 FEB 01 00:
+ 
+ 
+   Summary for: tempel1.bsp
+ 
+   Body: TEMPEL 1 (1000093)
+         Start of Interval (ET)              End of Interval (ET)
+         -----------------------------       ---------------------------
+         2000 JAN 01 00:00:00.000            2050 JAN 01 00:00:00.000
+ 
+</PRE>
+   All formatting rules for the ``-at'' option described in the previous
+   section apply to the ``-from'' and ``-at'' options. If either ``-from''
+   or ``-to'' is specified by itself it has the same effect as the ``-at''
+   option.
+<P>
+ 
+<BR><BR>
+<A NAME="Specifying Multiple Filtering Options"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying Multiple Filtering Options
+</H3><P><BR><BR>
+   Up to 100 individual ``-sb'', ``-'', and ``-sc'' constraints can be
+   specified at the same time. BRIEF combines them using logical ``OR'' and
+   displays a summary for all bodies/frames and
+   centers-of-motion/relative-to-frames specified by these constraints.
+<P>
+ 
+   ``-at'' specified together with ``-from''/``-to'' overrides them. When
+   multiple ``-at'', ``-from'', or ``-to'' are provided, for each of them
+   the one provided last on the command line takes precedence. If the time
+   provided with ``-from'' is later than the time provided with ``-to''
+   BRIEF re-orders them internally.
+<P>
+ 
+   Constraints from body/frame and time groups can be provided at the same
+   time. BRIEF combines them using logical ``AND'' and displays summary for
+   the specified bodies/frames only if they have coverage at the specified
+   time or time interval.
+<P>
+ 
+<BR><BR>
+<A NAME="Miscellaneous Options"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Miscellaneous Options
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   BRIEF also provides a number of miscellaneous options; they are
+   described in this section.
+<P>
+ 
+<BR><BR>
+<A NAME="Summarizing Kernels Listed in a File (``-f [list]'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Summarizing Kernels Listed in a File (``-f [list]'')
+</H3><P><BR><BR>
+   The ``-f'' option tells BRIEF to display a summary for the files whose
+   names are listed in the text file ``list''. For example, when a text
+   file named ``spk_list.txt'' with the following contents
+<P>
+ 
+<PRE>
+   stardust.bsp
+   tempel1.bsp
+</PRE>
+   is provided to BRIEF using this option, the program displays a summary
+   for these two SPKs as if they were provided on the command line.
+<P>
+ 
+   This option is useful when there is a need to produce a summary for a
+   large number of files whose names, if put all together on the command
+   line, may overflow either the terminal shell buffer or BRIEF's command
+   line buffer. In such cases a simple listing of these files can be made
+   and provided to BRIEF using the ``-f'' option.
+<P>
+ 
+   The list file name specified after ``-f'' must be separated from ``-f''
+   by one or more spaces, i.e. ``-f FILE'' not ``-fFILE''. The list file
+   must include only the names of binary SPK files and text kernels or the
+   names of binary PCK files and text kernels. The file names can be
+   provided one-per-line or a few-per-line separated by one or more spaces.
+   The file may include blank lines. All lines in the list file, including
+   the last line, must be terminated with the line terminators native to
+   the computer platform on which the program is run.
+<P>
+ 
+   When a list file is provided to the program, additional files to be
+   summarized can still be listed on the command line.
+<P>
+ 
+<BR><BR>
+<A NAME="Displaying Help and Version (``-h'' and ``-v'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Displaying Help and Version (``-h'' and ``-v'')
+</H3><P><BR><BR>
+   When run with a blank command line BRIEF displays a short usage message
+   listing only the most useful options.
+<P>
+ 
+   The ``-h'' option tells BRIEF to display a more complete usage message
+   listing all options. This display is similar to the text provided in the
+   ``Usage'' section of this document. When ``-h'' is specified, BRIEF
+   ignores any other options and/or file names specified on the command
+   line.
+<P>
+ 
+   The ``-v'' option tells BRIEF to display just the version line that is
+   normally displayed at the top of every summary produced by the program.
+   When this option is specified, BRIEF ignores any other options,
+   including ``-h'', and/or file names specified on the command line.
+<P>
+ 
+<BR><BR>
+<A NAME="Troubleshooting"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Troubleshooting
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   In most cases of incorrect usage BRIEF displays an error message or an
+   information message indicating what went wrong. The exceptions are cases
+   of the command line buffer overflow and coverage data buffer overflow.
+<P>
+ 
+   The BRIEF command line buffer can hold up to 25,000 characters. If the
+   command line is longer than 25,000 characters it gets truncated. The
+   truncation most frequently happens in the middle of a file name
+   resulting in the ``SPICE(FILENOTFOUND)'' error being signaled. To fix
+   this situation the number of files provided on the command line should
+   be reduced, or a list file listing all required files should be created
+   and provided with the ``-f'' option.
+<P>
+ 
+   When BRIEF coverage information buffers overflow due to too many
+   bodies/frames present in a file, or too many intervals for a body/frame,
+   or too many intervals for all bodies/frames, BRIEF displays the
+   ``SPICE(WINDOWEXCESS)'', ``SPICE(NAMETABLEFULL)'', or
+   ``SPICE(VALUETABLEFULL)'' error. If this happens when the program is run
+   with a single file, the user must contact NAIF because the situation
+   cannot be fixed by the user.
+<P>
+ 
+<BR><BR>
+<A NAME="Appendix 1: Matrix of Output Formats"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Appendix 1: Matrix of Output Formats
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   This table lists the output format variations for all combinations of
+   the ``-t'', ``-n'', ``-c'' and ``-o'' options. When ``-a'' is not
+   specified these formats are used for each summarized file; when ``-a''
+   is specified these formats are used for the combined summary. The time
+   format options ``-utc'', ``-utcdoy'', and ``-etsec'' and the time
+   rounding options ``-sec'', ``-min'', ``-hour'', and ``-day'' affect only
+   the time tags included in the summary reports, not any other aspect of
+   the report formats.
+<P>
+ 
+<PRE>
+   ------------------------------------------------------------
+   Options     | Output Format
+   ------------------------------------------------------------
+   -t -n -c -o | body/frame format, location, N of tables,
+               | ordering
+   ------------------------------------------------------------
+               |
+   Y  .  .  .  | ``ID NAME'', left column, one table, ordered
+               | by ID
+               |
+   Y  Y  .  .  | ``ID'', left column, one table, ordered by ID
+               |
+   Y  Y  Y  .  | ``ID w.r.t ID'', left column, one table,
+               | ordered by ID
+               |
+   Y  Y  Y  Y  | same as -t/-n/-c NO -o
+               |
+   Y  Y  .  Y  | same as -t/-n NO -c/-o
+               |
+   Y  .  Y  .  | ``ID NAME w.r.t. ID NAME'', left column, one
+               | table, ordered by ID
+               |
+   Y  .  Y  Y  | ``NAME (ID) w.r.t. NAME (ID)'', in left
+               | column, one table, ordered by name
+               |
+   Y  .  .  Y  | ``NAME (ID)'', left column, one table,
+               | ordered by name
+               |
+   .  Y  .  .  | ``ID'', table header, multiple tables
+               | with the same coverage ordered by ID,
+               | within table headers bodies/frames ordered
+               | by ID
+               |
+   .  Y  Y  .  | ``ID w.r.t ID'', table header, multiple
+               | tables with the same coverage ordered by
+               | ID, within table headers bodies/frames
+               | ordered by ID
+               |
+   .  Y  Y  Y  | same as -n/-c NO -t/-o
+               |
+   .  Y  .  Y  | same as -n NO -t/-c/-o
+               |
+   .  .  Y  .  | ``NAME (ID) w.r.t. NAME (ID)'', table
+               | header, multiple tables with the same
+               | coverage ordered by name, within table
+               | headers bodies/frames ordered by name
+               |
+   .  .  Y  Y  | ``NAME (ID) w.r.t. NAME (ID)'', in table
+               | header, multiple tables with the same
+               | coverage ordered name, within table headers
+               | bodies ordered by name
+               |
+   .  .  .  Y  | ``NAME (ID)'', table header, multiple
+               | tables with the same coverage ordered
+               | by name, within table headers
+               | bodies/frames ordered name
+               |
+   .  .  .  .  | ``NAME (ID)'', table header, multiple
+               | tables with the same coverage ordered
+               | by ID, within table headers
+               | bodies/frames ordered by ID
+   ------------------------------------------------------------
+</PRE>
+
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+
+</BODY>
+
+</HTML>

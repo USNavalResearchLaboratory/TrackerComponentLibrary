@@ -1,0 +1,189 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_wnvald</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_wnvald</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_WNVALD forms a valid double precision window from the contents
+   of an 2Mx1 array.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      window_i   2M endpoints of (possibly unordered and non-disjoint)
+                 intervals.
+
+                 [2m,1] = size(window_i); double = class(window_i)
+
+   the call:
+
+      window_f = <b>cspice_wnvald</b>(window_i)
+
+   returns:
+
+      window_f   SPICE window containing the ordered union of the intervals in
+                 the input array 'window_i'.
+
+                 [2n,1] = size(window_f); double = class(window_f)
+
+                 The 'window_f' output may overwrite the input 'window_i'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      Define an array containing a set of unordered intervals:
+
+      &gt;&gt; windata = [ [0;   0]; ...
+                     [10; 12]; ...
+                     [2;   7]; ...
+                     [13; 15]; ...
+                     [1;   5]; ...
+                     [23; 29] ];
+
+      Validate the array as a SPICE window:
+
+      &gt;&gt; w1 = <b>cspice_wnvald</b>(windata)
+
+      w1 =
+
+           0
+           0
+           1
+           7
+          10
+          12
+          13
+          15
+          23
+          29
+
+   Representing the intervals:
+
+     [0, 0] [1, 7] [10, 12] [13, 15] [23, 29]
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   On input, 'window' is a 2Mx1 array. During validation, the intervals
+   are ordered, and overlapping intervals are merged. The size of the output
+   window equals the number of endpoints remaining, and window is ready for
+   use with any of the window routines.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/wnvald_c.html">wnvald_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/windows.html">WINDOWS.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.1, 12-MAR-2012, EDW (JPL), SCK (JPL)
+
+      Edited I/O section to conform to NAIF standard for Mice documentation.
+
+   -Mice Version 1.1.0, 27-JUL-2009, EDW (JPL)
+
+      'zzmice_cell' modified to include the cell type identifier 'double'.
+
+   -Mice Version 1.0.0, 17-DEC-2008, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   validate a d.p. window
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:39 2014</pre>
+
+</body>
+</html>
+

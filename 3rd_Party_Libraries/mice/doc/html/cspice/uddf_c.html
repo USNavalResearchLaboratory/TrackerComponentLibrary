@@ -1,0 +1,300 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>uddf_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>uddf_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void uddf_c (  void             ( * udfunc ) ( SpiceDouble    et,
+                                                  SpiceDouble  * value ),
+                  SpiceDouble          x,
+                  SpiceDouble          dx,
+                  SpiceDouble        * deriv )
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   Routine to calculate the first derivative of a caller-specified
+   function using a three-point estimation.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+   DERIVATIVE
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     udfunc     I   Name of the routine that computes the scalar value
+                    of interest.
+     x          I   Independent variable of 'udfunc'
+     dx         I   Interval from 'x' for derivative calculation
+     deriv      O   Approximate derivative of 'udfunc' at 'x'
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     udfunc     is an externally specified routine that returns the 
+                value of the scalar quantity function of interest
+                at x. 
+
+                The prototype for 'udfunc' is
+
+                    void   ( * udfunc ) ( SpiceDouble    et,
+                                          SpiceDouble  * value )
+
+                where: 
+ 
+                    et      an input double precision value of the independent
+                            variable the function at which to determine the
+                            scalar value.  
+ 
+                    value   the scalar double precision value of 'udfunc' 
+                            at 'x'.
+
+     x          a scalar double precision value representing the independent 
+                variable at which to determine the derivative of 'udfunc'.
+
+                For many SPICE uses, 'x' will represent the TDB ephemeris
+                time.
+
+     dx         a scalar double precision value representing half the 
+                interval in units of X separating the evaluation
+                epochs of UDFUNC; the evaluations occur at (x + dx)) 
+                and (x - dx).
+
+                'dx' may be negative but must be non-zero.
+     </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     deriv      the scalar double precision approximate value of the 
+                first derivative of udfunc with respect to 'x'.
+
+                Functionally:
+
+                            d  udfunc ( x )
+                   deriv =  --
+                            dx
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+   This routine provides a simple interface to numerically calculate
+   the first derivative of a scalar quantity function.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine 
+   specific arithmetic implementation. 
+
+
+      #include &lt;stdio.h&gt;
+      #include &quot;SpiceUsr.h&quot;
+
+      void udfunc ( SpiceDouble et, SpiceDouble * value );
+                   
+      int main()
+         {
+
+         SpiceDouble       et;
+         SpiceDouble       dt;
+         SpiceDouble       deriv;
+
+         /.
+         Load leapsecond and SPK kernels. The name of the 
+         meta kernel file shown here is fictitious; you 
+         must supply the name of a file available 
+         on your own computer system.
+         ./
+
+         <a href="furnsh_c.html">furnsh_c</a> ( &quot;standard.tm&quot; );
+
+         /.
+         Use a shift of one second off the epoch of interest.
+         ./
+         dt = 1.;
+
+         /.
+         Convert the epoch date string to ephemeris seconds.
+         ./
+         <a href="str2et_c.html">str2et_c</a> ( &quot;JAN 1 2009&quot;, &amp;et );
+
+         /.
+         Calculate the derivative of UDFUNC at ET.
+         ./
+         <b>uddf_c</b>( udfunc, et, dt, &amp;deriv );
+
+         /.
+         Output the calculated derivative.
+         ./
+
+         printf( &quot;%18.12f\n&quot;, deriv );
+
+         return ( 0 );
+         }
+
+
+      /.
+      A scalar quantity function that returns the light-time
+      between the Moon and Mercury at 'et'.
+      ./
+
+      void udfunc ( SpiceDouble et, SpiceDouble * value )
+         {
+
+         SpiceDouble          lt;
+         SpiceDouble          pos[3];
+
+         /.
+         Evaluate the apparent position of Mercury with respect 
+         to the Moon at 'et'.
+         ./
+         <a href="spkpos_c.html">spkpos_c</a> ( &quot;MERCURY&quot;, et, &quot;J2000&quot;, &quot;LT+S&quot;, &quot;MOON&quot;, pos, &amp;lt );
+         
+         /.
+         Return the light-time value as the scalar quantity.
+         ./
+         *value = lt;
+
+         return;
+         }
+
+   The program outputs: 
+
+      -0.000135670940
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   'udfunc' must evaluate to real values at x + dx and x - dx.
+   </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+   See qderiv.c header.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   N.J. Bachman   (JPL)
+   E.D. Wright    (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   CSPICE Version 1.0.0  31-MAR-2010 (EDW) 
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   first derivative of a function
+</PRE>
+<h4>Link to routine uddf_c source file <a href='../../../src/cspice/uddf_c.c'>uddf_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:46 2014</pre>
+
+</body>
+</html>
+

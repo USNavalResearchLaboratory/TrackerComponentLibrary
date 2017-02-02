@@ -1,0 +1,530 @@
+<HTML>
+<HEAD>
+<TITLE> COMMNT User's Guide </TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+
+<A NAME="top"></A>
+
+<TABLE STYLE="text-align: left; margin-left: auto; margin-right: auto; width: 800px;" BORDER="0" CELLPADDING="5" CELLSPACING="2">
+<TBODY>
+<TR>
+  <TD STYLE="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+  <DIV ALIGN="right">
+    <SMALL><SMALL><A HREF="index.html">Index Page</A></SMALL></SMALL>
+  </DIV>
+  <B>COMMNT User's Guide</B> </TD>
+</TR>
+<TR>
+  <TD STYLE="vertical-align: top;">
+
+<H2> Table of Contents
+</H2>
+
+<PRE>
+   <A HREF="#COMMNT User's Guide">COMMNT User's Guide</A>
+      <A HREF="#Abstract">Abstract</A>
+      <A HREF="#Usage">Usage</A>
+      <A HREF="#Overview">Overview</A>
+      <A HREF="#References">References</A>
+      <A HREF="#Changes">Changes</A>
+      <A HREF="#File Naming and Usage Conventions">File Naming and Usage Conventions</A>
+   <A HREF="#Using COMMNT">Using COMMNT</A>
+      <A HREF="#Using COMMNT from the command line">Using COMMNT from the command line</A>
+      <A HREF="#Using COMMNT interactively">Using COMMNT interactively</A>
+      <A HREF="#The COMMNT Main Menu">The COMMNT Main Menu</A>
+      <A HREF="#COMMNT Options">COMMNT Options</A>
+         <A HREF="#COMMNT Option: Q -- Quit.">COMMNT Option: Q -- Quit.</A>
+         <A HREF="#COMMNT Option: A -- Add comments to a binary file.">COMMNT Option: A -- Add comments to a binary file.</A>
+         <A HREF="#COMMNT Option: R -- Read the comments in a binary file.">COMMNT Option: R -- Read the comments in a binary file.</A>
+         <A HREF="#COMMNT Option: E -- Extract comments from a binary file.">COMMNT Option: E -- Extract comments from a binary file.</A>
+         <A HREF="#COMMNT Option: D -- Delete the comments in a binary file.">COMMNT Option: D -- Delete the comments in a binary file.</A>
+
+</PRE>
+
+<HR SIZE=3 NOSHADE>
+
+<BR><BR>
+<A NAME="COMMNT User's Guide"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> COMMNT User's Guide
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Last revised on 2008 JAN 17 by B. V. Semenov.
+<P>
+ 
+<BR><BR>
+<A NAME="Abstract"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Abstract
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   COMMNT is a command-line program that reads, adds, extracts, or deletes
+   comments from SPICE binary kernel files.
+<P>
+ 
+<BR><BR>
+<A NAME="Usage"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Usage
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   To use COMMNT as a menu driven interactive program, type the name of the
+   program at the system prompt.
+<P>
+ 
+<PRE>
+   prompt&gt; commnt
+</PRE>
+   To use COMMNT as a command line utility, supply additional arguments as
+   shown below:
+<P>
+ 
+   See the command line mode usage:
+<P>
+ 
+<PRE>
+   prompt&gt; commnt -h
+</PRE>
+   Add comments to a kernel file from a text file.
+<P>
+ 
+<PRE>
+   prompt&gt; commnt -a kernel_file comment_file
+</PRE>
+   Extract comments from a kernel file to a text file.
+<P>
+ 
+<PRE>
+   prompt&gt; commnt -e kernel_file comment_file
+</PRE>
+   Read the comments in a kernel file, displaying the results on the
+   Standard Output device.
+<P>
+ 
+<PRE>
+   prompt&gt; commnt -r kernel_file
+</PRE>
+   Delete all of the comments in a kernel file.
+<P>
+ 
+<PRE>
+   prompt&gt; commnt -d kernel_file
+</PRE>
+   Note that in either mode the program cannot perform operations that
+   require modifying the file -- addition and deletion -- if the file does
+   not have the format native to the computer, on which the program is run.
+   Refer to the CONVERT User's Guide (<a href="../ug/convert.html">convert.ug</a>) for details.
+<P>
+ 
+<BR><BR>
+<A NAME="Overview"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Overview
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The COMMNT utility program provides a collection of services useful for
+   manipulating and examining the contents of the comment area in SPICE
+   binary kernel files. The COMMNT program can add comments to the comment
+   area from a text file, read the comment area, displaying the comments on
+   the terminal screen, extract the comment area to a text file, or delete
+   the entire comment area of a SPICE binary kernel file.
+<P>
+ 
+   The comment area of a SPICE binary kernel file provides a mechanism for
+   storing printable textual information that is related to the data
+   contained in the file. The comment area is typically used to ``attach''
+   metadata (i.e. a description of the data) to the data contained in the
+   file. When used in this manner, the comment area provides a convenient
+   mechanism for maintaining the association between a description of the
+   data in a file and the data itself. A common use of the comment area
+   would be to store the following types of descriptive information: how
+   the data in the file were generated, assumptions made about the data,
+   who to contact about problems or questions, the creator of the file,
+   intended uses of the data, etc.. This type of descriptive information is
+   essential for the correct interpretation and use of the data.
+<P>
+ 
+   Through a conscientious use of the comment area, all of the information
+   necessary to understand the data is readily available with the data.
+   Contrast this with an approach where the descriptive information is
+   stored in a file separate from the data. In this case, the description
+   could easily be lost or forgotten, and without the descriptive
+   information, determining the utility or applicability of the data in a
+   file would be difficult.
+<P>
+ 
+   The COMMNT program supports the CK, EK, PCK, and SPK SPICE binary kernel
+   file formats. CK files contain orientation information, commonly called
+   ``pointing,'' for various spacecraft structures or instruments. EK files
+   contain time tagged event information for a spacecraft. Binary PCK files
+   contain body orientation models. Binary PCK files are currently only
+   available for the Earth and the Moon with limited time coverage. SPK
+   files contain ephemeris information for solar system objects: planets,
+   satellites, comets, asteroids, and spacecraft.
+<P>
+ 
+   The comments are stored in a ``what you put in is what you get out''
+   fashion, so care should be taken when formatting the comments before
+   placing them into the comment area of a SPICE binary kernel file.
+<P>
+ 
+<BR><BR>
+<A NAME="References"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> References
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Detailed descriptions of the CK, EK, PCK, and SPK SPICE binary kernel
+   file formats may be found in the NAIF documents:
+<P>
+ 
+<UL>
+<TT>1.</TT> CK Required Reading (<a href="../req/ck.html">ck.req</a>).
+<BR><BR></UL>
+<UL>
+<TT>2.</TT> EK Required Reading (<a href="../req/ek.html">ek.req</a>).
+<BR><BR></UL>
+<UL>
+<TT>3.</TT> PCK Required Reading (<a href="../req/pck.html">pck.req</a>).
+<BR><BR></UL>
+<UL>
+<TT>4.</TT> SPK Required Reading (<a href="../req/spk.html">spk.req</a>).
+<BR><BR></UL>
+   Information related to other aspects of the COMMNT program and its
+   options may be found in the NAIF document:
+<P>
+ 
+<UL>
+<TT>1.</TT> SPC Required Reading (<a href="../req/spc.html">spc.req</a>).
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Changes"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Changes
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   COMMNT can now be used as a command line driven program. This makes the
+   program more useful for script programs that need to manipulate the
+   comment area of SPICE binary kernels.
+<P>
+ 
+<BR><BR>
+<A NAME="File Naming and Usage Conventions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> File Naming and Usage Conventions
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Filenames are required for options in the COMMNT program. In order to
+   maintain portability a filename must, in addition to any conditions
+   imposed by a particular computer or operating system, satisfy the
+   following conditions.
+<P>
+ 
+<UL>
+<TT>--</TT> A filename must be nonblank.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> A filename may not contain embedded spaces.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> A filename may not contain nonprinting or ``control'' characters, e.g.,
+tabs, line feeds, carriage returns, nulls, form feeds, etc.. The
+nonprinting and control characters are those with decimal values 0-31 and
+127.
+<BR><BR></UL>
+   Be aware that on many computer systems filenames are case sensitive. On
+   such a system, the filenames `program.for' and `PROGRAM.FOR' are
+   different. On a computer system that does not support case sensitive
+   filenames these filenames would both refer to the same file.
+<P>
+ 
+   Also be aware that each computer system will have a limit on the length
+   of a filename. Care must be taken when moving files from a computer
+   system which supports longer filenames to a computer system which
+   supports shorter filenames, in particular if the initial portion of the
+   filenames are identical.
+<P>
+ 
+   When extracting comments into a text file the COMMNT program will not
+   allow an existing filename to be used. Before the program creates a file
+   it determines whether a file with the entered filename already exists.
+   If so, a brief message reporting this is displayed and an opportunity to
+   reenter the filename will be provided. This is done in order to prevent
+   accidental modification of existing files.
+<P>
+ 
+   If at any time an improper filename is entered: a file which did not
+   exist when it should have, a file which existed when it should not have,
+   or a filename containing improper characters, an appropriate error
+   message will be displayed. A chance to reenter the filename will be
+   provided via a ``Try again? (Yes/No)'' prompt. A response of ``Yes'' and
+   the prompt for the filename will be redisplayed. A response of ``No''
+   will return the program to the main menu.
+<P>
+ 
+<BR><BR>
+<A NAME="Using COMMNT"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Using COMMNT
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   The COMMNT utility program provides a collection of services useful for
+   manipulating and examining the comment area of SPICE binary kernel
+   files. The COMMNT program provides four services for use with the
+   comment area of SPICE binary kernel files.
+<P>
+ 
+<UL>
+<TT>--</TT> Add comments to a binary kernel file from a text file.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Read the comments in a binary kernel file.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Extract comments from a binary kernel file to a text file.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Delete the comments in a binary kernel file.
+<BR><BR></UL>
+   The desired service is selected by providing the appropriate option on
+   the command line or by choosing the appropriate option from the main
+   menu of the COMMNT program.
+<P>
+ 
+<BR><BR>
+<A NAME="Using COMMNT from the command line"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Using COMMNT from the command line
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The command line options, given at the beginning of this document are
+   repeated below:
+<P>
+ 
+   Add comments to a kernel file from a text file.
+<P>
+ 
+<PRE>
+   prompt&gt; commnt -a kernel_file comment_file
+</PRE>
+   Extract comments from a kernel file to a text file.
+<P>
+ 
+<PRE>
+   prompt&gt; commnt -e kernel_file comment_file
+</PRE>
+   Read the comments in a kernel file, displaying the results on the
+   Standard Output device.
+<P>
+ 
+<PRE>
+   prompt&gt; commnt -r kernel_file
+</PRE>
+   Delete all of the comments in a kernel file.
+<P>
+ 
+<PRE>
+   prompt&gt; commnt -d kernel_file
+</PRE>
+   If an error occurs during the execution of COMMNT in command line mode,
+   the program will display an appropriate error message and halt.
+<P>
+ 
+<BR><BR>
+<A NAME="Using COMMNT interactively"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Using COMMNT interactively
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   If you execute the program without providing any command line arguments,
+   you will be presented with a menu of optional actions. An option is
+   selected by entering the letter or number appearing in parentheses to
+   the left of the option's description. The selection of an option is not
+   case sensitive.
+<P>
+ 
+   If an error occurs during the execution of a COMMNT option while the
+   program is in interactive mode, the program will display an appropriate
+   error message, recover and return to the main menu. See the descriptions
+   of the COMMNT options to determine what effect an error may have on the
+   outcome of the selected service.
+<P>
+ 
+<BR><BR>
+<A NAME="The COMMNT Main Menu"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> The COMMNT Main Menu
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   An option is selected from the COMMNT main menu.
+<P>
+ 
+<PRE>
+            COMMNT Options
+ 
+      ( Q ) Quit.
+      ( A ) Add comments to a binary file.
+      ( R ) Read the comments in a binary file.
+      ( E ) Extract comments from a binary file.
+      ( D ) Delete the comments in a binary file.
+ 
+</PRE>
+<BR><BR>
+<A NAME="COMMNT Options"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> COMMNT Options
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   This section describes in detail each of the options available from the
+   COMMNT main menu. For an example of each option, see the appendix.
+<P>
+ 
+<BR><BR>
+<A NAME="COMMNT Option: Q -- Quit."></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> COMMNT Option: Q -- Quit.
+</H3><P><BR><BR>
+   Gracefully exit the program.
+<P>
+ 
+<BR><BR>
+<A NAME="COMMNT Option: A -- Add comments to a binary file."></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> COMMNT Option: A -- Add comments to a binary file.
+</H3><P><BR><BR>
+   Add comments from a text file to the comment area of a SPICE binary
+   kernel file.
+<P>
+ 
+   This option requires that two filenames be supplied:
+<P>
+ 
+<UL>
+<TT>--</TT> The name of an existing text file which contains comments that are to be
+placed into the comment area of a specified SPICE binary kernel file.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> The name of an existing SPICE binary kernel file.
+<BR><BR></UL>
+   When this option is selected, prompts requesting each of the required
+   filenames will be displayed. For each prompt, the appropriate filename
+   should be entered.
+<P>
+ 
+   Upon successful completion of this option, the comments from the text
+   file will have been added to the comment area of the binary kernel file.
+   If the comment area of the binary kernel file already contains comments,
+   a single blank comment line is inserted after the existing comments, and
+   then the new comments are appended. Otherwise, the comments are simply
+   added to the comment area.
+<P>
+ 
+   As mentioned, the comments from the text file are placed into the
+   comment area of the SPICE binary kernel file in a ``what you put in is
+   what you get out'' fashion, so care should be taken when formatting the
+   comments before they are added to a SPICE binary kernel file. In
+   particular, the length of individual comment lines should be
+   ``reasonable.'' A length not exceeding 80 characters is recommended, as
+   it works well with most display devices, terminal screens, printers,
+   etc.. An individual comment line in the text file may contain at most
+   255 characters. Any characters beyond this number are ignored.
+<P>
+ 
+   The comments may contain only printing ASCII characters (decimal values
+   32 -- 126). Nonprinting characters such as tab and form--feed are not
+   allowed and will result in an error if encountered in the comments.
+   Leading and embedded blanks in the comment lines are preserved, but
+   trailing blanks are removed. This preserves the overall appearance of
+   the comments while conserving space in the comment area of the file.
+<P>
+ 
+   WARNING: If an error occurs during the execution of this option, the
+   SPICE binary kernel file may be corrupted due to a partial addition of
+   the comments. The text file containing the comments will not be
+   affected. It is advisable to keep a backup copy of the binary kernel
+   file.
+<P>
+ 
+<BR><BR>
+<A NAME="COMMNT Option: R -- Read the comments in a binary file."></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> COMMNT Option: R -- Read the comments in a binary file.
+</H3><P><BR><BR>
+   Read the comments in the comment area of a SPICE binary kernel file.
+<P>
+ 
+   This option requires the name of the binary kernel file containing the
+   comments to be read. A prompt requesting the required filename will be
+   displayed, and the appropriate filename should be entered at this time.
+<P>
+ 
+   The comments contained in the comment area of the SPICE binary kernel
+   file will be displayed on the terminal screen.
+<P>
+ 
+   If an error occurs during the execution of this option, the SPICE binary
+   kernel file will not be affected.
+<P>
+ 
+<BR><BR>
+<A NAME="COMMNT Option: E -- Extract comments from a binary file."></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> COMMNT Option: E -- Extract comments from a binary file.
+</H3><P><BR><BR>
+   Extract the comments in the comment area of a SPICE binary file to a new
+   text file.
+<P>
+ 
+   This option requires that two filenames be supplied:
+<P>
+ 
+<UL>
+<TT>--</TT> The name of an existing SPICE binary kernel file.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> The name of the text file to create for the extracted comments.
+<BR><BR></UL>
+   When this option is selected, prompts requesting each of the required
+   filenames will be displayed. The name entered for the text file that is
+   created for the extracted comments must be that of a new file.
+   Otherwise, COMMNT will report that the file already exists and provide
+   an opportunity to reenter the filename.
+<P>
+ 
+   Upon successful completion of this option the comments from the SPICE
+   binary kernel file will be in the specified text file.
+<P>
+ 
+   If an error occurs during the execution of this option, the SPICE binary
+   kernel file will be unaffected. The text file that was being created
+   will be deleted since the complete contents of the comment area may not
+   have been extracted.
+<P>
+ 
+<BR><BR>
+<A NAME="COMMNT Option: D -- Delete the comments in a binary file."></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> COMMNT Option: D -- Delete the comments in a binary file.
+</H3><P><BR><BR>
+   Delete the comments in the comment area of a SPICE binary kernel file.
+<P>
+ 
+   This option requires the name of the binary file which is to have its
+   comment area deleted.
+<P>
+ 
+   A prompt requesting the required filename will be displayed, and the
+   appropriate filename should be entered at this time.
+<P>
+ 
+   Upon successful completion of this option, the comments will have been
+   deleted from the SPICE binary kernel file that was specified. Deleting
+   the comments does NOT reduce the size of the existing binary file. The
+   space used by the comment area is reclaimed for later use.
+<P>
+ 
+   WARNING: If an error occurs during the execution of this option, the
+   SPICE binary kernel file may be corrupted due to a partial deletion of
+   the comments. It is advisable to keep a backup copy of the binary kernel
+   file.
+<P>
+ 
+
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+
+</BODY>
+
+</HTML>

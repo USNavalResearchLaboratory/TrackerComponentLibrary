@@ -1,0 +1,203 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dafopw</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dafopw</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DAFOPW opens a DAF for subsequent write requests.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      fname   the string name of a DAF to open for write access.
+
+              [1,c1] = size(fname); char = class(fname)
+
+                 or
+
+              [1,1] = size(fname); cell = class(fname)
+
+   the call:
+
+      handle = <b>cspice_dafopw</b>( fname )
+
+   returns:
+
+      handle   the file handle used other DAF routines
+               to refer to 'fname'.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+   Use <a href="cspice_dafcls.html">cspice_dafcls</a> to close files opened by this routine.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      %    Given an SPK with a comment section:
+      %
+      %      Body list
+      %       1 MERCURY BARYCENTER
+      %       2 VENUS BARYCENTER
+      %       3 EARTH BARYCENTER
+      %       4 MARS BARYCENTER
+      %       5 JUPITER BARYCENTER
+      %       6 SATURN BARYCENTER
+      %       7 URANUS BARYCENTER
+      %       8 NEPTUNE BARYCENTER
+      %
+      %             ...
+
+      %
+      % Define the SPK file from which to remove the comments section.
+      %
+      SPK = 'test.spk';
+
+      %
+      % Open for writing the 'SPK', return the corresponding
+      % file handle to 'handle'.
+      %
+      handle = <b>cspice_dafopw</b>( SPK );
+
+      %
+      % Remove the comments section from the DAF referred to by 'handle'.
+      %
+      <a href="cspice_dafdc.html">cspice_dafdc</a>( handle )
+
+      %
+      % SAFELY close the file.
+      %
+      <a href="cspice_dafcls.html">cspice_dafcls</a>( handle )
+
+   Examine the 'SPK' comment after the <a href="cspice_dafdc.html">cspice_dafdc</a> call.
+
+      $ commnt -r test.spk
+
+      There were no comments in the file 'test.spk'.
+
+   Matlab outputs:
+
+      None.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Most DAFs require only read access. If you do not need to
+   change the contents of a file, you should open it with <a href="cspice_dafopr.html">cspice_dafopr</a>.
+   Use <b>cspice_dafopw</b> when you need to
+
+      -- change (update) one or more summaries, names, or
+         arrays within a file; or
+
+      -- add new arrays to a file.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/dafopw_c.html">dafopw_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/daf.html">DAF.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 10-JUL-2012, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   open DAF for write
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:36 2014</pre>
+
+</body>
+</html>
+

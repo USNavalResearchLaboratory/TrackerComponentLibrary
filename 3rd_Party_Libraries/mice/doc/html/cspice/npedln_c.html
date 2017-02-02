@@ -1,0 +1,341 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>npedln_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>npedln_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void npedln_c ( SpiceDouble         a,
+                   SpiceDouble         b,
+                   SpiceDouble         c,
+                   ConstSpiceDouble    linept[3],
+                   ConstSpiceDouble    linedr[3],
+                   SpiceDouble         pnear[3],
+                   SpiceDouble       * dist      ) 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Find nearest point on a triaxial ellipsoid to a specified line, 
+   and the distance from the ellipsoid to the line. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/ellipses.html">ELLIPSES</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   ELLIPSOID 
+   GEOMETRY 
+   MATH 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   a          I   Length of ellipsoid's semi-axis in the x direction 
+   b          I   Length of ellipsoid's semi-axis in the y direction 
+   c          I   Length of ellipsoid's semi-axis in the z direction 
+   linept     I   Point on line 
+   linedr     I   Direction vector of line 
+   pnear      O   Nearest point on ellipsoid to line 
+   dist       O   Distance of ellipsoid from line 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   a, 
+   b, 
+   c              are the lengths of the semi-axes of a triaxial 
+                  ellipsoid which is centered at the origin and 
+                  oriented so that its axes lie on the x-, y- and 
+                  z- coordinate axes.  a, b, and c are the lengths of 
+                  the semi-axes that point in the x, y, and z 
+                  directions respectively. 
+ 
+   linept 
+   linedr         are, respectively, a point and a direction vector 
+                  that define a line.  The line is the set of vectors 
+ 
+                     linept   +   t * linedr 
+ 
+                  where t is any real number. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   pnear          is the point on the ellipsoid that is closest to 
+                  the line, if the line doesn't intersect the 
+                  ellipsoid. 
+ 
+                  If the line intersects the ellipsoid, pnear will 
+                  be a point of intersection.  If linept is outside 
+                  of the ellipsoid, pnear will be the closest point 
+                  of intersection.  If linept is inside the 
+                  ellipsoid, pnear will not necessarily be the 
+                  closest point of intersection. 
+ 
+ 
+   dist           is the distance of the line from the ellipsoid. 
+                  This is the minimum distance between any point on 
+                  the line and any point on the ellipsoid. 
+ 
+                  If the line intersects the ellipsoid, dist is zero. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None.
+    </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   If this routine detects an error, the output arguments nearp and 
+   dist are not modified. 
+ 
+   1)  If the length of any semi-axis of the ellipsoid is 
+       non-positive, the error SPICE(INVALIDAXISLENGTH) is signaled. 
+ 
+   2)  If the line's direction vector is the zero vector, the error 
+       SPICE(ZEROVECTOR) is signaled. 
+ 
+   3)  If the length of any semi-axis of the ellipsoid is zero after 
+       the semi-axis lengths are scaled by the reciprocal of the 
+       magnitude of the longest semi-axis and then squared, the error 
+       SPICE(DEGENERATECASE) is signaled. 
+ 
+   4)  If the input ellipsoid is extremely flat or needle-shaped 
+       and has its shortest axis close to perpendicular to the input 
+       line, numerical problems could cause this routine's algorithm 
+       to fail, in which case the error SPICE(DEGENERATECASE) is 
+       signaled. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   For any ellipsoid and line, if the line does not intersect the 
+   ellipsoid, there is a unique point on the ellipsoid that is 
+   closest to the line.  Therefore, the distance dist between 
+   ellipsoid and line is well-defined.  The unique line segment of 
+   length dist that connects the line and ellipsoid is normal to 
+   both of these objects at its endpoints. 
+ 
+   If the line intersects the ellipsoid, the distance between the 
+   line and ellipsoid is zero. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   1)   We can find the distance between an instrument optic axis ray 
+        and the surface of a body modelled as a tri-axial ellipsoid 
+        using this routine.  If the instrument position and pointing 
+        unit vector in body-fixed coordinates are 
+ 
+           linept = ( 1.0e6,  2.0e6,  3.0e6 ) 
+ 
+        and 
+ 
+           linedr = ( -4.472091234e-1 
+                      -8.944182469e-1, 
+                      -4.472091234e-3  ) 
+ 
+        and the body semi-axes lengths are 
+ 
+           a = 7.0e5 
+           b = 7.0e5 
+           c = 6.0e5, 
+ 
+        then the call to <b>npedln_c</b> 
+ 
+           <b>npedln_c</b> ( a, b, c, linept, linedr, pnear, &amp;dist ); 
+ 
+        yields a value for pnear, the nearest point on the body to 
+        the optic axis ray, of 
+
+           (  -.16333110792340931E+04,
+              -.32666222157820771E+04,
+               .59999183350006724E+06  )
+ 
+        and a value for dist, the distance to the ray, of 
+
+           .23899679338299707E+06
+ 
+        (These results were obtained on a PC-Linux system under gcc.)
+
+        In some cases, it may not be clear that the closest point 
+        on the line containing an instrument boresight ray is on 
+        the boresight ray itself; the point may lie on the ray 
+        having the same vertex as the boresight ray and pointing in 
+        the opposite direction.  To rule out this possibility, we 
+        can make the following test: 
+ 
+           /.
+           Find the difference vector between the closest point 
+           on the ellipsoid to the line containing the boresight 
+           ray and the boresight ray's vertex.  Find the 
+           angular separation between this difference vector 
+           and the boresight ray.  If the angular separation 
+           does not exceed pi/2, we have the nominal geometry. 
+           Otherwise, we have an error. 
+           ./
+           
+           <a href="vsub_c.html">vsub_c</a> ( pnear,  linept,  diff );
+           
+           sep = <a href="vsep_c.html">vsep_c</a> ( diff, linedr );
+
+           if (  sep &lt;= <a href="halfpi_c.html">halfpi_c</a>()  )  
+           {
+              [ perform normal processing ] 
+           }
+           else 
+           {
+              [ handle error case ] 
+           }
+
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman   (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.1.0, 01-JUN-2010 (NJB)
+ 
+       Added touchd_ calls to tests for squared, scaled axis length
+       underflow. This forces rounding to zero in certain cases where
+       it otherwise might not occur due to use of extended registers.
+
+   -CSPICE Version 1.0.1, 06-DEC-2002 (NJB)
+
+       Outputs shown in header example have been corrected to 
+       be consistent with those produced by this routine.
+
+   -CSPICE Version 1.0.0, 03-SEP-1999 (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   distance between line and ellipsoid 
+   distance between line of sight and body 
+   nearest point on ellipsoid to line 
+ </PRE>
+<h4>Link to routine npedln_c source file <a href='../../../src/cspice/npedln_c.c'>npedln_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:39 2014</pre>
+
+</body>
+</html>
+

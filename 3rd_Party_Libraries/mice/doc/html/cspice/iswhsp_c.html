@@ -1,0 +1,246 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>iswhsp_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>iswhsp_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   SpiceBoolean iswhsp_c ( ConstSpiceChar * string ) 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Return a boolean value indicating whether a string contains
+   only white space characters.
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   FILES,  TEXT 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   string     I   String to be tested.
+    
+   The function returns the boolean value SPICETRUE if the string is
+   empty or contains only white space characters; otherwise it returns 
+   the value SPICEFALSE.
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+   string     is a character pointer designating a string to be 
+              searched for non-white-space characters.
+              </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+   The function returns the boolean value SPICETRUE if the string 
+   contains only white space characters; otherwise it returns the 
+   value SPICEFALSE.
+   
+   White space characters are those in the set
+              
+      { ' ', '\f', '\n', '\r', '\t', '\v' }
+                 
+               </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1)  If the input string pointer is null, the error SPICE(NULLPOINTER)
+       is signaled.
+    
+   2)  An empty string, that is a string with a null character
+       at index 0, is considered to be blank.
+   </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   This routine provides a short cut for testing lines for the presence
+   of non-blank characters; this is a test which is performed frequently
+   in CSPICE.
+    </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   1) Read a text file; print the non-blank lines.   
+   
+         #include &lt;stdio.h&gt;
+         #include &quot;SpiceUsr.h&quot;
+         
+         void main()
+         {
+            #define MAXLEN 82
+
+            FILE          *fptr;
+            SpiceBoolean   eof;
+            SpiceChar      line [MAXLEN];
+            
+            
+            txtopr_c ( &quot;myfile&quot;, &amp;fptr );
+            
+            readln_c ( fptr, MAXLEN, line, &amp;eof );
+            
+            while ( !eof )
+            {
+               if ( !<b>iswhsp_c</b>(line) )
+               {
+                  printf ( &quot;%s\n&quot;, line );
+               }
+            
+               readln_c ( fptr, MAXLEN, line, &amp;eof );
+            }
+         }
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   1)  &quot;American National Standard for Programming Languages -- C,&quot;
+        Published by the American National Standards Institute, 1990. 
+        Section 7.3.1.9., p. 104.
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.1.0, 27-AUG-1999 (NJB)
+
+      Now checks for null input string.
+      
+   -CSPICE Version 1.0.0, 24-FEB-1999 (NJB)
+
+      Arguments passed to isspace are now cast to unsigned char to 
+      suppress compilation warnings on some systems.
+
+   -CSPICE Version 1.0.0, 08-FEB-1998 (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   read a non-blank line from a text file 
+ </PRE>
+<h4>Link to routine iswhsp_c source file <a href='../../../src/cspice/iswhsp_c.c'>iswhsp_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:36 2014</pre>
+
+</body>
+</html>
+

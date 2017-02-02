@@ -1,0 +1,289 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>dafrs_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>dafrs_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void dafrs_c ( ConstSpiceDouble  * sum ) 
+
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Change the summary for the current array in the current DAF. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/daf.html">DAF</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   FILES 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   sum        I   New summary for current array. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   sum         is the new summary for the current array. This 
+               replaces the existing summary. However, the addresses 
+               (the final two integer components) of the original 
+               summary are not changed. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1)  If this routine is called when no search is in progress in the 
+       the current DAF, the error SPICE(DAFNOSEARCH) is signaled. 
+ 
+   2)  If the DAF containing the `current' array has actually been 
+       closed, the error will be diagnosed by routines called by 
+       this routine. 
+ 
+   3)  If the DAF containing the `current' array is not open for 
+       writing, the error will be diagnosed by routines called by 
+       this routine. 
+ 
+   4)  If no array is current in the current DAF, the error 
+       SPICE(NOCURRENTARRAY) is signaled.  There is no current 
+       array when a search is started by <a href="dafbfs_c.html">dafbfs_c</a> or <a href="dafbbs_c.html">dafbbs_c</a>, but no 
+       calls to <a href="daffna_c.html">daffna_c</a> or dafbna_ have been made yet, or whenever 
+       <a href="daffna_c.html">daffna_c</a> or <a href="daffpa_c.html">daffpa_c</a> return the value SPICEFALSE in the `found' 
+       argument. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   This routine operates on a DAF opened for write access.  A search
+   must be in progress at the time this routine is called; this 
+   routine replaces the descriptor of the current segment.
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   See SPICELIB umbrella routine DAFFA. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   1) Replace the body ID code -999 with -1999 in every descriptor
+      of an SPK file.
+
+
+      #include &lt;SpiceUsr.h&gt;
+ 
+      int main ( int argc,  char **argv )
+      {
+         #define ND              2
+         #define NI              6
+         #define DSCSIZ          5
+         #define NEWCODE         ( -1999 )
+         #define OLDCODE         ( -999  )
+
+         SpiceBoolean            found;
+
+         SpiceInt                handle;
+         SpiceInt                ic      [ NI ];
+
+         SpiceDouble             dc      [ ND ];
+         SpiceDouble             sum     [ DSCSIZ ];
+
+         /.
+         Open for writing the SPK file specified on the command line.
+         ./
+         <a href="dafopw_c.html">dafopw_c</a> ( argv[1], &amp;handle );
+      
+         /.
+         Search the file in forward order.
+         ./
+         <a href="dafbfs_c.html">dafbfs_c</a> ( handle );
+         <a href="daffna_c.html">daffna_c</a> ( &amp;found );
+
+         while ( found )
+         {
+            /.
+            Fetch and unpack the descriptor (aka summary)
+            of the current segment.
+            ./
+            <a href="dafgs_c.html">dafgs_c</a> ( sum  );
+            <a href="dafus_c.html">dafus_c</a> ( sum, ND, NI, dc, ic );
+          
+            /.
+            Replace ID codes if necessary.
+            ./
+            if ( ic[0] == OLDCODE )
+            {
+               ic[0] = NEWCODE;
+            }
+            if ( ic[1] == OLDCODE )
+            {
+               ic[1] = NEWCODE;
+            }
+
+            /.
+            Re-pack the descriptor; replace the descriptor
+            in the file.
+            ./
+            <a href="dafps_c.html">dafps_c</a> ( ND, NI, dc, ic, sum );
+
+            <b>dafrs_c</b> ( sum );
+ 
+            /.
+            Find the next segment.
+            ./
+            <a href="daffna_c.html">daffna_c</a> ( &amp;found );
+         }
+
+         /.
+         Close the file.
+         ./
+         <a href="dafcls_c.html">dafcls_c</a> ( handle );
+
+         return ( 0 );
+      }
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman    (JPL) 
+   W.L. Taber      (JPL) 
+   I.M. Underwood  (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 23-NOV-2004 (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   replace daf summary 
+ </PRE>
+<h4>Link to routine dafrs_c source file <a href='../../../src/cspice/dafrs_c.c'>dafrs_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:29 2014</pre>
+
+</body>
+</html>
+

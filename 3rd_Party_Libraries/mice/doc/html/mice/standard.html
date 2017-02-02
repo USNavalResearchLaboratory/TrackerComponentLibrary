@@ -1,0 +1,48 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+
+<head>
+   <title>The standard.tm meta kernel</title>
+</head>
+
+<body bgcolor=white>
+
+<pre>
+
+   \begintext
+   
+   Several code examples mention use of a SPICE meta kernel 'standard.tm'. 
+   Consider this as shorthand for any meta kernel that lists an SPK kernel, 
+   PCK kernel, and a current leapseconds kernel.
+   
+   The names and contents of the kernels referenced by this meta-kernel 
+   are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de414.bsp                     Planetary ephemeris
+
+            pck00008.tpc                  Planet orientation and
+                                          radii
+
+            naif0009.tls                  Leapseconds
+
+
+   Load the three kernel: 
+
+
+   \begindata
+
+     KERNELS_TO_LOAD = ( '/kernels/gen/lsk/naif0009.tls',
+                         '/kernels/gen/spk/de414.bsp',
+                         '/kernels/gen/pck/pck00008.tpc' )
+
+   \begintext
+</pre>
+
+</body>
+
+</html>
+

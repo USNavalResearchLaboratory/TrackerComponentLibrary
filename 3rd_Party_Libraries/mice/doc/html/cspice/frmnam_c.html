@@ -1,0 +1,291 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>frmnam_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>frmnam_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void frmnam_c ( SpiceInt      frcode,
+                   SpiceInt      lenout,
+                   SpiceChar *   frname  )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Retrieve the name of a reference frame associated with 
+   a SPICE ID code. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   FRAMES 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   VARIABLE  I/O  DESCRIPTION 
+   --------  ---  -------------------------------------------------- 
+   frcode     I   an integer code for a reference frame 
+   lenout     I   Maximum length of output string.
+   frname     O   the name associated with the reference frame. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   frcode         is an integer code for a reference frame. 
+ 
+   lenout         is the maximum number of characters that can be 
+                  accommodated in the output string.  This count 
+                  includes room for the terminating null character.
+                  For example, if the maximum allowed length of the 
+                  output string, including the terminating null, is 33
+                  characters, then lenout should be set to 33.
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   frname      is the name associated with the reference frame. 
+               It will be returned left-justified. 
+ 
+               If frcode is not recognized as the name of a 
+               known reference frame, frname will be returned 
+               as an empty string. 
+ 
+               If frname is not sufficiently long to hold the 
+               name, it will be truncated on the right. 
+ 
+               All reference frame names are 32 or fewer characters 
+               in length.  Thus declaring frname to be SpiceChar[33] 
+               will ensure that the returned name will not be 
+               truncated. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1) If frcode is not recognized as the name of a known reference
+      frame, frname will be returned as a blank. 
+ 
+   2) If the output string pointer is null, the error SPICE(NULLPOINTER)
+      is signaled.
+      
+   3) If the output string has length less than two characters, it 
+      is too short to contain one character of output data plus a null  
+      terminator, so it cannot be passed to the underlying Fortran 
+      routine.  In this event, the error SPICE(STRINGTOOSHORT) is
+      signaled.
+      
+   4) If the length of frname (indicated by lenout) is at least two
+      characters but not large enough to contain the output string, 
+      the output string will be truncated on the right. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   This routine retrieves the name of a reference frame associated 
+   with a SPICE frame ID code. 
+ 
+   The ID codes stored locally are scanned for a match with frcode. 
+   If a match is found, the name stored locally will be returned 
+   as the name for the frame. 
+ 
+   If frcode is not a member of the list of internally stored 
+   ID codes, the kernel pool will be examined to see if the 
+   variable 
+ 
+      FRAME_idcode_NAME 
+ 
+   is present (where idcode is the decimal character equivalent 
+   of frcode).  If the variable is located and it has both 
+   character type and dimension 1, the string value of the 
+   kernel pool variable is returned as the name of the reference 
+   frame. 
+ 
+   Note that because the local information is always examined 
+   first and searches of the kernel pool are performed only 
+   after exhausting local information, it is not possible to 
+   override the local name for any reference frame that is 
+   known by this routine. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   Suppose you needed to create a message concerning a reference 
+   frame and wish to use the name of the frame in the message. 
+   Suppose further that you have only the frame ID code at your 
+   disposal.  You can capture the frame name using this routine 
+   as shown here. 
+ 
+      #include &quot;SpiceUsr.h&quot;   
+           .
+           .
+           .
+      #define NAMELEN         33
+      
+      SpiceChar               frname [NAMELEN];
+      SpiceInt                frcode;
+
+ 
+      <b>frmnam_c</b> ( frcode, NAMELEN, frname );
+ 
+      if ( <a href="iswhsp_c.html">iswhsp_c</a>(frname) )  
+      { 
+         sprintf ( frname, &quot;%ld&quot;, frcode );
+      }
+
+      printf ( &quot;Concerning reference frame: %s\n&quot;, frname );
+ 
+        [Print the rest of your message.]
+        
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   W.L. Taber      (JPL) 
+   B.V. Semenov    (JPL) 
+   N.J. Bachman    (JPL)
+   </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.2, 08-JAN-2014 (BVS) 
+
+       Fixed typo in Examples (frname_c -&gt; <b>frmnam_c</b>). Reordered
+       header sections.
+
+   -CSPICE Version 1.0.1, 26-MAR-2003 (NJB) 
+
+       Fixed description of exception (4):  replaced &quot;lenout-1&quot;
+       with &quot;lenout.&quot;  Removed spurious word &quot;clock&quot; from string
+       description.
+
+   -CSPICE Version 1.0.0, 13-AUG-2001 (NJB) (WLT)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   Frame idcode to frame name translation   
+</PRE>
+<h4>Link to routine frmnam_c source file <a href='../../../src/cspice/frmnam_c.c'>frmnam_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:34 2014</pre>
+
+</body>
+</html>
+

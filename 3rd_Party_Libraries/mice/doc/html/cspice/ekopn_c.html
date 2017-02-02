@@ -1,0 +1,237 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>ekopn_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>ekopn_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void ekopn_c ( ConstSpiceChar    * fname,
+                  ConstSpiceChar    * ifname,
+                  SpiceInt            ncomch,
+                  SpiceInt          * handle ) 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Open a new E-kernel file and prepare the file for writing. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/ek.html">EK</a> 
+   <a href="../req/naif_ids.html">NAIF_IDS</a> 
+   <a href="../req/time.html">TIME</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   EK 
+   FILES 
+   UTILITY 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   fname      I   Name of EK file. 
+   ifname     I   Internal file name. 
+   ncomch     I   The number of characters to reserve for comments. 
+   handle     O   Handle attached to new EK file. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   fname          is the name of a new E-kernel file to be created. 
+ 
+   ifname         is the internal file name of a new E-kernel.  The 
+                  internal file name may be up to 60 characters in 
+                  length, not including the null terminator.
+ 
+   ncomch         is the amount of space, measured in characters, to 
+                  be allocated in the comment area when the new EK 
+                  file is created.  It is not necessary to allocate 
+                  space in advance in order to add comments, but 
+                  doing so may greatly increase the efficiency with 
+                  which comments may be added.  Making room for 
+                  comments after data has already been added to the 
+                  file involves moving the data, and thus is slower. 
+ 
+                  ncomch must be greater than or equal to zero. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   handle         is the EK handle of the file designated by fname. 
+                  This handle is used to identify the file to other 
+                  EK routines. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1)  If NCOMCH is less than zero, the error SPICE(INVALIDCOUNT) 
+       will be signalled.  No file will be created. 
+ 
+   2)  If IFNAME is invalid, the error will be diagnosed by routines 
+       called by this routine. 
+ 
+   3)  If the indicated file cannot be opened, the error will be 
+       diagnosed by routines called by this routine.  The new file 
+       will be deleted. 
+ 
+   4)  If an I/O error occurs while reading or writing the indicated 
+       file, the error will be diagnosed by routines called by this 
+       routine. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   See the EK Required Reading for a discussion of the EK file 
+   format. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   This routine operates by side effects:  it opens and prepares 
+   an EK for addition of data. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   1)  Open a new EK file with name &quot;my.ek&quot; and internal file 
+       name &quot;test ek/1995-JUL-17&quot;: 
+ 
+       <b>ekopn_c</b> ( &quot;my.ek&quot;,  &quot;test ek/1995-JUL-17&quot;,  &amp;handle  );
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman   (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 31-MAR-1998 (NJB)
+   
+      Based on SPICELIB Version 1.0.0, 26-SEP-1995 (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   open new E-kernel 
+   open new EK 
+ </PRE>
+<h4>Link to routine ekopn_c source file <a href='../../../src/cspice/ekopn_c.c'>ekopn_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:32 2014</pre>
+
+</body>
+</html>
+

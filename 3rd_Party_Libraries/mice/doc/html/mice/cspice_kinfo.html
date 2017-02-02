@@ -1,0 +1,236 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_kinfo</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_kinfo</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_KINFO returns information about a loaded kernel
+   specified by name.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      file   the scalar string name of a kernel file for which descriptive
+             information is desired.
+
+   the call:
+
+      [ filtyp, source, handle, found] = <b>cspice_kinfo</b>( file)
+
+   returns:
+
+      filtyp   the scalar string type name of the kernel specified by 'file'.
+               'filtyp' will be empty if file is not on the list of kernels
+               loaded via <a href="cspice_furnsh.html">cspice_furnsh</a>.
+
+      source   the scalar string name of the source file used to
+               specify 'file' as one to load.  If 'file' was loaded
+               directly via a call to <a href="cspice_furnsh.html">cspice_furnsh</a>, 'source' will be empty.
+               If file is not on the list of kernels loaded via
+               <a href="cspice_furnsh.html">cspice_furnsh</a>, 'source' will be empty.
+
+      handle   the integer handle attached to 'file' if it is a binary
+               kernel.  If file is a text kernel or meta-text kernel
+               handle will be zero. If file is not on the list of
+               kernels loaded via <a href="cspice_furnsh.html">cspice_furnsh</a>, 'handle' has value zero.
+
+      found    returns true if the specified file exists.
+               If there is no such file, 'found' will be set to
+               false.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+         KPL/MK
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            pck00009.tpc                  Planet orientation and
+                                          radii
+            naif0009.tls                  Leapseconds
+
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( '/kernels/gen/lsk/naif0009.tls'
+                                '/kernels/gen/spk/de421.bsp'
+                                '/kernels/gen/pck/pck00009.tpc'
+                      )
+
+         \begintext
+
+      %
+      % Load a meta kernel listing a path to an SPK file.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % Use <b>cspice_kinfo</b> to ensure the kernel system loaded
+      % the SPK file of interest.
+      %
+      file = '/kernels/gen/spk/de421.bsp';
+
+      [ filtyp, source, handle, found ] = <b>cspice_kinfo</b>( file );
+
+      %
+      % Take appropriate action depending on the returned
+      % state of found. If found has value false, then
+      % 'file' is not loaded.
+      %
+      if ( found )
+         disp( [ 'File type: ' filtyp ] )
+         disp( [ 'Source   : ' source ] )
+      else
+         disp( [ 'Kernel not loaded: ' file ] )
+      end
+
+      %
+      % It's always good form to unload kernels after use,
+      % particularly in Mice due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+      File type: SPK
+      Source   : <a href= "standard.html">standard.tm</a>
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/kinfo_c.html">kinfo_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.2.0, 10-MAY-2011, EDW (JPL)
+
+      &quot;logical&quot; call replaced with &quot;zzmice_logical.&quot;
+
+   -Mice Version 1.0.1, 06-MAY-2009, EDW (JPL)
+
+      Added <a href="../req/mice.html">MICE.REQ</a> reference to the Required Reading section.
+
+   -Mice Version 1.0.0, 01-DEC-2006, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Fetch information about a loaded SPICE kernel
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:37 2014</pre>
+
+</body>
+</html>
+

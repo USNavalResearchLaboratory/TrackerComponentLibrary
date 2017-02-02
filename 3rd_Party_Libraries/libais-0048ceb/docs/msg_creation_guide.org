@@ -1,0 +1,81 @@
+
+* Introduction
+
+None of the documents out in the wild really do a good job talking
+about the rights and wrongs of AIS message creation. This is my
+attempt to capture best practices. This is based on experience
+implementing pure python and pure C++ decoders of AIS, talking ESR
+through his writing of a pure python decoder and the GPSD C decoder.
+The real solution is to introduce a proper language for describing AIS
+messages, but the majority of the community does not see this as a
+requirement.
+
+Unsorted initial list:
+
+- All messages must have their overall content broadcast in byte
+  aligned message, so make your message clear how it byte aligns.  A
+  variable length spare at the end is a good way to do this.
+- Do not pad more than to then next byte on the end of your message.
+  There is no reason to fill out to the end of a slot.  Extra space
+  only increases the chance that VHF noise will corrupt the message.
+- Avoid defaults or common with lots of 1 bits in them.  This will
+  trigger bit stuffing more often and cause problems.
+- Make sure that values that are needed occur before they are used.
+  Otherwise you are forcing people code to require random access to
+  the bit stream.
+- Provide example messages, bit streams, and decoded values for people
+  to test against.
+- Provide an example database SQL CREATE command for your message.
+  This will force you to think carefully about your data structures.
+  If it has spatial geometry, include both a traditional SQL
+  definition and a PostGIS spatial version.
+- Include a diagram if appropriate!
+- Do not reference paywalled documents (e.g. ITU 1371)
+- Include the lookup tables locally for things that have tables.  Do
+  not just blindly refer to things like the Beaufort scale.  That is
+  not helpful.
+- State all units.  For example, you can *not* just say "Salinity".
+- Use SI units.  Using things like nautical miles or chains for
+  distances is bad.  Use km or m and let the software
+  presentation interface do the unit conversions to what ever.
+- Just because it is done in ITU 1371 does not mean it is a good
+  idea.  e.g. Message 22 and 23.
+- On messages 25 and 26, use an DAC/FI pair (aka app id).
+  Unstructured binary without a specification document is bad.  Are we
+  supposed to use the MMSI to id the content?
+- Always specify longitude (x) first and then specify latitude (y)
+- Specify the reference datum and only use WGS 84 SRID 4326
+- Be very careful with vertical reference datums.  It may not be
+  possible to convert if a different datum is needed on the ship.
+- Always specify dates and times in UTC
+- An integer scaled by a constant is not "floating point".  Reserve
+  that term for things like IEEE Floats
+- If you have a boolean value and want to specify that it can be
+  unknown, you can use two bits and call out all the options.  For
+  example "Ice Yes/No", say 0==No Ice, 1==Ice Present, 2==Information
+  not available, 3==Reserved.  Use 2 to be unknown to avoid "11" and
+  an increased chance of bit-stuffing.  However, this is a terrible
+  example.  What does it mean to have ice or no ice?  That is a huge
+  question.
+- Realize that any data transmitted is sent unencrypted and can be
+  read by anyone with a receiver (including spacecraft).  Transmitted
+  data is public domain.  If you need to keep it private, do not send
+  it over AIS.  *Anyone* can read an addressed message.
+- Consider alternative broadcast methods to the VHF data link (VDL).
+  It has limited bandwidth.
+- Try to avoid too much state.  Lots of messages where the state has
+  to be cached can overload small systems.  Try to have messages
+  expire before too long.
+- When a value is a decimal scaled value, write out the equation.  e.g
+  -20.0 to 50.0 C should be "deg C = (raw_value / 10.0) - 20."
+- Make sure to explain the motivation for a message.  Why would this
+  message be sent.  What conditions trigger the message to be sent?
+- Do not count on precise timing of AIS messages.  Receivers should
+  have a good (GPS based) local clock, but the message may take from 1
+  sec to as much as a minute or two to get to the end computer
+  (e.g. traveling through networks).  Alternatively, the message will
+  be decoded after the fact for analysis.  The USCG N-AIS sense of
+  time is +/- 8 minutes.  Alternatively, the message might be received
+  by a satellite and downlinked 30 minutes or more later when the
+  satellite gets to a downlink station.  Is the message understandable
+  in that sense?

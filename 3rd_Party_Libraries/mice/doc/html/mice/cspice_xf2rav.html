@@ -1,0 +1,218 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_xf2rav</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_xf2rav</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_XF2RAV determines the rotation matrix and angular
+   velocity of the rotation from a state transformation matrix.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      xform   a double precision 6x6 or double precision 6x6xN
+              array of a state transformations from some frame
+              &quot;frame1&quot; to another frame &quot;frame2&quot;
+
+   the call:
+
+      [rot, av] = <b>cspice_xf2rav</b>(xform)
+
+   returns:
+
+      rot   a double precision 3x3 or double precision 3x3xN array of
+            rotation matrices that gives the transformation from some
+            frame &quot;frame1&quot; to another frame &quot;frame2&quot;
+
+      av    the double precision 3x1 array or double precision
+            3xN array of angular velocities of the transformation
+
+            If 'p' is the position of a fixed point in &quot;frame2,&quot;
+            then from the point of view of &quot;frame1,&quot; 'p' rotates
+            (in a right handed sense) about an axis parallel to
+            'av'.  Moreover the rate of rotation in radians per unit
+            time is given by the length of 'av'.
+
+            More formally, the velocity 'v' of 'p' in &quot;frame1&quot; is
+            given by
+                                  t
+               v  = av x ( rot * p )
+
+            The components of 'av' are given relative to &quot;frame1.&quot;
+
+            'rot' and 'av' return with the same vectorization
+            measure (N) as 'xform'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      %  Load a set of kernels: an SPK file, a PCK file
+      %  and a leapseconds file. Use a meta kernel
+      %  for convenience.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % Create an array of 10001 ephemeris times based at July 1 2007.
+      %
+      et    = [0: 10000]* <a href="cspice_spd.html">cspice_spd</a> + <a href="cspice_str2et.html">cspice_str2et</a>( 'July 1 2007' );
+
+      %
+      % Calculate the state transformation matrices from J2000 to IAU_MOON
+      % for 'et'.
+      %
+      xform = <a href="cspice_sxform.html">cspice_sxform</a>( 'J2000', 'IAU_MOON', et );
+
+      %
+      % Convert the set of 'xform' matrices to the corresponding rotation
+      % matrices and angular velocity vectors.
+      %
+      [ rot, av ] = <b>cspice_xf2rav</b>(xform);
+
+      %
+      % Use the converted outputs from <b>cspice_xf2rav</b> to recompute a set
+      % of state transformation matrices.
+      %
+      strans = <a href="cspice_rav2xf.html">cspice_rav2xf</a>( rot, av );
+
+      %
+      % Calculate the maximum value of the absolute difference between
+      % 'xform' and 'strans'.
+      %
+      disp( 'Vector:' )
+      fprintf(                                                              ...
+         'Maximum absolute difference between rotation matrices: %8.6e\n', ...
+                                   max( max( max( abs(strans - xform) ) ) )   )
+
+      %
+      %  It's always good form to unload kernels after use,
+      %  particularly in MATLAB due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+      Maximum absolute difference between rotation matrices: 1.694066e-21
+
+      In this case, a value on the order of -21 indicates numerical
+      equivalence.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine is an inverse of the routine <a href="cspice_rav2xf.html">cspice_rav2xf</a>.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/xf2rav_c.html">xf2rav_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.1, 06-MAY-2009, EDW (JPL)
+
+      Added <a href="../req/mice.html">MICE.REQ</a> reference to the Required Reading section.
+
+   -Mice Version 1.0.0, 11-APR-2007, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   State transformation to rotation and angular velocity
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:39 2014</pre>
+
+</body>
+</html>
+

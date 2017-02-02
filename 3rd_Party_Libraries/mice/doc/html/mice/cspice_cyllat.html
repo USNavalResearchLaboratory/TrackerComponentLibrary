@@ -1,0 +1,268 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_cyllat</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_cyllat</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_CYLLAT converts cylindrical coordinates to latitudinal
+   coordinates.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      r      a double precision scalar or double precision 1xN array
+             describing the distance of the point of interest from z axis
+
+      lonc   a double precision scalar or double precision 1xN array
+             describing the cylindrical angle of the point of interest
+             from the XZ plane measured in radians
+
+      z      a double precision scalar or double precision 1xN array
+             describing the height of the point above the XY plane
+
+   the call:
+
+      [radius, lon, lat] = <b>cspice_cyllat</b>( r, lonc, z)
+
+   returns:
+
+      radius   a double precision scalar or double precision 1xN array
+               describing the distance of the position from origin
+
+      lon      a double precision scalar or double precision 1xN array
+               describing the angle of the position from the XZ plane
+               measured in radians
+
+      lat      a double precision scalar or double precision 1xN array
+               describing the angle of the position from the XY plane
+               measured in radians
+
+               The argument 'radius' returns in the same units associated
+               with 'r' and 'z'.
+
+               'radius', 'lon', and 'lat' return with the same
+               vectorization measure (N) as the 'r', 'lonc', and 'z'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   Example (1):
+
+      %
+      % Load an SPK, leapseconds, and PCK kernel set.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % Create a vector of scalar times.
+      %
+      et = [0:2]*2.*<a href="cspice_spd.html">cspice_spd</a>;
+
+      %
+      % Retrieve the position of the moon seen from earth at 'et'
+      % in the J2000 frame without aberration correction.
+      %
+      [pos, et] = <a href="cspice_spkpos.html">cspice_spkpos</a>( 'MOON', et, 'J2000', 'NONE', 'EARTH' );
+
+      %
+      % Convert the array of position vectors 'pos' to cylindrical
+      % coordinates.
+      %
+      [r, lon, z]           = <a href="cspice_reccyl.html">cspice_reccyl</a>(pos);
+
+      %
+      % Convert the cylindrical coords to latitudinal.
+      %
+      [radius3, lon3, lat3] = <b>cspice_cyllat</b>(r, lon, z);
+
+      %
+      % Convert the latitudinal to rectangular.
+      %
+      [rectan]              = <a href="cspice_latrec.html">cspice_latrec</a>(radius3, lon3, lat3);
+
+      %
+      % Calculate the relative error against the original position
+      % vectors.
+      %
+      (rectan-pos) ./ pos
+
+   MATLAB outputs:
+
+      1.0e-13 *
+
+                     0                  0  -0.25349834013312
+     -0.00436475351630                  0  -0.00153127196389
+                     0  -0.00121380425711   0.00203951344664
+
+      The relative error between the original array of position vectors
+      and the array that resulted from the various coordinate conversion
+      has magnitude on the order of 10^(-13).  A numerical
+      demonstration of equality.
+
+   Example (2):
+
+      %
+      % Define six sets of cylindrical coordinates, 'lonc' expressed
+      % in degrees - converted to radians by use of <a href="cspice_rpd.html">cspice_rpd</a>.
+      %
+      r     = [ 1.,  1.,   1.,   1.,   0.,  0. ];
+      lonc  = [ 0., 90., 180., 180., 180., 33. ] * <a href="cspice_rpd.html">cspice_rpd</a>;
+      z     = [ 0.,  0.,   1.,  -1.,   1.,  0. ];
+
+      %
+      % ...convert the cylindrical coordinates to latitudinal coordinates
+      %
+      [rad, lon, lat] = <b>cspice_cyllat</b>(r, lonc, z);
+
+      %
+      % ...convert angular measure to degrees.
+      %
+      lonc = lonc * <a href="cspice_dpr.html">cspice_dpr</a>;
+      lon  = lon  * <a href="cspice_dpr.html">cspice_dpr</a>;
+      lat  = lat  * <a href="cspice_dpr.html">cspice_dpr</a>;
+
+      %
+      % Output banner.
+      %
+      disp('     r         lonc        z        radius      lon        lat   ')
+      disp('  --------   --------   --------   --------   --------   --------')
+
+      %
+      % Create an array of values for output.
+      %
+      output = [ r; lonc; z; rad; lon; lat ];
+
+      txt = sprintf( '%10.4f %10.4f %10.4f %10.4f %10.4f %10.4f\n', output);
+      disp( txt )
+
+      %
+      % It's always good form to unload kernels after use,
+      % particularly in MATLAB due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+        r         lonc        z        radius      lon        lat
+     --------   --------   --------   --------   --------   --------
+       1.0000     0.0000     0.0000     1.0000     0.0000     0.0000
+       1.0000    90.0000     0.0000     1.0000    90.0000     0.0000
+       1.0000   180.0000     1.0000     1.4142   180.0000    45.0000
+       1.0000   180.0000    -1.0000     1.4142   180.0000   -45.0000
+       0.0000   180.0000     1.0000     1.0000   180.0000    90.0000
+       0.0000    33.0000     0.0000     0.0000    33.0000     0.0000
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/cyllat_c.html">cyllat_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 01-DEC-2005, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   cylindrical to latitudinal
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:36 2014</pre>
+
+</body>
+</html>
+

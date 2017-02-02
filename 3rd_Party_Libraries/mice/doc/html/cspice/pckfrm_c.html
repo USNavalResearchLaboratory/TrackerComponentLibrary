@@ -1,0 +1,364 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>pckfrm_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>pckfrm_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void pckfrm_c ( ConstSpiceChar  * pck,
+                   SpiceCell       * ids  ) 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Find the set of reference frame class ID codes of all frames  
+   in a specified binary PCK file. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/cells.html">CELLS</a> 
+   <a href="../req/daf.html">DAF</a> 
+   <a href="../req/sets.html">SETS</a> 
+   <a href="../req/pck.html">PCK</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   ORIENTATION 
+   UTILITY 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   pck        I   Name of PCK file. 
+   ids       I/O  Set of frame class ID codes of frames in PCK file. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   pck            is the name of a binary PCK file.
+ 
+   ids            is an initialized CSPICE set data structure. `ids'
+                  optionally may contain a set of ID codes on input; on
+                  output, the data already present in `ids' will be
+                  combined with ID code set found for the file PCK.
+ 
+                  If `ids' contains no data on input, its size and
+                  cardinality still must be initialized.
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   ids            is a CSPICE set data structure which contains the
+                  union of its contents upon input with the set of
+                  reference frame class ID codes of each frame for
+                  which data are present in the indicated PCK file. The
+                  elements of CSPICE sets are unique; hence each ID
+                  code in `ids' appears only once, even if the PCK file
+                  contains multiple segments for that ID code.
+ 
+                  See the Examples section below for a complete example
+                  program showing how to retrieve the ID codes from
+                  `ids'.
+                                     </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1)  If the input file has transfer format, the error  
+       SPICE(INVALIDFORMAT) is signaled. 
+ 
+   2)  If the input file is not a transfer file but has architecture 
+       other than DAF, the error SPICE(BADARCHTYPE) is signaled. 
+ 
+   3)  If the input file is a binary DAF file of type other than 
+       PCK, the error SPICE(BADFILETYPE) is signaled. 
+ 
+   4)  If the PCK file cannot be opened or read, the error will 
+       be diagnosed by routines called by this routine. 
+ 
+   5)  If the size of the output set argument `ids' is insufficient to 
+       contain the actual number of ID codes of frames covered by 
+       the indicated PCK file, the error will be diagnosed by 
+       routines called by this routine. 
+ 
+   6)  The error SPICE(EMPTYSTRING) is signaled if the input string
+       `pck' does not contain at least one character, since the input
+       string cannot be converted to a Fortran-style string in this
+       case.
+ 
+   7)  The error SPICE(NULLPOINTER) is signaled if the input string
+       pointer `pck' is null.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   This routine provides an API via which applications can determine 
+   the set of reference frames for which there are data in a 
+   specified PCK file. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   1)  Display the coverage for each frame in a specified PCK file. 
+       Find the set of frames in the file.  Loop over the contents 
+       of the ID code set:  find the coverage for each item in the 
+       set and display the coverage. 
+ 
+
+          #include &lt;stdio.h&gt;
+          #include &quot;SpiceUsr.h&quot;
+
+          int main()
+          {
+             /.
+             Local parameters
+             ./
+             #define  FILSIZ         256
+             #define  MAXIV          1000
+             #define  WINSIZ         ( 2 * MAXIV )
+             #define  TIMLEN         51
+             #define  MAXOBJ         1000
+
+             /.
+             Local variables
+             ./
+             SPICEDOUBLE_CELL        ( cover, WINSIZ );
+             SPICEINT_CELL           ( ids,   MAXOBJ );
+
+             SpiceChar               lsk     [ FILSIZ ];
+             SpiceChar               pck     [ FILSIZ ];
+             SpiceChar               timstr  [ TIMLEN ];
+
+             SpiceDouble             b;
+             SpiceDouble             e;
+
+             SpiceInt                i;
+             SpiceInt                j;
+             SpiceInt                niv;
+             SpiceInt                obj;
+
+
+             /.
+             Load a leapseconds kernel for output time conversion.
+             PCKCOV itself does not require a leapseconds kernel.
+             ./
+             <a href="prompt_c.html">prompt_c</a> ( &quot;Name of leapseconds kernel &gt; &quot;, FILSIZ, lsk );
+             <a href="furnsh_c.html">furnsh_c</a> ( lsk );
+
+             /.
+             Get name of PCK file.
+             ./
+             <a href="prompt_c.html">prompt_c</a> ( &quot;Name of PCK file           &gt; &quot;, FILSIZ, pck    );
+
+             /.
+             Find the set of frames in the PCK file. 
+             ./
+             <b>pckfrm_c</b> ( pck, &amp;ids );
+
+             /.
+             We want to display the coverage for each frame. Loop over
+             the contents of the ID code set, find the coverage for
+             each item in the set, and display the coverage.
+             ./
+             for ( i = 0;  i &lt; <a href="card_c.html">card_c</a>( &amp;ids );  i++  )
+             {
+                /.
+                Find the coverage window for the current frame. 
+                Empty the coverage window each time so we don't
+                include data for the previous frame.
+                ./
+                obj  =  SPICE_CELL_ELEM_I( &amp;ids, i );
+
+                <a href="scard_c.html">scard_c</a>  ( 0,        &amp;cover );
+                <a href="pckcov_c.html">pckcov_c</a> ( pck, obj, &amp;cover );
+
+                /.
+                Get the number of intervals in the coverage window.
+                ./
+                niv = <a href="wncard_c.html">wncard_c</a> ( &amp;cover );
+
+                /.
+                Display a simple banner.
+                ./
+                printf ( &quot;%s\n&quot;, &quot;========================================&quot; );
+
+                printf ( &quot;Coverage for frame %ld\n&quot;, obj );
+
+                /.
+                Convert the coverage interval start and stop times to TDB
+                calendar strings.
+                ./
+                for ( j = 0;  j &lt; niv;  j++  )
+                {
+                   /.
+                   Get the endpoints of the jth interval.
+                   ./
+                   <a href="wnfetd_c.html">wnfetd_c</a> ( &amp;cover, j, &amp;b, &amp;e );
+
+                   /.
+                   Convert the endpoints to TDB calendar
+                   format time strings and display them.
+                   ./
+                   <a href="timout_c.html">timout_c</a> ( b, 
+                              &quot;YYYY MON DD HR:MN:SC.### (TDB) ::TDB&quot;,  
+                              TIMLEN,
+                              timstr                                  );
+
+                   printf ( &quot;\n&quot;
+                            &quot;Interval:  %ld\n&quot;
+                            &quot;Start:     %s\n&quot;,
+                            j,
+                            timstr            );
+
+                   <a href="timout_c.html">timout_c</a> ( e, 
+                              &quot;YYYY MON DD HR:MN:SC.### (TDB) ::TDB&quot;,  
+                              TIMLEN,
+                              timstr                                  );
+                   printf ( &quot;Stop:      %s\n&quot;, timstr );
+
+                }
+
+             }
+             return ( 0 );
+          } 
+
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   1) If an error occurs while this routine is updating the set 
+      `ids', the set may be corrupted. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman   (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 01-DEC-2007 (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   find frame class id codes of frames in binary pck file 
+ </PRE>
+<h4>Link to routine pckfrm_c source file <a href='../../../src/cspice/pckfrm_c.c'>pckfrm_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:39 2014</pre>
+
+</body>
+</html>
+

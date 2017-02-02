@@ -1,0 +1,326 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>mice_subpt</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>mice_subpt</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   MICE_SUBPT determines the coordinates of the sub-observer point
+   on a target body at a particular epoch, optionally corrected
+   for planetary (light time) and stellar aberration. The call also
+   returns the observer's altitude above the target body.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      method   a string defining the method to use in the calculation
+
+      target   the string name of the observed target body
+
+      et       the double precision ephemeris time of interest
+
+      abcorr   the string defining the aberration correction to use in
+               the calculation
+
+      obsrvr   the string name of the observing body
+
+   the call:
+
+      [spoint] = <b>mice_subpt</b>( method, target, et, abcorr, obsrvr)
+
+   returns:
+
+      spoint   the scalar or 1xN array of structures, each structure
+               consisting of two fields:
+
+                  'pos'   the double-precision 3-vector containing the
+                          coordinates of the 'obsrvr' subpoint on 'target'
+                          relative to the body-fixed frame of 'target'
+
+                  'alt'   the double precision scalar altitude of 'obsrvr'
+                          above 'target'
+
+              'spoint' returns with the same vectorization measure (N)
+               as 'et'.
+
+      Note, If needed the user can extract the field data from vectorized
+      'spoint' structures into separate arrays.
+
+      Extract the N 'pos' field data to a 3XN array 'position':
+
+         position = reshape( [spoint(:).pos], 3, [] )
+
+      Extract the N 'alt' field data to a 1XN array 'altitude':
+
+         altitude = reshape( [point(:).alt], 1, [] )
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   Example(1):
+
+      %
+      % Find the sub point position of the moon on the earth at
+      % a given time using the &quot;near point&quot; then the &quot;intercept&quot;
+      % options.
+      %
+      % Load the meta kernel listing the needed SPK, PCK, LSK
+      % kernels.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % Calculate the location of the sub point of the moon as
+      % seen from Earth at epoch JAN 1, 2006. Apply light time
+      % correction to return apparent position.
+      %
+      et = <a href="cspice_str2et.html">cspice_str2et</a>( 'JAN 1, 2006' );
+
+      %
+      % First use option 'Near Point'
+      %
+      [point1] = <b>mice_subpt</b>( 'near point', 'earth', et, 'lt+s', 'moon');
+
+      %
+      % Now use option 'Intercept'
+      %
+      [point2] = <b>mice_subpt</b>( 'intercept', 'earth', et, 'lt+s', 'moon');
+
+      %
+      % Calculate the Euclidean distance between the two locations
+      % and the angular separation between the position vectors.
+      %
+      dist = norm( point1.pos - point2.pos);
+      sep  = <a href="cspice_vsep.html">cspice_vsep</a>(point1.pos, point2.pos )*<a href="cspice_dpr.html">cspice_dpr</a>;
+
+      txt = sprintf( 'Distance between locations            (km): %8.5f', ...
+                                                                       dist);
+      disp( txt )
+
+      txt = sprintf( 'Angular separation between locations (deg): %8.5f', ...
+                                                                       sep );
+      disp( txt )
+
+      %
+      % It's always good form to unload kernels after use,
+      % particularly in MATLAB due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+      Distance between locations            (km): 16.70963
+      Angular separation between locations (deg):  0.15020
+
+   Example(2):
+
+      %
+      % Find the sub body position of the moon on the earth at
+      % at epoch JAN 1, 2006 and for the next 12 months. Use the
+      % 'near point' option to calculate the physically
+      % closest point between the two bodies.
+      %
+      % Load the meta kernel listing the needed SPK, PCK, LSK
+      % kernels.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % Convert the calendar string to ephemeris time.
+      %
+      et0 = <a href="cspice_str2et.html">cspice_str2et</a>( 'JAN 1, 2006' );
+
+      %
+      % Fill an array with epochs, start with the epoch above then
+      % epochs in steps on one month ( thirty days in seconds)
+      %
+      et  = [0:12]*<a href="cspice_spd.html">cspice_spd</a>*30. + et0;
+
+      %
+      % Calculate the nearpoint of the moon with respect to earth at
+      % the epochs defined in 'et'.
+      %
+      [point] = <b>mice_subpt</b>( 'near point', 'earth', et, 'lt+s', 'moon');
+
+      %
+      % Convert the subpoint coordinates to lat/lon expressed in degrees with
+      % the radius.
+      %
+      % Extract from the 'point' structure the 3XN array of position data.
+      %
+      position = reshape( [point(:).pos], 3, [] )
+
+      [radius, longitude, latitude] = <a href="cspice_reclat.html">cspice_reclat</a>(position);
+      longitude                     = longitude * <a href="cspice_dpr.html">cspice_dpr</a>;
+      latitude                      = latitude  * <a href="cspice_dpr.html">cspice_dpr</a>;
+
+      %
+      % Convert the 'et' epochs to calendar format.
+      %
+      utc = <a href="cspice_et2utc.html">cspice_et2utc</a>( et, 'C', 3 );
+
+      for i=1:13
+         txt = sprintf( 'Moon subpoint epoch: %s', utc(i,:) );
+         disp( txt )
+
+         txt = sprintf( '              (deg): longitude %8.4f', longitude(i) );
+         disp( txt )
+
+         txt = sprintf( '              (deg): latitude  %8.4f', latitude(i) );
+         disp( txt )
+         disp( ' ' )
+
+      end
+
+      %
+      % It's always good form to unload kernels after use,
+      % particularly in MATLAB due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+                 ... partial output ...
+
+      Moon subpoint epoch: 2006 JUL 30 00:00:00.001
+                    (deg): longitude -127.7548
+                    (deg): latitude   -0.1948
+
+      Moon subpoint epoch: 2006 AUG 29 00:00:00.001
+                    (deg): longitude -128.2727
+                    (deg): latitude  -15.0349
+
+      Moon subpoint epoch: 2006 SEP 28 00:00:00.002
+                    (deg): longitude -123.9021
+                    (deg): latitude  -25.9738
+
+      Moon subpoint epoch: 2006 OCT 28 00:00:00.001
+                    (deg): longitude -113.7475
+                    (deg): latitude  -27.7753
+
+      Moon subpoint epoch: 2006 NOV 27 00:00:00.001
+                    (deg): longitude -104.0459
+                    (deg): latitude  -17.9194
+
+      Moon subpoint epoch: 2006 DEC 27 00:00:00.000
+                    (deg): longitude -98.2728
+                    (deg): latitude   -0.5411
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   A sister version of this routine exists named <a href="cspice_subpt.html">cspice_subpt</a> that returns
+   the structure field data as separate arguments.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/subpt_c.html">subpt_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/frames.html">FRAMES.REQ</a>
+   <a href="../req/pck.html">PCK.REQ</a>
+   <a href="../req/spk.html">SPK.REQ</a>
+   <a href="../req/time.html">TIME.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 16-DEC-2005, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   sub-observer point
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:39 2014</pre>
+
+</body>
+</html>
+

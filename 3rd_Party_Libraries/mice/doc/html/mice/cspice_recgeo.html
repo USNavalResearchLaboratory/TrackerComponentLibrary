@@ -1,0 +1,253 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_recgeo</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_recgeo</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_RECGEO converts rectangular coordinates to geodetic
+   coordinates.
+%
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      rectan   a double precision 3x1 array or double precision
+               3xN array containing the rectangular coordinates of the
+               position or set of positions
+
+       re      the scalar, double precision equatorial radius of
+               the body of interest
+
+       f       the scalar, double precision flattening coefficient
+               of the body, a dimensionless value defined as:
+
+                    equatorial_radius - polar_radius
+                    --------------------------------
+                           equatorial_radius
+
+   the call:
+
+      [ lon, lat, alt ] = <b>cspice_recgeo</b>( rectan, re, f)
+
+   returns:
+
+       lon   a double precision scalar or 1XN-vector describing
+             the geodetic longitude measured in radians.
+
+       lat   a double precision scalar or 1XN-vector describing
+             the geodetic latitude measured in radians.
+
+       alt   a double precision scalar or 1XN-vector describing
+             the altitude above the reference spheroid.
+
+             'lon', 'lat', and 'alt' return with the same vectorization
+             measure (N) as 'rectan'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Load the standard kernel set.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % Retrieve the triaxial radii of the earth
+      %
+      radii = <a href="cspice_bodvrd.html">cspice_bodvrd</a>( 'EARTH', 'RADII', 3 );
+
+      %
+      % Calculate the flatness coefficient. Set a bodyfixed
+      % position.
+      %
+      flat = (radii(1) - radii(3))/radii(1);
+      x    = [ -2541.748162; 4780.333036; 3360.428190];
+
+      [ lon, lat, alt] = <b>cspice_recgeo</b>( x, radii(1), flat );
+
+      %
+      % Output, convert the angular values to degrees.
+      %
+      lon = lon * <a href="cspice_dpr.html">cspice_dpr</a>;
+      lat = lat * <a href="cspice_dpr.html">cspice_dpr</a>;
+
+      disp('Scalar:')
+      txt = sprintf( '%12.8f   %12.8f   %12.8f', lon , lat , alt );
+      disp( txt )
+
+      disp(' ')
+
+      %
+      % Using the equatorial radius of the Clark66 spheroid
+      % (CLARKR = 6378.2064 km) and the Clark 66 flattening
+      % factor (CLARKF = 1.0 / 294.9787 ) convert to
+      % body fixed rectangular coordinates.
+      %
+      CLARKR = 6378.2064;
+      CLARKF = 1./294.9787;
+
+      x = [ [ 0, 1, 0, 0, -1,  0,  0, 1, 1, 0, 1];
+            [ 0, 0, 1, 0,  0, -1,  0, 1, 0, 1, 1];
+            [ 0, 0, 0, 1,  0,  0, -1, 0, 1, 1, 1] ];
+
+      [ lon, lat, alt] = <b>cspice_recgeo</b>(  x, CLARKR, CLARKF );
+
+      %
+      % Output, convert the angular values to degrees.
+      %
+      lon = lon * <a href="cspice_dpr.html">cspice_dpr</a>;
+      lat = lat * <a href="cspice_dpr.html">cspice_dpr</a>;
+
+      disp('Vector:')
+
+      %
+      % Output banner.
+      %
+    disp('    lon        lat          alt         x          y          z    ')
+    disp('  --------   --------   ----------   --------   --------   --------')
+
+      output = [ lon; lat; alt; x(1,:); x(2,:); x(3,:) ];
+      txt    = sprintf( '%10.4f %10.4f %12.6f %10.4f %10.4f %10.4f\n',output);
+      disp(txt)
+
+      %
+      % It's always good form to unload kernels after use,
+      % particularly in MATLAB due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+      Scalar:
+         118.00000000    32.00000000     0.00000024
+
+      118 degrees west, 32 north, 0.24 mm altitude.
+
+   Vector:
+       lon        lat          alt         x          y          z
+     --------   --------   ----------   --------   --------   --------
+       0.0000    90.0000 -6356.583800     0.0000     0.0000     0.0000
+       0.0000    88.6772 -6356.572258     1.0000     0.0000     0.0000
+      90.0000    88.6772 -6356.572258     0.0000     1.0000     0.0000
+       0.0000    90.0000 -6355.583800     0.0000     0.0000     1.0000
+     180.0000    88.6772 -6356.572258    -1.0000     0.0000     0.0000
+     -90.0000    88.6772 -6356.572258     0.0000    -1.0000     0.0000
+       0.0000   -90.0000 -6355.583800     0.0000     0.0000    -1.0000
+      45.0000    88.1291 -6356.560715     1.0000     1.0000     0.0000
+       0.0000    88.7071 -6355.572518     1.0000     0.0000     1.0000
+      90.0000    88.7071 -6355.572518     0.0000     1.0000     1.0000
+      45.0000    88.1714 -6355.561236     1.0000     1.0000     1.0000
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/recgeo_c.html">recgeo_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 22-NOV-2005, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   rectangular to geodetic
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:38 2014</pre>
+
+</body>
+</html>
+

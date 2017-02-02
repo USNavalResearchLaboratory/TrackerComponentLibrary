@@ -1,0 +1,230 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>bsrchi_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>bsrchi_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   SpiceInt bsrchi_c ( SpiceInt          value,
+                       SpiceInt          ndim,
+                       ConstSpiceInt   * array ) 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Do a binary search for a key value within an integer array, 
+   assumed to be in increasing order. Return the index of the 
+   matching array entry, or -1 if the key value is not found. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   ARRAY
+   SEARCH 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   VARIABLE  I/O  DESCRIPTION 
+   --------  ---  -------------------------------------------------- 
+   value      I   Value to find in array. 
+   ndim       I   Dimension of array. 
+   array      I   Array to be searched. 
+
+   The function returns the index of the input key value in the 
+   input array, or -1 if the value is not found.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   value       is the value to be found in the input array. 
+
+   ndim        is the number of elements in the input array. 
+
+   array       is the array to be searched. The elements in the
+               array are assumed to sorted in increasing order. 
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   The function returns the index of the input value in the input array. 
+   Indices range from zero to ndim-1.
+
+   If the input array does not contain the specified value, the function 
+   returns -1. 
+ 
+   If the input array contains more than one occurrence of the specified
+   value, the returned index may point to any of the occurrences. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   Error free. 
+
+   If ndim &lt; 1 the value of the function is -1. 
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   A binary search is performed on the input array. If an element of
+   the array is found to match the input value, the index of that
+   element is returned. If no matching element is found, -1 is
+   returned.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   Let array contain the following elements: 
+
+      -11 
+        0 
+       22 
+      750 
+
+   Then 
+
+      <b>bsrchi_c</b> ( -11, 4, array )   ==  0
+      <b>bsrchi_c</b> (  22, 4, array )   ==  2 
+      <b>bsrchi_c</b> ( 751, 4, array )   == -1 
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   array is assumed to be sorted in increasing order. If this 
+   condition is not met, the results of <b>bsrchi_c</b> are unpredictable. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman    (JPL)
+   I.M. Underwood  (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 30-AUG-2002 (NJB) (IMU)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   binary search for an integer value 
+ </PRE>
+<h4>Link to routine bsrchi_c source file <a href='../../../src/cspice/bsrchi_c.c'>bsrchi_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:27 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,363 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>errprt_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>errprt_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void errprt_c ( ConstSpiceChar * op,
+                   SpiceInt         lenout,
+                   SpiceChar      * list  )
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   Retrieve or set the list of error message items
+   to be output when an error is detected.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+   <a href="../req/error.html">ERROR</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+   ERROR
+
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   op         I   The operation:  &quot;GET&quot; or &quot;SET&quot;.
+   lenout     I   Length of list for output.
+   list      I/O  Specification of error messages to be output.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+   op      indicates the operation to be performed.  Possible
+           values are &quot;GET&quot; and &quot;SET&quot;.
+
+           &quot;SET&quot; means, &quot;the following list specifies the default
+           selection of error messages to be output.&quot;  These are
+           the messages that will be output to the default error
+           output device (selected by <a href="errdev_c.html">errdev_c</a>) when an error is
+           detected.
+
+           &quot;GET&quot; means, &quot;return the current list of error output
+           items.&quot;  This is the exact list that was set by the
+           last call to this routine with the &quot;SET&quot; option.
+
+           The option can be specified in mixed case.  For example,
+           the following call will work:
+
+           <b>errprt_c</b> ( &quot;SeT&quot;, lenout, &quot;ALL&quot; )
+
+
+   lenout  is the allowed length of list when list is returning a
+           the error message list.  The size described by lenout
+           should be large enough to hold any possible output plus 1.
+
+
+   list    is a list of error message items.  The items
+           are delimited by commas.  The items that can be
+           in the list are the words:
+
+           1.  SHORT        ...indicates the short error message
+           2.  EXPLAIN      ...the explanation of the short message
+           3.  LONG         ...the long error message
+           4.  TRACEBACK    ...the traceback
+           5.  ALL          ...indicates &quot;output all messages&quot;
+           6.  NONE         ...indicates &quot;don't output any messages&quot;
+           7.  DEFAULT      ...same as ALL, but includes default
+                                message
+
+           A &quot;list&quot; is a character string containing some or
+           all of the above words, delimited by commas.  Examples
+           are:
+
+           1.  &quot;SHORT, EXPLAIN&quot;
+           2.  &quot;SHORT, LONG&quot;
+           3.  &quot;ALL&quot;
+           4.  &quot;NONE&quot;
+           5.  &quot;ALL, NONE, ALL, SHORT, NONE&quot;
+
+           Each word in the list can be thought of as
+           &quot;flipping a switch&quot; to enable or disable the output
+           of the message(s) indicated by the word.  The
+           words are acted on in the order they occur in the
+           list, starting with the leftmost word.  As examples,
+           consider the sample lists above.
+
+           The effect of the first list above, &quot;SHORT, EXPLAIN&quot;,
+           is to enable the output of the short error message
+           and the explanatory text corresponding to it.
+
+           The effect of the second list is to enable the output
+           of the short and long messages.
+
+           The effect of the third list is to enable the output of
+           all of the error messages (short, long, explanation
+           of the short message, and traceback).
+
+           The effect of the fourth list is to disable output of
+           all of the messages.
+
+           The effect of the fifth list is to disable output of
+           all of the messages.  The reason for this is that
+           the words in the list are responded to in order,
+           from left to right, and &quot;NONE&quot; is the last word.
+
+           If any words other than SHORT, LONG, EXPLAIN, ALL,
+           DEFAULT, TRACEBACK or NONE appear in list, those words
+           that are recognized are responded to.  The words
+           that are not recognized are diagnosed as
+           erroneous, and error messages are generated
+           for each such unrecognized word.
+
+           The length of list is caller-defined, but only
+           the first 100 characters of list will be saved
+           for later retrieval.
+
+           Only the first 10 items in the list are used;
+           the rest are ignored.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+   list    is a list of error message items.  The value of
+           list is that set by the last call to this routine
+           using the &quot;SET&quot; option.  See &quot;Detailed Input&quot;
+           for a description of the possible values and
+           meanings of list.
+
+           The initial value returned is &quot;DEFAULT&quot;.
+
+           Only the first 100 characters of list are saved
+           when the list is set; any additional characters
+           are truncated.  Therefore, the first 100
+           characters, at most, of the saved value of list
+           will be returned.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+   1) If the input argument op does not indicate a valid operation,
+      the error SPICE(INVALIDOPERATION) will be signaled.
+      
+   2) If the input argument list does not indicate a valid list of
+      error message types, the error SPICE(INVALIDLISTITEM) will be
+      signaled.
+      
+   3) The error SPICE(EMPTYSTRING) is signalled if the input
+      string does not contain at least one character, since the
+      input string cannot be converted to a Fortran-style string
+      in this case.
+      
+   4) The error SPICE(NULLPOINTER) is signalled if the input string
+      pointer is null.
+ 
+   5) The user must pass a value indicating the length of the output
+      string, when list is an output.  If this value is not at least 2, 
+      the error SPICE(STRINGTOOSHORT) is signaled.
+
+   Also, this routine is part of the CSPICE error
+   handling mechanism.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+   Please read the &quot;required reading&quot;!
+
+   This routine is intended to be used in conjunction with
+   <a href="errdev_c.html">errdev_c</a>, which selects the default output device to which
+   the error messages selected by this routine will be
+   output.
+
+   Additionally, the error response action must be
+   something other than &quot;IGNORE&quot; if the error messages
+   are to be output.  Possible choices of the error
+   response action are &quot;RETURN&quot;, &quot;REPORT&quot;, &quot;ABORT&quot;, &quot;DEFAULT&quot;, and
+   &quot;IGNORE&quot;.  Use <a href="erract_c.html">erract_c</a> to set the error response action.
+
+
+   Only the first 100 characters of list are saved.
+
+   The default set of error messages that are output is the
+   set specified by &quot;DEFAULT&quot;; i.e., all of them, including
+   the &quot;default&quot; message.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+   1.  In this example, we select as the output device
+       the file, SPUD.DAT, and then select the error
+       messages to be output.  We choose the short
+       error message and the traceback.  Since a
+       different set of messages may have been selected
+       previously, we clear the old setting by putting
+       the word, &quot;NONE&quot;, at the beginning of the list.
+
+          /.
+          Set the error output device to SPUD.DAT:
+          ./
+          <a href="errdev_c.html">errdev_c</a> (  &quot;SET&quot;, lenout, &quot;SPUD.DAT&quot; );
+
+          /.
+          Choose error messages:
+          ./
+          <b>errprt_c</b> (  &quot;SET&quot;, lenout, &quot;NONE, SHORT, TRACEBACK&quot; );
+
+
+   2.  In this example we are retrieving the error message list.
+
+          /.
+          Declare the output string and its size.
+          ./
+
+         #define     LENOUT  50
+
+         SpiceChar   list[ LENOUT ];
+
+         <a href="errdev_c.html">errdev_c</a> ( &quot;GET&quot;, LENOUT, list );
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   The device to which the selected error messages will
+   be written must be selected via <a href="errdev_c.html">errdev_c</a>; otherwise,
+   messages will be written to the initial default device.
+
+   Only the first 100 characters of list are saved.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   N.J. Bachman    (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.3.0, 24-JUN-2003 (NJB)
+
+      Bug fix:  case of invalid operation keyword is now 
+      diagnosed, as per the Exceptions section of the header.
+
+   -CSPICE Version 2.0.0, 09-FEB-1998 (NJB) (EDW)
+
+      Input argument op was changed to type ConstSpiceChar *.
+
+      Re-implemented routine without dynamically allocated, temporary 
+      strings. 
+      
+      Corrected errors in examples in which the call sequence
+      was incorrect.
+
+   -CSPICE Version 1.0.0, 25-OCT-1997   (EDW)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   get/set error output items
+</PRE>
+<h4>Link to routine errprt_c source file <a href='../../../src/cspice/errprt_c.c'>errprt_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:33 2014</pre>
+
+</body>
+</html>
+

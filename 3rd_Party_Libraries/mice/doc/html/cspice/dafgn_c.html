@@ -1,0 +1,344 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>dafgn_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>dafgn_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void dafgn_c ( SpiceInt     lenout,
+                  SpiceChar  * name   ) 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Return (get) the name for the current array in the current DAF. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/daf.html">DAF</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   FILES 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   lenout     I   Length of array name string.
+   name       O   Name of current array. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   lenout         is the length of the name string, including room for
+                  the null terminator. For a DAF with summary
+                  parameters ND and NI, the maximum length of an array 
+                  name is
+ 
+                                        (NI + 1)
+                     NC  =   8 * ( ND + -------- ) (Note that this is
+                                            2       integer division.)
+                                            
+                  Given NC, lenout should be set equal to NC+1.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   name        is the name for the current array (the array found by
+               the latest call to <a href="daffna_c.html">daffna_c</a> or <a href="daffpa_c.html">daffpa_c</a>).
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1)  If this routine is called when no search is in progress in the 
+       the current DAF, the error SPICE(DAFNOSEARCH) is signalled. 
+ 
+   2)  If the DAF for which the &quot;current&quot; array's name is to be 
+       returned has actually been closed, the error will be diagnosed 
+       by routines called by this routine. 
+ 
+   3)  If no array is current in the current DAF, the error 
+       SPICE(NOCURRENTARRAY) is signalled.  There is no current 
+       array when a search is started by <a href="dafbfs_c.html">dafbfs_c</a> or <a href="dafbbs_c.html">dafbbs_c</a>, but no 
+       calls to <a href="daffna_c.html">daffna_c</a> or dafbna_c have been made yet, or whenever 
+       <a href="daffna_c.html">daffna_c</a> or <a href="daffpa_c.html">daffpa_c</a> return the value SPICEFALSE in the found 
+       argument. 
+
+   4)  The error SPICE(NULLPOINTER) is signaled if the input string
+       pointer is null.
+
+   5) The caller must pass a value indicating the length of the output
+      string.  If this value is not at least 2, the error
+      SPICE(STRINGTOOSHORT) is signaled.
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   The DAF search routines are:
+
+      <a href="dafbfs_c.html">dafbfs_c</a>       Begin forward search.
+      daffna         Find next array.
+
+      <a href="dafbbs_c.html">dafbbs_c</a>       Begin backward search.
+      <a href="daffpa_c.html">daffpa_c</a>       Find previous array.
+
+      <a href="dafgs_c.html">dafgs_c</a>        Get summary.
+      <b>dafgn_c</b>        Get name.
+      <a href="dafgh_c.html">dafgh_c</a>        Get handle.
+
+      <a href="dafcs_c.html">dafcs_c</a>        Continue search.
+
+   The main function of these entry points is to allow the
+   contents of any DAF to be examined on an array-by-array
+   basis.
+
+   Conceptually, the arrays in a DAF form a doubly linked list,
+   which can be searched in either of two directions: forward or
+   backward. It is possible to search multiple DAFs simultaneously.
+
+   <a href="dafbfs_c.html">dafbfs_c</a> (begin forward search) and daffna are used to search the
+   arrays in a DAF in forward order.  In applications that search a
+   single DAF at a time, the normal usage is
+
+      <a href="dafbfs_c.html">dafbfs_c</a> ( handle );
+      <a href="daffna_c.html">daffna_c</a> ( &amp;found );
+
+      while ( found )
+      {
+         <a href="dafgs_c.html">dafgs_c</a> ( sum  );
+         <b>dafgn_c</b> ( name );
+          .
+          .
+
+         <a href="daffna_c.html">daffna_c</a> ( &amp;found );
+      }
+
+
+   <a href="dafbbs_c.html">dafbbs_c</a> (begin backward search) and <a href="daffpa_c.html">daffpa_c</a> are used to search the
+   arrays in a DAF in backward order.  In applications that search
+   a single DAF at a time, the normal usage is
+
+      <a href="dafbbs_c.html">dafbbs_c</a> ( handle );
+      <a href="daffpa_c.html">daffpa_c</a> ( &amp;found );
+
+      while ( found )
+      {
+         <a href="dafgs_c.html">dafgs_c</a> ( sum  );
+         <b>dafgn_c</b> ( name );
+          .
+          .
+
+         <a href="daffpa_c.html">daffpa_c</a> ( &amp;found );
+      }
+
+
+   In applications that conduct multiple searches simultaneously,
+   the above usage must be modified to specify the handle of the
+   file to operate on, in any case where the file may not be the
+   last one specified by <a href="dafbfs_c.html">dafbfs_c</a> or <a href="dafbbs_c.html">dafbbs_c</a>.  The routine <a href="dafcs_c.html">dafcs_c</a>
+   (DAF, continue search) is used for this purpose.  Below, we
+   give an example of an interleaved search of two files specified
+   by the handles handl1 and handl2.  The directions of searches
+   in different DAFs are independent; here we conduct a forward
+   search on one file and a backward search on the other.
+   Throughout, we use dafcs to specify which file to operate on,
+   before calling <a href="daffna_c.html">daffna_c</a>, <a href="daffpa_c.html">daffpa_c</a>, <a href="dafgs_c.html">dafgs_c</a>, or <b>dafgn_c</b>.
+
+
+      <a href="dafbfs_c.html">dafbfs_c</a> ( handl1 );
+      <a href="dafbbs_c.html">dafbbs_c</a> ( handl2 );
+
+      <a href="dafcs_c.html">dafcs_c</a>  ( handl1  );
+      <a href="daffna_c.html">daffna_c</a> ( &amp;found1 );
+
+      <a href="dafcs_c.html">dafcs_c</a>  ( handl2  );
+      <a href="daffpa_c.html">daffpa_c</a> ( &amp;found2 );
+
+      while ( found1 || found2 )
+      {
+         if ( found1 )  
+         {
+            <a href="dafcs_c.html">dafcs_c</a> ( handl1 );
+            <a href="dafgs_c.html">dafgs_c</a> ( sum    );
+            <b>dafgn_c</b> ( name   );
+             .
+             .
+            <a href="dafcs_c.html">dafcs_c</a>  ( &amp;handl1 );
+            <a href="daffna_c.html">daffna_c</a> ( &amp;found1 );
+         }
+
+         if ( found2 )  
+         {
+            <a href="dafcs_c.html">dafcs_c</a> ( handl2 );
+            <a href="dafgs_c.html">dafgs_c</a> ( sum    );
+            <b>dafgn_c</b> ( name   );
+             .
+             .
+            <a href="dafcs_c.html">dafcs_c</a>  ( handl2  );
+            <a href="daffpa_c.html">daffpa_c</a> ( &amp;found2 );
+         }
+      }
+
+
+   At any time, the latest array found (whether by <a href="daffna_c.html">daffna_c</a> or <a href="daffpa_c.html">daffpa_c</a>)
+   is regarded as the &quot;current&quot; array for the file in which the
+   array was found.  The last DAF in which a search was started,
+   executed, or continued by any of <a href="dafbfs_c.html">dafbfs_c</a>, <a href="dafbbs_c.html">dafbbs_c</a>, <a href="daffna_c.html">daffna_c</a>, 
+   <a href="daffpa_c.html">daffpa_c</a> or <a href="dafcs_c.html">dafcs_c</a> is regarded as the &quot;current&quot; DAF.  The summary 
+   and name for the current array in the current DAF can be obtained
+   separately, as shown above, by calls to DAFGS (get summary) and
+   <b>dafgn_c</b> (get name).  The handle of the current DAF can also be
+   obtained by calling <a href="dafgh_c.html">dafgh_c</a> (get handle).
+
+   Once a search has been begun, it may be continued in either
+   direction. That is, <a href="daffpa_c.html">daffpa_c</a> may be used to back up during a
+   forward search, and <a href="daffna_c.html">daffna_c</a> may be used to advance during a
+   backward search.
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   1) See Particulars. 
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   NAIF Document 167.0, &quot;Double Precision Array Files (DAF) 
+   Specification and User's Guide&quot; 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman    (JPL) 
+   W.L. Taber      (JPL) 
+   I.M. Underwood  (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 01-AUG-1999 (NJB) (WLT) (IMU)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   get daf array name 
+ </PRE>
+<h4>Link to routine dafgn_c source file <a href='../../../src/cspice/dafgn_c.c'>dafgn_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:29 2014</pre>
+
+</body>
+</html>
+

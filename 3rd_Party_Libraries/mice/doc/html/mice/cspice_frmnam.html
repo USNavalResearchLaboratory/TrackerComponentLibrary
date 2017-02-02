@@ -1,0 +1,211 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_frmnam</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_frmnam</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_FRMNAM retrieves the name of a reference frame associated with a
+   SPICE frame ID code.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+     frcode   value defining a SPICE reference frame ID code.
+
+              [1,n] = size(frcode); int32 = class(frcode)
+
+   the call:
+
+      frmname = <b>cspice_frmnam</b>( frcode )
+
+   returns:
+
+      frmnam   the frame name corresponding to the 'frcode' code.
+
+               [n,m] = size(frmnam); char = class(frmnam)
+
+               If frcode is not recognized as the name of a known reference
+               frame, 'frname' will be returned as an empty string.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Retrieve frame information for a scalar code.
+      %
+      disp('Scalar' )
+      code = 13000;
+
+      %
+      % Output the frame name corresponding to 'code'.
+      %
+      frmname = <b>cspice_frmnam</b>( code )
+
+
+      %
+      % Retrieve frame information for a vector of codes.
+      %
+      disp('Vector' )
+      codes = [1:5];
+
+      %
+      % Output the frame names corresponding to the 'codes'.
+      %
+      frmname = <b>cspice_frmnam</b>( codes )
+
+   MATLAB outputs:
+
+      Scalar
+
+      frmname =
+
+      ITRF93
+
+      Vector
+
+      frmname =
+
+      J2000
+      B1950
+      FK4
+      DE-118
+      DE-96
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine retrieves the name of a reference frame associated
+   with a SPICE frame ID code.
+
+   The ID codes stored locally are scanned for a match with frcode.
+   If a match is found, the name stored locally will be returned
+   as the name for the frame.
+
+   If frcode is not a member of the list of internally stored
+   ID codes, the kernel pool will be examined to see if the
+   variable
+
+      FRAME_idcode_NAME
+
+   is present (where idcode is the decimal character equivalent
+   of frcode).  If the variable is located and it has both
+   character type and dimension 1, the string value of the
+   kernel pool variable is returned as the name of the reference
+   frame.
+
+   Note that because the local information is always examined
+   first and searches of the kernel pool are performed only
+   after exhausting local information, it is not possible to
+   override the local name for any reference frame that is
+   known by this routine.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/frmnam_c.html">frmnam_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/frames.html">FRAMES.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 12-MAR-2012, EDW (JPL), SCK (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   frame ID code to frame name translation
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:37 2014</pre>
+
+</body>
+</html>
+

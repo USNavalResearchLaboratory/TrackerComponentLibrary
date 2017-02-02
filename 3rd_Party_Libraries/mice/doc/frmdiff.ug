@@ -1,0 +1,2984 @@
+ 
+FRMDIFF User's Guide
+===========================================================================
+ 
+   Last revised on 2014 JAN 21 by B. V. Semenov.
+ 
+ 
+Abstract
+--------------------------------------------------------
+ 
+   FRMDIFF is a program that samples orientation of a reference frame known
+   to SPICE or computes differences between orientations of two reference
+   frames known to SPICE, and either displays this orientation or these
+   differences, or shows statistics about it or them.
+ 
+ 
+Summary
+--------------------------------------------------------
+ 
+   FRMDIFF provides means for sampling orientation of a single reference
+   frame, or for comparing orientations of two reference frames known to
+   SPICE and supported by data from SPICE kernels.
+ 
+   To sample orientation of a single frame the program computes a set of
+   transformations from one frame (the ``from'' frame) to another frame
+   (the ``to'' frame) over an interval of time with fixed or variable time
+   step, using a given set of kernel files. Then, depending on the
+   requested type of output report, it prints to the screen a table
+   containing these transformations expressed as total rotation angles and
+   axes, quaternions, matrices or Euler angles and angular velocities, or
+   only magnitude of the maximum rotation and angular velocity, or results
+   of a simple statistical analysis of rotations.
+ 
+   To compare orientations of two frames the program computes a set of
+   transformations from one frame (the ``from'' frame) to another frame
+   (the ``to'' frame) over an interval of time with a fixed or variable
+   time step using one set of kernels, computes a set of transformations
+   for the same or a different ``from''-``to'' frame combination at the
+   same times using the same or a different set of kernels, and then
+   computes the difference in rotation and angular velocity between the
+   corresponding transformations. Depending on the requested type of output
+   report the program prints to the screen only maximum differences in
+   rotation and angular velocity, or a complete table of rotation and
+   angular velocity differences expressed as total rotation angles and
+   axes, matrices, quaternions, or Euler angles, or results of a simple
+   statistical analysis of the rotation differences.
+ 
+ 
+If You Are in a Hurry
+--------------------------------------------------------
+ 
+   This section shows four very common FRMDIFF usage scenarios with just
+   enough explanations to get you going. An extensive set of detailed
+   examples is provided at the end of this User's Guide.
+ 
+ 
+To Check if Two CK Files Provide Identical Data
+ 
+   To check if two CK files containing orientation for the same structure
+   with respect to the same reference frame provide identical data, run
+   FRMDIFF as follows:
+ 
+      % frmdiff -k <lsk> <sclk> <fk> -s <step> <ck1> <ck2>
+ 
+   where ``<lsk>'', ``<sclk>'', ``<fk>'', ``<ck1>'' and ``<ck2>'' are the
+   names of LSK, SCLK, FK, and two CK files (all five are required), and
+   ``step'' is the time step, in seconds. If the maximum rotation angle in
+   the output is zero (or close to zero, accounting for round off), then
+   the CKs contain the same data. To include angular velocities in
+   comparison, add ``-a yes'' before ``-s'', like this:
+ 
+      % frmdiff -k <lsk> <sclk> <fk> -a yes -s <step> <ck1> <ck2>
+ 
+ 
+To Assess Difference Between Two CK Files
+ 
+   To assess the difference between two CK files containing orientation for
+   the same structure with respect to the same reference frame as a
+   function of time, run FRMDIFF as follows:
+ 
+      % frmdiff -k <lsk> <sclk> <fk> -t dumpaa -s <step> <ck1> <ck2>
+ 
+   where ``<lsk>'', ``<sclk>'', ``<fk>'', ``<ck1>'' and ``<ck2>'' are the
+   names of LSK, SCLK, FK, and two CK files (all five are required); ``-t
+   dumpaa'' sets the output format to the rotation angle and axis dump; and
+   ``step'' is the time step, in seconds. The program's output, which can
+   be rather lengthy, can be re-directed to a file using the ``>'' pipe.
+   Using the data captured in the file the total rotation angle (column 2)
+   can be plotted against TDB seconds (column 1) to analyze the difference.
+   To print output time tags as UTC in ISO date format instead of TDB
+   seconds, add
+ 
+      -f 'YYYY-MM-DDTHR:MN:SC.### ::RND'
+ 
+   before ``-k''. To use the Euler angle dump output instead of the
+   rotation angle and axis dump output, replace ``dumpaa'' with ``dumpea''.
+   To include angular velocities in the comparison, add ``-a yes'' before
+   ``-s'', like this (the command line below is wrapped to fit the page
+   width):
+ 
+      % frmdiff -k <lsk> <sclk> <fk> -t dumpaa -a yes -s <step>
+                <ck1> <ck2>
+ 
+ 
+To Sample Quaternions from a CK File
+ 
+   To sample orientation provided in a CK file and print it as SPICE-style
+   quaternions, run FRMDIFF as follows:
+ 
+      % frmdiff -k <lsk> <sclk> <fk> -t dumpqs -s <step> <ck>
+ 
+   where ``<lsk>'', ``<sclk>'', ``<fk>'', and ``<ck>'' are the names of
+   LSK, SCLK, FK, and CK files (all four are required); ``-t dumpqs'' sets
+   the output format to the SPICE-style quaternion dump; and ``step'' is
+   the time step, in seconds. The program's output can be re-directed to a
+   file using the ``>'' pipe. To print output time tags as UTC in ISO date
+   format, add
+ 
+      -f 'YYYY-MM-DDTHR:MN:SC.### ::RND'
+ 
+   before ``-k''. To use the ``other''-style quaternion dump instead of the
+   SPICE-style quaternion dump, replace ``dumpqs'' with ``dumpqo''. To
+   include angular velocities, add ``-a yes'' before ``-s''; to print
+   angular velocities in the structure frame rather than the base frame,
+   also add ``-m to'', like this (the command line below is wrapped to fit
+   the page width):
+ 
+      % frmdiff -k <lsk> <sclk> <fk> -t dumpqo -a yes -m to
+                -s <step> <ck>
+ 
+ 
+To Compute Transformation Between Two Frames
+ 
+   To compute transformation from one frame known to SPICE to another frame
+   known to SPICE and display this transformation as Euler angles, run
+   FRMDIFF as follows (the command line below is wrapped to fit the page
+   width):
+ 
+      % frmdiff -k <kernels> -t dumpea
+                -b <begintime> -e <endtime> -s <step>
+                -f1 <from_frame> -t1 <to_frame>
+ 
+   where ``<kernels>'' are the names of kernel files needed to compute the
+   transformation (an LSK must be included); ``-t dumpea'' sets the output
+   format to the Euler angles dump; ``<begintime>'' and ``<endtime>'' set
+   the begin and end time, as UTC, for the period of interest; ``step'' is
+   the time step, in seconds; and ``<from_frame>'' and ``<to_frame>'' are
+   the names of the frames from which and to which the transformation can
+   be computed. For lengthy reports the program's output should be
+   re-directed to a file using the ``>'' pipe.
+ 
+   Note that if the ``<to_frame>'' is a CK-based (Class 3) or PCK-based
+   (Class 2) frame, the list of kernels (``<kernels>'') includes CKs or
+   binary PCKs providing data for that frame, and ``-b <begintime> -e
+   <endtime>'' are omitted, the program will automatically determine the
+   ``<to_frame>''s data availability time window and will compute
+   transformations with specified step over that whole window.
+ 
+ 
+Usage
+--------------------------------------------------------
+ 
+   FRMDIFF is a command line program with the following usage:
+ 
+      % frmdiff [options] <first kernel> <second kernel>
+      % frmdiff [options] <kernel>
+      % frmdiff [options]
+ 
+   where either of the kernels can be a CK, a PCK, an FK, or any other
+   SPICE kernel. The options are:
+ 
+      -k  <supporting kernel(s) name(s)>
+      -f1 <first ``from'' frame, name or ID>
+      -t1 <first ``to'' frame, name or ID>
+      -c1 <first frame for coverage look up, name or ID>
+      -k1 <additional supporting kernel(s) for first file>
+      -f2 <second ``from'' frame, name or ID>
+      -t2 <second ``to'' frame, name or ID>
+      -c2 <second frame for coverage look up, name or ID>
+      -k2 <additional supporting kernel(s) for second file>
+      -a  <compare angular velocities, yes|no (default: no)>
+      -m  <frame for angular velocities, from|to (default: from)
+      -b  <interval start time>
+      -e  <interval stop time>
+      -n  <number of points: 1 to 1000000 (default: 1000)>
+      -s  <time step in seconds>
+      -f  <time format, et|sclk|sclkd|ticks|picture_for_TIMOUT>
+          (default: et)>
+      -t  <report: basic|stats|dumpaa|dumpm|dumpqs|dumpqo|dumpea
+          |dumpc|dumpg>
+      -o  <rotation axes order (default: z y x)>
+      -x  <units for output angles>
+      -d  <number of significant digits: 6 to 17 (default: 14)>
+ 
+   The order of options and case of the option keys are not significant.
+   The values provided after the option keys must be separated from keys by
+   one or more spaces. Un-recognized options are not specifically checked
+   for; instead they are treated as continuation of the value provided
+   using the preceding recognized option.
+ 
+ 
+Options
+--------------------------------------------------------
+ 
+   Kernel file names and control parameters are provided to the program
+   using the following command line options (only a brief description of
+   each option is given in the list below; details, defaults, and
+   dependencies are discussed later in this document):
+ 
+         <first kernel>      is the name of the first primary kernel. When
+                             two primary kernels are provided to the
+                             program this name must be the second to last
+                             item on the command line.
+ 
+         <second kernel>     is the name of the second primary kernel. When
+                             two primary kernels are provided to the
+                             program this name must be the last item on the
+                             command line.
+ 
+         <kernel>            is the name of the only primary kernel. When
+                             only one primary kernel is provided to the
+                             program this name must be the last item on the
+                             command line.
+ 
+         -k <kernels>        is used to specify the list of additional
+                             kernels that should be used for both frame
+                             transformations to be computed. Kernel names
+                             following ``-k'' must be separated by spaces.
+ 
+         -f1 <frame>         is used to specify the ``from'' frame for the
+                             first (or only) frame transformation to be
+                             computed. This frame must be known to SPICE
+                             and can be specified using the frame name, ID,
+                             or class ID.
+ 
+         -t1 <frame>         is used to specify the ``to'' frame for the
+                             first (or only) frame transformation to be
+                             computed. This frame must be known to SPICE
+                             and can be specified using the frame name, ID,
+                             or class ID.
+ 
+         -c1 <frame>         is used to specify the ``coverage'' frame to
+                             be used to look up the first coverage window.
+                             This frame must be known to SPICE and must be
+                             either a PCK-based (Class 2) or CK-based
+                             (Class 3) frame. It can be specified using the
+                             frame name, frame ID, or, if the first (or
+                             only) primary kernel is a CK or a binary PCK,
+                             class ID. If the first (or only) primary
+                             kernel file is a CK or a binary PCK, it must
+                             contain data for this frame.
+ 
+         -k1 <kernels>       is used to specify the list of additional
+                             kernels that should be used only for the first
+                             frame transformation to be computed. Kernel
+                             names following ``-k1'' must be separated by
+                             spaces.
+ 
+         -f2 <frame>         is used to specify the ``from'' frame for the
+                             second (or only) frame transformation to be
+                             computed. This frame must be known to SPICE
+                             and can be specified using the frame name, ID,
+                             or class ID.
+ 
+         -t2 <frame>         is used to specify the ``to'' frame for the
+                             second (or only) frame transformation to be
+                             computed. This frame must be known to SPICE
+                             and can be specified using the name, ID, or
+                             class ID.
+ 
+         -c2 <frame>         is used to specify the ``coverage'' frame to
+                             be used to look up the second coverage window.
+                             This frame must be known to SPICE and must be
+                             either a PCK-based (Class 2) or CK-based
+                             (Class 3) frame. It can be specified using the
+                             frame name, frame ID, or, if the second (or
+                             only) primary kernel is a CK or a binary PCK,
+                             class ID. If the second (or only) primary
+                             kernel file is a CK or a binary PCK, it must
+                             contain data for this frame.
+ 
+         -k2 <kernels>       is used to specify the list of additional
+                             kernels that should be used only for the
+                             second frame transformation to be computed.
+                             Kernel names following ``-k2'' must be
+                             separated by spaces.
+ 
+         -b <time>           is used to specify the coverage window begin
+                             time. This option must be provided when no
+                             primary kernels and ``coverage'' frames are
+                             specified. The time string provided using this
+                             option can be in any form accepted by SPICE's
+                             cspice_str2et function.
+ 
+         -e <time>           is used to specify the coverage window end
+                             time. This option must be provided when no
+                             primary kernels and ``coverage'' frames are
+                             specified. The time string provided using this
+                             option can be in any form accepted by SPICE's
+                             cspice_str2et function.
+ 
+         -n <number>         is used to specify the number of points within
+                             the coverage window, for which the frame
+                             transformation(s) must be computed. The number
+                             must be an integer between 1 and 1,000,000.
+                             The default value is 1000.
+ 
+         -s <step>           is used to specify the step, in seconds, for
+                             determining points within the coverage window,
+                             for which the frame transformation(s) must be
+                             computed. The step must be greater than 1E-8.
+                             This option supersedes ``-n''.
+ 
+         -t <report_type>    is used specify the type of report that the
+                             program should display:
+ 
+                                basic   to display only the maximum
+                                        rotation angle and angular
+                                        velocity (AV) magnitude (default)
+ 
+                                stats   to display statistics on rotation
+                                        angles and AVs
+ 
+                                dumpaa  to display a table of rotation
+                                        angles and axes
+ 
+                                dumpm   to display a table of matrices
+ 
+                                dumpqs  to display a table of SPICE-style
+                                        quaternions
+ 
+                                dumpqo  to display a table of ``other''-
+                                        style quaternions
+ 
+                                dumpea  to display a table of Euler angles
+ 
+                                dumpc   to display a table of coverage
+                                        intervals
+ 
+                                dumpg   to display a table of coverage
+                                        gaps
+ 
+         -a <av_flag>        is used to tell the program whether angular
+                             velocities should be computed along with
+                             rotations:
+ 
+                                no      to compute only rotations
+                                        (default)
+ 
+                                yes     to compute rotations and
+                                        angular velocities
+ 
+         -m <av_frame>       is used to tell the program in which frame
+                             angular velocities should be reported:
+ 
+                                from    to output angular velocities in
+                                        ``from'' frame (default)
+ 
+                                to      to output angular velocities in
+                                        ``to'' frame
+ 
+         -f <time_type>      is used to specify the type of time tag to be
+                             used in tabular reports (``-t'' with
+                             ``dumpm'', ``dumpqs'', ``dumpqo'', ``dumpea'',
+                             ``dumpc'', or ``dumpg''):
+ 
+                                et      to display times as TDB seconds
+                                        past J2000 (default)
+ 
+                                sclk    to display times as string SCLKs
+ 
+                                sclkd   to display times as decimal SCLKs
+ 
+                                ticks   to display times as encoded SCLK
+                                        ticks
+ 
+                                <PICT>  any time format picture accepted
+                                        by the @TIMOUT @routine (for
+                                        example ``YYYY-MM-DDTHR:MN:SC.###
+                                        ::RND'' for time tags for be
+                                        displayed as UTCs in ISO date
+                                        format)
+ 
+         -o <axes>           is used to specify the list of axes
+                             determining the order of rotations used for
+                             converting rotation matrices to Euler angles.
+                             The value must be a space-delimited list of
+                             three axes from the set of ``X'', ``Y'', ``Z''
+                             (case-insensitive). The second axis must
+                             differ from the first and third axes. The
+                             default order is ``Z Y X''.
+ 
+         -x <units>          is used to specify the units for the angles in
+                             the rotation angle and axis dump (``-t
+                             dumpaa'') and Euler angle dump (``-t dumpea'')
+                             reports; ignored for all other report types.
+                             Supported units are:
+ 
+                                radians (default)
+                                degrees
+                                arcminutes
+                                arcseconds
+                                hourangle
+                                minuteangle
+                                secondangle
+ 
+         -d <number>         is used to specify the number of significant
+                             digits in the output numeric times (TDB
+                             seconds past J2000, decimal SCLKs and encoded
+                             SCLK ticks) and rotation component values or
+                             rotation difference component values included
+                             in the dump, coverage and coverage gap
+                             reports. The number must be an integer between
+                             6 and 17. The default value is 14.
+ 
+         -v                  causes the program to display only the version
+                             line. This option overrides all other options.
+ 
+         -u                  causes the program to display the usage
+                             message. This option overrides all other
+                             options except ``-v''.
+ 
+         -h                  causes the program to display a brief help
+                             message. This option overrides all other
+                             options except ``-v'' and ``-u''.
+ 
+ 
+Inputs
+===========================================================================
+ 
+   For a successful run the program must be supplied with kernel files
+   providing sufficient data to compute the frame transformation(s) of
+   interest, and with control parameters clearly specifying, together with
+   default values determined from the kernels, what transformations should
+   be computed and at what times. Both the kernels and the control
+   parameters are provided to the program using command line options.
+ 
+ 
+Kernel Files
+--------------------------------------------------------
+ 
+   In most cases one or more kernel files must be provided to the program
+   to perform comparison or sampling of frame orientations. Depending on
+   how the kernel files are provided, they fall into one of two categories
+   -- primary kernel files and additional kernel files.
+ 
+   Primary kernel files -- two, one, or none -- are provided at the end of
+   the command line without any command line keys. Normally these kernel
+   files contain orientations that differ (for example, predicted and
+   reconstructed CKs for the same frame and time period, two versions of an
+   FK with different alignment data for the same frame, etc.), or contain
+   orientation to be sampled. These kernel files are also examined by the
+   program to determine the default values for the ``from'', ``to'', and
+   ``cov'' frames, and to determine the coverage window boundaries. Note
+   that becasue the program slightly contracts coverage windows determined
+   from CK files to compensate for roundoff occuring in SCLK to ET time
+   conversions, in general FRMDIFF cannot be used to sample or compare CKs
+   with discrete data, e.g. Type 1 CKs or Type 3 CKs with singleton
+   intervals. For additional discussion of this limitation see the
+   ``Coverage Window'' section below.
+ 
+   Additional kernel files -- none, or as many as needed -- are provided
+   anywhere on the command line (except at the very end) using the ``-k'',
+   ``-k1'', and ``-k2'' keys. Normally these kernel files contain
+   additional SPICE data needed to compute requested orientations (for
+   example, LSK and SCLK files providing supporting time conversion data,
+   FK files providing frame definitions needed by SPICE to recognize
+   specified frames, etc).
+ 
+ 
+Primary Kernel Files
+ 
+   The primary kernels can be of any type -- CK, PCK, FK, SCLK, LSK or even
+   SPK -- and are provided as the last or the last two items on the command
+   line. Since the primary kernel files do not require specific command
+   line keys, the program determines if they were given by examining the
+   last two words on the command line as follows:
+ 
+       --   If the last word on the command line is not the name of an
+            existing file, the program assumes that no primary kernel files
+            were given.
+ 
+       --   If the last word on the command line is the name of an existing
+            file but the second to last word is not, the program assumes
+            that only one primary kernel was given.
+ 
+       --   If both last two words are names of existing files, the program
+            assumes that it was given two primary kernel files
+ 
+   Due to the parsing approach described above, misspelling a primary
+   kernel name leads to the program deciding that it either runs with no
+   primary kernel files (if the last file name is misspelled) or that it
+   runs with one primary kernel instead of two (if the second to last file
+   name is misspelled). In either case, the misspelled file name(s) is(are)
+   treated as a part of the value of the command line option immediately
+   preceding it(them) causing the program to signal an error indicating an
+   incorrect option value.
+ 
+   On the other hand, if any of the options for specifying additional
+   kernel files (``-k'', ``-k1'', ``-k2'') followed by actual files names
+   is provided at the end of the command line (for the case of no primary
+   kernels) or immediately preceding the only primary file (for one primary
+   kernel case), the last one or the last two additional kernels are
+   mistakenly picked as the primary kernel(s). In this situation the
+   program usually signals an error indicating that orientation could not
+   be computed because insufficient data was loaded.
+ 
+ 
+Additional Kernel Files
+ 
+   As for primary kernels, additional kernels can also be of any type --
+   CK, PCK, FK, SCLK, LSK or even SPK. Unlike primary kernels, additional
+   kernels are specified using the dedicated ``-k'', ``-k1'', and ``-k2''
+   keys. Any number of additional kernels can be provided using any of the
+   three keys, with kernel file names listed in any order, separated by
+   blanks. While in some rare cases no additional kernel files are
+   required, in most cases at least an LSK file and an SCLK file containing
+   time correlation data and an FK file containing frame definitions should
+   be specified using these keys. The additional kernels are used by the
+   program as follows:
+ 
+       --   All additional kernel files provided using the ``-k'' are
+            loaded and used for both ``from''-``to'' frame combinations.
+ 
+       --   All additional kernel files provided using ``-k1'' are loaded
+            and used only for the first ``from''-``to'' frame combination.
+ 
+       --   All additional kernel files provided using ``-k2'' are loaded
+            and used only for the second ``from''-``to'' frame combination.
+ 
+   Neither the combined set of additional kernel files given using
+   ``-k''/``-k1'' nor the combined set of additional kernel files given
+   using ``-k''/``-k2'' can contain enough data to compute corresponding
+   orientations at any time in the time buffer without loading the
+   corresponding primary file(s). If they do, the program signals an error.
+   The two exceptions from this requirement are:
+ 
+       --   when no primary kernel files are specified the additional
+            kernel files given using ``-k''/``-k1'' and ``-k''/``-k2''
+            should contain enough data to compute the corresponding
+            orientations
+ 
+       --   when both ``from'' and ``to'' frames in one or
+            both``from''-``to'' frame pairs are built-in frames, the check
+            for inability to compute orientations without loading primary
+            kernel files is skipped
+ 
+ 
+Comparison Runs vs. Sampling Runs
+--------------------------------------------------------
+ 
+   The program automatically decides whether it should compare two
+   orientations or sample one orientation, based on the primary kernels
+   provided at the end of the command line, additional kernel files
+   provided using the ``-k1'' and ``-k2'' keys, and on the ``from'' and
+   ``to'' frames specified on the command line using the ``-f1'', ``-t1'',
+   ``-f2'', and ``-t2'' keys and/or determined from the primary kernel
+   data.
+ 
+   To run the program in comparison mode, it is enough to satisfy any of
+   the following guidelines for specifying inputs that tell the program to
+   compute two different orientations:
+ 
+       --   provide two different primary kernels
+ 
+       --   provide two different sets of orientation-specific additional
+            kernels using ``-k1'' and ``-k2''
+ 
+       --   specify two different ``from'' frames using ``-f1'' and ``-f2''
+ 
+       --   specify two different ``to'' frames using ``-t1'' and ``-t2''
+ 
+   To run the program in sampling mode, it is required to satisfy all of
+   the following guidelines telling the program to compute a single
+   orientation:
+ 
+       --   provide only one primary kernel or no primary kernels
+ 
+       --   provide no orientation-specific additional kernels using
+            ``-k1'' and ``-k2''
+ 
+       --   specify only one ``from'' frame using either ``-f1'' or ``-f2''
+            or no ``from'' frames
+ 
+       --   specify only one ``to'' frame using either ``-t1'' or ``-t2''
+            or no ``to'' frames
+ 
+   There are only two cases when the program runs in sampling mode after
+   being given two primary kernels and/or two orientation-specific
+   additional kernel sets. These cases are:
+ 
+       --   When run with two primary kernel files, the program samples
+            orientation only if these kernel files are the same file and
+            additional kernel files provided using the ``-k1''/``-k2'' keys
+            are the same files listed the same order and ``from'' frames
+            provided using the ``-f1''/``-f2'' keys or determined
+            automatically are the same and ``to'' frames provided using the
+            ``-t1''/``-t2'' keys or determined automatically are the same.
+ 
+       --   When run with one primary kernel file or no primary kernel
+            files but with some orientation-specific additional kernels,
+            the program will sample orientation only if additional kernel
+            files provided using the ``-k1''/``-k2'' keys are the same
+            files listed in the same order and the ``from'' frames provided
+            using the ``-f1''/``-f2'' keys or determined automatically are
+            the same frames and the ``to'' frames provided using the
+            ``-t1''/``-t2'' keys or determined automatically are the same
+            frames.
+ 
+ 
+Runs with Two, One, and No Primary Kernel File(s)
+--------------------------------------------------------
+ 
+   The number and types of primary kernel files and the mode in which the
+   program is run (``comparing'' vs. ``sampling'') directly affect the
+   requirements in regards to which command line options must be provided,
+   approaches for determining default values for omitted options, and ways
+   in which kernels are loaded and orientations are computed. The three
+   subsections below discuss specifics of runs with two, one, and no
+   primary kernel files.
+ 
+ 
+Runs with Two Primary Kernel Files
+ 
+   When two primary kernel files are provided on the command line:
+ 
+       --   All ``-*1'' and ``-*2'' options, and ``-b'' and ``-e'' options
+            can be omitted if one of the primary files (or both primary
+            files) are a CK or a binary PCK, for which defaults for these
+            options can be picked from the file(s).
+ 
+       --   ``-f1'' or ``-f2'' or both, ``-t1'' or ``-t2'' or both, and
+            sufficient coverage information (e.g. a sufficient combination
+            of ``-b'', ``-e'', ``-c1'', and ``-c2'') must be specified if
+            neither of the primary files is a CK or binary PCK because the
+            program has no way of picking defaults for the ``from''
+            frame(s), ``to'' frame(s), and time boundaries for any other
+            types of primary kernels.
+ 
+       --   If the program is run in comparison mode, the first primary
+            file and the additional kernel files given using ``-k'' and
+            ``-k1'' are loaded and orientations for the first
+            default/specified ``from''-``to'' frame combination are
+            computed at times within the default/specified time window,
+            then the second primary file and the additional kernel files
+            given using ``-k'' and ``-k2'' are loaded and orientations for
+            the second default/specified ``from''-``to'' frame combination
+            are computed at the same times within the default/specified
+            time window, then the differences between the corresponding
+            orientations are computed and printed in the specified format.
+ 
+       --   If the program is run in sampling mode, the first primary file
+            and the additional kernel files given using ``-k'' and ``-k1''
+            are loaded and orientations for the first default/specified
+            ``from''-``to'' frame combination are computed at times within
+            the default/specified time window and printed in the specified
+            format.
+ 
+ 
+Runs with One Primary Kernel File
+ 
+   When one primary kernel file is provided on the command line:
+ 
+       --   All ``-*1'' and ``-*2'' options, and ``-b'' and ``-e'' options
+            can be omitted if the primary file is a CK or a binary PCK, for
+            which defaults for these options can be picked from the file.
+ 
+       --   ``-f1'' or ``-f2'' or both, ``-t1'' or ``-t2'' or both, and
+            sufficient coverage information (e.g. a sufficient combination
+            of ``-b'', ``-e'', ``-c1'', and ``-c2'') must be specified if
+            the primary file is not a CK or a binary PCK because the
+            program has no way of picking defaults for the ``from''
+            frame(s), ``to'' frame(s) and time boundaries for any other
+            types of primary kernels.
+ 
+       --   If the program is run in comparison mode, the primary file and
+            the additional kernel files given using ``-k'' and ``-k1'' are
+            loaded and orientations for the first ``from''-``to'' frame
+            combination are computed at times within the default/specified
+            time window, then the primary file and the additional kernel
+            files given using ``-k'' and ``-k2'' are loaded and
+            orientations for the second ``from''-``to'' frame combination
+            are computed at the same times within the default/specified
+            time window, then the differences between corresponding
+            orientations are computed and printed in the specified format.
+ 
+       --   If the program is run in sampling mode, the primary file and
+            the additional kernel files given using ``-k'' and ``-k1'' are
+            loaded and orientations for the first ``from''-``to'' frame
+            combination are computed at times within the default/specified
+            time window and then printed in the specified format.
+ 
+ 
+Runs Without Primary Kernel Files
+ 
+   When no primary kernel files are specified on the command line:
+ 
+       --   ``-f1'' or ``-f2'' or both, ``-t1'' or ``-t2'' or both, and
+            sufficient coverage information (e.g. a sufficient combination
+            of ``-b'', ``-e'', ``-c1'', and ``-c2'') must be specified
+            because the program has no way of picking defaults for the
+            ``from'' frame(s), ``to'' frame(s), and time boundaries when it
+            is not given any primary kernel(s) to examine.
+ 
+       --   If the program is run in comparison mode, the additional kernel
+            files given using ``-k'' and ``-k1'' are loaded and
+            orientations for the first ``from''-``to'' frame combination
+            are computed at times within the default/specified time window,
+            then the additional kernel files given using ``-k'' and ``-k2''
+            are loaded and orientations for the second ``from''-``to''
+            frame combination are computed at the same times within the
+            default/specified time window, then the differences between
+            corresponding orientations are computed and printed in the
+            specified format.
+ 
+       --   If the program is run in sampling mode, the additional kernel
+            files given using ``-k'' and ``-k1'' are loaded and
+            orientations for the first ``from''-``to'' frame combination
+            are computed at times within the default/specified time window
+            and then printed in the specified format.
+ 
+ 
+``From'', ``To'', and ``Coverage'' Frames
+--------------------------------------------------------
+ 
+   The program has six command line keys -- ``-f1'', ``-t1'', ``-c1'',
+   ``-f2'', ``-t2'', and ``-c2'' -- to specify frames to be used to compute
+   rotations (``-f*'' and ``-t*'' keys) and to determine coverage from
+   primary or additional CK or binary PCK files (``-c*'' keys). A single
+   frame can be specified using each of these keys using the frame name,
+   frame ID, or frame class ID (only for runs with primary kernel files
+   that are CKs or binary PCKs).
+ 
+   Whether the frame is specified by the name, ID, or class ID, it must be
+   known to SPICE, i.e. it must either be a built-in frame or one of the
+   frames defined in the FK file(s) provided as primary or additional
+   kernels. If the frame name, ID, or class ID specified on the command
+   line or picked from the primary file is not recognized after loading the
+   kernel files provided using ``-k''/``-k1'' and the first primary file
+   for the ``-*1'' frames, or provided using ``-k''/``-k2'' and the second
+   primary file for the ``-*2'' frames, the program signals an error.
+ 
+   Not all six frames have to be specified for every program run. In fact
+   in many cases only one, two, or even no frames can be given and the
+   program will set the rest to default values based on the other frames
+   that are provided and/or by examining the primary kernel files. The
+   three subsections below discuss specifying and picking defaults for the
+   ``from'', ``to'', and ``coverage'' frames.
+ 
+ 
+``From'' Frames
+ 
+   The following rules apply to specifying and picking defaults for the
+   ``from'' frames:
+ 
+       --   If both ``-f1'' and ``-f2'' are specified, orientations are
+            computed with respect to these ``from'' frames.
+ 
+       --   If only ``-f1'' or only ``-f2'' is specified, the specified
+            ``from'' frame is used for both ``from'' frames.
+ 
+       --   If neither ``-f1'' nor ``-f2'' is specified and only one of the
+            primary kernel files is a CK or a binary PCK, the ``from''
+            frame from the last segment of this CK or PCK file is used for
+            both ``from'' frames.
+ 
+       --   If neither ``-f1'' nor ``-f2'' is specified and both primary
+            kernel files are CKs or binary PCKs, the ``from'' frame from
+            the last segment of the first primary CK or PCK file is used
+            for both ``from'' frames.
+ 
+       --   If neither ``-f1'' nor ``-f2'' is specified and no primary
+            files are given or neither of the primary files is a CK or
+            binary PCK, the program signals an error.
+ 
+ 
+``To'' Frames
+ 
+   The following rules apply to specifying and picking defaults for the
+   ``to'' frames:
+ 
+       --   If ``-t1'' and ``-t2'' are specified, orientations are computed
+            for these ``to'' frames.
+ 
+       --   If only ``-t1'' or only ``-t2'' is specified, the specified
+            ``to'' frame is used for both ``to'' frames.
+ 
+       --   If neither ``-t1'' nor ``-t2'' is specified and only one of the
+            primary kernel files is a CK or a binary PCK, the frame from
+            the last segment of this CK or PCK is used for both ``to''
+            frames.
+ 
+       --   If neither ``-t1'' nor ``-t2'' is specified and both primary
+            kernel files are CKs or binary PCKs, the frame from the last
+            segment of the first CK or PCK is used for both ``to'' frames.
+ 
+       --   If neither ``-t1'' nor ``-t2'' is specified and no primary
+            files are given or neither of the primary files is a CK or
+            binary PCK, the program signals an error.
+ 
+ 
+``Coverage'' Frames
+ 
+   The following rules apply to specifying and picking defaults for the
+   ``coverage'' frames:
+ 
+       --   Only PCK-based (Class 2) or CK-based (Class 3) frames can be
+            specified using ``-c1'' and ``-c2''. Specifying frames of any
+            other class using these keys is an error.
+ 
+       --   If ``-c1'' is not specified and the first ``to'' frame is a
+            PCK-based (Class 2) or CK-based (Class 3) specified using
+            ``-t1'' or picked by default, the first ``coverage'' frame is
+            set to the first ``to'' frame. Similarly, if ``-c2'' is not
+            specified and the second ``to'' frame is a PCK-based (Class 2)
+            or CK-based (Class 3) specified using ``-t2'' or picked by
+            default, the second ``coverage'' frame is set to the second
+            ``to'' frame.
+ 
+       --   If ``-c1'' is specified or set by default to the first ``to''
+            frame, and the first (or only) primary kernel is a CK or binary
+            PCK file containing data for this frame, then this frame is
+            used to look up the first coverage window from this primary
+            file. Similarly, if ``-c2'' is specified or set by default to
+            the second ``to'' frame, and the second (or only) primary
+            kernel is a CK or binary PCK file containing data for this
+            frame, then this frame is used to look up the second coverage
+            window from this primary file.
+ 
+       --   If ``-c1'' is specified and the first (or only) primary kernel
+            is a CK or binary PCK file that does not contains data for this
+            frame, then the program signals an error. Similarly, if ``-c2''
+            is specified and the second (or only) primary kernel is a CK or
+            binary PCK file that does not contains data for this frame,
+            then the program signals an error.
+ 
+       --   If ``-c1'' is set by default to the first ``to'' frame and the
+            first (or only) primary kernel is a CK or binary PCK file that
+            does not contains data for this frame, then the program does
+            not attempt to determine the first coverage window for this
+            frame based on the primary or additional kernels. Similarly, if
+            ``-c2'' is set by default to the second ``to'' frame and the
+            second (or only) primary kernel is a CK or binary PCK file that
+            does not contains data for this frame, then the program does
+            not attempt to determine the second coverage window for this
+            frame based on the primary or additional kernels.
+ 
+       --   If ``-c1'' is specified or set by default to the first ``to''
+            frame, and the first (or only) primary kernel is not a CK or
+            binary PCK file, then this frame is used to look up the first
+            coverage window from the kernels specified using ``-k'' and
+            ``-k1''. Similarly, if ``-c2'' is specified or set by default
+            to the second ``to'' frame, and the second (or only) primary
+            kernel is not a CK or binary PCK file, then this frame is used
+            to look up the second coverage window from the kernels
+            specified using ``-k'' and ``-k2''.
+ 
+       --   If ``-c1'' is specified or set by default to the first ``to''
+            frame and no primary kernels are given, then this frame is used
+            to look up the first coverage window from the kernels specified
+            using ``-k'' and ``-k1''. Similarly, if ``-c2'' is specified or
+            set by default to the second ``to'' frame, and no primary
+            kernels are given, then this frame is used to look up the
+            second coverage window from the kernels specified using ``-k''
+            and ``-k2''.
+ 
+ 
+Times for Comparison/Sampling
+--------------------------------------------------------
+ 
+   The program picks times at which orientation(s) are computed based on
+   the coverage window determined by examining the primary or additional
+   files(s) and/or specified using the ``-b'' and ``-e'' keys, and on
+   either the number of points within that window specified using the
+   ``-n'' key or the time step specified using the ``-s'' key''.
+ 
+   The coverage window begin and end times specified using the ``-b'' and
+   ``-e'' options can be in any format accepted by SPICE's cspice_str2et
+   function (see cspice_str2et header for details). If one or both of these
+   times are provided, an LSK file must be provided as one of the
+   additional or primary kernels.
+ 
+   The number of points specified using the ``-n'' key must be an integer
+   between 1 to 1,000,000 while the step specified using the ``-s'' key
+   must be in seconds and be greater than 1.0E-8. If both ``-n'' and ``-s''
+   are specified, ``-s'' takes precedence.
+ 
+   The coverage window determined by examining the primary or additional
+   kernels -- especially if these kernels are CK files, which frequently
+   have gaps in coverage -- may consist of many intervals, some of which
+   may be singletons (with the interval begin time equal to the interval
+   end time). Whether the coverage window consists of only one interval or
+   of many intervals, the program computes times within the window in such
+   a way that the interval ends are always included in the set of points.
+   The rest of times are distributed within the intervals, stepping from
+   the beginning of each interval with the specified step. If the number of
+   points is given instead of the step, the step is computed using the
+   measure of the coverage window (the sum of the lengths of the individual
+   intervals) and the specified number of points.
+ 
+   Not all of the keys controlling selection of points have to be specified
+   for every program run. In some cases none of these options are required;
+   in the other cases ``-b'', ``-e'', ``-c1'', and/or ``-c2'' must be
+   specified. The two subsections below discuss specifics of providing and
+   picking defaults for the coverage window and step or number of points.
+ 
+ 
+Coverage Window
+ 
+   The program determines the coverage window either by examining the
+   primary or additional kernels (resulting in the ``default coverage
+   window''), or by using the begin and end times specified using the
+   ``-b'' and ``-e'' keys, or as a combination of both.
+ 
+   The default coverage window can be determined only from the primary or
+   additional kernel files that are binary PCK files (using SPICE's
+   cspice_pckcov function) or CK files (using SPICE's cspice_ckcov
+   function) and only if these kernels contain data for the ``coverage''
+   frames either specified using the ``-c1''/``-c2'' keys or set to default
+   values as described earlier in this document. When both ``coverage''
+   frames are specified or set to default values, the program determines
+   the frame-specific coverage window for each of them using the
+   corresponding primary or additional kernels and sets the default
+   coverage window to the intersection of these two frame-specific coverage
+   windows. When only one ``coverage'' frame is specified or set to the
+   default value, the program determines the frame-specific coverage window
+   for that frame using corresponding primary or additional kernels and
+   sets the default coverage window to that frame-specific coverage window.
+ 
+   In cases when a frame-specific coverage window is obtained from the
+   corresponding primary kernel, the program examines only that primary
+   kernel to construct the desired frame-specific coverage window. In cases
+   when a frame-specific coverage window is obtained from additional
+   kernels, the program examines all kernels of a particular type -- all
+   CKs if the ``coverage'' frame is a CK-based frame or all binary PCKs if
+   the ``coverage'' frame is a PCK-based frame -- listed explicitly with
+   the ``-k''/``-k1'' or ``-k''/``-k2'' keys or included in meta-kernels
+   provided with these keys and constructs the frame-specific coverage
+   window as the union of coverages obtained from individual additional
+   kernels.
+ 
+   When the program determines the coverage window for a CK file it
+   slightly contracts the actual coverage window given by the CK data to
+   compensate for roundoff occuring in SCLK-ET time conversions. The
+   contraction is done by adjusting inward the window interval boundary
+   times by three times the amout of maximum roundoff that was determined
+   by converting all boundary times from SCLK to ET then back to SCLK. This
+   adjustment is done to ensure that the program is able to compute
+   orientation at any time within the comparison or sampling time domain
+   using the high level SPICE frames routines (cspice_pxform and
+   cspice_sxform). While this contraction does not have any noticable
+   effect when the program is run with CKs containing continuous data, it
+   makes the program unuseable with CKs containing disrete data -- Type 1
+   CKs and Type 3 CKs with singleton intervals -- because such contraction
+   eliminates all singleton intervals corresponding to the discrete time
+   point from the comparison window. The error messages that the program
+   would display in such cases say that CK files do not provide any
+   roundoff-adjusted coverage for a particular CK-based frame. An exception
+   to this limitation is the rare ciscumstance when SCLK-ET time
+   conversions have no round off; in such cases the program will work on
+   CKs containing discrete data.
+ 
+   If the default coverage window was determined from primary or additional
+   kernel file(s) and either ``-b'' or ``-e'', or both ``-b'' and ``-e''
+   were specified, it is truncated according to these begin and end times.
+   If the time specified using ``-b'' is before the start of the default
+   window, this time is ignored. If the time specified using ``-b'' is
+   after the end of the default coverage window, the program signals an
+   error. If the time specified using ``-e'' is after the end of the
+   default window, this time is ignored. If the time specified using ``-e''
+   is before the start of the default coverage window, the program signals
+   an error.
+ 
+   If no ``coverage'' frames are specified or set by default, or if one or
+   both ``coverage'' frames are given but corresponding primary or
+   additional kernels don't contain any data for them, both the coverage
+   window begin time and the coverage window end time must be specified
+   using the ``-b'' and ``-e'' keys because the program has no way to
+   determining the default coverage window. If either ``-b'' or ``-e'' is
+   not provided in such cases, the program signals an error.
+ 
+ 
+Times within Coverage Window
+ 
+   The program picks times within the coverage window based on the number
+   of points specified using the ``-n'' key or the time step specified
+   using the ``-s'' key''.
+ 
+   When neither the number of points is specified using ``-n'' nor the step
+   is specified using ``-s'', the number of points is set to a default
+   value determined by examining the coverage window. If the total number
+   of endpoints -- 2 for each non-singleton interval, 1 for each singleton
+   interval -- for all intervals in the coverage window is greater than
+   1000, the number of points is set to the number of endpoints and the
+   step is not computed. Otherwise it is set to 1000 or a number less than
+   but close to 1000 (the actual number is determined at run-time based on
+   the lengths of the intervals) and the step is computed by dividing the
+   measure of the coverage window by the number of points minus the number
+   of endpoints.
+ 
+   When the number of points is specified using ``-n'' but this number is
+   less than the number of the coverage window interval endpoints, the
+   value given using ``-n'' is ignored and the number of points is set to
+   the number of interval endpoints and the step is not computed. Otherwise
+   the number of points is set to the value provided using ``-n'' or a
+   number less than but close to this value (the actual number is
+   determined at run time based on the lengths of the intervals) and the
+   step is computed by dividing the measure of the coverage window by the
+   number of points minus the number of endpoints.
+ 
+   When step is specified using ``-s'', the number of points is computed by
+   adding the number of interval endpoints to the total of the numbers of
+   points that can fit within each non-singleton interval when it's stepped
+   through with this step. If the resultant number of points is greater
+   than 1,000,000, the program signals an error.
+ 
+   Whether the step was provided or computed using the provided or default
+   number of points, the set of times at which orientation is computed
+   includes all interval ends -- 2 for each non-singleton interval, 1 for
+   each singleton interval -- plus additional points computed by stepping
+   with this step within each non-singleton interval starting from the
+   interval start time. The last point within each non-singleton interval
+   is computed such that it always lies inside the 1.5*step to 0.5*step
+   range off the interval end.
+ 
+   Care should be taken when picking the step using ``-s'' or specifying
+   the number of points using ``-n''. Picking a very small step for a large
+   time window, or very many points for any window, leads to very long run
+   times. In some cases the number of points computed using the step may
+   even be greater that 1,000,000, preventing the program from running
+   because its buffers are not large enough to deal with so many points. On
+   the other hand, picking a large step or too few points prevents the
+   program from doing a thorough comparison.
+ 
+ 
+Angular Velocities
+--------------------------------------------------------
+ 
+   The ``-a'' key is used to tell the program to compute angular velocities
+   in addition to orientations. When the value provided using ``-a'' is
+   ``yes'', the program computes angular velocities and reports them or
+   their differences along with the orientation or orientation differences.
+   If the key is omitted or set to ``no'', the program does not compute
+   angular velocities. For any value other than ``yes'' or ``no'' the
+   program reports an error.
+ 
+   If the program samples or compares angular velocities (``-a yes''), the
+   ``-m'' key is used to specify whether they or their differences should
+   be reported in the ``from'' frame(s) or the ``to'' frame(s). When the
+   value provided using the ``-m'' key is ``to'', the program reports
+   angular velocities or their differences in the ``to'' frames. If the key
+   is omitted or set to ``from'', the program reports angular velocities or
+   their differences in the ``from'' frames. For any value other than
+   ``to'' or ``from'' the program reports an error.
+ 
+   In order for the program to compute angular velocities the data provided
+   to it must support this computation. This is not an issue for any frames
+   except for CK-based frames. Therefore, when using CK files, whether as
+   primary or as additional kernels, it's important to make sure that these
+   CKs include angular velocities before requesting the program to compute
+   angular velocities.
+ 
+ 
+Output
+===========================================================================
+ 
+   In a successful run the program prints to the screen a report consisting
+   of the report header and report data. The report header provides the
+   complete information about kernels and control parameters used by the
+   program. The report data provides information about the orientation and
+   angular velocity differences (for comparison runs) or orientations and
+   angular velocities (for sampling reports) in a variety of ways, called
+   report types. The algorithms used to compute orientations and angular
+   velocities and their differences and to convert them to various
+   representations used in the reports are shown in ``Appendix 1''.
+ 
+ 
+Overview of Report Types
+--------------------------------------------------------
+ 
+   The report data can be of one of the following types depending on the
+   value provided using the ``-t'' key:
+ 
+         basic    the basic report including only the maximum and the
+                  average rotation angle difference (for comparison runs)
+                  or rotation angle (for sampling runs) and, if requested,
+                  the maximum and the average angular velocity magnitude
+                  difference (for comparison runs) or angular velocity
+                  magnitude (for sampling runs). This is the default report
+                  displayed when ``-t'' is omitted.
+ 
+         stats    the statistics report including a small set of
+                  statistical information on the difference between two
+                  frame orientations (for comparison runs) or statistics on
+                  a single orientation (for sampling runs). In addition to
+                  the items from the basic report (maximums and averages),
+                  this report includes RMS of the rotation angle
+                  difference/angle and angular velocity difference/angular
+                  velocity and the times when the maximum value of the
+                  rotation angle difference/angle and the angular velocity
+                  difference/angular velocity were found.
+ 
+         dumpaa   the angle and axis dump report containing a table listing
+                  the orientation difference (for comparison runs) or
+                  orientation (for sampling runs) expressed as the rotation
+                  angle and axis and, if requested, the components and the
+                  magnitude of the angular velocity difference (for
+                  comparison runs) or angular velocity (for sampling runs),
+                  along with the time, for each of the times at which the
+                  orientations were computed.
+ 
+         dumpm    the matrix dump report containing a table listing the
+                  orientation difference (for comparison runs) or
+                  orientation (for sampling runs) expressed as a 3x3
+                  rotation matrix and, if requested, the components of the
+                  angular velocity difference (for comparison runs) or
+                  angular velocity (for sampling runs), along with the
+                  time, for each of the times at which the orientations
+                  were computed.
+ 
+         dumpqs   the SPICE-style quaternion dump report containing a table
+                  listing the orientation difference (for comparison runs)
+                  or orientation (for sampling runs) expressed as a
+                  SPICE-style quaternion and, if requested, the components
+                  of the angular velocity difference (for comparison runs)
+                  or angular velocity (for sampling runs), along with the
+                  time, for each of the times at which the orientations
+                  were computed.
+ 
+         dumpqo   produces the ``other''-style quaternion dump report
+                  containing a table listing the orientation difference
+                  (for comparison runs) or orientation (for sampling runs)
+                  expressed as SPICE-style quaternion and, if requested,
+                  the components of the angular velocity difference (for
+                  comparison runs) or angular velocity (for sampling runs),
+                  along with the time, for each of the times at which the
+                  orientations were computed.
+ 
+         dumpea   the Euler angle dump report containing a table listing
+                  the orientation difference (for comparison runs) or
+                  orientation (for sampling runs) expressed as three Euler
+                  angles and, if requested, the components of the angular
+                  velocity difference (for comparison runs) or angular
+                  velocity (for sampling runs), along with the time, for
+                  each of the times at which the orientations were
+                  computed.
+ 
+         dumpc    the coverage intervals dump report containing a table
+                  listing the start and stop times and durations for the
+                  intervals inside the coverage window, during which
+                  orientation(s) can be computed.
+ 
+         dumpg    the coverage gaps dump report containing a table listing
+                  the start and stop times and duration for the gaps inside
+                  the coverage window, during which orientation(s) cannot
+                  be computed.
+ 
+   The ``basic'' and ``stats'' report are useful for quick assessment of
+   whether and by how much two frame transformations differ (for comparison
+   runs) or of the maximum/average magnitude of one frame transformation
+   (for sampling runs). The ``dumpaa'', ``dumpm'', ``dumpqs'', ``dumpqo'',
+   and ``dumpea'' are useful to capture detailed information about
+   differences of two transformations (in comparison runs) or information
+   about a single transformation (for sampling runs) in various formats as
+   a function of time, for analysis or use in other applications. The
+   ``dumpc'' and ``dumpg'' reports are useful for CK or binary PCK coverage
+   overlap analysis.
+ 
+   All reports have rigid formats. The only items in the reports that can
+   be altered by command line options are:
+ 
+       --   the format of time tags in all ``dump*'' reports; the time
+            format is changed using the ``-f'' key
+ 
+       --   the number of significant digits in the output numeric times
+            (TDB seconds past J2000, decimal SCLKs and encoded SCLK ticks)
+            and rotation component values or rotation difference component
+            values included in all ``dump*'' reports; the number of
+            significant digits is changed using the ``-d'' key
+ 
+       --   units for the angles in the dump reports that include angles
+            (``dumpaa'' and ``dumpea''); the units are changed using the
+            ``-x'' key
+ 
+       --   the order of rotations in the Euler angles dump report
+            (``dumpea''); the order is changed using the ``-o'' key
+ 
+       --   absence or presence of angular velocities in all non-coverage
+            related dump reports (``dumpaa'', ``dumpm'', ``dumpqs'',
+            ``dumpqo'', and ``dumpea''); whether angular velocities are
+            included or not is controlled by the ``-a'' key as discussed
+            earlier in this document.
+ 
+ 
+Time Tag Format for ``dump*'' Reports
+ 
+   The format of the time tags in the ``dump*'' reports is controlled using
+   the ``-f'' key. The following values can be provided using ``-f'':
+ 
+         et         to display times as TDB seconds past J2000 (default
+                    format when ``-f'' is omitted)
+ 
+         sclk       to display times as string SCLKs
+ 
+         sclkd      to display times as decimal SCLKs
+ 
+         ticks      to display times as encoded SCLK ticks
+ 
+         <PICTUR>   a time format picture acceptable for cspice_timout
+                    function. For example:
+ 
+                       YYYY-MM-DDTHR:MN:SC.### ::RND    for UTC ISO date
+                       YYYY-DOYTHR:MN:SC.### ::RND      for UTC ISO DOY
+                       JULIAND.######### ::TDB          for Julian day TDB
+ 
+   When one of the SCLK formats (``sclk'', ``sclkd'', ``ticks'') is
+   specified, TDB times used internally by the program are converted to
+   SCLK times using the SCLK ID associated with one of the ``to'' or
+   ``coverage'' CK-based frames in the following priority order (from
+   highest to lowest): first ``to'' frame, first ``coverage'' frame, second
+   ``to'' frame, second ``coverage'' frame. If neither of the ``to'' or
+   ``coverage'' frames is a CK frame, the program signals an error.
+ 
+   When decimal SCLK tags are requested, the SCLK string returned by
+   SPICE's cspice_sce2s function is converted to ``decimal'' SCLK by
+   stripping off the partition, using the left field as the integer part
+   and converting the rest of the fields to the decimal fraction of the
+   left field using the SCLK field values from the string SCLK and SCLK
+   moduli and offsets from the SCLK kernel file. For example, the SCLK
+   string ``1/883612839.255'' that has seconds in the left field and a
+   count of ticks having duration of 1/256 of a second in the right field
+   is converted to this DP SCLK 883612839.996094. This conversion is
+   supported only for type 1 clocks.
+ 
+   When one of the numeric formats (``et'', ``sclkd'', ``ticks'') is
+   specified, times are displayed in the scientific format with 14
+   significant digits (e.g. +1.2345678901234E+01), unless ``-d'' is used to
+   specify a different number of significant digits.
+ 
+   ``-f'' does not apply to times in the report header and the statistics
+   report, in which the times are always displayed as TDBs in calendar and
+   seconds past J2000 numeric (in scientific format with 14 significant
+   digits) formats.
+ 
+ 
+Numeric Format for ``dump*'' Reports
+ 
+   The default format of numeric time tags (TDB seconds past J2000, decimal
+   SCLKs and encoded SCLK ticks), rotation and angular velocity component
+   values, and rotation and angular velocity difference component values in
+   all ``dump*'' reports is the scientific format with 14 significant
+   digits (e.g. +1.2345678901234E+01). A different number of significant
+   digits can be specified using the ``-d'' option as an integer in the
+   range from 6 to 17. If specified, the number of significant digits is
+   used for all numeric items in the ``dump*'' report data part (table) but
+   is not used for any numbers in the table header or in the data part of
+   the non-``dump*'' (``basic'' and ``stats'') reports.
+ 
+   The default format, with 14 significant digits, is usually adequate for
+   output from all comparison runs and from all sampling runs that are
+   intended to produce tables of rotations or rotation differences for
+   plotting but, due to round off, it may not be adequate for sampling runs
+   that are intended to generate tables of quaternions, angles, or matrices
+   for subsequent interpolation or packaging into CK files. For such
+   outputs the number of significant digits should be increased to 16 -- if
+   output rotations are planned to be packaged into an CK file using the
+   MSOPCK program that employs a custom parser to ingest input numeric data
+   -- or 17 -- if output rotations will read by an application that uses
+   language-native means to parse input numeric data.
+ 
+ 
+Angle Units for ``dumpaa'' and ``dumpea'' Reports
+ 
+   The angles in the ``dumpaa'' and ``dumpea'' reports can be displayed
+   using one of the following units depending on the value provided using
+   the ``-x'' key:
+ 
+                       radians (default)
+                       degrees
+                       arcminutes
+                       arcseconds
+                       hourangle
+                       minuteangle
+                       secondangle
+ 
+   ``-f'' applies neither to the angles in the basic and statistics reports
+   (in which the angles are always displayed in radians) nor to angular
+   velocities in any reports (which are always displayed in radians per
+   second).
+ 
+ 
+Report Header
+--------------------------------------------------------
+ 
+   The top portion of each report generated by the program is occupied by
+   the report header providing complete information about the kernels and
+   control parameters used by the program. The format and the set of
+   information provided in the report header depends on
+ 
+       --   the type of run (comparison vs. sampling)
+ 
+       --   the type of report (data dump, coverage dump, etc.)
+ 
+       --   the set of kernels that were provided
+ 
+       --   whether angular velocities were computed
+ 
+       --   and various miscellaneous control parameters.
+ 
+   All lines in the report header have
+ 
+      #
+ 
+   as the first character. This allows common plotting programs, such as
+   GNUPLOT, to skip these header lines when plotting the ``dump''-type
+   reports generated by the program.
+ 
+ 
+Report Header for Comparing Two Orientations
+ 
+   For runs comparing two orientations the report header has the following
+   format (the line numbers given on the left are not present in the actual
+   report; they are provided for referencing purposes only):
+ 
+       1  #
+       2  # Comparison of N rotations
+       3  #
+       4  #    from 'FROM1NAME' (FROM1ID) to 'TO1NAME' (TO1ID)
+       5  #    computed using
+       6  #
+       7  #       -K/KERNEL1  -K/KERNEL2  ... -K/KERNELn
+       8  #       -K1/KERNEL1 -K1/KERNEL2 ... -K1/KERNELm
+       9  #       FIRSTKERNEL
+      10  #
+      11  # with N rotations
+      12  #
+      13  #    from 'FROM2NAME' (FROM2ID) to 'TO2NAME' (TO2ID)
+      14  #    computed using
+      15  #
+      16  #       -K/KERNEL1  -K/KERNEL2  ... -K/KERNELn
+      17  #       -K2/KERNEL1 -K2/KERNEL2 ... -K2/KERNELm
+      18  #       SECONDKERNEL
+      19  #
+      20  # with a S second (DDDAYS:HR:MN:SC.MSECND) step size
+      21  # within the continuous time period
+      22  #
+      23  #    from 'YYYY MON DD HR:MN:SC.### TDB' (SSS.###### TDB seconds)
+      24  #    to   'YYYY MON DD HR:MN:SC.### TDB' (SSS.###### TDB seconds)
+      25  #
+      26  # including differences in AVs relative to the FRAME frames.
+      27  #
+      28  # TIMESPEC.
+      29  #
+ 
+   where:
+ 
+       --   on lines 2 and 11 ``N'' is replaced with the actual number of
+            comparison points
+ 
+       --   on lines 4 and 13 ``FROM1NAME'', ``FROM1ID'', ``TO1NAME'',
+            ``TO1ID'', ``FROM2NAME'', ``FROM2ID'', ``TO2NAME'', and
+            ``TO2ID'' are replaced with the actual names/IDs used to
+            compute transformations for comparison
+ 
+       --   lines 7, 8, 9, 16, 17, and 18 contain lists of additional
+            kernels provided using the ``-k'', ``-k1'', and ``-k2'' keys
+            and primary kernels provided at the end of the command line,
+            listed in the order in which they were loaded by the program.
+            These lines are present only when corresponding kernel files
+            are given on the command line.
+ 
+       --   on line 20 the actual step replaces ``S'' and
+            ``DDDAYS:HR:MN:SC.MSECND'' (step expressed as days, hours,
+            minutes, seconds). If transformations are computed only at the
+            interval endpoints, the whole line is replaced with the
+            following string: ``at continuous coverage intervals'
+            endpoints''
+ 
+       --   line 21 has the form shown above when there are no gaps in
+            coverage window. Otherwise the whole line is replaced with the
+            following string: ``within the non-continuous (with M gaps)
+            time period'' where ``M'' is replaced with the actual number of
+            gaps.
+ 
+       --   on lines 23 and 24 times are replaced with the first and last
+            times from the set of times for which the comparison was made.
+ 
+       --   lines 26 and 27 are displayed only when angular velocities are
+            compared. The FRAME is set to ``from'' or ``to'' depending on
+            the frame in which the angular velocity difference is reported.
+ 
+       --   line 28 and 29 are displayed for all report types except
+            ``basic'' and ``stats''. Depending on the output time type
+            specified using the ``-f'' key TIMESPEC is replaced with one of
+            the following strings:
+ 
+               -f et       ``Times are TDB seconds past J2000.''
+ 
+               -f sclk     ``Times are SCLKs computed using SCLK
+                           ID <nnn>.''
+ 
+               -f sclkd    ``Times are decimal SCLKs computed using
+                           SCLK ID <nnn>.''
+ 
+               -f ticks    ``Times are SCLK ticks computed using
+                           SCLK ID <nnn>.''
+ 
+               -f PICTURE  ``Times were generated by TIMOUT using
+                           '<format>' format.''
+ 
+            where ``nnn'' is replaced with the SCLK ID used to convert TDB
+            to SCLK.
+ 
+ 
+Report Header for Coverage/Gaps for Two Orientations
+ 
+   For runs displaying coverage or gaps in coverage for two orientations
+   the report header has the following format (the line numbers given on
+   the left are not present in the actual report; they are provided only
+   for referencing purposes):
+ 
+       1  #
+       2  # Coverage overlap for rotation
+       3  #
+       4  #    from 'FROM1NAME' (FROM1ID) to 'TO1NAME' (TO1ID)
+       5  #    computed using
+       6  #
+       7  #       -K/KERNEL1  -K/KERNEL2  ... -K/KERNELn
+       8  #       -K1/KERNEL1 -K1/KERNEL2 ... -K1/KERNELm
+       9  #       FIRSTKERNEL
+      10  #
+      11  # and rotation
+      12  #
+      13  #    from 'FROM2NAME' (FROM2ID) to 'TO2NAME' (TO2ID)
+      14  #    computed using
+      15  #
+      16  #       -K/KERNEL1  -K/KERNEL2  ... -K/KERNELn
+      17  #       -K2/KERNEL1 -K2/KERNEL2 ... -K2/KERNELm
+      18  #       SECONDKERNEL
+      19  #
+      20  # with a S second (DDDAYS:HR:MN:SC.MSECND) step size
+      21  # within the continuous time period
+      22  #
+      23  #    from 'YYYY MON DD HR:MN:SC.### TDB' (SSS.###### TDB seconds)
+      24  #    to   'YYYY MON DD HR:MN:SC.### TDB' (SSS.###### TDB seconds)
+      25  #
+      26  # TIMESPEC.
+      27  #
+ 
+   where:
+ 
+       --   on lines 4 and 13 ``FROM1NAME'', ``FROM1ID'', ``TO1NAME'',
+            ``TO1ID'', ``FROM2NAME'', ``FROM2ID'', ``TO2NAME'', and
+            ``TO2ID'' are replaced with the actual names/IDs used to
+            compute transformations for comparison
+ 
+       --   lines 7, 8, 9, 16, 17, and 18 contain lists of additional
+            kernels provided using the ``-k'', ``-k1'', and ``-k2'' keys
+            and primary kernels provided at the end of the command line,
+            listed in the order in which they were loaded by the program.
+            These lines are present only when corresponding kernel files
+            are given on the command line.
+ 
+       --   on line 20 the actual step replaces ``S'' and
+            ``DDDAYS:HR:MN:SC.MSECND'' (step expressed as days, hours,
+            minutes, seconds). If transformation is computed only at the
+            interval endpoints, the whole line is replaced with the
+            following string: ``at continuous coverage intervals'
+            endpoints''.
+ 
+       --   line 21 has the form shown above when there are no gaps in the
+            coverage window. Otherwise the whole line is replaced with the
+            following string: ``within the non-continuous (with M gaps)
+            time period'' where ``M'' is replaced with the actual number of
+            gaps.
+ 
+       --   on lines 23 and 24 times are replaced with the first and last
+            times from the set of times for which the comparison was made.
+ 
+       --   on line 26, depending on the output time type specified using
+            the ``-f'' key, ``TIMESPEC'' is replaced with one of the
+            following strings:
+ 
+               -f et       ``Times are TDB seconds past J2000.''
+ 
+               -f sclk     ``Times are SCLKs computed using SCLK
+                           ID <nnn>.''
+ 
+               -f sclkd    ``Times are decimal SCLKs computed using
+                           SCLK ID <nnn>.''
+ 
+               -f ticks    ``Times are SCLK ticks computed using
+                           SCLK ID <nnn>.''
+ 
+               -f PICTURE  ``Times were generated by TIMOUT using
+                           '<format>' format.''
+ 
+            where ``nnn'' is replaced with the SCLK ID used to convert TDB
+            to SCLK.
+ 
+ 
+Report Header for Sampling an Orientation
+ 
+   For runs sampling an orientation the report header has the following
+   format (the line numbers given on the left are not present in the actual
+   report; they are provided for referencing purposes only):
+ 
+       1  #
+       2  # Sampling of N rotations
+       3  #
+       4  #    from 'FROMNAME' (FROMID) to 'TONAME' (TOID)
+       5  #    computed using
+       6  #
+       7  #       -K/KERNEL1  -K/KERNEL2  ... -K/KERNELn
+       8  #       -K1/KERNEL1 -K1/KERNEL2 ... -K1/KERNELm
+       9  #       FIRSTKERNEL
+      10  #
+      11  # with a S second (DDDAYS:HR:MN:SC.MSECND) step size
+      12  # within the continuous time period
+      13  #
+      14  #    from 'YYYY MON DD HR:MN:SC.### TDB' (SSS.###### TDB seconds)
+      15  #    to   'YYYY MON DD HR:MN:SC.### TDB' (SSS.###### TDB seconds)
+      16  #
+      17  # including angular velocities relative to the FRAME frame.
+      18  #
+      19  # TIMESPEC
+      20  #
+ 
+   where:
+ 
+       --   on line 2 ``N'' is replaced with the actual number of
+            comparison points
+ 
+       --   on line 4 ``FROMNAME'', ``FROMID'', ``TONAME'', and ``TOID''
+            are replaced with the actual names/IDs used to compute
+            transformations
+ 
+       --   lines 7, 8, and 9 contain lists of additional kernels provided
+            using ``-k'' and ``-k1'' (or ``-k2'') keys and the primary
+            kernel provided at the end of the command line, listed in the
+            order in which they were loaded by the program. These lines are
+            present only when the corresponding kernel files are given on
+            the command line.
+ 
+       --   on line 11 the actual step replaces ``S'' and
+            ``DDDAYS:HR:MN:SC.MSECND'' (step expressed as days, hours,
+            minutes, seconds). If transformation is computed only at the
+            interval endpoints, the whole line is replaced with the
+            following string: ``at continuous coverage intervals'
+            endpoints''
+ 
+       --   line 12 has the form shown above when there are no gaps in the
+            coverage window. Otherwise the whole line is replaced with the
+            following string: ``within the non-continuous (with M gaps)
+            time period'' where ``M'' is replaced with the actual number of
+            gaps.
+ 
+       --   on lines 14 and 15 times are replaced with the first and last
+            times from the set of times for which transformation was
+            computed.
+ 
+       --   lines 17 and 18 are displayed only when angular velocities are
+            computed. The FRAME is set to ``from'' or ``to'' depending on
+            the frame in which the angular velocity is reported.
+ 
+       --   line 19 and 20 are displayed for all report types except
+            ``basic'' and ``stats''. Depending on the output time type
+            specified using the ``-f'' key TIMESPEC is replaced with one of
+            the following strings:
+ 
+               -f et       ``Times are TDB seconds past J2000.''
+ 
+               -f sclk     ``Times are SCLKs computed using SCLK
+                           ID <nnn>.''
+ 
+               -f sclkd    ``Times are decimal SCLKs computed using
+                           SCLK ID <nnn>.''
+ 
+               -f ticks    ``Times are SCLK ticks computed using
+                           SCLK ID <nnn>.''
+ 
+               -f PICTURE  ``Times were generated by TIMOUT using
+                           '<format>' format.''
+ 
+            where ``nnn'' is replaced with the SCLK ID used to convert TDB
+            to SCLK.
+ 
+ 
+Report Header for Coverage/Gaps for An Orientation
+ 
+   For runs displaying coverage or gaps in coverage for an orientation the
+   report header has the following format (the line numbers given on the
+   left are not present in the actual report; they are provided for
+   referencing purposes only):
+ 
+       1  #
+       2  # Coverage for rotation
+       3  #
+       4  #    from 'FROMNAME' (FROMID) to 'TONAME' (TOID)
+       5  #    computed using
+       6  #
+       7  #       -K/KERNEL1  -K/KERNEL2  ... -K/KERNELn
+       8  #       -K1/KERNEL1 -K1/KERNEL2 ... -K1/KERNELm
+       9  #       FIRSTKERNEL
+      10  #
+      11  # with a S second (DDDAYS:HR:MN:SC.MSECND) step size
+      12  # within the continuous time period
+      13  #
+      14  #    from 'YYYY MON DD HR:MN:SC.### TDB' (SSS.###### TDB seconds)
+      15  #    to   'YYYY MON DD HR:MN:SC.### TDB' (SSS.###### TDB seconds)
+      16  #
+      17  # TIMESPEC
+      18  #
+ 
+   where:
+ 
+       --   on line 4 ``FROMNAME'', ``FROMID'', ``TONAME'', and ``TOID''
+            are replaced with the actual names/IDs used to compute
+            transformations.
+ 
+       --   lines 7, 8, and 9 contain lists of additional kernels provided
+            using the ``-k'' and ``-k1'' (or ``-k2'') keys and the primary
+            kernel provided at the end of the command line, listed in the
+            order in which they were loaded by the program. These lines are
+            present only when the corresponding the kernel files are given
+            on the command line.
+ 
+       --   on line 11 the actual step replaces ``S'' and
+            ``DDDAYS:HR:MN:SC.MSECND'' (step expressed as days, hours,
+            minutes, seconds). If transformation is computed only at the
+            interval endpoints, the whole line is replaced with the
+            following string: ``at continuous coverage intervals'
+            endpoints''
+ 
+       --   line 12 has the form shown above when there are no gaps in the
+            coverage window. Otherwise the whole line is replaced with the
+            following string: ``within the non-continuous (with M gaps)
+            time period'' where ``M'' is replaced with the actual number of
+            gaps.
+ 
+       --   on lines 14 and 15 times are replaced with the first and last
+            times from the set of times for which transformation was
+            computed.
+ 
+       --   on line 17, depending on the output time type specified using
+            the ``-f'' key TIMESPEC is replaced with one of the following
+            strings:
+ 
+               -f et       ``Times are TDB seconds past J2000.''
+ 
+               -f sclk     ``Times are SCLKs computed using SCLK
+                           ID <nnn>.''
+ 
+               -f sclkd    ``Times are decimal SCLKs computed using
+                           SCLK ID <nnn>.''
+ 
+               -f ticks    ``Times are SCLK ticks computed using
+                           SCLK ID <nnn>.''
+ 
+               -f PICTURE  ``Times were generated by TIMOUT using
+                           '<format>' format.''
+ 
+            where ``nnn'' is replaced with the SCLK ID used to convert TDB
+            to SCLK.
+ 
+ 
+Report Formats
+--------------------------------------------------------
+ 
+ 
+Basic Report (no ``-t'' or ``-t basic'')
+ 
+   The basic report indicates if the two frame transformations are
+   different, or if a single transformation is a non-zero transformation,
+   by displaying only the maximum and the average rotation angle difference
+   (for comparison runs) or rotation angle (for sampling runs) and, if
+   requested using the ``-a'' key, the maximum and the average angular
+   velocity magnitude difference (for comparison runs) or angular velocity
+   magnitude (for sampling runs).
+ 
+   The basic report has the following format:
+ 
+ 
+      Absolute difference magnitudes:
+ 
+                                          maximum             average
+ 
+        Rotation (rad):                  MAX_ANGLE         AVERAGE_ANGLE
+        Angular Velocity (rad/s):        MAX_RATE          AVERAGE_RATE
+ 
+ 
+   where:
+ 
+       --   ``MAX_ANGLE'', ``AVERAGE_ANGLE'', ``MAX_RATE'',
+            ``AVERAGE_RATE'' are the maximum and average rotation angle
+            difference (for comparison runs) or angle (for sampling runs)
+            and angular velocity difference (for comparison runs) or
+            angular velocity magnitude (for sampling runs) determined for
+            the set of frame transformation differences or frame
+            transformations computed by the program within the coverage
+            window.
+ 
+       --   The word ``difference'' is omitted from the ``Absolute
+            difference magnitudes:'' line when the program is run in
+            sampling mode.
+ 
+       --   The line ``Angular Velocity ...'' is omitted when AVs are not
+            compared/sampled (no ``-a'' or ``-a no'').
+ 
+       --   All ``*ANGLE'' and ``*RATE'' values are printed in the
+            ``x.xxxxxxxxxxxxxE+xx'' format.
+ 
+       --   All ``*ANGLE'' values are always printed in radians (i.e. units
+            specified using the ``-x'' key have no effect on the values in
+            this report).
+ 
+       --   All ``*RATE'' values are always printed in radians per second.
+ 
+       --   Neither the custom time format specified using ``-f'' nor the
+            number of significant digits specified using ``-d'' apply to
+            this report.
+ 
+ 
+Statistics Report (``-t stats'')
+ 
+   The statistics report provides a small set of statistical information on
+   the difference of two frame transformations (for comparison runs) or a
+   single transformation (for sampling runs). It includes the same items as
+   the basic report (maximums and averages) plus a few additional
+   parameters such as RMS of the rotation angle difference/angle and
+   angular velocity difference/angular velocity and the times when the
+   maximum value of the rotation angle difference/angle and angular
+   velocity difference/angular velocity were found.
+ 
+   The statistics report has the following format:
+ 
+ 
+      1) Average difference
+ 
+         1a) Rotation (rad):                               AVERAGE_ANGLE
+ 
+         1b) Angular velocity (rad/s):                     AVERAGE_RATE
+ 
+ 
+      2) RMS of difference
+ 
+         2a) Rotation (rad):                               RMS_OF_ANGLE
+ 
+         2b) Angular velocity (rad/s):                     RMS_OF_RATE
+ 
+ 
+      3) Maximum rotation difference
+ 
+         3a) Rotation (rad):                               MAX_ANGLE
+ 
+         3b) Epoch (TDB, seconds past J2000):              TDB_SECONDS
+ 
+         3c) Epoch (TDB, calendar format):         YYYY-MON-DD-HR:MN:SC.MMM
+ 
+ 
+      4) Maximum angular velocity difference
+ 
+         4a) Angular velocity (rad/s):                     MAX_RATE
+ 
+         4b) Epoch (TDB, seconds past J2000):              TDB_SECONDS
+ 
+         4c) Epoch (TDB, calendar format):         YYYY-MON-DD-HR:MN:SC.MMM
+ 
+ 
+   where:
+ 
+       --   ``MAX_ANGLE'', ``AVERAGE_ANGLE'', ``RMS_OF_ANGLE'',
+            ``MAX_RATE'', ``AVERAGE_RATE'', ``RMS_OF_RATE'' are the
+            maximum, average, and RMS of rotation angle difference (for
+            comparison runs) or angle (for sampling runs) and angular
+            velocity difference (for comparison runs) or angular velocity
+            magnitude (for sampling runs) determined for the set of frame
+            transformation differences or frame transformations computed by
+            the program within the coverage window. ``TDB_SECONDS'' and
+            ``YYYY-MON-DD-HR:MN:SC.MMM'' are the times, as TDB seconds past
+            J2000 and TDB in calendar date format, when the maximums were
+            found.
+ 
+       --   The word ``difference'' is omitted from the lines starting with
+            ``1)'', ``2)'', ``3)'', and ``4)'' when the program is run in
+            sampling mode.
+ 
+       --   All lines pertaining to angular velocity are omitted when AVs
+            are not compared/sampled (no ``-a'' or ``-a no'').
+ 
+       --   All ``*ANGLE'' and ``*RATE'' values are printed in
+            ``x.xxxxxxxxxxxxxE+xx'' format.
+ 
+       --   All ``*ANGLE'' values are always printed in radians (i.e. units
+            specified using the ``-x'' key have no effect on the values in
+            this report).
+ 
+       --   All ``*RATE'' values are always printed in radians per second.
+ 
+       --   ``TDB_SECONDS'' are printed in the ``xxxxxxxxxx.xxxxxx''
+            format.
+ 
+       --   Neither the custom time format specified using ``-f'' nor the
+            number of significant digits specified using ``-d'' apply to
+            this report.
+ 
+ 
+Angle and Axis Dump Report (``-t dumpaa'')
+ 
+   The angle and axis dump report displays the orientation difference (for
+   comparison runs) or orientation (for sampling runs) expressed as the
+   rotation angle and axis and, if requested using the ``-a'' key, the
+   components and the magnitude of the angular velocity difference (for
+   comparison runs) or angular velocity (for sampling runs), along with the
+   time, for each of the times at which the frame transformations were
+   computed. The angle is displayed in units specified using the ``-x'' key
+   -- ``radians'' (default), ``degrees'', ``arcminutes'', ``arcseconds'',
+   ``hourangle'', ``minuteangle'', or ``secondangle''. The time tags are
+   displayed in the format specified using the ``-f'' key, discussed
+   earlier in this document.
+ 
+   The angle and axis dump report has the following format:
+ 
+      # angle is shown in UNITS.
+      #
+      # time, angle, axis_x, axis_y, axis_z, av_x, av_y, av_z, av_magnitude
+      TIME ANGLE AXIS(1) AXIS(2) AXIS(3) AV(1) AV(2) AV(3) |AV|
+      ...
+      TIME ANGLE AXIS(1) AXIS(2) AXIS(3) AV(1) AV(2) AV(3) |AV|
+ 
+   where:
+ 
+       --   Items on each data line are separated by spaces.
+ 
+       --   All items except TIME are printed in the
+            ``+x.xxxxxxxxxxxxxE+xx'' format, either with the default 14
+            significant digits or with the number of significant digits
+            specified using the ``-d'' option. TIME is displayed in the
+            format specified using the ``-f'' key.
+ 
+       --   The ANGLE is displayed in units specified using the ``-x'' key.
+            The AV components and magnitude are always displayed in radians
+            per second.
+ 
+       --   The AV difference/AV components and the corresponding labels in
+            the table header line are omitted when AVs are not
+            compared/sampled (no ``-a'' or ``-a no'').
+ 
+       --   UNITS is replaced with the units used to display the angles.
+ 
+ 
+Matrix Dump Report (``-t dumpm'')
+ 
+   The matrix dump report displays the orientation difference (for
+   comparison runs) or orientation (for sampling runs) expressed as a 3x3
+   rotation matrix and, if requested using the ``-a'' key, the components
+   of the angular velocity difference (for comparison runs) or angular
+   velocity (for sampling runs), along with the time, for each of the times
+   at which the frame transformations were computed. The time tags are
+   displayed in the format specified using the ``-f'' key, discussed
+   earlier in this document.
+ 
+   The matrix dump report has the following format:
+ 
+      # time, m11, m12, m13, m21, m22, m23, m31, m32, m33, av_x, av_y, av_z
+      TIME M11 M12 M13 M21 M22 M23 M31 M32 M33 AV(1) AV(2) AV(3)
+      ...
+      TIME M11 M12 M13 M21 M22 M23 M31 M32 M33 AV(1) AV(2) AV(3)
+ 
+   where:
+ 
+       --   Items on each data line are separated by spaces.
+ 
+       --   All items except TIME are printed in the
+            ``+x.xxxxxxxxxxxxxE+xx'' format, either with the default 14
+            significant digits or with the number of significant digits
+            specified using the ``-d'' option. TIME is displayed in the
+            format specified using the ``-f'' key.
+ 
+       --   The AV components are always displayed in radians per second.
+ 
+       --   The AV difference/AV components and the corresponding labels in
+            the table header line are omitted when AVs are not
+            compared/sampled (no ``-a'' or ``-a no'').
+ 
+ 
+SPICE-Style Quaternion Dump Report (``-t dumpqs'')
+ 
+   The SPICE-style quaternion dump report displays the orientation
+   difference (for comparison runs) or orientation (for sampling runs)
+   expressed as a SPICE-style quaternion and, if requested using the ``-a''
+   key, the components of the angular velocity difference (for comparison
+   runs) or angular velocity (for sampling runs), along with the time, for
+   each of the times at which the frame transformations were computed. The
+   time tag is displayed in the format specified using the ``-f'' key,
+   discussed earlier in this document.
+ 
+   The SPICE-style quaternion dump report has the following format:
+ 
+      # time, q_cos, q_sin1, q_sin2, q_sin3, av_x, av_y, av_z
+      TIME QS(1) QS(2) QS(3) QS(4) AV(1) AV(2) AV(3)
+      ...
+      TIME QS(1) QS(2) QS(3) QS(4) AV(1) AV(2) AV(3)
+ 
+   where:
+ 
+       --   Items on each data line are separated by spaces.
+ 
+       --   All items except TIME are printed in the
+            ``+x.xxxxxxxxxxxxxE+xx'' format, either with the default 14
+            significant digits or with the number of significant digits
+            specified using the ``-d'' option. TIME is displayed in the
+            format specified using the ``-f'' key.
+ 
+       --   The AV components are always displayed in radians per second.
+ 
+       --   The AV difference/AV components and the corresponding labels in
+            the table header line are omitted when AVs are not
+            compared/sampled (no ``-a'' or ``-a no'').
+ 
+ 
+``Other''-Style Quaternion Dump Report (``-t dumpqo'')
+ 
+   The ``other''-style quaternion dump report displays the orientation
+   difference (for comparison runs) or orientation (for sampling runs)
+   expressed as the ``other''-style (or engineering-style) quaternion and,
+   if requested using the ``-a'' key, the components of the angular
+   velocity difference (for comparison runs) or angular velocity (for
+   sampling reports), along with the time, for each of the times at which
+   frame transformations were computed. The time tags are displayed in the
+   format specified using the ``-f'' key, discussed earlier in the
+   document.
+ 
+   The ``other''-style quaternion dump report has the following format:
+ 
+      # time, q_sin1, q_sin2, q_sin3, q_cos, av_x, av_y, av_z
+      TIME QO(1) QO(2) QO(3) QO(4) AV(1) AV(2) AV(3)
+      ...
+      TIME QO(1) QO(2) QO(3) QO(4) AV(1) AV(2) AV(3)
+ 
+   where:
+ 
+       --   Items on each data line are separated by spaces.
+ 
+       --   All items except TIME are printed in the
+            ``+x.xxxxxxxxxxxxxE+xx'' format, either with the default 14
+            significant digits or with the number of significant digits
+            specified using the ``-d'' option. TIME is displayed in the
+            format specified using the ``-f'' key.
+ 
+       --   The AV components are always displayed in radians per second.
+ 
+       --   The AV difference/AV components and the corresponding labels in
+            the table header line are omitted when AVs are not
+            compared/sampled (no ``-a'' or ``-a no'').
+ 
+ 
+Euler Angles Dump Report (``-t dumpea'')
+ 
+   The Euler angles dump report displays the orientation difference (for
+   comparison runs) or orientation (for sampling runs) expressed as three
+   Euler angles and, if requested using the ``-a'' key, the components of
+   the angular velocity difference (for comparison runs) or angular
+   velocity (for sampling runs), along with the time, for each of the times
+   at which frame transformations were computed. The order of rotations is
+   specified using the ``-o'' key as sequence of three axes from the set of
+   ``X'', ``Y'', ``Z'' (case-insensitive), separated by spaces. The second
+   axis in the sequence must differ from the first and third axes. When
+   ``-o'' is not provided, the default order is set to ``Z Y X''. The
+   angles are displayed in the units specified using the ``-x'' key --
+   ``radians'' (default), ``degrees'', ``arcminutes'', ``arcseconds'',
+   ``hourangle'', ``minuteangle'', or ``secondangle''. The time tags are
+   displayed in the format specified using the ``-f'' key, discussed
+   earlier in this document.
+ 
+   The Euler angles dump report has the following format:
+ 
+      # angles are shown in UNITS
+      #
+      # time, angle_AXIS3, angle_AXIS2, angle_AXIS1, av_x, av_y, av_z
+      TIME ANGLE3 ANGLE2 ANGLE1 AV(1) AV(2) AV(3)
+      ...
+      TIME ANGLE3 ANGLE2 ANGLE1 AV(1) AV(2) AV(3)
+ 
+   where:
+ 
+       --   Items on each data line are separated by spaces.
+ 
+       --   All items except TIME are printed in the
+            ``+x.xxxxxxxxxxxxxE+xx'' format, either with the default 14
+            significant digits or with the number of significant digits
+            specified using the ``-d'' option. TIME is displayed in the
+            format specified using the ``-f'' key.
+ 
+       --   The ANGLEs are displayed in the units specified using the
+            ``-x'' key. The AV components are always displayed in radians
+            per second.
+ 
+       --   The AV difference/AV components and the corresponding labels in
+            the table header line are omitted when AVs are not
+            compared/sampled (no ``-a'' or ``-a no'').
+ 
+       --   UNITS is replaced with the units used to display angles.
+ 
+       --   ``AXIS1'', ``AXIS2'', ``AXIS3'' are replaced with the
+            corresponding axis labels (X,Y, or Z).
+ 
+ 
+Coverage Intervals Dump Report (``-t dumpc''):
+ 
+   The coverage intervals dump report displays the start and stop times for
+   the intervals inside the coverage window, during which frame
+   transformations can be computed. The time tags are displayed in the
+   format specified using the ``-f'' key, discussed earlier in the
+   document.
+ 
+   The coverage intervals dump report has the following format:
+ 
+      # int_start_time, int_end_time, int_duration_sec, int_duration_string
+      STARTTIME STOPTIME SECONDS DAYS:HR:MN:SC.MMMMMM
+      ...
+      STARTTIME STOPTIME SECONDS DAYS:HR:MN:SC.MMMMMM
+ 
+   where:
+ 
+       --   Items on each data line are separated by spaces.
+ 
+       --   The interval durations are printed as seconds in the
+            ``xxxxxxxxxxxx.xxxxxx'' format (replaces SECONDS) and in days,
+            hours, minutes, seconds format (replaces DAYS:HR:MN:SC.MMMMMM).
+            The STARTTIMEs and STOPTIMEs are displayed in the format
+            specified using the ``-f'' key.
+ 
+ 
+Coverage Gaps Dump Report (``-t dumpg'')
+ 
+   The coverage gaps dump report displays the start and stop times for the
+   gaps inside the coverage window, during which frame transformations
+   cannot be computed. The time tags are displayed in the format specified
+   using the ``-f'' key, discussed earlier in this document.
+ 
+   The coverage gaps dump report has the following format:
+ 
+      # gap_start_time, gap_end_time, gap_duration_sec, gap_duration_string
+      STARTTIME STOPTIME SECONDS DAYS:HR:MN:SC.MMMMMM
+      ...
+      STARTTIME STOPTIME SECONDS DAYS:HR:MN:SC.MMMMMM
+ 
+       --   Items on each data line are separated by spaces.
+ 
+       --   The gap durations are printed as seconds in the
+            ``xxxxxxxxxxxx.xxxxxx'' format (replaces SECONDS) and in days,
+            hours, minutes, seconds format (replaces DAYS:HR:MN:SC.MMMMMM).
+            The STARTTIMEs and STOPTIMEs are displayed in the format
+            specified using the ``-f'' key.
+ 
+       --   If the coverage window has no gaps, the string ``There are no
+            gaps in coverage.'' is printed instead of the data records.
+ 
+ 
+Examples
+===========================================================================
+ 
+   The examples below illustrate some of the common FRMDIFF usage
+   scenarios. In all examples the files are assumed to be in the current
+   directory, the FRMDIFF command lines, which usually occupy a single
+   line, span multiple lines and use the UNIX shell style continuation
+   character (backslash), and the report lines are truncated to fit the
+   width of the page (``...'' at the end of a line indicates that it was
+   truncated).
+ 
+ 
+Checking if Two CKs Provide the Same Orientation
+--------------------------------------------------------
+ 
+   In this example the program is run to check if the daily reconstructed
+   MRO CK ``mro_sc_2009-01-26.bc'' and the weekly reconstructed MRO CK
+   ``mro_sc_psp_090120_090126.bc'' provide the same data. The CK files are
+   provided as primary kernels to make the program run in comparison mode.
+   The LSK ``naif0009.tls'' and SCLK ``MRO_SCLKSCET.00027.tsc'', required
+   to support time conversions, and the FK ``mro_v13.tf'', required because
+   it defines the MRO spacecraft frame and the frame used as the base frame
+   in the CKs, apply to both CKs and, therefore, are provided using the
+   ``-k'' key. To make sure the comparison is thorough the step is set to 1
+   second using the ``-s'' key. No other options need to be specified
+   because the primary kernels are CKs, which the program can examine to
+   automatically pick the ``from'' and ``to'' frames and the coverage
+   window. The basic report displaying the maximum difference will suffice
+   for this case; therefore, there is no need to specify the ``-t'' option.
+ 
+      % frmdiff -k naif0009.tls MRO_SCLKSCET.00027.tsc mro_v13.tf \
+                -s 1 \
+                mro_sc_2009-01-26.bc mro_sc_psp_090120_090126.bc
+      # int_start_time, int_end_time, int_duration_sec, int_duration_string
+      #
+      # Comparison of 86401 rotations
+      #
+      #    from 'MRO_MME_OF_DATE' (-74900) to 'MRO_SPACECRAFT' (-74000)
+      #    computed using
+      #
+      #       naif0009.tls MRO_SCLKSCET.00027.tsc mro_v13.tf
+      #       mro_sc_2009-01-26.bc
+      #
+      # with 86401 rotations
+      #
+      #    from 'MRO_MME_OF_DATE' (-74900) to 'MRO_SPACECRAFT' (-74000)
+      #    computed using
+      #
+      #       naif0009.tls MRO_SCLKSCET.00027.tsc mro_v13.tf
+      #       mro_sc_psp_090120_090126.bc
+      #
+      # with a 1.0000000000000 second (0:00:00:01.000000) step size
+      # within the continuous time period
+      #
+      #    from '2009 JAN 26 00:01:06.261' TDB (286200066.26113 TDB seco...
+      #    to   '2009 JAN 27 00:01:06.024' TDB (286286466.02413 TDB seco...
+      #
+ 
+      Absolute difference magnitudes:
+ 
+                                           maximum                 avera...
+ 
+        Rotation (rad):             +0.0000000000000E+00      +0.0000000...
+ 
+ 
+   The zero maximum rotation difference indicates that these two CKs
+   provide the same data.
+ 
+ 
+Comparing Predicted and Reconstructed CKs
+--------------------------------------------------------
+ 
+   In this example the program is run to assess, for a specified period of
+   time, the difference of the spacecraft orientation provided by the
+   predicted CASSINI spacecraft CK ``09009_09025pa_fsiv_lud2.bc'' and the
+   reconstructed CASSINI spacecraft CK ``09006_09011ra.bc''. The CK files
+   are provided as primary kernels to make the program run in comparison
+   mode. The LSK ``naif0009.tls'' and the SCLK ``cas00130.tsc'', required
+   to support time conversions, and the FK ``cas_v40.tf'', required because
+   it defines the CASSINI spacecraft frame, apply to both CKs and,
+   therefore, are provided using the ``-k'' key. The angle and axis dump
+   report is requested using ``-t dumpaa'' and the step is set to 10
+   seconds using ``-s 10''. The time boundaries for the period of interest
+   are specified using ``-b'' and ``-e''. No other options need to be
+   specified because the primary kernels are CKs, which the program can
+   examine to automatically pick the ``from'' and ``to'' frames and the
+   default coverage window (which is intersected with the window of
+   interest specified using ``-b'' and ``-e''). The program's output is
+   re-directed to the file ``output.txt'' using the ``>'' shell pipe, with
+   the contents of the file shown using the UNIX ``cat'' command.
+ 
+      % frmdiff -k naif0009.tls cas00130.tsc cas_v40.tf \
+                -s 10 -b 2009-JAN-09 00:00 -e 2009-JAN-10 00:00 -t dumpaa \
+                09009_09025pa_fsiv_lud2.bc 09006_09011ra.bc \
+                > output.txt
+      % cat output.txt
+      #
+      # Comparison of 3143 rotations
+      #
+      #    from 'J2000' (1) to 'CASSINI_SC_COORD' (-82000)
+      #    computed using
+      #
+      #       naif0009.tls cas00130.tsc cas_v40.tf
+      #       09009_09025pa_fsiv_lud2.bc
+      #
+      # with 3143 rotations
+      #
+      #    from 'J2000' (1) to 'CASSINI_SC_COORD' (-82000)
+      #    computed using
+      #
+      #       naif0009.tls cas00130.tsc cas_v40.tf
+      #       09006_09011ra.bc
+      #
+      # with a 10.000000000000 second (0:00:00:10.000000) step size
+      # within the non-continuous (with 1 gaps) time period
+      #
+      #    from '2009 JAN 09 15:17:06.359' TDB (284786226.35996 TDB seco...
+      #    to   '2009 JAN 10 00:01:06.184' TDB (284817666.18419 TDB seco...
+      #
+      # Times are TDB seconds past J2000.
+      #
+      # angle is shown in radians.
+      #
+      # time, angle, axis_x, axis_y, axis_z
+      +2.8478622635996E+08 +5.4958832051797E-05 +8.2101753099566E-01 +4....
+      +2.8478623635996E+08 +5.4931030131424E-05 +8.2046010733260E-01 +4....
+      +2.8478624635996E+08 +5.4903290577181E-05 +8.1990116349661E-01 +4....
+      ...
+      +2.8481765833081E+08 +2.3714852496640E-05 +4.7607884330795E-01 -8....
+      +2.8481766618419E+08 +1.7506382825421E-05 -3.3218433215999E-01 -6....
+ 
+   The orientation difference expressed as the rotation angle (column 2)
+   can be plotted against TDB seconds (column 1) for analysis.
+ 
+   Note that the time window shown in the report header is different from
+   the requested window specified using the ``-b'' and ``-e'' options. The
+   reason for that is the lack of coverage for the requested windows in one
+   of the CKs (``09009_09025pa_fsiv_lud2.bc'').
+ 
+   To find out when the difference between two orientations is the greatest
+   without plotting the difference as suggested above, the program can be
+   re-run with the same options to generate a statistics report (``-t
+   stats''). For such a run it makes sense to also decrease the time step
+   in order to determine the time of interest more accurately, for example
+   by setting the step to 1 second (``-s 1'').
+ 
+      % frmdiff -k naif0009.tls cas00130.tsc cas_v40.tf \
+                -s 1 -b 2009-JAN-09 00:00 -e 2009-JAN-10 00:00 -t stats \
+                09009_09025pa_fsiv_lud2.bc 09006_09011ra.bc
+      #
+      # Comparison of 31414 rotations
+      #
+      #    from 'J2000' (1) to 'CASSINI_SC_COORD' (-82000)
+      #    computed using
+      #
+      #       naif0009.tls cas00130.tsc cas_v40.tf
+      #       09009_09025pa_fsiv_lud2.bc
+      #
+      # with 31414 rotations
+      #
+      #    from 'J2000' (1) to 'CASSINI_SC_COORD' (-82000)
+      #    computed using
+      #
+      #       naif0009.tls cas00130.tsc cas_v40.tf
+      #       09006_09011ra.bc
+      #
+      # with a 1.0000000000000 second (0:00:00:01.000000) step size
+      # within the non-continuous (with 1 gaps) time period
+      #
+      #    from '2009 JAN 09 15:17:06.359' TDB (284786226.35996 TDB seco...
+      #    to   '2009 JAN 10 00:01:06.184' TDB (284817666.18419 TDB seco...
+      #
+ 
+      1) Average difference
+ 
+         1a) Rotation (rad):                               0.00007738559...
+ 
+ 
+      2) RMS of difference
+ 
+         2a) Rotation (rad):                               0.00016380723...
+ 
+ 
+      3) Maximum rotation difference
+ 
+         3a) Rotation (rad):                               0.00098956656...
+ 
+         3b) Epoch (TDB, seconds past J2000):              284788762.33081
+ 
+         3c) Epoch (TDB, calendar format):         2009-JAN-09-15:59:22.330
+ 
+ 
+   As seen in the report the maximum difference between orientations
+   provided by these CKs between 2009-JAN-09 15:17:06 TDB and 2009-JAN-10
+   00:01:06 TDB is about 1 milliradian near 2009-JAN-09 15:59:22 TDB.
+ 
+ 
+Comparing Orientations from a CK Read Using Different SCLKs
+--------------------------------------------------------
+ 
+   In this example the program is run to assess the effect that using an
+   out-of-date SCLK kernel has on the 2001 Mars Odyssey spacecraft
+   orientation computed from the M01 CK file ``m01_sc_2009-01-27.bc''. To
+   make the program run in comparison mode, the current SCLK
+   ``ORB1_SCLKSCET.00157.tsc'' and the out-of-date SCLK
+   ``ORB1_SCLKSCET.00147.tsc'' are provided using the ``-k1'' and ``-k2''
+   keys while the CK is provided as the only primary kernel.
+   (Alternatively, the SCLK kernels could be provided as two primary
+   kernels while the CK could be provided using the ``-k'' key, in which
+   case the ``from'' and ``to'' frames and the coverage boundaries would
+   have to be specified because the program would not be able to determine
+   defaults from the SCLK kernels.) The LSK ``naif0009.tls'', required to
+   support time conversions, and the FK ``m01_v28.tf'', required because it
+   defines the M01 spacecraft frame, are provided using the ``-k'' key. The
+   angle and axis dump report is requested using ``-t dumpaa'' and the step
+   size is set to 10 seconds using ``-s 10''. No other options need to be
+   specified because the primary kernel is a CK, which the program can
+   examine to automatically pick the ``from'' and ``to'' frames and the
+   default coverage window. The program's output is re-directed to the file
+   ``output.txt'' using the ``>'' shell pipe, with the contents of the file
+   shown using the UNIX ``cat'' command.
+ 
+      % frmdiff -k naif0009.tls m01_v28.tf \
+                -k1 ORB1_SCLKSCET.00157.tsc \
+                -k2 ORB1_SCLKSCET.00147.tsc \
+                -s 10 -t dumpaa \
+                m01_sc_2009-01-27.bc \
+                > output.txt
+      % cat output.txt
+      #
+      # Comparison of 8283 rotations
+      #
+      #    from 'MARSIAU' (16) to 'M01_SPACECRAFT' (-53000)
+      #    computed using
+      #
+      #       naif0009.tls m01_v28.tf
+      #       ORB1_SCLKSCET.00157.tsc
+      #       m01_sc_2009-01-27.bc
+      #
+      # with 8283 rotations
+      #
+      #    from 'MARSIAU' (16) to 'M01_SPACECRAFT' (-53000)
+      #    computed using
+      #
+      #       naif0009.tls m01_v28.tf
+      #       ORB1_SCLKSCET.00147.tsc
+      #       m01_sc_2009-01-27.bc
+      #
+      # with a 10.000000000000 second (0:00:00:10.000000) step size
+      # within the non-continuous (with 2 gaps) time period
+      #
+      #    from '2009 JAN 27 00:01:07.301' TDB (286286467.30114 TDB seco...
+      #    to   '2009 JAN 28 00:01:03.083' TDB (286372863.08345 TDB seco...
+      #
+      # Times are TDB seconds past J2000.
+      #
+      # angle is shown in radians.
+      #
+      # time, angle, axis_x, axis_y, axis_z
+      +2.8628646730114E+08 +1.6811778261922E-04 -1.6518133891799E-03 -1....
+      +2.8628647730114E+08 +1.6807590586987E-04 -2.5417591048513E-03 -9....
+      ...
+      +2.8637285336657E+08 +1.5490156847677E-04 -1.0767849826583E-03 -1....
+      +2.8637286308345E+08 +1.5459290844816E-04 +5.3342008940173E-05 +1....
+ 
+   The orientation difference expressed as rotation angle (column 2) can be
+   plotted against TDB seconds (column 1) for analysis.
+ 
+ 
+Comparing Binary and Text PCKs
+--------------------------------------------------------
+ 
+   In this example the program is run to compare Earth orientations
+   provided by the high precision Earth orientation binary PCK file
+   ``earth_000101_090421_090128.bpc'' and the low precision Earth
+   orientation text PCK file ``pck00008.tpc''. The PCK files are specified
+   as two primary kernels to make the program run in comparison mode. For
+   this run both ``to'' frames must be specified because the frame
+   associated with the high precision orientation -- ``ITRF93'' -- is
+   different from the frame associated with the low precision orientation
+   -- ``IAU_EARTH''. These two frames are provided using the ``-t1'' and
+   ``-t2'' keys. Note that neither the coverage boundaries nor the ``from''
+   frames need to be specified because the program can set them to default
+   values obtained by examining the binary PCK. The step is set to 1 hour
+   (``-s 3600'') and the report type is picked to be the Euler angle dump
+   (``-t dumpea'') with the rotation axis order Z,Y,X (``-o z y x'').
+   Reporting differences as Euler angles might be desirable in this case
+   because the angles will show how much of the difference is in the pole
+   tilt (combination of angles about X and Y) and how much of it is in the
+   rotation about the pole (angle about Z). The ``-x'' option used to
+   report angles in degrees (``-x degrees''). The program's output is
+   re-directed to the file ``output.txt'' using the ``>'' shell pipe, with
+   the contents of the file shown using the UNIX ``cat'' command.
+ 
+      % frmdiff -t1 ITRF93 -t2 IAU_EARTH \
+                -s 3600 -t dumpea -o Z Y X -x degrees \
+                earth_000101_090421_090128.bpc pck00008.tpc \
+                > output.txt
+      % cat output.txt
+      #
+      # Comparison of 81553 rotations
+      #
+      #    from 'ECLIPJ2000' (17) to 'ITRF93' (13000)
+      #    computed using
+      #
+      #       earth_000101_090421_090128.bpc
+      #
+      # with 81553 rotations
+      #
+      #    from 'ECLIPJ2000' (17) to 'IAU_EARTH' (10013)
+      #    computed using
+      #
+      #       pck00008.tpc
+      #
+      # with a 3600.0000000000 second (0:01:00:00.000000) step size
+      # within the continuous time period
+      #
+      #    from '2000 JAN 01 00:01:04.183' TDB (-43135.816087188 TDB sec...
+      #    to   '2009 APR 21 00:01:06.185' TDB (293544066.18557 TDB seco...
+      #
+      # Times are TDB seconds past J2000.
+      #
+      # angles are shown in degrees.
+      #
+      # time, ang3_about_Z, ang2_about_Y, ang1_about_X
+      -4.3135816087188E+04 +4.6935841900452E-02 -1.3237283886873E-03 -1....
+      -3.9535816087188E+04 +4.6935945731300E-02 -8.1268845525487E-04 -2....
+      ...
+      +2.9354046418391E+08 +5.9885369786058E-02 -1.7263299596662E-03 +1....
+      +2.9354406618557E+08 +5.9885381660130E-02 -1.9758128919827E-03 +5....
+ 
+   The Euler angles about Z, Y, and X (column 2, 3, 4) can be plotted
+   against TDB seconds (column 1) for analysis.
+ 
+ 
+Comparing Two Text PCKs
+--------------------------------------------------------
+ 
+   In this example the program is run to compare Mars orientations provided
+   by the text PCK file ``pck00006.tpc'' containing 1994 IAU constants and
+   the text PCK ``pck00008.tpc'' containing IAU 2000 constants. The PCK
+   files are specified as two primary kernels to make the program run in
+   comparison mode. Since both files are neither CKs nor binary PCKs, the
+   ``from'' and ``to'' frames and the time boundaries for coverage window
+   must be specified using the ``-t1'' (or ``-t2''), ``-f1'' (or ``-f2''),
+   and ``-b'' and ``-e'' keys. Since the time boundaries are provided on
+   the command line, the LSK ``naif0009.tls'' required for time conversions
+   must be provided using ``-k'' (either ``-k1'' or ``-k2'' can also be
+   used). The step is set to 1 hour (``-s 3600'') and the report type is
+   picked to be the Euler angles dump (``-t dumpea'') with the rotation
+   axis order Z,Y,X (``-o z y x''). Reporting differences as Euler angles
+   might be desirable in this case because the angles will show how much of
+   the difference is in the pole tilt (combination of angles about X and Y)
+   and how much of it is in the rotation about the pole (angle about Z).
+   The ``-x'' option is used to report angles in degrees (``-x degrees'').
+   The ``-f'' option is used to print times as UTC in ISO date format (``-f
+   YYYY-MM-DDTHR:MN:SC ::RND''). The program's output is re-directed to the
+   file ``output.txt'' using the ``>'' shell pipe, with the contents of the
+   file shown using the UNIX ``cat'' command.
+ 
+      % frmdiff -k naif0009.tls -f1 J2000 -t1 IAU_MARS \
+                -b 2005-01-01 -e 2006-01-01 \
+                -t dumpea -o z y x -x degrees \
+                -f YYYY-MM-DDTHR:MN:SC ::RND -s 3600 \
+                pck00006.tpc pck00008.tpc \
+                > output.txt
+      % cat output.txt
+      #
+      # Comparison of 8761 rotations
+      #
+      #    from 'J2000' (1) to 'IAU_MARS' (10014)
+      #    computed using
+      #
+      #       naif0009.tls
+      #       pck00006.tpc
+      #
+      # with 8761 rotations
+      #
+      #    from 'J2000' (1) to 'IAU_MARS' (10014)
+      #    computed using
+      #
+      #       naif0009.tls
+      #       pck00008.tpc
+      #
+      # with a 3600.0000000000 second (0:01:00:00.000000) step size
+      # within the continuous time period
+      #
+      #    from '2005 JAN 01 00:01:04.183' TDB (157809664.18393 TDB seco...
+      #    to   '2006 JAN 01 00:01:05.183' TDB (189345665.18393 TDB seco...
+      #
+      # Times were generated by TIMOUT using 'YYYY-MM-DDTHR:MN:SC ::RND'...
+      #
+      # angles are shown in degrees.
+      #
+      # time, ang3_about_Z, ang2_about_Y, ang1_about_X
+      2005-01-01T00:00:00 +2.7193295981800E-01 +4.3458477098658E-04 +4.0...
+      2005-01-01T01:00:00 +2.7193298908895E-01 +3.1750496671468E-04 +5.0...
+      ...
+      2005-12-31T23:00:00 +2.7218789688912E-01 +3.4616175147429E-04 -4.9...
+      2006-01-01T00:00:00 +2.7218792598016E-01 +4.5965878416891E-04 -3.9...
+ 
+   The Euler angles about Z, Y, and X (column 2, 3, 4) can be plotted
+   against UTC (column 1) for analysis.
+ 
+ 
+Sampling Orientation from a CK
+--------------------------------------------------------
+ 
+   In this example the program is run to sample the orientation and angular
+   velocity of Deep Impact Flyby (DIF) spacecraft from the daily CK
+   ``dif_sc_2009-01-27.bc'' every five seconds over the whole period
+   covered by the file and and print the orientation as engineering style
+   quaternions and angular velocities expressed in the spacecraft frame,
+   tagged with DP SCLKs. In addition to the CK file the LSK
+   ``naif0009.tls'' and SCLK ``DIF_SCLKSCET.00036.tsc'', required to
+   support time conversions, and the FK ``di_v17.tf'', required because it
+   defines the DIF spacecraft frame, must be provided to the program. The
+   CK file is provided as the only primary kernel and all other kernels are
+   provided using ``-k'' to make the program run in sampling mode. The step
+   is set to 5 seconds using ``-s 5''. The report type is set to the
+   ``other''-style quaternion dump using ``-t dumpqo''. The output time
+   format is set to DP SCLK using ``-f sclkd''. ``-a yes'' and ``-m to''
+   are specified to add angular velocities rotated to the spacecraft frame
+   (the ``to'' frame) to the output. No other options need to be specified
+   because the primary kernel is a CK, which the program can examine to
+   automatically pick the ``from'' and ``to'' frames and the coverage
+   window. The program's output is re-directed to the file ``output.txt''
+   using the ``>'' shell pipe, with the contents of the file shown using
+   the UNIX ``cat'' command.
+ 
+      % frmdiff -k naif0009.tls DIF_SCLKSCET.00036.tsc di_v17.tf \
+                -s 5 -t dumpqo -f sclkd -a yes -m to \
+                dif_sc_2009-01-27.bc \
+                > output.txt
+      % cat output.txt
+      #
+      # Sampling of 16864 rotations
+      #
+      #    from 'J2000' (1) to 'DIF_SPACECRAFT' (-140000)
+      #    computed using
+      #
+      #       naif0009.tls DIF_SCLKSCET.00036.tsc di_v17.tf
+      #       dif_sc_2009-01-27.bc
+      #
+      # with a 5.0000000000000 second (0:00:00:05.000000) step size
+      # within the non-continuous (with 2 gaps) time period
+      #
+      #    from '2009 JAN 27 00:01:06.713' TDB (286286466.71354 TDB seco...
+      #    to   '2009 JAN 28 00:01:05.346' TDB (286372865.34683 TDB seco...
+      #
+      # including angular velocities relative to 'to' frame.
+      #
+      # Times are decimal SCLKs computed using SCLK ID -140.
+      #
+      # time, q_sin1, q_sin2, q_sin3, q_cos, av_x, av_y, av_z
+      2.8628543276953E+08 +6.9350853049532E-01 +3.7594179111024E-01 -6.1...
+      2.8628543776953E+08 +6.9350851552324E-01 +3.7594215798843E-01 -6.1...
+      ...
+      2.8637182501172E+08 +6.9259444035804E-01 +3.8202205741497E-01 -6.0...
+      2.8637183010156E+08 +6.9259433874053E-01 +3.8202240378948E-01 -6.0...
+ 
+ 
+Sampling Orientation of a Built-in Frame
+--------------------------------------------------------
+ 
+   In this example the program is run to print the rotation from the
+   ``J2000'' frame to the ``ECLIPJ2000'' frame, both of which are built-in
+   frames. To get this rotation, ``J2000'' is specified using ``-f1'' and
+   ``ECLIPJ2000'' is specified using ``-t1''. While it may seem that no
+   kernels would be needed in this case, it is not true. An LSK must be
+   provided to the program because the time at which the orientation should
+   be computed must be provided on the command line twice using the ``-b''
+   and ``-e'' keys and this time has to be converted to TDB inside the
+   program. Therefore the program is given the LSK ``naif0009.tls'' using
+   the ``-k'' option and an arbitrary time (``2000-01-01'') twice using the
+   ``-b'' and ``-e'' options. The Euler angle dump report is picked using
+   ``-t dump'' with the axis order X,Y,Z picked using ``-o x y z''. The
+   angles are requested to be printed in degrees using ``-x degrees''.
+ 
+      % frmdiff -k naif0009.tls \
+                -f1 J2000 -t1 ECLIPJ2000 \
+                -b 2000-01-01 -e 2000-01-01 \
+                -t dumpea -o x y z -x degrees
+      #
+      # Sampling of 1 rotations
+      #
+      #    from 'J2000' (1) to 'ECLIPJ2000' (17)
+      #    computed using
+      #
+      #       naif0009.tls
+      #
+      # at continuous coverage intervals' endpoints
+      # within the continuous time period
+      #
+      #    from '2000 JAN 01 00:01:04.183' TDB (-43135.816087188 TDB sec...
+      #    to   '2000 JAN 01 00:01:04.183' TDB (-43135.816087188 TDB sec...
+      #
+      # Times are TDB seconds past J2000.
+      #
+      # angles are shown in degrees.
+      #
+      # time, ang3_about_X, ang2_about_Y, ang1_about_Z
+      -4.3135816087188E+04 +2.3439291111111E+01 +0.0000000000000E+00 +0....
+ 
+ 
+Sampling Orientation of a Dynamic Frame
+--------------------------------------------------------
+ 
+   In this example the program is run to sample orientation of the
+   Geocentric Solar Ecliptic frame (``GSE''), a dynamic frame defined in
+   the FK ``RSSD0002.TF'', relative to the ``J2000'' inertial frame and
+   print this orientation as Euler angles tagged with Julian day TDB. The
+   frames are specified using ``-f1'' and ``-t1''. All kernels needed to
+   compute this transformation and convert times -- the FK, LSK
+   ``NAIF0009.TLS'' and SPK ``DE405.BSP'' -- are listed using the ``-k''
+   key. Since there are no primary kernels, the default coverage window
+   cannot be picked automatically. Therefore the coverage window boundaries
+   are specified using ``-b'' and ``-e''. The step is set to 1 day using
+   ``-s 86400''. The Euler angles dump report is requested using ``-t
+   dumpea''. The time format for output is set to be the Julian day TDB
+   using
+ 
+      -f 'JULIAND.######### ::TDB''
+ 
+   The program's output is re-directed to the file ``output.txt'' using the
+   ``>'' shell pipe, with the contents of the file shown using the UNIX
+   ``cat'' command.
+ 
+      % frmdiff -k RSSD0002.TF NAIF0009.TLS DE405.BSP \
+                -f1 J2000 -t1 GSE \
+                -b 2008-01-01 -e 2009-01-01 -s 86400 \
+                -t dumpea -f 'YYYY-MM-DD HR:MN:SC.### ::RND ::TDB' \
+                > output.txt
+      % cat output.txt
+      #
+      # Sampling of 367 rotations
+      #
+      #    from 'J2000' (1) to 'GSE' (1500399)
+      #    computed using
+      #
+      #       RSSD0002.TF ../lsk/NAIF0009.TLS ../spk/DE405.BSP
+      #
+      # with a 86400.000000000 second (1:00:00:00.000000) step size
+      # within the continuous time period
+      #
+      #    from '2008 JAN 01 00:01:05.183' TDB (252417665.18391 TDB seco...
+      #    to   '2009 JAN 01 00:01:06.183' TDB (284040066.18393 TDB seco...
+      #
+      # Times were generated by TIMOUT using 'JULIAND.######### ::TDB' f...
+      #
+      # angles are shown in radians.
+      #
+      # time, ang3_about_Z, ang2_about_Y, ang1_about_X
+      2454466.500754400 -1.3994266054604E+00 +1.6337747151270E-06 +4.090...
+      2454467.500754400 -1.3816355414305E+00 +1.6343360047251E-06 +4.090...
+      ...
+      2454831.500754400 -1.4039978657128E+00 +1.8387392674578E-06 +4.090...
+      2454832.500766000 -1.3862038203964E+00 +1.8393010792771E-06 +4.090...
+ 
+ 
+Sampling Orientation With Two Different ``Coverage'' Frames
+--------------------------------------------------------
+ 
+   In this example the program is run to sample orientation of the MGS MAG
+   +Y sensor frame, ``MGS_MAG_+Y_SENSOR'', relative to the ``J2000''
+   inertial frame over two hour period from 2006-04-01 11:00 to 2006-04-01
+   13:00 (given using ``-b'' and ``-e'') and print this orientation as
+   Euler angles tagged with UTC in ISO-date format. The ``from'' and ``to''
+   frames are specified using ``-f1'' and ``-t1''. All kernels needed to
+   compute this transformation and convert times are listed in the
+   meta-kernel ``mgs_2006_v01.tm'' from the MGS SPICE PDS data set,
+   specified using the ``-k'' key. Because computing this orientation
+   requires data from MGS solar array CKs and spacecraft CKs, both of which
+   have gaps in coverage, ``-c1'' and ``-c2'' are used to tell the program
+   to look up available coverages for the frames ``MGS_LEFT_SOLAR_ARRAY''
+   and ``MGS_SPACECRAFT'' associated with data in these CKs and intersect
+   this available coverage with the requested two hour interval to
+   guarantee that the program won't stop from not being able to compute
+   orientation in one of the gaps. The step is set to 1 minute using ``-s
+   60''. The Euler angles dump report is requested using ``-t dumpea''. The
+   time format for output is set to be the UTC in ISO-date format using
+ 
+      -f  'YYYY-MM-DDTHR:MN:SC.### ::RND'
+ 
+   The program's output is re-directed to the file ``output.txt'' using the
+   ``>'' shell pipe, with the contents of the file shown using the UNIX
+   ``cat'' command.
+ 
+      % frmdiff -k  mgs_2006_v01.tm \
+                -f1 J2000 \
+                -t1 MGS_MAG_+Y_SENSOR \
+                -c1 MGS_LEFT_SOLAR_ARRAY \
+                -c2 MGS_SPACECRAFT \
+                -t  dumpea \
+                -f  'YYYY-MM-DDTHR:MN:SC.### ::RND' \
+                -b  2006-04-01 11:00 \
+                -e  2006-04-01 13:00 \
+                -s  60 \
+                > output.txt
+      % cat output.txt
+      #
+      # Sampling of 121 rotations
+      #
+      #    from 'J2000' (1) to 'MGS_MAG_+Y_SENSOR' (-94051)
+      #    computed using
+      #
+      #       mgs_2006_v01.tm
+      #
+      # with a 60.000000000000 second (0:00:01:00.000000) step size
+      # within the non-continuous (with 1 gaps) time period
+      #
+      #    from '2006 APR 01 11:01:05.185' TDB (197161265.18566 TDB seco...
+      #    to   '2006 APR 01 13:01:05.185' TDB (197168465.18566 TDB seco...
+      #
+      # Times were generated by TIMOUT using 'YYYY-MM-DDTHR:MN:SC.### ::...
+      #
+      # angles are shown in radians.
+      #
+      # time, ang3_about_Z, ang2_about_Y, ang1_about_X
+      2006-04-01T11:00:00.000 +1.1187945929621E+00 -1.7969108686644E-01 ...
+      2006-04-01T11:01:00.000 +1.1187852723628E+00 -1.7931962082645E-01 ...
+      2006-04-01T11:02:00.000 +1.1186582180859E+00 -1.7869508126719E-01 ...
+      ...
+      2006-04-01T12:57:55.804 +1.1175120633959E+00 -1.7734256227094E-01 ...
+      2006-04-01T12:58:55.804 +1.1174237423840E+00 -1.7692771707569E-01 ...
+      2006-04-01T13:00:00.000 +1.1173605546240E+00 -1.7633741045076E-01 ...
+ 
+ 
+Displaying Overlap in Coverage between Two CKs
+--------------------------------------------------------
+ 
+   In this example the program is run to determine the time intervals when
+   both the MRO spacecraft CK ``mro_sc_psp_080408_080414.bc'' and MRO CRISM
+   instrument CK ``mro_crm_psp_080413_080430.bc'' provide coverage and to
+   display the boundaries of these intervals as UTC in ISO DOY format. The
+   CKs are provided as the two primary kernels with other kernels -- the
+   LSK ``naif0009.tls'' and the SCLK ``MRO_SCLKSCET.00027.65536.tsc'',
+   required for time conversions, and the MRO FK ``mro_v13.tf'', defining
+   frames used in the CKs, -- provided using ``-k''. The report is set to
+   the coverage intervals dump using ``-t dumpc'' and the output time
+   format is set to UTC in ISO DOY format using
+ 
+      -f 'YYYY-DOYTHR:MN:SC.### ::RND'
+ 
+   For runs like this usually both ``from'' frames and both ``to'' frames
+   should be specified using ``-f1'', ``-f2'', ``-t1'', and ``-t2'' and
+   these frames should match the base and structure frames from the CK
+   files (the names of the base and structure frames can be seen in the CK
+   summary produced by the ``BRIEF'' utility program run using the ``-rel
+   -n'' options).
+ 
+      % frmdiff -k naif0009.tls MRO_SCLKSCET.00027.65536.tsc mro_v13.tf \
+                -f1 MRO_MME_OF_DATE -t1 MRO_SPACECRAFT \
+                -f2 MRO_CRISM_BASE  -t2 MRO_CRISM_ART \
+                -t dumpc -f 'YYYY-DOYTHR:MN:SC.### ::RND' \
+                mro_sc_psp_080408_080414.bc mro_crm_psp_080413_080430.bc
+      #
+      # Coverage overlap for rotation
+      #
+      #    from 'MRO_MME_OF_DATE' (-74900) to 'MRO_SPACECRAFT' (-74000)
+      #    computed using
+      #
+      #       naif0009.tls MRO_SCLKSCET.00027.65536.tsc mro_v13.tf
+      #       mro_sc_psp_080408_080414.bc
+      #
+      # and rotation
+      #
+      #    from 'MRO_CRISM_BASE' (-74011) to 'MRO_CRISM_ART' (-74012)
+      #    computed using
+      #
+      #       naif0009.tls MRO_SCLKSCET.00027.65536.tsc mro_v13.tf
+      #       mro_crm_psp_080413_080430.bc
+      #
+      # with a 0.56599156324219 second (0:00:00:00.565992) step size
+      # within the non-continuous (with 22 gaps) time period
+      #
+      #    from '2008 APR 13 00:29:16.745' TDB (261318556.74553 TDB seco...
+      #    to   '2008 APR 13 01:12:03.742' TDB (261321123.74222 TDB seco...
+      #
+      # Times were generated by TIMOUT using 'YYYY-DOYTHR:MN:SC.### ::RN...
+      #
+      # interval_start, interval_stop, interval_duration_sec, interval_d...
+      2008-104T00:28:11.560 2008-104T00:31:11.564         180.003858    ...
+      2008-104T00:43:10.558 2008-104T00:43:14.559           4.001042    ...
+      ...
+      2008-104T01:10:08.423 2008-104T01:10:12.424           4.000950    ...
+      2008-104T01:10:54.556 2008-104T01:10:58.557           4.001042    ...
+ 
+ 
+Displaying Gaps in a CK File
+--------------------------------------------------------
+ 
+   In this example the program is run to display the gaps in the CASSINI CK
+   ``09006_09011ra.bc''. The CK is given as the only primary kernel, with
+   all other kernels -- the LSK ``naif0009.tls'' and the SCLK
+   ``cas00130.tsc'', required for time conversions, and the CASSINI FK
+   ``cas_v40.tf'', defining frames used in the CK, -- provided using
+   ``-k''. The report type is set to the coverage gaps dump using ``-t
+   dumpg'' and the output time format is set to UTC in ISO date format
+   using
+ 
+      -f 'YYYY-MM-DDTHR:MN:SC.### ::RND'
+ 
+   There is no need to specify the ``to'' and ``from'' frames because the
+   program will pick them automatically by examining the CK file.
+ 
+      % frmdiff -k naif0009.tls cas00130.tsc cas_v40.tf \
+                -t dumpg -f 'YYYY-MM-DDTHR:MN:SC.### ::RND' \
+                09006_09011ra.bc
+      #
+      # Coverage for rotation
+      #
+      #    from 'J2000' (1) to 'CASSINI_SC_COORD' (-82000)
+      #    computed using
+      #
+      #       naif0009.tls cas00130.tsc cas_v40.tf
+      #       09006_09011ra.bc
+      #
+      # with a 439.60863577834 second (0:00:07:19.608636) step size
+      # within the non-continuous (with 8 gaps) time period
+      #
+      #    from '2009 JAN 06 00:01:08.565' TDB (284472068.56521 TDB seco...
+      #    to   '2009 JAN 11 00:01:05.243' TDB (284904065.24341 TDB seco...
+      #
+      # Times were generated by TIMOUT using 'YYYY-MM-DDTHR:MN:SC.### ::...
+      #
+      # gap_start, gap_stop, gap_duration_sec, gap_duration_string
+      2009-01-06T13:45:49.779 2009-01-06T13:46:10.029          20.249856...
+      2009-01-06T15:15:49.740 2009-01-06T15:16:49.990          60.249572...
+      ...
+      2009-01-09T15:16:43.897 2009-01-09T15:17:12.147          28.249799...
+      2009-01-10T17:18:27.481 2009-01-10T17:18:55.480          27.999801...
+ 
+ 
+Miscellaneous Things to Consider
+===========================================================================
+ 
+ 
+``Apples vs. Oranges''
+--------------------------------------------------------
+ 
+   Even though the program has the flexibility to compare any two
+   transformations -- for example the transformation from the ``J2000''
+   frame to the ``IAU_MARS'' frame with the transformation from the
+   ``MRO_SPACECRAFT'' frame to the ``MRO_CTX'' frame -- it doesn't mean
+   that such comparisons make sense. In general, it makes sense to compare
+   only transformations that are close to each other and have the same
+   ``from'' frame.
+ 
+ 
+Using Euler Angles for Small Rotation Differences
+--------------------------------------------------------
+ 
+   While Euler angles included in the Euler angles dump report (``-t
+   dumpea'') may be one of the more intuitive representations of rotations,
+   in many cases, depending on the rotation order, the angle magnitudes can
+   be large and not representative of the small rotation differences. The
+   total rotation angle provided in the rotation angle and axis report
+   (``-t dumpaa'') is a much more reliable indicator of the difference of
+   two rotations.
+ 
+ 
+Single Epoch
+--------------------------------------------------------
+ 
+   Due to the algorithm which the program uses to determine the coverage
+   window, when orientations must be compared at, or an orientation must be
+   sampled at, a certain epoch this epoch must be provided on the command
+   line twice, once using the ``-b'' key and once using the ``-e'' key.
+ 
+ 
+References
+===========================================================================
+ 
+       1.   Frames Required Reading (frames.req)
+ 
+       2.   CK Required Reading (ck.req)
+ 
+       3.   PCK Required Reading (pck.req)
+ 
+       4.   ROTATIONS Required Reading (rotation.req)
+ 
+       5.   TIME Required Reading (time.req)
+ 
+       6.   SCLK Required Reading (sclk.req)
+ 
+ 
+Acronyms
+===========================================================================
+ 
+         AV     angular velocity
+ 
+         ET     Ephemeris Time (synonymous to TDB)
+ 
+         SCLK   Spacecraft CLocK time
+ 
+         TDB    Barycentric Dynamical Time (synonymous to ET)
+ 
+ 
+Appendix 1: Comparison, Sampling and Report Quantity Algorithms
+===========================================================================
+ 
+ 
+Computing Rotation and Angular Velocity Difference
+--------------------------------------------------------
+ 
+   When run in comparison mode the program uses the following SPICE
+   routines to compute the rotation and angular velocity differences at
+   each of the times:
+ 
+       --   if only rotations (without angular velocities) are to be
+            compared:
+ 
+               M1 = cspice_pxform ( FROM1, TO1, ET )
+               M2 = cspice_pxform ( FROM2, TO2, ET )
+ 
+               MDIFF = M1 * M2'
+ 
+       --   if rotations and angular velocities in the ``from'' frames are
+            to be compared:
+ 
+               X1          = cspice_sxform ( FROM1, TO1, ET )
+               [ M1, AV1 ] = cspice_xf2rav ( X1 )
+ 
+               X2          = cspice_sxform ( FROM2, TO2, ET )
+               [ M2, AV2 ] = cspice_xf2rav ( X2 )
+ 
+               MDIFF  = M1 * M2'
+               AVDIFF = AV1 - AV2
+ 
+       --   if rotations and angular velocities in the ``to'' frames are to
+            be compared:
+ 
+               X1          = cspice_sxform ( FROM1, TO1, ET )
+               [ M1, AV1 ] = cspice_xf2rav ( X1 )
+ 
+               X2          = cspice_sxform ( FROM2, TO2, ET )
+               [ M2, AV2 ] = cspice_xf2rav ( X2 )
+ 
+               MDIFF    = M1 * M2'
+               AVDIFFFR = AV1 - AV2
+ 
+               AVDIFF   = M1 * AVDIFFFR
+ 
+   where FROM1, FROM2, TO1, TO2, and ET are the ``from'' and ``to'' frames
+   of interest and time, MDIFF and AVDIFF are the rotation and angular
+   velocity differences to be reported.
+ 
+ 
+Sampling Rotation and Angular Velocity
+--------------------------------------------------------
+ 
+   When run in sampling mode the program uses the following SPICE routines
+   to compute the rotation and angular velocity at each of the times:
+ 
+       --   if only rotation (without angular) velocity is to be sampled:
+ 
+               MDIFF = cspice_pxform ( FROM, TO, ET )
+ 
+       --   if rotation and angular velocity in the ``from'' frame is to be
+            sampled:
+ 
+               X                 = cspice_sxform ( FROM, TO, ET )
+               [ MDIFF, AVDIFF ] = cspice_xf2rav ( X )
+ 
+       --   if rotation and angular velocity in the ``to'' frame is to be
+            sampled:
+ 
+               X             = cspice_sxform ( FROM, TO, ET )
+               [ MDIFF, AV ] = cspice_xf2rav ( X )
+ 
+               AVDIFF = MDIFF * AV
+ 
+   where FROM, TO, and ET are the ``from'' and ``to'' frames of interest
+   and time, MDIFF and AVDIFF are the rotation and angular velocity to be
+   reported.
+ 
+ 
+Converting Rotation to Angle/Axis
+--------------------------------------------------------
+ 
+   If no ``-t'' is specified, or if ``-t basic'', ``-t stats'', or ``-t
+   dumpaa'' is specified, the program converts MDIFF to the rotation angle
+   and axis using
+ 
+               [ AXIS, ANGLE ] = cspice_raxisa ( MDIFF )
+ 
+ 
+Converting Rotation to SPICE-Style Quaternion
+--------------------------------------------------------
+ 
+   If ``-t dumpqs'' is specified, the program converts MDIFF to the
+   SPICE-style quaternion using
+ 
+               QS = cspice_m2q ( MDIFF )
+ 
+ 
+Converting Rotation to ``Other''-Style quaternion
+--------------------------------------------------------
+ 
+   If ``-t dumpqo'' is specified, the program converts MDIFF to the
+   ``other''-style quaternion using
+ 
+               QS = cspice_m2q ( MDIFF )
+               QO(1) = -QS(2)
+               QO(2) = -QS(3)
+               QO(3) = -QS(4)
+               QO(4) =  QS(1)
+ 
+ 
+Converting Rotation to Euler Angles
+--------------------------------------------------------
+ 
+   If ``-t'' dumpea is specified, the program converts MDIFF to Euler
+   angles using
+ 
+               [ANG3, ANG2, ANG1] = ...
+                               cspice_m2eul( MDIFF, AXIS3, AXIS2, AXIS1 )
+ 
+   where AXIS1-3 are either defaults (``Z Y X'') or the axes specified
+   using the ``-o'' key. The axes are ``passed'' as input to M2EUL in the
+   same order as they are listed using ``-o''. For example, for ``-o X Z
+   Y'' M2EUL is called with ``( MDIFF, 1, 3, 2, ...)''.
+ 

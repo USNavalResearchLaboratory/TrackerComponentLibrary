@@ -1,0 +1,285 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ducrss</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ducrss</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DUCRSS calculates the unit vector parallel to the cross product
+   of the position components of two state vectors and the time derivative
+   of this unit vector.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      s1   a SPICE state(s);
+
+              s1 = (r1, dr1 ).
+                         --
+                         dt
+
+           [6,n] = size(s1); double = class(s1)
+
+      s2   a second SPICE state(s);
+
+              s2 = (r2, dr2 ).
+                        --
+                        dt
+
+           [6,n] = size(s2); double = class(s2)
+
+      An implicit assumption exists that 's1' and 's2' are specified
+      in the same reference frame. If this is not the case, the numerical
+      result has no meaning.
+
+   the call:
+
+      ducrss = <b>cspice_ducrss</b> ( s1, s2 )
+
+   returns:
+
+      ducrss   the unit vector(s) parallel to the cross product(s) of the
+               position components of 's1' and 's2' and the derivative
+               of the unit vector(s).
+
+               If the cross product of the position components is the zero
+               vector, then the position component of the output will be the
+               zero vector. The velocity component of the output will simply
+               be the derivative of the cross product of the position
+               components of 's1' and 's2'.
+
+               'ducrss' returns with the same measure of vectorization (N)
+               as 's1' and 's2'
+
+               Programmatically:
+
+                  crss   = <a href="cspice_dvcrss.html">cspice_dvcrss</a>( s1, s2 )
+                  ducrss = <a href="cspice_dvhat.html">cspice_dvhat</a>( crss )
+
+               [6,n] = size(ducrss); double = class(ducrss)
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      One can construct non-inertial coordinate frames from apparent
+      positions of objects or defined directions.  However, if one wants
+      to convert states in this non-inertial frame to states in an inertial
+      reference frame, the derivatives of the axes of the non-inertial
+      frame are required.
+
+      Define a reference frame with the apparent direction of the sun
+      as seen from earth as the primary axis (x). Use the earth pole vector
+      to define with the primary axis a primary plane of the frame.
+
+
+      %
+      % Load SPK, PCK, and LSK kernels, use a meta kernel for convenience.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % Define the earth body-fixed pole vector (z). The pole
+      % has no velocity in the earth fixed frame &quot;IAU_EARTH.&quot;
+      %
+      z_earth = [ 0, 0, 1, 0, 0, 0 ]';
+
+      %
+      % Calculate the state transformation between IAU_EARTH and J2000
+      % at an arbitrary epoch.
+      %
+      utc     = 'Jan 1, 2009';
+      et      = <a href="cspice_str2et.html">cspice_str2et</a>( utc );
+      trans   = <a href="cspice_sxform.html">cspice_sxform</a>( 'IAU_EARTH', 'J2000', et );
+
+      %
+      % Transform the earth pole vector from the IAU_EARTH frame to J2000.
+      %
+      z_j2000 = trans * z_earth;
+
+      %
+      % Calculate the apparent state of the sun from earth at the epoch
+      % 'et' in the J2000 frame.
+      %
+      target   = 'Sun';
+      observer = 'Earth';
+
+      [state, ltime] = <a href="cspice_spkezr.html">cspice_spkezr</a>( target, et, 'J2000', 'LT+S', observer);
+
+      %
+      % Define the z axis of the new frame as the cross product between
+      % the apparent direction of the sun and the earth pole. 'z_new' cross
+      % 'x_new' defines the y axis of the derived frame.
+      %
+      x_new = <a href="cspice_dvhat.html">cspice_dvhat</a>( state )
+      z_new = <b>cspice_ducrss</b>( state, z_j2000 )
+      y_new = <b>cspice_ducrss</b>( z_new, state   )
+
+      %
+      % It's always good form to unload kernels after use,
+      % particularly in Matlab due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+      x_new =
+
+           1.834466375917397e-01
+          -9.019196633169827e-01
+          -3.910092736476536e-01
+           2.024497675152527e-07
+           3.466010606102513e-08
+           1.503314202237741e-08
+
+
+      y_new =
+
+           7.884654015638601e-02
+          -3.829780802895584e-01
+           9.203863390571874e-01
+           8.238367850215384e-08
+           3.230941292533659e-08
+           6.386588623423665e-09
+
+
+      z_new =
+
+          -9.798625180410016e-01
+          -1.996715075815909e-01
+           8.572038510978363e-04
+           4.453114222022677e-08
+          -2.185310696303958e-07
+          -3.614002123088436e-11
+
+      These vectors define the transformation between the new frame and J2000.
+
+              -            -
+             |       :      |
+             |   R   :  0   |
+         M = | ......:......|
+             |       :      |
+             | dRdt  :  R   |
+             |       :      |
+              -            -
+
+      with
+
+         R    = [ x_new(1:3): y_new(1:3); z_new(1:3) ]
+
+         dRdt = [ x_new(4:6): y_new(4:6); z_new(4:6) ]
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   The frame transformation described in the Example may also be implemented
+   using a dynamic frames kernel.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/ducrss_c.html">ducrss_c</a>.
+
+   <a href="../req/frames.html">FRAMES.REQ</a>
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 09-NOV-2012, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   compute a unit cross product and its derivative
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:37 2014</pre>
+
+</body>
+</html>
+

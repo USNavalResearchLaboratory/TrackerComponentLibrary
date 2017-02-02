@@ -1,0 +1,270 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>dvnorm_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>dvnorm_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   SpiceDouble       dvnorm_c ( ConstSpiceDouble state[6] )
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   Function to calculate the derivative of the norm of a 3-vector.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+   DERIVATIVES
+   MATH
+   VECTOR
+
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   state      I   A 6-vector composed of three coordinates and their
+                  derivatives.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+   state   A double precision 6-vector, the second three
+           components being the derivatives of the first three
+           with respect to some scalar.
+
+              state =  ( x, dx )
+                            --
+                            ds
+
+           A common form for 'state' would contain position and
+           velocity.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+   <b>dvnorm_c</b>   The value of d||x|| corresponding to 'state'.
+                           ------
+                             ds
+
+                                 1/2         2    2    2  1/2
+            where ||x|| = &lt; x, x &gt;    =  ( x1 + x2 + x3 )
+
+
+                      v = ( dx1, dx2, dx3 )
+                            ---  ---  ---
+                            ds   ds   ds
+
+                 d||x||   &lt; x, v &gt;
+                 ------ =  ------     =  &lt; xhat, v &gt;
+                   ds            1/2
+                          &lt; x, x &gt;
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+   A common use for this routine is to calculate the time derivative
+   of the radius corresponding to a state vector.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      #include &quot;SpiceUsr.h&quot;
+      #include &lt;stdio.h&gt;
+      #include &lt;math.h&gt;
+
+      int main()
+         {
+
+         SpiceDouble     mag  [3] =
+                          { -4., 4., 12. };
+
+         SpiceDouble     x1   [3] =
+                          { 1., sqrt(2.), sqrt(3.) };
+
+         SpiceDouble     y   [6];
+
+         /.
+         Parallel...
+         ./
+         y[0] = x1[0] * pow(10., mag[0] );
+         y[1] = x1[1] * pow(10., mag[0] );
+         y[2] = x1[2] * pow(10., mag[0] );
+         y[3] = x1[0];
+         y[4] = x1[1];
+         y[5] = x1[2];
+
+         printf( &quot;Parallel x, dx/ds         : %f\n&quot;, <b>dvnorm_c</b>( y ) );
+
+         /.
+         ...anti-parallel...
+         ./
+         y[0] = x1[0] * pow(10., mag[1] );
+         y[1] = x1[1] * pow(10., mag[1] );
+         y[2] = x1[2] * pow(10., mag[1] );
+         y[3] = -x1[0];
+         y[4] = -x1[1];
+         y[5] = -x1[2];
+
+         printf( &quot;Anti-parallel x, dx/ds    : %f\n&quot;, <b>dvnorm_c</b>( y ) );
+
+
+         /.
+         ...'x' zero vector.
+         ./
+         y[0] = 0.;
+         y[1] = 0.;
+         y[2] = 0.;
+         y[3] = x1[0] * pow(10., mag[2] );
+         y[4] = x1[1] * pow(10., mag[2] );
+         y[5] = x1[2] * pow(10., mag[2] );
+
+         printf( &quot;Zero vector x, large dx/ds: %f\n&quot;, <b>dvnorm_c</b>( y ) );
+
+         return 0;
+         }
+
+   The program outputs:
+
+      Parallel x, dx/ds         :  2.449490
+      Anti-parallel x, dx/ds    : -2.449490
+      Zero vector x, large dx/ds:  0.000000
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   Error free.
+
+   1) If the first three components of 'state' (&quot;x&quot;) describes the
+      origin (zero vector) the routine returns zero as the
+      derivative of the vector norm.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   Ed Wright     (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.0.0, 04-MAY-2010 (EDW)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   derivative of 3-vector norm
+</PRE>
+<h4>Link to routine dvnorm_c source file <a href='../../../src/cspice/dvnorm_c.c'>dvnorm_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:31 2014</pre>
+
+</body>
+</html>
+

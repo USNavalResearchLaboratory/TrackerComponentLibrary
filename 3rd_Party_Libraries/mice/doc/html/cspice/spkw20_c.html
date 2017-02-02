@@ -1,0 +1,474 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>spkw20_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>spkw20_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void spkw20_c  ( SpiceInt            handle,
+                    SpiceInt            body,
+                    SpiceInt            center,
+                    ConstSpiceChar    * frame,
+                    SpiceDouble         first,
+                    SpiceDouble         last,
+                    ConstSpiceChar    * segid,
+                    SpiceDouble         intlen,
+                    SpiceInt            n,
+                    SpiceInt            polydg,
+                    ConstSpiceDouble    cdata[],
+                    SpiceDouble         dscale, 
+                    SpiceDouble         tscale,
+                    SpiceDouble         initjd,
+                    SpiceDouble         initfr  )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Write a type 20 segment to an SPK file. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/daf.html">DAF</a> 
+   <a href="../req/naif_ids.html">NAIF_IDS</a> 
+   <a href="../req/time.html">TIME</a> 
+   <a href="../req/spk.html">SPK</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   EPHEMERIS 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+ Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   handle     I   Handle of SPK file open for writing. 
+   body       I   NAIF code for ephemeris object. 
+   center     I   NAIF code for the center of motion of the body. 
+   frame      I   Reference frame name. 
+   first      I   Start time of interval covered by segment. 
+   last       I   End time of interval covered by segment. 
+   segid      I   Segment identifier. 
+   intlen     I   Length of time covered by logical record (days). 
+   n          I   Number of logical records in segment. 
+   polydg     I   Chebyshev polynomial degree. 
+   cdata      I   Array of Chebyshev coefficients and positions. 
+   dscale     I   Distance scale of data. 
+   tscale     I   Time scale of data. 
+   initjd     I   Integer part of begin time (TDB Julian date) of 
+                  first record. 
+   initfr     I   Fractional part of begin time (TDB Julian date) of 
+                  first record. 
+   MAXDEG     P   Maximum allowed degree of Chebyshev expansions. 
+   DTOL       P   Absolute tolerance for coverage bound checking. 
+   TOLSCL     P   Tolerance scale for coverage bound checking. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   handle         is the DAF handle of an SPK file to which a type 20 
+                  segment is to be added.  The SPK file must be open 
+                  for writing. 
+ 
+   body           is the NAIF integer code for an ephemeris object 
+                  whose state relative to another body is described 
+                  by the segment to be created. 
+ 
+   center         is the NAIF integer code for the center of motion 
+                  of the object identified by `body'. 
+ 
+   frame          is the NAIF name for a reference frame relative to 
+                  which the state information for `body' is specified. 
+ 
+   first, 
+   last           are the start and stop times of the time interval 
+                  over which the segment defines the state of the 
+                  object identified by `body'. 
+ 
+   segid          is a segment identifier. An SPK segment identifier 
+                  may contain up to 40 characters, not counting the
+                  terminating null character. 
+ 
+   intlen         is the length of time, in TDB Julian days, covered 
+                  by each set of Chebyshev polynomial coefficients 
+                  (each logical record). 
+ 
+   n              is the number of number of logical records to be
+                  stored in the segment. There is one logical record
+                  for each time period. Each logical record contains
+                  three sets of Chebyshev coefficients---one for each
+                  coordinate---and three position vector components.
+ 
+   polydg         is the degree of each set of Chebyshev 
+                  polynomials, i.e. the number of Chebyshev 
+                  coefficients per coordinate minus one. `polydg' must 
+                  be less than or equal to the parameter MAXDEG. 
+ 
+   cdata          is an array containing all the sets of Chebyshev 
+                  polynomial coefficients and position components to 
+                  be placed in the new segment of the SPK file. 
+                  There are three sets of coefficients and position 
+                  components for each time interval covered by the 
+                  segment. 
+ 
+                  The coefficients and position components are 
+                  stored in `cdata' in order as follows: 
+ 
+                     the (degree + 1) coefficients for the first 
+                     coordinate of the first logical record, 
+                     followed by the X component of position at the 
+                     first interval midpoint. 
+ 
+                     the coefficients for the second coordinate, 
+                     followed by the Y component of position at the 
+                     first interval midpoint. 
+ 
+                     the coefficients for the third coordinate, 
+                     followed by the Z component of position at the 
+                     first interval midpoint. 
+ 
+                     the coefficients for the first coordinate for 
+                     the second logical record, followed by the X 
+                     component of position at the second interval 
+                     midpoint. 
+ 
+                     and so on. 
+ 
+                    
+                  A diagram follows:
+
+                     +--------------------------------------+
+                     | Coeff set for X velocity component   |
+                     +--------------------------------------+
+                     | X position component                 |
+                     +--------------------------------------+
+                     | Coeff set for Y velocity component   |
+                     +--------------------------------------+
+                     | Y position component                 |
+                     +--------------------------------------+
+                     | Coeff set for Z velocity component   |
+                     +--------------------------------------+
+                     | Z position component                 |
+                     +--------------------------------------+
+
+                 Each coefficient set has the structure:
+
+                     +--------------------------------------+
+                     | Coefficient of T_0                   |
+                     +--------------------------------------+
+                     | Coefficient of T_1                   |
+                     +--------------------------------------+
+                                       ...
+                     +--------------------------------------+
+                     | Coefficient of T_POLYDG              |
+                     +--------------------------------------+
+
+                  Where T_n represents the Chebyshev polynomial
+                  of the first kind of degree n.
+
+
+   dscale,  
+   tscale         are, respectively, the distance scale of the input 
+                  position and velocity data in km, and the time 
+                  scale of the input velocity data in TDB seconds. 
+ 
+                  For example, if the input distance data have units
+                  of astronomical units (AU), `dscale' should be set
+                  to the number of km in one AU. If the input
+                  velocity data have time units of Julian days, then
+                  `tscale' should be set to the number of seconds per
+                  Julian day (86400).
+ 
+ 
+   initjd         is the integer part of the Julian ephemeris date of
+                  initial epoch of the first record. `initjd' may be
+                  less than, equal to, or greater than the initial
+                  epoch.
+ 
+   initfr         is the fractional part of the Julian ephemeris date
+                  of initial epoch of the first record. `initfr' has
+                  units of Julian days. `initfr' has magnitude strictly
+                  less than 1 day. The sum
+ 
+                     initjd + initfr  
+ 
+                  equals the Julian ephemeris date of the initial 
+                  epoch of the first record. 
+ 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   None. This routine writes data to an SPK file. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+   The parameters listed below are not used directly in this
+   routine; they are used by the underlying SPICELIB code that
+   has been translated to C via f2c. 
+ 
+   MAXDEG         is the maximum allowed degree of the input 
+                  Chebyshev expansions. MAXDEG is declared in the 
+                  SPICELIB Fortran INCLUDE file spk20.inc. 
+
+                  The current value of MAXDEG is 50.
+ 
+
+   TOLSCL         is a tolerance scale factor (also called a
+                  &quot;relative tolerance&quot;) used for time coverage
+                  bound checking. TOLSCL is unitless. TOLSCL
+                  produces a tolerance value via the formula
+
+                     TOL = TOLSCL * MAX( ABS(FIRST), ABS(LAST) )
+
+                  where FIRST and LAST are the coverage time bounds
+                  of a type 20 segment, expressed as seconds past
+                  J2000 TDB.
+
+                  The resulting parameter TOL is used as a tolerance
+                  for comparing the input segment descriptor time
+                  bounds to the first and last epoch covered by the
+                  sequence of time intervals defined by the inputs
+
+                     initjd
+                     initfr
+                     intlen
+                     n
+
+                  See the Exceptions section below for a description
+                  of the error check using this tolerance.
+ 
+                  The current value of TOLSCL is 1e-13.
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1)  If the number of sets of coefficients is not positive 
+       SPICE(INVALIDCOUNT) is signaled. 
+ 
+   2)  If the interval length is not positive, SPICE(INTLENNOTPOS) 
+       is signaled. 
+ 
+   3)  If the name of the reference frame is not recognized, 
+       SPICE(INVALIDREFFRAME) is signaled. 
+ 
+   4)  If segment stop time is not greater then the begin time, 
+       SPICE(BADDESCRTIMES) is signaled. 
+ 
+   5)  If the start time of the first record exceeds the descriptor 
+       begin time by more than a computed tolerance, or if the end 
+       time of the last record precedes the descriptor end time by 
+       more than a computed tolerance, the error SPICE(COVERAGEGAP) 
+       is signaled. See the Parameters section above for a 
+       description of the tolerance. 
+ 
+   6)  If the input degree `polydg' is less than 0 or greater than 
+       MAXDEG, the error SPICE(INVALIDDEGREE) is signaled. 
+ 
+   7)  If the last non-blank character of `segid' occurs past index 
+       40, or if `segid' contains any nonprintable characters, the 
+       error will be diagnosed by a routine in the call tree of this 
+       routine. 
+ 
+   8)  If either the distance or time scale is non-positive, the
+       error SPICE(NONPOSITIVESCALE) will be signaled.
+
+   9)  The error SPICE(EMPTYSTRING) is signaled if any input string
+       does not contain at least one character, since the input strings
+       cannot be converted to a Fortran-style string in this case.
+ 
+   10) The error SPICE(NULLPOINTER) is signaled if any input string
+       pointer is null.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   A new type 20 SPK segment is written to the SPK file attached 
+   to `handle'. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   This routine writes an SPK type 20 data segment to the designated 
+   SPK file, according to the format described in the SPK Required 
+   Reading. 
+ 
+   Each segment can contain data for only one target, central body, 
+   and reference frame. The Chebyshev polynomial degree and length 
+   of time covered by each logical record are also fixed. However, 
+   an arbitrary number of logical records of Chebyshev polynomial 
+   coefficients can be written in each segment.  Minimizing the 
+   number of segments in an SPK file will help optimize how the 
+   SPICE system accesses the file. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   Suppose that you have in an array `cdata' sets of Chebyshev
+   polynomial coefficients and position vectors representing the state
+   of the moon (NAIF ID = 301), relative to the Earth-moon barycenter
+   (NAIF ID = 3), in the J2000 reference frame, and you want to put
+   these into a type 20 segment in an existing SPK file. The following
+   code could be used to add one new type 20 segment. To add multiple
+   segments, put the call to <b>spkw20_c</b> in a loop.
+ 
+      #include &quot;SpiceUsr.h&quot;
+           .
+           .
+           .
+           
+      /.
+      First open the SPK file and get a handle for it. 
+      ./
+      <a href="spkopa_c.html">spkopa_c</a> ( spknam, &amp;handle ); 
+
+      /.
+      Create a segment identifier. 
+      ./
+      segid = &quot;MY_SAMPLE_SPK_TYPE_20_SEGMENT&quot;;
+
+      /.    
+      Note that the interval length `intlen' has units 
+      of Julian days. The start time of the first record 
+      is expressed using two inputs: integer and fractional 
+      portions of the Julian ephemeris date of the start  
+      time. 
+  
+      Write the segment.  
+      ./
+      <b>spkw20_c</b> ( handle, 301,    3,      &quot;J2000&quot;, 
+                 first,  last,   segid,  intlen, 
+                 n,      polydg, cdata,  dscale, 
+                 tscale, initjd, initfr          );
+ 
+      /.
+      Close the file. 
+      ./
+      <a href="spkcls_c.html">spkcls_c</a> ( handle );
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 23-DEC-2013 (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   write spk type_20 data segment 
+ </PRE>
+<h4>Link to routine spkw20_c source file <a href='../../../src/cspice/spkw20_c.c'>spkw20_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:45 2014</pre>
+
+</body>
+</html>
+

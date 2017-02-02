@@ -1,0 +1,271 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>spkuds_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>spkuds_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void spkuds_c ( ConstSpiceDouble     descr [5],
+                   SpiceInt           * body,
+                   SpiceInt           * center,
+                   SpiceInt           * frame,
+                   SpiceInt           * type,
+                   SpiceDouble        * first,
+                   SpiceDouble        * last,
+                   SpiceInt           * begin,
+                   SpiceInt           * end       )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Unpack the contents of an SPK segment descriptor 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/spk.html">SPK</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   SPK 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   VARIABLE  I/O  DESCRIPTION 
+   --------  ---  -------------------------------------------------- 
+   descr      I   An SPK segment descriptor. 
+   body       O   The NAIF ID code for the body of the segment. 
+   center     O   The center of motion for body. 
+   frame      O   The ID code for the frame of this segment. 
+   type       O   The type of SPK segment. 
+   first      O   The first epoch for which the segment is valid. 
+   last       O   The last  epoch for which the segment is valid. 
+   begin      O   Beginning DAF address of the segment. 
+   end        O   Ending DAF address of the segment. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   descr      is an SPK segment descriptor. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   body       is the NAIF ID code for the body of the segment. 
+ 
+   center     is the center of motion for body. 
+ 
+   frame      is the SPICE integer code for the frame to which states 
+              for the body are be referenced. 
+ 
+   type       is the type of SPK segment. 
+ 
+   first      is the first epoch for which the segment has 
+              ephemeris data. 
+ 
+   last       is the last epoch for which the segment has 
+              ephemeris data. 
+ 
+   begin      is the starting address of the data associated 
+              with this descriptor. 
+ 
+   end        is the last address of the data associated with 
+              this descriptor. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   This routine extracts the contents of an SPK segment 
+   descriptor into the components needed for reading and 
+   evaluating the data stored in the segment.  It serves 
+   as a macro for expanding the SPK segment descriptor. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   Suppose you wished to summarize a particular SPK segment 
+   and that you have the descriptor for that segment in hand. 
+   The following code fragment shows how you might use this 
+   routine to create a summary message concerning the segment. 
+ 
+      #include &lt;stdio.h&gt;
+      #include &quot;SpiceUsr.h&quot;
+      
+      #define   TIMLEN       35
+            .
+            .
+            .
+            
+      <b>spkuds_c</b> ( descr,  &amp;body, &amp;center, &amp;frame, 
+  .              &amp;type,  &amp;first, &amp;last,  &amp;baddr, &amp;eaddr ); 
+ 
+      /.
+      Convert the start and stop times to TDB calendar strings.
+      ./
+      <a href="etcal_c.html">etcal_c</a> ( first, TIMLEN, fstcal ); 
+      <a href="etcal_c.html">etcal_c</a> ( last,  TIMLEN, lstcal ); 
+ 
+      printf ( &quot;\n&quot;
+               &quot;Body     : %d\n&quot;  
+               &quot;Center   : %d\n&quot;   
+               &quot;Frame ID : %d\n&quot;   
+               &quot;Data Type: %d\n&quot;  
+               &quot;\n&quot;
+               &quot;Segment Start :  %s\n&quot;  
+               &quot;Segment Stop  :  %s\n&quot;,
+               body,
+               center,
+               frame,
+               type,
+               fstcal,
+               lstcal                   );
+  
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman      (JPL)
+   W.L. Taber        (JPL) 
+   K.R. Gehringer    (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.1.0, 24-JUL-2001   (NJB)
+
+       Changed protoype:  input descr is now type (ConstSpiceDouble *).
+       Implemented interface macro for casting input descr to const.
+
+   -CSPICE Version 1.0.0, 22-JUL-1999 (NJB) (WLT) (KRG)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   Unpack and SPK segment descriptor 
+ </PRE>
+<h4>Link to routine spkuds_c source file <a href='../../../src/cspice/spkuds_c.c'>spkuds_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:44 2014</pre>
+
+</body>
+</html>
+

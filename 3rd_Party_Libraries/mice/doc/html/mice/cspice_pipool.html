@@ -1,0 +1,226 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_pipool</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_pipool</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_PIPOOL provides toolkit programmers a method for
+   programmatically inserting integer data into the kernel pool.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      name    name of the kernel pool variable to associate with the values
+              supplied in the array 'ivals'. 'name' is restricted to a length
+              of 32 characters or less.
+
+              [1,m] = size(name); char = class(name)
+
+      ivals   values to load into the kernel pool subsystem with the assigned
+              variable name 'name'.
+
+              [n,1] = size(ivals); int32 = class(ivals)
+
+   the call:
+
+       <b>cspice_pipool</b>( name, ivals)
+
+   returns:
+
+      Inserts the variable 'name' into the kernel pool with values as
+      defined in 'ivals'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Define the parameters for the double array.
+      %
+      PIPOOL_DIM  = 9;
+      PIPOOL_VAR  = 'pipool_array';
+      START       = 1;
+
+      %
+      % Populate the 'pipool_arr' array with PIPOOL_DIM values.
+      %
+      pipool_arr = int32([0:PIPOOL_DIM-1]');
+
+      %
+      % Insert the array data into the kernel pool
+      % with variable name 'pipool_array'.
+      %
+      <b>cspice_pipool</b>( PIPOOL_VAR, pipool_arr)
+
+      %
+      % Retrieve the variable's associated values in
+      % array 'ivals'.
+      %
+      ivals = <a href="cspice_gipool.html">cspice_gipool</a>( PIPOOL_VAR, START, PIPOOL_DIM );
+
+      %
+      % Check we found the expected variable, and ensure
+      % the expected values.
+      %
+      if ( ~isempty(ivals) )
+
+         txt = sprintf( 'Found array variable %s with entries:', PIPOOL_VAR );
+         disp(txt)
+
+         n_elements = size( ivals );
+
+         txt = sprintf( '   %d\n', ivals );
+         disp(txt)
+
+      else
+
+         txt = sprintf( 'Failed to find %s in the kernel pool',  PIPOOL_VAR  );
+         disp(txt)
+
+      end
+
+      %
+      % Clear the kernel pool.
+      %
+      <a href="cspice_clpool.html">cspice_clpool</a>
+
+   MATLAB outputs:
+
+      Found array variable pipool_array with entries:
+         0
+         1
+         2
+         3
+         4
+         5
+         6
+         7
+         8
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/pipool_c.html">pipool_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/kernel.html">KERNEL.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.1, 12-MAR-2012, EDW (JPL), SCK (JPL)
+
+      Edited I/O section to conform to NAIF standard for Mice documentation.
+
+      Added mention of the length restriction on the kernel pool variable
+      name 'name'.
+
+   -Mice Version 1.1.0, 23-FEB-2009, EDW (JPL)
+
+      Added zzmice_str call on input 'name' to convert string cells to
+      character arrays if 'name' has type string cells. Added proper
+      markers for usage string variable types.
+
+   -Mice Version 1.0.0, 24-JAN-2006, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Set the value of a numeric kernel pool variable
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:38 2014</pre>
+
+</body>
+</html>
+

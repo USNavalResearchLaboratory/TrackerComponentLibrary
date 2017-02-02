@@ -1,0 +1,243 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_timout</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_timout</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_TIMOUT converts an input epoch represented in TDB seconds
+   past the TDB epoch of J2000 to a character string formatted to
+   the specifications of a user's format picture.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+     et       a double precision scalar or 1xN array of time values
+              in seconds past the ephemeris epoch J2000.
+
+     pictur   a scalar string that specifies how the output should be
+              presented.  The string is made up of various markers
+              that stand for various components associated with
+              a time.
+
+   the call:
+
+      output = <b>cspice_timout</b>( et, pictur )
+
+   returns:
+
+      output   the scalar string or NxM character array of output time strings
+               equivalent to the input epoch 'et' in the format specified
+               by 'pictur'
+
+               'output' returns with the same vectorization measure (N)
+                as 'et'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Given a sample with the format of the UNIX date string
+      % local to California, create a SPICE time picture for use
+      % in <b>cspice_timout</b>.
+      %
+      sample = 'Thu Oct 1 11:11:11 PDT 1111';
+
+      %
+      % Load a leapseconds kernel file.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % Create the pic string.
+      %
+      [ pic, ok, xerror ] = <a href="cspice_tpictr.html">cspice_tpictr</a>( sample );
+
+      %
+      % Check the error flag, 'ok', for problems.
+      %
+      if ( ~ok  )
+         error( xerror )
+      end
+
+      %
+      % Convert an ephemeris time to the 'pic' format.
+      %
+      % Using the ET representation for: Dec 25 2005, 1:15:00 AM UTC
+      %
+      et = 188745364.;
+
+      output = <b>cspice_timout</b>( et, pic );
+
+      disp( 'Scalar: ' )
+
+      txt = sprintf( 'ET              : %16.8f', et );
+      disp( txt )
+
+      disp( ['Converted output: ' output] )
+      disp( ' ' )
+
+      %
+      % Create an array of ephemeris times beginning
+      % at 188745364 with graduations of 10000.0
+      % ephemeris seconds.
+      %
+      et=[0:4] * 10000. + 188745364;
+
+      %
+      % Convert the array of ephemeris times 'et' to an
+      % array of time strings, 'output', in 'pic' format.
+      %
+      output = <b>cspice_timout</b>( et, pic );
+
+      disp( 'Vector:' )
+      for i=1:5
+         txt = sprintf( 'ET              : %16.8f', et(i) );
+         disp( txt)
+
+         disp( ['Converted output: ' output(i,:) ]  )
+         disp( ' ' )
+      end
+
+      %
+      %  It's always good form to unload kernels after use,
+      %  particularly in MATLAB due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+      Scalar:
+      ET              : 188745364.00000000
+      Converted output: Sat Dec 24 18:14:59 PDT 2005
+
+      Vector:
+      ET              : 188745364.00000000
+      Converted output: Sat Dec 24 18:14:59 PDT 2005
+
+      ET              : 188755364.00000000
+      Converted output: Sat Dec 24 21:01:39 PDT 2005
+
+      ET              : 188765364.00000000
+      Converted output: Sat Dec 24 23:48:19 PDT 2005
+
+      ET              : 188775364.00000000
+      Converted output: Sun Dec 25 02:34:59 PDT 2005
+
+      ET              : 188785364.00000000
+      Converted output: Sun Dec 25 05:21:39 PDT 2005
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/timout_c.html">timout_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/time.html">TIME.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 22-NOV-2005, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Convert and format d.p. seconds past J2000 as a string
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:39 2014</pre>
+
+</body>
+</html>
+

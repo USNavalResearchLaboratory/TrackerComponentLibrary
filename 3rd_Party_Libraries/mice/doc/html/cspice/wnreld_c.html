@@ -1,0 +1,340 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>wnreld_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>wnreld_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   SpiceBoolean wnreld_c ( SpiceCell       * a,
+                           ConstSpiceChar  * op,
+                           SpiceCell       * b   )
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Compare two double precision windows. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/windows.html">WINDOWS</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   WINDOWS 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   VARIABLE  I/O  DESCRIPTION 
+   --------  ---  -------------------------------------------------- 
+   a          I   First window. 
+   op         I   Comparison operator. 
+   b          I   Second window. 
+
+   The function returns the result of comparison: a (op) b. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   a, 
+   b           are CSPICE windows, each of which contains zero or more 
+               intervals. 
+
+               a and b must be declared as double precision SpiceCells.
+
+
+   op          is a comparison operator, indicating the way in 
+               which the input sets are to be compared. op may 
+               be any of the following: 
+
+                  Operator             Meaning 
+                  --------  ------------------------------------- 
+                    &quot;=&quot;     a = b is SPICETRUE if a and b are equal 
+                            (contain the same intervals). 
+
+                    &quot;&lt;&gt;&quot;    a &lt;&gt; b is SPICETRUE if a and b are not 
+                            equal. 
+
+                    &quot;&lt;=&quot;    a &lt;= b is SPICETRUE if a is a subset of b. 
+
+                    &quot;&lt;&quot;     a &lt; b is SPICETRUE is a is a proper subset 
+                            of b. 
+
+                    &quot;&gt;=&quot;    a &gt;= b is SPICETRUE if b is a subset of a. 
+
+                    &quot;&gt;&quot;     a &gt; b is SPICETRUE if b is a proper subset 
+                            of a. 
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   The function returns the result of the comparison. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1) If any of the function arguments are SpiceCells of type
+      other than double precision, the error SPICE(TYPEMISMATCH)
+      is signaled.
+
+   2) If the relational operator is not recognized, the error 
+      SPICE(INVALIDOPERATION) is signaled. 
+ 
+   3) The error SPICE(EMPTYSTRING) is signaled if the input operator
+      string does not contain at least one character, since the
+      input string cannot be converted to a Fortran-style string
+      in this case.
+      
+   4) The error SPICE(NULLPOINTER) is signalled if the input operator
+      string pointer is null.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   This function returns SPICETRUE whenever the specified relationship 
+   between the input windows a and b is satisfied. For example, 
+   the expression 
+
+      <b>wnreld_c</b> ( &amp;needed, &quot;&lt;=&quot;, &amp;avail )
+
+   is SPICETRUE whenever the window needed is a subset of the window 
+   avail. One window is a subset of another window if each of 
+   the intervals in the first window is included in one of the 
+   intervals in the second window. In addition, the first window 
+   is a proper subset of the second if the second window contains 
+   at least one point not contained in the first window. (Thus, 
+   &quot;&lt;&quot; implies &quot;&lt;=&quot;, and &quot;&gt;&quot; implies &quot;&gt;=&quot;.) 
+
+   The following pairs of expressions are equivalent. 
+
+      <b>wnreld_c</b> ( &amp;a, &quot;&gt;&quot;,  &amp;b ); 
+      <b>wnreld_c</b> ( &amp;b, &quot;&lt;&quot;,  &amp;a ); 
+
+      <b>wnreld_c</b> ( &amp;a, &quot;&gt;=&quot;, &amp;b ); 
+      <b>wnreld_c</b> ( &amp;b, &quot;&lt;=&quot;, &amp;a ); 
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   Let a contain the intervals 
+
+      [ 1, 3 ]  [ 7, 11 ]  [ 23, 27 ] 
+
+   Let b and c contain the intervals 
+
+      [ 1, 2 ]  [ 9, 9 ]  [ 24, 27 ] 
+
+   Let d contain the intervals 
+
+      [ 5, 10 ]  [ 15, 25 ] 
+
+   Finally, let e and f be empty windows (containing no intervals). 
+
+   Because b and c contain the same intervals, 
+
+      <b>wnreld_c</b> ( &amp;b, &quot;=&quot;,  &amp;c ) 
+      <b>wnreld_c</b> ( &amp;b, &quot;&lt;=&quot;, &amp;c ) 
+      <b>wnreld_c</b> ( &amp;b, &quot;&gt;=&quot;, &amp;c ) 
+
+   are all SPICETRUE, while 
+
+      <b>wnreld_c</b> ( &amp;b, &quot;&lt;&gt;&quot;, &amp;c ) 
+
+   is SPICEFALSE. Because neither b nor c contains any points not also 
+   contained by the other, neither is a proper subset of the other. 
+   Thus, 
+
+      <b>wnreld_c</b> ( &amp;b, &quot;&lt;&quot;, &amp;c ) 
+      <b>wnreld_c</b> ( &amp;b, &quot;&gt;&quot;, &amp;c ) 
+
+   are both SPICEFALSE. 
+
+   Every point contained in b and c is also contained in a. Thus, 
+
+      <b>wnreld_c</b> ( &amp;b, &quot;&lt;=&quot;, &amp;a ) 
+      <b>wnreld_c</b> ( &amp;a, &quot;&gt;=&quot;, &amp;c ) 
+
+   are both SPICETRUE. In addition, a contains points not contained in 
+   b and c. (That is, the differences a-b and a-c are not empty.) 
+   Thus, b and c are peoper subsets of a as well, and 
+
+      <b>wnreld_c</b> ( &amp;b, &quot;&lt;&quot;, &amp;a ) 
+      <b>wnreld_c</b> ( &amp;a, &quot;&gt;&quot;, &amp;b ) 
+
+   are both SPICETRUE. 
+
+   Although a and d have points in common, neither contains the 
+   other. Thus 
+
+      <b>wnreld_c</b> ( &amp;a, &quot;=&quot;,  &amp;d ) 
+      <b>wnreld_c</b> ( &amp;a, &quot;&lt;=&quot;, &amp;d ) 
+      <b>wnreld_c</b> ( &amp;a, &quot;&gt;=&quot;, &amp;d ) 
+
+   are all SPICEFALSE. 
+
+   In addition, any window is equal to itself, a subset of itself, 
+   and a superset of itself. Thus, 
+
+      <b>wnreld_c</b> ( &amp;a, &quot;=&quot;,  &amp;a ) 
+      <b>wnreld_c</b> ( &amp;a, &quot;&lt;=&quot;, &amp;a ) 
+      <b>wnreld_c</b> ( &amp;a, &quot;&gt;=&quot;, &amp;a ) 
+
+   are always SPICETRUE. However, no window is a proper subset or a 
+   proper superset of itself. Thus, 
+
+      <b>wnreld_c</b> ( &amp;a, &quot;&lt;&quot;, &amp;a ) 
+      <b>wnreld_c</b> ( &amp;a, &quot;&gt;&quot;, &amp;a ) 
+
+   are always SPICEFALSE. 
+
+   Finally, an empty window is a proper subset of any window 
+   except another empty window. Thus, 
+
+      <b>wnreld_c</b> ( &amp;e, &quot;&lt;&quot;, &amp;a ) 
+
+   is SPICETRUE, but 
+
+      <b>wnreld_c</b> ( &amp;e, &quot;&lt;&quot;, &amp;f ) 
+
+   is SPICEFALSE. 
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman    (JPL)
+   H.A. Neilan     (JPL) 
+   W.L. Taber      (JPL) 
+   I.M. Underwood  (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 27-JUL-2002 (NJB) (HAN) (WLT) (IMU)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   compare two d.p. windows 
+ </PRE>
+<h4>Link to routine wnreld_c source file <a href='../../../src/cspice/wnreld_c.c'>wnreld_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:49 2014</pre>
+
+</body>
+</html>
+

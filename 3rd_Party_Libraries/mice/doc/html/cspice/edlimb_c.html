@@ -1,0 +1,294 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>edlimb_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>edlimb_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void edlimb_c ( SpiceDouble           a,
+                   SpiceDouble           b,
+                   SpiceDouble           c,
+                   ConstSpiceDouble      viewpt[3],
+                   SpiceEllipse        * limb      ) 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Find the limb of a triaxial ellipsoid, viewed from a specified 
+   point. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/ellipses.html">ELLIPSES</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   ELLIPSE 
+   ELLIPSOID 
+   GEOMETRY 
+   MATH 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   a          I   Length of ellipsoid semi-axis lying on the x-axis. 
+   b          I   Length of ellipsoid semi-axis lying on the y-axis. 
+   c          I   Length of ellipsoid semi-axis lying on the z-axis. 
+   viewpt     I   Location of viewing point. 
+   limb       O   Limb of ellipsoid as seen from viewing point. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   a, 
+   b, 
+   c              are the lengths of the semi-axes of a triaxial 
+                  ellipsoid.  The ellipsoid is centered at the 
+                  origin and oriented so that its axes lie on the 
+                  x, y and z axes.  a, b, and c are the lengths of 
+                  the semi-axes that point in the x, y, and z 
+                  directions respectively. 
+ 
+   viewpt         is a point from which the ellipsoid is viewed. 
+                  viewpt must be outside of the ellipsoid. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   limb           is a CSPICE ellipse that represents the limb of 
+                  the ellipsoid. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1)  If the length of any semi-axis of the ellipsoid is 
+       non-positive, the error DEGENERATECASE is signaled. 
+       limb is not modified. 
+ 
+   2)  If the length of any semi-axis of the ellipsoid is zero after 
+       the semi-axis lengths are scaled by the reciprocal of the 
+       magnitude of the longest semi-axis and then squared, the error 
+       SPICE(DEGENERATECASE) is signaled.  limb is not modified. 
+ 
+   3)  If the viewing point viewpt is inside the ellipse, the error 
+       SPICE(INVALIDPOINT) is signaled.  limb is not modified. 
+ 
+   4)  If the geometry defined by the input ellipsoid and viewing 
+       point is so extreme that the limb cannot be found, the error 
+       SPICE(DEGENERATECASE) is signaled. 
+ 
+   5)  If the shape of the ellipsoid and the viewing geometry are 
+       such that the limb is an excessively flat ellipsoid, the 
+       limb may be a degenerate ellipse.  You must determine whether 
+       this possibility poses a problem for your application. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   The limb of a body, as seen from a viewing point, is the boundary 
+   of the portion of the body's surface that is visible from that 
+   viewing point.  In this definition, we consider a surface point 
+   to be `visible' if it can be connected to the viewing point by a 
+   line segment that doen't pass through the body.  This is a purely 
+   geometrical definition that ignores the matter of which portions 
+   of the surface are illuminated, or whether the view is obscured by 
+   any additional objects. 
+ 
+   If a body is modelled as a triaxial ellipsoid, the limb is always 
+   an ellipse.  The limb is determined by its center, a semi-major 
+   axis vector, and a semi-minor axis vector. 
+ 
+   We note that the problem of finding the limb of a triaxial 
+   ellipsoid is mathematically identical to that of finding its 
+   terminator, if one makes the simplifying assumption that the 
+   terminator is the limb of the body as seen from the vertex of the 
+   umbra.  So, this routine can be used to solve this simplified 
+   version of the problem of finding the terminator. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   1)  We'd like to find the apparent limb of Jupiter, corrected for 
+       light time and stellar aberration, as seen from a spacecraft's 
+       position at time ET. 
+ 
+     
+          /.
+          Find the viewing point in Jupiter-fixed coordinates.  To do 
+          this, find the apparent position of Jupiter as seen from the
+          spacecraft in Jupiter-fixed coordinates and negate this 
+          vector.  In this case we'll use light time and stellar 
+          aberration corrections to arrive at the apparent limb. jstat 
+          is the Jupiter's state (position and velocity) as seen
+          from the spacecraft.  scpos is the spacecraft's
+          position relative to Jupiter.
+          ./
+          <a href="spkez_c.html">spkez_c</a>( jupid, et, &quot;IAU_JUPITER&quot;, &quot;LT+S&quot;, scid, scstat, &amp;lt);
+ 
+          <a href="vminus_c.html">vminus_c</a> ( scstat, scpos );
+ 
+          /.
+          Get Jupiter's semi-axis lengths.
+          ./
+          <a href="bodvcd_c.html">bodvcd_c</a> ( jupid, &quot;RADII&quot;, 3, &amp;n, rad );
+ 
+          /.
+          Find the apparent limb.  limb is a CSPICE ellipse
+          representing the limb.
+          ./
+          <b>edlimb_c</b> ( rad[0], rad[1], rad[2], scpos, &amp;limb );
+ 
+          /.
+          lcentr, smajor, and sminor are the limb's center,
+          semi-major axis, and semi-minor axis. 
+          ./
+          <a href="el2cgv_c.html">el2cgv_c</a> ( &amp;limb, center, smajor, sminor );
+ 
+ 
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman   (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.1.0, 24-JUN-2014 (NJB)
+ 
+       Edit to correct <a href="chkout_c.html">chkout_c</a> call passing the wrong routine name.
+ 
+   -CSPICE Version 1.0.1, 24-OCT-2005 (NJB)
+
+       Header update: reference to <a href="bodvar_c.html">bodvar_c</a> was replaced with
+       reference to <a href="bodvcd_c.html">bodvcd_c</a>.
+
+   -CSPICE Version 1.0.0, 13-JUN-1999 (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   ellipsoid limb 
+ </PRE>
+<h4>Link to routine edlimb_c source file <a href='../../../src/cspice/edlimb_c.c'>edlimb_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:31 2014</pre>
+
+</body>
+</html>
+

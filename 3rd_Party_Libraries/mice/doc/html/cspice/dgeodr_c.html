@@ -1,0 +1,294 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>dgeodr_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>dgeodr_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void dgeodr_c ( SpiceDouble   x,
+                   SpiceDouble   y,
+                   SpiceDouble   z,
+                   SpiceDouble   re,
+                   SpiceDouble   f,
+                   SpiceDouble   jacobi[3][3] ) 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   This routine computes the Jacobian of the transformation from 
+   rectangular to geodetic coordinates. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   COORDINATES 
+   DERIVATIVES 
+   MATRIX 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   X          I   X-coordinate of point. 
+   Y          I   Y-coordinate of point. 
+   Z          I   Z-coordinate of point. 
+   RE         I   Equatorial radius of the reference spheroid. 
+   F          I   Flattening coefficient. 
+   JACOBI     O   Matrix of partial derivatives. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+  
+   x, 
+   y, 
+   z          are the rectangular coordinates of the point at 
+              which the Jacobian of the map from rectangular 
+              to geodetic coordinates is desired. 
+ 
+   re         Equatorial radius of the reference spheroid. 
+ 
+   f          Flattening coefficient = (re-rp) / re,  where rp is 
+              the polar radius of the spheroid.  (More importantly 
+              rp = re*(1-f).) 
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   jacobi     is the matrix of partial derivatives of the conversion 
+              between rectangular and geodetic coordinates.  It 
+              has the form 
+ 
+                  .-                            -. 
+                  |  dlon/dx   dlon/dy  dlon/dz  | 
+                  |  dlat/dx   dlat/dy  dlat/dz  | 
+                  |  dalt/dx   dalt/dy  dalt/dz  | 
+                  `-                            -' 
+ 
+             evaluated at the input values of x, y, and z. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+    1) If the input point is on the z-axis (x and y = 0), the 
+       Jacobian is undefined.  The error SPICE(POINTONZAXIS) 
+       will be signaled. 
+ 
+    2) If the flattening coefficient is greater than or equal to 
+       one, the error SPICE(VALUEOUTOFRANGE) is signaled. 
+ 
+    3) If the equatorial radius is not positive, the error 
+       SPICE(BADRADIUS) is signaled. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   When performing vector calculations with velocities it is 
+   usually most convenient to work in rectangular coordinates. 
+   However, once the vector manipulations have been performed, 
+   it is often desirable to convert the rectangular representations 
+   into geodetic coordinates to gain insights about phenomena 
+   in this coordinate frame. 
+ 
+   To transform rectangular velocities to derivatives of coordinates 
+   in a geodetic system, one uses the Jacobian of the transformation 
+   between the two systems. 
+ 
+   Given a state in rectangular coordinates 
+ 
+      ( x, y, z, dx, dy, dz ) 
+ 
+   the velocity in geodetic coordinates is given by the matrix  
+   equation: 
+                        t          |                     t 
+      (dlon, dlat, dalt)   = jacobi|       * (dx, dy, dz) 
+                                   |(x,y,z) 
+ 
+   This routine computes the matrix  
+ 
+            | 
+      jacobi| 
+            |(x, y, z) 
+ 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   Suppose one is given the bodyfixed rectangular state of an object 
+   (x(t), y(t), z(t), dx(t), dy(t), dz(t)) as a function of time t. 
+ 
+   To find the derivatives of the coordinates of the object in 
+   bodyfixed geodetic coordinates, one simply multiplies the 
+   Jacobian of the transformation from rectangular to geodetic 
+   coordinates (evaluated at x(t), y(t), z(t)) by the rectangular  
+   velocity vector of the object at time t. 
+ 
+   In code this looks like: 
+ 
+      #include &quot;SpiceUsr.h&quot;
+          .
+          .
+          .
+
+      /.
+      Load the rectangular velocity vector vector recv. 
+      ./ 
+      recv[0] = dx_dt ( t );
+      recv[1] = dy_dt ( t );
+      recv[2] = dz_dt ( t );
+ 
+      /. 
+      Determine the Jacobian of the transformation from 
+      rectangular to geodetic coordinates at the rectangular 
+      coordinates at time t. 
+      ./ 
+      <b>dgeodr_c</b> ( x(t), y(t), z(t), re, f, jacobi );
+ 
+      /.
+      Multiply the Jacobian on the right by the rectangular 
+      velocity to obtain the geodetic coordinate derivatives  
+      geov. 
+      ./ 
+      <a href="mxv_c.html">mxv_c</a> ( jacobi, recv, geov );
+ 
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   W.L. Taber     (JPL) 
+   N.J. Bachman   (JPL)
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.0.0, 18-JUL-2001 (WLT) (NJB)
+ </PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   Jacobian of geodetic  w.r.t. rectangular coordinates 
+ </PRE>
+<h4>Link to routine dgeodr_c source file <a href='../../../src/cspice/dgeodr_c.c'>dgeodr_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:30 2014</pre>
+
+</body>
+</html>
+

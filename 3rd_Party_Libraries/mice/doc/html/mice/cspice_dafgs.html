@@ -1,0 +1,279 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dafgs</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dafgs</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DAFGS returns the summary of the current DAF array,
+   i.e. the array found by the previous call to <a href="cspice_daffna.html">cspice_daffna</a>
+   or <a href="cspice_daffpa.html">cspice_daffpa</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      nd   a scalar integer defining the size of the return
+           double precision array.
+
+           [1,1] = size(nd); int32 = class(nd)
+
+      ni   a scalar integer defining the size of the return
+           integer array.
+
+           [1,1] = size(ni); int32 = class(ni)
+
+      For an SPK file, 'nd' always equals 2, 'ni' always equals 6. The precise
+      contents of the vectors depend on the type of DAF but the
+      final two elements of the 'ic' (integer) vector always contains the
+      initial and final addresses respectively of the array.
+
+   the call:
+
+      [dc, ic] = <b>cspice_dafgs</b>( nd, ni )
+
+   returns:
+
+      dc   the array of double precision components of the summary.
+
+           [1,nd] = size(dc); double = class(dc)
+
+      ic   the array of integer components of the summary.
+
+           [1,ni] = size(ic); int32 = class(ic)
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   Use a simple function to output the double precision and integer
+   values stored in an SPK's segments descriptors. This function opens
+   a DAF for read, performs a forwards search for the DAF arrays,
+   prints segments description for each array found, then closes the DAF.
+
+   function daf_t( kernel)
+
+      %
+      % Open a DAF for read. Return a 'handle' referring to the file.
+      %
+      handle = <a href="cspice_dafopr.html">cspice_dafopr</a>( kernel );
+
+      %
+      % Define the summary parameters appropriate
+      % for an SPK file.
+      %
+      ND = 2;
+      NI = 6;
+
+      %
+      % Begin a forward search on the file.
+      %
+      <a href="cspice_dafbfs.html">cspice_dafbfs</a>( handle );
+
+      %
+      % Search until a DAF array is found.
+      %
+      found = <a href="cspice_daffna.html">cspice_daffna</a>;
+
+      %
+      % Loop while the search finds subsequent DAF arrays.
+      %
+      while found
+
+         [dc, ic ] = <b>cspice_dafgs</b>( ND, NI );
+
+         fprintf( 'Doubles:  ' )
+         fprintf( '%f   ', dc )
+         fprintf( '\n' )
+
+         fprintf( 'Integers: ' )
+         fprintf( '%d   ', ic )
+         fprintf( '\n\n' )
+
+
+         %
+         % Check for another segment.
+         %
+         found = <a href="cspice_daffna.html">cspice_daffna</a>;
+
+      end
+
+      %
+      % Safely close the DAF.
+      %
+      <a href="cspice_dafcls.html">cspice_dafcls</a>( handle )
+
+   Matlab outputs:
+
+      &gt;&gt; daf_t( 'de421.bsp' )
+
+      Doubles:  -3169195200.000000   1696852800.000000
+      Integers: 1   0   1   2   641   310404
+
+      Doubles:  -3169195200.000000   1696852800.000000
+      Integers: 2   0   1   2   310405   423048
+
+      Doubles:  -3169195200.000000   1696852800.000000
+      Integers: 3   0   1   2   423049   567372
+
+      Doubles:  -3169195200.000000   1696852800.000000
+      Integers: 4   0   1   2   567373   628976
+
+      Doubles:  -3169195200.000000   1696852800.000000
+      Integers: 5   0   1   2   628977   674740
+
+      Doubles:  -3169195200.000000   1696852800.000000
+      Integers: 6   0   1   2   674741   715224
+
+      Doubles:  -3169195200.000000   1696852800.000000
+      Integers: 7   0   1   2   715225   750428
+
+      Doubles:  -3169195200.000000   1696852800.000000
+      Integers: 8   0   1   2   750429   785632
+
+      Doubles:  -3169195200.000000   1696852800.000000
+      Integers: 9   0   1   2   785633   820836
+
+      Doubles:  -3169195200.000000   1696852800.000000
+      Integers: 10   0   1   2   820837   944040
+
+      Doubles:  -3169195200.000000   1696852800.000000
+      Integers: 301   3   1   2   944041   1521324
+
+      Doubles:  -3169195200.000000   1696852800.000000
+      Integers: 399   3   1   2   1521325   2098608
+
+      Doubles:  -3169195200.000000   1696852800.000000
+      Integers: 199   1   1   2   2098609   2098620
+
+      Doubles:  -3169195200.000000   1696852800.000000
+      Integers: 299   2   1   2   2098621   2098632
+
+      Doubles:  -3169195200.000000   1696852800.000000
+      Integers: 499   4   1   2   2098633   2098644
+
+   Note, the specific contents of 'ic' and 'dc' depend on the
+   type of DAF.
+
+   Note, the final entries in the integer array contains the segment
+   start/end indexes. The output indicates the search proceeded
+   from the start of the file (low value index) towards the end
+   (high value index).
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   A single call to <b>cspice_dafgs</b> equates to the C calls:
+
+      dafgs_c( sum );
+      dafus_c( sum, nd, ni, dc, ic );
+
+   without use of the 'sum' variable.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine dafgs_c and dafus_c.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/daf.html">DAF.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 21-MAR-2014, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   get DAF summary
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:36 2014</pre>
+
+</body>
+</html>
+

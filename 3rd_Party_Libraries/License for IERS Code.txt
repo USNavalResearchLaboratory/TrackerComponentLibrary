@@ -1,0 +1,268 @@
+The function getEOP uses Matlab translations of subroutines of a function interp.f that is provided online by the International Earth Rotation Systems Service (IERS). The e-mail exchnage below confirms that this file is not subject to copyright, so there is no problem with creating a derivative work.
+
+June 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+Return-Path: <nick.stamatakos@usno.navy.mil>
+Received: from mail6.nrl.navy.mil (smail.nrl.navy.mil [132.250.21.116])
+	by radar.nrl.navy.mil (8.13.8/8.13.8) with ESMTP id u5KH0tAh025221
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES128-SHA bits=128 verify=NOT)
+	for <crouse@radar.nrl.navy.mil>; Mon, 20 Jun 2016 13:00:55 -0400
+Received: from ucol19pa15.eemsg.mail.mil (ucol19pa15.eemsg.mail.mil [214.24.24.88])
+	by mail6.nrl.navy.mil (8.15.2/8.15.2) with ESMTP id u5KFduHb025056
+	for <david.crouse@nrl.navy.mil>; Mon, 20 Jun 2016 11:39:56 -0400
+X-EEMSG-Attachment-filename: smime.p7s
+X-IronPort-AV: E=Sophos;i="5.26,499,1459814400"; 
+   d="p7s'?scan'208";a="321542508"
+Received: from lumen.usno.navy.mil (HELO eon.usno.navy.mil) ([199.211.133.254])
+  by ucol19pa15.eemsg.mail.mil with ESMTP; 20 Jun 2016 17:00:49 +0000
+Received: from echo.usno.navy.mil ([10.1.0.27]) by eos.usno.navy.mil
+ ([10.1.0.31]) with mapi id 14.02.0387.000; Mon, 20 Jun 2016 13:00:49 -0400
+From: "Stamatakos, Nick" <nick.stamatakos@usno.navy.mil>
+To: "Luzum, Brian" <brian.luzum@usno.navy.mil>
+CC: "david.crouse@nrl.navy.mil" <david.crouse@nrl.navy.mil>
+Subject: Re: Regarding IERS Conventions Code
+Thread-Topic: Regarding IERS Conventions Code
+Thread-Index: AQHRxjO9W0VnoRiqsEW3cSotHdB1Up/r9MUAgAaNNICAABwtAA==
+Date: Mon, 20 Jun 2016 17:00:48 +0000
+Message-ID: <D38D985E.377A0%nick.stamatakos@usno.navy.mil>
+References: <14314C5A-E2D4-457A-943F-B8B86986F1A9@nrl.navy.mil>
+ <D388018E.B0F7E%brian.luzum@usno.navy.mil>
+ <D38D819B.3777A%nick.stamatakos@usno.navy.mil>
+In-Reply-To: <D38D819B.3777A%nick.stamatakos@usno.navy.mil>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator: 
+user-agent: Microsoft-MacOutlook/14.6.4.160422
+x-originating-ip: [10.1.0.158]
+Content-Type: multipart/signed; protocol="application/pkcs7-signature";
+	micalg=sha1; boundary="B_3549272444_1142613"
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 2.64 on 132.250.183.240
+X-Scanned-By: MIMEDefang 2.78
+X-Spam-Score: 0.001 () MIME_QP_LONG_LINE
+
+--B_3549272444_1142613
+Content-type: text/plain;
+	charset="EUC-KR"
+Content-transfer-encoding: quoted-printable
+
+Hello Dr Crouse and Brian=A1=AA
+Christian Bizouard, the author of interp.f, stated:
+
+=3D=3D=3D
+Dear Nick,=20
+
+no copyrights, just mention the source, that's will be publicity for us
+and IERS!
+
+Christian
+
+
+=3D=3D=3D
+
+The source is: =20
+
+* IERS Earth Orientation Centre
+* Christian Bizouard
+* Observatoire de Paris
+* 61, Avenue de l'Observatoire
+* 75014 Paris
+* France
+* Phone: +33-1-4051-2335
+* Fax: +33-1-451-2291
+* christian.bizouard@obspm.fr
+
+
+
+
+Nick Stamatakos
+Chief, Earth Orientation Parameters C/P Division
+US Naval Observatory
+3450 Massachusetts Avenue, N.W.
+Washington, D.C.  20392
+nick.stamatakos@usno.navy.mil
+Phone:  202-762-1518
+
+
+
+
+On 6/20/16, 11:20 AM, "Stamatakos, Nick" <nick.stamatakos@usno.navy.mil>
+wrote:
+
+>Hello Dr Crouse=A1=AA
+>I have sent an email to the Paris Observatory to ask permission from them
+>for you to post the code as you described below.
+>
+>Thanks
+>R/
+>Nick=20
+>
+>Nick Stamatakos
+>Chief, Earth Orientation Parameters C/P Division
+>US Naval Observatory
+>3450 Massachusetts Avenue, N.W.
+>Washington, D.C.  20392
+>nick.stamatakos@usno.navy.mil
+>Phone:  202-762-1518
+>
+>
+>
+>
+>On 6/16/16, 7:16 AM, "Luzum, Brian" <brian.luzum@usno.navy.mil> wrote:
+>
+>>Nick,
+>>
+>>I received this question and request regarding IERS Conventions software.
+>>Since you are now the Conventions director, I would appreciate if you
+>>could address this as time permits.
+>>
+>>Regards,
+>>Brian
+>>
+>>On 6/14/16, 7:56 AM, "David F. Crouse" <david.crouse@nrl.navy.mil> wrote:
+>>
+>>>Dear Dr. Luzum:
+>>>
+>>>I would like to verify the copyright status of the file interp.f which
+>>>is
+>>>referred to in the IERS 20120 Conventions. I would like to post code on
+>>>the Naval research laboratory=A9=F6s Radar Division=A9=F6s web site that makes u=
+se
+>>>of the interp.f function. However, SECNAVINST 5720.47B  requires that is
+>>>anything is copyrighted, one have written permission to post it.
+>>>Unfortunately no where does your code list its copyright status or any
+>>>license. Is this file subject to copyright? Either way, could you
+>>>include
+>>>a statement of the copyright status with the file on the USNO web site?
+>>>Since it looks like there are some foreign authors who worked on it, I
+>>>would assume that the file in unfortunately subject to copyright.
+>>>
+>>>For future releases of the IERS Conventions, I would suggest following
+>>>the lead of the IAU=A9=F6s Standards of Fundamental Astronomy (SOFA) library
+>>>and putting a copyright statement in every file. Even a statement about
+>>>the work not being subject to copyright would be appropriate.
+>>>
+>>>David F. Crouse
+>>>Surveillance Technology Branch
+>>>Radar Division
+>>>Naval Research Laboratory
+>>>Phone: (202) 404-8106
+>>>Fax: (202) 404-8687
+>>>E-Mail: david.crouse@nrl.navy.mil
+>>>=20
+>>>MAILING ADDRESS:
+>>>Naval Research Laboratory
+>>>Attn: Code 5344 (D. Crouse)
+>>>4555 Overlook Avenue S.W.
+>>>Washington, DC  20375
+>>>
+>>>
+>>
+
+--B_3549272444_1142613
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+
+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
+L2IeBNQhv6wfJnc10B284rtGwvLr5BSu+LNrs/pxOLBxKe3RixvXAhveyux+7qHcSKXxPpSp
+AgMBAAGjggIcMIICGDAdBgNVHQ4EFgQUhvFbaG/dMPOUgmjUTPdEHbjKaIEwHwYDVR0jBBgw
+FoAUSXS7DF66ev4CVO97oMaVxgmAcJYwEgYDVR0TAQH/BAgwBgEB/wIBADAMBgNVHSQEBTAD
+gAEAMA4GA1UdDwEB/wQEAwIBhjBmBgNVHSAEXzBdMAsGCWCGSAFlAgELBTALBglghkgBZQIB
+CwkwCwYJYIZIAWUCAQsRMAsGCWCGSAFlAgELEjALBglghkgBZQIBCxMwDAYKYIZIAWUDAgED
+GjAMBgpghkgBZQMCAQMbMDcGA1UdHwQwMC4wLKAqoCiGJmh0dHA6Ly9jcmwuZGlzYS5taWwv
+Y3JsL0RPRFJPT1RDQTIuY3JsMIIBAQYIKwYBBQUHAQEEgfQwgfEwOgYIKwYBBQUHMAKGLmh0
+dHA6Ly9jcmwuZGlzYS5taWwvaXNzdWVkdG8vRE9EUk9PVENBMl9JVC5wN2MwIAYIKwYBBQUH
+MAGGFGh0dHA6Ly9vY3NwLmRpc2EubWlsMIGQBggrBgEFBQcwAoaBg2xkYXA6Ly9jcmwuZ2Rz
+LmRpc2EubWlsL2NuJTNkRG9EJTIwUm9vdCUyMENBJTIwMiUyY291JTNkUEtJJTJjb3UlM2RE
+b0QlMmNvJTNkVS5TLiUyMEdvdmVybm1lbnQlMmNjJTNkVVM/Y3Jvc3NDZXJ0aWZpY2F0ZVBh
+aXI7YmluYXJ5MA0GCSqGSIb3DQEBBQUAA4IBAQBZMq2qw/jfnGSccQk0wb28YwAeLdvtqcgI
+47kY5K/KrhTB3bv5c4ODV46UyaCqAwfOZ5y15RdZPyi4Fzbauo3DlhEBalDWBtpopErSC4V8
+zYjf/1535vWkSJHQTqJnavho76oXRe/Ylgrdz/A+h7a/iD/TVL4+Es6h+QtvMtFUv4RbNaDb
+B2S1q+l5HuLyqnRy55ES98e7bu7ldJAQJIu3582chZBH5OJvfyC9LLuDliNNqEzYfi5eFSm4
+JX1XNQstFVSMqdzg5TedqE8glYMrxRI2Pahz4U6ISaW5u/oJSihaM7nkknlbe/ilT/PJNM2Z
+jLC6YH6fhD7mPPp+WuvmMIIDcDCCAligAwIBAgIBBTANBgkqhkiG9w0BAQUFADBbMQswCQYD
+VQQGEwJVUzEYMBYGA1UEChMPVS5TLiBHb3Zlcm5tZW50MQwwCgYDVQQLEwNEb0QxDDAKBgNV
+BAsTA1BLSTEWMBQGA1UEAxMNRG9EIFJvb3QgQ0EgMjAeFw0wNDEyMTMxNTAwMTBaFw0yOTEy
+MDUxNTAwMTBaMFsxCzAJBgNVBAYTAlVTMRgwFgYDVQQKEw9VLlMuIEdvdmVybm1lbnQxDDAK
+BgNVBAsTA0RvRDEMMAoGA1UECxMDUEtJMRYwFAYDVQQDEw1Eb0QgUm9vdCBDQSAyMIIBIjAN
+BgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwCzB9o07rP8/PNZxvrh0IgfscEEV/KtA4weq
+wcPYn/7aTDq/P8jYKHtLNgHArEUlw9IOCo+FGGQQPRoTcCpvjtfcjZOzQQ84Ic2tq8I9KgXT
+VxE3Dc2MUfmT48xGSSGOFLTNyxQ+OM1yMe6rEvJl6jQuVl3/7mN1y226kTT8nvP0LRy+UMRC
+31mI/2qz+qhsPctWcXEFlrufgOWARVlnQbDrw61gpIB1BhecDvRD4JkOG/t/9bPMsoGCsf0y
+wbi+QaRktWA6WlEwjM7eQSwZR1xJEGS5dKmHQa99brrBuKG/ZTE6BGf5tbuOkooAY7ix5ow4
+X4P/UNU7ol1rshDMYwIDAQABoz8wPTAdBgNVHQ4EFgQUSXS7DF66ev4CVO97oMaVxgmAcJYw
+CwYDVR0PBAQDAgGGMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQEFBQADggEBAJiRjT+J
+yLv1wGlzKTs1rLqzCHY9cAmS6YREIQF9FHYb7lFsHY0VNy17MWn0mkS4r0bMNPojywMnGdKD
+IXUr5+AbmSbchECV6KjSzPZYXGbvP0qXEIIdugqi3VsGK52nZE7rLgE1pLQ/E61V5NVzqGmb
+EfGY8jEeb0DU+HifjpGgb3AEkGaqBivO4XqStX3h4NGW56E6LcyxnR8FRO2HmdNNGnA5wQQM
+5X7Z8a/XIA7xInolpHOZzD+kByeWqKKV7YK5FtOeC4fCwfKI9WLfaN/HvGlR7bFc3FRUKQ8J
+OZqsA8HbDE2ubwp6Fknxv5HSOJTT9pUst2zJQraNypCNhdkwggS+MIIDpqADAgECAgNFah0w
+DQYJKoZIhvcNAQEFBQAwXTELMAkGA1UEBhMCVVMxGDAWBgNVBAoTD1UuUy4gR292ZXJubWVu
+dDEMMAoGA1UECxMDRG9EMQwwCgYDVQQLEwNQS0kxGDAWBgNVBAMTD0RPRCBFTUFJTCBDQS0z
+MTAeFw0xNTEwMjEwMDAwMDBaFw0xODEwMjAyMzU5NTlaMHwxCzAJBgNVBAYTAlVTMRgwFgYD
+VQQKEw9VLlMuIEdvdmVybm1lbnQxDDAKBgNVBAsTA0RvRDEMMAoGA1UECxMDUEtJMQwwCgYD
+VQQLEwNVU04xKTAnBgNVBAMTIFNUQU1BVEFLT1MuTklDSE9MQVMuRy4xMjk3MjYzNDM1MIIB
+IjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAr+LrKnqhWUBR2Vquzpn1D7cpRVhkRkLC
+jHOe6fiddOAZFPC5uZ/nq+UWsOWYuW/hpWo8cxez/kg5m4gDoh2Fvq1NrO+4W13CHz2rf+jz
+dWJ3fjHmSpNwpPAkkOLyi5RSbx/jQsPe4um0j9kC6bu8YW87XIk83IxD9T24yOb3ibgGe+FG
+Pz5qTHYJFDm0kjjy2bVuDHRPILIR3oefa1yHjE8fDPkQGhjYx3JwgPztOztGT1l072PTTi9u
+L6Yrpu/Tdu3E3bANHevo7nfzrPpVAZPyRcygO/MVDrdMpn0NxUx3sCxVv5GMRlTFWpTih2Vg
+zjaZc4rEMgo3YR7vBSCBuQIDAQABo4IBZjCCAWIwHwYDVR0jBBgwFoAUhvFbaG/dMPOUgmjU
+TPdEHbjKaIEwOgYDVR0fBDMwMTAvoC2gK4YpaHR0cDovL2NybC5kaXNhLm1pbC9jcmwvRE9E
+RU1BSUxDQV8zMS5jcmwwDgYDVR0PAQH/BAQDAgUgMCMGA1UdIAQcMBowCwYJYIZIAWUCAQsJ
+MAsGCWCGSAFlAgELEzAdBgNVHQ4EFgQUSgABtoPi6i0pziPmNxry4LXL1LIwaAYIKwYBBQUH
+AQEEXDBaMDYGCCsGAQUFBzAChipodHRwOi8vY3JsLmRpc2EubWlsL3NpZ24vRE9ERU1BSUxD
+QV8zMS5jZXIwIAYIKwYBBQUHMAGGFGh0dHA6Ly9vY3NwLmRpc2EubWlsMCgGA1UdEQQhMB+B
+HW5pY2suc3RhbWF0YWtvc0B1c25vLm5hdnkubWlsMBsGA1UdCQQUMBIwEAYIKwYBBQUHCQQx
+BBMCVVMwDQYJKoZIhvcNAQEFBQADggEBAOHN0bn7qKGGZpgdhsyNAy3XFNlGZJKN2b5135FV
+WbzWDQ5kHXUAxxJWGEWLh2NFbm3jxcm1WVWmdhp22OxoyyRXRF1SXAAf9qKTQyERPDOBL/Zu
+Gf9jtjNXwF2aDwVc/yV2TpHutnHO8pDP5z5xdKXtwg4dIriBIWwRgty/V4tGCL4j3yr+Dyom
+3uk4OafX7XswHfKpsfNg6s4DRvUECbWUJb8ThptW1FXzY8JBjij72M/mJRH6FBQ8OQ6Ga8KB
+hjrG73nV+iO9096LMlxUubMtJh8coBDUl3j8w9sb+Qx4+4TrZfxN6BSP2ks2WFYEhiiTarvV
+O2KhjNNvmw+cOc4xggHqMIIB5gIBATBkMF0xCzAJBgNVBAYTAlVTMRgwFgYDVQQKEw9VLlMu
+IEdvdmVybm1lbnQxDDAKBgNVBAsTA0RvRDEMMAoGA1UECxMDUEtJMRgwFgYDVQQDEw9ET0Qg
+RU1BSUwgQ0EtMzECA0VqHDAJBgUrDgMCGgUAoF0wIwYJKoZIhvcNAQkEMRYEFLOI7WFhXNex
+5iOmict/H1Y8ROlQMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8X
+DTE2MDYyMDE3MDA0MlowDQYJKoZIhvcNAQEBBQAEggEAppSbv+XvqxI6RXq3joINIVvcJLVI
+w/zO8sS1lCtokzwcIduwtf7uVMzIPNNoLUtTqBGiwSeKrUenauty8W8FSB0A/D2qOYJ7NQ0p
+RnBDiD3E/SMttGtLlmXsqDN8Niqf7czZEWklC8/HwGLYQGtccWnGruSNGWboCiIwVfE2f8dB
+lEe0ndAJUrG9jkbG5be+/ezl9LIt9GPtwwyCoVpjXsEqvyYEzDWB0pkFo6c+UJr1Yc9ceUa2
+CN3KoZqCU3Sx3yFdEfnzrqCx3P+QydFjG1cHYEYhXBD72n08RgT7NkJ11NPpl9INexKvEKEP
+Qfks7Ptwk68IsBCEF+XjBtD9gQ==
+
+--B_3549272444_1142613--

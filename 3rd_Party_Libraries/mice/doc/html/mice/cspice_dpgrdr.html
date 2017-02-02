@@ -1,0 +1,268 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dpgrdr</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dpgrdr</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DPGRDR computes the Jacobian matrix of the transformation
+   from rectangular to planetographic coordinates.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      body   name of the body with which the planetographic coordinate system
+             is associated.
+
+             [1,m] = size(body); char = class(body)
+
+             `body' is used by this routine to look up from the
+             kernel pool the prime meridian rate coefficient giving
+             the body's spin sense.
+
+      x      [1,n] = size(x); double = class(x)
+
+      y      [1,n] = size(y); double = class(y)
+
+      z      [1,n] = size(z); double = class(z)
+
+             the rectangular coordinates of the point at which the Jacobian of
+             the map from rectangular to planetographic coordinates is
+             desired.
+
+      re     equatorial radius of a reference spheroid. This spheroid is a
+             volume of revolution: its horizontal cross sections are circular.
+             The shape of the spheroid is defined by an equatorial radius `re'
+             and a polar radius `rp'.
+
+             [1,1] = size(re); double = class(re)
+
+      f      the flattening coefficient
+
+             [1,1] = size(f); double = class(f)
+
+                f = (re-rp) / re
+
+             where rp is the polar radius of the spheroid. (More importantly
+             rp = re*(1-f).)
+
+   the call:
+
+      jacobi = <b>cspice_dpgrdr</b>( body, x, y, z, re, f)
+
+   returns:
+
+      jacobi   the matrix of partial derivatives of the conversion from
+               rectangular to planetographic coordinates. It has the form
+
+               If [1,1] = size(x) then [3,3]   = size(jacobi).
+               If [1,n] = size(x) then [3,3,n] = size(jacobi).
+               double = class(jacobi)
+
+                   -                               -
+                  |  dlon/dx    dlon/dy   dlon/dz   |
+                  |                                 |
+                  |  dlat/dx    dlat/dy   dlat/dz   |
+                  |                                 |
+                  |  dalt/dx    dalt/dy   dalt/dz   |
+                   -                               -
+
+               evaluated at the input values of 'x', 'y', and 'z'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   When performing vector calculations with velocities it is usually
+   most convenient to work in rectangular coordinates. However, once
+   the vector manipulations have been performed, it is often
+   desirable to convert the rectangular representations into
+   planetographic coordinates to gain insights about phenomena in
+   this coordinate frame.
+
+   To transform rectangular velocities to derivatives of coordinates
+   in a planetographic system, one uses the Jacobian of the
+   transformation between the two systems.
+
+   Given a state in rectangular coordinates
+
+      ( x, y, z, dx, dy, dz )
+
+   the velocity in planetographic coordinates is given by the matrix
+   equation:
+                        t          |                     t
+      (dlon, dlat, dalt)   = jacobi|       * (dx, dy, dz)
+                                   |(x,y,z)
+
+   This routine computes the matrix
+
+            |
+      jacobi|
+            |(x, y, z)
+
+
+   The planetographic definition of latitude is identical to the
+   planetodetic (also called &quot;geodetic&quot; in SPICE documentation)
+   definition. In the planetographic coordinate system, latitude is
+   defined using a reference spheroid.  The spheroid is
+   characterized by an equatorial radius and a polar radius. For a
+   point P on the spheroid, latitude is defined as the angle between
+   the X-Y plane and the outward surface normal at P.  For a point P
+   off the spheroid, latitude is defined as the latitude of the
+   nearest point to P on the spheroid.  Note if P is an interior
+   point, for example, if P is at the center of the spheroid, there
+   may not be a unique nearest point to P.
+
+   In the planetographic coordinate system, longitude is defined
+   using the spin sense of the body.  Longitude is positive to the
+   west if the spin is prograde and positive to the east if the spin
+   is retrograde.  The spin sense is given by the sign of the first
+   degree term of the time-dependent polynomial for the body's prime
+   meridian Euler angle &quot;W&quot;:  the spin is retrograde if this term is
+   negative and prograde otherwise.  For the sun, planets, most
+   natural satellites, and selected asteroids, the polynomial
+   expression for W may be found in a SPICE PCK kernel.
+
+   The earth, moon, and sun are exceptions: planetographic longitude
+   is measured positive east for these bodies.
+
+   If you wish to override the default sense of positive longitude
+   for a particular body, you can do so by defining the kernel
+   variable
+
+      BODY&lt;body ID&gt;_PGR_POSITIVE_LON
+
+   where &lt;body ID&gt; represents the NAIF ID code of the body. This
+   variable may be assigned either of the values
+
+      'WEST'
+      'EAST'
+
+   For example, you can have this routine treat the longitude
+   of the earth as increasing to the west using the kernel
+   variable assignment
+
+      BODY399_PGR_POSITIVE_LON = 'WEST'
+
+   Normally such assignments are made by placing them in a text
+   kernel and loading that kernel via furnsh_c.
+
+   The definition of this kernel variable controls the behavior of
+   the CSPICE planetographic routines
+
+      <a href="cspice_pgrrec.html">cspice_pgrrec</a>
+      <a href="cspice_recpgr.html">cspice_recpgr</a>
+      <b>cspice_dpgrdr</b>
+      <a href="cspice_drdpgr.html">cspice_drdpgr</a>
+
+   It does not affect the other CSPICE coordinate conversion
+   routines.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/dpgrdr_c.html">dpgrdr_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 11-NOV-2013, EDW (JPL), SCK (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Jacobian of planetographic  w.r.t. rectangular coordinates
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:37 2014</pre>
+
+</body>
+</html>
+

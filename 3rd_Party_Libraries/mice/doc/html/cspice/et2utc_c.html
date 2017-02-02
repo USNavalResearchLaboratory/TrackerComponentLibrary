@@ -1,0 +1,396 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>et2utc_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>et2utc_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void et2utc_c (  SpiceDouble       et,
+                    ConstSpiceChar  * format,
+                    SpiceInt          prec,
+                    SpiceInt          lenout,
+                    SpiceChar       * utcstr   )
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   Convert an input time from ephemeris seconds past J2000
+   to Calendar, Day-of-Year, or Julian Date format, UTC.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+   <a href="../req/time.html">TIME</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+   TIME
+
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   et         I   Input epoch, given in ephemeris seconds past J2000.
+   format     I   Format of output epoch.
+   prec       I   Digits of precision in fractional seconds or days.
+   lenout     I   The length of the output string plus 1.
+   utcstr     O   Output time string, UTC.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+   et          is the input epoch, ephemeris seconds past J2000.
+
+   format      is the format of the output time string. It may be
+               any of the following:
+
+
+                 &quot;C&quot;      Calendar format, UTC.
+
+                 &quot;D&quot;      Day-of-Year format, UTC.
+
+                 &quot;J&quot;      Julian Date format, UTC.
+
+                 &quot;ISOC&quot;   ISO Calendar format, UTC.
+
+                 &quot;ISOD&quot;   ISO Day-of-Year format, UTC.
+
+   prec        is the number of digits of precision to which
+               fractional seconds (for Calendar and Day-of-Year
+               formats) or days (for Julian Date format) are to
+               be computed. If PREC is zero or smaller, no decimal
+               point is appended to the output string. If PREC is
+               greater than 14, it is treated as 14.
+
+   lenout      The allowed length of the output string.  This length
+               must large enough to hold the output string plus the
+               null terminator.  If the output string is expected to
+               have x characters, lenout must be x + 1.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+   utcstr      is the output time string equivalent to the input
+               epoch, in the specified format.  Some examples are
+               shown below.
+
+                     &quot;C&quot;      &quot;1986 APR 12 16:31:09.814&quot;
+                     &quot;D&quot;      &quot;1986-102 // 16:31:12.814&quot;
+                     &quot;J&quot;      &quot;JD 2446533.18834276&quot;
+                     &quot;ISOC&quot;   &quot;1987-04-12T16:31:12.814&quot;
+                     &quot;ISOD&quot;   &quot;1987-102T16:31:12.814&quot;
+
+               If an error occurs, utcstr is not changed.
+
+               Fractional seconds, or for Julian dates, fractional
+               days, are rounded to the precision level specified
+               by the input argument `prec'.
+
+               utcstr should be declared to be at least
+               20 + prec characters in length to ensure
+               sufficient room to hold calendar strings
+               for modern epochs.  For epochs prior to
+               1000 A.D. at least 24 + prec characters in
+               length are required to hold the output
+               calendar string.
+
+               For epochs prior to 1000 A.D. Jan 1 calendar
+               and day of year formats are returned with the
+               era (A.D. or B.C.) attached to the year.  For
+               example
+
+                    &quot;877 A.D. MAR 17 13:29:11.829&quot;
+                    &quot;471 B.C. Jan 01 12:00:00.000&quot;
+                    &quot;471 B.C. 001 // 12:00:00.000&quot;
+
+               ISO formats do not support the inclusion of
+               an era.  For years prior to 1 A.D. an error
+               will be signaled if ISO format has been requested.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+   1) If the format for the output string is not recognized, the
+      error SPICE(INVALIDTIMEFORMAT) is signaled.
+
+   2) If prec is less than or equal to zero, it is treated as
+      zero.  If prec is greater than 14, it is treated as 14.
+
+   3) If one of the ISO formats is specified (ISOC or ISOD) but
+      the year corresponding to ET is prior to 1  A.D. on the
+      Gregorian Calendar, the error SPICE(YEAROUTOFRANGE) will
+      be signaled.
+
+   4) Epochs prior to 15 Oct, 1582 on the Gregorian calendar (the
+      calendar commonly used in western societies) are returned in the
+      &quot;extended&quot; Gregorian Calendar.  To convert epochs to the Julian
+      calendar see the header of the function gr2jul_ in the file
+      jul2gr.c.
+
+   5) This routine does not attempt to account for variations
+      in the length of the second that were in effect prior
+      to Jan 1, 1972.  For days prior to that date, we assume
+      there are exactly 86400 ephemeris seconds. Consequently
+      the UTC gregorian calendar strings produced for epochs
+      prior to Jan 1, 1972 differ from the corresponding
+      TDB calendar strings by approximately 41.18 seconds.
+      (TDB gregorian calendar strings are produced by the
+      routine ETCAL).
+
+   6) The error SPICE(NULLPOINTER) is signaled if either of
+      the input or output string pointers is null.
+
+   7) If the input string has length zero, the error SPICE(EMPTYSTRING)
+      will be signaled.
+
+   8) The caller must pass a value indicating the length of the output
+      string.  If this value is not at least 2, the error
+      SPICE(STRINGTOOSHORT) is signaled.
+
+   9) The user's processing environment must be properly initialized by
+      loading a leapseconds kernel via the routine <a href="furnsh_c.html">furnsh_c</a> before
+      calling this routine.  If a leapsecond kernel has not been
+      loaded, an error will be signaled by a routine in the call tree
+      of this routine.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+   A leapseconds kernel must be loaded via <a href="furnsh_c.html">furnsh_c</a> prior to
+   calling this routine.  The kernel need be loaded only  
+   once during a program run. 
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   This routine handles the task of converting a double precision
+   representation of an epoch to a character string suitable for human
+   consumption.  The more general routine <a href="timout_c.html">timout_c</a> may also be used to
+   convert ET to time strings.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+   The numerical results shown for these examples may differ across
+   platforms.  The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   Let the value of ET be -527644192.5403653 ephemeris seconds
+   past J2000. Assuming that the nominal values in the kernel pool
+   have not been altered, the following calls
+
+      <b>et2utc_c</b> ( et, &quot;C&quot;, 0, lenout, utcstr );
+      <b>et2utc_c</b> ( et, &quot;C&quot;, 3, lenout, utcstr );
+      <b>et2utc_c</b> ( et, &quot;D&quot;, 5, lenout, utcstr );
+      <b>et2utc_c</b> ( et, &quot;J&quot;, 7, lenout, utcstr );
+
+   produce the following output strings
+
+      1983 APR 13 12:09:14
+      1983 APR 13 12:09:14.274
+      1983-103 // 12:09:14.27400
+      JD 2445438.0064152
+
+   respectively, where lenout is the length of utcstr.
+
+   An example program.
+
+      #include &lt;stdio.h&gt;
+
+      #include &quot;SpiceUsr.h&quot;
+
+      int main()
+      {
+         /. 
+         Local variables 
+         ./
+         SpiceDouble        et =  -527644192.5403653;
+
+         SpiceChar        * leap    = &quot;naif0007.tls&quot;;
+         ConstSpiceChar   * format;
+         SpiceChar        * utcstr;
+
+         SpiceInt           prec;
+
+         SpiceInt           lenout = 35;
+
+         format             = &quot;J&quot;;
+         prec               =  6;
+
+         /. 
+         Load the leapseconds kernel. 
+         ./
+         <a href="furnsh_c.html">furnsh_c</a> ( leap );
+         <b>et2utc_c</b> (  et , format, prec, lenout, utcstr );
+
+         printf ( &quot;ET:               %18.7f\n&quot;
+                  &quot;Converted output: %s\n&quot;, 
+                   et,
+                   utcstr                       );
+
+         return ( 0 );
+      }
+
+
+   The program output is
+
+      ET:               -527644192.5403653
+      Converted output: JD 2445438.006415
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+   Jesperson and Fitz-Randolph, From Sundials to Atomic Clocks,
+   Dover Publications, New York, 1977.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   C.H. Acton      (JPL)
+   N.J. Bachman    (JPL)
+   B.V. Semenov    (JPL)
+   W.L. Taber      (JPL)
+   W.M. Owen       (JPL)
+   I.M. Underwood  (JPL)
+   E.D. Wright     (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.1.5, 06-APR-2009 (NJB)
+
+      Header was updated to state that fractional
+      seconds or days are rounded in the output
+      string.
+
+   -CSPICE Version 1.1.4, 28-JAN-2008   (BVS)
+
+      Fixed typo in the ISOC example string in Detailed_Output.
+
+   -CSPICE Version 1.1.3, 16-JAN-2008   (EDW)
+
+      Corrected typos in header titles:
+      
+      Detailed Input to Detailed_Input
+      Detailed Output to Detailed_Output
+      
+   -CSPICE Version 1.1.2, 11-JAN-2006 (EDW)
+
+      Added a CHKFSTR check call on the 'format' input string.
+
+   -CSPICE Version 1.1.1, 29-JUL-2003 (NJB) (CHA)
+
+      Various header changes were made to improve clarity and 
+      more fully explain the routine's functionality.
+
+   -CSPICE Version 1.1.0, 09-FEB-1998 (NJB) (EDW)
+
+      Re-implemented routine without dynamically allocated, temporary
+      strings. Added Exceptions section and corrected typo in <a href="chkout_c.html">chkout_c</a>
+      module name.
+
+   -CSPICE Version 1.0.0, 25-OCT-1997 (EDW)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   ephemeris time to utc
+</PRE>
+<h4>Link to routine et2utc_c source file <a href='../../../src/cspice/et2utc_c.c'>et2utc_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:33 2014</pre>
+
+</body>
+</html>
+

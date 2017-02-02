@@ -1,0 +1,276 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_gnpool</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_gnpool</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_GNPOOL returns the names of kernel variables matching a
+   specified template.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      name    the matchi_c template to use when searching for variable names
+              in the kernel pool. The characters '*' and '%' are used for the
+              wild card string and wild card character respectively.  For
+              details of string pattern matching see the header of the routine
+              matchi_c.
+
+              [1,m] = size(name); char = class(name)
+
+      start   value for the index indicating the first component of the data
+              vector assigned to 'name' for return (index 1 for all elements).
+
+              [1,1] = size(start); int32 = class(start)
+
+      room    value specifying the maximum number of components that can
+              return for 'name'.
+
+              [1,1] = size(room); int32 = class(room)
+
+   the call:
+
+      [kvars, found] = <b>cspice_gnpool</b>( name, start, room )
+
+   returns:
+
+      kvars   the values assigned to 'name' beginning at index 'start'.
+              'kvars' returns empty if variables described by 'name' does not
+              exist in the kernel pool.
+
+              [n,m] = size(kvars); char = class(kvars)
+
+      found   the flag indicating true if variables matching the 'name'
+              template exist in the kernel pool, false otherwise.
+
+              [1,1] = size(found); logical = class(found)
+
+              N &lt;= 'room', M = length of longest string in return
+              array 'kvars'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   Example(1):
+
+      %
+      % Load a leapseconds kernel.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % A template for Jupiter kernel variables.
+      %
+      VAR = 'BODY599*';
+
+      %
+      % Query for the variable name, return all matches from
+      % index 1.
+      %
+      INDEX  = 1;
+      ROOM   = 10;
+
+      [kervar, found] = <b>cspice_gnpool</b>( VAR, INDEX, ROOM );
+
+      if( found )
+
+         n_elements = size(kervar, 1);
+
+         %
+         % Output the returned variable names.
+         %
+         for n=1: n_elements
+            txt = sprintf( 'Variable %d matching %s: %s', n, VAR, kervar(n,:));
+            disp( txt )
+         end
+
+      else
+         txt = sprintf( ['Failed to find  ' VAR ' in the kernel pool.'] );
+         disp( txt )
+      end
+
+   MATLAB outputs:
+
+      Variable 1 matching BODY599*: BODY599_POLE_RA
+      Variable 2 matching BODY599*: BODY599_POLE_DEC
+      Variable 3 matching BODY599*: BODY599_PM
+      Variable 4 matching BODY599*: BODY599_RADII
+      Variable 5 matching BODY599*: BODY599_LONG_AXIS
+
+   Example(2):
+
+      %
+      % Return to the array 'kervar' the names of the first
+      % 'ROOM' pool variables. Use the * wildcard character
+      % as a template to indicate a request for all kernel
+      % variables.
+      %
+      % Return all matches from 'INDEX' 1.
+      %
+      INDEX  = 1;
+      ROOM   = 10;
+      VAR    = '*';
+
+      [kervar, found] = <b>cspice_gnpool</b>( VAR, INDEX, ROOM );
+
+      if ( found )
+
+         n_elements = size(kervar, 1);
+
+         %
+         % Output the returned variable names.
+         %
+         for n=1: n_elements
+            txt = sprintf( 'Variable %d matching %s: %s', n, VAR, kervar(n,:));
+            disp( txt )
+         end
+
+      else
+         txt = sprintf( ['Failed to find  ' VAR ' in the kernel pool.'] );
+         disp( txt )
+      end
+
+      %
+      % It's always good form to unload kernels after use,
+      % particularly in MATLAB due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+      Variable 1 matching *: BODY402_PM
+      Variable 2 matching *: BODY705_RADII
+      Variable 3 matching *: BODY618_POLE_RA
+      Variable 4 matching *: BODY610_PM
+      Variable 5 matching *: BODY710_LONG_AXIS
+      Variable 6 matching *: BODY806_PM
+      Variable 7 matching *: BODY299_PM
+      Variable 8 matching *: BODY705_NUT_PREC_DEC
+      Variable 9 matching *: BODY603_RADII
+      Variable 10 matching *: BODY805_LONG_AXIS
+
+   Note, the seemingly random order of the output list reflects the
+   order used by the SPICE kernel subsystem to store/lookup the
+   variable names.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/gnpool_c.html">gnpool_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/kernel.html">KERNEL.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.2.0, 12-MAR-2012, EDW (JPL), SCK (JPL)
+
+      &quot;logical&quot; call replaced with &quot;zzmice_logical.&quot;
+
+      I/O descriptions edits to conform to Mice documentation format.
+
+   -Mice Version 1.0.0, 15-DEC-2006, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   return names of kernel pool variables matching a template
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:37 2014</pre>
+
+</body>
+</html>
+

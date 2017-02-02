@@ -1,0 +1,242 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>setmsg_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>setmsg_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void setmsg_c ( ConstSpiceChar * message )
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   Set the value of the current long error message.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+   <a href="../req/error.html">ERROR</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+   ERROR
+
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   message    I   A long error message.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+   message        A ``long'' error message.
+                  message is a detailed description of the error.
+                  message is supposed to start with the name of the
+                  module which detected the error, followed by a
+                  colon.  Example:
+
+                     &quot;<a href="rdtext_c.html">rdtext_c</a>:  There are no more free logical units&quot;
+
+                  Only the first LMSGLN (see setmsg.c) characters of
+                  message are stored; any further characters are
+                  truncated.
+
+                  Generally, message will be stored internally by the
+                  CSPICE error handling mechanism.  The only exception
+                  is the case in which the user has commanded the
+                  toolkit to ``ignore'' the error indicated by message.
+
+                  As a default, message will be output to the screen.
+                  See the required reading file for a discussion of how
+                  to customize toolkit error handling behavior, and
+                  in particular, the disposition of message.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+   This routine does not detect any errors.
+
+   However, this routine is part of the interface to the
+   CSPICE error handling mechanism.  For this reason,
+   this routine does not participate in the trace scheme,
+   even though it has external references.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+   The CSPICE routine <a href="sigerr_c.html">sigerr_c</a> should always be called
+   AFTER this routine is called, when an error is detected.
+
+   The effects of this routine are:
+
+      1.  If acceptance of a new long error message is
+          allowed:
+
+          message will be stored internally.  As a result,
+          The CSPICE routine, getmsg_ , will be able to
+          retrieve message, until message has been ``erased''
+          by a call to <a href="reset_c.html">reset_c</a>, or overwritten by another
+          call to <b>setmsg_c</b>.
+
+
+      2.  If acceptance of a new long error message is not allowed,
+          a call to this routine has no effect.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+    In the following example, an error is signaled because the
+    double precision variable x contains an invalid value.  The
+    value of x and the maximum allowed value MAXVAL are substituted
+    into the error message at the locations indicated by the # signs
+    below.
+
+       /.
+       Indicate that x is out of range if x is too large.
+       ./
+
+       if ( x &gt; MAXVAL )
+       {
+          <b>setmsg_c</b> ( &quot;Variable x = #; maximum allowed value is #&quot; );
+          <a href="errdp_c.html">errdp_c</a>  ( &quot;#&quot;,  x                                      );
+          <a href="errdp_c.html">errdp_c</a>  ( &quot;#&quot;,  MAXVAL                                 );
+          <a href="sigerr_c.html">sigerr_c</a> ( &quot;SPICE(VALUEOUTOFRANGE)&quot;                     ) ;
+          return;
+       }
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   <a href="sigerr_c.html">sigerr_c</a> must be called once after each call to this routine.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   N.J. Bachman    (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.2.1, 25-MAR-1998 (EDW)
+
+      Corrected errors in header.
+
+   -CSPICE Version 1.2.0, 08-FEB-1998 (NJB)
+
+      Re-implemented routine without dynamically allocated, temporary
+      strings.  Made various header fixes.
+
+   -CSPICE Version 1.0.0, 25-OCT-1997 (EDW)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   set long error message
+</PRE>
+<h4>Link to routine setmsg_c source file <a href='../../../src/cspice/setmsg_c.c'>setmsg_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:42 2014</pre>
+
+</body>
+</html>
+

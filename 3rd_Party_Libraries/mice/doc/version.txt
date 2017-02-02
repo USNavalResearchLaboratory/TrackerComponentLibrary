@@ -1,0 +1,7 @@
+This file describes your current toolkit package.
+ 
+Creation Date: Fri Jul 18 20:24:16 PDT 2014 
+ 
+Version Information
+ 
+               MICE.................V.N0065

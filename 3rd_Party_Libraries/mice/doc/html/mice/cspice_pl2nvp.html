@@ -1,0 +1,217 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_pl2nvp</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_pl2nvp</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_PL2NVP returns a unit normal vector and point that define
+   a specified plane.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      plane   a structure describing a SPICE plane.
+
+              [1,1] = size(plane); struct = class(plane)
+
+              The structure has the fields:
+
+                 normal:     [3,1] = size(normal); double = class(normal)
+                 constant:   [1,1] = size(constant); double = class(constant)
+
+   the call:
+
+      [normal, point] = <b>cspice_pl2nvp</b>( plane )
+
+   returns:
+
+      normal   [3,1] = size(normal); double = class(normal)
+
+      point    [3,1] = size(point); double = class(point)
+
+               are, respectively, a unit normal vector and point
+               that define the geometric plane represented by
+               plane.  Let the symbol &lt; a, b &gt; indicate the inner
+               product of vectors a and b; then the geometric
+               plane is the set of vectors x in three-dimensional
+               space that satisfy
+
+                  &lt; x - point, normal &gt;  =  0.
+
+               'point' is always the closest point in the input
+               plane to the origin. 'point' is always a
+               non-negative scalar multiple of 'normal'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % A trivial example of plane creation and
+      % decomposition. Create a plane via the definition
+      % of a plane normal and constant, determine a
+      % point in the plane.
+      %
+      plane_norm = [ 2.44; -5./3.; 11./9. ];
+      const      = <a href="cspice_pi.html">cspice_pi</a>;
+
+      %
+      % Construct the SPICE plane.
+      %
+      plane = <a href="cspice_nvc2pl.html">cspice_nvc2pl</a>( plane_norm, const );
+
+      %
+      % Convert the plane to a normal vector, point
+      % representation, 'point' lies in the plane.
+      %
+      [ norm_vec, point ] = <b>cspice_pl2nvp</b>( plane )
+
+   MATLAB outputs:
+
+      norm_vec =
+
+           7.630514391556131e-01
+          -5.212099994232330e-01
+           3.822206662437042e-01
+
+
+      point =
+
+           7.496657642594705e-01
+          -5.120667788657586e-01
+           3.755156378348896e-01
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Mice geometry routines that deal with planes use the `plane'
+   data type to represent input and output planes.  This data type
+   makes the subroutine interfaces simpler and more uniform.
+
+   The Mice routines that produce SPICE planes from data that
+   define a plane are:
+
+      <a href="cspice_nvc2pl.html">cspice_nvc2pl</a> ( Normal vector and constant to plane )
+      <a href="cspice_nvp2pl.html">cspice_nvp2pl</a> ( Normal vector and point to plane    )
+      <a href="cspice_psv2pl.html">cspice_psv2pl</a> ( Point and spanning vectors to plane )
+
+   The Mice routines that convert SPICE planes to data that
+   define a plane are:
+
+      <a href="cspice_pl2nvc.html">cspice_pl2nvc</a> ( Plane to normal vector and constant )
+      <b>cspice_pl2nvp</b> ( Plane to normal vector and point    )
+      <a href="cspice_pl2psv.html">cspice_pl2psv</a> ( Plane to point and spanning vectors )
+
+   Any of these last three routines may be used to convert this
+   routine's output, 'plane', to another representation of a
+   geometric plane.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/pl2nvp_c.html">pl2nvp_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/planes.html">PLANES.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 27-AUG-2012, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   plane to normal vector and point
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:38 2014</pre>
+
+</body>
+</html>
+

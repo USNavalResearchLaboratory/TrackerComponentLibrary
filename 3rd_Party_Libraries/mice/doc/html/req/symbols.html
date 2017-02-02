@@ -1,0 +1,869 @@
+<HTML>
+<HEAD>
+<TITLE> Symbol Tables </TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+
+<A NAME="top"></A>
+
+<TABLE STYLE="text-align: left; margin-left: auto; margin-right: auto; width: 800px;" BORDER="0" CELLPADDING="5" CELLSPACING="2">
+<TBODY>
+<TR>
+  <TD STYLE="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+  <DIV ALIGN="right">
+    <SMALL><SMALL><A HREF="index.html">Index Page</A></SMALL></SMALL>
+  </DIV>
+  <B>Symbol Tables</B> </TD>
+</TR>
+<TR>
+  <TD STYLE="vertical-align: top;">
+
+<H2> Table of Contents
+</H2>
+
+<PRE>
+   <A HREF="#Symbol Tables">Symbol Tables</A>
+      <A HREF="#Abstract">Abstract</A>
+      <A HREF="#Note on FORTRAN and C Versions">Note on FORTRAN and C Versions</A>
+      <A HREF="#Revisions">Revisions</A>
+      <A HREF="#What are Symbol Tables?">What are Symbol Tables?</A>
+      <A HREF="#Illustration of Symbol Table Representation">Illustration of Symbol Table Representation</A>
+      <A HREF="#Why use Symbol Tables?">Why use Symbol Tables?</A>
+      <A HREF="#Symbol Subroutine Naming Conventions">Symbol Subroutine Naming Conventions</A>
+      <A HREF="#Symbol Table Initialization">Symbol Table Initialization</A>
+      <A HREF="#A Comprehensive Example">A Comprehensive Example</A>
+         <A HREF="#Creating a symbol">Creating a symbol</A>
+         <A HREF="#Deleting a symbol">Deleting a symbol</A>
+         <A HREF="#Duplicating a symbol">Duplicating a symbol</A>
+         <A HREF="#Renaming a symbol">Renaming a symbol</A>
+         <A HREF="#Obtaining the name of a symbol">Obtaining the name of a symbol</A>
+         <A HREF="#Adding a new value to a symbol">Adding a new value to a symbol</A>
+         <A HREF="#Deleting a value from a symbol">Deleting a value from a symbol</A>
+         <A HREF="#Obtaining values associated with a symbol">Obtaining values associated with a symbol</A>
+         <A HREF="#Reordering the values associated with a symbol">Reordering the values associated with a symbol</A>
+         <A HREF="#Determining the dimension of a symbol">Determining the dimension of a symbol</A>
+      <A HREF="#Three Letter Mnemonics used in Subroutine Names">Three Letter Mnemonics used in Subroutine Names</A>
+      <A HREF="#Calling Sequences">Calling Sequences</A>
+
+</PRE>
+
+<HR SIZE=3 NOSHADE>
+
+<BR><BR>
+<A NAME="Symbol Tables"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Symbol Tables
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Last revised on 2008 JAN 17 by B. V. Semenov.
+<P>
+ 
+<BR><BR>
+<A NAME="Abstract"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Abstract
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Symbol tables are SPICE data structures used to associate variable names
+   with sets of values.
+<P>
+ 
+<BR><BR>
+<A NAME="Note on FORTRAN and C Versions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Note on FORTRAN and C Versions
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   This document covers the FORTRAN version of the interfaces of this
+   subsystem. CSPICE provides f2c translated equivalents for all, and
+   native C wrappers for some of them. If you wish to use the C versions of
+   the interfaces described in this document, refer to the CSPICE Required
+   Reading, <a href="../req/cspice.html">cspice.req</a>, for more information on naming conventions,
+   locations, and usage of the f2c'ed routines and native C wrappers.
+<P>
+ 
+<BR><BR>
+<A NAME="Revisions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Revisions
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   June 15, 1992
+<P>
+ 
+<UL>
+<TT>&#32;&#32;</TT> The document differs from the previous version of December 2, 1989 in that
+a number of typographical errors were corrected and a paragraph in the
+section on Symbol Table Initialization was modified to improve its clarity.
+<BR><BR></UL>
+<BR><BR>
+<A NAME="What are Symbol Tables?"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> What are Symbol Tables?
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Symbol tables are storage structures used to associate multiple values
+   with one variable name called a symbol. This storage structure consists
+   of three arrays. The first array, called the name table, contains the
+   names of the symbols. The second array, called the pointer table,
+   contains the pointers which associate the symbol name with its values.
+   The third array, called the value table, contains values associated with
+   the symbol names in the name table.
+<P>
+ 
+   As implemented in SPICELIB, there are three types of symbol tables:
+   character, double precision, and integer. While the symbol names are
+   always character strings, the type of the symbol table is determined by
+   the data type of the values. For example, an integer symbol table has
+   integer values associated with its symbol names.
+<P>
+ 
+<BR><BR>
+<A NAME="Illustration of Symbol Table Representation"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Illustration of Symbol Table Representation
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   This is an illustration of how the contents of a symbol table are
+   represented in the SPICELIB documentation. This symbol table is a double
+   precision symbol table.
+<P>
+ 
+<PRE>
+   symbol name          associated values
+   --------------       -----------------
+   BODY4_GM        --&gt;   4.282628654899D4
+   BODY4_POLE_DEC  --&gt;   5.2886D1
+                        -6.1D-2
+                         0.0D0
+   BODY4_POLE_RA   --&gt;   3.17681D2
+                        -1.08D-1
+                         0.0D0
+</PRE>
+   This symbol table contains three symbols. One of the symbols, BODY4 GM,
+   points to a single value. The other two symbols each point to three
+   values.
+<P>
+ 
+<BR><BR>
+<A NAME="Why use Symbol Tables?"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Why use Symbol Tables?
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The primary use of symbol tables is to implement associative arrays:
+   that is, arrays which are indexed by character strings rather than by
+   indices. For example, you may wish to store the masses for several
+   planets and satellites, without knowing ahead of time which ones you
+   will be using. You might use a double precision symbol table for this,
+   storing the mass of Jupiter as element `JUPITER', the mass of Europa as
+   element `EUROPA', and so on.
+<P>
+ 
+   The fact that more than one value may be stored under a single name
+   (symbol) allows you to store polynomials, vectors, matrices, or any set
+   of associated values under one name. Examples from the SPICELIB kernel
+   pool include: three axes for one body under the name `BODYxxx AXES';
+   polynomials for the right ascension and declination of the pole of a
+   body (three terms each) under the name `BODYxxx POLE RA' and `BODYxxx
+   POLE DEC'. Other examples might be to list the names of active
+   satellites under the name of the parent planet; to list one or more
+   vidicom matrices under the name `K-MATRIX'; and to store scalar, vector,
+   and matrix values in a simulated desk calculator.
+<P>
+ 
+   In short, any time you need to store something and look it up later, you
+   can use symbol tables. The advantages come into play mostly when the
+   things to be stored are not known until run-time, or when a program is
+   undergoing development and the things to be stored are subject to rapid
+   change.
+<P>
+ 
+<BR><BR>
+<A NAME="Symbol Subroutine Naming Conventions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Symbol Subroutine Naming Conventions
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The names of the symbol table subroutines in SPICELIB are assigned as
+   follows. Each name is of the form SYfffx.
+<P>
+ 
+<DL><DT>
+<B>
+ SY
+</B><BR><BR>
+<DD>
+ indicates that the subroutine belongs to the symbol table family of
+subroutines.<BR>
+</DL>
+<DL><DT>
+<B>
+ fff
+</B><BR><BR>
+<DD>
+ is a three letter mnemonic code indicating the function of the
+subroutine.<BR>
+</DL>
+<DL><DT>
+<B>
+ x
+</B><BR><BR>
+<DD>
+ indicates the data type of the values associated with the symbols in
+the name table. The data types are: C for character, D for double
+precision, and I for integer.<BR>
+</DL>
+   In the descriptive text that follows, the generic routines are referred
+   to by their mnemonic codes, and specific routines are referred to by
+   their full names. For example, the notation DEL refers to the generic
+   routine, DEL, for deleting a symbol. The notation SYDELC refers to the
+   particular routine that deletes a symbol from a character symbol table.
+<P>
+ 
+<BR><BR>
+<A NAME="Symbol Table Initialization"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Symbol Table Initialization
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Symbol tables are implemented using cells, another SPICELIB data
+   structure. Hence, the restrictions that apply to cells also apply to
+   symbol tables. The size and cardinality of the components of a symbol
+   table must be initialized before the symbol table can be used properly.
+   The cell routines SSIZEx should be used for this initialization. Consult
+   the Required Reading for the family of cell routines (<a href="../req/cells.html">cells.req</a>) if you
+   are not familiar with their use.
+<P>
+ 
+   Before using the symbol tables, you must initialize the name table,
+   pointer table, and value table. This initialization sets the size and
+   cardinality of the component tables.
+<P>
+ 
+   The size of the name table must equal the size of the pointer table. In
+   other words, both must contain the same number of elements. Also, the
+   size of the value table should be large enough to accommodate the
+   maximum number of values anticipated. If the size of any of the
+   component tables of a symbol table is too small, it is treated as an
+   error by the symbol table routines.
+<P>
+ 
+   The cardinality of the component tables should be set to zero before
+   using a symbol table.
+<P>
+ 
+   The following piece of code demonstrates the easiest way to initialize a
+   symbol table. Using the cell routines SSIZEx to create a symbol table
+   containing up to thirty symbols and up to one hundred-fifty values, the
+   initialization looks like this:
+<P>
+ 
+   Initialize the name table:
+<P>
+ 
+<PRE>
+   CALL SSIZEC ( 30,   TABSYM )
+</PRE>
+   Initialize the pointer table:
+<P>
+ 
+<PRE>
+   CALL SSIZEI ( 30,   TABPTR )
+</PRE>
+   Initialize the value table:
+<P>
+ 
+<PRE>
+   CALL SSIZEC ( 150,  TABVAL )
+</PRE>
+   The name table always contains character values and is initialized with
+   SSIZEC. Likewise, the pointer table always contains integer values and
+   is thus initialized with SSIZEI. The initialization of the value table
+   is different for each of the types of symbol tables. In the example
+   above the routine SSIZEC was used to initialize the value table for a
+   character symbol table. A double precision value table should be
+   initialized using SSIZED, and an integer values table should be
+   initialized using SSIZEI.
+<P>
+ 
+<BR><BR>
+<A NAME="A Comprehensive Example"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> A Comprehensive Example
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The following examples illustrate how each symbol table routine is used.
+   The first five examples illustrate how to create a symbol, delete a
+   symbol, duplicate a symbol, rename a symbol, and fetch the name of a
+   symbol. The next four examples demonstrate how to add a value, delete a
+   value, obtain the values, and reorder the values associated with an
+   existing symbol. The final example illustrates how to determine the
+   number of values associated with a symbol.
+<P>
+ 
+<BR><BR>
+<A NAME="Creating a symbol"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Creating a symbol
+</H3><P><BR><BR>
+   Suppose that you want to create a symbol table of famous scientists and
+   their fields of study. First, you must create a symbol and give it one
+   or more associated values. SET and PUT create symbols. If you want to
+   create a symbol with one value, use the SET routine. Otherwise, use the
+   PUT routine. The routine used depends on the initial number of values
+   associated with the symbol. The call below demonstrates how to create
+   the symbol `EINSTEIN' with the associated value `BROWNIAN MOTION'.
+   Because this symbol has one value, the SET routine should be used.
+<P>
+ 
+   The call,
+<P>
+ 
+<PRE>
+   CALL SYSETC
+   ( 'EINSTEIN', 'BROWNIAN MOTION', TABSYM, TABPTR, TABVAL )
+</PRE>
+   creates the symbol table:
+<P>
+ 
+<PRE>
+   EINSTEIN   --&gt;  BROWNIAN MOTION
+</PRE>
+   To create a symbol giving it more than one value, use the PUT routine.
+<P>
+ 
+   If the VALUES array contains the elements,
+<P>
+ 
+<PRE>
+   ELECTRIC CHARGE
+   PHOTOELECTRIC EFFECT
+</PRE>
+   N is 2 (the number of elements in the VALUES array), and the symbol you
+   want to create is named `MILLIKAN', the call,
+<P>
+ 
+<PRE>
+   CALL SYPUTC
+   ( 'MILLIKAN', VALUES, N, TABSYM, TABPTR, TABVAL )
+</PRE>
+   creates a new symbol in the symbol table. The symbol table now looks
+   like this:
+<P>
+ 
+<PRE>
+   EINSTEIN   --&gt;  BROWNIAN MOTION
+   MILLIKAN   --&gt;  ELECTRIC CHARGE
+                   PHOTOELECTRIC EFFECT
+</PRE>
+   Imagine now that the symbol table has several symbols.
+<P>
+ 
+<PRE>
+   BARDEEN    --&gt;  TRANSISTOR EFFECT
+                   SUPERCONDUCTIVITY
+   EINSTEIN   --&gt;  BROWNIAN MOTION
+   HAHN       --&gt;  NUCLEAR FISSION
+   MILLIKAN   --&gt;  ELECTRIC CHARGE
+                   PHOTOELECTRIC EFFECT
+   PLANCK     --&gt;  ELEMENTARY QUANTA
+</PRE>
+<BR><BR>
+<A NAME="Deleting a symbol"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Deleting a symbol
+</H3><P><BR><BR>
+   The routine DEL deletes a symbol from the symbol table.
+<P>
+ 
+   The call,
+<P>
+ 
+<PRE>
+   CALL SYDELC ( 'PLANCK', TABSYM, TABPTR, TABVAL )
+</PRE>
+   deletes the scientist PLANCK from the table. The symbol table now looks
+   like this:
+<P>
+ 
+<PRE>
+   BARDEEN    --&gt;  TRANSISTOR EFFECT
+                   SUPERCONDUCTIVITY
+   EINSTEIN   --&gt;  BROWNIAN MOTION
+   HAHN       --&gt;  NUCLEAR FISSION
+   MILLIKAN   --&gt;  ELECTRIC CHARGE
+                   PHOTOELECTRIC EFFECT
+</PRE>
+<BR><BR>
+<A NAME="Duplicating a symbol"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Duplicating a symbol
+</H3><P><BR><BR>
+   Perhaps after doing some research, you find that the scientist STRASSMAN
+   also worked on NUCLEAR FISSION. You'd like to add him to the symbol
+   table. Well, you can do this in two ways. You could create a symbol
+   `STRASSMAN', or you could duplicate the symbol `HAHN' and give it the
+   name `STRASSMAN' since their associated values are the same. The routine
+   DUP duplicates a symbol.
+<P>
+ 
+   Using the DUP routine,
+<P>
+ 
+<PRE>
+   CALL SYDUPC ( 'HAHN', 'STRASSMAN', TABSYM, TABPTR, TABVAL )
+</PRE>
+   changes the symbol table contents to:
+<P>
+ 
+<PRE>
+   BARDEEN    --&gt;  TRANSISTOR EFFECT
+                   SUPERCONDUCTIVITY
+   EINSTEIN   --&gt;  BROWNIAN MOTION
+   HAHN       --&gt;  NUCLEAR FISSION
+   MILLIKAN   --&gt;  ELECTRIC CHARGE
+                   PHOTOELECTRIC EFFECT
+   STRASSMAN  --&gt;  NUCLEAR FISSION
+</PRE>
+   The same results could have been achieved using the SET routine to
+   create a symbol with one associated value, or the PUT routine if the
+   symbol you wanted to create had more than one associated value. The call
+   for creating the symbol `STRASSMAN' with the value `NUCLEAR FISSION'
+   would look like this:
+<P>
+ 
+<PRE>
+   CALL SYSETC
+   ( 'STRASSMAN', 'NUCLEAR FISSION', TABSYM, TABPRT, TABVAL )
+</PRE>
+<BR><BR>
+<A NAME="Renaming a symbol"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Renaming a symbol
+</H3><P><BR><BR>
+   The routine REN exists for renaming a symbol.
+<P>
+ 
+   Using the REN routine,
+<P>
+ 
+<PRE>
+   CALL SYRENC ( 'HAHN', 'FERMI', TABSYM, TABPTR, TABVAL )
+</PRE>
+   the symbol `HAHN' is renamed to `FERMI'.
+<P>
+ 
+   The symbol table now looks like this:
+<P>
+ 
+<PRE>
+   BARDEEN    --&gt;  TRANSISTOR EFFECT
+                   SUPERCONDUCTIVITY
+   EINSTEIN   --&gt;  BROWNIAN MOTION
+   FERMI      --&gt;  NUCLEAR FISSION
+   MILLIKAN   --&gt;  ELECTRIC CHARGE
+                   PHOTOELECTRIC EFFECT
+   STRASSMAN  --&gt;  NUCLEAR FISSION
+</PRE>
+<BR><BR>
+<A NAME="Obtaining the name of a symbol"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Obtaining the name of a symbol
+</H3><P><BR><BR>
+   The routine FET allows you to obtain the name of a particular symbol in
+   the symbol table. Perhaps you want to know the names of the first four
+   symbols in the symbol table. (Note that the FET routine does not modify
+   the contents of the symbol table.)
+<P>
+ 
+   The following code will `fetch' and write to the screen the names of the
+   first four symbols in the symbol table.
+<P>
+ 
+<PRE>
+   DO I = 1, 4
+      CALL SYFETC ( I, TABSYM, TABPTR, TABVAL, NAME, FOUND )
+      WRITE (6,*) NAME
+   END DO
+</PRE>
+<BR><BR>
+<A NAME="Adding a new value to a symbol"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Adding a new value to a symbol
+</H3><P><BR><BR>
+   Suppose that you want to add a value to a symbol. This can be done by
+   either `pushing' or `enqueueing' a value onto the symbol. Pushing a
+   value onto a symbol means that the value becomes the first value
+   associated with the symbol. Enqueueing the value onto the symbol means
+   that the value becomes the last value associated with the symbol. The
+   routines PSH or ENQ are used to add a value to the values already
+   associated with a symbol.
+<P>
+ 
+   If the call is,
+<P>
+ 
+<PRE>
+   CALL SYPSHC
+   ( 'EINSTEIN', 'GENERAL RELATIVITY', TABSYM, TABPTR, TABVAL )
+</PRE>
+   the contents of the symbol table are now:
+<P>
+ 
+<PRE>
+   BARDEEN    --&gt;  TRANSISTOR EFFECT
+                   SUPERCONDUCTIVITY
+   EINSTEIN   --&gt;  GENERAL RELATIVITY
+                   BROWNIAN MOTION
+   FERMI      --&gt;  NUCLEAR FISSION
+   MILLIKAN   --&gt;  ELECTRIC CHARGE
+                   PHOTOELECTRIC EFFECT
+   STRASSMAN  --&gt;  NUCLEAR FISSION
+</PRE>
+   Let the next call be:
+<P>
+ 
+<PRE>
+   CALL SYENQC
+   ( 'EINSTEIN', 'PHOTOELECTRIC EFFECT', TABSYM, TABPTR, TABVAL )
+</PRE>
+   The contents of the symbol table are modified to be:
+<P>
+ 
+<PRE>
+   BARDEEN    --&gt;  TRANSISTOR EFFECT
+                   SUPERCONDUCTIVITY
+   EINSTEIN   --&gt;  GENERAL RELATIVITY
+                   BROWNIAN MOTION
+                   PHOTOELECTRIC EFFECT
+   FERMI      --&gt;  NUCLEAR FISSION
+   MILLIKAN   --&gt;  ELECTRIC CHARGE
+                   PHOTOELECTRIC EFFECT
+   STRASSMAN  --&gt;  NUCLEAR FISSION
+</PRE>
+<BR><BR>
+<A NAME="Deleting a value from a symbol"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Deleting a value from a symbol
+</H3><P><BR><BR>
+   The only value that can be deleted is the first value associated with a
+   symbol. The first value associated with the symbol is deleted using the
+   POP routine. The call below demonstrates how to `pop' a value associated
+   with the symbol `BARDEEN'.
+<P>
+ 
+   The call,
+<P>
+ 
+<PRE>
+   CALL SYPOPC ( 'BARDEEN', TABSYM, TABPTR, TABVAL, VALUE, FOUND )
+</PRE>
+   results in the symbol table:
+<P>
+ 
+<PRE>
+   BARDEEN    --&gt;  SUPERCONDUCTIVITY
+   EINSTEIN   --&gt;  GENERAL RELATIVITY
+                   BROWNIAN MOTION
+                   PHOTOELECTRIC EFFECT
+   FERMI      --&gt;  NUCLEAR FISSION
+   MILLIKAN   --&gt;  ELECTRIC CHARGE
+                   PHOTOELECTRIC EFFECT
+   STRASSMAN  --&gt;  NUCLEAR FISSION
+</PRE>
+   If there are no remaining values associated with the symbol after VALUE
+   has been popped, the symbol is removed from the symbol table.
+<P>
+ 
+<BR><BR>
+<A NAME="Obtaining values associated with a symbol"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Obtaining values associated with a symbol
+</H3><P><BR><BR>
+   Some symbol table routines exist to obtain values associated with a
+   particular symbol. All of the values can be obtained, a subset of the
+   values, or just a particular value associated with a symbol. The
+   routines to do this are GET, SEL, and NTH respectively. These routines
+   do not modify the symbol tables. To obtain all the values associated
+   with the symbol `EINSTEIN' use the GET routine.
+<P>
+ 
+   Calling the GET routine,
+<P>
+ 
+<PRE>
+   CALL SYGETC
+   ( 'EINSTEIN', TABSYM, TABPTR, TABVAL, N, VALUES, FOUND )
+</PRE>
+   returns the following information about the symbol:
+<P>
+ 
+<DL><DT>
+<B>
+ N
+</B><BR><BR>
+<DD>
+ the number of values returned<BR>
+</DL>
+<DL><DT>
+<B>
+ VALUES
+</B><BR><BR>
+<DD>
+ an array containing the symbol's values<BR>
+</DL>
+<DL><DT>
+<B>
+ FOUND
+</B><BR><BR>
+<DD>
+ indicates whether or not the symbol was found in the symbol table<BR>
+</DL>
+   The following information is returned for the symbol `EINSTEIN':
+<P>
+ 
+<PRE>
+   N        3
+ 
+   VALUES   GENERAL RELATIVITY
+            BROWNIAN MOTION
+            PHOTOELECTRIC EFFECT
+ 
+   FOUND    TRUE
+</PRE>
+<BR><BR>
+<A NAME="Reordering the values associated with a symbol"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Reordering the values associated with a symbol
+</H3><P><BR><BR>
+   Two routines exist for reordering the values associated with a symbol.
+   The routine ORD will order the values in increasing order from the first
+   value to the last. Character values are ordered according to the ASCII
+   collating sequence. The second routine, TRN, transposes two values
+   associated with a symbol.
+<P>
+ 
+   Calling the ORD routine to order the values associated with the symbol
+   `EINSTEIN',
+<P>
+ 
+<PRE>
+   CALL SYORDC ( 'EINSTEIN', TABSYM, TABPTR, TABVAL )
+</PRE>
+   the contents of the symbol table are modified to be:
+<P>
+ 
+<PRE>
+   BARDEEN    --&gt;  SUPERCONDUCTIVITY
+   EINSTEIN   --&gt;  BROWNIAN MOTION
+                   GENERAL RELATIVITY
+                   PHOTOELECTRIC EFFECT
+   FERMI      --&gt;  NUCLEAR FISSION
+   MILLIKAN   --&gt;  ELECTRIC CHARGE
+                   PHOTOELECTRIC EFFECT
+   STRASSMAN  --&gt;  NUCLEAR FISSION
+</PRE>
+   In order to transpose the first and second value associated with the
+   symbol `MILLIKAN', use the TRN routine.
+<P>
+ 
+   The call,
+<P>
+ 
+<PRE>
+   CALL SYTRNC ( 'MILLIKAN', 1, 2, TABSYM, TABPTR, TABVAL )
+</PRE>
+   Changes the symbol table to look like this:
+<P>
+ 
+<PRE>
+   BARDEEN    --&gt;  SUPERCONDUCTIVITY
+   EINSTEIN   --&gt;  BROWNIAN MOTION
+                   GENERAL RELATIVITY
+                   PHOTOELECTRIC EFFECT
+   FERMI      --&gt;  NUCLEAR FISSION
+   MILLIKAN   --&gt;  PHOTOELECTRIC EFFECT
+                   ELECTRIC CHARGE
+   STRASSMAN  --&gt;  NUCLEAR FISSION
+</PRE>
+<BR><BR>
+<A NAME="Determining the dimension of a symbol"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Determining the dimension of a symbol
+</H3><P><BR><BR>
+   The integer function DIM exists for determining how many values are
+   associated with a symbol. (Note that the DIM function does not modify
+   the symbol table.)
+<P>
+ 
+   The code,
+<P>
+ 
+<PRE>
+   NUMSUB = SYDIMC ( 'EINSTEIN', TABSYM, TABPTR, TABVAL )
+</PRE>
+   returns the value of 3 for NUMSUB.
+<P>
+ 
+<BR><BR>
+<A NAME="Three Letter Mnemonics used in Subroutine Names"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Three Letter Mnemonics used in Subroutine Names
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The following is a list of the three letter mnemonics and their related
+   functions.
+<P>
+ 
+<DL><DT>
+<B>
+ DEL
+</B><BR><BR>
+<DD>
+ delete a symbol<BR>
+</DL>
+<DL><DT>
+<B>
+ DIM
+</B><BR><BR>
+<DD>
+ return the dimension of a symbol (function)<BR>
+</DL>
+<DL><DT>
+<B>
+ DUP
+</B><BR><BR>
+<DD>
+ duplicate a symbol<BR>
+</DL>
+<DL><DT>
+<B>
+ ENQ
+</B><BR><BR>
+<DD>
+ enque a value onto an existing symbol<BR>
+</DL>
+<DL><DT>
+<B>
+ FET
+</B><BR><BR>
+<DD>
+ fetch the name of the Nth symbol<BR>
+</DL>
+<DL><DT>
+<B>
+ GET
+</B><BR><BR>
+<DD>
+ return all of the values associated with a symbol<BR>
+</DL>
+<DL><DT>
+<B>
+ NTH
+</B><BR><BR>
+<DD>
+ return the Nth value associated with a symbol<BR>
+</DL>
+<DL><DT>
+<B>
+ ORD
+</B><BR><BR>
+<DD>
+ order the values associated with a symbol<BR>
+</DL>
+<DL><DT>
+<B>
+ POP
+</B><BR><BR>
+<DD>
+ pop a value associated with a symbol<BR>
+</DL>
+<DL><DT>
+<B>
+ PSH
+</B><BR><BR>
+<DD>
+ push a value onto a symbol<BR>
+</DL>
+<DL><DT>
+<B>
+ PUT
+</B><BR><BR>
+<DD>
+ create a symbol with several associated values<BR>
+</DL>
+<DL><DT>
+<B>
+ REN
+</B><BR><BR>
+<DD>
+ rename an existing symbol<BR>
+</DL>
+<DL><DT>
+<B>
+ SET
+</B><BR><BR>
+<DD>
+ create a symbol with one associated value<BR>
+</DL>
+<DL><DT>
+<B>
+ SEL
+</B><BR><BR>
+<DD>
+ select a subset of values associated with a symbol<BR>
+</DL>
+<DL><DT>
+<B>
+ TRN
+</B><BR><BR>
+<DD>
+ transpose two values associated with a symbol<BR>
+</DL>
+<BR><BR>
+<A NAME="Calling Sequences"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Calling Sequences
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The following is a list of the calling sequences of the generic symbol
+   table routines in SPICELIB.
+<P>
+ 
+   Subroutines:
+<P>
+ 
+<PRE>
+   SYDELx  ( NAME, TABSYM, TABPTR, TABVAL )
+ 
+   SYDUPx  ( NAME, COPY, TABSYM, TABPTR, TABVAL )
+ 
+   SYENQx  ( NAME, VALUE, TABSYM, TABPTR, TABVAL )
+ 
+   SYFETx  ( NTH, TABSYM, TABPTR, TABVAL, NAME, FOUND )
+ 
+   SYGETx  ( NAME, TABSYM, TABPTR, TABVAL, N, VALUES, FOUND )
+ 
+   SYNTHx  ( NAME, NTH, TABSYM, TABPTR, TABVAL, VALUE, FOUND )
+ 
+   SYORDx  ( NAME, TABSYM, TABPTR, TABVAL )
+ 
+   SYPOPx  ( NAME, TABSYM, TABPTR, TABVAL, VALUE, FOUND )
+ 
+   SYPSHx  ( NAME, VALUE, TABSYM, TABPTR, TABVAL )
+ 
+   SYPUTx  ( NAME, VALUES, N, TABSYM, TABPTR, TABVAL )
+ 
+   SYRENx  ( OLD, NEW, TABSYM, TABPTR, TABVAL )
+ 
+   SYSELx  ( NAME, BEGIN, END, TABSYM, TABPTR, TABVAL, VALUES, FOUND )
+ 
+   SYSETx  ( NAME, VALUE, TABSYM, TABPTR, TABVAL )
+ 
+   SYTRNx  ( NAME, I, J, TABSYM, TABPTR, TABVAL )
+</PRE>
+   Functions:
+<P>
+ 
+<PRE>
+   SYDIMx  ( NAME, TABSYM, TABPTR, TABVAL )
+</PRE>
+
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+
+</BODY>
+
+</HTML>

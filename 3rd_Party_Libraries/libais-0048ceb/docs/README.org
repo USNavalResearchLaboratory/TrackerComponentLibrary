@@ -1,0 +1,9 @@
+* Notes for docs
+
+Please see http://catb.org/gpsd/AIVDM.html or [[https://www.itu.int/rec/R-REC-M.1371/en][ITU 1371]] for the details of messages.
+
+** mid.csv
+
+The prefix is used as DAC for binary messages or as the 1st three of the MMSI.
+
+http://www.itu.int/online/mms/glad/cga_mids.sh?lng=E

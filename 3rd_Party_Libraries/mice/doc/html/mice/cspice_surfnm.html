@@ -1,0 +1,187 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_surfnm</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_surfnm</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SURFNM computes the double precision, outward-pointing
+   normal unit 3-vector at a point defined on the surface of an
+   ellipsoid.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      a,       the scalar double precision values of the ellipsoid's
+      b,       triaxial radii ellipsoid, where:
+      c
+                  'a' is length in kilometers of the semi-axis of the ellipsoid
+                   parallel to the x-axis of the body-fixed reference frame
+
+                  'b' is length in kilometers of the semi-axis of the ellipsoid
+                   parallel to the y-axis of the body-fixed reference frame
+
+                  'c' is length in kilometers of the semi-axis of the ellipsoid
+                   parallel to the z-axis of the body-fixed reference frame
+
+      point   a double precision 3-vector or a 3xN array of 3-vectors defining
+              some location(s) on the ellipsoid
+
+   the call:
+
+      normal = <b>cspice_surfnm</b>( a, b, c, point)
+
+   returns:
+
+      normal   a double precision unit 3-vector or 3XN array of unit vectors
+               normal to the ellipsoid at 'point' in the direction away
+               from the ellipsoid
+
+               'normal' returns with the same vectorization measure (N)
+                as 'point'.
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Define the radii of an ellipsoid.
+      %
+      a  =  1.;
+      b  =  2.;
+      c  =  3.;
+
+      %
+      % Select a set of locations, three 3-vectors.
+      %
+      point = [ [ 0.; 0.; 3.], [ 0.; 2.; 0.], [-1; 0; 0] ];
+
+      %
+      % Calculate the surface normal to the ellipsoid at 'point'.
+      %
+      out_norm = <b>cspice_surfnm</b>( a, b, c, point)
+
+   MATLAB outputs:
+
+      out_norm =
+
+           0     0    -1
+           0     1     0
+           1     0     0
+
+      Three 3-vectors:
+         the normal at (0,0,3) equals (0,0,1)
+         the normal at (0,2,0) equals (0,0,1)
+         the normal at (-1,0,0) equals (-1,0,0)
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/surfnm_c.html">surfnm_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 15-JUN-2006, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   surface normal vector on an ellipsoid
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:38 2014</pre>
+
+</body>
+</html>
+

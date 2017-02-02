@@ -1,0 +1,358 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>repmot_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>repmot_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void repmot_c ( ConstSpiceChar   * in,
+                   ConstSpiceChar   * marker,
+                   SpiceInt           value,
+                   SpiceChar          repcase,
+                   SpiceInt           lenout,
+                   SpiceChar        * out      ) 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Replace a marker with the text representation of an ordinal number.
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   CHARACTER 
+   CONVERSION 
+   STRING 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   VARIABLE  I/O  DESCRIPTION 
+   --------  ---  -------------------------------------------------- 
+   in         I   Input string. 
+   marker     I   Marker to be replaced. 
+   value      I   Replacement value.
+   repcase    I   Case of replacement text. 
+   lenout     I   Available space in output string.
+   out        O   Output string. 
+   MAXLON     P   Maximum length of an ordinal number. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   in             is an arbitrary character string. 
+ 
+   marker         is an arbitrary character string. The first 
+                  occurrence of marker in the input string is 
+                  to be replaced by the text representation of 
+                  the ordinal number value. 
+ 
+                  Leading and trailing blanks in marker are not 
+                  significant. In particular, no substitution is 
+                  performed if marker is blank or empty. 
+ 
+   value          is an arbitrary integer. 
+ 
+   repcase        indicates the case of the replacement text. 
+                  repcase may be any of the following: 
+ 
+                     repcase   Meaning       Example 
+                     -------   -----------   ----------------------- 
+                     U, u      Uppercase     ONE HUNDRED FIFTY-THREE 
+ 
+                     L, l      Lowercase     one hundred fifty-three 
+ 
+                     C, c      Capitalized   One hundred fifty-three 
+ 
+   lenout         is the allowed length of the output string.  This
+                  length must large enough to hold the output string
+                  plus the terminator.  If the output string is
+                  expected to have x characters, lenout should be at
+                  least x + 1. </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   out            is the string obtained by substituting the text 
+                  representation of the ordinal number value for 
+                  the first occurrence of marker in the input string. 
+ 
+                  out and in must be identical or disjoint. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   MAXLON         is the maximum expected length of any ordinal 
+                  text. 147 characters are sufficient to hold the 
+                  text representing any ordinal value whose 
+                  corresponding ordinal value is in the range 
+ 
+                    ( -10**12, 10**12 ) 
+ 
+                  An example of a number whose ordinal text 
+                  representation is of maximum length is 
+ 
+                     - 777 777 777 777 </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1) The error SPICE(NULLPOINTER) is signaled if any of 
+      the input or output string pointers is null.
+
+   2) If the marker string is blank or empty, this routine leaves 
+      the input string unchanged, except that trailing blanks
+      will be trimmed.  This case is not considered an error.
+
+   3) If the output string is too short to accommodate a terminating
+      null character, the error SPICE(STRINGTOOSHORT) is signaled.
+
+   4) If out does not have sufficient length to accommodate the 
+      result of the substitution, the result will be truncated on 
+      the right. 
+ 
+   5) If the value of repcase is not recognized, the error 
+      will be diagnosed by routines in the call tree of this 
+      routine.  out is not changed. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   This is one of a family of related routines for inserting values 
+   into strings. They are typically to construct messages that 
+   are partly fixed, and partly determined at run time. For example, 
+   a message like 
+ 
+      &quot;The fifty-first picture was found in directory [USER.DATA].&quot; 
+ 
+   might be constructed from the variable string 
+ 
+      &quot;The #1 picture was found in directory #2.&quot; 
+ 
+   by the calls 
+ 
+      <b>repmot_c</b> ( string, &quot;#1&quot;,  51,  'L',      LENOUT, string );
+      <a href="repmc_c.html">repmc_c</a>  ( string, &quot;#2&quot;, &quot;[USER.DATA]&quot;,  LENOUT, string );
+ 
+   which substitute the ordinal text &quot;fifty-first&quot; and the character 
+   string &quot;[USER.DATA]&quot; for the markers &quot;#1&quot; and &quot;#2&quot; respectively. 
+ 
+   The complete list of routines is shown below. 
+ 
+      <a href="repmc_c.html">repmc_c</a>  ( Replace marker with character string value ) 
+      <a href="repmd_c.html">repmd_c</a>  ( Replace marker with double precision value ) 
+      <a href="repmf_c.html">repmf_c</a>  ( Replace marker with formatted d.p. value   ) 
+      <a href="repmi_c.html">repmi_c</a>  ( Replace marker with integer value          ) 
+      <a href="repmct_c.html">repmct_c</a> ( Replace marker with cardinal text          ) 
+      <b>repmot_c</b> ( Replace marker with ordinal text           ) 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   The following examples illustrate the use of <b>repmot_c</b> to 
+   replace a marker within a string with the ordinal text 
+   corresponding to an integer. 
+ 
+   Uppercase 
+   --------- 
+ 
+      Let 
+ 
+         marker = &quot;#&quot; 
+         in     = &quot;Invalid command.  The # word was not recognized.&quot; 
+ 
+      Then following the call, 
+              .
+              .
+              .
+         #define   LENOUT                  201
+              .
+              .
+              .
+         <b>repmot_c</b> ( in, &quot;#&quot;, 5, 'U', LENOUT, in );
+  
+      in is 
+ 
+         &quot;Invalid command.  The FIFTH word was not recognized.&quot; 
+ 
+   Lowercase 
+   --------- 
+ 
+      Let 
+ 
+         marker = &quot; XX &quot; 
+         in     = &quot;The XX word of the XX sentence was misspelled.&quot; 
+ 
+      Then following the call, 
+ 
+         <b>repmot_c</b> ( in, &quot;  XX  &quot;, 5, 'L', LENOUT, out );
+ 
+      OUT is 
+ 
+         &quot;The fifth word of the XX sentence was misspelled.&quot; 
+ 
+ 
+   Capitalized 
+   ----------- 
+ 
+      Let 
+ 
+         marker == &quot; XX &quot; 
+         in     == &quot;Name:  YY.  Rank:  XX.&quot; 
+ 
+      Then following the calls, 
+ 
+        #include &quot;SpiceUsr.h&quot;
+              .
+              .
+              .
+         #define   LENOUT                  201
+              .
+              .
+              .
+         <a href="repmc_c.html">repmc_c</a>  ( in,  &quot;YY&quot;, &quot;Moriarty&quot;, LENOUT, out );
+         <a href="repmct_c.html">repmct_c</a> ( out, &quot;XX&quot;,  1,  'C',   LENOUT, out );
+
+      out is 
+
+         &quot;Name:  Moriarty.  Rank:  First.&quot; 
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   1) value must be in the range accepted by subroutine intord_. 
+      This range is currently 
+ 
+         ( -10**12, 10**12 ) 
+ 
+      Note that the endpoints of the interval are excluded. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman   (JPL) 
+   I.M. Underwood (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 14-AUG-2002 (NJB) (IMU)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   replace marker with ordinal text 
+ </PRE>
+<h4>Link to routine repmot_c source file <a href='../../../src/cspice/repmot_c.c'>repmot_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:41 2014</pre>
+
+</body>
+</html>
+

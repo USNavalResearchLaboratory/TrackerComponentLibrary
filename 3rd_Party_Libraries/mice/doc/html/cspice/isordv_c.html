@@ -1,0 +1,257 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>isordv_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>isordv_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   SpiceBoolean isordv_c ( ConstSpiceInt  * array,
+                           SpiceInt         n      ) 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Determine whether an array of n items contains the integers 
+   0 through n-1. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   SEARCH 
+   SORT 
+   UTILITY 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   array      I   Array of integers. 
+   n          I   Number of integers in array. 
+ 
+   The function returns SPICETRUE if the array contains the integers 
+   0 through n-1, otherwise it returns SPICEFALSE. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   array      is an array of integers.  Often this will be an array 
+              that is a candidate order vector to be passed to 
+              a routine for re-ordering some parallel array. 
+ 
+   n          is the number of elements in array. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   The function returns SPICETRUE if the array contains the integers 
+   1 through n.  Otherwise it returns SPICEFALSE. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+  
+   1) If n &lt; 1, the function returns SPICEFALSE.
+
+   2) If memory is not available to create a local copy of the order
+      vector, the error SPICE(MALLOCFAILED) is signaled.
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   This function provides a simple means of determining whether 
+   or not an array of n integers contains exactly the integers 
+   0 through n-1.  An array with this property is called an
+   &quot;order vector.&quot;  Order vectors are returned by the CSPICE
+   routines
+
+      <a href="orderc_c.html">orderc_c</a>
+      <a href="orderd_c.html">orderd_c</a>
+      <a href="orderi_c.html">orderi_c</a>
+
+   and are accepted as input by the CSPICE routines
+
+      <a href="reordc_c.html">reordc_c</a>
+      <a href="reordd_c.html">reordd_c</a>
+      <a href="reordi_c.html">reordi_c</a>
+      <a href="reordl_c.html">reordl_c</a>
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   1) Suppose you wished to reorder an array of strings based upon 
+      a ranking array supplied by a user.  If the ranking array 
+      contains any duplicates or refers to indices that are out 
+      of the range of valid indices for the array of strings, 
+      the attempt to reorder the array of strings cannot succeed. 
+      Its usually better to detect such a possibility before 
+      you begin trying to reorder the array of strings.  This routine 
+      will detect the error. 
+ 
+      The code fragment below illustrates this idea. 
+ 
+         #include &quot;SpiceUsr.h&quot;
+                  . 
+                  . 
+                  . 
+           
+         if ( <b>isordv_c</b> ( ordvec, n ) )  
+         {
+            ...reorder the input array of strings 
+ 
+            <a href="reordc_c.html">reordc_c</a> ( ordvec, n, lenvals, strings );
+         }
+         else 
+         { 
+            ...state the problem and let the user decide what 
+            to do about it. 
+                  . 
+                  . 
+                  . 
+         } 
+  </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman   (JPL) 
+   W.L. Taber     (JPL) 
+   I.M. Underwood (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.1.0, 16-FEB-2005 (NJB)  
+
+      Bug fix:  dynamic memory is now freed.
+
+   -CSPICE Version 1.0.0, 10-JUL-2002 (NJB) (WLT) (IMU)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   test whether an integer array is an order vector 
+ </PRE>
+<h4>Link to routine isordv_c source file <a href='../../../src/cspice/isordv_c.c'>isordv_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:36 2014</pre>
+
+</body>
+</html>
+

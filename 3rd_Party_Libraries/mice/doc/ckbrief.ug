@@ -1,0 +1,742 @@
+ 
+CKBRIEF User's Guide
+===========================================================================
+ 
+   Last revised on 2012 MAR 26 by B. V. Semenov.
+ 
+ 
+Abstract
+--------------------------------------------------------
+ 
+   CKBRIEF is a command-line utility program that displays a contents and
+   time coverage summary for one or more binary CK files.
+ 
+ 
+Summary
+--------------------------------------------------------
+ 
+   CKBRIEF is a command line program that displays a summary of the
+   contents and time coverage for one or more binary CK files. The program
+   displays a summary for each CK file listed on the command line, in a
+   list file, and/or a meta-kernel. It can display coverage boundaries as
+   ephemeris time (ET) in calendar format, as UTC time in
+   ``year-month-day'' or ``day-of-year'' format, or as on-board clock
+   (SCLK) time in string or encoded format. It can display the summary in a
+   variety of formats, with or without showing the names of the frames
+   associated with spacecraft or structure IDs or the names/IDs of the
+   frames with respect to which orientation is provided.
+ 
+ 
+Usage
+--------------------------------------------------------
+ 
+   CKBRIEF is a command line program with the following usage:
+ 
+      ckbrief [-options] file [file ...]
+ 
+   where [file]s are binary CK files and text kernels needed to support
+   time conversion (LSK and SCLKs), or containing frame definitions (FKs),
+   provided in any order. The options are:
+ 
+      -dump        display interpolation intervals boundaries
+      -nm          display segment boundaries
+ 
+      -rel         display relative-to frames
+      -n           display frames associated with structure IDs
+ 
+      -t           display summary in a tabular format
+      -a           treat all files as a single file
+      -g           display summary grouped by coverage
+ 
+      -utc         display times in UTC calendar date format
+      -utcdoy      display times in UTC day-of-year format
+      -sclk        display times as SCLK strings
+      -dpsclk      display times as SCLK ticks
+ 
+      [ID]         display summary for structure with [ID]
+ 
+      -f [list]    summarize kernels listed in the [list] file
+ 
+      -h           display help
+      -v           display version
+ 
+   The options can be provided in any order and can appear before, after,
+   or intermixed with file names. The case of option keys is significant --
+   they must be lowercase as shown above. While any option can be provided
+   together with any other option or a combination of options, some options
+   will override others. For specific information on this refer to the
+   sections of this document describing individual options in detail.
+ 
+   If the command line is blank, the program displays usage. If the command
+   line contains a token that is not the name of an existing file or a
+   recognized option, the program displays help.
+ 
+ 
+Helpful Hints for Those in a Hurry
+--------------------------------------------------------
+ 
+   This list contains a few quick suggestions about options that would be
+   most appropriate for common summary tasks:
+ 
+       --   use shell filename substitution capabilities to provide
+            multiple file names on the command line, e.g. ``*.bc'' will be
+            expanded into the list of all binary CK files in the current
+            directory by most shells
+ 
+       --   always provide LSK and SCLK files because they are required to
+            display times in ET (default), UTC, and SCLK string formats
+ 
+       --   use ``-dump'' to see boundaries of interpolation intervals --
+            the actual periods for which CK segments provide continuous
+            coverage
+ 
+       --   use ``-n'' to see the names of the frames associated with
+            structure IDs for which CK files contain data; an FK file(s)
+            defining these frames must be provided to the program
+ 
+       --   use ``-rel'' to see the names of the frames with respect to
+            which CK files contain data; an FK file(s) defining these
+            frames must be provided to the program
+ 
+       --   use both ``-n'' and ``-rel'' to see the frames associated with
+            structure IDs and the frames with respect to which the CK files
+            provide data in the same summary
+ 
+       --   use ``-utc'' or ``-utcdoy'' and provide LSK and SCLK files to
+            display times in UTC
+ 
+       --   use ``-sclk'' and provide LSK and SCLK files to display times
+            as SCLK strings
+ 
+       --   use ``-t'' in combination with any other options for a more
+            legible summary format
+ 
+       --   use ``-a'' treat all CK files listed on the command line and/or
+            provided in meta-kernels and/or a list file as a single CK file
+ 
+       --   use ``-f'' with a list file to summarize large sets of kernels,
+            the names of which cannot be listed on the command line all at
+            the same time
+ 
+ 
+Ways to Provide File Names
+--------------------------------------------------------
+ 
+   CKBRIEF supports three ways to provide the names of the CK files to be
+   summarized:
+ 
+       1.   by listing them on the command line
+ 
+       2.   by getting them from a meta-kernel(s) provided on the command
+            line and/or in a list file
+ 
+       3.   by listing them in a list file provided with the ``-f'' option
+            (see ``Summarizing Kernels Listed in a File'' for more details)
+ 
+   In most cases CKBRIEF requires some text kernels to be provided in
+   addition to the CK files to be summarized -- LSK and SCLK files to
+   support time conversions, and FK files to provide frame definitions. The
+   names of the text kernels may be provided in the same way as the names
+   of the files to be summarized -- on the command line, in a list file, or
+   in a meta-kernel(s).
+ 
+ 
+Default Summary Format
+--------------------------------------------------------
+ 
+   By default, when no options are specified, CKBRIEF displays summary
+   information as a set of blocks, one for each CK file, in the order in
+   which the files were provided on the command line and/or listed in the
+   meta-kernels and/or the list file. Each block contains one or more
+   tables showing the ``total'' coverage begin and end times for each of
+   the structures for which data is provided in the file. The numeric ID of
+   the structure is listed at the top of the table. The table header
+   consists of the column heading line, indicating the time tag type, and a
+   line of separating dashes. The table data consists of one or more
+   coverage summary lines providing the begin and end times for coverage
+   periods along with a flag indicating whether angular velocities are
+   included in the file. These coverage periods are based on the segment
+   descriptor information rather than on interpolation intervals from the
+   file segments, meaning that there may be gaps within these coverage
+   periods. The coverage begin and end times are displayed as calendar ET
+   in the ``YYYY-MON-DD HR:MN:SC.DDD'' format. The angular velocity flag is
+   set to ``Y'' if all segments for this ID contain angular velocity data.
+   It is set to ``N'' if none of the segments for this ID contains angular
+   velocity data. And it is set to ``*'' if some segments for this ID
+   contain angular velocity while others don't.
+ 
+   The example below illustrates CKBRIEF's default output. This example
+   should be used as a reference when examining the examples in later
+   sections of this document discussing various options. The output summary
+   lines in this example and all other examples in this document were
+   truncated to 69 characters to fit in the maximum page width allowed for
+   this User's Guide.
+ 
+   If CKBRIEF is run to display the default summary for two binary CK files
+   -- ``m01_sc.bc'', containing orientation data for the 2001 Mars Odyssey
+   (M01) spacecraft and ``m01_hga.bc'', containing orientation data for the
+   M01 High Gain Antenna (HGA), -- with the LSK file ``naif0009.tls'' and
+   the SCLK file ``m01.tsc'' files provided to support time conversions, it
+   will generate the following summary:
+ 
+      > ckbrief m01_sc.bc m01_hga.bc m01.tsc naif0009.tls
+ 
+      CKBRIEF -- Version 5.0.0, February 11, 2009 -- Toolkit Version N0062
+ 
+ 
+      Summary for: m01_sc.bc
+ 
+      Object:  -53000
+        Interval Begin ET        Interval End ET          AV
+        ------------------------ ------------------------ ---
+        2007-JAN-01 00:01:08.296 2007-APR-01 00:01:01.564 Y
+ 
+ 
+      Summary for: m01_hga.bc
+ 
+      Object:  -53211
+        Interval Begin ET        Interval End ET          AV
+        ------------------------ ------------------------ ---
+        2007-JAN-01 00:01:57.468 2007-MAR-31 23:58:58.431 Y
+ 
+      Object:  -53212
+        Interval Begin ET        Interval End ET          AV
+        ------------------------ ------------------------ ---
+        2007-JAN-01 00:01:57.468 2007-MAR-31 23:58:58.431 Y
+ 
+ 
+ 
+Options Controlling Output Summary Format
+--------------------------------------------------------
+ 
+   While the default summary format is adequate in many cases, the
+   information provided in it is insufficient for requests concerning the
+   segment or interpolation interval boundaries or frames associated with
+   the structure IDs, or used as the reference for the CK data. To alter
+   the type of coverage (``total'' vs. ``segments'' vs. ``intervals''), the
+   format, and the order of records in the displayed summary, and to
+   include frame information in the summaries, CKBRIEF provides a number of
+   options described in this section.
+ 
+ 
+Displaying Interpolation Intervals (``-dump'')
+ 
+   The ``-dump'' option tells CKBRIEF to display a summary of interpolation
+   interval boundaries -- the actual time periods for which the file
+   provides data -- for each of the segments in the file, as seen in this
+   example:
+ 
+      > ckbrief -dump m01_sc.bc m01.tsc naif0009.tls
+ 
+      CKBRIEF -- Version 5.0.0, February 11, 2009 -- Toolkit Version N0062
+ 
+ 
+      Summary for: m01_sc.bc
+ 
+      Segment No.: 1
+ 
+      Object:  -53000
+        Interval Begin ET        Interval End ET          AV
+        ------------------------ ------------------------ ---
+        2007-JAN-01 00:01:08.296 2007-JAN-01 06:35:52.430 Y
+        2007-JAN-01 06:40:16.430 2007-JAN-01 12:54:46.269 Y
+        2007-JAN-01 12:58:16.269 2007-JAN-03 06:27:52.809 Y
+        2007-JAN-03 06:28:58.809 2007-JAN-03 06:30:46.808 Y
+        2007-JAN-03 06:35:16.808 2007-JAN-03 06:42:04.803 Y
+      ...
+ 
+      Segment No.: 18
+ 
+      Object:  -53000
+        Interval Begin ET        Interval End ET          AV
+        ------------------------ ------------------------ ---
+        2007-MAR-29 04:20:23.895 2007-MAR-29 18:36:23.126 Y
+        2007-MAR-29 19:17:35.110 2007-MAR-29 20:32:13.677 Y
+        2007-MAR-29 20:34:05.075 2007-APR-01 00:01:01.564 Y
+ 
+ 
+ 
+Displaying Segment Boundaries (``-nm'')
+ 
+   The ``-nm'' option tells CKBRIEF to display a summary of segment
+   boundaries for each of the structures in the file, as seen in this
+   example:
+ 
+      > ckbrief -nm m01_hga.bc m01.tsc naif0009.tls
+ 
+      CKBRIEF -- Version 5.0.0, February 11, 2009 -- Toolkit Version N0062
+ 
+ 
+      Summary for: m01_hga.bc
+ 
+      Object:  -53211
+        Interval Begin ET        Interval End ET          AV
+        ------------------------ ------------------------ ---
+        2007-JAN-01 00:01:57.468 2007-MAR-15 11:53:47.032 Y
+        2007-MAR-15 11:53:47.032 2007-MAR-31 23:58:58.431 Y
+ 
+      Object:  -53212
+        Interval Begin ET        Interval End ET          AV
+        ------------------------ ------------------------ ---
+        2007-JAN-01 00:01:57.468 2007-MAR-15 11:53:47.032 Y
+        2007-MAR-15 11:53:47.032 2007-MAR-31 23:58:58.431 Y
+ 
+ 
+   As with the default summary, the coverage displayed in this summary is
+   based on segment descriptor information rather than on interpolation
+   intervals from the file segments, meaning that there may be gaps within
+   these coverage periods.
+ 
+ 
+Displaying Relative-to-Frames (``-rel'')
+ 
+   The ``-rel'' option tells CKBRIEF to display, in the additional
+   right-hand column, frames with respect to which the orientation is given
+   in the CK segments. For frames known to SPICE -- built-in or defined in
+   the FK files provided to the program along with CK, LSK, and SCLK files
+   -- the program displays names; for unrecognized frames, the program
+   displays IDs, as seen in these examples, only one of which loads the M01
+   FK file ``m01.tf'' defining M01 HGA frames:
+ 
+      > ckbrief -rel m01_hga.bc m01.tsc naif0009.tls
+ 
+      CKBRIEF -- Version 5.0.0, February 11, 2009 -- Toolkit Version N0062
+ 
+ 
+      Summary for: m01_hga.bc
+ 
+      Object:  -53211
+        Interval Begin ET        Interval End ET          AV  Relative to F
+        ------------------------ ------------------------ --- -------------
+        2007-JAN-01 00:01:57.468 2007-MAR-31 23:58:58.431 Y   -53210
+ 
+      Object:  -53212
+        Interval Begin ET        Interval End ET          AV  Relative to F
+        ------------------------ ------------------------ --- -------------
+        2007-JAN-01 00:01:57.468 2007-MAR-31 23:58:58.431 Y   -53211
+ 
+      > ckbrief -rel m01_hga.bc m01.tsc naif0009.tls m01.tf
+ 
+      CKBRIEF -- Version 5.0.0, February 11, 2009 -- Toolkit Version N0062
+ 
+ 
+      Summary for: m01_hga.bc
+ 
+      Object:  -53211
+        Interval Begin ET        Interval End ET          AV  Relative to F
+        ------------------------ ------------------------ --- -------------
+        2007-JAN-01 00:01:57.468 2007-MAR-31 23:58:58.431 Y   M01_HGA_BOOM
+ 
+      Object:  -53212
+        Interval Begin ET        Interval End ET          AV  Relative to F
+        ------------------------ ------------------------ --- -------------
+        2007-JAN-01 00:01:57.468 2007-MAR-31 23:58:58.431 Y   M01_HGA_INNER
+ 
+ 
+   If a CK file contains segments that provide data for the same structure
+   but with respect to different frames, the word ``MIXED'' is displayed in
+   the right column instead of the frame name or ID.
+ 
+ 
+Displaying Frames Associated with Structure IDs (``-n'')
+ 
+   The ``-n'' option tells CKBRIEF to display frame names associated with
+   the structure IDs instead of the numeric structure IDs. For frames known
+   to SPICE -- defined in the FK files provided to the program -- the
+   program displays names; for unrecognized frames, the program displays
+   IDs with the prefix ``NO FRAME FOR <id>'', as seen in these examples,
+   only one of which loads the M01 FK file ``m01.tf'' defining M01 HGA
+   frames:
+ 
+      > ckbrief -n m01_hga.bc m01.tsc naif0009.tls
+ 
+      CKBRIEF -- Version 5.0.0, February 11, 2009 -- Toolkit Version N0062
+ 
+ 
+      Summary for: m01_hga.bc
+ 
+      Frame:   NO FRAME FOR -53211
+        Interval Begin ET        Interval End ET          AV
+        ------------------------ ------------------------ ---
+        2007-JAN-01 00:01:57.468 2007-MAR-31 23:58:58.431 Y
+ 
+      Frame:   NO FRAME FOR -53212
+        Interval Begin ET        Interval End ET          AV
+        ------------------------ ------------------------ ---
+        2007-JAN-01 00:01:57.468 2007-MAR-31 23:58:58.431 Y
+ 
+ 
+      > ckbrief -n m01_hga.bc m01.tsc naif0009.tls m01.tf
+ 
+      CKBRIEF -- Version 5.0.0, February 11, 2009 -- Toolkit Version N0062
+ 
+ 
+      Summary for: m01_hga.bc
+ 
+      Frame:   M01_HGA_INNER_GIMBAL
+        Interval Begin ET        Interval End ET          AV
+        ------------------------ ------------------------ ---
+        2007-JAN-01 00:01:57.468 2007-MAR-31 23:58:58.431 Y
+ 
+      Frame:   M01_HGA_OUTER_GIMBAL
+        Interval Begin ET        Interval End ET          AV
+        ------------------------ ------------------------ ---
+        2007-JAN-01 00:01:57.468 2007-MAR-31 23:58:58.431 Y
+ 
+ 
+ 
+Displaying Summary in a Tabular Format (``-t'')
+ 
+   The ``-t'' option tells CKBRIEF to use the tabular display format in
+   which coverage information for all structures from each file is
+   presented in a single table with the structure IDs provided in the left
+   column rather than in the table headers, as seen in this example:
+ 
+      > ckbrief -t m01_hga.bc m01.tsc naif0009.tls
+ 
+      CKBRIEF -- Version 5.0.0, February 11, 2009 -- Toolkit Version N0062
+ 
+ 
+      Summary for: m01_hga.bc
+ 
+      Objects  Interval Begin ET        Interval End ET          AV
+      -------- ------------------------ ------------------------ ---
+      -53211   2007-JAN-01 00:01:57.468 2007-MAR-31 23:58:58.431 Y
+      -53212      -- same --               -- same --            Y
+ 
+ 
+ 
+Displaying Tabular Summary Grouped by Coverage (``-g'')
+ 
+   The ``-g'' option tells CKBRIEF to use the grouping display format, in
+   which information for structures with the same coverage is grouped
+   together into blocks with the coverage begin and end time shown first,
+   and the list of structure IDs shown below them, as seen in this example:
+ 
+      > ckbrief -g m01_hga.bc m01.tsc naif0009.tls
+ 
+      CKBRIEF -- Version 5.0.0, February 11, 2009 -- Toolkit Version N0062
+ 
+ 
+      Summary for: m01_hga.bc
+ 
+      Begin ET: 2007-JAN-01 00:01:57.468  End ET: 2007-MAR-31 23:58:58.431
+      Objects: -53211
+               -53212
+ 
+ 
+ 
+Specifying Multiple Options Controlling Output Format
+ 
+   When ``-dump'', ``-nm'', ``-rel'', ``-n'', ``-t'', and ``-g'' are
+   provided together, their effects are combined, resulting in a large
+   variety of display formats. They can be provided in any combination and,
+   in general, don't conflict, except in these cases:
+ 
+       --   ``-nm'' and ``-g'' are ignored when ``-dump'' is specified,
+ 
+       --   ``-rel'' is ignored when ``-g'' is specified
+ 
+       --   ``-g'' is ignored when ``-t'' is specified
+ 
+ 
+Options Controlling Output Time Format
+--------------------------------------------------------
+ 
+   CKBRIEF provides a number of options that can be used to change the
+   default output time tag format -- calendar ETs formatted as `YYYY-MON-DD
+   HR:MN:SC.DDD'' -- to another format. These options are ``-utc'' for UTC
+   times in the year-month-day day format, ``-utcdoy'' for UTC times in the
+   day-of-year format, ``-sclk'' for SCLK times in string format, and
+   ``-dpsclk'' for SCLK times in encoded format. The format chosen using
+   any of these options applies to all summaries -- default, interval dump,
+   grouped, etc.
+ 
+   In order for the program to display times in the default format or any
+   other format (except encoded SCLK), both an LSK file and an SCLK file
+   containing required time correlation data must be provided on the
+   command line, in a list file (specified with the option ``-f'' described
+   later in this document), or in a meta-kernel file given on the command
+   line or in the list file.
+ 
+   When multiple options controlling the output time format are given at
+   the same time, the option specified last on the command line takes
+   precedence.
+ 
+ 
+Displaying Times in UTC Calendar Date Format (``-utc'')
+ 
+   The ``-utc'' option tells CKBRIEF to display time tags as UTC in the
+   ``YYYY-MON-DD HR:MN:SC.DDD'' format, as seen in this example:
+ 
+      > ckbrief -utc m01_sc.bc m01.tsc naif0009.tls
+ 
+      CKBRIEF -- Version 5.0.0, February 11, 2009 -- Toolkit Version N0062
+ 
+ 
+      Summary for: m01_sc.bc
+ 
+      Object:  -53000
+        Interval Begin UTC       Interval End UTC         AV
+        ------------------------ ------------------------ ---
+        2007-JAN-01 00:00:03.112 2007-MAR-31 23:59:56.378 Y
+ 
+ 
+   Note the UTC tag format is identical to the format of ET times; the fact
+   that the tags are UTCs is reflected in the table header.
+ 
+ 
+Displaying Times in UTC Day-of-Year Format (``-utcdoy'')
+ 
+   The ``-utcdoy'' option tells CKBRIEF to display time tags as UTC times
+   in the ``YYYY-DOY // HR:MN:SC.DDD'' format, as seen in this example:
+ 
+      > ckbrief -utcdoy m01_sc.bc m01.tsc naif0009.tls
+ 
+      CKBRIEF -- Version 5.0.0, February 11, 2009 -- Toolkit Version N0062
+ 
+ 
+      Summary for: m01_sc.bc
+ 
+      Object:  -53000
+        Interval Begin UTC/DOY   Interval End UTC/DOY     AV
+        ------------------------ ------------------------ ---
+        2007-001 // 00:00:03.112 2007-090 // 23:59:56.378 Y
+ 
+ 
+ 
+Displaying Times as SCLK Strings (``-sclk'')
+ 
+   The ``-sclk'' option tells CKBRIEF to display time tags as SCLK strings,
+   as seen in this example:
+ 
+      > ckbrief -sclk m01_sc.bc m01.tsc naif0009.tls
+ 
+      CKBRIEF -- Version 5.0.0, February 11, 2009 -- Toolkit Version N0062
+ 
+ 
+      Summary for: m01_sc.bc
+ 
+      Object:  -53000
+        Interval Begin SCLK      Interval End SCLK        AV
+        ------------------------ ------------------------ ---
+        2/0852077102.124         2/0859853107.255         Y
+ 
+ 
+ 
+Displaying Times as Encoded SCLKs (``-dpsclk'')
+ 
+   The ``-dpsclk'' option tells CKBRIEF to display time tags as encoded
+   SCLKs (ticks), as seen in this example:
+ 
+      > ckbrief -dpsclk m01_sc.bc m01.tsc naif0009.tls
+ 
+      CKBRIEF -- Version 5.0.0, February 11, 2009 -- Toolkit Version N0062
+ 
+ 
+      Summary for: m01_sc.bc
+ 
+      Object:  -53000
+        Interval Begin TICKS     Interval End TICKS       AV
+        ------------------------ ------------------------ ---
+          218131739502.000000      220122396913.000000    Y
+ 
+ 
+   Note that only 14 significant digits of encoded SCLKs are printed in
+   this format. The digits past the 14th are printed as zeros even if they
+   are non-zero.
+ 
+ 
+Miscellaneous Options
+--------------------------------------------------------
+ 
+   CKBRIEF also provides a number of miscellaneous options; they are
+   described in this section.
+ 
+ 
+Summarizing Multiple CKs as a Single CK (``-a'')
+ 
+   The ``-a'' option tells CKBRIEF to display a summary for multiple CKs
+   listed on the command line and/or provided in meta-kernels and/or a list
+   file as if all data from these CKs were provided in a single CK file.
+   For example, with ``-a'' the program displays the following summary for
+   all M01 spacecraft mapping phase CKs provided in the current directory:
+ 
+      > ckbrief -a m01_sc_map*.bc naif0010.tls ORB1_SCLKSCET.00188.tsc
+ 
+      CKBRIEF -- Version 6.0.0, March 26, 2012 -- Toolkit Version N0065
+ 
+ 
+      Summary for: all CK files
+ 
+      Object:  -53000
+        Interval Begin ET        Interval End ET          AV
+        ------------------------ ------------------------ ---
+        2002-FEB-19 03:40:51.593 2002-APR-01 00:01:04.184 Y
+        2002-APR-01 01:54:10.680 2002-JUL-01 00:01:00.313 Y
+        2002-JUL-01 00:01:06.313 2002-OCT-01 00:01:03.869 Y
+        2002-OCT-01 00:01:09.572 2003-JAN-01 00:01:02.295 Y
+        2003-JAN-01 00:01:08.295 2003-APR-01 00:01:03.872 Y
+        2003-APR-01 00:01:09.872 2003-JUL-01 00:01:00.232 Y
+        2003-JUL-01 00:01:06.232 2003-OCT-01 00:00:58.672 Y
+        2003-OCT-01 00:01:04.672 2003-DEC-31 23:58:15.246 Y
+        2004-JAN-01 00:06:03.245 2004-APR-01 00:00:59.732 Y
+        2004-APR-01 00:01:05.626 2004-JUL-01 00:01:04.111 Y
+        2004-JUL-01 00:01:07.912 2004-OCT-01 00:01:03.147 Y
+ 
+   The ``-a'' option is especially useful to get a concise summary for
+   large numbers of CKs listed in a meta-kernel, as seen in this example
+   summarizing an archived MRO meta-kernel listing close to 300 CK files:
+ 
+      > ckbrief -a -n -t mro_2009_v06.tm
+ 
+      CKBRIEF -- Version 6.0.0, March 26, 2012 -- Toolkit Version N0064
+ 
+ 
+      Summary for: all CK files
+ 
+      Frames                     Interval Begin ET        Interval End ET
+      -------------------------- ------------------------ ----------------
+      MRO_HGA_INNER_GIMBAL       2008-DEC-29 23:31:01.692 2010-JAN-10 00:0
+      MRO_HGA_OUTER_GIMBAL          -- same --               -- same --
+      MRO_SAMX_INNER_GIMBAL         -- same --               -- same --
+      MRO_SAMX_OUTER_GIMBAL         -- same --               -- same --
+      MRO_SAPX_INNER_GIMBAL         -- same --               -- same --
+      MRO_SAPX_OUTER_GIMBAL         -- same --               -- same --
+      MRO_SPACECRAFT             2008-DEC-29 23:31:01.692 2009-OCT-27 00:0
+      MRO_SPACECRAFT             2009-OCT-27 00:02:06.264 2010-JAN-10 00:0
+      MRO_CRISM_ART              2009-JAN-01 05:56:09.145 2009-JAN-01 12:0
+      MRO_CRISM_ART              2009-JAN-02 01:16:14.080 2009-JAN-02 23:5
+      ...
+      MRO_CRISM_ART              2009-DEC-31 00:16:59.366 2009-DEC-31 22:4
+      MRO_MCS_AZ_GIMBAL          2009-JAN-01 00:01:06.184 2009-FEB-24 00:0
+      MRO_MCS_AZ_GIMBAL          2009-FEB-28 00:01:06.184 2009-MAR-01 00:0
+      ...
+      MRO_MCS_AZ_GIMBAL          2009-DEC-14 00:01:06.183 2010-JAN-01 00:0
+      MRO_MCS_EL_GIMBAL          2009-JAN-01 00:01:06.184 2009-FEB-24 00:0
+      MRO_MCS_EL_GIMBAL          2009-FEB-28 00:01:06.184 2009-MAR-01 00:0
+      ...
+      MRO_MCS_EL_GIMBAL          2009-DEC-14 00:01:06.183 2010-JAN-01 00:0
+ 
+ 
+Filtering for a Specified Structure ID (``[ID]'')
+ 
+   One or more (up to 100) structure IDs may be listed on the command line
+   to tell BRIEF to display summary information only for the specified
+   structure(s), as seen in this example:
+ 
+      > ckbrief -53000 m01_sc.bc m01_hga.bc m01.tsc naif0009.tls
+ 
+      CKBRIEF -- Version 5.0.0, February 11, 2009 -- Toolkit Version N0062
+ 
+ 
+      Summary for: m01_sc.bc
+ 
+      Object:  -53000
+        Interval Begin ET        Interval End ET          AV
+        ------------------------ ------------------------ ---
+        2007-JAN-01 00:01:08.296 2007-APR-01 00:01:01.564 Y
+ 
+ 
+      No data for specified objects in m01_hga.bc
+ 
+ 
+ 
+Summarizing Kernels Listed in a File (``-f [list]'')
+ 
+   The ``-f'' option tells CKBRIEF to display a summary for the files whose
+   names are listed in the text file ``list''. For example, when a text
+   file named ``ck_list.txt'' with the following contents
+ 
+      m01_sc.bc
+      m01_hga.bc
+ 
+   is provided to CKBRIEF using this option, the program displays a summary
+   for these two CKs as if they were provided on the command line:
+ 
+      > ckbrief -f ck_list.txt m01.tsc naif0009.tls
+ 
+      CKBRIEF -- Version 5.0.0, February 11, 2009 -- Toolkit Version N0062
+ 
+ 
+      Summary for: m01_hga.bc
+ 
+      Object:  -53211
+        Interval Begin ET        Interval End ET          AV
+        ------------------------ ------------------------ ---
+        2007-JAN-01 00:01:57.468 2007-MAR-31 23:58:58.431 Y
+ 
+      Object:  -53212
+        Interval Begin ET        Interval End ET          AV
+        ------------------------ ------------------------ ---
+        2007-JAN-01 00:01:57.468 2007-MAR-31 23:58:58.431 Y
+ 
+ 
+      Summary for: m01_sc.bc
+ 
+      Object:  -53000
+        Interval Begin ET        Interval End ET          AV
+        ------------------------ ------------------------ ---
+        2007-JAN-01 00:01:08.296 2007-APR-01 00:01:01.564 Y
+ 
+ 
+   This option is useful when there is a need to produce a summary for a
+   large number of files whose names, if put all together on the command
+   line, may overflow either the terminal shell buffer or CKBRIEF's command
+   line buffer. In such cases a simple listing of these files can be made
+   and provided to CKBRIEF using the ``-f'' option.
+ 
+   The list file name specified after ``-f'' must be separated from ``-f''
+   by one or more spaces, i.e. ``-f FILE'' not ``-fFILE''. The list file
+   may include only the names of binary CK files and text kernels. The file
+   names can be provided one-per-line or a few-per-line separated by one or
+   more spaces. The file may include blank lines. IMPORTANT: All lines in
+   the list file, including the last line, must be terminated with the line
+   terminators native to the computer platform on which the program is run.
+ 
+   When a list file is provided to the program, additional files to be
+   summarized can still be listed on the command line.
+ 
+   If ``-f'' is provided more than once, only the list file provided using
+   the last occurrence of this option is considered and all earlier ones
+   are ignored.
+ 
+ 
+Displaying Help and Version (``-h'' and ``-v'')
+ 
+   When run with a blank command line CKBRIEF displays a short usage
+   message listing only the most useful options.
+ 
+   The ``-h'' option tells CKBRIEF to display a more complete usage message
+   listing all options. This display is similar to the text provided in the
+   ``Usage'' section of this document. When ``-h'' is specified, CKBRIEF
+   ignores any other options and/or file names specified on the command
+   line.
+ 
+   The ``-v'' option tells CKBRIEF to display just the version line that is
+   normally displayed at the top of every summary produced by the program.
+   This option is ignored if ``-h'' or any file names are provided.
+ 
+ 
+Troubleshooting
+--------------------------------------------------------
+ 
+   In most cases of incorrect usage CKBRIEF displays an error message or an
+   information message indicating what went wrong. The exceptions are cases
+   of the command line buffer overflow and coverage data buffer overflow.
+ 
+   The CKBRIEF command line buffer can hold up to 25,000 characters. If the
+   command line is longer than 25,000 characters it gets truncated. The
+   truncation most frequently happens in the middle of a file name
+   resulting in the ``SPICE(FILENOTFOUND)'' error being signaled. To fix
+   this situation the number of files provided on the command line should
+   be reduced, or a list file listing all required files should be created
+   and provided with the ``-f'' option.
+ 
+   When CKBRIEF coverage information buffers overflow due to too many
+   segments present in a file (for any summary run) or too many intervals
+   present in a single segment (for summaries with ``-dump''), CKBRIEF
+   displays the ``SPICE(BUFFEROVERRUN1/2)'' or the ``SPICE(WINDOWEXCESS)''
+   error. If this happens, the user must contact NAIF because the situation
+   cannot be fixed by the user.
+ 

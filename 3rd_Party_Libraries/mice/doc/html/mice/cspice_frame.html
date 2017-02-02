@@ -1,0 +1,220 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_frame</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_frame</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_FRAME builds a right handed orthonormal frame x, y, z,
+   given an input vector 'vec' where the output vector 'x'
+   is parallel to the original input vector.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      vec   the vector used to form the first vector of a right-handed
+            orthonormal triple.
+
+            [3,1] = size(vec); double = class(vec)
+
+   the call:
+
+      [ x, y, z ] = <b>cspice_frame</b>( vec )
+
+   returns:
+
+      x   
+      y   
+      z   [3,1] = size(x); double = class(x)
+          [3,1] = size(y); double = class(y)
+          [3,1] = size(z); double = class(z)
+
+          the vectors that form a right handed orthonormal frame, with
+          output 'x' parallel to the input 'vec'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Given some arbitrary vector
+      %
+      vec = [ 23., -3., 18. ]';
+
+      %
+      % Create an orthonormal frame with the
+      % x axis parallel to vec.
+      %
+      disp( 'Input vector parallel to output X vector' )
+
+      [ x, y, z ] = <b>cspice_frame</b>( vec );
+      fprintf( 'x  %16.8e   %16.8e   %16.8e\n', x )
+      fprintf( 'y  %16.8e   %16.8e   %16.8e\n', y )
+      fprintf( 'z  %16.8e   %16.8e   %16.8e\n\n', z )
+
+
+
+      %
+      % Alternative, make a frame with y parallel to
+      % vec...
+      %
+      disp( 'Input vector parallel to output Y vector' )
+
+      [ y, z, x ] = <b>cspice_frame</b>( vec );
+      fprintf( 'x  %16.8e   %16.8e   %16.8e\n', x )
+      fprintf( 'y  %16.8e   %16.8e   %16.8e\n', y )
+      fprintf( 'z  %16.8e   %16.8e   %16.8e\n\n', z )
+
+
+
+      %
+      % ...or a frame with z parallel to vec.
+      %
+      disp( 'Input vector parallel to output Z vector' )
+
+      [ z, x, y ] = <b>cspice_frame</b>( vec );
+      fprintf( 'x  %16.8e   %16.8e   %16.8e\n', x )
+      fprintf( 'y  %16.8e   %16.8e   %16.8e\n', y )
+      fprintf( 'z  %16.8e   %16.8e   %16.8e\n\n', z )
+
+   MATLAB outputs:
+
+      Input vector parallel to output X vector
+      x    7.83383109e-01    -1.02180405e-01     6.13082433e-01
+      y    6.16308262e-01     0.00000000e+00    -7.87505001e-01
+      z    8.04675803e-02     9.94765884e-01     6.29746281e-02
+
+      Input vector parallel to output Y vector
+      x    8.04675803e-02     9.94765884e-01     6.29746281e-02
+      y    7.83383109e-01    -1.02180405e-01     6.13082433e-01
+      z    6.16308262e-01     0.00000000e+00    -7.87505001e-01
+
+      Input vector parallel to output Z vector
+      x    6.16308262e-01     0.00000000e+00    -7.87505001e-01
+      y    8.04675803e-02     9.94765884e-01     6.29746281e-02
+      z    7.83383109e-01    -1.02180405e-01     6.13082433e-01
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+    Given an input vector x, this routine returns unit vectors x,
+    y, and z such that xyz forms a right-handed orthonormal frame
+    where the output x is parallel to the input x.
+
+    This routine is intended primarily to provide a basis for
+    the plane orthogonal to x.  There are no special properties
+    associated with y and z other than that the resulting xyz frame
+    is right handed and orthonormal. There are an infinite
+    collection of pairs (y,z) that could be used to this end.
+    Even though for a given x, y and z are uniquely determined, users
+    should regard the pair (y,z) as a random selection from this
+    infinite collection.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/frame_c.html">frame_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/frames.html">FRAMES.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 12-MAR-2012, EDW (JPL), SCK (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   build a right handed coordinate frame
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:37 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,314 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>set_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>set_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   SpiceBoolean set_c (  SpiceCell        * a,
+                         ConstSpiceChar   * op,
+                         SpiceCell        * b   )
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Given a relational operator, compare two sets of any data type. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/cells.html">CELLS</a>, <a href="../req/sets.html">SETS</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   CELLS, SETS 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   VARIABLE  I/O  DESCRIPTION 
+   --------  ---  -------------------------------------------------- 
+   a          I   First set. 
+   op         I   Comparison operator. 
+   b          I   Second set. 
+
+   The function returns the result of the comparison: a (op) b. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+ 
+   a           is a CSPICE set.  a must be declared as a character,
+               double precision, or integer SpiceCell. 
+
+
+   op          is a comparison operator, indicating the way in 
+               which the input sets are to be compared. op may 
+               be any of the following: 
+
+                  Operator             Meaning 
+                  --------  ------------------------------------- 
+                    &quot;=&quot;     a = b is true if a and b are equal 
+                            (contain the same elements). 
+
+                    &quot;&lt;&gt;&quot;    a &lt;&gt; b is true if a and b are not 
+                            equal. 
+
+                    &quot;&lt;=&quot;    a &lt;= b is true if a is a subset of b. 
+
+                    &quot;&lt;&quot;     a &lt; b is true if a is a proper subset 
+                            of b. 
+
+                    &quot;&gt;=&quot;    a &gt;= b is true if b is a subset of a. 
+
+                    &quot;&gt;&quot;     a &gt; b is true if b is a proper subset 
+                            of a. 
+
+                    &quot;&amp;&quot;     a &amp; b is true if a and b have one or more 
+                            elements in common (the intersection of
+                            the two sets in non-empty.)
+ 
+                    &quot;~&quot;     a ~ b is true if a and b are disjoint 
+                            sets. 
+
+               When comparing elements of character sets, this routine
+               ignores trailing blanks.
+
+   b           is a CSPICE set of the same data type as a. 
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   The function returns the result of the comparison: a (op) b. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1)  If the set relational operator is not recognized, the error 
+       SPICE(INVALIDOPERATION) is signaled. 
+
+   2) The error SPICE(EMPTYSTRING) is signaled if the input operator
+      string does not contain at least one character, since this
+      input string cannot be converted to a Fortran-style string
+      in this case.
+      
+   3) The error SPICE(NULLPOINTER) is signalled if the input operator
+      string pointer is null.
+
+   4) If the input set arguments don't have identical data types,
+      the error SPICE(TYPEMISMATCH) is signaled.
+
+   5) If either of the input set arguments may be unordered or contain 
+      duplicates, the error SPICE(NOTASET) is signaled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   1) In the following code fragment, <b>set_c</b> is used to repeat an operation 
+      for as long as the integer set finished remains a proper 
+      subset of the integer set planned. 
+
+         #include &quot;SpiceUsr.h&quot;
+               .
+               .
+               .
+         while (  <b>set_c</b>( &amp;finished, &quot;&lt;&quot;, &amp;planned )  )
+         {
+               .
+               .
+               .
+         }
+
+
+   2) In the following example, let the integer sets a, b, and c 
+      contain the elements listed below. Let e be an empty integer 
+      set. 
+
+         a        b        c 
+        ---      ---      --- 
+         1        1        1 
+         2        3        3 
+         3 
+         4 
+
+   Then all of the following expressions are SPICETRUE. 
+
+      <b>set_c</b> ( b, &quot;=&quot;,  c )      &quot;b is equal to c&quot; 
+      <b>set_c</b> ( a, &quot;&lt;&gt;&quot;, c )      &quot;a is not equal to c&quot; 
+      <b>set_c</b> ( a, &quot;&gt;&quot;,  b )      &quot;a is a proper superset of b&quot; 
+      <b>set_c</b> ( b, &quot;&lt;=&quot;, c )      &quot;b is a subset of c&quot; 
+      <b>set_c</b> ( c, &quot;&lt;=&quot;, b )      &quot;c is a subset of b&quot; 
+      <b>set_c</b> ( a, &quot;&lt;=&quot;, a )      &quot;a is a subset of a&quot; 
+      <b>set_c</b> ( e, &quot;&lt;=&quot;, b )      &quot;e is a subset of b&quot; 
+      <b>set_c</b> ( e, &quot;&lt;&quot;,  b )      &quot;e is a proper subset of b&quot; 
+      <b>set_c</b> ( e, &quot;&lt;=&quot;, e )      &quot;e is a subset of e&quot; 
+      <b>set_c</b> ( a, &quot;&amp;&quot;,  b )      &quot;a has elements in common with b.&quot; 
+      <b>set_c</b> ( b, &quot;&amp;&quot;,  c )      &quot;b has elements in common with c.&quot; 
+
+   And all of the following are SPICEFALSE. 
+
+      <b>set_c</b> ( b, &quot;&lt;&gt;&quot;, c )      &quot;b is not equal to c&quot; 
+      <b>set_c</b> ( a, &quot;=&quot;,  c )      &quot;a is equal to c&quot; 
+      <b>set_c</b> ( a, &quot;&lt;&quot;,  b )      &quot;a is a proper subset of b&quot; 
+      <b>set_c</b> ( b, &quot;&lt;&quot;,  c )      &quot;b is a proper subset of c&quot; 
+      <b>set_c</b> ( b, &quot;&gt;=&quot;, a )      &quot;b is a superset of a&quot; 
+      <b>set_c</b> ( a, &quot;&gt;&quot;,  a )      &quot;a is a proper superset of a&quot; 
+      <b>set_c</b> ( e, &quot;&gt;=&quot;, a )      &quot;e is a superset of a&quot; 
+      <b>set_c</b> ( e, &quot;&lt;&quot;,  e )      &quot;e is a proper subset of e&quot; 
+      <b>set_c</b> ( a, &quot;~&quot;,  b )      &quot;a and b are disjoint sets.&quot; 
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   1) String comparisons performed by this routine are Fortran-style:
+      trailing blanks in the input sets are ignored. This gives
+      consistent behavior with CSPICE code generated by the f2c
+      translator, as well as with the Fortran SPICE Toolkit.
+
+      Note that this behavior is not identical to that of the ANSI
+      C library functions strcmp and strncmp.
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman    (JPL) 
+   H.A. Neilan     (JPL) 
+   W.L. Taber      (JPL) 
+   I.M. Underwood  (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.1.0, 15-FEB-2005 (NJB)
+
+       Bug fix:  loop bound changed from 1 to 2 in loop used
+       to free dynamically allocated arrays.
+
+   -CSPICE Version 1.0.0, 08-AUG-2002 (NJB) (CAC) (WLT) (IMU)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   compare sets 
+ </PRE>
+<h4>Link to routine set_c source file <a href='../../../src/cspice/set_c.c'>set_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:42 2014</pre>
+
+</body>
+</html>
+

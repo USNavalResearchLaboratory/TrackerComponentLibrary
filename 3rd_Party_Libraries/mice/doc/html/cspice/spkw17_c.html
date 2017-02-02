@@ -1,0 +1,370 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>spkw17_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>spkw17_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void spkw17_c ( SpiceInt           handle,
+                   SpiceInt           body, 
+                   SpiceInt           center, 
+                   ConstSpiceChar   * frame, 
+                   SpiceDouble        first,
+                   SpiceDouble        last,
+                   ConstSpiceChar   * segid, 
+                   SpiceDouble        epoch,
+                   ConstSpiceDouble   eqel   [9],
+                   SpiceDouble        rapol,
+                   SpiceDouble        decpol      )
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Write an SPK segment of type 17 given a type 17 data record. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/spk.html">SPK</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   EPHEMERIS 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   handle     I   Handle of an SPK file open for writing. 
+   body       I   Body code for ephemeris object. 
+   center     I   Body code for the center of motion of the body. 
+   frame      I   The reference frame of the states. 
+   first      I   First valid time for which states can be computed. 
+   last       I   Last valid time for which states can be computed. 
+   segid      I   Segment identifier. 
+   epoch      I   Epoch of elements in seconds past J2000. 
+   eqel       I   Array of equinoctial elements. 
+   rapol      I   Right Ascension of the pole of the reference plane. 
+   decpol     I   Declination of the pole of the reference plane. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   handle         is the file handle of an SPK file that has been 
+                  opened for writing. 
+ 
+   body           is the NAIF ID for the body whose states are 
+                  to be recorded in an SPK file. 
+ 
+   center         is the NAIF ID for the center of motion associated 
+                  with body. 
+ 
+   frame          is the reference frame that states are referenced to, 
+                  for example &quot;J2000&quot;. 
+ 
+   first          are the bounds on the ephemeris times, expressed as 
+   last           seconds past J2000. 
+ 
+   segid          is the segment identifier. An SPK segment identifier 
+                  may contain up to 40 characters. 
+ 
+   epoch          is the epoch of equinoctial elements in seconds 
+                  past the J2000 epoch. 
+ 
+   eqel           is an array of 9 double precision numbers that 
+                  are the equinoctial elements for some orbit relative 
+                  to the equatorial frame of a central body. 
+ 
+                  The z-axis of the equatorial frame is the direction 
+                  of the pole of the central body relative to frame. 
+                  The x-axis is given by the cross product of the 
+                  Z-axis of frame with the direction of the pole of 
+                  the central body.  The Y-axis completes a right 
+                  handed frame. 
+ 
+                  The specific arrangement of the elements is spelled 
+                  out below.  The following terms are used in the 
+                  discussion of elements of eqel:
+     
+                      inc  --- inclination of the orbit 
+                      argp --- argument of periapse 
+                      node --- longitude of the ascending node 
+                      e    --- eccentricity of the orbit 
+ 
+                  eqel[0] is the semi-major axis (A) of the orbit in km. 
+     
+                  eqel[1] is the value of H at the specified epoch. 
+                          ( e*sin(argp+node) ). 
+     
+                  eqel[2] is the value of K at the specified epoch 
+                          ( e*cos(argp+node) ). 
+     
+                  eqel[3] is the mean longitude (mean0+argp+node) at 
+                          the epoch of the elements measured in radians. 
+     
+                  eqel[4] is the value of p (tan(inc/2)*sin(node)) at 
+                          the specified epoch. 
+     
+                  eqel[5] is the value of q (tan(inc/2)*cos(node)) at 
+                          the specified epoch. 
+     
+                  eqel[6] is the rate of the longitude of periapse 
+                          (dargp/dt + dnode/dt ) at the epoch of 
+                          the elements.  This rate is assumed to hold 
+                          for all time. The rate is measured in 
+                          radians per second. 
+     
+                  eqel[7] is the derivative of the mean longitude 
+                          ( dm/dt + dargp/dt + dnode/dt ).  This 
+                          rate is assumed to be constant and is 
+                          measured in radians/second. 
+     
+                  eqel[8] is the rate of the longitude of the ascending 
+                          node ( dnode/dt).  This rate is measured 
+                          in radians per second. 
+ 
+   rapol          Right Ascension of the pole of the reference plane 
+                  relative to frame measured in radians. 
+ 
+   DECPOL         Declination of the pole of the reference plane 
+                  relative to frame measured in radians. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   None.  A type 17 segment is written to the file attached 
+   to handle. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1) If the semi-major axis is less than or equal to zero, the error 
+      SPICE(BADSEMIAXIS) is signaled. 
+ 
+   2) If the eccentricity of the orbit corresponding to the values 
+      of H and K ( eqel[1] and eqel[2] ) is greater than 0.9 the 
+      error SPICE(ECCOUTOFRANGE) is signaled. 
+ 
+   3) If the segment identifier has more than 40 non-blank characters 
+      the error SPICE(SEGIDTOOLONG) is signaled. 
+ 
+   4) If the segment identifier contains non-printing characters 
+      the error SPICE(NONPRINTABLECHARS) is signaled. 
+ 
+   5) If there are inconsistencies in the body, center, frame or 
+      first and last times, the problem will be diagnosed by 
+      a routine in the call tree of this routine. 
+ 
+   6) If either the input frame or segment ID string pointer is null,
+      the error SPICE(NULLPOINTER) is signaled.
+   
+   7) If either the input frame or segment ID string is empty,
+      the error SPICE(EMPTYSTRING) is signaled.
+      
+      </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   A new type 17 SPK segment is written to the SPK file attached 
+   to HANDLE. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   This routine writes an SPK type 17 data segment to the open SPK 
+   file according to the format described in the type 17 section of 
+   the SPK Required Reading. The SPK file must have been opened with 
+   write access. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   Suppose that at time epoch you have the classical elements 
+   of some body relative to the equatorial frame of some central 
+   body CENTER. These can be converted to equinoctial elements 
+   and stored in an SPK file as a type 17 segment so that this 
+   body can be used within the SPK subsystem of the SPICE system. 
+ 
+   Below is a list of the variables used to represent the 
+   classical elements 
+ 
+         Variable     Meaning 
+         --------     ---------------------------------- 
+         a            Semi-major axis in km 
+         ecc          Eccentricity of orbit 
+         inc          Inclination of orbit 
+         node         Longitude of the ascending node at epoch 
+         omega        Argument of periapse at epoch 
+         m            Mean anomaly at epoch 
+         dmdt         Mean anomaly rate in radians/second 
+         dnode        Rate of change of longitude of ascending node 
+                      in radians/second 
+         domega       Rate of change of argument of periapse in 
+                      radians/second 
+         epoch        is the epoch of the elements in seconds past 
+                      the J2000 epoch. 
+ 
+ 
+      These elements are converted to equinoctial elements (in 
+      the order compatible with type 17) as shown below. 
+ 
+         #include &quot;SpiceUsr.h&quot;
+               .
+               .
+               .
+               
+         eqel[0] = a; 
+         eqel[1] = ecc * sin ( omega + node ); 
+         eqel[2] = ecc * cos ( omega + node ); 
+ 
+         eqel[3] = m + omega + node; 
+ 
+         eqel[4] = tan(inc/2.0) * sin(node); 
+         eqel[5] = tan(inc/2.0) * cos(node); 
+ 
+         eqel[6] = domega; 
+         eqel[7] = domega + dmdt + dnode;
+         eqel[8] = dnode;
+ 
+ 
+         /.
+         Now add the segment. 
+         ./
+ 
+         <b>spkw17_c</b> ( handle, body,  center, frame,  first, last, 
+                    segid,  epoch, eqel,   rapol,  decpol      ); 
+ 
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman    (JPL)
+   W.L. Taber      (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 21-JUN-1999 (NJB) (WLT)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   Write a type 17 spk segment 
+ </PRE>
+<h4>Link to routine spkw17_c source file <a href='../../../src/cspice/spkw17_c.c'>spkw17_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:45 2014</pre>
+
+</body>
+</html>
+

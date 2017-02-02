@@ -1,0 +1,2164 @@
+<HTML>
+<HEAD>
+<TITLE> SPICE Kernel Required Reading </TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+
+<A NAME="top"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+
+<TABLE STYLE="text-align: left; margin-left: auto; margin-right: auto; width: 800px;" BORDER="0" CELLPADDING="5" CELLSPACING="2">
+<TBODY>
+<TR>
+  <TD STYLE="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+  <DIV ALIGN="right">
+    <SMALL><SMALL><A HREF="index.html">Index Page</A></SMALL></SMALL>
+  </DIV>
+  <B>SPICE Kernel Required Reading</B> </TD>
+</TR>
+<TR>
+  <TD STYLE="vertical-align: top;">
+
+<H2> Table of Contents
+</H2>
+
+<PRE>
+   <A HREF="#SPICE Kernel Required Reading">SPICE Kernel Required Reading</A>
+      <A HREF="#Abstract">Abstract</A>
+      <A HREF="#Document Outline">Document Outline</A>
+   <A HREF="#Introduction to Kernels">Introduction to Kernels</A>
+         <A HREF="#Kernel Types">Kernel Types</A>
+         <A HREF="#Text Kernels and the Kernel Pool">Text Kernels and the Kernel Pool</A>
+         <A HREF="#Binary Kernels">Binary Kernels</A>
+   <A HREF="#SPICE Kernel Type Identification and Kernel Naming">SPICE Kernel Type Identification and Kernel Naming</A>
+         <A HREF="#SPICE Kernel Type Identification">SPICE Kernel Type Identification</A>
+         <A HREF="#Recommendations on Kernel File Naming">Recommendations on Kernel File Naming</A>
+   <A HREF="#Binary Kernel Specifications">Binary Kernel Specifications</A>
+   <A HREF="#Text Kernel Specifications and Interfaces">Text Kernel Specifications and Interfaces</A>
+      <A HREF="#Text Kernel Specifications">Text Kernel Specifications</A>
+         <A HREF="#Variable Name Rules">Variable Name Rules</A>
+         <A HREF="#Assignment Rules">Assignment Rules</A>
+         <A HREF="#Variable Value Rules">Variable Value Rules</A>
+         <A HREF="#Additional Text Kernel Syntax Rules">Additional Text Kernel Syntax Rules</A>
+         <A HREF="#Maximum Numbers of Variables and Variable Values">Maximum Numbers of Variables and Variable Values</A>
+         <A HREF="#Treatment of Invalid Text Kernels">Treatment of Invalid Text Kernels</A>
+         <A HREF="#Additional Meta-kernel Specifications">Additional Meta-kernel Specifications</A>
+      <A HREF="#Text Kernel Interfaces - Fetching Data from the Kernel Pool">Text Kernel Interfaces - Fetching Data from the Kernel Pool</A>
+         <A HREF="#Informational Functions">Informational Functions</A>
+   <A HREF="#Section 5 -- Kernel Management">Section 5 -- Kernel Management</A>
+         <A HREF="#Loading Kernels">Loading Kernels</A>
+         <A HREF="#Kernel Priority">Kernel Priority</A>
+         <A HREF="#Path Symbols in Meta-kernels">Path Symbols in Meta-kernels</A>
+         <A HREF="#Keeping Track of Loaded Kernels">Keeping Track of Loaded Kernels</A>
+         <A HREF="#Reloading Kernels">Reloading Kernels</A>
+         <A HREF="#Changing Kernel Priority">Changing Kernel Priority</A>
+         <A HREF="#Load Limits">Load Limits</A>
+         <A HREF="#Finding Out What's Loaded">Finding Out What's Loaded</A>
+         <A HREF="#Unloading Kernels">Unloading Kernels</A>
+         <A HREF="#Loading of Non-native Text and Binary Kernels">Loading of Non-native Text and Binary Kernels</A>
+         <A HREF="#Manipulating Kernel Pool Contents">Manipulating Kernel Pool Contents</A>
+   <A HREF="#Appendix A -- Discussion of Competing Data">Appendix A -- Discussion of Competing Data</A>
+      <A HREF="#Binary Kernels0">Binary Kernels</A>
+         <A HREF="#SPKs">SPKs</A>
+         <A HREF="#CKs">CKs</A>
+         <A HREF="#Binary PCKs">Binary PCKs</A>
+      <A HREF="#Text Kernels">Text Kernels</A>
+   <A HREF="#Appendix B -- Glossary of Terms">Appendix B -- Glossary of Terms</A>
+         <A HREF="#Assignment">Assignment</A>
+         <A HREF="#Continued string">Continued string</A>
+         <A HREF="#Control words">Control words</A>
+         <A HREF="#Direct assignment">Direct assignment</A>
+         <A HREF="#Element">Element</A>
+         <A HREF="#Incremental assignment">Incremental assignment</A>
+         <A HREF="#Keeper (subsystem)">Keeper (subsystem)</A>
+         <A HREF="#Kernel pool (sometimes just called ``the pool'')">Kernel pool (sometimes just called ``the pool'')</A>
+         <A HREF="#Kernel variable">Kernel variable</A>
+         <A HREF="#Meta-kernel (also known as ``FURNSH kernel'')">Meta-kernel (also known as ``FURNSH kernel'')</A>
+         <A HREF="#Operator">Operator</A>
+         <A HREF="#Principal data">Principal data</A>
+         <A HREF="#Value">Value</A>
+         <A HREF="#Variable name">Variable name</A>
+         <A HREF="#Vector value">Vector value</A>
+   <A HREF="#Appendix C -- Summary of Routines">Appendix C -- Summary of Routines</A>
+   <A HREF="#Appendix D -- Summary of Key Text Kernel Parameter Values">Appendix D -- Summary of Key Text Kernel Parameter Values</A>
+   <A HREF="#Appendix E -- Revision History">Appendix E -- Revision History</A>
+
+</PRE>
+
+<HR SIZE=3 NOSHADE>
+
+<BR><BR>
+<A NAME="SPICE Kernel Required Reading"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> SPICE Kernel Required Reading
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Last revised on 2014 JUL 15 by N. J. Bachman.
+<P>
+ 
+<BR><BR>
+<A NAME="Abstract"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Abstract
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The kernel subsystem loads and unloads kernels, retrieves loaded data,
+   and for text kernels, inserts data into the kernel pool.
+<P>
+ 
+<BR><BR>
+<A NAME="Document Outline"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Document Outline
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   This document has five major sections.
+<P>
+ 
+<UL>
+<TT>--</TT> Introduction to kernels
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Kernel type identification and kernel naming
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Binary kernel specifications
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Text kernel specifications and interfaces, including extra rules for
+meta-kernels
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Kernel management
+<BR><BR></UL>
+   ``Introduction to kernels'' should be read by anyone new to SPICE or
+   needing a refresher about kernels.
+<P>
+ 
+   ``Kernel type identification and kernel naming'' contains specifications
+   for kernel architecture and type identification and restrictions and
+   recommendations concerning kernel file naming.
+<P>
+ 
+   ``Binary kernel specifications'' points the reader to other SPICE
+   documents for most information on binary kernels.
+<P>
+ 
+   ``Text kernel specifications and interfaces,'' which includes extra
+   rules for meta-kernels, provides a good deal of technical detail for
+   both producers and consumers (users) of text kernels.
+<P>
+ 
+   ``Kernel management'' contains important information about managing and
+   obtaining information about both text and binary kernels.
+<P>
+ 
+   Appendix A discusses the notion of ``competing data.''
+<P>
+ 
+   Appendix B provides definitions of terms used in this document with
+   SPICE-specific meaning.
+<P>
+ 
+   Appendix C provides a listing of kernel subsystem functions.
+<P>
+ 
+   Appendix D provides a summary of key text kernel parameter values.
+<P>
+ 
+   Appendix E provides the revision history of this document.
+<P>
+ 
+<BR><BR>
+<A NAME="Introduction to Kernels"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Introduction to Kernels
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Files containing the data used by SPICE are known as kernels (sometimes
+   called ``kernel files''). Two kernel architectures exist, referred to as
+   text kernels and binary kernels. Text kernels consist of human readable
+   ASCII text; binary kernels consist of mostly non-ASCII data.
+<P>
+ 
+   Within each architecture there are several kernel types.
+<P>
+ 
+<BR><BR>
+<A NAME="Kernel Types"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Kernel Types
+</H3><P><BR><BR>
+   The SPICE text kernels are:
+<P>
+ 
+<UL>
+<TT>--</TT> text form of planetary constants (text PCK)
+<BR><BR></UL>
+<UL>
+<TT>--</TT> leapseconds (LSK)
+<BR><BR></UL>
+<UL>
+<TT>--</TT> spacecraft clock coefficients (SCLK)
+<BR><BR></UL>
+<UL>
+<TT>--</TT> instrument geometry (IK)
+<BR><BR></UL>
+<UL>
+<TT>--</TT> reference frame specifications (FK)
+<BR><BR></UL>
+<UL>
+<TT>--</TT> meta-kernels (MK)
+<BR><BR></UL>
+   The SPICE binary kernels are:
+<P>
+ 
+<UL>
+<TT>--</TT> ephemeris for vehicles, planets, satellites, comets, asteroids (SPK)
+<BR><BR></UL>
+<UL>
+<TT>--</TT> orientation (attitude) of a spacecraft or other structure (CK)
+<BR><BR></UL>
+<UL>
+<TT>--</TT> special binary form of planetary constants containing only orientation
+(binary PCK)
+<BR><BR></UL>
+<UL>
+<TT>--</TT> mission events (EK)
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Text Kernels and the Kernel Pool"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Text Kernels and the Kernel Pool
+</H3><P><BR><BR>
+   Text kernels are used where the amount of data being stored is
+   relatively small, and where easy human readability and revision are
+   important.
+<P>
+ 
+   Text kernels should contain descriptive information, provided by the
+   kernel producer, describing the sources and intended uses of the kernel
+   data.
+<P>
+ 
+   Text kernels associate values with variables using a ``name = value(s)''
+   form of assignment. The kernel pool is the repository of the information
+   provided in these assignments. Populating the kernel pool occurs in
+   either or both of two ways: by loading text kernels -- by far the most
+   used method -- or by using pool subsystem functions.
+<P>
+ 
+   Once ``name = value(s)'' assignments provided in a text kernel have been
+   loaded into the kernel pool the value(s) are said to be associated with
+   the names. You may access these data through kernel pool look-up
+   functions using the names as keys to find the associated values. The
+   kernel pool look-up functions are described in detail a bit later in
+   this document. However, some higher-level and more often used functions
+   also access data loaded into the kernel pool. Two tables in the tutorial
+   named ``Summary of Key Points'' provide details.
+<P>
+ 
+<BR><BR>
+<A NAME="Binary Kernels"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Binary Kernels
+</H3><P><BR><BR>
+   Binary kernels store large data sets of primarily non-ASCII data, using
+   either the DAF or DAS format (see the technical reference documents
+   <a href="../req/daf.html">daf.req</a> and <a href="../req/das.html"><a href="../req/das.html">das.req</a></a> for details). For all but EK binary kernels, loading
+   the binary kernel does not cause the subsystem associated with the
+   kernel's type to read the principal kernel data; rather only a small
+   amount of descriptive data are read so the subsystem becomes aware of
+   the existence of the kernel and the nature of the data contained
+   therein. The subsystem physically reads primary binary kernel data only
+   when a data request is made by a kernel reader function.
+<P>
+ 
+   For EK binary kernels, the descriptive data mentioned above, and some
+   database schema information, are read in at kernel load time. Principal
+   data are read only when an EK query is made by a kernel reader function.
+<P>
+ 
+   Data from binary kernels do NOT get placed in the kernel pool; the pool
+   is used only for text kernel data.
+<P>
+ 
+   Binary kernels contain a ``comment area'' where important descriptive
+   information in ASCII form should be provided by the kernel producer.
+<P>
+ 
+   On occasion one may be given, or need to make, a ``transfer format''
+   file. This is an ASCII-format representation of a binary kernel, used in
+   early versions of Mice to port binary kernels between dissimilar
+   computers (e.g. IEEE - Little endian to IEEE - Big endian, or
+   vice-versa). For the most part these transfer format files are no longer
+   needed due to the addition of run-time translation capabilities in the
+   binary kernel readers. But there are some situations when transfer
+   format binary kernels are still needed; refer to the tutorial named
+   ``Porting Kernels'' for details.
+<P>
+ 
+<BR><BR>
+<A NAME="SPICE Kernel Type Identification and Kernel Naming"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> SPICE Kernel Type Identification and Kernel Naming
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+<BR><BR>
+<A NAME="SPICE Kernel Type Identification"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> SPICE Kernel Type Identification
+</H3><P><BR><BR>
+   Most SPICE users don't need to know about kernel type identification,
+   but since this aspect of kernels is used later on in this document we
+   have to explain the concept here.
+<P>
+ 
+   The first 6 to 8 bytes of a SPICE kernel are used for file type
+   identification. In binary and text kernels this identifier consists of
+   two string IDs separated by the ``/'' character. The first ID,
+   identifying the file architecture of the kernel file (``DAF'', ``DAS'',
+   ``KPL''), is always three characters long. The second ID, identifying
+   the file type of the kernel file (``SPK'', ``PCK'', ``IK'', ``SCLK'',
+   etc.), is two to four characters long.
+<P>
+ 
+   In transfer format files this file type identifier consists of a single
+   string ID. See the Convert User's Guide for details.
+<P>
+ 
+   In binary kernels the kernel type identifier always occupies the first
+   eight bytes. If the combined length of the kernel architecture ID, the
+   ``/'' character, and the kernel type ID is less than 8 characters, the
+   identifier is padded on the right to eight characters using blanks (e.g.
+   ``DAF/SPK '', ``DAS/EK ''). The correct identifier is written to a
+   binary kernel automatically when the kernel is created by calling the
+   kernel type specific ``open new file'' function -- <a href="../mice/cspice_spkopn.html">cspice_spkopn</a> for SPK
+   files, <a href="../mice/cspice_ckopn.html">cspice_ckopn</a> for CK files, etc. If a binary kernel is created by
+   calling an architecture specific ``open new file'' function --
+   cspice_dafonw for DAF files, cspice_dasonw for DAS files, etc., -- it is
+   the caller's responsibility to specify the correct kernel type in the
+   corresponding input argument of these functions to make sure the correct
+   kernel type identifier is written into the kernel.
+<P>
+ 
+   In text kernels the kernel type identifier occupies the first six to
+   eight characters and is followed by optional trailing blanks and then by
+   the end-of-line terminator character(s), resulting in the identifier
+   appearing on a line by itself. If the combined length of the kernel
+   architecture ID, the ``/'' character, and the kernel type ID is less
+   than 8 characters, the identifier can, but does not have to be padded on
+   the right to eight characters using blanks (e.g. ``KPL/SCLK'', ``KPL/IK
+   '', etc.). Since most text kernels are created manually using a text
+   editor, it is the responsibility of the person making the kernel to put
+   the correct identifier by itself on the first line of the kernel.
+<P>
+ 
+   In transfer format files the SPICE kernel type identifier occupies the
+   first six characters of the file and is followed by the expanded name of
+   the format (e.g. ``DAFETF NAIF DAF ENCODED TRANSFER FILE''). The correct
+   kernel type identifier is written to a transfer format file
+   automatically when the file is created by the SPICE utility programs
+   TOXFR or SPACIT. See their user guides, <a href="../ug/toxfr.html">toxfr.ug</a> and <a href="../ug/spacit.html"><a href="../ug/spacit.html">spacit.ug</a></a>, for
+   details.
+<P>
+ 
+   The SPICE kernel type identifiers used in modern SPICE kernels are as
+   follows.
+<P>
+ 
+<PRE>
+         Binary Kernels:
+ 
+            SPK           DAF/SPK
+            CK            DAF/CK
+            PCK           DAF/PCK
+            EK            DAS/EK
+ 
+         Text Kernels:
+ 
+            FK            KPL/FK
+            IK            KPL/IK
+            LSK           KPL/LSK
+            MK            KPL/MK
+            PCK           KPL/PCK
+            SCLK          KPL/SCLK
+ 
+         Transfer format files:
+ 
+            DAF           DAFETF
+            DAS           DASETF
+ 
+ 
+</PRE>
+   Some older kernels used an earlier version of the kernel type
+   identifier. In these kernels one would find:
+<P>
+ 
+<PRE>
+           NAIF/DAF
+           NAIF/DAS
+</PRE>
+   The Toolkit includes the cspice_getfat function to retrieve the kernel
+   file architecture and kernel type encapsulated in the SPICE kernel type
+   identifier.
+<P>
+ 
+   A text kernel not having a kernel type identifier can, in fact, be
+   processed by high-level functions, and by low-level functions other than
+   cspice_getfat that use text kernel data. However, NAIF strongly
+   recommends kernel creators to provide the identifier.
+<P>
+ 
+<BR><BR>
+<A NAME="Recommendations on Kernel File Naming"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Recommendations on Kernel File Naming
+</H3><P><BR><BR>
+   Mice places a few restrictions on kernel file names beyond those imposed
+   by your operating system:
+<P>
+ 
+<UL>
+<TT>--</TT> Kernel file names, including path specifications, must not exceed 255
+characters.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Use of embedded blanks in kernel file names is not supported by Mice. Such
+names generally will not be recognized when passed as command-line
+arguments to Mice utility programs.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Host system ``shell variables'' or ``environment variables'' cannot be
+passed as input arguments to Mice functions.
+<BR><BR></UL>
+   Mission operations teams often include a variety of identifying and user
+   information in kernel names, making them quite long. This practice is
+   probably unavoidable, but kernel producers should be aware that when the
+   mission's SPICE archive is prepared for delivery to the Planetary Data
+   System (PDS), all kernels to be archived must have names consistent with
+   PDS standards, including a limitation to a ``36.3'' format (1 to 36
+   alphanumeric characters, followed by the decimal character, followed by
+   1 to 3 alphanumeric characters) and using only letters, digits and the
+   underscore character.
+<P>
+ 
+   NAIF recommends kernel names use only lower case letters. NAIF further
+   recommends one follows the conventions established for kernel name
+   extensions, shown below.
+<P>
+ 
+<PRE>
+            .bc    binary CK
+            .bes   binary Sequence Component EK
+            .bpc   binary PCK
+            .bsp   binary SPK
+            .tf    text FK
+            .ti    text IK
+            .tls   text LSK
+            .tm    text meta-kernel (FURNSH kernel)
+            .tpc   text PCK
+            .tsc   text SCLK
+ 
+</PRE>
+<BR><BR>
+<A NAME="Binary Kernel Specifications"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Binary Kernel Specifications
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Other than the general specifications and recommendations in the section
+   ``Kernel type identification and kernel naming'' that are applicable to
+   binary kernels, specifications for the various binary kernels are
+   provided in kernel type specific technical reference documents, such as
+   ``SPK Required Reading'' and ``CK Required Reading.''
+<P>
+ 
+<BR><BR>
+<A NAME="Text Kernel Specifications and Interfaces"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Text Kernel Specifications and Interfaces
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   The specifications and restrictions discussed below apply to any text
+   kernel. However, the special type of text kernel known as a meta-kernel
+   (sometimes called a ``FURNSH kernel'') has additional restrictions;
+   these are discussed later in a section on meta-kernels.
+<P>
+ 
+<BR><BR>
+<A NAME="Text Kernel Specifications"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Text Kernel Specifications
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Often the easiest and best way to create a text kernel is to start with
+   an existing text kernel, editing it to meet your needs. But knowing text
+   kernel rules is still important. Those rules are documented in the
+   remainder of this section.
+<P>
+ 
+   As the name implies, SPICE text kernels contain printable ASCII text
+   (ASCII code 32-126). Text kernels may not contain non-printing
+   characters, excepting tab (ASCII code 9). However NAIF recommends
+   against use of tabs in text kernels. NAIF also recommends caution be
+   exercised when cutting/pasting text from a formatted document into a
+   text kernel; the text characters displayed in a document may not be in
+   the accepted ASCII range, in which case the text kernel parser will fail
+   when reading those characters.
+<P>
+ 
+   Assignments in SPICE text kernels have a ``name = value(s)'' or ``name
+   += value(s)'' format. We illustrate this format by way of an example
+   using an excerpt from a SPICE text planetary constants kernel (PCK). The
+   format description given below applies to all SPICE text kernels; the
+   specific data names shown in this example apply only to text PCK
+   kernels.
+<P>
+ 
+   The example begins with a SPICE kernel type identifier and is then
+   filled out with a combination of descriptive information, called comment
+   blocks, and data blocks.
+<P>
+ 
+<PRE>
+   KPL/PCK
+ 
+   Planets first. Each has quadratic expressions for the direction
+   (RA, Dec) of the north pole and the location and rotation state
+   of the prime meridian. Planets with satellites (except Pluto)
+   also have linear expressions for the auxiliary (phase) angles
+   used in the nutation and libration expressions of their satellites.
+ 
+   \begindata
+ 
+   BODY399_POLE_RA        = (    0.      -0.64061614  -0.00008386  )
+   BODY399_POLE_DEC       = (  +90.      -0.55675303  +0.00011851  )
+   BODY399_PM             = (   10.21  +360.98562970  +0.          )
+   BODY399_LONG_AXIS      = (    0.                                )
+ 
+   BODY3_NUT_PREC_ANGLES  = (  125.045    -1935.53
+                               249.390    -3871.06
+                               196.694  -475263.
+                               176.630  +487269.65
+                               358.219   -36000.    )
+ 
+   \begintext
+ 
+   Each satellite has similar quadratic expressions for the pole and
+   prime meridian. In addition, some satellites have nonzero nutation
+   and libration amplitudes. (The number of amplitudes matches the
+   number of auxiliary phase angles of the primary.)
+ 
+   \begindata
+ 
+   BODY301_POLE_RA      = (  270.000   -0.64061614  -0.00008386   )
+   BODY301_POLE_DEC     = (  +66.534   -0.55675303  +0.00011851   )
+   BODY301_PM           = (   38.314  +13.1763581    0.           )
+   BODY301_LONG_AXIS    = (    0.                                 )
+ 
+   BODY301_NUT_PREC_RA  = (  -3.878  -0.120  +0.070  -0.017   0.     )
+   BODY301_NUT_PREC_DEC = (  +1.543  +0.024  -0.028  +0.007   0.     )
+   BODY301_NUT_PREC_PM  = (  +3.558  +0.121  -0.064  +0.016  +0.025  )
+ 
+   \begintext
+ 
+   Here we include the radii of the satellites and planets.
+ 
+   \begindata
+ 
+   BODY399_RADII    = (     6378.140    6378.140     6356.755  )
+   BODY301_RADII    = (     1738.       1738.        1738.     )
+ 
+   \begintext
+</PRE>
+   End of example text kernel.
+<P>
+ 
+   In this example there are several comment blocks providing information
+   about the data. Except for the comments appearing just after the kernel
+   type identifier and before the first data block, all comment blocks are
+   introduced by the control word
+<P>
+ 
+<PRE>
+   \begintext
+</PRE>
+   A comment block may contain any number of comment lines. Once a comment
+   block has begun, no special characters are required to introduce
+   subsequent lines of comments within that block. A comment block is
+   terminated by the control word
+<P>
+ 
+<PRE>
+   \begindata
+</PRE>
+   or by the end of the kernel file.
+<P>
+ 
+   The
+<P>
+ 
+<PRE>
+   \begindata
+</PRE>
+   control word also serves to introduce a block of data that will be
+   stored in the kernel pool. A data block is terminated by the control
+   word
+<P>
+ 
+<PRE>
+   \begintext
+</PRE>
+   or by the end of the kernel file.
+<P>
+ 
+   Each of these control words must appear on a line by itself, and each
+   may be preceded by white space.
+<P>
+ 
+   Within each data block there are one or more variable assignments. Each
+   variable assignment consists of three components:
+<P>
+ 
+<UL>
+<TT>1.</TT> A variable name.
+<BR><BR></UL>
+<UL>
+<TT>2.</TT> An assignment operator. This must be ``='' (direct assignment) or ``+=''
+(incremental assignment).
+<BR><BR></UL>
+<UL>
+<TT>3.</TT> A scalar or vector value.
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Variable Name Rules"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Variable Name Rules
+</H3><P><BR><BR>
+   A variable name can include any printable character except:
+<P>
+ 
+<UL>
+<TT>1.</TT> `` '' (space)
+<BR><BR></UL>
+<UL>
+<TT>2.</TT> ``.'' (period)
+<BR><BR></UL>
+<UL>
+<TT>3.</TT> ``('' (open parentheses)
+<BR><BR></UL>
+<UL>
+<TT>4.</TT> ``)'' (close parentheses)
+<BR><BR></UL>
+<UL>
+<TT>5.</TT> ``='' (equal sign)
+<BR><BR></UL>
+<UL>
+<TT>6.</TT> TAB character
+<BR><BR></UL>
+   Variable names must not exceed 32 characters in length.
+<P>
+ 
+   Variable names are case-sensitive. Note that this behavior is different
+   from that of most Mice high-level functions, which tend to ignore case
+   in string inputs. Variable names that don't have the expected case will
+   be invisible to Mice functions that try to fetch their values. Since
+   high-level Mice functions that use kernel variables accept only upper
+   case names, NAIF recommends upper case always be used for variable
+   names.
+<P>
+ 
+   NAIF recommends you do not use a variable name with ``+'' as the last
+   character.
+<P>
+ 
+<BR><BR>
+<A NAME="Assignment Rules"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Assignment Rules
+</H3><P><BR><BR>
+   Direct assignments supersede previous assignments, whereas incremental
+   assignments append the specified values to the set created by previous
+   assignments. For example, the series of assignments
+<P>
+ 
+<PRE>
+   BODY301_NUT_PREC_RA  = -3.878
+   BODY301_NUT_PREC_RA += -0.120
+   BODY301_NUT_PREC_RA += +0.070
+   BODY301_NUT_PREC_RA += -0.017
+   BODY301_NUT_PREC_RA += 0.
+</PRE>
+   has the same effect as the single assignment
+<P>
+ 
+<PRE>
+   BODY301_NUT_PREC_RA = (  -3.878  -0.120  +0.070  -0.017   0 )
+</PRE>
+<BR><BR>
+<A NAME="Variable Value Rules"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Variable Value Rules
+</H3><P><BR><BR>
+   Values may be scalar (a single item) or vectors (two or more items). A
+   value may be a number, a string, or a special form of a date.
+<P>
+ 
+   Numeric values may be provided in integer or floating point
+   representation, with an optional sign. Engineering notation using an
+   ``E'' or ``D'' is allowed. All numeric values, including integers, are
+   stored as double precision numbers. Examples of assignments using valid
+   numeric formats:
+<P>
+ 
+<PRE>
+   BODY399_RADII     = ( 6378.1366     6378.1366     6356.7519   )
+   BODY399_RADII     = ( 6.3781366D3   6.3781366D3   6.3567519D3 )
+   BODY399_RADII     = ( 6.3781366d3   6.3781366d3   6.3567519d3 )
+   BODY399_RADII     = ( 6.3781366E3   6.3781366E3   6.3567519E3 )
+   BODY399_RADII     = ( 6.3781366e3   6.3781366e3   6.3567519e3 )
+   BODY399_RADII     = ( 6378          6378          6357        )
+</PRE>
+   String values are supplied by quoting the string using a single quote at
+   each end of the string, for example
+<P>
+ 
+<PRE>
+         DISTANCE_UNITS = ( 'KILOMETERS' )
+</PRE>
+   This quoting convention is independent of the Mice Toolkit language
+   version being used.
+<P>
+ 
+   All string values, whether part of a scalar or vector assignment, must
+   not exceed 80 characters on a given line. Creating a string value longer
+   than 80 characters is possible through continuation of an assignment
+   over multiple lines; this is described later.
+<P>
+ 
+   There is no practical limit on the length of a string value other than
+   as mentioned in the section on String Continuation below.
+<P>
+ 
+   If you need to include a single quote in the string value, use the
+   FORTRAN convention of ``doubling'' the quote.
+<P>
+ 
+<PRE>
+         MESSAGE = ( 'You can''t always get what you want.' )
+</PRE>
+   Date values may be entered in a wide variety of formats, using two
+   methods. The easiest method is to enter a date as a string, as described
+   above. There are no restrictions on the format of a date string entered
+   as a string, but if you wish to later use that date string in SPICE
+   software the string must conform to SPICE date/time formation rules (see
+   the ``Time Required Reading'' document for details).
+<P>
+ 
+   A second method for entering dates, unique to text kernels, uses an
+   ``@'' syntax. Some examples:
+<P>
+ 
+<PRE>
+         CALIBRATION_DATES = ( @31-JAN-1987,
+                               @feb/4/1987,
+                               @March-7-1987-3:10:39.221 )
+</PRE>
+   Dates entered using the ``@'' syntax may not contain embedded blanks.
+<P>
+ 
+   Dates entered using the ``@'' syntax are converted to double precision
+   seconds past the reference epoch J2000 as they are read into the kernel
+   pool.
+<P>
+ 
+   Note that NO time system specification (e.g. UTC or TDB) is implied by
+   dates using the ``@'' syntax. Association of a time system with such
+   dates is performed by the software that uses them. For example, in SPICE
+   leapseconds kernels, such dates represent UTC times; in frames kernels,
+   they represent TDB times. You should refer to software user's guides or
+   API documentation to understand the interpretation of these dates for
+   your application.
+<P>
+ 
+   Vector values, whether of numeric, string or date types, are enclosed in
+   parenthesis, and adjacent components are separated by either white space
+   (blank or carriage return, but not TAB) or commas.
+<P>
+ 
+<PRE>
+         MISSION_UNITS = ( 'KILOMETERS','SECONDS'
+                           'KILOMETERS/SECOND' )
+</PRE>
+   The types of values assigned to a given kernel pool variable must all be
+   the same. If you attempt to make an assignment such as the one shown
+   here:
+<P>
+ 
+<PRE>
+         ERROR_EXAMPLE = ( 1, 2, 'THREE', 4, 'FIVE' )
+ 
+ 
+</PRE>
+   the kernel pool reader will regard the assignment as erroneous and
+   reject it.
+<P>
+ 
+<BR><BR>
+<A NAME="Additional Text Kernel Syntax Rules"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Additional Text Kernel Syntax Rules
+</H3><P><BR><BR>
+   Line Length
+<P>
+ 
+   All assignments, or portions of an assignment, occurring on a line must
+   not exceed 132 characters, including the assignment operator and any
+   leading or embedded white space.
+<P>
+ 
+   String Continuation
+<P>
+ 
+   It is possible to treat specified, consecutive elements of a string
+   array as a single ``continued'' string. String continuation is indicated
+   by placing a user-specified sequence of non-blank characters at the end
+   (excluding trailing blanks) of each string value that is to be
+   concatenated to its successor. The string continuation marker can be any
+   positive number of printing characters that fit in a string value
+   (except not true for meta-kernels).
+<P>
+ 
+   For example, if the character sequence
+<P>
+ 
+<PRE>
+         //
+</PRE>
+   is used as the continuation marker, the assignment
+<P>
+ 
+<PRE>
+         CONTINUED_STRINGS = ( 'This //  ',
+                               'is //  ',
+                               'just //',
+                               'one long //',
+                               'string.',
+                               'Here''s a second //',
+                               'continued //'
+                               'string.'              )
+</PRE>
+   allows the string array elements on the right hand side of the
+   assignment to be treated as the two strings
+<P>
+ 
+<PRE>
+         This is just one long string.
+         Here's a second continued string.
+</PRE>
+   Everything between the single quotes, including white space and the
+   continuation marker, counts towards the limit of 80 characters in the
+   length of each string element.
+<P>
+ 
+   The Mice function <a href="../mice/cspice_stpool.html">cspice_stpool</a>, and ONLY that function, provides the
+   capability of retrieving continued strings from the kernel pool. See the
+   discussion below under ``Fetching Data from the Kernel Pool'' or the
+   header of <a href="../mice/cspice_stpool.html">cspice_stpool</a> for further information.
+<P>
+ 
+<BR><BR>
+<A NAME="Maximum Numbers of Variables and Variable Values"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Maximum Numbers of Variables and Variable Values
+</H3><P><BR><BR>
+   All variable values from all text kernels loaded into your program are
+   stored in the kernel pool. There are upper bounds on the total numbers
+   of variables and variable values.
+<P>
+ 
+   See Appendix D for the numeric values of these limits.
+<P>
+ 
+<BR><BR>
+<A NAME="Treatment of Invalid Text Kernels"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Treatment of Invalid Text Kernels
+</H3><P><BR><BR>
+   If during a call to <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>, an error is detected in a text
+   kernel, Mice will signal an error. By default, a diagnostic message will
+   be displayed to standard output and the program will terminate.
+<P>
+ 
+   If the application calling <a href="../mice/cspice_furnsh.html">cspice_furnsh</a> catches Mice exceptions, all
+   data loaded from the text kernel prior to discovery of the error will
+   remain loaded.
+<P>
+ 
+   In this case, if an error occurs while a meta-kernel is being loaded,
+   all files listed in that meta-kernel that have already been loaded will
+   remain loaded. Files listed in the meta-kernel later than a file for
+   which a failure occurred will not be loaded.
+<P>
+ 
+   Note that continuing program operation after a load failure could, due
+   to changes in the availability of competing data, result in performing
+   computations with data that were not planned to be used.
+<P>
+ 
+<BR><BR>
+<A NAME="Additional Meta-kernel Specifications"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Additional Meta-kernel Specifications
+</H3><P><BR><BR>
+   A meta-kernel (also known as a ``FURNSH kernel'') is a special instance
+   of a text kernel. Its use has been discussed earlier in this document.
+   In addition to the text kernel specifications above, a meta-kernel has
+   the following restrictions.
+<P>
+ 
+<UL>
+<TT>--</TT> When continuing the value field (a file name) over multiple lines, the
+continuation marker must be a single ``+'' character.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> The maximum length of any file name, including any path specification, is
+255 characters.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Embedded blanks are not allowed in path or file names.
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Text Kernel Interfaces - Fetching Data from the Kernel Pool"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Text Kernel Interfaces - Fetching Data from the Kernel Pool
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   For most SPICE users the accessing of text kernel data occurs inside of
+   high-level Mice functions, so you may choose to skip the rest of this
+   section. But if you need to work with text kernel variables that are not
+   present in traditional text kernels, and thus are not accessed by
+   high-level SPICE functions, read on.
+<P>
+ 
+   The values of variables stored in the kernel pool may be retrieved using
+   the functions:
+<P>
+ 
+<DL><DT>
+<B>
+ <a href="../mice/cspice_gcpool.html">cspice_gcpool</a>
+</B><BR><BR>
+<DD>
+ Used to fetch character data from the kernel pool.<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../mice/cspice_gdpool.html">cspice_gdpool</a>
+</B><BR><BR>
+<DD>
+ Used to fetch double precision data from the kernel pool.<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../mice/cspice_gipool.html">cspice_gipool</a>
+</B><BR><BR>
+<DD>
+ Used to fetch integer data from the kernel pool. Within the kernel pool
+all numeric data are stored as double precision values. This interface
+is provided as a convenience so that users may insert and retrieve
+integer data from the kernel pool without having to worry about
+converting between double precision values and integers.<BR>
+</DL>
+<DL><DT>
+<DD>
+ Non-integer, numeric kernel variable values retrieved by calling
+<a href="../mice/cspice_gipool.html">cspice_gipool</a> are rounded by cspice_gipool to the nearest integer.
+Kernel creators must ensure that values to be read using <a href="../mice/cspice_gipool.html">cspice_gipool</a>
+are within the range representable by integers.<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../mice/cspice_stpool.html">cspice_stpool</a>
+</B><BR><BR>
+<DD>
+ Used to fetch continued strings from the kernel pool.<BR>
+</DL>
+   The calling sequences are shown below.
+<P>
+ 
+<PRE>
+   [values, found] = <a href="../mice/cspice_gcpool.html">cspice_gcpool</a>( name, start, room )
+   [values, found] = <a href="../mice/cspice_gdpool.html">cspice_gdpool</a>( name, start, room )
+   [values, found] = <a href="../mice/cspice_gipool.html">cspice_gipool</a>( name, start, room )
+   [string, found] = <a href="../mice/cspice_stpool.html">cspice_stpool</a>( item, nth, contin )
+</PRE>
+   The meanings of the arguments are as follows:
+<P>
+ 
+<DL><DT>
+<B>
+ `name'
+</B><BR><BR>
+<DD>
+ is the name of the kernel pool variable to retrieve.<BR>
+</DL>
+<DL><DT>
+<B>
+ `first'
+</B><BR><BR>
+<DD>
+ is the index of the first item to retrieve from the array of values
+associated with `name'.<BR>
+</DL>
+<DL><DT>
+<B>
+ `room'
+</B><BR><BR>
+<DD>
+ is the number of values that may be stored in the output array
+`values'.<BR>
+</DL>
+<DL><DT>
+<B>
+ `values'
+</B><BR><BR>
+<DD>
+ is the output array of values associated with `name'. The data type of
+`values' depends upon the routine: for <a href="../mice/cspice_gcpool.html">cspice_gcpool</a>, `values' is an
+array of strings; for <a href="../mice/cspice_gdpool.html">cspice_gdpool</a>, `values' is an array of double
+precision numbers, for <a href="../mice/cspice_gipool.html">cspice_gipool</a>, `values' is an array of integers.<BR>
+</DL>
+<DL><DT>
+<B>
+ `found'
+</B><BR><BR>
+<DD>
+ indicates whether or not the requested data are available in the kernel
+pool.<BR>
+</DL>
+   For the function <a href="../mice/cspice_stpool.html">cspice_stpool</a>
+<P>
+ 
+<DL><DT>
+<B>
+ `nth'
+</B><BR><BR>
+<DD>
+ is the index (the number) of the string to fetch. The range for this
+index is 1 to n, where n is the number of string elements belonging to
+the variable.<BR>
+</DL>
+<DL><DT>
+<B>
+ `contin'
+</B><BR><BR>
+<DD>
+ is the continuation marker. This character or sequence of identical
+characters is used to indicate that the next string array element is to
+be concatenated to the marked element.<BR>
+</DL>
+<DL><DT>
+<B>
+ `string'
+</B><BR><BR>
+<DD>
+ is the string value whose index is given by `nth'.<BR>
+</DL>
+<DL><DT>
+<B>
+ `size'
+</B><BR><BR>
+<DD>
+ is the number of characters in the returned string. These routines are
+discussed at length in their respective headers.<BR>
+</DL>
+<BR><BR>
+<A NAME="Informational Functions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Informational Functions
+</H3><P><BR><BR>
+   Four routines are provided for retrieving general information about the
+   contents of the kernel pool.
+<P>
+ 
+<DL><DT>
+<B>
+ <a href="../mice/cspice_dtpool.html">cspice_dtpool</a>
+</B><BR><BR>
+<DD>
+ Returns information about the existence, dimension and type of a
+specified kernel pool variable.<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../mice/cspice_gnpool.html">cspice_gnpool</a>
+</B><BR><BR>
+<DD>
+ Allows retrieval of names of kernel pool variables that match a string
+pattern.<BR>
+</DL>
+   These routines are discussed at length in their respective source code
+   headers.
+<P>
+ 
+<BR><BR>
+<A NAME="Section 5 -- Kernel Management"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Section 5 -- Kernel Management
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   The kernel subsystem provides cspice_functions to load and unload SPICE
+   files, known as kernels, and provides other kernel management and
+   information functions. These cspice_functions are part of the ``KEEPER''
+   subsystem.
+<P>
+ 
+<BR><BR>
+<A NAME="Loading Kernels"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Loading Kernels
+</H3><P><BR><BR>
+   For the SPICE system to use kernels, they must be made known to the
+   system and opened at run time. This activity is called ``loading''
+   kernels. SPICE provides a simple interface for this purpose.
+<P>
+ 
+   The principal kernel loading function is named <a href="../mice/cspice_furnsh.html">cspice_furnsh</a> (pronounced
+   ``furnish''). A kernel database stores the existence information for any
+   kernel (text or binary) loaded by <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>. The subsystem provides
+   a set of functions that enable an application to find the names and
+   attributes of kernels stored in the database.
+<P>
+ 
+   Early versions of Mice loaded kernels using functions specific to each
+   kernel type. Code written for the binary kernels also supported a kernel
+   unload facility. Mice continues to support the original kernel loaders
+   and unloaders, but anyone writing new code should use the <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>
+   function instead of the kernel-specific functions.
+<P>
+ 
+   NAIF recommends loading multiple kernels using a ``meta-kernel'' rather
+   than by executing multiple calls to <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>. (``Meta-kernels'' are
+   sometimes called ``furnsh kernels.'') A meta-kernel is a SPICE text
+   kernel that lists the names of the kernels to load. At run time, the
+   user's application supplies the name of the meta-kernel as an input
+   argument to <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>. For example, instead of loading kernels using
+   the code fragment:
+<P>
+ 
+<PRE>
+ 
+ 
+ 
+   <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'leapseconds.tls' )
+   <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'mgs.tsc'         )
+   <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'generic.bsp'     )
+   <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'mgs.bc'          )
+   <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'earth.bpc'       )
+   <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'mgs.bes'         )
+</PRE>
+   one may now write
+<P>
+ 
+<PRE>
+ 
+ 
+ 
+   <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'kernels.tm' )
+</PRE>
+   where the file ``kernels.tm'' is a SPICE text meta-kernel containing the
+   lines
+<P>
+ 
+<PRE>
+   KPL/MK
+   \begindata
+ 
+   KERNELS_TO_LOAD = ( 'leapseconds.tls',
+                       'mgs.tsc',
+                       'generic.bsp',
+                       'mgs.bc',
+                       'earth.bpc',
+                       'mgs.bes'           )
+ 
+   \begintext
+</PRE>
+   This technique has the important advantage of enabling a user to easily
+   change the set of kernels to be loaded without modifying his source
+   code.
+<P>
+ 
+   While far less robust, it is also possible to provide the names of
+   kernels to be loaded as input arguments to <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>. For example,
+   one may write
+<P>
+ 
+<PRE>
+ 
+ 
+ 
+ 
+ 
+   kernels = { 'leapseconds.tls',
+               'mgs.tsc',
+               'generic.bsp',
+               'mgs.bc',
+               'earth.bpc',
+               'mgs.bes' };
+ 
+   %
+   % <a href="../mice/cspice_furnsh.html">cspice_furnsh</a> accepts vectorized arguments.
+   %
+   <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( kernels )
+</PRE>
+<BR><BR>
+<A NAME="Kernel Priority"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Kernel Priority
+</H3><P><BR><BR>
+   It is fairly common that two kernels of the same type - for example two
+   SPKs - to have ``competing data.'' ``Competing'' means that both kernels
+   could provide an answer to the user's request for data, even though the
+   numeric results would likely be different. This usually occurs when the
+   two kernels were produced using different input data and mostly contain
+   non-competing data, but do have some overlap in time. When two or more
+   kernels contain competing data a kernel loaded later has higher priority
+   than kernel(s) loaded earlier. This is true whether using separate calls
+   to <a href="../mice/cspice_furnsh.html">cspice_furnsh</a> for each kernel to be loaded, or a single call to
+   <a href="../mice/cspice_furnsh.html">cspice_furnsh</a> with a list of kernels to be loaded, or a call to
+   <a href="../mice/cspice_furnsh.html">cspice_furnsh</a> that loads a meta-kernel. See Appendix A for a more
+   complete discussion on competing data.
+<P>
+ 
+   If orientation data for a given body-fixed frame are provided in both a
+   text PCK and a binary PCK, data from the binary PCK always have higher
+   priority.
+<P>
+ 
+<BR><BR>
+<A NAME="Path Symbols in Meta-kernels"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Path Symbols in Meta-kernels
+</H3><P><BR><BR>
+   Inside a meta-kernel it is sometimes necessary to qualify kernel names
+   with their path names. To reduce both typing and the need to continue
+   kernel names over multiple lines, meta-kernels allow users to define
+   symbols for paths. This is done using two kernel variables:
+<P>
+ 
+<PRE>
+   PATH_VALUES
+   PATH_SYMBOLS
+</PRE>
+   To create symbols for path names, one assigns an array of path names to
+   the variable PATH_VALUES. Next, one assigns an array of corresponding
+   symbol names to the variable PATH_SYMBOLS. The nth symbol in the second
+   array represents the nth path name in the first array.
+<P>
+ 
+   Then you can prefix with path symbols the kernel names specified in the
+   KERNELS_TO_LOAD variable. Each symbol is prefixed with a dollar sign to
+   indicate that it is in fact a symbol.
+<P>
+ 
+   Suppose in our example above the MGS kernels reside in the path
+<P>
+ 
+<PRE>
+   /flight_projects/mgs/SPICE_kernels
+</PRE>
+   and the other kernels reside in the path
+<P>
+ 
+<PRE>
+   /generic/SPICE_kernels
+</PRE>
+   Then we can add paths to our meta-kernel as follows:
+<P>
+ 
+<PRE>
+   \begindata
+ 
+   PATH_VALUES  = ( '/flight_projects/mgs/SPICE_kernels',
+                    '/generic/SPICE_kernels'              )
+ 
+   PATH_SYMBOLS = ( 'MGS',
+                    'GEN' )
+ 
+ 
+   KERNELS_TO_LOAD = ( '$GEN/leapseconds.tls',
+                       '$MGS/mgs.tsc',
+                       '$GEN/generic.bsp',
+                       '$MGS/mgs.bc',
+                       '$GEN/earth.bpc',
+                       '$MGS/mgs.bes'           )
+ 
+   \begintext
+</PRE>
+   It is not required that paths be abbreviated using path symbols; it's
+   simply a convenience available to you.
+<P>
+ 
+   Caution: the symbols defined using PATH_SYMBOLS are not related to the
+   symbols supported by a host shell or any other operating system
+   interface.
+<P>
+ 
+<BR><BR>
+<A NAME="Keeping Track of Loaded Kernels"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Keeping Track of Loaded Kernels
+</H3><P><BR><BR>
+   The KEEPER subsystem maintains a database of the load operations that
+   <a href="../mice/cspice_furnsh.html">cspice_furnsh</a> has performed during a program run. This is implemented
+   using data structures of fixed size, so there is a limit on the maximum
+   number of loaded kernels that the KEEPER subsystem can accommodate.
+<P>
+ 
+   When a kernel is loaded using <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>, a new entry is created in
+   the database of loaded kernels, whether or not the kernel is already
+   loaded.
+<P>
+ 
+   All load and unload operations (see the discussion of <a href="../mice/cspice_unload.html">cspice_unload</a>
+   below) affect the list of loaded kernels and therefore affect the
+   results returned by the functions <a href="../mice/cspice_ktotal.html">cspice_ktotal</a>, <a href="../mice/cspice_kdata.html">cspice_kdata</a>, and
+   <a href="../mice/cspice_kinfo.html">cspice_kinfo</a>, all of which are discussed below under ``Finding Out
+   What's Loaded.''
+<P>
+ 
+<BR><BR>
+<A NAME="Reloading Kernels"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Reloading Kernels
+</H3><P><BR><BR>
+   Reloading an already loaded kernel creates another (duplicate) entry in
+   the database of loaded kernels, and thus decreases the available space
+   in that list. <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>'s treatment of reloaded kernels is thus
+   slightly different from that performed by the Mice low-level kernel
+   loaders, which handle a reload operation by first unloading the kernel
+   in question, then loading it.
+<P>
+ 
+<BR><BR>
+<A NAME="Changing Kernel Priority"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Changing Kernel Priority
+</H3><P><BR><BR>
+   The recommended method of increasing the priority of a loaded binary
+   kernel, or of a meta-kernel containing binary kernels, is to unload it
+   using <a href="../mice/cspice_unload.html">cspice_unload</a> (see below), then reload it using <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>.
+   This technique helps reduce clutter in <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>'s kernel list.
+<P>
+ 
+<BR><BR>
+<A NAME="Load Limits"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Load Limits
+</H3><P><BR><BR>
+   <a href="../mice/cspice_furnsh.html">cspice_furnsh</a> can currently keep track of up to 5000 kernels. The list
+   of loaded kernels may contain multiple entries for a given kernel, so
+   the number of distinct loaded kernels would be smaller if some have been
+   reloaded. Unloading kernels using <a href="../mice/cspice_unload.html">cspice_unload</a> frees room in the kernel
+   list, so there is no limit on the total number of load and corresponding
+   unload operations performed in a program run.
+<P>
+ 
+   The DAF/DAS handle manager system imposes its own limit on the number of
+   DAF binary kernels that may be loaded simultaneously. This limit is
+   currently set to a total of 5000 DAF kernels.
+<P>
+ 
+<BR><BR>
+<A NAME="Finding Out What's Loaded"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Finding Out What's Loaded
+</H3><P><BR><BR>
+   Mice-based applications may need to determine at run time which files
+   have been loaded. Applications may need to find the DAF or DAS handles
+   of loaded binary kernels so that the kernels may be searched. Some
+   applications may need to unload kernels to make room for others, or
+   change the priority of loaded kernels at run time.
+<P>
+ 
+   Mice provides kernel access functions to support these needs. For every
+   loaded kernel, an application can find the name of the kernel, the
+   kernel type (text or one of SPK, CK, PCK, or EK), the kernel's DAF or
+   DAS handle if applicable, and the name of the meta-kernel used to load
+   the kernel, if applicable.
+<P>
+ 
+   The function <a href="../mice/cspice_ktotal.html">cspice_ktotal</a> returns the count of loaded kernels of a
+   given type. The function <a href="../mice/cspice_kdata.html">cspice_kdata</a> returns information on the nth
+   kernel of a given type. The two functions are normally used together.
+   The following example shows how an application could retrieve summary
+   information on the currently loaded SPK files:
+<P>
+ 
+<PRE>
+ 
+ 
+ 
+      count = <a href="../mice/cspice_ktotal.html">cspice_ktotal</a>( 'spk' );
+ 
+      if ( count == 0 )
+ 
+         fprintf( 'There are no SPK files loaded at this time.\n' );
+ 
+      else
+ 
+         fprintf( 'The loaded SPK files are: \n' );
+ 
+         for which=1:count
+ 
+            [ file, filtyp, source, handle, found ] = ...
+                                        <a href="../mice/cspice_kdata.html">cspice_kdata</a>( which, 'spk');
+            fprintf( '%s\n', file );
+ 
+         end
+ 
+      end
+</PRE>
+   Above, the input argument
+<P>
+ 
+   'SPK'
+<P>
+ 
+   is a kernel type specifier. The allowed set of values is shown below.
+<P>
+ 
+<PRE>
+            SPK  --- Only SPK kernels are counted in the total
+            CK   --- Only CK kernels are counted in the total
+            PCK  --- Only binary PCK kernels are counted in the
+                     total
+            EK   --- Only EK kernels are counted in the total
+            TEXT --- Only text kernels that are not meta-
+                     kernels are included in the total
+            META --- Only meta-kernels are counted in the
+                     total
+            ALL  --- Every type of kernel is counted in the
+                     total
+</PRE>
+   In this example, `filtyp' is a string indicating the type of kernel.
+   `handle' is the file handle if the file is a binary SPICE kernel.
+   `source' is the name of the meta-kernel used to load the kernel, if
+   applicable. `found' indicates whether a kernel having the specified type
+   and index was found.
+<P>
+ 
+   Mice also contains the function <a href="../mice/cspice_kinfo.html">cspice_kinfo</a> that returns summary
+   information about a kernel whose name is already known. <a href="../mice/cspice_kinfo.html">cspice_kinfo</a> is
+   called as follows:
+<P>
+ 
+<PRE>
+ 
+ 
+ 
+      [ filtyp, source, handle, found ] = <a href="../mice/cspice_kinfo.html">cspice_kinfo</a>( file );
+</PRE>
+<BR><BR>
+<A NAME="Unloading Kernels"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Unloading Kernels
+</H3><P><BR><BR>
+   Mice-based applications may need to remove loaded kernels. Possible
+   reasons for this are:
+<P>
+ 
+<UL>
+<TT>--</TT> to make room to load other kernels
+<BR><BR></UL>
+<UL>
+<TT>--</TT> to change the priority of loaded kernel data
+<BR><BR></UL>
+<UL>
+<TT>--</TT> to change the set of kernel data visible to Mice
+<BR><BR></UL>
+   The function <a href="../mice/cspice_unload.html">cspice_unload</a> acts as an inverse to <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>: passing
+   a kernel name to <a href="../mice/cspice_unload.html">cspice_unload</a> undoes the effect of the previous load
+   operation performed on that kernel using <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>. For binary
+   kernels that have been loaded just once, the meaning of this is simple:
+   the kernel is closed and the database referring to the file is adjusted
+   to reflect the absence of the kernel.
+<P>
+ 
+   Text kernels are unloaded by clearing the kernel pool and then reloading
+   the other text kernels not designated for removal.
+<P>
+ 
+   Note that unloading text kernels has the side effect of wiping out any
+   kernel variables and associated values that had been entered in the
+   kernel pool using any of the kernel pool assignment functions, such as
+   <a href="../mice/cspice_pcpool.html">cspice_pcpool</a>. It is important to consider whether this side effect is
+   acceptable when writing code that may unload text kernels or
+   meta-kernels.
+<P>
+ 
+   Call <a href="../mice/cspice_unload.html">cspice_unload</a> as follows:
+<P>
+ 
+<PRE>
+ 
+ 
+ 
+      <a href="../mice/cspice_unload.html">cspice_unload</a>( kernel )
+</PRE>
+   Unloading a meta-kernel involves unloading all the kernels referenced by
+   the meta-kernel.
+<P>
+ 
+<BR><BR>
+<A NAME="Loading of Non-native Text and Binary Kernels"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Loading of Non-native Text and Binary Kernels
+</H3><P><BR><BR>
+   The various platforms supported by Mice use different end-of-line (EOL)
+   indicators in text files:
+<P>
+ 
+<PRE>
+   Environment                  Native End-Of-Line
+                                Indicator
+   ___________                  _____________________
+ 
+   PC DOS/Windows                &lt;CR&gt;&lt;LF&gt;
+   Unix                          &lt;LF&gt;
+   Linux                         &lt;LF&gt;
+   Mac OS X                      &lt;LF&gt;
+</PRE>
+   The Mice text kernel loader, <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>, can read and parse
+   non-native text files. (Caution: the FORTRAN SPICELIB text kernel
+   readers do not include this capability.)
+<P>
+ 
+   The CSPICE text file reader, rdtext_c, does not possess the capability
+   to read non-native text files.
+<P>
+ 
+   Starting with the version N0052 release of the SPICE Toolkit (January,
+   2002), supported platforms are able to read DAF-based binary kernels
+   (SPK, CK and binary PCK) that were written using a non-native binary
+   representation. This access is read-only; any operations requiring
+   writing to the file--for example, adding information to the comment
+   area, or appending additional ephemeris data-- require prior conversion
+   of the kernel to the native binary file format. See the ``Convert User's
+   Guide'' for details.
+<P>
+ 
+<BR><BR>
+<A NAME="Manipulating Kernel Pool Contents"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Manipulating Kernel Pool Contents
+</H3><P><BR><BR>
+   The main way one adds to or changes the contents of the kernel pool is
+   by ``loading'' a SPICE text kernel using the function <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>.
+   However, the kernel subsystem also provides several other functions that
+   allow one to change the contents of the kernel pool.
+<P>
+ 
+<DL><DT>
+<B>
+ <a href="../mice/cspice_clpool.html">cspice_clpool</a>
+</B><BR><BR>
+<DD>
+ Clears (initializes) the kernel pool, deleting all the variables in the
+pool.<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../mice/cspice_kclear.html">cspice_kclear</a>
+</B><BR><BR>
+<DD>
+ Clears (empties) the kernel pool, the kernel database (same effect as
+unloading all kernels), and re-initializes the subsystem. Use of
+<a href="../mice/cspice_kclear.html">cspice_kclear</a> also clears programmatic kernel pool assignments from the
+``put-pool'' routines, e.g. <a href="../mice/cspice_pipool.html">cspice_pipool</a>, <a href="../mice/cspice_pdpool.html">cspice_pdpool</a>,
+<a href="../mice/cspice_pcpool.html">cspice_pcpool</a>.<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../mice/cspice_lmpool.html">cspice_lmpool</a>
+</B><BR><BR>
+<DD>
+ Similar in effect to loading a text kernel using <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>, but the
+data being loaded into the pool come from an array of strings instead
+of a text kernel.<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../mice/cspice_pcpool.html">cspice_pcpool</a>
+</B><BR><BR>
+<DD>
+ Programmatically inserts a single character variable and its associated
+values into the kernel pool. The assignment is direct (the values
+replace any previously existing set of values associated with the
+variable.)<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../mice/cspice_pdpool.html">cspice_pdpool</a>
+</B><BR><BR>
+<DD>
+ Programmatically inserts a single double precision variable and its
+associated values into the kernel pool. The assignment is direct.<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../mice/cspice_pipool.html">cspice_pipool</a>
+</B><BR><BR>
+<DD>
+ Programmatically inserts a single integer variable and its associated
+values into the kernel pool. The assignment is direct.<BR>
+</DL>
+   The following code fragment shows how the data provided in a leapseconds
+   kernel (LSK) could be loaded using <a href="../mice/cspice_lmpool.html">cspice_lmpool</a>.
+<P>
+ 
+<PRE>
+ 
+ 
+ 
+   %
+   % Create a kernel in a text buffer.
+   %
+   textbuf = {                                             ...
+          'DELTET/DELTA_T_A = 32.184',                     ...
+          'DELTET/K         = 1.657D-3',                   ...
+          'DELTET/EB        = 1.671D-2',                   ...
+          'DELTET/M         = ( 6.239996 1.99096871D-7 )', ...
+          'DELTET/DELTA_AT  = ( 10, @1972-JAN-1',          ...
+          '                     11, @1972-JUL-1',          ...
+          '                     12, @1973-JAN-1',          ...
+          '                     13, @1974-JAN-1',          ...
+          '                     14, @1975-JAN-1',          ...
+          '                     15, @1976-JAN-1',          ...
+          '                     16, @1977-JAN-1',          ...
+          '                     17, @1978-JAN-1',          ...
+          '                     18, @1979-JAN-1',          ...
+          '                     19, @1980-JAN-1',          ...
+          '                     20, @1981-JUL-1',          ...
+          '                     21, @1982-JUL-1',          ...
+          '                     22, @1983-JUL-1',          ...
+          '                     23, @1985-JUL-1',          ...
+          '                     24, @1988-JAN-1',          ...
+          '                     25, @1990-JAN-1',          ...
+          '                     26, @1991-JAN-1',          ...
+          '                     27, @1992-JUL-1',          ...
+          '                     28, @1993-JUL-1',          ...
+          '                     29, @1994-JUL-1',          ...
+          '                     30, @1996-JAN-1',          ...
+          '                     31, @1997-JUL-1',          ...
+          '                     32, @1999-JAN-1',         ...
+          '                     33, @2006-JAN-1',         ...
+          '                     34, @2009-JAN-1 )'         ...
+             };
+ 
+   %
+   % Load the kernel data into the kernel pool.
+   %
+   <a href="../mice/cspice_lmpool.html">cspice_lmpool</a>( textbuf )
+</PRE>
+   See the headers of the kernel subsystem functions for specific details
+   regarding their use.
+<P>
+ 
+<BR><BR>
+<A NAME="Appendix A -- Discussion of Competing Data"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Appendix A -- Discussion of Competing Data
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+<BR><BR>
+<A NAME="Binary Kernels0"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Binary Kernels
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   For binary kernels, the conditions resulting in competing data depend on
+   the kernel type.
+<P>
+ 
+<BR><BR>
+<A NAME="SPKs"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> SPKs
+</H3><P><BR><BR>
+   For SPKs, a segment contains data of a single SPK type, providing
+   ephemeris for a single target measured relative to a single center and
+   given in a single reference frame, spanning between specified start and
+   stop times. If ephemeris data from any two segments, whether found in a
+   single SPK file or in two SPK files, are for the same target and have an
+   overlap in the time spans covered, then the two kernels are said to have
+   some competing data. Note that centers play no role in the competition:
+   two segments with the same target and different centers may compete.
+<P>
+ 
+   By definition, SPKs contain continuous data during the time interval
+   covered by a segment, so there is no chance for a ``data gap'' in a
+   segment within a higher priority file (later loaded file) leading to a
+   state lookup coming from a segment in a lower priority file.
+<P>
+ 
+   SPK segment chaining may lead to a problem. It may happen that you have
+   loaded into your program sufficient SPK data to compute the desired
+   state or position vector, but Mice nevertheless returns an error message
+   saying insufficient ephemeris data have been loaded. This can occur if a
+   higher priority SPK segment, for which there are not sufficient
+   additional SPK data to fully construct your requested state or position
+   vector, is masking (blocking) a segment that is part of a viable
+   (complete) chain. See the BACKUP section of the SPK tutorial for further
+   discussion about this.
+<P>
+ 
+   Having competition between two SPKs can be a relatively common
+   occurrence when using mission operations kernels, but is far less likely
+   when using PDS-archived SPICE data sets because of the clean-up and
+   consolidation actions usually taken when an archive delivery is
+   produced.
+<P>
+ 
+<BR><BR>
+<A NAME="CKs"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> CKs
+</H3><P><BR><BR>
+   For CKs, a segment contains data of a single CK type providing the
+   orientation of a reference frame associated with one object or
+   structure, such as a spacecraft or instrument (sometimes called the
+   ``to'' reference frame), relative to a second reference frame, generally
+   referred to as the base reference frame (sometimes called the ``from''
+   reference frame), spanning between specified start and stop times.
+<P>
+ 
+   If transformation data from any two segments, whether found in a single
+   CK file or in two CK files, are for the same object/structure (are for
+   the same ``to'' frame) and have an overlap in the time span covered,
+   then the two kernels may have competing data. But read on.
+<P>
+ 
+   However, unlike for SPKs, competition between CK files goes beyond
+   segment-level considerations. The so-called ``continuous'' CK types
+   (Types 2 through 5) do not necessarily provide orientation results for
+   any epoch falling within a segment--there may be real data gaps. And the
+   now little used Type 1 CK, containing discrete instances of orientation
+   data, can be thought of as containing mostly data gaps.
+<P>
+ 
+   While some of the Toolkit software used to compute orientation obtained
+   from CKs can provide an orientation result within a gap, this is usually
+   not the case. See the CK tutorial and the ``CK Required Reading''
+   document for discussions on interpolation intervals, tolerance, and how
+   the various CK readers work.
+<P>
+ 
+   CK segment chaining may lead to a problem. It may happen that you have
+   loaded into your program sufficient CK data to compute the desired
+   rotation matrix, but Mice nevertheless returns an error message saying
+   insufficient data have been loaded. This can occur if a higher priority
+   CK segment, for which there are not sufficient additional CK data to
+   fully construct your requested rotation matrix, is masking (blocking) a
+   segment that is part of a viable (complete) chain.
+<P>
+ 
+   Having competition between two CKs can be a relatively common occurrence
+   when using mission operations kernels, but is far less likely when using
+   PDS-archived SPICE data sets because of the clean-up and consolidation
+   actions usually taken when an archive delivery is prepared.
+<P>
+ 
+<BR><BR>
+<A NAME="Binary PCKs"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Binary PCKs
+</H3><P><BR><BR>
+   For binary PCKs, a segment contains data of a single binary PCK type
+   providing orientation of a reference frame associated with a single
+   object (a body-fixed frame), relative to a second reference frame, which
+   is always an inertial frame, spanning between specified start and stop
+   times. If orientation data from any segment in one binary PCK and
+   orientation data from any segment in a second binary PCK are for the
+   same body-fixed frame and overlap in time, then the two kernels are said
+   to have competing data.
+<P>
+ 
+   At present binary PCKs produced by NAIF exist only for the earth and the
+   moon. Having competition between the latest high precision, short term
+   earth orientation binary PCK and the lower precision, long term predict
+   earth orientation binary PCK is a clear possibility -- be sure to load
+   the long term predict file first to ensure any higher precision files
+   also loaded have higher priority.
+<P>
+ 
+   Orientation data provided in any loaded binary PCK have priority over
+   what would have otherwise been competing data provided in any loaded
+   text PCK.
+<P>
+ 
+<BR><BR>
+<A NAME="Text Kernels"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Text Kernels
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   If a given variable name has two or more assignments, with the final
+   assignment made using the ``='' operator, whether within a single loaded
+   text kernel, or from multiple loaded text kernels, or achieved using
+   Mice functions, the last such assignment supersedes all previous
+   occurrences of the assignment. This superseding happens no matter how
+   many values are contained in the last assignment. (It's as if all
+   previous assignments for the subject name had never occurred.)
+<P>
+ 
+   It is generally best to unload a text kernel before loading another one
+   containing competing data.
+<P>
+ 
+<BR><BR>
+<A NAME="Appendix B -- Glossary of Terms"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Appendix B -- Glossary of Terms
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+<BR><BR>
+<A NAME="Assignment"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Assignment
+</H3><P><BR><BR>
+   What appears inside data blocks of a text kernel. Each assignment
+   consists of three parts: a variable (also called variable name), an
+   operator, and a scalar or vector value. For example,
+<P>
+ 
+<PRE>
+   BODY399_RADII = ( 6378.14   6378.14   6356.75 )
+</PRE>
+   is an assignment with a vector value.
+<P>
+ 
+   Once a text kernel is loaded, the value(s) on the right hand sides of
+   the assignments become associated with the variable names on the
+   corresponding left hand sides. See ``direct assignment'' and
+   ``incremental assignment'' below.
+<P>
+ 
+<BR><BR>
+<A NAME="Continued string"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Continued string
+</H3><P><BR><BR>
+   A string value composed of two or more pieces--called elements--each of
+   which is no longer than 80 characters.
+<P>
+ 
+<BR><BR>
+<A NAME="Control words"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Control words
+</H3><P><BR><BR>
+   Markers indicating the start of data or comment blocks, specifically
+<P>
+ 
+<PRE>
+   \begindata
+   \begintext
+</PRE>
+<BR><BR>
+<A NAME="Direct assignment"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Direct assignment
+</H3><P><BR><BR>
+   A text kernel assignment, made using the ``='' operator. When a direct
+   assignment is processed during text kernel loading, it associates one or
+   more values with a variable name, and in so doing, replaces any previous
+   such associations.
+<P>
+ 
+<BR><BR>
+<A NAME="Element"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Element
+</H3><P><BR><BR>
+   Within the kernel pool the length of a string value is limited to 80
+   characters. A string value that is longer than 80 characters may be
+   stored in and extracted from the pool by chunking it into pieces--called
+   elements--each of which is no longer than 80 characters. Such a string
+   is referred to as a ``continued string.''
+<P>
+ 
+<BR><BR>
+<A NAME="Incremental assignment"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Incremental assignment
+</H3><P><BR><BR>
+   A text kernel assignment made using the ``+='' operator. When an
+   incremental assignment is processed during text kernel loading, it
+   appends one or more values to the list of values already associated with
+   a variable name. Any previous such associations are NOT replaced; rather
+   they are supplemented with the new value(s). Incremental assignments may
+   be made to variables that didn't previously exist in the kernel pool; in
+   such cases incremental assignments are equivalent to direct assignments.
+<P>
+ 
+<BR><BR>
+<A NAME="Keeper (subsystem)"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Keeper (subsystem)
+</H3><P><BR><BR>
+   The SPICE subsystem used to keep track of (manage) loaded kernel files.
+   In this sense it is also involved with the unloading of kernels.
+<P>
+ 
+<BR><BR>
+<A NAME="Kernel pool (sometimes just called ``the pool'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Kernel pool (sometimes just called ``the pool'')
+</H3><P><BR><BR>
+   A specially managed area of program memory where data from text kernel
+   assignment statements are stored.
+<P>
+ 
+<BR><BR>
+<A NAME="Kernel variable"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Kernel variable
+</H3><P><BR><BR>
+   Often a synonym for ``variable name,'' but may refer to the combination
+   of a variable name and its associated values.
+<P>
+ 
+<BR><BR>
+<A NAME="Meta-kernel (also known as ``FURNSH kernel'')"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Meta-kernel (also known as ``FURNSH kernel'')
+</H3><P><BR><BR>
+   A special kind of text kernel, used to name a collection of kernels that
+   are to be loaded into a user's application at run-time. May include the
+   path names for the kernels as well as the file names.
+<P>
+ 
+<BR><BR>
+<A NAME="Operator"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Operator
+</H3><P><BR><BR>
+   Within SPICE text kernels, an operator is either ``='' or the sequence
+   of ``+'' and ``='', written as ``+=''. The former is used to make direct
+   assignments, the latter is used to make incremental assignments.
+<P>
+ 
+<BR><BR>
+<A NAME="Principal data"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Principal data
+</H3><P><BR><BR>
+   This term occurs only within this document. It is used to refer to the
+   ``elemental'' data contained in a kernel, as opposed to meta-data or
+   bookkeeping data. For instance, within an SPK the principal data are the
+   polynomials or other numeric data providing ephemeris information. Not
+   part of the principal data are the descriptive information placed in the
+   comment area, the file architecture IDs, and the indexes that help the
+   subsystem quickly find the principal data needed to return a state
+   vector.
+<P>
+ 
+<BR><BR>
+<A NAME="Value"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Value
+</H3><P><BR><BR>
+   That which appears on the right-hand side of an assignment. May be a
+   single value or a vector of values.
+<P>
+ 
+   variable name = value(s)
+<P>
+ 
+<BR><BR>
+<A NAME="Variable name"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Variable name
+</H3><P><BR><BR>
+   That which appears on the left-hand side of an assignment.
+<P>
+ 
+   variable name = value(s)
+<P>
+ 
+<BR><BR>
+<A NAME="Vector value"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Vector value
+</H3><P><BR><BR>
+   Two or more values associated with a single variable name.
+<P>
+ 
+<BR><BR>
+<A NAME="Appendix C -- Summary of Routines"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Appendix C -- Summary of Routines
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Each of the function names is a mnemonic that translates into a short
+   description of the function's purpose.
+<P>
+ 
+<PRE>
+ 
+ 
+ 
+ 
+ 
+   <a href="../mice/cspice_clpool.html">cspice_clpool</a> ( Clear the pool of kernel variables )
+   <a href="../mice/cspice_dtpool.html">cspice_dtpool</a> ( Return information about a kernel pool variable )
+   <a href="../mice/cspice_furnsh.html">cspice_furnsh</a> ( Furnish the environment with SPICE kernels )
+   <a href="../mice/cspice_gcpool.html">cspice_gcpool</a> ( Get character data from the kernel pool )
+   <a href="../mice/cspice_gdpool.html">cspice_gdpool</a> ( Get double precision values from the kernel pool )
+   <a href="../mice/cspice_gipool.html">cspice_gipool</a> ( Get integers from the kernel pool )
+   <a href="../mice/cspice_gnpool.html">cspice_gnpool</a> ( Get names of kernel pool variables )
+   <a href="../mice/cspice_kclear.html">cspice_kclear</a> ( Clear and re-initialize the kernel database )
+   <a href="../mice/cspice_kdata.html">cspice_kdata</a>  ( Return informatin about the nth loaded kernel )
+   <a href="../mice/cspice_kinfo.html">cspice_kinfo</a>  ( Return information about a specific loaded kernel )
+   <a href="../mice/cspice_ktotal.html">cspice_ktotal</a> ( Return the number of kernels loaded using KEEPER )
+   <a href="../mice/cspice_lmpool.html">cspice_lmpool</a> ( Load variables from memory into the pool )
+   <a href="../mice/cspice_pcpool.html">cspice_pcpool</a> ( Put character strings into the kernel pool )
+   <a href="../mice/cspice_pdpool.html">cspice_pdpool</a> ( Put double precision values into the kernel pool )
+   <a href="../mice/cspice_pipool.html">cspice_pipool</a> ( Put integers into the kernel pool )
+   <a href="../mice/cspice_stpool.html">cspice_stpool</a> ( Return a string associated with a kernel variable )
+   <a href="../mice/cspice_unload.html">cspice_unload</a> ( Unload a kernel )
+</PRE>
+<BR><BR>
+<A NAME="Appendix D -- Summary of Key Text Kernel Parameter Values"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Appendix D -- Summary of Key Text Kernel Parameter Values
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Text kernel limits
+<P>
+ 
+<PRE>
+   Maximum variable name length:                         32
+   Maximum length of any element of a string value:      80
+   Maximum number of distinct variables:              26003
+   Maximum number of numeric variable values:        400000
+   Maximum number of character strings
+    stored in the kernel pool as values:              15000
+   Maximum length of a file name, including any
+    path specification, placed in a meta-kernel:        255
+</PRE>
+   Other applicable limits
+<P>
+ 
+<PRE>
+   Maximum total number of kernel files of any
+   type that can be loaded simultaneously:             5000
+</PRE>
+<BR><BR>
+<A NAME="Appendix E -- Revision History"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Appendix E -- Revision History
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   2014 July 15, NJB (JPL)
+<P>
+ 
+   Updated numeric limits. Added discussion of kernel loading errors. Made
+   small additions to discussion of file name restrictions. Added mention
+   of treatment by GIPOOL of non-integer values. Made small addition to
+   discussion of ``@'' time values in text kernels. Corrected a
+   ``setparamsize'' setting that truncated function names. Changed quoting
+   style to standard (`` '')for .ftm documents. Changed double quotes to
+   single quotes in IDL code example. Made other miscellaneous, minor
+   edits.
+<P>
+ 
+   2011 October 24, CHA (JPL)
+<P>
+ 
+   Re-organization and added further clarifications. Also added Appendix A
+   discussion of competing data, Appendix B providing a glossary of terms,
+   and an Appendix C summarizing kernel subsystem functions. Includes much
+   information provided by N. Bachman.
+<P>
+ 
+   2011 APR 18, EDW (JPL)
+<P>
+ 
+   Edits for clarity and organization.
+<P>
+ 
+   Added description of the 32 character limit on user defined kernel pool
+   variable names for <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>, <a href="../mice/cspice_lmpool.html">cspice_lmpool</a>, <a href="../mice/cspice_pcpool.html">cspice_pcpool</a>,
+   <a href="../mice/cspice_pdpool.html">cspice_pdpool</a>, and cspice_pdpool. Added mention that tabs are now
+   allowed in text kernels. <a href="../mice/cspice_kclear.html">cspice_kclear</a> now included in routines list.
+<P>
+ 
+   2009 APR 08, BVS (JPL)
+<P>
+ 
+   Previous edits.
+<P>
+ 
+
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+
+
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+
+</BODY>
+
+
+</HTML>

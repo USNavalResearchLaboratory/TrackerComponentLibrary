@@ -1,0 +1,101 @@
+In the e-mail exchange below, David Vallado confirmed that the code for his implementation of an SGP4 propagator is in the public domain.
+
+June 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+
+Return-Path: <dvallado@agi.com>
+Received: from mail6.nrl.navy.mil (smail.nrl.navy.mil [132.250.21.116])
+	by radar.nrl.navy.mil (8.13.8/8.13.8) with ESMTP id u5LK37Fl002395
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES128-SHA bits=128 verify=NOT)
+	for <crouse@radar.nrl.navy.mil>; Tue, 21 Jun 2016 16:03:08 -0400
+Received: from na01-bl2-obe.outbound.protection.outlook.com (mail-bl2on0792.outbound.protection.outlook.com [IPv6:2a01:111:f400:fc09:0:0:0:792])
+	by mail6.nrl.navy.mil (8.15.2/8.15.2) with ESMTPS id u5LIg99W015218
+	(version=TLSv1.2 cipher=AES256-SHA256 bits=256 verify=FAIL)
+	for <david.crouse@nrl.navy.mil>; Tue, 21 Jun 2016 14:42:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=otsf.onmicrosoft.com;
+ s=selector1-agi-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=vMmSU4RkFUXprbAmFaYFyyNLBY3uYW+D58/DtSPB0gc=;
+ b=W8BY5YMIV6f77OCY1tOx2D0Abhpc32kXA0HXuVklUZq4nByYQyciNDsNAg7s4UWoNesE4Rc3L6iqL7n7ZSZFzeJ46Wf5hjbVaHKWkXFFN4L6I4QA4ThMBqxA/gxs5RbTgwQE4MdHbwSI73xEvrNdmg8GiAfF7S2HJW9zVRPpB2A=
+Received: from DM2PR07MB1500.namprd07.prod.outlook.com (10.161.140.12) by
+ DM2PR07MB1498.namprd07.prod.outlook.com (10.161.139.156) with Microsoft SMTP
+ Server (TLS) id 15.1.523.12; Tue, 21 Jun 2016 20:02:43 +0000
+Received: from DM2PR07MB1500.namprd07.prod.outlook.com ([10.161.140.12]) by
+ DM2PR07MB1500.namprd07.prod.outlook.com ([10.161.140.12]) with mapi id
+ 15.01.0523.015; Tue, 21 Jun 2016 20:02:43 +0000
+From: "Vallado, David" <dvallado@agi.com>
+To: "David F. Crouse" <david.crouse@nrl.navy.mil>
+Subject: RE: The SGP4 Code
+Thread-Topic: The SGP4 Code
+Thread-Index: AQHRx9dNt49cmIHrLkO8dNuBJ7RSFJ/0X+iA
+Date: Tue, 21 Jun 2016 20:02:43 +0000
+Message-ID: <DM2PR07MB1500E3502A26D1F9696C0AA1C32B0@DM2PR07MB1500.namprd07.prod.outlook.com>
+References: <FBDF075B-242D-46B5-B4FA-34195F6C6553@nrl.navy.mil>
+In-Reply-To: <FBDF075B-242D-46B5-B4FA-34195F6C6553@nrl.navy.mil>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=dvallado@agi.com; 
+x-originating-ip: [65.89.177.254]
+x-ms-office365-filtering-correlation-id: 12251487-eddc-49a0-7235-08d39a0f01e5
+x-microsoft-exchange-diagnostics: 1;DM2PR07MB1498;6:NqM3S2tldifEDEE/Yz6ZAo+dQbeVWeluANX7seUI+js0T4XiSiTdnwrxhYp0bqkb+bVnt+lukFguY93YGSV5iFL3RpLnJAvz48edxcqFZKaclMaCt8zkgHMHwR4ipbYWaQNLAEA0636nyAFwd41XrXmgzfaJtwa4yS+CAF/Tz1BRCAH8FrfKyafPyzoOS/fEfs4R3VD8ifuy/Ckn8Ex3dXX2p5F856FSGw8SVq3d3KTvXPzMWLcFMKcsxu+bP5lQ8TG+e0ol6scYCN0EUcy47FCOjtufOwLHqwd5OzGRcLc=;5:ZHmtndJVtpRXT1PMfpRfmp2EzXgdN617trTGzP0HMCL+/BtFeUmcTAdnbvqH8/YuhEuBce2/enTF7eYrCBm66GH3D0AA9XzH9rcfGC8V8uQ9PYVsnH9h4vX3+bQpiwXUtcQ3r4EAkI1cNbgQbkaPgg==;24:ivA62Yd1a2bEC5xIjuKmSTjNfT5AIlBOE33IhhCZBWzs/0+mDmTgs+pWUCRZK0Vh2R6+rAgxZproxhuvSvW3/mnj8KTdAUpQWr+MjjWcPbg=;7:282H/C8+Ph6wnzuVJdwaAK8vh0kXg06bvVWUZtNPcbNopFKFWJxNsmuqL8N1XOveVgt530vQIlN+Bhvp0q3wwNyI4vOimFB04UTanuxAuJKPtnCHSekL4m348o1VXUFK6FLlp8kflg94iSMXEWD11ma4XHisHv/rltSDtmfTO7F1clrekj71hUhmplU2Xccxj9xY9J34koY8LBQ4al2PIzgg43MD2jBXJL1dW1uczgI1s03NmJoC3S+YnsEdqjqW
+x-microsoft-antispam: UriScan:;BCL:0;PCL:0;RULEID:;SRVR:DM2PR07MB1498;
+x-microsoft-antispam-prvs: <DM2PR07MB1498B5D7C4C8EF18200B4D9EC32B0@DM2PR07MB1498.namprd07.prod.outlook.com>
+x-exchange-antispam-report-test: UriScan:(209352067349851)(4659246709749);
+x-exchange-antispam-report-cfa-test: BCL:0;PCL:0;RULEID:(601004)(2401047)(8121501046)(5005006)(3002001)(10201501046);SRVR:DM2PR07MB1498;BCL:0;PCL:0;RULEID:;SRVR:DM2PR07MB1498;
+x-forefront-prvs: 098076C36C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(6009001)(7916002)(199003)(189002)(41584004)(377454003)(252514010)(13464003)(101416001)(3846002)(106116001)(76176999)(105586002)(106356001)(99286002)(3280700002)(8936002)(33656002)(189998001)(107886002)(7736002)(110136002)(76576001)(586003)(50986999)(9686002)(3660700001)(2950100001)(10400500002)(77096005)(102836003)(81156014)(74316001)(19580405001)(86362001)(19580395003)(87936001)(8676002)(66066001)(450100001)(2900100001)(92566002)(11100500001)(68736007)(54356999)(2906002)(6116002)(122556002)(5002640100001)(81166006)(5003600100003)(7846002)(7696003)(97736004)(13914002)(19627235001);DIR:OUT;SFP:1102;SCL:1;SRVR:DM2PR07MB1498;H:DM2PR07MB1500.namprd07.prod.outlook.com;FPR:;SPF:None;PTR:InfoNoRecords;A:1;MX:1;LANG:en;
+received-spf: None (protection.outlook.com: agi.com does not designate
+ permitted sender hosts)
+spamdiagnosticoutput: 1:99
+spamdiagnosticmetadata: NSPM
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+X-OriginatorOrg: agi.com
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jun 2016 20:02:43.5011
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8b5e95e7-474d-4fb4-b270-7cea810b73bb
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM2PR07MB1498
+X-Scanned-By: MIMEDefang 2.64 on 132.250.183.240
+X-Scanned-By: MIMEDefang 2.78
+X-Spam-Score: 0.01 () T_DKIM_INVALID
+Content-Transfer-Encoding: 8bit
+X-MIME-Autoconverted: from base64 to 8bit by radar.nrl.navy.mil id u5LK37Fl002395
+
+David,
+    Sorry for the delay - yes, the code is totally legal and in the public domain. That was my intent. :-)
+
+dav
+David A Vallado
+Senior Research Astrodynamicist, CSSI/AGI 
+719-573-2600, 719-573-9079 FAX, 610-981-8614 direct
+There is a new STK ...Â agi.com/ThisOneGoesTo11
+
+
+-----Original Message-----
+From: David F. Crouse [mailto:david.crouse@nrl.navy.mil] 
+Sent: Thursday, June 16, 2016 7:59 AM
+To: Vallado, David <dvallado@agi.com>
+Subject: The SGP4 Code
+
+Dear Dr. Vallado:
+
+Regarding the SGP4 code that you had posted online, you had previously written that "There is no license - all open sourceâ. As I would like to release a new version of the Tracker Component Library for Matlab, to satisfy legal, could you reply confirming that the code is officially in the public domain?
+
+David F. Crouse
+Surveillance Technology Branch
+Radar Division
+Naval Research Laboratory
+Phone: (202) 404-8106
+Fax: (202) 404-8687
+E-Mail: david.crouse@nrl.navy.mil
+ 
+MAILING ADDRESS:
+Naval Research Laboratory
+Attn: Code 5344 (D. Crouse)
+4555 Overlook Avenue S.W.
+Washington, DC  20375
+

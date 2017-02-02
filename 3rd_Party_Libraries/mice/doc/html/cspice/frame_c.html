@@ -1,0 +1,254 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>frame_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>frame_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void frame_c ( SpiceDouble x[3],
+                  SpiceDouble y[3],
+                  SpiceDouble z[3] ) 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+    Given a vector x, this routine builds a right handed 
+    orthonormal frame x,y,z where the output x is parallel to 
+    the input x. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+    AXES,  FRAME 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+    VARIABLE  I/O  DESCRIPTION 
+    --------  ---  ------------------------------------------------ 
+    x         I/O  Input vector. A parallel unit vector on output. 
+    y          O   Unit vector in the plane orthogonal to x. 
+    z          O   Unit vector given by x X y. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+ 
+    x      This vector is used to form the first vector of a 
+           right-handed orthonormal triple. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+    x, 
+    y, 
+    z      form a right handed orthonormal frame, where x is 
+           now a unit vector parallel to the original input 
+           vector x.  There are no special geometric properties 
+           connected to y and z (other than that they complete the 
+           right handed frame). 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+    None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   Error Free.
+ 
+   1) If x on input is the zero vector the ``standard'' frame (ijk) 
+      is returned. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+    None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+    Given an input vector x, this routine returns unit vectors x, 
+    y, and z such that xyz forms a right-handed orthonormal frame 
+    where the output x is parallel to the input x. 
+ 
+    This routine is intended primarily to provide a basis for 
+    the plane orthogonal to x.  There are no special properties 
+    associated with y and z other than that the resulting xyz frame 
+    is right handed and orthonormal.  There are an infinite 
+    collection of pairs (y,z) that could be used to this end. 
+    Even though for a given x, y and z are uniquely determined, users 
+    should regard the pair (y,z) as a random selection from this 
+    infinite collection. 
+ 
+    For instance, when attempting to determine the locus of points 
+    that make up the limb of a triaxial body, it is a straightforward 
+    matter to determine the normal to the limb plane.  To find 
+    the actual parametric equation of the limb one needs to have 
+    a basis of the plane.  This routine can be used to get a basis 
+    in which one can describe the curve and from which one can 
+    then determine the principal axes of the limb ellipse. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+    In addition to using a vector to construct a right handed frame 
+    with the x-axis aligned with the input vector, one can construct 
+    right handed frames with any of the axes aligned with the input 
+    vector. 
+ 
+    For example suppose we want a right hand frame xyz with the 
+    z-axis aligned with some vector v.  Assign v to z 
+ 
+          z[0] = v[0]; 
+          z[1] = v[1]; 
+          z[2] = v[2]; 
+ 
+    Then call <b>frame_c</b> with the arguments x,y,z cycled so that z 
+    appears first. 
+ 
+          <b>frame_c</b> (z, x, y); 
+ 
+    The resulting xyz frame will be orthonormal with z parallel 
+    to the vector v. 
+ 
+    To get an xyz frame with y parallel to v perform the following 
+ 
+          y[0] = v[0]; 
+          y[1] = v[1]; 
+          y[2] = v[2]; 
+ 
+          <b>frame_c</b> (y, z, x); 
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+    None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+    None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+    W.L. Taber      (JPL) 
+    I.M. Underwood  (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 26-MAR-1999 (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   build a right handed coordinate frame 
+ </PRE>
+<h4>Link to routine frame_c source file <a href='../../../src/cspice/frame_c.c'>frame_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:33 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,287 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>etcal_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>etcal_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void etcal_c ( SpiceDouble   et,
+                  SpiceInt      lenout,
+                  SpiceChar   * string )
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   Convert from an ephemeris epoch measured in seconds past
+   the epoch of J2000 to a calendar string format using a
+   formal calendar free of leapseconds.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+   TIME
+
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+   Variable  I/O  Description
+   --------  ---  --------------------------------------------------
+   et         I   Ephemeris time measured in seconds past J2000.
+   lenout     I   Length of output string.
+   string     O   A standard calendar representation of et.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+   et       is an epoch measured in ephemeris seconds
+            past the epoch of J2000.
+
+   lenout   is the user defined length of the output string.
+            The value should be at least 48 characters.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+   string   is a calendar string representing the input ephemeris
+            epoch.  This string is based upon extending the
+            Gregorian Calendar backward and forward indefinitely
+            keeping the same rules for determining leap years.
+            Moreover, there is no accounting for leapseconds.
+
+            To be sure that all of the date can be stored in
+            string, it should be declared to have length at
+            least 48 characters.
+
+            The string will have the following format
+
+               year (era) mon day, hr:mn:sc.sss
+
+            Where:
+
+               year --- is the year
+               era  --- is the chronological era associated with
+                        the date.  For years after 999 A.D.
+                        the era is omitted.  For years
+                        between 1 A.D. and 999 A.D. (inclusive)
+                        era is the string 'A.D.' For epochs
+                        before 1 A.D. Jan 1 00:00:00, era is
+                        given as 'B.C.' and the year is converted
+                        to years before the &quot;Christian Era&quot;.
+                        The last B.C. epoch is
+
+                          1 B.C. DEC 31, 23:59:59.999
+
+                        The first A.D. epoch (which occurs .001
+                        seconds after the last B.C. epoch) is:
+
+                           1 A.D. JAN 1, 00:00:00.000
+
+                        Note: there is no year 0 A.D. or 0 B.C.
+               mon  --- is a 3-letter abbreviation for the month
+                        in all capital letters.
+               day  --- is the day of the month
+               hr   --- is the hour of the day (between 0 and 23)
+                        leading zeros are added to hr if the
+                        numeric value is less than 10.
+               mn   --- is the minute of the hour (0 to 59)
+                        leading zeros are added to mn if the
+                        numeric value is less than 10.
+               sc.sss   is the second of the minute to 3 decimal
+                        places ( 0 to 59.999).  Leading zeros
+                        are added if the numeric value is less
+                        than 10.  Seconds are truncated, not
+                        rounded.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+   Error free.
+
+   1) If the input et is so large that the corresponding
+      number of days since 1 A.D. Jan 1, 00:00:00 is
+      within 1 of overflowing or underflowing an integer,
+      et will not be converted to the correct string
+      representation rather, the string returned will
+      state that the epoch was before or after the day
+      that is min_integer_val + 1 or max_integer_val - 1 days
+      after 1 A.D. Jan 1, 00:00:00.
+
+   2) If the output string is not sufficiently long to hold
+      the full date, it will be truncated on the right.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+   This is an error free routine for converting ephemeris epochs
+   represented as seconds past the J2000 epoch to formal
+   calendar strings based upon the Gregorian Calendar.  This formal
+   time is often useful when one needs a human recognizable
+   form of an ephemeris epoch.  There is no accounting for leap
+   seconds in the output times produced.
+
+   Note: The calendar epochs produced are not the same as the
+         UTC calendar epochs that correspond to et. The strings
+         produced by this routine may vary from the corresponding
+         UTC epochs by more than 1 minute.
+
+   This routine can be used in creating error messages or
+   in routines and programs in which one prefers to report
+   times without employing leapseconds to produce exact UTC
+   epochs.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+   Suppose you wish to  report that no data is
+   available at a particular ephemeris epoch et.  The following
+   code shows how you might accomplish this task.
+
+   #define STRLEN   48
+
+   <b>etcal_c</b>  ( et, STRLEN, string )
+
+   printf ( &quot;There is no data available for the body &quot; );
+   printf ( &quot;at requested time: %s ( %f )&quot;, string, et );
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   One must keep in mind when using this routine that
+   ancient times are not based upon the Gregorian
+   calendar.  For example the 0 point of the Julian
+   Date system is 4713 B.C. Jan 1, 12:00:00 on the Julian
+   Calendar.  If one formalized the Gregorian calendar
+   and extended it indefinitely, the zero point of the Julian
+   date system corresponds to 4714 B.C. NOV 24 12:00:00 on
+   the Gregorian calendar.  There are several reasons for this.
+   Leap years in the Julian calendar occur every
+   4 years (including *all* centuries).  Moreover,  the
+   Gregorian calendar &quot;effectively&quot; begins on 15 Oct, 1582 A.D.
+   which is 5 Oct, 1582 A.D. in the Julian Calendar.
+
+   Therefore you must be careful in your interpretation
+   of ancient dates produced by this routine.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+   1. &quot;From Sundial to Atomic Clocks---Understanding Time and
+       Frequency&quot; by James Jespersen and Jane Fitz-Randolph
+       Dover Publications, Inc. New York (1982).
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   W.L. Taber      (JPL)
+   K.R. Gehringer  (JPL)
+   E.D. Wright     (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.0.0, 5-MAR-1998   (EDW)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   Convert ephemeris time to a formal calendar date
+</PRE>
+<h4>Link to routine etcal_c source file <a href='../../../src/cspice/etcal_c.c'>etcal_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:33 2014</pre>
+
+</body>
+</html>
+

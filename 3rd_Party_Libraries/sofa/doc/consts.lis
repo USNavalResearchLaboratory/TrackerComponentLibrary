@@ -1,0 +1,54 @@
+consts.lis                                             2008 September 30
+
+
+SOFA Fortran constants
+----------------------
+
+These must be used exactly as presented below.
+
+*  Pi
+      DOUBLE PRECISION DPI
+      PARAMETER ( DPI = 3.141592653589793238462643D0 )
+
+*  2Pi
+      DOUBLE PRECISION D2PI
+      PARAMETER ( D2PI = 6.283185307179586476925287D0 )
+
+*  Radians to hours
+      DOUBLE PRECISION DR2H
+      PARAMETER ( DR2H = 3.819718634205488058453210D0 )
+
+*  Radians to seconds
+      DOUBLE PRECISION DR2S
+      PARAMETER ( DR2S = 13750.98708313975701043156D0 )
+
+*  Radians to degrees
+      DOUBLE PRECISION DR2D
+      PARAMETER ( DR2D = 57.29577951308232087679815D0 )
+
+*  Radians to arc seconds
+      DOUBLE PRECISION DR2AS
+      PARAMETER ( DR2AS = 206264.8062470963551564734D0 )
+
+*  Hours to radians
+      DOUBLE PRECISION DH2R
+      PARAMETER ( DH2R = 0.2617993877991494365385536D0 )
+
+*  Seconds to radians
+      DOUBLE PRECISION DS2R
+      PARAMETER ( DS2R = 7.272205216643039903848712D-5 )
+
+*  Degrees to radians
+      DOUBLE PRECISION DD2R
+      PARAMETER ( DD2R = 1.745329251994329576923691D-2 )
+
+*  Arc seconds to radians
+      DOUBLE PRECISION DAS2R
+      PARAMETER ( DAS2R = 4.848136811095359935899141D-6 )
+
+
+SOFA C constants
+----------------
+
+The constants used by the C version of SOFA are defined in the header
+file sofam.h.

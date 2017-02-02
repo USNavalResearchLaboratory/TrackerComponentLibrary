@@ -1,0 +1,264 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>npelpt_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>npelpt_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void npelpt_c ( ConstSpiceDouble      point  [3],
+                   ConstSpiceEllipse   * ellips,
+                   SpiceDouble           pnear  [3],
+                   SpiceDouble         * dist       ) 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Find the nearest point on an ellipse to a specified point, both 
+   in three-dimensional space, and find the distance between the 
+   ellipse and the point. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/ellipses.html">ELLIPSES</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   CONIC 
+   ELLIPSE 
+   GEOMETRY 
+   MATH 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   point      I   Point whose distance to an ellipse is to be found. 
+   ellips     I   A CSPICE ellipse. 
+   pnear      O   Nearest point on ellipse to input point. 
+   dist       O   Distance of input point to ellipse. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   ellips         is a CSPICE ellipse that represents an ellipse 
+                  in three-dimensional space. 
+ 
+   point          is a point in 3-dimensional space. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   pnear          is the nearest point on ellips to point. 
+ 
+   dist           is the distance between point and pnear.  This is 
+                  the distance between point and the ellipse. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1)  Invalid ellipses will be diagnosed by routines called by 
+       this routine. 
+ 
+   2)  Ellipses having one or both semi-axis lengths equal to zero 
+       are turned away at the door; the error SPICE(DEGENERATECASE) 
+       is signalled. 
+ 
+   3)  If the geometric ellipse represented by ellips does not 
+       have a unique point nearest to the input point, any point 
+       at which the minimum distance is attained may be returned 
+       in pnear. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   Given an ellipse and a point in 3-dimensional space, if the 
+   orthogonal projection of the point onto the plane of the ellipse 
+   is on or outside of the ellipse, then there is a unique point on 
+   the ellipse closest to the original point.  This routine finds 
+   that nearest point on the ellipse.  If the projection falls inside 
+   the ellipse, there may be multiple points on the ellipse that are 
+   at the minimum distance from the original point.  In this case, 
+   one such closest point will be returned. 
+ 
+   This routine returns a distance, rather than an altitude, in 
+   contrast to the CSPICE routine <a href="nearpt_c.html">nearpt_c</a>.  Because our ellipse is 
+   situated in 3-space and not 2-space, the input point is not 
+   `inside' or `outside' the ellipse, so the notion of altitude does 
+   not apply to the problem solved by this routine.  In the case of 
+   <a href="nearpt_c.html">nearpt_c</a>, the input point is on, inside, or outside the ellipsoid, 
+   so it makes sense to speak of its altitude. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   1)  For planetary rings that can be modelled as flat disks with 
+       elliptical outer boundaries, the distance of a point in 
+       space from a ring's outer boundary can be computed using this 
+       routine.  Suppose center, smajor, and sminor are the center, 
+       semi-major axis, and semi-minor axis of the ring's boundary. 
+       Suppose also that scpos is the position of a spacecraft. 
+       scpos, center, smajor, and sminor must all be expressed in 
+       the same coordinate system.  We can find the distance from 
+       the spacecraft to the ring using the code fragment 
+ 
+          #include &quot;SpiceUsr.h&quot;
+               .
+               .
+               .
+          /.
+          Make a CSPICE ellipse representing the ring, 
+          then use <b>npelpt_c</b> to find the distance between 
+          the spacecraft position and RING. 
+          ./
+          <a href="cgv2el_c.html">cgv2el_c</a> ( center, smajor, sminor,  ring ); 
+          <b>npelpt_c</b> ( scpos,  ring,   pnear,  &amp;dist );
+           
+ 
+ 
+   2)  The problem of finding the distance of a line from a tri-axial 
+       ellipsoid can be reduced to the problem of finding the 
+       distance between the same line and an ellipse; this problem in 
+       turn can be reduced to the problem of finding the distance 
+       between an ellipse and a point.  The routine <a href="npedln_c.html">npedln_c</a> carries 
+       out this process and uses <b>npelpt_c</b> to find the ellipse-to-point 
+       distance. 
+ 
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman   (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 02-SEP-1999 (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   nearest point on ellipse to point 
+ </PRE>
+<h4>Link to routine npelpt_c source file <a href='../../../src/cspice/npelpt_c.c'>npelpt_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:39 2014</pre>
+
+</body>
+</html>
+

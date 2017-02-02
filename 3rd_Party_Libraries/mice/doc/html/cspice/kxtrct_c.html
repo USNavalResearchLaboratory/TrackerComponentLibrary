@@ -1,0 +1,340 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>kxtrct_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>kxtrct_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void kxtrct_c ( ConstSpiceChar       * keywd,
+                   SpiceInt               termlen,
+                   const void           * terms,
+                   SpiceInt               nterms,
+                   SpiceInt               stringlen,
+                   SpiceInt               substrlen,
+                   SpiceChar            * string,
+                   SpiceBoolean         * found,
+                   SpiceChar            * substr     )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Locate a keyword in a string and extract the substring from 
+   the beginning of the first word following the keyword to the 
+   beginning of the first subsequent recognized terminator of a list. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+    SEARCH, PARSING, PARSING 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   VARIABLE  I/O  DESCRIPTION 
+   --------  ---  -------------------------------------------------- 
+   keywd      I   Word that marks the beginning of text of interest. 
+   termlen    I   Length of strings in string array term.
+   terms      I   Set of words, any of which marks the end of text. 
+   nterms     I   Number of terms. 
+   stringlen  I   Available space in argument string.
+   substrlen  I   Available space in output substring.
+   string    I/O  String containing a sequence of words. 
+   found      O   SPICETRUE if the keyword is found in the string. 
+   substr     O   String from end of keywd to beginning of first 
+                  terms item found. 
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   keywd          is a word used to mark the start of text of interest. 
+
+   termlen        is the maximum number of characters that can be 
+                  accommodated in the each element of the input argument 
+                  terms.  This count includes room for the terminating null 
+                  characters.  
+
+   terms          is a set of words, any one of which may signal the 
+                  end of text of interest.  
+
+                  The array terms should be declared with dimensions
+
+                     [nterms][termlen]
+
+   nterms         is the number of elements in the array terms. 
+
+   stringlen      is the maximum number of characters that can be 
+                  accommodated in the in/out argument string.  This count 
+                  includes room for the terminating null character.
+                  For example, if the maximum allowed length of the 
+                  output string, including the terminating null, is 25
+                  characters, then stringlen should be set to 25.
+ 
+   substrlen      is the maximum number of characters that can be 
+                  accommodated in the output argument substr.  This count 
+                  includes room for the terminating null character.
+ 
+   string         is a character string made up of words, which may 
+                  contain the keyword in keywd. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   string         is the input string stripped of all words from 
+                  the beginning of the keyword keywd to the end of 
+                  the last word preceding one of the words in terms 
+                  (or the end of the string if none of the terms follows 
+                  keywd in the string). 
+
+   found          is a flag indicating whether keywd is present in the 
+                  input string.  found is set to SPICETRUE if the keyword
+                  is present and SPICEFALSE otherwise.
+
+   substr         is the substring that begins with the first word 
+                  following keywd up to the beginning of any of the 
+                  words in term or the end of the string.  If no words
+                  are found between the keyword and the next terminator,
+                  substr is returned empty.
+
+                  substr cannot overwrite string.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1) If any string pointer argument is null, the error
+      SPICE(NULLPOINTER) will be signaled.
+ 
+   2) If keywd has string length zero, the error SPICE(EMPTYSTRING) 
+      will be signaled.
+
+   3) If any of the arguments terms, string, or substr has length 
+      less than 2, as indicated by their associated length arguments 
+      termlen, stringlen and substrlen, the error SPICE(STRINGTOOSHORT) 
+      will be signaled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   Definitions: 
+
+      A WORD     is a set of consecutive non-blank characters 
+                 delimited by blanks or either end of the string 
+                 that contains them. 
+
+   Given a string and a keyword this routine locates the first 
+   occurrence of the keyword in the string and returns the 
+   substring between the end of the keyword and the first occurrence 
+   of any of the words in a list of terminating words.  If none 
+   of the terminating words follows the keyword in the string, 
+   the routine returns all of the string following the keyword. 
+
+   If the next word following the keyword is a terminating word, 
+   the substring returned will be empty. 
+
+   If the keyword can not be located in the string, the variable 
+   found will be returned as SPICEFALSE and the input string will be 
+   unchanged.  The substring will be returned empty. 
+
+   In all other cases, the part of the input string from the 
+   beginning of the keyword to the start of the first terminating 
+   word will be removed.  If no terminating word follows the keyword 
+   the portion of the string from the keyword to the last non-blank 
+   character of the string will be removed. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   Example 1. 
+   ---------- 
+     Input:  string  &quot;FROM 1 October 1984 12:00:00 TO 1 January 1987&quot; 
+             keywd   &quot;TO&quot; 
+             terms   &quot;FROM&quot; 
+                     &quot;TO&quot; 
+                     &quot;BEGINNING&quot; 
+                     &quot;ENDING&quot; 
+ 
+     Output: string  &quot;FROM 1 October 1984 12:00:00&quot; 
+             found   SPICETRUE 
+             substr  &quot;1 January 1987&quot; 
+ 
+ 
+ 
+   Example 2. 
+   ---------- 
+     Input:  string  &quot;FROM 1 October 1984 12:00:00 TO 1 January 1987&quot; 
+             keywd   &quot;FROM&quot; 
+             terms   &quot;FROM&quot; 
+                     &quot;TO&quot; 
+                     &quot;BEGINNING&quot; 
+                     &quot;ENDING&quot; 
+ 
+     Output: string  &quot; TO 1 January 1987&quot; 
+             found   SPICETRUE 
+             substr  &quot;1 October 1984 12:00:00&quot; 
+ 
+ 
+ 
+   Example 3. 
+   ---------- 
+     Input:  string  &quot;ADDRESS: 4800 OAK GROVE DRIVE PHONE: 354-4321 &quot; 
+             keywd   &quot;ADDRESS:&quot; 
+             terms   &quot;ADDRESS:&quot; 
+                     &quot;PHONE:&quot; 
+                     &quot;NAME:&quot; 
+ 
+     Output: string  &quot; PHONE: 354-4321&quot; 
+             found   SPICETRUE 
+             substr  &quot;4800 OAK GROVE DRIVE&quot; 
+ 
+ 
+   Example 4. 
+   ---------- 
+     Input:  string  &quot;ADDRESS: 4800 OAK GROVE DRIVE PHONE: 354-4321 &quot; 
+             keywd   &quot;NAME:&quot; 
+             terms   &quot;ADDRESS:&quot; 
+                     &quot;PHONE:&quot; 
+                     &quot;NAME:&quot; 
+ 
+     Output: string  &quot;ADDRESS: 4800 OAK GROVE DRIVE PHONE: 354-4321&quot; 
+             found   SPICEFALSE 
+             substr  &quot;&quot; 
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman    (JPL)
+   H.A. Neilan     (JPL) 
+   W.L. Taber      (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 18-AUG-2002 (NJB) (HAN) (WLT)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   extract a substring starting with a keyword 
+ </PRE>
+<h4>Link to routine kxtrct_c source file <a href='../../../src/cspice/kxtrct_c.c'>kxtrct_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:37 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,281 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>xposeg_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>xposeg_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void xposeg_c ( const void   * matrix, 
+                   SpiceInt       nrow, 
+                   SpiceInt       ncol, 
+                   void         * xposem ) 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Transpose a matrix of arbitrary size (in place, the matrix 
+   need not be square). 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   MATRIX 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   VARIABLE  I/O  DESCRIPTION 
+   --------  ---  -------------------------------------------------- 
+   matrix     I   Matrix to be transposed. 
+   nrow       I   Number of rows of input matrix. 
+   ncol       I   Number of columns of input matrix. 
+   xposem     O   Transposed matrix (xposem can overwrite matrix). 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   matrix         Matrix to be transposed. 
+ 
+   nrow           Number of rows of input matrix. 
+ 
+   ncol           Number of columns of input matrix. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   xposem         Transposed matrix.  xposem can overwrite matrix. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   Error Free. 
+ 
+   1) If either nrow or ncol is less than or equal to zero, no action 
+      is taken. The routine simply returns. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   This routine transposes the input matrix and writes the 
+   result to the matrix xposem.  This algorithm is performed in 
+   such a way that the transpose can be performed in place.  That 
+   is, matrix and xposem can use the same storage area in memory. 
+ 
+   NOTE:  The matrices matrix and xposem are declared 
+          one-dimensional for computational purposes only.  The 
+          calling program should declare them as matrix[nrow][ncol]
+          and xposem[ncol][nrow]. 
+ 
+          This routine works on the assumption that the input and 
+          output matrices are defined as described above.  More 
+          specifically it assumes that the elements of the matrix 
+          to be transformed is stored in contiguous memory locations 
+          as shown here.  On output these elements will be 
+          rearranged in consecutive memory locations as shown. 
+ 
+ 
+             matrix                xposem
+ 
+             m[0][0]               m[0][0]
+             m[0][1]               m[1][0]
+             m[0][2]               m[2][0]
+             .                     .
+             .                     .
+             m[0][ncol-1]          .
+             m[1][0]               m[nrow-1][0]
+             m[1][1]               m[0][1]
+             m[1][2]               m[1][1]
+             .                     m[2][1]
+             .                     .
+             m[1][ncol-1]          .
+             .                     .
+                                   m[nrow-1][1]
+             .                     .
+ 
+             .                     .
+ 
+             .                     .
+                                   m[0][ncol-1]
+             m[nrow-1][0]          m[1][ncol-1]
+             m[nrow-1][1]          m[2][ncol-1]
+             m[nrow-1][2]          .
+             .                     .
+             .                     .
+             m[nrow-1][ncol-1]     m[nrow-1][ncol-1]
+ 
+ 
+   For those familiar with permutations, this algorithm relies upon the
+   fact that the transposition of a matrix, which has been stored as a
+   string, is simply the action of a permutation applied to that
+   string.  Since any permutation can be decomposed as a product of
+   disjoint cycles, it is possible to transpose the matrix with only
+   one additional storage register.  However, once a cycle has been
+   computed it is necessary to find the next entry in the string that
+   has not been moved by the permutation.  For this reason the
+   algorithm is slower than would be necessary if the numbers of rows
+   and columns were known in advance.
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   This routine is primarily useful when attempting to transpose large
+   matrices, where inplace transposition is important.  For example
+   suppose you have the following declarations
+ 
+      SpiceDouble           matrix [1003][800];
+ 
+   If the transpose of the matrix is needed, it may not be possible to
+   fit a second matrix requiring the same storage into memory.  Instead
+   declare xposem as below so that no additional memory is allocated.
+ 
+      SpiceDouble        (* xposem) [1003]  =  matrix;
+        
+   To obtain the transpose simply execute 
+ 
+      <b>xposeg_c</b> ( matrix, 1003, 800, xposem ); 
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman    (JPL) 
+   W.L. Taber      (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+  
+   -CSPICE Version 1.1.0, 24-JUL-2001   (NJB)
+
+       Changed protoype:  input matrix is now type (const void *).
+       Implemented interface macro for casting input matrix to const.
+
+   -CSPICE Version 1.0.0, 31-MAY-1999 (NJB) (WLT)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   transpose a matrix general 
+ </PRE>
+<h4>Link to routine xposeg_c source file <a href='../../../src/cspice/xposeg_c.c'>xposeg_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:49 2014</pre>
+
+</body>
+</html>
+

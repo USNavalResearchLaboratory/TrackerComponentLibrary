@@ -1,0 +1,264 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>dascls_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>dascls_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void dascls_c ( SpiceInt handle ) 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Close a DAS file. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/das.html">DAS</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   DAS 
+   FILES 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   handle     I   Handle of an open DAS file. 
+   FTSIZE     P   Maximum number of simultaneously open DAS files. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   handle         is the file handle of an open DAS file. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   None.  See $Particulars for a description of the effect of this 
+   routine. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   FTSIZE         is the maximum number of DAS files that can be 
+                  open at any one time.  See the file dasfm.c
+                  for details.
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   Error free. 
+ 
+   1)  If `handle' is not the handle of an open DAS file, no error 
+       is signaled. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   See the description of input argument `handle' in $Detailed_Input. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   This routine provides the primary recommended method of closing an
+   open DAS file.  It is also possible to close a DAS file without
+   segregating it by calling daswbr_ and dasllc_. Closing a DAS file by
+   any other means may cause the DAS mechanism for keeping track of
+   which files are open to fail.  Closing a DAS file that has been
+   opened for writing by any other means may result in the production
+   of something other than a DAS file.
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   1)  Open a new DAS file called TEST.DAS, add 100 d.p. numbers 
+       to it, and then close the file. 
+ 
+          #include &quot;SpiceUsr.h&quot;
+          #include &quot;SpiceZfc.h&quot;
+          #include &lt;string.h&gt;
+
+          int main()
+          {
+             #define  NMAX           100 
+
+             SpiceChar             * fname;
+             SpiceChar             * ftype;
+             SpiceChar             * ifname;
+
+             SpiceDouble             ddata  [ NMAX ];
+
+             SpiceInt                handle;
+             SpiceInt                i;
+             SpiceInt                n;
+             SpiceInt                ncomch;
+
+
+             /.
+             We'll give the file the same internal file name
+             as the file's actual name.  We don't require any
+             comment records.
+             ./
+             fname  = &quot;TEST.DAS&quot;;
+             ftype  = &quot;TEST&quot;;
+             ifname = fname;
+             ncomch = 0;
+
+             dasonw_ ( (SpiceChar *) fname,
+                       (SpiceChar *) ftype,
+                       (SpiceChar *) ifname,
+                       (integer   *) &amp;ncomch,
+                       (integer   *) &amp;handle,
+                       (ftnlen     ) strlen(fname),        
+                       (ftnlen     ) strlen(ftype),        
+                       (ftnlen     ) strlen(ifname)  );
+
+    
+             for ( i = 0;  i &lt; NMAX;  i++ )
+             {
+                 ddata[i] = (SpiceDouble)i; 
+             }
+
+             n = NMAX;
+
+             dasadd_ ( &amp;handle, &amp;n, ddata );
+
+             <b>dascls_c</b> ( handle );
+
+             return ( 0 );
+          }       
+          
+    
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman   (JPL) 
+   K.R. Gehringer (JPL) 
+   W.L. Taber     (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 05-OCT-2006 (NJB) (KRG) (WLT)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   close a DAS file 
+ </PRE>
+<h4>Link to routine dascls_c source file <a href='../../../src/cspice/dascls_c.c'>dascls_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:30 2014</pre>
+
+</body>
+</html>
+

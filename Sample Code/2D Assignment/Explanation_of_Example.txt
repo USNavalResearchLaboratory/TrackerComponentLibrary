@@ -1,0 +1,8 @@
+EXPLANATION OF THE 2D ASSIGNMENT SAMPLE CODE
+
+The example implemented in this folder demonstrates how 2D assignment
+algorithms can be used as well as also how differences in algorithmic
+implementation affect performance. The file compare2DAssign runs the
+example. The files assign2DAlt.cpp, assign2DByCol.c, and assign2DByCol.m
+are alternative implementations of the assign2D function that is in the
+library. More details are given in the relevant files.

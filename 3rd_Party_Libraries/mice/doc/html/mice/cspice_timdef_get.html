@@ -1,0 +1,299 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_timdef_get</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_timdef_get</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_TIMDEF_GET retrieves the default zone/calendar/system
+   definitions associated with calendar input strings.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      item   is the is the Time subsystem parameter value to retrieve.
+             The parameters that may be requested are:
+
+              item          Allowed Values
+              ---------     --------------
+              'CALENDAR'    'GREGORIAN'
+                            'JULIAN'
+                            'MIXED'
+
+              'SYSTEM'      'TDB'
+                            'TDT'
+                            'UTC'
+
+              'ZONE'        'EST', 'EDT', 'CST', 'CDT',
+                            'MST', 'MDT', 'PST', 'PDT'
+                            'UTC+HR'
+                            'UTC-HR'       ( 0 &lt;= HR &lt; 13 )
+                            'UTC+HR:MN'    ( 0 &lt;= MN &lt; 60 )
+                            'UTC-HR:MN'
+
+              The case of item is not significant.
+
+   the call:
+
+      [value] = <b>cspice_timdef_get</b>( item )
+
+   returns:
+
+      value   the value currently associated to 'item'.
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Example(1):
+
+      ITEMS = { 'CALENDAR', 'SYSTEM' };
+
+      %
+      % Retrieve the time definition settings.
+      %
+      for i=1:numel(ITEMS)
+
+         value = <b>cspice_timdef_get</b>( ITEMS(i) );
+         fprintf( '%s -&gt; %s\n',  char(ITEMS(i)), value )
+
+      end
+
+   MATLAB outputs:
+
+      CALENDAR -&gt; GREGORIAN
+      SYSTEM -&gt; UTC
+
+   Example(2):
+
+      ITEMS = { 'CALENDAR', 'SYSTEM' };
+
+      %
+      % Set the calendar to 'MIXED'
+      %
+      ITEM  = 'CALENDAR';
+      VALUE = 'MIXED';
+
+      <a href="cspice_timdef_set.html">cspice_timdef_set</a>( ITEM, VALUE )
+
+      %
+      % Retrieve the time definition settings.
+      %
+      for i=1:numel(ITEMS)
+
+         value = <b>cspice_timdef_get</b>( ITEMS(i) );
+         fprintf( '%s -&gt; %s\n',  char(ITEMS(i)), value )
+
+      end
+
+   MATLAB outputs:
+
+      CALENDAR -&gt; MIXED
+      SYSTEM -&gt; UTC
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   The routines <b>cspice_timdef_get</b> and <a href="cspice_timdef_set.html">cspice_timdef_set</a> exist
+   to allow SPICE toolkit users to alter the default interpretation
+   of time strings made by the routine <a href="cspice_str2et.html">cspice_str2et</a>.
+
+   Normally, unlabeled time strings are assumed to belong to
+   the Gregorian Calendar and are UTC times. However, you
+   may alter the default behavior by calling <a href="cspice_timdef_set.html">cspice_timdef_set</a>.
+
+   Calendar
+   --------
+
+   You may set the calendar to be one of the following
+
+   Gregorian   --- This is the calendar used daily the
+                   Western Hemisphere. Leap years occur in this
+                   calendar every 4 years except on centuries
+                   such as 1900 that are not divisible by 400.
+
+   Julian      --- This is the calendar that was in use prior
+                   to October 15, 1582. Leap years occur every
+                   4 years on the Julian Calendar (including all
+                   centuries.)  October 5, 1582 on the Julian
+                   calendar corresponds to October 15, 1582 of the
+                   Gregorian Calendar.
+
+   Mixed       --- This calendar uses the Julian calendar
+                   for days prior to October 15, 1582 and
+                   the Gregorian calendar for days on or after
+                   October 15, 1582.
+
+   To set the default calendar, select on of the above for value
+   and make the following call.
+
+      <a href="cspice_timdef_set.html">cspice_timdef_set</a>( 'CALENDAR', value )
+
+
+   System
+   -------
+
+   You may set the system used for keeping time to be UTC (default)
+   TDB (barycentric dynamical time) or TDT (terrestrial dynamical
+   time). Both TDB and TDT have no leapseconds. As such the time
+   elapsed between any two epochs on these calendars does not depend
+   upon when leapseconds occur.
+
+   To set the default time system, select TDT, TDB or UTC for value
+   and make the following call.
+
+      <a href="cspice_timdef_set.html">cspice_timdef_set</a>( 'SYSTEM', value )
+
+   Note that such a call has the side effect of setting the value
+   associated with ZONE to a blank.
+
+   Zone
+   -----
+
+   You may alter the UTC system by specifying a time zone (UTC
+   offset). For example you may specify that epochs are referred
+   to Pacific Standard Time (PST --- UTC-7). The standard
+   abbreviations for U.S. time zones are recognized:
+
+      EST   UTC-5
+      EDT   UTC-4
+      CST   UTC-6
+      CDT   UTC-5
+      MST   UTC-7
+      MDT   UTC-6
+      PST   UTC-8
+      PDT   UTC-7
+
+   In addition you may specify any commercial time zone by using
+   &quot;offset&quot; notation. This notation starts with the letters &quot;UTC&quot;
+   followed by a + for time zones east of Greenwich and - for
+   time zones west of Greenwich. This is followed by the number
+   of hours to add or subtract from UTC. This is optionally followed
+   by a colon ':' and the number of minutes to add or subtract (based
+   on the sign that follows &quot;UTC&quot;) to get the
+   local time zone. Thus to specify the time zone of Calcutta you
+   would specify the time zone to be UTC+5:30. To specify the
+   time zone of Newfoundland use the time zone UTC-3:30.
+
+   To set a default time zone, select one of the &quot;built-in&quot; U.S.
+   zones or construct an offset as discussed above. Then make the
+   call
+
+      <a href="cspice_timdef_set.html">cspice_timdef_set</a>( 'ZONE', value );
+
+   If you &quot;GET&quot; a 'ZONE' it will either be blank, or have the
+   form &quot;UTC+/-HR[:MN]&quot;
+
+   Note that such a call has the side effect of setting the value
+   associated with SYSTEM to a blank.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/timdef_c.html">timdef_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   TIMDEF.REQ
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 14-NOV-2013, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Change time software defaults.
+   Time Zones
+   Gregorian and Julian Calendars
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:39 2014</pre>
+
+</body>
+</html>
+

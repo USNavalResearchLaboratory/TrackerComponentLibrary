@@ -1,0 +1,327 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ckgpav</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ckgpav</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_CKGPAV returns pointing (attitude) and angular velocity
+   for a specified object at a user specified spacecraft clock time.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      inst     NAIF ID for the instrument, spacecraft, or other structure for
+               which pointing is requested. The frame fixed to this object is
+               called the &quot;instrument frame&quot; or &quot;instrument-fixed&quot; frame.
+
+               [1,1] = size(inst); int32 = class(inst)
+
+      sclkdp   encoded spacecraft clock time(s) for which pointing is
+               requested.
+
+               [1,n] = size(sclkdp); double = class(sclkdp)
+
+      tol      time tolerance given in ticks (+/-), the units of encoded
+               spacecraft clock time, about 'sclkdp'
+
+               [1,1] = size(tol); double = class(tol)
+
+                  The C-matrix returned by <b>cspice_ckgpav</b>, if any, is the one
+                  whose time tag is closest to 'sclkdp' and within 'tol'
+                  units of 'sclkdp'.
+
+               In general, because using a non-zero tolerance affects
+               selection of the segment from which the data is obtained,
+               users are strongly discouraged from using a non-zero
+               tolerance when reading CKs with continuous data. Using
+               a non-zero tolerance should be reserved exclusively to
+               reading CKs with discrete data because in practice
+               obtaining data from such CKs using a zero tolerance is
+               often not possible due to time round off.
+
+      ref      naming the desired reference frame for the returned pointing.
+
+               [1,m] = size(ref); char = class(ref)
+
+   the call:
+
+      [ cmat, av, clkout, found ] = <b>cspice_ckgpav</b>( inst, sclkdp, tol, ref)
+
+   returns:
+
+      cmat     rotation matrix(ces) that transform components of a vector
+               expressed in the frame specified by 'ref' to components
+               expressed in the frame tied to the instrument, spacecraft, or
+               other structure at time(s) 'clkout'.
+
+               If [1,1] = size(sclkdp) then [3,3]   = size(cmat)
+               If [1,n] = size(sclkdp) then [3,3,n] = size(cmat)
+                                             double = class(cmat)
+
+      av       angular velocity measured in radians per second (this is the
+               axis about which the reference frame tied to the instrument is
+               rotating in the right-handed sense at time 'clkout')
+
+               [3,n] = size(av); double = class(av)
+
+      clkout   encoded spacecraft clock time(s) associated with the returned
+               C-matrix 'cmat' (this value may differ from the requested time,
+               but never by more than the input tolerance 'tol').
+
+               [1,n] = size(clkout); double = class(clkout)
+
+      found    the flag(s) indicating if the requested pointing is found.
+
+               [1,n] = size(found); logical = class(found)
+
+               'cmat', 'av', 'clkout', and 'found' return with the same
+               vectorization measure (N) as 'sclkdp'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Load the CK pointing file.
+      %
+      CK     = '/kernels/cassini/ck/030810_031019_c39_port1_pa.bc';
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( CK )
+
+      %
+      % Need to load a Cassini SCLK kernel to convert from
+      % clock string to ticks and the leapseconds kernel.
+      %
+      SCLK   = '/kernels/cassini/sclk/cas00082.tsc';
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( SCLK )
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % The code for the Cassini spacecraft is -82
+      %
+      SC     = -82;
+
+      % The code for the Cassini spacecraft bus is -82000.
+      %
+      INST   = -82000;
+
+      %
+      % The reference frame we want is J2000.
+      %
+      REF    = 'J2000';
+
+      %
+      % The bus boresight has direction ( 0, 0, 1 ) in the
+      % bus (instrument) frame.
+      %
+      BORE   = [ 0.; 0.; 1.];
+
+      %
+      % The spacecraft clock ticks every 1/256 of a second.
+      %
+      TICS   =  256.;
+
+      %
+      % Two Cassini clock strings of interest.
+      %
+      SCLKCH =  strvcat( '1440000000.000' , '1445000000.000' );
+
+      %
+      % Calculate a tolerance for pointing data. Use 5 seconds,
+      % convert to ticks by multiplying by the number of ticks
+      % per second.
+      %
+      toltik = 5. * TICS;
+
+      %
+      % <b>cspice_ckgpav</b> requires encoded spacecraft clock time.
+      %
+      sclkdp = <a href="cspice_scencd.html">cspice_scencd</a>( SC, SCLKCH );
+
+      %
+      % Retrieve the 'REF' reference frame to 'INST' reference frame
+      % transformation matrix at time sclkdp with a tolerance
+      % 'toltik'.
+      %
+      %   [INST] = [cmat][ref]
+      %
+      [ cmat, av, clkout, found ] = <b>cspice_ckgpav</b>( INST, sclkdp, toltik, REF);
+
+      for n=1:2
+
+         if( found(n) )
+
+            %
+            % Transform the 'BORE' vector from 'INST' reference frame to
+            % 'REF' frame.
+            %                T
+            %  [ref] = [cmat] [INST]
+            %
+            bore_ref = cmat(:,:,n)' * BORE;
+
+            txt = sprintf( 'At SCLK time               : %s', SCLKCH(n,:) );
+            disp( txt )
+
+            txt = sprintf(                                             ...
+                  'The boresight vector       : %11.8f %11.8f %11.8f', ...
+                                                               bore_ref );
+            disp( txt )
+
+            txt = sprintf(                                            ...
+                 'The angular velocity vector: %10.7e %10.7e %10.7e', ...
+                                                               av(:,n) );
+            disp( txt )
+
+            disp( ' ' )
+
+         else
+
+            txt = sprintf( 'At SCLK time       : %s pointing not found', ...
+                                                              SCLKCH(n,:) );
+            disp( txt )
+            disp( ' ' )
+
+         end
+
+      end
+
+   MATLAB outputs:
+
+      At SCLK time               : 1440000000.000
+      The boresight vector       : -0.25517775  0.88933091  0.37944018
+      The angular velocity vector: -3.1532789e-13 -7.8841788e-09 1.7857623e-08
+
+      At SCLK time               : 1445000000.000
+      The boresight vector       : -0.31149356  0.87452887  0.37171362
+      The angular velocity vector: -8.0798136e-11 -7.1102943e-10 1.5325493e-09
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/ckgpav_c.html">ckgpav_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/ck.html">CK.REQ</a>
+   <a href="../req/sclk.html">SCLK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.2.0, 08-NOV-2012, EDW (JPL), SCK (JPL)
+
+       I/O descriptions edits to conform to Mice documentation format.
+
+      &quot;logical&quot; call replaced with &quot;zzmice_logical.&quot;
+
+   -Mice Version 1.1.1, 03-JUN-2010, BVS (JPL)
+
+      Edits to header. Added warning regarding non-zero tolerance.
+
+   -Mice Version 1.1.0, 23-FEB-2009, EDW (JPL)
+
+      Added zzmice_str call on input 'ref' to convert string cells to
+      character arrays if 'ref' has type string cells. Added proper
+      markers for usage string variable types.
+
+   -Mice Version 1.0.0, 22-NOV-2005, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   get ck pointing and angular velocity
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:36 2014</pre>
+
+</body>
+</html>
+

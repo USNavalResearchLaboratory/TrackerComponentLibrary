@@ -1,0 +1,694 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>MICE Index</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<a name="TOP"></a>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> <small><small><a href="../index.html">Main Page</a></small></small><br>
+      </div>
+      <b>Index of MICE functions</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+<p> Index typography for arguments </p><ul><li><i>`name`</i> : a string variable of dimension 1xL with L the string length</li> <li><i>_name_</i> : a vectorizable variable</li> <li><i>name(N)</i> : an N-vector (Nx1)</li> <li><i>name(N,M)</i> : an NxM array</li> <li><i>_name(N)_</i> : a vectorized N-vector with dimension (NxS) where S represents the measure of vectorization</li> <li><i>_name(N,M)_</i> : a vectorized NxM array with dimension (NxMxS) where S represents the measure of vectorization</li> <li><i>name()</i> : an output vector of unknown dimension</li> <li><i>_`name`_</i> : a vector of strings with dimension SxL with L the string lengths and S the measure of vectorization</li> <li><i>[name]</i> : when used to delimit an input argument (rhs), indicates an optional input argument</li> </ul>            </ul>
+            <hr>
+
+            <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+            <tbody>
+
+            <tr>
+            <td style="vertical-align: top; width: 50%;">
+                                           <a name="A"><b>A</b></a></td>
+            </tr>
+
+            </tbody>
+            </table>
+
+            <ul>
+<LI><SAMP><A HREF="cspice_axisar.html">AXISAR</A>:  <I> [r(3,3)] = cspice_axisar( axis(3), angle)</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="B"><b>B</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_b1900.html">B1900</A>:  <I> [b1900] = cspice_b1900</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_b1950.html">B1950</A>:  <I> [b1950] = cspice_b1950</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_bodc2n.html">BODC2N</A>:  <I> [_`name`_, _found_] = cspice_bodc2n(_code_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="mice_bodc2n.html">BODC2N</A>:  <I> [_`name`_] = mice_bodc2n(_code_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_bodc2s.html">BODC2S</A>:  <I> [_`name`_] = cspice_bodc2s(_code_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_boddef.html">BODDEF</A>:  <I> cspice_boddef(`name`, code)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_bodn2c.html">BODN2C</A>:  <I> [_code_, _found_] = cspice_bodn2c(_`name`_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="mice_bodn2c.html">BODN2C</A>:  <I> [_code_] = mice_bodn2c(_`name`_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_bods2c.html">BODS2C</A>:  <I> [_code_, _found_] = cspice_bods2c(_`name`_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="mice_bods2c.html">BODS2C</A>:  <I> [_code_] = mice_bods2c(_`name`_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_bodvcd.html">BODVCD</A>:  <I> [values()] = cspice_bodvcd(bodyid, `item`, maxn)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_bodvrd.html">BODVRD</A>:  <I> [values()] = cspice_bodvrd( `body`, `item`, maxn)</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="C"><b>C</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_cgv2el.html">CGV2EL</A>:  <I> [ellipse] = cspice_cgv2el( center(3), vec1(3), vec2(3) )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_cidfrm.html">CIDFRM</A>:  <I> [_frcode_, _`frname`_, _found_] = cspice_cidfrm(_cent_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_ckcls.html">CKCLS</A>:  <I> cspice_ckcls(handle)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_ckcov.html">CKCOV</A>:  <I> [cov] = cspice_ckcov( _`ck`_, idcode, needav, level, tol, timsys, room, [cover_i])</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_ckgp.html">CKGP</A>:  <I> [_cmat(3,3)_, _clkout_, _found_] = cspice_ckgp(inst, _sclkdp_, tol, `ref`)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_ckgpav.html">CKGPAV</A>:  <I> [_cmat(3,3)_, _av(3)_, _clkout_, _found_] = cspice_ckgpav(inst, _sclkdp_, tol, `ref`)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_ckobj.html">CKOBJ</A>:  <I> [ids] = cspice_ckobj( _`ck`_, room, [ids_i])</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_ckopn.html">CKOPN</A>:  <I> [handle] = cspice_ckopn(`fname`, `ifname`, ncomch)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_ckw01.html">CKW01</A>:  <I> cspice_ckw01( handle, begtime, endtime, inst, ref, avflag, segid, sclkdp(N), quats(4,N), avvs(3,N))</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_ckw02.html">CKW02</A>:  <I> cspice_ckw02( handle, begtime, endtime, inst, ref, segid, start(N), stop(N), quats(4,N), avvs(3,N)) rates(N)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_ckw03.html">CKW03</A>:  <I> cspice_ckw03( handle, begtime, endtime, inst, ref, avflag, segid, sclkdp(N), quats(4,N), avvs(3,N), starts(M))</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_clight.html">CLIGHT</A>:  <I> [clight] = cspice_clight</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_clpool.html">CLPOOL</A>:  <I> cspice_clpool</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_cnmfrm.html">CNMFRM</A>:  <I> [_frcode_, _`frname`_, _found_] = cspice_cnmfrm(_`cname`_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_conics.html">CONICS</A>:  <I> [_state(6)_] = cspice_conics( _elts(8)_, _et_ )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_convrt.html">CONVRT</A>:  <I>[_y_] = cspice_convrt( _x_, `in`, `out`)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_cyllat.html">CYLLAT</A>:  <I> [_radius_, _lon_, _lat_] = cspice_cyllat(_r_, _lonc_, _z_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_cylrec.html">CYLREC</A>:  <I> [_rectan(3)_] = cspice_cylrec(_r_, _lonc_, _z_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_cylsph.html">CYLSPH</A>:  <I> [_radius_, _colat_, _lon_] = cspice_cylsph(_r_, _lonc_, _z_)</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="D"><b>D</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_dafac.html">DAFAC</A>:  <I> cspice_dafac( handle, buffer )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dafbbs.html">DAFBBS</A>:  <I> cspice_dafbbs(handle)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dafbfs.html">DAFBFS</A>:  <I> cspice_dafbfs(handle)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dafcls.html">DAFCLS</A>:  <I> cspice_dafcls(handle)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dafcs.html">DAFCS</A>:  <I> cspice_dafcs(handle)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dafdc.html">DAFDC</A>:  <I> cspice_dafdc(handle)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dafec.html">DAFEC</A>:  <I> [buffer, done] = cspice_dafec( handle, bufsiz, lenout )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_daffna.html">DAFFNA</A>:  <I> [found] = cspice_daffna</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_daffpa.html">DAFFPA</A>:  <I> [found] = cspice_daffpa</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dafgda.html">DAFGDA</A>:  <I> data = cspice_dafgda( handle, baddr, eaddr)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dafgn.html">DAFGN</A>:  <I> [`name`] = cspice_dafgn</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dafgs.html">DAFGS</A>:  <I> [dc, ic] = cspice_dafgs( nd, ni)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dafopr.html">DAFOPR</A>:  <I> [handle] = cspice_dafopr(`fname`)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dafopw.html">DAFOPW</A>:  <I> [handle] = cspice_dafopw(`fname`)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dafus.html">DAFUS</A>:  <I> [dc(nd), ic(nd)] = cspice_dafus( sum(), nd, ni)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dcyldr.html">DCYLDR</A>:  <I>[_jacobi(3,3)_] = cspice_dcyldr( _x_, _y_, _z_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_deltet.html">DELTET</A>:  <I> [_delta_] = cspice_deltet( _epoch_, `eptype`)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dgeodr.html">DGEODR</A>:  <I>[_jacobi(3,3)_] = cspice_dgeodr( _x_, _y_, _z_, re, f)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dlatdr.html">DLATDR</A>:  <I>[_jacobi(3,3)_] = cspice_dlatdr( _x_, _y_, _z_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dpgrdr.html">DPGRDR</A>:  <I>[_jacobi(3,3)_] = cspice_dpgrdr( `body`, _x_, _y_, _z_, re, f)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dpr.html">DPR</A>:  <I> [dpr] = cspice_dpr</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_drdcyl.html">DRDCYL</A>:  <I>[_jacobi(3,3)_] = cspice_drdcyl( _r_, _lon_, _z_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_drdgeo.html">DRDGEO</A>:  <I>[_jacobi(3,3)_] = cspice_drdgeo( _lon_, _lat_, _alt_, re, f)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_drdlat.html">DRDLAT</A>:  <I>[_jacobi(3,3)_] = cspice_drdlat( _r_, _lon_, _lat_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_drdpgr.html">DRDPGR</A>:  <I>[_jacobi(3,3)_] = cspice_drdpgr( `body`, _lon_, _lat_, _alt_, re, f)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_drdsph.html">DRDSPH</A>:  <I>[_jacobi(3,3)_] = cspice_drdsph( _r_, _colat_, _lon_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dsphdr.html">DSPHDR</A>:  <I>[_jacobi(3,3)_] = cspice_dsphdr( _x_, _y_, _z_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dtpool.html">DTPOOL</A>:  <I> [_found_, _n_, _`type`_] = cspice_dtpool(_`name`_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="mice_dtpool.html">DTPOOL</A>:  <I> [_value_] = mice_dtpool(_`name`_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_ducrss.html">DUCRSS</A>:  <I> [_ducrss(6)_] = cspice_ducrss(_s1(6)_, _s2(6)_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dvcrss.html">DVCRSS</A>:  <I> [_dvcrss(6)_] = cspice_dvcrss(_s1(6)_, _s2(6)_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dvdot.html">DVDOT</A>:  <I> [_dvdot_] = cspice_dvdot(_s1(6)_, _s2(6)_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dvhat.html">DVHAT</A>:  <I> [_dvhat(6)_] = cspice_dvhat(_s1(6)_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dvnorm.html">DVNORM</A>:  <I> [_dvnorm_] = cspice_dvnorm(_state(6)_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dvpool.html">DVPOOL</A>:  <I> cspice_dvpool(_`name`_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_dvsep.html">DVSEP</A>:  <I> [_dvsep_] = cspice_dvsep(_s1(6)_, _s2(6)_)</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="E"><b>E</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_edlimb.html">EDLIMB</A>:  <I> [ limb ] = cspice_edlimb( a, b, c, viewpt )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_edterm.html">EDTERM</A>:  <I> [ trgepc, obspos, termpts] = cspice_edterm( `trmtyp`, `source`, `target`, et,       `fixfrm`, `abcorr`, `obsrvr`, npts)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_ekfind.html">EKFIND</A>:  <I> [ nmrows, ok, `errmsg`] = cspice_ekfind( `query` )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_ekgc.html">EKGC</A>:  <I> [ `cdata`, null, found] = cspice_ekgc( selidx, row, elment, lenout )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_ekgd.html">EKGD</A>:  <I> [ ddata, null, found] = cspice_ekgd( selidx, row, elment )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_ekgi.html">EKGI</A>:  <I> [ idata, null, found] = cspice_ekgi( selidx, row, elment )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_eknelt.html">EKNELT</A>:  <I> [nelt] = cspice_eknelt( selidx, row )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_el2cgv.html">EL2CGV</A>:  <I> [center(3), smajor(3), sminor(3)] = cspice_el2cgv( ellipse )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_et2lst.html">ET2LST</A>:  <I> [ _hr_, _min_, _sec_, _`time`_, _`ampm`_] = cspice_et2lst( _et_, body, lon, `type`)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_et2utc.html">ET2UTC</A>:  <I> [_`utcstr`_] = cspice_et2utc(_et_, `format`, prec)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_etcal.html">ETCAL</A>:  <I>[_`string`_] = cspice_etcal(_et_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_eul2m.html">EUL2M</A>:  <I>[_r(3,3)_] = cspice_eul2m(_angle3_, _angle2_, _angle1_, axis3, axis2, axis1)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_eul2xf.html">EUL2XF</A>:  <I> [_xform(6,6)_] = cspice_eul2xf(_eulang(6)_, axisa, axisb, axisc)</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="F"><b>F</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_fovray.html">FOVRAY</A>:  <I> [_visibl_] = cspice_xfmsta( `inst`, _raydir[6], `rframe`, `abcorr`), `obsrvr`, _et_]</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_fovtrg.html">FOVTRG</A>:  <I> [_visibl_] = cspice_fovtrg( `instrument`, `target`, `target_shape`, `target_frame`, `abcorr`), `observer`, _et_]</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_frame.html">FRAME</A>:  <I> [x(3), y(3), z(3)] = cspice_frame( vec(3) )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_frinfo.html">FRINFO</A>:  <I>[_cent_, _clss_, _clssid_, _found_] = cspice_frinfo(_frcode_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_frmnam.html">FRMNAM</A>:  <I>[_`frmnam`_] = cspice_frmnam(_frcode_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_furnsh.html">FURNSH</A>:  <I> cspice_furnsh(_`file`_)</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="G"><b>G</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_gcpool.html">GCPOOL</A>:  <I> [cvals(), found] = cspice_gcpool( `name`, start, room)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_gdpool.html">GDPOOL</A>:  <I> [dvals(), found] = cspice_gdpool( `name`, start, room)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_georec.html">GEOREC</A>:  <I> [_rectan(3)_] = cspice_georec( _lon_, _lat_, _alt_, re, f)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_getfov.html">GETFOV</A>:  <I> [`shape`, `frame`, bsight(3), bounds(3,N)] = cspice_getfov( instid, room)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_gfdist.html">GFDIST</A>:  <I> [result] = cspice_gfdist( `target`, `abcorr`, `obsrvr`, `relate`, refval, adjust, step, nintvls, cnfine )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_gfilum.html">GFILUM</A>:  <I> [result] = cspice_gfilum( `method`, `angtyp`, `target`, `illmn`, `fixref`, `abcorr`, `obsrvr`, spoint[3], `relate`, refval, adjust, step, nintvls, cnfine, )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_gfoclt.html">GFOCLT</A>:  <I> [result] = cspice_gfoclt( `occtyp`, `front`, `fshape`, `fframe`, `back`, `bshape`, `bframe`, `abcorr`, `obsrvr`, step, cnfine, room)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_gfpa.html">GFPA</A>:  <I> [result] = cspice_gfpa( `target`, `illmn`,  `abcorr, obsrvr`, `relate`, refval, adjust, step, nintvls, cnfine )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_gfposc.html">GFPOSC</A>:  <I> [result] = cspice_gfposc( `target`, `frame`, `abcorr`, `obsrvr`, `crdsys`, `coord`, `relate`, refval, adjust, step, nintvls, cnfine )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_gfrfov.html">GFRFOV</A>:  <I> [result] = cspice_gfrfov( `inst`, raydir[3], `rframe` `abcorr`, `obsrvr`, step, cnfine, nintvls)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_gfrr.html">GFRR</A>:  <I> [result] = cspice_gfrr( `target`, `abcorr`, `obsrvr`, `relate`, refval, adjust, step, nintvls, cnfine )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_gfsep.html">GFSEP</A>:  <I> [result] = cspice_gfsep( `targ1`, `shape1`, `frame1`, `targ2`, `shape2`, `frame2`, `abcorr`, `obsrvr`, `relate`, refval, adjust, step, nintvls, cnfine )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_gfsntc.html">GFSNTC</A>:  <I> [result] = cspice_gfsntc( `target`, `fixref`, `method`, `abcorr`, `obsrvr`, `dref`, dvec[3], `crdsys`, `coord`, `relate`, refval, adjust, step, nintvls, cnfine )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_gfstol.html">GFSTOL</A>:  <I> cspice_gfstol(value)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_gfsubc.html">GFSUBC</A>:  <I> [result] = cspice_gfsubc( `target`, `fixref`, `method`, `abcorr`, `obsrvr`, `crdsys`, `coord`, `relate`, refval, adjust, step, nintvls, cnfine )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_gftfov.html">GFTFOV</A>:  <I> [result] = cspice_gftfov( `inst`, `target`, `tshape`, `tframe` `abcorr`, `obsrvr`, step, cnfine, room)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_gipool.html">GIPOOL</A>:  <I> [ivals(), found] = cspice_gipool( `name`, start, room )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_gnpool.html">GNPOOL</A>:  <I> [kvars(), found] = cspice_gnpool( `name`, start, room )</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="H"><b>H</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_halfpi.html">HALFPI</A>:  <I> double = cspice_halfpi</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="I"><b>I</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_illum.html">ILLUM</A>:  <I> [_phase_, _solar_, _emissn_] = cspice_illum( `target`, _et_, `abcorr`, `obsrvr`, _spoint(3)_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_ilumin.html">ILUMIN</A>:  <I> [trgepc, srfvec(3), phase, solar, emissn] = cspice_ilumin( `method`, `target`, et, `fixref`, `abcorr`, `obsrvr`, spoint(3))</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_inedpl.html">INEDPL</A>:  <I> [ ellipse, found ] = cspice_inedpl( a, b, c, plane )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_inelpl.html">INELPL</A>:  <I> [ nxpts, xpt1, xpt2] =  cspice_inelpl( ellipse, plane )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_inrypl.html">INRYPL</A>:  <I> [ nxpts, xpt ] = cspice_inrypl( vertex, dir, plane )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_invort.html">INVORT</A>:  <I>[mit(3,3)] = cspice_rotmat( m(3,3) )</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="J"><b>J</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_j1900.html">J1900</A>:  <I> [j1900] = cspice_j1900</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_j1950.html">J1950</A>:  <I> [j1950] = cspice_j1950</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_j2000.html">J2000</A>:  <I> [j2000] = cspice_j2000</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_j2100.html">J2100</A>:  <I> [j2100] = cspice_j21000</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_jyear.html">JYEAR</A>:  <I> [jyear] = cspice_jyear</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="K"><b>K</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_kclear.html">KCLEAR</A>:  <I> cspice_kclear</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_kdata.html">KDATA</A>:  <I>[ `file`, `filtyp`, `source`, handle ] = cspice_kdata( which, `kind` )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_kinfo.html">KINFO</A>:  <I>[ `filtyp`, `source`, handle, found ] = cspice_kinfo( `file` )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_ktotal.html">KTOTAL</A>:  <I> [count] = cspice_ktotal(`kind`)</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="L"><b>L</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_latcyl.html">LATCYL</A>:  <I> [ _r_, _lonc_, _z_] = cspice_latcyl( _radius_, _lon_, _lat_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_latrec.html">LATREC</A>:  <I> [_rectan(3)_] = cspice_latrec(_radius_, _longitude_, _latitude_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_latsph.html">LATSPH</A>:  <I> [_radius_, _colat_, _lon_] = cspice_latsph( _radius_, _longitude_, _latitude_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_lmpool.html">LMPOOL</A>:  <I> cspice_lmpool( _`cvals`_ )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_ltime.html">LTIME</A>:  <I> [_ettarg_, _elapsd_] = cspice_ltime( _etobs_, obs, `dir`, targ)</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="M"><b>M</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_m2eul.html">M2EUL</A>:  <I> [_angle3_, _angle2_, _angle1_]  = cspice_m2eul( _r(3,3)_, axis3, axis2, axis1)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_m2q.html">M2Q</A>:  <I> [_q(4)_] = cspice_m2q( _r(3,3)_ )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_mice.html">MICE</A>:  <I> [`value`] = cspice_mice( `item` )</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="N"><b>N</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_namfrm.html">NAMFRM</A>:  <I> [_frcode_] = cspice_namfrm(_`frname`_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_nearpt.html">NEARPT</A>:  <I> [_npoint(3)_, _alt_] = cspice_nearpt( _positn(3)_, a, b, c )</I> </SAMP></LI>
+<LI><SAMP><A HREF="mice_nearpt.html">NEARPT</A>:  <I> [_npoint_] = mice_nearpt( _positn(3)_, a, b, c )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_npedln.html">NPEDLN</A>:  <I> [ pnear(3), dist] = cspice_npedln( a, b, c, linept(3), linedr(3) )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_npelpt.html">NPELPT</A>:  <I> [ pnear, dist ] = cspice_npelpt( point, ellipse )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_nplnpt.html">NPLNPT</A>:  <I> [ pnear(3), dist] = cspice_nplnpt( linpt(3), lindir(3), point(3) )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_nvc2pl.html">NVC2PL</A>:  <I> [plane] = cspice_nvc2pl( normal(3), constant )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_nvp2pl.html">NVP2PL</A>:  <I> [plane] = cspice_nvp2pl( normal(3), point(3) )</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="O"><b>O</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_occult.html">OCCULT</A>:  <I> [_output_state_] = cspice_occult( `target1`, `shape1`, `frame1`,`target2`, `shape2`, `frame2`, `abcorr`, `observer`, _time_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_oscelt.html">OSCELT</A>:  <I> [_elts(8)_] = cspice_oscelt( _state(6)_, _et_, mu )</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="P"><b>P</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_pcpool.html">PCPOOL</A>:  <I> cspice_pcpool( `name`, `cvals`)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_pdpool.html">PDPOOL</A>:  <I> cspice_pdpool( `name`, dvals)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_pgrrec.html">PGRREC</A>:  <I> [_rectan(3)_] = cspice_pgrrec( body, _lon_, _lat_, _alt_, re, f)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_phaseq.html">PHASEQ</A>:  <I> [_phase_] = cspice_phaseq( _et_, `target`, `illmn`, `obsrvr`, `abcorr` )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_pi.html">PI</A>:  <I> [onepi] = cspice_pi</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_pipool.html">PIPOOL</A>:  <I> cspice_pipool( `name`, ivals[])</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_pjelpl.html">PJELPL</A>:  <I> [elout] = cspice_pjelpl( elin, plane )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_pl2nvc.html">PL2NVC</A>:  <I>[normal(3), constant] = cspice_pl2nvc( plane )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_pl2nvp.html">PL2NVP</A>:  <I> [normal(3), point(3)] = cspice_pl2nvp( plane )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_pl2psv.html">PL2PSV</A>:  <I> [point(3), span1(3), span2(3)] = cspice_pl2psv( plane )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_psv2pl.html">PSV2PL</A>:  <I> [plane] = cspice_psv2pl( point(3), span1(3), span2(3) )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_pxform.html">PXFORM</A>:  <I> [_rotate(3,3)_] = cspice_pxform( `from`, `to`, _et_ )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_pxfrm2.html">PXFRM2</A>:  <I> [_rotate(3,3)_] = cspice_pxfrm2( `from`, `to`, _etfrom_, _etto_ )</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="Q"><b>Q</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_q2m.html">Q2M</A>:  <I> [_r(3,3)_] = cspice_q2m( _q(4)_ )</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="R"><b>R</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_radrec.html">RADREC</A>:  <I> [_rectan(3)_] = cspice_radrec( _range_, _ra_, _dec_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_rav2xf.html">RAV2XF</A>:  <I> [_xform(6,6)_] = cspice_rav2xf(_rot(3,3)_, _av(3)_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_raxisa.html">RAXISA</A>:  <I> [axis(3), angle] = cspice_raxisa(matrix(3,3))</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_reccyl.html">RECCYL</A>:  <I> [_r_, _lonc_, _z_] = cspice_reccyl(_rectan(3)_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_recgeo.html">RECGEO</A>:  <I> [_lon_, _lat_, _alt_] = cspice_recgeo(_rectan(3)_, re, f)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_reclat.html">RECLAT</A>:  <I> [_radius_, _longitude_, _latitude_] = cspice_reclat(_rectan(3)_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_recpgr.html">RECPGR</A>:  <I> [_lon_, _lat_, _alt_] = cspice_recpgr( body, _rectan(3)_, re, f)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_recrad.html">RECRAD</A>:  <I> [_range_, _ra_, _dec_] = cspice_recrad(_rectan(3)_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_recsph.html">RECSPH</A>:  <I> [_r_, _colat_, _lon_] = cspice_recsph(_rectan(3)_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_rotate.html">ROTATE</A>:  <I> [_mout(3,3)_] = cspice_rotate( _angle_, iaxis )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_rotmat.html">ROTMAT</A>:  <I> [mout(3,3)] = cspice_rotmat( m1(3,3), angle, iaxis )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_rpd.html">RPD</A>:  <I> [rpd] = cspice_rpd</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="S"><b>S</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_saelgv.html">SAELGV</A>:  <I> [ smajor(3), sminor(3) ] = cspice_saelgv( vec1(3), vec2(3) )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_scdecd.html">SCDECD</A>:  <I> [_`sclkch`_] = cspice_scdecd(sc, _sclkdp_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_sce2c.html">SCE2C</A>:  <I> [_sclkdp_] = cspice_sce2c(sc, _et_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_sce2s.html">SCE2S</A>:  <I> [_`sclkch`_] = cspice_sce2s(sc, _et_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_scencd.html">SCENCD</A>:  <I> [_sclkdp_] = cspice_scencd(sc, _`sclkch`_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_scs2e.html">SCS2E</A>:  <I> [_et_] = cspice_scs2e(sc, _`sclkch`_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_sct2e.html">SCT2E</A>:  <I>[_et_] = cspice_sct2e(sc, _sclkdp_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_sctiks.html">SCTIKS</A>:  <I> [_ticks_] = cspice_sctiks(sc, _`clkstr`_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_sincpt.html">SINCPT</A>:  <I>[ spoint, trgepc, srfvec, found] =  cspice_sincpt( `method`, `target`, et, `fixref`, `abcorr`, `obsrvr`, `dref`, dvec)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_spd.html">SPD</A>:  <I> [spd] = cspice_spd</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_sphcyl.html">SPHCYL</A>:  <I> [ _r_, _lonc_, _z_] = cspice_sphcyl(_radius_, _colat_, _slon_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_sphlat.html">SPHLAT</A>:  <I> [_radius_, _lon_, _lat_] = cspice_sphlat(_r_, _colat_, _lons_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_sphrec.html">SPHREC</A>:  <I> [_rectan(3)_] = cspice_sphrec(_r_, _colat_, _lon_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_spkcls.html">SPKCLS</A>:  <I> cspice_spkcls(handle)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_spkcov.html">SPKCOV</A>:  <I> [cover] = cspice_spkcov( _`spk`_, idcode, room, [cover_i])</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_spkcpo.html">SPKCPO</A>:  <I> [ state(6), lt] = cspice_spkcpo( `target`, et, `outref`, `refloc`, `abcorr`, obspos(3), `obsctr`, `obsref` )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_spkcpt.html">SPKCPT</A>:  <I>[ state(6), lt] = cspice_spkcpt( trgpos(3), `trgctr`, `trgref`, et, `outref`, `evlref`, `abcorr`, `obsrvr` )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_spkcvo.html">SPKCVO</A>:  <I> [ state(6), lt] = cspice_spkcvo( `target`, et, `outref`, `evlref`, `abcorr`, obssta(6), obsepc, `obsctr`, `obsref` )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_spkcvt.html">SPKCVT</A>:  <I>[state(6), lt] = cspice_spkcvt( trgsta(6), trgepc, `trgctr`, `trgref`, et, `outref`, `evlref`, `abcorr`, `obsrvr` )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_spkezr.html">SPKEZR</A>:  <I> [_state(6)_, _lt_] = cspice_spkezr( `targ`, _et_, `ref`, `abcorr`, `obs`)</I> </SAMP></LI>
+<LI><SAMP><A HREF="mice_spkezr.html">SPKEZR</A>:  <I> [_starg_] = mice_spkezr( `targ`, _et_, `ref`, `abcorr`, `obs`)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_spkobj.html">SPKOBJ</A>:  <I>[ids] = cspice_spkobj( _`spk`_, room, [ids_i])</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_spkopn.html">SPKOPN</A>:  <I> [handle] = cspice_spkopn(`fname`, `ifname`, ncomch)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_spkpos.html">SPKPOS</A>:  <I> [_pos(3)_, _lt_] = cspice_spkpos( `targ`, _et_, `ref`, `abcorr`, `obs`)</I> </SAMP></LI>
+<LI><SAMP><A HREF="mice_spkpos.html">SPKPOS</A>:  <I> [_ptarg_] = mice_spkpos( `targ`, _et_, `ref`, `abcorr`, `obs`)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_spkpvn.html">SPKPVN</A>:  <I> [ref, state(6), center] = cspice_spkpvn( handle, descr(5), et)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_spksfs.html">SPKSFS</A>:  <I> [handle, descr(5), `ident`, found] = cspice_spksfs( body, et)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_spkw08.html">SPKW08</A>:  <I> cspice_spkw08( handle, body, center, frame, first, last, segid, degree, states, epoch1, step )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_srfxpt.html">SRFXPT</A>:  <I>[_spoint(3)_, _dist_, _trgepc_, _obspos(3)_, _found_ ] = cspice_srfxpt( `method`, `target`, _et_, `abcorr`, `obsrvr`, `dref`, dvec(3))</I> </SAMP></LI>
+<LI><SAMP><A HREF="mice_srfxpt.html">SRFXPT</A>:  <I> [_surf_ ] = mice_srfxpt( `method`, `target`,  _et_, `abcorr`, `obsrvr`, `dref`, dvec(6))</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_stpool.html">STPOOL</A>:  <I> [`string`, found] = cspice_stpool( `item`, nth, `contin` )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_str2et.html">STR2ET</A>:  <I> [_et_] = cspice_str2et(_`str`_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_subpnt.html">SUBPNT</A>:  <I> [spoint, trgepc, srfvec] = cspice_subpnt( `method`, `target`, et, `fixref`, `abcorr`, `obsrvr`)</I> </SAMP></LI>
+<LI><SAMP><A HREF="mice_subpnt.html">SUBPNT</A>:  <I> [subnt] = mice_subpnt( `method`, `target`, et, `fixref`, `abcorr`, `obsrvr`)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_subpt.html">SUBPT</A>:  <I> [_spoint(3)_, _alt_] = cspice_subpt( `method`, `target`, _et_, `abcorr`, `obsrvr`)</I> </SAMP></LI>
+<LI><SAMP><A HREF="mice_subpt.html">SUBPT</A>:  <I> [_spoint_] = mice_subpt( `method`, `target`, _et_, `abcorr`, `obsrvr`)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_subslr.html">SUBSLR</A>:  <I> [spoint, trgepc, srfvec] = cspice_subslr( `method`, `target`, et, `fixref`, `abcorr`, `obsrvr`)</I> </SAMP></LI>
+<LI><SAMP><A HREF="mice_subslr.html">SUBSLR</A>:  <I> [subslr] = mice_subslr( `method`, `target`, et, `fixref`, `abcorr`, `obsrvr`)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_subsol.html">SUBSOL</A>:  <I> [_spoint(3)_ ] = cspice_subsol( `method`, `target`, _et_, `abcorr`, `obsrvr`)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_surfnm.html">SURFNM</A>:  <I> [_normal(3)_] = cspice_surfnm( a, b, c, _point(3)_ )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_surfpt.html">SURFPT</A>:  <I> [point, found] = cspice_surfpt( `positn`, `u`, `a`, `b`, c )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_sxform.html">SXFORM</A>:  <I>[_xform(6,6)_] = cspice_sxform( `from`, `to`, _et_ )</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="T"><b>T</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_timdef_get.html">TIMDEF_GET</A>:  <I> [value] = cspice_timdef_get( `item` )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_timdef_set.html">TIMDEF_SET</A>:  <I> cspice_timdef_set( `item`, `value`)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_timout.html">TIMOUT</A>:  <I>[_`output`_] = cspice_timout( _et_, `pictur` )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_tkvrsn.html">TKVRSN</A>:  <I> [`value`] = cspice_tkvrsn( `item` )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_tpictr.html">TPICTR</A>:  <I> [ `pictur`, ok, `errmsg`] = cspice_tpictr( `sample`)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_tsetyr.html">TSETYR</A>:  <I> cspice_tsetyr(year)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_twopi.html">TWOPI</A>:  <I> [twopi] = cspice_twopi</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_twovec.html">TWOVEC</A>:  <I> [mout(3,3)] = cspice_twovec( axdef(3), indexa, plndef(3), indexp)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_tyear.html">TYEAR</A>:  <I> double = cspice_tyear</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="U"><b>U</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_unitim.html">UNITIM</A>:  <I>[_output_] = cspice_unitim( _epoch_, `insys`, `outsys` )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_unload.html">UNLOAD</A>:  <I> cspice_unload(_`file`_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_unorm.html">UNORM</A>:  <I> [_vout(3)_, _vmag_] = cspice_unorm(_v1(3)_)</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="V"><b>V</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_vdist.html">VDIST</A>:  <I> [_dist_] = cspice_vdist(_v1(3)_, _v2(3)_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_vhat.html">VHAT</A>:  <I> [_vout(3)_] = cspice_vhat(_v1(3)_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_vnorm.html">VNORM</A>:  <I> [_vnorm_] = cspice_vnorm(_v1(3)_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_vperp.html">VPERP</A>:  <I> [_vperp(3)_] = cspice_vperp(_a(3)_, _b(3)_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_vprjp.html">VPRJP</A>:  <I> [vout(3)] = cspice_vprjp( vin(3), plane )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_vprjpi.html">VPRJPI</A>:  <I> [vout(3), found] = cspice_vprjpi( vin(3), projpl, invpl )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_vproj.html">VPROJ</A>:  <I> [_vproj(3)_] = cspice_vproj(_a(3)_, _b(3)_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_vrotv.html">VROTV</A>:  <I> [r(3)] = cspice_vrotv( v(3), axis(3), theta)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_vsep.html">VSEP</A>:  <I> [_sep_] = cspice_vsep(_v1(3)_, _v2(3)_)</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="W"><b>W</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_wncard.html">WNCARD</A>:  <I> [card] = cspice_wncard(window)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_wncomd.html">WNCOMD</A>:  <I> [result] = cspice_wncomd( left, right, window)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_wncond.html">WNCOND</A>:  <I> [window_f] = cspice_wncond( left, right, window)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_wndifd.html">WNDIFD</A>:  <I> [c] = cspice_wndifd( a, b )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_wnelmd.html">WNELMD</A>:  <I>boolean = cspice_wnelmd( point, window )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_wnexpd.html">WNEXPD</A>:  <I> [window_f] = cspice_wnexpd( left, right, window)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_wnextd.html">WNEXTD</A>:  <I> [window_f] = cspice_wnextd( side, window)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_wnfetd.html">WNFETD</A>:  <I>[left, right] = cspice_wnfetd(window, n)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_wnfild.html">WNFILD</A>:  <I> [window_f] = cspice_wnfild( sml, window)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_wnfltd.html">WNFLTD</A>:  <I> [window_f] = cspice_wnfltd( sml, window)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_wnincd.html">WNINCD</A>:  <I>boolean = cspice_wnincd( left, right, window )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_wninsd.html">WNINSD</A>:  <I> [window] = cspice_wninsd( left, right, [window_i] )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_wnintd.html">WNINTD</A>:  <I> [c] = cspice_wnintd( a, b )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_wnreld.html">WNRELD</A>:  <I>boolean = cspice_wnreld( a, `op`, b )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_wnsumd.html">WNSUMD</A>:  <I>[ meas, avg, stddev, shortest, longest ]  = cspice_wnsumd( window )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_wnunid.html">WNUNID</A>:  <I>[c] = cspice_wnunid( a, b )</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_wnvald.html">WNVALD</A>:  <I> [window_f] = cspice_wnvald(window_i)</I> </SAMP></LI>
+               </ul>
+               <hr>
+
+               <table cellpadding="2" cellspacing="2" border="0" style="width: 100%; text-align: left;">
+               <tbody>
+
+               <tr>
+               <td style="vertical-align: top; width: 50%;">
+                                           <a name="X"><b>X</b></a></td>
+               <td style="vertical-align: top; text-align: right;"><a href="#TOP"><small>Top</small></a></td>
+               </tr>
+
+               </tbody>
+               </table>
+
+               <ul>
+<LI><SAMP><A HREF="cspice_xf2eul.html">XF2EUL</A>:  <I> [_eulang(6)_, _unique_] = cspice_xf2eul(_xform(3,3)_, axisa, axisb, axisc)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_xf2rav.html">XF2RAV</A>:  <I> [_rot(3,3)_, _av(3)_] = cspice_xf2rav(_xform(6,6)_)</I> </SAMP></LI>
+<LI><SAMP><A HREF="cspice_xfmsta.html">XFMSTA</A>:  <I> [_output_state(6)_] = cspice_xfmsta( `_input_state(6)_`, `input_coord_sys`, `output_coord_sys`, `body`)</I> </SAMP></LI>
+
+</UL>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>
+

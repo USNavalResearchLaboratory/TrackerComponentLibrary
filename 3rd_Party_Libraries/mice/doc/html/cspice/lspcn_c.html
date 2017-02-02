@@ -1,0 +1,355 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>lspcn_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>lspcn_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   SpiceDouble lspcn_c ( ConstSpiceChar   * body,
+                         SpiceDouble        et,
+                         ConstSpiceChar   * abcorr )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Compute L_s, the planetocentric longitude of the sun, as seen 
+   from a specified body. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/naif_ids.html">NAIF_IDS</a> 
+   <a href="../req/pck.html">PCK</a> 
+   <a href="../req/time.html">TIME</a> 
+   <a href="../req/spk.html">SPK</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   GEOMETRY 
+   TIME 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   body       I   Name of central body. 
+   et         I   Epoch in seconds past J2000 TDB. 
+   abcorr     I   Aberration correction. 
+ 
+   The function returns the value of L_s for the specified body 
+   at the specified time. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   body        is the name of the central body, typically a planet. 
+ 
+   et          is the epoch at which the longitude of the sun (L_s) is
+               to be computed. `et' is expressed as seconds past J2000
+               TDB (Barycentric Dynamical Time).
+ 
+   abcorr      indicates the aberration corrections to be applied 
+               when computing the longitude of the sun.  `abcorr' 
+               may be any of the following. 
+ 
+                  &quot;NONE&quot;     Apply no correction. 
+ 
+                  &quot;LT&quot;       Correct the position of the sun, 
+                             relative to the central body, for 
+                             planetary (light time) aberration. 
+ 
+                  &quot;LT+S&quot;     Correct the position of the sun, 
+                             relative to the central body, for 
+                             planetary and stellar aberrations. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   The function returns the planetocentric longitude of the sun, 
+   often called &quot;L_s,&quot; for the specified body at the specified time. 
+   This is the longitude of the body-sun vector in a right-handed 
+   frame whose basis vectors are defined as follows: 
+ 
+      - The positive Z direction is given by the instantaneous 
+        angular velocity vector of the orbit of the body about 
+        the sun. 
+ 
+      - The positive X direction is that of the cross product of the 
+        instantaneous north spin axis of the body with the
+        positive Z direction.
+ 
+      - The positive Y direction is Z x X. 
+ 
+   Units are radians; the range is 0 to 2*pi.  Longitudes are 
+   positive to the east. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1) If the input body name cannot be translated to an ID code, 
+      and if the name is not a string representation of an integer 
+      (for example, &quot;399&quot;), the error SPICE(NOTRANSLATION) is 
+      signaled. 
+ 
+   2) If no SPK (ephemeris) file has been loaded prior to calling 
+      this routine, or if the SPK data has insufficient coverage, an 
+      error will be diagnosed and signaled by a routine in the call 
+      tree of this routine. 
+ 
+   3) If a PCK file containing rotational elements for the central 
+      body has not been loaded prior to calling this routine, an 
+      error will be diagnosed and signaled by a routine called by a 
+      routine in the call tree of this routine. 
+ 
+   4) If the instantaneous angular velocity and spin axis of `body' 
+      are parallel, the error will be diagnosed and signaled by a 
+      routine in the call tree of this routine. 
+
+   5) The error SPICE(EMPTYSTRING) is signaled if the input
+      string `body' does not contain at least one character, since the
+      input string cannot be converted to a Fortran-style string in
+      this case.
+      
+   6) The error SPICE(NULLPOINTER) is signaled if the input string
+      pointer `body' is null.
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   1) An SPK file (or file) containing ephemeris data sufficient to 
+      compute the geometric state of the central body relative to 
+      the sun at `et' must be loaded before this routine is called. If 
+      light time correction is used, data must be available that 
+      enable computation of the state the sun relative to the solar 
+      system barycenter at the light-time corrected epoch.  If 
+      stellar aberration correction is used, data must be available 
+      that enable computation of the state the central body relative 
+      to the solar system barycenter at `et'. 
+ 
+   2) A PCK file containing rotational elements for the central body 
+      must be loaded before this routine is called. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   The direction of the vernal equinox for the central body is 
+   determined from the instantaneous equatorial and orbital planes 
+   of the central body.  This equinox definition is specified in 
+   reference [1].  The &quot;instantaneous orbital plane&quot; is interpreted 
+   in this routine as the plane normal to the cross product of the 
+   position and velocity of the central body relative to the sun. 
+   The geometric state of the central body relative to the sun is 
+   used for this normal vector computation. The &quot;instantaneous 
+   equatorial plane&quot; is normal to the central body's north pole 
+   at the requested epoch.  The pole direction is determined from 
+   rotational elements loaded via a PCK file. 
+ 
+   The result returned by this routine will depend on the 
+   ephemeris data and rotational elements used.  The result may 
+   differ from that given in any particular version of the 
+   Astronomical Almanac, due to differences in these input data, 
+   and due to differences in precision of the computations. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   1) A simple program that computes L_s for a body and time 
+      supplied interactively.  The geometric state of the sun is 
+      used. 
+ 
+         #include &lt;stdio.h&gt;
+         #include &quot;SpiceUsr.h&quot;
+
+         int main()
+         {
+            #define  ABCORR         &quot;NONE&quot; 
+            #define  FILSIZ         256
+            #define  NAMLEN         37
+            #define  TIMLEN         41
+            #define  ABCORR         &quot;NONE&quot; 
+
+            SpiceChar               body   [ NAMLEN ];
+            SpiceChar               lsk    [ FILSIZ ];
+            SpiceChar               pck    [ FILSIZ ];
+            SpiceChar               spk    [ FILSIZ ];
+            SpiceChar               timstr [ TIMLEN ];
+
+            SpiceDouble             et;
+            SpiceDouble             lon;
+
+            <a href="prompt_c.html">prompt_c</a> ( &quot;Enter name of leapseconds kernel &gt; &quot;, FILSIZ, lsk ); 
+            <a href="prompt_c.html">prompt_c</a> ( &quot;Enter name of PCK file           &gt; &quot;, FILSIZ, pck ); 
+            <a href="prompt_c.html">prompt_c</a> ( &quot;Enter name of SPK file           &gt; &quot;, FILSIZ, spk ); 
+
+            <a href="furnsh_c.html">furnsh_c</a> ( spk );
+            <a href="furnsh_c.html">furnsh_c</a> ( lsk ); 
+            <a href="furnsh_c.html">furnsh_c</a> ( pck ); 
+ 
+            printf ( &quot;\n&quot;
+                     &quot;Kernels have been loaded.\n&quot;
+                     &quot;\n&quot;                           );
+
+            while ( SPICETRUE )
+            { 
+               <a href="prompt_c.html">prompt_c</a> ( &quot;Enter name of central body       &gt; &quot;,  
+                          NAMLEN, 
+                          body                                   ); 
+               <a href="prompt_c.html">prompt_c</a> ( &quot;Enter calendar, JD, or DOY time  &gt; &quot;,  
+                          TIMLEN, 
+                          timstr                                 );
+ 
+               <a href="str2et_c.html">str2et_c</a> ( timstr, &amp;et ); 
+ 
+               /.
+               Convert longitude to degrees. 
+               ./
+               lon = <a href="dpr_c.html">dpr_c</a>() * <b>lspcn_c</b> ( body, et, ABCORR );
+ 
+               printf ( &quot;\n&quot;
+                        &quot;Central body              = %s\n&quot;
+                        &quot;Time                      = %s\n&quot;
+                        &quot;Planetocentric L_s (deg.) = %f\n&quot;
+                        &quot;\n&quot;,
+                        body,
+                        timstr,
+                        lon                               );
+            }
+            return ( 0 );
+         }
+ 
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   [1] &quot;The Astronomical Almanac for the Year 2005.&quot; U.S. Government 
+       Printing Office, Washington, D.C., 1984, page L9. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman       (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 06-JAN-2005 (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   planetocentric longitude of sun 
+   compute L_s 
+   compute Ls 
+   compute L_sub_s 
+ </PRE>
+<h4>Link to routine lspcn_c source file <a href='../../../src/cspice/lspcn_c.c'>lspcn_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:37 2014</pre>
+
+</body>
+</html>
+

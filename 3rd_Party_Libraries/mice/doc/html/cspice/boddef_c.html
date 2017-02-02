@@ -1,0 +1,360 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>boddef_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>boddef_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void boddef_c ( ConstSpiceChar   * name,
+                   SpiceInt           code )
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   Define a body name/ID code pair for later translation via
+   <a href="bodn2c_c.html">bodn2c_c</a> or <a href="bodc2n_c.html">bodc2n_c</a>.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+   <a href="../req/naif_ids.html">NAIF_IDS</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+   BODY
+   CONVERSION
+
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+   Variable  I/O  Description
+   --------  ---  --------------------------------------------------
+   name       I   Common name of some body.
+   code       I   Integer code for that body.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+   name        is an arbitrary name of a body which could be
+               a planet, satellite, barycenter, spacecraft,
+               asteroid, comet, or other ephemeris object.
+
+               The case and positions of blanks in a name are
+               significant. <a href="bodc2n_c.html">bodc2n_c</a> returns the same string
+               (case and space) most recently mapped to a code.
+               When 'name' consists of more than one word, the
+               words require separation by at least one blank.
+
+               The kernel sub-system stores 'name' as described in
+               the <b>boddef_c</b> call, but creates an equivalence class
+               based on 'name for comparisons in <a href="bodn2c_c.html">bodn2c_c</a>. This class
+               ignores leading/trailing whitespace, compresses
+               interior whitespace to a single space, and ignores 
+               character case.
+
+               The following strings belong to the same equivalence 
+               class:
+
+                       &quot;JUPITER BARYCENTER&quot;
+                       &quot;Jupiter Barycenter&quot;
+                       &quot;JUPITER BARYCENTER   &quot;
+                       &quot;JUPITER    BARYCENTER&quot;
+                       &quot;   JUPITER BARYCENTER&quot;
+
+               However, &quot;JUPITERBARYCENTER&quot; is distinct from
+               the names above.
+
+               When ignoring trailing blanks, NAME must be short
+               enough to fit into the space defined by parameter
+               MAXL.The value may be found in the C file 
+               zzbodtrn.c. Due to the way in which f2c converts 
+               FORTRAN code to C, you must examine the dimensions
+               assigned to the variables:
+ 
+                   defnam
+                   defnor
+                   kernam
+                   kernor
+
+                to obtain the MAXL value. These variables have a 
+                declaration of the form:
+
+                   static char variable_name[MAXL*array_length]
+                
+                  (note MAXL is this first value).
+
+               The maximum allowed length of a name is in any case
+               at least 32 characters. 
+
+   code        is the integer ID code for assignment to body 'name'.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+   1) An attempt to associate more than one code with a given name
+      will cause an error to be signaled by a routine called by this
+      routine.
+
+   2) Names too long to be stored will be truncated on the right.
+      Names of length not exceeding 32 characters will not be
+      truncated.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+   <b>boddef_c</b> is one of five related subroutines,
+
+      <a href="bods2c_c.html">bods2c_c</a>      Body string to code
+      <a href="bodc2s_c.html">bodc2s_c</a>      Body code to string
+      <a href="bodn2c_c.html">bodn2c_c</a>      Body name to code
+      <a href="bodc2n_c.html">bodc2n_c</a>      Body code to name
+      <b>boddef_c</b>      Body name/code definition
+
+   <a href="bods2c_c.html">bods2c_c</a>, <a href="bodc2s_c.html">bodc2s_c</a>, <a href="bodn2c_c.html">bodn2c_c</a>, and <a href="bodc2n_c.html">bodc2n_c</a> perform translations between 
+   body names and their corresponding integer ID codes which are 
+   used in SPICE files and routines.
+
+   <a href="bods2c_c.html">bods2c_c</a> is a slightly more general version of <a href="bodn2c_c.html">bodn2c_c</a>: support
+   for strings containing ID codes in string format enables a caller
+   to identify a body using a string, even when no name is
+   associated with that body.
+
+   <a href="bodc2s_c.html">bodc2s_c</a> is a general version of <a href="bodc2n_c.html">bodc2n_c</a>; the routine returns either
+   the name assigned in the body ID to name mapping or a string
+   representation of the CODE value if no mapping exists.
+
+   <b>boddef_c</b> assigns a body name to ID mapping. The mapping has priority 
+   in name-to-ID and ID-to-name translations.
+
+   Refer to NAIF_IDs for the list of name/code associations built into
+   SPICE, and for details concerning adding new name/code
+   associations at run time by loading text kernels.
+
+   Modifying the SPICE name-ID mapping set
+   =======================================
+
+   Each body has a unique integer 'code', but may have several
+   names. Thus you may associate more than one name with
+   a particular integer code.
+
+   'code' may already have a name as defined by a previous
+   call to <b>boddef_c</b> or as part of the set of default
+   definitions.  That previous definition will remain,
+   and a translation of that name will still give the
+   same 'code'.  However, future translations of 'code' will
+   give the new 'name' instead of the previous one.  This
+   feature is useful for assigning a more familiar or
+   abbreviated name to a body. For example, in addition
+   to the default name for body 5, &quot;JUPITER BARYCENTER&quot;,
+   you could define the abbreviation &quot;JB&quot; to mean 5.
+
+   Note: In the case where <b>boddef_c</b> performs a name-to-ID mapping
+   assignment for an unused body name and unused ID value,
+   any subsequent assignment to NAME destroys the previous
+   mapping.
+
+      <b>boddef_c</b> ( &quot;spud&quot;, 22)
+
+   then
+
+      <b>boddef_c</b> ( &quot;spud&quot;, 23)
+
+   results in the state &quot;spud&quot; maps to 23, 23 maps to &quot;spud&quot;,
+   and 22 maps to nothing ('found' in <a href="bodc2n_c.html">bodc2n_c</a> returns SPICEFALSE).
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+   You may associate a new name with a particular code that
+   has already been defined:
+
+          <b>boddef_c</b> ( &quot;JB&quot;, 5 );
+
+   You may also define the name and integer code for a new body:
+
+          <b>boddef_c</b> ( &quot;Asteroid Frank&quot;, 20103456 );
+
+   After these calls to <b>boddef_c</b>, <a href="bodn2c_c.html">bodn2c_c</a> would return the following
+   translations:
+
+      Name                         Code    Found?
+      ------------------------   ------    ------
+      &quot;JB&quot;                            5    Yes
+      &quot;Jupiter Barycenter&quot;            5    Yes
+      &quot;ASTEROID FRANK&quot;         20103456    Yes
+      &quot;ASTEROIDFRANK&quot;                 -    No
+      &quot;Frank&quot;                         -    No
+
+   and BODC2N will return these translations:
+
+      Code        Name                     Found?
+      -------     -------------------      ------
+             5    &quot;JB&quot;                     Yes
+      20103456    &quot;Asteroid Frank&quot;         Yes
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   N.J. Bachman    (JPL)
+   K.R. Gehringer  (JPL)
+   B.V. Semenov    (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 2.2.2, 16-MAY-2009 (EDW) 
+
+       Edit to Particulars section to document the <a href="bodc2s_c.html">bodc2s_c</a> routine.
+
+   -CSPICE Version 2.2.1, 27-FEB-2008 (BVS)
+
+       Corrected the contents of the Required_Reading section of 
+       the header.
+
+   -CSPICE Version 2.2.0, 23-JAN-2004 (EDW)
+
+      Rewrote header for clarity with regards to the
+      current capabilities of the kernel subsystem.
+
+   -CSPICE Version 2.1.0, 17-NOV-2003 (EDW)
+
+      Updated header to describe the maximum allowed length
+      for 'name' and its effect on this module.
+
+      Updated header with information on new functionality.
+      The code-to-name retrieval routines now return the exact
+      string as defined in the last code/name mapping (case
+      and space).
+
+   -CSPICE Version 2.0.1, 08-FEB-1998 (EDW)
+
+      Corrected and clarified header entries.
+
+   -CSPICE Version 2.0.0, 06-JAN-1998 (NJB)
+
+       The type of the input argument name was changed to
+       ConstSpiceChar *.
+
+       References to C2F_CreateStr_Sig were removed; code was
+       cleaned up accordingly.  String checks are now done using
+       the macro CHKFSTR.
+
+   -CSPICE Version 1.0.0, 25-OCT-1997 (NJB)
+
+      Based on SPICELIB Version 1.0.0, 23-JAN-1996 (KRG)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   body name/id code definition
+</PRE>
+<h4>Link to routine boddef_c source file <a href='../../../src/cspice/boddef_c.c'>boddef_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:27 2014</pre>
+
+</body>
+</html>
+

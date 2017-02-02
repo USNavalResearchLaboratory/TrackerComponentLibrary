@@ -1,0 +1,214 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>vcrss_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>vcrss_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void vcrss_c ( ConstSpiceDouble   v1[3],
+                  ConstSpiceDouble   v2[3],
+                  SpiceDouble        vout[3] )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   Compute the cross product of two 3-dimensional vectors.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+   VECTOR
+
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   v1         I     Left hand vector for cross product.
+   v2         I     Right hand vector for cross product.
+   vout       O     Cross product v1xv2.
+                    vout can overwrite either v1 or v2.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+   v1      This may be any 3-dimensional vector.  Typically, this
+           might represent the (possibly unit) vector to a planet,
+           sun, or a star which defines the orientation of axes of
+           some coordinate system.
+
+   v2      Ditto.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+   vout    This variable represents the cross product of v1 and v2.
+           vout may overwrite v1 or v2.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+   Error free.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+   <b>vcrss_c</b> calculates the three dimensional cross product of two
+   vectors according to the definition.  The cross product is stored
+   in a buffer vector until the calculation is complete.  Thus vout
+   may overwrite v1 or v2 without interfering with intermediate
+   computations.
+
+   If v1 and v2 are large in magnitude (taken together, their
+   magnitude surpasses the limit allow by the computer) then it may
+   be possible to generate a floating point overflow from an
+   intermediate computation even though the actual cross product
+   may be well within the range of double precision numbers.
+   <b>vcrss_c</b> does NOT check the magnitude of v1 or v2 to insure that
+   overflow will not occur.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+   v1                  v2                  vout (=v1Xv2)
+   -----------------------------------------------------------------
+   (0, 1, 0)           (1, 0, 0)           (0, 0, -1)
+   (5, 5, 5)           (-1, -1, -1)        (0, 0, 0)
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   No checking of v1 or v2 is done to prevent floating point
+   overflow. The user is required to determine that the magnitude
+   of each component of the vectors is within an appropriate range
+   so as not to cause floating point overflow. In almost every case
+   there will be no problem and no checking actually needs to be
+   done.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   W.M. Owen       (JPL)
+   E.D. Wright     (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.1.0, 22-OCT-1998 (NJB)
+
+      Made input vectors const.
+
+   -CSPICE Version 1.0.1, 06-MAR-1998 (EDW)
+   
+      Minor header correction.  Added use of MOVED.
+
+   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   vector cross product
+</PRE>
+<h4>Link to routine vcrss_c source file <a href='../../../src/cspice/vcrss_c.c'>vcrss_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:47 2014</pre>
+
+</body>
+</html>
+

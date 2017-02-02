@@ -1,0 +1,301 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_inrypl</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_inrypl</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_INRYPL finds the intersection of a ray and a plane.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      vertex   the position of a ray vertex.
+
+               [3,1] = size(normal); double = class(normal)
+
+      dir      the direction of a ray from 'vertex'.
+
+               [3,1] = size(normal); double = class(normal)
+
+      plane    a structure describing a SPICE plane.
+
+               [1,1] = size(plane); struct = class(plane)
+
+               The structure has the fields:
+
+                  normal:     [3,1] = size(normal); double = class(normal)
+                  constant:   [1,1] = size(constant); double = class(constant)
+
+   the call:
+
+      [ nxpts, xpt ] = <b>cspice_inrypl</b>( vertex, dir, plane )
+
+   returns:
+
+      nxpts   the number of points of intersection of the
+              input ray and plane. Values and meanings of nxpts are:
+
+                 0     No intersection.
+
+                 1     One point of intersection.  Note that
+                       this case may occur when the ray's
+                       vertex is in the plane.
+
+                 -1    An infinite number of points of
+                       intersection; the ray lies in the plane.
+
+              [1,1] = size(nxpts); int32 = class(nxpts)
+
+      xpt     the point of intersection of the input ray and plane, when
+              there is exactly one point of intersection.
+
+              If the ray lies in the plane, 'xpt' is set equal to
+              vertex.
+
+              If there is no intersection, 'xpt' is the zero vector.
+
+              [3,1] = size(xpt); double = class(xpt)
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+         KPL/MK
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            pck00009.tpc                  Planet orientation and
+                                          radii
+            naif0009.tls                  Leapseconds
+
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( '/kernels/gen/lsk/naif0009.tls'
+                                '/kernels/gen/spk/de421.bsp'
+                                '/kernels/gen/pck/pck00009.tpc'
+                      )
+
+         \begintext
+
+
+      %
+      % Determine the intersection between the Saturn ring plane and
+      % a look direction as seen from a position in the Saturn
+      % body-fixed frame. For this extremely simplistic example,
+      % we take the equatorial plane as the ring plane.
+      %
+
+      %
+      % Load the standard kernel set.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % Retrieve the triaxial radii of Saturn (699)
+      %
+      radii = <a href="cspice_bodvrd.html">cspice_bodvrd</a>( 'SATURN', 'RADII', 3 );
+
+      %
+      % Define a position in the IAU_SATURN frame at three equatorial
+      % radius out along the x axis, a half radius above the
+      % equatorial plane. For this example, we'll assume 'vertex'
+      % represents the light-time corrected position of a vehicle
+      % to the Saturn ring plane.
+      %
+      vertex = [ 3.0 * radii(1), 0.0, radii(3) *.50 ]';
+
+      %
+      % Define a look vector in the y-z plane from 'vertex'.
+      %
+      %   'vertex'
+      %      *______ y
+      %     /|\
+      %    / | \  30 degrees
+      %   /  |  \
+      %  x  -z  'dir'
+      %
+      dir = [ 0.,
+              cos( 30. *<a href="cspice_rpd.html">cspice_rpd</a>() ),
+             -sin( 30. *<a href="cspice_rpd.html">cspice_rpd</a>() )
+            ];
+
+      %
+      % Define the equatorial plane as a SPICE plane. The Z
+      % axis is normal to the plane, the origin lies in the
+      % plane.
+      %
+      normal = [ 0., 0., 1.]';
+      point  = [ 0., 0., 0.]';
+      plane  = <a href="cspice_nvp2pl.html">cspice_nvp2pl</a>( normal, point );
+
+      %
+      % Determine the intersection point of 'dir' and 'plane', if
+      % such an intersection exists.
+      %
+      [ nxpts, xpt ] =<b>cspice_inrypl</b>( vertex, dir, plane );
+
+
+      %
+      % Do we have an intersection?
+      %
+      if ( nxpts == 1 )
+         fprintf( 'Vector intersects plane at: %12.9g %12.9g %12.9g\n', ...
+                  xpt(:) )
+      end
+
+      %
+      % No intersection
+      %
+      if ( nxpts == 0 )
+         fprintf( 'No intersection between vector and plane.\n' )
+      end
+
+      %
+      % No intersection
+      %
+      if ( nxpts == -1 )
+         fprintf( 'Vector lies in plane, degenerate case.\n' )
+      end
+
+      %
+      % It's always good form to unload kernels after use,
+      % particularly in IDL due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+      Vector intersects plane at:       180804   47080.6051            0
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   The intersection of a ray and plane in three-dimensional space
+   can be a the empty set, a single point, or the ray itself.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/inrypl_c.html">inrypl_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/planes.html">PLANES.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 27-AUG-2012, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   intersection of ray and plane
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:37 2014</pre>
+
+</body>
+</html>
+

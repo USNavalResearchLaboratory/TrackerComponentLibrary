@@ -1,0 +1,526 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>scencd_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>scencd_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void scencd_c ( SpiceInt           sc, 
+                   ConstSpiceChar   * sclkch, 
+                   SpiceDouble      * sclkdp ) 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Encode character representation of spacecraft clock time into a 
+   double precision number. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/sclk.html">SCLK</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   CONVERSION 
+   TIME 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   sc         I   NAIF spacecraft identification code. 
+   sclkch     I   Character representation of a spacecraft clock. 
+   sclkdp     O   Encoded representation of the clock count. 
+   MXPART     P   Maximum number of spacecraft clock partitions. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   sc         is the standard NAIF ID of the spacecraft whose clock's 
+              time is being encoded. 
+ 
+   sclkch     is the character representation of some spacecraft's 
+              clock count. 
+ 
+              sclkch will have the following general format: 
+ 
+                           &quot;pp/sclk_string&quot;, or just 
+                              &quot;sclk_string&quot; 
+ 
+              &quot;pp&quot; is an integer greater than or equal to one 
+              and is called the partition number. 
+ 
+              Each mission is divided into some number of partitions. 
+              A new partition starts when the spacecraft clock 
+              resets, either to zero, or to some other 
+              value. Thus, the first partition for any mission 
+              starts with launch, and ends with the first clock 
+              reset. The second partition starts immediately when 
+              the first stopped, and so on. 
+ 
+              In order to be completely unambiguous about a 
+              particular time, you need to specify a partition number 
+              along with the standard clock string. 
+ 
+              Information about when partitions occur for different 
+              missions is contained in a spacecraft clock kernel 
+              file, which needs to be loaded into the kernel pool, 
+              using the routine <a href="furnsh_c.html">furnsh_c</a>. 
+ 
+              The routine <a href="scpart_c.html">scpart_c</a> is used to read the partition 
+              start and stop times, in encoded units of SCLK (called 
+              &quot;ticks&quot; -- see sclkdp below) from the kernel file. 
+ 
+              If the partition number is included, it must be 
+              separated from the rest of the string by a &quot;/&quot;. 
+              Any number of spaces may separate the partition number, 
+              the &quot;/&quot;, and the rest of the clock string. 
+ 
+ 
+              If the partition number is omitted, a default partition 
+              will be assumed. The default partition is the lowest- 
+              numbered partition that contains the given clock time. 
+              If the clock time does not fall in any of the 
+              partition boundaries then an error is signalled. 
+ 
+ 
+              &quot;sclk_string&quot; is a spacecraft specific clock string. 
+              Using Galileo as an example, the full format is 
+ 
+                             wwwwwwww:xx:y:z 
+ 
+              where z is a mod-8 counter (values 0-7) which 
+              increments approximately once every 8 1/3 ms., y is a 
+              mod-10 counter (values 0-9) which increments once 
+              every time z turns over, i.e., approximately once every 
+              66 2/3 ms., xx is a mod-91 (values 0-90) counter 
+              which increments once every time y turns over, i.e., 
+              once every 2/3 seconds. wwwwwwww is the Real-Time Image 
+              Count (RIM), which increments once every time xx turns 
+              over, i.e., once every 60 2/3 seconds. The roll-over 
+              expression for the RIM is 16777215, which corresponds 
+              to approximately 32 years. 
+ 
+              wwwwwwww, xx, y, and z are referred to interchangeably 
+              as the fields or components of the spacecraft clock. 
+              SCLK components may be separated by any of these 
+              five characters: &quot; &quot;  &quot;:&quot;  &quot;,&quot;  &quot;-&quot;  &quot;.&quot; 
+              Any number of spaces can separate the components and 
+              the delimiters. The presence of the RIM component 
+              is required. Successive components may be omitted, and 
+              in such cases are assumed to represent zero values. 
+ 
+              Values for the individual components may exceed the 
+              maximum expected values. For instance, &quot;0:0:0:9&quot; is 
+              an acceptable Galileo clock string, and will convert 
+              to the same number of ticks as &quot;0:0:1:1&quot;. 
+ 
+              Consecutive delimiters containing no intervening digits 
+              are treated as if they delimit zero components. 
+ 
+              Trailing zeros should always be included to match the 
+              length of the counter.  For example, a Galileo clock 
+              count of &quot;25684.90&quot; should not be represented as 
+              &quot;25684.9&quot;. 
+ 
+              Some spacecraft clock components have offset, or 
+              starting, values different from zero.  For example, 
+              with an offset value of 1, a mod 20 counter would 
+              cycle from 1 to 20 instead of from 0 to 19. 
+ 
+              See the SCLK required reading for a detailed 
+              description of the Voyager and Mars Observer clock 
+              formats. 
+ 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   sclkdp     is the double precision encoding of sclkch. 
+ 
+              The encoding is such that order and proximity will be 
+              preserved. That is, if t1, t2, and t3 are spacecraft 
+              clock times, and t1*, t2*, and t3* are their encodings, 
+              then if 
+ 
+                            t1 &lt; t2 &lt; t3, and 
+ 
+              t2 is closer to t1 than to t3, you will have the result 
+              that 
+ 
+                           t1* &lt; t2* &lt; t3*, and 
+ 
+              t2* is closer to t1* than to t3*. 
+ 
+              The units of encoded SCLK are &quot;ticks since the start of 
+              the mission&quot;, where a &quot;tick&quot; is defined to be the 
+              shortest time increment expressible by a particular 
+              spacecraft's clock. 
+ 
+              Each clock string without partition number represents 
+              a certain number of ticks, but you need to include 
+              partition information to determine the relative 
+              position of that time in relation to the start of the 
+              mission. 
+ 
+              Since the end time of one partition is coincident 
+              with the begin time of the next, there are two 
+              different representations for this instant, and they 
+              will both yield the same encoding. 
+ 
+              For example, if partition 1 has an end time of t1, and 
+              partition 2 has a begin time of t2, then if we executed
+              the code fragment 
+ 
+                 <b>scencd_c</b> ( &quot;1/t1&quot;, sc, &amp;x ); 
+                 <b>scencd_c</b> ( &quot;2/t2&quot;, sc, &amp;y );
+                 
+              The we would obtain x = y. 
+ 
+              The individual routines tiksNN_c, where NN is the 
+              clock type code, contain more detailed information 
+              on the conversion process. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   MXPART     is the maximum number of spacecraft clock partitions 
+              expected in the kernel file for any one spacecraft. 
+              MXPART is currently set to 9999.
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1) If the number of partitions in the kernel file for spacecraft 
+      sc exceeds the parameter MXPART, the error 
+      SPICE(TOOMANYPARTS) is signalled. 
+ 
+ 
+   If a partition number is included in the SCLK string, the 
+   following exceptions may occur: 
+ 
+   2) If the partition number cannot be parsed as an integer, the 
+      error SPICE(BADPARTNUMBER) is signalled. 
+ 
+   3) If the partition number is not in the range of the number of 
+      partitions found in the kernel pool, the error 
+      SPICE(BADPARTNUMBER) is signalled. 
+ 
+   4) If the clock count does not fall within the boundaries of the 
+      specified partition, the error SPICE(NOTINPART) is signalled. 
+ 
+   If a partition number is not included in the SCLK string, the 
+   following exception may occur. 
+ 
+   5) If the clock count does not fall within the boundaries of any 
+      partition found in the kernel pool, the error SPICE(NOPARTITION)
+      is signalled. 
+ 
+ 
+   The following error is signalled by a routine called by <b>scencd_c</b>.
+ 
+   6)  If any of the extracted clock components cannot be parsed as 
+       integers, or the string has too many components, or the value 
+       of one of the components is less than the offset value, then 
+       the error SPICE(INVALIDSCLKSTRING) is signalled. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   A kernel file containing spacecraft clock partition information 
+   for the desired spaceraft must be loaded, using the routine
+   <a href="furnsh_c.html">furnsh_c</a>, before calling this routine. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   In general, it is difficult to compare spacecraft clock counts 
+   numerically since there are too many clock components for a 
+   single comparison.  This routine provides a method of assigning a 
+   single double precision number to a spacecraft's clock count, 
+   given one of its character representations. 
+ 
+   The routine <a href="scdecd_c.html">scdecd_c</a> performs the inverse operation of <b>scencd_c</b>, 
+   converting an encoded double precision number to character format. 
+ 
+   To convert the string to ticks since the start of the mission, 
+   <b>scencd_c</b> 
+ 
+      1) Converts the non-partition portion of the string to 
+         ticks, using the routine <a href="sctiks_c.html">sctiks_c</a>. 
+ 
+      2) Determines the partition number for the clock time, 
+         either by getting it directly from the input string, or 
+         determining the default partition if none was specified. 
+ 
+      3) Includes partition start and stop times, which are also 
+         measured in ticks, to compute the number of ticks 
+         from the beginning of the mission to the clock time. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   Double precision encodings of spacecraft clock counts are used to 
+   tag pointing data in the C-kernel. 
+
+   In the following example, pointing for a sequence of images from 
+   the Voyager 2 narrow angle camera is requested from the C-kernel 
+   using an array of character spacecraft clock counts as input. 
+   The clock counts attached to the output are then decoded to 
+   character and compared with the input strings. 
+ 
+      #include &lt;stdio.h&gt;
+      #include &quot;SpiceUsr.h&quot;
+      
+      void main()
+      {
+         /. 
+         The instrument we want pointing for is the Voyager 2 
+         narrow angle camera.  The reference frame we want is 
+         J2000. The spacecraft is Voyager 2. 
+         ./
+         
+         #define  SC         -32
+         #define  INST       -32001
+         #define  REF        &quot;J2000&quot;
+         #define  CK         &quot;/kernels/voyager2/ck/vg2_jup_qmw_na.bc&quot;
+         #define  SCLK       &quot;/kernels/voyager2/sclk/vg200004.tsc&quot;
+         #define  NPICS      4 
+         #define  CLKTOL     &quot;0:01:001&quot;
+         #define  MAXLEN     30
+      
+         SpiceBoolean       found;
+      
+         SpiceChar          sclkin [4][25] = { {&quot;2 / 20538:39:768&quot;}, 
+                                               {&quot;2 / 20543:21:768&quot;}, 
+                                               {&quot;2 / 20550:37&quot;    }, 
+                                               {&quot;2 / 20561:59&quot;    } };      
+         SpiceChar          sclkout[25];
+      
+         SpiceDouble        tol;
+         SpiceDouble        timein;
+         SpiceDouble        timeout; 
+         SpiceDouble        cmat   [3][3];
+      
+         SpiceInt           handle;
+         SpiceInt           i;
+      
+      
+         /.
+         Load the appropriate files. We need 
+         
+            1) CK file containing pointing data. 
+            2) Spacecraft clock kernel file, for <b>scencd_c</b> and SCDECD. 
+         ./
+         
+         <a href="cklpf_c.html">cklpf_c</a>  ( CK,  &amp;handle );
+         <a href="furnsh_c.html">furnsh_c</a> ( SCLK         ); 
+      
+      
+         /.
+         Convert the tolerance string to ticks. 
+         ./
+         <a href="sctiks_c.html">sctiks_c</a> ( SC, CLKTOL, &amp;tol ); 
+      
+      
+         for ( i = 0;  i &lt; NPICS;  i++ )
+         {
+            <b>scencd_c</b> ( SC,   sclkin[i], &amp;timein ); 
+      
+            <a href="ckgp_c.html">ckgp_c</a>   ( INST,  timein,    tol,    REF, 
+                       cmat,  &amp;timeout,  &amp;found       );
+      
+            <a href="scdecd_c.html">scdecd_c</a> ( SC, timeout, MAXLEN, sclkout );  
+      
+            if ( found )
+            {
+               printf ( &quot;\n&quot;
+                        &quot;Input  s/c clock count: %s\n&quot;
+                        &quot;Output s/c clock count: %s\n&quot;
+                        &quot;Output C-Matrix:          \n&quot;
+                        &quot;%25.16f   %25.16f   %25.16f\n&quot;   
+                        &quot;%25.16f   %25.16f   %25.16f\n&quot;   
+                        &quot;%25.16f   %25.16f   %25.16f\n&quot;
+                        &quot;\n&quot;,   
+                        sclkin[i],
+                        sclkout,
+                        cmat[0][0],  cmat[0][1],  cmat[0][2],
+                        cmat[1][0],  cmat[1][1],  cmat[1][2],
+                        cmat[2][0],  cmat[2][1],  cmat[2][2] );
+            }
+            else
+            {
+               printf ( &quot;\n&quot;
+                        &quot;Input  s/c clock count: %s\n&quot;
+                        &quot;No pointing found.\n&quot;,   
+                        sclkin[i]                     );
+            }
+         }
+      
+      }
+
+ 
+   The output from such a program might look like: 
+ 
+ 
+          Input  s/c clock count:  2 / 20538:39:768 
+          Output s/c clock count:  2/20538:39:768 
+          Output C-Matrix:  &quot;first C-matrix&quot; 
+ 
+          Input  s/c clock count:  2 / 20543:21:768 
+          Output s/c clock count:  2/20543:22:768 
+          Output C-Matrix:  &quot;second C-matrix&quot; 
+ 
+          Input  s/c clock count:  2 / 20550:37 
+          Output s/c clock count:  2/20550:36:768 
+          Output C-Matrix:  &quot;third C-matrix&quot; 
+ 
+          Input  s/c clock count:  2 / 20561:59 
+          Output s/c clock count:  2/20561:58:768 
+          Output C-Matrix:  &quot;fourth C-matrix&quot; 
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   J.M. Lynch   (JPL) 
+   R.E. Thurman (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.2.0, 11-FEB-2008   (NJB)
+
+      Definition of constant macro MXPART was deleted.
+      Documentation was updated to reflect current
+      MXPART value of 9999.
+
+   -CSPICE Version 1.1.1, 14-AUG-2006 (EDW)
+
+      Replace mention of <a href="ldpool_c.html">ldpool_c</a> with <a href="furnsh_c.html">furnsh_c</a>.
+ 
+   -CSPICE Version 1.1.0, 08-FEB-1998 (NJB)  
+   
+       References to C2F_CreateStr_Sig were removed; code was
+       cleaned up accordingly.  String checks are now done using
+       the macro CHKFSTR.
+       
+   -CSPICE Version 1.0.0, 25-OCT-1997 (NJB)
+   
+      Based on SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   encode spacecraft_clock 
+ </PRE>
+<h4>Link to routine scencd_c source file <a href='../../../src/cspice/scencd_c.c'>scencd_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:42 2014</pre>
+
+</body>
+</html>
+

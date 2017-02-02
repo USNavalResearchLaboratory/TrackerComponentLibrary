@@ -1,0 +1,244 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ltime</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ltime</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_LTIME computes the transmit (or receive) time of
+   a signal at a specified target, given the receive (or transmit)
+   time at a specified observer. The elapsed time between transmit
+   and receive is also returned.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      etobs   a double precision scalar or 1xN vector defining the
+              epoch in ephemeris seconds (TDB) of a signal at some
+              observer
+
+      obs     the scalar integer NAIF ID code of the observer
+
+      dir     a character string pictograph defining the
+              direction the signal travels, to target from
+              observer &quot;-&gt;&quot;, or from the target to the
+              observer &quot;&lt;-&quot;
+
+      targ    the scalar integer NAIF ID code of the target
+
+   the call:
+
+      [ettarg, elapsd] = <b>cspice_ltime</b>(etobs, obs, dir, targ)
+
+   returns:
+
+      ettarg   the double precision scalar or 1XN vector defining the
+               epoch at which the electromagnetic signal is &quot;at&quot; the
+               target body, expressed in ephemeris seconds (TDB)
+
+                  Note 'ettarg' is computed using only Newtonian
+                  assumptions about the propagation of light.
+
+      elapsd   the double precision scalar or 1XN vector defining the
+               measure of ephemeris seconds (TDB) between transmission
+               and receipt of the signal
+
+                  elapsd = abs( etobs - ettarg )
+
+               'ettarg' and 'elapsd' return with the same
+               vectorization measure (N) as 'etobs'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      %  Load an SPK, PCK, and leapseconds kernel
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % Suppose a signal originates from Earth towards the
+      % the Jupiter system barycenter. Define the NAIF IDs
+      % for the observer, Earth (399), the target, Jupiter
+      % barycenter (5), and time of interest.
+      %
+      OBS      = 399;
+      TARGET   = 5;
+      TIME_STR = 'July 4, 2004';
+
+      %
+      %  Convert the transmission time to ET.
+      %
+      et = <a href="cspice_str2et.html">cspice_str2et</a>( TIME_STR);
+
+      %
+      %  Determine the arrival time and the time for propagation.
+      %
+      [arrive, ltime] = <b>cspice_ltime</b>( et, OBS, '-&gt;', TARGET);
+
+      %
+      %  Convert the arrival time (ET) to UTC.
+      %
+      arrive_utc = <a href="cspice_et2utc.html">cspice_et2utc</a>( arrive, 'C', 3 );
+
+      %
+      %  Output the results.
+      %
+      txt = sprintf( 'Transmission at (UTC)       : %s', TIME_STR );
+      disp(txt)
+
+      txt = sprintf( 'The signal arrived at (UTC) : %s', arrive_utc );
+      disp(txt)
+
+      txt = sprintf( 'Time for propagation (secs) : %16.4f', ltime );
+      disp(txt)
+      disp( ' ' )
+
+      %
+      % Now assume the signal originated at Jupiter barycenter,
+      % received by Earth at TIME_STR. Determine the transmission
+      % time and the time for propagation.
+      %
+      [receive, ltime] = <b>cspice_ltime</b>( et, OBS, '&lt;-', TARGET);
+
+      %
+      % Convert the reception time (ET) to UTC.
+      %
+      receive_utc = <a href="cspice_et2utc.html">cspice_et2utc</a>( receive, 'C', 3 );
+
+      %
+      %  Output the results.
+      %
+      txt = sprintf( 'Reception at (UTC)          : %s', TIME_STR );
+      disp(txt)
+
+      txt = sprintf( 'The signal sent at (UTC)    : %s', receive_utc );
+      disp(txt)
+
+      txt = sprintf( 'Time for propagation (secs) : %16.4f', ltime );
+      disp(txt)
+
+   MATLAB outputs:
+
+      Transmission at (UTC)       : July 4, 2004
+      The signal arrived at (UTC) : 2004 JUL 04 00:48:38.717
+      Time for propagation (secs) :        2918.7170
+
+      Reception at (UTC)          : July 4, 2004
+      The signal sent at (UTC)    : 2004 JUL 03 23:11:21.248
+      Time for propagation (secs) :        2918.7524
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+     None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/ltime_c.html">ltime_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/time.html">TIME.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 22-JAN-2006, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Compute uplink and downlink light time
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:38 2014</pre>
+
+</body>
+</html>
+

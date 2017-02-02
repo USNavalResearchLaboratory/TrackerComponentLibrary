@@ -1,0 +1,321 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_inedpl</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_inedpl</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_INEDPL calculates the intercept of a triaxial ellipsoid
+   and a plane.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      a       [1,1] = size(a); double = class(a)
+
+      b       [1,1] = size(b); double = class(b)
+
+      c       [1,1] = size(c); double = class(c)
+
+              are the lengths of the semi-axes of a triaxial ellipsoid.
+              The ellipsoid is centered at the origin and oriented so that
+              its axes lie on the x, y and z axes. 'a', 'b', and 'c' are
+              the lengths of the semi-axes that respectively point in the
+              x, y, and z directions.
+
+      plane   a structure describing a SPICE plane. The intersection of
+              'plane' and the ellipsoid is sought.
+
+              [1,1] = size(plane); struct = class(plane)
+
+              The structure has the fields:
+
+                 normal:     [3,1] = size(normal); double = class(normal)
+                 constant:   [1,1] = size(constant); double = class(constant)
+
+   the call:
+
+      [ ellipse, found ] = <b>cspice_inedpl</b>( a, b, c, plane )
+
+   returns:
+
+      ellipse   a structure describing a SPICE ellipse that defines the
+                intersection of 'plane' and the ellipsoid.
+
+                [1,1] = size(ellipse); struct = class(ellipse)
+
+                The structure has the fields:
+
+                  center:    [3,1] = size(center); double = class(center)
+                  semiMajor: [3,1] = size(semiMajor); double = class(semiMajor)
+
+      found     the boolean indicating whether 'plane'
+                intersects the ellipsoid (true) or not (false).
+
+                [1,1] = size(found); logical = class(found)
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+         KPL/MK
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            pck00009.tpc                  Planet orientation and
+                                          radii
+            naif0009.tls                  Leapseconds
+
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( '/kernels/gen/lsk/naif0009.tls'
+                                '/kernels/gen/spk/de421.bsp'
+                                '/kernels/gen/pck/pck00009.tpc'
+                      )
+
+         \begintext
+
+      %
+      % Give a position relative to an ellipsoid, calculate
+      % the terminator on the ellipsoid as seen from the position.
+      % As an example, use the view of Earth from the sun.
+      %
+
+      %
+      % Standard SPK, LSK, PCK files.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % Define the time to calculate the  terminator, the reference
+      % frame, and the light time correction.
+      %
+      TIME  = 'Oct 31 2002, 12:55:00 PST';
+      FRAME = 'J2000';
+      CORR  = 'LT+S';
+
+      %
+      % Convert the date string to ephemeris time.
+      %
+      et = <a href="cspice_str2et.html">cspice_str2et</a>( TIME );
+
+      %
+      % calculate the position of Earth wrt the Sun.
+      %
+      [pos, ltime] = <a href="cspice_spkpos.html">cspice_spkpos</a>( 'EARTH', et, FRAME, CORR, 'SUN' );
+
+      %
+      % retrieve the triaxial radii of Earth.
+      %
+      radii = <a href="cspice_bodvrd.html">cspice_bodvrd</a>( 'EARTH', 'RADII', 3 );
+
+      %
+      % Normalize the position to factors of the radii.
+      %
+      pos = [ pos(1)/radii(1)^2,
+              pos(2)/radii(2)^2,
+              pos(3)/radii(3)^2 ];
+
+      %
+      % Create the SPICE plane.
+      %
+      plane = <a href="cspice_nvc2pl.html">cspice_nvc2pl</a>( pos, 1. );
+
+      %
+      % Calculate the intercept.
+      %
+      [term, found] = <b>cspice_inedpl</b>( radii(1), radii(2), radii(3), plane );
+
+      %
+      % Show the ellipse.
+      %
+      center = term.center
+
+      smaj = term.semiMajor
+
+      smin = term.semiMinor
+
+      %
+      % What's the length measure of the semimajor axis.
+      %
+      smaj_norm = norm( term.semiMajor )
+
+      %
+      % What's the length measure of the semiminor axis?
+      %
+      smin_norm = norm( term.semiMinor )
+
+      %
+      % It's always good form to unload kernels after use,
+      % particularly in IDL due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+      center =
+
+           2.151203091605303e-01
+           1.554452696107440e-01
+           6.739164295284016e-02
+
+
+      smaj =
+
+          -3.735613602474674e+03
+           5.169706064912584e+03
+          -1.359546017505989e-11
+
+
+      smin =
+
+          -1.276335287715053e+03
+          -9.222759286967922e+02
+           6.159971549668506e+03
+
+
+      smaj_norm =
+
+           6.378139994119584e+03
+
+
+      smin_norm =
+
+           6.358055846565489e+03
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   An ellipsoid and a plane can intersect in an ellipse, a single point, or
+   the empty set.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/inedpl_c.html">inedpl_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/ellipses.html">ELLIPSES.REQ</a>
+   <a href="../req/planes.html">PLANES.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.1, 11-JUN-2013, EDW (JPL)
+
+       I/O descriptions edits to conform to Mice documentation format.
+
+   -Mice Version 1.0.0, 27-AUG-2012, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   intersection of ellipsoid and plane
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:37 2014</pre>
+
+</body>
+</html>
+

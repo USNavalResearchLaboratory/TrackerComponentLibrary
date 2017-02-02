@@ -1,0 +1,335 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>timdef_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>timdef_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void timdef_c ( ConstSpiceChar * action,
+                   ConstSpiceChar * item,
+                   SpiceInt         lenout,
+                   SpiceChar      * value )
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   Set and retrieve the defaults associated with calendar
+   input strings.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+   TIME
+
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   action     I   is the kind of action to take &quot;SET&quot; or &quot;GET&quot;.
+   item       I   is the default item of interest.
+   lenout     I   Length of list for output.
+   value     I/O  is the value associated with the default item.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+   action     is a word that specifies whether <b>timdef_c</b> sets the
+              value associated with item or retrieves the value
+              associated with item.  The allowed values for
+              action are &quot;SET&quot; and &quot;GET&quot;.  The routine is not
+              sensitive to the case of the letters in action.
+
+   item       is the default items whose value should be set or
+              retrieved.  The items that may be requested are:
+
+              item        Allowed Values
+              ---------   --------------
+              CALENDAR    GREGORIAN
+                          JULIAN
+                          MIXED
+
+              SYSTEM      TDB
+                          TDT
+                          UTC
+
+              ZONE        EST, EDT, CST, CDT, MST, MDT, PST, PDT
+                          UTC+HR
+                          UTC-HR       ( 0 &lt;= HR &lt; 13 )
+                          UTC+HR:MN    ( 0 &lt;= MN &lt; 60 )
+                          UTC-HR:MN
+
+              The case of item is not significant.
+
+   lenout     is the allowed length of the string when returning a
+              value via a &quot;GET&quot;.  The size described by lenout should
+              be large enough to hold any possible output plus 1.
+
+   value      if the action is &quot;SET&quot; then value is an input and
+              is the value to be associated with item.  Note that
+              value is checked to ensure it is within the range
+              of allowed values for item.  If it is not within
+              the expected range and appropriate error message
+              is signalled.  The case of value is not significant.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+   value      if the action is &quot;GET&quot; then value will be the
+              value associated with the requested item.  Note that
+              when time zones are set, they are translated to the
+              UTC offset form ( UTC(+/-)HR[:MN] ).  When value is
+              an output it will be in upper case.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+   1) If the action specified is not SET or GET the error
+      SPICE(BADACTION) is signalled.
+
+   2) If the item specified is not one the recognized items
+      the error SPICE(BADTIMEITEM) is signalled.
+
+   3) If the value associated with a &quot;SET&quot;, item input
+      is not one of the recognized items, the error
+      SPICE(BADDEFAULTVALUE) is signalled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+   This routine exists to allow SPICE toolkit users to alter
+   the default interpretation of time strings made by the
+   routine <a href="str2et_c.html">str2et_c</a>.
+
+   Normally, unlabelled time strings are assumed to belong to
+   the Gregorian Calendar and are UTC times.  However, you
+   may alter the default behavior by calling <b>timdef_c</b>.
+
+   Calendar
+   --------
+
+   You may set the calendar to be one of the following
+
+   Gregorian   --- This is the calendar used daily the
+                   Western Hemisphere.  Leap years occur in this
+                   calendar every 4 years except on centuries
+                   such as 1900 that are not divisible by 400.
+
+   Julian      --- This is the calendar that was in use prior
+                   to October 15, 1582.  Leap years occur every
+                   4 years on the Julian Calendar (including all
+                   centuries.)  October 5, 1582 on the Julian
+                   calendar corresponds to October 15, 1582 of the
+                   Gregorian Calendar.
+
+   Mixed       --- This calendar uses the Julian calendar
+                   for days prior to October 15, 1582 and
+                   the Gregorian calendar for days on or after
+                   October 15, 1582.
+
+   To set the default calendar, select on of the above for value
+   and make the following call.
+
+      <b>timdef_c</b> ( &quot;SET&quot;, &quot;CALENDAR&quot;, lenout, value );
+
+
+   System
+   -------
+
+   You may set the system used for keeping time to be UTC (default)
+   TDB (barycentric dynamical time) or TDT (terrestrial dynamical
+   time).  Both TDB and TDT have no leapseconds.  As such the time
+   elapsed between any two epochs on these calendars does not depend
+   upon when leapseconds occur.
+
+   To set the default time system, select TDT, TDB or UTC for value
+   and make the following call.
+
+      <b>timdef_c</b> ( &quot;SET&quot;, &quot;SYSTEM&quot;, lenout, value );
+
+   Note that such a call has the side effect of setting the value
+   associated with ZONE to a blank.
+
+   Zone
+   -----
+
+   You may alter the UTC system by specifying a time zone (UTC
+   offset).  For example you may specify that epochs are referred
+   to Pacific Standard Time (PST --- UTC-7).  The standard
+   abbreviations for U.S. time zones are recognized:
+
+      EST   UTC-5
+      EDT   UTC-4
+      CST   UTC-6
+      CDT   UTC-5
+      MST   UTC-7
+      MDT   UTC-6
+      PST   UTC-8
+      PDT   UTC-7
+
+   In addition you may specify any commercial time zone by using
+   &quot;offset&quot; notation.  This notation starts with the letters &quot;UTC&quot;
+   followed by a + for time zones east of Greenwich and - for
+   time zones west of Greenwich.  This is followed by the number
+   of hours to add or subtract from UTC.  This is optionally followed
+   by a colon ':' and the number of minutes to add or subtract (based
+   on the sign that follows &quot;UTC&quot;) to get the
+   local time zone.  Thus to specify the time zone of Calcutta you
+   would specify the time zone to be UTC+5:30.  To specify the
+   time zone of Newfoundland use the time zone UTC-3:30.
+
+   To set a default time zone, select one of the &quot;built-in&quot; U.S.
+   zones or construct an offset as discussed above.  Then make the
+   call
+
+      <b>timdef_c</b> ( &quot;SET&quot;, &quot;ZONE&quot;, lenout, value );
+
+   If you &quot;GET&quot; a &quot;ZONE&quot; it will either be blank, or have the
+   form &quot;UTC+/-HR[:MN]&quot;
+
+   Note that such a call has the side effect of setting the value
+   associated with SYSTEM to a blank.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+   Suppose you wish to modify the behavior of <a href="str2et_c.html">str2et_c</a> so that
+   it interprets unlabeled time strings as being times in
+   Pacific Daylight Time and that you want the calendar to use
+   to be the &quot;Mixed&quot; calendar.  The following two calls will
+   make the desired changes to the behavior of <a href="str2et_c.html">str2et_c</a>
+
+       <b>timdef_c</b> ( &quot;SET&quot;, &quot;CALENDAR&quot;, lenout, &quot;MIXED&quot; );
+       <b>timdef_c</b> ( &quot;SET&quot;, &quot;ZONE&quot;    , lenout, &quot;PDT&quot;   );
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   W.L. Taber      (JPL)
+   E.D. Wright     (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.0.1, 13-APR-2000 (NJB) 
+   
+      Made some minor updates and corrections in the header comments.
+      
+   -CSPICE Version 1.0.0, 4-FEB-1998   (EDW)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   Change time software defaults.
+   Time Zones
+   Gregorian and Julian Calendars
+</PRE>
+<h4>Link to routine timdef_c source file <a href='../../../src/cspice/timdef_c.c'>timdef_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:46 2014</pre>
+
+</body>
+</html>
+

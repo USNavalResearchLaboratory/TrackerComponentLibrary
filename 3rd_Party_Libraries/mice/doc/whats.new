@@ -1,0 +1,5212 @@
+ 
+What's New in SPICE
+===========================================================================
+ 
+ 
+Introduction
+===========================================================================
+ 
+   This document describes new and extended capabilities of the latest
+   version of the SPICE Toolkit. It also notes bug fixes. Each release of
+   the Toolkit is documented in a separate chapter that is titled with the
+   version of the Toolkit. The most recent version of the Toolkit is
+   documented first. The next most recent version is documented next, and
+   so on.
+ 
+   The Toolkit version changes described in this document are
+ 
+      Version 65 --- July 2014
+      Version 64 --- June 2010
+      Version 63 --- April 2009
+      Version 62 --- March 2008
+      Version 61 --- December 2006
+      Version 60 --- December 2005
+      Version 59 --- November 2005
+      Version 58 --- January 2005
+      Version 57 --- March 2004
+      Version 56 --- August 2003
+      Version 55 --- March 2003
+      Version 54 --- December 2002
+      Version 53 --- September 2002
+      Version 52 --- January 2002
+      Version 51 --- April 2000
+      Version 50 --- October 1999
+      Version 49 --- September 1998
+      Version 48 --- May 1998
+      Version 47 --- July 1997
+      Version 46 --- January 1997
+      Version 45 --- October 1996
+      Version 44 --- August 1996
+      Version 43 --- May 1996
+      Version 42 --- December 1995
+      Version 41 --- October 1995
+ 
+ 
+Version 65 --- July 2014
+===========================================================================
+ 
+ 
+Summary
+--------------------------------------------------------
+ 
+   This is a brief summary of what's new and updated in N0065, with the
+   details about each item provided later in this section:
+ 
+       --   support for some new environments and termination of some old
+            environments
+ 
+       --   new Geometry Finder (GF) interfaces -- illumination angle
+            search, phase angle search, user-defined binary quantity search
+ 
+       --   new high-level SPK APIs allowing one to specify the observer or
+            target as a location with a constant position and velocity
+            rather than as an ephemeris object
+ 
+       --   new high-level APIs that check for occultation and
+            in-Field-Of-View (FOV) conditions
+ 
+       --   new high-level illumination angle routines
+ 
+       --   new high-level reference frame transformation routine
+ 
+       --   new high-level coordinate system transformation routine for
+            states
+ 
+       --   many Icy and Mice APIs that were formerly available only in
+            SPICELIB and CSPICE
+ 
+       --   new data types: SPK (19, 20, 21), PCK (20), and CK (6)
+ 
+       --   performance improvements in the range of 10-50 percent for some
+            types of use
+ 
+       --   ability to load up to 5000 kernels
+ 
+       --   increased buffers in the POOL and in SPK and CK segment search
+            subsystems
+ 
+       --   new built-in body name/ID code mappings and body-fixed
+            reference frames
+ 
+       --   a significant upgrade of utility SPKDIFF including the ability
+            to sample SPK data
+ 
+       --   updates to other toolkit utilities -- BRIEF, CKBRIEF, FRMDIFF,
+            MKSPK, MSOPCK
+ 
+       --   bug fixes in Toolkit and utility programs
+ 
+ 
+Environments
+--------------------------------------------------------
+ 
+ 
+New Environments
+ 
+   The SPICE Toolkit is now officially supported on these new environments:
+ 
+      FORTRAN Toolkit:
+ 
+         PC           CYGWIN        GFORTRAN / 32bit
+         PC           CYGWIN        GFORTRAN / 64bit
+         PC           Linux         Intel FORTRAN / 64bit
+         Sun/Intel    Solaris       SUN FORTRAN / 64bit
+ 
+      CSPICE:
+ 
+         PC           CYGWIN        gCC / 64bit
+ 
+      Icy:
+ 
+         Sun/Intel    Solaris       SUN C / IDL 8.x / 64bit
+ 
+ 
+ 
+Deprecated Environments
+ 
+   The SPICE Toolkit is no longer supported on these environments:
+ 
+      FORTRAN Toolkit:
+ 
+         Mac/PowerPC  OS-X          Absoft FORTRAN / 32bit
+         Mac/PowerPC  OS-X          g77 / 32bit
+         PC           CYGWIN        g77 / 32bit
+         PC           Windows       Compaq (Digital) FORTRAN / 32bit
+         PC           Windows       Lahey FORTRAN 95 / 32bit
+ 
+      CSPICE:
+ 
+         Mac/PowerPC  OS-X          Apple C / 32bit
+ 
+      Icy:
+ 
+         Mac/PowerPC  OS-X          Apple C / IDL 6.4 / 32bit
+ 
+      Mice:
+ 
+         Mac/PowerPC  OS-X          Apple C / MATLAB 7.x / 32bit
+ 
+ 
+ 
+Complete List of Supported Environments
+ 
+   This is the complete list of environments on which the N0065 version of
+   the SPICE Toolkit is supported:
+ 
+      FORTRAN Toolkit:
+ 
+         Mac/Intel    OS-X          GFORTRAN / 32bit
+         Mac/Intel    OS-X          GFORTRAN / 64bit
+         Mac/Intel    OS-X          Intel FORTRAN / 32bit
+         Mac/Intel    OS-X          Intel FORTRAN / 64bit
+         PC           CYGWIN        GFORTRAN / 32bit
+         PC           CYGWIN        GFORTRAN / 64bit
+         PC           Linux         GFORTRAN / 32bit
+         PC           Linux         GFORTRAN / 64bit
+         PC           Linux         Intel FORTRAN / 32bit
+         PC           Linux         Intel FORTRAN / 64bit
+         PC           Linux         g77 / 32bit
+         PC           Windows       Intel FORTRAN / 32bit
+         PC           Windows       Intel FORTRAN / 64bit
+         Sun          Solaris       SUN FORTRAN / 32bit
+         Sun/Intel    Solaris       SUN FORTRAN / 32bit
+         Sun/Intel    Solaris       SUN FORTRAN / 64bit
+ 
+      CSPICE:
+ 
+         Mac/Intel    OS-X          Apple C / 32bit
+         Mac/Intel    OS-X          Apple C / 64bit
+         PC           CYGWIN        gCC / 32bit
+         PC           CYGWIN        gCC / 64bit
+         PC           Linux         gCC / 32bit
+         PC           Linux         gCC / 64bit
+         PC           Windows       MS Visual C / 32bit
+         PC           Windows       MS Visual C / 64bit
+         Sun          Solaris       SUN C / 32bit
+         Sun          Solaris       SUN C / 64bit
+         Sun          Solaris       gCC / 32bit
+         Sun          Solaris       gCC / 64bit
+         Sun/Intel    Solaris       SUN C / 32bit
+         Sun/Intel    Solaris       SUN C / 64bit
+ 
+      Icy:
+ 
+         Mac/Intel    OS-X          Apple C / IDL 8.x / 32bit
+         Mac/Intel    OS-X          Apple C / IDL 8.x / 64bit
+         PC           Linux         gCC / IDL 8.x / 32bit
+         PC           Linux         gCC / IDL 8.x / 64bit
+         PC           Windows       MS Visual C / IDL 7.x / 32bit
+         PC           Windows       MS Visual C / IDL 7.x / 64bit
+         Sun          Solaris       SUN C / IDL 7.x / 32bit
+         Sun          Solaris       gCC / IDL 7.x / 32bit
+         Sun          Solaris       gCC / IDL 7.x / 64bit
+         Sun/Intel    Solaris       SUN C / IDL 8.x / 64bit
+ 
+      Mice:
+ 
+         Mac/Intel    OS-X          Apple C / MATLAB 7.x / 32bit
+         Mac/Intel    OS-X          Apple C / MATLAB 7.x / 64bit
+         PC           Linux         gCC / MATLAB 7.x / 32bit
+         PC           Linux         gCC / MATLAB 7.x / 64bit
+         PC           Windows       MS Visual C / MATLAB 7.x / 32bit
+         PC           Windows       MS Visual C / MATLAB 7.x / 64bit
+         Sun          Solaris       SUN C / MATLAB 7.x / 64bit
+ 
+ 
+ 
+Scratch EK File Issue in Icy on PC/Windows
+ 
+   The scratch EK file issue in Icy on PC/Windows described in the N0061
+   section of this document persists in the N0065 version of the Toolkit.
+ 
+ 
+Optimization on PC Linux, Intel FORTRAN, 32bit
+ 
+   The default optimization was turned off in the PC Linux, Intel FORTRAN,
+   32bit toolkit because of the bugs in the compiler versions available to
+   NAIF.
+ 
+ 
+SPICELIB/CSPICE/Icy/Mice Additions and Updates
+--------------------------------------------------------
+ 
+ 
+New Geometry Finder (GF) Routines
+ 
+   The N0065 version offers a number of additional SPICE Geometry Finder
+   (GF) subsystem interfaces.
+ 
+       --   A new routine to determine time intervals over which a
+            specified constraint on the observed phase, solar incidence, or
+            emission angle at a specified target body surface point is met:
+ 
+                  GFILUM          (SPICELIB)
+                  gfilum_c        (CSPICE)
+                  cspice_gfilum   (ICY and MICE)
+ 
+       --   A new routine to determine time intervals over which a
+            specified constraint on the phase angle between an illumination
+            source, a target, and observer body centers is met:
+ 
+                  GFPA            (SPICELIB)
+                  gfpa_c          (CSPICE)
+                  cspice_gfpa     (ICY and MICE)
+ 
+       --   A new routine to override the default GF convergence value used
+            in the high level GF routines:
+ 
+                  GFSTOL          (SPICELIB)
+                  gfstol_c        (CSPICE)
+                  cspice_gfstol   (ICY and MICE)
+ 
+       --   A new routine to perform a GF search on a user defined boolean
+            quantity (not available in ICY and MICE):
+ 
+                  GFUDB           (SPICELIB)
+                  gfudb_c         (CSPICE)
+ 
+ 
+New SPK Constant Position/Velocity Observer/Target Routines
+ 
+   The N0065 version offers four high-level SPK routines using a location
+   with a constant position or a constant velocity for either the observer
+   or the target.
+ 
+       --   A new routine to return the state of a specified target
+            relative to an observer, where the observer has constant
+            position in a specified reference frame. The observer's
+            position is provided by the calling program rather than by
+            loaded SPK files:
+ 
+                  SPKCPO          (SPICELIB)
+                  spkcpo_c        (CSPICE)
+                  cspice_spkcpo   (ICY and MICE)
+ 
+       --   A new routine to return the state, relative to a specified
+            observer, of a target having constant position in a specified
+            reference frame. The target's position is provided by the
+            calling program rather than by loaded SPK files:
+ 
+                  SPKCPT          (SPICELIB)
+                  spkcpt_c        (CSPICE)
+                  cspice_spkcpt   (ICY and MICE)
+ 
+       --   A new routine to return the state of a specified target
+            relative to an observer, where the observer has constant
+            velocity in a specified reference frame. The observer's state
+            is provided by the calling program rather than by loaded SPK
+            files:
+ 
+                  SPKCVO          (SPICELIB)
+                  spkcvo_c        (CSPICE)
+                  cspice_spkcvo   (ICY and MICE)
+ 
+       --   A new routine to return the state, relative to a specified
+            observer, of a target having constant velocity in a specified
+            reference frame. The target's state is provided by the calling
+            program rather than by loaded SPK files:
+ 
+                  SPKCVT          (SPICELIB)
+                  spkcvt_c        (CSPICE)
+                  cspice_spkcvt   (ICY and MICE)
+ 
+ 
+New Occultation and in FOV Condition Routines
+ 
+   The N0065 version offers three high-level routines that check for
+   occultation and in Field-Of-View (FOV) conditions.
+ 
+       --   A new routine to determine if a specified ray is within the
+            field-of-view (FOV) of a specified instrument at a given time:
+ 
+                  FOVRAY           (SPICELIB)
+                  fovray_c         (CSPICE)
+                  cspice_fovray    (ICY and MICE)
+ 
+       --   A new routine to determine if a specified ephemeris object is
+            within the field-of-view (FOV) of a specified instrument at a
+            given time:
+ 
+                  FOVTRG           (SPICELIB)
+                  fovtrg_c         (CSPICE)
+                  cspice_fovtrg    (ICY and MICE)
+ 
+       --   A new routine to determine the occultation condition (not
+            occulted, partially, etc.) of one target relative to another
+            target as seen by an observer at a given time:
+ 
+                  OCCULT           (SPICELIB)
+                  occult_c         (CSPICE)
+                  cspice_occult    (ICY and MICE)
+ 
+ 
+New Illumination Angles Routines
+ 
+   The N0065 version offers two new high-level routines for computing
+   illumination angles.
+ 
+       --   A new routine to compute the illumination angles (phase,
+            incidence, and emission) at a specified surface point of a
+            target body with the illumination source ephemeris object
+            specified by the caller:
+ 
+                  ILLUMG           (SPICELIB)
+ 
+       --   A new routine to compute the apparent phase angle for a target,
+            observer, illuminator set of ephemeris objects:
+ 
+                  PHASEQ           (SPICELIB)
+                  phaseq_c         (CSPICE)
+                  cspice_phaseq    (ICY and MICE)
+ 
+ 
+New High-Level Frame Transformation Routine
+ 
+   The N0065 version offers a new high-level frame transformation routine.
+ 
+       --   A new routine to return the 3x3 matrix that transforms position
+            vectors from one specified frame at a specified epoch to
+            another specified frame at another specified epoch:
+ 
+                  PXFRM2           (SPICELIB)
+                  pxfrm2_c         (CSPICE)
+                  cspice_pxfrm2    (ICY and MICE)
+ 
+ 
+New High-Level State Transformation Routine
+ 
+   The N0065 version offers a new high-level state transformation routine.
+ 
+       --   A new routine to transform a state between coordinate systems
+            (rectangular, cylindrical, latitudinal, spherical, geodetic
+            planetographic):
+ 
+                  XFMSTA            (SPICELIB)
+                  xfmsta_c          (CSPICE)
+                  cspice_xfmsta     (ICY and MICE)
+ 
+ 
+Other New SPICELIB Interfaces
+ 
+   The following new APIs were added to SPICELIB:
+ 
+                  BLTFRM          CHBIGR          KPLFRM
+                  LJUCRS          SEPOOL          UDF
+ 
+ 
+Other New CSPICE Interfaces
+ 
+   The following new APIs were added to CSPICE:
+ 
+                  bltfrm_c        ccifrm_c        dafgh_c
+                  edterm_c        eqncpv_c        kplfrm_c
+                  qcktrc_c        spkpvn_c        spksfs_c
+                  trcdep_c        trcnam_c        udf_c
+ 
+ 
+Other New Icy Interfaces
+ 
+   A significant number of APIs were added to Icy to make the set of Icy
+   routines be more closely aligned with the sets available in toolkits for
+   other languages:
+ 
+                  cspice_dafus            cspice_dascls
+                  cspice_dasopr           cspice_dcyldr
+                  cspice_dgeodr           cspice_dlatdr
+                  cspice_dpgrdr           cspice_drdcyl
+                  cspice_drdgeo           cspice_drdlat
+                  cspice_drdpgr           cspice_drdsph
+                  cspice_dsphdr           cspice_edterm
+                  cspice_eqncpv           cspice_invort
+                  cspice_spkpvn           cspice_spksfs
+                  cspice_spkw17
+ 
+   The following global parameter scripts were added to Icy:
+ 
+                  IcyUser.pro
+                  IcyOccult.pro
+ 
+ 
+Other New Mice Interfaces
+ 
+   A large number of APIs were added to Mice to make the set of Mice
+   routines be more closely aligned with the sets available in toolkits for
+   other languages:
+ 
+                  cspice_cidfrm           cspice_cnmfrm
+                  cspice_dafac            cspice_dafbbs
+                  cspice_dafbfs           cspice_dafcls
+                  cspice_dafcs            cspice_dafdc
+                  cspice_dafec            cspice_daffna
+                  cspice_daffpa           cspice_dafgda
+                  cspice_dafgn            cspice_dafgs
+                  cspice_dafopr           cspice_dafopw
+                  cspice_dafus            cspice_dcyldr
+                  cspice_dgeodr           cspice_dlatdr
+                  cspice_dpgrdr           cspice_drdcyl
+                  cspice_drdgeo           cspice_drdlat
+                  cspice_drdpgr           cspice_drdsph
+                  cspice_dsphdr           cspice_dvpool
+                  cspice_edlimb           cspice_edterm
+                  cspice_frame            cspice_frinfo
+                  cspice_frmnam           cspice_inedpl
+                  cspice_inelpl           cspice_inrypl
+                  cspice_invort           cspice_namfrm
+                  cspice_npedln           cspice_npelpt
+                  cspice_nplnpt           cspice_pjelpl
+                  cspice_pl2nvc           cspice_pl2nvp
+                  cspice_pl2psv           cspice_psv2pl
+                  cspice_spkcls           cspice_spkopn
+                  cspice_spkpvn           cspice_spksfs
+                  cspice_spkw08           cspice_surfpt
+                  cspice_timdef_get       cspice_timdef_set
+                  cspice_vprjp            cspice_vprjpi
+                  cspice_vproj
+ 
+   The following global parameter scripts were added to Mice:
+ 
+                  MiceUser.m
+                  MiceOccult.m
+ 
+ 
+SPK Type 19
+ 
+   SPK type 19 has been provided to support accurate duplication by the
+   SPICE SPK subsystem of spacecraft ephemeris data used by the European
+   Space Agency (ESA) on the Mars Express, Rosetta, SMART-1 and Venus
+   Express missions. SPK type 19 is an enhanced version of SPK type 18.
+   Type 19 enables creation of SPK files representing the same ephemerides
+   that can be represented using type 18, but containing far fewer
+   segments.
+ 
+   SPK Type 19 routines (available only in SPICELIB):
+ 
+                  SPKE19          SPKR19          SPKS19
+                  SPKW19
+ 
+ 
+SPK Type 20
+ 
+   SPK data type 20 contains Chebyshev polynomial coefficients for the
+   velocity of a body, relative to its center of motion, as a function of
+   time. This data type is provided to accurately represent ``EPM''
+   ephemerides developed by the Institute of Applied Astronomy (IAA),
+   Russian Academy of Sciences (RAS).
+ 
+   SPK Type 20 routines (available only in SPICELIB):
+ 
+                  SPKE20          SPKR20          SPKS20
+                  SPKW20
+ 
+ 
+SPK Type 21
+ 
+   SPK data type 21 contains extended Modified Difference Arrays (MDA),
+   also called ``difference lines.'' These data structures use the same
+   mathematical trajectory representation as SPK data type 1, but type 21
+   allows use of larger, higher-degree MDAs.
+ 
+   SPK Type 21 routines (available only in SPICELIB):
+ 
+                  SPKE21          SPKR21          SPKS21
+                  SPKW21
+ 
+ 
+PCK Type 20
+ 
+   PCK data type 20 contains Chebyshev polynomial coefficients for a
+   specified set of Euler angle rates of a body-fixed, body-centered
+   reference frame as a function of time.
+ 
+   This data type is provided to accurately represent ``EPM'' orientation
+   data developed by the Institute of Applied Astronomy (IAA), Russian
+   Academy of Sciences (RAS).
+ 
+   PCK Type 20 routines are available in SPICELIB:
+ 
+                  PCKE20          PCKR20          PCKW20
+ 
+   PCK Type 20 writer function available in CSPICE:
+ 
+                  spkw20_c
+ 
+ 
+CK Type 6
+ 
+   CK type 6 has been provided to support accurate duplication by the SPICE
+   CK subsystem of spacecraft attitude data used by the European Space
+   Agency (ESA) on the Mars Express, Rosetta, SMART-1 and Venus Express
+   missions.
+ 
+   CK type 6 is an enhanced version of CK type 5. Type 6 enables creation
+   of CK files representing the same attitude data that can be represented
+   using type 5, but containing far fewer segments.
+ 
+   CK Type 6 routines (available only in SPICELIB):
+ 
+                  CKE06           CKGR06          CKMP06
+                  CKNM06          CKR06           CKW06
+ 
+ 
+SPKLTC
+ 
+   SPKLTC is used by the SPK subsystem to compute light time-corrected
+   state vectors. SPKLTC was updated to ensure convergence when CN or XCN
+   light time corrections are used. For these correction choices, the new
+   algorithm also terminates early (after fewer than three iterations) when
+   convergence is attained.
+ 
+ 
+SPKW02, SPKW03, SPKW08, SPKW12
+ 
+   The segment writer routines SPKW02, SPKW03, SPKW08, and SPKW12 were
+   updated to check the input polynomial degree; the maximum allowed degree
+   was increased.
+ 
+   In these routines, there is now less strict error checking on the
+   consistency of the time bounds of the input record set (determined by
+   EPOCH1, STEP, and N) and the descriptor bounds FIRST and LAST. Now the
+   descriptor end time may extend slightly beyond the stop time of the last
+   input record.
+ 
+ 
+Speedup
+ 
+   A number of core SPICELIB routines were modified to speed up their
+   execution. Since most of these updates were in the body name/ID
+   translation and reference frames subsystems, their effect will be most
+   noticeable in programs that call high-level SPICE APIs that take body
+   and frame names as inputs, and in high level APIs that perform
+   operations with reference frames. On average users of these routines
+   should see speedups from 10 to 50 percent depending on what SPICE APIs
+   they call. Speed up will also be noticeable in loading meta-kernels with
+   large numbers of kernels (hundreds of kernels).
+ 
+   Note that much of the speedup has been designed around the premise that
+   the contents of the SPICELIB's POOL data buffer are not frequently
+   modified via loading/unloading kernels or via direct POOL data
+   insertion/deletion APIs during the program execution. Applications that
+   constantly alter the POOL will not see any significant speedup and in
+   some cases may even see a slight performance degradation (no more that 5
+   percent).
+ 
+ 
+Maximum Number of Loaded Kernels
+ 
+   The maximum number of kernels that can be loaded by FURNSH has been
+   increased from 1000 to 5000.
+ 
+ 
+Kernel Pool Double Precision Buffer Limit
+ 
+   The maximum number of keywords that can be stored in the kernel POOL has
+   been increased from 5003 to 26003. The maximum number of double
+   precision values that can be stored in the kernel POOL has been
+   increased from 200000 to 400000. The maximum number of character values
+   that can be stored in the kernel POOL has been increased from 4000 to
+   15000.
+ 
+ 
+CK Buffered Segment Limits
+ 
+   The maximum number of CK segments that can be buffered simultaneously
+   has been increased 50000 to 100000.
+ 
+ 
+SPK Buffered Segment Limits
+ 
+   The maximum number of SPK segments that can be buffered simultaneously
+   has been increased 50000 to 100000.
+ 
+ 
+Built-in NAIF ID Code/Name Definitions
+ 
+   The following new built-in NAIF ID code/name definitions have been added
+   to the Toolkit:
+ 
+      Spacecraft:
+ 
+             -750   SPRINT-AS
+             -189   NSYT
+             -189   INSIGHT
+             -170   JWST
+             -170   JAMES WEBB SPACE TELESCOPE
+             -144   SOLO
+             -144   SOLAR ORBITER
+              -96   SPP
+              -96   SOLAR PROBE PLUS
+              -64   ORX
+              -64   OSIRIS-REX
+              -54   ARM
+              -54   ASTEROID RETRIEVAL MISSION
+              -12   LADEE
+               -3   MOM
+               -3   MARS ORBITER MISSION
+ 
+      Planet Barycenter Aliases with ``_'':
+ 
+                0   SOLAR_SYSTEM_BARYCENTER
+                1   MERCURY_BARYCENTER
+                2   VENUS_BARYCENTER
+                3   EARTH_BARYCENTER
+                4   MARS_BARYCENTER
+                5   JUPITER_BARYCENTER
+                6   SATURN_BARYCENTER
+                7   URANUS_BARYCENTER
+                8   NEPTUNE_BARYCENTER
+                9   PLUTO_BARYCENTER
+ 
+      Satellites:
+ 
+              644   HYRROKKIN
+              904   KERBEROS
+              905   STYX
+ 
+      Comets:
+ 
+          1003228   C/2013 A1
+          1003228   SIDING SPRING
+ 
+      Asteroids:
+ 
+          2000002   PALLAS
+          2000511   DAVIDA
+ 
+ 
+   The following built-in NAIF ID code/name definitions have been removed
+   from the Toolkit:
+ 
+             -486   HERSCHEL
+             -489   PLANCK
+             -187   SOLAR PROBE
+ 
+ 
+Built-in Body-Fixed Frames
+ 
+   The following built-in body-fixed frames were added to the list of
+   frames hard-coded in the Toolkit:
+ 
+                    IAU_CERES
+                    IAU_PALLAS
+                    IAU_LUTETIA
+                    IAU_DAVIDA
+                    IAU_STEINS
+ 
+ 
+Toolkit Applications Updates
+--------------------------------------------------------
+ 
+ 
+BRIEF
+ 
+   The BRIEF program was updated to sort tabular output by time when the
+   new command line option ``-s'' is specified.
+ 
+   Refer to the BRIEF User's Guide, brief.ug, for more information about
+   the program.
+ 
+ 
+CKBRIEF
+ 
+   The CKBRIEF program was updated to display a summary for all CK files to
+   be summarized as if the data were in a single CK file when the new
+   command line option ``-s'' is specified. The internal CKBRIEF buffers
+   were increased to allow the program to summarize CK files with larger
+   numbers of segments.
+ 
+   Refer to the CKBRIEF User's Guide, ckbrief.ug, for more information
+   about the program.
+ 
+ 
+FRMDIFF
+ 
+   The FRMDIFF program was updated to determine default coverage from
+   additional kernels if no primary kernels were provided (e.g. from the
+   set of kernels or a meta-kernel provided with ``-k'' option) and to
+   display the user-specified number of significant digits in numeric
+   output when the new command line option ``-s'' is specified.
+ 
+   Refer to the FRMDIFF User's Guide, frmdiff.ug, for more information
+   about the program.
+ 
+ 
+MKSPK
+ 
+   The MKSPK program was updated to process additional TLE-specific setup
+   keywords allowing user-specified output time coverage for TLE-based SPK,
+   to sort input TLEs, and to eliminate duplicate TLE sets from the input.
+ 
+   Refer to the MKSPK User's Guide, MKSPK.ug, for more information about
+   the program.
+ 
+ 
+MSOPCK
+ 
+   The MSOPCK program was updated to check the time order of the input data
+   when the new optional setup keyword CHECK_TIME_ORDER is specified.
+ 
+   Refer to the MSOPCK User's Guide, MSOPCK.ug, for more information about
+   the program.
+ 
+ 
+SPKDIFF
+ 
+   The SPKDIFF program has gone through a major upgrade to make its
+   functionality scope be similar to that of FRMDIFF, including the ability
+   to sample trajectory data from specified SPKs and SPK sets, the ability
+   to determine default coverage windows and work with SPKs and SPK sets
+   that have gaps in coverage, the ability to display SPK coverage and gap
+   summaries, and so on.
+ 
+   Refer to the SPKDIFF User's Guide, SPKDIFF.ug, for more information
+   about the program.
+ 
+ 
+Bug Fixes
+--------------------------------------------------------
+ 
+ 
+SPICELIB -- SPKBSR, CKBSR, PCKBSR
+ 
+   These routines were updated to correct a logic error, common to all
+   three routines, affecting their behavior in cases where their segment
+   buffers were too small to store all requested segment coverage
+   information.
+ 
+ 
+SPICELIB -- CKE05
+ 
+   The CKE05 routine was updated to no longer perform quaternion sign
+   adjustment for the Hermite subtypes (0 and 2). If a sign adjustment is
+   needed for quaternions belonging to a record of Hermite subtype, an
+   error is signaled. Sign adjustment is still performed for the Lagrange
+   subtypes.
+ 
+ 
+SPICELIB -- CKMETA
+ 
+   If a previously available CK_<ID>_SCLK or CK_<ID>_SPK variable that was
+   used to populate a saved value disappears, the CKMETA routine now resets
+   and returns the value based on the default rule rather than keeping and
+   returning the stale POOL-based saved value. The routine now also deletes
+   the kernel POOL watchers for the CK IDs that were bumped from its local
+   buffer.
+ 
+ 
+SPICELIB -- DASA2L
+ 
+   DASA2L was updated to correct an error that caused it to operate
+   inefficiently in certain cases where multiple DAS files were read in an
+   interleaved fashion. The routine was substantially re-written to improve
+   efficiency and clarity.
+ 
+ 
+SPICELIB -- CCIFRM
+ 
+   The CCIFRM logic was corrected to examine the built-in frames before
+   looking at the kernel POOL frames.
+ 
+ 
+SPICELIB -- NEARPT
+ 
+   The NEARPT routine now correctly computes an off-axis solution for the
+   case of a prolate ellipsoid and a viewing point on the interior long
+   axis.
+ 
+ 
+SPICELIB -- SPKEZ/SPKEZP
+ 
+   The SPKEZ and SPKEZP routines were updated to reject all aberration
+   corrections not supported by the SPK subsystem.
+ 
+ 
+SPICELIB -- TIME CONVERSION
+ 
+   A number of checks for invalid time string inputs were added to the time
+   conversion routines to signal an error rather that stopping the program
+   due to a memory violation.
+ 
+ 
+FRMDIFF
+ 
+   The FRMDIFF program was updated to signal an error in cases when a
+   computed matrix does not represent a rotation (e.g. for left-handed
+   frames.)
+ 
+ 
+MKSPK
+ 
+   The MKSPK program was updated to process input TLE lines with spacecraft
+   code left-padded with zeros to five digits. It was also updated to
+   adjust the longitude of the ascending node and argument of periapse for
+   the time of the nearest periapsis for elliptic orbit cases for type 15
+   inputs that are not given at the time of periapsis.
+ 
+ 
+MSOPCK
+ 
+   The MSOPCK program was updated to compute the clock rate to be stored in
+   type 2 output segments as the average rate for the input record
+   endpoints rather than the average rate computed by averaging all rate
+   values fetched from the loaded SCLK coefficient table.
+ 
+   The program's down-sampling end-point selection algorithm was changed to
+   not consider end-point quaternions that are close to 180 degrees apart
+   to prevent cases in which the quaternion and matrix interpolation
+   algorithms produce rotations in the opposite directions due to numerical
+   differences in their algorithms.
+ 
+ 
+Version 64 --- June 2010
+===========================================================================
+ 
+ 
+Environments
+--------------------------------------------------------
+ 
+ 
+New Environments
+ 
+   The SPICE Toolkit is now officially supported on these new environments:
+ 
+      FORTRAN Toolkit:
+ 
+         Mac/Intel    OS-X          GFORTRAN / 64bit
+         Mac/Intel    OS-X          Intel FORTRAN / 64bit
+         PC           Linux         GFORTRAN / 64bit
+         PC           Windows       Intel FORTRAN / 64bit
+         Sun/Intel    Solaris       SUN FORTRAN / 32bit
+ 
+      CSPICE:
+ 
+         Mac/Intel    OS-X          Apple C / 64bit
+         PC           Windows       MS Visual C / 64bit
+         Sun          Solaris       SUN C / 64bit
+         Sun/Intel    Solaris       SUN C / 32bit
+         Sun/Intel    Solaris       SUN C / 64bit
+ 
+      Icy:
+ 
+         Mac/Intel    OS-X          Apple C / IDL 7.x / 64bit
+         PC           Windows       MS Visual C / IDL 7.x / 64bit
+ 
+      Mice:
+ 
+         Mac/Intel    OS-X          Apple C / MATLAB 7.x / 64bit
+         PC           Windows       MS Visual C / MATLAB 7.x / 64bit
+         Sun/Intel    Solaris       SUN C / MATLAB 7.x / 64bit
+ 
+ 
+ 
+Complete List of Supported Environments
+ 
+   This is the complete list of environments on which the N0064 version of
+   the SPICE Toolkit is supported:
+ 
+      FORTRAN Toolkit:
+ 
+         Mac/Intel    OS-X          GFORTRAN / 32bit
+         Mac/Intel    OS-X          GFORTRAN / 64bit
+         Mac/Intel    OS-X          Intel FORTRAN / 32bit
+         Mac/Intel    OS-X          Intel FORTRAN / 64bit
+         Mac/PowerPC  OS-X          Absoft FORTRAN / 32bit
+         Mac/PowerPC  OS-X          g77 / 32bit
+         PC           CYGWIN        g77 / 32bit
+         PC           Linux         GFORTRAN / 32bit
+         PC           Linux         GFORTRAN / 64bit
+         PC           Linux         Intel FORTRAN / 32bit
+         PC           Linux         g77 / 32bit
+         PC           Windows       Compaq (Digital) FORTRAN / 32bit
+         PC           Windows       Intel FORTRAN / 32bit
+         PC           Windows       Intel FORTRAN / 64bit
+         PC           Windows       Lahey FORTRAN 95 / 32bit
+         Sun          Solaris       SUN FORTRAN / 32bit
+         Sun/Intel    Solaris       SUN FORTRAN / 32bit
+ 
+      CSPICE:
+ 
+         Mac/Intel    OS-X          Apple C / 32bit
+         Mac/Intel    OS-X          Apple C / 64bit
+         Mac/PowerPC  OS-X          Apple C / 32bit
+         PC           CYGWIN        gCC / 32bit
+         PC           Linux         gCC / 32bit
+         PC           Linux         gCC / 64bit
+         PC           Windows       MS Visual C / 32bit
+         PC           Windows       MS Visual C / 64bit
+         Sun          Solaris       SUN C / 32bit
+         Sun          Solaris       SUN C / 64bit
+         Sun          Solaris       gCC / 32bit
+         Sun          Solaris       gCC / 64bit
+         Sun/Intel    Solaris       SUN C / 32bit
+         Sun/Intel    Solaris       SUN C / 64bit
+ 
+      Icy:
+ 
+         Mac/Intel    OS-X          Apple C / IDL 7.x / 32bit
+         Mac/Intel    OS-X          Apple C / IDL 7.x / 64bit
+         Mac/PowerPC  OS-X          Apple C / IDL 6.4 / 32bit
+         PC           Linux         gCC / IDL 6.4 / 32bit
+         PC           Linux         gCC / IDL 6.4 / 64bit
+         PC           Windows       MS Visual C / IDL 7.x / 32bit
+         PC           Windows       MS Visual C / IDL 7.x / 64bit
+         Sun          Solaris       SUN C / IDL 7.x / 32bit
+         Sun          Solaris       gCC / IDL 7.x / 32bit
+         Sun          Solaris       gCC / IDL 7.x / 64bit
+ 
+      Mice:
+ 
+         Mac/Intel    OS-X          Apple C / MATLAB 7.x / 32bit
+         Mac/Intel    OS-X          Apple C / MATLAB 7.x / 64bit
+         Mac/PowerPC  OS-X          Apple C / MATLAB 7.x / 32bit
+         PC           Linux         gCC / MATLAB 7.x / 32bit
+         PC           Linux         gCC / MATLAB 7.x / 64bit
+         PC           Windows       MS Visual C / MATLAB 7.x / 32bit
+         PC           Windows       MS Visual C / MATLAB 7.x / 64bit
+         Sun/Intel    Solaris       SUN C / MATLAB 7.x / 64bit
+ 
+ 
+ 
+Dynamically Linked Executables
+ 
+   For some environments precompiled executables provided in the generic
+   Toolkit packages and additional utility program executables provided on
+   the Utilities page on the NAIF Web site
+   (http://naif.jpl.nasa.gov/naif/utilities.html) are dynamically linked
+   and, in order to run, require certain dynamic libraries, usually
+   provided with the compiler used to build the executables, to be
+   installed on the user's system. This applies to most Mac/OSX, PC/Linux
+   and Sun/Solaris environments.
+ 
+ 
+Lahey Memory Issue Related to File Opening/Closing
+ 
+   The Lahey memory issue related to file opening/closing described in the
+   N0061 section of this document persists in the N0064 version of the
+   Toolkit.
+ 
+ 
+Scratch EK File Issue in Icy on PC/Windows
+ 
+   The scratch EK file issue in Icy on PC/Windows described in the N0061
+   section of this document persists in the N0064 version of the Toolkit.
+ 
+ 
+Geometry Finder (GF) Subsystem
+--------------------------------------------------------
+ 
+   The N0064 version offers a number of additional SPICE Geometry Finder
+   (GF) subsystem interfaces.
+ 
+ 
+SPICELIB High-Level GF APIs
+ 
+   The following High-Level GF APIs were added to SPICELIB:
+ 
+         GFRR            determines time intervals when a specified
+                         constraint on the observer-target range rate
+                         is met.
+ 
+         GFUDS           performs a GF search on a user defined scalar
+                         quantity. This API is supported by two
+                         additional routines UDDC and UDDF.
+ 
+ 
+CSPICE High-Level GF APIs
+ 
+   The following High-Level GF APIs were added to CSPICE:
+ 
+         gfrr_c          determines time intervals when a specified
+                         constraint on the observer-target range rate
+                         is met.
+ 
+         gfuds_c         performs a GF search on a user defined scalar
+                         quantity. This API is supported by two
+                         additional functions uddc_c and uddf_c.
+ 
+ 
+Icy and Mice High-Level GF APIs
+ 
+   The following High-Level GF APIs were added to Icy and Mice:
+ 
+         cspice_gfrr     determines time intervals when a specified
+                         constraint on the observer-target range rate
+                         is met.
+ 
+ 
+SPICELIB/CSPICE/Icy/Mice
+--------------------------------------------------------
+ 
+ 
+Kernel Pool Variable Name Length Check
+ 
+   The routines loading SPICE text kernel files now include a check on the
+   length of the kernel pool variable names. The error SPICE(BADVARNAME) is
+   signaled if the length of any variable provided in the text kernel file
+   exceeds 32 characters. Regardless of language, all Toolkits inherit this
+   behavior.
+ 
+ 
+CK Buffered Segment Limits
+ 
+   The maximum number of CK segments that can be buffered simultaneously
+   has been increased to 50000.
+ 
+ 
+SPK Buffered Segment Limits
+ 
+   The maximum number of SPK segments that can be buffered simultaneously
+   has been increased to 50000.
+ 
+ 
+Kernel Pool Double Precision Buffer Limit
+ 
+   The maximum number of double precision values that can be stored in the
+   kernel pool has been increased to 200000.
+ 
+ 
+SCLK Coefficient Record Limit
+ 
+   The maximum number of SCLK coefficient records that can be buffered has
+   been increased to 50000. This is also the limit on the number of
+   coefficient records that can be stored in an SCLK kernel.
+ 
+ 
+CK writer quaternion magnitude check
+ 
+   The quaternion magnitude check performed in the CK writers
+ 
+      CKW01 (ckw01_c in CSPICE) (cspice_ckw01 in Icy and Mice)
+      CKW02 (ckw02_c in CSPICE) (cspice_ckw02 in Icy and Mice)
+      CKW03 (ckw03_c in CSPICE) (cspice_ckw03 in Icy and Mice)
+      CKW05 (ckw05_c in CSPICE)
+ 
+   has been relaxed from checking for a magnitude ``close'' to 1 to simply
+   ensuring that the input quaternions are non-zero.
+ 
+ 
+New SPICELIB Interfaces
+ 
+   The following 3d and 6d vector APIs were added to SPICELIB:
+ 
+         dvnorm          calculates the derivative of the norm of a
+                         3-vector.
+ 
+         dhfa            calculates the value of the time derivative
+                         of the half angle of a spherical body given
+                         a state vector and body radius.
+ 
+   The following auxiliary APIs were added to SPICELIB:
+ 
+         bodc2s          translates a body ID code to either the
+                         corresponding name, or if no name to ID code
+                         mapping exists, the string representation
+                         of the body ID value.
+ 
+ 
+New CSPICE Interfaces
+ 
+   The following 3d and 6d vector APIs were added to CSPICE:
+ 
+         ducrss_c        computes the unit vector parallel to the
+                         cross product of two 3-dimensional vectors,
+                         and the derivative of this unit vector.
+ 
+         dvcrss_c        computes the cross product of two
+                         3-dimensional vectors and the derivative of
+                         this cross product.
+ 
+         dvnorm_c        calculates the derivative of the norm of a
+                         3-vector.
+ 
+   The following lower-level DAF access APIs were added to CSPICE:
+ 
+         dafgsr_c        reads a portion of the contents of a summary
+                         record in a DAF file.
+ 
+         dafrfr_c        reads the contents of the file record of
+                         a DAF.
+ 
+   The following auxiliary APIs were added to CSPICE:
+ 
+         bodc2s_c        translates a body ID code to either the
+                         corresponding name, or if no name to ID code
+                         mapping exists, the string representation
+                         of the body ID value.
+ 
+         dp2hx_c         converts a double precision number to an
+                         equivalent character string using base 16
+                         ``scientific notation.''
+ 
+         hx2dp_c         converts a string representing a double
+                         precision number in a base 16 ``scientific
+                         notation'' into its equivalent double
+                         precision number.
+ 
+ 
+New Icy Interfaces
+ 
+   The following 3d and 6d vector APIs were added to Icy:
+ 
+         cspice_ducrss   computes the unit vector parallel to the
+                         cross product of two 3-dimensional vectors
+                         and the derivative of this unit vector.
+ 
+         cspice_dvcrss   computes the cross product of two
+                         3-dimensional vectors and the derivative of
+                         this cross product.
+ 
+         cspice_dvnorm   calculates the derivative of the norm of a
+                         3-vector.
+ 
+         cspice_dvsep    calculates the time derivative of the
+                         separation angle between states.
+ 
+   The following auxiliary APIs were added to Icy:
+ 
+         cspice_bodc2s   translates a body ID code to either the
+                         corresponding name or if no name to ID code
+                         mapping exists, the string representation
+                         of the body ID value.
+ 
+         cspice_dp2hx    converts a double precision number to an
+                         equivalent character string using base 16
+                         ``scientific notation.''
+ 
+         cspice_hx2dp    converts a string representing a double
+                         precision number in a base 16 ``scientific
+                         notation'' into its equivalent double
+                         precision number.
+ 
+ 
+New Mice Interfaces
+ 
+   The following 3d and 6d vector APIs were added to Mice:
+ 
+         cspice_ducrss   computes the unit vector parallel to the
+                         cross product of two 3-dimensional vectors
+                         and the derivative of this unit vector.
+ 
+         cspice_dvcrss   computes the cross product of two
+                         3-dimensional vectors and the derivative of
+                         this cross product.
+ 
+         cspice_dvdot    computes the time derivative of the dot
+                         product of two position vectors.
+ 
+         cspice_dvhat    calculates the unit vector corresponding
+                         to a state or states and the derivative of
+                         the unit vector.
+ 
+         cspice_dvnorm   calculates the derivative of the norm of a
+                         3-vector.
+ 
+         cspice_dvsep    calculates the time derivative of the
+                         separation angle between states.
+ 
+         cspice_vnorm    returns the magnitude of a double
+                         precision, 3-dimensional array or set of
+                         such arrays.
+ 
+         cspice_vperp    calculates the component of a vector
+                         perpendicular to a second vector.
+ 
+   The following EK-access APIs were added to Mice:
+ 
+         cspice_ekfind   finds E-kernel data that satisfy a set of
+                         constraints.
+ 
+         cspice_eknelt   returns the number of elements in a
+                         specified column entry in the current row.
+ 
+         cspice_ekgc     returns an element of string (character)
+                         data from a specified row in a specified
+                         column of the set of rows matching
+                         the previous cspice_ekfind query.
+ 
+         cspice_ekgd     returns an element of double precision
+                         data from a specified row in a specified
+                         column of the set of rows matching
+                         the previous cspice_ekfind query.
+ 
+         cspice_ekgi     returns an element of integer
+                         data from a specified row in a specified
+                         column of the set of rows matching
+                         the previous cspice_ekfind query.
+ 
+   The following time conversion APIs were added to Mice:
+ 
+         cspice_unitim   returns the double precision value of
+                         an input epoch converted from one uniform
+                         time scale to another.
+ 
+ 
+   The following auxiliary APIs were added to Mice:
+ 
+         cspice_bodc2s   translates a body ID code to either the
+                         corresponding name, or if no name to ID code
+                         mapping exists, the string representation
+                         of the body ID value.
+ 
+ 
+Built-in NAIF ID Code/Name Definitions
+ 
+   The following new built-in NAIF ID code/name definitions have been added
+   to the Toolkit:
+ 
+      Spacecraft:
+ 
+               -5   AKATSUKI
+               -5   VCO
+             -121   BEPICOLOMBO
+             -177   GRAIL-A
+             -181   GRAIL-B
+             -202   MAVEN
+             -205   SOIL MOISTURE ACTIVE AND PASSIVE
+             -205   SMAP
+             -362   RADIATION BELT STORM PROBE A
+             -362   RBSP_A
+             -363   RADIATION BELT STORM PROBE B
+             -363   RBSP_B
+ 
+      Satellites:
+ 
+              550   HERSE
+              653   AEGAEON
+ 
+      Comets:
+ 
+          1000093   TEMPEL_1
+ 
+      Asteroids:
+ 
+          2000021   LUTETIA
+          2004179   TOUTATIS
+ 
+ 
+ 
+Documentation
+--------------------------------------------------------
+ 
+ 
+Overwriting Input Arguments Not Allowed
+ 
+   The following SPICELIB routines were designed to allow applications to
+   call them in such a way that input arguments could overwrite output
+   arguments. However, this usage is a violation of the Fortran 77
+   standard; it also causes failures in some environments when SPICELIB is
+   compiled with optimization (currently SPICELIB is optimized only for
+   Intel Fortran environments). So, the header documentation of affected
+   SPICELIB routines has been updated to not suggest this calling
+   technique. The affected routines are:
+ 
+      CYCLAD  CYCLAI  DUCRSS  DVCRSS  INVERT  INVSTM  MTXM
+      MTXV    MXM     MXMT    MXV     PACKAC  PACKAD  PACKAI
+      ROTMAT  ROTVEC  SAELGV  UNORM   UNORMG  VADD    VADDG
+      VCRSS   VHATG   VMINUG  VMINUS  VPROJ   VPROJG  VSCL
+      VSCLG   VSUB    VSUBG   XPOSBL  XPOSE   XPOSEG
+ 
+ 
+Bug Fixes
+--------------------------------------------------------
+ 
+ 
+Kernel Pool Watcher Deletion in TKFRAM
+ 
+   The watcher deletion algorithm has been corrected to delete watchers
+   only when the variables they watch are dumped from the local buffer.
+ 
+ 
+Frame Change in CKGP
+ 
+   CKGP now computes the transformation from the requested frame to the
+   applicable CK segment's base frame via a call to REFCHG. Formerly CKGP
+   performed this transformation using FRMCHG, which required that angular
+   velocity data describing the relative motion of these frames be
+   available.
+ 
+ 
+ROTGET Dynamic Frame ID
+ 
+   ROTGET formerly passed the frame class ID rather than the frame ID to
+   private routine ZZDYNROT, which handles dynamic frame transformations.
+   Since by convention these IDs are identical for dynamic frames, the
+   error had no practical effect. The error has been corrected. The shadow
+   private routine ZZROTGT0 has been corrected as well. Note that the error
+   does not apply to the second-level private shadow routine ZZROTGT1.
+ 
+ 
+ZZEKQCON Initialization Error
+ 
+   The private routine ZZEKQCON could in some cases access uninitialized
+   variables when working with null column entries. This has been
+   corrected.
+ 
+ 
+ZZEKRD03 Memory Violation Error
+ 
+   The private routine ZZEKRD03 had a bug that caused it to overwrite local
+   memory. Prior to the N0064 version of SPICELIB, this error had been
+   benign on all supported platforms. The error has been corrected.
+ 
+ 
+EK Strings Longer Than 1024 Characters
+ 
+   Although the EK Required Reading states that variable-length strings in
+   EK columns are limited to 1024 characters in length, the EK writer
+   routines don't enforce this limit, and some users have created kernels
+   that violate the limit. Various routines that support EK query and fetch
+   operations had assumed that the limit was in effect and were subject to
+   substring boundary violations when these long strings were encountered.
+   In addition, the semantics of string comparisons for excessively long
+   strings were undefined.
+ 
+   A compromise solution was selected: EK routines that perform
+   variable-length EK column entry string comparisons now treat only the
+   first 1024 characters of strings as significant.
+ 
+   The following private routines were updated to effect this change:
+ 
+      ZZEKECMP
+      ZZEKFRX
+      ZZEKSCMP
+      ZZEKVMCH
+ 
+   This fix also corrects the substring boundary violations.
+ 
+ 
+RETURN Mode Logic in Various Routines
+ 
+   The following routines were corrected to ensure that they avoid making
+   branch decisions based on uninitialized data after encountering a SPICE
+   error while in RETURN mode:
+ 
+      ILUMIN
+      SPKAPO
+      SPKEZ
+      SUBPNT
+      SUBSLR
+      ZZSPKEZ0
+      ZZSPKEZ1
+ 
+ 
+Version 63 --- April 2009
+===========================================================================
+ 
+ 
+Environments
+--------------------------------------------------------
+ 
+ 
+New Environments
+ 
+   The SPICE Toolkit is now officially supported on these new environments:
+ 
+      FORTRAN Toolkit:
+ 
+         Mac/Intel    OS-X          GFORTRAN
+         PC           Linux         GFORTRAN
+ 
+      Icy:
+ 
+         PC           Linux         gCC / IDL 6.4 / 64bit
+         Sun          Solaris       gCC / IDL 6.4 / 64bit
+ 
+      Mice:
+ 
+         PC           Linux         gCC / MATLAB 7.x / 64bit
+ 
+ 
+ 
+Complete List of Supported Environments
+ 
+   This is the complete list of environments on which the N0063 version of
+   the SPICE Toolkit is supported:
+ 
+      FORTRAN Toolkit:
+ 
+         Mac/Intel    OS-X          Intel FORTRAN
+         Mac/Intel    OS-X          GFORTRAN
+         Mac/PowerPC  OS-X          Absoft FORTRAN
+         Mac/PowerPC  OS-X          g77
+         PC           CYGWIN        g77
+         PC           Linux         g77
+         PC           Linux         GFORTRAN
+         PC           Linux         Intel FORTRAN
+         PC           Windows       Compaq Visual (Digital) FORTRAN
+         PC           Windows       Intel FORTRAN
+         PC           Windows       Lahey FORTRAN 95
+         Sun          Solaris       SUN FORTRAN
+ 
+      CSPICE:
+ 
+         Mac/Intel    OS-X          Apple C
+         Mac/PowerPC  OS-X          Apple C
+         PC           CYGWIN        gCC
+         PC           Linux         gCC / 32bit
+         PC           Linux         gCC / 64bit
+         PC           Windows       MS Visual C
+         Sun          Solaris       gCC / 32bit
+         Sun          Solaris       gCC / 64bit
+         Sun          Solaris       SUN C
+ 
+      Icy:
+ 
+         Mac/Intel    OS-X          Apple C / IDL 6.4 / 32bit
+         Mac/PowerPC  OS-X          Apple C / IDL 6.4 / 32bit
+         PC           Linux         gCC / IDL 6.4 / 32bit
+         PC           Linux         gCC / IDL 6.4 / 64bit
+         PC           Windows       MS Visual C / IDL 6.4 / 32bit
+         Sun          Solaris       gCC / IDL 6.4 / 32bit
+         Sun          Solaris       gCC / IDL 6.4 / 64bit
+         Sun          Solaris       SUN C / IDL 6.4 / 32bit
+ 
+      Mice:
+ 
+         Mac/Intel    OS-X          Apple C / MATLAB 7.x / 32bit
+         Mac/PowerPC  OS-X          Apple C / MATLAB 7.x / 32bit
+         PC           Linux         gCC / MATLAB 7.x / 32bit
+         PC           Linux         gCC / MATLAB 7.x / 64bit
+         PC           Windows       MS Visual C / MATLAB 7.x / 32bit
+ 
+ 
+ 
+Lahey Memory Issue Related to File Opening/Closing
+ 
+   The Lahey memory issue related to file opening/closing described in the
+   N0061 section of this document still persists in the N0063 version of
+   the Toolkit.
+ 
+ 
+Scratch EK File Issue in Icy on PC/Windows
+ 
+   The scratch EK file issue in Icy on PC/Windows described in the N0061
+   section of this document still persists in the N0063 version of the
+   Toolkit.
+ 
+ 
+Geometry Finder (GF) Subsystem
+--------------------------------------------------------
+ 
+   The N0063 version offers the first official release of the initial set
+   of the SPICE Geometry Finder (GF) subsystem interfaces. The GF subsystem
+   answers questions such as:
+ 
+       --   find the time(s) or time span(s) when a selected orbital
+            geometric condition is "true" (e.g. a condition such as an
+            occultation or transit)
+ 
+       --   find the time(s) or time span(s) when a specified geometric
+            quantity, such as range or phase angle, is within a specified
+            range.
+ 
+   The GF Required Reading document, gf.req, provides a comprehensive
+   description of the GF subsystem and its high-, mid-, and low-level APIs
+   and includes numerous usage examples.
+ 
+   For your convenience, the language-specific high-level GF APIs included
+   in this release are listed in the three subsections below.
+ 
+ 
+SPICELIB High-Level GF APIs
+ 
+   SPICELIB High-Level GF APIs for finding times of events satisfying
+   numerical constraints are:
+ 
+         GFDIST          determines time intervals when a specified
+                         constraint on observer-target distance is met.
+ 
+         GFPOSC          determines time intervals when a coordinate of an
+                         observer-target position vector satisfies a
+                         numerical constraint.
+ 
+         GFSEP           determines time intervals when the angular
+                         separation between the position vectors of two
+                         target bodies relative to an observer satisfies a
+                         numerical relationship.
+ 
+         GFSNTC          determines time intervals when a coordinate of a
+                         ray-surface intercept position vector satisfies a
+                         numerical constraint.
+ 
+         GFSUBC          determines time intervals when a coordinate of a
+                         sub-observer point position vector satisfies a
+                         numerical constraint.
+ 
+   SPICELIB High-Level GF APIs for finding times of events satisfying FOV
+   constraints are:
+ 
+         GFRFOV          determines time intervals when a specified ray
+                         intersects the space bounded by the field-of-view
+                         (FOV) of a specified instrument.
+ 
+         GFTFOV          determines time intervals when a specified
+                         ephemeris object intersects the space bounded by
+                         the field-of-view (FOV) of a specified
+                         instrument.
+ 
+   SPICELIB High-Level GF APIs for finding times of occultations are:
+ 
+         GFOCLT          determines time intervals when an observer sees
+                         one target occulted by another.
+ 
+ 
+CSPICE High-Level GF APIs
+ 
+   CSPICE High-Level GF APIs for finding times of events satisfying
+   numerical constraints are:
+ 
+         gfdist_c        determines time intervals when a specified
+                         constraint on observer-target distance is met.
+ 
+         gfposc_c        determines time intervals when a coordinate of an
+                         observer-target position vector satisfies a
+                         numerical constraint.
+ 
+         gfsep_c         determines time intervals when the angular
+                         separation between the position vectors of two
+                         target bodies relative to an observer satisfies a
+                         numerical relationship.
+ 
+         gfsntc_c        determines time intervals when a coordinate of a
+                         ray-surface intercept position vector satisfies a
+                         numerical constraint.
+ 
+         gfsubc_c        determines time intervals when a coordinate of a
+                         sub-observer point position vector satisfies a
+                         numerical constraint.
+ 
+   CSPICE High-Level GF APIs for finding times of events satisfying FOV
+   constraints are:
+ 
+         gfrfov_c        determines time intervals when a specified ray
+                         intersects the space bounded by the field-of-view
+                         (FOV) of a specified instrument.
+ 
+         gftfov_c        determines time intervals when a specified
+                         ephemeris object intersects the space bounded by
+                         the field-of-view (FOV) of a specified
+                         instrument.
+ 
+   CSPICE High-Level GF APIs for finding times of occultations are:
+ 
+         gfoclt_c        determines time intervals when an observer sees
+                         one target occulted by another.
+ 
+ 
+Icy and Mice High-Level GF APIs
+ 
+   Icy and Mice High-Level GF APIs for finding times of events satisfying
+   numerical constraints are:
+ 
+         cspice_gfdist   determines time intervals when a specified
+                         constraint on observer-target distance is met.
+ 
+         cspice_gfposc   determines time intervals when a coordinate of an
+                         observer-target position vector satisfies a
+                         numerical constraint.
+ 
+         cspice_gfsep    determines time intervals when the angular
+                         separation between the position vectors of two
+                         target bodies relative to an observer satisfies a
+                         numerical relationship.
+ 
+         cspice_gfsntc   determines time intervals when a coordinate of a
+                         ray-surface intercept position vector satisfies a
+                         numerical constraint.
+ 
+         cspice_gfsubc   determines time intervals when a coordinate of a
+                         sub-observer point position vector satisfies a
+                         numerical constraint.
+ 
+   Icy and Mice High-Level GF APIs for finding times of events satisfying
+   FOV constraints are:
+ 
+         cspice_gfrfov   determines time intervals when a specified ray
+                         intersects the space bounded by the field-of-view
+                         (FOV) of a specified instrument.
+ 
+         cspice_gftfov   determines time intervals when a specified
+                         ephemeris object intersects the space bounded by
+                         the field-of-view (FOV) of a specified
+                         instrument.
+ 
+   Icy and Mice High-Level GF APIs for finding times of occultations are:
+ 
+         cspice_gfoclt   determines time intervals when an observer sees
+                         one target occulted by another.
+ 
+ 
+SPICELIB/CSPICE/Icy/Mice
+--------------------------------------------------------
+ 
+ 
+SURFPV/surfpv_c (SPICELIB/CSPICE only)
+ 
+   The SURFPV routine (surfpv_c in SPICE) finding the state (position and
+   velocity) of the surface intercept defined by a specified ray, ray
+   velocity, and ellipsoid was added to the Toolkit.
+ 
+ 
+DVSEP/dvsep_c (SPICELIB/CSPICE only)
+ 
+   The DVSEP function (dvsep_c in CSPICE) calculating the time derivative
+   of the separation angle between two input states was added to the
+   Toolkit.
+ 
+ 
+GETFOV
+ 
+   The header of the GETFOV routine (getfov_c in CSPICE, cspice_getfov in
+   Icy and Mice) was updated to provide a comprehensive specification of
+   the IK keywords used to define FOVs and to include more practical
+   examples of FOV definitions.
+ 
+ 
+FURNSH
+ 
+   The FURNSH routine (furnsh_c in CSPICE, cspice_furnsh in Icy and Mice)
+   was updated to support continued path values and to reject files with
+   names longer than 255 characters.
+ 
+ 
+Improved Error Messages from PXFORM/SXFORM
+ 
+   The formerly rather cryptic error messages ``There is insufficient
+   information available to transform from ... to frame ....'' generated by
+   PXFORM/SXFORM (pxform_c/sxform_c in CSPICE, cspice_pxform/cspice_sxform
+   in Icy and Mice) have been improved to provide more context and to
+   suggest what SPICE data may be missing.
+ 
+ 
+Built-in NAIF ID Code/Name Definitions
+ 
+   The following new built-in NAIF ID code/name definitions have been added
+   to the Toolkit:
+ 
+      Spacecraft:
+ 
+              -5    PLC
+              -5    PLANET-C
+              -68   MMO
+              -68   MERCURY MAGNETOSPHERIC ORBITER
+              -69   MPO
+              -69   MERCURY PLANETARY ORBITER
+             -140   EPOCH
+             -140   DIXI
+ 
+      Asteroids:
+ 
+          2002867   STEINS
+ 
+ 
+ 
+Mice (MATLAB interface to CSPICE) Only
+--------------------------------------------------------
+ 
+ 
+New Interfaces
+ 
+   NAIF added the following interfaces to Mice for this release:
+ 
+      cspice_cgv2el
+      cspice_el2cgv
+      cspice_lmpool
+      cspice_nvc2pl
+      cspice_nvp2pl
+      cspice_saelgv
+      cspice_vrotv
+      cspice_wncard
+      cspice_wnsumd
+      cspice_wnvald
+ 
+ 
+New and Updated Applications
+--------------------------------------------------------
+ 
+ 
+FRMDIFF
+ 
+   The FRMDIFF program was added to the application set included in each
+   SPICE toolkit. This program samples orientation of a reference frame
+   known to SPICE or computes differences between orientations of two
+   reference frames known to SPICE, and either displays this orientation or
+   these differences, or shows statistics about it or them.
+ 
+   Refer to the FRMDIFF User's Guide, frmdiff.ug, for more information
+   about the program.
+ 
+ 
+CKBRIEF
+ 
+   The CKBRIEF program was updated to display names of the frames
+   associated with CK IDs when the new command line option ``-n'' is
+   specified. The help information that the program displays when the
+   command line option ``-h'' is specified was updated for clarity and
+   contents.
+ 
+ 
+Documentation
+--------------------------------------------------------
+ 
+ 
+Language Specific Required Reading Documents
+ 
+   The following Required Reading documents have been adapted for Icy and
+   Mice:
+ 
+      gf.req
+      frames.req
+      kernel.req
+      naif_ids.req
+      time.req
+      windows.req
+ 
+ 
+CKBRIEF User's Guide
+ 
+   The CKBRIEF User's Guide, ckbrief.ug, was fully rewritten to describe
+   new features added to the program and to provide examples illustrating
+   all aspects of the program's functionality.
+ 
+ 
+Bug Fixes
+--------------------------------------------------------
+ 
+ 
+SINCPT, SRFXPT
+ 
+   The routines SINCPT and SRFXPT were modified to not perform the quick
+   test for non-intersection when observer-target distance is less than
+   target's maximum radius.
+ 
+ 
+POOL Watchers
+ 
+   A new POOL entry point DWPOOL (delete watch from pool) has been added.
+   This routine deletes a specified agent from all POOL data structures
+   that associate kernel variables and agents.
+ 
+   Watcher overflow detection logic has been corrected in SWPOOL.
+ 
+   In the following routines, watched kernel variables are no longer
+   considered to be buffered when a lookup of one of these variables fails:
+ 
+      BODC2N (via changes to ZZBODTRN)
+      BODDEF (via changes to ZZBODTRN)
+      BODN2C (via changes to ZZBODTRN)
+      SCPART
+      SCTYPE
+      SCTK01 (SC01 entry point)
+      SCFM01 (SC01 entry point)
+      SCTE01 (SC01 entry point)
+      SCET01 (SC01 entry point)
+      SCEC01 (SC01 entry point)
+      TTRANS
+      UNITIM
+ 
+ 
+Frame subsystem
+ 
+   TKFRAM has been updated to use DWPOOL when it deletes a frame
+   specification from its internal buffer; this corrects a bug that caused
+   the watcher system to overflow when a large number of TK frame
+   specifications were used.
+ 
+ 
+Error handling
+ 
+   OUTMSG has been updated so that it correctly displays very long strings
+   that have been substituted into the long error message.
+ 
+ 
+Non-printing Character Detection in Time System
+ 
+   The low-level time string parser routines called by STR2ET (str2et_c in
+   CSPICE, cspice_str2et in Icy and Mice), UTC2ET (utc2et_c in CSPICE,
+   cspice_utc2et in Icy and Mice), and TPARSE (tparse_c in CSPICE,
+   cspice_tparse in Icy and Mice) were updated to detect non-printing
+   characters with ASCII codes greater than 126.
+ 
+ 
+MKSPK
+ 
+   The program was updated to prevent signaling an error due to round off
+   in the computed time step when creating Type 8 or Type 12 SPK files.
+ 
+ 
+CKBRIEF
+ 
+   Two bugs in CKRBIEF were fixed: hanging up when no value is provided
+   after the ``-f'' option and displaying a warning message and an
+   incomplete summary in case of an insufficient buffer space. In the
+   latter case the program now displays an error message.
+ 
+ 
+Version 62 --- March 2008
+===========================================================================
+ 
+ 
+Environments
+--------------------------------------------------------
+ 
+ 
+New Environments
+ 
+   The SPICE Toolkit is now officially supported on this new environment:
+ 
+      FORTRAN Toolkit:
+ 
+         PC           Linux         Intel FORTRAN
+ 
+ 
+ 
+Complete List of Supported Environments
+ 
+   This is the complete list of environments on which the N0062 version of
+   the SPICE Toolkit is supported:
+ 
+      FORTRAN Toolkit:
+ 
+         Mac/Intel    OS-X          Intel FORTRAN
+         Mac/PowerPC  OS-X          Absoft FORTRAN
+         Mac/PowerPC  OS-X          g77
+         PC           CYGWIN        g77
+         PC           Linux         g77
+         PC           Linux         Intel FORTRAN
+         PC           Windows       Compaq Visual (Digital) FORTRAN
+         PC           Windows       Intel FORTRAN
+         PC           Windows       Lahey FORTRAN 95
+         Sun          Solaris       SUN FORTRAN
+ 
+      CSPICE:
+ 
+         Mac/Intel    OS-X          Apple C
+         Mac/PowerPC  OS-X          Apple C
+         PC           CYGWIN        gCC
+         PC           Linux         gCC / 32bit
+         PC           Linux         gCC / 64bit
+         PC           Windows       MS Visual C
+         Sun          Solaris       gCC / 32bit
+         Sun          Solaris       gCC / 64bit
+         Sun          Solaris       SUN C
+ 
+      Icy:
+ 
+         Mac/Intel    OS-X          Apple C / IDL 6.4 / 32bit
+         Mac/PowerPC  OS-X          Apple C / IDL 6.4 / 32bit
+         PC           Linux         gCC / IDL 6.4 / 32bit
+         PC           Windows       MS Visual C / IDL 6.4 / 32bit
+         Sun          Solaris       gCC / IDL 6.4 / 32bit
+         Sun          Solaris       SUN C / IDL 6.4 / 32bit
+ 
+      Mice:
+ 
+         Mac/Intel    OS-X          Apple C / MATLAB 7.x / 32bit
+         Mac/PowerPC  OS-X          Apple C / MATLAB 7.x / 32bit
+         PC           Linux         gCC / MATLAB 7.x / 32bit
+         PC           Windows       MS Visual C / MATLAB 7.x / 32bit
+ 
+ 
+ 
+Use of -m32 Option
+ 
+   The CSPICE library provided with the CSPICE, Icy, and Mice toolkits for
+   PC / Linux / gCC / 32bit environment compiles with the -m32 option to
+   produce 32bit code when recompiled on a 64bit PC.
+ 
+ 
+Lahey Memory Issue Related to File Opening/Closing
+ 
+   The Lahey memory issue related to file opening/closing described in the
+   N0061 section of this document still persists in the N0062 version of
+   the Toolkit.
+ 
+ 
+Scratch EK File Issue in Icy on PC/Windows
+ 
+   The scratch EK file issue in Icy on PC/Windows described in the N0061
+   section of this document still persists in the N0062 version of the
+   Toolkit.
+ 
+ 
+Mice
+--------------------------------------------------------
+ 
+   The N0062 version offers the first official release of Mice, the ANSI
+   based interface between the MATLAB environment, a product of Mathworks,
+   Inc. (http://www.mathworks.com), and the CSPICE library. If you
+   downloaded a Mice package, refer to ``mice.req'' document and to the
+   Mice HTML documentation pointed to by ``doc/html/index.html'' for more
+   details.
+ 
+ 
+SPICELIB/CSPICE/Icy/Mice
+--------------------------------------------------------
+ 
+ 
+New ``Surface Intercept'' routine SINCPT
+ 
+   Given an observer and a direction vector defining a ray, the new routine
+   SINCPT (sincpt_c in CSPICE, cspice_sincpt in Icy and Mice) computes the
+   surface intercept of the ray on a target body at a specified epoch,
+   optionally corrected for light time and stellar aberration. This routine
+   supersedes SRFXPT (srfxpt_c, cspice_srfxpt), which does not have an
+   input argument for the target body-fixed frame name.
+ 
+ 
+New ``Illumination Angles'' routine ILUMIN
+ 
+   The new routine ILUMIN (ilumin_c in CSPICE, cspice_ilumin in Icy and
+   Mice) finds the illumination angles (phase, solar incidence, and
+   emission) at a specified surface point of a target body. This routine
+   supersedes ILLUM (illum_c, cspice_illum), which doesn't have an input
+   argument for the target body-fixed frame name.
+ 
+ 
+New ``Sub-observer Point'' routine SUBPNT
+ 
+   The new routine SUBPNT (subpnt_c in CSPICE, cspice_subpnt in Icy and
+   Mice) computes the rectangular coordinates of the sub-observer point on
+   a target body at a specified epoch, optionally corrected for light time
+   and stellar aberration. This routine supersedes SUBPT (subpt_c,
+   cspice_subpt), which does not have an input argument for the target
+   body-fixed frame name.
+ 
+ 
+New ``Sub-solar Point'' Routine SUBSLR
+ 
+   The new routine SUBSLR (subslr_c in CSPICE, cspice_subslr in Icy and
+   Mice) computes the rectangular coordinates of the sub-solar point on a
+   target body at a specified epoch, optionally corrected for light time
+   and stellar aberration. This routine supersedes SUBSOL (subsol_c,
+   cspice_subsol), which does not have an input argument for the target
+   body-fixed frame name.
+ 
+ 
+Improvements of Aberration Corrected Velocity in the SPK Subsystem
+ 
+   NAIF has upgraded the algorithms used by the SPICE Toolkit's SPK
+   subsystem to improve the accuracy of certain velocity results returned
+   by that subsystem. The new algorithms improve the accuracy of velocities
+   that are corrected for light time alone, or both light time and stellar
+   aberration. The new algorithms use the same non-relativistic models for
+   aberration corrections as do the current SPK algorithms, but the new
+   implementations of the velocity calculations are more accurate.
+ 
+   The changes improve the accuracy of certain derived quantities,
+   including range rates and times of periapse or apoapse, when aberration
+   corrections are used. These changes improve current SPICE computations
+   as well as being necessary for implementation of the upcoming geometric
+   event finding subsystem.
+ 
+   The changes do not affect the computation of aberration-corrected
+   position vectors, nor do they affect uncorrected (``geometric'') states
+   (position and velocity).
+ 
+   A few examples of the magnitudes of improvements afforded by the new
+   algorithms are shown below. All velocities are inertially referenced.
+ 
+       --   Range rate of the light time corrected position of the Moon as
+            seen from the DSN station DSS-25: 1 cm/sec
+ 
+       --   Range rate of the light time and stellar aberration corrected
+            position of the Moon as seen from DSS-25: 13 cm/sec
+ 
+       --   Range rate of the light time corrected position of Mars as seen
+            from DSS-25: 55 cm/sec
+ 
+       --   Range rate of the light time and stellar aberration corrected
+            position of Mars as seen from DSS-25: 1.6 m/sec
+ 
+       --   Range rate of the light time corrected position of Cassini as
+            seen from DSS-25: 9 cm/sec
+ 
+       --   Range rate of the light time and stellar aberration corrected
+            position of Cassini as seen from DSS-25: 3.4 m/sec
+ 
+       --   Velocity of the Neptune barycenter, as seen from DSS-25,
+            corrected for light time: 25 cm/sec
+ 
+       --   Velocity of the Neptune barycenter, as seen from DSS-25,
+            corrected for light time and stellar aberration: 400 m/sec
+ 
+   Negative effects of the changes are
+ 
+       --   Velocity computations using stellar aberration corrections are
+            slower; the extent of the effect varies considerably depending
+            on the inputs to the computations, but tests indicate that some
+            common computations would be slower by a factor of 2.
+ 
+   But take note: since computation of aberration-corrected states is
+   usually a small fraction of the computational workload of SPICE-based
+   applications, the effect on the speed of SPICE-based applications is
+   very small, and in a majority of cases would likely not be discernible
+   at all.
+ 
+   Also note, the effect on speed of an application that simply ``reads''
+   state vectors from an SPK file is nil since aberration corrections are
+   not used for this purpose.
+ 
+       --   Using the upgraded algorithms would change outputs of some
+            SPICE-based user applications. In these situations, a user's
+            regression tests could be affected.
+ 
+       --   If a user's application counts on the specific, current
+            implementation of velocity aberration corrections, a problem
+            could occur.
+ 
+   NAIF believes any possible negative consequences are outweighed by the
+   benefits of improved accuracy.
+ 
+   Below we briefly describe the differences between the old and new
+   aberration correction algorithms.
+ 
+   The previous SPK light time correction algorithms introduce errors by
+   ignoring the rate of change of light time with respect to time. This
+   occurs in two places:
+ 
+       --   In computation of light-time corrected velocity referenced to
+            inertial reference frames
+ 
+       --   In computation of light-time corrected velocity referenced to
+            non-inertial reference frames centered at an object other than
+            the observer.
+ 
+   The new light time algorithms correct both of these errors.
+ 
+   SPICE supports stellar aberration correction only when light time
+   correction is used as well.
+ 
+   Previously, the velocity returned when light time and stellar aberration
+   corrections were used is identical to that returned when only light time
+   correction is used.
+ 
+   The new algorithm computes light time and stellar aberration-corrected
+   velocity as the derivative with respect to time of light time and
+   stellar aberration-corrected position.
+ 
+ 
+New SPK Routines
+ 
+   To support improvements to the SPK subsystem described above, three new
+   SPK routines were added (described below). In most cases SPICE users
+   would not call one of these routines, using the high-level APIs SPKEZR
+   or SPKEZ instead. For the N0062 release these routines are available
+   only in SPICELIB and CSPICE.
+ 
+         SPKACS   The new routine SPKACS (spkacs_c in CSPICE) returns the
+                  state (position and velocity) of a target body relative
+                  to an observer, optionally corrected for light time and
+                  stellar aberration, expressed relative to an inertial
+                  reference frame.
+ 
+         SPKAPS   Given the state and acceleration of an observer relative
+                  to the solar system barycenter, the new routine SPKAPS
+                  (spkaps_c in CSPICE) returns the state (position and
+                  velocity) of a target body relative to the observer,
+                  optionally corrected for light time and stellar
+                  aberration. All input and output vectors are expressed
+                  relative to an inertial reference frame.
+ 
+         SPKLTC   The new routine SPKLTC (spkltc_c in CSPICE) returns the
+                  state (position and velocity) of a target body relative
+                  to an observer, optionally corrected for light time,
+                  expressed relative to an inertial reference frame.
+ 
+ 
+New Binary PCK Coverage Routines PCKFRM and PCKCOV
+ 
+   The new PCK coverage determination routine PCKCOV (pckcov_c in CSPICE)
+   provides an API with which an application can find the time period(s)
+   during which a specified binary PCK file provides data for a specified
+   reference frame. The coverage information is a set of disjoint time
+   intervals returned in a SPICE ``window'' data structure.
+ 
+   The new PCK routine PCKFRM (pckfrm_c in CSPICE) provides an API via
+   which an application can find the set of reference frames for which a
+   specified binary PCK file contains data. The coverage information is
+   returned in a SPICE ``set'' data structure.
+ 
+   For the N0062 release these routines are available only in SPICELIB and
+   CSPICE.
+ 
+ 
+New Routine WNCARD
+ 
+   The new routine WNCARD (wncard_c in CSPICE, cspice_wncard in Icy)
+   returns the cardinality -- number of intervals -- of a SPICE ``window''
+   data structure.
+ 
+   For the N0062 release this routine is available only in SPICELIB,
+   CSPICE, and Icy.
+ 
+ 
+New Routine EDTERM
+ 
+   The new routine EDTERM computes a set of points on the umbral or
+   penumbral terminator of a specified target body, where the target shape
+   is modeled as an ellipsoid.
+ 
+   For the N0062 release this routine is available only in SPICELIB.
+ 
+ 
+SCLK Buffer Size Increase
+ 
+   The sizes of the internal buffers in the SCLK subsystem have been
+   increased to allow SCLK kernels to include up to 9,999 partitions.
+ 
+ 
+TABs in Text Kernels
+ 
+   The low level routines called by the SPICE kernel loader routine FURNSH
+   were modified to ignore TAB characters present in text kernels files on
+   all supported environments.
+ 
+ 
+Built-in NAIF ID Code/Name Definitions
+ 
+   The following new built-in NAIF ID code/name definitions have been added
+   to the Toolkit:
+ 
+      Spacecraft:
+ 
+              -18   LCROSS
+              -29   NEXT
+              -86   CH1
+              -86   CHANDRAYAAN-1
+             -131   KAGUYA
+             -140   EPOXI
+             -151   CHANDRA
+             -187   SOLAR PROBE
+ 
+      Satellites:
+ 
+              636   AEGIR
+              637   BEBHIONN
+              638   BERGELMIR
+              639   BESTLA
+              640   FARBAUTI
+              641   FENRIR
+              642   FORNJOT
+              643   HATI
+              644   HYROKKIN
+              645   KARI
+              646   LOGE
+              647   SKOLL
+              648   SURTUR
+              649   ANTHE
+              650   JARNSAXA
+              651   GREIP
+              652   TARQEQ
+ 
+              809   HALIMEDE
+              810   PSAMATHE
+              811   SAO
+              812   LAOMEDEIA
+              813   NESO
+ 
+ 
+   The following built-in NAIF ID code/name definitions for Jovian system
+   satellites have been modified to conform to the current name/body
+   mapping:
+ 
+      Satellites:
+ 
+              540   MNEME
+              541   AOEDE
+              542   THELXINOE
+              543   ARCHE
+              544   KALLICHORE
+              545   HELIKE
+              546   CARPO
+              547   EUKELADE
+              548   CYLLENE
+              549   KORE
+ 
+   The following provisional default NAIF ID code/name definitions have
+   been removed:
+ 
+      Spacecraft:
+ 
+             -172   SPACETECH-3 COMBINER
+             -174   PLUTO-KUIPER EXPRESS
+             -175   PLUTO-KUIPER EXPRESS SIMULATION
+             -205   SPACETECH-3 COLLECTOR
+ 
+      Satellites:
+ 
+              514   1979J2
+              515   1979J1
+              516   1979J3
+              610   1980S1
+              611   1980S3
+              612   1980S6
+              613   1980S13
+              614   1980S25
+              615   1980S28
+              616   1980S27
+              617   1980S26
+ 
+              706   1986U7
+              707   1986U8
+              708   1986U9
+              709   1986U4
+              710   1986U6
+              711   1986U3
+              712   1986U1
+              713   1986U2
+              714   1986U5
+              715   1985U1
+              718   1986U10
+ 
+              901   1978P1
+ 
+   The spelling in the following built-in NAIF ID code/name definitions
+   have been corrected:
+ 
+      Satellites:
+ 
+              MAGACLITE to MEGACLITE
+ 
+   The following built-in objects have been renamed:
+ 
+      Spacecraft:
+ 
+              STV-1 to STV51
+              STV-2 to STV52
+              STV-3 to STV53
+ 
+      Satellites:
+ 
+              ERRIAPO to ERRIAPUS
+ 
+ 
+Icy (IDL interface to CSPICE) Only
+--------------------------------------------------------
+ 
+ 
+New and Updated Interfaces
+ 
+   NAIF added the following interfaces to Icy for this release:
+ 
+      cspice_getelm
+      cspice_spkw10
+      cspice_wncard
+      cspice_subpnt
+      cspice_subslr
+      cspice_dafac
+      cspice_dafdc
+      cspice_dafec
+      cspice_subpnt
+      cspice_subslr
+      cspice_sincpt
+ 
+   These Icy interfaces now process vectorized arguments:
+ 
+      cspice_etcal
+      cspice_furnsh
+      cspice_unload
+ 
+   These Interfaces have been removed from Icy:
+ 
+      cspice_spkw15
+      cspice_spkw17
+ 
+ 
+Documentation
+--------------------------------------------------------
+ 
+ 
+Permuted Index for Icy and Mice
+ 
+   The permuted index documents have been added to the ASCII and HTML
+   documentation sets provided with the Icy and Mice Toolkits.
+ 
+ 
+BRIEF User's Guide
+ 
+   The BRIEF User's Guide, brief.ug, was fully rewritten to describe new
+   features added to the program and to provide examples illustrating all
+   aspects of the program's functionality.
+ 
+ 
+Documentation on NAIF Web Server
+ 
+   The documentation provided in the generic SPICE, CSPICE, Icy and Mice
+   Toolkits is now also available at this URL on the NAIF Web server:
+ 
+      http://naif.jpl.nasa.gov/naif/documentation.html
+ 
+ 
+BRIEF
+--------------------------------------------------------
+ 
+   The BRIEF utility program was modified to:
+ 
+       --   summarize binary PCK files
+ 
+       --   summarize SPK files provided in meta-kernels
+ 
+       --   load text kernels
+ 
+       --   display times as calendar UTC (``-utc'' option), day-of-year
+            UTC (``-utcdoy'' option), and ET seconds (``-etsec'' option)
+ 
+       --   detect attempts to summarize unsupported kernel types (CK, EK,
+            transfer format kernels, etc.)
+ 
+   The program's help and usage displays as well as the formats of the
+   summary reports were improved. The internal buffers holding summary
+   information were increased to allow summarizing SPK files or file sets
+   containing up to 100,000 bodies.
+ 
+ 
+CKBRIEF
+--------------------------------------------------------
+ 
+   The CKBRIEF utility program was modified to:
+ 
+       --   summarize CK files provided in meta-kernels
+ 
+       --   detect attempts to summarize unsupported kernel types (SPK,
+            binary PCK, EK, transfer format kernels, etc.)
+ 
+   The program's help and usage displays were improved. The internal
+   buffers holding summary information were increased to allow summarizing
+   CK files containing up to 100,000 segments.
+ 
+ 
+MKSPK
+--------------------------------------------------------
+ 
+   The capability to accept time tags given as ET seconds past J2000 was
+   added to the program. The TIME_WRAPPER setup keyword must be set to the
+   special value '# ETSECONDS' to make the program recognize and process
+   such time tags.
+ 
+ 
+SUBPT Cookbook
+--------------------------------------------------------
+ 
+   The cookbook program SUBPT was updated to illustrate use of the new
+   ``sub-observer point'' routine SUBPNT.
+ 
+ 
+Bug Fixes
+--------------------------------------------------------
+ 
+ 
+EV2LIN
+ 
+   Corrected error in the calculation of the C4 term due to typographic
+   error in expression.
+ 
+ 
+HYPTOF
+ 
+   An error in the HYPTOF routine affecting cases of evaluating elements of
+   a hyperbolic trajectory with a very large eccentricity with respect to a
+   small body (low gravity) has been fixed.
+ 
+ 
+INELPL
+ 
+   The routine's specification and behavior have been updated so the
+   routine now returns a meaningful result for the case of an ellipse
+   consisting of a single point.
+ 
+   Also, in the degenerate case where the input ellipse is a line segment
+   of positive length, and this segment intersects the plane, the number of
+   intersection points is set to 1 rather than 2.
+ 
+ 
+RAXISA
+ 
+   Minor edit to the ANGLE declaration strictly identifying the constant as
+   a double. This change eliminates an occasional compiler warning.
+ 
+ 
+SC01
+ 
+   The routine was fixed to correctly insert spaces between fields when the
+   output field delimiter is blank.
+ 
+ 
+SRFXPT
+ 
+   The routine was corrected to no longer apply the light time improvement
+   logic in near-miss cases when a geometric solution is requested via
+   ABCORR.
+ 
+ 
+BRIEF
+ 
+   A number of bugs were fixed in the BRIEF utility program in the course
+   of the modifications described above. The two most significant of these
+   bugs were hanging up when no value was provided after ``-from'',
+   ``-to'',``-at'', and ``-f'' options, and a logic expression error
+   causing the program's crash on the Intel FORTRAN environments.
+ 
+ 
+CKBRIEF
+ 
+   The bug causing an unsolicited grouping display on some C environments
+   was fixed.
+ 
+ 
+Header Updates
+ 
+   A number of formatting problems, typos, and errors in examples were
+   fixed in the SPICE, CSPICE, and Icy headers.
+ 
+ 
+Version 61 --- December 2006
+===========================================================================
+ 
+ 
+Rules Regarding Use of SPICE Components
+--------------------------------------------------------
+ 
+   The rules regarding use of SPICE components have been updated to reflect
+   the new ITAR clearance for the SPICE toolkit, documentation and data.
+   Please see the RULES page of the NAIF website:
+   http://naif.jpl.nasa.gov/naif/rules.html for details.
+ 
+ 
+Environments
+--------------------------------------------------------
+ 
+ 
+New Environments
+ 
+   The SPICE Toolkit is now officially supported on these new environments:
+ 
+      FORTRAN Toolkit:
+ 
+         Mac/Intel    OS-X          Intel FORTRAN
+         PC           Windows       Intel FORTRAN
+ 
+      CSPICE:
+ 
+         Mac/Intel    OS-X          Apple C
+         Sun          Solaris       gCC/64bit
+ 
+      Icy:
+ 
+         Mac/Intel    OS-X          Apple C / IDL 6.3
+ 
+ 
+Deprecated Environments
+ 
+   The SPICE Toolkit is no longer supported on these environments:
+ 
+      FORTRAN Toolkit:
+ 
+         HP           UX-10         HP FORTRAN
+         Vax          VMS           Digital FORTRAN
+ 
+      CSPICE:
+ 
+         HP           UX-10         HP C
+ 
+ 
+ 
+Complete List of Supported Environments
+ 
+   This is the complete list of environments on which the N0061 version of
+   the SPICE Toolkit is supported:
+ 
+      FORTRAN Toolkit:
+ 
+         Mac/Intel    OS-X          Intel FORTRAN
+         Mac/PowerPC  OS-X          Absoft FORTRAN
+         Mac/PowerPC  OS-X          g77
+         PC           CYGWIN        g77
+         PC           Linux         g77
+         PC           Windows       Compaq Visual (Digital) FORTRAN
+         PC           Windows       Intel FORTRAN
+         PC           Windows       Lahey FORTRAN 95
+         Sun          Solaris       SUN FORTRAN
+ 
+      CSPICE:
+ 
+         Mac/Intel    OS-X          Apple C
+         Mac/PowerPC  OS-X          Apple C
+         PC           CYGWIN        gCC
+         PC           Linux         gCC
+         PC           Linux         gCC/64bit
+         PC           Windows       Microsoft Visual C
+         Sun          Solaris       gCC
+         Sun          Solaris       gCC/64bit
+         Sun          Solaris       SUN C
+ 
+      Icy:
+ 
+         Mac/Intel    OS-X          Apple C / IDL 6.3
+         Mac/PowerPC  OS-X          Apple C / IDL 6.3
+         PC           Linux         gCC / IDL 6.3
+         PC           Windows       Microsoft Visual C / IDL 6.3
+         Sun          Solaris       gCC / IDL 6.3
+         Sun          Solaris       SUN C / IDL 6.3
+ 
+ 
+Use of -fPIC/-KPIC Option
+ 
+   The CSPICE library provided with the CSPICE and Icy toolkits is now
+   compiled with the -fPIC or -KPIC option resulting in
+   position-independent code, suitable for dynamic linking all environments
+   that support it.
+ 
+ 
+Lahey Memory Issue Related to File Opening/Closing
+ 
+   Users of Lahey FORTRAN under the Windows operating systems should be
+   aware that the F95 compiler allocates a small amount of memory, in
+   connection with the process of using file OPEN and INQUIRE statements,
+   that it might not free at the end of the file manipulation process.
+   Since the simple opening of a binary kernel file can involve multiple
+   OPEN and INQUIRE statements, the result of this allocation is that if
+   the user were to open many (e.g. 100 or more) kernel files, an
+   application program could sequester memory that would not be freed as
+   expected. A virtual memory error message such as "A work area cannot be
+   reserved because of insufficient area" may result from this situation.
+   This can adversely affect the stability of the Windows operating system,
+   even after the user program is terminated.
+ 
+   We believe that this behavior affects all versions of SPICELIB,
+   including the N61 version. We are working with Lahey to resolve this
+   issue.
+ 
+ 
+Scratch EK File Issue in Icy on PC/Windows
+ 
+   An issue may exist when using EK scratch files from IDL under Microsoft
+   Windows. The cspice_ekcls call may fail to delete the scratch file
+   created by the cspice_ekops call. This file normally has a name style
+   similar to tmp.Fxxxxx. You can manually delete the file only after you
+   close the IDL application.
+ 
+   This problem does not affect use of the file or cause any known
+   instability to Icy.
+ 
+ 
+Documentation
+--------------------------------------------------------
+ 
+   Starting with N0061 every SPICE toolkit package comes with a complete
+   set of HTML documentation consisting of:
+ 
+       --   brief introduction to the SPICE system
+ 
+       --   overview of specifics of SPICE implementation for a given
+            language (for CSPICE and Icy only)
+ 
+       --   description of the Toolkit package layout and contents
+ 
+       --   language specific summary of Most Used SPICE APIs by category
+ 
+       --   complete reference guide for all public APIs, derived from the
+            source headers and provided with an alphabetical index
+ 
+       --   Permuted Index of all public APIs
+ 
+       --   complete set of Required Reading documents, provided with an
+            index
+ 
+       --   complete set of User's Guide documents, provided with an index
+ 
+   All HTML documents in this set are cross-hyperlinked -- every instance
+   of an API name in Required Reading, index or other documents is linked
+   to the API HTML page derived from its source code header; every
+   reference to a Required Reading document in the API HTML pages, indexes
+   and other documents is linked to the Required Reading's HTML page, and
+   so on. In some cases HTML pages are also linked to the actual source
+   code modules, specifically from the Permuted Index document and from the
+   bottom of each of the each individual API pages.
+ 
+   The top level index file
+ 
+      doc/html/index.html
+ 
+   provides a single entry point to all HTML documentation.
+ 
+   While the CSPICE and Icy set of individual API HTML pages contains a
+   page for each of the public routines, the SPICELIB (Fortran) set does
+   not provide HTML pages for about 30 routines that are different on
+   different environments. NAIF omitted them in this Toolkit version due to
+   some technical difficulties in assembling the Toolkit packages and will
+   try to fix this situation in the next release of the Toolkit.
+ 
+   Also, the SPICELIB HTML documentation set does not include links to a
+   small set of APIs that have names that are either common words (POS,
+   FRAME, ROTATE, RETURN) or terms (J2000, B1950) commonly used in the
+   SPICE documentation.
+ 
+ 
+New Applications
+--------------------------------------------------------
+ 
+ 
+MSOPCK
+ 
+   The MSOPCK program was added to the application set included in each
+   SPICE toolkit. This program converts attitude data provided in a text
+   file as UTC, SCLK, or ET-tagged quaternions, Euler angles, or matrices,
+   optionally accompanied by angular velocities, into a type 1, 2, or 3
+   SPICE C-kernel.
+ 
+   Refer to the MSOPCK User's Guide, msopck.ug, for more information about
+   the program.
+ 
+   Note: an earlier version of this program has been available in some
+   mission-specific Toolkits and through the NAIF website. We recommend
+   users replace that older version with this one.
+ 
+ 
+SPKDIFF
+ 
+   The SPKDIFF program was added to the application set included in each
+   SPICE toolkit. This program computes differences between geometric
+   states obtained from two SPK files and either displays these differences
+   or shows statistics about them.
+ 
+   Refer to the SPKDIFF User's Guide, spkdiff.ug, for more information
+   about the program.
+ 
+   Note: SPPKDIFF replaces a predecessor program named CMPSPK that had
+   limited distribution.
+ 
+ 
+SPICELIB/CSPICE/Icy
+--------------------------------------------------------
+ 
+ 
+KCLEAR Routine
+ 
+   A call to KCLEAR unloads all files loaded via FURNSH and clears the
+   kernel pool.
+ 
+   Calling KCLEAR at the end of an Icy-based IDL script ensures that
+   kernels loaded during script execution won't contaminate results from
+   Icy-based scripts run subsequently during the same IDL session.
+ 
+ 
+DAF Comment Area Routines
+ 
+   The former support library routines DAFAC, DAFDC, and DAFEC have been
+   moved into SPICELIB. These routines provide comment area access for
+   DAF-based files, such as SPK, CK, and binary PCK files. DAFAC appends to
+   the contents of a DAF's comment area text provided in a buffer. DAFDC
+   deletes all comments from the comment area. DAFEC extracts the contents
+   of the comment area into a buffer.
+ 
+   These routines are available in SPICELIB and CSPICE; they are not yet
+   supported in Icy.
+ 
+ 
+DAF-based Kernel Open Routines
+ 
+   The routines CKOPN, PCKOPN, and SPKOPN, which open new CK, binary PCK
+   and SPK kernels respectively, now are able to reserve a caller-specified
+   amount of space in the new file's comment area at the time of file
+   creation. This allows faster comment addition when comments must be
+   added after the kernel contains a large amount of data, since the data
+   need not be shifted to make room in the comment area.
+ 
+   The calling sequences of these routines have not changed. The routines'
+   input argument NCOMCH was previously disregarded; it now specifies the
+   amount of comment area space to reserve.
+ 
+   This change applies to SPICELIB, CSPICE, and Icy.
+ 
+ 
+DAFONW Routine
+ 
+   The routine DAFONW, which opens a new DAF, now initializes the DAF
+   comment area when comment area records are reserved. The comment records
+   are null-padded as before, but now the first character of the comment
+   area is initialized with the ``end-of-comments'' character. This
+   provides a correctly initialized empty comment area that can be accessed
+   by SPICE routines and utilities. Formerly this initialization had to be
+   carried out by the calling program.
+ 
+   This change supports the capability of reserving space in the comment
+   area now provided by the higher-level kernel opening routines CKOPN,
+   PCKOPN, and SPKOPN.
+ 
+ 
+SPKW02, SPKW03, and SPKW05 Routines
+ 
+   The restriction that the input reference frame should be inertial has
+   been removed from SPK Type 2, 3 and 5 writer routines SPKW02, SPKW03 and
+   SPKW05. Any application that calls there routines, including the MKSPK
+   program, can now create a type 2, 3, or 5 SPK file with data given with
+   respect to a non-inertial frame.
+ 
+ 
+Built-in NAIF ID Code/Name Definitions
+ 
+   The following new built-in NAIF ID code/name definitions have been added
+   to the Toolkit:
+ 
+      Spacecraft:
+ 
+              -61   JUNO
+              -76   MSL
+              -76   MARS SCIENCE LABORATORY
+              -85   LRO
+              -85   LUNAR RECON ORBITER
+              -85   LUNAR RECONNAISSANCE ORBITER
+             -212   STV-1
+             -213   STV-2
+             -214   STV-3
+ 
+      Satellites:
+ 
+              540   ARCHE
+              541   EUKELADE
+              546   HELIKE
+              547   AOEDE
+              548   HEGEMONE
+              551   KALLICHORE
+              553   CYLLENE
+              560   CARPO
+              561   MNEME
+ 
+              635   DAPHNIS
+ 
+              722   FRANCISCO
+              723   MARGARET
+              724   FERDINAND
+              725   PERDITA
+              726   MAB
+              727   CUPID
+ 
+              902   NIX
+              903   HYDRA
+ 
+   The following provisional name/ID mappings for the Jovian system
+   satellites were replaced or removed from the Toolkit:
+ 
+       539         'HEGEMONE'              JXXXIX
+       540         'MNEME'                 JXL
+       541         'AOEDE'                 JXLI
+       542         'THELXINOE'             JXLII
+       543         'ARCHE'                 JXLIII
+       544         'KALLICHORE'            JXLIV
+       545         'HELIKE'                JXLV
+       546         'CARPO'                 JXLVI
+       547         'EUKELADE'              JXLVII
+       548         'CYLLENE'               JXLVIII
+ 
+   The new mapping leaves the IDs 539, 542-545, 549, 550, 552, 554-559
+   unassigned.
+ 
+   The following name spelling correction has also been made:
+ 
+              632   METHODE to METHONE
+ 
+ 
+CSPICE Only
+--------------------------------------------------------
+ 
+ 
+New Wrappers
+ 
+   The following interfaces to SPICE routines were added to CSPICE in this
+   release:
+ 
+      dafac_c        dafdc_c         dafec_c
+      dafgda_c       dascls_c        dasopr_c
+      kclear_c
+ 
+ 
+Icy (IDL interface to CSPICE) Only
+--------------------------------------------------------
+ 
+ 
+New Interfaces
+ 
+   NAIF added the following new Icy interfaces for this release:
+ 
+      cspice_appndd  cspice_appndi   cspice_badkpv
+      cspice_dafgda  cspice_dascls   cspice_dasopr
+      cspice_inter   cspice_kclear   cspice_valid
+ 
+ 
+Bug Fixes
+--------------------------------------------------------
+ 
+ 
+CKE05
+ 
+   Several functional changes were made to the CK type 5 evaluator CKE05.
+   These changes affect all CK type 5 subtypes EXCEPT subtype 1, which is
+   used by the Mars Express, Rosetta, Venus Express, and SMART-1 missions.
+   These changes are not expected to affect current SPICE users.
+ 
+   First change: the evaluator now assumes that input rate information,
+   whether in the form of quaternion derivatives or angular velocity
+   vectors, has units of radians/second. This makes the routine's interface
+   consistent with SPICE conventions. This change affects subtypes 0, 2,
+   and 3.
+ 
+   Second change: the evaluator no longer attempts to improve interpolation
+   of quaternion derivatives by negating, if necessary, the derivatives
+   provided in the input record. This places on C-kernel creators the
+   burden of determining correct quaternion derivatives suitable for
+   Hermite interpolation. This decision was made because the selection
+   functionality cannot be implemented in a completely reliable way for the
+   case where the derivatives have very small magnitude (which in practice
+   is not a rare case). Quaternions themselves still WILL be negated if
+   necessary for correct Hermite interpolation. This change affects
+   subtypes 0 and 2.
+ 
+ 
+ET2LST
+ 
+   The bug for bodies with retrograde rotation causing the local time to
+   flow backwards has been fixed. The local time for all types of bodies
+   now progresses as expected -- midnight, increasing AM hours, noon,
+   increasing PM hours, next midnight, and so on.
+ 
+ 
+UNLOAD
+ 
+   The bug causing incorrect meta-kernel unloading was fixed. Formerly some
+   sequences of FURNSH and UNLOAD calls could cause UNLOAD to become unable
+   to unload meta-kernels correctly: in some cases, kernels referenced by
+   the meta-kernels were not unloaded when they should have been.
+ 
+ 
+STR2ET
+ 
+   Two bugs were fixed. The first bug caused the routine to return
+   incorrect results in some cases on calls following calls for which a
+   time zone was specified. The second bug caused the routine to generate a
+   memory violation exception for blank input strings on some environments
+   (HP).
+ 
+ 
+SURFPT
+ 
+   The ray's surface intercept is now always set to the ray's vertex when
+   the vertex is on the ellipsoid's surface. Formerly, for inward-pointing
+   direction vectors, the ray's point of egress from the ellipsoid was
+   selected as the intercept.
+ 
+   The new functionality is consistent with the routine's documentation,
+   which claims that the intercept closest to the ray's vertex is selected.
+ 
+ 
+CHRONOS
+ 
+   Two bugs were fixed. The first bug caused slightly incorrect computation
+   of the mean local second duration, which could have resulted in a leap
+   in the LST SOL counting. For landed Martian missions this bug would have
+   exhibited itself after approximately SOL 2100. The second bug prohibited
+   conversion from and to LST for local times a few seconds before
+   midnight, in the 23:59:00-23:59:59 range.
+ 
+   The important side effect of correcting the first bug is that due to the
+   fact that LST is returned with integer local seconds the result of any
+   conversion from and to LST differs slightly -- by less that 1 second --
+   from the same conversion done by the previous versions of the program.
+ 
+ 
+Icy
+ 
+   The bug causing a cascade of 'zzerror_c' strings prefixed to error
+   strings has been fixed.
+ 
+ 
+MKSPK
+ 
+   The bug causing the 8th input equinoctial element (DMPN/DT) to be
+   assigned to the 8th (DMPN/DT) and 9th (DNOD/DT) equinoctial elements
+   stored in the output SPK file when the first six equinoctial elements
+   were derived from input states or classical elements was fixed.
+ 
+ 
+Version 60 --- December 2005
+===========================================================================
+ 
+   The sole purpose of this version is to fix the bug described below. In
+   all other aspects the N0060 Toolkit is the same as the N0059 Toolkit.
+ 
+ 
+Bug Fixes
+--------------------------------------------------------
+ 
+ 
+Access to High Precision Binary Earth PCK
+ 
+   On December 13, 2005, a significant bug was found in the Fortran, C, and
+   IDL N0059 SPICE Toolkits: this bug results in corruption of data read
+   from high precision binary earth PCK files.
+ 
+   A second, probably rarely encountered, effect of the bug is that data
+   will be corrupted when read directly from routine TISBOD (tisbod_c in
+   CSPICE, cspice_tisbod in Icy), in cases where the input reference frame
+   name doesn't match the frame associated with the data in the source PCK.
+ 
+   This bug has been fixed in the N0060 Toolkit.
+ 
+ 
+Version 59 --- November 2005
+===========================================================================
+ 
+ 
+Rules Regarding Use of SPICE Components
+--------------------------------------------------------
+ 
+   The rules regarding use of SPICE components, already very minimal, have
+   been further relaxed and better articulated. Please see the RULES page
+   of the NAIF website: http://naif.jpl.nasa.gov/naif/rules.html for
+   details.
+ 
+ 
+Environments
+--------------------------------------------------------
+ 
+ 
+New Environments
+ 
+   The SPICE Toolkit is now officially supported on Sun/Solaris/64bit gcc
+   environment.
+ 
+ 
+Supported Environments
+ 
+   This is the complete list of environments on which the N0059 version of
+   the SPICE Toolkit is supported:
+ 
+      FORTRAN Toolkit:
+ 
+         HP         UX-10         HP FORTRAN
+         Macintosh  OS-X          Absoft FORTRAN
+         Macintosh  OS-X          g77
+         PC         CYGWIN        g77
+         PC         Linux         g77
+         PC         Windows       Compaq Visual (Digital) FORTRAN
+         PC         Windows       Lahey FORTRAN 95
+         Sun        Solaris       SUN FORTRAN
+         Vax        VMS           Digital FORTRAN
+ 
+      CSPICE:
+ 
+         HP         UX            HP C
+         Macintosh  OS-X          Apple C
+         PC         CYGWIN        gCC
+         PC         Linux         gCC
+         PC         Windows       Microsoft Visual C
+         Sun        Solaris       SUN C
+         Sun        Solaris       gCC
+         Sun        Solaris       gCC/64bit
+ 
+      Icy:
+ 
+         Macintosh  OS-X          Apple C / IDL 6.2
+         PC         Linux         gCC / IDL 6.2
+         PC         Windows       Microsoft Visual C / IDL 6.2
+         Sun        Solaris       SUN C / IDL 6.2
+         Sun        Solaris       gCC / IDL 6.2
+ 
+ 
+Optimization for C/Icy environments
+ 
+   Optimization -O2 or equivalent is now used to compile CSPICE for all
+   supported C and Icy environments.
+ 
+ 
+Lahey Memory Issue Related to File Opening/Closing
+ 
+   Users of Lahey FORTRAN under the Windows operating systems should be
+   aware that the F95 compiler allocates a small amount of memory, in
+   connection with the process of using file OPEN and INQUIRE statements,
+   that it might not free at the end of the file manipulation process.
+   Since the simple opening of a binary kernel file can involve multiple
+   OPEN and INQUIRE statements, the result of this allocation is that if
+   the user were to open many (e.g. 100 or more) kernel files, an
+   application program could sequester memory that would not be freed as
+   expected. A virtual memory error message such as "A work area cannot be
+   reserved because of insufficient area" may result from this situation.
+   This can adversely affect the stability of the Windows operating system,
+   even after the user program is terminated.
+ 
+   We believe that this behavior affects all versions of SPICELIB,
+   including the soon to be released N59 version. We are working with Lahey
+   to resolve this issue.
+ 
+ 
+Scratch EK File Issue in Icy on PC/Windows
+ 
+   An issue may exist when using EK scratch files from IDL under Microsoft
+   Windows. The cspice_ekcls call may fail to delete the scratch file
+   created by the cspice_ekops call. This file normally has a name style
+   similar to tmp.Fxxxxx. You can manually delete the file only after you
+   close the IDL application.
+ 
+   This problem does not affect use of the file or cause any known
+   instability to Icy.
+ 
+ 
+SPICELIB/CSPICE/Icy
+--------------------------------------------------------
+ 
+ 
+Loading of Non-Native Text Kernels Files
+ 
+   Starting with this version of the toolkit, the CSPICE and Icy text
+   kernel loaders, furnsh_c/cspice_furnsh and ldpool_c/cspice_ldpool, can
+   read and parse non-native text files. Unfortunately this capability
+   cannot be provided in FORTRAN instances of the Toolkit.
+ 
+   Please be aware the CSPICE text file reader, rdtext_c, does not possess
+   the capability to read non-native text files.
+ 
+ 
+Additional Testing
+ 
+   A large amount of additional testing of existing SPICE interfaces and
+   capabilities was performed during preparation of this version of the
+   toolkit. This testing uncovered a small number of bugs, all of which
+   have been fixed for this release (see Section ``Bug Fixes'' below.)
+ 
+ 
+Deprecation of BODVAR in favor of BODVRD and BODVCD
+ 
+   Routine BODVAR has been deprecated due to deficiency of its interface
+   and a possibility that it may cause memory violation when used to
+   retrieve data for incorrectly formed text kernel keywords. Routines
+   BODVCD and BODVRD should be used instead of it.
+ 
+ 
+``In Place'' Routines
+ 
+   A number of routines parallel to existing interfaces but utilizing the
+   same argument for both input and output were added to SPICELIB (FORTRAN
+   Toolkit). These routines are:
+ 
+      cyacip.for
+      cyadip.for
+      cyaiip.for
+      vhatip.for
+      vsclip.for
+      xpsgip.for
+ 
+ 
+SPK Segment Buffer Increase
+ 
+   The SPK segment buffer size was increased to 30,000 to allow more
+   efficient read access to SPK files containing a large number of
+   segments, such as SPK files produced by ESA's Mars Express project.
+ 
+ 
+EK Buffer Increased
+ 
+   Buffers facilitating EK access have been increased to provide more
+   efficient read access to EK files containing a large numbers of records,
+   such as EK files produced by the Cassini project.
+ 
+ 
+Built-in NAIF ID Code/Name Definitions
+ 
+   The following new built-in NAIF ID code/name definitions have been added
+   to the Toolkit:
+ 
+      Spacecraft:
+ 
+              -98   NEW HORIZONS
+             -248   VENUS EXPRESS, VEX
+             -500   RSAT, SELENE Relay Satellite, SELENE Rstar, Rstar
+             -502   VSAT, SELENE VLBI Radio Satellite,
+                    SELENE VRAD Satellite, SELENE Vstar
+ 
+      Asteroids:
+ 
+          2025143   ITOKAWA
+ 
+      Satellites:
+ 
+              539   HEGEMONE
+              540   MNEME
+              541   AOEDE
+              542   THELXINOE
+              543   ARCHE
+              544   KALLICHORE
+              545   HELIKE
+              546   CARPO
+              547   EUKELADE
+              548   CYLLENE
+              631   NARVI
+              632   METHODE
+              633   PALLENE
+              634   POLYDEUCES
+ 
+      Ground Stations:
+ 
+           399064   DSS-64
+ 
+ 
+Documentation
+ 
+   The PCK Required Reading document has been revised.
+ 
+ 
+CSPICE
+--------------------------------------------------------
+ 
+ 
+New Wrappers
+ 
+   The following interfaces to SPICE routines were added to CSPICE in this
+   release:
+ 
+      bodvcd_c.c
+      qdq2av_c.c
+      qxq_c.c
+      srfrec_c.c
+ 
+ 
+Icy (Interactive Data Language interface to CSPICE)
+--------------------------------------------------------
+ 
+ 
+Vectorization
+ 
+   NAIF modified the function of several Icy routines to support vectorized
+   variables (in the IDL sense) as input and output.
+ 
+      cspice_illum    cspice_insrtd   cspice_insrti   cspice_oscelt
+      cspice_sce2c    cspice_srfrec   cspice_srfxpt   cspice_subpt
+      cspice_removd   cspice_removi
+ 
+ 
+New interfaces
+ 
+   NAIF added the following new Icy interfaces for this release:
+ 
+      cspice_bodvcd   cspice_diff     cspice_insrtd   cspice_insrti
+      cspice_qdq2av   cspice_qxq      cspice_removd   cspice_removi
+      cspice_sdiff    cspice_set      cspice_srfrec   cspice_union
+ 
+ 
+Bug Fixes
+--------------------------------------------------------
+ 
+ 
+Non-standard Use of Duplicate Arguments in FORTRAN
+ 
+   A large number of SPICELIB routines has been revised to eliminate
+   non-standard use of duplicate arguments in calls to other routines.
+   Though this use did not pose any problems or cause any errors in the
+   earlier Toolkit versions, it prevented use of optimization on some
+   environments. With these changes optimization is now used in building
+   all CSPICE and Icy Toolkits.
+ 
+ 
+NEARPT
+ 
+   A bug related to the scale of transverse component of error vector was
+   corrected for the exterior point case.
+ 
+ 
+ET2LST
+ 
+   The treatment of planetographic longitude has been updated to be
+   consistent with the SPICE planetographic / rectangular coordinate
+   conversion routines. The effect of this change is that the default sense
+   of positive longitude for the moon is now east; also, the default sense
+   of positive planetographic longitude now may be overridden for any body.
+ 
+ 
+GETFOV
+ 
+   A bug causing incorrect computation of the boundary vectors for a
+   rectangular FOV specified using the angular extents method has been
+   fixed. In the previous versions for cases when the reference vector was
+   provided as a non-unit vector and/or was non-perpendicular to the
+   specified boresight the boundary vectors returned by the routine were
+   computed incorrectly.
+ 
+ 
+CKW03
+ 
+   A check verifying that the start time of the first interval is the same
+   as the time of the first pointing instance has been added.
+ 
+ 
+INEDPL
+ 
+   Error detection for the case of invalid input plane was added.
+ 
+ 
+INSRTC
+ 
+   The routine was changed in such way that when the item to be inserted
+   would, after truncation to the set's string length, match an item
+   already in the set, no insertion is performed. Previously the truncated
+   string was inserted, corrupting the set.
+ 
+ 
+String Parsing Routines
+ 
+   Routines lparse.for, lparsm.for, and lparss.for were modified to avoid
+   out-of-range substring bounds conditions.
+ 
+ 
+Version 58 --- January 2005
+===========================================================================
+ 
+ 
+Environments
+--------------------------------------------------------
+ 
+   The SPICE Toolkit is now officially supported on PC/CYGWIN/g77 and
+   PC/CYGWIN/gCC environments and no longer supported on SGI and DEC Alpha
+   computers.
+ 
+   This is the complete list of environments on which the N0058 version of
+   the SPICE Toolkit is supported:
+ 
+      FORTRAN Toolkit:
+ 
+         HP         UX            HP FORTRAN
+         Macintosh  OS-X          Absoft FORTRAN
+         Macintosh  OS-X          g77
+         PC         CYGWIN        g77
+         PC         Linux         g77
+         PC         Windows       Compaq Visual (Digital) FORTRAN
+         PC         Windows       Lahey FORTRAN 95
+         Sun        Solaris       SUN FORTRAN
+         Vax        VMS           Digital FORTRAN
+ 
+      CSPICE:
+ 
+         HP         UX            HP C
+         Macintosh  OS-X          Apple C
+         PC         CYGWIN        gCC
+         PC         Linux         gCC
+         PC         Windows       Microsoft Visual C
+         Sun        Solaris       SUN C
+         Sun        Solaris       gCC
+ 
+      Icy:
+ 
+         Macintosh  OS-X          Apple C / IDL 6.1
+         PC         Linux         gCC / IDL 6.1
+         PC         Windows       Microsoft Visual C / IDL 6.1
+         Sun        Solaris       SUN C / IDL 6.1
+         Sun        Solaris       gCC / IDL 6.1
+ 
+ 
+SPICELIB/CSPICE/Icy
+--------------------------------------------------------
+ 
+ 
+Parameterized Dynamic Frames
+ 
+   The SPICE frame system now supports parameterized dynamic frames: frames
+   for which orientation is based on dynamic directions computed using
+   SPICE kernel data (SPKs, CK, PCKs), on mathematical models implemented
+   in SPICE routines, or on formulas defined in frame kernels.
+   Parameterized dynamic frames are grouped into ``families'' according to
+   the method by which they're defined.
+ 
+   Currently supported dynamic frame families are:
+ 
+       --   Two-vector frames: these are defined by pairs of vectors. The
+            vectors may be position vectors, velocity vectors,
+            observer-target near point vectors, or constant vectors.
+ 
+       --   Mean equator and equinox of date frames.
+ 
+       --   True equator and equinox of date frames.
+ 
+       --   Mean ecliptic and equinox of date frames.
+ 
+       --   Euler frames: these are defined by angles specified as
+            polynomial functions of time.
+ 
+   Currently ``of date'' frames are supported only for the earth.
+ 
+   The Frames Required Reading documents the new capability and contains
+   numerous examples of dynamic frame kernel definitions.
+ 
+ 
+CK/SPK Coverage Summary Routines
+ 
+   The new CK and SPK coverage determination routines CKCOV and SPKCOV
+   provide an API via which an application can find the time periods for
+   which a specified CK or SPK file provides data for, respectively, an
+   instrument or body of interest. The coverage information is a set of
+   disjoint time intervals returned in a SPICE ``window'' data structure.
+ 
+   The new CK and SPK routines CKOBJ and SPKOBJ provide an API via which an
+   application can find the set of instruments or bodies for which,
+   respectively, a specified CK or SPK file contains data. The coverage
+   information is returned in a SPICE ``set'' data structure.
+ 
+   These new APIs are supported by SPICELIB, CSPICE, and Icy.
+ 
+ 
+Planetographic Coordinate Conversion Routines
+ 
+   The new planetographic coordinate conversion routines RECPGR and PGRREC
+   support conversion between rectangular and planetographic coordinates.
+   The planetographic Jacobian matrix routines DRDPGR and DPGRDR provide
+   the derivative matrices for these transformations (used for coordinate
+   transformations of velocities).
+ 
+   These new APIs are supported by SPICELIB, CSPICE, and Icy.
+ 
+ 
+``L-sub-S'' Solar Longitude Routine
+ 
+   The new routine LSPCN computes the planetocentric longitude of the sun
+   (often called ``L-sub-S'' or ``Ls'') for a specified body and time. This
+   quantity is typically used as an approximate ``time of year'' indicator.
+ 
+   The new API is supported by SPICELIB, CSPICE, and Icy.
+ 
+ 
+Built-in NAIF ID Code/Name Definitions
+ 
+   The following new built-in NAIF ID code/name definitions have been added
+   to the Toolkit:
+ 
+      Spacecraft:
+ 
+              -84         PHOENIX
+             -130         HAYABUSA
+             -131         SELENE
+             -203         DAWN
+             -238         SMART-1, S1, SM1, SMART1
+             -486         HERSCHEL
+             -489         PLANCK
+ 
+      Comets:
+ 
+          1000012         CHURYUMOV-GERASIMENKO
+                          67P/CHURYUMOV-GERASIMENKO (1969 R1)
+ 
+      Stations:
+ 
+           399049         DSS-49
+           399055         DSS-55
+           398989         NOTO
+ 
+ 
+Documentation
+ 
+   FRAMES REQ has been re-structured and augmented with an extensive
+   description and examples of the new parameterized dynamic frames family.
+ 
+ 
+CSPICE
+--------------------------------------------------------
+ 
+ 
+New Wrappers
+ 
+   The following new miscellaneous interfaces to SPICE routines were added
+   to CSPICE in this release:
+ 
+      bods2c_c.c      dafopw_c.c      dafps_c.c       dafrs_c.c
+ 
+ 
+Icy (Interactive Data Language interface to CSPICE)
+--------------------------------------------------------
+ 
+ 
+Vectorization
+ 
+   NAIF modified the function of several Icy routines to support vectorized
+   variables (in the IDL sense) as input and output.
+ 
+      cspice_cylrec   cspice_deltet   cspice_et2lst   cspice_et2utc
+      cspice_georec   cspice_latrec   cspice_pxform   cspice_pgrrec
+      cspice_radrec   cspice_reccyl   cspice_recgeo   cspice_reclat
+      cspice_recpgr   cspice_recrad   cspice_recsph   cspice_scdecd
+      cspice_scencd   cspice_scs2e    cspice_sphrec   cspice_spkezr
+      cspice_spkpos   cspice_str2et   cspice_sxform   cspice_timout
+ 
+ 
+Windows
+ 
+   Icy now includes interfaces to the full set of CSPICE window routines.
+ 
+      cspice_wnelmd   cspice_wnincd   cspice_wnreld   cspice_wncomd
+      cspice_wncond   cspice_wndifd   cspice_wnexpd   cspice_wnextd
+      cspice_wnfetd   cspice_wnfild   cspice_wnfltd   cspice_wninsd
+      cspice_wnintd   cspice_wnsumd   cspice_wnunid   cspice_wnvald
+ 
+ 
+Other new interfaces
+ 
+   The following new miscellaneous interfaces to SPICE routines were added
+   to Icy in this release:
+ 
+      cspice_bods2c   cspice_card     cspice_celli    cspice_celld
+      cspice_dafopw   cspice_dafrs    cspice_deltet   cspice_et2lst
+      cspice_pgrrec   cspice_recpgr   cspice_scard    cspice_size
+      cspice_spkcov   cspice_spkobj   cspice_ssize
+ 
+ 
+Bug Fixes
+--------------------------------------------------------
+ 
+ 
+MKSPK Processing of TLE
+ 
+   A MKSPK bug causing the program to process improperly formatted TLE
+   files without signaling an error and producing output SPK containing bad
+   data was fixed.
+ 
+ 
+MKSPK Adding Comments When Appending to Existing SPK
+ 
+   A MKSPK bug causing the program, in some rare circumstances, to signal
+   an error when adding comments to an existing SPK file was fixed.
+ 
+ 
+Icy/cspice_getfov
+ 
+   A bug that caused the interface to fail to release allocated memory when
+   the FRAMEMISSING error signaled was fixed.
+ 
+ 
+DVPOOL/dvpool_c/cspice_dvpool
+ 
+   A bug causing the DVPOOL routine to not delete a specified kernel pool
+   variable in some cases was fixed.
+ 
+ 
+CSPICE/kdata_c Function
+ 
+   A number of typos in the example provided in the header of the routine
+   were corrected.
+ 
+ 
+FRINFO/frinfo_c/cspice_frinfo
+ 
+   A bug causing the FRINFO routine to treat any frame with a negative ID
+   code and a frame definition not provided in the kernel pool as a
+   CK-based frame was fixed. Now, instead of returning ``manufactured''
+   attributes of a CK-based frame, the routine will generate an error for
+   such inputs.
+ 
+ 
+Version 57 --- March 2004
+===========================================================================
+ 
+ 
+Environments
+--------------------------------------------------------
+ 
+   The N0057 version of the SPICE Toolkit is supported on the same
+   environments as version N0056.
+ 
+ 
+Icy
+--------------------------------------------------------
+ 
+   The N0057 version offers the first official release of Icy, the
+   interface to the CSPICE library from Interactive Data Language (IDL), a
+   product of Research Systems, Inc. (RSI, http://www.rsi.com). If Icy was
+   provided with this package, refer to ``icy.req'' document and to the Icy
+   HTML documentation pointed to by ``doc/html/index.html'' for more
+   details.
+ 
+ 
+SPICELIB/CSPICE
+--------------------------------------------------------
+ 
+ 
+SRFXPT
+ 
+   This new routine computes the surface intercept point of a specified ray
+   on a target body at a specified epoch, optionally corrected for light
+   time and stellar aberration. Its purpose is the same as for the SPICE
+   routine SURFPT but unlike SURFPT is provides a much more flexible
+   interface and computes geometry adjusted for light time and stellar
+   aberration to the surface point rather than to the center of the target
+   body. Therefore for most cases this routine makes SURFPT obsolete.
+   Currently SRFXPT supports only the ellipsoid shape for target bodies but
+   in the future it may be extended to support digital terrain models.
+ 
+ 
+Support for Satellite IDs in the Range 10000-99999
+ 
+   NAIF PCK data access routines have been modified to recognize satellites
+   with IDs in the 10000-99999 range.
+ 
+ 
+Detection of Non-native Text Files
+ 
+   The SPICE data loading mechanism was extended to detect and prohibit
+   loading text kernel files containing lines terminated with EOF
+   character(s) non-native to the platform on which the Toolkit was
+   compiled. If a non-native EOL terminator is detected in the first 132
+   characters of a text kernel, the execution is stopped and an error
+   message is displayed. This feature does not work with files that are
+   smaller that 132 bytes or have the first line longer that 132
+   characters.
+ 
+ 
+Documentation
+ 
+   The Toolkit may now optionally include documentation in HTML format. It
+   is provided in the ``doc/html'' subdirectory and is pointed to by the
+   top level index file
+ 
+      doc/html/index.html
+ 
+   The headers of a few additional most often used routines have been
+   revised to correct technical errors and grammar and/or spelling, improve
+   clarity, and improve examples.
+ 
+ 
+Built-in NAIF ID Code/Name Definitions
+ 
+   The following new built-in NAIF ID code/name definitions have been added
+   to the Toolkit:
+ 
+      Spacecraft:
+ 
+              -79         SPITZER
+ 
+      Asteroids:
+ 
+              2000216     KLEOPATRA
+ 
+ 
+INSPEKT
+--------------------------------------------------------
+ 
+   INSPEKT was updated to generate comma-delimited reports. This output
+   format can be set using the ``SET FORMAT DELIMITED ...'' command. See
+   INSPEKT on-line help for more details.
+ 
+ 
+TOBIN
+--------------------------------------------------------
+ 
+   TOBIN was modified to detect and prohibit processing input transfer
+   files containing lines terminated with EOF character(s) non-native to
+   the platform on which the Toolkit was compiled.
+ 
+ 
+Version 56 --- August 2003
+===========================================================================
+ 
+ 
+Environments
+--------------------------------------------------------
+ 
+   The N0056 version of the SPICE Toolkit is supported on the same
+   environments as version N0055 except the following ``Classic'' Mac
+   environments:
+ 
+      Macintosh  MacOS9        Absoft FORTRAN
+      Macintosh  MacOS9        Metrowerks Codewarrior C
+ 
+   Contact NAIF if you wish to obtain the Toolkit for these two deprecated
+   environments.
+ 
+ 
+SPICELIB/CSPICE
+--------------------------------------------------------
+ 
+ 
+Documentation
+ 
+   The headers of 20+ of the most often used routines have been revised for
+   one or more of the following reasons:
+ 
+       --   to correct technical errors,
+ 
+       --   to add pertinent new information,
+ 
+       --   to improve clarity,
+ 
+       --   to correct grammar and/or spelling,
+ 
+       --   to improve examples.
+ 
+ 
+Built-in NAIF ID Code/Name Definitions
+ 
+   The following new built-in NAIF ID code/name definitions have been added
+   to the Toolkit:
+ 
+      Spacecraft:
+ 
+              -74         MRO
+              -74         MARS RECON ORBITER
+              -130        MUSES-C
+              -142        TERRA
+              -154        AQUA
+              -159        EUROPA ORBITER
+              -172        SPACETECH-3 COMBINER
+              -188        MUSES-B
+              -190        SIM
+              -198        INTEGRAL
+              -205        SPACETECH-3 COLLECTOR
+              -234        STEREO AHEAD
+              -235        STEREO BEHIND
+              -253        OPPORTUNITY
+              -254        SPIRIT
+ 
+      Tracking Stations:
+ 
+              398990      NEW NORCIA
+ 
+      Jovian satellites:
+ 
+              528         AUTONOE
+              529         THYONE
+              530         HERMIPPE
+              531         AITNE
+              532         EURYDOME
+              533         EUANTHE
+              534         EUPORIE
+              535         ORTHOSIE
+              536         SPONDE
+              537         KALE
+              538         PASITHEE
+ 
+      Saturnian satellites:
+ 
+              619         YMIR
+              620         PAALIAQ
+              621         TARVOS
+              622         IJIRAQ
+              623         SUTTUNG
+              624         KIVIUQ
+              625         MUNDILFARI
+              626         ALBIORIX
+              627         SKADI
+              628         ERRIAPO
+              629         SIARNAQ
+              630         THRYM
+ 
+      Uranian satellites:
+ 
+              718         PROSPERO
+              719         SETEBOS
+              720         STEPHANO
+              721         TRINCULO
+ 
+ 
+CHRONOS
+--------------------------------------------------------
+ 
+   CHRONOS utility program has been modified to allow loading kernel files
+   using FURNSH kernel pool keywords and to accept all setup information
+   from the command line.
+ 
+ 
+Bug Fixes
+--------------------------------------------------------
+ 
+ 
+Reading Files with MAC-OSX Absoft FORTRAN Toolkit
+ 
+   Low level read routines were fixed to make sure that the OSX Absoft
+   FORTRAN SPICE toolkit can read files not owned by the user.
+ 
+ 
+DAS Scratch Files
+ 
+   DASCLS routine has been modified to call the routine flushing DAS
+   buffers before closing scratch DAS files. Failing to free the buffers
+   caused write errors on HP/FORTRAN systems.
+ 
+ 
+Argument Checking in CSPICE Error Handling Functions
+ 
+   The errprt_c, errdev_c, and erract_c functions were updated to diagnose
+   invalid operation keyword input.
+ 
+ 
+Version 55 --- March 2003
+===========================================================================
+ 
+ 
+Environments
+--------------------------------------------------------
+ 
+   The N0055 version of the SPICE Toolkit is supported on the same
+   environments as version N0054.
+ 
+ 
+SPICELIB
+--------------------------------------------------------
+ 
+ 
+SPKW01
+ 
+   SPK type 1 writer routine has been added.
+ 
+ 
+DASCLS
+ 
+   Scratch files no longer have their buffered portions flushed and are no
+   longer segregated before before being closed. This change speeds up the
+   close operation.
+ 
+ 
+SPKBSR
+ 
+   Segment buffer size was increased from 2000 to 10000 to improve
+   efficiency when handling SPK files with large number of segments.
+ 
+ 
+Kernel POOL
+ 
+   The buffer that stores distinct numeric data items from the text kernel
+   files was increased. The new buffer size is 20000, which is the maximum
+   total number of values for all numeric scalar and array pool variables
+   together.
+ 
+ 
+Type 1 SCLK
+ 
+   The buffer that stores Type 1 SCLK coefficients was increased. The new
+   buffer size is 10000.
+ 
+ 
+CSPICE
+--------------------------------------------------------
+ 
+ 
+New CSPICE wrappers
+ 
+   Wrappers dasac_c and dasec_c have been added to CSPICE. These support
+   DAS file comment area access.
+ 
+ 
+Bug Fixes
+--------------------------------------------------------
+ 
+ 
+Built-in NAIF ID Code/Name Definitions
+ 
+   The following built-in NAIF ID code/name definitions have been corrected
+   to match official MER name-ID mapping:
+ 
+             -253     was MER-A, now MER-1
+             -254     was MER-B, now MER-2
+ 
+   MER-A and MER-B names are no longer supported by the Toolkit.
+ 
+ 
+DASCUD
+ 
+   DASCUD has been fixed so that it writes a new, empty cluster directory
+   record at the correct location. This corrects an error introduced by a
+   bug fix in N0054.
+ 
+ 
+OSCELT
+ 
+   OSCELT has been fixed so that it computes the argument of periapse
+   correctly when the inclination is zero or 180 degrees. The mean anomaly
+   computation has been corrected so that it works for circular and
+   near-circular orbits. The computation of inclination has been changed to
+   use ATAN2 for improved accuracy. Code that could generate arithmetic
+   exceptions was corrected. Several new error checks have been added.
+ 
+ 
+CKE05
+ 
+   Angular velocity computations for subtypes 0 and 1 have been changed to
+   make them compatible with those used by the MEX/Rosetta attitude file
+   interpolation algorithms.
+ 
+ 
+CKBRIEF
+ 
+   CKBRIEF has been updated to retrieve and display interpolation interval
+   information from Type 2 CK files correctly in all cases.
+ 
+ 
+Version 54 --- December 2002
+===========================================================================
+ 
+ 
+Mailing Lists
+--------------------------------------------------------
+ 
+   NAIF has created 2 mailing lists, ``Spice_announce''
+ 
+      http://naif.jpl.nasa.gov/mailman/listinfo/spice_announce
+ 
+   and ``Spice_discussion''
+ 
+      http://naif.jpl.nasa.gov/mailman/listinfo/spice_discussion
+ 
+   ``Spice_announce'' is intended to provide notification of important
+   developments such as a new toolkit release. Posting will generally be
+   limited to members of the NAIF team. If you feel you have an important
+   announcement that would be suitable for this list, you may send email to
+   the list, but it will be reviewed by the NAIF team before dissemination.
+ 
+   ``Spice_discussion'' is meant to provide a forum for discussion among
+   SPICE users. Posting on this list is encouraged, however we also
+   encourage you to limit mail traffic to the entire list. Extended
+   discussions are often best carried out with a limited distribution list.
+ 
+   Both lists require registration, allow access to an archive of prior
+   postings and allow the user to choose whether to receive individual
+   postings or a daily digest.
+ 
+ 
+Environments
+--------------------------------------------------------
+ 
+   The N0054 version of the SPICE Toolkit is supported on the same
+   environments as version N0053.
+ 
+ 
+COOKBOOK Programs
+--------------------------------------------------------
+ 
+   FORTRAN and C versions of the COOKBOOK programs have been made more
+   consistent in implementation and behavior. User's Guide documents for
+   COOKBOOK programs have been updated and are now delivered with both
+   FORTRAN and C toolkits. The FSTSPK COOKBOOK program has been deprecated
+   and is no longer delivered.
+ 
+ 
+New Built-in NAIF ID Code/Name Definitions
+--------------------------------------------------------
+ 
+   The following new built-in NAIF ID code/name definitions have been added
+   to the toolkit:
+ 
+      Spacecraft:
+ 
+             -226     ROSETTA
+ 
+      Jovian satellites:
+ 
+              517     CALLIRRHOE
+              518     THEMISTO
+              519     MAGACLITE
+              520     TAYGETE
+              521     CHALDENE
+              522     HARPALYKE
+              523     KALYKE
+              524     IOCASTE
+              525     ERINOME
+              526     ISONOE
+              527     PRAXIDIKE
+ 
+ 
+Documentation
+--------------------------------------------------------
+ 
+   User's Guide documents for TOBIN, TOXFR and VERSION utility programs
+   have been added to the toolkit documentation.
+ 
+ 
+Bug Fixes
+--------------------------------------------------------
+ 
+ 
+Built-in Body-Fixed Frame for Pan
+ 
+   Definition of the built-in body-fixed frame for PAN (IAU_PAN) has been
+   updated to point to the correct PCK values used to compute its rotation.
+   In the previous version of the toolkit it was pointing to PANDORA's
+   rotation constants.
+ 
+ 
+Surface Intercept Routine
+ 
+   The surface intercept routine SURFPT/surfpt_c has been re-implemented to
+   reduce loss of precision.
+ 
+ 
+DAS Writer Routines
+ 
+   DAS utility routine DASCUD has been fixed to ensure that DAS file
+   structure is correct when files are closed without data segregation.
+   Previously it was possible for unsegregated files to have an invalid
+   final forward directory pointer. Note: this problem could not occur in
+   E-kernels created by SPICE utility programs or using the SPICE EK API
+   routines.
+ 
+ 
+CSPICE Cell Implementation
+ 
+   The CELLINIT macro has been updated so that it doesn't modify data added
+   to character cells prior to cell initialization. This enables population
+   of uninitialized character cells via macro calls.
+ 
+ 
+Body Name to Associated Frame Conversion Routine
+ 
+   The routine CNMFRM retrieving the reference frame name for a specified
+   body name has been fixed so a TK frame specified by name and designated
+   as an object's preferred frame via kernel pool assignments is found, and
+   so that the correct name of this frame is returned.
+ 
+ 
+CHRONOS
+ 
+   CHRONOS has been updated to make sure that the iterative search for the
+   nearest local midnight converges in all cases. It has also been updated
+   to use the maximum system allowed file name length on VAX and DEC Alpha
+   environments.
+ 
+ 
+Version 53 --- September 2002
+===========================================================================
+ 
+ 
+Environments
+--------------------------------------------------------
+ 
+   The N0053 version of the SPICE Toolkit is supported in the following
+   environments:
+ 
+      PC         Linux         g77
+      PC         Windows       Compaq Visual (Digital) FORTRAN
+      PC         Windows       Lahey FORTRAN 95
+      PC         Linux         gCC
+      PC         Windows       Microsoft Visual C++
+      Sun        Solaris       FORTRAN
+      Sun        Solaris       Native C
+      Sun        Solaris       gCC
+      HP         UX            HP FORTRAN
+      HP         UX            HP C
+      Macintosh  MacOS         Absoft FORTRAN
+      Macintosh  MacOS         Metrowerks Codewarrior C
+      Macintosh  OS-X          g77
+      Macintosh  OS-X          Absoft FORTRAN
+      Macintosh  OS-X          Apple C
+      SGI        IRIX          N32/O32 FORTRAN
+      SGI        IRIX          MIPS C (N32/O32 ABIs)
+      DEC Alpha  Digital Unix  Digital FORTRAN
+      DEC Alpha  Digital Unix  Digital C
+      Vax        VMS           Digital FORTRAN
+ 
+   The PC/Linux/g77 version previously supported the alternative ``fort77''
+   compiler. This is no longer the case. Contact NAIF if you need support
+   for this compiler.
+ 
+   The Macintosh OS-X environments are new.
+ 
+ 
+CSPICE
+--------------------------------------------------------
+ 
+ 
+New CSPICE wrappers for cell, set, and windows routines
+ 
+   The complete set of C wrappers duplicating cell, sets, and windows
+   capabilities existing in FORTRAN SPICE has been added to CSPICE.
+ 
+ 
+New CSPICE wrappers for sorting and searching routines
+ 
+   The following new CSPICE wrappers implementing sorting and searching
+   capabilities have been added:
+ 
+      bscho*_c.c
+      bsrch*_c.c
+      esrchc_c.c
+      isordv_c.c
+      isrch*_c.c
+      lstle*_c.c
+      lstlt*_c.c
+      order*_c.c
+      reord*_c.c
+      shell*_c.c
+ 
+ 
+New CSPICE wrappers for string manipulation and parsing routines
+ 
+   The following new CSPICE wrappers for string manipulation and parsing
+   capabilities have been added:
+ 
+      cpos*_c.c
+      pos*_c.c
+      ncpos*_c.c
+      kxtrct_c.c
+      lpars*_c.c
+      lx4*_c.c
+      lxqstr_c.c
+      repm*_c.c
+ 
+ 
+SPICELIB
+--------------------------------------------------------
+ 
+ 
+SPK Type 18
+ 
+   A new SPK type (Type 18) has been added. This incorporates ESA/ESOC
+   model for a spacecraft ephemeris.
+ 
+ 
+CK Type 5
+ 
+   A new CK type (Type 5) has been added. This incorporates ESA/ESOC model
+   for a spacecraft attitude data.
+ 
+ 
+BRIEF
+--------------------------------------------------------
+ 
+   BRIEF utility has been updated to allow summarizing SPKs containing
+   ephemerides for up to 20,000 distinct bodies.
+ 
+ 
+COOKBOOK
+--------------------------------------------------------
+ 
+   COOKBOOK programs have been updated to use the highest level routines
+   currently available in SPICE -- FURNSH, SUBPT, etc.
+ 
+ 
+Bug Fixes
+--------------------------------------------------------
+ 
+ 
+ID-to-name Translation
+ 
+   SPICE's ID-to-name mapping subsystem has been updated to provide
+   consistent behavior across all of its interfaces. It now correctly
+   processes duplicate ID-to-name mapping assignments provided via text
+   kernel files. Refer to the NAIF_IDS Required Reading for more details.
+ 
+ 
+Built-in Body-Fixed Frames
+ 
+   Missing body-fixed frames -- IAU_PAN, IAU_GASPRA, IAU_IDA, and IAU_EROS
+   -- have been added to the built-in frame set.
+ 
+ 
+Binary architecture consistency check at run-time
+ 
+   Binary file format consistency check has been implemented at run time to
+   verify that the toolkit prepared specifically for a platform with one
+   binary file format has not been compiled/used on a platform with another
+   binary file format.
+ 
+ 
+Long/truncated lines in text kernel files
+ 
+   The text kernel file reader has been modified to correctly process
+   truncated string value assignments.
+ 
+ 
+VMS Read-Only Access File Open Failure
+ 
+   A bug in the DAF system preventing users on VMS systems from loading
+   SPK, CK and binary PCK files with the read-only attribute(*) has been
+   fixed.
+ 
+ 
+Version 52 --- January 2002
+===========================================================================
+ 
+ 
+Environments
+--------------------------------------------------------
+ 
+   The N0052 version of the SPICE Toolkit is supported on the following
+   environments:
+ 
+      PC         Linux         G77
+      PC         Windows       Compaq Visual (Digital) Fortran
+      PC         Windows       Lahey Fortran 95
+      PC         Linux         GCC
+      PC         Windows       Microsoft Visual C++
+      Sun        Solaris       Fortran
+      Sun        Solaris       Native C
+      Sun        Solaris       GCC
+      HP         UX            HP Fortran
+      HP         UX            HP C
+      Macintosh  MacOS         Absoft Fortran
+      Macintosh  MacOS         Metrowerks Codewarrior C
+      SGI        IRIX          N32/O32 Fortran
+      SGI        IRIX          MIPS C (N32/O32 ABIs)
+      DEC Alpha  Digital Unix  Digital Fortran
+      DEC Alpha  Digital Unix  Digital C
+      Vax        VMS           Digital Fortran
+ 
+   The N0052 version of the SPICE Toolkit is no longer supported on the
+   following environments:
+ 
+      PC         Windows       Lahey F77L3
+      PC         Windows       Microsoft Powerstation Fortran 1.x
+      PC         Windows       Microsoft Powerstation Fortran 4.x
+      Sun        SunOS         Fortran
+      Macintosh  MacOS         Language Systems Fortran
+      Next       Nextstep      Absoft Fortran
+      Next       Nextstep      GCC
+ 
+   Contact NAIF if you wish to obtain the Toolkit for one or more of these
+   deprecated environments.
+ 
+ 
+SPICELIB
+--------------------------------------------------------
+ 
+ 
+Run-Time Binary File Format Translation
+ 
+   The most popular supported systems (including Macintosh, PC, and UNIX
+   platforms) are now capable of accessing data in binary SPICE kernel
+   files from other platforms directly without using transfer format. But
+   note that binary files from other platforms are only available for read
+   access. See the Convert User's Guide for specifics and details.
+ 
+ 
+Open File Limit Increase
+ 
+   The sum of loaded SPK, CK, and binary PCK files, all of which are
+   implemented using the DAF file architecture, may now reach 1000.
+   Previous versions of the toolkit restricted the number of loaded DAFs to
+   20. But caution: loading large numbers of files may impact system
+   performance.
+ 
+ 
+SPK aberration corrections
+ 
+   SPK readers can now perform aberration corrections for transmitted, as
+   well as received, radiation. This feature makes it simple to compute the
+   direction in which radiation must be emitted in order to reach a
+   specified target.
+ 
+   The headers of the SPK readers have been expanded to explain aberration
+   corrections in greater detail.
+ 
+ 
+Instrument Kernel Support
+ 
+   GETFOV was extended to compute boundary corners from FOV definitions in
+   the kernel pool utilizing the new ANGLES specification. See GETFOV's or
+   getfov_c's header for details.
+ 
+ 
+Kernel POOL
+ 
+   The buffers that store text kernel data were increased. The new maximums
+   are:
+ 
+      Maximum Number of Variables                     5003
+      Maximum Number of Distinct Numeric Data Items  10000 (*)
+      Maximum Number of Character Strings             4000 (**)
+ 
+   (*) This is the maximum total number of values for all numeric scalar
+   and array pool variables together. (**) This is the maximum total number
+   of values for all character scalar and array pool variables together.
+ 
+   These changes allow the kernel pool to hold substantially more data than
+   previous versions of the SPICE toolkit, which became necessary due to
+   the increasing use of such SPICE components as IK and FK utilizing the
+   POOL as the data repository and access mechanism.
+ 
+ 
+Jacobian routines
+ 
+   Routines have been added for computing the Jacobians of the
+   transformations between rectangular and the following coordinate
+   systems:
+ 
+      cylindrical
+      geodetic
+      latitudinal
+      spherical
+ 
+   The Jacobian routines support transformation of velocities between these
+   coordinate systems. See the headers of the following SPICELIB
+   routines/CSPICE functions for more information:
+ 
+      DCYLDR/dcyldr_c
+      DGEODR/dgeodr_c
+      DLATDR/dlatdr_c
+      DSPHDR/dsphdr_c
+      DRDCYL/drdcyl_c
+      DRDGEO/drdgeo_c
+      DRDLAT/drdlat_c
+      DRDSPH/drdsph_c
+ 
+ 
+NAIF ID to Object Name Mapping
+ 
+   The NAIF IDs for the following missions has been added to the set of IDs
+   built into SPICE:
+ 
+      CONTOUR
+      LUNAR-A
+      DRTS-WC
+      MARS EXPRESS
+      DEEP IMPACT
+      STARLIGHT
+      MER
+ 
+ 
+Documentation
+ 
+   DAS and EK Required Reading documents have been added to the SPICE
+   Toolkit.
+ 
+   The CONVERT User's Guide has been updated to reflect new run-time binary
+   file format translation capability.
+ 
+   The FRAMES Required Reading has been updated to include inertial frame
+   information formerly contained in the NAIF_IDS Required Reading.
+ 
+   The NAIF_IDS Required Reading has been updated to reflect new Toolkit
+   capability, through which the NAIF ID to name mappings can be defined
+   using text kernel files.
+ 
+   The MKSPK User's Guide has been updated to add clarity throughout.
+ 
+   The ERROR, PCK, ROTATIONS, SPK, and TIME Required Reading documents have
+   all been improved.
+ 
+ 
+CSPICE
+--------------------------------------------------------
+ 
+ 
+New CSPICE wrappers for EK routines
+ 
+   CSPICE wrappers have been added to support record-oriented EK
+   manipulation, including record-oriented writing, updating, and reading.
+ 
+   CSPICE wrappers have been added to provide summary capabilities for
+   loaded EK tables.
+ 
+ 
+Miscellaneous new CSPICE wrappers
+ 
+   Some new CSPICE wrappers have been added:
+ 
+      frmnam_c
+      inelpl_c
+      namfrm_c
+ 
+ 
+CKBRIEF
+--------------------------------------------------------
+ 
+   A capability to display a separate record for each interpolation
+   interval in each segment of a Type 2 or Type 3 CK file has been added to
+   the program. This capability is implemented using the ``-dump'' command
+   line option.
+ 
+ 
+COMMNT
+--------------------------------------------------------
+ 
+   An inconsistency between the program's functionality in interactive and
+   command line modes has been fixed. The maximum length of a comment line
+   that can be added to and extracted from the comments in either mode is
+   now the same and is equal to 1000 characters.
+ 
+ 
+MKSPK
+--------------------------------------------------------
+ 
+   The program was modified to allow appending new data segments to an
+   existing SPK file.
+ 
+ 
+VERSION
+--------------------------------------------------------
+ 
+   The interface of this utility program has been extended: a command line
+   parameter causing the program to display additional library information
+   has been added. See ``version -help'' for details.
+ 
+ 
+Bug Fixes
+--------------------------------------------------------
+ 
+ 
+CK, PCK, and SPK segment buffering and selection
+ 
+   Several bugs have been corrected in the modules CKBSR, PCKBSR, and
+   SPKBSR. These bug fixes enable users to load more segments than can be
+   buffered at once by these modules. However, the best run-time speed is
+   still obtained when all segments of a given kernel type can be buffered.
+   The current segment buffer sizes are:
+ 
+      CK:    4000 segments
+      SPK:   2000 segments
+      PCK:    100 segments
+ 
+ 
+Const-qualification for various CSPICE interfaces
+ 
+   A number of CSPICE function interfaces have been updated to add
+   const-qualification of input arrays. This fix enhances compatibility
+   with C++ applications.
+ 
+ 
+CSPICE function gcpool_c fixed
+ 
+   This routine did not properly trim trailing blanks from values in its
+   output array.
+ 
+ 
+MOVED fix for Fortran PC Linux platform
+ 
+   In some cases the routine MOVED incorrectly copied double precision
+   numbers whose values were assigned via EQUIVALENCE statements with pairs
+   of integers. This could happen when the integer bit patterns did not
+   correspond to valid double precision numbers. This problem prevented
+   correct manipulation of some DAF segment descriptors.
+ 
+ 
+EK query processing using LIKE operator and null values
+ 
+   Null values could be returned in some rare circumstances when a query
+   employed the LIKE operator to compare scalar string column entries
+   against a specified string value, and a null column entry was compared.
+ 
+ 
+EK time conversion
+ 
+   The EK time parsing code handled SCLK values incorrectly when the string
+   ``SCLK'' appeared in the name of the clock.
+ 
+ 
+EK documentation
+ 
+   Various headers have been updated to indicate that query-and-fetch
+   operations and EK fast writer operations may not be interleaved.
+ 
+ 
+Source code clean-up
+ 
+   Miscellaneous problems triggering annoying but insignificant compilation
+   warnings have been fixed. Various files have had TAB characters removed.
+   Others have had final newline characters added.
+ 
+ 
+Version 51 --- April 2000
+===========================================================================
+ 
+ 
+SPICELIB
+--------------------------------------------------------
+ 
+ 
+Instrument Kernel Support
+ 
+   The routine GETFOV was added to the Toolkit. It returns information
+   describing the shape, size, boresight, and orientation of the field of
+   view for traditional remote sensing instruments.
+ 
+ 
+Binary Kernel Recognition
+ 
+   The routine GETFAT was upgraded to use a more robust algorithm for
+   identifying the type (SPK or CK) of inadequately labeled binary kernels.
+   This modification is critical for Mars project SPICE customers who wish
+   to use the SPICELIB utility FURNSH when loading binary kernels.
+ 
+ 
+CK
+ 
+   A new representation for the orientation of spacecraft structures has
+   been added to the C-kernel system. C-kernel data type 04 provides a
+   flexible and compact method for representing the attitude of structures
+   by using Chebyshev polynomials to fit orientation data or models.
+ 
+ 
+SPK
+ 
+   Two new representations for position and velocity of objects have been
+   added to the SPK system. Types 12 and 13 provide for the Hermite
+   interpolation of states from series of state vectors. See the SPK
+   Required Reading for further details.
+ 
+ 
+Miscellaneous
+ 
+   The list of names recognized by BODTRN was enhanced to support the
+   identification of the "Cluster" spacecraft (1,2,3 and 4) as well as the
+   Pluto-Kuiper Express spacecraft and simulation.
+ 
+ 
+MKSPK
+--------------------------------------------------------
+ 
+   The utility program MKSPK has been added to the general release of the
+   SPICE Toolkit. This allows SPICE customers to more easily generate SPK
+   files from tabular ephemeris information. See the User's Guide
+   (mkspk.ug) for details on the use of MKSPK.
+ 
+ 
+SPKMERGE
+--------------------------------------------------------
+ 
+   The program was upgraded to correct an "infinite loop" that existed in
+   rare cases on some platforms.
+ 
+ 
+Bug Fixes
+ 
+   Although it is unlikely that most users will notice any difference, a
+   number of minor bug corrections have been incorporated:
+ 
+       --   The kernel pool software was modified to detect and handle
+            string specifications that are too long to be stored in the
+            kernel pool.
+ 
+       --   The time parsing software (used by STR2ET) was enhanced so that
+            erroneous long strings will be diagnosed as erroneous and no
+            longer cause a run-time error.
+ 
+ 
+Version 50 --- October 1999
+===========================================================================
+ 
+ 
+CSPICE
+--------------------------------------------------------
+ 
+   Version 50 of the SPICE Toolkit includes a C language edition of the
+   Toolkit. This provides a C language interface to the Toolkit and
+   duplicates the FORTRAN capabilities. SPICE users interested in a C
+   version of the Toolkit should specifically request the CSPICE version.
+   Moreover, C users should read the document "CSPICE User's Guide" which
+   addresses issues regarding the translation of the FORTRAN Toolkit to C.
+ 
+ 
+Additions and Extensions to SPICE routines
+--------------------------------------------------------
+ 
+ 
+Loading Kernels
+ 
+   The new routine FURNSH provides a single uniform interface for loading
+   all SPICE kernels. In addition, the new interface allows you create a
+   "meta-kernel" listing which SPICE kernels should be loaded. When this
+   "meta-kernel" is supplied to FURNSH, all listed kernels will be loaded
+   into the appropriate SPICE subsystems. It is anticipated that this new
+   interface will substantially ease the problem of managing and loading
+   SPICE kernels.
+ 
+   In addition to the routine FURNSH several related routines are provided
+   to assist with the run-time management of kernels loaded through the
+   FURNSH interface.
+ 
+         KTOTAL   returns the number of kernels that are currently
+                  available to your program as a result of previous calls
+                  to FURNSH and UNLOAD.
+ 
+         KDATA    provides an interface for retrieving (in order of their
+                  specification through FURNSH) kernels that are active in
+                  your application.
+ 
+         KINFO    allows you to retrieve information about a loaded kernel
+                  using the name of that kernel.
+ 
+         UNLOAD   provides an interface for unloading kernels that have
+                  been loaded via the routine FURNSH.
+ 
+   FORTRAN users should consult the header for the routine KEEPER for
+   details on the use of these routines. C users should see the specific
+   files furnsh_c.c, ktotal_c.c, kdata_c.c, kinfo_c.c and unload_c.c
+ 
+ 
+Position Only Interface.
+ 
+   The Frames and SPK subsystems have been extended to provide a "position
+   only" interface. The user level routines in the extension are:
+ 
+         SPKPOS   returns the 3-vector giving the location of one object as
+                  seen from another corrected for light time and stellar
+                  aberration (if requested by the user) in the user
+                  specified reference frame.
+ 
+         PXFORM   returns the 3x3 matrix that transforms positions from one
+                  reference frame to another as a function of time.
+ 
+   These routines run slightly faster than their position and velocity
+   counter parts: SPKEZR and SXFORM. In addition they allow you to use
+   C-kernel based frames when the C-kernel does not contain angular
+   velocity data.
+ 
+   See the routines PXFORM and SPKPOS for details on their use.
+ 
+ 
+ID-codes
+ 
+   The name/ID-code translation routines (BODN2C and BODC2N) have been
+   extended so that users may add missing name/ID-code mappings to SPICE
+   text kernels. Using this new capability, users can extend the built-in
+   name/ID-code mapping by simply loading an appropriate SPICE text kernel
+   with the interface FURNSH.
+ 
+ 
+Kernel Pool Enhancements
+ 
+   Several new kernel pool interfaces have been provided
+ 
+         STPOOL   Allows storage of long string valued variables through
+                  use of a continuation character.
+ 
+         PCPOOL   Allows the insertion of a character variable directly
+                  into the kernel pool without supplying a text kernel.
+ 
+         PDPOOL   Allows the insertion of a double precision variable
+                  directly into the kernel pool without supplying a text
+                  kernel.
+ 
+         PIPOOL   Allows the insertion of an integer variable directly into
+                  the kernel pool without supplying a text kernel.
+ 
+         LMPOOL   Similar to LDPOOL, but the text kernel is stored in an
+                  array of strings instead of an external file.
+ 
+         SZPOOL   allows run time retrieval of kernel pool memory
+                  parameters.
+ 
+         DVPOOL   allows deletion of a specific variable from the kernel
+                  pool.
+ 
+         GNPOOL   assists in determining which variables are defined in the
+                  kernel pool via variable name template matching.
+ 
+ 
+Continuous Spacecraft Clocks
+ 
+   The Spacecraft Clock system has been extended so that "ticks" can be
+   modeled continuously instead of discretely. See the SCLK required
+   reading for more details.
+ 
+ 
+Bad FTP File Transfer Detection
+ 
+   SPICE binary kernels have been enhanced so that Toolkit software can
+   detect whether a binary kernel has been transferred using ASCII instead
+   of BINARY transfer mode. Note that only SPICE binary kernels produced
+   with the N0050 (or later) version of the SPICE Toolkit will have
+   features required for this diagnosis.
+ 
+ 
+CK Writer Enhancements
+ 
+   The SPICE C-kernel writers have been enhanced to check that quaternions
+   supplied to the writer are indeed nearly unit length. This check allows
+   detection of programming errors earlier in the kernel production
+   process.
+ 
+ 
+Bugs
+ 
+   No bugs were identified between version N0049 and N0050 of the Toolkit.
+   However, users may notice that several routines have minor changes. The
+   main reasons for code changes are:
+ 
+       1.   Extending the range of inputs that can be handled by SPICE
+            routines.
+ 
+       2.   Balancing the use of the SPICE error handling
+            Check-in/Check-out tracing mechanism.
+ 
+       3.   Removal of unused variables.
+ 
+       4.   Corrections in grammar, spelling and other typographic errors
+            in the headers of SPICE routines.
+ 
+ 
+SPICE Utility Programs
+--------------------------------------------------------
+ 
+ 
+TOBIN
+ 
+   The utility program TOBIN which converts transfer format kernels to
+   binary form, can now process transfer format kernels that have been
+   wrapped with SFDUs.
+ 
+ 
+COMMNT
+ 
+   COMMNT now accepts command line arguments making it usable from user
+   scripts.
+ 
+ 
+CKBRIEF
+ 
+   CKBRIEF is a new utility that allows you to quickly summarize a C-kernel
+   in a manner similar to the summary capabilities provided by the SPK
+   summary tool, BRIEF.
+ 
+ 
+MKSPK
+ 
+   MKSPK is a utility program that allows users to generate SPK files from
+   appropriate and suitably tabularized position and velocity information.
+ 
+ 
+Documentation
+--------------------------------------------------------
+ 
+   Many SPICE documents were edited and brought up to date. Most notable of
+   these is the document KERNEL.REQ which discusses SPICE text kernels and
+   the use of the kernel pool.
+ 
+   In addition a new document called "Common Problems" (problems.req) has
+   been included with the standard SPICE documentation. This document is
+   intended to help you in trouble shooting problems that may arise with
+   programming with the SPICE Toolkit.
+ 
+ 
+Version 49 --- September 1998
+===========================================================================
+ 
+   Version 49 of the SPICE Toolkit exists only to fix errors that were
+   identified in version 48 of the Toolkit. The routines in SPICELIB that
+   were corrected are:
+ 
+      DELTET  --- obsolete routine maintained only for
+                  backwards compatibility. A bug was
+                  introduced in Version 48 that could
+                  lead to 0.003 seconds of error in outputs.
+      DPFMT   --- documentation corrections.
+      EKQMRT  --- a boundary bug was corrected.
+      SPKW02  --- documentation correction
+      TIMDEF  --- a bug was fixed that can only be manifested
+                  when the default exception handling is modified.
+      TIMOUT  --- correction of grammatical errors in header.
+ 
+ 
+Version 48 --- May 1998
+===========================================================================
+ 
+   Version 48 of the SPICE Toolkit extends the set of supported platforms
+   to include PCs running the LINUX operating system.
+ 
+   The time system was modified so that two digit years are interpreted as
+   belonging to the years 1969-2068 inclusive.
+ 
+   In addition a number of minor bugs have been fixed. The intended
+   functionality of the Toolkit has not changed. The most significant bug
+   fixes are listed here.
+ 
+      conics.for was updated.
+ 
+         There was a coding error in the computation of the mean
+         anomaly in the parabolic case. This problem has been
+         corrected.
+ 
+      et2lst.for was updated.
+ 
+         The integer variable SUN was never initialized in the
+         previous version of the routine. Now it is set to
+         the proper value of 10.
+ 
+      str2et.for was updated.
+ 
+         The previous versions of this routine did not correctly
+         convert day-of-year strings in the TDB or TDT systems.
+         They treated the day of year as year, month, day giving
+         spectacularly wrong answers.
+ 
+         In addition, comments concerning the default century for
+         abbreviated years were updated to reflect changes to TEXPYR
+ 
+      timout.for was updated.
+ 
+         The previous version of this routine did not output
+         fractional components for epochs prior to 1 A.D.
+ 
+         In addition, the default time system, calendar and time zone
+         are obtained from TIMDEF.
+ 
+ 
+ 
+Version 47 --- July 1997
+===========================================================================
+ 
+   This chapter describes the significant changes to version 47 of the
+   SPICE Toolkit.
+ 
+ 
+Documentation
+--------------------------------------------------------
+ 
+   There are two significant documentation changes to version 47 of the
+   Toolkit.
+ 
+       1.   The Required Reading for SPK (SPK.REQ) has been re-written to
+            address the use of non-inertial frames within the SPK system.
+ 
+       2.   The Frames subsystem has been documented in the required
+            reading file FRAMES.REQ. This document describes the various
+            reference systems that are currently supported by the Toolkit
+            as well as naming and numbering conventions that will be
+            adhered to by NAIF.
+ 
+   These two documents together with the extensions to the frame system
+   that have been added in version 47 allows one to easily model the
+   dynamics of structures on spacecraft or surface rovers.
+ 
+   In addition to these major modifications to the base SPICE
+   documentation, the document TIME.REQ has been updated to reflect a
+   slight broadening of recognized time strings and to document the routine
+   ET2LST that allows the user to convert to ephemeris time to local solar
+   time for any natural ephemeris object.
+ 
+ 
+Software
+--------------------------------------------------------
+ 
+ 
+SPK
+ 
+   The SPK ephemeris system has been expanded to support Space Command Two
+   Line Elements (formally known as NORAD Two Line Elements) and
+   equinoctial elements.
+ 
+   To assist SPICE users who need to create SPK files that contain two line
+   element sets, NAIF has a preliminary utility that allows the creation of
+   SPK files from two line element data. This tool is available from NAIF
+   on an as-needed basis. This utility is still a bit rough around the
+   edges and has not yet been made an official Toolkit product.
+ 
+ 
+Frames
+ 
+   The frame system has been extended to support reference frames that can
+   be described as a constant rotation from another frame (such as a
+   bodyfixed, inertial or C-kernel frame). These frames are easily
+   described using text based kernels. This new frame type is well suited
+   for describing instrument, lander and topocentric frames.
+ 
+ 
+Time
+ 
+   The time parsing software was enhanced so that a slightly broader set of
+   time formats are recognized. In addition the routine ET2LST was added to
+   the Toolkit. This routine allows you to convert ET (ephemeris time TDB)
+   to local solar time for a planet, satellite comet or asteroid. Local
+   solar time is a "clock" measure of the angle between a local meridian
+   and the meridian of the sun. See the TIME required reading for further
+   details.
+ 
+ 
+Bug Fixes
+ 
+   The routines CKGPAV and CKFXFM in versions prior to version 47 of the
+   Toolkit dealt with angular velocity in non-inertial frames incorrectly.
+   This error did not affect C-kernels that were described relative to
+   inertial frames. In those rare instances in which a C-kernel was
+   described relative to a non-inertial frame, the mistreatment of angular
+   velocity could lead to errors in the computation of velocities relative
+   to the C-kernel frame. The computation of positions were not affected by
+   this error.
+ 
+   The routine TIMOUT in version 46 did not reliably produce an abbreviated
+   two-digit year. This error has been corrected.
+ 
+   All other errors were of a technical nature such as improper use of the
+   SPICE exception handling subsystem and are unlikely to have affected
+   most SPICE users.
+ 
+ 
+Version 46 --- January 1997
+===========================================================================
+ 
+   This chapter describes the significant changes to version 46 of the
+   SPICE Toolkit.
+ 
+ 
+Documentation
+ 
+   NAIF now has available two overview documents that provide users with a
+   higher level view of Toolkit. The two documents are called
+ 
+      Introduction to SPICE
+      Most Useful SPICELIB Subroutines
+ 
+   These documents are available in the ``doc'' subdirectory of the Toolkit
+   in the postscript files
+ 
+      intro.ps
+      mostused.ps
+ 
+   respectively.
+ 
+   The first of these documents, ``Introduction to SPICE'', provides a
+   broad overview of the SPICE system and attempts to lay out a map of
+   where you can find more specific information about the various
+   components of the SPICE system. The second document ``Most Useful
+   SPICELIB Routines'' categorizes 120 or so of the most frequently used
+   SPICELIB routines and provides a synopsis for each of these.
+ 
+ 
+Time
+ 
+   The time software has undergone significant enhancement. The Toolkit now
+   supports a wider set of time formats and time systems. The most
+   important new routines are:
+ 
+      STR2ET
+      TIMOUT
+      TTRANS
+      TPARTV
+ 
+   The new time software is outlined in the ``recommended reading'' file
+   --- TIME.REQ which appears in the ``doc'' subdirectory of the Toolkit.
+ 
+   A number of convenience routines have been added to the Toolkit. Those
+   likely to be of most interest to users are:
+ 
+         DPFMT    The routine DPFMT allows you to create a string
+                  representing a number by supplying a ``picture'' that
+                  should be followed in formatting the string.
+ 
+         TOSTDO   The routine TOSTDO is a portable means of writing strings
+                  to ``standard output.'' The particulars of formatting on
+                  various platforms are handled transparently. Using this
+                  routine, you can isolate yourself from formatting
+                  considerations that arise when using the intrinsic
+                  FORTRAN WRITE statement.
+ 
+   The remainder of the modifications to the Toolkit are primarily to ease
+   problems associated with maintenance of the Toolkit.
+ 
+ 
+Version 45 --- October 1996
+===========================================================================
+ 
+   Version 45 is a quick update to correct an oversight in versions 43 and
+   44. Although the reference frames DE-143 was added to the collection of
+   non-inertial reference frames in version 43, it was not available to all
+   of the SPICE subsystems. Version 45 corrects this deficiency.
+ 
+   In addition to this correction to the reference frame subsystem, a
+   number of minor corrections were made to the DAS subsystem and to error
+   messages returned by EK software.
+ 
+ 
+Version 44 --- August 1996
+===========================================================================
+ 
+   This chapter describes the significant changes to version 44 of the
+   SPICE Toolkit.
+ 
+ 
+SPK Subsystem
+ 
+   The main workhorse routine of the SPK subsystem, SPKGEO, was modified to
+   remove potentially redundant computations. As a result, some
+   applications may see a performance improvement on the order of 60
+   percent.
+ 
+ 
+Inspekt
+ 
+   Inspekt was upgraded to support the DEC Alpha OSF/1 environment. All
+   functional aspects of Inspekt are now fully supported in the DEC Alpha
+   OSF/1 environment.
+ 
+ 
+Bug Fixes
+ 
+   Several errors in the EK and supporting DAS subsystem were corrected.
+   These fixes will be visible to only a small number of SPICE users.
+   (Primarily those users who create E-kernels or access the EK files
+   directly through the subroutine interface.) Users whose primary use of
+   E-kernels is via the program Inspekt will see no visible changes in the
+   SPICE system.
+ 
+   The generic segment subsystem was corrected. The errors were discovered
+   by the NAIF staff while developing new SPK data types. These new data
+   types are not yet incorporated into SPICELIB. Consequently users of the
+   SPICE system are unlikely to have used any of the code in which these
+   errors were found.
+ 
+   The frames subsystem was corrected. In NAIF's experiments in converting
+   the library to C, an error was found in the routine FRMCHG. This error
+   is of a pedantic nature and has not surfaced in any of the supported
+   native FORTRAN environments.
+ 
+ 
+Version 43 --- May 1996
+===========================================================================
+ 
+   This chapter describes the new capabilities available in version 43 of
+   the SPICE Toolkit.
+ 
+ 
+Brief
+ 
+   The SPICE utility program BRIEF has been added to the generic SPICE
+   Toolkit. This program allows you to easily summarize the contents of an
+   SPK file. The summary can be tuned depending upon the level of detail
+   you are interested in seeing. See the BRIEF User's Guide (brief.ug) for
+   an explanation of features.
+ 
+ 
+Star Catalogs.
+ 
+   In version 43 of the SPICE Toolkit, an introductory level star catalog
+   capability has been introduced. The routines used for manipulating star
+   catalogs are:
+ 
+      STCF01
+      STCG01
+      STCL01
+ 
+ 
+CHGIRF
+ 
+   Support for the inertial reference frame DE143 has been added to
+   SPICELIB.
+ 
+ 
+BODTRN
+ 
+   The routine BODTRN has been added to the Toolkit. This routine allows
+   you to easily translate between the names of ephemeris objects to their
+   NAIF ID codes.
+ 
+ 
+Performance Improvements
+ 
+   A number of performance enhancements have been included. Most notable in
+   this list is the SPICE exception handling subsystem. By relinking your
+   programs you may see an improvement in performance from 20 to 30 percent
+   (depending upon how heavily your program makes use of the SPICE
+   exception handling capability).
+ 
+ 
+Version 42 --- December 1995
+===========================================================================
+ 
+   This chapter describes new capabilities available in version 42 of the
+   SPICE Toolkit and includes examples of how to make use of these new
+   capabilities. The major new capability of Version 42 of the Toolkit is
+   the official release of the SPICE Events Kernel Software. This software
+   includes all the interface level routines for reading and writing events
+   kernels. It also includes the event kernel browser program Inspekt.
+   Inspekt has an extensive on-line help facility that for now must serve
+   as a user's guide to the program.
+ 
+   Full documentation for the new capabilities will be available in version
+   43 of the Toolkit.
+ 
+ 
+Version 41 --- October 1995
+===========================================================================
+ 
+   This chapter describes new capabilities available in version 41 of the
+   SPICE Toolkit and includes examples of how to make use of these new
+   capabilities. There are two major new capabilities provided in version
+   41 of the Toolkit. First is the ability to retrieve the states of
+   objects by using the names of the objects instead of SPICE integer
+   id-codes for those objects. Second is the ability to store and retrieve
+   states of objects relative to non-inertial reference frames.
+ 
+ 
+--------------------------------------------------------
+ 
+   Until now, the primary mechanism for retrieving state information from
+   the SPICE ephemeris (SPK) files has been the subroutine SPKEZ
+   (pronounced: ess pee kay eee' zee). This routine requires that you know
+   the integer id-codes associated with the objects of interest.
+ 
+   Beginning with version 41 of the SPICE Toolkit the routine SPKEZR
+   (pronounced: ess pee kay eee' zee er ) will be the primary mechanism for
+   retrieving states. The calling sequence for this new routine is
+ 
+      CALL SPKEZR ( TARG, ET, REF, ABCORR, OBS, STARG, LT )
+ 
+   where
+ 
+      Inputs:
+ 
+         TARG     is a character string that is the name of the object
+                  whose state is of interest. Examples are: 'JUPITER',
+                  'EARTH', 'SUN', 'GOLDSTONE'.
+ 
+         ET       is the epoch at which the state is desired. ET is a
+                  double precision number giving the epoch measure in
+                  ephemeris seconds past the epoch of the J2000 reference
+                  frame.
+ 
+         REF      is a character string giving the name of the reference
+                  frame in which the output state should be represented.
+                  Examples are: 'J2000', 'IAU_EARTH'.
+ 
+         ABCORR   is a string indicating what forms of aberration
+                  corrections should be applied to the retrieved state.
+ 
+         OBS      is a string that is the name of the object to which the
+                  returned state will be relative. Examples are: 'EARTH',
+                  'GOLSTONE'.
+ 
+      Outputs:
+ 
+         STARG    is the state of the target body relative to the observer
+                  represented in the specified reference frame with the
+                  specified aberration corrections accounted for.
+ 
+         LT       is the light time in seconds from the target to the
+                  observer.
+ 
+   To illustrate the use of this routine, suppose that you wanted to get
+   the B1950 state of Mars relative to Earth corrected for light-time and
+   stellar aberration at the epoch that occurs 10 million seconds prior to
+   the J2000 epoch. The code fragment below shows how you would call SPKEZR
+   to obtain this state. (Note that this assumes that you have already
+   loaded ephemerides for Mars and the Earth.)
+ 
+       DOUBLE PRECISION      STATE ( 6 )
+       DOUBLE PRECISION      LT
+ 
+       CALL SPKEZR ( 'MARS',  1.0D+07, 'B1950', 'LT+S',
+      .             'EARTH', STATE, LT )
+ 
+ 
+Non-inertial Reference Frames
+--------------------------------------------------------
+ 
+   Prior to version 41 of the Toolkit, storing or obtaining states relative
+   to a body-fixed frame required conversion to or from states relative to
+   inertial frames such as J2000. With version 41 of the SPICE Toolkit,
+   this restriction has been removed. It is now possible to store states
+   relative to a non-inertial frame. Moreover, you may now retrieve states
+   relative to non-inertial frames.
+ 
+   For example suppose you want to determine whether or not Jupiter is
+   above the local horizon at the Goldstone tracking site. The following
+   code fragment allows you to make this determination at an epoch ET. Note
+   we've hard-coded the radii for the spheroid that approximates the
+   surface of the earth.
+ 
+      C     Look up the bodyfixed state of Jupiter relative to
+      C     the Goldstone tracking site and the state of
+      C     Goldstone relative to the center of the earth.
+      C
+            CALL SPKEZR ( 'JUPITER',   ET,    'IAU_EARTH', 'LT+S',
+           .              'GOLDSTONE', JSTATE, LT )
+ 
+            CALL SPKEZR ( 'GOLDSTONE', ET,    'IAU_EARTH', 'NONE',
+           .              'EARTH',     GSTATE, LT )
+      C
+      C     Compute the local surface normal at the Goldstone site.
+      C
+            EQRAD1 = 6378.140
+            EQRAD2 = 6378.140
+            POLRAD = 6356.75
+ 
+            CALL SURFNM ( EQRAD1, EQRAD2, POLRAD, GSTATE, LNORML )
+      C
+      C     Next compute the angle between the local normal and the
+      C     vector to Jupiter. If the angle is less than pi/2 then
+      C     Jupiter is above the local horizon.  Otherwise it's not
+      C     visible.
+      C
+            ANGLE = VSEP ( JSTATE, LNORML )
+ 
+            IF ( ANGLE .LT. HALFPI() ) THEN
+               WRITE (*,*) 'Jupiter is above the horizon.'
+            ELSE
+               WRITE (*,*) 'Jupiter is not visible from Goldstone.'
+            END IF
+ 
+   Below is a list of the non-inertial frames that are currently supported.
+   Frames that begin with the letters IAU are frames whose orientation is
+   specified in the report: "Report of the IAU/IAG/COSPAR Working Group on
+   Cartographic Coordinates and Rotational Elements of the Planets and
+   Satellites"
+ 
+      IAU_ADRASTEA
+      IAU_AMALTHEA
+      IAU_ANANKE
+      IAU_ARIEL
+      IAU_ATLAS
+      IAU_BELINDA
+      IAU_BIANCA
+      IAU_CALLISTO
+      IAU_CALYPSO
+      IAU_CARME
+      IAU_CHARON
+      IAU_CORDELIA
+      IAU_CRESSIDA
+      IAU_DEIMOS
+      IAU_DESDEMONA
+      IAU_DESPINA
+      IAU_DIONE
+      IAU_EARTH
+      IAU_EARTH_BARYCENTER
+      IAU_ELARA
+      IAU_ENCELADUS
+      IAU_EPIMETHEUS
+      IAU_EUROPA
+      IAU_GALATEA
+      IAU_GANYMEDE
+      IAU_HELENE
+      IAU_HIMALIA
+      IAU_HYPERION
+      IAU_IAPETUS
+      IAU_IO
+      IAU_JANUS
+      IAU_JULIET
+      IAU_JUPITER
+      IAU_JUPITER_BARYCENTER
+      IAU_LARISSA
+      IAU_LEDA
+      IAU_LYSITHEA
+      IAU_MARS
+      IAU_MARS_BARYCENTER
+      IAU_MERCURY
+      IAU_MERCURY_BARYCENTER
+      IAU_METIS
+      IAU_MIMAS
+      IAU_MIRANDA
+      IAU_MOON
+      IAU_NAIAD
+      IAU_NEPTUNE
+      IAU_NEPTUNE_BARYCENTER
+      IAU_NEREID
+      IAU_OBERON
+      IAU_OPHELIA
+      IAU_PANDORA
+      IAU_PASIPHAE
+      IAU_PHOBOS
+      IAU_PHOEBE
+      IAU_PLUTO
+      IAU_PLUTO_BARYCENTER
+      IAU_PORTIA
+      IAU_PROMETHEUS
+      IAU_PROTEUS
+      IAU_PUCK
+      IAU_RHEA
+      IAU_ROSALIND
+      IAU_SATURN
+      IAU_SATURN_BARYCENTER
+      IAU_SINOPE
+      IAU_SUN
+      IAU_TELESTO
+      IAU_TETHYS
+      IAU_THALASSA
+      IAU_THEBE
+      IAU_TITAN
+      IAU_TITANIA
+      IAU_TRITON
+      IAU_UMBRIEL
+      IAU_URANUS
+      IAU_URANUS_BARYCENTER
+      IAU_VENUS
+      IAU_VENUS_BARYCENTER
+ 

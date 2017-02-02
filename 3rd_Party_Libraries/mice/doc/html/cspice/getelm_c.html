@@ -1,0 +1,391 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>getelm_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>getelm_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void getelm_c ( SpiceInt         frstyr,
+                   SpiceInt         lineln,
+                   const void     * lines,
+                   SpiceDouble    * epoch,
+                   SpiceDouble    * elems   ) 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+  Given a the &quot;lines&quot; of a two-line element set, parse the 
+  lines and return the elements in units suitable for use 
+  in SPICE software. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   PARSING 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   VARIABLE  I/O  DESCRIPTION 
+   --------  ---  -------------------------------------------------- 
+   frstyr     I   Year of earliest representable two-line elements.
+   lineln     I   Length of strings in lines array.
+   lines      I   A pair of &quot;lines&quot; containing two-line elements.
+   epoch      O   The epoch of the elements in seconds past J2000. 
+   elems      O   The elements converted to SPICE units. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   frstyr    is the first year possible for two line elements. Since
+             two line elements allow only two digits for the year, some
+             conventions must be followed concerning which century the
+             two digits refer to.  frstyr is the year of the earliest
+             representable elements. The two-digit year is mapped to
+             the year in the interval from frstyr to frstyr + 99 that
+             has the same last two digits as the two digit year in the
+             element set.  For example if frstyr is set to 1960  then
+             the two digit years are mapped as shown in the table
+             below:
+ 
+             Two-line         Maps to 
+             element year 
+             
+                00            2000 
+                01            2001 
+                02            2002 
+                 .              . 
+                 .              . 
+                 .              . 
+                58            2058 
+                59            2059 
+               -------------------- 
+                60            1960 
+                61            1961 
+                62            1962 
+                 .              . 
+                 .              . 
+                 .              . 
+                99            1999 
+ 
+              Note that if Space Command should decide to represent
+              years in 21st century as 100 + the last two digits of the
+              year (for example: 2015 is represented as 115) instead of
+              simply dropping the first two digits of the year, this
+              routine will correctly map the year as long as you set
+              frstyr to some value between 1900 and 1999.
+ 
+   lines      is a pair of lines of text that comprise a Space command
+              ``two-line element'' set.  lines should be declared
+              
+                 SpiceChar lines[2][lineln];
+
+              These text lines should be the same as they are presented
+              in the two-line element files available from Space
+              Command (formerly NORAD). Below is an example of a
+              two-line set for TOPEX.
+ 
+   TOPEX 
+   1 22076U 92052A   97173.53461370 -.00000038  00000-0  10000-3 0   594 
+   2 22076  66.0378 163.4372 0008359 278.7732  81.2337 12.80930736227550 
+ 
+ 
+                 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   epoch      is the epoch of the two line elements supplied via 
+              the input array lines.  Epoch is returned in TDB 
+              seconds past J2000. 
+ 
+   elems      is an array containing the elements from the two line 
+              set supplied via the array lines.  The elements are 
+              in units suitable for use by the CSPICE routine 
+              ev2lin_. 
+ 
+              Also note that the elements XNDD6O and BSTAR 
+              incorporate the exponential factor present in the 
+              input two line elements in LINES.  (See particulars 
+              below. 
+ 
+                  ELEMS [ 0 ] = XNDT2O in radians/minute**2 
+                  ELEMS [ 1 ] = XNDD6O in radians/minute**3 
+                  ELEMS [ 2 ] = BSTAR 
+                  ELEMS [ 3 ] = XINCL  in radians 
+                  ELEMS [ 4 ] = XNODEO in radians 
+                  ELEMS [ 5 ] = EO 
+                  ELEMS [ 6 ] = OMEGAO in radians 
+                  ELEMS [ 7 ] = XMO    in radians 
+                  ELEMS [ 8 ] = XNO    in radians/minute 
+                  ELEMS [ 9 ] = EPOCH of the elements in seconds 
+                                past ephemeris epoch J2000. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   No checking of the inputs is performed in this routine. However, this
+   routine does call other CSPICE routines. If one of these routines
+   detects an error it will diagnose it and signal an error.
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   You must have loaded a SPICE leapseconds kernel into the 
+   kernel pool prior to caling this routine. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   This routine parses a Space Command Two-line element set and returns
+   the orbital elements properly scaled and in units suitable for use
+   by other SPICE software.  Input elements look like the following
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   Suppose you have a set of two-line elements and an array containing
+   the related geophysical constants necessary to evaluate a state.
+   The example below shows how you can use this routine together with
+   the routine EV2LIN to propagate a state to an epoch of interest.
+ 
+      #include &lt;string.h&gt;
+      #include &lt;stdio.h&gt;
+      #include &quot;SpiceUsr.h&quot;
+      
+      SpiceDouble         et;
+      SpiceDouble         epoch;
+      SpiceInt            frstyr;
+          .
+          .
+          .
+      /.
+      The parameters below will make it easier to make assignments 
+      to the array GEOPHS required by EV2LIN. 
+ 
+         J2  --- location of J2 
+         J3  --- location of J3 
+         J4  --- location if J4 
+         KE  --- location of KE = sqrt(GM) in eart-radii**1.5/MIN 
+         QO  --- location of upper bound of atmospheric model in KM 
+         SO  --- location of lower bound of atmospheric model in KM 
+         ER  --- location of earth equatorial radius in KM. 
+         AE  --- location of distance units/earth radius 
+      ./
+      
+      #define  J2 0   
+      #define  J3 1   
+      #define  J4 2    
+      #define  KE 3   
+      #define  QO 4   
+      #define  SO 5   
+      #define  ER 6   
+      #define  AE 7  
+ 
+      /.
+      We set the lower bound for the years to be the beginning 
+      of the space age. 
+      ./
+      frstyr  =  1957;
+ 
+      /.
+      Read in the next two lines from the text file that contains 
+      the two-line elements.  We assume that file has been opened 
+      properly and that we have set the ``file pointer'' to the 
+      correct location for reading the next set of elements. 
+      ./
+      
+      for ( i = 0; i &lt; 2; i++ )
+      {
+         fgets ( line[i], lineln, textfile );
+         line[i][ strlen(line[i]) ] = '\0';
+      }
+
+      <b>getelm_c</b> ( frstyr, lineln, line, &amp;epoch, elems ); 
+ 
+ 
+      /.
+      Set up the geophysical quantities.  At last check these 
+      were the values used by Space Command. 
+      ./
+      
+      geophs[ J2 ] =    1.082616e-3; 
+      geophs[ J3 ] =   -2.53881e-6; 
+      geophs[ J4 ] =   -1.65597e-6; 
+      geophs[ KE ] =    7.43669161e-2; 
+      geophs[ QO ] =  120.0; 
+      geophs[ SO ] =   78.0; 
+      geophs[ ER ] = 6378.135; 
+      geophs[ AE ] =    1.0; 
+      
+      
+      /.
+      Now propagate the state using ev2lin_ to the epoch of 
+      interest. 
+      ./
+      ev2lin_ ( &amp;et, geophs, elems, state ); 
+ 
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+  The format of the two-line elements suffer from a &quot;millenium&quot;
+  problem---only two digits are used for the year of the elements. It
+  is not clear how Space Command will deal with this problem as the
+  year 2000 comes and goes.  We hope that by adjusting the input frstyr
+  you should be able to use this routine well into the 21st century.
+  However, since we can't predict how others will resolve the millenium
+  problem we can't be sure that our approach will be addequate to deal
+  with the problem.
+ 
+  The approach taken to mapping the two-digit year to the full year is
+  given by the code below. Here, yr is the integer obtained by parsing
+  the two-digit year from the first line of the elements.
+ 
+      begyr = (frstyr/100)*100; 
+      year  = begyr + yr;
+ 
+      if ( year &lt; frstyr )  
+      {
+         year += 100;
+      }
+ 
+   This mapping will be changed if future two-line element
+   representations make this method of computing the full year
+   inaccurate.
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman    (JPL)
+   W.L. Taber      (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.0.1, 15-NOV-2007 (EDW)
+   
+      Minor edits to example section; the <b>getelm_c</b> call lacked
+      the 'lineln' argument, the use of 'et' implied a pointer
+      rather than a value.
+
+   -CSPICE Version 1.0.0, 06-AUG-1999 (NJB) (WLT)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   Parse two-line elements 
+ </PRE>
+<h4>Link to routine getelm_c source file <a href='../../../src/cspice/getelm_c.c'>getelm_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:34 2014</pre>
+
+</body>
+</html>
+

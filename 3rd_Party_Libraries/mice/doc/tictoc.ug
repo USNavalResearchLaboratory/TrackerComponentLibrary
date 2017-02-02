@@ -1,0 +1,127 @@
+ 
+TICTOC User's Guide
+===========================================================================
+ 
+   Last revised on 2002 DEC 13 by E. D. Wright.
+ 
+ 
+Abstract
+--------------------------------------------------------
+ 
+   TICTOC is a cookbook program that demonstrates how to use Toolkit
+   routines to convert between different time representations.
+ 
+ 
+Summary
+--------------------------------------------------------
+ 
+   The TICTOC `cookbook' program illustrates the use use of the two SPICE
+   time conversion routines:
+ 
+         str2et_c
+ 
+         et2utc_c
+ 
+   These routines convert between UTC and ET representations of time:
+ 
+         UTC   is a string representation of Universal Time Coordinated,
+               which may be in calendar, day of year, or Julian date
+               format. UTC time strings are human-readable and thus
+               suitable as user input.
+ 
+         ET    which stands for Ephemeris Time, is the double precision
+               number of ephemeris seconds past Julian year 2000. ET time
+               is used internally in SPICELIB routines for reading
+               ephemeris files. (The term ``Barycentric Dynamical Time'' -
+               TBD - is widely used in place of ET.)
+ 
+   When you run TICTOC, it outputs several examples of UTC time strings and
+   their corresponding ET times. However, successful execution of the
+   program is only the first step in learning about CSPICE time conversion.
+   Read the TICTOC source code for CSPICE routines time conversion usage
+   examples. Also, refer to Time Required Reading (time.req) and the
+   str2et_c and et2utc_c module headers for additional information.
+ 
+   TICTOC requires a leapseconds kernel to run; an example leapseconds
+   kernel, 'cook_01.tls' exists in the CSPICE data directory.
+ 
+   The following is a sample session of a TICTOC execution.
+ 
+   Please note: FORTRAN and C versions of the program may output numerical
+   values in slightly different formats.
+ 
+   It is assumed the kernel files used by TICTOC exist in the current
+   directory (i.e. the directory from which your execute TICTOC). This
+   particular session was run on an Intel box using the LINUX operating
+   system.
+ 
+ 
+                       Welcome to TICTOC
+ 
+      This program demonstrates the use of the CSPICE
+      time conversion utility routines: str2et_c and et2utc_c.
+ 
+      Enter the name of a leapseconds kernel file: cook_01.tls
+ 
+      Working ... Please wait.
+ 
+ 
+            Example UTC time      :  9 JAN 1986 03:12:59.22451
+ 
+            Corresponding ET      :  -441103565.591323
+ 
+            UTC calendar format   :  1986 JAN 09 03:12:59.225
+            UTC day of year format:  1986-009 // 03:12:59.225
+            UTC Julian date format:  JD 2446439.634
+ 
+      Continue? (Enter Y or N): Y
+ 
+            Example UTC time      :  1/9/86 3:12:59.22451
+ 
+            Corresponding ET      :  -441103565.591323
+ 
+            UTC calendar format   :  1986 JAN 09 03:12:59.225
+            UTC day of year format:  1986-009 // 03:12:59.225
+            UTC Julian date format:  JD 2446439.634
+ 
+      Continue? (Enter Y or N): Y
+ 
+            Example UTC time      :  86-365//12:00
+ 
+            Corresponding ET      :  -410313544.816091
+ 
+            UTC calendar format   :  1986 DEC 31 12:00:00.000
+            UTC day of year format:  1986-365 // 12:00:00.000
+            UTC Julian date format:  JD 2446796.000
+ 
+      Continue? (Enter Y or N): Y
+ 
+            Example UTC time      :  JD 2451545
+ 
+            Corresponding ET      :  57.183927
+ 
+            UTC calendar format   :  2000 JAN 01 12:00:00.000
+            UTC day of year format:  2000-001 // 12:00:00.000
+            UTC Julian date format:  JD 2451545.000
+ 
+      Continue? (Enter Y or N): Y
+ 
+            Example UTC time      :  77 JUL 1
+ 
+            Corresponding ET      :  -710164751.815897
+ 
+            UTC calendar format   :  1977 JUL 01 00:00:00.000
+            UTC day of year format:  1977-182 // 00:00:00.000
+            UTC Julian date format:  JD 2443325.500
+ 
+      Continue? (Enter Y or N): Y
+ 
+            Example UTC time      :  1 JUL '29
+ 
+            Corresponding ET      :  930830457.184117
+ 
+            UTC calendar format   :  2029 JUL 01 00:00:00.000
+            UTC day of year format:  2029-182 // 00:00:00.000
+            UTC Julian date format:  JD 2462318.500
+ 
+ 

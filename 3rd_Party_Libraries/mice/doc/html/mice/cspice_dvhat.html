@@ -1,0 +1,214 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dvhat</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dvhat</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DVHAT calculates the unit vector corresponding to a state or states
+   and the derivative of the unit vector.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      s1   a double precision 6x1-array or 6xN array defining a
+           state or states;
+
+              s1 = (r1, dr1 ).
+                         --
+                         dt
+
+   the call:
+
+      dvhat = <b>cspice_dvhat</b>(s1)
+
+   returns:
+
+      dvhat   a double precision 6x1 array or 6xN array containing the unit
+              vector(s) pointing in the direction of the position component(s)
+              of 's1' and the derivative of the unit vector with respect
+              to time;
+
+              dvhat = [u, du ] where u =   r1
+                          --             -----
+                          dt             ||r1||
+
+              'dvhat' returns with the same measure of vectorization (N)
+              as 's1'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   Suppose that 'state' gives the apparent state of a body with
+   respect to an observer.  This routine can be used to compute the
+   instantaneous angular rate of the object across the sky as seen
+   from the observers vantage.
+
+      %
+      % Load SPK, PCK, and LSK kernels, use a meta kernel for convenience.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % Define an arbitrary epoch, convert the epoch to ephemeris time.
+      %
+      EPOCH = 'Jan 1 2009';
+      et    = <a href="cspice_str2et.html">cspice_str2et</a>( EPOCH );
+
+      %
+      % Calculate the state of the moon with respect to the earth-moon
+      % barycenter in J2000, corrected for light time and stellar aberration
+      % at 'et'.
+      %
+      target   = 'MOON';
+      frame    = 'J2000';
+      abcorr   = 'LT+S';
+      observer = 'EARTH BARYCENTER';
+
+      [ state, ltime ] = <a href="cspice_spkezr.html">cspice_spkezr</a>( target, et, frame, abcorr, observer );
+
+      %
+      % Calculate the unit vector of 'state' and the derivative of the
+      % unit vector.
+      %
+      ustate = <b>cspice_dvhat</b>( state )
+
+      %
+      % Calculate the instantaneous angular velocity from the magnitude of the
+      % derivative of the unit vector.
+      %
+      %   v = r x omega
+      %
+      %   ||omega|| = ||v||  for  r . v = 0
+      %               -----
+      %               ||r||
+      %
+      %   ||omega|| = ||v||  for  ||r|| = 1
+      %
+      omega = <a href="cspice_vnorm.html">cspice_vnorm</a>( ustate(4:6) );
+
+      fprintf( 'Instantaneous angular velocity %2.10e rad/sec.\n', omega )
+
+      %
+      % It's always good form to unload kernels after use,
+      % particularly in Matlab due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+      Instantaneous angular velocity 2.4810665797e-06  rad/sec.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/dvhat_c.html">dvhat_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 04-MAY-2010, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   state of a unit vector parallel to a state vector
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:37 2014</pre>
+
+</body>
+</html>
+

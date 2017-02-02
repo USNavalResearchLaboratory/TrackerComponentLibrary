@@ -1,0 +1,303 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_m2eul</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_m2eul</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_M2EUL factors a rotation matrix into a product of
+   three rotations about specified coordinate axes.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      r       is a 3x3 or 3x3xN array of rotation matrices to factor as
+              a product of three rotations about a specified
+              coordinate axes.  The angles of these rotations are
+              called &quot;Euler angles&quot;.
+
+      axis3
+      axis2
+      axis1   are the scalar integer indices of the rotation axes of the
+              &quot;factor&quot; rotations, whose product is 'r'. 'r' is
+              factored as
+
+                 r = [ angle3 ]     [ angle2 ]     [ angle1 ]
+                               axis3          axis2          axis1
+
+              The axis numbers must belong to the set {1, 2, 3}.
+              The second axis number MUST differ from the first
+              and third axis numbers.
+
+   the call:
+
+      [angle3, angle2, angle1] = <b>cspice_m2eul</b>( r, axis3, axis2, axis1 )
+
+   returns:
+
+      angle3
+      angle2
+      angle1   the scalar or 1xN arrays of double precision
+               Euler angles measured where the angle satisfy
+
+                   r = [ angle3 ]     [ angle2 ]     [ angle1 ]
+                                axis3           axis2          axis1
+
+                  The range of 'angle3' and 'angle1' is (-pi, pi].
+
+                  The range of 'angle2' depends on the exact set of
+                  axes used for the factorization.  For
+                  factorizations in which the first and third axes
+                  are the same,
+
+                     r = [R]  [S]  [T]
+                            a    b    a
+
+                  the range of 'angle2' is [0, pi].
+
+                  For factorizations in which the first and third
+                  axes are different,
+
+                     r = [R]  [S]  [T] ,
+                            a    b    c
+
+                  the range of angle2 is [-pi/2, pi/2].
+
+                  For rotations such that 'angle3' and 'angle1' are not
+                  uniquely determined, 'angle3' will always be set to
+                  zero; 'angle1' is then uniquely determined.
+
+               'angle3', 'angle2', and 'angle1' return with the same
+               vectorization measure (N) as 'r'.
+
+      Note, the call sequence:
+
+         [angle3, angle2, angle1] = <b>cspice_m2eul</b>(r, axis3, axis2, axis1)
+         r = <a href="cspice_eul2m.html">cspice_eul2m</a>(angle3, angle2, angle1, axis3, axis2, axis1)
+
+      preserves 'r' to round-off error.
+
+      Yet, the call sequence:
+
+         r = <a href="cspice_eul2m.html">cspice_eul2m</a>(angle3, angle2, angle1, axis3, axis2, axis1)
+        [angle3, angle2, angle1] = <b>cspice_m2eul</b>(r, axis3, axis2, axis1)
+
+      preserves 'angle3', 'angle2', and 'angle1' only if the initial
+      values of the angle existed within the range of <b>cspice_m2eul</b>'s
+      output.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      Example(1):
+
+      %
+      % Scalar example, conversion of instrument pointing from a matrix
+      % representation to Euler angles:
+      %
+      % Suppose we want to find camera pointing in 'alpha', 'delta', and
+      % 'kappa', given the inertial-to-camera coordinate transformation
+      %
+      ticam = [                                                            ...
+         [ 0.49127379678135830  0.50872620321864170  0.70699908539882417 ]
+         [ -0.50872620321864193 -0.49127379678135802  0.70699908539882428]
+         [  0.70699908539882406 -0.70699908539882439  0.01745240643728360] ];
+
+      %
+      % We want to find angles alpha, delta, kappa such that
+      %
+      %
+      %   ticam  =  [ kappa ]  [ pi/2 - delta ]  [ pi/2 + alpha ] .
+      %                      3                 1                 3
+      %
+      %
+      % Factor the matrix to the Euler angles corresponding to a
+      % 3-1-3 rotation.
+      %
+      [ kappa, ang2, ang1  ] = <b>cspice_m2eul</b>( ticam, 3, 1, 3 );
+
+      alpha  =  ang1          - <a href="cspice_halfpi.html">cspice_halfpi</a>;
+      delta  =  <a href="cspice_halfpi.html">cspice_halfpi</a> - ang2;
+
+      %
+      %  calculates the desired angles.  If we wish to make sure that
+      % alpha, delta, and kappa are in the ranges [0, 2pi),
+      % [-pi/2, pi/2], and [0, 2pi) respectively, we may add the code
+      %
+
+      if ( alpha &lt; 0. )
+       alpha = alpha + <a href="cspice_twopi.html">cspice_twopi</a>;
+      end
+
+      if ( kappa &lt; 0. )
+         kappa = kappa + <a href="cspice_twopi.html">cspice_twopi</a>;
+      end
+
+      %
+      % Output the 3-1-3 Euler rotation angles corresponding to 'ticam'.
+      %
+      fprintf( '%12.5f   %12.5f   %12.5f\n', ...
+               [ alpha, delta, kappa ] *<a href="cspice_dpr.html">cspice_dpr</a>)
+
+   MATLAB outputs:
+
+         315.00000        1.00000       45.00000
+
+      Example(2):
+
+      %
+      % Vectorized example, input an array of ephemeris times, calculate
+      % the corresponding J2000 to IAU_MOON transformation matrices.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>('<a href= "standard.html">standard.tm</a>')
+
+      et0 = <a href="cspice_str2et.html">cspice_str2et</a>( 'Jan 1 2000 12:00:00 TDB' );
+      et1 = <a href="cspice_str2et.html">cspice_str2et</a>( 'Jan 1 2010 12:00:00 TDB' );
+
+      n     = 10;
+      times = et0 + (1:n)* (et1 - et0)/n;
+      quot   = <a href="cspice_pxform.html">cspice_pxform</a>( 'J2000', 'IAU_MOON', times );
+
+      %
+      % Factor the matrices to the Euler angles corresponding to a
+      % 3-2-1 rotation set.
+      %
+      [a3,a2,a1] = <b>cspice_m2eul</b>( quot, 1,2,3);
+
+      %
+      % Output the 3-2-1 Euler rotation angles corresponding to 'quot'.
+      %
+      fprintf( '%12.5f   %12.5f   %12.5f\n', [a1; a2; a3] * <a href="cspice_dpr.html">cspice_dpr</a> )
+
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+         -52.93007       18.11962       15.07397
+          77.30266      -22.59555        3.51974
+        -150.68645       12.42680      -18.79120
+         -14.28248        4.91714       21.55874
+         120.06957      -19.09792      -11.00536
+        -109.73801       20.66329       -7.52692
+          23.54335       -8.43440       20.49467
+         160.13917       -9.11890      -20.58629
+         -66.71201       21.70068        7.52880
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/m2eul_c.html">m2eul_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/rotation.html">ROTATION.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.1, 30-DEC-2008, EDW (JPL)
+
+      Corrected misspellings.
+
+   -Mice Version 1.0.0, 22-NOV-2005, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   matrix to euler angles
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:38 2014</pre>
+
+</body>
+</html>
+

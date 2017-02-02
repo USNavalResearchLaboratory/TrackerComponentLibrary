@@ -1,0 +1,333 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>ekccnt_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>ekccnt_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void ekccnt_c ( ConstSpiceChar  * table,
+                   SpiceInt        * ccount ) 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Return the number of distinct columns in a specified, currently 
+   loaded table 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/ek.html">EK</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   EK 
+   FILES 
+   UTILITY 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   table      I   Name of table. 
+   ccount     O   Count of distinct, currently loaded columns. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   table          is the name of a currently loaded table.  Case 
+                  is not significant in the table name. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   ccount         is the number of distinct columns in table. 
+                  Columns that have the same name but belong to 
+                  different segments that are considered to be 
+                  portions of the same column, if the segments 
+                  containing those columns belong to table. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1) If the specified table is not loaded, the error 
+      SPICE(TABLENOTLOADED) is signaled. 
+  
+   2) If the input string pointer is null, the error
+      SPICE(NULLPOINTER) will be signaled.
+
+   3) If the input string has length zero, the error
+      SPICE(EMPTYSTRING) will be signaled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   This routine reads binary &quot;sequence component&quot; EK files.
+   In order for a binary EK file to be accessible to this routine,
+   the file must be loaded via a call to <a href="furnsh_c.html">furnsh_c</a> or the low-level
+   EK loader <a href="eklef_c.html">eklef_c</a>.
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   This routine is a utility intended for use in conjunction with 
+   the entry point <a href="ekcii_c.html">ekcii_c</a>.  These routines can be used to find the 
+   names and attributes of the columns that are currently loaded. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   1)  Dump the names and attributes of the columns in each loaded 
+       table.  <b>ekccnt_c</b> is used to obtain column counts. 
+
+
+          #include &quot;SpiceUsr.h&quot;
+          #include &quot;SpiceEK.h&quot;
+
+          #define FILEN           256
+
+          SpiceChar               colnam  [ SPICE_EK_CSTRLN ];
+          SpiceChar               ek      [ FILEN ];
+          SpiceChar               tabnam  [ SPICE_EK_TSTRLN ];
+
+          SpiceChar             * typstrs [ 4 ] =
+                                  {
+                                     &quot;CHR&quot;, &quot;DP&quot;, &quot;INT&quot;, &quot;TIME&quot; 
+                                  };
+
+          SpiceEKAttDsc           attdsc;
+
+          SpiceInt                i;
+          SpiceInt                ncols;
+          SpiceInt                ntab;
+          SpiceInt                tab;
+
+
+          <a href="prompt_c.html">prompt_c</a> ( &quot;Enter name of EK to examine &gt; &quot;, FILEN, ek );
+
+          <a href="furnsh_c.html">furnsh_c</a> ( ek );
+
+          /. 
+          Get the number of loaded tables. 
+          ./
+          <a href="ekntab_c.html">ekntab_c</a> ( &amp;ntab );
+
+          for ( tab = 0;  tab &lt; ntab;  tab++ )
+          {
+             /.
+             Get the name of the current table, and look up 
+             the column count for this table. 
+             ./
+             <a href="ektnam_c.html">ektnam_c</a> ( tab, SPICE_EK_TSTRLN, tabnam );
+
+             <b>ekccnt_c</b> ( tabnam, &amp;ncols );
+
+             printf ( &quot;Table = %s\n\n&quot;, tabnam );
+  
+
+             /.
+             For each column in the current table, look up the 
+             column's attributes.  The attribute block 
+             index parameters are defined in the include file 
+             ekattdsc.inc. 
+             ./
+
+             for ( i = 0;  i &lt; ncols;  i++ )
+             {
+                <a href="ekcii_c.html">ekcii_c</a> ( tabnam, i, SPICE_EK_CSTRLN, colnam, &amp;attdsc );
+ 
+                printf ( &quot;Column = %s\n&quot;, colnam );
+
+ 
+                /.
+                Write out the current column's data type. 
+                ./
+
+                printf ( &quot;Type = %s\n&quot;, typstrs[(int)attdsc.dtype] );
+
+                if ( attdsc.dtype == SPICE_CHR )
+                {
+                   if ( attdsc.strlen == SPICE_EK_VARSIZ )
+                   {
+                      printf ( &quot;String length = VARIABLE\n&quot; );
+                   }
+                   else
+                   {
+                       printf ( &quot;String length = %ld\n&quot;, 
+                               (SpiceInt) attdsc.strlen );
+                   }
+                }
+
+                /.
+                Write out the current column's entry size. 
+                ./                
+                printf ( &quot;Size = %ld\n&quot;, attdsc.size );
+ 
+
+                /.
+                Indicate whether the current column is indexed. 
+                ./
+                if ( attdsc.indexd == SPICETRUE )
+                {
+                   printf ( &quot;Indexed.\n&quot; );
+                }
+                else
+                {
+                   printf ( &quot;Not indexed.\n&quot; );
+                }
+ 
+                /.
+                Indicate whether the current column allows 
+                null values. 
+                ./
+                if ( attdsc.nullok == SPICETRUE )
+                {
+                   printf ( &quot;Null values allowed.\n&quot; );
+                }
+                else
+                {
+                   printf ( &quot;Null values not allowed.\n&quot; );
+                }
+             }
+             /.
+             We're done with the current column.
+             ./
+          }
+          /.
+          We're done with the current table.
+          ./
+
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman   (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 14-OCT-2001 (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   return the number of loaded EK columns 
+   return the count of loaded EK columns 
+ </PRE>
+<h4>Link to routine ekccnt_c source file <a href='../../../src/cspice/ekccnt_c.c'>ekccnt_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:31 2014</pre>
+
+</body>
+</html>
+

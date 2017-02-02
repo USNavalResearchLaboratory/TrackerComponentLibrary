@@ -1,0 +1,337 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>pl2psv_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>pl2psv_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void pl2psv_c ( ConstSpicePlane  * plane,
+                   SpiceDouble        point[3],
+                   SpiceDouble        span1[3],
+                   SpiceDouble        span2[3]  ) 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Return a point and two orthogonal spanning vectors that generate 
+   a specified plane. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/planes.html">PLANES</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   GEOMETRY 
+   MATH 
+   PLANE 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   plane      I   A CSPICE plane. 
+   point, 
+   span1, 
+   span2      O   A point in the input plane and two vectors 
+                  spanning the input plane. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   plane          is a CSPICE plane that represents the geometric 
+                  plane defined by point, span1, and span2. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   point, 
+   span1, 
+   span2          are, respectively, a point and two orthogonal 
+                  spanning vectors that generate the geometric plane 
+                  represented by plane.  The geometric plane is the 
+                  set of vectors 
+ 
+                     point   +   s * span1   +   t * span2 
+ 
+                  where s and t are real numbers.  point is the 
+                  closest point in the plane to the origin; this 
+                  point is always a multiple of the plane's normal 
+                  vector.  span1 and span2 are an orthonormal pair 
+                  of vectors.  point, span1, and span2 are mutually 
+                  orthogonal. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   Error free. 
+ 
+   1)  The input plane MUST have been created by one of the CSPICE 
+       routines 
+ 
+          <a href="nvc2pl_c.html">nvc2pl_c</a> ( Normal vector and constant to plane ) 
+          <a href="nvp2pl_c.html">nvp2pl_c</a> ( Normal vector and point to plane    ) 
+          <a href="psv2pl_c.html">psv2pl_c</a> ( Point and spanning vectors to plane ) 
+ 
+       Otherwise, the results of this routine are unpredictable. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   CSPICE geometry routines that deal with planes use the `plane' 
+   data type to represent input and output planes.  This data type 
+   makes the subroutine interfaces simpler and more uniform. 
+ 
+   The CSPICE routines that produce CSPICE planes from data that 
+   define a plane are: 
+ 
+      <a href="nvc2pl_c.html">nvc2pl_c</a> ( Normal vector and constant to plane ) 
+      <a href="nvp2pl_c.html">nvp2pl_c</a> ( Normal vector and point to plane    ) 
+      <a href="psv2pl_c.html">psv2pl_c</a> ( Point and spanning vectors to plane ) 
+ 
+   The CSPICE routines that convert CSPICE planes to data that 
+   define a plane are: 
+ 
+      <a href="pl2nvc_c.html">pl2nvc_c</a> ( Plane to normal vector and constant ) 
+      <a href="pl2nvp_c.html">pl2nvp_c</a> ( Plane to normal vector and point    ) 
+      <b>pl2psv_c</b> ( Plane to point and spanning vectors ) 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   1)  Find the intersection of a plane and the unit sphere.  This 
+       is a geometry problem that arises in computing the 
+       intersection of a plane and a triaxial ellipsoid.  The 
+       CSPICE routine <a href="inedpl_c.html">inedpl_c</a> computes this intersection, but this 
+       example does illustrate how to use this routine. 
+ 
+          /. 
+          The geometric plane of interest will be represented 
+          by the CSPICE plane plane in this example. 
+      
+          The intersection circle will be represented by the 
+          vectors center, v1, and v2; the circle is the set 
+          of points 
+      
+             center  +  cos(theta) v1  +  sin(theta) v2, 
+      
+          where theta is in the interval (-pi, pi]. 
+      
+          The logical variable found indicates whether the 
+          intersection is non-empty. 
+            
+          The center of the intersection circle will be the 
+          closest point in the plane to the origin.  This 
+          point is returned by <b>pl2psv_c</b>.  The distance of the 
+          center from the origin is the norm of center. 
+          ./
+          
+          <b>pl2psv_c</b>  ( &amp;plane, center, span1, span2 ); 
+
+          dist = <a href="vnorm_c.html">vnorm_c</a> ( center ) 
+ 
+            
+          /.
+          The radius of the intersection circle will be 
+            
+                  ____________ 
+              _  /          2 
+               \/  1 - dist 
+      
+          since the radius of the circle, the distance of the 
+          plane from the origin, and the radius of the sphere 
+          (1) are the lengths of the sides of a right triangle. 
+          
+          ./
+          
+          found = ( dist &lt;= 1.0 );
+          
+          if ( found )
+          {
+             radius = sqrt ( 1.0 - pow(dist,2) );
+  
+             <a href="vscl_c.html">vscl_c</a> ( radius, span1, v1 );
+             <a href="vscl_c.html">vscl_c</a> ( radius, span2, v2 ) ;
+          }
+
+
+
+   2)  Apply a linear transformation represented by the matrix m to 
+       a plane represented by the normal vector n and the constant c. 
+       Find a normal vector and constant for the transformed plane. 
+
+          /. 
+          Make a CSPICE plane from n and c, and then find a 
+          point in the plane and spanning vectors for the 
+          plane.  n need not be a unit vector. 
+          ./ 
+          <a href="nvc2pl_c.html">nvc2pl_c</a> ( n,       c,     &amp;plane         ); 
+          <b>pl2psv_c</b> ( &amp;plane,  point,  span1,  span2 );
+           
+ 
+          /.
+          Apply the linear transformation to the point and 
+          spanning vectors.  All we need to do is multiply 
+          these vectors by m, since for any linear 
+          transformation T, 
+           
+                T ( point  +  t1 * span1     +  t2 * span2 ) 
+      
+             =  T (point)  +  t1 * T(span1)  +  t2 * T(span2), 
+            
+          which means that T(point), T(span1), and T(span2) 
+          are a point and spanning vectors for the transformed 
+          plane. 
+          ./
+      
+          <a href="mxv_c.html">mxv_c</a> ( m, point, tpoint ); 
+          <a href="mxv_c.html">mxv_c</a> ( m, span1, tspan1 ); 
+          <a href="mxv_c.html">mxv_c</a> ( m, span2, tspan2 ); 
+ 
+          /.
+          Make a new CSPICE plane tplane from the 
+          transformed point and spanning vectors, and find a 
+          unit normal and constant for this new plane. 
+          ./
+          
+          <a href="psv2pl_c.html">psv2pl_c</a> ( tpoint,   tspan1,  tspan2,   &amp;tplane ); 
+          <a href="pl2nvc_c.html">pl2nvc_c</a> ( &amp;tplane,  tn,      &amp;tc               ); 
+ 
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   [1] `Calculus and Analytic Geometry', Thomas and Finney. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman   (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 05-MAR-1999 (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   plane to point and spanning vectors 
+ </PRE>
+<h4>Link to routine pl2psv_c source file <a href='../../../src/cspice/pl2psv_c.c'>pl2psv_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:40 2014</pre>
+
+</body>
+</html>
+

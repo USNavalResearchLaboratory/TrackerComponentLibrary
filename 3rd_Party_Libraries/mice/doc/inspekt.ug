@@ -1,0 +1,2999 @@
+ 
+INSPEKT User's Guide
+===========================================================================
+ 
+   Last revised on 2002 DEC 13 by W. L. Taber.
+ 
+ 
+Abstract
+--------------------------------------------------------
+ 
+   INSPEKT is an interactive program that examines the contents of an
+   events component (ESQ) of an E-kernel.
+ 
+ 
+About INSPEKT's Built-in Help System
+--------------------------------------------------------
+ 
+   You've already discovered the basics of Inspekt's Help system. When you
+   type "help;" (or "HELP;") a menu is displayed such as the one below:
+ 
+      (Q) Quit Help
+      (1) About Help
+            ...
+      Option: _
+ 
+   At the prompt (Option: ) type the number or letter shown in parentheses
+   to the left of the topic of interest and hit RETURN. You will be
+   presented with a screen of text that describes the topic.
+ 
+   After a full screen of text has been displayed, a left justified short
+   vertical line will be displayed. Just to the right of this line will be
+   the cursor. This indicates there is more text or related topics
+   associated with the current topic. Hit a carriage return to display the
+   additional information. If there is more text on the topic, you will see
+   another screen of text followed by the same short line and prompt. If
+   there is no more text for the current topic, another menu of options
+   will be displayed allowing you to exit the help system; return to the
+   main menu; or move on to topics related to the current topic.
+ 
+ 
+Related Topics
+ 
+   Short Cut to Topics, Making Help Wait
+ 
+ 
+Autoadjust
+===========================================================================
+ 
+   The "page" on which reports are displayed is often too narrow to hold a
+   tabular report. However, by adjusting the width of some columns it may
+   be possible to fit the report in the available space. If this is true,
+   Inspekt will ask whether or not it should temporarily (for the duration
+   of the report) adjust column widths so that the report may be printed.
+   This feature is called "AUTOADJUST". By default, AUTOADJUST is set up so
+   that Inspekt asks you whether or not it should adjust some column widths
+   to fit a report on the current page. This default action can be modified
+   by using the SET AUTOADJUST command. You can set the automatic action to
+ 
+       1.   Prohibit display of reports that are too wide.
+ 
+       2.   Ask whether or not a columns should be narrowed to accommodate
+            a wide report (default)
+ 
+       3.   Automatically adjust column widths and display reports.
+ 
+   The syntax for this command is:
+ 
+         SET AUTOADJUST (1:1){ OFF | ASK | ON }
+ 
+   To see the current status of AUTOADJUST type the command
+ 
+      SHOW FORMAT
+ 
+   Note: AUTOADJUST does not affect the widths of numeric or time columns.
+   Only character columns are affected by AUTOADJUST.
+ 
+ 
+Collecting Commands In Files
+===========================================================================
+ 
+   Inspekt allows you to collect frequently executed sequences of command
+   in files called Inspekt Procedure Files.
+ 
+   To create a procedure file, simply type in a sequence of commands as you
+   would type them when entering them in Inspekt. End each command with a
+   semi-colon. Start every new command on a new line.
+ 
+   You can insert a "comment" line in the procedure file by starting the
+   line with a semi-colon (;).
+ 
+   To start a procedure file enter the command:
+ 
+      START filename;
+ 
+   where "filename" above is replaced by the name of your procedure file.
+ 
+   Procedure files may start other procedure files. Procedure commands may
+   not use any of the following commands:
+ 
+      EDIT
+      DO
+      RECALL
+ 
+   or a command that evaluates to one of these commands as a result of
+   symbol substitution.
+ 
+   If there is information that a procedure needs, you can pass that
+   information to the procedure by creating one or more symbols that
+   evaluate to the needed information.
+ 
+ 
+Related Topics
+ 
+   Using Symbols
+ 
+ 
+Column
+===========================================================================
+ 
+   When we collect data about events (or any other set of objects) a
+   decision must be made about what aspects of the event shall be recorded.
+   Usually some of these aspects (attributes) of events will change from
+   one event to the next. It is the variation in these attributes that
+   allow us to distinguish one event from another. An individual attribute
+   of the event is called a column of the event. This term arises from the
+   common way in which data is presented on a page. If we list all of the
+   events we have recorded on a sheet of paper (or a terminal) so that the
+   attributes for each event are always listed in the same order from left
+   to right, then the attributes for different events appear in columns on
+   the page.
+ 
+ 
+Related Topics
+ 
+   Column
+ 
+ 
+Column and Table Abbreviations
+===========================================================================
+ 
+   When someone creates a table and column names for the table they are
+   presented with the following problem. The various names should be
+   meaningful and they should be easy to type. If an easy to type name is
+   not meaningful, it won't be very useful in describing the table or a
+   column. Since tables and columns are usually meant to exist for a long
+   time, table producers often err on the side of creating names that are
+   meaningful but are a bit difficult to type.
+ 
+   Inspekt helps you deal with the problem of minimizing the amount of text
+   you have to type to specify a table or column by allowing you to use a
+   pattern instead of the full name. For example suppose that a column has
+   the name EMPLOYEE_SALARY. If there are no other columns that start with
+   "EMP", you can specify this column by typing "EMP*". If there are
+   several column names that start with "EMPLOYEE_" but only one column
+   name ends with "SALARY" you can specify the column by typing "*_SAL*".
+   As long as only one name matches the pattern, Inspekt will recognize the
+   name and treat the pattern as if you had typed the full name.
+ 
+   For example suppose that you have loaded an E-kernel that contains two
+   tables "EMPLOYEE_DATA" and "DEPARTMENT_DATA". Moreover suppose that the
+   first table contains the following columns: "EMPLOYEE_NAME",
+   "SUPERVISOR", "HIRE_DATE", "SALARY", "DEPARTMENT". Suppose the second
+   table has the following columns: "DEPARTMENT_NAME",
+   "OPERATING_EXPENSES", "MANAGER", "LOCATION".
+ 
+   Then the following query
+ 
+      SELECT EMP*, SAL*, DEP* FROM EMP* WHERE SAL* > 30000;
+ 
+   is equivalent to the much longer command
+ 
+      SELECT EMPLOYEE_NAME, SALARY, DEPARTMENT
+      FROM EMPLOYEE_DATA
+      WHERE SALARY > 30000;
+ 
+   You can patterns only for column and table names. You may not use them
+   to abbreviate other words of the Inspekt command language. If some
+   language words or phrases seem to be a bit long to type you should
+   consider creating a symbol for those words or phrases.
+ 
+ 
+Related Topics
+ 
+   Column and Table Abbreviations, Pattern Matching, Using Symbols, Special
+   Symbols --- Queries
+ 
+ 
+Columns
+===========================================================================
+ 
+   To see a list of all columns that are currently available in Inspekt,
+   type the command
+ 
+      SHOW SUMMARY
+ 
+   You will be presented with a list of column names in the form
+   "table_name.column_name" where "table_name" is the name of the table to
+   which the column belongs and "column_name" is the name of the column. To
+   see attributes for a particular column, type
+ 
+        SHOW COLUMN column_name
+      or
+        SHOW COLUMN table_name.column_name
+ 
+   The second form is required only if there are two or more loaded tables
+   that have the same column.
+ 
+   To see a list of indexed columns type:
+ 
+      SHOW INDEXED
+ 
+ 
+Related Topics
+ 
+   Column and Table Abbreviations, Pattern Matching, Using Symbols, Special
+   Symbols --- Queries, SET COLUMN ..., Reports, Time Formats, Autoadjust
+ 
+ 
+Combining Tables
+===========================================================================
+ 
+   Data in one row of a table can be connected with data in a row of a
+   second (possibly the same) table by a process called "joining" the
+   tables.
+ 
+   The "join" of two tables is the cartesian product of the two tables. For
+   example suppose that the tables MUSIC and PEOPLE have been loaded into
+   Inspekt. Table MUSIC has two columns SONG and COMPOSER, Table PEOPLE has
+   columns NAME and COUNTRY. Below is a sample of the data in these two
+   tables.
+ 
+      Table MUSIC
+ 
+      SONG              COMPOSER
+      --------------------------
+      YESTERDAY         MCCARTNEY
+      LIVE AND LET DIE  MCCARTNEY
+      BLOODY SUNDAY     HEUSSEN
+      ONE TREE HILL     HEUSSEN
+      SATISFACTION      JAGGER
+      BOYS OF SUMMER    HENLEY
+ 
+ 
+      Table PEOPLE
+ 
+      NAME             COUNTRY
+      --------------------------
+      MCCARTNEY        ENGLAND
+      HEUSSEN          IRELAND
+      JAGGER           ENGLAND
+      HENLEY           USA
+ 
+   The two tables have sufficient information to tell us the names of all
+   the songs written by Irish composers. But, how do we get Inspekt to tell
+   us this information.
+ 
+   We "join" the two tables so that everything is in one large table. Below
+   is the join of the tables MUSIC and PEOPLE. (We've included blank lines
+   to help illustrate how rows are combined to make the join table. Also
+   for purpose of illustration only, we've presented the data from the
+   second table in lower case. In the actual join the case of data does not
+   change.)
+ 
+      Join of tables MUSIC, PEOPLE
+ 
+      SONG              COMPOSER   NAME       COUNTRY
+      -----------------------------------------------
+      YESTERDAY         MCCARTNEY  mccartney  england
+      YESTERDAY         MCCARTNEY  heussen    ireland
+      YESTERDAY         MCCARTNEY  jagger     england
+      YESTERDAY         MCCARTNEY  henley     usa
+ 
+      LIVE AND LET DIE  MCCARTNEY  mccartney  england
+      LIVE AND LET DIE  MCCARTNEY  heussen    ireland
+      LIVE AND LET DIE  MCCARTNEY  jagger     england
+      LIVE AND LET DIE  MCCARTNEY  henley     usa
+ 
+      BLOODY SUNDAY     HEUSSEN    mccartney  england
+      BLOODY SUNDAY     HEUSSEN    heussen    ireland
+      BLOODY SUNDAY     HEUSSEN    jagger     england
+      BLOODY SUNDAY     HEUSSEN    henley     usa
+ 
+      ONE TREE HILL     HEUSSEN    mccartney  england
+      ONE TREE HILL     HEUSSEN    heussen    ireland
+      ONE TREE HILL     HEUSSEN    jagger     england
+      ONE TREE HILL     HEUSSEN    HENLEY     USA
+ 
+      SATISFACTION      JAGGER     mccartney  england
+      SATISFACTION      JAGGER     heussen    ireland
+      SATISFACTION      JAGGER     jagger     england
+      SATISFACTION      JAGGER     henley     usa
+ 
+      BOYS OF SUMMER    HENLEY     mccartney  england
+      BOYS OF SUMMER    HENLEY     heussen    ireland
+      BOYS OF SUMMER    HENLEY     jagger     england
+      BOYS OF SUMMER    HENLEY     henley     usa
+ 
+   To select something from this join of two tables you construct your
+   SELECT command as shown here:
+ 
+      select item, ... , item
+      FROM   MUSIC, PEOPLE
+      where ...
+ 
+   The tables we want to join are specified in the FROM clause of the
+   select command. They must be separated by commas.
+ 
+   Notice that every row of the first table, MUSIC, has every row of the
+   second table, PEOPLE appended to it to produce a new row. This table
+   becomes useful when we apply constraints to it. In our case we want to
+   find out which songs were written by Irish song writers.
+ 
+   The country of origin of the composer is present in a row of the join
+   table if the NAME and COMPOSER columns have the same value. The SELECT
+   command
+ 
+      select song, composer, name, country
+      from music, people
+      WHERE COMPOSER = NAME
+ 
+   gives us the following rows.
+ 
+      SONG              COMPOSER   NAME       COUNTRY
+      -----------------------------------------------
+      YESTERDAY         MCCARTNEY  MCCARTNEY  ENGLAND
+      LIVE AND LET DIE  MCCARTNEY  MCCARTNEY  ENGLAND
+      BLOODY SUNDAY     HEUSSEN    HEUSSEN    IRELAND
+      ONE TREE HILL     HEUSSEN    HEUSSEN    IRELAND
+      SATISFACTION      JAGGER     JAGGER     ENGLAND
+      BOYS OF SUMMER    HENLEY     HENLEY     USA
+ 
+   This report is a lot closer to what we want.
+ 
+   To see just the titles of songs written by Irish song writers we add
+   modify the SELECT command as shown below.
+ 
+      select SONG
+      from music, people
+      where composer = name
+      AND   COUNTRY  = 'IRELAND'
+ 
+   This results in the following report.
+ 
+      SONG
+      --------------
+      BLOODY SUNDAY
+      ONE TREE HILL
+ 
+ 
+Equi-joins
+ 
+   In the previous example we had the condition
+ 
+      WHERE COMPOSER = NAME
+ 
+   This is a common condition when selecting data from a join of two
+   tables. The general situation looks something like this.
+ 
+      SELECT ...
+      FROM   table_1, table_2
+      WHERE  column_from_table_1 = column_from_table_2
+ 
+   When you join two or more tables and add an equality a condition to the
+   rows from different tables, the join is called an "equi-join". You will
+   almost always create equi-joins when joining tables.
+ 
+ 
+Ambiguous Columns
+ 
+   Suppose in the following example the table PEOPLE had the columns
+   COMPOSER and COUNTRY instead of NAME and COUNTRY. The simple view of the
+   join now becomes:
+ 
+      SONG              COMPOSER   COMPOSER   COUNTRY
+      -----------------------------------------------
+      YESTERDAY         MCCARTNEY  MCCARTNEY  ENGLAND
+      YESTERDAY         MCCARTNEY  HEUSSEN    IRELAND
+      YESTERDAY         MCCARTNEY  JAGGER     ENGLAND
+      YESTERDAY         MCCARTNEY  HENLEY     USA
+      LIVE AND LET DIE  MCCARTNEY  MCCARTNEY  ENGLAND
+              .            .           .        .
+              .            .           .        .
+              .            .           .        .
+ 
+   If I want to talk about the column first column COMPOSER how do I
+   distinguish it from the second column COMPOSER? The first column comes
+   from the table MUSIC the second comes from the table PEOPLE. To
+   unambiguously specify either prefix the column name by the name of its
+   parent table as in MUSIC.COMPOSER or PEOPLE.COMPOSER. The select command
+   would then be issued as:
+ 
+      select song
+      from music, people
+      where MUSIC.COMPOSER = PEOPLE.COMPOSER
+      and   country  = 'IRELAND'
+ 
+ 
+Joining a Table to Itself
+ 
+   Sometimes it is useful to be able to join a table to itself. This is
+   particularly true if the table contains some kind of hierarchical
+   information such as in child-parent pairs. For example here is a list of
+   family members and their parents
+ 
+      Table RELATIONS
+      CHILD    FATHER   MOTHER
+      ------------------------
+      CINDY    GEORGE   ALICE
+      SALLY    GEORGE   MARTHA
+      GEORGE   WILLIAM  MARGARET
+      ALICE    JOHN     KATHERINE
+      MARTHA   ROBERT   CONSTANCE
+ 
+   The grandparents in this table are parents of parents. We can join the
+   table to itself to get a list of all the grandfathers. The join is
+   simple enough. Here it is.
+ 
+      Join of RELATIONS, RELATIONS
+ 
+      CHILD    FATHER   MOTHER     CHILD   FATHER    MOTHER
+      ---------------------------------------------------------
+      CINDY    GEORGE   ALICE      CINDY   GEORGE    ALICE
+      CINDY    GEORGE   ALICE      SALLY   GEORGE    MARTHA
+      CINDY    GEORGE   ALICE      GEORGE  WILLIAM   MARGARET
+      CINDY    GEORGE   ALICE      ALICE   JOHN      KATHERINE
+      CINDY    GEORGE   ALICE      MARTHA  ROBERT    CONSTANCE
+      SALLY    GEORGE   MARTHA     CINDY   GEORGE    ALICE
+      SALLY    GEORGE   MARTHA     SALLY   GEORGE    MARTHA
+      SALLY    GEORGE   MARTHA     GEORGE  WILLIAM   MARGARET
+      SALLY    GEORGE   MARTHA     ALICE   JOHN      KATHERINE
+      SALLY    GEORGE   MARTHA     MARTHA  ROBERT    CONSTANCE
+      GEORGE   WILLIAM  MARGARET   CINDY   GEORGE    ALICE
+      GEORGE   WILLIAM  MARGARET   SALLY   GEORGE    MARTHA
+      GEORGE   WILLIAM  MARGARET   GEORGE  WILLIAM   MARGARET
+      GEORGE   WILLIAM  MARGARET   ALICE   JOHN      KATHERINE
+      GEORGE   WILLIAM  MARGARET   MARTHA  ROBERT    CONSTANCE
+      ALICE    JOHN     KATHERINE  CINDY   GEORGE    ALICE
+      ALICE    JOHN     KATHERINE  SALLY   GEORGE    MARTHA
+      ALICE    JOHN     KATHERINE  GEORGE  WILLIAM   MARGARET
+      ALICE    JOHN     KATHERINE  ALICE   JOHN      KATHERINE
+      ALICE    JOHN     KATHERINE  MARTHA  ROBERT    CONSTANCE
+      MARTHA   ROBERT   CONSTANCE  CINDY   GEORGE    ALICE
+      MARTHA   ROBERT   CONSTANCE  SALLY   GEORGE    MARTHA
+      MARTHA   ROBERT   CONSTANCE  GEORGE  WILLIAM   MARGARET
+      MARTHA   ROBERT   CONSTANCE  ALICE   JOHN      KATHERINE
+      MARTHA   ROBERT   CONSTANCE  MARTHA  ROBERT    CONSTANCE
+ 
+   But this table has a clear problem. If I want to select a CHILD from
+   this table how do I specify which CHILD column I'm talking about? It
+   clearly is not enough to simply type RELATIONS.CHILD because both CHILD
+   columns come from the same table. We handle the problem of ambiguous
+   columns names by creating a unique alias for the table when you specify
+   the join. Thus if I want to be able to select a column from this table I
+   specify the join in the from clause as shown below.
+ 
+      select ...
+      FROM   RELATIONS X, RELATIONS Y
+      where  ...
+ 
+   This join creates the following table.
+ 
+      Join of RELATIONS X, RELATIONS Y
+ 
+      X.CHILD  X.FATHER X.MOTHER   Y.CHILD Y.FATHER  Y.MOTHER
+      ---------------------------------------------------------
+      CINDY    GEORGE   ALICE      CINDY   GEORGE    ALICE
+      CINDY    GEORGE   ALICE      SALLY   GEORGE    MARTHA
+      CINDY    GEORGE   ALICE      GEORGE  WILLIAM   MARGARET
+      CINDY    GEORGE   ALICE      ALICE   JOHN      KATHERINE
+      CINDY    GEORGE   ALICE      MARTHA  ROBERT    CONSTANCE
+      SALLY    GEORGE   MARTHA     CINDY   GEORGE    ALICE
+        .         .       .          .        .        .
+        .         .       .          .        .        .
+        .         .       .          .        .        .
+ 
+   As you can see in the example FROM clause above, an alias is specified
+   by following the name of a table by a second word and a comma. The
+   second word is the alias for the table. Thus the alias for the first
+   copy of RELATIONS is X, the alias for the second copy of RELATIONS is Y.
+   There is nothing special about the aliases X and Y. We could just as
+   easily have used EGG and SPAM respectively. The letters X and Y are just
+   easier to type. Aliases are case insensitive. The names X.FATHER and
+   x.FATHER refer to the same column.
+ 
+   To select columns you simply use the aliased names as presented in the
+   table above. Thus to find all of the grandfathers in our original table
+   RELATIONS we would issue the following command
+ 
+      SELECT  Y.FATHER
+      FROM   RELATIONS X, RELATIONS Y
+      WHERE   X.FATHER = Y.CHILD
+      OR      X.MOTHER = Y.CHILD
+ 
+   Here is how the conditions narrow down the join.
+ 
+      Join of RELATIONS X, RELATIONS Y
+      WHERE   X.FATHER = Y.CHILD
+      OR      X.MOTHER = Y.CHILD
+ 
+      X.CHILD  X.FATHER X.MOTHER   Y.CHILD Y.FATHER  Y.MOTHER
+      ---------------------------------------------------------
+      CINDY    GEORGE   ALICE      GEORGE  WILLIAM   MARGARET
+      CINDY    GEORGE   ALICE      ALICE   JOHN      KATHERINE
+      SALLY    GEORGE   MARTHA     GEORGE  WILLIAM   MARGARET
+      SALLY    GEORGE   MARTHA     MARTHA  ROBERT    CONSTANCE
+ 
+   We get all the names in the Y.FATHER column where the CHILD appearing in
+   the Y copy of RELATIONS appears as a parent in the X copy of RELATIONS.
+ 
+   To find every child that is a grandchild, we can simply pick out the
+   children whose mothers are listed as children in the second copy of
+   RELATIONS.
+ 
+      SELECT X.CHILD
+      FROM RELATIONS X, RELATION Y
+      WHERE X.MOTHER = Y.CHILD
+ 
+ 
+Using Aliases
+ 
+   Even if you do not join a table to itself, you may wish to use an alias
+   for a table name. For instance, in the second example where the tables
+   MUSIC and PEOPLE had a column name in column, you can use an alias as
+   shown below in order to simplify the typing.
+ 
+      Original Select Command Without Aliases
+ 
+      select song
+      from music, people
+      where MUSIC.COMPOSER = PEOPLE.COMPOSER
+      and   country  = 'IRELAND'
+ 
+      Same Select Command but with Aliases for the Tables
+ 
+      select song
+      from music M, people P
+      where M.COMPOSER = P.COMPOSER
+      and   country  = 'IRELAND'
+ 
+ 
+Combining More than Two Tables
+ 
+   You may join more than two tables if the need arises. The result is the
+   cartesian product of the contents of the contributing tables.
+ 
+   The syntax for specifying such a join is:
+ 
+      FROM  TABLE_1 [alias_1],
+            TABLE_2 [alias_2],
+            ...,
+            TABLE_N [alias_N]
+ 
+   Inspekt and the E-kernel system require that N be no more than 10. As
+   you might imagine, the join of many tables has the potential for
+   creating an enormous table from which data will be selected. As a result
+   Inspekt's speed may degrade significantly if you join many tables.
+   \subsection Related Topics
+ 
+   From Clause, Looking at Data --- SELECT
+ 
+ 
+Conditional Operators
+===========================================================================
+ 
+   Normally, when you select data from an events kernels, you place
+   conditions upon the various columns that will be displayed. This is done
+   via conditional operators (also called relational operators).
+ 
+   The following conditionals are supported by the E-kernel system.
+ 
+      Operator       Usage in a condition
+      --------       ---------------------------
+      LT             column LT   expression
+      LE             column LE   expression
+      EQ             column EQ   expression
+      GE             column GE   expression
+      GT             column GT   expression
+      NE             column NE   expression
+      <              column <    expression
+      <=             column <=   expression
+      =              column =    expression
+      >=             column >=   expression
+      >              column >    expression
+      !=             column <>   expression
+      <>             column !=   expression
+      LIKE           column LIKE expression
+      NOT LIKE       column NOT LIKE expression
+ 
+      BETWEEN        column BETWEEN expression
+                            AND     expression
+ 
+      NOT BETWEEN    column NOT BETWEEN expression
+                            AND         expression
+ 
+   where "column" is the name of some column and "expression" is the name
+   of a column or a literal value such as 1 or "A Literal String".
+ 
+   Conditions listed above are true if:
+ 
+         LT or <       the value column is less than the value of
+                       expression.
+ 
+         LE or <=      the value of column is less than or equal to the
+                       value of expression
+ 
+         EQ or =       the value of column is equal to the value of
+                       expression. Note that for strings, the case of
+                       characters is significant. The strings 'A' and 'a'
+                       are not equal.
+ 
+         GE or >=      the value of column is greater than or equal to the
+                       value of expression.
+ 
+         GT or >       the value of column is greater than the value of
+                       expression.
+ 
+         NE or != or   the value of column is not equal to the value of
+                       expression.
+ 
+         LIKE          the value of column matches the value of expression
+                       when expression is interpreted as a pattern.
+ 
+         NOT LIKE      The value of column does not match the value of
+                       expression when expression is interpreted as a
+                       pattern.
+ 
+         BETWEEN       The value of column is greater than or equal to the
+                       smaller of the two expressions AND less than or
+                       equal to the larger of the two expressions.
+ 
+         NOT BETWEEN
+ 
+   A WHERE clause is composed of the word "WHERE" followed by a logical
+   expression made up of conditions connected by AND's, OR's and NOT's and
+   grouped using parentheses.
+ 
+ 
+Related Topics
+ 
+   From Clause, Specifying Strings, Specifying Times, Where Clause
+ 
+ 
+Current Settings --- SHOW
+===========================================================================
+ 
+   Inspekt can display any of it's current setting. However, these settings
+   are grouped together in various groupings. To see one of these grouping
+   you type
+ 
+      SHOW item
+ 
+   See the help topics below for more specific descriptions. \subsection
+   Related Topics
+ 
+   SHOW COLUMN, SHOW COMMENTS, SHOW ENVIRONMENT, SHOW FORMAT, SHOW INDEXED,
+   SHOW KERNELS, SHOW PAGE, SHOW SUMMARY, Columns, Deluge Warning, Headers,
+   Time Formats, Titles, Other Settings, Setting up Inspekt --- SET
+ 
+ 
+Custom Formats
+===========================================================================
+ 
+   To create a custom time format for a column, enter the command:
+ 
+      SET COLUMN <column_name> FORMAT <format>;
+ 
+   where <column_name> is the name of the column and <format> is the custom
+   format you desire.
+ 
+   Custom formats work as follows. Given a time, there are associated with
+   it the current year, month, day, day of year, hour, minutes, seconds,
+   current julian date, current number of seconds past the epoch of J2000,
+   etc. When a time is to be displayed, the custom format you have provided
+   is used as a recipe for constructing the time string. Reading from left
+   to right the string formatter looks for special substrings (listed
+   below). Unrecognized substrings are simply copied into the output
+   string. (This allows you to add any label you might like to the output
+   times.) However, when a recognized substring is found, the time
+   formatter determines the corresponding component of time and appends
+   this to the output time string that is under construction.
+ 
+   NOTE THAT TIME FORMATS ARE CASE SENSITIVE. To get a particular component
+   of the time into the output string you must use exactly the substring
+   given in the list below. For example, if you wish have the 3 letter
+   abbreviation for the month appear in your output times, you must use
+   "MON"; the string "mon" will simply be copied as is into any of your
+   time strings.
+ 
+   (Substrings beginning with "::" do not affect the appearance of the
+   format only the time system or rounding)
+ 
+         UTC,TDB,TDT         use the time system UTC, TDB, TDT respectively
+                             (default UTC)
+ 
+         RND, TRUNC          Round or Truncate time respectively (default
+                             truncate)
+ 
+         YYYY                year
+ 
+         MON, MM             3 letter abbreviation, 2 digit number for
+                             month resp.
+ 
+         DD, DOY             day of month, day of year respectively
+ 
+         WKD                 3 letter abbreviation for day of week
+ 
+         HR, MN, SC          hour, minutes, seconds respectively
+ 
+         JD,SP1950, SP2000   Julian date, seconds past 1950 or 2000
+                             respectively
+ 
+         Decimals            when the characters
+ 
+                                ###
+ 
+                             follow a decimal point, they indicate the
+                             number of decimal places to use in the
+                             representation of the preceding numeric
+                             component. For example
+ 
+                                'SC.###'
+ 
+                             indicates that the seconds component of a time
+                             should be presented with 3 decimal points.
+ 
+ 
+Related Topics
+ 
+   Example Time Formats
+ 
+ 
+Default Floating Format
+===========================================================================
+ 
+   When printing a double precision number in a report, Inspekt first
+   examines the column attributes to determine if you have specified a
+   particular format for that column. If you have that format is used to
+   create the text that is presented in the report. If you have not
+   specified a particular format, Inspekt looks up the "default floating
+   format" and uses this to create the text to be used in the report. You
+   may adjust the default floating format. To do this issue the command
+ 
+      SET DEFAULT FLOATING FORMAT format;
+ 
+   where "format" is the format you'd like Inspekt to use when you have not
+   specified a particular format for a column.
+ 
+   If you've specified a format for a double precision column, and would
+   like to return to using the default floating format issue the command
+ 
+      SET COLUMN column_name FORMAT DEFAULT;
+ 
+   Until you change the format for the specified column again, the format
+   used when presenting its values in a report will be the default floating
+   format.
+ 
+ 
+Related Topics
+ 
+   Numeric Formats, Default Integer Format, Default Time Format, SHOW
+   FORMAT
+ 
+ 
+Default Integer Format
+===========================================================================
+ 
+   When printing an integer in a report, Inspekt first examines the column
+   attributes to determine if you have specified a particular format for
+   that column. If you have that format is used to create the text that is
+   presented in the report. If you have not specified a particular format,
+   Inspekt looks up the "default integer format" and uses this to create
+   text to be used in the report. You may adjust the default integer
+   format. To do this issue the command
+ 
+      SET DEFAULT INTEGER FORMAT format;
+ 
+   where "format" is the format you'd like Inspekt to use when you have not
+   specified a particular format for an integer column.
+ 
+   If you've specified a format for an integer column, and would like to
+   return to using the default integer format issue the command
+ 
+      SET COLUMN column_name FORMAT DEFAULT;
+ 
+   Until you change the format for the specified column again, the format
+   used when presenting its values in a report will be the default integer
+   format.
+ 
+ 
+Related Topics
+ 
+   Numeric Formats, Default Floating Format, Default Time Format, SHOW
+   FORMAT
+ 
+ 
+Default Time Format
+===========================================================================
+ 
+   When printing a time in a report, Inspekt first examines the column
+   attributes to determine if you have specified a particular format for
+   that column. If you have that format is used to create the text that is
+   presented in the report. If you have not specified a particular format,
+   Inspekt looks up the "default time format" and uses this to create text
+   to be used in the report. You may adjust the default time format. To do
+   this issue the command
+ 
+      SET DEFAULT TIME FORMAT format;
+ 
+   where "format" is the format you'd like Inspekt to use when you have not
+   specified a particular format for a column.
+ 
+   If you've specified a format for a time column, and would like to return
+   to using the default time format issue the command
+ 
+      SET COLUMN column_name FORMAT DEFAULT;
+ 
+   Until you change the format for the specified column again, the format
+   used when presenting its values in a report will be the default time
+   format.
+ 
+ 
+Related Topics
+ 
+   Custom Formats, Default Floating Format, Default Integer Format, SHOW
+   FORMAT
+ 
+ 
+Deluge Warning
+===========================================================================
+ 
+   To see the current data-deluge warning level type the command
+ 
+      SHOW FORMAT
+ 
+   To set the deluge warning level, type the command.
+ 
+      SET DELUGE WARNING integer
+ 
+   If you take no action the warning level has value 100.
+ 
+ 
+Related Topics
+ 
+   Getting Too Much Data, Sampling Data
+ 
+ 
+Display Area
+===========================================================================
+ 
+   The area of the terminal or terminal window where reports are displayed
+   is called the output page. Reports may span several output pages.
+   Inspekt allows you to adjust the shape of the output page and to control
+   the titles and headers that appear on the page. The commands that allow
+   you to manipulate the output page are shown below.
+ 
+         SET PAGE WIDTH number
+         SET PAGE HEIGHT number
+         SET PAGE TITLE title
+         SET TITLE JUSTIFICATION justification
+         SET TITLE FREQUENCY frequency
+         SET HEADER FREQUENCY frequency
+ 
+   The output page is described in terms of printable fixed size
+   characters. By default it is 80 characters wide and 24 characters tall.
+   The output page is a subset of a page region that is between 40 and 132
+   characters wide and at least 22 characters tall. (The maximum page
+   height allowed is the maximum positive integer that your computer
+   supports)
+ 
+   The page width is used to determine how much text can fit across your
+   terminal window. The page height is used to determine how many lines of
+   text can be written before displaying a page title or report header.
+ 
+ 
+Related Topics
+ 
+   Reports, SET TIME, SET HEADER, SET PAGE
+ 
+   |endliteral
+ 
+ 
+Echoing Translated Commands
+===========================================================================
+ 
+   Although symbols can be a big help when used well, they can also
+   interfere with what you think you've typed. Usually you discover this
+   problem as the result of an error message.
+ 
+   You may want to see how Inspekt translated what you typed before it gets
+   around to acting on the command. To do this you can "turn on" command
+   echoing. Do this by typing
+ 
+      ECHO
+ 
+   Having issued this command, when a new command is issued that contains
+   symbols, Inspekt will "echo" the translated command so that you can see
+   how Inspekt has interpreted your command.
+ 
+   To disable the echoing of commands type:
+ 
+      NO ECHO
+ 
+   You can see the current status of command echoing by issuing a show
+   environment command.
+ 
+      SHOW ENVIRONMENT
+ 
+ 
+Editing Commands
+===========================================================================
+ 
+   Inspekt maintains a "stack" of the twenty most recently entered
+   commands. Each new command is placed on "top" of the other commands.
+   Once a command has twenty or more commands on top of it, it is lost and
+   can not be retrieved.
+ 
+   Commands in the stack are numbered from 1 to 20. The most recently
+   issued command (the one on top) is number 1. The command issued just
+   prior to number 1, is number 2, and so on.
+ 
+   You can manipulate this stack with the commands below. Most "stack"
+   manipulation commands require that you specify a particular command. You
+   can do this by specifying the number of the command (the number provide
+   by RECALL) or by specifying a pattern. If you specify a command via a
+   number, the number must be between 1 and 20. If you specify the command
+   via a pattern, you are specifying the last command whose first line
+   matches the pattern. As a convenience, the wild card '*' is
+   automatically appended to the specification pattern. You can not
+   suppress the appended wild card.
+ 
+         RECALL           displays the commands in the reverse order from
+                          the way you have entered them. The commands are
+                          numbered so that you may easily refer to them.
+                          The stack is left unchanged.
+ 
+         RECALL number    displays a specific command. The stack is left
+                          unchanged.
+ 
+         DO number        re-executes the command specified. The
+         DO pattern       re-executed command is placed on the top of the
+                          command stack.
+ 
+         EDIT number      invokes your system editor and allows you to use
+         EDIT pattern     the editor to modify the command. When you exit
+                          the editor, the new command is executed and
+                          placed on the top of the command stack.
+ 
+ 
+Related Topics
+ 
+   Pattern Matching, Setting The Editor
+ 
+ 
+Environment Variables
+===========================================================================
+ 
+   Inspekt recognizes two environment variables: LEAPSECONDS and SCLK. If
+   you want to make them available to Inspekt, you should create one or
+   both of them prior to running Inspekt.
+ 
+         LEAPSECONDS   should point to a SPICE leapseconds kernel.
+ 
+         SCLK          should point to a SPICE Spacecraft Clock kernel.
+ 
+   Inspekt looks for these environment variables at program initialization.
+   If they are present, Inspekt will load the kernels pointed to by the
+   environment variables. This is the only time these variables can be used
+   by Inspekt. You may not use them in a LOAD command.
+ 
+   If you should decide to use these environment variables make sure that
+   they evaluate to the full path name of the kernels. You may set these
+   variables with C-shell command "setenv"
+ 
+      setenv LEAPSECONDS (full path of leapseconds kernel)
+      setenv SCLK        (full path of spacecraft clock kernel)
+ 
+   In DCL you use logical variables instead of environment variables. You
+   set the logical variables using the define command.
+ 
+      DEFIND LEAPSECONDS DISK:[DIR.ECT.ORY]leap_file.ker
+      DEFINE SCLK        DISK:[DIR.ECT.ORY]sclk_file.ker
+ 
+ 
+Errors
+===========================================================================
+ 
+   Every now and then, you will type a command that Inspekt cannot process.
+   There are several causes of such errors: typos, misunderstanding of
+   commands syntax, or inadequate preparation of Inspekt's environment.
+   Inspekt attempts to diagnose errors and provides two levels of error
+   diagnosis. All error diagnostics are written to Inspekt's log file.
+ 
+   When an error is detected, Inspekt will display a message and then
+   prompt for a new command. If the error message does not seem to explain
+   what went wrong, you can get the second level of error diagnosis by
+   entering the command "?;". If second level of error diagnosis is not
+   available, you will get a message stating that there is no more
+   information available. If a second level is available, the diagnosis
+   will be displayed. This second level will usually list the chain of
+   subroutine calls that led to the error diagnosis and other information.
+   If you can't determine the cause of the error, send a description of
+   what you were attempting to do along with the Inspekt.log file to:
+ 
+      btaber@spice.jpl.nasa.gov
+ 
+   and I will do what I can to help out.
+ 
+      -Bill Taber
+ 
+ 
+Related Topics
+ 
+   Typing Commands
+ 
+ 
+Example Time Formats
+===========================================================================
+ 
+   Below is a collection of sample time formats and the time strings that
+   would be formed for noon on the fifteenth of February 1993.
+ 
+      Format:  YYYY-MON-DD WKD HR:MN:SC
+      Result:  1993-FEB-15 MON 12:00:00
+ 
+      Format:  Day of year DDD, MON-DD YYYY HR:MN:SC.####
+      Result:  Day of year 046, FEB-15 1993 12:00:00.0000
+ 
+      Format:  YYYY-DDD.### ::RND
+      Result:  1993-046.500
+ 
+ 
+Related Topics
+ 
+   Time Formats, Custom Formats
+ 
+ 
+Example Where Clause
+===========================================================================
+ 
+   The WHERE clause in the SELECT command below narrows down a selection to
+   those events that occurred later than 1 Jan 1993 but before 1 MAR 1993.
+   It further restricts the selection to those events that have "PLATFORM"
+   occurring in a substring in the SUBSYSTEM column of the event.
+ 
+      select time event_type subsystem notes
+      from  events
+      WHERE TIME GT "1 JAN 1993"
+        AND TIME LT "1 MAR 1993"
+        AND SUBSYSTEM LIKE "*PLATFORM*";
+ 
+   Note that the times used in the TIME condition and the pattern used in
+   the SUBSYSTEM condition must match is enclosed in double (") or single
+   (') quotes.
+ 
+ 
+Flagged Format
+===========================================================================
+ 
+   Flagged formats are presented as shown here
+ 
+      First Column : Value of column for first event
+      Second Column: Value of the second column with
+                     the output wrapped if it will
+                     not fit on a single line of text.
+      Third Column : Value of the third column
+                     possibly wrapped in an uneven
+                     fashion due to
+                     the means of specifying an event.
+ 
+      First Column : Value of this for second event
+            ...            ...
+ 
+   There are two forms of flagged format. PRESERVED and un-PRESERVED
+   (default). If a format is a preserved, each component of a column is
+   begun on a new line of the report. Otherwise it is considered to be
+   simply FLAGGED format. Note a blank line is inserted between consecutive
+   events in the output. \subsection Related Topics
+ 
+   Reports
+ 
+ 
+From Clause
+===========================================================================
+ 
+   An E-kernel may contain many different tables. Moreover, different
+   tables may have columns having the same name. For this reason when you
+   select items to be displayed in a report via a SELECT or SAMPLE ...
+   SELECT statement you must specify which table the report is to be drawn
+   from. You do this via the FROM clause of the SELECT statement
+ 
+      select  ...
+      FROM    TABLE_1 [alias_1]
+           [, TABLE_2 [alias_2] ...]
+      where   ...
+      oder by ...
+ 
+   The simplest commands involve only one table. In such cases there is
+   usually no need to supply an alias for the table specified in the FROM
+   clause. \subsection Related Topics
+ 
+   Combining Tables, Looking at Data --- SELECT
+ 
+ 
+Getting Too Much Data
+===========================================================================
+ 
+   We anticipate that E-kernels may become quite large. As a result the
+   number of events that satisfy some matching criteria given in a SELECT
+   command might be very large. Since Inspekt does not yet support a
+   UNIX-like "more" function and does not allow you to interrupt some task
+   (via a key sequence such as CTRL-C), Inspekt has a user adjustable
+   DATA-DELUGE WARNING level. Reports will be generated automatically in
+   response to a SELECT command only if the number of matching events is
+   less than the data-deluge warning level. If the number of matching
+   events is greater than this level, you will be notified and given the
+   option of producing the report, viewing a subsample of the report, or
+   cancelling the report.
+ 
+   To set the deluge warning level, type the command.
+ 
+         SET DELUGE WARNING integer
+ 
+   If you take no action the warning level has value 100.
+ 
+   To see the current data-deluge warning level type the command
+ 
+      SHOW FORMAT
+ 
+ 
+Related Topics
+ 
+   Sampling Data, SHOW FORMAT
+ 
+ 
+Headers
+===========================================================================
+ 
+   The only attribute that you can set that globally affects headers is the
+   header frequency. To see the current frequency type the command
+ 
+      SHOW PAGE;
+ 
+ 
+Kernels --- LOAD
+===========================================================================
+ 
+   SPICE data is stored in data files called kernels. To make the data in
+   these kernels available for retrieval and manipulation by Inspekt, you
+   need to "load" the kernels. When you load a kernel, Inspekt opens the
+   file, reads the file, and stores some (or all) of its contents in
+   Inspekt's memory.
+ 
+   E-kernels can be "unloaded." When an E-kernel is unloaded, Inspekt
+   "forgets" about the existence of the kernel. Data in the kernel can not
+   be retrieved or manipulated without first re-loading it.
+ 
+   To load or unload an E-kernel, type
+ 
+      LOAD EK (filename of E-kernel)
+      UNLOAD  (filename of previously loaded E-kernel).
+ 
+   The filename used in the UNLOAD command must be the same as the filename
+   used to load it.
+ 
+   Two other files may be loaded: a leapseconds kernel and an SCLK kernel.
+   These are loaded using the commands:
+ 
+      LOAD LEAPSECONDS (filename of leapseconds kernel)
+      LOAD SCLK KERNEL (filename of SCLK kernel)
+ 
+   You can avoid having to load leapseconds or SCLK kernels by setting up
+   the environment variables SCLK and LEAPSECONDS to point to the
+   corresponding kernel prior to starting Inspekt.
+ 
+   Leapsecond and SCLK kernels cannot be unloaded. However, you can load a
+   different leapseconds or SCLK kernel. When a new SLCK or leapseconds
+   kernel is loaded Inspekt behaves as if you had never loaded the previous
+   SCLK or leapseconds kernel. Only the data in the freshly loaded kernel
+   will be used by Inspekt.
+ 
+   There are two commands for determining what kernels have been loaded.
+ 
+      SHOW KERNELS;
+ 
+   displays which E-kernels have been loaded
+ 
+      SHOW ENVIRONMENT
+ 
+   displays which leapseconds and SCLK kernels (if any) have been loaded
+   along with other information about the current Inspekt settings.
+   \subsection Related Topics
+ 
+   Environment Variables
+ 
+ 
+Limits
+===========================================================================
+ 
+   Listed below are the limits for various aspects of Inspekt.
+ 
+         Loaded E-kernels          a maximum of 20 E-kernels may be loaded
+                                   at once.
+ 
+         Total number of columns   a maximum of 500 columns may be present
+                                   in all of the loaded kernels
+ 
+         Page Width                the page must be at least 40 characters
+                                   wide and no more than 132 characters
+                                   wide.
+ 
+         Column width              a column must be at least 8 characters
+                                   wide and no more than 80 characters
+                                   wide.
+ 
+         Command Size              A command can contain no more than 1760
+                                   character (it should fit on one 24 by 80
+                                   character screen).
+ 
+         Events per Report         A default limit of 100 rows will be
+                                   presented in any report. You can
+                                   override this limit with the SET DELUGE
+                                   command or at the time a report is ready
+                                   for output.
+ 
+ 
+Looking at Data --- SELECT
+===========================================================================
+ 
+   To view events in a report, you need to issue a "SELECT" command. The
+   form of this command is shown below ("WHERE" and "ORDER BY" clauses are
+   optional).
+ 
+      SELECT a comma delimited
+             list of unambiguous
+             column names
+      FROM   a comma delimited
+             list of tables-alias pairs
+      WHERE    condition_1
+         AND/OR condition_2
+         ...
+         AND/OR condition_n
+      ORDER BY a comma delimited
+               list of unambiguous
+               column names
+ 
+   All but one of the conditions in the "WHERE" clause have the form:
+ 
+      [NOT] column <relation> value
+ 
+   If the column is a character or time column, the value must be enclosed
+   in either single (') or double (") quotes. Allowed relations are EQ NE
+   LT LE GT GE and LIKE (used for pattern matching).
+ 
+ 
+Related Topics
+ 
+   Column and Table Abbreviations, Select Clause, From Clause, Where
+   Clause, Order By, Combining Tables, Reports, Getting Too Much Data
+ 
+ 
+Making Help Wait
+===========================================================================
+ 
+   When you select a help topic for which there is some text that should be
+   displayed, the help system begins sending this text to your display. If
+   there is a lot of text, some of it may scroll by before you have a
+   chance to read it. There are two ways to deal with this.
+ 
+       1.   You can hit CTRL-S on your keypad to cause output to your
+            display to be temporarily disabled. Hit CTRL-Q to restart the
+            output. This works on most terminals and terminal emulators.
+ 
+       2.   You can tell Inspekt to wait once it finishes displaying a page
+            full of text.
+ 
+   To do this at the Inspekt prompt type:
+ 
+      Inspekt> SET HELP WAIT;
+ 
+   The Inspekt help system will now pause after each page of text it
+   displays and wait for you to hit a carriage return before it displays
+   the next page or related topics menu.
+ 
+   To return to the original help system behaviour, type the command
+ 
+      Inspekt> SET HELP NO WAIT;
+ 
+   Note that the size of a page is also under your control. You may set the
+   number of lines that will fit on a page by using the command "SET PAGE
+   HEIGHT". This command is described in the "SET PAGE ..." help topic.
+ 
+ 
+Related Topics
+ 
+   SET PAGE
+ 
+ 
+Numeric Formats
+===========================================================================
+ 
+   A numeric format is specified by creating a picture of the format. For
+   example to specify that a number should start with 3 digits and be
+   displayed to 3 decimal places use a picture such as this:
+ 
+      ###.###
+ 
+   If the first character of the picture is a minus sign, the first
+   character in the output string will be a blank if the number is
+   non-negative, a minus sign if the number is negative.
+ 
+   If the first character of the picture is a plus sign, the first
+   character of the output string will be a plus if the number is positive,
+   a blank if the number is zero, and a minus sign if the number is
+   negative.
+ 
+   If the first character of the string is NOT a sign (plus or minus) the
+   first character of the output string will be a minus sign if the number
+   is negative and will be the first character of the integer part of the
+   number otherwise.
+ 
+   The integer portion of STRING will contain at least as many characters
+   as appear before the decimal point (or last character if there is no
+   decimal point) but after a leading + or -. There will ALWAYS be at least
+   one digit output in integer portion of STRING.
+ 
+   If the picture begins with a any of the following
+ 
+         '+0', '-0', or '0'
+ 
+   it is said to have a leading zero. If a picture has a leading zero and
+   the integer portion is not large enough to fill up the integer space
+   specified by the picture, the output will be zero padded from the sign
+   (if one is required) up to the first character of the integer part of
+   the number.
+ 
+   If picture does NOT have a leading zero and the integer portion is not
+   large enough to fill up the space specified by the picture, output will
+   be blank padded between the sign (if one is required and the first
+   character of the integer part of the number.
+ 
+   If a decimal point ( '.' ) is present in the picture it will be present
+   following the integer portion of output. Moreover, the decimal portion
+   of the output will contain the same number of digits as there are
+   non-blank characters following the decimal point in the picture.
+   However, if the picture contains more than 14 characters following the
+   decimal point, the characters in output that follow the 14 position to
+   the right of the decimal point will be zeros.
+ 
+ 
+Order By
+===========================================================================
+ 
+   You may control the order in which events are reported by a SELECT
+   command through use of the "ORDER BY" clause that is an optional part of
+   all SELECT commands. The default ordering is by the TIME column that is
+   present in every E-kernel. To order your output based upon some other
+   column issue the SELECT command with the clause
+ 
+      ORDER BY column(s) of choice
+ 
+   as part of your command. Column names should be separated by commas (,).
+   Note that the "ORDER BY" clause works faster with indexed columns. To
+   see which columns are indexed you can use any of the commands:
+ 
+      SHOW INDEXES
+      SHOW KERNELS
+      SHOW SUMMARY
+ 
+ 
+Related Topics
+ 
+   Looking at Data --- SELECT
+ 
+ 
+Pattern Matching
+===========================================================================
+ 
+   It is often easier to describe a set of character by specifying some
+   common pattern shared by all of the strings of interest. For this reason
+   you can use a LIKE relation in the WHERE clause of a SELECT command. You
+   specify a like condition as shown below:
+ 
+      column_name LIKE "pattern"
+ 
+   where "pattern" is a pattern that the column must match for the
+   LIKE-condition to be satisfied. Note that the pattern must be enclosed
+   in quotes ("). There are two special characters that may appear in a
+   pattern. The asterisk '*' matches any substring. The percent mark '%'
+   matches any character. If a pattern does not begin/end with the
+   asterisk, the column value must begin/end with the pattern character in
+   order to match the pattern. pattern matching is case insensitive.
+ 
+      Examples:  SPECIAL          matches S*C%%L
+                 SPECIAL does not match   S*C%%L%
+                 SPECIAL          matches %PE%%AL
+                 SPECIAL          matches S*L
+ 
+ 
+Patterns
+===========================================================================
+ 
+   Patterns are sequences of characters that are used to select a word or
+   phrase from some list of words or phrases. The pattern begins at the
+   first non-blank character in the character sequence. The pattern ends at
+   the last non-blank character of the sequence.
+ 
+   There are two special characters that may appear in a pattern they are
+   '*' the substring "wild card" and '%' the character "wild card".
+ 
+   Patterns are useful only when they are used to select matching strings.
+ 
+   Pattern matches in Inspekt are case insensitive: 'a' matches both 'a'
+   and 'A'. Upper and lower case letters are said to be equivalent.
+ 
+   If a pattern does not begin with a wild card, a matching string must
+   begin with the a character that is equivalent to the beginning character
+   of the pattern. If a pattern does not end with a wild card, a matching
+   string must end with a character that is equivalent to the ending
+   character of the pattern.
+ 
+ 
+Query
+===========================================================================
+ 
+   The word query is used in two ways in Inspekt.
+ 
+       1.   A query is a SELECT command issued to Inspekt to search loaded
+            E-kernels for data that satisfies a user specified selection
+            criteria
+ 
+       2.   A query is a word in a command, or symbol that ends in a
+            question mark. When Inspekt encounters such a word in a
+            command, it prompts the user for a value to replace the "query"
+ 
+            For example suppose you enter the command
+ 
+               Inspekt> SHOW COLUMN NAME?;
+ 
+            Inspekt will ask you to supply a value for NAME? and then
+            continue acting upon the resulting command. Normally you will
+            not type queries directly when issuing a command. Instead, you
+            will define symbols that contain queries or place queries in
+            commands that are collected in Inspekt procedure files.
+ 
+ 
+Reports
+===========================================================================
+ 
+   After you issue a SELECT command to Inspekt, the program presents a
+   display of the items that match the selection criteria. The items
+   displayed together with the method in which they are displayed is called
+   a "report".
+ 
+   A report has several attributes that are user adjustable.
+ 
+   Reports are presented in a region that models a physical page as you
+   find in a loose leaf binder. You may adjust the height and width of
+   these pages.
+ 
+   A report is presented in a particular format. There are three basic
+   formats: tabular, flagged and verbatim. You may select the format you
+   prefer for reports the program creates. Tabular formats are usually the
+   easiest to read. However, if events have a large number of attributes
+   and you want to see many of these attributes, you may find the flagged
+   format better suited to your needs. Verbatim format allows you to see
+   most directly the actual contents of an event without any of Inspekt's
+   formatting tools modifying line breaks in the original data. However,
+   this format is difficult to read and suitable only when you need to see
+   directly how a particular event was stored in the E-kernel.
+ 
+   Every report has a title. You can remove the title, change it and alter
+   the frequency with which it is displayed (only at the beginning of the
+   report, on every page, or every n'th page). You can also control whether
+   the title is left justified, right justified or centered on the report
+   page.
+ 
+   Reports in tabular format, have a header as well as a title. The header
+   names the various columns that appear in the report. As with the report
+   title you can adjust the frequency with which the header is displayed in
+   the report.
+ 
+ 
+Related Topics
+ 
+   Tabular Format, Flagged Format, Verbatim Format, SET FORMAT, SET HEADER,
+   SET TITLE, SET PAGE
+ 
+ 
+Sampling Data
+===========================================================================
+ 
+   When you first open an E-kernel, it is often not clear what range of
+   events are present in the kernel. In such situations, simply selecting
+   events may result in much more data that you can easily view. For this
+   reason you may preface your selection command with a "SAMPLE" clause. By
+   doing so, you can view a reasonable subset of the events that match your
+   selection criteria. There are several forms of the SAMPLE clause.
+   However, all sample commands are formed the same way: type the SAMPLE
+   clause and follow it by the SELECT statement you would issue if you
+   wanted to view all of the matching events of a selection.
+ 
+   The SAMPLE clauses that can prefixed to a SELECT command are shown
+   below:
+ 
+      SAMPLE number
+      SAMPLE FIRST number
+      SAMPLE LAST  number
+      SAMPLE number FROM  percentile TO percentile
+      SAMPLE number UP TO       percentile [EVERY number]
+      SAMPLE number STARTING AT percentile [EVERY number]
+      SAMPLE number CENTER   AT percentile [EVERY number]
+ 
+   The first "number" in each clause is the number of samples to extract
+   from a selection. Percentiles must be integers from 0 to 100. The 0th
+   percentile corresponds to the first event of a selection; the 100th
+   percentile to the last event. In those clauses with an optional "EVERY"
+   subclause, the "EVERY-number" refers to how many events to skip between
+   displayed events. If not supplied the "EVERY-number" value is assumed to
+   be one (1). \subsection Related Topics
+ 
+   Looking at Data --- SELECT
+ 
+ 
+Saving Work --- SAVE TO
+===========================================================================
+ 
+   To save output that is printed on your terminal (or in your terminal
+   window) issue the command:
+ 
+      SAVE TO filename;
+ 
+   All subsequent screen output will be saved the file specified in the
+   command. To stop saving to the SAVE file, issue the command
+ 
+      DISCARD;
+ 
+   You may SAVE and DISCARD output as frequently as you wish. Moreover, a
+   different file may be used with each SAVE command. However, to begin
+   saving output to a new file you must first issue a DISCARD command. If
+   you use the same filename you may (depending upon your system) overwrite
+   the previous file.
+ 
+   Regardless of whether you save any screen output, Inspekt automatically
+   saves every command you type at the "Inspekt>" prompt. These commands
+   are collected in the Inspekt Log File. It has a name of the form
+   "nspXXXXX.log" where each 'X' is a decimal digit. In addition to
+   commands you type, the text of any error message that Inspekt produces
+   are recorded in the log file.
+ 
+   The log file is a crucial aid in determining why Inspekt sometimes
+   behaves in unexpected ways. Each log file is in fact an Inspekt
+   procedure that you can execute to exactly the sequence of commands you
+   entered in some previous Inspekt work session. If you have a problem
+   with Inspekt, and need our assistance, be sure to save the log file so
+   that we can duplicate your problems.
+ 
+ 
+Select Clause
+===========================================================================
+ 
+   When you issue a select command, you are telling Inspekt to find rows
+   from a table (or join of tables) as specified by a FROM clause. The rows
+   match some criterion specified in a "WHERE" clause. (If no "WHERE"
+   clause is specified, all events are considered to be of interest.) To
+   request columns in a report you should type the first portion of the
+   SELECT command as shown below.
+ 
+      SELECT col_1, col_2, ... , col_n
+      FROM table ...
+      WHERE condition ...
+      ORDER BY ...
+ 
+   Note that commas (,) are required between column names. If you select
+   rows from a single table (i.e. the FROM clause lists a single table) you
+   can just use the column names from that table. However, if you select
+   columns from a "join" of two or more tables and two or more of the
+   tables possess the column you want to see you need to make sure you tell
+   Inspekt which table the column belongs to. To do this you attach the
+   name of the table (or an alias for that table) to the front of the
+   column name as in
+ 
+         table.column
+      or
+         alias.column
+ 
+   The columns will be displayed in the report in the same order as you
+   list them in the select clause.
+ 
+ 
+Related Topics
+ 
+   Looking at Data --- SELECT
+ 
+ 
+SET COLUMN ...
+===========================================================================
+ 
+   To adjust the display attributes of a column use the SET COLUMN command.
+   You may adjust the width of a column, the heading that will appear in
+   tabular reports, whether or not columns will be left or right justified
+   in reports, and the format of the column for time and numeric columns.
+   The syntax of the SET COLUMN command is:
+ 
+      SET COLUMN @name
+       (1:1){ WIDTH @int(8:80)
+            | FORMAT    (1:)@word
+            | HEADING   (1:)@word
+            | JUSTIFICATION RIGHT
+            | JUSTIFICATION LEFT }
+ 
+   NOTE: If you modify the format of a numeric or time column, the width of
+   the column is automatically adjusted to match the width of the new
+   format. You must re-adjust the width if you want it to be something
+   other than the width of the format. \subsection Related Topics
+ 
+   Time Formats, Numeric Formats, SHOW COLUMN
+ 
+ 
+SET FORMAT ...
+===========================================================================
+ 
+   Inspekt supports 3 basic report formats: TABULAR, FLAGGED and VERBATIM.
+   These are set using the SET FORMAT command. The syntax for this command
+   is:
+ 
+      SET FORMAT (0:1){ MARKED | SPACED }
+         TABULAR (0:1){ PRESERVED }
+ 
+      SET FORMAT FLAGGED (0:1){ PRESERVED }
+ 
+      SET FORMAT VERBATIM
+ 
+   TABULAR reports show each event as a row of a table with the various
+   event attributes appearing in fixed columns.
+ 
+   FLAGGED reports show events as a vertical list of name-value paragraphs
+   with each complete event separated from the next by a blank line.
+ 
+   VERBATIM reports list events as a vertical list as well. However the
+   column name is listed on one line and its value on the next line(s).
+   This presents the components of each column without line breaks.
+ 
+ 
+Related Topics
+ 
+   Reports, SET FORMAT MARK, SHOW FORMAT
+ 
+ 
+SET FORMAT MARK ...
+===========================================================================
+ 
+   When you use MARKED TABULAR formats for reports, Inspekt places the
+   character ">" in the leftmost column of the report. You can modify this
+   FORMAT MARK by issuing a SET FORMAT MARK command.
+ 
+   Decide what character you want to appear in the leftmost column
+   (remember you cannot use the semi-colon ";"). For the purpose of an
+   example lets use "=". Then issue the command:
+ 
+      SET FORMAT MARK =;
+ 
+   From this point forward MARKED TABULAR reports will place the character
+   "=" in the left most column of reports.
+ 
+ 
+SET HEADER ...
+===========================================================================
+ 
+   When Inspekt produces a report as the result of a SELECT command, and
+   the reporting format is some form of tabular format, Inspekt can place a
+   header at the beginning of the displayed output. This header displays
+   the names of the various columns that appear in the report. (If a column
+   has an alias, the alias will be used instead of the column name.)
+ 
+   You can control how often these items are placed in your report by
+   issuing a SET HEADER FREQUENCY command. The syntax for this is:
+ 
+      SET HEADER FREQUENCY (1:1){ 0
+                                | 1ST
+                                | FIRST
+                                | ALL
+                                | EVERY @int(1:)
+                                }
+ 
+   The values mean respectively: on none of the pages; on the first page
+   only, on every page, and on the first page and every nth page following
+   the first page.
+ 
+ 
+Related Topics
+ 
+   SET TITLE
+ 
+ 
+SET PAGE ...
+===========================================================================
+ 
+   Reports written by Inspekt are modelled as if they were being written to
+   a page of fixed height and width. This is convenient if you plan to save
+   the output of a file (using the SAVE TO command) and then print the
+   resulting file. Moreover, if you have a long report, it allows you to
+   have header and title information appear on your screen at regular
+   intervals.
+ 
+   The default height and width of this page are 20 and 80 characters
+   respectively. To adjust these use the following commands.
+ 
+      SET PAGE HEIGHT @int(20:)
+      SET PAGE WIDTH  @int(40:132)
+ 
+   You may also set the title that appears on reports with the command
+ 
+      SET PAGE TITLE (1:)@word
+ 
+   Use the title "NONE" if you want no title to appear on report pages.
+ 
+ 
+Related Topics
+ 
+   SHOW PAGE
+ 
+ 
+SET TIME ...
+===========================================================================
+ 
+   There are two commands available for adjusting the format of time
+   strings when they are output in reports. They are:
+ 
+      SET COLUMN column_name FORMAT format;
+ 
+      SET DEFAULT TIME FORMAT format;
+ 
+ 
+Related Topics
+ 
+   Time Formats, Default Time Format, Custom Formats
+ 
+ 
+SET TITLE ...
+===========================================================================
+ 
+   When Inspekt produces a report as the result of a SELECT command, it can
+   place a title and a header on the report. You set a report title that
+   appears on pages of a report by issuing the command:
+ 
+      SET PAGE TITLE title
+ 
+   Note that the TITLE is an attribute of the display page. Whenever, a
+   report is displayed in which a title is allowed, the title you've set
+   with the SET PAGE TITLE command will be the title used.
+ 
+   You may also control the placement of the report title using the
+   command:
+ 
+      SET TITLE JUSTIFICATION (1:1){ LEFT | CENTER | RIGHT }
+ 
+   You can control how often the title are placed in your report by issuing
+   a SET TITLE/HEADER FREQUENCY command. The syntax for this is:
+ 
+      SET TITLE  FREQUENCY (1:1){ 0
+                                | 1ST
+                                | FIRST
+                                | ALL
+                                | EVERY @int(1:)
+                                }
+ 
+   The values mean respectively: on none of the pages; on the first page
+   only; on every page, and on the first page and every nth page following
+   the first page. (See SET PAGE ...for a description of the output page ).
+ 
+ 
+Related Topics
+ 
+   SET HEADER
+ 
+ 
+Setting The Editor
+===========================================================================
+ 
+   When you type
+ 
+      EDIT command
+ 
+   Inspekt writes the specified command to a file, starts up some text
+   editor on your system and loads the file into the editor window.
+   However, the editor selected might not be one you are familiar with.
+   This can be terribly frustrating because you may not know how to get the
+   editor to carry out any familiar task.
+ 
+   You can determine the default editor by typing
+ 
+      SHOW ENVIRONMENT
+ 
+   If the editor listed there is not the one you prefer you can change to
+   some other editor by typing
+ 
+      SET EDITOR edit_launching_command
+ 
+   where "edit_launching_command" is the command you type to invoke your
+   favorite editor on your computer. If you use an alias for this command,
+   you should look up what this alias translates to and use that
+   translation.
+ 
+ 
+Setting up Inspekt --- SET
+===========================================================================
+ 
+   Inspekt allows you to adjust the working session environment as well as
+   the appearance of its outputs to suit your needs. You may control:
+ 
+       1.   the format of reports that result from the SELECT command;
+ 
+       2.   the format used when printing time strings;
+ 
+       3.   the width and justification(right/left) of columns that appear
+            in reports;
+ 
+       4.   the size of the "page" on which reports appear;
+ 
+       5.   the frequency with which report titles and report headers
+            appear.
+ 
+   To change current settings use the "SET" command. To examine current
+   settings use the "SHOW" command. \subsection Related Topics
+ 
+   Columns, Display Area, Reports, SET COLUMN, SET FORMAT, SET HEADER, SET
+   PAGE, SET TIME, SET TITLE, Time Formats, Numeric Formats, Other
+   Settings, Current Settings --- SHOW
+ 
+ 
+Short Cut to Topics
+===========================================================================
+ 
+   If you already know the title of a help topic you'd like to see, you
+   don't have to navigate through the help systems series of menus.
+   Instead, you can bring up the help topic immediately. To do this you add
+   the topic title to the HELP command.
+ 
+      Inspekt> HELP topic title;
+ 
+   where topic title is the title that appears in one of the help menus.
+ 
+   You don't have to enter the title exactly as it appears in the help
+   system menus. The help topic search does not depend upon the case of the
+   letters you use. Also, you may use a wild card pattern for the topic
+   title. This way you don't have to remember the exact topic. However, you
+   do run a slight risk that some other help topic will match your pattern.
+   If more than one topic matches the pattern, Inspekt will choose the one
+   that occurs first in an alphabetical listing of the help topics.
+ 
+   Once you are in the help system, you must use the menus to navigate the
+   various help topics. You can not enter the name of some other topic and
+   display it directly.
+ 
+ 
+SHOW COLUMN ...
+===========================================================================
+ 
+   You can get a snapshot of all of the attributes of a column (both the
+   user adjustable attributes and fixed attributes) by issuing the command.
+ 
+      SHOW COLUMN column_name;
+ 
+   If more than one table possess a column with your name you must specify
+   which column you are talking about. Do this by prefixing the table name
+   to the column name as in
+ 
+      SHOW COLUMN table.column_name
+ 
+   where <table> is the name of the column of interest . Below is a
+   possible result of the command SHOW COLUMN ACTIVITY;
+ 
+      Attributes of column:     :  ACTIVITY
+      Type                      :  CHARACTER*(32)
+      Indexed                   :  YES
+      Number of Components      :  1
+ 
+      User Adjustable Attributes
+      Column justification      :  LEFT
+      Column width              :  32
+      Column heading            :  ACTIVITY
+ 
+ 
+Related Topics
+ 
+   SET COLUMN
+ 
+ 
+SHOW COMMENTS ...
+===========================================================================
+ 
+   Every SPICE kernel provides a mechanism for the creator of the product
+   to attach documentation to the kernel. This documentation is stored in a
+   region of the file called the "comments" area. All kernels should have a
+   non-empty comment section. The comments typically will provide
+   information on one or more of the following items:
+ 
+       1.   the date the kernel was created,
+ 
+       2.   who created it,
+ 
+       3.   who to contact if you have questions about the kernel,
+ 
+       4.   the intended set of users of the kernel,
+ 
+       5.   special notes regarding the contents of the kernel.
+ 
+   To see the comments stored in a loaded E-kernel issue the command
+ 
+      SHOW COMMENTS pattern
+ 
+   If the name of a loaded kernel matches this pattern, the comments for
+   that kernel will be displayed.
+ 
+   If none of the kernel names match this pattern, a message informing you
+   of this condition will be displayed. If a kernel matches the pattern,
+   but no comments are in the kernel a message will be displayed indicating
+   that no comments are available.
+ 
+ 
+SHOW ENVIRONMENT ...
+===========================================================================
+ 
+   There are a number of more or less global features of an Inspekt session
+   that affect how Inspekt carries out the commands you issue. These items
+   are grouped together under the term Environment. They include:
+ 
+       1.   The editor used when you EDIT a command.
+ 
+       2.   Whether or not Help waits for you to finish reading a page
+            before it prints the next screen out material
+ 
+       3.   What leapsecond and SCLK kernels are loaded
+ 
+   To see the current session environment, type the command
+ 
+      SHOW ENVIRONMENT
+ 
+ 
+Related Topics
+ 
+   Making Help Wait, Echoing Translated Commands, Kernels --- LOAD
+ 
+ 
+SHOW FORMAT ...
+===========================================================================
+ 
+   You can see what report format is currently active by typing the
+   command:
+ 
+      SHOW FORMAT;
+ 
+   In addition to showing you the format, it will show you the current
+   format being used for presenting time and in the case of MARKED TABULAR
+   format the current format mark. You will also be given the current value
+   for triggering a data DELUGE WARNING. An example result is given here.
+ 
+      Report Format          :  MARKED TABULAR
+      Report Mark            :  '>'
+      Default Time     Format:  YYYY MON DD HR:MN:SC::UTC::RND
+      Default Integer  Format:  ###########
+      Default Floating Format:  #########.####
+      Deluge Warning         :  100
+      Auto Adjust            :  ASK (applies only to tabular formats)
+ 
+ 
+Related Topics
+ 
+   Default Floating Format, Default Integer Format, Default Time Format
+ 
+ 
+SHOW INDEXED ...
+===========================================================================
+ 
+   When you issue a select command to Inspekt, the speed with which it is
+   executed may depend upon whether the columns referenced in the select
+   command are indexed.
+ 
+   To get a list of all indexed columns, type the command
+ 
+      SHOW INDEXED
+ 
+ 
+SHOW KERNELS ...
+===========================================================================
+ 
+   You can create a summary of the loaded E-kernels by typing the command
+ 
+      SHOW KERNELS;
+ 
+   There are two main reasons for issuing this command:
+ 
+       1.   Obtaining a quick summary of loaded kernels
+ 
+       2.   Finding out whether the tables and kernels you thought you
+            loaded were in fact loaded by Inspekt.
+ 
+ 
+Related Topics
+ 
+   SHOW COMMENTS
+ 
+ 
+SHOW PAGE ...
+===========================================================================
+ 
+   You can see the current page settings (including the report title and
+   header attributes) by typing the command:
+ 
+      SHOW PAGE;
+ 
+   A sample output is given below. (Note: the Page width refers to number
+   of columns one character wide will fit on the page.)
+ 
+      Page height (rows)   :  20
+      Page width  (columns):  80
+ 
+      Page Title           :  Inspekt Report
+      Title Justification  :  LEFT
+      Title Appears on     :  First page only
+ 
+      Header Appears on    :  First page only
+ 
+ 
+SHOW SUMMARY ...
+===========================================================================
+ 
+   To see a summary of the characteristics of all columns for all loaded
+   events kernels, type the command
+ 
+      SHOW SUMMARY;
+ 
+   Inspekt will display an alphabetical listing of all columns
+ 
+ 
+Special Symbols --- Queries
+===========================================================================
+ 
+   In addition to symbols you define, there are special symbols called
+   "queries" that have no permanent value. You supply the value of a query
+   when a command containing it is issued. A query is any word beginning
+   with a letter and ending with a question mark (?). Whenever, such a word
+   is encountered in a command, Inspekt asks you to supply a value for the
+   query. You should enter the value followed by a semicolon (;).
+ 
+   Here's an example. Suppose you routinely issue some select command and
+   that the only portion that changes is the constraint upon the column
+   time.
+ 
+      SELECT TIME, COMMENTS
+      FROM EVENTLIST
+      WHERE TIME variable condition
+      ORDER BY TIME;
+ 
+   Define the following symbols
+ 
+      DEFINE STDSEL SELECT TIME, COMMENTS FORM EVENTLIST WHERE TIME
+             After_Before_Tween? ORDER BY TIME;
+      DEFINE AFTER  GT TIME?
+      DEFINE BEFORE LT TIME?
+      DEFINE TWEEN  BETWEEN FIRST_TIME? AND LAST_TIME?
+ 
+   Here's what happens when we now type STDSEL;
+ 
+      Inspekt> STDSEL;
+ 
+   Inspekt responds with the following prompt.
+ 
+      Enter value for After_Before_Tween >
+ 
+   You can type anything at this prompt. However the prompt suggests you
+   should pick one of the symbols you define earlier. Type "before"
+   followed by a semi-colon.
+ 
+      Enter value for After_Before_Tween > before;
+      Enter value for TIME >
+ 
+   Now enter some time (be sure to put it in quotes) and follow this with a
+   semi-colon.
+ 
+      Enter value for After_Before_Tween > before;
+      Enter value for TIME > "1 jan 1995";
+ 
+   The effect of these three entries is
+ 
+      SELECT TIME, COMMENTS FROM EVENTLIST
+      WHERE TIME LT "1 jan 1995"
+      ORDER BY TIME;
+ 
+   By creative use of symbols and queries you can greatly alter your view
+   of Inspekt and greatly ease the entry of frequently typed commands.
+ 
+ 
+Specifying Strings
+===========================================================================
+ 
+   When you create SELECT commands you will often need to compare a
+   character column to some specified string. To specify a string you must
+   enclose it in either single (') or double (") quotes. (Note that these
+   are both single characters. You cannot use '' in place of ".) For
+   example, you might want to find all of the rows for which a character
+   column begins with the letter 'A'. To specify this condition in a query
+   you would type:
+ 
+      column GE 'A' AND column LE 'B'
+ 
+   If you need to put a quote into a string, you type double the quote as
+   you would in a FORTRAN string. For example the word DOESN'T would be
+   typed as
+ 
+      'DOESN''T'
+ 
+ 
+Related Topics
+ 
+   Specifying Times
+ 
+ 
+Specifying Times
+===========================================================================
+ 
+   Although Inspekt can display times in almost any format, the set of
+   inputs is necessarily more restrictive.
+ 
+   First, time strings need to be input as strings. Strings must be
+   enclosed in quotes. The condition
+ 
+      TIME LT 1 JAN 1995
+ 
+   will not be recognized if it is part of a SELECT command. However, once
+   you place quotes around the time, the time string will be recognized
+ 
+      TIME LT "1 JAN 1995"
+ 
+   A wide variety of time formats are allowed as input to Inspekt. These
+   formats are listed below.
+ 
+ 
+Spacecraft Clock
+ 
+      MO   SCLK mars observer spacecraft clock string
+      GLL  SCLK galileo spacecraft clock string
+      VGR1 SCLK voyager 1 spacecraft clock string
+      VGR2 SCLK voyager 2 spacecraft clock string
+ 
+   To use these formats you must have either specified SCLK to be an
+   appropriate kernel (see Getting Started) or have loaded an appropriate
+   kernel via the LOAD SCLK KERNEL command.
+ 
+ 
+ISO Formats
+ 
+   The International Standards Organization (ISO) time format is used by
+   many NASA flight projects.
+ 
+      YYYY-MM-DDTHR:MN:SC    ISO UTC Calendar format
+      YYYY-DDDTHR:MN:SC      ISO UTC Day of year format
+ 
+ 
+Generic
+ 
+   In these formats Month stands for the month spelled out to 3 or more
+   letters, e.g. Jan, Janu, Janua, etc. Also note that where spaces have
+   been used to separate the components of the date you may also use a
+   comma or a slash (i.e. the solidus (/) ). All times are UTC.
+ 
+      MONTH DD YYYY  HR:MN:SC.##...#
+      DD MONTH YYYY  HR:MN:SC.##...#
+      YYYY DD MONTH  HR:MN:SC.##...#
+      YYYY MONTH DD  HR:MN:SC.##...#
+ 
+      YYYY MM DD HR:MN:SC.##...#
+      MM DD YYYY HR:MN:SC.##...#
+ 
+      JD244xxxx.xx...x
+ 
+ 
+Related Topics
+ 
+   Where Clause
+ 
+ 
+Symbol
+===========================================================================
+ 
+   A symbol is a word that begins with a letter of the alphabet and does
+   not end with a question mark. It must be 32 or fewer characters in
+   length. Moreover, you must specifically designate this word to be a
+   symbol via the DEFINE command. The define command associates a value
+   with the symbol.
+ 
+   When you type a command in Inspekt that contains a symbol, the symbol is
+   replaced by its associated value. The command is then re-examined and
+   any remaining symbols are replaced by their associated values.
+ 
+   Symbols allow you to customize your Inspekt environment. In addition
+   they allow you to greatly reduce the amount of typing you need to do in
+   order to issue frequently occurring groups of words.
+ 
+   Words that are surrounded by any of the characters ("'@) are not
+   regarded as symbols and are processed as they appear.
+ 
+   Symbols are case insensitive in Inspekt. If you define "SPUD" to be a
+   symbol then "spud", "Spud", "sPud", etc. will all be interpreted as
+   SPUD.
+ 
+   You may not define EDIT, DO, RECALL, START, STOP, DEFINE, ECHO
+ 
+ 
+Syntax Description Language
+===========================================================================
+ 
+   The language you use to communicate with Inspekt is a word oriented
+   language. With one exception the smallest significant component of a
+   command is a word. The words in a command must match a pattern that is
+   called the syntax of the command. The syntax of the commands you type at
+   the prompt Inspekt> can be expressed in a language called Meta/2. The
+   sections below describe the various constructs that make up a Meta/2
+   specification. After reading these sections you should be able to make
+   sense of any syntax specification presented later in this User's Guide.
+ 
+   Inspekt's command language is quite simple; it does not require all of
+   the features of Meta/2. But since Inspekt is expected to grow, we've
+   included a complete description of Meta/2 so that you'll have a handy
+   reference as this growth occurs.
+ 
+ 
+Keywords
+--------------------------------------------------------
+ 
+   Each command you type at the prompt Inspekt> must begin with a keyword.
+   Keywords define the structure of a command: for the most part, a command
+   is a collection of keywords, some of which are modified by non-keyword
+   arguments. The keywords of a Meta/2 syntax description are the words
+   that do not begin with one of the special characters in the list below:
+ 
+      "("   the left parenthesis
+      "@"   the "at" sign
+      "|"   the vertical bar
+      "}"    the right  brace
+ 
+   In Inspekt all of the keywords are english words.
+ 
+   The simplest Meta/2 expressions consist entirely of keywords. Some of
+   Inspekt's commands that fall into this category are shown below.
+ 
+      SHOW KERNELS
+ 
+      SHOW SUMMARY
+ 
+      SHOW INDEXES
+ 
+      SET AUTOADJUST ON
+ 
+      SET FORMAT TABULAR
+ 
+      SET FORMAT FLAGGED PRESERVED
+ 
+      SET FORMAT VERBATIM
+ 
+      SET TITLE FREQUENCY ALL
+ 
+      SET HEADER FREQUENCY FIRST
+ 
+   When you type a command, you may enter the keywords in upper, lower or
+   mixed case.
+ 
+ 
+Class Templates
+--------------------------------------------------------
+ 
+   Keywords can be modified by non-keyword values. The values associated
+   with a keyword always immediately follow that keyword. A collection of
+   values is terminated by another keyword, or by the end of the command.
+ 
+   Class templates are used to indicate that the values associated with a
+   particular keyword belong to a class of values. For example the Meta/2
+   expression of the rule that the keywords SHOW COLUMN are to be followed
+   by the name of a column looks like this.
+ 
+      SHOW COLUMN @name ...
+ 
+   The word, name, indicates that the next word in the command following
+   COLUMN should begin with a letter followed by characters from the
+   collection: upper and lower case letters, digits, the hyphen and the
+   underscore. Given this rule, a command that begins
+ 
+      SHOW COLUMN 13 ...
+ 
+   is clearly in error.
+ 
+   Class templates are very much like the wild card templates used in
+   operating systems like Unix and VMS, except they are a little more
+   specialized. The class templates recognized by Meta/2 are listed below
+   along with descriptions of the words that match them. Class templates in
+   a Meta/2 description begin with the "at" character (@).
+ 
+ 
+number
+ 
+   This template matches any number. Examples are
+ 
+      1
+      3.14
+      0.07281D-10
+ 
+ 
+int
+ 
+   This template matches only integer values. Examples are
+ 
+      -3
+      26172771
+      0.24E6
+ 
+ 
+word
+ 
+   This template matches any string of contiguous, non-blank, printing
+   characters. Examples are
+ 
+      alpine
+      /u/user/naif/etc/data/spam
+      ^&HANNk228***(JASNSK
+ 
+ 
+name
+ 
+   This template matches any word that begins with a letter and contains
+   from one to 32 letters, numbers, underscores, and hyphens. Examples are
+ 
+      Andrea
+      BRORSEN-METCALF
+      COMMAND_STEM
+      X11J9
+ 
+ 
+calendar
+ 
+   This template matches a sequence of words that make up a calendar date.
+   The rules for matching this template are somewhat complicated: for the
+   most part, any unambiguous format will be accepted. Examples are
+ 
+      JAN 1, 1992 12:28:28
+      1992-3-18 18:28
+      5 APR 1993 18:00:00.289
+      12-1-1995
+ 
+ 
+Template Quantifiers
+ 
+   The construct
+ 
+      FORMAT (1:8)@word
+ 
+   matches the keyword FORMAT followed by between one and eight words. The
+   quantifier
+ 
+      (n:m)
+ 
+   when prefixed to any class template has similar meaning. The lower bound
+   is always present, and is always positive. The upper bound is optional:
+   for example, template
+ 
+      (2:)@int
+ 
+   matches any sequence of two or more integer words.
+ 
+ 
+Numeric Qualifiers
+ 
+   The construct
+ 
+      WIDTH @int(8:80)
+ 
+   matches the keyword WIDTH followed by an integer between 8 and 80
+   inclusive. The qualifier
+ 
+      (n:m)
+ 
+   when suffixed to any numeric class template has similar meaning. Both
+   bounds are optional: for example the templates
+ 
+      @number(2:)
+      @number(:1000)
+ 
+   are matched by numeric words whose values are greater than or equal to
+   two and less than or equal to 1000 respectively.
+ 
+ 
+Character Qualifiers
+ 
+   The construct
+ 
+      DIRECTORY @word([*]|*%:[*]|*:)
+ 
+   matches any word that matches one of the individual wildcard templates
+ 
+      [*]
+ 
+      *%:[*]
+ 
+      *:
+ 
+   The wildcard characters (asterisk and percent sign) match any substring
+   and any character respectively. The qualifier
+ 
+      (t1|...|tn)
+ 
+   when suffixed to any character class template has a similar meaning.
+ 
+ 
+Combining Quantifiers with Qualifiers
+--------------------------------------------------------
+ 
+   Quantifiers and qualifiers may be combined in any combination. The
+   following are all valid class templates.
+ 
+      @int(-5:5)
+ 
+      (3:)@name(A*|B*|*X)
+ 
+      (1:3)@name(John|Bobby|Teddy)
+ 
+ 
+Switches
+--------------------------------------------------------
+ 
+   The construct
+ 
+          (1:1){ NONE
+               | FIRST
+               | 1ST
+               | ALL
+               | EVERY @int(2:) }
+ 
+   is called a switch. It is the final construct that you need to know.
+   Although it looks forbidding, it is really quite simple. A switch is a
+   list of keyword-template phrases, separated by vertical bars, and
+   surrounded by braces. The left brace is prefixed with a quantifier,
+ 
+         (n:m){ ... }
+ 
+   Whenever you see a switch, it means that at least n and not more than m
+   of the phrases separated by vertical bars must appear; however, they may
+   appear in any order. Thus, the syntax
+ 
+      SET TITLE FREQUENCY (1:1){ NONE
+                               | FIRST
+                               | 1ST
+                               | ALL
+                               | EVERY @int(2:) }
+ 
+   matches all of the following commands.
+ 
+      SET TITLE FREQUENCY FIRST
+ 
+      SET TITLE FREQUENCY EVERY 3
+ 
+      SET TITLE FREQUENCY ALL
+ 
+   but does not match
+ 
+      SET TITLE FREQUENCY NONE FIRST ALL EVERY @int(2:)
+ 
+   When you see the special word
+ 
+      @options
+ 
+   within a switch, it means that the phrases following the token are
+   optional, whereas the phrases preceding the token are required (again,
+   the phrases may appear in any order). For example the construct
+ 
+         (2:3){         WIDTH  @int(40:132)
+              |         HEIGHT @int(22:)
+              | @options
+              |         TITLE (1:3)@word }
+ 
+   means that the phrases beginning with the keywords WIDTH and HEIGHT must
+   appear, while the phrase beginning with TITLE is optional.
+ 
+ 
+Nesting Switches
+ 
+   Switches cannot be nested. The construct
+ 
+         (a:b){ ...
+              | (c:d){ ...  }
+              }
+ 
+   is illegal.
+ 
+ 
+Examples
+--------------------------------------------------------
+ 
+   Given the syntax description
+ 
+         SET FORMAT (0:1){ SPACED  | MARKED } TABULAR
+                    (0:1){ PRESERVED }
+ 
+   Convince yourself that the following are all valid commands.
+ 
+      SET FORMAT TABULAR;
+ 
+      SET FORMAT SPACED TABULAR;
+ 
+      SET FORMAT MARKED TABULAR PRESERVED;
+ 
+      SET FORMAT TABULAR PRESERVED;
+ 
+      SET FORMAT SPACE TABULAR PRESERVED;
+ 
+   Convince yourself that the following are not valid commands.
+ 
+      SET FORMAT SPACED;
+ 
+      SET FORMAT PRESERVED TABULAR;
+ 
+      SET FORMAT MARKED PRESERVED;
+ 
+ 
+Syntax Summaries
+===========================================================================
+ 
+   Listed here is the formal syntax for every command recognized by
+   Inspekt.
+ 
+      DEFINE   @name
+      DEFINE   @name (1:)@word
+      UNDEFINE @name
+ 
+      DISCARD
+ 
+      DO @word
+ 
+      ECHO
+      NO ECHO
+ 
+      EDIT @word
+ 
+      EXIT
+      HELP
+      LOAD EK @word
+      LOAD LEAPSECONDS @word
+      LOAD SCLK KERNEL @word
+ 
+      RECALL
+      RECALL @word
+ 
+      SAVE TO @word
+ 
+      SAMPLE @int(1:)  SELECT (1:100)@word
+                       FROM   (1:)@word
+                      (0:1){ WHERE    (1:)@word    }
+                      (0:1){ ORDER BY (1:100)@word }
+ 
+ 
+      SAMPLE          (1:1){ FIRST @int(1:)
+                           | LAST  @int(1:)
+                           }
+                       SELECT (1:100)@word
+                       FROM   (1:)@word
+                      (0:1){ WHERE    (1:)@word    }
+                      (0:1){ ORDER BY (1:100)@word }
+ 
+ 
+      SAMPLE @int(1:) (1:1){ UP TO       @int(0:100) EVERY @int(1:)
+                           | UP TO       @int(0:100)
+                           | STARTING AT @int(0:100) EVERY @int(1:)
+                           | STARTING AT @int(0:100)
+                           | CENTER   AT @int(0:100) EVERY @int(1:)
+                           | CENTER   AT @int(0:100)
+                           | FROM @int(0:100) TO   @int(0:100)
+                           }
+                       SELECT (1:100)@word
+                       FROM   (1:)@word
+                      (0:1){ WHERE    (1:)@word    }
+                      (0:1){ ORDER BY (1:100)@word }
+ 
+ 
+      SELECT (1:100)@word FROM (1:)@word
+                          (0:1){ WHERE    (1:)@word    }
+                          (0:1){ ORDER BY (1:100)@word }
+ 
+ 
+ 
+      SET AUTOADJUST (1:1){ OFF | ASK | ON }
+      SET COLUMN @word FORMAT (1:)@word }
+      SET COLUMN @word HEADING (1:)@word
+      SET COLUMN @word JUSTIFICATION (1:1){ LEFT  | JUSTIFICATION }
+      SET COLUMN @word WIDTH @int
+      SET DEFAULT TIME     FORMAT (1:)@word
+      SET DEFAULT INTEGER  FORMAT @word
+      SET DEFAULT FLOATING FORMAT @word
+      SET DELUGE WARNING @int(1:)
+      SET EDITOR (1:)@word
+      SET FORMAT (0:1){ SPACED | MARKED } TABULAR (0:1){ PRESERVED }
+      SET FORMAT FLAGGED (0:1){ PRESERVED }
+      SET FORMAT MARK @word(%)
+      SET FORMAT VERBATIM
+ 
+      SET HEADER FREQUENCY (1:1){ 0
+                                | FIRST | 1ST
+                                | ALL
+                                | EVERY @int(2:) }
+ 
+      SET HELP WAIT
+      SET HELP NO WAIT
+      SET PAGE HEIGHT @int
+      SET PAGE TITLE (1:)@word
+      SET PAGE WIDTH @int
+ 
+      SET TITLE FREQUENCY (1:1){ 0
+                               | FIRST | 1ST
+                               | ALL
+                               | EVERY @int(2:) }
+ 
+      SET TITLE JUSTIFICATION (1:1){ LEFT | CENTER | RIGHT }
+      SHOW COLUMN @word
+      SHOW COMMENTS
+      SHOW COMMENTS @word
+      SHOW ENVIRONMENT
+      SHOW FORMAT
+      SHOW INDEXES
+      SHOW KERNELS
+      SHOW PAGE
+      SHOW SYMBOL @word
+      SHOW SUMMARY
+      START @word
+      UNLOAD @word
+ 
+ 
+Related Topics
+ 
+   Syntax Description Language
+ 
+ 
+Table
+===========================================================================
+ 
+   A "table" is a named grouping of events (or other objects) all of which
+   have the same named attributes.
+ 
+   The designation "table" comes from the appearance of listings of the
+   attributes of events. If we list all of the events we have recorded on a
+   sheet of paper (or a terminal) so that the attributes for each event are
+   always listed in the same order from left to right, the resulting page
+   will look like a "table" of values similar to a table of sines and
+   cosines or a table of prices.
+ 
+ 
+Tabular Format
+===========================================================================
+ 
+   Inspekt provides a number of different Tabular formats.
+ 
+ 
+TABULAR
+ 
+      JAN 25 07:15:00  OBSERVATION   WEATHER  Sunny and cool (about 55 F)
+                                              Air Quality good.
+      JAN 26 07:15:00  OBSERVATION   WEATHER  Sunny and cool (about 52 F)
+ 
+ 
+MARKED TABULAR
+ 
+      > JAN 25 07:15:00  OBSERVATION WEATHER  Sunny and cool (about 55 F)
+                                              Air Quality good.
+      > JAN 26 07:15:00  OBSERVATION WEATHER  Sunny and cool (about 52 F)
+ 
+ 
+ 
+SPACED TABULAR
+ 
+      JAN 25 07:15:00  OBSERVATION   WEATHER  Sunny and cool (about 55 F)
+                                              Air Quality good.
+ 
+      AN 26 07:15:00  OBSERVATION    WEATHER  Sunny and cool (about 52 F)
+ 
+ 
+Related Topics
+ 
+   Reports, Tabular Format Mark
+ 
+ 
+Tabular Format Mark
+===========================================================================
+ 
+   The format of a marked tabular report is similar to that of a tabular
+   report. However, an extra column is inserted at the left side of the
+   report. A format mark appears in this column when each new row is begun.
+   You can quickly scan the left most column of the report and determine
+   where each new row begins. The default format mark is the "greater than"
+   symbol (>). To change this default to some other character, use the SET
+   FORMAT MARK command.
+ 
+      SET FORMAT MARK character
+ 
+   where "character" is the character you would like to replace '>'.
+ 
+   NOTE: the format character cannot be a semi-colon.
+ 
+   For example suppose that you would like to change the format mark from
+   '>' to '='. Type the command
+ 
+      SET FORMAT MARK =;
+ 
+ 
+Related Topics
+ 
+   Tabular Format
+ 
+ 
+Time Formats
+===========================================================================
+ 
+   You may request time to be displayed in an almost limitless variety of
+   formats. The default format is UTC calendar format. Other standard
+   formats may be set by using either of the commands:
+ 
+      SET COLUMN column_name FORMAT format;
+      SET DEFAULT TIME FORMAT format;
+ 
+   A number of standard formats may be specified:
+ 
+         UTC       Default format: YYYY-MON-DD HR:MN:SC
+ 
+         ISO       International Standards format: YYYY-MM-DDTHR:MN:SC
+ 
+         ISODOY    International Standards day of year: YYYY-DOYTHR:MN:SC
+ 
+         JED       Julian Ephemeris date to 5 decimal places
+ 
+         MOSCLK    Mars Observer Spacecraft Clock format
+ 
+         GLLSCLK   Galileo Spacecraft Clock format
+ 
+   These formats will be recognized regardless of the case of the letters
+   use to specify them. The UTC, ISO and ISODY formats are all UTC times.
+   You may also create a custom format (see Custom Formats). \subsection
+   Related Topics
+ 
+   Custom Formats, Default Time Format
+ 
+ 
+Titles
+===========================================================================
+ 
+   Titles are single lines of text that appear at the beginning of Inspekt
+   reports. You may adjust the text of the title, its positioning (left
+   justified, centered, or right justified), and how often it is shown as a
+   report is displayed. To see the current attributes of the report title,
+   type
+ 
+      SHOW PAGE
+ 
+ 
+Typing Commands
+===========================================================================
+ 
+   Inspekt is a command driven program. You type a command at the prompt
+ 
+      Inspekt>
+ 
+   The program performs some action based upon the typed command. If a
+   command is too long to fit on a single line, hit the return key when you
+   get to the end of the line and continue typing on the next line. When
+   you are finished typing the command, type a semi-colon (";"). The
+   semi-colon is required at the end of all commands typed in response to a
+   prompt ending with ">". It is needed even if the line will fit on a
+   single line. Occasionally, Inspekt may prompt you to supply inputs other
+   than commands (such as in the Help system). In such cases the prompt
+   will not end in a greater than sign ">" and the semi-colon is not
+   needed.
+ 
+   The commands you type may be in either upper or lower case.
+ 
+   If you begin typing a command and realize you've made an error or wish
+   to start again, add a blank line to the command entered so far. Inspekt
+   will ignore what you've typed and prompt you for a new command.
+   \subsection Related Topics
+ 
+   Editing Commands, Column and Table Abbreviations, Using Symbols, Special
+   Symbols --- Queries, Collecting Commands In Files
+ 
+ 
+Using Symbols
+===========================================================================
+ 
+ 
+An Example
+ 
+   Inspekt allows you to create special words that when encountered in a
+   command are translated into different words. These special words are
+   called 'symbols'.
+ 
+   For example suppose that you frequently want to edit your last "Select"
+   command. You could make up the symbol ES as shown below:
+ 
+      DEFINE ES EDIT SELECT;
+ 
+   When you type
+ 
+      Inspekt> ES;
+ 
+   The command is translated to
+ 
+      EDIT SELECT
+ 
+   If you have recently issued a select command, the command will be copied
+   into the editor so that you may perform any desired modifications.
+ 
+ 
+Creating Symbols
+ 
+   You may use symbols to stand for any group of words that you would like
+   to avoid typing repeatedly. To define a symbol type:
+ 
+      DEFINE symbol_name value;
+ 
+   where "symbol_name" is the name of the symbol you want to define and
+   "value" is the associated list of words and characters. The value of a
+   symbol may be blank. Symbol names must begin with a letter and can not
+   end with a question mark '?'. Also the case of letters in a symbol is
+   insignificant. For example, the commands
+ 
+      DEFINE MYSYM a string of words;
+      DEFINE MySym a string of words;
+      DEFINE mysym a string of words;
+ 
+   all define the symbol MYSYM. Moreover, when symbols appear in a command,
+   the case of the letters is insignificant. The commands
+ 
+      SET FORMAT MYSYM;
+      SET FORMAT MySym;
+      SET FORMAT mysym;
+ 
+   will all be recognized as containing the symbol MYSYM.
+ 
+ 
+Removing Symbols
+ 
+   To remove a symbol definitions type:
+ 
+      UNDEFINE symbol_name
+ 
+   Note that you can "undefine" a symbol that has not been defined. This is
+   useful in Inspekt Procedure Files when you want to make sure that some
+   previously defined symbol will not accidentally alter the meaning of a
+   procedure command.
+ 
+ 
+Symbols Used in Other Symbols
+ 
+   You may use symbols in the definition of another symbol. For example,
+ 
+      DEFINE P PRESERVED;
+      DEFINE M MARKED;
+      DEFINE TAB TABULAR;
+      DEFINE SETF SET FORMAT
+      DEFINE MYFMT SETF M TAB P;
+ 
+   When you type
+ 
+      Inspekt> MYFMT;
+ 
+   The effect will be the same as if you had typed
+ 
+      SET FORMAT MARKED TABULAR PRESERVED;
+ 
+   Symbols are not evaluated until they are encountered in a command.
+   Moreover, symbol substitution is performed until no more symbols are
+   found in the string.
+ 
+   As a result of this "evaluate when encountered" strategy you can change
+   the value of MYFMT to mean SET FORMAT MARKED TABULAR by redefining P to
+   be a blank.
+ 
+      DEFINE P  ;
+ 
+   In addition to saving you typing, symbols offer a mechanism for passing
+   information to Inspekt Procedures. If a procedure needs some variable
+   piece of information, you can write the procedure so that this
+   information is expected to be present in some symbol. Then create the
+   symbol with the appropriate information before starting the procedure
+   that needs it.
+ 
+ 
+Suppressing Symbols Substitution
+ 
+   Occasionally you may want to make sure that a word does not get mistaken
+   for a symbol. If the word is enclosed in single (') or double (") quotes
+   it is automatically invisible to the symbol translation subsystem. Thus
+   words in quoted strings are never mistaken for symbols. In addition to
+   these words you can make one or more words invisible to the symbol
+   resolver by placing it between consecutive '@' characters. Thus the
+   command below sets the page title to be "MYFMT" even though MYFMT is a
+   symbol defined above
+ 
+      SET PAGE TITLE @MYFMT@;
+ 
+ 
+Examining Symbols
+ 
+   After working in Inspekt for some time, you may want to see what symbols
+   you've created. Type
+ 
+      SHOW SYMBOL pattern
+ 
+   to see the definition and full evaluation of all symbols whose names
+   match the supplied pattern. \subsection Related Topics
+ 
+   Echoing Translated Commands, Collecting Commands In Files, Special
+   Symbols --- Queries, Column and Table Abbreviations
+ 
+ 
+Verbatim Format
+===========================================================================
+ 
+   The VERBATIM format allows you to capture in a report the explicit
+   components that were supplied to each column at the time an event was
+   recorded. Each component will appear on a separate line in the report.
+   An example appears below:
+ 
+      --- TIME     ---
+      JAN 25 18:29:59
+      --- ACTIVITY ---
+      OBSERVATION
+      --- SUBCLASS ---
+      GOOD AIR QUALITY
+      --- COMMENTS ---
+      The air quality is good.
+      Smog has not been a problem for several days now.
+ 
+ 
+Related Topics
+ 
+   Reports
+ 
+ 
+Where Clause
+===========================================================================
+ 
+   The "WHERE" clause of a SELECT command allows you to narrow focus on a
+   particular set of events. The form of the WHERE-clause is:
+ 
+      WHERE condition
+      AND/OR (NOT) condition
+               ...
+      AND/OR (NOT) condition
+ 
+   With one exception A condition is an expression of the form:
+ 
+      column_name  binary_relation  value/column
+      or
+      column_name  [NOT] BETWEEN value1/column AND value2/column
+ 
+   Only names of columns from loaded kernels may be specified. The columns
+   must be scalar valued. If the column specified in a relation is a
+   character or time column, VALUE must be enclosed in single (') or double
+   (") quotes.
+ 
+   The binary relations are: NE, LT, LE, EQ, GE, GT, LIKE, NOT LIKE. The
+   short hand equivalents of the first 6 of these are !=, <, <=, =, >=, >.
+   All but the LIKE relation can be used with any column. The LIKE relation
+   can be used only with character columns; it is the pattern matching
+   relation. The value to the right of a LIKE relation is a pattern that
+   the column must match. The character '*' matches any substring of of any
+   string. The character '% ' matches any single character.
+ 
+   Conditions may be grouped using parentheses. These groups may in turn be
+   grouped using parentheses and the connecting words AND and OR. Any
+   condition can be negated using the word NOT.
+ 
+ 
+Related Topics
+ 
+   Example Where Clause, Conditional Operators, Looking at Data --- SELECT
+ 
+ 
+Problems, Suggestions
+===========================================================================
+ 
+   If you have a problem that you can't figure out on your own, you can
+   send it to NAIF at the e-mail address given below. However, please send
+   Inspekt's log file along with a description of the problem. The log file
+   allows us to reproduce the problem. We may also need to request a copy
+   of the E-kernels you were using at the time you experienced the problem.
+ 
+   If you have comments or suggestions regarding Inspekt, send them to
+ 
+      btaber@spice.jpl.nasa.gov
+ 
+   Within the limits of time and money, we will do our best to respond to
+   your correspondence.
+ 
+            ---Bill Taber
+ 

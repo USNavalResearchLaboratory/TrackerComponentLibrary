@@ -1,0 +1,239 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_et2lst</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_et2lst</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_ET2LST computes the local solar time at a given ephemeris epoch,
+   for an object on the surface of a body at a specified longitude.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      et     the double precision scalar or 1xN array of ephemeris
+             time expressed as ephemeris seconds past J2000 at which
+             a local time is desired
+
+      body   an integer scalar SPICE ID-code of the body on which local
+             time is to be measured
+
+      lon    the scalar double precision longitude (either planetocentric
+             or planetographic) in radians of the site on the surface
+             of body for which local time should be computed
+
+      type   is the form of longitude supplied by the variable
+             lon.   Allowed values are &quot;PLANETOCENTRIC&quot; and
+             &quot;PLANETOGRAPHIC&quot;.  Note the case of the letters
+             in type is insignificant.  Both &quot;PLANETOCENTRIC&quot;
+             and &quot;planetocentric&quot; are recognized.  Leading and
+             trailing blanks in type are not significant.
+
+   the call:
+
+      [ hr, min, sec, time, ampm] = <b>cspice_et2lst</b>( et, body, lon, type)
+
+   returns:
+
+      hr     a double precision scalar or double precision 1xN array describing
+             the integral number of the local &quot;hour&quot; of the site specified
+             at epoch 'et'
+
+             Note that an &quot;hour&quot; of local time does not have the same duration
+             as an hour measured by conventional clocks. It is simply a
+             representation of an angle.
+
+      mn     a double precision scalar or double precision 1xN array describing
+             the integral number of &quot;minutes&quot; past the hour of the local time
+             of the site at the epoch 'et'
+
+             Again note that a &quot;local minute&quot; is not the same as a minute you
+             would measure with conventional clocks
+
+      sc     a double precision scalar or double precision 1xN array describing
+             the integral number of &quot;seconds&quot; past the minute of the local time
+             of the site at the epoch `et'
+
+             Again note that a &quot;local second&quot; is not the same as a second
+             you would measure with conventional clocks.
+
+      time   the scalar string or NXM character array of output local time
+             on a &quot;24 hour&quot; local clock
+
+      ampm   the scalar string or NXM character array of output local time
+             on a &quot;12 hour&quot; local clock together with the traditional AM/PM
+             label to indicate whether the sun has crossed the local zenith
+             meridian.
+
+             All output arguments return with the same measure of
+             vectorization, N, as 'et'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Load a leapseconds kernel.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % Define two UTC time strings to 'utc'
+      %
+      utc                        = strvcat( '2002 SEP 02 00:00:00', ...
+                                            '2002 SEP 30 00:00:00' );
+
+      %
+      % Convert 'utc' the ephemeris time, 'et'
+      %
+      et                         = <a href="cspice_str2et.html">cspice_str2et</a>(utc);
+
+      %
+      % Define a planetographic longitude in degrees, convert the
+      % value to radians
+      %
+      dlon                       =  326.17;
+      rlon                       =  dlon * <a href="cspice_rpd.html">cspice_rpd</a>;
+
+      %
+      % Convert inputs to Local Solar Time.
+      %
+      [hr, min, sec, time, ampm] = <b>cspice_et2lst</b>( et,   ...
+                                                  499,  ...
+                                                  rlon, ...
+                                                  'PLANETOGRAPHIC');
+
+      fprintf( ['The local time at Mars %6.2f degrees E ' ...
+               'planetographic longitude:\n'],            ...
+               dlon )
+      fprintf( '   at UTC %s, LST = %s\n', utc(1,:), ampm(1,:) )
+      fprintf( '   at UTC %s, LST = %s\n', utc(2,:), ampm(2,:) )
+
+      %
+      % It's always good form to unload kernels after use,
+      % particularly in MATLAB due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+      The local time at Mars 326.17 degrees E planetographic longitude:
+         at UTC 2002 SEP 02 00:00:00, LST = 03:25:35 A.M.
+         at UTC 2002 SEP 30 00:00:00, LST = 09:33:00 A.M.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/et2lst_c.html">et2lst_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.1, 06-MAY-2009, EDW (JPL)
+
+      Added <a href="../req/mice.html">MICE.REQ</a> reference to the Required Reading section.
+
+   -Mice Version 1.0.0, 07-MAR-2007, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Compute the local time for a point on a body.
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:37 2014</pre>
+
+</body>
+</html>
+

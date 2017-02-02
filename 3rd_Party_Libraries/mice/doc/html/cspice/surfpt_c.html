@@ -1,0 +1,320 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>surfpt_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>surfpt_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void surfpt_c ( ConstSpiceDouble   positn[3], 
+                   ConstSpiceDouble   u[3], 
+                   SpiceDouble        a, 
+                   SpiceDouble        b,
+                   SpiceDouble        c, 
+                   SpiceDouble        point[3],  
+                   SpiceBoolean     * found     ) 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Determine the intersection of a line-of-sight vector with the 
+   surface of an ellipsoid. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   ELLIPSOID
+   GEOMETRY 
+   INTERSECTION
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+   VARIABLE  I/O  DESCRIPTION 
+   --------  ---  -------------------------------------------------- 
+   positn     I   Position of the observer in body-fixed frame. 
+   u          I   Vector from the observer in some direction.
+   a          I   Length of the ellipsoid semi-axis along the x-axis.
+   b          I   Length of the ellipsoid semi-axis along the y-axis.
+   c          I   Length of the ellipsoid semi-axis along the z-axis.
+   point      O   Point on the ellipsoid pointed to by u.
+   found      O   Flag indicating if u points at the ellipsoid.
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   positn     3-vector giving the position of an observer with respect
+              to the center of an ellipsoid.  The vector is expressed
+              in a body-fixed reference frame. The semi-axes of the
+              ellipsoid are aligned with the x, y, and z-axes of the
+              body-fixed frame.
+
+   u          Direction vector emanating from the observer.  
+
+   a          Length of the semi-axis of the ellipsoid that is parallel
+              to the x-axis of the body-fixed reference frame.
+ 
+   b          Length of the semi-axis of the ellipsoid that is parallel
+              to the y-axis of the body-fixed reference frame.
+ 
+   c          Length of the semi-axis of the ellipsoid that is parallel
+              to the z-axis of the body-fixed reference frame.
+ 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   point      If the ray with direction vector u emanating from 
+              positn intersects the ellipsoid, point will be 
+              returned with the body-fixed coordinates of the point 
+              where the ray first meets the ellipsoid.  Otherwise, 
+              point will be returned as (0, 0, 0). 
+
+   found      A logical flag indicating whether or not the ray from
+              positn with direction u actually intersects the
+              ellipsoid.  If the ray does intersect the ellipsoid,
+              found will be returned as SPICETRUE. If the ray misses
+              the ellipsoid, found will be returned as SPICEFALSE.
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+    1) If the input vector is the zero vector, the error 
+       SPICE(ZEROVECTOR) is signaled. 
+ 
+    2) If any of the body's axes is zero, the error 
+       SPICE(BADAXISLENGTH) is signaled. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+    None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   This routine assumes that an ellipsoid having semi-axes of length a,
+   b and c is given.  Moreover, it is assumed that these axes are
+   parallel to the x-, y-, and z-axes of a coordinate system whose
+   origin is the geometric center of the ellipsoid---this is called the
+   body-fixed coordinate frame.
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   A typical use of <b>surfpt_c</b> would be to obtain the planetocentric
+   coordinates of the point at which the optic axis of a
+   spacecraft-mounted instrument intersects the surface of a target
+   body, given the following items.
+
+      1) The epoch (et) of observation, and the inertial 
+         pointing (vpnt) of the instrument at this epoch. 
+
+      2) The apparent position (vtarg) of the center of the 
+         target body as seen from the spacecraft at the epoch 
+         of observation, and the one-way light time (tau) 
+         from the target to the spacecraft. 
+ 
+   In order to find the point of intersection, the following items are
+   also needed.
+
+      3) The transformation (tibf) from inertial 
+         to body-fixed coordinates at epoch et-tau. 
+
+      4) The radii (r) of the tri-axial ellipsoid 
+         used to model the target body. 
+
+   These may be obtained from the kernel pool via calls to <a href="pxform_c.html">pxform_c</a> and
+   <a href="bodvrd_c.html">bodvrd_c</a> or <a href="bodvcd_c.html">bodvcd_c</a> respectively.
+ 
+   The position of the observer is just the negative of the
+   spacecraft-target vector, vtarg, computed using the <a href="vminus_c.html">vminus_c</a> module.
+   (Note that this is NOT the same as the apparent position of the
+   spacecraft as seen from the target!) Both vectors must be in
+   body-fixed coordinates. The point of intersection is found as
+   follows.
+
+      <a href="vminus_c.html">vminus_c</a> ( vtarg, vpos );
+      <a href="mxv_c.html">mxv_c</a>    ( tibf,  vpos,  vpos );
+      <a href="mxv_c.html">mxv_c</a>    ( tibf,  vpnt,  vpnt );
+
+      <b>surfpt_c</b> ( vpos, vpnt, r[0], r[1], r[2], vsurf, &amp;found );
+ 
+   Note that vsurf may or may not be a point of intersection, depending
+   on whether found is SPICETRUE or SPICEFALSE. Note also that vsurf is
+   a vector from the center to the surface of the target, in body-fixed
+   coordinates, which may be converted directly to planetocentric
+   latitude, longitude, and radius:
+
+     <a href="reclat_c.html">reclat_c</a> ( vsurf, &amp;radius, &amp;long, &amp;lat );
+
+   To get the inertial vector from the spacecraft to the surface point,
+   you must subtract vpos from vsurf, and rotate the resulting vector
+   back to inertial coordinates:
+ 
+      <a href="vsub_c.html">vsub_c</a> ( vsurf, vpos,  vsurf );
+      <a href="mtxv_c.html">mtxv_c</a> ( tibf,  vsurf, vsurf );
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+    None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+    C.H. Acton      (JPL)
+    N.J. Bachman    (JPL)
+    W.L. Taber      (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.4.3, 24-OCT-2005 (NJB)
+
+       Header update: reference to <a href="bodvar_c.html">bodvar_c</a> was replaced with
+       references to <a href="bodvrd_c.html">bodvrd_c</a> and <a href="bodvcd_c.html">bodvcd_c</a>.
+
+   -CSPICE Version 1.4.2, 27-JUL-2003 (NJB) (CHA)
+
+      Various header corrections were made.
+
+   -CSPICE Version 1.4.1, 28-NOV-2002 (NJB)
+
+      Made miscellaneous updates to header comments.
+
+   -CSPICE Version 1.4.0, 27-AUG-1999 (NJB)
+
+      Now uses local &quot;found&quot; flag of type logical.
+
+   -CSPICE Version 1.3.0, 22-OCT-1998 (NJB)
+
+      Made input vectors const.
+
+   -CSPICE Version 1.2.0, 08-FEB-1998 (NJB)
+   
+      Removed local variables used for temporary capture of outputs.
+
+   -CSPICE Version 1.0.0, 25-OCT-1997 (NJB)
+   
+       Based on SPICELIB Version 1.1.0, 07-AUG-1996 (WLT)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   line of sight intercept with body 
+   point of intersection between ray and ellipsoid 
+   surface point of intersection of ray and ellipsoid 
+ </PRE>
+<h4>Link to routine surfpt_c source file <a href='../../../src/cspice/surfpt_c.c'>surfpt_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:45 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,294 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ekgi</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ekgi</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_EKGI returns an element of integer data from a
+   specified row in a specified column of the set of rows matching
+   the previous <a href="cspice_ekfind.html">cspice_ekfind</a> SELECT query.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      selidx   the scalar integer index for a column of interest
+               satisfying the SELECT clause, the column indices
+               range from 1 to number of columns in the SELECT clause.
+
+      row      the scalar integer index for a row in the column
+               identified by 'selidx', the column indices
+               range from 1 to 'nmrows' where 'nmrows' equals the total
+               number of rows satisfying the SELECT clause.
+
+      elment   the scalar integer index for an element of
+               the data at the 'selidx','row' position; a scalar
+               value at 'selidx', 'row' has 'elment' value one.
+
+   the call:
+
+      [ idata, null, found] = <b>cspice_ekgi</b>( selidx, row, elment )
+
+   returns:
+
+      idata    the integer value of the requested element at
+               data location 'selidx', 'row', 'elment'.
+
+      null     a scalar boolean indicating if 'idata' has a null value.
+
+      found    a scalar boolean indicating whether the specified
+               value at 'selidx', 'row', 'elment' was found.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Assign an EK file to load..
+      %
+      EK = 'test_file.ek';
+
+      %
+      % Load the EK.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( EK )
+
+      %
+      % Assume the file test_file.ek contains the table 'scalar_2',
+      % and that &quot;scalar_2' has the column named 'i_col_1' of integer
+      % values.
+      %
+      % Define a set of constraints to perform a query on all
+      % loaded EK files (the SELECT clause). In this case select
+      % the column &quot;i_col_1&quot; from table &quot;scalar_2.&quot;
+      %
+      query = 'Select i_col_1 from scalar_2 order by row_no';
+
+      %
+      % Query the EK system for data rows matching the
+      % SELECT constraints.
+      %
+      [ nmrows, ok, errmsg ] = <a href="cspice_ekfind.html">cspice_ekfind</a>( query );
+
+      %
+      % Check whether an error occurred while processing the
+      % SELECT clause. If so, output the error message.
+      %
+      if ( ok )
+         printf( 'SELECT clause error: %s\n', errmsg );
+      end
+
+      %
+      % Loop over each row found matching the query.
+      %
+      for rowno = 1:nmrows
+
+         %
+         % Fetch the integer data. We know the query returned
+         % one column and the column contains only scalar data,
+         % so the index of all elements is 1.
+         %
+         selidx = 1;
+         eltidx = 1;
+
+         %
+         % Use <b>cspice_ekgi</b> to retrieve the value from
+         % row/column position.
+         %
+         [ idata, isnull, found ] = <b>cspice_ekgi</b>( selidx, ...
+                                                 rowno,  ...
+                                                 eltidx );
+
+         %
+         % Output the value, if non-null data exist at the
+         % requested position.
+         %
+         if  ~isnull
+            fprintf( 'Integer data: %d\n', idata );
+         end
+
+      end
+
+      %
+      % Clear the kernel pool and database. Note, you don't normally
+      % unload an EK after a query, rather at the end of a program.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+      Integer data: 2000001
+      Integer data: 2000002
+      Integer data: 2000003
+      Integer data: 2000004
+      Integer data: 2000005
+      Integer data: 2000006
+      Integer data: 2000007
+      Integer data: 2000008
+      Integer data: 2000009
+      Integer data: 2000010
+      Integer data: 2000011
+      Integer data: 2000012
+      Integer data: 2000013
+      Integer data: 2000014
+      Integer data: 2000015
+      Integer data: 2000016
+      Integer data: 2000017
+      Integer data: 2000018
+      Integer data: 2000019
+      Integer data: 2000020
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Suppose a SELECT clause return data consisting of three columns (N=3)
+   and four rows (M=4):
+
+              col 1    col 2    col 3
+
+      row 1   val_11   val_12   val_13
+      row 2   val_21   val_22   val_23
+      row 3   val_31   val_32   val_33
+      row 4   val_41   val_42   val_43
+
+   with &quot;col 2&quot; and &quot;col 3&quot; containing scalar integer data and &quot;val_42&quot;
+   containing a vector of K integers.
+
+   Retrieving the data elements depends on the values for the index set
+   &quot;selidx,&quot; &quot;row,&quot; and &quot;elment.&quot;
+
+   Use the set
+
+      'selidx' = 2, 'row' = 3, 'elment' = 1
+
+   to fetch scalar &quot;val_32.&quot;
+
+   Use the set
+
+      'selidx' = 3, 'row' = 4, 'elment' = 1
+
+   to fetch scalar &quot;val_43.&quot;
+
+   Use the set
+
+      'selidx' = 2, 'row' = 4, 'elment' = K
+
+   to fetch the final element of vector &quot;val_42&quot;
+
+   'elment' is allowed to exceed the number of elements in the column
+   entry; if it does, 'found' returns as false.  This allows the caller
+   to read data from the column entry in a loop without checking the
+   number of available elements first.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/ekgi_c.html">ekgi_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/ek.html">EK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.2.0, 10-MAY-2011, EDW (JPL)
+
+      &quot;logical&quot; call replaced with &quot;zzmice_logical.&quot;
+
+   -Mice Version 1.0.0, 10-APR-2010, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   fetch element from integer column entry
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:37 2014</pre>
+
+</body>
+</html>
+

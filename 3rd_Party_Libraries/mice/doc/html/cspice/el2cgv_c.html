@@ -1,0 +1,247 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>el2cgv_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>el2cgv_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void el2cgv_c ( ConstSpiceEllipse   * ellipse,
+                   SpiceDouble           center[3],
+                   SpiceDouble           smajor[3],
+                   SpiceDouble           sminor[3]  ) 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Convert a CSPICE ellipse to a center vector and two generating 
+   vectors.  The selected generating vectors are semi-axes of the 
+   ellipse. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/ellipses.html">ELLIPSES</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   ELLIPSE 
+   GEOMETRY 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   ellipse    I   A CSPICE ellipse. 
+   center, 
+   smajor, 
+   sminor     O   Center and semi-axes of ellipse. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   ellipse        is a CSPICE ellipse. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   center, 
+   smajor, 
+   sminor         are, respectively, a center vector, a semi-major 
+                  axis vector, and a semi-minor axis vector that 
+                  generate the input ellipse.  This ellipse is the 
+                  set of points 
+ 
+                     center + cos(theta) smajor + sin(theta) sminor 
+ 
+                  where theta ranges over the interval (-pi, pi]. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   Error free. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   CSPICE ellipses serve to simplify calling sequences and reduce 
+   the chance for error in declaring and describing argument lists 
+   involving ellipses. 
+ 
+   The set of ellipse conversion routines is 
+ 
+      <a href="cgv2el_c.html">cgv2el_c</a> ( Center and generating vectors to ellipse ) 
+      <b>el2cgv_c</b> ( Ellipse to center and generating vectors ) 
+ 
+   A word about the output of this routine:   the semi-major axis of 
+   an ellipse is a vector of largest possible magnitude in the set 
+ 
+      cos(theta) vec1  +  sin(theta) vec2, 
+ 
+   where theta is in the interval (-pi, pi].  There are two such 
+   vectors; they are additive inverses of each other. The semi-minor 
+   axis is an analogous vector of smallest possible magnitude.  The 
+   semi-major and semi-minor axes are orthogonal to each other.  If 
+   smajor and sminor are choices of semi-major and semi-minor axes, 
+   then the input ellipse can also be represented as the set of 
+   points 
+ 
+ 
+      center + cos(theta) smajor + sin(theta) sminor 
+ 
+   where theta ranges over the interval (-pi, pi]. 
+ 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   1)  Find the semi-axes of the limb of an ellipsoid. 
+ 
+          #include &quot;SpiceUsr.h&quot;
+                  .
+                  .
+                  .
+          /.
+          Our viewing location is viewpt.  The radii of the 
+          ellipsoid are a, b, and c. 
+          ./
+          <a href="edlimb_c.html">edlimb_c</a> ( a, b, c, viewpt, &amp;limb );
+
+          <b>el2cgv_c</b> ( &amp;limb, center, smajor, sminor ); 
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman   (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 12-JUN-1999 (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   ellipse to center and generating vectors 
+ </PRE>
+<h4>Link to routine el2cgv_c source file <a href='../../../src/cspice/el2cgv_c.c'>el2cgv_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:32 2014</pre>
+
+</body>
+</html>
+

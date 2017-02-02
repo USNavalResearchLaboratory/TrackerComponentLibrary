@@ -1,0 +1,120 @@
+ 
+SIMPLE User's Guide
+===========================================================================
+ 
+   Last revised on 2002 DEC 13 by E. D. Wright.
+ 
+ 
+Abstract
+--------------------------------------------------------
+ 
+   SIMPLE is a cookbook program that demonstrates how to use Toolkit
+   routines to obtain state vectors.
+ 
+ 
+Summary
+--------------------------------------------------------
+ 
+   The SIMPLE `cookbook' program illustrates the use of SPICE SPK ephemeris
+   files and CSPICE Toolkit software. The program demonstrates how CSPICE
+   routines fit together to solve a typical geometrical problem involving
+   state vectors extracted from an SPK file.
+ 
+   SIMPLE demonstrates the use of the following high-level subroutines:
+ 
+         furnsh_c   Load SPICE kernels
+ 
+         spkezr_c   SPK, easy reader
+ 
+         str2et_c   Convert time string to ephemeris time
+ 
+         et2utc_c   Convert ephemeris time to UTC string
+ 
+         vsep_c     Calculate angular separation between vectors
+ 
+   To run SIMPLE, you need a binary SPK ephemeris file and knowledge of the
+   bodies and the corresponding time intervals contained in that file. The
+   utility program named BRIEF summarizes the contents and time coverage of
+   a binary SPK file. Refer to NAIF IDs Required Reading (naif_ids.req) for
+   a list of body names and integer codes. In addition to an SPK file, you
+   also require access to a leapseconds kernel (LSK).
+ 
+   The user enters the string names or NAIF ID codes for two target bodies
+   and an observing body, and the end-points (expressed in UTC) of a time
+   interval. The bodies may be any objects in the solar system, as long as
+   the SPK file loaded into SIMPLE contains data for them during the time
+   interval requested.
+ 
+   The time interval consists of ten (10) equally spaced time steps. SIMPLE
+   computes the angular separation, in degrees, between the target bodies
+   as seen from the observing body at each time step then displays the
+   output to the terminal screen. The application then prompts the user to
+   continue with another set of parameters or quit.
+ 
+   Below, find an example of a SIMPLE run. The session calculates the angle
+   of separation between the Sun and the Moon as seen from Earth.
+ 
+   Please note: FORTRAN and C versions of the program can output numerical
+   values in slightly different formats.
+ 
+   It is assumed the kernel files used by SIMPLE exist in the current
+   directory (i.e. the directory from which your execute SIMPLE). This
+   particular session was run on an Intel box using the LINUX operating
+   system.
+ 
+   First, create the binary SPK kernel "cook_01.bsp" by running the CSPICE
+   Toolkit TOBIN application on the transfer format file "cook_01.tsp"
+   located in the CSPICE data directory. The program also requires a
+   leapseconds kernel to run; an example leapseconds kernel, 'cook_01.tls'
+   exists within the same directory. Now, execute SIMPLE:
+ 
+ 
+                          Welcome to SIMPLE
+ 
+      This program calculates the angular separation of two
+      target bodies as seen from an observing body.
+ 
+      The angular separations are calculated for each of 10
+      equally spaced times in a given time interval. A table
+      of the results is presented.
+ 
+ 
+      Enter the name of a leapseconds kernel file: cook_01.tls
+ 
+      Enter the name of a binary SPK ephemeris file: cook_01.bsp
+ 
+      Enter the name of the observing body: earth
+ 
+      Enter the name of the first target body: moon
+ 
+      Enter the name of the second target body: sun
+ 
+      Enter the beginning UTC time: 1 jan 1990
+ 
+      Enter the ending UTC time: 2 jan 1990
+ 
+      Working ... Please wait.
+ 
+ 
+      The angular separation between bodies moon and sun,
+      as seen from body earth.
+ 
+      From: 1990 JAN 01 00:00:00
+      To  : 1990 JAN 02 00:00:00
+ 
+             UTC Time                 Separation
+      ----------------------------------------------
+        1990 JAN 01 00:00:00         46.25929528 deg
+        1990 JAN 01 02:40:00         47.63463504 deg
+        1990 JAN 01 05:20:00         49.01248624 deg
+        1990 JAN 01 08:00:00         50.39282527 deg
+        1990 JAN 01 10:40:00         51.77563064 deg
+        1990 JAN 01 13:20:00         53.16088282 deg
+        1990 JAN 01 16:00:00         54.54856399 deg
+        1990 JAN 01 18:40:00         55.93865792 deg
+        1990 JAN 01 21:20:00         57.33114978 deg
+        1990 JAN 02 00:00:00         58.72602606 deg
+ 
+      Continue? (Enter Y or N): N
+ 
+ 

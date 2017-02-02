@@ -1,0 +1,262 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>dafrda_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>dafrda_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void dafrda_c ( SpiceInt       handle, 
+                   SpiceInt       begin,
+                   SpiceInt       end,
+                   SpiceDouble  * data )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   Read the double precision data bounded by two addresses within
+   a DAF.
+
+   Deprecated:  This routine has been superseded by <a href="dafgda_c.html">dafgda_c</a> and
+   <a href="dafgsr_c.html">dafgsr_c</a>.  This routine is supported for purposes of backward
+   compatibility only.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+   <a href="../req/daf.html">DAF</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+   FILES
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+   Variable  I/O  Description
+   --------  ---  --------------------------------------------------
+   handle     I   Handle of a DAF.
+   begin,
+   end        I   Initial, final address within file.
+   data       O   Data contained between begin and end.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+   handle      is the handle of a DAF.
+
+   begin,
+   end         are the initial and final addresses of a contiguous
+               set of double precision numbers within a DAF.
+               Presumably, these make up all or part of a particular
+               array.
+               
+               Note that CSPICE DAF addresses begin at 1 as in the 
+               FORTRAN version of the SPICE Toolkit.
+               </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+   data        are the double precision data contained between
+               the specified addresses within the specified file.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+   1) If `begin' is zero or negative, the error SPICE(DAFNEGADDR)
+      is signaled.
+
+   2) If the begin &gt; end, the error SPICE(DAFBEGGTEND)
+      is signaled.
+
+   3) If the file associated with `handle' is not of the native
+      binary file format this routine signals the error
+      SPICE(UNSUPPORTEDBFF).
+
+   4) If `handle' is invalid, routines in the call tree of <b>dafrda_c</b>
+      signal an appropriate error.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+   The principal reason that DAFs are so easy to use is that
+   the data in each DAF are considered to be one long contiguous
+   set of double precision numbers. You can grab data from anywhere
+   within a DAF without knowing (or caring) about the physical
+   records in which they are stored.
+
+   This routine has been made obsolete by the routines <a href="dafgda_c.html">dafgda_c</a> and
+   <a href="dafgsr_c.html">dafgsr_c</a>.  This routine is supported for reasons of backward
+   compatibility only.  New software development should utilize
+   <a href="dafgda_c.html">dafgda_c</a> or <a href="dafgsr_c.html">dafgsr_c</a>.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+   The following code fragment illustrates the use of <b>dafrda_c</b>
+   to read data from an imaginary array. The array begins with a
+   directory containing 11 epochs. Each pair of epochs bounds
+   an interval, and each interval is covered by a set of eight
+   osculating elements.
+
+      #include &quot;SpiceUsr.h&quot;
+      
+         .
+         .
+         .
+      
+      <a href="dafus_c.html">dafus_c</a> ( sum, nd, ni, dc, ic );
+      begin = ic[4];
+      end   = ic[5];
+
+      <b>dafrda_c</b> ( handle, begin, begin+10, epochs );
+
+      for ( i = 0;  i &lt; 10;  i++ )
+      {
+         if (     ( et &gt; epochs[i]   )
+              &amp;&amp;  ( et &lt; epochs[i+1] ) ) 
+         {
+            offset = ic[4] + 11 + (i - 1) * 8;
+            <b>dafrda_c</b> ( handle, offset+1, offset+8, elements );
+            return;
+         }
+      }
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   1) This routine is deprecated.  See the routines <a href="dafgda_c.html">dafgda_c</a> and
+      <a href="dafgsr_c.html">dafgsr_c</a>.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   N.J. Bachman    (JPL)
+   W.L. Taber      (JPL)
+   F.S. Turner     (JPL)
+   R.E. Thurman    (JPL)
+   I.M. Underwood  (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.0.3, 19-MAY-2010 (BVS)
+
+        Index line now states that this routine is deprecated.
+
+   -CSPICE Version 1.0.2, 23-JAN-2008 (EDW)
+
+      Removed a spurious and unneeded &quot;-Declarations&quot;
+      tag. The tag's presence prevented the HTML API doc
+      script from parsing the function description.
+
+   -CSPICE Version 1.0.1, 27-OCT-2003 (NJB) (FST)
+
+       The header now states that this routine is deprecated.
+       The Exceptions header section has been extended.
+       Minor additional header updates were made.
+
+   -CSPICE Version 1.0.0, 14-DEC-1999 (NJB) (RET) (IMU) (WLT)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   DEPRECATED read data from daf address
+</PRE>
+<h4>Link to routine dafrda_c source file <a href='../../../src/cspice/dafrda_c.c'>dafrda_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:29 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,200 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_m2q</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_m2q</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_M2Q calculates a unit quaternion corresponding to a
+   specified 3x3 double precision, rotation matrix.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      r   a double precision 3x3 or 3x3xN array of rotation
+          matrices
+
+   the call:
+
+      q = <b>cspice_m2q</b>(r)
+
+   returns:
+
+      q   a double precision 4-vector or 4xN array, the quaternion
+          representation of the matrix 'r'
+
+          Note that multiple styles of quaternions are in use.
+          This routine returns a quaternion that conforms to
+          the SPICE convention. See the Particulars section
+          for details.
+
+          'q' returns with the same vectorization measure (N)
+          as 'r' .
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Create a rotation matrix of 90 degrees about the Z axis.
+      %
+      r = <a href="cspice_rotate.html">cspice_rotate</a>( <a href="cspice_halfpi.html">cspice_halfpi</a>, 3)
+
+   MATLAB outputs:
+
+      r =
+
+         0.00000000000000   1.00000000000000                  0
+        -1.00000000000000   0.00000000000000                  0
+                        0                  0   1.00000000000000
+
+      q = <b>cspice_m2q</b>( r )
+
+   MATLAB outputs:
+
+      q =
+
+         0.70710678118655
+                        0
+                        0
+        -0.70710678118655
+
+      %            _
+      % Confirm || q || = 1.
+      %
+      q'  * q
+
+   MATLAB outputs:
+
+      ans =
+
+           1
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   About SPICE quaternions
+   =======================
+
+   There are (at least) two popular &quot;styles&quot; of quaternions; these
+   differ in the layout of the quaternion elements, the definition
+   of the multiplication operation, and the mapping between the set
+   of unit quaternions and corresponding rotation matrices.
+
+   SPICE-style quaternions have the scalar part in the first
+   component and the vector part in the subsequent components. The
+   SPICE convention, along with the multiplication rules for SPICE
+   quaternions, are those used by William Rowan Hamilton, the
+   inventor of quaternions.
+
+   Another common quaternion style places the scalar component
+   last.  This style is often used in engineering applications.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/m2q_c.html">m2q_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/rotation.html">ROTATION.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+    -Mice Version 1.0.0, 10-JAN-2006, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   matrix to quaternion
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:38 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,234 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_deltet</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_deltet</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DELTET returns value of Delta ET (ET-UTC)
+   for an input epoch.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      epoch    the double precision scalar or N-vector of
+               epochs at which &quot;delta ET&quot; is to be computed.
+               'epoch' may be either UTC or ephemeris seconds
+               past J2000, as specified by 'eptype'.
+
+      eptype   the scalar string indicating the type of input
+               epoch. It may be either of the following:
+
+                  'UTC'   UTC seconds past J2000 UTC.
+
+                  'ET'    Ephemeris seconds past J2000 TDB,
+                          also known as barycentric
+                          dynamical time (TDB).
+
+   the call:
+
+      delta = <b>cspice_deltet</b>( epoch, eptype )
+
+   returns:
+
+      delta   the double precision scalar or N-vector
+              values of
+
+                 &quot;delta ET&quot; = ET - UTC
+
+              at the input 'epoch'. This is added to UTC to
+              give ET, or subtracted from ET to give UTC.
+
+              'delta' return with the same vectorization measure
+              (N) as 'epoch'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Load a leapsecond file.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % Define times of interest and the array size
+      % parameter.
+      %
+      SIZE     = 2004 - 1997 +1;
+      UTC_1997 = 'Jan 1 1997';
+      UTC_2004 = 'Jan 1 2004';
+
+      %
+      % Convert the UTC time strings to ET.
+      %
+      et_1997 = <a href="cspice_str2et.html">cspice_str2et</a>( UTC_1997 );
+      et_2004 = <a href="cspice_str2et.html">cspice_str2et</a>( UTC_2004 );
+
+      %
+      % Calculate the ET-UTC delta at Jan 1 1997
+      % and Jan 1 2004.
+      %
+      delt_1997 = <b>cspice_deltet</b>( et_1997, 'ET' );
+      delt_2004 = <b>cspice_deltet</b>( et_2004, 'ET' );
+
+      disp( 'Scalar:' )
+      disp( sprintf( 'Delta 1997: %f'  , delt_1997 ) )
+      disp( sprintf( 'Delta 2004: %f\n', delt_2004 ) )
+
+      %
+      % Given an array of 'SIZE' ephemeris times
+      % starting from value 'et_1997' with steps being
+      % of the number of seconds per Julian year, return
+      % the ET-UTC delta value for each time.
+      %
+      et   = [0:SIZE-1]*<a href="cspice_jyear.html">cspice_jyear</a> + et_1997;
+      delt = <b>cspice_deltet</b>( et, 'ET' );
+
+      %
+      % Convert 'et' to 'utc'.
+      %
+      utc = <a href="cspice_et2utc.html">cspice_et2utc</a>( et, 'C', 3 );
+
+      disp( 'Vector:' )
+      for n=1:SIZE
+         txt = sprintf( '%s delta %f', utc(n,:), delt(n) );
+         disp( txt )
+      end
+
+      %
+      % It's always good form to unload kernels after use,
+      % particularly in MATLAB due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+      Scalar:
+      Delta 1997: 62.183935
+      Delta 2004: 64.183912
+
+      Vector:
+      1997 JAN 01 00:00:00.000 delta 62.183935
+      1998 JAN 01 05:59:59.000 delta 63.183935
+      1999 JAN 01 11:59:58.000 delta 64.183935
+      2000 JAN 01 17:59:58.000 delta 64.183935
+      2000 DEC 31 23:59:58.000 delta 64.183934
+      2002 JAN 01 05:59:58.000 delta 64.183934
+      2003 JAN 01 11:59:58.000 delta 64.183934
+      2004 JAN 01 17:59:58.000 delta 64.183933
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/deltet_c.html">deltet_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/time.html">TIME.REQ</a>
+   <a href="../req/kernel.html">KERNEL.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 22-NOV-2005, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   difference between ephemeris time and utc
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:36 2014</pre>
+
+</body>
+</html>
+

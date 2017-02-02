@@ -1,0 +1,259 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>gfbail_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>gfbail_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   SpiceBoolean gfbail_c () 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Indicate whether an interrupt signal (SIGINT) has been received. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/gf.html">GF</a>
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   GEOMETRY
+   SEARCH 
+   UTILITY 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   The function returns SPICETRUE if an interrupt signal has
+   been received by the GF handler.
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   None 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   The function returns SPICETRUE if an interrupt signal has been
+   received by the GF handler <a href="gfinth_c.html">gfinth_c</a> since the first setting of the
+   handler or the last call to <a href="gfclrh_c.html">gfclrh_c</a>, whichever is most recent.
+   Otherwise the function returns SPICEFALSE.
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   Error free.
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   This routine returns the interrupt signal handler status maintained
+   by the GF subsystem. 
+
+   User applications that use default GF interrupt handling should call
+   this routine after each call to a GF API that can process an
+   interrupt signal. In general, if this routine indicates that an
+   interrupt signal was received, any GF processing that was interrupted
+   should be presumed to have invalid results.
+  </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   1) The code fragment below is from an example program in
+      the header of <a href="gfocce_c.html">gfocce_c</a>. The code includes a search,
+      a call to <b>gfbail_c</b>, which is made to determine whether
+      an interrupt signal was received, and a call to 
+      <a href="gfclrh_c.html">gfclrh_c</a> to clear the interrupt signal status.
+
+            ...
+
+            /.
+            Turn on interrupt handling and progress reporting.
+            ./
+            bail = SPICETRUE;
+            rpt  = SPICETRUE;
+
+            /.
+            Perform the search.
+            ./
+            <a href="gfocce_c.html">gfocce_c</a> ( &quot;ANY&quot;,                            
+                       &quot;MOON&quot;,     &quot;ellipsoid&quot;,  &quot;IAU_MOON&quot;, 
+                       &quot;SUN&quot;,      &quot;ellipsoid&quot;,  &quot;IAU_SUN&quot;,  
+                       &quot;LT&quot;,       &quot;EARTH&quot;,      CNVTOL,    
+                       <a href="gfstep_c.html">gfstep_c</a>,   <a href="gfrefn_c.html">gfrefn_c</a>,     rpt,       
+                       <a href="gfrepi_c.html">gfrepi_c</a>,   <a href="gfrepu_c.html">gfrepu_c</a>,     <a href="gfrepf_c.html">gfrepf_c</a>, 
+                       bail,       <b>gfbail_c</b>,     &amp;cnfine,   
+                       &amp;result                              );
+
+
+            if ( <b>gfbail_c</b>() ) 
+            {
+               /.
+               Clear the CSPICE interrupt indication. This is
+               an essential step for programs that continue
+               running after an interrupt; <b>gfbail_c</b> will
+               continue to return SPICETRUE until this step
+               has been performed.
+               ./
+               <a href="gfclrh_c.html">gfclrh_c</a>();
+
+
+               /.
+               We've trapped an interrupt signal. In a realistic
+               application, the program would continue operation
+               from this point. In this simple example, we simply
+               display a message and quit.
+               ./
+               printf ( &quot;\nSearch was interrupted.\n\nThis message &quot;
+                        &quot;was written after an interrupt signal\n&quot;
+                        &quot;was trapped. By default, the program &quot;
+                        &quot;would have terminated \nbefore this message &quot;
+                        &quot;could be written.\n\n&quot;                       );
+            }
+            else
+            
+
+            ...
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   This routine has no visible effect on operation of user applications
+   unless GF interrupt handling is enabled and this routine is used as
+   the interrupt signal receipt indicator.
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman   (JPL) 
+   L.S. Elson     (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 05-FEB-2009 (NJB) (LSE)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   GF interrupt signal receipt indicator
+ </PRE>
+<h4>Link to routine gfbail_c source file <a href='../../../src/cspice/gfbail_c.c'>gfbail_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:34 2014</pre>
+
+</body>
+</html>
+

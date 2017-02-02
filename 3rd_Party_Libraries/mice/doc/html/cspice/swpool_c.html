@@ -1,0 +1,306 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>swpool_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>swpool_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void swpool_c ( ConstSpiceChar    * agent,
+                   SpiceInt            nnames,
+                   SpiceInt            lenvals,
+                   const void        * names   ) 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Add a name to the list of agents to notify whenever a member of 
+   a list of kernel variables is updated. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/kernel.html">KERNEL</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   CONSTANTS 
+   FILES 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   VARIABLE  I/O  DESCRIPTION 
+   --------  ---  -------------------------------------------------- 
+   agent      I   The name of an agent to be notified after updates. 
+   nnames     I   The number of variables to associate with agent. 
+   lenvals    I   Length of strings in the names array.
+   names      I   Variable names whose update causes the notice. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   agent       is the name of a routine or entry point (agency) that 
+               will want to know when a some variables in the kernel 
+               pool have been updated. 
+ 
+   nnames      is the number of kernel pool variable names that will 
+               be associated with agent. 
+ 
+   lenvals     is the length of the strings in the array names, 
+               including the null terminators.  
+              
+   names       is an array of names of variables in the kernel pool. 
+               Whenever any of these is updated, a notice will be 
+               posted for agent so that one can quickly check 
+               whether needed data has been modified. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1) If sufficient room is not available to hold a name or new agent,
+      a routine in the call tree for this routine will signal an error.
+ 
+   2) If either of the input string pointers are null, the error 
+      SPICE(NULLPOINTER) will be signaled.
+      
+   3) If any input string agent has length zero, the error 
+      SPICE(EMPTYSTRING) will be signaled.
+      
+   4) The caller must pass a value indicating the length of the strings
+      in the names array.  If this value is not at least 2, the error
+      SPICE(STRINGTOOSHORT) will be signaled.
+      </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   The kernel pool is a convenient place to store a wide variety of
+   data needed by routines in CSPICE and routines that interface with
+   CSPICE routines.  However, when a single name has a large quantity
+   of data associated with it, it becomes inefficient to constantly
+   query the kernel pool for values that are not updated on a frequent
+   basis.
+ 
+   This entry point allows a routine to instruct the kernel pool to
+   post a message whenever a particular value gets updated. In this
+   way, a routine can quickly determine whether or not data it requires
+   has been updated since the last time the data was accessed.  This
+   makes it reasonable to buffer the data in local storage and update
+   it only when a variable in the kernel pool that affects this data
+   has been updated.
+ 
+   Note that <b>swpool_c</b> has a side effect.  Whenever a call to <b>swpool_c</b>
+   is made, the agent specified in the calling sequence is added to the
+   list of agents that should be notified that an update of its
+   variables has occurred.  In other words the code
+ 
+       <b>swpool_c</b> ( agent, nnames, lenvals, names   ); 
+       <a href="cvpool_c.html">cvpool_c</a> ( agent,                  &amp;update ); 
+ 
+   will always return update as SPICETRUE. 
+ 
+   This feature allows for a slightly cleaner use of <b>swpool_c</b> and
+   <a href="cvpool_c.html">cvpool_c</a> as shown in the example below.  Because <b>swpool_c</b>
+   automatically loads agent into the list of agents to notify of a
+   kernel pool update, you do not have to include the code for fetching
+   the initial values of the kernel variables in the initialization
+   portion of a subroutine.  Instead, the code for the first fetch from
+   the pool is the same as the code for fetching when the pool is
+   updated.
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   Suppose that you have an application subroutine, MYTASK, that 
+   needs to access a large data set in the kernel pool.  If this 
+   data could be kept in local storage and kernel pool queries 
+   performed only when the data in the kernel pool has been 
+   updated, the routine can perform much more efficiently. 
+ 
+   The code fragment below illustrates how you might make use of this 
+   feature. 
+ 
+      #include &quot;SpiceUsr.h&quot;
+           .
+           .
+           .
+      /.  
+      On the first call to this routine establish those variables 
+      that we will want to read from the kernel pool only when 
+      new values have been assigned. 
+      ./
+      if ( first )
+      {
+         first = SPICEFALSE;
+         <b>swpool_c</b> ( &quot;MYTASK&quot;, nnames, lenvals, names ); 
+      }
+ 
+      /.
+      If any of the variables has been updated, fetch them from the
+      kernel pool.
+      ./    
+        
+      <a href="cvpool_c.html">cvpool_c</a> ( &quot;MYTASK&quot;, &amp;update ); 
+ 
+      if ( update )
+      {
+         for ( i = 0;  i &lt; NVAR;  i++ )
+         {
+            <a href="gdpool_c.html">gdpool_c</a>( MYTASK_VAR[i], 1, NMAX, n[i], val[i], &amp;found[i] );
+         }
+      }
+ 
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman    (JPL)
+   W.L. Taber      (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.3.0, 27-AUG-2002 (NJB)
+
+      Call to C2F_CreateStrArr_Sig replaced with call to C2F_MapStrArr.
+
+   -CSPICE Version 1.2.0, 28-AUG-2001 (NJB)
+
+      Const-qualified input array names.
+
+   -CSPICE Version 1.1.0, 14-FEB-2000 (NJB)
+
+       Calls to C2F_CreateStrArr replaced with calls to error-signaling 
+       version of this routine:  C2F_CreateStrArr_Sig.
+      
+   -CSPICE Version 1.0.0, 05-JUN-1999 (NJB) (WLT)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   Watch for an update to a kernel pool variable 
+   Notify a routine of an update to a kernel pool variable </PRE>
+<h4>Link to routine swpool_c source file <a href='../../../src/cspice/swpool_c.c'>swpool_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:46 2014</pre>
+
+</body>
+</html>
+

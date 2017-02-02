@@ -1,0 +1,511 @@
+<HTML>
+<HEAD>
+<TITLE> Cells </TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+
+<A NAME="top"></A>
+
+<TABLE STYLE="text-align: left; margin-left: auto; margin-right: auto; width: 800px;" BORDER="0" CELLPADDING="5" CELLSPACING="2">
+<TBODY>
+<TR>
+  <TD STYLE="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+  <DIV ALIGN="right">
+    <SMALL><SMALL><A HREF="index.html">Index Page</A></SMALL></SMALL>
+  </DIV>
+  <B>Cells</B> </TD>
+</TR>
+<TR>
+  <TD STYLE="vertical-align: top;">
+
+<H2> Table of Contents
+</H2>
+
+<PRE>
+   <A HREF="#Cells">Cells</A>
+      <A HREF="#Abstract">Abstract</A>
+         <A HREF="#Revisions">Revisions</A>
+      <A HREF="#Introduction">Introduction</A>
+      <A HREF="#Naming Conventions">Naming Conventions</A>
+      <A HREF="#Declaring and Initializing Cells">Declaring and Initializing Cells</A>
+      <A HREF="#Using Cells">Using Cells</A>
+      <A HREF="#Character Cells">Character Cells</A>
+      <A HREF="#Cell-based data types">Cell-based data types</A>
+   <A HREF="#Summary">Summary</A>
+
+</PRE>
+
+<HR SIZE=3 NOSHADE>
+
+<BR><BR>
+<A NAME="Cells"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Cells
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Last revised on 2002 SEP 04 by N. J. Bachman.
+<P>
+ 
+<BR><BR>
+<A NAME="Abstract"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Abstract
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Cells are SPICE data structures that are vectors of type double
+   precision, integer, or character type carrying with them their own
+   dimension and knowledge of how many components have been used.
+<P>
+ 
+<BR><BR>
+<A NAME="Revisions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Revisions
+</H3><P><BR><BR>
+   September 04, 2002
+<P>
+ 
+<UL>
+<TT>&#32;&#32;</TT> Initial release for CSPICE.
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Introduction"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Introduction
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   A ``CSPICE cell'' (or simply ``cell'') is a data structure intended to
+   provide safe array access within C applications.
+<P>
+ 
+   A CSPICE cell consists of two components: a data array, and an
+   associated C structure---called a ``SpiceCell''--- that maintains
+   attribute information regarding the data array.
+<P>
+ 
+   The SpiceCell structure contains sufficient information to allow CSPICE
+   cell API functions to access the data array ``safely,'' ensuring that
+   out-of-range subscript conditions or mismatched data type errors are
+   avoided. A SpiceCell acts as an array descriptor: rather than passing
+   the address of a cells' data array between functions, a program normally
+   passes the address of the associated SpiceCell.
+<P>
+ 
+   The SpiceCell structure contains the members:
+<P>
+ 
+<PRE>
+   dtype:     Data type of cell: character,
+              integer, or double precision.
+ 
+              dtype has type
+              SpiceCellDataType.
+ 
+   length:    For character cells, the
+              declared length of the
+              cell's string array.
+ 
+   size:      The maximum number of data
+              items that can be stored in
+              the cell's data array.
+ 
+   card:      The cell's "cardinality": the
+              number of data items currently
+              present in the cell.
+ 
+   isSet:     Boolean flag indicating whether
+              the cell is a CSPICE set.
+              Sets have no duplicate data
+              items, and their data items are
+              stored in increasing order.
+ 
+   adjust:    Boolean flag indicating whether
+              the cell's data area has
+              adjustable size.  Adjustable
+              size cell data areas are not
+              currently implemented.
+ 
+   init:      Boolean flag indicating whether
+              the cell has been initialized.
+ 
+   base:      is a void pointer to the
+              associated data array.  base
+              points to the start of the
+              control area of this array.
+ 
+   data:      is a void pointer to the
+              first data slot in the
+              associated data array.  This
+              slot is the element following
+              the control area.
+</PRE>
+   The terms ``size'' and ``cardinality'' refer, respectively, to the
+   maximum number of data elements the cell's data array can hold and the
+   number of data elements currently in the data array.
+<P>
+ 
+   See the header file SpiceCel.h for details concerning the definition of
+   this structure.
+<P>
+ 
+   The CSPICE cell's compact representation allows the user to declare,
+   pass, and otherwise manipulate cells without having to keep track of
+   separate pointers and dimensions for each cell array. Thus, a function
+   to merge the contents of two arrays into a third, when coded using
+   cells, looks like this
+<P>
+ 
+<PRE>
+   merge ( &amp;old, &amp;new, &amp;total );
+</PRE>
+   instead of like this
+<P>
+ 
+<PRE>
+   merge ( old, n_old, new, n_new, max_total, total, &amp;n_total  );
+</PRE>
+   This is especially convenient for arrays that need to be passed as
+   arguments through several levels of subprograms. This also remedies one
+   of the serious flaws in the implementation of C arrays---the inability
+   of a subprogram to determine the size of an argument array into which it
+   is to place values. Since the size of a cell is always available,
+   functions that manipulate cells can always check for overflow
+   conditions.
+<P>
+ 
+<BR><BR>
+<A NAME="Naming Conventions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Naming Conventions
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The type of a cell is the same as the type of the cell's data array. The
+   three types are: Character, Double Precision, and Integer. Most CSPICE
+   cell functions are type-independent. The few type-dependent functions
+   have names ending with the suffixes
+<P>
+ 
+<PRE>
+   c_c, d_c, i_c
+</PRE>
+   where the first character of the suffix indicates the data type. When
+   referring to a class of type-dependent functions, we substitute an ``x''
+   for the letter denoting type. Thus appndx_c refers to any of <a href="../cspice/appndc_c.html">appndc_c</a>,
+   <a href="../cspice/appndd_c.html">appndd_c</a>, or <a href="../cspice/appndi_c.html">appndi_c</a>.
+<P>
+ 
+<BR><BR>
+<A NAME="Declaring and Initializing Cells"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Declaring and Initializing Cells
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   CSPICE provides declaration macros to simplify the process of declaring
+   and initializing CSPICE cells. There is one macro for each data type.
+   The calling sequences are:
+<P>
+ 
+<PRE>
+   SPICECHAR_CELL   ( name, size, length );
+   SPICEDOUBLE_CELL ( name, size );
+   SPICEINT_CELL    ( name, size );
+</PRE>
+   These macros declare both a SpiceCell and a data array having the
+   capacity specified by size, and for character cells, length. The data
+   array is given a name having the input parameter ``name'' as a
+   substring. Normally applications will not refer to the data array by
+   name.
+<P>
+ 
+   Note that these macros are coded so as to require a semicolon following
+   each call.
+<P>
+ 
+   The data array created by the declaration macros is dimensioned so as to
+   be compatible with SPICELIB cells. In SPICELIB, a ``cell array"' is an
+   array dimensioned from LBCELL to CMAX, where LBCELL is the standard
+   lower bound of a cell (currently -5) and CMAX is the maximum number of
+   elements that the cell is allowed to contain at any one time---that is,
+   the maximum cardinality of the cell. SPICELIB cell array elements
+   indexed LBCELL through 0 constitute the ``control area'' of the
+   cell---the portion where the cell's bookkeeping data are stored.
+<P>
+ 
+   Keeping CSPICE cells' data array dimensions compatible with those of
+   SPICELIB cells simplifies passing CSPICE cell data arrays to f2c'd
+   SPICELIB cell routines.
+<P>
+ 
+   CSPICE cell declaration macros always create cells and their data arrays
+   with static storage duration.
+<P>
+ 
+   The members of a SpiceCell are initialized by the declaration macros; in
+   particular the base pointer is set to the base address of the data
+   array, and the data pointer is set to the address of the start of the
+   data area (the first address following the control area) in the data
+   array. Unlike SPICELIB cells, CSPICE cells require no initialization
+   action on the user's part at run time.
+<P>
+ 
+   Every CSPICE cell starts out as a CSPICE ``set.'' The property of being
+   a set (the data elements are sorted in increasing order and contain no
+   duplicates) is maintained if the cell is modified using only CSPICE set
+   functions. Unlike SPICELIB cells, CSPICE cells maintain a flag
+   indicating whether they are in fact sets. See the SETS Required Reading,
+   <a href="../req/sets.html">sets.req</a>, for more information on CSPICE sets.
+<P>
+ 
+<BR><BR>
+<A NAME="Using Cells"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Using Cells
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   SPICELIB users can access their cells' data elements directly via array
+   subscript notation. In CSPICE, an analogous capability is provided via
+   access macros. These macros allow a user to fetch, assign, or reference
+   CSPICE cells' data array elements. The name of each access macro ends in
+   a letter (C, D, or I) indicating the data type of cells the macro is
+   intended to act upon.
+<P>
+ 
+   The CSPICE element reference macros return a pointer to a specified data
+   array element. The macros's calling sequences are:
+<P>
+ 
+<PRE>
+   SPICE_CELL_ELEM_C ( &amp;cell, i );
+   SPICE_CELL_ELEM_D ( &amp;cell, i );
+   SPICE_CELL_ELEM_I ( &amp;cell, i );
+</PRE>
+   Note the character macro returns a pointer of type (SpiceChar *), not
+   (SpiceChar (*)[cell.length]).
+<P>
+ 
+   The cell assignment macros have the calling sequences
+<P>
+ 
+<PRE>
+   SPICE_CELL_SET_C ( item, i, &amp;cell );
+   SPICE_CELL_SET_D ( item, i, &amp;cell );
+   SPICE_CELL_SET_I ( item, i, &amp;cell );
+</PRE>
+   The cell fetch macros have the calling sequences
+<P>
+ 
+<PRE>
+   SPICE_CELL_GET_C ( &amp;cell, i, lenout, item );
+   SPICE_CELL_GET_D ( &amp;cell, i, &amp;item );
+   SPICE_CELL_GET_I ( &amp;cell, i, &amp;item );
+</PRE>
+   Here lenout is an input SpiceInt argument indicating the amount of room
+   in the output string item.
+<P>
+ 
+   CSPICE cells may be populated using the appndx_c functions. These
+   routines ``append'' a datum to a cell: they insert a specified data item
+   into the lowest-indexed free slot in the data area of the cell's data
+   array. The appndx_c functions automatically update the cell's
+   cardinality to reflect the addition of the new datum.
+<P>
+ 
+   To append three double precision numbers onto an empty double precision
+   cell, we could use the code fragment
+<P>
+ 
+<PRE>
+   #include "SpiceUsr.h"
+     .
+     .
+     .
+   SPICEDOUBLE_CELL ( x, 100 );
+     .
+     .
+     .
+   <a href="../cspice/appndd_c.html">appndd_c</a> ( 0.0, &amp;x );
+   <a href="../cspice/appndd_c.html">appndd_c</a> ( 0.0, &amp;x );
+   <a href="../cspice/appndd_c.html">appndd_c</a> ( 1.0, &amp;x );
+</PRE>
+   Another function <a href="../cspice/scard_c.html">scard_c</a> is used to adjust the cardinality of a cell.
+   This is necessary when directly inserting items into or removing items
+   from a cell, as shown below.
+<P>
+ 
+<PRE>
+   #include "SpiceUsr.h"
+     .
+     .
+     .
+   SPICEDOUBLE_CELL ( x, 100 );
+     .
+     .
+     .
+   SPICE_CELL_SET_D ( 0.0, 0, &amp;x );
+   SPICE_CELL_SET_D ( 0.0, 1, &amp;x );
+   SPICE_CELL_SET_D ( 1.0, 2, &amp;x );
+ 
+   <a href="../cspice/scard_c.html">scard_c</a> ( 3, &amp;x );
+</PRE>
+   <a href="../cspice/ssize_c.html">ssize_c</a> and <a href="../cspice/scard_c.html">scard_c</a> should always be used in lieu of altering the size
+   and cardinality members of a SpiceCell directly.
+<P>
+ 
+   The function <a href="../cspice/copy_c.html">copy_c</a> copies the elements of one cell to another cell.
+   This can be useful for modifying temporary or working cells, or for
+   saving copies of cells which are about to be changed. For example,
+<P>
+ 
+<PRE>
+   #include "SpiceUsr.h"
+     .
+     .
+     .
+   SPICEDOUBLE_CELL ( x,    100 );
+   SPICEDOUBLE_CELL ( temp, 100 );
+     .
+     .
+     .
+   <a href="../cspice/copy_c.html">copy_c</a> ( &amp;x, &amp;temp );
+</PRE>
+   copies the contents of `x' into `temp'. In this case, the cells are the
+   same size (each can hold up to 100 elements), so the operation will
+   always succeed. In general, if the output cell is not large enough to
+   hold the contents of the input cell, as many elements as will fit are
+   inserted into the output cell, and the CSPICE error handling mechanism
+   reports the number of excess elements.
+<P>
+ 
+   An extra check is performed when <a href="../cspice/copy_c.html">copy_c</a> is used to copy character cells.
+   In order to avoid truncation problems, <a href="../cspice/copy_c.html">copy_c</a> verifies that the
+   operation can be performed without losing any of the non-blank
+   characters in the original cell. The loss of one or more non-blank
+   characters is reported through the CSPICE error handling mechanism.
+<P>
+ 
+   The integer function <a href="../cspice/card_c.html">card_c</a> returns the cardinality of a cell. This may
+   be used to determine whether a cell is empty or not. (The cardinality of
+   an empty cell is zero.) It may also be used to assist in accessing the
+   elements of a cell individually, as in the following example.
+<P>
+ 
+<PRE>
+   printf ( "Winners of the Nobel Prize for Physics:\n" );
+ 
+   for ( i = 0;  i &lt; <a href="../cspice/card_c.html">card_c</a>(&amp;nobel);  i++ )
+   {
+      printf ( "%s\n",  SPICE_CELL_ELEM_C ( &amp;nobel, i )  );
+   }
+</PRE>
+   The integer function <a href="../cspice/size_c.html">size_c</a> returns the size (maximum cardinality) of a
+   cell. This is useful primarily for predicting situations in which
+   overflow can occur, as in the following example.
+<P>
+ 
+<PRE>
+   if (  <a href="../cspice/card_c.html">card_c</a>( &amp;winners )  &lt;=  <a href="../cspice/size_c.html">size_c</a>( &amp;nobel )  )
+   {
+      <a href="../cspice/copy_c.html">copy_c</a> ( &amp;winners, &amp;nobel );
+   }
+</PRE>
+<BR><BR>
+<A NAME="Character Cells"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Character Cells
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   In SPICELIB cells, the size and cardinality of a cell are stored in the
+   control area of the cell (elements LBCELL through 0). For numeric data
+   types, this is accomplished by simple assignment. However, in the case
+   of cell arrays of type character, the values for the size and
+   cardinality must be encoded into character strings.
+<P>
+ 
+   This is done by storing the numbers in base CHBASE, where CHBASE is the
+   number of distinct characters in the character set supported by the host
+   machine and compiler. (In ASCII environments, CHBASE is always at least
+   128, and may be as high as 256.) The numbers are encoded and decoded by
+   subroutines ENCHAR and DECHAR respectively. The value of parameter
+   MINLEN (declared in ENCHAR) constrains the minimum length of the
+   elements in a cell array. The nominal value for MINLEN is 5.
+<P>
+ 
+   Because CSPICE relies on f2c'd Fortran routines to carry out some
+   operations on cells, it is necessary for a character CSPICE cell's data
+   array to be convertible to a SPICELIB character cell. To make this
+   convenient, the string length of a CSPICE character cell should be at
+   least MINLEN.
+<P>
+ 
+<BR><BR>
+<A NAME="Cell-based data types"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Cell-based data types
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   CSPICE contains several extended data types based on cells. For example,
+   one family of functions uses cells to implement algebraic sets of all
+   types (character, integer, double precision). Another uses double
+   precision cells to manipulate collections of closed intervals of the
+   real numbers, called windows.
+<P>
+ 
+   All of these data types are supported by functions designed to
+   manipulate them. However, because they are based on cells, all of these
+   data types can be manipulated by the general cell routines as well.
+   Thus, <a href="../cspice/copy_c.html">copy_c</a> can be used to copy sets and windows, just as it can be
+   used to copy vanilla cells.
+<P>
+ 
+<BR><BR>
+<A NAME="Summary"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Summary
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   The following table summarizes the CSPICE cell functions.
+<P>
+ 
+<DL><DT>
+<B>
+ <a href="../cspice/ssize_c.html">ssize_c</a> ( size, cell )
+</B><BR><BR>
+<DD>
+ Initialize (set the size of) a cell.<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/scard_c.html">scard_c</a> ( card, cell )
+</B><BR><BR>
+<DD>
+ Set the cardinality of a cell.<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/size_c.html">size_c</a> ( cell )
+</B><BR><BR>
+<DD>
+ Return the size of a cell.<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/card_c.html">card_c</a> ( cell )
+</B><BR><BR>
+<DD>
+ Return the cardinality of a cell.<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/copy_c.html">copy_c</a> ( orig, copy )
+</B><BR><BR>
+<DD>
+ Copy the contents of a cell.<BR>
+</DL>
+<DL><DT>
+<B>
+ appndx_c ( item, cell )
+</B><BR><BR>
+<DD>
+ Append an item to a cell.<BR>
+</DL>
+
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+
+</BODY>
+
+</HTML>

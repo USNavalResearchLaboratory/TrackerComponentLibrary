@@ -1,0 +1,265 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_sphrec</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_sphrec</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SPHREC converts spherical coordinates to rectangular
+   (Cartesian) coordinates.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      r       a double precision scalar or double precision 1XN
+              array describing the distance of the position from origin
+
+      colat   a double precision scalar or double precision 1XN
+              array describing the angle between the point and the
+              positive z-axis, measured in radians (also referred to
+              as the polar angle)
+
+      lon     a double precision scalar or double precision 1XN array
+              describing the angle of the projection of the point to the XY
+              plane from the positive X-axis, measured in radians,
+              with range:
+
+                  -pi &lt; lon &lt;= pi
+
+              The positive Y-axis is at longitude PI/2 radians.
+
+   the call:
+
+       rectan = <b>cspice_sphrec</b>( r, colat, lon)
+
+   returns:
+
+      rectan   a double precision 3x1 array or double precision
+               3xN array containing the rectangular coordinates of the
+               position or set of positions
+
+               The argument 'rectan' returns in the same units associated
+               with 'r'.
+
+               'rectan' returns with the same vectorization measure (N)
+                as 'r', 'colat', and 'lon'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   Example (1):
+
+      %
+      % Load an SPK, leapseconds, and PCK kernel set.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % Create a vector of scalar times.
+      %
+      et = [0:2]*2.*<a href="cspice_spd.html">cspice_spd</a>;
+
+      %
+      % Retrieve the position of the moon seen from earth at 'et'
+      % in the J2000 frame without aberration correction.
+      %
+      [pos, et] = <a href="cspice_spkpos.html">cspice_spkpos</a>( 'MOON', et, 'J2000', 'NONE', 'EARTH' );
+
+      %
+      % Convert the array of position vectors 'pos' to spherical
+      % coordinates.
+      %
+      [r, colat, lon] = <a href="cspice_recsph.html">cspice_recsph</a>(pos);
+
+      %
+      % Convert the spherical to rectangular.
+      %
+      [rectan] = <b>cspice_sphrec</b>(r, colat, lon);
+
+      %
+      % Calculate the relative error against the original position
+      % vectors.
+      %
+      (rectan-pos) ./ pos
+
+   MATLAB outputs:
+
+      1.0e-14 *
+
+                     0  -0.03701547067225   0.63783453323816
+      0.02182376758148   0.01641520435413  -0.01531271963894
+     -0.01912147275010  -0.04855217028457   0.02039513446643
+
+      Example (2):
+
+      %
+      % Define eleven sets of spherical coordinates, 'lon' and 'colat'
+      % expressed in degrees - converted to radians by use of <a href="cspice_rpd.html">cspice_rpd</a>.
+      %
+      r     = [  0., 1., 1., 1., 1., 1., 1., ...
+                 sqrt(2), sqrt(2), sqrt(2), sqrt(3) ];
+      colat = [  0., 90., 90., 0., 90., 90., ...
+                 180. 90., 45., 45., 54.7356] * <a href="cspice_rpd.html">cspice_rpd</a>;
+      lons  = [  0., 0., 90., 0., 180., -90.,...
+                 0., 45., 0., 90., 45] * <a href="cspice_rpd.html">cspice_rpd</a>;
+
+      %
+      % ...convert the spherical coordinates to rectangular coordinates
+      %
+      rec = <b>cspice_sphrec</b>(r, colat, lons);
+
+      %
+      % Loop over each set of coordinates for output, convert  'colat' and
+      % 'lons' to degrees...
+      %
+      colat = colat * <a href="cspice_dpr.html">cspice_dpr</a>;
+      lons  = lons  * <a href="cspice_dpr.html">cspice_dpr</a>;
+
+      %
+      % Output banner.
+      %
+      disp('     r        colat       lons         x         y           z   ')
+      disp('  --------   --------   --------   --------   --------   --------')
+
+      %
+      % Create an array of values for output.
+      %
+      output = [ r; colat; lons; rec(1,:); rec(2,:); rec(3,:)];
+      txt    = sprintf( '%10.4f %10.4f %10.4f %10.4f %10.4f %10.4f\n', output);
+      disp( txt )
+
+      %
+      % It's always good form to unload kernels after use,
+      % particularly in MATLAB due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+        r        colat       lons         x         y           z
+     --------   --------   --------   --------   --------   --------
+       0.0000     0.0000     0.0000     0.0000     0.0000     0.0000
+       1.0000    90.0000     0.0000     1.0000     0.0000     0.0000
+       1.0000    90.0000    90.0000     0.0000     1.0000     0.0000
+       1.0000     0.0000     0.0000     0.0000     0.0000     1.0000
+       1.0000    90.0000   180.0000    -1.0000     0.0000     0.0000
+       1.0000    90.0000   -90.0000     0.0000    -1.0000     0.0000
+       1.0000   180.0000     0.0000     0.0000     0.0000    -1.0000
+       1.4142    90.0000    45.0000     1.0000     1.0000     0.0000
+       1.4142    45.0000     0.0000     1.0000     0.0000     1.0000
+       1.4142    45.0000    90.0000     0.0000     1.0000     1.0000
+       1.7321    54.7356    45.0000     1.0000     1.0000     1.0000
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/sphrec_c.html">sphrec_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 22-NOV-2005, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   spherical to rectangular coordinates
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:38 2014</pre>
+
+</body>
+</html>
+

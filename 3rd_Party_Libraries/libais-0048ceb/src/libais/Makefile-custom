@@ -1,0 +1,140 @@
+# -*- makefile -*-
+
+# CXX := c++
+
+CXXFLAGS := -fPIC -DNDEBUG
+CXXFLAGS += -std=c++11
+
+# CXXFLAGS += -O3 -funroll-loops -fexpensive-optimizations -DNDEBUG
+# CXXFLAGS += -ffast-math
+
+# CXXFLAGS += -g3 -O0 -m32
+
+WARN := -Wall
+WARN += -Wextra
+WARN += -Wno-sign-compare
+# WARN += -Werror
+
+# Disabled warnings
+# WARN += -pedantic  # long long
+# WARN += -W
+# WARN += -Weffc++
+# WARN += -Wendif-labels
+# WARN += -Wimplicit
+# WARN += -Wmissing-prototypes
+# WARN += -Wnewline-eof
+# WARN += -Wredundant-decls
+# WARN += -Wshadow
+# WARN += -Wuninitialized  # Requires -O to work.
+# WARN += -Wunknown-pragmas
+# WARN += -Wunreachable-code
+# WARN += -Wunused
+
+DEBUG := -g -O2
+# DEBUG := -g3 -DDEBUG=1
+# DEBUG += -O0
+# DEBUG += -O
+# DEBUG += -D_GLIBCXX_DEBUG # Bad things on the mac?  May be a gtest bug.
+# DEBUG += -D_GLIBCXX_DEBUG_PEDANTIC -D_GLIBCPP_CONCEPT_CHECKS
+
+OPT := -O3 -funroll-loops -fexpensive-optimizations -ffast-math
+OPT += -DNDEBUG
+
+ifdef OPTIMIZE
+  CXXFLAGS += ${OPT}
+else
+  CXXFLAGS += ${DEBUG}
+endif
+
+
+CXXFLAGS += ${WARN}
+
+SRCS := ais.cpp
+SRCS += ais1_2_3.cpp
+SRCS += ais4_11.cpp
+SRCS += ais5.cpp
+SRCS += ais6.cpp
+SRCS += ais7_13.cpp
+SRCS += ais8.cpp
+
+# IMO Messages - Circ 289
+SRCS += ais8_1_22.cpp # Area notice
+SRCS += ais8_1_26.cpp # Env Sensors
+
+SRCS += ais8_200.cpp # River Information System (RIS)
+
+# US Specific Messages
+SRCS += ais8_366.cpp
+SRCS += ais8_366_22.cpp
+SRCS += ais8_367.cpp
+
+SRCS += ais9.cpp
+SRCS += ais10.cpp
+# See 4 for 11
+SRCS += ais12.cpp
+# See 7 for 13
+SRCS += ais14.cpp
+SRCS += ais15.cpp
+SRCS += ais16.cpp
+SRCS += ais17.cpp
+SRCS += ais18.cpp
+SRCS += ais19.cpp
+SRCS += ais20.cpp
+SRCS += ais21.cpp
+SRCS += ais22.cpp
+SRCS += ais23.cpp
+SRCS += ais24.cpp
+SRCS += ais25.cpp
+SRCS += ais26.cpp
+SRCS += ais27.cpp
+#SRCS += ais28.cpp
+
+SRCS += decode_body.cpp
+SRCS += vdm.cpp
+
+OBJS := ${SRCS:.cpp=.o}
+
+all: libais.a
+
+libais.a: ${OBJS}
+	ls ${OBJS}
+	ar rv $@ $?
+	ranlib $@
+
+clean:
+	-rm -rf *.o *.a *.pyc
+	-rm -rf *.d *.dSYM
+
+ais_decode_normed: ${OBJS} ais_decode_normed.o ais.h
+	@echo SRCS: ${SRCS}
+	@echo OBJS: ${OBJS}
+	${CXX} -o $@ ${OBJS} ais_decode_normed.o ${CXXFLAGS}
+
+# Hardcoded depends
+ais.o: ais.h
+ais123.o: ais.h
+ais4_11.o: ais.h
+ais5.o: ais.h
+ais6.o: ais.h
+ais7_13.o: ais.h
+ais8_1_22.o: ais.h
+ais9.o: ais.h
+ais10.o: ais.h
+ais12.o: ais.h
+ais14.o: ais.h
+ais15.o: ais.h
+ais16.o: ais.h
+ais17.o: ais.h
+ais18.o: ais.h
+ais19.o: ais.h
+ais20.o: ais.h
+ais21.o: ais.h
+ais22.o: ais.h
+ais23.o: ais.h
+ais24.o: ais.h
+ais25.o: ais.h
+ais26.o: ais.h
+ais27.o: ais.h
+ais_py.o: ais.h
+vdm.o: vdm.h ais.h
+

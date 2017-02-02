@@ -1,0 +1,353 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_spksfs</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_spksfs</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SPKSFS searches through loaded SPK files to find the
+   highest-priority segment applicable to the body and time specified.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      body   the SPK ID code of an ephemeris object, typically a solar
+             system body.
+
+             [1,1] = size(dc); int32 = class(body)
+
+      et     the time, in seconds past the epoch J2000 TDB.
+
+             [1,1] = size(et); double = class(et)
+
+   the call:
+
+      [handle, descr, ident, found] = <b>cspice_spksfs</b>( body, et)
+
+   returns:
+
+      handle   the handle of the SPK file containing a located segment.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+      descr    the descriptor of a located SPK segment.
+
+               [5,1] = size(descr); double = class(descr)
+
+      ident    the string SPK segment identifier of a located SPK segment.
+
+               [1,c1] = size(ident); char = class(ident)
+
+      found    indicates whether a requested segment was found or not.
+               The other output arguments are valid only if `found'
+               is set to true.
+
+               [1,1] = size(found); logical = class(found)
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   In the following code fragment, an SPK file is searched for
+   a segment containing ephemeris data for the Jupiter system
+   barycenter at a particular epoch. Using this segment,
+   states of the Jupiter system barycenter relative to the
+   solar system barycenter are evaluated at a sequence of times.
+
+   This method of state computation minimizes the number of
+   segment searches required to obtain requested data, but
+   it bypasses the SPK subsystem's state chaining mechanism.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+         KPL/MK
+
+         File name: <a href= "standard.html">standard.tm</a>
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            pck00010.tpc                  Planet orientation and
+                                          radii
+            naif0010.tls                  Leapseconds
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de421.bsp',
+                                'pck00010.tpc',
+                                'naif0010.tls'  )
+
+         \begintext
+
+   Example:
+
+      %
+      % Local constants
+      %
+      META   =  '<a href= "standard.html">standard.tm</a>';
+      ND     =  2;
+      NI     =  6;
+      TIMFMT =  'YYYY MON DD HR:MN:SC.######::TDB TDB';
+
+      %
+      % Load meta-kernel.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( META )
+
+      %
+      % Convert starting time to seconds past J2000 TDB.
+      %
+      timstr = '2012 APR 27 00:00:00.000 TDB';
+
+      et0 = <a href="cspice_str2et.html">cspice_str2et</a>(timstr);
+
+      %
+      % Find a loaded segment for the Jupiter barycenter
+      % that covers `et0'.
+      %
+      body = 5;
+
+      [handle, descr, segid, found] = <b>cspice_spksfs</b>( body, et0);
+
+
+      if ~found
+         <a href="cspice_kclear.html">cspice_kclear</a>
+         txt = sprintf( 'No SPK segment found for body %d at time %s', ...
+                         body, timstr );
+         error( txt )
+      end
+
+      %
+      % Unpack the descriptor of the current segment.
+      %
+      [dc, ic] = <a href="cspice_dafus.html">cspice_dafus</a>( descr, ND, NI );
+
+      frname = <a href="cspice_frmnam.html">cspice_frmnam</a>( ic(3) );
+
+      fprintf( 'Body        = %d\n', ic(1) )
+      fprintf( 'Center      = %d\n', ic(2) )
+      fprintf( 'Frame       = %s\n', frname)
+      fprintf( 'Data type   = %d\n', ic(4) )
+      fprintf( 'Start ET    = %f\n', dc(1) )
+      fprintf( 'Stop ET     = %f\n', dc(2) )
+      fprintf( 'Segment ID  = %s\n\n', segid )
+
+
+      %
+      % Evaluate states at 10-second steps, starting at `et0'
+      % and continuing for 20 seconds.
+      %
+
+      for i=1:3
+
+         et = et0 + ( 10. * (i-1) );
+
+         %
+         % Convert `et' to a string for display.
+         %
+         outstr = <a href="cspice_timout.html">cspice_timout</a>( et, TIMFMT );
+
+         %
+         % Attempt to compute a state only if the segment's
+         % coverage interval contains `et'.
+         %
+         if ( et &lt;= dc(2) )
+
+            %
+            % This segment has data at `et'. Evaluate the
+            % state of the target relative to its center
+            % of motion.
+            %
+            [ref_id, state, center] = <a href="cspice_spkpvn.html">cspice_spkpvn</a>( handle, descr, et );
+
+            %
+            %  Display the time and state.
+            %
+            fprintf( '\n%s\n', outstr )
+            fprintf( 'Position X (km):   %24.17f\n', state(1) )
+            fprintf( 'Position Y (km):   %24.17f\n', state(2) )
+            fprintf( 'Position Z (km):   %24.17f\n', state(3) )
+            fprintf( 'Velocity X (km):   %24.17f\n', state(4) )
+            fprintf( 'Velocity X (km):   %24.17f\n', state(5) )
+            fprintf( 'Velocity X (km):   %24.17f\n', state(6) )
+
+         else
+
+            <a href="cspice_kclear.html">cspice_kclear</a>
+            txt = sprintf( 'No data found for body %d at time %s', ...
+                         body, outstr );
+            error( txt )
+
+         end
+
+      end
+
+      %
+      % It's always good form to unload kernels after use,
+      % particularly in IDL due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+      Body        = 5
+      Center      = 0
+      Frame       = J2000
+      Data type   = 2
+      Start ET    = -3169195200.000000
+      Stop ET     = 1696852800.000000
+      Segment ID  = DE-0421LE-0421
+
+
+      2012 APR 27 00:00:00.000000 TDB
+      Position X (km):   464528993.98216485977172852
+      Position Y (km):   541513126.15685200691223145
+      Position Z (km):   220785135.62462940812110901
+      Velocity X (km):      -10.38685648307654930
+      Velocity X (km):        7.95324700713742416
+      Velocity X (km):        3.66185835431306517
+
+      2012 APR 27 00:00:10.000000 TDB
+      Position X (km):   464528890.11359262466430664
+      Position Y (km):   541513205.68931341171264648
+      Position Z (km):   220785172.24320945143699646
+      Velocity X (km):      -10.38685796160419272
+      Velocity X (km):        7.95324528430304944
+      Velocity X (km):        3.66185765185608103
+
+      2012 APR 27 00:00:20.000000 TDB
+      Position X (km):   464528786.24500560760498047
+      Position Y (km):   541513285.22175765037536621
+      Position Z (km):   220785208.86178246140480042
+      Velocity X (km):      -10.38685944013147910
+      Velocity X (km):        7.95324356146845002
+      Velocity X (km):        3.66185694939899253
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine finds the highest-priority segment, in any loaded
+   SPK file, such that the segment provides data for the specified
+   body and epoch.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/spksfs_c.html">spksfs_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/spk.html">SPK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 30-OCT-2012, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   select spk file and segment
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:38 2014</pre>
+
+</body>
+</html>
+

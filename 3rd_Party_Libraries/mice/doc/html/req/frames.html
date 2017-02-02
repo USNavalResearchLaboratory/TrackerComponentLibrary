@@ -1,0 +1,4445 @@
+<HTML>
+<HEAD>
+<TITLE> Reference Frames </TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+
+<A NAME="top"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+
+<TABLE STYLE="text-align: left; margin-left: auto; margin-right: auto; width: 800px;" BORDER="0" CELLPADDING="5" CELLSPACING="2">
+<TBODY>
+<TR>
+  <TD STYLE="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+  <DIV ALIGN="right">
+    <SMALL><SMALL><A HREF="index.html">Index Page</A></SMALL></SMALL>
+  </DIV>
+  <B>Reference Frames</B> </TD>
+</TR>
+<TR>
+  <TD STYLE="vertical-align: top;">
+
+<H2> Table of Contents
+</H2>
+
+<PRE>
+   <A HREF="#Reference Frames">Reference Frames</A>
+      <A HREF="#Abstract">Abstract</A>
+         <A HREF="#Purpose">Purpose</A>
+         <A HREF="#Intended Audience">Intended Audience</A>
+   <A HREF="#Using Frames">Using Frames</A>
+      <A HREF="#Frame Functions in Mice">Frame Functions in Mice</A>
+         <A HREF="#Frame Transformation Functions">Frame Transformation Functions</A>
+         <A HREF="#Frame Information Functions">Frame Information Functions</A>
+      <A HREF="#Frames Supported in SPICE">Frames Supported in SPICE</A>
+      <A HREF="#Kernels Needed For Computing Frame Transformations">Kernels Needed For Computing Frame Transformations</A>
+   <A HREF="#Creating a Frame Kernel">Creating a Frame Kernel</A>
+      <A HREF="#Frame Classes">Frame Classes</A>
+      <A HREF="#Specifying a New Frame">Specifying a New Frame</A>
+      <A HREF="#Guidelines for Frame Specification">Guidelines for Frame Specification</A>
+         <A HREF="#Selecting a Name">Selecting a Name</A>
+         <A HREF="#Selecting a Frame ID">Selecting a Frame ID</A>
+         <A HREF="#Selecting the Class">Selecting the Class</A>
+         <A HREF="#Selecting the Center">Selecting the Center</A>
+         <A HREF="#Selecting a Class ID">Selecting a Class ID</A>
+         <A HREF="#Frame IDs Reserved for Public Use">Frame IDs Reserved for Public Use</A>
+         <A HREF="#Why have a Frame ID and a Class ID?">Why have a Frame ID and a Class ID?</A>
+      <A HREF="#Putting the Pieces Together">Putting the Pieces Together</A>
+      <A HREF="#Connecting an Object to its Body-fixed Frame">Connecting an Object to its Body-fixed Frame</A>
+      <A HREF="#The rest of the frame information">The rest of the frame information</A>
+   <A HREF="#Inertial Frames">Inertial Frames</A>
+   <A HREF="#PCK Frames">PCK Frames</A>
+   <A HREF="#CK Frames">CK Frames</A>
+      <A HREF="#SCLK and SPK ID codes">SCLK and SPK ID codes</A>
+   <A HREF="#TK Frames">TK Frames</A>
+      <A HREF="#Defining a TK Frame Using a Matrix">Defining a TK Frame Using a Matrix</A>
+      <A HREF="#Defining a TK Frame Using Euler Angles">Defining a TK Frame Using Euler Angles</A>
+      <A HREF="#Defining a TK Frame Using a SPICE-style Quaternion">Defining a TK Frame Using a SPICE-style Quaternion</A>
+      <A HREF="#Gaining Flexibility via TK Frames">Gaining Flexibility via TK Frames</A>
+   <A HREF="#Dynamic Frames">Dynamic Frames</A>
+   <A HREF="#Parameterized Dynamic Frame Families">Parameterized Dynamic Frame Families</A>
+         <A HREF="#Notation">Notation</A>
+      <A HREF="#Required Keywords for Parameterized Dynamic Frames">Required Keywords for Parameterized Dynamic Frames</A>
+      <A HREF="#Conditional Keywords for Parameterized Dynamic Frames">Conditional Keywords for Parameterized Dynamic Frames</A>
+         <A HREF="#Rotation State">Rotation State</A>
+         <A HREF="#Freeze Epoch">Freeze Epoch</A>
+   <A HREF="#Two-Vector Frames">Two-Vector Frames</A>
+      <A HREF="#Defining a Two-Vector Frame in a Frame Kernel">Defining a Two-Vector Frame in a Frame Kernel</A>
+         <A HREF="#Kernel Availability">Kernel Availability</A>
+         <A HREF="#Specifying the Base Frame">Specifying the Base Frame</A>
+         <A HREF="#Specifying the Frame Family">Specifying the Frame Family</A>
+         <A HREF="#Specifying the Rotation state or Freeze Epoch">Specifying the Rotation state or Freeze Epoch</A>
+         <A HREF="#Specifying the Angular Separation Tolerance">Specifying the Angular Separation Tolerance</A>
+         <A HREF="#Frame Axis Labels">Frame Axis Labels</A>
+      <A HREF="#Vector Specifications">Vector Specifications</A>
+         <A HREF="#Observer-Target Position Vectors">Observer-Target Position Vectors</A>
+         <A HREF="#Target Near point Vectors">Target Near point Vectors</A>
+         <A HREF="#Observer-Target Velocity Vectors">Observer-Target Velocity Vectors</A>
+         <A HREF="#Constant Vectors">Constant Vectors</A>
+   <A HREF="#Mean Equator and Equinox of Date Frames">Mean Equator and Equinox of Date Frames</A>
+      <A HREF="#Defining a Mean Equator and Equinox of Date Frame in a Frame Kernel">Defining a Mean Equator and Equinox of Date Frame in a Frame Kernel</A>
+         <A HREF="#Specifying the Base Frame0">Specifying the Base Frame</A>
+         <A HREF="#Specifying the Frame Family0">Specifying the Frame Family</A>
+         <A HREF="#Specifying the Precession Model">Specifying the Precession Model</A>
+         <A HREF="#Specifying a Rotation State or Freeze Epoch">Specifying a Rotation State or Freeze Epoch</A>
+   <A HREF="#True Equator and Equinox of Date Frames">True Equator and Equinox of Date Frames</A>
+      <A HREF="#Defining a True Equator and Equinox of Date Frame in a Frame Kernel">Defining a True Equator and Equinox of Date Frame in a Frame Kernel</A>
+         <A HREF="#Specifying the Base Frame1">Specifying the Base Frame</A>
+         <A HREF="#Specifying the Frame Family1">Specifying the Frame Family</A>
+         <A HREF="#Specifying the Precession Model0">Specifying the Precession Model</A>
+         <A HREF="#Specifying the Nutation Model">Specifying the Nutation Model</A>
+         <A HREF="#Specifying a Rotation State or Freeze Epoch0">Specifying a Rotation State or Freeze Epoch</A>
+   <A HREF="#Mean Ecliptic and Equinox of Date Frames">Mean Ecliptic and Equinox of Date Frames</A>
+      <A HREF="#Defining a Mean Ecliptic and Equinox of Date Frame in a Frame Kernel">Defining a Mean Ecliptic and Equinox of Date Frame in a Frame Kernel</A>
+         <A HREF="#Specifying the Base Frame2">Specifying the Base Frame</A>
+         <A HREF="#Specifying the Frame Family2">Specifying the Frame Family</A>
+         <A HREF="#Specifying the Precession Model1">Specifying the Precession Model</A>
+         <A HREF="#Specifying the Mean Obliquity Model">Specifying the Mean Obliquity Model</A>
+         <A HREF="#Specifying a Rotation State or Freeze Epoch1">Specifying a Rotation State or Freeze Epoch</A>
+   <A HREF="#Euler Frames">Euler Frames</A>
+      <A HREF="#Defining an Euler Frame in a Frame Kernel">Defining an Euler Frame in a Frame Kernel</A>
+         <A HREF="#Specifying the Base Frame3">Specifying the Base Frame</A>
+         <A HREF="#Specifying the Frame Family3">Specifying the Frame Family</A>
+         <A HREF="#Specifying the Epoch">Specifying the Epoch</A>
+         <A HREF="#Specifying the Euler Angles">Specifying the Euler Angles</A>
+   <A HREF="#Dynamic Frame Implementation Considerations">Dynamic Frame Implementation Considerations</A>
+      <A HREF="#Introduction">Introduction</A>
+      <A HREF="#Simulated Recursion">Simulated Recursion</A>
+         <A HREF="#The Need for Recursion in the Mice Frame Subsystem">The Need for Recursion in the Mice Frame Subsystem</A>
+         <A HREF="#Implementation of Limited Simulated Recursion">Implementation of Limited Simulated Recursion</A>
+         <A HREF="#Limits on Recursion in Frame Definitions">Limits on Recursion in Frame Definitions</A>
+      <A HREF="#Frame Derivative Accuracy">Frame Derivative Accuracy</A>
+      <A HREF="#Degenerate Geometry">Degenerate Geometry</A>
+      <A HREF="#Efficiency Concerns">Efficiency Concerns</A>
+   <A HREF="#Appendix. ``Built in'' Inertial Reference Frames">Appendix. ``Built in'' Inertial Reference Frames</A>
+         <A HREF="#Complete List of ``Built in'' Inertial Reference Frames">Complete List of ``Built in'' Inertial Reference Frames</A>
+         <A HREF="#Inertial Reference Frame References">Inertial Reference Frame References</A>
+         <A HREF="#Low Level Inertial Reference Frame Functions">Low Level Inertial Reference Frame Functions</A>
+   <A HREF="#Appendix. ``Built in'' PCK-Based IAU Body-Fixed Reference Frames">Appendix. ``Built in'' PCK-Based IAU Body-Fixed Reference Frames</A>
+   <A HREF="#Appendix. High Precision Earth Fixed Frames">Appendix. High Precision Earth Fixed Frames</A>
+   <A HREF="#Appendix. Frame Identifiers Reserved for Earth Fixed Frames">Appendix. Frame Identifiers Reserved for Earth Fixed Frames</A>
+   <A HREF="#Appendix. Frame Definition Examples">Appendix. Frame Definition Examples</A>
+         <A HREF="#Inertial Frame">Inertial Frame</A>
+         <A HREF="#PCK Frame">PCK Frame</A>
+         <A HREF="#CK Frames0">CK Frames</A>
+         <A HREF="#TK frame --- Alias">TK frame --- Alias</A>
+         <A HREF="#TK frame --- Topographic">TK frame --- Topographic</A>
+         <A HREF="#TK frame --- Instrument">TK frame --- Instrument</A>
+      <A HREF="#Examples of Two-Vector Parameterized Dynamic Frames">Examples of Two-Vector Parameterized Dynamic Frames</A>
+         <A HREF="#Geocentric Solar Ecliptic (GSE) Frame">Geocentric Solar Ecliptic (GSE) Frame</A>
+         <A HREF="#Geocentric Solar Magnetospheric (GSM) Frame">Geocentric Solar Magnetospheric (GSM) Frame</A>
+         <A HREF="#Mercury Solar Equatorial (MSEQ) Frame">Mercury Solar Equatorial (MSEQ) Frame</A>
+         <A HREF="#Example: Nadir Frame for Mars Orbiting Spacecraft">Example: Nadir Frame for Mars Orbiting Spacecraft</A>
+         <A HREF="#Example: Roll-Celestial Spacecraft Frame">Example: Roll-Celestial Spacecraft Frame</A>
+      <A HREF="#Examples of Mean Equator and Equinox of Date Frames">Examples of Mean Equator and Equinox of Date Frames</A>
+         <A HREF="#Earth Mean Equator and Equinox of Date Frames">Earth Mean Equator and Equinox of Date Frames</A>
+      <A HREF="#Examples of True Equator and Equinox of Date Frames">Examples of True Equator and Equinox of Date Frames</A>
+      <A HREF="#Example of a Mean Ecliptic and Equinox of Date Frame">Example of a Mean Ecliptic and Equinox of Date Frame</A>
+      <A HREF="#Example of an Euler Frame">Example of an Euler Frame</A>
+
+</PRE>
+
+<HR SIZE=3 NOSHADE>
+
+<BR><BR>
+<A NAME="Reference Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Reference Frames
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Last revised on 2014 JUL 14 by N. J. Bachman.
+<P>
+ 
+<BR><BR>
+<A NAME="Abstract"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Abstract
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The frames subsystem specifies the relationships of various kinds of
+   reference frames supported by SPICE. This facilitates
+   ``behind-the-scenes'' transformations between these frames.
+<P>
+ 
+<BR><BR>
+<A NAME="Purpose"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Purpose
+</H3><P><BR><BR>
+   This document describes how reference frames are treated within SPICE.
+   The document includes a general discussion of reference frames, detailed
+   information about various types of frames supported within SPICE, and
+   instructions on defining additional reference frames to assist in a
+   user's computations.
+<P>
+ 
+<BR><BR>
+<A NAME="Intended Audience"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Intended Audience
+</H3><P><BR><BR>
+   This document addresses the needs of several groups of users. Users
+   looking for a basic discussion of reference frames and a list of the
+   frames supported by the SPICE system should read the chapter ``Using
+   Frames.'' Users desiring to customize their environment by adding new
+   frames should read the chapter ``Creating a Frame Kernel.''
+<P>
+ 
+   This document assumes you have some familiarity with SPICE concepts and
+   terminology. If you are new to the SPICE system, or just a bit rusty
+   with it, you should consider reviewing ``An Overview of the SPICE
+   System'' and ``An Introduction to SPICE.''
+<P>
+ 
+<BR><BR>
+<A NAME="Using Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Using Frames
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+<BR><BR>
+<A NAME="Frame Functions in Mice"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Frame Functions in Mice
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The SPICE frame subsystem facilitates ``behind-the-scenes'' frame
+   transformations. This allows you to concentrate on questions more
+   closely related to the problem you are trying to solve instead of the
+   details of on how to get position or state vectors in the frame of
+   interest.
+<P>
+ 
+<BR><BR>
+<A NAME="Frame Transformation Functions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Frame Transformation Functions
+</H3><P><BR><BR>
+   Several user-level Mice functions require that the user supply the name
+   of a reference frame as one of the inputs to the function. The most
+   important of these is the function <a href="../mice/cspice_spkezr.html">cspice_spkezr</a>. This function returns
+   the state (Cartesian position and velocity) of one object relative to
+   another in a user specified reference frame. The choice of reference
+   frame often makes a big difference in the usefulness of a returned
+   state. If the state is given relative to the reference frame of interest
+   to the user, computations involving that state can be much simpler than
+   if the state is returned relative to some other reference frame.
+<P>
+ 
+   The two user-level interface functions that deal solely with frame
+   transformations are <a href="../mice/cspice_sxform.html">cspice_sxform</a> and <a href="../mice/cspice_pxform.html">cspice_pxform</a>. cspice_sxform
+   supports transformations of Cartesian state vectors (6 components)
+   between reference frames while <a href="../mice/cspice_pxform.html">cspice_pxform</a> supports transformations of
+   Cartesian position vectors (3 components). <a href="../mice/cspice_pxform.html">cspice_pxform</a> may be used
+   when only position information is needed, or when the derivatives
+   required for a state transformation are unavailable, for example when
+   one frame is defined by a C-kernel that lacks angular velocity data.
+<P>
+ 
+   The calling sequences for these functions are
+<P>
+ 
+<PRE>
+      xform = <a href="../mice/cspice_sxform.html">cspice_sxform</a>( from, to, et )
+      rotate = <a href="../mice/cspice_pxform.html">cspice_pxform</a>( from, to, et )
+</PRE>
+   The output of <a href="../mice/cspice_sxform.html">cspice_sxform</a>, `xform', is a 6 by 6 matrix used to
+   transform state vectors relative to a reference frame, the name of which
+   is specified by the `from' input argument, to states relative to another
+   reference frame, the name of which is specified by the `to' input
+   argument, at the epoch `et' (specified in seconds past J2000).
+<P>
+ 
+   The output of <a href="../mice/cspice_pxform.html">cspice_pxform</a>, `rotate', is a 3 by 3 transformation matrix
+   equivalent to the upper left 3x3 block of `xform'. This matrix
+   transforms position as opposed to state vectors.
+<P>
+ 
+<BR><BR>
+<A NAME="Frame Information Functions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Frame Information Functions
+</H3><P><BR><BR>
+   The Mice frame subsystem contains a set of functions that enable
+   applications to retrieve information about frames known to Mice, whether
+   they are built-in or specified by means of frame kernels:
+<P>
+ 
+<DL><DT>
+<B>
+ <a href="../mice/cspice_frmnam.html">cspice_frmnam</a>
+</B><BR><BR>
+<DD>
+ Convert frame ID code to frame name.<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../mice/cspice_namfrm.html">cspice_namfrm</a>
+</B><BR><BR>
+<DD>
+ Convert frame name to frame ID code.<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../mice/cspice_frinfo.html">cspice_frinfo</a>
+</B><BR><BR>
+<DD>
+ Return frame specification parameters: frame center, frame class, and
+frame class ID.<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../mice/cspice_cidfrm.html">cspice_cidfrm</a>
+</B><BR><BR>
+<DD>
+ Map body ID code to the default frame centered on the specified body.
+Both frame name and ID are returned.<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../mice/cspice_cnmfrm.html">cspice_cnmfrm</a>
+</B><BR><BR>
+<DD>
+ Map body name to the default frame centered on the specified body. Both
+frame name and ID are returned.<BR>
+</DL>
+   The calling sequences for the frame information functions are
+<P>
+ 
+<PRE>
+   frname = <a href="../mice/cspice_frmnam.html">cspice_frmnam</a>( frcode )
+   frcode = <a href="../mice/cspice_namfrm.html">cspice_namfrm</a>( frname )
+   [ cent,   clss,   clssid, found ] = <a href="../mice/cspice_frinfo.html">cspice_frinfo</a>( code  )
+   [ frcode, frname, found ]         = <a href="../mice/cspice_cidfrm.html">cspice_cidfrm</a>( cent  )
+   [ frcode, frname, found ]         = <a href="../mice/cspice_cnmfrm.html">cspice_cnmfrm</a>( cname )
+</PRE>
+   See the section ``Specifying a New Frame'' below for more information on
+   frame specification parameters.
+<P>
+ 
+<BR><BR>
+<A NAME="Frames Supported in SPICE"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Frames Supported in SPICE
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   In both cases -- with the functions requiring specification of a
+   reference frame as one of the inputs (for example <a href="../mice/cspice_spkezr.html">cspice_spkezr</a>), and
+   with the functions computing transformation between two reference frames
+   (<a href="../mice/cspice_sxform.html">cspice_sxform</a> and <a href="../mice/cspice_pxform.html">cspice_pxform</a>) -- you specify the frame or frames of
+   interest using a character string that contains the name of the
+   reference frame.
+<P>
+ 
+   A number of names are automatically recognized by the frame subsystem
+   because the definitions for these frames are ``built into'' Mice
+   software. Among these frames are:
+<P>
+ 
+<UL>
+<TT>--</TT> inertial frames such as Earth mean equator and equinox of J2000 frame
+('J2000'), Mean ecliptic and equinox of J2000 ('ECLIPJ2000'), Galactic
+System II frame ('GALACTIC'), Mars Mean Equator and IAU vector of J2000
+frame ('MARSIAU'), etc. For the complete list of ``built in'' inertial
+reference frames refer to the appendix ``built in Inertial Reference
+Frames'' of this document.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> body-fixed frames based on IAU rotation models provided in text PCK files,
+such as Earth body-fixed rotating frame ('IAU_EARTH') and Mars body-fixed
+rotating frame ('IAU_MARS'), and body-fixed frames based on high precision
+Earth rotation models provided in binary PCK files such as 'ITRF93'. For
+the complete lists of ``built in'' body-fixed reference frames refer to the
+appendixes ``built in PCK-Based Reference Frames'' and High Precision Earth
+Fixed Frames'' of this document.
+<BR><BR></UL>
+   For all other frames the names are not ``built into'' SPICE. Instead,
+   these names, as well as the parameters specifying the frames, are
+   provided via keywords included in a text kernel file. The types of
+   frames defined in text kernels include:
+<P>
+ 
+<UL>
+<TT>--</TT> CK-based frames, i.e. frames for which orientation is provided in CK files
+<BR><BR></UL>
+<UL>
+<TT>--</TT> fixed offset frames, i.e. frames for which orientation is constant with
+respect to another frame and is specified as part of the frame definition
+stored in a text kernel
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Dynamic frames, i.e. frames for which orientation is based on dynamic
+directions computed based on SPICE kernel data (SPKs, CK, PCKs), on
+mathematical models implemented in Mice functions, or on formulas defined
+in frame kernels.
+<BR><BR></UL>
+   You can find the names of these frames by examining the text kernel file
+   that contains the frame definitions. Normally definitions of all frames
+   specific for a given mission are stored in that mission's Frames Kernel
+   (FK) file but they can also be provided in the Instrument Kernels (IK)
+   or any other text kernels. In order to make frame definitions from the
+   text kernels available to SPICE, these kernels need to be loaded via a
+   call to <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>. For example, to load an FK named ``myframe.tf'',
+   call <a href="../mice/cspice_furnsh.html">cspice_furnsh</a> as follows:
+<P>
+ 
+<PRE>
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'myframe.tf' )
+</PRE>
+   Note that the SPICE data loading mechanism detects and prohibits loading
+   text kernel files containing lines terminated with EOL character(s)
+   non-native to the platform on which the Toolkit was compiled. If a
+   non-native EOL terminator is detected in the first 132 characters of a
+   text kernel, the execution is stopped and an error message is displayed.
+   This feature does not work with files that are smaller that 132 bytes or
+   have the first line longer that 132 characters.
+<P>
+ 
+<BR><BR>
+<A NAME="Kernels Needed For Computing Frame Transformations"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Kernels Needed For Computing Frame Transformations
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   In many cases data needed to compute transformation of one frame
+   relative to another is stored in SPICE kernels: PCK, CK, FK, and even
+   SPK. The appropriate kernels must be loaded for the SPICE system to
+   compute a frame transformation from a non-inertial frame to any other
+   frame.
+<P>
+ 
+   The ``built in'' inertial frames are the only frames the transformations
+   between which can be computed without loading any SPICE kernels.
+<P>
+ 
+   Since the body-fixed frames are tied to the rotation of planets,
+   satellites, asteroids, etc, the information about how the orientation of
+   these frames is changing with respect to inertial frames is stored in
+   SPICE PCK files. It is important to note that although the names of
+   these frames are ``built in'' their relationship to inertial frames is
+   not. This information must be ``loaded'' into the SPICE system from a
+   PCK file. Without loading this information you cannot compute the
+   transformation to or from a body-fixed frame.
+<P>
+ 
+   As the name suggests, the orientation of CK-based frames is computed
+   using data provided in CK files and cannot be computed without loading
+   these. In addition to the CKs, an SCLK kernel establishing time
+   correlation for the on-board clock that is used to tag data in the CKs
+   must be loaded to support time conversion between that clock and
+   ephemeris time.
+<P>
+ 
+   Because the fixed offset frame definitions stored in text kernels
+   provide all information needed to determine their orientation relative
+   to the frame with respect to which they are defined, only the text
+   kernel containing the definition need be loaded.
+<P>
+ 
+   Depending on the particular family to which a dynamic frame belongs, no
+   additional data may be needed in order to compute its orientation, or
+   one or more types of SPICE kernels, including SPKs, PCKs, CKs, and SCLK,
+   may have to be loaded.
+<P>
+ 
+<BR><BR>
+<A NAME="Creating a Frame Kernel"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Creating a Frame Kernel
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   To create a frame kernel you will need to understand the SPICE text
+   kernel file format described in detail in the Kernel Required Reading
+   document, <a href="../req/kernel.html"><a href="../req/kernel.html">kernel.req</a></a>. When making a new frame kernel, make sure that the
+   first line of the file contains the proper SPICE file identification
+   word for the FK files -- ``KPL/FK'' -- left-justified, on a line by
+   itself.
+<P>
+ 
+   You will also need to understand the concept of a frame class.
+<P>
+ 
+<BR><BR>
+<A NAME="Frame Classes"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Frame Classes
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The method by which a frame is related to some other frame is a function
+   of the ``class'' of the frame. You describe the class of a frame with an
+   integer called the frame's ``class number.'' The reference frame classes
+   are enumerated below.
+<P>
+ 
+<UL>
+<TT>1.</TT> Inertial frames. These frames do not rotate with respect to the star
+background. They are the frames in which Newton's laws of motion apply. The
+class number associated with inertial frames is 1.
+<BR><BR></UL>
+<UL>
+<TT>2.</TT> PCK (body-fixed) frames. PCK frames are reference frames whose orientation
+with respect to inertial frames is supplied through either binary or text
+PCK files. To determine a transformation to or from a PCK frame, you must
+load a PCK file that describes the orientation of the frame with respect to
+one of the inertial frames ``built into'' SPICE. The class number
+associated with PCK frames is 2.
+<BR><BR></UL>
+<UL>
+<TT>3.</TT> CK frames. CK frames are reference frames whose orientation with respect to
+some other reference frame is supplied via a SPICE C-kernel. The other
+reference frame may be any of the four classes of frames described here.
+C-kernels use spacecraft clock ``ticks'' as their basic time unit.
+Consequently you need to load a spacecraft clock kernel appropriate for the
+C-kernel to determine the transformation from or to a C-kernel frame. In
+addition you will need to load a PCK, CK, or TK frame kernel if the
+``other'' frame belongs to one of these classes. The class number
+associated with CK frames is 3.
+<BR><BR></UL>
+<UL>
+<TT>4.</TT> Fixed offset frames. These frames are also called Text Kernel (TK) frames
+because they have a constant orientation with respect to some other
+reference frame and this orientation is included in the frame definition
+provided in a SPICE text kernel. They may be defined relative to a frame of
+any of the other classes of reference frames. The class number associated
+with TK frames is 4.
+<BR><BR></UL>
+<UL>
+<TT>5.</TT> Dynamic frames. These are time-dependent reference frames defined via
+parameters or formulas specified in a frame kernel. The class number
+associated with dynamic frames is 5.
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Specifying a New Frame"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Specifying a New Frame
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   In addition to the data/model needed to specify the orientation of a
+   frame with respect to some other reference frame, you must tell the
+   SPICE system how to find the data or model. This specification requires
+   five pieces of information:
+<P>
+ 
+<UL>
+<TT>1.</TT> the name of the frame,
+<BR><BR></UL>
+<UL>
+<TT>2.</TT> the ID code for the frame,
+<BR><BR></UL>
+<UL>
+<TT>3.</TT> the class number of the frame,
+<BR><BR></UL>
+<UL>
+<TT>4.</TT> the SPK ID code or name for the frame center,
+<BR><BR></UL>
+<UL>
+<TT>5.</TT> the internal ID code used by the class (CLASS_ID) to refer to the frame.
+<BR><BR></UL>
+   The rules for selecting these items are given in the next section, but
+   for the moment let's assume that the rules have been obeyed and we have
+   arrived at the following values.
+<P>
+ 
+<PRE>
+   Frame Name    :    'WALDO'
+   Frame ID code :    1234567   (A number guaranteed to be suitable
+                                 for private use)
+   Frame Class   :          3   (C-kernel)
+   Frame Center  :     -10001   (Waldo Spacecraft ID code)
+   Frame Class_id:  -10000001   (ID code in C-kernel for Waldo)
+</PRE>
+   The frame kernel that specifies this frame is given below:
+<P>
+ 
+<PRE>
+   \begindata
+ 
+      FRAME_WALDO            =  1234567
+      FRAME_1234567_NAME     = 'WALDO'
+      FRAME_1234567_CLASS    =  3
+      FRAME_1234567_CENTER   = -10001
+      FRAME_1234567_CLASS_ID = -10000001
+ 
+   \begintext
+</PRE>
+<BR><BR>
+<A NAME="Guidelines for Frame Specification"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Guidelines for Frame Specification
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Selecting a Name"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Selecting a Name
+</H3><P><BR><BR>
+   The name chosen for a frame must not exceed 26 characters taken from the
+   set including uppercase letters, numbers, underscore, and plus and minus
+   signs. It should have some mnemonic value so that users can recognize
+   what the name means. Finally, it should not be the name of one of the
+   ``built in'' frames listed above or the name of any other frame you wish
+   to specify. If you try to use a ``built in'' name, the frame subsystem
+   will ignore your frame specification. In the example given above, we
+   chose the name 'WALDO' for the name of our reference frame. If ``Waldo''
+   would be a lander and would need to specify a local level frame at its
+   landing site, we could have named that frame 'WALDO_LOCAL_LEVEL'. A good
+   name for a frame associated with the camera flown on ``Waldo'' would be
+   'WALDO_CAMERA'.
+<P>
+ 
+<BR><BR>
+<A NAME="Selecting a Frame ID"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Selecting a Frame ID
+</H3><P><BR><BR>
+   What you choose for a frame ID depends upon the class of the frame.
+<P>
+ 
+   If the class is CK, you may use the same ID as you use for the CLASS_ID.
+   In the previous example, we selected the Frame ID to be 1234567. (Since
+   our example frame above is of class 3, a CK frame, we would normally use
+   the same number for the frame ID as we used for the class ID. However,
+   in this example, we have chosen a different value to illustrate the
+   connection between the frame ID and the variables needed to define the
+   frame.)
+<P>
+ 
+   For TK frames, the frame and class IDs must be identical. For TK frames
+   associated with an instrument, the instrument ID is used for both frame
+   ID and class ID. For topocentric TK frames at tracking station sites,
+   both frame ID and class ID are created by ``combining'' the ID of the
+   body on which the station is located with the station number (for
+   example frame and class ID 1399012 is used for ``DSS-12'', with the
+   formula used to arrive at this ID being 1000000 + ``Earth ID''*1000 +
+   ``station ID''.) For local level and surface fixed TK frames at a
+   landing site, both frame ID and class ID are based on the ID of the
+   lander (for example frame and class ID of -222999 would be the natural
+   choice for the lander with ID -222.)
+<P>
+ 
+   If the frame is a PCK frame or a dynamic frame and you are working
+   without consultation with NAIF, select an integer in the range from
+   1400000 to 2000000.
+<P>
+ 
+<BR><BR>
+<A NAME="Selecting the Class"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Selecting the Class
+</H3><P><BR><BR>
+   This is usually the easiest part of specifying a frame. Presumably you
+   know how the orientation of the frame with respect to some other frame
+   will be computed. Simply choose the appropriate class number. In the
+   example above, the class number is 3 because we are defining a CK-based
+   frame.
+<P>
+ 
+<BR><BR>
+<A NAME="Selecting the Center"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Selecting the Center
+</H3><P><BR><BR>
+   A frame is used to specify the orientation of some object. The frame
+   consists of a set of coordinate axes relative to some point -- the
+   origin of the reference frame. When viewed from some other frame the
+   axes rotate about the origin. The origin about which the rotation takes
+   place is the center of the frame. For body-fixed frames this is the
+   center of the body to which they are fixed. For C-kernel frames the
+   center is often the spacecraft whose orientation is provided by the
+   C-kernel. Simply find the SPK ID code or name for the object to which
+   the frame is attached and use that as the value for the center. In our
+   example, the SPK ID code for the ``Waldo'' spacecraft is -10001.
+<P>
+ 
+   Note that this center ID is used to look up the position of the frame
+   origin when SPICE computes frame orientation adjusted for light time.
+   Therefore, only centers for which supporting SPK data are expected to be
+   available should be picked. It is usually an issue only for TK and CK
+   frames associated with instruments because the positions of instruments
+   are rarely available in SPKs. To get around the need to provide the
+   instrument positions, it is appropriate to specify the ID of the
+   spacecraft on which an instrument is mounted as the center of a TK or CK
+   frame associated with it.
+<P>
+ 
+<BR><BR>
+<A NAME="Selecting a Class ID"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Selecting a Class ID
+</H3><P><BR><BR>
+   A frame's ``CLASS_ID'' is an integer used internally by Mice software.
+   It is the integer code used by the Mice reference frame subsystem to
+   look up reference frame information.
+<P>
+ 
+   If your frame is a PCK class frame the CLASS_ID is the ID code for the
+   body for which rotation constants are provided in the text PCK file or
+   the ID associated with the orientation data provided in the binary PCK
+   file.
+<P>
+ 
+   If your frame is a CK class frame, the CLASS_ID is the ID code used in
+   the C-kernel to describe the orientation of the spacecraft.
+<P>
+ 
+   If the frame is a TK frame, the class ID must match the frame ID. For
+   both ID codes you should use a positive integer in the range from
+   1400000 to 2000000 (unless you are working in an official project
+   capacity in which case you should ask NAIF to provide a CLASS_ID for
+   you). In the example above, the CLASS_ID is the ID code for the C-kernel
+   structure: -10000001.
+<P>
+ 
+   If the frame is a dynamic frame, the class ID must match the frame ID.
+<P>
+ 
+<BR><BR>
+<A NAME="Frame IDs Reserved for Public Use"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Frame IDs Reserved for Public Use
+</H3><P><BR><BR>
+   The range 1400000 to 2000000 has been set aside by NAIF as ranges of
+   Frame IDs that can be used freely by SPICE users without fear of
+   conflict with ``officially recognized'' frames. However, if you and a
+   colleague plan to create several such frames, you will need to
+   coordinate your work to ensure that your definitions are not in conflict
+   with one another.
+<P>
+ 
+<BR><BR>
+<A NAME="Why have a Frame ID and a Class ID?"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Why have a Frame ID and a Class ID?
+</H3><P><BR><BR>
+   When the Mice software receives a request to compute a frame
+   transformation, it first translates the name of the frame to the
+   corresponding frame ID. There is a one to one correspondence between
+   frame names and frame IDs. Once the frame ID is in hand, the class of
+   the frame can be located and an appropriate subsystem identified for
+   carrying out the initial computations needed to construct a frame
+   transformation matrix. However, the frame subsystem evolved to unify
+   several distinct reference frame systems. In each of these systems,
+   reference frames are identified by integer codes. Unfortunately, since
+   these subsystems evolved independently, the numeric codes used to
+   identify the reference systems overlapped from one system to the next.
+   Moreover, to support backward compatibility, NAIF was not free to change
+   the numeric codes used by the various systems or the meaning of the
+   frame codes that were already present in existing data products.
+<P>
+ 
+   To support existing data products and allow extension of the SPICE
+   system, NAIF needed to associate the old ID code with the new frame ID.
+   The CLASS_ID fills this role. When the frame is identified, the ID code
+   suitable for the frame class is located and passed onto the frame's
+   class so that the initial portion of the frame transformation can be
+   carried out.
+<P>
+ 
+<BR><BR>
+<A NAME="Putting the Pieces Together"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Putting the Pieces Together
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Once you've determined the name, ID code, center, class and class ID of
+   your frame, you create the frame specification by filling in the frame
+   template below. This should be stored in a text kernel called a Frame
+   Specification Kernel or Frames Kernel (FK).
+<P>
+ 
+<PRE>
+   FRAME_&lt;name&gt;             = &lt;ID code&gt;
+   FRAME_&lt;ID code&gt;_NAME     = '&lt;name&gt;'
+   FRAME_&lt;ID code&gt;_CLASS    = &lt;class&gt;
+   FRAME_&lt;ID code&gt;_CLASS_ID = &lt;classid&gt;
+   FRAME_&lt;ID code&gt;_CENTER   = &lt;center&gt;
+</PRE>
+   The example we used for the frame 'WALDO' illustrates this.
+<P>
+ 
+<PRE>
+   \begindata
+ 
+      FRAME_WALDO            =  1234567
+      FRAME_1234567_NAME     = 'WALDO'
+      FRAME_1234567_CLASS    =  3
+      FRAME_1234567_CENTER   = -10001
+      FRAME_1234567_CLASS_ID = -10000001
+ 
+   \begintext
+</PRE>
+   Once you've completed the frame specification you tell the SPICE system
+   about the frame by ``loading'' the frame kernel that contains it. As
+   with all text kernels, you load it via the routine <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>. For
+   example if the frame kernel containing your frame specification is
+   contained in the file ``myframe.tf'' you load the kernel via the call
+<P>
+ 
+<PRE>
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'myframe.tf' )
+</PRE>
+<BR><BR>
+<A NAME="Connecting an Object to its Body-fixed Frame"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Connecting an Object to its Body-fixed Frame
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Every extended object has both a position and orientation in space. The
+   SPICE ephemeris subsystem (SPK) allows you to specify the location of
+   such an object. The frame subsystem allows you to name the body-fixed
+   frame that describes the orientation of the object, and to retrieve the
+   orientation of the frame relative to some other frame as a function of
+   time. Given the name or SPK ID code associated with an object we can
+   locate its position through the SPK subsystem. Unfortunately, the
+   body-fixed frame of the object cannot always be determined from the
+   object's name or ID code. For example, we have already mentioned that
+   there are two ``built in'' reference frames that describe the
+   orientation of the Earth: 'IAU_EARTH' and 'ITRF93'. For other objects,
+   such as the asteroid Ceres, there is no ``built in'' frame associated
+   with the object. The body-fixed frame of Ceres must be defined through a
+   text kernel. In both cases, the connection between the object and its
+   body-fixed frame needs to be supplied via a kernel pool variable. There
+   are two ways to do this.
+<P>
+ 
+<PRE>
+   OBJECT_&lt;name or spk_id&gt;_FRAME =  '&lt;frame name&gt;'
+</PRE>
+   or
+<P>
+ 
+<PRE>
+   OBJECT_&lt;name or spk_id&gt;_FRAME =  &lt;frame ID code&gt;
+</PRE>
+   You may use the ID codes for either the object, the frame or both. As
+   example, four of the following assignments could serve to connect the
+   Earth with the 'ITRF93' frame.
+<P>
+ 
+<PRE>
+   OBJECT_399_FRAME   =  13000
+   OBJECT_399_FRAME   = 'ITRF93'
+   OBJECT_EARTH_FRAME =  13000
+   OBJECT_EARTH_FRAME = 'ITRF93'
+</PRE>
+   Note: if you use the name of either the object or frame, you must use
+   upper case letters.
+<P>
+ 
+   Of these four means of specifying an object's body-fixed frame the
+   second (OBJECT_399_FRAME = 'ITRF93') is the most robust.
+<P>
+ 
+   For the sun, the planets and their satellites the frame subsystem
+   maintains a default connection between the object and its body-fixed
+   frame ``built into'' SPICE. The complete list of ``built in'' body-fixed
+   frames is provided in the ``built in PCK-Based IAU Body-Fixed Reference
+   Frames'' appendix of this document.
+<P>
+ 
+<BR><BR>
+<A NAME="The rest of the frame information"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> The rest of the frame information
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The information supplied in the frame specification tells the SPICE
+   system where to look for a particular frame model. However, the
+   specification alone doesn't tell the SPICE system how to actually
+   transform from the specified frame to some other frame of interest. To
+   do this you need to supply other information. How this information is
+   supplied depends upon the class of the frame.
+<P>
+ 
+<BR><BR>
+<A NAME="Inertial Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Inertial Frames
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Inertial frames are ``built into'' the SPICE system via the routine
+   CHGIRF. Only the frames defined in that routine are available as
+   inertial class frames. For this reason there is rarely a need to specify
+   an inertial frame through a frame specification kernel. Essentially all
+   you can do by creating a frame specification for an inertial frame is to
+   supply a second name for one of the ``built in'' frames. For example you
+   might define EME2000 as another name for the J2000 frame.
+<P>
+ 
+   NAIF recommends against creating inertial frame specifications. However,
+   if you choose to do so anyway, you are done once you've defined the
+   frame specification. (You may not be done explaining to your colleagues
+   why you've decided to do this.)
+<P>
+ 
+   In the example cited earlier (EME2000) here's how you'd specify the
+   frame.
+<P>
+ 
+<PRE>
+   \begindata
+ 
+      FRAME_EME2000          = 2000000
+      FRAME_2000000_NAME     = 'EME2000'
+      FRAME_2000000_CLASS    = 1
+      FRAME_2000000_CENTER   = 0
+      FRAME_2000000_CLASS_ID = 1
+ 
+   \begintext
+</PRE>
+   Everything else about this frame is ``built into'' the SPICE system.
+<P>
+ 
+<BR><BR>
+<A NAME="PCK Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> PCK Frames
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   If you specify a PCK frame, you will need to load either a text or
+   binary PCK file for the body with which the frame is associated. The
+   construction of PC kernels is discussed in the SPICE document PCK
+   Required Reading (<a href="../req/pck.html"><a href="../req/pck.html">pck.req</a></a>.)
+<P>
+ 
+<BR><BR>
+<A NAME="CK Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> CK Frames
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   If a frame is defined as a CK frame, you will need both a C-kernel for
+   the structure identified by the FRAME_..._CLASS_ID variable and an SCLK
+   kernel for converting ephemeris time to the ``ticks'' used to represent
+   time in the C-kernel. Both the C-kernel(s) and SCLK kernel must be
+   loaded prior to attempting to use the CK frame.
+<P>
+ 
+<BR><BR>
+<A NAME="SCLK and SPK ID codes"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> SCLK and SPK ID codes
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   For many C-kernels, the spacecraft clock and spacecraft ID codes can be
+   determined by performing an integer division of the C-kernel ID code by
+   1000. However, under some circumstances this numerical correspondence
+   between C-kernel ID code and the associated SCLK or spacecraft ID may
+   break down. When the numerical relationship fails you need to tell the
+   SPICE system the ID code of the SCLK or spacecraft via two kernel pool
+   variables.
+<P>
+ 
+<PRE>
+   CK_&lt;ck_ID code&gt;_SCLK = &lt;ID code of SCLK&gt;
+   CK_&lt;ck_ID code&gt;_SPK  = &lt;SPK ID code&gt;
+</PRE>
+   These variables are normally placed in either the SCLK kernel or in the
+   frame specification kernel (FK).
+<P>
+ 
+   To illustrate how you would create a C-kernel frame, we shall suppose
+   that we have a C-kernel for structure -100001 aboard the fictional
+   spacecraft ``Waldo'' which has ID code -1001. Moreover we shall assume
+   that the clock ID appropriate for this structure is -1002. Below is a
+   frame specification together with the CK_..._SCLK and CK_..._SPK
+   variable definitions for the 'WALDO' frame.
+<P>
+ 
+<PRE>
+   \begindata
+ 
+      FRAME_WALDO            = -100001
+      FRAME_-100001_NAME     = 'WALDO'
+      FRAME_-100001_CLASS    = 3
+      FRAME_-100001_CLASS_ID = -100001
+      FRAME_-100001_CENTER   = -1001
+ 
+      CK_-100001_SCLK        = -1002
+      CK_-100001_SPK         = -1001
+ 
+   \begintext
+</PRE>
+<BR><BR>
+<A NAME="TK Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> TK Frames
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   The relationship between a constant offset Text Kernel (TK) frame and
+   the frame it is offset from is given via a text kernel that can be
+   loaded via the kernel pool routine <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>. The first five kernel
+   pool variables required for TK frame specification are the same as for
+   any other frame defined via a text kernel:
+<P>
+ 
+<PRE>
+   FRAME_&lt;name&gt;             = &lt;ID code&gt;
+   FRAME_&lt;ID code&gt;_NAME     = '&lt;name&gt;'
+   FRAME_&lt;ID code&gt;_CLASS    = 4
+   FRAME_&lt;ID code&gt;_CLASS_ID = &lt;ID code&gt;
+   FRAME_&lt;ID code&gt;_CENTER   = &lt;center&gt;
+</PRE>
+   You need to supply information that indicates the frame, RELATIVE, from
+   which the TK frame is offset. It is done using this kernel pool
+   variable:
+<P>
+ 
+<PRE>
+   TKFRAME_&lt;frame&gt;_RELATIVE = '&lt;name of relative frame&gt;'
+</PRE>
+   where `frame' is the ID code or name you used in the frame
+   specification.
+<P>
+ 
+   Because the rotation from the TK frame to the RELATIVE frame is fixed
+   (time invariant) it can be specified in the FK along with the frame
+   specification information described above. This rotation data can be
+   provided in any of three ways:
+<P>
+ 
+<UL>
+<TT>1.</TT> as a 3 by 3 matrix, M, that converts vectors from the TK frame to the
+RELATIVE frame by left multiplication
+<BR><BR></UL>
+<PRE>
+               V_relative = M * V_tkframe
+</PRE>
+<UL>
+<TT>2.</TT> as a set of 3 Euler angles and axes that can be used to produce M
+<BR><BR></UL>
+<UL>
+<TT>3.</TT> as a SPICE-style quaternion representing M.
+<BR><BR></UL>
+   You let the frame subsystem know which method you've chosen for
+   representing the rotation via the kernel pool variable
+<P>
+ 
+<PRE>
+   TKFRAME_&lt;frame&gt;_SPEC.
+</PRE>
+   To use a matrix to define the rotation, use the assignment:
+<P>
+ 
+<PRE>
+   TKFRAME_&lt;frame&gt;_SPEC = 'MATRIX'
+</PRE>
+   To define the rotation via three Euler angles, use the assignment:
+<P>
+ 
+<PRE>
+   TKFRAME_&lt;frame&gt;_SPEC = 'ANGLES'
+</PRE>
+   To define the rotation via a SPICE-style quaternion, use the assignment:
+<P>
+ 
+<PRE>
+   TKFRAME_&lt;frame&gt;_SPEC = 'QUATERNION'
+</PRE>
+   Depending upon the value of the `SPEC' variable, you need to supply one
+   of the following sets of kernel pool variables.
+<P>
+ 
+<BR><BR>
+<A NAME="Defining a TK Frame Using a Matrix"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Defining a TK Frame Using a Matrix
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   If you've chosen to define the rotation using a matrix, supply the
+   matrix using the kernel pool variable assignment below:
+<P>
+ 
+<PRE>
+   TKFRAME_&lt;frame&gt;_MATRIX = ( matrix_value(1,1),
+                              matrix_value(2,1),
+                              matrix_value(3,1),
+                              matrix_value(1,2),
+                              matrix_value(2,2),
+                              matrix_value(3,2),
+                              matrix_value(1,3),
+                              matrix_value(2,3),
+                              matrix_value(3,3)  )
+</PRE>
+   For example, if the matrix defining your TK frame is
+<P>
+ 
+<PRE>
+   0.4   -0.6   0.0
+   0.6    0.4   0.0
+   0.0    0.0   1.0
+</PRE>
+   and the ID code you've selected for the frame is 1234567, then you would
+   supply the following information in a text kernel.
+<P>
+ 
+<PRE>
+   TKFRAME_1234567_SPEC   = 'MATRIX'
+ 
+   TKFRAME_1234567_MATRIX = (  0.4
+                               0.6
+                               0.0
+                              -0.6
+                               0.4
+                               0.0
+                               0.0
+                               0.0
+                               1.0 )
+</PRE>
+<BR><BR>
+<A NAME="Defining a TK Frame Using Euler Angles"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Defining a TK Frame Using Euler Angles
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   If you've chosen to define a TK frame as a sequence of three Euler angle
+   rotations about specified coordinate axes, you need to supply the
+   following pieces of information:
+<P>
+ 
+<UL>
+<TT>1.</TT> The values of the three Euler angles;
+<BR><BR></UL>
+<UL>
+<TT>2.</TT> The axes about which the Euler rotations are performed;
+<BR><BR></UL>
+<UL>
+<TT>3.</TT> The units associated with the three Euler angles. The recognized units are:
+'DEGREES', 'RADIANS', 'ARCSECONDS', 'ARCMINUTES' 'HOURANGLE',
+'MINUTEANGLE', 'SECONDANGLE'.
+<BR><BR></UL>
+   This information is supplied to the SPICE system using the kernel pool
+   variables shown below.
+<P>
+ 
+<PRE>
+   TKFRAME_&lt;frame&gt;_ANGLES = ( angle_1, angle_2, angle_3 )
+   TKFRAME_&lt;frame&gt;_AXES   = ( axis_1,  axis_2,  axis_3  )
+   TKFRAME_&lt;frame&gt;_UNITS  = 'units_of_angles'
+</PRE>
+   The units must be from the list given above. The axes must be chosen
+   from the set of integers 1,2,3 where 1 stands for the x-axis, 2 for the
+   y-axis, and 3 for the z-axis. If M is the matrix that converts vectors
+   relative to the TK frame to the RELATIVE frame by left multiplication,
+   then the angles and axes must satisfy the following relationship:
+<P>
+ 
+<PRE>
+   M = [angle_1]      [angle_2]      [angle_3]
+                axis_1         axis_2         axis_3
+ 
+</PRE>
+   where the symbol
+<P>
+ 
+<PRE>
+   [ A ]
+        i
+</PRE>
+   stands for a rotation by the angle A about the i'th axis.
+<P>
+ 
+<PRE>
+   +-                     -+
+   |   1       0      0    |
+   |   0     cos A   sin A |   =  [ A ]
+   |   0    -sin A   cos A |           1
+   +-                     -+
+ 
+   +-                     -+
+   |  cos A    0    -sin A |
+   |   0       1      0    |   =  [ A ]
+   |  sin A    0     cos A |           2
+   +-                     -+
+ 
+   +-                     -+
+   |  cos A   sin A   0    |
+   | -sin A   cos A   0    |   =  [ A ]
+   |   0       0      1    |           3
+   +-                     -+
+</PRE>
+   This method of definition is particularly well suited for defining
+   topocentric frames on the surface of the Earth. For example, suppose you
+   have an SPK (ephemeris) file that specifies the location of some surface
+   point on the Earth, and that the SPK ID code of this point is 399100.
+   Moreover suppose you have the geodetic co-latitude (COLAT) and longitude
+   (LONG) measured in degrees for this point. (Note that the co-latitude is
+   the complement of latitude: latitude + co-latitude = 90 degrees.)
+<P>
+ 
+   Given this information we can easily define a topocentric reference
+   frame at the point such that the x-axis points north along the local
+   meridian, the y-axis points west along the local latitude and the z-axis
+   points up from the reference spheroid.
+<P>
+ 
+   The transformation from Earth body-fixed frame to topocentric frame is
+   given by
+<P>
+ 
+<PRE>
+   BF2TP = [180] [COLAT] [LONG]
+                3       2      3
+</PRE>
+   Consequently the transformation from the topocentric frame to the
+   body-fixed frame is given by
+<P>
+ 
+<PRE>
+   M = TP2BF = [-LONG] [-COLAT] [180]
+                      3        2     3
+</PRE>
+   Let 1234567 be the ID code for the topocentric frame; let the name of
+   this frame be 'MYTOPO'; and define this relative to the IAU frame for
+   the Earth (one of the ``built in'' frames). The topocentric frame at the
+   ephemeris point 399100 is specified as shown below:
+<P>
+ 
+<PRE>
+   \begindata
+ 
+      FRAME_MYTOPO             = 1234567
+      FRAME_1234567_NAME       = 'MYTOPO'
+      FRAME_1234567_CLASS      = 4
+      FRAME_1234567_CLASS_ID   = 1234567
+      FRAME_1234567_CENTER     = 399100
+ 
+      TKFRAME_1234567_SPEC     = 'ANGLES'
+      TKFRAME_1234567_RELATIVE = 'IAU_EARTH'
+      TKFRAME_1234567_ANGLES   = ( &lt;-long&gt;, &lt;-colat&gt;, 180 )
+      TKFRAME_1234567_AXES     = (       3,        2,   3 )
+      TKFRAME_1234567_UNITS    = 'DEGREES'
+ 
+   \begintext
+</PRE>
+   As we'll see a bit later, we can make a more flexible definition for
+   this topocentric frame.
+<P>
+ 
+<BR><BR>
+<A NAME="Defining a TK Frame Using a SPICE-style Quaternion"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Defining a TK Frame Using a SPICE-style Quaternion
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   If you've chosen to define a TK frame using a SPICE-style quaternion,
+   supply the quaternion using the kernel pool variable assignment below:
+<P>
+ 
+<PRE>
+   TKFRAME_&lt;frame&gt;_Q = ( q_0, q_1, q_2, q_3 )
+</PRE>
+   where component zero is the so-called ``real'' component of the
+   quaternion (the ``cosine'' component of the quaternion). The last 3
+   components (components 1 through 3) are the ``axis'' components of the
+   quaternion -- the i, j, and k components respectively of the quaternion.
+   The quaternion must be a unit quaternion.
+<P>
+ 
+<PRE>
+        2        2        2        2
+   (q_0)  + (q_1)  + (q_2)  + (q_3)  = 1
+</PRE>
+   A more detailed discussion of quaternions is available in the reference
+   document ``Rotations Required Reading'' (<a href="../req/rotation.html"><a href="../req/rotation.html">rotation.req</a></a>), and in a
+   ``Quaternions White Paper'' available from NAIF.
+<P>
+ 
+<BR><BR>
+<A NAME="Gaining Flexibility via TK Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Gaining Flexibility via TK Frames
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The use of non-inertial frames gives you an easy means of creating
+   ephemerides for points on the surface of a body such as the Earth, Moon
+   or Mars. The ephemeris is simply the body-fixed location of the object
+   relative to a body-fixed frame for the same object. However, the model
+   used to relate the body-fixed frame to other reference frames may not be
+   fixed. Indeed, for the Earth there are several different methods with
+   varying degrees of accuracy that give the orientation of the Earth with
+   respect to inertial space. Each of these different realizations may have
+   a different frame ID code. This ability to ``plug in'' different
+   orientations is one of the strengths of the SPICE system. However, if
+   you create an ephemeris relative to one of these specific models, you
+   won't be able to use it unless you've loaded the correct model. To make
+   the ephemeris usable regardless of the orientation model you happen to
+   have at your disposal, you should define the body-fixed ephemeris
+   relative to a TK frame. Then define the TK frame so that rotation from
+   the TK frame to the PCK frame is the identity matrix. For example, you
+   can define a lunar body-fixed frame as shown below.
+<P>
+ 
+<PRE>
+   \begindata
+ 
+      FRAME_MOONFIXED          = 3010000
+      FRAME_3010000_NAME       = 'MOONFIXED'
+      FRAME_3010000_CLASS      = 4
+      FRAME_3010000_CLASS_ID   = 3010000
+      FRAME_3010000_CENTER     = 301
+ 
+      TKFRAME_3010000_SPEC     = 'MATRIX'
+      TKFRAME_3010000_RELATIVE = '&lt;name of base frame&gt;'
+      TKFRAME_3010000_MATRIX   = ( 1,
+                                   0,
+                                   0,
+                                   0,
+                                   1,
+                                   0,
+                                   0,
+                                   0,
+                                   1 )
+ 
+   \begintext
+</PRE>
+   By editing this definition you can make the MOONFIXED frame be the IAU
+   MOON frame or some other model if one is available. Or you can create
+   several such definitions and, at run-time, load the file that best fits
+   your current environment.
+<P>
+ 
+   Using this indirect method of defining the various frames for which more
+   than one orientation model may be available, you can avoid limiting how
+   various kernels can be used.
+<P>
+ 
+<BR><BR>
+<A NAME="Dynamic Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Dynamic Frames
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   In Mice documentation, the term ``dynamic frame'' designates a
+   time-dependent reference frame defined via a frame kernel.
+<P>
+ 
+   A ``parameterized dynamic frame'' is a dynamic frame defined by a
+   formula implemented in Mice code and having user-selectable parameters
+   set via a frame kernel. The formula defining a dynamic frame may rely on
+   data from other SPICE kernels, for example state vectors provided by SPK
+   files or rotation matrices from C-kernels or PCK files.
+<P>
+ 
+   An example of a parameterized dynamic frame is a nadir-pointing
+   reference frame for a spacecraft orbiting a planet, where the
+   spacecraft's nadir direction and velocity vector define the frame. Using
+   a frame kernel, a Mice user may specify the planet and spacecraft, the
+   relationship between the nadir and velocity vectors and the frame's
+   axes, and a small set of additional parameters required to define the
+   frame.
+<P>
+ 
+   Currently parameterized dynamic frames are the only type of dynamic
+   frame supported by Mice. Other types of dynamic frames, such as frames
+   defined by complete formulas (as opposed to parameters) provided in
+   frame kernels, may be implemented in future versions of Mice.
+<P>
+ 
+   Below we'll discuss the various types of supported dynamic frames, how
+   to create frame kernels that define dynamic frames, and dynamic frame
+   implementation considerations. The appendix ``Frame Definition
+   Examples'' contains frame definition templates for a variety of popular
+   dynamic frames.
+<P>
+ 
+<BR><BR>
+<A NAME="Parameterized Dynamic Frame Families"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Parameterized Dynamic Frame Families
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   The ``family'' to which a parameterized dynamic frame belongs indicates
+   the underlying mathematical formula by which the frame is defined.
+   Currently there are four parameterized dynamic frame families:
+<P>
+ 
+<UL>
+<TT>--</TT> Two-vector frames: a reference frame is defined by two vectors. The first
+vector is parallel to one axis of the frame; the component of the second
+vector orthogonal to the first is parallel to another axis of the frame,
+and the cross product of the two vectors is parallel to the remaining axis.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Mean equator and equinox of date frames: these use mathematical precession
+models to define orientation of a body's equatorial plane and location of
+the frame's x-axis. Currently these frames are supported only for the
+earth.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> True equator and equinox of date frames: these use mathematical precession
+and nutation models to define orientation of a body's equatorial plane and
+location of the frame's x-axis. Currently these frames are supported only
+for the earth.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Mean ecliptic and equinox of date frames: these use mathematical precession
+and mean obliquity models to define orientation of a body's orbital plane
+and location of the frame's x-axis. Currently these frames are supported
+only for the earth.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Euler frames: polynomial coefficients, a reference epoch, and an axis
+sequence are used to specify time-dependent Euler angles giving the
+orientation of the frame relative to a second, specified frame as a
+function of time.
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Notation"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Notation
+</H3><P><BR><BR>
+   A lower case letter `x' is used to designate the cross product operator,
+   as in
+<P>
+ 
+<PRE>
+   C = A x B
+</PRE>
+   Double vertical bars bracketing the name of a vector indicate the norm
+   of the vector:
+<P>
+ 
+<PRE>
+   ||A||
+</PRE>
+   Throughout this discussion we'll use text enclosed in angle brackets to
+   indicate values to be filled in by the creator of a frame kernel.
+   Examples are:
+<P>
+ 
+<PRE>
+      Token                 Replacement Value
+   -------------            -----------------------------------------
+   &lt;vec_ID&gt;                 'PRI' or 'SEC' [See discussion of
+                            two-vector frames below.]
+   &lt;frame_name&gt;             SPICE frame name, .e.g. 'J2000'
+   &lt;frame_ID&gt;               Integer frame ID code
+   &lt;observer_ID&gt;            NAIF integer ID for the observing body
+   &lt;aberration correction&gt;  String indicating aberration correction,
+                            e.g.:  'NONE', 'LT', 'XLT', 'LT+S'
+</PRE>
+<BR><BR>
+<A NAME="Required Keywords for Parameterized Dynamic Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Required Keywords for Parameterized Dynamic Frames
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   All parameterized dynamic frame kernel definitions contain the
+   assignments shown here:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_name&gt;                  =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_NAME               =  &lt;frame_name&gt;
+   FRAME_&lt;frame_ID&gt;_CLASS              =  5
+   FRAME_&lt;frame_ID&gt;_CLASS_ID           =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_CENTER             =  &lt;center_ID&gt;
+ 
+   FRAME_&lt;frame_ID&gt;_RELATIVE           =  &lt;base_frame_name&gt;
+   FRAME_&lt;frame_ID&gt;_DEF_STYLE          =  'PARAMETERIZED'
+   FRAME_&lt;frame_ID&gt;_FAMILY             =  &lt;frame_family&gt;
+</PRE>
+   These first five of the assignments are common to all Mice frame
+   definitions; the class code 5 indicates that the frame is dynamic. See
+   the section ``Guidelines for Frame Specification'' in the chapter
+   ``Creating a Frame Kernel'' above for a detailed discussion of these
+   assignments.
+<P>
+ 
+   The sixth assignment (for keyword FRAME_&lt;frame_ID&gt;_RELATIVE) is
+   the ``base frame'' specification; this indicates the frame the
+   transformation defined by the frame kernel ``maps to'': starting with an
+   epoch ET and a state vector S specified relative to the defined frame
+<P>
+ 
+<PRE>
+   &lt;frame name&gt;
+</PRE>
+   the frame definition determines the 6x6 state transformation matrix
+   XFORM such that the product
+<P>
+ 
+<PRE>
+   XFORM * S
+</PRE>
+   yields the equivalent state specified relative to the base frame at ET.
+<P>
+ 
+   The seventh assignment (for keyword FRAME_&lt;frame_ID&gt;_DEF_STYLE) is
+   used to simplify future implementation of other dynamic frame definition
+   styles. Only the value
+<P>
+ 
+<PRE>
+   'PARAMETERIZED'
+</PRE>
+   is currently supported.
+<P>
+ 
+   The last assignment indicates the frame family. The possible values are
+<P>
+ 
+<PRE>
+   'TWO-VECTOR'
+   'MEAN_EQUATOR_AND_EQUINOX_OF_DATE'
+   'TRUE_EQUATOR_AND_EQUINOX_OF_DATE'
+   'MEAN_ECLIPTIC_AND_EQUINOX_OF_DATE'
+   'EULER'
+</PRE>
+   Additional, required frame kernel assignments are a function of the
+   family to which a dynamic frame belongs. These are discussed below.
+<P>
+ 
+<BR><BR>
+<A NAME="Conditional Keywords for Parameterized Dynamic Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Conditional Keywords for Parameterized Dynamic Frames
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Rotation State"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Rotation State
+</H3><P><BR><BR>
+   A parameterized dynamic frame definition can specify a frame's
+   ``rotation state'' as ``rotating'' or ``inertial.'' Rotating frames are
+   nominally time-dependent, although it is possible for them to be
+   constant (an Euler frame with all Euler angles constant is an example).
+<P>
+ 
+   When a parameterized dynamic frame is specified as ``inertial,'' the
+   derivative with respect to time of the transformation between the frame
+   and any inertial frame, for example the J2000 frame, is zero. The
+   rotation between the frame and any inertial frame is still treated as
+   time-dependent. For such a frame F, the call
+<P>
+ 
+<PRE>
+   xform = <a href="../mice/cspice_sxform.html">cspice_sxform</a>( 'F', 'J2000', t )
+</PRE>
+   yields a 6x6 state transformation matrix `xform' having the structure
+<P>
+ 
+<PRE>
+   +-----+-----+
+   | R(t)|  0  |
+   +-----+-----+
+   |  0  | R(t)|
+   +-----+-----+
+</PRE>
+   where R(t) is the 3x3 rotation matrix that transforms vectors from frame
+   F to the J2000 frame at time `t'. By contrast, when the rotation state
+   of F is ``rotating,'' `xform' has the structure
+<P>
+ 
+<PRE>
+   +-----+-----+
+   | R(t)|  0  |
+   +-----+-----+
+   |dR/dt| R(t)|
+   +-----+-----+
+</PRE>
+   So, when the rotation state of frame F is ``inertial,'' velocities are
+   transformed from frame F to J2000 by left-multiplication by R(t); the
+   time derivative of the rotation from F to J2000 is simply ignored.
+<P>
+ 
+   Normally the inertial rotation state makes sense only for slowly
+   rotating frames such as the earth mean equator and equinox of date
+   frame.
+<P>
+ 
+   A parameterized dynamic frame's rotation state is specified via the
+   assignment
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_ROTATION_STATE     =  &lt;state&gt;
+</PRE>
+   where
+<P>
+ 
+<PRE>
+   &lt;state&gt;
+</PRE>
+   is one of
+<P>
+ 
+<PRE>
+   'ROTATING'
+   'INERTIAL'
+</PRE>
+   For frames belonging to the parameterized dynamic frame families
+<P>
+ 
+<PRE>
+   'MEAN_EQUATOR_AND_EQUINOX_OF_DATE'
+   'TRUE_EQUATOR_AND_EQUINOX_OF_DATE'
+   'MEAN_ECLIPTIC_AND_EQUINOX_OF_DATE'
+</PRE>
+   either the rotation state must be specified, or the frame must be frozen
+   (see ``Frozen Frames'' below).
+<P>
+ 
+   For two-vector and Euler frames, the rotation state specification is
+   optional; these frames are considered to be rotating by default.
+<P>
+ 
+   When the rotation state of a parameterized frame is specified, the frame
+   cannot be frozen; these options are mutually exclusive.
+<P>
+ 
+<BR><BR>
+<A NAME="Freeze Epoch"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Freeze Epoch
+</H3><P><BR><BR>
+   A parameterized dynamic frame definition can specify a frame as
+   ``frozen'' at a particular epoch. The rotation between a frozen frame
+   and its base frame is constant; the derivative with respect to time of
+   this rotation is zero.
+<P>
+ 
+   A frozen frame whose base frame is time-varying is still time-varying:
+   it is the relationship between the frozen frame and the base frame that
+   is time-independent.
+<P>
+ 
+   A frame is declared frozen by specifying a ``freeze epoch.'' This is
+   done via the assignment:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_FREEZE_EPOCH       =  &lt;time_spec&gt;
+</PRE>
+   where
+<P>
+ 
+<PRE>
+   &lt;time_spec&gt;
+</PRE>
+   is a TDB calendar date whose format conforms to the SPICE text kernel
+   date format specification. These dates
+<P>
+ 
+<UL>
+<TT>--</TT> are unquoted
+<BR><BR></UL>
+<UL>
+<TT>--</TT> start with the character
+<BR><BR></UL>
+<PRE>
+            @
+</PRE>
+<UL>
+<TT>--</TT> contain no embedded blanks
+<BR><BR></UL>
+   An example of a template for these calendar strings is
+<P>
+ 
+<PRE>
+   @YYYY-MON-DD/HR:MN.SEC.###
+</PRE>
+   Literal examples include
+<P>
+ 
+<PRE>
+   @7-MAR-2005
+   @March-7-2005-3:10:39.221
+   @2005-MAR-07/3:10:39.221
+</PRE>
+   Note that unlike time strings supported by the Mice function
+   <a href="../mice/cspice_str2et.html">cspice_str2et</a>, time system tokens such as
+<P>
+ 
+<PRE>
+   UTC
+   TDT
+   TDB
+</PRE>
+   are not supported; times are always assumed to be TDB.
+<P>
+ 
+   For frames belonging to the parameterized dynamic frame families
+<P>
+ 
+<PRE>
+   'MEAN_EQUATOR_AND_EQUINOX_OF_DATE'
+   'TRUE_EQUATOR_AND_EQUINOX_OF_DATE'
+   'MEAN_ECLIPTIC_AND_EQUINOX_OF_DATE'
+</PRE>
+   either the frame must be frozen or the rotation state must be specified,
+   (see ``Rotation State'' above).
+<P>
+ 
+   For two-vector and Euler frames, the freeze epoch specification is
+   optional; these frames are considered to be time-varying relative to
+   their base frames by default.
+<P>
+ 
+   When a parameterized frame is frozen, the rotation state of the frame
+   cannot be specified; these options are mutually exclusive.
+<P>
+ 
+<BR><BR>
+<A NAME="Two-Vector Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Two-Vector Frames
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Two-vector frames use two user-specified, non-parallel vectors to define
+   the mutually orthogonal axes of a right-handed reference frame.
+<P>
+ 
+   In a two-vector frame definition, one defining vector is parallel to a
+   specified axis of the reference frame; this vector is called the
+   ``primary vector.'' The other vector, called the ``secondary vector,''
+   defines another axis: the component of the secondary vector orthogonal
+   to the primary vector is parallel to a specified axis of the reference
+   frame. The secondary vector itself need not be, and typically is not,
+   aligned with an axis of the defined frame.
+<P>
+ 
+   Below, we'll call the primary and secondary defining vectors PRI and
+   SEC, and we'll name the axes of the right-handed frame X, Y, and Z. The
+   unit +Z vector is the cross product of the unit +X and +Y vector.
+<P>
+ 
+   In a two-vector frame definition, the vectors PRI and SEC are specified
+   geometrically; for example, PRI could be the position of the earth
+   relative to a spacecraft, and SEC could be defined by the right
+   ascension and declination of a given star in a specified reference
+   frame.
+<P>
+ 
+   In a frame kernel, the vectors PRI and SEC are associated with two
+   members of the set of unit vectors
+<P>
+ 
+<PRE>
+   { X, -X, Y, -Y, Z, -Z }
+</PRE>
+   An example: in this case PRI is associated with -Z and SEC is associated
+   with +X. SEC itself is not parallel to the X axis, but the component of
+   SEC orthogonal to PRI points in the +X direction.
+<P>
+ 
+   The diagram below shows the relationship between PRI, SEC, X, Y, and Z:
+<P>
+ 
+<PRE>
+ 
+      Component of SEC orthogonal to PRI
+                      |
+                      |      ^
+                      v      |
+                    &lt;-----+--+
+                     \    |  |
+                      \   +--+
+                       \     |
+                    SEC \    |  +Z  = - PRI / ||PRI||
+                         \   |
+                          \  |
+                           \ +--+
+                            \|  |
+   +X = Y x Z  &lt;---------+---+--+
+                        /   /|
+                       +---/ |
+                          /| /
+                         / |/|
+                        /  + |  -Z  =   PRI / ||PRI||
+                       /     |
+                      /      |
+                     v       v  PRI
+ 
+            Z x SEC
+     +Y = -----------
+          ||Z x SEC||
+ 
+      =   Z x X
+</PRE>
+   By defining PRI and SEC we can create a concrete frame definition.
+   Continuing the above example, we can define a nadir-pointing frame for
+   the Mars Global Surveyor (MGS) spacecraft as follows:
+<P>
+ 
+<PRE>
+   PRI  =  Vector from MGS to nearest point on Mars reference
+           ellipsoid
+ 
+   Z    =  -PRI / ||PRI||
+ 
+   SEC  =  Inertially referenced velocity of MGS relative to Mars
+ 
+   Y    =  Z x SEC / ||Z x SEC||
+ 
+   X    =  Y x Z
+</PRE>
+   For this nadir-pointing frame, -Z is the nadir direction, X points
+   roughly in the direction of the inertially referenced spacecraft
+   velocity, and Y is aligned with the orbital angular velocity vector.
+<P>
+ 
+   By converting the above definition into the frame kernel
+   ``keyword=value'' format, we can make the definition usable by the Mice
+   system. Above, for brevity, we've glossed over a few aspects of the
+   vector definitions. Below we'll discuss in detail all of the elements of
+   two-vector frame specifications.
+<P>
+ 
+<BR><BR>
+<A NAME="Defining a Two-Vector Frame in a Frame Kernel"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Defining a Two-Vector Frame in a Frame Kernel
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Kernel Availability"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Kernel Availability
+</H3><P><BR><BR>
+   In the following discussion, for brevity, we will use the term
+   ``computable'' to describe frames whose definitions are known to Mice
+   and for which kernels have been loaded sufficient to enable computation
+   of the transformations between these frames and their base frames.
+<P>
+ 
+   We'll also call a frame transformation between frames F1 and F2
+   ``computable'' if both frames F1 and F2 are computable and kernels have
+   been loaded sufficient to enable computation of the transformation
+   between F1 and F2. For example, the transformation between the J2000 and
+   IAU_TITAN frames is computable once a PCK containing rotational elements
+   for TITAN has been loaded.
+<P>
+ 
+<BR><BR>
+<A NAME="Specifying the Base Frame"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying the Base Frame
+</H3><P><BR><BR>
+   When a two-vector frame F is defined with a base frame F_BASE, and when
+   the necessary kernels are loaded, the transformation between F and
+   F_BASE (in both directions) becomes computable by the Mice frame
+   subsystem. In addition, for any frame F2 such that the transformation
+   between F2 to F_BASE is computable, the transformation from F2 to F (in
+   both directions) becomes computable.
+<P>
+ 
+   For a two-vector frame, the base frame may be any frame F_BASE such that
+   the transformation between F_BASE and the J2000 reference frame is
+   computable at the time the two-vector frame definition is referenced.
+<P>
+ 
+   Normally for two-vector frames the base frame should be set to 'J2000';
+   this choice yields optimal run-time efficiency. The assignment is made
+   as follows.
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_RELATIVE           =  'J2000'
+</PRE>
+   Base frame specifications are part of the two-vector frame definition
+   because the base frame can be used to control how Mice chains together
+   two-vector frames with other frames. However, from a mathematical point
+   of view, two-vector frames are fully defined without reference to a base
+   frame. For example, suppose the two-vector frame F1 is defined by the
+   earth-moon position vector and the earth-sun position vector, and the
+   base frame for F1 is IAU_EARTH. Suppose that the two-vector frame F2 is
+   defined by the same vectors and that the base frame of F2 is J2000.
+   Then, ignoring small round-off errors, the transformation between F1 and
+   F2 is the identity transformation.
+<P>
+ 
+   Base frames should not be confused with other frames occurring in
+   two-vector frame definitions: constant vectors and velocity vectors have
+   associated frames which are also specified by keyword assignments. See
+   the discussion below under the heading ``Constant Vectors'' and
+   ``Velocity Vectors'' for details.
+<P>
+ 
+<BR><BR>
+<A NAME="Specifying the Frame Family"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying the Frame Family
+</H3><P><BR><BR>
+   Definitions of two-vector frames include the frame family specification:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_FAMILY             =  'TWO-VECTOR'
+</PRE>
+   Further assignments (discussed below) define the primary and secondary
+   vectors and relate these vectors to the frame's axes.
+<P>
+ 
+<BR><BR>
+<A NAME="Specifying the Rotation state or Freeze Epoch"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying the Rotation state or Freeze Epoch
+</H3><P><BR><BR>
+   These specifications are optional for two-vector frames. See the section
+   above titled ``Conditional Keywords for Parameterized Dynamic Frames''
+   for details.
+<P>
+ 
+<BR><BR>
+<A NAME="Specifying the Angular Separation Tolerance"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying the Angular Separation Tolerance
+</H3><P><BR><BR>
+   This specification applies only to two-vector frames and is optional. To
+   diagnose near-degenerate geometry, specifically cases where the defining
+   vectors have angular separation too close to zero or pi radians, users
+   can specify a limit on these angular separations. This is done via the
+   keyword assignment
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_ANGLE_SEP_TOL      = &lt;tolerance&gt;
+</PRE>
+   where &lt;tolerance&gt; is the separation limit in radians. If the
+   angular separation of the defining vectors differs from zero or pi
+   radians by less than the specified tolerance, an error will be signaled
+   at run time.
+<P>
+ 
+   When a two-vector frame definition omits specification of an angular
+   separation tolerance, Mice uses a default value of one milliradian.
+<P>
+ 
+<BR><BR>
+<A NAME="Frame Axis Labels"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Frame Axis Labels
+</H3><P><BR><BR>
+   The primary defining vector is associated with a frame axis via the
+   assignment
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_PRI_AXIS           = &lt;label&gt;
+</PRE>
+   Here
+<P>
+ 
+<PRE>
+   &lt;label&gt;
+</PRE>
+   may be any of
+<P>
+ 
+<PRE>
+   { 'X',  '-X',  'Y',  '-Y',  'Z',  '-Z' }
+</PRE>
+   Blanks and case in the label are not significant. Unsigned axis
+   designations are treated as positive; optionally '+' signs may be used
+   to prefix positive axis designations. The primary vector is aligned with
+   the indicated axis and has the sense indicated by the implied or
+   explicit sign.
+<P>
+ 
+   The secondary defining vector is associated with a frame axis via the
+   assignment
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_SEC_AXIS           = &lt;label&gt;
+</PRE>
+   where the axis labels are as above. The assignment means that the
+   component of the secondary vector orthogonal to the primary vector is
+   aligned with the indicated axis and has the sense indicated by the
+   implied or explicit sign.
+<P>
+ 
+<BR><BR>
+<A NAME="Vector Specifications"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Vector Specifications
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The vectors used to define a two-vector frame are specified by geometric
+   means. Each defining vector may be any of:
+<P>
+ 
+<UL>
+<TT>--</TT> The position of one ephemeris object relative to another
+<BR><BR></UL>
+<UL>
+<TT>--</TT> The vector from an observer to the nearest point on an extended body to the
+observer
+<BR><BR></UL>
+<UL>
+<TT>--</TT> The velocity of one ephemeris object relative to another in a specified
+reference frame
+<BR><BR></UL>
+<UL>
+<TT>--</TT> A constant vector in a specified reference frame
+<BR><BR></UL>
+   The frames (explicit or implicit) associated with the two defining
+   vectors need not match each other or the base frame. Mice will map the
+   defining vectors to a common frame before performing vector arithmetic
+   to derive the axes of the defined frame.
+<P>
+ 
+   All keywords comprising the primary vector definition start with the
+   prefix
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_PRI_
+</PRE>
+   All keywords for the second defining vector are prefixed by
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_SEC_
+</PRE>
+   Here &lt;frame_ID&gt; is the integer ID code for the frame being
+   defined.
+<P>
+ 
+   Both the primary and secondary vectors are specified using the sets of
+   keywords described below.
+<P>
+ 
+<BR><BR>
+<A NAME="Observer-Target Position Vectors"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Observer-Target Position Vectors
+</H3><P><BR><BR>
+   An observer-target position vector is simply the position of one
+   ephemeris object relative to another. These vectors are defined by an
+   observer, a target, an aberration correction, a reference frame, and an
+   epoch. In the frame kernel, there is no need to specify the reference
+   frame or epoch: the Mice frame subsystem will determine which frame to
+   use, and the epoch is supplied by the calling application at run time.
+<P>
+ 
+   The observer and target are specified by name or ID code. The aberration
+   correction may be any value accepted by <a href="../mice/cspice_spkezr.html">cspice_spkezr</a>.
+<P>
+ 
+   The frame kernel assignments used to define an observer-target position
+   vector are:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_VECTOR_DEF = 'OBSERVER_TARGET_POSITION'
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_OBSERVER   = &lt;observer name or ID code&gt;
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_TARGET     = &lt;target name or ID code&gt;
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_ABCORR     = &lt;aberration correction&gt;
+</PRE>
+   where &lt;vec_ID&gt; may be either PRI or SEC, and &lt;frame_ID&gt; is
+   the ID code of the frame established by the generic assignments
+   described above.
+<P>
+ 
+   In order for a two-vector frame using a position vector as part of its
+   definition to be computable, kernel data must be loaded that enable
+   computation of the specified position vector with respect to the J2000
+   frame.
+<P>
+ 
+   For an example of a two-vector frame definition using an observer-target
+   position vector, see the subsection titled ``Geocentric Solar Ecliptic
+   (GSE) Frame'' in the appendix ``Frame Definition Examples.''
+<P>
+ 
+<BR><BR>
+<A NAME="Target Near point Vectors"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Target Near point Vectors
+</H3><P><BR><BR>
+   Target near point vectors point from an observer to the closest point on
+   an extended target body to the observer.
+<P>
+ 
+   Target near point vectors are defined by an observer, a target, an
+   aberration correction, a frame, and an epoch. As with position vectors,
+   the frame and epoch are not specified in the frame kernel.
+<P>
+ 
+   The observer and target are specified by name or ID code. Aberration
+   corrections may be any supported by the Mice function <a href="../mice/cspice_subpt.html">cspice_subpt</a>.
+   Light time corrections are applied both to the observer- target center
+   vector and to the rotation of the target body. The stellar aberration
+   correction, if specified, is applied to the observer-target center
+   vector.
+<P>
+ 
+   The frame kernel assignments used to define a target near point position
+   vector are:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_VECTOR_DEF = 'TARGET_NEAR_POINT'
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_OBSERVER   = &lt;observer name or ID code&gt;
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_TARGET     = &lt;target name or ID code&gt;
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_ABCORR     = &lt;aberration correction&gt;
+</PRE>
+   In order for a two-vector frame using a target near point vector as part
+   of its definition to be computable, kernel data must be loaded that
+   enable computation of the target near point vector with respect to the
+   J2000 frame.
+<P>
+ 
+   For an example of a two-vector frame definition using a target near
+   point vector, see the subsection titled ``Nadir Frame for Mars Orbiting
+   Spacecraft'' in the appendix ``Frame Definition Examples.''
+<P>
+ 
+<BR><BR>
+<A NAME="Observer-Target Velocity Vectors"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Observer-Target Velocity Vectors
+</H3><P><BR><BR>
+   An observer-target velocity vector is the velocity portion of the state
+   of one ephemeris object relative to another. These vectors are defined
+   by an observer, a target, an aberration correction, a reference frame,
+   and an epoch. Of these, only the epoch is not specified in the frame
+   kernel. Unlike observer-target position vectors, velocity vectors
+   require a user-supplied frame specification. The specified frame (we'll
+   call this the ``velocity frame'') will be used to look up the velocity
+   vector from the Mice SPK subsystem.
+<P>
+ 
+   When the velocity frame is non-inertial and aberration corrections are
+   used, the epoch at which the velocity frame is evaluated will be
+   adjusted by the one-way light time between the observer and the frame's
+   center---just as is done by <a href="../mice/cspice_spkezr.html">cspice_spkezr</a> (see the header of that
+   function for details).
+<P>
+ 
+   The reason the velocity frame specification is crucial is that, (unlike
+   rotations) state transformations between non-inertial frames don't
+   preserve geometric properties of velocity vectors. Example: compare the
+   specific angular momentum vector of a geosynchronous satellite (obtained
+   by taking the cross product of the satellite's geocentric position and
+   velocity vectors) in both the J2000 frame and in the earth body-fixed
+   frame. In the latter frame, the specific angular momentum is zero. A
+   valid two-vector frame could be defined using the satellite's position
+   and velocity in the J2000 frame, while using the position and velocity
+   in the earth body-fixed frame gives rise to a degenerate case for which
+   the two-vector frame is undefined.
+<P>
+ 
+   The observer and target defining the velocity vector are specified by
+   name or ID code. The aberration correction may be any value accepted by
+   <a href="../mice/cspice_spkezr.html">cspice_spkezr</a>. The velocity frame may be any computable by Mice,
+   including a dynamic frame, as long as the transformation between the
+   velocity frame and the J2000 frame doesn't require multiple levels of
+   simulated recursion (see the discussion of recursion in the chapter
+   ``Dynamic Frame Implementation Considerations'' below for details).
+<P>
+ 
+   The frame kernel assignments used to define an observer-target velocity
+   vector are:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_VECTOR_DEF = 'OBSERVER_TARGET_VELOCITY'
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_OBSERVER   = &lt;observer name or ID code&gt;
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_TARGET     = &lt;target name or ID code&gt;
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_FRAME      = &lt;frame_name&gt;
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_ABCORR     = &lt;aberration correction&gt;
+</PRE>
+   In order for a two-vector frame using a velocity vector as part of its
+   definition to be computable, kernel data must be loaded that enable
+   computation of the velocity vector with respect to both the velocity
+   frame and the J2000 frame.
+<P>
+ 
+   For an example of a two-vector frame definition using an observer-target
+   velocity vector, see the subsection titled ``Geocentric Solar Ecliptic
+   (GSE) Frame'' in the appendix ``Frame Definition Examples.''
+<P>
+ 
+<BR><BR>
+<A NAME="Constant Vectors"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Constant Vectors
+</H3><P><BR><BR>
+   Constant vectors are defined by specifying a reference frame and a
+   vector expressed relative to that frame. Optionally, aberration
+   corrections may be specified.
+<P>
+ 
+   The coordinates of a constant vector may be specified in any of the
+   rectangular, latitudinal, or RA/DEC (right ascension and declination)
+   systems. If the coordinates are angular, the associated angular units
+   must be specified; any angular units supported by the Mice function
+   <a href="../mice/cspice_convrt.html">cspice_convrt</a> may be used.
+<P>
+ 
+   All constant vectors require the frame kernel assignments
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_VECTOR_DEF = 'CONSTANT'
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_SPEC       = &lt;coordinate_system&gt;
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_FRAME      = &lt;frame_name&gt;
+</PRE>
+   where &lt;coordinate_system&gt; is one of
+<P>
+ 
+<PRE>
+   'RECTANGULAR'
+   'LATITUDINAL'
+   'RA/DEC'
+</PRE>
+   and the frame is any computable by Mice, including a dynamic frame, as
+   long as the transformation between the constant vector's frame and the
+   J2000 frame doesn't require multiple levels of simulated recursion (see
+   the discussion of recursion in the chapter ``Dynamic Frame
+   Implementation Considerations'' below for details).
+<P>
+ 
+   When the coordinate system is rectangular, the vector is specified by
+   the frame kernel assignment
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_SPEC   = 'RECTANGULAR'
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_VECTOR = ( &lt;X component&gt;,
+                                        &lt;Y component&gt;,
+                                        &lt;Z component&gt;  )
+</PRE>
+   When the coordinate system is latitudinal, the vector is specified by
+   the frame kernel assignments
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_SPEC      = 'LATITUDINAL'
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_UNITS     = &lt;angular_units&gt;
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_LONGITUDE = &lt;longitude&gt;
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_LATITUDE  = &lt;latitude&gt;
+</PRE>
+   where &lt;angular_units&gt; designates one of the units supported by the
+   Mice function <a href="../mice/cspice_convrt.html">cspice_convrt</a>. The set of supported units includes
+<P>
+ 
+<PRE>
+   'RADIANS'
+   'DEGREES'
+   'ARCSECONDS'
+</PRE>
+   When the coordinate system is RA/DEC, the vector is specified by the
+   frame kernel assignments
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_SPEC      = 'RA/DEC'
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_UNITS     = &lt;angular_units&gt;
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_RA        = &lt;RA&gt;
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_DEC       = &lt;DEC&gt;
+</PRE>
+   where &lt;angular_units&gt; are as described above.
+<P>
+ 
+   Aberration corrections are optional for constant vectors. The set of
+   available corrections is unique to this application: either light time
+   correction or stellar aberration correction may be applied, but both
+   cannot be applied together.
+<P>
+ 
+   Light time corrections adjust the orientation of the constant vector's
+   frame for the one-way light time between the center of the frame and a
+   specified observer. The application to the frame of light time
+   correction is identical to that performed by the Mice function
+   <a href="../mice/cspice_spkezr.html">cspice_spkezr</a> when it is asked to compute a light-time corrected state
+   relative to a non-inertial reference frame. Supported light time
+   corrections are any of those supported by <a href="../mice/cspice_spkezr.html">cspice_spkezr</a> that don't
+   include stellar aberration correction.
+<P>
+ 
+   The user may also correct the constant vector for stellar aberration;
+   this correction is a function of the constant vector and the velocity of
+   an observer relative to the solar system barycenter. A typical
+   application would be to correct an inertially referenced star direction
+   vector for the stellar aberration induced by motion of an observing
+   spacecraft. The supported stellar aberration corrections are
+<P>
+ 
+<PRE>
+   'S'      {correct for stellar aberration, reception case}
+   'XS'     {correct for stellar aberration, transmission case}
+</PRE>
+   In the application above, one would correct the apparent observer-star
+   direction by selecting the 'S' option. See the discussion in the header
+   of the Mice function <a href="../mice/cspice_spkezr.html">cspice_spkezr</a> for a description of the
+   ``reception'' and ``transmission'' aberration correction cases.
+<P>
+ 
+   When aberration corrections are desired, the observer and the correction
+   are specified by the frame kernel assignments
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_OBSERVER  = &lt;observer name or ID code&gt;
+   FRAME_&lt;frame_ID&gt;_&lt;vec_ID&gt;_ABCORR    = &lt;aberration correction&gt;
+</PRE>
+   In order for a two-vector frame using a constant vector as part of its
+   definition to be computable, kernel data must be loaded that enable
+   computation of the specified vector with respect to both the constant
+   vector's frame and the J2000 frame.
+<P>
+ 
+   For examples of two-vector frame definitions using constant vectors, see
+   the subsections titled ``Geocentric Solar Magnetospheric (GSM) Frame''
+   and ``Mercury Solar Equatorial (MSEQ) Frame'' in the appendix ``Frame
+   Definition Examples.''
+<P>
+ 
+<BR><BR>
+<A NAME="Mean Equator and Equinox of Date Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Mean Equator and Equinox of Date Frames
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Mean Equator and Equinox of Date Frames are defined for a solar system
+   body (for example, a planet) using mathematical models of the
+   orientation of the body's mean equatorial and orbital planes. The term
+   ``mean equator'' indicates that orientation of the equatorial plane is
+   modeled accounting for precession only. The ``mean equinox'' is the
+   intersection of the body's mean orbital plane with the mean equatorial
+   plane. The X-axis of such a frame is aligned with the cross product of
+   the north-pointing vectors normal to the body's mean equator and mean
+   orbital plane of date. The Z-axis is aligned with the first of these
+   normal vectors. The Y axis is the cross product of the Z and X axes. The
+   resulting reference frame is time-varying; the term ``of date'' means
+   this frame is evaluated at a specified epoch.
+<P>
+ 
+   The mathematical model for a mean equator and equinox of date frame is
+   typically called a ``precession model''; Mice adopts this usage.
+<P>
+ 
+   The Mice frame subsystem supports mean equator and equinox of date
+   frames via precession models built into Mice. In principle, for any
+   body, a frame kernel definition for a mean equator and equinox of date
+   frame identifies which precession model to use for that body. Currently
+   Mice supports only one precession model: the 1976 IAU precession model
+   for the earth.
+<P>
+ 
+<BR><BR>
+<A NAME="Defining a Mean Equator and Equinox of Date Frame in a Frame Kernel"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Defining a Mean Equator and Equinox of Date Frame in a Frame Kernel
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Specifying the Base Frame0"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying the Base Frame
+</H3><P><BR><BR>
+   The base frame of a mean equator and equinox of date frame is a function
+   of the precession model. For the 1976 IAU earth precession model the
+   base frame is J2000. This association is made via the assignment:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_RELATIVE           =  'J2000'
+</PRE>
+<BR><BR>
+<A NAME="Specifying the Frame Family0"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying the Frame Family
+</H3><P><BR><BR>
+   A mean equator and equinox of date frame is identified by frame family
+   specification:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_FAMILY = 'MEAN_EQUATOR_AND_EQUINOX_OF_DATE'
+</PRE>
+<BR><BR>
+<A NAME="Specifying the Precession Model"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying the Precession Model
+</H3><P><BR><BR>
+   The 1976 IAU precession model is ``selected'' via the assignment:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_PREC_MODEL   = 'EARTH_IAU_1976'
+</PRE>
+<BR><BR>
+<A NAME="Specifying a Rotation State or Freeze Epoch"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying a Rotation State or Freeze Epoch
+</H3><P><BR><BR>
+   Although mean equator and equinox of date frames are, strictly speaking,
+   non-inertial, their time variation may be very slow. In some cases it
+   may be desirable to treat them as inertial (specifically, non-rotating),
+   perhaps in order to simplify computations or to ensure compatibility
+   with computations from another source.
+<P>
+ 
+   Users can instruct the Mice frame subsystem to treat a mean equator and
+   equinox of date frame as either inertial or rotating by making a
+   ``rotation state'' assignment. Users can also direct the frame subsystem
+   to treat a mean equator and equinox of date frame as though it were
+   ``frozen'' at a specified epoch. See the section above titled
+   ``Conditional Keywords for Parameterized Dynamic Frames'' for
+   instructions on how to make these assignments.
+<P>
+ 
+   Definitions of mean equator and equinox of date frames require either,
+   but not both, the rotation state or a freeze epoch to be specified.
+<P>
+ 
+   For examples of Mean Equator and Equinox of Date frame definitions, see
+   the subsection titled ``Earth Mean Equator and Equinox of Date Frames''
+   in the appendix ``Frame Definition Examples.''
+<P>
+ 
+<BR><BR>
+<A NAME="True Equator and Equinox of Date Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> True Equator and Equinox of Date Frames
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   True Equator and Equinox of Date Frames may be viewed as a refinement of
+   mean equator and equinox of date frames. The term ``true equator''
+   indicates that orientation of a body's equatorial plane is modeled
+   accounting for precession and nutation. The ``true equinox'' is the
+   intersection of the body's mean orbital plane with the true equatorial
+   plane. The X-axis of such a frame is aligned with the cross product of
+   the north-pointing vectors normal to the body's true equator and mean
+   orbital plane of date. The Z-axis is aligned with the first of these
+   normal vectors. The Y axis is the cross product of the Z and X axes. The
+   term ``of date'' means that these axes are evaluated at a specified
+   epoch.
+<P>
+ 
+<BR><BR>
+<A NAME="Defining a True Equator and Equinox of Date Frame in a Frame Kernel"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Defining a True Equator and Equinox of Date Frame in a Frame Kernel
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   True Equator and Equinox of date frame definitions are nearly identical
+   to those for mean of date frames (see above): the only differences are
+   the frame family specification and the addition of an assignment
+   identifying the nutation model.
+<P>
+ 
+<BR><BR>
+<A NAME="Specifying the Base Frame1"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying the Base Frame
+</H3><P><BR><BR>
+   The base frame of a true equator and equinox of date frame is a function
+   of the precession model. For the 1976 IAU earth precession model the
+   base frame is J2000. This association is made via the assignment:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_RELATIVE           =  'J2000'
+</PRE>
+<BR><BR>
+<A NAME="Specifying the Frame Family1"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying the Frame Family
+</H3><P><BR><BR>
+   A true equator and equinox of date frame is identified by frame family
+   specification:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_FAMILY = 'TRUE_EQUATOR_AND_EQUINOX_OF_DATE'
+</PRE>
+<BR><BR>
+<A NAME="Specifying the Precession Model0"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying the Precession Model
+</H3><P><BR><BR>
+   Currently Mice supports only one precession model: the 1976 IAU
+   precession model for the earth.
+<P>
+ 
+   The 1976 IAU precession model is ``selected'' via the assignment:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_PREC_MODEL   = 'EARTH_IAU_1976'
+</PRE>
+<BR><BR>
+<A NAME="Specifying the Nutation Model"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying the Nutation Model
+</H3><P><BR><BR>
+   The choice of nutation model is specified by the assignment:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_NUT_MODEL     = &lt;nutation_model&gt;
+</PRE>
+   Currently the only available nutation model is the 1980 IAU nutation
+   model for the earth. An assignment specifying this model has the form:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_NUT_MODEL     = 'EARTH_IAU_1980'
+</PRE>
+<BR><BR>
+<A NAME="Specifying a Rotation State or Freeze Epoch0"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying a Rotation State or Freeze Epoch
+</H3><P><BR><BR>
+   Although true equator and equinox of date frames are, strictly speaking,
+   non-inertial, their time variation may be very slow. In some cases it
+   may be desirable to treat them as inertial (specifically, non-rotating),
+   perhaps in order to simplify computations or to ensure compatibility
+   with computations from another source.
+<P>
+ 
+   Users can instruct the Mice frame subsystem to treat a true equator and
+   equinox of date frame as either inertial or rotating by making a
+   ``rotation state'' assignment. Users can also direct the frame subsystem
+   to treat a true equator and equinox of date frame as though it were
+   ``frozen'' at a specified epoch. See the section above titled
+   ``Conditional Keywords for Parameterized Dynamic Frames'' for
+   instructions on how to make these assignments.
+<P>
+ 
+   Definitions of true equator and equinox of date frames require either,
+   but not both, the rotation state or a freeze epoch to be specified.
+<P>
+ 
+   For examples of True Equator and Equinox of Date frame definitions, see
+   the subsection titled ``Earth True Equator and Equinox of Date Frames''
+   in the appendix ``Frame Definition Examples.''
+<P>
+ 
+<BR><BR>
+<A NAME="Mean Ecliptic and Equinox of Date Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Mean Ecliptic and Equinox of Date Frames
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Mean Ecliptic and Equinox of Date Frames are closely related to mean
+   equator and equinox of date frames: for a given body, the former is
+   obtained by rotating the latter about the X-axis by the mean obliquity
+   of date.
+<P>
+ 
+   The term ``mean equator'' indicates that orientation of a body's
+   equatorial plane is modeled accounting for precession. The ``mean
+   equinox'' is the intersection of the body's mean orbital plane with the
+   mean equatorial plane. The X-axis of such a frame is aligned with the
+   cross product of the north-pointing vectors normal to the body's mean
+   equator and mean orbital plane of date. The Z-axis is aligned with the
+   second of these normal vectors. The Y axis is the cross product of the Z
+   and X axes. The term ``of date'' means that these axes are evaluated at
+   a specified epoch.
+<P>
+ 
+<BR><BR>
+<A NAME="Defining a Mean Ecliptic and Equinox of Date Frame in a Frame Kernel"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Defining a Mean Ecliptic and Equinox of Date Frame in a Frame Kernel
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Mean Ecliptic and Equinox of date frame definitions are nearly identical
+   to those for mean of date frames (see above): the only differences are
+   the frame family specification and the addition of an assignment
+   identifying the mean obliquity model.
+<P>
+ 
+<BR><BR>
+<A NAME="Specifying the Base Frame2"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying the Base Frame
+</H3><P><BR><BR>
+   The base frame of a mean ecliptic and equinox of date frame is a
+   function of the precession model. For the 1976 IAU earth precession
+   model the base frame is J2000. This association is made via the
+   assignment:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_RELATIVE           =  'J2000'
+</PRE>
+<BR><BR>
+<A NAME="Specifying the Frame Family2"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying the Frame Family
+</H3><P><BR><BR>
+   A mean ecliptic and equinox of date frame is identified by frame family
+   specification:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_FAMILY = 'MEAN_ECLIPTIC_AND_EQUINOX_OF_DATE'
+</PRE>
+<BR><BR>
+<A NAME="Specifying the Precession Model1"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying the Precession Model
+</H3><P><BR><BR>
+   Currently Mice supports only one precession model: the 1976 IAU
+   precession model for the earth.
+<P>
+ 
+   The 1976 IAU precession model is ``selected'' via the assignment:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_PREC_MODEL   = 'EARTH_IAU_1976'
+</PRE>
+<BR><BR>
+<A NAME="Specifying the Mean Obliquity Model"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying the Mean Obliquity Model
+</H3><P><BR><BR>
+   The choice of mean obliquity model is specified by the assignment:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_OBLIQ_MODEL     = &lt;obliquity_model&gt;
+</PRE>
+   Currently the only available mean obliquity model is the 1980 IAU
+   obliquity model for the earth. An assignment specifying this model has
+   the form:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_OBLIQ_MODEL     = 'EARTH_IAU_1980'
+</PRE>
+<BR><BR>
+<A NAME="Specifying a Rotation State or Freeze Epoch1"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying a Rotation State or Freeze Epoch
+</H3><P><BR><BR>
+   Although mean ecliptic and equinox of date frames are, strictly
+   speaking, non-inertial, their time variation may be very slow. In some
+   cases it may be desirable to treat them as inertial (specifically,
+   non-rotating), perhaps in order to simplify computations or to ensure
+   compatibility with computations from another source.
+<P>
+ 
+   Users can instruct the Mice frame subsystem to treat a mean ecliptic and
+   equinox of date frame as either inertial or rotating by making a
+   ``rotation state'' assignment. Users can also direct the frame subsystem
+   to treat a mean ecliptic and equinox of date frame as though it were
+   ``frozen'' at a specified epoch. See the section above titled
+   ``Conditional Keywords for Parameterized Dynamic Frames'' for
+   instructions on how to make these assignments.
+<P>
+ 
+   Definitions of mean ecliptic and equinox of date frames require either,
+   but not both, the rotation state or a freeze epoch to be specified.
+<P>
+ 
+   For examples of Mean Ecliptic and Equinox of Date frame definitions, see
+   the subsection titled ``Earth Mean Ecliptic and Equinox of Date Frames''
+   in the appendix ``Frame Definition Examples.''
+<P>
+ 
+<BR><BR>
+<A NAME="Euler Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Euler Frames
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   An Euler frame is defined by a sequence of rotation axes and
+   corresponding time-dependent Euler angles. Each angle is defined by a
+   set of polynomial coefficients. A reference epoch must be provided in
+   the frame definition; the independent variable of each polynomial
+   represents ephemeris seconds past the J2000 TDB epoch.
+<P>
+ 
+   The rotation defined by the Euler angles maps position vectors via left
+   multiplication from the defined Euler reference frame to the base frame:
+<P>
+ 
+<PRE>
+   V           = r(t) * V
+    base_frame           Euler_frame
+</PRE>
+   This rotation can be considered to be a time-dependent matrix
+<P>
+ 
+<PRE>
+   r(t)
+</PRE>
+   where r(t) represents the composition of the rotations defined by the
+   input angle-axis pairs. Naming the axis indices and angles of the Euler
+   angle sequence
+<P>
+ 
+<PRE>
+   axindx_i, angle_i,  i = 1, 2, 3
+</PRE>
+   r(t) is
+<P>
+ 
+<PRE>
+   r(t) = [ angle_1(t) ]      [ angle_2(t) ]      [ angle_3(t) ]
+                     axindx_1            axindx_2            axindx_3
+</PRE>
+   The axis indices axindx_i, for i = 1, 2, 3, are in the set { 1, 2, 3 };
+   axindx_2 cannot equal axindx_1 or axindx_3. For example, we could have
+<P>
+ 
+<PRE>
+   axindx_1 = 3
+   axindx_2 = 1
+   axindx_3 = 3
+</PRE>
+   Here the notation
+<P>
+ 
+<PRE>
+   [ A ]
+        j
+</PRE>
+   stands for a frame rotation by the angle A radians about the jth axis of
+   a right-handed frame, where we assign the axes {X, Y, Z} the indices {1,
+   2, 3} respectively:
+<P>
+ 
+<PRE>
+   +-                     -+
+   |   1       0      0    |
+   |   0     cos A   sin A |   =  [ A ]
+   |   0    -sin A   cos A |           1
+   +-                     -+
+ 
+   +-                     -+
+   |  cos A    0    -sin A |
+   |   0       1      0    |   =  [ A ]
+   |  sin A    0     cos A |           2
+   +-                     -+
+ 
+   +-                     -+
+   |  cos A   sin A   0    |
+   | -sin A   cos A   0    |   =  [ A ]
+   |   0       0      1    |           3
+   +-                     -+
+</PRE>
+   The base frame can be constructed from the Euler frame via a sequence of
+   Euler angle rotations as follows:
+<P>
+ 
+<UL>
+<TT>1.</TT> Rotate the axes of the Euler frame by angle_3 about the axis indexed by
+axindx_3.
+<BR><BR></UL>
+<UL>
+<TT>2.</TT> Rotate the axes of the frame resulting from the first rotation by angle_2
+about the axis indexed by axindx_2.
+<BR><BR></UL>
+<UL>
+<TT>3.</TT> Rotate the axes of the frame resulting from the second rotation by angle_1
+about the axis indexed by axindx_1.
+<BR><BR></UL>
+   The resulting set of axes are those of the base frame.
+<P>
+ 
+   The rotation angles are defined as follows: letting t0 represent the
+   reference epoch, and letting
+<P>
+ 
+<PRE>
+   c   ,  i = 1, 2, 3;   j = 0, ... , ni
+    i,j
+</PRE>
+   be the polynomial coefficients for the ith angle, we have
+<P>
+ 
+<PRE>
+                                                        n1
+   angle_1(t) = c   + c   * (t-t0) + ... + c    * (t-t0)
+                 1,0   1,1                  1,n1
+ 
+                                                        n2
+   angle_2(t) = c   + c   * (t-t0) + ... + c    * (t-t0)
+                 2,0   2,1                  2,n2
+ 
+                                                        n3
+   angle_3(t) = c   + c   * (t-t0) + ... + c    * (t-t0)
+                 3,0   3,1                  3,n3
+</PRE>
+   See the Rotation Required Reading, <a href="../req/rotation.html"><a href="../req/rotation.html">rotation.req</a></a>, or the header of the
+   Mice function <a href="../mice/cspice_eul2m.html">cspice_eul2m</a> for details concerning definition of
+   rotations via Euler angles. Note however that the referenced document
+   and source code use a different convention for labeling Euler angles and
+   their rotation axes: here the elements of the rotation sequence are
+   numbered left to right; in those documents the order is that in which
+   rotations are performed, namely right to left.
+<P>
+ 
+<BR><BR>
+<A NAME="Defining an Euler Frame in a Frame Kernel"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Defining an Euler Frame in a Frame Kernel
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Specifying the Base Frame3"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying the Base Frame
+</H3><P><BR><BR>
+   The base frame of an Euler frame specified via the assignment:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_RELATIVE           =  '&lt;frame_name&gt;'
+</PRE>
+<BR><BR>
+<A NAME="Specifying the Frame Family3"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying the Frame Family
+</H3><P><BR><BR>
+   An Euler frame is identified by frame family specification:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_FAMILY = 'EULER'
+</PRE>
+<BR><BR>
+<A NAME="Specifying the Epoch"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying the Epoch
+</H3><P><BR><BR>
+   The zero epoch for the independent variable of the polynomials is
+   defined using the SPICE text kernel calendar ephemeris time syntax. A
+   sample template is shown below:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_EPOCH           =  @YYYY-MON-DD/HR:MN.SEC.###
+</PRE>
+   A concrete example is:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_EPOCH           =  @2000-JAN-1/12:00:00.000
+</PRE>
+   The calendar time string is assumed to represent a TDB epoch.
+<P>
+ 
+   See the discussion in the section ``Freeze Epoch'' above or the Kernel
+   Required Reading, <a href="../req/kernel.html"><a href="../req/kernel.html">kernel.req</a></a>, for further information.
+<P>
+ 
+<BR><BR>
+<A NAME="Specifying the Euler Angles"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Specifying the Euler Angles
+</H3><P><BR><BR>
+   Euler angles are specified by an axis sequence, a set of polynomial
+   coefficients, and associated units. The axes are specified by an
+   assignment of the form:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_AXES            =  ( &lt;index of axis 1&gt;
+                                         &lt;index of axis 2&gt;
+                                         &lt;index of axis 3&gt; )
+</PRE>
+   The axis indices must be taken from the set
+<P>
+ 
+<PRE>
+   { 1, 2, 3 }
+</PRE>
+   and the middle value must differ from its neighbors. The first integer
+   listed is the axis index for angle 1, the second for angle 2, and the
+   last for angle 3, where the role of the angles is as shown in the
+   equation for r(t) above.
+<P>
+ 
+   Let n1, n2, and n3 represent the maximum degrees of the polynomials for
+   angles 1, 2, and 3 respectively. Then the polynomial coefficients are
+   defined by the assignments
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_ANGLE_1_COEFFS = ( &lt;order 0 coefficient&gt;
+                                       &lt;order 1 coefficient&gt;
+                                              ...
+                                       &lt;order n1 coefficient&gt;  )
+ 
+   FRAME_&lt;frame_ID&gt;_ANGLE_2_COEFFS = ( &lt;order 0 coefficient&gt;
+                                       &lt;order 1 coefficient&gt;
+                                              ...
+                                       &lt;order n2 coefficient&gt;  )
+ 
+   FRAME_&lt;frame_ID&gt;_ANGLE_3_COEFFS = ( &lt;order 0 coefficient&gt;
+                                       &lt;order 1 coefficient&gt;
+                                              ...
+                                       &lt;order n3 coefficient&gt;  )
+</PRE>
+   Angular units are specified by the frame kernel assignment
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_ID&gt;_UNITS     = &lt;angular_units&gt;
+</PRE>
+   where &lt;angular_units&gt; designates one of the units supported by the
+   Mice function <a href="../mice/cspice_convrt.html">cspice_convrt</a>. The set of supported units includes
+<P>
+ 
+<PRE>
+   'RADIANS'
+   'DEGREES'
+   'ARCSECONDS'
+</PRE>
+   For an example of an Euler frame definition, see the subsection titled
+   ``Euler Frames'' in the appendix ``Frame Definition Examples.''
+<P>
+ 
+<BR><BR>
+<A NAME="Dynamic Frame Implementation Considerations"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Dynamic Frame Implementation Considerations
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+<BR><BR>
+<A NAME="Introduction"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Introduction
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   This chapter discusses issues affecting implementation of dynamic
+   frames:
+<P>
+ 
+<UL>
+<TT>--</TT> Simulated Recursion
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Frame Derivative Accuracy
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Degenerate Geometry
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Efficiency
+<BR><BR></UL>
+   By necessity, this chapter presents some aspects of the implementation
+   of the Mice parameterized dynamic frame subsystem. The implementation
+   described here is not considered part of the Mice API specification.
+   Although unlikely, this implementation could be changed in a future
+   version of the Mice Toolkit.
+<P>
+ 
+<BR><BR>
+<A NAME="Simulated Recursion"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Simulated Recursion
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="The Need for Recursion in the Mice Frame Subsystem"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> The Need for Recursion in the Mice Frame Subsystem
+</H3><P><BR><BR>
+   In the following discussion, we'll use the graph notation below to
+   indicate that function A calls function B:
+<P>
+ 
+<PRE>
+   A -&gt; B
+</PRE>
+   A function R_0 is ``recursive'' if it calls itself
+<P>
+ 
+<PRE>
+   R_0 -&gt; R_0
+</PRE>
+   or if some sequence of calls initiated in the function R_0 results in a
+   call to R_0:
+<P>
+ 
+<PRE>
+   R_0 -&gt; R_1-&gt; ... -&gt; R_0
+</PRE>
+   ANSI standard Fortran 77 doesn't permit recursive calls. However, the
+   implementation of two-vector frames requires sequences of calls that at
+   face value are recursive. For example, to look up a state vector in the
+   GSE frame (see the appendix ``Frame Definition Examples''), the function
+   SPKEZ must initiate the sequence of calls (ellipses indicate omitted
+   portions of the call graph)
+<P>
+ 
+<PRE>
+   SPKEZ -&gt; ... -&gt; FRMGET -&gt; ... -&gt; SPKEZ -&gt; ... -&gt; FRMGET
+</PRE>
+   Both SPKEZ and FRMGET are called recursively in this graph.
+<P>
+ 
+   This issue affects not only SPICELIB but CSPICE and Icy as well because
+   these products rely on the SPICELIB (Fortran) implementation of the
+   frame subsystem.
+<P>
+ 
+<BR><BR>
+<A NAME="Implementation of Limited Simulated Recursion"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Implementation of Limited Simulated Recursion
+</H3><P><BR><BR>
+   SPICELIB solves the recursion problem by providing renamed duplicates of
+   routines that must be called recursively. For example, the invalid call
+   graph
+<P>
+ 
+<PRE>
+   SPKEZ -&gt; ... -&gt; FRMGET -&gt; ... -&gt; SPKEZ -&gt; ... -&gt; FRMGET
+</PRE>
+   is implemented in (valid) ANSI standard Fortran 77 using the call graph
+<P>
+ 
+<PRE>
+   SPKEZ -&gt; ... -&gt; FRMGET -&gt; ... -&gt; ZZSPKEZ0 -&gt; ... -&gt; ZZFRMGT0
+</PRE>
+   To a limited extent, two levels of simulated recursion are supported in
+   the frame subsystem, so call graphs of the form
+<P>
+ 
+<PRE>
+   SPKEZ -&gt; ... -&gt; FRMGET    -&gt; ... -&gt; ZZSPKEZ0    -&gt; ... -&gt; ZZFRMGT0
+         -&gt; ... -&gt; ZZSPKEZ1  -&gt; ... -&gt; ZZFRMGT1
+</PRE>
+   are possible.
+<P>
+ 
+   For brevity, when we refer to recursion in the following discussion,
+   we'll omit the qualifier ``simulated.''
+<P>
+ 
+<BR><BR>
+<A NAME="Limits on Recursion in Frame Definitions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Limits on Recursion in Frame Definitions
+</H3><P><BR><BR>
+   We say a reference frame is ``evaluated'' when the transformation from
+   the frame to its base frame is computed for some epoch. A parameterized
+   dynamic frame normally is evaluated each time it is referenced in a
+   function call. For example, the calls
+<P>
+ 
+<PRE>
+   [ state, ltime ] = <a href="../mice/cspice_spkezr.html">cspice_spkezr</a>( moon, et, 'GSE', ...
+                                     'NONE', 'EARTH' )
+ 
+   xform = <a href="../mice/cspice_sxform.html">cspice_sxform</a>( 'GSE', 'J2000', et )
+</PRE>
+   both cause the GSE parameterized dynamic frame to be evaluated at ET.
+<P>
+ 
+   When the definition of a parameterized dynamic frame F1 refers to a
+   second frame F2 as
+<P>
+ 
+<UL>
+<TT>--</TT> the base frame
+<BR><BR></UL>
+<UL>
+<TT>--</TT> the frame relative to which a constant vector is specified
+<BR><BR></UL>
+<UL>
+<TT>--</TT> the frame relative to which a velocity vector is specified
+<BR><BR></UL>
+   the referenced frame F2 may be dynamic, but F2 must not make reference
+   to any dynamic frame. If deeper recursion is required to evaluate the
+   referenced frame F2, an error will occur at run time.
+<P>
+ 
+   If F2 is not dynamic but its evaluation requires evaluation of a dynamic
+   frame F3, the same restrictions apply to F3.
+<P>
+ 
+   When a dynamic frame is used as a base frame in either an SPK or CK
+   segment, evaluation of data from that segment may result in a call to
+   the dynamic frame subsystem. That call may result in lookup of another
+   segment whose base frame is dynamic, and so on: the original kernel
+   lookup could easily exhaust the dynamic frame subsystem's ability to
+   handle recursive calls.
+<P>
+ 
+   Clearly use of dynamic frames in SPK and CK files requires caution.
+   However, there are some ``reasonable'' applications that call for
+   dynamic base frames in kernels, for example: representing ephemerides of
+   earth orbiters expressed relative to the earth true equator and equinox
+   of date frame.
+<P>
+ 
+<BR><BR>
+<A NAME="Frame Derivative Accuracy"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Frame Derivative Accuracy
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Transformation of state vectors between frames F1 and F2 via a
+   time-dependent rotation R(t) requires the derivative with respect to
+   time of R(t): d(R(t))/dt. The accuracy of the velocity portion of a
+   transformed state is limited by the accuracy of d(R(t))/dt. When either
+   frame F1 or F2 is dynamic, loss of accuracy in d(R(t))/dt can occur for
+   a number of reasons, including but not limited to:
+<P>
+ 
+<UL>
+<TT>--</TT> R(t) depends on CK data. Often angular rates in C-kernels have low
+accuracy. (This issue applies to non-dynamic frames as well.)
+<BR><BR></UL>
+<UL>
+<TT>--</TT> R(t) is defined via a two-vector frame using position vectors, and the
+velocities associated with those vectors have low accuracy. This can happen
+for SPK data types for which position and velocity are represented
+independently, for example SPK types 3 or 9.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> R(t) is defined via a two-vector frame using aberration-corrected position
+vectors. Even if the geometric velocities of the vectors are accurate, the
+aberration-corrected velocities associated with those vectors will probably
+have low accuracy due to accuracy limitations of the aberration corrections
+applied to velocity vectors by the SPK subsystem.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> R(t) is defined via a two-vector frame using a velocity vector. The
+acceleration associated with the velocity vector is required to compute
+d(R(t))/dt, and this acceleration must be computed numerically. The results
+are likely to have at best single precision validity.
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Degenerate Geometry"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Degenerate Geometry
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Two-vector frame definitions can suffer from singularities: the defining
+   vectors may, in some cases, become extremely close to parallel. In such
+   cases the frame evaluation may generate meaningless results.
+<P>
+ 
+   Because two-vector frame definitions may be perfectly valid for some
+   epochs and yield degenerate geometry for others, testing can easily fail
+   to reveal problems with these definitions. Careful frame design is the
+   best defense.
+<P>
+ 
+   As a backup measure, setting the angular separation tolerance in
+   two-vector frame definitions can enable the frame subsystem to diagnose
+   at run time degenerate or near-degenerate geometry. See the section
+   ``Specifying the Angular Separation Tolerance'' above for details.
+<P>
+ 
+<BR><BR>
+<A NAME="Efficiency Concerns"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Efficiency Concerns
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   In many cases, when recursion is required by a frame evaluation, that
+   evaluation requires a relatively large amount of computation. For
+   example, when an SPK call results in a two-vector frame evaluation,
+   several additional SPK calls may be required to support the original
+   call. The original call may be many times slower than a call requiring
+   only non-dynamic frame evaluation.
+<P>
+ 
+   To minimize the performance degradation imposed by recursion, avoid
+   unnecessary references to dynamic frames in frame definitions. When
+   possible, use J2000 or another inertial frame as the base frame, or as
+   the frame relative to which constant or velocity vectors are defined.
+   When it is not possible to use an inertial frame, prefer non-dynamic,
+   non-inertial frames to dynamic frames.
+<P>
+ 
+<BR><BR>
+<A NAME="Appendix. ``Built in'' Inertial Reference Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Appendix. ``Built in'' Inertial Reference Frames
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+<BR><BR>
+<A NAME="Complete List of ``Built in'' Inertial Reference Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Complete List of ``Built in'' Inertial Reference Frames
+</H3><P><BR><BR>
+   SPICE software includes the definitions of several inertial reference
+   frames. The numeric IDs and names of the inertial frames defined in
+   SPICE software are:
+<P>
+ 
+<PRE>
+      ID  Name        Description
+   -----  --------    -------------------------------------------
+       1  J2000       Earth mean equator, dynamical equinox of J2000.
+                      The root reference frame for SPICE.
+ 
+       2  B1950       Earth mean equator, dynamical equinox of B1950.
+                      The B1950 reference frame is obtained by
+                      precessing the J2000 frame backwards from
+                      Julian year 2000 to Besselian year 1950, using
+                      the 1976 IAU precession model.
+ 
+                      The rotation from B1950 to J2000 is
+ 
+                      [ -z ]  [ theta ]  [ -zeta ]
+                             3          2          3
+                      The values for z, theta, and zeta are taken
+                      directly from formulas given in table 5 of [5].
+ 
+                      z     =  1153.04066200330"
+                      theta = -1002.26108439117"
+                      zeta  =  1152.84248596724"
+ 
+       3  FK4         Fundamental Catalog (4). The FK4 reference
+                      frame is derived from the B1950 frame by
+                      applying the equinox offset determined by
+                      Fricke.
+ 
+                      [ 0.525" ]
+                                3
+ 
+       4  DE-118      JPL Developmental Ephemeris (118). The DE-118
+                      reference frame is nearly identical to the FK4
+                      frame. It is also derived from the B1950 frame.
+                      Only the offset is different
+ 
+                      [ 0.53155" ]
+                                  3
+ 
+                      In [2], Standish uses two separate rotations,
+ 
+                      [ 0.00073" ]  P [ 0.5316" ]
+                                   3              3
+ 
+                      (where P is the precession matrix used above to
+                      define the B1950 frame). The major effect of the
+                      second rotation is to correct for truncating the
+                      magnitude of the first rotation. At his
+                      suggestion, we will use the untruncated value,
+                      and stick to a single rotation.
+ 
+ 
+                      Most of the other DE historical reference frames
+                      are defined relative to either the DE-118 or
+                      B1950 frame. The values below are taken
+                      from [4].
+ 
+                      DE number  Offset from DE-118  Offset from B1950
+                      ---------  ------------------  -----------------
+                             96            +0.1209"           +0.4107"
+                            102            +0.3956"           +0.1359"
+                            108            +0.0541"           +0.4775"
+                            111            -0.0564"           +0.5880"
+                            114            -0.0213"           +0.5529"
+                            122            +0.0000"           +0.5316"
+                            125            -0.0438"           +0.5754"
+                            130            +0.0069"           +0.5247"
+ 
+       5  DE-96       JPL Developmental Ephemeris ( 96).
+ 
+       6  DE-102      JPL Developmental Ephemeris (102).
+ 
+       7  DE-108      JPL Developmental Ephemeris (108).
+ 
+       8  DE-111      JPL Developmental Ephemeris (111).
+ 
+       9  DE-114      JPL Developmental Ephemeris (114).
+ 
+      10  DE-122      JPL Developmental Ephemeris (122).
+ 
+      11  DE-125      JPL Developmental Ephemeris (125).
+ 
+      12  DE-130      JPL Developmental Ephemeris (130).
+ 
+      13  GALACTIC    Galactic System II. The Galactic System II
+                      reference frame is defined by the following
+                      rotations:
+                           o          o            o
+                      [ 327  ]  [ 62.6  ]  [ 282.25  ]
+                              3          1            3
+ 
+                      In the absence of better information, we
+                      assume the rotations are relative to the
+                      FK4 frame.
+ 
+      14  DE-200      JPL Developmental Ephemeris (200).
+ 
+      15  DE-202      JPL Developmental Ephemeris (202).
+ 
+      16  MARSIAU     Mars Mean Equator and IAU vector of
+                      J2000. The IAU-vector at Mars is the point
+                      on the mean equator of Mars where the equator
+                      ascends through the earth mean equator.
+                      This vector is the cross product of Earth
+                      mean north with Mars mean north.
+ 
+      17  ECLIPJ2000  Ecliptic coordinates based upon the
+                      J2000 frame.
+ 
+                      The value for the obliquity of the
+                      ecliptic at J2000 is taken from page 114
+                      of [7] equation 3.222-1. This agrees with the
+                      expression given in [5].
+ 
+      18  ECLIPB1950  Ecliptic coordinates based upon the B1950
+                      frame.
+ 
+                      The value for the obliquity of the ecliptic at
+                      B1950 is taken from page 171 of [7].
+ 
+      19  DE-140      JPL Developmental Ephemeris. (140)
+                      The DE-140 frame is the DE-400 frame rotated:
+ 
+           0.9999256765384668  0.0111817701197967  0.0048589521583895
+          -0.0111817701797229  0.9999374816848701 -0.0000271545195858
+          -0.0048589520204830 -0.0000271791849815  0.9999881948535965
+ 
+                      The DE-400 frame is treated as equivalent to
+                      the J2000 frame.
+ 
+      20  DE-142      JPL Developmental Ephemeris. (142)
+                      The DE-142 frame is the DE-402 frame rotated:
+ 
+           0.9999256765402605  0.0111817697320531  0.0048589526815484
+          -0.0111817697907755  0.9999374816892126 -0.0000271547693170
+          -0.0048589525464121 -0.0000271789392288  0.9999881948510477
+ 
+                      The DE-402 frame is treated as equivalent to
+                      the J2000 frame.
+ 
+      21  DE-143      JPL Developmental Ephemeris. (143)
+                      The DE-143 frame is the DE-403 frame rotated:
+ 
+           0.9999256765435852  0.0111817743077255  0.0048589414674762
+          -0.0111817743300355  0.9999374816382505 -0.0000271622115251
+          -0.0048589414161348 -0.0000271713942366  0.9999881949053349
+ 
+                      The DE-403 frame is treated as equivalent to
+                      the J2000 frame.
+</PRE>
+<BR><BR>
+<A NAME="Inertial Reference Frame References"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Inertial Reference Frame References
+</H3><P><BR><BR>
+<PRE>
+   [1] Jay Lieske, ``Precession Matrix Based on IAU (1976)
+       System of Astronomical Constants,'' Astron. Astrophys.
+       73, 282-284 (1979).
+ 
+   [2] E.M. Standish, Jr., ``Orientation of the JPL Ephemerides,
+       DE 200/LE 200, to the Dynamical Equinox of J2000,''
+       Astron. Astrophys. 114, 297-302 (1982).
+ 
+   [3] E.M. Standish, Jr., ``Conversion of Ephemeris Coordinates
+       from the B1950 System to the J2000 System,'' JPL IOM
+       314.6-581, 24 June 1985.
+ 
+   [4] E.M. Standish, Jr., ``The Equinox Offsets of the JPL
+       Ephemeris,'' JPL IOM 314.6-929, 26 February 1988.
+ 
+   [5] Jay Lieske, ``Expressions for the Precession  Quantities
+       Based upon the IAU (1976) System of Astronomical
+       Constants'' Astron. Astrophys. 58, 1-16 (1977).
+ 
+   [6] Laura Bass and Robert Cesarone "Mars Observer Planetary
+       Constants and Models" JPL D-3444 November 1990.
+ 
+   [7] "Explanatory Supplement to the Astronomical Almanac"
+        edited by P. Kenneth Seidelmann. University Science
+        Books, 20 Edgehill Road, Mill Valley, CA 94941 (1992)
+</PRE>
+<BR><BR>
+<A NAME="Low Level Inertial Reference Frame Functions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Low Level Inertial Reference Frame Functions
+</H3><P><BR><BR>
+   No low level inertial reference frame functions are implemented in Mice.
+<P>
+ 
+<BR><BR>
+<A NAME="Appendix. ``Built in'' PCK-Based IAU Body-Fixed Reference Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Appendix. ``Built in'' PCK-Based IAU Body-Fixed Reference Frames
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   SPICE software includes the definitions of body-fixed frames for all
+   natural bodies -- planets, satellites, and some asteroids -- listed in
+   International Astronomical Union (IAU) reports on cartographic
+   constants. These frames are fixed to and do not move with respect to
+   ``surface'' features of a natural object, but they do move with respect
+   to inertial frames as the object rotates. The complete list of
+   body-fixed frames ``built into'' SPICE is given below. Each name is
+   constructed by adding the prefix ``IAU_'' to the name of the body. The
+   prefix ``IAU_'' indicates that the orientation of this frame is
+   typically determined from the IAU model for the body in question. The
+   constants associated with this model are stored in one or more text PCK
+   files, which, therefore, must be loaded in order for orientation of
+   these frames to be computed.
+<P>
+ 
+<PRE>
+   IAU_ADRASTEA
+   IAU_AMALTHEA
+   IAU_ANANKE
+   IAU_ARIEL
+   IAU_ATLAS
+   IAU_BELINDA
+   IAU_BIANCA
+   IAU_BORRELLY
+   IAU_CALLIRRHOE
+   IAU_CALLISTO
+   IAU_CALYPSO
+   IAU_CARME
+   IAU_CERES
+   IAU_CHALDENE
+   IAU_CHARON
+   IAU_CORDELIA
+   IAU_CRESSIDA
+   IAU_DAVIDA
+   IAU_DEIMOS
+   IAU_DESDEMONA
+   IAU_DESPINA
+   IAU_DIONE
+   IAU_EARTH
+   IAU_ELARA
+   IAU_ENCELADUS
+   IAU_EPIMETHEUS
+   IAU_ERINOME
+   IAU_EROS
+   IAU_EUROPA
+   IAU_GALATEA
+   IAU_GANYMEDE
+   IAU_GASPRA
+   IAU_HARPALYKE
+   IAU_HELENE
+   IAU_HIMALIA
+   IAU_HYPERION
+   IAU_IAPETUS
+   IAU_IDA
+   IAU_IO
+   IAU_IOCASTE
+   IAU_ISONOE
+   IAU_ITOKAWA
+   IAU_JANUS
+   IAU_JULIET
+   IAU_JUPITER
+   IAU_KALYKE
+   IAU_LARISSA
+   IAU_LEDA
+   IAU_LUTETIA
+   IAU_LYSITHEA
+   IAU_MAGACLITE
+   IAU_MARS
+   IAU_MERCURY
+   IAU_METIS
+   IAU_MIMAS
+   IAU_MIRANDA
+   IAU_MOON
+   IAU_NAIAD
+   IAU_NEPTUNE
+   IAU_NEREID
+   IAU_OBERON
+   IAU_OPHELIA
+   IAU_PALLAS
+   IAU_PAN
+   IAU_PANDORA
+   IAU_PASIPHAE
+   IAU_PHOBOS
+   IAU_PHOEBE
+   IAU_PLUTO
+   IAU_PORTIA
+   IAU_PRAXIDIKE
+   IAU_PROMETHEUS
+   IAU_PROTEUS
+   IAU_PUCK
+   IAU_RHEA
+   IAU_ROSALIND
+   IAU_SATURN
+   IAU_SINOPE
+   IAU_STEINS
+   IAU_SUN
+   IAU_TAYGETE
+   IAU_TELESTO
+   IAU_TEMPEL_1
+   IAU_TETHYS
+   IAU_THALASSA
+   IAU_THEBE
+   IAU_THEMISTO
+   IAU_TITAN
+   IAU_TITANIA
+   IAU_TRITON
+   IAU_UMBRIEL
+   IAU_URANUS
+   IAU_VENUS
+   IAU_VESTA
+</PRE>
+<BR><BR>
+<A NAME="Appendix. High Precision Earth Fixed Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Appendix. High Precision Earth Fixed Frames
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   In addition to the text PCK based IAU body-fixed frame for Earth,
+   'IAU_EARTH', these two body-fixed frames for Earth are also ``built
+   into'' the SPICE system:
+<P>
+ 
+<PRE>
+   ITRF93
+   EARTH_FIXED
+</PRE>
+   'ITRF93' is a frame ``fixed'' to the Earth's crust. It provides a high
+   precision model for the orientation of the Earth with respect to J2000.
+   In SPICE this is also a PCK type frame but its orientation is provided
+   in a binary PCK file.
+<P>
+ 
+   'EARTH_FIXED' is a ``generic frame'' that gives the orientation of the
+   Earth with respect to some other frame (usually 'IAU_EARTH' or 'ITRF93')
+   via a constant rotational offset. Such frames are called Text Kernel
+   (TK) frames. See the subsection `` Gaining Flexibility via TK Frames''
+   for a discussion of the use of TK frames.
+<P>
+ 
+<BR><BR>
+<A NAME="Appendix. Frame Identifiers Reserved for Earth Fixed Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Appendix. Frame Identifiers Reserved for Earth Fixed Frames
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   NAIF has set aside a range of frame ID codes for Earth fixed frames to
+   be added in the future when/if additional high precision Earth
+   orientation model become available and are implemented in SPICE. This
+   reserved range is from 13000 to 13999. The ID assigned to 'ITRF93',
+   which is only currently implemented frame of this kind, is 13000. All of
+   these frames are PCK based frames. They model the orientation of the
+   Earth with respect to an inertial reference frame such as the J2000
+   frame. Since the primary customer of these frames is NASA's Deep Space
+   Network (DSN), we shall refer to any frame with ID code in this reserved
+   range as a DSN Earth Fixed frame or simply DSN frame.
+<P>
+ 
+   The class ID to associate with any DSN frame is the frame ID minus
+   10000. For example, the class ID associated with frame 13003 is 3003. It
+   is this class ID that should be placed in the PCK file that implements
+   the relationship between the DSN frame and the corresponding inertial
+   frame.
+<P>
+ 
+   The center of any DSN frame is the center of mass of the Earth, which
+   has SPK ID code 399.
+<P>
+ 
+   These frames are partially ``built in''. Given a frame ID in the range
+   from 13001 to 13999, the frame subsystem ``knows'' that the frame is a
+   PCK frame, the center of the frame is 399 and the class ID of the frame
+   is the frame ID - 10000. This knowledge cannot be overridden. However,
+   the frame subsystem does not ``know'' the relationship between the names
+   of these frames and their ID codes. The relationship must be specified
+   via the appropriate kernel pool frame definition.
+<P>
+ 
+<PRE>
+      FRAME_&lt;name&gt;              = &lt;DSN Frame-ID&gt;
+      FRAME_&lt;DSN Frame-ID&gt;_NAME = '&lt;name&gt;'
+      OBJECT_EARTH_FRAME        = &lt;DSN Frame-ID&gt;
+</PRE>
+   Note that this specification leaves out the items below
+<P>
+ 
+<PRE>
+   FRAME_&lt;DSN Frame-ID&gt;_CENTER   = 399
+   FRAME_&lt;DSN Frame-ID&gt;_CLASS    = 2
+   FRAME_&lt;DSN Frame-ID&gt;_CLASS_ID = &lt;DSN Frame-ID  - 10000&gt;
+</PRE>
+   You may supply these values if you like, but they have no effect on the
+   frame subsystem's recognition and interpretation of the frame with the
+   specified frame ID.
+<P>
+ 
+<BR><BR>
+<A NAME="Appendix. Frame Definition Examples"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Appendix. Frame Definition Examples
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Below are examples that you can modify to create frame specifications
+   for similar situations.
+<P>
+ 
+<BR><BR>
+<A NAME="Inertial Frame"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Inertial Frame
+</H3><P><BR><BR>
+   Inertial frames can be defined only as aliases for the ``built in''
+   inertial frames. This example defines EME50 to be the same frame as
+   B1950.
+<P>
+ 
+<PRE>
+   \begindata
+ 
+      FRAME_EME50            = 2000000
+      FRAME_2000000_NAME     = 'EME50'
+      FRAME_2000000_CLASS    =  1
+      FRAME_2000000_CLASS_ID =  2
+      FRAME_2000000_CENTER   =  0
+ 
+   \begintext
+</PRE>
+<BR><BR>
+<A NAME="PCK Frame"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> PCK Frame
+</H3><P><BR><BR>
+   This definition shows how you create a frame definition for the asteroid
+   Eros. Note we also define which frame is associated with the asteroid
+   Eros.
+<P>
+ 
+<PRE>
+   \begindata
+ 
+      FRAME_EROS_FIXED       =  2000433
+      FRAME_2000433_NAME     = 'EROS_FIXED'
+      FRAME_2000433_CLASS    =  2
+      FRAME_2000433_CLASS_ID =  2000433
+      FRAME_2000433_CENTER   =  2000433
+ 
+      OBJECT_2000433_FRAME   = 'EROS_FIXED'
+ 
+   \begintext
+</PRE>
+<BR><BR>
+<A NAME="CK Frames0"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> CK Frames
+</H3><P><BR><BR>
+   This definition shows how you create a frame definition for the MGS
+   spacecraft. Note this frame definition includes the appropriate SCLK
+   definition as well as which frame to attach to the MGS spacecraft.
+<P>
+ 
+<PRE>
+   \begindata
+ 
+      FRAME_MGS_SPACECRAFT   = -94000
+      FRAME_-94000_NAME      = 'MGS_SPACECRAFT'
+      FRAME_-94000_CLASS     =  3
+      FRAME_-94000_CLASS_ID  = -94000
+      FRAME_-94000_CENTER    = -94
+ 
+      CK_-94000_SCLK         = -94
+      CK_-94000_SPK          = -94
+ 
+      OBJECT_-94_FRAME       = 'MGS_SPACECRAFT'
+ 
+   \begintext
+</PRE>
+<BR><BR>
+<A NAME="TK frame --- Alias"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> TK frame --- Alias
+</H3><P><BR><BR>
+   This example shows how you can make up an alias for a frame using a TK
+   frame. Note we make the reference frame to associate with Mars the
+   MARS_FIXED frame.
+<P>
+ 
+<PRE>
+   \begindata
+ 
+      FRAME_MARS_FIXED       =  1400499
+      FRAME_1400499_NAME     = 'MARS_FIXED'
+      FRAME_1400499_CLASS    =  4
+      FRAME_1400499_CLASS_ID =  1400499
+      FRAME_1400499_CENTER   =  499
+ 
+      OBJECT_499_FRAME       = 'MARS_FIXED'
+ 
+   \begintext
+ 
+   To make this point to another frame just replace
+   'IAU_MARS' below with the name of that frame.
+ 
+   \begindata
+ 
+      TKFRAME_1400499_RELATIVE = 'IAU_MARS'
+      TKFRAME_1400499_SPEC     = 'MATRIX'
+      TKFRAME_1400499_MATRIX   = ( 1   0   0
+                                   0   1   0
+                                   0   0   1 )
+   \begintext
+</PRE>
+<BR><BR>
+<A NAME="TK frame --- Topographic"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> TK frame --- Topographic
+</H3><P><BR><BR>
+   This example shows how you could create a topographic frame for the DSN
+   Station DSS-17.
+<P>
+ 
+<PRE>
+   \begindata
+ 
+      FRAME_DSS-17_TOPO      =  1399017
+      FRAME_1399017_NAME     = 'DSS-17_TOPO'
+      FRAME_1399017_CLASS    =  4
+      FRAME_1399017_CLASS_ID =  1399017
+      FRAME_1399017_CENTER   =   399017
+ 
+      OBJECT_399017_FRAME    = 'DSS-17_TOPO'
+ 
+   \begintext
+ 
+   Note that the geodetic longitude and co-latitude of the DSS-17
+   tracking station are: 243.126496675 and 54.657822839 respectively.
+ 
+   \begindata
+ 
+      TKFRAME_DSS-17_TOPO_RELATIVE = 'EARTH_FIXED'
+      TKFRAME_DSS-17_TOPO_SPEC     = 'ANGLES'
+      TKFRAME_DSS-17_TOPO_UNITS    = 'DEGREES'
+      TKFRAME_DSS-17_TOPO_AXES     = ( 3, 2, 3 )
+      TKFRAME_DSS-17_TOPO_ANGLES   = ( -243.126496675,
+                                        -54.657822839,
+                                        180.0 )
+   \begintext
+ 
+   Recall that the frame `EARTH_FIXED' is a TK frame. As a result
+   its relationship to other frames must be specified via
+   a kernel pool variable. We make that specification here.
+ 
+   If the ITRF93 PCK kernel is not available we can simply rename the
+   "RELATIVE" frame to be IAU_EARTH and still have the topocentric
+   frame well defined.
+ 
+   \begindata
+ 
+      TKFRAME_EARTH_FIXED_RELATIVE = 'ITRF93'
+      TKFRAME_EARTH_FIXED_SPEC     = 'MATRIX'
+      TKFRAME_EARTH_FIXED_MATRIX   = ( 1   0   0
+                                       0   1   0
+                                       0   0   1 )
+ 
+   \begintext
+</PRE>
+<BR><BR>
+<A NAME="TK frame --- Instrument"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> TK frame --- Instrument
+</H3><P><BR><BR>
+   This example shows how you could create a TK frame for the Medium
+   Resolution Imager (MRI) instrument on-board the Deep Impact Flyby (DIF)
+   spacecraft.
+<P>
+ 
+   The rotation from the DIF spacecraft frame to the MRI instrument frame
+   determined from the in-flight calibration data can be represented by the
+   following rotation angles:
+<P>
+ 
+<PRE>
+    mri
+   M    = |0.129539306414|  * |-45.006884881185|  * |0.004898709285|
+    sc                    Z                     Y                   X
+</PRE>
+   The frame definition contains the opposite of these rotation angles --
+   with the angle order reversed and the angle signs changed to the
+   opposite ones -- because the angles specified in it define the
+   transformation from the MRI frame to the spacecraft frame.
+<P>
+ 
+<PRE>
+   \begindata
+ 
+      FRAME_DIF_MRI             = -140200
+      FRAME_-140200_NAME        = 'DIF_MRI'
+      FRAME_-140200_CLASS       = 4
+      FRAME_-140200_CLASS_ID    = -140200
+      FRAME_-140200_CENTER      = -140
+      TKFRAME_-140200_SPEC      = 'ANGLES'
+      TKFRAME_-140200_RELATIVE  = 'DIF_SPACECRAFT'
+      TKFRAME_-140200_ANGLES    = ( -0.004898709285,
+                                    45.006884881185,
+                                    -0.129539306414 )
+      TKFRAME_-140200_AXES      = ( 1,    2,   3   )
+      TKFRAME_-140200_UNITS     = 'DEGREES'
+ 
+   \begintext
+</PRE>
+<BR><BR>
+<A NAME="Examples of Two-Vector Parameterized Dynamic Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Examples of Two-Vector Parameterized Dynamic Frames
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Geocentric Solar Ecliptic (GSE) Frame"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Geocentric Solar Ecliptic (GSE) Frame
+</H3><P><BR><BR>
+   Definition of the Geocentric Solar Ecliptic frame:
+<P>
+ 
+<UL>
+<TT>&#32;&#32;</TT> All vectors are geometric: no aberration corrections are used.
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> The position of the sun relative to the earth is the primary vector: the X
+axis points from the earth to the sun.
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> The inertially referenced velocity of the sun relative to the earth is the
+secondary vector: the Y axis is the component of this velocity vector
+orthogonal to the X axis.
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> The Z axis is X cross Y, completing the right-handed reference frame.
+<BR><BR></UL>
+   The GSE frame can be defined using the following assignments, where
+   &lt;frame_ID&gt; must be replaced by an integer ID code.
+<P>
+ 
+<PRE>
+   FRAME_GSE                       =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_NAME           = 'GSE'
+   FRAME_&lt;frame_ID&gt;_CLASS          =  5
+   FRAME_&lt;frame_ID&gt;_CLASS_ID       =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_CENTER         =  399
+   FRAME_&lt;frame_ID&gt;_RELATIVE       = 'J2000'
+   FRAME_&lt;frame_ID&gt;_DEF_STYLE      = 'PARAMETERIZED'
+   FRAME_&lt;frame_ID&gt;_FAMILY         = 'TWO-VECTOR'
+   FRAME_&lt;frame_ID&gt;_PRI_AXIS       = 'X'
+   FRAME_&lt;frame_ID&gt;_PRI_VECTOR_DEF = 'OBSERVER_TARGET_POSITION'
+   FRAME_&lt;frame_ID&gt;_PRI_OBSERVER   = 'EARTH'
+   FRAME_&lt;frame_ID&gt;_PRI_TARGET     = 'SUN'
+   FRAME_&lt;frame_ID&gt;_PRI_ABCORR     = 'NONE'
+   FRAME_&lt;frame_ID&gt;_SEC_AXIS       = 'Y'
+   FRAME_&lt;frame_ID&gt;_SEC_VECTOR_DEF = 'OBSERVER_TARGET_VELOCITY'
+   FRAME_&lt;frame_ID&gt;_SEC_OBSERVER   = 'EARTH'
+   FRAME_&lt;frame_ID&gt;_SEC_TARGET     = 'SUN'
+   FRAME_&lt;frame_ID&gt;_SEC_ABCORR     = 'NONE'
+   FRAME_&lt;frame_ID&gt;_SEC_FRAME      = 'J2000'
+</PRE>
+<BR><BR>
+<A NAME="Geocentric Solar Magnetospheric (GSM) Frame"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Geocentric Solar Magnetospheric (GSM) Frame
+</H3><P><BR><BR>
+   Definition of the Geocentric Solar Magnetospheric frame:
+<P>
+ 
+<UL>
+<TT>&#32;&#32;</TT> All vectors are geometric: no aberration corrections are used.
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> The position of the sun relative to the earth is the primary vector: the X
+axis points from the earth to the sun.
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> The earth's geomagnetic centered north dipole vector is secondary: the Z
+axis is the component of this vector orthogonal to the X axis. For the
+purpose of this definition, we treat the dipole vector as constant in the
+IAU_EARTH body-fixed frame. Note that in an earth-fixed reference frame,
+the north geomagnetic centered dipole is actually time-varying; the values
+shown here may be unsuitable for your application.
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> The Y axis direction is the cross product of the Z-axis and the X-axis.
+<BR><BR></UL>
+   The GSM frame can be defined using the following assignments, where
+   &lt;frame_ID&gt; must be replaced by an integer ID code.
+<P>
+ 
+<PRE>
+   FRAME_GSM                       =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_NAME           = 'GSM'
+   FRAME_&lt;frame_ID&gt;_CLASS          =  5
+   FRAME_&lt;frame_ID&gt;_CLASS_ID       =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_CENTER         =  399
+   FRAME_&lt;frame_ID&gt;_RELATIVE       = 'J2000'
+   FRAME_&lt;frame_ID&gt;_DEF_STYLE      = 'PARAMETERIZED'
+   FRAME_&lt;frame_ID&gt;_FAMILY         = 'TWO-VECTOR'
+   FRAME_&lt;frame_ID&gt;_PRI_AXIS       = 'X'
+   FRAME_&lt;frame_ID&gt;_PRI_VECTOR_DEF = 'OBSERVER_TARGET_POSITION'
+   FRAME_&lt;frame_ID&gt;_PRI_OBSERVER   = 'EARTH'
+   FRAME_&lt;frame_ID&gt;_PRI_TARGET     = 'SUN'
+   FRAME_&lt;frame_ID&gt;_PRI_ABCORR     = 'NONE'
+   FRAME_&lt;frame_ID&gt;_SEC_AXIS       = 'Z'
+   FRAME_&lt;frame_ID&gt;_SEC_VECTOR_DEF = 'CONSTANT'
+   FRAME_&lt;frame_ID&gt;_SEC_FRAME      = 'IAU_EARTH'
+   FRAME_&lt;frame_ID&gt;_SEC_SPEC       = 'LATITUDINAL'
+   FRAME_&lt;frame_ID&gt;_SEC_UNITS      = 'DEGREES'
+   FRAME_&lt;frame_ID&gt;_SEC_LONGITUDE  =  288.43
+   FRAME_&lt;frame_ID&gt;_SEC_LATITUDE   =   79.54
+</PRE>
+<BR><BR>
+<A NAME="Mercury Solar Equatorial (MSEQ) Frame"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Mercury Solar Equatorial (MSEQ) Frame
+</H3><P><BR><BR>
+   Definition of the Mercury Solar Equatorial Frame:
+<P>
+ 
+<UL>
+<TT>&#32;&#32;</TT> All vectors are geometric: no aberration corrections are used.
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> The sun's north spin axis direction is primary: the Z axis of the MSEQ
+frame is aligned with this spin axis.
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> The position of the Sun relative to Mercury is secondary: the Y axis is
+aligned with the component of this position orthogonal to the Z axis.
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> The X axis direction is the cross product of the Y axis and Z axis.
+<BR><BR></UL>
+   All vectors are geometric: no aberration corrections are used.
+<P>
+ 
+   The MSEQ frame can be defined using the following assignments, where
+   &lt;frame_ID&gt; must be replaced by an integer ID code.
+<P>
+ 
+<PRE>
+   FRAME_MSEQ                      =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_NAME           = 'MSEQ'
+   FRAME_&lt;frame_ID&gt;_CLASS          =  5
+   FRAME_&lt;frame_ID&gt;_CLASS_ID       =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_CENTER         =  199
+   FRAME_&lt;frame_ID&gt;_RELATIVE       = 'J2000'
+   FRAME_&lt;frame_ID&gt;_DEF_STYLE      = 'PARAMETERIZED'
+   FRAME_&lt;frame_ID&gt;_FAMILY         = 'TWO-VECTOR'
+   FRAME_&lt;frame_ID&gt;_PRI_AXIS       = 'Z'
+   FRAME_&lt;frame_ID&gt;_PRI_VECTOR_DEF = 'CONSTANT'
+   FRAME_&lt;frame_ID&gt;_PRI_FRAME      = 'IAU_SUN'
+   FRAME_&lt;frame_ID&gt;_PRI_SPEC       = 'RECTANGULAR'
+   FRAME_&lt;frame_ID&gt;_PRI_VECTOR     =  ( 0, 0, 1 )
+   FRAME_&lt;frame_ID&gt;_SEC_AXIS       = 'X'
+   FRAME_&lt;frame_ID&gt;_SEC_VECTOR_DEF = 'OBSERVER_TARGET_POSITION'
+   FRAME_&lt;frame_ID&gt;_SEC_OBSERVER   = 'MERCURY'
+   FRAME_&lt;frame_ID&gt;_SEC_TARGET     = 'SUN'
+   FRAME_&lt;frame_ID&gt;_SEC_ABCORR     = 'NONE'
+</PRE>
+<BR><BR>
+<A NAME="Example: Nadir Frame for Mars Orbiting Spacecraft"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Example: Nadir Frame for Mars Orbiting Spacecraft
+</H3><P><BR><BR>
+   Definition of the nadir frame:
+<P>
+ 
+<UL>
+<TT>&#32;&#32;</TT> All vectors are geometric: no aberration corrections are used.
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> The Z axis points from the spacecraft to the closest point on Mars.
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> The component of inertially referenced spacecraft velocity vector
+orthogonal to Z is aligned with the -X axis.
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> The Y axis is the cross product of the Z axis and the X axis.
+<BR><BR></UL>
+   This nadir frame can be defined using the following assignments, where
+<P>
+ 
+<DL><DT>
+<B>
+ &lt;frame_name&gt;
+</B><BR><BR>
+<DD>
+ should be replaced by an actual frame name<BR>
+</DL>
+<DL><DT>
+<B>
+ &lt;orbiter_ID&gt;
+</B><BR><BR>
+<DD>
+ must be replaced with the integer ID code of the orbiter<BR>
+</DL>
+<DL><DT>
+<B>
+ &lt;orbiter_ID/name&gt;
+</B><BR><BR>
+<DD>
+ must be replaced with either the integer ID code of the orbiter or the
+name of the orbiter<BR>
+</DL>
+<DL><DT>
+<B>
+ &lt;frame_ID&gt;
+</B><BR><BR>
+<DD>
+ must be replaced by an integer ID code<BR>
+</DL>
+<PRE>
+   FRAME_&lt;frame_name&gt;              = &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_NAME           = &lt;frame_name&gt;
+   FRAME_&lt;frame_ID&gt;_CLASS          = 5
+   FRAME_&lt;frame_ID&gt;_CLASS_ID       = &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_CENTER         = &lt;orbiter_ID&gt;
+   FRAME_&lt;frame_ID&gt;_RELATIVE       = 'J2000'
+   FRAME_&lt;frame_ID&gt;_DEF_STYLE      = 'PARAMETERIZED'
+   FRAME_&lt;frame_ID&gt;_FAMILY         = 'TWO-VECTOR'
+   FRAME_&lt;frame_ID&gt;_PRI_AXIS       = 'Z'
+   FRAME_&lt;frame_ID&gt;_PRI_VECTOR_DEF = 'TARGET_NEAR_POINT'
+   FRAME_&lt;frame_ID&gt;_PRI_OBSERVER   = &lt;orbiter_ID/name&gt;
+   FRAME_&lt;frame_ID&gt;_PRI_TARGET     = 'MARS'
+   FRAME_&lt;frame_ID&gt;_PRI_ABCORR     = 'NONE'
+   FRAME_&lt;frame_ID&gt;_SEC_AXIS       = '-X'
+   FRAME_&lt;frame_ID&gt;_SEC_VECTOR_DEF = 'OBSERVER_TARGET_VELOCITY'
+   FRAME_&lt;frame_ID&gt;_SEC_OBSERVER   = &lt;orbiter_ID/name&gt;
+   FRAME_&lt;frame_ID&gt;_SEC_TARGET     = 'MARS'
+   FRAME_&lt;frame_ID&gt;_SEC_ABCORR     = 'NONE'
+   FRAME_&lt;frame_ID&gt;_SEC_FRAME      = 'J2000'
+</PRE>
+<BR><BR>
+<A NAME="Example: Roll-Celestial Spacecraft Frame"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Example: Roll-Celestial Spacecraft Frame
+</H3><P><BR><BR>
+   There are a variety of roll-celestial frames in use. This example may
+   not match frame definitions used for any specific flight project; it is
+   intended to demonstrate how to define this category of frame.
+<P>
+ 
+   Definition of the roll-celestial frame:
+<P>
+ 
+<UL>
+<TT>&#32;&#32;</TT> The Z axis points from the spacecraft to the earth. This vector is
+geometric (uncorrected).
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> The component of an inertially referenced star direction vector orthogonal
+to the Z axis is the X axis. The star direction is provided by a specified
+star catalog in the form of right ascension and declination relative to the
+J2000 frame. If necessary, the RA/DEC coordinates should be adjusted for
+proper motion and parallax. This star direction vector is corrected for
+stellar aberration using the spacecraft as the observer.
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> The Y axis is the cross product of the Z axis and the X axis.
+<BR><BR></UL>
+   This roll-celestial frame can be defined using the following
+   assignments, where
+<P>
+ 
+<DL><DT>
+<B>
+ &lt;frame_name&gt;
+</B><BR><BR>
+<DD>
+ should be replaced by an actual frame name<BR>
+</DL>
+<DL><DT>
+<B>
+ &lt;spacecraft_ID&gt;
+</B><BR><BR>
+<DD>
+ must be replaced with the integer ID code of the spacecraft<BR>
+</DL>
+<DL><DT>
+<B>
+ &lt;spacecraft_ID/name&gt;
+</B><BR><BR>
+<DD>
+ must be replaced with either the integer ID code of the spacecraft or
+the name of the spacecraft<BR>
+</DL>
+<DL><DT>
+<B>
+ &lt;frame_ID&gt;
+</B><BR><BR>
+<DD>
+ must be replaced by an integer ID code<BR>
+</DL>
+<PRE>
+   FRAME_&lt;frame_name&gt;              = &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_NAME           = &lt;frame_name&gt;
+   FRAME_&lt;frame_ID&gt;_CLASS          = 5
+   FRAME_&lt;frame_ID&gt;_CLASS_ID       = &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_CENTER         = &lt;spacecraft_ID&gt;
+   FRAME_&lt;frame_ID&gt;_RELATIVE       = 'J2000'
+   FRAME_&lt;frame_ID&gt;_DEF_STYLE      = 'PARAMETERIZED'
+   FRAME_&lt;frame_ID&gt;_FAMILY         = 'TWO-VECTOR'
+   FRAME_&lt;frame_ID&gt;_PRI_AXIS       = 'Z'
+   FRAME_&lt;frame_ID&gt;_PRI_VECTOR_DEF = 'OBSERVER_TARGET_POSITION'
+   FRAME_&lt;frame_ID&gt;_PRI_OBSERVER   = &lt;spacecraft_ID/name&gt;
+   FRAME_&lt;frame_ID&gt;_PRI_TARGET     = 'EARTH'
+   FRAME_&lt;frame_ID&gt;_PRI_ABCORR     = 'NONE'
+   FRAME_&lt;frame_ID&gt;_SEC_AXIS       = 'X'
+   FRAME_&lt;frame_ID&gt;_SEC_VECTOR_DEF = 'CONSTANT'
+   FRAME_&lt;frame_ID&gt;_SEC_FRAME      = 'J2000'
+   FRAME_&lt;frame_ID&gt;_SEC_SPEC       = 'RA/DEC'
+   FRAME_&lt;frame_ID&gt;_SEC_UNITS      = 'DEGREES'
+   FRAME_&lt;frame_ID&gt;_SEC_RA         = &lt;star RA in degrees&gt;
+   FRAME_&lt;frame_ID&gt;_SEC_DEC        = &lt;star DEC in degrees&gt;
+   FRAME_&lt;frame_ID&gt;_SEC_ABCORR     = 'S'
+   FRAME_&lt;frame_ID&gt;_SEC_OBSERVER   = &lt;spacecraft_ID/name&gt;
+</PRE>
+<BR><BR>
+<A NAME="Examples of Mean Equator and Equinox of Date Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Examples of Mean Equator and Equinox of Date Frames
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Earth Mean Equator and Equinox of Date Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Earth Mean Equator and Equinox of Date Frames
+</H3><P><BR><BR>
+   Definition of a non-inertial Earth Mean Equator and Equinox of Date
+   frame using 1976 IAU precession model. Here &lt;frame_name&gt; must be
+   replaced by a string containing the name of the frame, and
+   &lt;frame_ID&gt; must be replaced by an integer ID code:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_name&gt;             =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_NAME          =  &lt;frame_name&gt;
+   FRAME_&lt;frame_ID&gt;_CLASS         =  5
+   FRAME_&lt;frame_ID&gt;_CLASS_ID      =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_CENTER        =  399
+   FRAME_&lt;frame_ID&gt;_RELATIVE      = 'J2000'
+   FRAME_&lt;frame_ID&gt;_DEF_STYLE     = 'PARAMETERIZED'
+   FRAME_&lt;frame_ID&gt;_FAMILY        = 'MEAN_EQUATOR_AND_EQUINOX_OF_DATE'
+   FRAME_&lt;frame_ID&gt;_PREC_MODEL    = 'EARTH_IAU_1976'
+   FRAME_&lt;frame_ID&gt;_ROTATION_STATE= 'ROTATING'
+</PRE>
+   Definition for the inertial version of the above frame:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_name&gt;             =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_NAME          =  &lt;frame_name&gt;
+   FRAME_&lt;frame_ID&gt;_CLASS         =  5
+   FRAME_&lt;frame_ID&gt;_CLASS_ID      =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_CENTER        =  399
+   FRAME_&lt;frame_ID&gt;_RELATIVE      = 'J2000'
+   FRAME_&lt;frame_ID&gt;_DEF_STYLE     = 'PARAMETERIZED'
+   FRAME_&lt;frame_ID&gt;_FAMILY        = 'MEAN_EQUATOR_AND_EQUINOX_OF_DATE'
+   FRAME_&lt;frame_ID&gt;_PREC_MODEL    = 'EARTH_IAU_1976'
+   FRAME_&lt;frame_ID&gt;_ROTATION_STATE= 'INERTIAL'
+</PRE>
+   Definition for the frozen version of the above frame, where the ``freeze
+   epoch'' is B1950 TDB. The resulting frame should match the inertial
+   frame B1950 to round-off level:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_name&gt;             =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_NAME          =  &lt;frame_name&gt;
+   FRAME_&lt;frame_ID&gt;_CLASS         =  5
+   FRAME_&lt;frame_ID&gt;_CLASS_ID      =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_CENTER        =  399
+   FRAME_&lt;frame_ID&gt;_RELATIVE      = 'J2000'
+   FRAME_&lt;frame_ID&gt;_DEF_STYLE     = 'PARAMETERIZED'
+   FRAME_&lt;frame_ID&gt;_FAMILY        = 'MEAN_EQUATOR_AND_EQUINOX_OF_DATE'
+   FRAME_&lt;frame_ID&gt;_PREC_MODEL    = 'EARTH_IAU_1976'
+   FRAME_&lt;frame_ID&gt;_FREEZE_EPOCH  = @1949-DEC-31/22:09:46.861901
+</PRE>
+<BR><BR>
+<A NAME="Examples of True Equator and Equinox of Date Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Examples of True Equator and Equinox of Date Frames
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Definition of the Earth True Equator and Equinox of Date frame:
+<P>
+ 
+<UL>
+<TT>&#32;&#32;</TT> The earth precession model is the 1976 IAU model.
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> The earth nutation model is the 1980 IAU model.
+<BR><BR></UL>
+   Here &lt;frame_name&gt; must be replaced by a string containing the name
+   of the frame, and &lt;frame_ID&gt; must be replaced by an integer ID
+   code:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_name&gt;             =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_NAME          =  &lt;frame_name&gt;
+   FRAME_&lt;frame_ID&gt;_CLASS         =  5
+   FRAME_&lt;frame_ID&gt;_CLASS_ID      =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_CENTER        =  399
+   FRAME_&lt;frame_ID&gt;_RELATIVE      = 'J2000'
+   FRAME_&lt;frame_ID&gt;_DEF_STYLE     = 'PARAMETERIZED'
+   FRAME_&lt;frame_ID&gt;_FAMILY        = 'TRUE_EQUATOR_AND_EQUINOX_OF_DATE'
+   FRAME_&lt;frame_ID&gt;_PREC_MODEL    = 'EARTH_IAU_1976'
+   FRAME_&lt;frame_ID&gt;_NUT_MODEL     = 'EARTH_IAU_1980'
+   FRAME_&lt;frame_ID&gt;_ROTATION_STATE= 'ROTATING'
+</PRE>
+   Definition for the inertial version of the above frame:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_name&gt;             =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_NAME          =  &lt;frame_name&gt;
+   FRAME_&lt;frame_ID&gt;_CLASS         =  5
+   FRAME_&lt;frame_ID&gt;_CLASS_ID      =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_CENTER        =  399
+   FRAME_&lt;frame_ID&gt;_RELATIVE      = 'J2000'
+   FRAME_&lt;frame_ID&gt;_DEF_STYLE     = 'PARAMETERIZED'
+   FRAME_&lt;frame_ID&gt;_FAMILY        = 'TRUE_EQUATOR_AND_EQUINOX_OF_DATE'
+   FRAME_&lt;frame_ID&gt;_PREC_MODEL    = 'EARTH_IAU_1976'
+   FRAME_&lt;frame_ID&gt;_NUT_MODEL     = 'EARTH_IAU_1980'
+   FRAME_&lt;frame_ID&gt;_ROTATION_STATE= 'INERTIAL'
+</PRE>
+   Definition for the frozen version of the above frame, where the ``freeze
+   epoch'' is B1950 TDB.
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_name&gt;             =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_NAME          =  &lt;frame_name&gt;
+   FRAME_&lt;frame_ID&gt;_CLASS         =  5
+   FRAME_&lt;frame_ID&gt;_CLASS_ID      =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_CENTER        =  399
+   FRAME_&lt;frame_ID&gt;_RELATIVE      = 'J2000'
+   FRAME_&lt;frame_ID&gt;_DEF_STYLE     = 'PARAMETERIZED'
+   FRAME_&lt;frame_ID&gt;_FAMILY        = 'TRUE_EQUATOR_AND_EQUINOX_OF_DATE'
+   FRAME_&lt;frame_ID&gt;_PREC_MODEL    = 'EARTH_IAU_1976'
+   FRAME_&lt;frame_ID&gt;_NUT_MODEL     = 'EARTH_IAU_1980'
+   FRAME_&lt;frame_ID&gt;_FREEZE_EPOCH  = @1949-DEC-31/22:09:46.861901
+</PRE>
+<BR><BR>
+<A NAME="Example of a Mean Ecliptic and Equinox of Date Frame"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Example of a Mean Ecliptic and Equinox of Date Frame
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Definition of the Earth Mean Ecliptic and Equinox of Date frame:
+<P>
+ 
+<UL>
+<TT>&#32;&#32;</TT> The earth precession model is the 1976 IAU model.
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> The earth mean obliquity model is the 1980 IAU model.
+<BR><BR></UL>
+   Here &lt;frame_name&gt; must be replaced by a string containing the name
+   of the frame, and &lt;frame_ID&gt; must be replaced by an integer ID
+   code:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_name&gt;             =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_NAME          =  &lt;frame_name&gt;
+   FRAME_&lt;frame_ID&gt;_CLASS         =  5
+   FRAME_&lt;frame_ID&gt;_CLASS_ID      =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_CENTER        =  399
+   FRAME_&lt;frame_ID&gt;_RELATIVE      = 'J2000'
+   FRAME_&lt;frame_ID&gt;_DEF_STYLE     = 'PARAMETERIZED'
+   FRAME_&lt;frame_ID&gt;_FAMILY        = 'MEAN_ECLIPTIC_AND_EQUINOX_OF_DATE'
+   FRAME_&lt;frame_ID&gt;_PREC_MODEL    = 'EARTH_IAU_1976'
+   FRAME_&lt;frame_ID&gt;_OBLIQ_MODEL   = 'EARTH_IAU_1980'
+   FRAME_&lt;frame_ID&gt;_ROTATION_STATE= 'ROTATING'
+</PRE>
+   Definition for the inertial version of the above frame:
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_name&gt;             =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_NAME          =  &lt;frame_name&gt;
+   FRAME_&lt;frame_ID&gt;_CLASS         =  5
+   FRAME_&lt;frame_ID&gt;_CLASS_ID      =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_CENTER        =  399
+   FRAME_&lt;frame_ID&gt;_RELATIVE      = 'J2000'
+   FRAME_&lt;frame_ID&gt;_DEF_STYLE     = 'PARAMETERIZED'
+   FRAME_&lt;frame_ID&gt;_FAMILY        = 'MEAN_ECLIPTIC_AND_EQUINOX_OF_DATE'
+   FRAME_&lt;frame_ID&gt;_PREC_MODEL    = 'EARTH_IAU_1976'
+   FRAME_&lt;frame_ID&gt;_OBLIQ_MODEL   = 'EARTH_IAU_1980'
+   FRAME_&lt;frame_ID&gt;_ROTATION_STATE= 'INERTIAL'
+</PRE>
+   Definition for the frozen version of the above frame, where the ``freeze
+   epoch'' is B1950 TDB.
+<P>
+ 
+<PRE>
+   FRAME_&lt;frame_name&gt;             =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_NAME          =  &lt;frame_name&gt;
+   FRAME_&lt;frame_ID&gt;_CLASS         =  5
+   FRAME_&lt;frame_ID&gt;_CLASS_ID      =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_CENTER        =  399
+   FRAME_&lt;frame_ID&gt;_RELATIVE      = 'J2000'
+   FRAME_&lt;frame_ID&gt;_DEF_STYLE     = 'PARAMETERIZED'
+   FRAME_&lt;frame_ID&gt;_FAMILY        = 'MEAN_ECLIPTIC_AND_EQUINOX_OF_DATE'
+   FRAME_&lt;frame_ID&gt;_PREC_MODEL    = 'EARTH_IAU_1976'
+   FRAME_&lt;frame_ID&gt;_OBLIQ_MODEL   = 'EARTH_IAU_1980'
+   FRAME_&lt;frame_ID&gt;_FREEZE_EPOCH  = @1949-DEC-31/22:09:46.861901
+</PRE>
+<BR><BR>
+<A NAME="Example of an Euler Frame"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Example of an Euler Frame
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   As an example, we construct an Euler frame called IAU_MARS_EULER. Frame
+   IAU_MARS_EULER is mathematically identical to the PCK frame IAU_MARS.
+<P>
+ 
+   The PCK data defining the underlying IAU_MARS frame are:
+<P>
+ 
+<PRE>
+   BODY499_POLE_RA          = (  317.68143   -0.1061      0.  )
+   BODY499_POLE_DEC         = (   52.88650   -0.0609      0.  )
+   BODY499_PM               = (  176.630    350.89198226  0.  )
+</PRE>
+   These values are from:
+<P>
+ 
+<PRE>
+   Seidelmann, P.K., Abalakin, V.K., Bursa, M., Davies, M.E., Bergh, C.
+   de, Lieske, J.H., Oberst, J., Simon, J.L., Standish, E.M.,
+   Stooke, P., and Thomas, P.C. (2002). "Report of the IAU/IAG Working
+   Group on Cartographic Coordinates and Rotational Elements of the
+   Planets and Satellites: 2000," Celestial Mechanics and Dynamical
+   Astronomy, v.82, Issue 1, pp. 83-111.
+</PRE>
+   Here pole RA/Dec terms in the PCK are in degrees and degrees/century;
+   the rates here have been converted to degrees/sec. Prime meridian terms
+   in the PCK are in degrees and degrees/day; the rate here has been
+   converted to degrees/sec.
+<P>
+ 
+   The 3x3 transformation matrix M defined by the angles is
+<P>
+ 
+<PRE>
+   M = [angle_1]   [angle_2]   [angle_3]
+                3           1           3
+</PRE>
+   Vectors are mapped from the J2000 base frame to the IAU_MARS frame via
+   left multiplication by M.
+<P>
+ 
+   The relationship of these Euler angles to RA/Dec/PM for the J2000-to-IAU
+   Mars body-fixed transformation is as follows:
+<P>
+ 
+<PRE>
+   angle_1 is        PM  * (radians/degree)
+   angle_2 is pi/2 - Dec * (radians/degree)
+   angle_3 is pi/2 + RA  * (radians/degree)
+</PRE>
+   Since when we define the IAU_MARS_EULER frame we're defining the
+   *inverse* of the above transformation, the angles for our Euler frame
+   definition are reversed and the signs negated:
+<P>
+ 
+<PRE>
+   angle_1 is -pi/2 - RA  * (radians/degree)
+   angle_2 is -pi/2 + Dec * (radians/degree)
+   angle_3 is       - PM  * (radians/degree)
+</PRE>
+   Then our frame definition is:
+<P>
+ 
+<PRE>
+   FRAME_IAU_MARS_EULER            =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_NAME           = 'IAU_MARS_EULER'
+   FRAME_&lt;frame_ID&gt;_CLASS          =  5
+   FRAME_&lt;frame_ID&gt;_CLASS_ID       =  &lt;frame_ID&gt;
+   FRAME_&lt;frame_ID&gt;_CENTER         =  499
+   FRAME_&lt;frame_ID&gt;_RELATIVE       = 'J2000'
+   FRAME_&lt;frame_ID&gt;_DEF_STYLE      = 'PARAMETERIZED'
+   FRAME_&lt;frame_ID&gt;_FAMILY         = 'EULER'
+   FRAME_&lt;frame_ID&gt;_EPOCH          =  @2000-JAN-1/12:00:00
+   FRAME_&lt;frame_ID&gt;_AXES           =  ( 3  1  3 )
+   FRAME_&lt;frame_ID&gt;_UNITS          = 'DEGREES'
+   FRAME_&lt;frame_ID&gt;_ANGLE_1_COEFFS = (  -47.68143
+                                          0.33621061170684714E-10 )
+   FRAME_&lt;frame_ID&gt;_ANGLE_2_COEFFS = (  -37.1135
+                                         -0.19298045478743630E-10 )
+   FRAME_&lt;frame_ID&gt;_ANGLE_3_COEFFS = ( -176.630
+                                         -0.40612497946759260E-02 )
+</PRE>
+
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+
+
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+
+</BODY>
+
+
+</HTML>

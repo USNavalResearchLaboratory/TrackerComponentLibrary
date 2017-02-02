@@ -1,0 +1,256 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_scdecd</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_scdecd</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SCDECD converts a double precision encoding of spacecraft
+   clock time into a string representation.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      sc       the integer scalar NAIF ID of the spacecraft clock
+               whose encoded clock value is represented by
+               'sclkdp'
+
+      sclkdp   the double precision scalar or double precision 1xN array
+               encoding of a clock time(s) in units of ticks since the
+               spacecraft clock start time
+
+   the call:
+
+      sclkch = <b>cspice_scdecd</b>( sc, sclkdp )
+
+   returns:
+
+      sclkch   the scalar string or NXM character array representation(s)
+               of the clock count 'sclkdp' for 'sc'
+
+               'sclkch' returns with the same vectorization measure (N)
+                as 'sclkdp'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Assign values for the spacecraft ID (Voyager2),
+      % SCLK kernels, and an SCLK time string.
+      %
+      SC     = -32;
+      SCLK   = '/kernels/voyager2/sclk/vg200004.tsc';
+      sclkin =  '2/20538:39:768';
+
+      %
+      % Load the SCLK kernel.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( SCLK )
+
+      %
+      % Convert the Voyager SCLK strings to the
+      % corresponding double precision value.
+      %
+      timein = <a href="cspice_scencd.html">cspice_scencd</a>( SC, sclkin );
+
+      %
+      % Convert the double precision value of
+      % the SCLK count back to string. The output
+      % string should nearly match the original
+      % with regards to roundoff and minus any
+      % embedded spaces.
+      %
+      sclkch = <b>cspice_scdecd</b>( SC, timein );
+
+      disp( 'Scalar:' )
+      txt = sprintf( 'Original: %s',  sclkin );
+      disp( txt )
+
+      txt = sprintf( 'Encoded : %20.8f',  timein );
+      disp( txt )
+
+      txt = sprintf( 'Decoded : %s', sclkch );
+      disp( txt )
+
+      %
+      % Convert a vector of SCLK strings. Define a set of strings.
+      %
+      sclkin =  strvcat( '2/20538:39:768' , ...
+                         '2/20543:21:768' , ...
+                         '2/20550:37'     , ...
+                         '2/20561:59'     , ...
+                         '5/04563:00:001'  );
+
+      %
+      % Convert the SCLK strings to the dp representation,
+      % then convert to the string form. As before, the
+      % output value should nearly match the original.
+      %
+      timein = <a href="cspice_scencd.html">cspice_scencd</a>( SC, sclkin );
+      sclkch = <b>cspice_scdecd</b>( SC, timein );
+
+      disp(' ')
+
+      disp( 'Vector:' )
+      for i=1:5
+
+         txt = sprintf( 'Original: %s',  sclkin(i,:) );
+         disp( txt )
+
+         txt = sprintf( 'Encoded : %20.8f',  timein(i) );
+         disp( txt )
+
+         txt = sprintf( 'Decoded : %s', sclkch(i,:) );
+         disp( txt )
+         disp (' ')
+
+      end
+
+      %
+      % It's always good form to unload kernels after use,
+      % particularly in MATLAB due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+      Scalar:
+      Original: 2/20538:39:768
+      Encoded :   985327950.00000000
+      Decoded : 2/20538:39:768
+
+      Vector:
+      Original: 2/20538:39:768
+      Encoded :   985327950.00000000
+      Decoded : 2/20538:39:768
+
+      Original: 2/20543:21:768
+      Encoded :   985553550.00000000
+      Decoded : 2/20543:21:768
+
+      Original: 2/20550:37
+      Encoded :   985901583.00000000
+      Decoded : 2/20550:37:001
+
+      Original: 2/20561:59
+      Encoded :   986447183.00000000
+      Decoded : 2/20561:59:001
+
+      Original: 5/04563:00:001
+      Encoded :  9136032015.00000000
+      Decoded : 5/04563:00:001
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/scdecd_c.html">scdecd_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/sclk.html">SCLK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 18-APR-2006, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   decode spacecraft_clock
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:38 2014</pre>
+
+</body>
+</html>
+

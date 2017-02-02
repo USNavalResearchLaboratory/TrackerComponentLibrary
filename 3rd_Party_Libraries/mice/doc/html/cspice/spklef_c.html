@@ -1,0 +1,276 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>spklef_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>spklef_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void spklef_c ( ConstSpiceChar * filename,
+                   SpiceInt       * handle    )
+
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   Load an ephemeris file for use by the readers.  Return that file's 
+   handle, to be used by other SPK routines to refer to the file.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+   <a href="../req/spk.html">SPK</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+   None.
+
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+   Variable  I/O  Description
+   --------  ---  --------------------------------------------------
+   fname      I   Name of the file to be loaded.
+   handle     O   Loaded file's handle.
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+   fname          is a string containing the name of the file to be 
+                  loaded.
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+   handle         is an integer handle assigned to the file upon 
+                  loading.   Almost every other SPK routine will 
+                  subsequently use this number to refer to the file.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+   The parameter FTSIZE referenced below is defined in the header file
+   cspicelimits.h.
+
+   1) If an attempt is made to load more files than is specified
+      by the parameter FTSIZE, the error &quot;SPICE(SPKFILETABLEFULL)&quot; is
+      signalled.
+
+   2) If an attempt is made to open more DAF files than is specified
+      by the parameter FTSIZE, an error is signalled by a routine that 
+      this routine calls.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+   A file specified by fname, to be loaded.  The file is assigned a
+   handle by <b>spklef_c</b>, which will be used by most other routines to
+   refer to it.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+   Loading an SPK file make the file's data accessible to the CSPICE
+   SPK readers <a href="spkezr_c.html">spkezr_c</a> and <a href="spkez_c.html">spkez_c</a>.  
+   
+   The maximum number of SPK files that may be loaded at any time is
+   given by the parameter FTSIZE, which is defined in the header file
+   cspicelimits.h.  After this limit it reached, it is necessary to
+   unload an SPK file before another can be loaded.  The function
+   <a href="spkuef_c.html">spkuef_c</a> is provided to unload files from the SPK system.
+   </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+   1)  Load a planetary ephemeris SPK; then look up a series of
+       geometric states of the Earth relative to the solar system 
+       barycenter, referenced to the J2000 frame.
+       
+       
+            #define        MAXITR        100
+            #define        ET0           -315576000.0
+            #define        STEP          3600.0
+            
+            #define        ABCORR        &quot;NONE&quot;
+            #define        FRAME         &quot;J2000&quot;
+            #define        OBSERVER      &quot;SOLAR SYSTEM BARYCENTER&quot;
+            #define        SPK           &quot;de403.bsp&quot;
+            #define        TARGET        &quot;EARTH&quot;
+
+            SpiceInt       handle;
+            SpiceInt       i;
+            
+            SpiceDouble    et;
+            SpiceDouble    lt;
+            SpiceDouble    state [6];
+            
+            
+         /.
+            Load the spk file.
+         ./
+            <b>spklef_c</b> ( SPK, &amp;handle );
+         
+         /.
+            Step through a series of epochs, looking up a state vector
+            at each one.
+         ./ 
+            for ( i = 0;  i &lt; MAXITR;  i++ )
+            {
+               et  =  ET0 + i*STEP;
+               
+               <a href="spkezr_c.html">spkezr_c</a> ( TARGET,    et,     FRAME,  ABCORR, 
+                          OBSERVER,  state,  &amp;lt             );
+            
+               printf( &quot;\net = %20.10f\n\n&quot;,                 et       );
+               printf( &quot;J2000 x-position (km):   %20.10f\n&quot;, state[0] );
+               printf( &quot;J2000 y-position (km):   %20.10f\n&quot;, state[1] );
+               printf( &quot;J2000 z-position (km):   %20.10f\n&quot;, state[2] );
+               printf( &quot;J2000 x-velocity (km/s): %20.10f\n&quot;, state[3] );
+               printf( &quot;J2000 y-velocity (km/s): %20.10f\n&quot;, state[4] );
+               printf( &quot;J2000 z-velocity (km/s): %20.10f\n&quot;, state[5] );
+            }
+       </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+   NAIF Document 168.0, &quot;S- and P- Kernel (SPK) Specification and
+   User's Guide&quot;
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   N.J. Bachman    (JPL)
+   K.R. Gehringer  (JPL)
+   J.M. Lynch      (JPL)
+   R.E. Thurman    (JPL)
+   I.M. Underwood  (JPL)
+   E.D. Wright     (JPL)
+   B.V. Semenov    (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 2.0.3, 04-FEB-2008   (BVS)
+
+      Removed duplicate header section '-Exceptions'.
+
+   -CSPICE Version 2.0.2, 16-JAN-2008   (EDW)
+
+      Corrected typos in header titles:
+      
+      Detailed Input to Detailed_Input
+      Detailed Output to Detailed_Output
+      
+   -CSPICE Version 2.0.1, 10-NOV-2006   (EDW)
+
+      Added Keywords and Parameters section headers. 
+      Reordered section headers.
+
+   -CSPICE Version 2.0.0, 08-FEB-1998 (NJB)  
+   
+       Input argument filename changed to type ConstSpiceChar *.
+       References to C2F_CreateStr_Sig were removed; code was
+       cleaned up accordingly.  String checks are now done using
+       the macro CHKFSTR. 
+       
+   -CSPICE Version 1.0.0, 25-OCT-1997 (NJB) (EDW)
+      </PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   load spk ephemeris file
+</PRE>
+<h4>Link to routine spklef_c source file <a href='../../../src/cspice/spklef_c.c'>spklef_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:44 2014</pre>
+
+</body>
+</html>
+

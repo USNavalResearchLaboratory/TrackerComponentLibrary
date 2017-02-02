@@ -1,0 +1,595 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>occult_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>occult_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void occult_c ( ConstSpiceChar   * target1,
+                   ConstSpiceChar   * shape1,
+                   ConstSpiceChar   * frame1,
+                   ConstSpiceChar   * target2,
+                   ConstSpiceChar   * shape2,
+                   ConstSpiceChar   * frame2,
+                   ConstSpiceChar   * abcorr,
+                   ConstSpiceChar   * observer,
+                   SpiceDouble        et,
+                   SpiceInt         * occult_code )
+
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   Determines the occultation condition (not occulted, partially,
+   etc.) of one target relative to another target as seen by
+   an observer at a given time.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/spk.html">SPK</a>
+   <a href="../req/time.html">TIME</a>
+   <a href="../req/kernel.html">KERNEL</a>
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   GEOMETRY
+   OCCULTATION
+   ELLIPSOID
+
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+   VARIABLE    I/O  DESCRIPTION
+   --------    ---  -------------------------------------------
+   target1      I   Name or ID of first target.
+   shape1       I   Type of shape model used for first target.
+   frame1       I   Body-fixed, body-centered frame for first body.
+   target2      I   Name or ID of second target.
+   shape2       I   Type of shape model used for second target.
+   frame2       I   Body-fixed, body-centered frame for second body.
+   abcorr       I   Aberration correction flag.
+   observer     I   Name or ID of the observer.
+   et           I   Time of the observation (seconds past J2000).
+   occult_code  O   Occultation identification code.
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   target1    is the name of the first target body. Both object
+              names and NAIF IDs are accepted. For example, both
+              'Moon' and '301' are accepted.
+   
+   shape1     is a string indicating the geometric model used to
+              represent the shape of the front target body. The
+              supported options are:
+   
+                 'ELLIPSOID'     Use a triaxial ellipsoid model
+                                 with radius values provided via the
+                                 kernel pool. A kernel variable
+                                 having a name of the form
+   
+                                    'BODYnnn_RADII'
+   
+                                 where nnn represents the NAIF
+                                 integer code associated with the
+                                 body, must be present in the kernel
+                                 pool. This variable must be
+                                 associated with three numeric
+                                 values giving the lengths of the
+                                 ellipsoid's X, Y, and Z semi-axes.
+   
+                 'POINT'         Treat the body as a single point.
+                                 When a point target is specified,
+                                 the occultation type must be
+                                 set to 'ANY'.
+   
+              At least one of the target bodies `target1' or `target2' must
+              be modeled as an ellipsoid.
+   
+              Case and leading or trailing blanks are not
+              significant in the string.
+   
+   frame1     is the name of the body-fixed, body-centered reference
+              frame associated with the first target body. Examples
+              of such names are 'IAU_SATURN' (for Saturn) and
+              'ITRF93' (for the Earth).
+   
+              If the first target body is modeled as a point, `frame1'
+              should be left blank (Ex: ' ').
+   
+              Case and leading or trailing blanks bracketing a
+              non-blank frame name are not significant in the string.
+   
+   target2    is the name of the second target body. See the description
+              of `target1' above for more details.
+   
+   shape2     is the shape specification for the body designated
+              by `target2'. See the description of `shape1' above for
+              details.
+   
+   frame2     is the name of the body-fixed, body-centered reference
+              frame associated with the second target body. See the
+              description of `frame1' above for more details.
+   
+   abcorr     indicates the aberration corrections to be applied to
+              the state of each target body to account for one-way
+              light time. Stellar aberration corrections are
+              ignored if specified, since these corrections don't
+              improve the accuracy of the occultation determination.
+   
+              See the header of the SPICE routine <a href="spkezr_c.html">spkezr_c</a> for a
+              detailed description of the aberration correction
+              options. For convenience, the options supported by
+              this routine are listed below:
+   
+                 'NONE'     Apply no correction.
+   
+                 'LT'       &quot;Reception&quot; case: correct for
+                            one-way light time using a Newtonian
+                            formulation.
+   
+                 'CN'       &quot;Reception&quot; case: converged
+                            Newtonian light time correction.
+   
+                 'XLT'      &quot;Transmission&quot; case: correct for
+                            one-way light time using a Newtonian
+                            formulation.
+   
+                 'XCN'      &quot;Transmission&quot; case: converged
+                            Newtonian light time correction.
+   
+              Case and blanks are not significant in the string
+              `abcorr'.
+   
+   observer   is the name of the body from which the occultation
+              is observed. See the description of `target1' above for 
+              more details.
+   
+   et         is the observation time in seconds past the J2000
+              epoch.
+ 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   occult_code   is an integer occultation code indicating the geometric
+                 relationship of the three bodies.
+      
+                 The meaning of the sign of `occult_code' is given below.
+      
+                     Code sign          Meaning
+                     ---------          ------------------------------
+                        &gt; 0             The second ellipsoid is
+                                        partially or fully occulted
+                                        by the first.
+                     
+                        &lt; 0             The first ellipsoid is
+                                        partially of fully
+                                        occulted by the second.
+                     
+                        = 0             No occultation.
+      
+                 Possible `occult_code' values and meanings are given below.
+                 The variable names indicate the type of occultation
+                 and which target is in the back. For example, 
+                 SPICE_OCCULT_TOTAL1 represents a total occultation in which the
+                 first target is in the back (or occulted by) the second
+                 target.
+      
+                     Name                Code    Meaning
+                     ------              -----   ------------------------------
+                     SPICE_OCCULT_TOTAL1  -3     Total occultation of first
+                                                 target by second.
+      
+                     SPICE_OCCULT_ANNLR1  -2     Annular occultation of first
+                                                 target by second. The second
+                                                 target does not block the limb
+                                                 of the first.
+      
+                     SPICE_OCCULT_PARTL1  -1     Partial occultation of first
+                                                 target by second target.
+      
+                     SPICE_OCCULT_NOOCC    0     No occultation or transit:
+                                                 both objects are completely
+                                                 visible to the observer.
+      
+                     SPICE_OCCULT_PARTL2   1     Partial occultation of second
+                                                 target by first target.
+      
+                     SPICE_OCCULT_ANNLR2   2     Annular occultation of
+                                                 second target by first.
+      
+                     SPICE_OCCULT_TOTAL2   3     Total occultation of second
+                                                 target by first.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None.
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1)  If the target or observer body names input by the user are
+       not recognized, the error will be diagnosed by a routine in
+       the call tree of this routine.
+   
+   2)  If the input shapes are not accepted, the error will be
+       diagnosed by a routine in the call tree of this routine.
+   
+   3)  If both input shapes are points, the error will be
+       diagnosed by a routine in the call tree of this routine.
+   
+   4)  If the radii of a target body modeled as an ellipsoid cannot
+       be determined by searching the kernel pool for a kernel
+       variable having a name of the form
+   
+          'BODYnnn_RADII'
+   
+       where nnn represents the NAIF integer code associated with
+       the body, the error will be diagnosed by a routine in the
+       call tree of this routine.
+   
+   5)  If any of the target or observer bodies (`target1', `target2', or
+       `observer') are the same, the error will be diagnosed
+       by a routine in the call tree of this routine.
+   
+   6)  If the loaded kernels provide insufficient data to
+       compute any required state vector, the deficiency will
+       be diagnosed by a routine in the call tree of this routine.
+   
+   7)  If an error occurs while reading an SPK or other kernel,
+       the error will be diagnosed by a routine in the call tree
+       of this routine.
+   
+   8)  Invalid aberration correction specifications will be
+       diagnosed by a routine in the call tree of this routine.
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   Appropriate SPICE kernels must be loaded by the calling program
+   before this routine is called.
+   
+   The following data are required:
+   
+      - SPK data: the calling application must load ephemeris data
+        for the targets and observer for the specified input time.
+        If aberration corrections are used, the states of the target
+        bodies and of the observer relative to the solar system
+        barycenter must be calculable from the available ephemeris
+        data. Typically ephemeris data are made available by loading
+        one or more SPK files via <a href="furnsh_c.html">furnsh_c</a>.
+   
+      - PCK data: bodies modeled as triaxial ellipsoids must have
+        semi-axis lengths provided by variables in the kernel pool.
+        Typically these data are made available by loading a text
+        PCK file via <a href="furnsh_c.html">furnsh_c</a>.
+   
+   Kernel data are normally loaded once per program run, NOT every
+   time this routine is called.
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   For many purposes, modeling extended bodies as triaxial
+   ellipsoids is adequate for determining whether one body is
+   occulted by another as seen from a specified observer.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Find whether MRO is occulted by Mars as seen by
+      the DSS-13 ground station at a few specific
+      times.
+
+         KPL/MK
+         
+         File: mro_ex_occult.tm
+         
+         This is the meta-kernel file for the example problem for
+         the subroutine <b>occult_c</b>. These kernel files can be found in
+         the NAIF archives.
+         
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+         
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+         
+               File name                       Contents
+               ---------                       --------
+               de421.bsp                       Planetary ephemeris
+               earthstns_itrf93_050714.bsp     DSN station ephemeris
+               pck00010.tpc                    Planet orientation and
+                                               radii
+               earth_000101_120409_120117.bpc  High precision Earth
+                                               orientation
+               mro_psp_rec.bsp                 MRO ephemeris
+               naif0010.tls                    Leapseconds
+               earth_topo_050714.tf            Topocentric reference
+                                               frames for
+                                               DSN stations
+         
+         \begindata
+         
+         KERNELS_TO_LOAD = ( 'de421.bsp',
+                             'earthstns_itrf93_050714.bsp',
+                             'pck00010.tpc',
+                             'earth_000101_120409_120117.bpc',
+                             'mro_psp_rec.bsp',
+                             'naif0010.tls',
+                             'earth_topo_050714.tf' )
+         \begintext
+
+      Example code begins here.
+      
+         #include exit
+         #include &quot;SpiceUsr.h&quot;
+         
+         int main()
+         {
+            /.
+            Constants
+            
+            `abcorr' is the desired light time and stellar
+            aberration correction setting.
+            
+            METAKR is the name of the meta-kernel.
+            ./ 
+            #define ABCORR &quot;CN+S&quot;
+            #define METAKR &quot;mro_ex_occult.tm&quot;
+            #define TIMLEN  41
+            
+            /.
+            Local variables  
+            ./
+            SpiceChar             * abcorr      = &quot;CN&quot;;
+            SpiceChar             * time_format = &quot;YYYY-MON-DD HR:MN ::UTC-8&quot;;
+            SpiceChar             * observer    = &quot;DSS-13&quot;;
+            SpiceChar             * out_format  = &quot;%s %s %s %s wrt %s\n&quot;;
+            SpiceChar             * shape1      = &quot;point&quot;;
+            SpiceChar             * shape2      = &quot;ellipsoid&quot;;
+            SpiceChar             * target1     = &quot;MRO&quot;;
+            SpiceChar             * target2     = &quot;Mars&quot;;
+            SpiceChar               time[TIMLEN];
+            
+            static SpiceChar      * output_char[4] =
+                                    {
+                                       &quot;totally occulted by&quot;, 
+                                       &quot;transited by&quot;,
+                                       &quot;partially occulted by&quot;, 
+                                       &quot;not occulted by&quot;
+                                    };
+            
+            SpiceDouble             et;
+            SpiceDouble             et_start;
+            SpiceDouble             et_stop;
+            
+            SpiceInt                dt = 1000;
+            SpiceInt                occult_code;
+            
+            /.
+            Load kernel files via the meta-kernel.
+            ./
+            <a href="furnsh_c.html">furnsh_c</a> ( METAKR );
+            
+            /.
+            Calculate the type of occultation that
+            corresponds to time ET.
+            ./
+            <a href="str2et_c.html">str2et_c</a> ( &quot;2012-JAN-5 1:15:00 UTC&quot;, &amp;et_start );
+            <a href="str2et_c.html">str2et_c</a> ( &quot;2012-JAN-5 2:50:00 UTC&quot;, &amp;et_stop  );
+            
+            et = et_start;
+            while ( et &lt; et_stop ) {
+               /.
+               Calculate the type of occultation that
+               corresponds to time ET.
+               ./
+               <b>occult_c</b> ( target1, shape1,  &quot; &quot;,
+                          target2, shape2,  &quot;IAU_MARS&quot;, 
+                          abcorr,  observer, et, &amp;occult_code );
+                          
+               /.
+               Output the results.
+               ./
+               <a href="timout_c.html">timout_c</a> ( et, time_format, TIMLEN, time );
+               
+               switch ( occult_code ) {
+               
+                  case SPICE_OCCULT_TOTAL1:
+         
+                     printf( out_format, time, target1, output_char[0],
+                                         target2, observer );
+                     break;
+                  
+                  case SPICE_OCCULT_ANNLR1:
+                  
+                     printf( out_format, time, target1, output_char[1],
+                                         target2, observer );
+                     break;
+                  
+                  case SPICE_OCCULT_PARTL1:
+                  
+                     printf( out_format, time, target1, output_char[2],
+                                         target2, observer );
+                     break;
+                  
+                  case SPICE_OCCULT_NOOCC:
+                  
+                     printf( out_format, time, target1, output_char[3],
+                                         target2, observer );
+                     break;
+                  
+                  case SPICE_OCCULT_PARTL2:
+                  
+                     printf( out_format, time, target2, output_char[2],
+                                         target1, observer );
+                     break;
+                  
+                  case SPICE_OCCULT_ANNLR2:
+                  
+                     printf( out_format, time, target2, output_char[1],
+                                         target1, observer );
+                     break;
+                  
+                  case SPICE_OCCULT_TOTAL2:
+                  
+                     printf( out_format, time, target2, output_char[0],
+                                         target1, observer );
+                     break;
+                  
+                  default:
+                  
+                     printf( &quot;Bad occultation code: %d&quot;, occult_code );
+                     break;
+                     
+               }
+               /.
+               Increment the time.
+               ./
+               et = et + dt;
+            }
+            
+            return 0;
+         }
+
+      When this program was executed on a Linux/PC gcc platform, the
+      output was:
+   
+         2012-JAN-04 17:15 Mars transited by MRO wrt DSS-13
+         2012-JAN-04 17:31 MRO not occulted by Mars wrt DSS-13
+         2012-JAN-04 17:48 MRO totally occulted by Mars wrt DSS-13
+         2012-JAN-04 18:04 MRO totally occulted by Mars wrt DSS-13
+         2012-JAN-04 18:21 MRO not occulted by Mars wrt DSS-13
+         2012-JAN-04 18:38 Mars transited by MRO wrt DSS-13
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None.
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+   </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   S.C. Krening  (JPL)
+   N.J. Bachman  (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ -CSPICE Version 1.0.0  1-FEB-2012 (SCK) (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   occultation type at a specified time
+</PRE>
+<h4>Link to routine occult_c source file <a href='../../../src/cspice/occult_c.c'>occult_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:39 2014</pre>
+
+</body>
+</html>
+

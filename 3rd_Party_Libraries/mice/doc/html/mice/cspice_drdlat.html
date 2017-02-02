@@ -1,0 +1,193 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_drdlat</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_drdlat</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DRDLAT computes the Jacobian of the transformation from latitudinal
+   to rectangular coordinates.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      radius   the distance of a point from the origin.
+
+               [1,n] = size(radius); double = class(radius)
+
+      lon      the angle of the point measured from the XZ plane in radians.
+               The angle increases in the counterclockwise sense about the 
+               +Z axis.
+
+               [1,n] = size(lon); double = class(lon)
+
+      lat      the angle of the point measured from the XY plane in radians.
+               The angle increases in the direction of the +Z axis.
+
+               [1,n] = size(lat); double = class(lat)
+
+   the call:
+
+      jacobi = <b>cspice_drdlat</b>( r, lon, lat)
+
+   returns:
+
+      jacobi   the matrix of partial derivatives of the conversion between
+               latitudinal and rectangular coordinates, evaluated at the input
+               coordinates. This matrix has the form
+
+               If [1,1] = size(radius) then [3,3]   = size(jacobi)
+               If [1,n] = size(radius) then [3,3,n] = size(jacobi)
+                                             double = class(jacobi)
+
+                   -                                -
+                  |  dx/dr     dx/dlon     dx/dlat   |
+                  |                                  |
+                  |  dy/dr     dy/dlon     dy/dlat   |
+                  |                                  |
+                  |  dz/dr     dz/dlon     dz/dlat   |
+                   -                                -
+
+               evaluated at the input values of r, lon and lat.
+               Here x, y, and z are given by the familiar formulae
+
+                  x = r * cos(lon) * cos(lat)
+                  y = r * sin(lon) * cos(lat)
+                  z = r *            sin(lat).
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   It is often convenient to describe the motion of an object
+   in latitudinal coordinates. It is also convenient to manipulate
+   vectors associated with the object in rectangular coordinates.
+
+   The transformation of a latitudinal state into an equivalent
+   rectangular state makes use of the Jacobian of the
+   transformation between the two systems.
+
+   Given a state in latitudinal coordinates,
+
+        ( r, lon, lat, dr, dlon, dlat )
+
+   the velocity in rectangular coordinates is given by the matrix
+   equation
+                  t          |                               t
+      (dx, dy, dz)   = jacobi|             * (dr, dlon, dlat)
+                             |(r,lon,lat)
+
+   This routine computes the matrix
+
+            |
+      jacobi|
+            |(r,lon,lat)
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/drdlat_c.html">drdlat_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 12-MAR-2012, EDW (JPL), SCK (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Jacobian of rectangular w.r.t. latitudinal coordinates
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:37 2014</pre>
+
+</body>
+</html>
+

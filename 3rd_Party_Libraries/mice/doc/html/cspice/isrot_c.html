@@ -1,0 +1,298 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>isrot_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>isrot_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   SpiceBoolean isrot_c ( ConstSpiceDouble    m   [3][3],
+                          SpiceDouble         ntol,
+                          SpiceDouble         dtol       )
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Indicate whether a 3x3 matrix is a rotation matrix. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/rotation.html">ROTATION</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   ERROR 
+   MATRIX 
+   ROTATION 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   m          I   A matrix to be tested. 
+   ntol       I   Tolerance for the norms of the columns of m. 
+   dtol       I   Tolerance for the determinant of a matrix whose 
+                  columns are the unitized columns of m. 
+ 
+   The function returns the value SPICETRUE if and only if m is 
+   a rotation matrix. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   m              is a 3x3 matrix to be tested. 
+ 
+   ntol           is the tolerance for the norms of the columns 
+                  of m. 
+ 
+   dtol           is the tolerance for the determinant of a matrix 
+                  whose columns are the unitized columns of m. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   The function returns the value SPICETRUE if and only if m is found 
+   to be a rotation matrix.  The criteria that m must meet are: 
+ 
+ 
+      1) The norm of each column of m must satisfy the relation 
+ 
+            1. - ntol  &lt;   || column ||   &lt;  1. + ntol. 
+                       -                  - 
+ 
+      2) The determinant of the matrix whose columns are the 
+         unitized columns of m must satisfy 
+ 
+            1. - dtol  &lt;   determinant   &lt;  1. + dtol. 
+                       -                 - </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1)  If either of ntol or dtol is negative, the error 
+       SPICE(VALUEOUTOFRANGE) is signaled.  <b>isrot_c</b> returns the 
+       value SPICEFALSE in this case. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   This routine is an error checking &quot;filter&quot;; its purpose is to 
+   detect gross errors, such as uninitialized matrices.  Matrices 
+   that do not pass the tests used by this routine hardly qualify as 
+   rotation matrices.  The test criteria can be adjusted by varying 
+   the parameters ntol and dtol. 
+ 
+   A property of rotation matrices is that their columns form a 
+   right-handed, orthonormal basis in 3-dimensional space.  The 
+   converse is true:  all 3x3 matrices with this property are 
+   rotation matrices. 
+ 
+   An ordered set of three vectors V1, V2, V3 forms a right-handed, 
+   orthonormal basis if and only if 
+ 
+      1)   || V1 ||  =  || V2 ||  =  || V3 ||  =  1 
+ 
+      2)   V3 = V1 x V2.  Since V1, V2, and V3 are unit vectors, 
+           we also have 
+ 
+           &lt; V3, V1 x V2 &gt; = 1. 
+ 
+           This quantity is the determinant of the matrix whose 
+           columns are V1, V2 and V3. 
+ 
+   When finite precision numbers are used, rotation matrices will 
+   usually fail to satisfy these criteria exactly.  We must use 
+   criteria that indicate approximate conformance to the criteria 
+   listed above.  We choose 
+ 
+      1)   |   || Vi ||  -  1   |   &lt;   ntol,  i = 1, 2, 3. 
+                                    - 
+ 
+      2)   Let 
+ 
+                     Vi 
+              Ui = ------ ,   i = 1, 2, 3. 
+                   ||Vi|| 
+ 
+           Then we require 
+ 
+              | &lt; U3, U1 x U2 &gt; - 1 |  &lt;  dtol; 
+                                       - 
+ 
+           equivalently, letting U be the matrix whose columns 
+           are U1, U2, and U3, we insist on 
+ 
+              | det(U) - 1 |  &lt;  dtol. 
+                              _ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   1)  We have obtained an instrument pointing matrix C from a 
+       C-kernel, and we wish to test whether it is in fact a 
+       rotation matrix.  We can use <b>isrot_c</b> to check this: 
+ 
+          #include &quot;SpiceUsr.h&quot;
+               .
+               .
+               .
+          /.
+          Obtain pointing matrix: 
+          ./
+          <a href="ckgp_c.html">ckgp_c</a> ( inst, timein, tol, ref, c, &amp;timout, &amp;found );
+ 
+            
+          /.
+          Verify that c is a rotation: 
+          ./
+          
+          if ( !<b>isrot_c</b>( c ) )
+          {
+          
+             [ perform exception handling ] 
+          
+          }
+          else
+          {
+          
+             [ code for the normal case goes here ] 
+             
+          }
+            
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman   (JPL) 
+   H.A. Neilan    (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 16-AUG-1999 (NJB) (HAN)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   indicate whether a matrix is a rotation matrix 
+ </PRE>
+<h4>Link to routine isrot_c source file <a href='../../../src/cspice/isrot_c.c'>isrot_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:36 2014</pre>
+
+</body>
+</html>
+

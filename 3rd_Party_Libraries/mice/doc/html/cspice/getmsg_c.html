@@ -1,0 +1,321 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>getmsg_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>getmsg_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void getmsg_c ( ConstSpiceChar  * option,
+                   SpiceInt          lenout,
+                   SpiceChar       * msg     ) 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Retrieve the current short error message, 
+   the explanation of the short error message, or the 
+   long error message. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/error.html">ERROR</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   ERROR 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   VARIABLE  I/O  DESCRIPTION 
+   --------  ---  -------------------------------------------------- 
+   option     I   Indicates type of error message. 
+   lenout     I   Available space in the output string msg.
+   msg        O   The error message to be retrieved. 
+ 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   option  Indicates the type of error message to be retrieved. 
+           The choices are:  The current short error message, 
+           the explanation of the short error message, 
+           or the current long error message. 
+
+           Possible values of option are: 
+
+              &quot;SHORT&quot;   -- indicates that the short message is to 
+                           be retrieved 
+   
+              &quot;EXPLAIN&quot; -- indicates that the explanation of the 
+                           short message is to be retrieved 
+   
+              &quot;LONG&quot;    -- indicates that the long message is to 
+                           be retrieved 
+   
+           The input strings indicating the choice of option 
+           may be in mixed case.  For example, there is no 
+           problem with the call, 
+
+              <b>getmsg_c</b> ( &quot;loNg&quot;, MSGLEN, msg );
+ 
+
+
+   lenout  is the maximum allowed length of the output message string,
+           including the terminating null character.  For example,
+           if the caller wishes to be able to accept an 1840-character
+           message, lenout must be set to (at least) 1841.  The current
+           maximum long error message length is in fact 1840 characters.
+          
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   msg     is the error message to be retrieved. Its value depends on 
+           option, and on whether an error condition exists. 
+
+           When there is no error condition, msg is empty. 
+
+           If an error condition does exist, 
+
+             When option is 
+
+             &quot;SHORT&quot;    --  msg is the current short error message. 
+                            This is a very condensed, 25-character 
+                            description of the error. 
+
+             &quot;EXPLAIN&quot;  --  msg is the explanation of the current 
+                            short error message.  This is a one-line 
+                            expansion of the text of the short 
+                            message. 
+
+                            Most CSPICE short error messages 
+                            have corresponding explanation text. 
+                            For other short error messages, if 
+                            there is no explanation text, msg 
+                            will be blank. 
+
+             &quot;LONG&quot;     --  msg is the current long error message. 
+                            The long error message is a detailed 
+                            explanation of the error, possibly 
+                            containing data specific to the 
+                            particular occurrence of the error. 
+                            Not all errors have long error messages. 
+                            If there is none, msg will be empty. 
+                            Long error messages are no longer than 
+                            320 characters. 
+
+             invalid    --  msg will remain unchanged from 
+                            its value on input. 
+
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1) If the input string option is invalid, the error 
+      SPICE(INVALIDMSGTYPE) will be signaled.  In that case no message
+      is returned; msg retains the value it had on input. 
+ 
+   2) The error SPICE(NULLPOINTER) is signaled if either string pointer
+      argument is null.
+
+   3) The caller must pass a value indicating the length of the output
+      string.  If this value is not at least 2, the error 
+      SPICE(STRINGTOOSHORT) is signaled.  
+   
+   This routine is part of the interface to the 
+   CSPICE error handling mechanism.  For this reason, 
+   this routine does not participate in the trace scheme, 
+   even though it has external references. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   Please read the &quot;required reading&quot; first! 
+
+   A good time to call this routine would be when an error 
+   condition exists, as indicated by the CSPICE function, 
+   <a href="failed_c.html">failed_c</a>. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+ 
+   Here's an example of a real-life call to <b>getmsg_c</b> to get the 
+   explanation of the current short error message. 
+
+   In this example, a CSPICE routine, <a href="ckopn_c.html">ckopn_c</a>, is called. 
+   Following the return from <a href="ckopn_c.html">ckopn_c</a>, the logical function, 
+   <a href="failed_c.html">failed_c</a>, is tested to see whether an error occurred. 
+   If it did, the message is retrieved and output via 
+   a user-defined output routine: 
+
+      #include &quot;SpiceUsr.h&quot;
+      #include &lt;stdio.h&gt;
+      
+      #define  MSGLEN         1841
+      
+      SpiceChar               msg [ MSGLEN ];
+
+            .
+            .
+            .
+      /.
+      We call <a href="ckopn_c.html">ckopn_c</a>; then test for errors... 
+      ./
+      
+      <a href="ckopn_c.html">ckopn_c</a> ( filename, ifname, ncomch, &amp;handle ); 
+
+      if ( <a href="failed_c.html">failed_c</a>() ) 
+      {
+         /.
+         Get explanation text for the current short message 
+         and print it: 
+         ./
+
+         <b>getmsg_c</b> ( &quot;EXPLAIN&quot;, MSGLEN, msg );
+
+         [Output message]
+                  . 
+                  .     
+                  . 
+      }
+
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman    (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 5-APR-1999 (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   get error message 
+ </PRE>
+<h4>Link to routine getmsg_c source file <a href='../../../src/cspice/getmsg_c.c'>getmsg_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:34 2014</pre>
+
+</body>
+</html>
+

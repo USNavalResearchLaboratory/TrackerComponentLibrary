@@ -1,0 +1,3873 @@
+<HTML>
+<HEAD>
+<TITLE> Rotation </TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+
+<A NAME="top"></A>
+
+<TABLE STYLE="text-align: left; margin-left: auto; margin-right: auto; width: 800px;" BORDER="0" CELLPADDING="5" CELLSPACING="2">
+<TBODY>
+<TR>
+  <TD STYLE="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+  <DIV ALIGN="right">
+    <SMALL><SMALL><A HREF="index.html">Index Page</A></SMALL></SMALL>
+  </DIV>
+  <B>Rotation</B> </TD>
+</TR>
+<TR>
+  <TD STYLE="vertical-align: top;">
+
+<H2> Table of Contents
+</H2>
+
+<PRE>
+   <A HREF="#Rotation">Rotation</A>
+      <A HREF="#Abstract">Abstract</A>
+      <A HREF="#Introduction">Introduction</A>
+         <A HREF="#Using this document">Using this document</A>
+         <A HREF="#References">References</A>
+         <A HREF="#Notation">Notation</A>
+   <A HREF="#CSPICE Functions">CSPICE Functions</A>
+         <A HREF="#Categories of functions">Categories of functions</A>
+      <A HREF="#Euler angle functions">Euler angle functions</A>
+         <A HREF="#Constructing a matrix from Euler angles">Constructing a matrix from Euler angles</A>
+         <A HREF="#Finding Euler angles that represent a matrix">Finding Euler angles that represent a matrix</A>
+         <A HREF="#Programming hazards">Programming hazards</A>
+         <A HREF="#Working with RA, Dec and Twist">Working with RA, Dec and Twist</A>
+      <A HREF="#Quaternions">Quaternions</A>
+         <A HREF="#Finding a quaternion that represents a matrix">Finding a quaternion that represents a matrix</A>
+         <A HREF="#Finding the matrix represented by a quaternion">Finding the matrix represented by a quaternion</A>
+         <A HREF="#q2m_c and m2q_c are approximate inverses of each other">q2m_c and m2q_c are approximate inverses of each other</A>
+         <A HREF="#Multiplying quaternions">Multiplying quaternions</A>
+         <A HREF="#Obtaining angular velocity from quaternions">Obtaining angular velocity from quaternions</A>
+      <A HREF="#Rotating vectors and matrices">Rotating vectors and matrices</A>
+         <A HREF="#A word of warning">A word of warning</A>
+         <A HREF="#Rotating a vector about a coordinate axis">Rotating a vector about a coordinate axis</A>
+         <A HREF="#Rotating a matrix about a coordinate axis">Rotating a matrix about a coordinate axis</A>
+         <A HREF="#Rotating a vector about an arbitrary axis">Rotating a vector about an arbitrary axis</A>
+      <A HREF="#Rotation axis and angle">Rotation axis and angle</A>
+         <A HREF="#Constructing a matrix from a rotation axis and angle">Constructing a matrix from a rotation axis and angle</A>
+         <A HREF="#Finding the axis and angle of a rotation matrix">Finding the axis and angle of a rotation matrix</A>
+         <A HREF="#axisar_c and raxisa_c are approximate inverses">axisar_c and raxisa_c are approximate inverses</A>
+         <A HREF="#Using raxisa_c and axisar_c">Using raxisa_c and axisar_c</A>
+         <A HREF="#Constructing a coordinate axis rotation matrix">Constructing a coordinate axis rotation matrix</A>
+      <A HREF="#Rotation derivatives">Rotation derivatives</A>
+         <A HREF="#Differentiating rotations">Differentiating rotations</A>
+         <A HREF="#State transformations">State transformations</A>
+      <A HREF="#Validating a rotation matrix">Validating a rotation matrix</A>
+   <A HREF="#Tutorial introduction to rotations">Tutorial introduction to rotations</A>
+      <A HREF="#A comment of the heuristic variety">A comment of the heuristic variety</A>
+      <A HREF="#Definition of ``rotation''">Definition of ``rotation''</A>
+         <A HREF="#Definition 1">Definition 1</A>
+         <A HREF="#Definition 2">Definition 2</A>
+         <A HREF="#Definition 3">Definition 3</A>
+         <A HREF="#Uses of the definitions">Uses of the definitions</A>
+      <A HREF="#Definition of ``rotation'' and ``orthogonal'' matrix">Definition of ``rotation'' and ``orthogonal'' matrix</A>
+      <A HREF="#Rotations preserve inner products">Rotations preserve inner products</A>
+      <A HREF="#Inverses of rotation matrices">Inverses of rotation matrices</A>
+      <A HREF="#Composition of rotations">Composition of rotations</A>
+      <A HREF="#Coordinate transformations">Coordinate transformations</A>
+      <A HREF="#Rotation of vectors in the plane">Rotation of vectors in the plane</A>
+      <A HREF="#A canonical representation for rotations">A canonical representation for rotations</A>
+      <A HREF="#Rotation axis and angle0">Rotation axis and angle</A>
+      <A HREF="#Time-dependent coordinate transformations">Time-dependent coordinate transformations</A>
+      <A HREF="#Euler angles">Euler angles</A>
+      <A HREF="#Quaternions0">Quaternions</A>
+      <A HREF="#Quaternion arithmetic">Quaternion arithmetic</A>
+         <A HREF="#Definitions">Definitions</A>
+         <A HREF="#Basic properties of multiplication">Basic properties of multiplication</A>
+         <A HREF="#Deducing the multiplication formula">Deducing the multiplication formula</A>
+         <A HREF="#Composing rotations using quaternions">Composing rotations using quaternions</A>
+   <A HREF="#Mathematical road map">Mathematical road map</A>
+      <A HREF="#Rotation of a vector about an axis">Rotation of a vector about an axis</A>
+      <A HREF="#Formation of a rotation matrix from axis and angle">Formation of a rotation matrix from axis and angle</A>
+      <A HREF="#Finding the axis and angle of a rotation matrix0">Finding the axis and angle of a rotation matrix</A>
+      <A HREF="#Formation of a rotation matrix from a quaternion">Formation of a rotation matrix from a quaternion</A>
+      <A HREF="#Equivalence of rotation definitions">Equivalence of rotation definitions</A>
+         <A HREF="#An algebraic approach">An algebraic approach</A>
+         <A HREF="#A geometric approach">A geometric approach</A>
+      <A HREF="#Quaternion multiplication">Quaternion multiplication</A>
+         <A HREF="#Assertion 1">Assertion 1</A>
+         <A HREF="#Assertion 2">Assertion 2</A>
+      <A HREF="#Recovery of Euler angles from a rotation matrix">Recovery of Euler angles from a rotation matrix</A>
+         <A HREF="#Euler angle recovery: a-b-a case">Euler angle recovery: a-b-a case</A>
+         <A HREF="#Euler angle recovery: a-b-c case">Euler angle recovery: a-b-c case</A>
+   <A HREF="#Appendix A: Document Revision History">Appendix A: Document Revision History</A>
+         <A HREF="#May 27, 2010">May 27, 2010</A>
+         <A HREF="#November 17, 2005">November 17, 2005</A>
+         <A HREF="#January 10, 2005">January 10, 2005</A>
+         <A HREF="#February 2, 2004">February 2, 2004</A>
+         <A HREF="#December 2, 2002">December 2, 2002</A>
+         <A HREF="#April 26, 1999">April 26, 1999</A>
+
+</PRE>
+
+<HR SIZE=3 NOSHADE>
+
+<BR><BR>
+<A NAME="Rotation"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Rotation
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Last revised on 2010 MAY 27 by E. D. Wright.
+<P>
+ 
+<BR><BR>
+<A NAME="Abstract"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Abstract
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The SPICE rotation routines manipulate and convert between different
+   representations of rotation transformations: matrices, quaternions,
+   Euler angles, and axis-angle pairs.
+<P>
+ 
+<BR><BR>
+<A NAME="Introduction"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Introduction
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   This document covers the CSPICE routines that deal with rotations and
+   the mathematical ideas behind the routines.
+<P>
+ 
+   There are three chapters:
+<P>
+ 
+<UL>
+<TT>--</TT> CSPICE routines
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> The ``CSPICE routines'' chapter tells you what routines are available, what
+they do, and how to call them.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Tutorial introduction to rotations
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> If rotations are new to you, you'll profit most by reading the ``tutorial''
+chapter first. This chapter lists most of the facts about rotations used in
+the CSPICE code. The emphasis is on building intuition about rotations;
+proofs of any noticeable difficulty or length are deferred to the
+``Mathematical Road Map'' chapter.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Mathematical road map
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> This chapter contains detailed explanations of a number of the mathematical
+ideas used in the CSPICE rotation routines. And as we've said, proofs of
+some of assertions made in the tutorial chapter are stowed here.
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Using this document"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Using this document
+</H3><P><BR><BR>
+   For many readers, the first chapter will be the only one of interest.
+   The mechanics of using the rotation routines in your code are covered
+   here.
+<P>
+ 
+   The rest of the document covers the ideas behind the code. This material
+   is meant to be used as a reference rather than to be read from start to
+   finish; the topics are ordered loosely according to logical dependence,
+   but there is no narrative progression from section to section.
+<P>
+ 
+   The purpose of the tutorial and ``road map'' chapters is to make it
+   easier to be certain that you're using the code correctly. In our
+   experience, thinking about this category of code only in terms of
+   ``inputs'' and ``outputs'' is a tricky and error-prone approach; really
+   understanding the mathematics helps you to verify that you're putting
+   the pieces together in ways that make sense.
+<P>
+ 
+   Because some of the ideas required to understand the code seem to exist
+   as lore and are rarely written down, we've collected them here for your
+   convenience.
+<P>
+ 
+<BR><BR>
+<A NAME="References"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> References
+</H3><P><BR><BR>
+<UL>
+<TT>1.</TT> For CSPICE routines dealing with inertial reference frames: SPK ``required
+reading.'' (<a href="../req/spk.html">spk.req</a>)
+<BR><BR></UL>
+<UL>
+<TT>2.</TT> For CSPICE routines dealing with body-fixed reference frames: KERNEL
+``required reading.'' (<a href="../req/kernel.html">kernel.req</a>)
+<BR><BR></UL>
+<UL>
+<TT>3.</TT> For linear algebra: ``Calculus, Vol. II.'' Tom M. Apostol. Wiley and Sons,
+1969.
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> Also, ``Elementary Linear Algebra.'' Howard Anton. Wiley and Sons, 1977.
+<BR><BR></UL>
+<UL>
+<TT>4.</TT> NAIF document number 179.0, ``Rotations and Their Habits,'' by Dr. William
+Taber.
+<BR><BR></UL>
+<UL>
+<TT>5.</TT> NAIF document number 192.0, ``Memo to: Quaternion Seekers,'' by Allen
+Klumpp.
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Notation"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Notation
+</H3><P><BR><BR>
+   Here are the symbols used in this document, and their definitions:
+<P>
+ 
+<PRE>
+    Symbol                      Meaning
+   ---------          ----------------------------------
+ 
+      E3              Three-dimensional Euclidean space.
+ 
+      E2              Two-dimensional Euclidean space.
+ 
+   &lt; u, v &gt;           Inner product of vectors u and v.
+ 
+        T
+      M               Transpose of the matrix M.
+ 
+       -1
+      M               Inverse of the matrix M.
+ 
+       -1
+      f               Inverse of the function f.
+ 
+    u x v             Cross product of vectors u and v.
+ 
+     M v              Product of matrix M and vector v.
+ 
+     M N              Product of matrix M and matrix N.
+ 
+   Trace(M)           Sum of elements on the main diagonal of M.
+ 
+     [w]              Matrix that rotates a coordinate system by
+        i             w radians about the ith coordinate axis
+                      (and rotates vectors by -w radians about the
+                      same axis).  We also use this notation to refer
+                      to the linear transformation corresponding to
+                      this matrix.
+</PRE>
+   There are only three types of rotation matrices representing rotations
+   about coordinate axes:
+<P>
+ 
+<PRE>
+            +-                        -+
+            |     1       0        0   |
+   [w]   =  |     0    cos(w)   sin(w) |
+      1     |     0   -sin(w)   cos(w) |
+            +-                        -+
+ 
+            +-                        -+
+            |  cos(w)     0    -sin(w) |
+   [w]   =  |     0       1        0   |
+      2     |  sin(w)     0     cos(w) |
+            +-                        -+
+ 
+            +-                        -+
+            |  cos(w)  sin(w)      0   |
+   [w]   =  | -sin(w)  cos(w)      0   |
+      3     |     0       0        1   |
+            +-                        -+
+</PRE>
+   The composition of rotations
+<P>
+ 
+<PRE>
+   [w1]   [w2]   [w3]
+       a      b      c
+</PRE>
+   is sometimes referred to as a ``a-b-c'' rotation. For example, we may
+   talk about a ``3-1-3'' rotation.
+<P>
+ 
+   About angles: all angles in this document are measured in radians.
+<P>
+ 
+   About directions: the ``right hand rule'' is in effect at all times in
+   this document, so counterclockwise rotations about an axis have positive
+   measure.
+<P>
+ 
+<BR><BR>
+<A NAME="CSPICE Functions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> CSPICE Functions
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   This chapter describes the CSPICE functions that deal with rotations.
+   The chapter lists the CSPICE rotation functions and discusses each
+   function.
+<P>
+ 
+   The CSPICE functions that deal with general rotations are:
+<P>
+ 
+<DL><DT>
+<B>
+ <a href="../cspice/axisar_c.html">axisar_c</a>
+</B><BR><BR>
+<DD>
+ ( Axis and angle to rotation )<BR>
+</DL>
+<DL><DT>
+<B>
+ drotat_c
+</B><BR><BR>
+<DD>
+ ( Derivative of a rotation matrix )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/eul2m_c.html">eul2m_c</a>
+</B><BR><BR>
+<DD>
+ ( Euler angles to matrix )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/eul2xf_c.html">eul2xf_c</a>
+</B><BR><BR>
+<DD>
+ ( Euler angles and derivative to transformation )<BR>
+</DL>
+<DL><DT>
+<B>
+ invstm_c
+</B><BR><BR>
+<DD>
+ ( Inverse of state transformation matrix )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/isrot_c.html">isrot_c</a>
+</B><BR><BR>
+<DD>
+ ( Is it a rotation matrix? )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/m2eul_c.html">m2eul_c</a>
+</B><BR><BR>
+<DD>
+ ( Matrix to Euler angles )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/m2q_c.html">m2q_c</a>
+</B><BR><BR>
+<DD>
+ ( Matrix to quaternion )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/pxform_c.html">pxform_c</a>
+</B><BR><BR>
+<DD>
+ ( Position transformation matrix )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/q2m_c.html">q2m_c</a>
+</B><BR><BR>
+<DD>
+ ( Quaternion to matrix )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/qdq2av_c.html">qdq2av_c</a>
+</B><BR><BR>
+<DD>
+ ( Quaternion and derivative to angular velocity )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/qxq_c.html">qxq_c</a>
+</B><BR><BR>
+<DD>
+ ( Quaternion times quaternion )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/raxisa_c.html">raxisa_c</a>
+</B><BR><BR>
+<DD>
+ ( Rotation axis and angle )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/rav2xf_c.html">rav2xf_c</a>
+</B><BR><BR>
+<DD>
+ ( Rotation and angular velocity to transform )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/rotate_c.html">rotate_c</a>
+</B><BR><BR>
+<DD>
+ ( Generate a rotation matrix )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/rotmat_c.html">rotmat_c</a>
+</B><BR><BR>
+<DD>
+ ( Rotate a matrix about a coordinate axis )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/rotvec_c.html">rotvec_c</a>
+</B><BR><BR>
+<DD>
+ ( Rotate a vector about a coordinate axis )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/sxform_c.html">sxform_c</a>
+</B><BR><BR>
+<DD>
+ ( State transformation matrix )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/tipbod_c.html">tipbod_c</a>
+</B><BR><BR>
+<DD>
+ ( Transformation, inertial position to bodyfixed )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/tisbod_c.html">tisbod_c</a>
+</B><BR><BR>
+<DD>
+ ( Transformation, inertial state to bodyfixed )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/vrotv_c.html">vrotv_c</a>
+</B><BR><BR>
+<DD>
+ ( Rotate a vector about an arbitrary axis )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/xf2eul_c.html">xf2eul_c</a>
+</B><BR><BR>
+<DD>
+ ( State transformation to Euler angles )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/xf2rav_c.html">xf2rav_c</a>
+</B><BR><BR>
+<DD>
+ ( Transform to rotation and angular velocity)<BR>
+</DL>
+   Additional CSPICE functions that deal with rotations between specific
+   coordinate systems are documented in the FRAMES required reading and in
+   the header of the CSPICE function <a href="../cspice/sxform_c.html">sxform_c</a>.
+<P>
+ 
+<BR><BR>
+<A NAME="Categories of functions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Categories of functions
+</H3><P><BR><BR>
+   The discussions of the functions are categorized according to the type
+   of problem that the functions solve. This chapter contains one section
+   for each category. The categories are:
+<P>
+ 
+<UL>
+<TT>--</TT> Euler angles
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Quaternions
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Rotating vectors and matrices
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Rotation axis and angle
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Rotation derivatives
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Validating rotation matrices
+<BR><BR></UL>
+   The rotation functions constitute a ``family'' of functions insofar as
+   they deal with related problems, but they do not constitute a
+   ``system.'' So, there is no logical interdependence between the
+   discussions of functions in different categories.
+<P>
+ 
+<BR><BR>
+<A NAME="Euler angle functions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Euler angle functions
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The CSPICE Euler angle functions are:
+<P>
+ 
+<DL><DT>
+<B>
+ <a href="../cspice/eul2m_c.html">eul2m_c</a>
+</B><BR><BR>
+<DD>
+ ( Euler angles to matrix )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/m2eul_c.html">m2eul_c</a>
+</B><BR><BR>
+<DD>
+ ( Matrix to Euler angles )<BR>
+</DL>
+   <a href="../cspice/eul2m_c.html">eul2m_c</a> and <a href="../cspice/m2eul_c.html">m2eul_c</a> provide a convenient way to solve problems such as
+   converting between C-matrices and RA, Dec, and Twist. These functions
+   are inverses of each other, roughly speaking.
+<P>
+ 
+<BR><BR>
+<A NAME="Constructing a matrix from Euler angles"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Constructing a matrix from Euler angles
+</H3><P><BR><BR>
+   The function <a href="../cspice/eul2m_c.html">eul2m_c</a> constructs the rotation matrix defined by three
+   Euler angles ang[2], ang[1], ang[0], and three coordinate axes indexed
+   by the integers i[2], i[1], i[0].
+<P>
+ 
+   The call
+<P>
+ 
+<PRE>
+   <a href="../cspice/eul2m_c.html">eul2m_c</a> ( ang[2], ang[1], ang[0],
+             i[2],   i[1],   i[0],   m );
+</PRE>
+   returns the matrix `m', where
+<P>
+ 
+<PRE>
+   m   =   [ang[2]]       [ang[1]]        [ang[0]]    .
+                   i[2]           i[1]            i[0]
+</PRE>
+   The indices i[2], i[1], i[0] must belong to the set
+<P>
+ 
+<PRE>
+   {1, 2, 3}.
+</PRE>
+<BR><BR>
+<A NAME="Finding Euler angles that represent a matrix"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Finding Euler angles that represent a matrix
+</H3><P><BR><BR>
+   Given a rotation matrix `m' and three coordinate axes indexed by the
+   integers i[2], i[1], i[0], the function <a href="../cspice/m2eul_c.html">m2eul_c</a> finds angles ang[2],
+   ang[1], ang[0] such that
+<P>
+ 
+<PRE>
+   m   =   [ang[2]]       [ang[1]]        [ang[0]]    .
+                   i[2]           i[1]            i[0]
+</PRE>
+   The call
+<P>
+ 
+<PRE>
+   <a href="../cspice/m2eul_c.html">m2eul_c</a> ( m, i[2], i[1], i[0], ang+2, ang+1, ang );
+</PRE>
+   returns the desired angles. <a href="../cspice/m2eul_c.html">m2eul_c</a> restricts the ranges of the output
+   angles so as to guarantee that the Euler angle representation is unique.
+   The output angles ang[2] and ang[0] are always in the range (-pi,pi].
+   The range of ang[1] is determined by the set of rotation axes. When i[2]
+   equals i[0], ang[1] is in the range [0, pi]. Otherwise, ang[1] is in the
+   range [-pi/2, pi/2]. These ranges make unique determinations of Euler
+   angles possible, except in degenerate cases.
+<P>
+ 
+   In cases where the Euler angles are not uniquely determined, <a href="../cspice/eul2m_c.html">eul2m_c</a>
+   sets the first angle (called ang[2] above) to zero. The other two angles
+   are then uniquely determined.
+<P>
+ 
+   Again, the indices i[2], i[1], i[0] are members of
+<P>
+ 
+<PRE>
+   {1, 2, 3}.
+</PRE>
+   There is a restriction on the allowed set of coordinate axes: i[1] must
+   not equal i[2] or i[0]. If this constraint is not met, the desired
+   representation of `m' by Euler angles may not exist; <a href="../cspice/m2eul_c.html">m2eul_c</a> signals an
+   error in this case.
+<P>
+ 
+<BR><BR>
+<A NAME="Programming hazards"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Programming hazards
+</H3><P><BR><BR>
+   There are several pitfalls associated with converting matrices to Euler
+   angles. First, any mapping from matrices to Euler angles has
+   singularities. These come in two flavors: some matrices don't map to a
+   unique set of Euler angles, and some matrices have the property that a
+   small change in the matrix can result in a large change in the
+   corresponding Euler angles.
+<P>
+ 
+   The first category of singularity occurs with matrices that represent
+   rotations about the first or third axis in the sequence of rotation axes
+   (for example, axis 3 for a 2-1-3 rotation). In practical terms, if
+   <a href="../cspice/eul2m_c.html">eul2m_c</a> encounters one of these special matrices, eul2m_c must choose
+   the Euler angles. Immediately the possibility arises that <a href="../cspice/eul2m_c.html">eul2m_c</a> will
+   disagree with any other code performing the same task.
+<P>
+ 
+   The second kind of singularity occurs when any of the Euler angles
+   corresponding to a matrix is at one of the endpoints of its range, for
+   example, when the first angle has the value pi. If the matrix is
+   perturbed slightly, the first angle may jump from pi to a value close to
+   -pi. Again, two different pieces of code may give different results in
+   such a case, merely because of round-off error. Euler angles near the
+   limits of their ranges should be regarded with suspicion.
+<P>
+ 
+   The existence of singularities in the matrix-to-Euler angle mapping
+   prevents <a href="../cspice/eul2m_c.html">eul2m_c</a> and <a href="../cspice/m2eul_c.html">m2eul_c</a> from being exact inverses: most of the
+   time, the code fragment
+<P>
+ 
+<PRE>
+   <a href="../cspice/eul2m_c.html">eul2m_c</a> (    ang[2],  ang[1],  ang[0],
+                axis[2], axis[1], axis[0], m );
+ 
+   <a href="../cspice/m2eul_c.html">m2eul_c</a> ( m, axis[2], axis[1], axis[0],
+                ang+2,   ang+1,   ang        );
+</PRE>
+   leaves the angles ang[2], ang[1], ang[0] unchanged, except for round-off
+   error, but in some cases, the angles may change drastically.
+<P>
+ 
+   If we reverse the order of the function calls in the last code fragment,
+   the matrix `m' should be preserved, except for errors due to loss of
+   precision. The loss of precision can be considerable, though, for
+   matrices whose entries are nearly those of any degenerate case matrix.
+<P>
+ 
+   For more details on this topic, consult the ``Mathematical road map''
+   section.
+<P>
+ 
+<BR><BR>
+<A NAME="Working with RA, Dec and Twist"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Working with RA, Dec and Twist
+</H3><P><BR><BR>
+   The Euler angle routines could be used for conversion between ``RA, Dec,
+   and Twist'' and a ``C-matrix.'' Most projects, including Voyager and
+   Cassini define the relationship as:
+<P>
+ 
+<PRE>
+   c  =  [ Twist ]   [ pi/2 - Dec ]   [ pi/2 + RA ]
+                  3                1               3
+</PRE>
+   so the code fragments
+<P>
+ 
+<PRE>
+   <a href="../cspice/eul2m_c.html">eul2m_c</a> ( twist,   <a href="../cspice/halfpi_c.html">halfpi_c</a>() - dec,   halfpi_c() + ra,
+             3,       1,                  3,                 c  );
+</PRE>
+   and
+<P>
+ 
+<PRE>
+   <a href="../cspice/m2eul_c.html">m2eul_c</a> ( c, 3, 1, 3, ang+2, ang+1, ang );
+ 
+   twist =  ang[2];
+   dec   =  <a href="../cspice/halfpi_c.html">halfpi_c</a>() - ang[1];
+   ra    =  ang[0]     - <a href="../cspice/halfpi_c.html">halfpi_c</a>();
+</PRE>
+   carry out the conversion from RA, Dec, and Twist to a C matrix, and
+   back.
+<P>
+ 
+   Note that definitions of ``RA, Dec, and Twist'' vary: on the Galileo
+   project, the C matrix is related to the angles ``RA, Dec, and Twist'' by
+   the equation
+<P>
+ 
+<PRE>
+   C  =  [ Twist ]   [ pi/2 - Dec ]    [ RA ] .
+                  3                2         3
+</PRE>
+<BR><BR>
+<A NAME="Quaternions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Quaternions
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The CSPICE quaternion routines are:
+<P>
+ 
+<DL><DT>
+<B>
+ <a href="../cspice/m2q_c.html">m2q_c</a>
+</B><BR><BR>
+<DD>
+ ( Matrix to quaternion )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/q2m_c.html">q2m_c</a>
+</B><BR><BR>
+<DD>
+ ( Quaternion to matrix )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/qdq2av_c.html">qdq2av_c</a>
+</B><BR><BR>
+<DD>
+ ( Quaternion and derivative to angular velocity )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/qxq_c.html">qxq_c</a>
+</B><BR><BR>
+<DD>
+ ( Quaternion times quaternion )<BR>
+</DL>
+   Quaternions are used in CSPICE as a compact representation for
+   rotations. They may be used to compose rotations more efficiently than
+   can be done with matrix multiplication.
+<P>
+ 
+<BR><BR>
+<A NAME="Finding a quaternion that represents a matrix"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Finding a quaternion that represents a matrix
+</H3><P><BR><BR>
+   The routine <a href="../cspice/m2q_c.html">m2q_c</a> produces a quaternion that represents a specified
+   rotation matrix.
+<P>
+ 
+   The code fragment
+<P>
+ 
+<PRE>
+   <a href="../cspice/m2q_c.html">m2q_c</a> ( m, q );
+</PRE>
+   returns a unit quaternion `q' that represents the rotation matrix `m'.
+<P>
+ 
+   If you really want to know about it, the elements of the quaternion are
+   defined as follows:
+<P>
+ 
+   Let the unit vector `a' be a choice of rotation axis for `m', and let
+   `angle' be the rotation angle, where `angle' is in the interval
+<P>
+ 
+<PRE>
+   [0, pi]
+</PRE>
+   Then the elements of the unit quaternion `q' returned by <a href="../cspice/m2q_c.html">m2q_c</a> are
+<P>
+ 
+<PRE>
+   q[0] = cos( angle/2 )
+ 
+   q[1] = sin( angle/2 ) * a[0]
+   q[2] = sin( angle/2 ) * a[1]
+   q[3] = sin( angle/2 ) * a[2]
+</PRE>
+   <a href="../cspice/m2q_c.html">m2q_c</a> considers the rotation angle of `m' to lie in [0, pi]. Therefore,
+   half the rotation angle lies in [0, pi/2], so Q(0) is always in [0, 1].
+   For a given rotation matrix `m', the corresponding quaternion is
+   uniquely determined except if the rotation angle is pi.
+<P>
+ 
+<BR><BR>
+<A NAME="Finding the matrix represented by a quaternion"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Finding the matrix represented by a quaternion
+</H3><P><BR><BR>
+   The routine <a href="../cspice/q2m_c.html">q2m_c</a> inverts the transformation performed by <a href="../cspice/m2q_c.html">m2q_c</a>. The
+   following call finds the rotation matrix `m' represented by the unit
+   quaternion `q':
+<P>
+ 
+<PRE>
+   <a href="../cspice/q2m_c.html">q2m_c</a> ( q, m );
+</PRE>
+<BR><BR>
+<A NAME="q2m_c and m2q_c are approximate inverses of each other"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> <a href="../cspice/q2m_c.html">q2m_c</a> and <a href="../cspice/m2q_c.html">m2q_c</a> are approximate inverses of each other
+</H3><P><BR><BR>
+   The calls
+<P>
+ 
+<PRE>
+   <a href="../cspice/m2q_c.html">m2q_c</a> ( m, q );
+   <a href="../cspice/q2m_c.html">q2m_c</a> ( q, m );
+</PRE>
+   always preserve `m', except for round-off error.
+<P>
+ 
+   However, since there are two quaternions that represent each rotation,
+   the sequence of calls
+<P>
+ 
+<PRE>
+   <a href="../cspice/q2m_c.html">q2m_c</a> ( q, m );
+   <a href="../cspice/m2q_c.html">m2q_c</a> ( m, q );
+</PRE>
+   do not necessarily preserve `q'.
+<P>
+ 
+<BR><BR>
+<A NAME="Multiplying quaternions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Multiplying quaternions
+</H3><P><BR><BR>
+   Two quaternions `q1', `q2' may be multiplied by calling <a href="../cspice/qxq_c.html">qxq_c</a>:
+<P>
+ 
+<PRE>
+   <a href="../cspice/qxq_c.html">qxq_c</a> ( q1, q2, qout );
+</PRE>
+   The resulting product `qout' is computed using the multiplication
+   formula given in the section ``Quaternion Arithmetic'' below. `qout'
+   represents the rotation formed by composing the rotations represented by
+   `q1' and `q2'.
+<P>
+ 
+<BR><BR>
+<A NAME="Obtaining angular velocity from quaternions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Obtaining angular velocity from quaternions
+</H3><P><BR><BR>
+   Given a quaternion `q' and its derivative with respect to time `dq', the
+   angular velocity of the reference frame represented by `q' may be found
+   by calling <a href="../cspice/qdq2av_c.html">qdq2av_c</a>:
+<P>
+ 
+<PRE>
+   <a href="../cspice/qdq2av_c.html">qdq2av_c</a> ( q, dq, av );
+</PRE>
+   The resulting angular velocity vector `av' has units of radians/T, where
+   1/T is the time unit associated with `dq'.
+<P>
+ 
+<BR><BR>
+<A NAME="Rotating vectors and matrices"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Rotating vectors and matrices
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The CSPICE routines that ``rotate'' vectors and matrices are:
+<P>
+ 
+<DL><DT>
+<B>
+ <a href="../cspice/rotvec_c.html">rotvec_c</a>
+</B><BR><BR>
+<DD>
+ ( Rotate vector )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/rotmat_c.html">rotmat_c</a>
+</B><BR><BR>
+<DD>
+ ( Rotate matrix )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/vrotv_c.html">vrotv_c</a>
+</B><BR><BR>
+<DD>
+ ( Rotate a vector about an axis )<BR>
+</DL>
+   This set of routines are frequently used as utilities from which more
+   complicated routines may be constructed. For example, the routine
+   <a href="../cspice/eul2m_c.html">eul2m_c</a> constructs a rotation matrix from a sequence of three rotations
+   about specified coordinate axis, so there is no need to call <a href="../cspice/rotmat_c.html">rotmat_c</a>
+   directly to accomplish this.
+<P>
+ 
+<BR><BR>
+<A NAME="A word of warning"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> A word of warning
+</H3><P><BR><BR>
+   Some care is needed when dealing with signs of rotation angles: a
+   rotation of a vector by an angle `theta' can be viewed as rotating the
+   coordinate system by -`theta'. We try to avoid confusion here by
+   referring to routines as ``coordinate system rotations'' or ``vector
+   rotations,'' depending on whether a positive rotation angle corresponds
+   to rotating the coordinate system by a positive angle, or to rotating a
+   vector by a positive angle. The same criterion applies to matrix
+   rotations. According to this classification, <a href="../cspice/rotvec_c.html">rotvec_c</a> and <a href="../cspice/rotmat_c.html">rotmat_c</a>
+   perform coordinate rotations, and <a href="../cspice/vrotv_c.html">vrotv_c</a> performs a vector rotation.
+<P>
+ 
+<BR><BR>
+<A NAME="Rotating a vector about a coordinate axis"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Rotating a vector about a coordinate axis
+</H3><P><BR><BR>
+   To apply the rotation
+<P>
+ 
+<PRE>
+   [angle]
+          i
+</PRE>
+   to a vector, use <a href="../cspice/rotvec_c.html">rotvec_c</a>. The following code fragment applies
+<P>
+ 
+<PRE>
+   [ angle ]
+            3
+</PRE>
+   to the vector `v', yielding `vout'.
+<P>
+ 
+<PRE>
+   <a href="../cspice/rotvec_c.html">rotvec_c</a> ( v, angle, 3, vout );
+</PRE>
+   The components of `vout' are the coordinates of the vector `v' in a
+   system rotated by `angle' radians about the third coordinate axis. We
+   can also regard `vout' as `v', rotated by
+<P>
+ 
+<PRE>
+   -angle
+</PRE>
+   radians about the third coordinate axis.
+<P>
+ 
+<BR><BR>
+<A NAME="Rotating a matrix about a coordinate axis"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Rotating a matrix about a coordinate axis
+</H3><P><BR><BR>
+   We can apply the same rotation
+<P>
+ 
+<PRE>
+   [angle]
+          i
+</PRE>
+   to a matrix using <a href="../cspice/rotmat_c.html">rotmat_c</a>, as follows:
+<P>
+ 
+<PRE>
+   <a href="../cspice/rotmat_c.html">rotmat_c</a> ( m, angle, 3, mout );
+</PRE>
+   After this function call, `mout' is equal to
+<P>
+ 
+<PRE>
+   [ angle ]  * m
+            3
+</PRE>
+<BR><BR>
+<A NAME="Rotating a vector about an arbitrary axis"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Rotating a vector about an arbitrary axis
+</H3><P><BR><BR>
+   We can rotate a vector about an arbitrary axis using <a href="../cspice/vrotv_c.html">vrotv_c</a>. The code
+   fragment
+<P>
+ 
+<PRE>
+   <a href="../cspice/vrotv_c.html">vrotv_c</a> ( v, axis, angle, vout );
+</PRE>
+   rotates the vector `v' about the vector `axis' by `angle' radians,
+   yielding `vout'.
+<P>
+ 
+<BR><BR>
+<A NAME="Rotation axis and angle"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Rotation axis and angle
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   There are three CSPICE routines that deal with rotation axes and angles:
+<P>
+ 
+<DL><DT>
+<B>
+ <a href="../cspice/axisar_c.html">axisar_c</a>
+</B><BR><BR>
+<DD>
+ ( Axis and angle to rotation )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/raxisa_c.html">raxisa_c</a>
+</B><BR><BR>
+<DD>
+ ( Rotation axis and angle )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/rotate_c.html">rotate_c</a>
+</B><BR><BR>
+<DD>
+ ( Generate a rotation matrix )<BR>
+</DL>
+   Like the routines that rotate vectors and matrices, these routines are
+   frequently used as building blocks for more sophisticated routines.
+<P>
+ 
+<BR><BR>
+<A NAME="Constructing a matrix from a rotation axis and angle"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Constructing a matrix from a rotation axis and angle
+</H3><P><BR><BR>
+   To generate a matrix that rotates vectors by a specified angle about an
+   arbitrary axis, use <a href="../cspice/axisar_c.html">axisar_c</a>. If `axis' is the axis vector and `angle'
+   is the rotation angle, the code fragment
+<P>
+ 
+<PRE>
+   <a href="../cspice/axisar_c.html">axisar_c</a> ( axis, angle, m );
+</PRE>
+   produces `m', the desired rotation matrix.
+<P>
+ 
+   What if we want generate a coordinate system rotation about an arbitrary
+   axis, as opposed to a coordinate axis? We can use <a href="../cspice/axisar_c.html">axisar_c</a> for this. Let
+   `axis' be the coordinate system rotation axis and `angle' be the
+   rotation angle; then the code fragment
+<P>
+ 
+<PRE>
+   <a href="../cspice/axisar_c.html">axisar_c</a> ( axis, -angle, m );
+</PRE>
+   produces the desired coordinate system rotation matrix. Note that the
+   input angle is the NEGATIVE of that associated with a vector rotation.
+   <a href="../cspice/axisar_c.html">axisar_c</a> is designed this way for compatibility with <a href="../cspice/raxisa_c.html">raxisa_c</a>, which is
+   an inverse routine for <a href="../cspice/axisar_c.html">axisar_c</a>.
+<P>
+ 
+<BR><BR>
+<A NAME="Finding the axis and angle of a rotation matrix"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Finding the axis and angle of a rotation matrix
+</H3><P><BR><BR>
+   To find the rotation axis and angle of a rotation matrix `m', use
+   <a href="../cspice/raxisa_c.html">raxisa_c</a>:
+<P>
+ 
+<PRE>
+   <a href="../cspice/raxisa_c.html">raxisa_c</a> ( m, axis, &amp;angle );
+</PRE>
+   `axis' and `angle' have the property that for any vector `v',
+<P>
+ 
+<PRE>
+   m v
+</PRE>
+   yields `v', rotated by `angle' radians about the vector `axis'. If `m'
+   is viewed as a coordinate transformation, we can say that `m' rotates
+   the initial coordinate system by
+<P>
+ 
+<PRE>
+   - angle
+</PRE>
+   radians about `axis'.
+<P>
+ 
+<BR><BR>
+<A NAME="axisar_c and raxisa_c are approximate inverses"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> <a href="../cspice/axisar_c.html">axisar_c</a> and <a href="../cspice/raxisa_c.html">raxisa_c</a> are approximate inverses
+</H3><P><BR><BR>
+   The code fragment
+<P>
+ 
+<PRE>
+   <a href="../cspice/raxisa_c.html">raxisa_c</a> ( m,      axis,   &amp;angle );
+   <a href="../cspice/axisar_c.html">axisar_c</a> ( axist,  angle,  m      );
+</PRE>
+   leaves `m' unchanged, except for round-off error.
+<P>
+ 
+   The code fragment
+<P>
+ 
+<PRE>
+   <a href="../cspice/axisar_c.html">axisar_c</a> ( axist,  angle,  m      );
+   <a href="../cspice/raxisa_c.html">raxisa_c</a> ( m,      axis,   &amp;angle );
+</PRE>
+   usually leaves `axis' and `angle' unchanged, except for round-off error,
+   provided that two conditions are met:
+<P>
+ 
+<UL>
+<TT>--</TT> `angle' is in the range (0,pi)
+<BR><BR></UL>
+<UL>
+<TT>--</TT> `axis' is a unit vector.
+<BR><BR></UL>
+   If `angle' is near zero or pi, loss of precision may preclude recovery
+   of `axis'.
+<P>
+ 
+<BR><BR>
+<A NAME="Using raxisa_c and axisar_c"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Using <a href="../cspice/raxisa_c.html">raxisa_c</a> and <a href="../cspice/axisar_c.html">axisar_c</a>
+</H3><P><BR><BR>
+   <a href="../cspice/raxisa_c.html">raxisa_c</a> and <a href="../cspice/axisar_c.html">axisar_c</a> can be used to perform linear interpolation
+   between two rotation matrices. Here's a code fragment illustrating the
+   procedure:
+<P>
+ 
+<PRE>
+      /*
+      Let r(t) be a time-varying rotation matrix; r could be
+      a C-matrix describing the orientation of a spacecraft
+      structure.  Given two points in time t1 and t2 at which
+      r(t) is known, and given a third time t3, where
+ 
+         t1  &lt;  t3  &lt;  t2,
+ 
+      we can estimate r(t3) by linear interpolation.  In other
+      words, we approximate the motion of r by pretending that
+      r rotates about a fixed axis at a uniform angular rate
+      during the time interval [t1, t2].  More specifically, we
+      assume that each column vector of r rotates in this
+      fashion.  This procedure will not work if r rotates through
+      an angle of pi radians or more during the time interval
+      [t1, t2]; an aliasing effect would occur in that case.
+ 
+      If we let
+ 
+         r1 = r(t1)
+         r2 = r(t2), and
+ 
+                     -1
+         q  = r2 * r1  ,
+ 
+      then the rotation axis and angle of q define the rotation
+      that each column of r(t) undergoes from time t1 to time
+      t2.  Since r(t) is orthogonal, we can find q using the
+      transpose of r1.  We find the rotation axis and angle via
+      <a href="../cspice/raxisa_c.html">raxisa_c</a>.
+      */
+ 
+      <a href="../cspice/mxmt_c.html">mxmt_c</a>    ( r2, r1,    q      );
+      <a href="../cspice/raxisa_c.html">raxisa_c</a>  ( q,  axis,  &amp;angle );
+ 
+      /*
+      Find the fraction of the total rotation angle that r
+      rotates through in the time interval [t1, t3].
+      */
+      frac = ( t3 - t1 )  /  ( t2 - t1 );
+ 
+      /*
+      Finally, find the rotation delta that r(t) undergoes
+      during the time interval [t1, t3], and apply that rotation
+      to r1, yielding r(t3), which we'll call r3.
+      */
+      <a href="../cspice/axisar_c.html">axisar_c</a> ( axis,  frac * angle, delta );
+      <a href="../cspice/mxm_c.html">mxm_c</a>    ( delta, r1,           r3    );
+</PRE>
+<BR><BR>
+<A NAME="Constructing a coordinate axis rotation matrix"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Constructing a coordinate axis rotation matrix
+</H3><P><BR><BR>
+   The routine <a href="../cspice/rotate_c.html">rotate_c</a> generates the rotation matrix
+<P>
+ 
+<PRE>
+   [ angle ] ,
+            i
+</PRE>
+   which corresponds to a rotation about a coordinate axis. This is a
+   special case of the problem solved by <a href="../cspice/axisar_c.html">axisar_c</a>. Note however that the
+   matrix produced by <a href="../cspice/rotate_c.html">rotate_c</a> is the inverse of that produced by <a href="../cspice/axisar_c.html">axisar_c</a>,
+   if both routines are provided with the same input angle, and <a href="../cspice/axisar_c.html">axisar_c</a> is
+   given the ith coordinate basis vector as the rotation axis.
+<P>
+ 
+   The call
+<P>
+ 
+<PRE>
+   <a href="../cspice/rotate_c.html">rotate_c</a> ( angle, i, m );
+</PRE>
+   produces `m', the desired matrix.
+<P>
+ 
+<BR><BR>
+<A NAME="Rotation derivatives"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Rotation derivatives
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The CSPICE routines that deal with derivatives of rotations are:
+<P>
+ 
+<DL><DT>
+<B>
+ drotat_c
+</B><BR><BR>
+<DD>
+ ( Derivative of a rotation matrix )<BR>
+</DL>
+<DL><DT>
+<B>
+ invstm_c
+</B><BR><BR>
+<DD>
+ ( Inverse of state transformation matrix )<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../cspice/tisbod_c.html">tisbod_c</a>
+</B><BR><BR>
+<DD>
+ ( Transformation, inertial state to bodyfixed )<BR>
+</DL>
+   The rotation derivative routines are utilities that simplify finding
+   derivatives of time-varying coordinate transformations. In particular,
+   these routines are used to transform state vectors between non-inertial
+   reference frames.
+<P>
+ 
+<BR><BR>
+<A NAME="Differentiating rotations"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Differentiating rotations
+</H3><P><BR><BR>
+   The routine drotat_c gives the derivative of a coordinate axis rotation
+   with respect to the rotation angle. For example, the transformation
+<P>
+ 
+<PRE>
+   [ angle ]
+            1
+</PRE>
+   which has the matrix representation
+<P>
+ 
+<PRE>
+   +-                             -+
+   |  1         0           0      |
+   |  0    cos(angle)  sin(angle)  |
+   |  0   -sin(angle)  cos(angle)  |
+   +-                             -+
+</PRE>
+   yields, when differentiated with respect to `angle', the matrix
+<P>
+ 
+<PRE>
+   +-                             -+
+   |  0         0           0      |
+   |  0   -sin(angle)  cos(angle)  |
+   |  0   -cos(angle) -sin(angle)  |
+   +-                             -+
+</PRE>
+   The routine drotat_c is useful for differentiating rotations that are
+   defined by time-varying Euler angles. For example, if the rotation `r'
+   is defined by
+<P>
+ 
+<PRE>
+   r = [ Twist ]    [ pi/2 - Dec ]    [ pi/2 + RA ]
+                3                 1                3
+</PRE>
+   where RA, Dec, and Twist are time-dependent, then if we make the
+   abbreviations
+<P>
+ 
+<PRE>
+   A(Twist) = [ Twist ]
+                       3
+ 
+   B(Dec)   = [ pi/2 - Dec ]
+                            1
+ 
+   C(RA)    = [ pi/2 + RA ]
+                           3
+</PRE>
+   we can write
+<P>
+ 
+<PRE>
+   d(r)            d(A)     d(Twist)
+   ----  =       -------- * --------       *     B     *      C
+    dt           d(Twist)      dt
+ 
+                                     d(B)    - d(Dec)
+             +       A    *         ------ * --------  *      C
+                                    d(Dec)      dt
+ 
+                                                 d(C)     d(RA)
+             +       A    *        B       *     ----- * -------
+                                                 d(RA)      dt
+</PRE>
+   The derivatives of A, B, and C can be found using drotat_c.
+<P>
+ 
+<BR><BR>
+<A NAME="State transformations"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> State transformations
+</H3><P><BR><BR>
+   Transforming state vectors between inertial and non-inertial coordinates
+   requires the derivative of the rotation that relates the two frames: Let
+<P>
+ 
+<PRE>
+   p (t)
+    I
+</PRE>
+   be a position vector referenced to an inertial frame ``I,'' and let
+<P>
+ 
+<PRE>
+   p (t)
+    N
+</PRE>
+   be the equivalent position vector referenced to a non-inertial frame
+   ``N.'' If r(t) is the transformation from frame I to N at time t, then
+   the two vectors are related as follows:
+<P>
+ 
+<PRE>
+   p (t)  =  r(t) p (t)
+    N              I
+</PRE>
+   Therefore, the derivatives of the position vectors satisfy
+<P>
+ 
+<PRE>
+   d [ p (t) ]               d [ p (t) ]
+        N                         I              d [ r(t) ]
+   -----------   =   r(t) *  -----------    +    ----------  *  p (t)
+       dt                        dt                  dt          I
+</PRE>
+   It's well to note that although `r'(t) may vary slowly, the second term
+   in the above equation is not necessarily insignificant. For example, if
+   `r'(t) describes a transformation between an inertial frame and a
+   body-centered frame that uses a body-center-to-Sun vector to define one
+   of its coordinate axes, then for any point that is fixed on this axis,
+   the two addends above have equal and opposite magnitude. In particular,
+   if the fixed point is the location of the Sun, the magnitude of the
+   second addend is (ignoring the velocity of the Sun with respect to the
+   inertial frame) that of the inertially referenced velocity of the body
+   used to define the body-centered frame.
+<P>
+ 
+   CSPICE provides routines to transform states between inertial frames and
+   body-fixed planetocentric frames. The routine <a href="../cspice/tisbod_c.html">tisbod_c</a> returns the 6x6
+   transformation matrix required to transform inertially referenced state
+   vectors to body-fixed planetocentric coordinates. If `ref' is the name
+   of the inertial frame of interest, `body' is the NAIF integer code of a
+   body defining a body-fixed planetocentric frame, and `et' is ephemeris
+   time used to define the body-fixed frame, then the call
+<P>
+ 
+<PRE>
+   <a href="../cspice/tisbod_c.html">tisbod_c</a> ( ref, body, et, tsipm );
+</PRE>
+   returns `tsipm', the desired 6x6 state transformation matrix. A state
+   vector `s' can be transformed to the body-fixed state vector `sbfixd' by
+   the function call
+<P>
+ 
+<PRE>
+   <a href="../cspice/mxvg_c.html">mxvg_c</a> ( tsipm, s, 6, 6, sbfixd );
+</PRE>
+   Since the inverse of a state transformation matrix is not simply its
+   transpose, CSPICE provides the utility routine invstm_c to perform the
+   inversion. If `m' is a state transformation matrix, the inverse matrix
+   `minv' can be obtained via the function call
+<P>
+ 
+<PRE>
+   invstm_c ( m, minv );
+</PRE>
+<BR><BR>
+<A NAME="Validating a rotation matrix"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Validating a rotation matrix
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   <a href="../cspice/isrot_c.html">isrot_c</a> is a logical function that indicates whether a matrix is a valid
+   rotation matrix. The criteria for validity are:
+<P>
+ 
+<UL>
+<TT>--</TT> The columns of the matrix are unit vectors, within a specified tolerance.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> The determinant of the matrix formed by unitizing the columns of the input
+matrix is 1, within a specified tolerance. This criterion ensures that the
+columns of the matrix are nearly orthogonal, and that they form a
+right-handed basis.
+<BR><BR></UL>
+   We might use <a href="../cspice/isrot_c.html">isrot_c</a> as follows:
+<P>
+ 
+<PRE>
+      /*
+      Set values for the column norm and determinant tolerances
+      ntol and dtol:
+      */
+ 
+      ntol = 1.e-7;
+      dtol = 1.e-7;
+ 
+      if ( ! <a href="../cspice/isrot_c.html">isrot_c</a> ( m, ntol, dtol )   )
+      {
+         [perform error handling]
+      }
+      else
+      {
+         <a href="../cspice/m2q_c.html">m2q_c</a> ( m, q );
+              .
+              .
+              .
+      }
+</PRE>
+<BR><BR>
+<A NAME="Tutorial introduction to rotations"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Tutorial introduction to rotations
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   This tutorial is intended to bridge the gap between knowing linear
+   algebra and understanding rotations. If you haven't reached the gap yet,
+   consult reference [2], or any reasonable textbook on the subject.
+<P>
+ 
+   In this section, we make some assertions that we don't prove. Our goal
+   is to supply you with the most important information first, and fill in
+   the details later. Proofs are supplied only when they're instructive and
+   not too distracting. The longer or more difficult proofs are deferred to
+   the ``Mathematical road map'' chapter.
+<P>
+ 
+<BR><BR>
+<A NAME="A comment of the heuristic variety"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> A comment of the heuristic variety
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   If you're going to read the rest of this tutorial, you're going to see a
+   lot of definitions, symbol manipulation, and proofs. This information
+   may be more accessible if you have some kind of reasonable mental model
+   of rotations; then you can test our claims against your model.
+<P>
+ 
+   We offer the following model: Take a soccer ball, put two fingers on
+   diametrically opposed points on the ball, and rotate the ball through
+   some angle, keeping your fingers in place. What you use to rotate the
+   ball is up to you.
+<P>
+ 
+   Well, that's it. That's the effect of a rotation on a soccer ball. Now
+   you're equipped to answer some questions about rotations. Do rotations
+   preserve inner products of vectors? That is, is it true that for vectors
+   u and v, and a rotation R,
+<P>
+ 
+<PRE>
+   &lt; R u,  R v &gt;  =  &lt; u, v &gt; ?
+</PRE>
+   Well, presume that your soccer ball is centered at the origin, and mark
+   the ball where u and v, or extensions of them, intercept the surface
+   (perhaps you could hold a marker pen between your teeth). Does rotating
+   the ball change the angular separation of the marks? No. So rotations
+   preserve angular separation. Does rotating the ball change the norm of u
+   or of v? No. So rotations preserve both angular separation and norms,
+   and hence inner products.
+<P>
+ 
+   Do rotations preserve cross products? For vectors u and v, is it true
+   that
+<P>
+ 
+<PRE>
+   ( R u )  x  ( R v )  =  R ( u x v )?
+</PRE>
+   Mark the intercepts of u, v, and u x v on the soccer ball. After you
+   rotate the ball, does the intercept mark of u x v still lie at the right
+   place, relative to the u and v intercept marks? Yes. Since we already
+   know that rotations preserve norms, we can conclude that they preserve
+   cross products as well.
+<P>
+ 
+   The soccer ball model shows that rotations preserve geometrical
+   relationships between vectors.
+<P>
+ 
+<BR><BR>
+<A NAME="Definition of ``rotation''"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Definition of ``rotation''
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Actually, we present three definitions of the term ``rotation.'' What
+   for? Having more than one way of knowing that a mapping is a rotation
+   makes it easier to check whether any particular mapping is a rotation or
+   not. Some properties of rotations are easier to derive from one
+   definition than from another.
+<P>
+ 
+<BR><BR>
+<A NAME="Definition 1"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Definition 1
+</H3><P><BR><BR>
+   A ``rotation'' R is a linear transformation defined on E3 that has the
+   following properties:
+<P>
+ 
+<UL>
+<TT>--</TT> R preserves norms: if v is a vector, then
+<BR><BR></UL>
+<PRE>
+   || R(v) ||  =  ||v||
+</PRE>
+<UL>
+<TT>--</TT> R preserves cross products: if a and b are vectors, then
+<BR><BR></UL>
+<PRE>
+   R ( a x b )  =  ( R a )  x  ( R b ).
+</PRE>
+<BR><BR>
+<A NAME="Definition 2"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Definition 2
+</H3><P><BR><BR>
+   A ``rotation' R is a mapping defined on E3 that satisfies definition
+   (1), and also has the property:
+<P>
+ 
+<UL>
+<TT>--</TT> R keeps some vector (called the rotation axis) fixed. That is, if n is the
+rotation axis, then
+<BR><BR></UL>
+<PRE>
+   R(n) = n.
+</PRE>
+<UL>
+<TT>&#32;&#32;</TT> Since R is linear, the entire line containing n is fixed.
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Definition 3"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Definition 3
+</H3><P><BR><BR>
+   A rotation R is a linear mapping defined on E3 that has the following
+   properties:
+<P>
+ 
+<UL>
+<TT>--</TT> R preserves distances on the unit sphere.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> R keeps exactly two points on the unit sphere fixed, or else R is the
+identity.
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> This property rules out the possibility that R is a ``reflection.''
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Uses of the definitions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Uses of the definitions
+</H3><P><BR><BR>
+   Definition (1) is useful for checking that a mapping is a rotation,
+   because there's not much to check.
+<P>
+ 
+   Definition (2) obviously implies definition (1). Less obviously,
+   definition (1) implies definition (2). This had better be true if
+   definition (1) is valid, since we expect rotations to have rotation
+   axes. In the ``Mathematical road map'' chapter, we prove that the two
+   definitions are equivalent.
+<P>
+ 
+   Definition (3) is a mathematical paraphrase of our soccer ball model of
+   rotations.
+<P>
+ 
+<BR><BR>
+<A NAME="Definition of ``rotation'' and ``orthogonal'' matrix"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Definition of ``rotation'' and ``orthogonal'' matrix
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   A ``rotation matrix'' M is a 3 by 3 matrix whose columns form an
+   orthonormal set, and whose third column is the cross product of the
+   first two. Given a rotation R and an orthonormal basis B, the matrix
+   representation of R relative to B is a rotation matrix.
+<P>
+ 
+   Any matrix whose columns form an orthonormal set is called an
+   ``orthogonal'' matrix.
+<P>
+ 
+<BR><BR>
+<A NAME="Rotations preserve inner products"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Rotations preserve inner products
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   This section is for those who do not feel comfortable with soccer ball
+   arguments.
+<P>
+ 
+   Our definition of ``rotation'' says that rotations preserve norms of
+   vectors. That is, if R is a rotation and v is a vector, then
+<P>
+ 
+<PRE>
+   || R(v) ||  =  || v ||.
+</PRE>
+   Preserving norms also implies the seemingly stronger property of
+   preserving inner products: if R preserves norms and u, v are vectors,
+   then
+<P>
+ 
+<PRE>
+                      2               2
+   ||  R ( u - v )  ||  =  || u - v ||
+ 
+ 
+                        =  &lt; u - v,  u - v &gt;
+ 
+                                  2                        2
+                        =  || u ||  - 2 &lt; u, v &gt;  + || v ||,
+</PRE>
+   and also
+<P>
+ 
+<PRE>
+                      2
+   ||  R ( u - v )  ||  =  &lt; R ( u - v ),  R ( u - v ) &gt;
+ 
+ 
+                        =  &lt; R(u) - R(v),  R(u) - R(v) &gt;
+ 
+                                     2               2
+                        =  || R(u) ||   +  || R(v) ||
+ 
+                                       -  2 &lt; R u, R v &gt;
+ 
+                                  2             2
+                        =  || u ||   +   || v ||
+ 
+                                       -  2 &lt; R u, R v &gt;
+</PRE>
+   so
+<P>
+ 
+<PRE>
+   &lt; R(u), R(v) &gt;       =   &lt; u, v &gt;.
+</PRE>
+   So rotations really do preserve inner products. In particular, for any
+   orthonormal basis, the images of the basis vectors under a rotation are
+   also an orthonormal set. Then rotation matrices, expressed relative to
+   an orthonormal basis, are in fact orthogonal, as claimed.
+<P>
+ 
+<BR><BR>
+<A NAME="Inverses of rotation matrices"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Inverses of rotation matrices
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   We've seen that the columns of a rotation matrix R form an orthonormal
+   set. Since the (i,j) entry of
+<P>
+ 
+<PRE>
+    T
+   R  R
+</PRE>
+   is the inner product of the ith column of R and the jth column of R, all
+   entries of the product are zero except for those on the main diagonal,
+   and the entries on the main diagonal are all 1. So
+<P>
+ 
+<PRE>
+    T
+   R  R  =  I.
+</PRE>
+   If A and B are square matrices with real or complex entries, it's a fact
+   that if
+<P>
+ 
+<PRE>
+   A B = I
+</PRE>
+   then
+<P>
+ 
+<PRE>
+   B A = I.
+</PRE>
+   We won't prove this (the ``Nullity and Rank'' theorem is useful, if you
+   wish to do so). But this result implies that
+<P>
+ 
+<PRE>
+      T
+   R R  = I,
+</PRE>
+   given the previous result.
+<P>
+ 
+   This shows that the rows of R form an orthonormal set as well, and that
+   the transpose of R is also a rotation matrix.
+<P>
+ 
+<BR><BR>
+<A NAME="Composition of rotations"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Composition of rotations
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   If we multiply a sequence of rotation matrices, is the result a rotation
+   matrix? Equivalently, if we compose a sequence of rotations, is the
+   resulting mapping a rotation?
+<P>
+ 
+   What does our soccer ball model say? We can rotate the ball as many
+   times as we like, changing the rotation axis each time, without changing
+   the distance of any surface point from the center, so norms are
+   preserved. Similarly, after marking the intercepts of u, v, and u x v on
+   the surface, we can perform any sequence of rotations without changing
+   the position of the u x v intercept mark relative to those of u and v.
+   So cross products are preserved. That's all we need to verify that the
+   composition of a sequence of rotations is a rotation. It follows that
+   the product of a sequence of rotation matrices is a rotation matrix.
+<P>
+ 
+   If you don't agree that that's all we need, we can present the same
+   argument using the usual symbols:
+<P>
+ 
+   Suppose R1 and R2 are rotation mappings, and for any vector v,
+<P>
+ 
+<PRE>
+   R3(v) = R2 ( R1(v) ).
+</PRE>
+   Then for any vector v, we have
+<P>
+ 
+<PRE>
+   || R3(v) ||  =  || R2 ( R1 v ) ||
+ 
+                =  || R1( v ) ||
+ 
+                =  || v ||.
+</PRE>
+   So R3 preserves norms.
+<P>
+ 
+   If u and v are vectors, then
+<P>
+ 
+<PRE>
+   R3 ( u x v ) =  R2 ( R1 ( u x v )  )
+ 
+                =  R2 ( R1(u)  x  R1(v) )
+ 
+                =  (  R2 ( R1(u) )   x   R2 ( R1(v) )  )
+ 
+                =  R3(u)  x  R3(v),
+</PRE>
+   so R3 preserves cross products. We've used only the definition of R3 and
+   the fact that R2 and R1 preserve cross products in this proof.
+<P>
+ 
+   We conclude that R3 is a rotation. We can extend the result to the
+   product of a finite number of rotations by mathematical induction; the
+   argument we've made is almost identical to the induction step.
+<P>
+ 
+<BR><BR>
+<A NAME="Coordinate transformations"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Coordinate transformations
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Change-of-basis transformations between right-handed, orthonormal bases
+   are rotations. You can verify this using our first definition of
+   rotations. In particular, the inertial coordinate system transformations
+   available in CSPICE are all rotations.
+<P>
+ 
+   How do we transform a vector v from one coordinate system to another?
+   This result really belongs to linear algebra, but we'll state it here
+   because it seems to come up a lot.
+<P>
+ 
+   Given two vector space bases,
+<P>
+ 
+<PRE>
+   B1 = { e1, e2, e3 },   B2 = { u1, u2, u3 },
+</PRE>
+   and a vector v that has components ( v1, v2, v3 ) relative to B1, we
+   wish to express v relative to B2. We can say that
+<P>
+ 
+<PRE>
+   v  =  x1 u1 +  x2 u2  +  x3 u3,
+</PRE>
+   where the x's are unknowns. Let M be the matrix whose columns are u1,
+   u2, and u3, represented relative to basis B1. M represents the linear
+   transformation T defined by
+<P>
+ 
+<PRE>
+   T  (e1) = u1, T(e2) = u2, T(e3) = u3.
+</PRE>
+   Then since
+<P>
+ 
+<PRE>
+    -1         -1
+   T  (v)  =  T  ( x1 u1 +  x2 u2  +  x3 u3 )
+ 
+           =     ( x1 e1 +  x2 e2  +  x3 e3 ),
+</PRE>
+   we see that
+<P>
+ 
+<PRE>
+    -1
+   M  v  = ( x1, x2, x3 ).
+</PRE>
+   So we've found the components of v, relative to basis B2.
+<P>
+ 
+   In the case where B1 and B2 are orthonormal bases, the matrix M is
+   orthogonal. So we have
+<P>
+ 
+<PRE>
+    T
+   M  v  = ( x1, x2, x3 ).
+</PRE>
+   Conversely, if M is the matrix that transforms vectors from orthonormal
+   basis B1 to orthonormal basis B2, then the rows of M are the basis
+   vectors of B2.
+<P>
+ 
+   For example, if M is the matrix that transforms vectors from J2000
+   coordinates to body equator and prime meridian coordinates, then the
+   first row is the vector, expressed in J2000 coordinates, that points
+   from the body center to the intersection of the prime meridian and body
+   equator. The third row is the vector, expressed in J2000 coordinates,
+   that points from the body center toward the body's north pole.
+<P>
+ 
+<BR><BR>
+<A NAME="Rotation of vectors in the plane"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Rotation of vectors in the plane
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   How do we rotate a two-dimensional vector v by theta radians? Trivial as
+   this problem may seem, it's probably worth your while to get a firm grip
+   on its solution. When you've understood it, you've almost understood
+   three-dimensional rotations.
+<P>
+ 
+   We can assume that v is a unit vector; since rotations are linear, it's
+   easy to extend the result to vectors of any length.
+<P>
+ 
+   Now, if v is (1,0), the result of the rotation will be
+<P>
+ 
+<PRE>
+   ( cos(theta),  sin(theta) ).
+</PRE>
+   How does this help us if v is an arbitrary unit vector? Given a unit
+   vector v, let v' be the vector perpendicular to v, obtained by rotating
+   v by pi/2. Now v and v' form an orthonormal basis, and relative to this
+   basis, v has coordinates (1,0). But we've already found out what we get
+   by rotating v by theta radians: relative to our new basis, the result
+   must be
+<P>
+ 
+<PRE>
+   ( cos(theta), sin(theta) ).
+</PRE>
+   Relative to our original basis, this vector is
+<P>
+ 
+<PRE>
+   cos(theta) v  +  sin(theta) v'
+</PRE>
+   This is the result we're looking for: ``If you rotate a vector v by
+   theta radians, you end up with cos(theta) v plus sin(theta) v,'' where
+   v' is v, rotated by pi/2.
+<P>
+ 
+   Scaling v does not affect this result.
+<P>
+ 
+   A consequence of this result is that the mapping R that rotates vectors
+   by theta radians is represented by the matrix
+<P>
+ 
+<PRE>
+   +-                        -+
+   |  cos(theta)  -sin(theta) |
+   |                          |.
+   |  sin(theta)   cos(theta) |
+   +-                        -+
+</PRE>
+   It is useful to note that R has this exact representation relative to
+   any orthonormal basis where the second vector is obtained from the first
+   by a rotation of pi/2.
+<P>
+ 
+<BR><BR>
+<A NAME="A canonical representation for rotations"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> A canonical representation for rotations
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Suppose we have a rotation R, defined in three-dimensional space, that
+   rotates vectors by angle theta about unit vector n. For an arbitrary
+   vector r, we can break r up into two orthogonal components: one parallel
+   to n and one perpendicular to n. We can call these components rParallel
+   and rPerp.
+<P>
+ 
+   The two-dimensional diagram below shows this decomposition. All of the
+   vectors lie in the plane containing r and n.
+<P>
+ 
+<PRE>
+                \           . rParallel
+                 \          .
+                  \         .
+                r  \        .
+                    \       .
+                     \      .
+                      \     .
+                       \    ^
+                        \   |
+                         \  |  n
+                          \ |
+                 ..........\|
+                rPerp
+</PRE>
+   Now, what does R do to vectors that are perpendicular to n? Since R
+   rotates each vector about n, if a vector v is perpendicular to n, then
+   R(v) is perpendicular to n as well (remember that rotations preserve
+   inner products, and orthogonality in particular). So rPerp just gets
+   rotated in the plane perpendicular to n. We know from the last section
+   how to find R(rPerp): if we let rPerp' be the vector obtained by
+   rotating rPerp by pi/2 about n, then
+<P>
+ 
+<PRE>
+   R(rPerp) = cos(theta) rPerp  +  sin(theta) rPerp'
+</PRE>
+   We will also want to know what R(rPerp') is. Since rotating rPerp' by
+   pi/2 about n yields -rPerp, applying our familiar formula to rPerp'
+   gives us
+<P>
+ 
+<PRE>
+   R(rPerp') = cos(theta) rPerp'  -  sin(theta) rPerp.
+</PRE>
+   Now, since n, rPerp, and rPerp' are mutually orthogonal, these vectors
+   form a basis. Since we can scale r so that rPerp has norm 1, and since
+   rPerp' has the same norm as rPerp, we may assume that the basis is
+   actually orthonormal.
+<P>
+ 
+   The matrix of R relative to this basis is
+<P>
+ 
+<PRE>
+   +-                              -+
+   |  1         0            0      |
+   |                                |
+   |  0     cos(theta)  -sin(theta) |.
+   |                                |
+   |  0     sin(theta)   cos(theta) |
+   +-                              -+
+</PRE>
+   Since the rotation we're representing is arbitrary, we've shown that
+   every rotation can be represented by a matrix of the above form.
+   Equivalently, every rotation matrix is similar to one of the above form.
+   This fact justifies the use of the term ``canonical form.''
+<P>
+ 
+   The canonical form we've found shows why three-dimensional rotations are
+   very much like two-dimensional rotations: The effect of a
+   three-dimensional rotation on any vector is to rotate the component of
+   that vector that is normal to the rotation axis, and leave the component
+   parallel to the rotation axis fixed.
+<P>
+ 
+   This rotation matrix is a useful ``model'' to keep in mind when dealing
+   with rotations because of its particularly simple form. It's easy to
+   read off some types of information directly from this matrix.
+<P>
+ 
+   Some examples:
+<P>
+ 
+<UL>
+<TT>--</TT> The trace of the above matrix is 1 + 2 cos(theta). Since the trace of a
+matrix is invariant under similarity transformations, every rotation matrix
+has trace equal to 1 + 2 cos(theta). So we can easily find the rotation
+angle of any rotation matrix.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Every rotation has 1 as one of its eigenvalues. We already knew that, but
+there it is, sitting alone in its one-dimensional diagonal block. The other
+eigenvalues are complex unless the rotation angle is a multiple of pi.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Every rotation is an orthogonal mapping, that is, orthogonal vectors map to
+orthogonal vectors. This has to be true because the canonical form is an
+orthogonal matrix, represented relative to an orthonormal basis.
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Rotation axis and angle0"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Rotation axis and angle
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Our soccer ball model shows that a rotation has a fixed vector, called
+   the ``axis.'' Now if the vector n is fixed by R, then -n is fixed as
+   well, so the direction of the rotation axis is not unique.
+<P>
+ 
+   Given a rotation R and a vector v, normal to the rotation axis n of R,
+   the angle between v and R(v), measured counterclockwise around n, is the
+   rotation angle of R. We see that the rotation angle depends on the
+   direction of the axis: if we pick -n as the axis, we change the sign of
+   the angle.
+<P>
+ 
+   Note that while the rotation axis and angle of a rotation are not
+   uniquely defined, a choice of axis and angle do determine a unique
+   rotation.
+<P>
+ 
+   How do we find the rotation matrix R that rotates vectors by angle theta
+   about the unit vector n? If n is
+<P>
+ 
+<PRE>
+   n = (n1, n2, n3),
+</PRE>
+   then
+<P>
+ 
+<PRE>
+                                      2
+   R  =   I   +   ( 1 - cos(theta) ) N   +   sin(theta) N,
+</PRE>
+   where
+<P>
+ 
+<PRE>
+       +-             -+
+       |  0   -n3   n2 |
+       |               |
+   N = |  n3   0   -n1 |.
+       |               |
+       | -n2   n1   0  |
+       +-             -+
+</PRE>
+   How do we recover the rotation angle and axis of a rotation R from a
+   corresponding rotation matrix, M?
+<P>
+ 
+   We've already seen in the ``canonical form'' section that the rotation
+   angle is
+<P>
+ 
+<PRE>
+   ACOS (  ( Trace(M) - 1 ) / 2  ).
+</PRE>
+   If the rotation angle is not zero or pi, then the relation
+<P>
+ 
+<PRE>
+        T
+   M - M  = 2 sin(theta) N
+</PRE>
+   allows us to recover the rotation axis n from M, while if the rotation
+   angle is pi, we have
+<P>
+ 
+<PRE>
+              2
+   M = I + 2 N,
+</PRE>
+   again determining n.
+<P>
+ 
+   In the ``Mathematical road map'' chapter, we'll verify these assertions.
+<P>
+ 
+<BR><BR>
+<A NAME="Time-dependent coordinate transformations"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Time-dependent coordinate transformations
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Suppose we have two bases, B1 and B2, where the elements of B2,
+   expressed relative to B1, are time dependent:
+<P>
+ 
+<PRE>
+   B2 = { v1(t), v2(t), v3(t) }.
+</PRE>
+   An example of a time-dependent coordinate transformation is the
+   transformation from J2000 to body equator and prime meridian
+   coordinates.
+<P>
+ 
+   If R(t) transforms vectors from basis B1 to basis B2, the basis vectors
+   of B2 are the rows of the matrix R(t).
+<P>
+ 
+   Let p(t) and p'(t) be position and velocity vectors expressed relative
+   to B1. What is the corresponding velocity, expressed relative to B2? We
+   know that p(t) has coordinates
+<P>
+ 
+<PRE>
+   R(t) p(t)
+</PRE>
+   relative to B2, so the time derivative of R(p(t)) is
+<P>
+ 
+<PRE>
+   R(t) p'(t)  +  R'(t) p(t),
+</PRE>
+   relative to B2.
+<P>
+ 
+   If R(t) is expressed as a product of the form
+<P>
+ 
+<PRE>
+   R(t) = [ w1(t) ]   [ w2(t) ]   [ w3(t) ] ,
+                   i           j           k
+</PRE>
+   then
+<P>
+ 
+<PRE>
+   R'(t)  =     [ w1(t) ]'  [ w2(t) ]   [ w3(t) ]
+                         i           j           k
+ 
+             +  [ w1(t) ]   [ w2(t) ]'  [ w3(t) ]
+                         i           j           k
+ 
+             +  [ w1(t) ]   [ w2(t) ]   [ w3(t) ]'
+                         i           j           k
+</PRE>
+   Since we know the explicit form of the factors (given in the
+   ``Notation'' section), we can compute R'(t).
+<P>
+ 
+   We must take care when converting velocity vectors between systems whose
+   bases are related in a time-dependent way. If R(t) varies extremely
+   slowly, it is tempting to ignore the R' term, and in fact this is a
+   valid approximation in some cases. However, since the magnitude of this
+   term is proportional to the magnitude of p, the term can be large when R
+   is quite slowly varying. An example:
+<P>
+ 
+   Let B1 be the basis vectors of the J2000 system, and let
+<P>
+ 
+<PRE>
+   B2  =  { v1(t), v2(t), v3(t) }
+</PRE>
+   be defined as follows: v1(t) is the geometric Jupiter-Sun vector at
+   ephemeris time t, v3(t) is orthogonal to v1(t) and lies in the plane
+   containing v1(t) and Jupiter's pole at time t, and v2(t) is the cross
+   product of v3(t) and v1(t).
+<P>
+ 
+   Let R(t) be the transformation matrix from basis B1 to B2. Then the
+   period of R(t) is 1 Jovian year (we're ignoring movement of Jupiter's
+   pole). Now if p(t) is the Jupiter-Sun vector in J2000 coordinates, then
+   p'(t) is the negative of Jupiter's velocity in J2000 coordinates. But in
+   B2 coordinates, R(t) ( p(t) ) always lies along the x-axis, and if we
+   approximate Jupiter's motion as a circle, then R(p(t))' is the zero
+   vector. So we have the equation
+<P>
+ 
+<PRE>
+   R(t) p'(t)  +  R'(t) p(t)  =  [ R(t)( p(t) ) ]'  =  0,
+</PRE>
+   which implies
+<P>
+ 
+<PRE>
+   R'(t)p(t)   =   - R(t) p'(t).
+</PRE>
+   So in this case, the term involving R' has the same magnitude as the
+   term involving R, even though R is slowly varying.
+<P>
+ 
+<BR><BR>
+<A NAME="Euler angles"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Euler angles
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Given a rotation matrix M (usually representing a coordinate
+   transformation), we occasionally have the need to express it as the
+   product
+<P>
+ 
+<PRE>
+   M  =  [w1]    [w2]    [w3]  .
+             i1      i2      i3
+</PRE>
+   The angles w1, w2, and w3 are called ``Euler angles.''
+<P>
+ 
+   It is not necessarily obvious that this ``factorization'' is possible.
+   It turns out that as long as i2 does not equal i1 or i3, it is possible,
+   for any rotation matrix M. In the ``Mathematical road map'' chapter, we
+   exhibit the formulas for calculating w1, w2, and w3, given M and i1, i2,
+   and i3.
+<P>
+ 
+<BR><BR>
+<A NAME="Quaternions0"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Quaternions
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Quaternions are four dimensional vectors, on which a particular kind of
+   arithmetic is defined. The quaternions that have norm equal to 1 are
+   called ``unit quaternions.''
+<P>
+ 
+   Unit quaternions may be associated with rotations in the following way:
+   if a rotation R has unit vector n = (n1, n2, n3) as an axis and w as a
+   rotation angle, then we represent R by
+<P>
+ 
+<PRE>
+   Q = ( cos(w/2),  sin(w/2) n1,  sin(w/2) n2,  sin(w/2) n3 ).
+</PRE>
+   As you might suspect, this association is not unique: substituting (w +
+   2*pi) for w, we see that -Q is also a representation for R.
+<P>
+ 
+   If we choose the rotation axis and angle of R so that the angle lies in
+   [0, pi], then there is a unique quaternion representing R, except in the
+   case where R is a rotation by pi radians.
+<P>
+ 
+<BR><BR>
+<A NAME="Quaternion arithmetic"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Quaternion arithmetic
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   CSPICE does not currently contain any routines that make use of
+   quaternion arithmetic. Eventually, CSPICE may use quaternion
+   multiplication to compose rotations, since quaternion arithmetic is more
+   efficient than matrix multiplication. At present, this section is merely
+   for the curious.
+<P>
+ 
+<BR><BR>
+<A NAME="Definitions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Definitions
+</H3><P><BR><BR>
+   There are two binary operations defined on quaternions: addition and
+   multiplication.
+<P>
+ 
+   The main interest of quaternion multiplication is that we can actually
+   carry out composition of rotations using the multiplication defined on
+   the quaternions. If quaternions Q1 and Q2 represent rotations R1 and R2,
+   then Q2*Q1 represents R2(R1). So the mapping from unit quaternions to
+   rotations is a group homomorphism, where the ``multiplication''
+   operation on the rotations is functional composition.
+<P>
+ 
+   Quaternion addition is simple vector addition. Multiplication is a
+   little more complicated. Before defining it, we're going to introduce a
+   new notation for quaternions that makes it easier to deal with products.
+<P>
+ 
+   The quaternion
+<P>
+ 
+<PRE>
+   Q = ( Q0, Q1, Q2, Q3 )
+</PRE>
+   can be represented as
+<P>
+ 
+<PRE>
+   Q0 + ( Q1, Q2, Q3 ),
+</PRE>
+   or
+<P>
+ 
+<PRE>
+   s + v,
+</PRE>
+   where s represents the ``scalar'' Q0 and v represents the ``vector''
+<P>
+ 
+<PRE>
+   ( Q1, Q2, Q3 ).
+</PRE>
+   We define the ``conjugate'' of the quaternion
+<P>
+ 
+<PRE>
+   q = s + v
+</PRE>
+   as
+<P>
+ 
+<PRE>
+    *
+   q  = s - v.
+</PRE>
+   Given two quaternions,
+<P>
+ 
+<PRE>
+   q1 = s1 + v1,  q2 = s2 + v2,
+</PRE>
+   we define the product q1 * q2 as
+<P>
+ 
+<PRE>
+   ( s1 * s2 - &lt; v1, v2 &gt; )  +  ( s1 * v2  +  s2 * v1  +  v1 x v2 ).
+</PRE>
+   We've grouped the ``scalar'' and ``vector'' portions of the product.
+<P>
+ 
+<BR><BR>
+<A NAME="Basic properties of multiplication"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Basic properties of multiplication
+</H3><P><BR><BR>
+   Let's check out a few of the properties of the multiplication formula.
+<P>
+ 
+   Is multiplication commutative? No; if s1 and s2 above are zero, then the
+   product is
+<P>
+ 
+<PRE>
+   - &lt; v1, v2 &gt;   +   v1 x v2,
+</PRE>
+   which is not commutative. However, multiplication is associative: given
+   three quaternions q1, q2, and q3, we have
+<P>
+ 
+<PRE>
+   q3 * ( q2 * q1 ) = ( q3 * q2 ) * q1.
+</PRE>
+   We'll forgo checking this; it's messy but straightforward. If you do
+   check it, the vector identities
+<P>
+ 
+<PRE>
+    A x ( B x C ) =  &lt; A, C &gt; B  -  &lt; A, B &gt; C
+ 
+   ( A x B ) x C  =  &lt; C, A &gt; B  -  &lt; C, B &gt; A
+</PRE>
+   will be useful.
+<P>
+ 
+   What's the product of q and its conjugate? It comes out to
+<P>
+ 
+<PRE>
+          2
+   || q ||.
+</PRE>
+   What's the conjugate of the product
+<P>
+ 
+<PRE>
+   q1 * q2,
+</PRE>
+   where q1 and q2 are as defined above? The product formula allows us to
+   verify that the answer is
+<P>
+ 
+<PRE>
+     *     *
+   q2  * q1.
+</PRE>
+<BR><BR>
+<A NAME="Deducing the multiplication formula"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Deducing the multiplication formula
+</H3><P><BR><BR>
+   One really interesting fact about the product formula is that it is a
+   sum of binary operations, each of which is linear (where the
+   coefficients are scalars, not quaternions) in both operands. This
+   implies that the product formula itself is linear in q1 and q2.
+<P>
+ 
+   You can check this: if we scale q1 by x, the product gets scaled by x.
+   The same thing happens if we scale q2. If we replace q1 by the sum of
+   two quaternions, say
+<P>
+ 
+<PRE>
+   q1 = q + q' =  ( s + s' )  +  ( v + v' ),
+</PRE>
+   the product is
+<P>
+ 
+<PRE>
+   q * q2   +   q' * q2.
+</PRE>
+   The analogous result occurs when we replace q2 by a sum of two
+   quaternions.
+<P>
+ 
+   Because of this linearity property, we can define multiplication on a
+   small set of quaternions, and then define multiplication on the whole
+   set of quaternions by insisting that the multiplication operator is
+   linear in both operands. This gives us an equivalent definition of
+   multiplication.
+<P>
+ 
+   To carry out this definition, we first define multiplication on the four
+   quaternions
+<P>
+ 
+<PRE>
+   1 + ( 0, 0, 0 ), which we call ``1,''
+   0 + ( 1, 0, 0 ), which we call ``i,''
+   0 + ( 0, 1, 0 ), which we call ``j,''
+   0 + ( 0, 0, 1 ), which we call ``k.''
+</PRE>
+   We treat ``1'' as a scalar and i, j, and k as vectors, and define the
+   products
+<P>
+ 
+<PRE>
+   1 * v   = v,  for v = i, j, k;
+ 
+   v * v   = -1,  for v = i, j, k;
+ 
+   v1 * v2 = - v2 * v1, for v1, v2 = i, j, k;
+ 
+   i * j   = k;
+   j * k   = i;
+   k * i   = j.
+</PRE>
+   Multiplication of i, j, and k works just like taking cross products.
+<P>
+ 
+   If we now proclaim that multiplication is linear in both operands, then
+   since all quaternions can be expressed as linear combinations of ``1,''
+   i, j, and k, we've defined multiplication on the entire set of
+   quaternions. You can check that this definition of multiplication is
+   consistent with our formula above.
+<P>
+ 
+<BR><BR>
+<A NAME="Composing rotations using quaternions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Composing rotations using quaternions
+</H3><P><BR><BR>
+   There is one last assertion to check: we've said that you can carry out
+   composition of rotations using quaternion multiplication. Let's examine
+   what that means:
+<P>
+ 
+   We've defined a mapping from quaternions to rotations, since the
+   relation
+<P>
+ 
+<PRE>
+   Q = ( cos(w/2),  sin(w/2) n1,  sin(w/2) n2,  sin(w/2) n3 )
+</PRE>
+   allows us to recover w and the axis ( n1, n2, n3 ), hence the
+   corresponding rotation. Now suppose we have two quaternions Q1 and Q2
+   that represent rotations R1 and R2, respectively. We're claiming that
+   the product Q2 * Q1 represents R2(R1). So, we should be able to recover
+   the rotation axis and angle of R2(R1) from the quaternion Q2 * Q1. In
+   the ``Mathematical road map' chapter, we will verify this claim.
+<P>
+ 
+<BR><BR>
+<A NAME="Mathematical road map"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Mathematical road map
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   The purpose of this chapter is to familiarize you with the mathematical
+   ideas essential to dealing with rotations. If you understand the
+   relevant mathematics, you are in a position to judge the merits of
+   alternative software designs based on CSPICE routines. If you don't
+   understand the mathematics, you can still build programs that work by
+   paying careful attention to function interface specifications, but the
+   design process is more error-prone, and you're unlikely to hit upon
+   efficient and elegant solutions.
+<P>
+ 
+   The difference between the two perspectives is a bit like the difference
+   between having a set of directions to get from point A to point B, and
+   having a road map of the entire area.
+<P>
+ 
+   This chapter is not organized sequentially, since there is little
+   logical dependence of one section on another. It is simply a collection
+   of discussions.
+<P>
+ 
+<BR><BR>
+<A NAME="Rotation of a vector about an axis"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Rotation of a vector about an axis
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Suppose we have a unit vector n, and we wish to rotate a vector r about
+   n by an angle of theta radians. What's the resulting vector?
+<P>
+ 
+   As in the tutorial discussion of the canonical form for rotations, we
+   can express r as the sum of two orthogonal components:
+<P>
+ 
+<PRE>
+   r  =  rParallel + rPerp.
+</PRE>
+   Let's give the name rPerp' to the vector obtained by rotating rPerp by
+   pi/2 radians about n.
+<P>
+ 
+   We know, from the results of the ``canonical form'' section, that
+   applying our rotation to r will yield
+<P>
+ 
+<PRE>
+   rParallel  +  cos(theta) rPerp  +  sin(theta) rPerp'
+</PRE>
+   So all we have to do is find rPerp and rPerp' in terms of r, n, and
+   theta.
+<P>
+ 
+   It turns out that rPerp' is precisely n x r, since n x r is parallel to
+   rPerp' and has the same magnitude as rPerp, namely
+<P>
+ 
+<PRE>
+   |r| sin(phi),
+</PRE>
+   where phi is the angle between r and n. Rotating rPerp' by another pi/2
+   radians yields -rPerp, so
+<P>
+ 
+<PRE>
+   rPerp = -n x ( n x r ).
+</PRE>
+   In the picture below,
+<P>
+ 
+<UL>
+<TT>--</TT> The diagonal, dashed line segment represents r.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> The short, vertical, dashed line segment represents n.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> The dotted, vertical extension of n represents the projection of r onto n.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> The dotted, horizontal segments represent
+<BR><BR></UL>
+<PRE>
+   n x ( n x r)
+</PRE>
+<UL>
+<TT>&#32;&#32;</TT> on the right, and
+<BR><BR></UL>
+<PRE>
+   - n x ( n x r)
+</PRE>
+<UL>
+<TT>&#32;&#32;</TT> on the left.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> The dotted, diagonal segment represents n x r.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> The little boxes at the intersection of the segments are supposed to
+indicate orthogonality.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> The ugly, little segments with the label ``phi'' between them are supposed
+to indicate the angle phi.
+<BR><BR></UL>
+<PRE>
+                      \           .  rParallel
+                       \    phi --.
+                        \ /       .
+                      r  \        .
+                          \       .
+                           \      .
+                            \     .
+                             \    ^
+                              \   |
+                               \  |    n
+                                \ |_
+     - n x ( n x r )   ...........|_|.........   n  x  ( n x r )
+                                 /_/
+         = rPerp                .                     =  - rPerp
+                               .
+                              .
+                             .  n x r
+ 
+                                     = rPerp'
+</PRE>
+   Now we're ready to compute the image of r under the rotation. It is:
+<P>
+ 
+<PRE>
+         rParallel     +   cos(theta) rPerp
+                       +   sin(theta) rPerp'
+ 
+   =   ( r - rPerp )   +   cos(theta) rPerp
+                       +   sin(theta) rPerp'
+ 
+   =        r          +   ( cos(theta) - 1 )   rPerp
+                       +     sin(theta)         rPerp'
+ 
+   =        r          +   ( 1 - cos(theta) )  ( n x ( n x r ) )
+                       +      sin(theta)       (     n x r     ).
+</PRE>
+   This is what we were after: an expression for the image of r under the
+   rotation, given in terms of r, theta, and n.
+<P>
+ 
+<BR><BR>
+<A NAME="Formation of a rotation matrix from axis and angle"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Formation of a rotation matrix from axis and angle
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   In this section, we derive an expression for a rotation matrix that
+   explicitly relates the matrix to the rotation axis and angle. This
+   expression is valuable for understanding how to find the rotation axis
+   and angle of a rotation matrix, as well as how to build a rotation
+   matrix having a given rotation axis and angle. The problem of finding a
+   quaternion corresponding to a specified rotation matrix is also solved
+   by the expression derived here.
+<P>
+ 
+   What's the rotation matrix R that rotates vectors by theta radians about
+   the vector n? If n is a unit vector, then the result of the last section
+   implies that
+<P>
+ 
+<PRE>
+   R * r  =  r     +   ( 1 - cos(theta) )  ( n x ( n x r ) )
+                   +      sin(theta)       (     n x r     ),
+</PRE>
+   for any vector r. Now, let
+<P>
+ 
+<PRE>
+   n = (n1, n2, n3),
+</PRE>
+   and define the matrix N by
+<P>
+ 
+<PRE>
+       +-             -+
+       |  0   -n3   n2 |
+       |               |
+   N = |  n3   0   -n1 |;
+       |               |
+       | -n2   n1   0  |
+       +-             -+
+</PRE>
+   this definition implies that
+<P>
+ 
+<PRE>
+   N * r = n x r
+</PRE>
+   for all r. So we can rewrite the above expression as
+<P>
+ 
+<PRE>
+   R * r  =  r     +   ( 1 - cos(theta) )  ( N * ( N * r ) )
+                   +      sin(theta)       (     N * r     ),
+</PRE>
+   or
+<P>
+ 
+<PRE>
+                                          2
+   R * r  =  [  I  +  ( 1 - cos(theta) ) N  +  sin(theta) N  ]  r.
+</PRE>
+   Since r is arbitrary, we must have
+<P>
+ 
+<PRE>
+                                      2
+   R  =   I   +   ( 1 - cos(theta) ) N   +   sin(theta) N.
+</PRE>
+   R is the desired matrix.
+<P>
+ 
+<BR><BR>
+<A NAME="Finding the axis and angle of a rotation matrix0"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Finding the axis and angle of a rotation matrix
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The topic is covered in reference [1], so we'll just make a few notes.
+<P>
+ 
+   There are many ways to recover the rotation axis. The most elegant
+   method we know of is presented in [1]. The idea is based on the
+   observation that any rotation matrix R can be expressed by
+<P>
+ 
+<PRE>
+                                      2
+   R  =   I   +   ( 1 - cos(theta) ) N   +   sin(theta) N,
+</PRE>
+   where N is derived from the rotation axis, as in the last section. Now N
+   is skew-symmetric and N squared is symmetric, so
+<P>
+ 
+<PRE>
+        T
+   R - R   =  2 sin(theta) N.
+</PRE>
+   As long as sin(theta) is non-zero, we've found N and hence the axis
+   itself. If theta is pi, we have
+<P>
+ 
+<PRE>
+                   2
+   R  =   I  +  2 N,
+</PRE>
+   which still allows us to recover the axis.
+<P>
+ 
+   In the tutorial section, we showed that the rotation angle can be
+   recovered from the trace of a rotation matrix:
+<P>
+ 
+<PRE>
+   angle = ACOS (  ( trace - 1 ) / 2  ).
+</PRE>
+   If the angle is very small, we will determine it more accurately from
+   the relation
+<P>
+ 
+<PRE>
+        T
+   R - R   =  2 sin(theta) N.
+</PRE>
+<BR><BR>
+<A NAME="Formation of a rotation matrix from a quaternion"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Formation of a rotation matrix from a quaternion
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Since the quaternion gives us a rotation's axis and angle, an earlier
+   discussion in this chapter gives us one way of recovering the rotation
+   matrix: twice the arccosine of the first component of the quaternion
+   gives us the rotation angle, and the rest of the quaternion is the
+   rotation axis, so AXISAR can be used to form the matrix. In this
+   approach, we may want to treat small rotation angles as a special case,
+   since the arccosine function is very inaccurate when the argument is
+   close to 1. We would use the norm of the ``vector'' portion of the
+   quaternion to give us the sine of half the rotation angle instead, and
+   recover the rotation angle from this.
+<P>
+ 
+   There is a fast, accurate solution available. It depends on the formula
+   relating a rotation matrix to its axis and angle, which we derived
+   earlier in the chapter. In this approach, we compute the matrix
+   corresponding to a quaternion, component by component.
+<P>
+ 
+   Define
+<P>
+ 
+<PRE>
+   c = cos(theta/2),
+ 
+   s = sin(theta/2),
+</PRE>
+   and let the quaternion
+<P>
+ 
+<PRE>
+   q  =   c   +  s n
+      =   q0  +  s ( q1, q2, q3 )
+</PRE>
+   represent a rotation R having unit axis vector n and rotation angle
+   theta.
+<P>
+ 
+   If n = ( n1, n2, n3 ), and we define the matrix N by
+<P>
+ 
+<PRE>
+       +-             -+
+       |  0   -n3   n2 |
+       |               |
+   N = |  n3   0   -n1 |,
+       |               |
+       | -n2   n1   0  |
+       +-             -+
+</PRE>
+   then the matrix M representing R is
+<P>
+ 
+<PRE>
+                                      2
+   M  =   I   +   ( 1 - cos(theta) ) N   +   sin(theta) N.
+</PRE>
+   Now we can make the substitutions
+<P>
+ 
+<PRE>
+   sin(theta) = 2 c s,
+ 
+                           2
+   ( 1 - cos(theta) ) = 2 s
+</PRE>
+   to obtain
+<P>
+ 
+<PRE>
+                           2
+   M  =   I   +   2 ( s N )   +   2 c ( s N ).
+</PRE>
+   Substituting the elements of our quaternion into s N, we find
+<P>
+ 
+<PRE>
+                            +-                                     -+
+                            |     2    2                            |
+           +-       -+      | -(q2 + q3 )     q1 q2        q1 q3    |
+           | 1  0  0 |      |                                       |
+           |         |      |                  2    2               |
+   M  =    | 0  1  0 | + 2  |    q1 q2     -(q1 + q3 )     q2 q3    |
+           |         |      |                                       |
+           | 0  0  1 |      |                               2    2  |
+           +-       -+      |    q1 q3        q2 q3     -(q1 + q2 ) |
+                            +-                                     -+
+ 
+                            +-                                     -+
+                            |                                       |
+                            |      0         -q0 q3       q0 q2     |
+                            |                                       |
+                            |                                       |
+                       + 2  |     q0 q3         0        -q0 q1     |,
+                            |                                       |
+                            |                                       |
+                            |    -q0 q2       q0 q1         0       |
+                            +-                                     -+
+</PRE>
+   so
+<P>
+ 
+<PRE>
+       +-                                                          -+
+       |           2    2                                           |
+       | 1 - 2 ( q2 + q3 )    2 (q1 q2 - q0 q3)   2 (q1 q3 + q0 q2) |
+       |                                                            |
+       |                                                            |
+       |                               2    2                       |
+   M = | 2 (q1 q2 + q0 q3)    1 - 2 ( q1 + q3 )   2 (q2 q3 - q0 q1) |.
+       |                                                            |
+       |                                                            |
+       |                                                    2    2  |
+       | 2 (q1 q3 - q0 q2)    2 (q2 q3 + q0 q1)   1 - 2 ( q1 + q2 ) |
+       |                                                            |
+       +-                                                          -+
+</PRE>
+<BR><BR>
+<A NAME="Equivalence of rotation definitions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Equivalence of rotation definitions
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The idea discussed here is used implicitly throughout the CSPICE
+   rotation routines.
+<P>
+ 
+   We wish to prove that definitions (1) and (2) from the ``Definition of
+   rotations'' section of the tutorial are equivalent. To do this, we need
+   to show that a mapping R that satisfies definition (1) also satisfies
+   definition (2). This amounts to showing that R has a fixed subspace of
+   dimension 1, or equivalently, that R has 1 as one of its eigenvalues.
+<P>
+ 
+<BR><BR>
+<A NAME="An algebraic approach"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> An algebraic approach
+</H3><P><BR><BR>
+   We observe that the characteristic polynomial of a rotation is of degree
+   three, and so has either zero or two complex roots, hence at least one
+   real root. Because rotations preserve norms, the magnitudes of all of
+   the roots (eigenvalues), real or complex, are equal to one. So the real
+   roots are 1 or -1. The determinant of any rotation matrix is 1, since
+   the determinant of any 3 by 3 matrix is the dot product of the third
+   column with the cross product of the first and second columns, and for
+   rotations, this cross product is the third column. But the determinant
+   is also the product of the eigenvalues. In the case where all three
+   roots are 1 or -1, we cannot get a product of 1 unless at least one
+   eigenvalue is equal to 1. If there are complex roots, they are complex
+   conjugates, so their product is 1, which implies that the real root must
+   be 1 as well, if the product of all three roots is 1.
+<P>
+ 
+<BR><BR>
+<A NAME="A geometric approach"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> A geometric approach
+</H3><P><BR><BR>
+   Again, we assume that our rotation R satisfies definition (1), and we
+   prove that R has a fixed axis.
+<P>
+ 
+   We're going to look at the effect of R on the unit sphere, and
+   demonstrate that two points on the sphere are fixed. We'll assume that
+   the rotation is not the identity and does not map any vector v to -v.
+   This last case corresponds to a rotation of pi radians.
+<P>
+ 
+   Our first observation is that R maps great circles to great circles.
+   This follows from the fact that a great circle is a set of unit vectors,
+   all orthogonal to some particular vector v. Since R preserves inner
+   products, the image of the great circle is a set of unit vectors, all
+   orthogonal to R(v).
+<P>
+ 
+   Now, consider the distances that vectors on the unit sphere move when
+   the rotation R is applied; there is some vector v, not necessarily
+   unique, that moves the maximum distance. Let C1 be a great circle
+   passing through v and R(v), and let C2 be a great circle that passes
+   through v and intersects C1 at right angles. Now R(C2) passes through
+   R(v), and if we can show that it passes through at right angles to C1,
+   then C2 and R(C2) intersect at vectors p and -p, both of which are
+   normal to v and R(v). So R(p) is either p or -p. But we've assumed that
+   R does not map any vector to its inverse, so R(p) = p, and we have a
+   fixed vector.
+<P>
+ 
+   So, we must show that R(C2) passes through R(v) at right angles to C1.
+   If it did not, there would be some point w on C2, close to v, such that
+<P>
+ 
+<PRE>
+   || R(w) - w ||  &gt;  || R(v) - v ||,
+</PRE>
+   contradicting our hypothesis that no vector moves farther that v. We
+   will leave the rigorous proof of this last assertion to the energetic
+   reader.
+<P>
+ 
+<BR><BR>
+<A NAME="Quaternion multiplication"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Quaternion multiplication
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   In this section, we verify some claims made in the tutorial on
+   rotations.
+<P>
+ 
+   There are two assertions that we need to prove:
+<P>
+ 
+<UL>
+<TT>1.</TT> If the unit quaternion q represents the rotation R, then for any vector v,
+<BR><BR></UL>
+<PRE>
+                     *
+   R(v)  =  q * v * q,
+</PRE>
+<UL>
+<TT>&#32;&#32;</TT> where v is treated as a quaternion.
+<BR><BR></UL>
+<UL>
+<TT>2.</TT> If the unit quaternions q1 and q2 represent the rotations R1 and R2, then
+the rotation R2(R1) is represented by the quaternion
+<BR><BR></UL>
+<PRE>
+   q2 * q1.
+</PRE>
+<BR><BR>
+<A NAME="Assertion 1"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Assertion 1
+</H3><P><BR><BR>
+   To prove the first assertion, we express R(v) in the form
+<P>
+ 
+<PRE>
+   R(v) =  v + sin(theta) n x v  + ( 1 - cos(theta) ) n x ( n x v ),
+</PRE>
+   where n is a unit axis vector and theta is the corresponding rotation
+   angle. We also define the constants C and S by
+<P>
+ 
+<PRE>
+   C = cos(theta/2),
+   S = sin(theta/2).
+</PRE>
+   The quaternion
+<P>
+ 
+<PRE>
+   q = C  +  S n
+</PRE>
+   represents R. To check the assertion, we compute
+<P>
+ 
+<PRE>
+        ( C  +  S n ) * v * ( C  -  S n )
+ 
+ 
+   =    ( C  +  S n ) * [ ( S  &lt;v,n&gt; )  +  ( C v  -  S v x n ) ]
+ 
+                                           2
+   =    [ C S &lt;v, n&gt;  -  S C &lt; n, v &gt;  +  S  &lt; n,  v x n &gt; ]
+ 
+           2                    2
+     +  [ C v  - C S v x n  +  S &lt;v, n&gt; n  +  S C n x v
+ 
+         2
+     -  S n x ( v x n ) ].
+</PRE>
+   Since n is normal to v x n, the scalar part of the last line is zero,
+   which leaves us with
+<P>
+ 
+<PRE>
+ 
+    2       2                              2
+   C v  +  S &lt;v, n&gt; n  +  2 S C n x v  -  S n x ( v x n ).
+</PRE>
+   We can re-write this again as
+<P>
+ 
+<PRE>
+    2       2                               2
+   C v  +  S &lt;v, n&gt; n  +  2 S C n x v  + 2 S n x ( n x v )
+ 
+                                            2
+                                       -   S n x ( n x v ),
+</PRE>
+   and using the vector identity
+<P>
+ 
+<PRE>
+   A x ( B x C ) =  &lt; A, C &gt; B  -  &lt; A, B &gt; C,
+</PRE>
+   we can modify the final term to arrive at
+<P>
+ 
+<PRE>
+    2       2                               2
+   C v  +  S &lt;v, n&gt; n  +  2 S C n x v  + 2 S n x ( n x v )
+ 
+                                            2
+                                       -   S ( &lt;n, v&gt; n - &lt;n, n&gt; v ).
+</PRE>
+   Since n is a unit vector, the entire expression reduces to
+<P>
+ 
+<PRE>
+                                 2
+        v  +  2 S C n x v  +  2 S  n x ( n x v )
+ 
+   =    v  +  2 sin(theta/2) cos(theta/2) n x v
+ 
+                   2
+           +  2 sin (theta/2) n x ( n x v)
+ 
+   =    v  +  sin(theta) n x v  +  ( 1 - cos(theta) ) n x ( n x v )
+ 
+   =    R(v).
+</PRE>
+<BR><BR>
+<A NAME="Assertion 2"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Assertion 2
+</H3><P><BR><BR>
+   The second assertion follows rather more quickly from the first. Given
+   that R1(v) is
+<P>
+ 
+<PRE>
+              *
+   q1 * v * q1 ,
+</PRE>
+   we can express R2(R1(v)) by
+<P>
+ 
+<PRE>
+                        *      *
+      q2 * ( q1 * v * q1 ) * q2
+                                   *
+   =  ( q2 * q1 ) * v * ( q2 * q1 ).
+</PRE>
+   Now let q be a quaternion that represents R2(R1); then
+<P>
+ 
+<PRE>
+            *
+   q * v * q   =  R2(R1(v))
+</PRE>
+   for all v. We'll be done if we can show that, in general, for unit
+   quaternions x and y, if
+<P>
+ 
+<PRE>
+            *             *
+   x * v * x  =  y * v * y
+</PRE>
+   for all vectors v, then x equals y or -y. But this equation implies that
+<P>
+ 
+<PRE>
+    *                 *
+   y * x * v  =  v * y * x,
+</PRE>
+   for all v, which in turn implies that
+<P>
+ 
+<PRE>
+    *
+   y * x
+</PRE>
+   is a scalar, since only scalar quaternions commute with every vector
+   quaternion (due to the cross product term in the product formula). Since
+   y and x are unit quaternions, either
+<P>
+ 
+<PRE>
+    *
+   y * x = 1
+</PRE>
+   or
+<P>
+ 
+<PRE>
+    *
+   y * x = -1,
+</PRE>
+   so x = y or -y.
+<P>
+ 
+   We conclude that q2 * q1 = q or -q, so q2 * q1 does represent R2(R1).
+<P>
+ 
+<BR><BR>
+<A NAME="Recovery of Euler angles from a rotation matrix"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Recovery of Euler angles from a rotation matrix
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Here's the problem: Given a rotation matrix M, and a set of coordinate
+   axes indexed by i1, i2, i3, find angles w1, w2, w3 such that
+<P>
+ 
+<PRE>
+   M = [w1]     [w2]      [w3]  .                       (1)
+           i1       i2        i3
+</PRE>
+   There are a couple of reasons why we might want to solve this problem:
+   first, the representation of a rotation by three Euler angles is a
+   common one, so it is convenient to be able to convert the matrix
+   representation to this form. Also, the three angles on the right hand
+   side of equation (1) often allow you to visualize a rotation more
+   readily than does the matrix representation M.
+<P>
+ 
+   This ``factorization'' is possible if i2 does not equal i1 or i3. For
+   each valid sequence (i1-i2-i3) of axes, there is a set of functions that
+   give us w1, w2, and w3 as a function of M:
+<P>
+ 
+<PRE>
+   w1 = f1         ( M ),
+          i1-i2-i3
+ 
+   w2 = f2         ( M ),
+          i1-i2-i3
+ 
+   w3 = f3         ( M ).
+          i1-i2-i3
+</PRE>
+   How can we derive the functions
+<P>
+ 
+<PRE>
+   f1        ,  f2        ,  f3        ?
+     i1-i2-i3     i1-i2-i3     i1-i2-i3
+</PRE>
+   One approach is to multiply the matrices on the right hand side of
+   equation (1); this yields a matrix whose entries are sums of products of
+   sines and cosines of w1, w2, and w3. We can then equate the entries of
+   this matrix to those of M, and find formulas for w1, w2, and w3 that
+   arise from the component-wise correspondence. In subsequent sections, we
+   actually carry out this procedure for 3-1-3 and 1-2-3 factorizations.
+<P>
+ 
+   There are twelve sets of axes to consider, so there are potentially
+   twelve sets of functions to compute. However, the procedure we've just
+   described is not enjoyable enough to justify doing it twelve times. We'd
+   like to find a slicker way of solving the problem. One approach is to
+   find a way of ``recycling'' the formulas we derived for one particular
+   axis sequence. Here's an example of how we might do this:
+<P>
+ 
+   Suppose that we already have functions
+<P>
+ 
+<PRE>
+   f1     ,  f2     ,  f3
+     3-1-3     3-1-3     3-1-3
+</PRE>
+   that allow us to factor rotation matrix M as a 3-1-3 product:
+<P>
+ 
+   If
+<P>
+ 
+<PRE>
+   M = [w1]   [w2]    [w3] .                            (2)
+           3      1       3
+</PRE>
+   then
+<P>
+ 
+<PRE>
+   w1 = f1      ( M ),
+          3-1-3
+ 
+   w2 = f2      ( M ),
+          3-1-3
+ 
+   w3 = f3      ( M ).
+          3-1-3
+</PRE>
+   We'd like to somehow use the functions we've already got to factor M as
+   a 2-3-2 product: we want to find functions
+<P>
+ 
+<PRE>
+   f1     ,   f2     ,   f3
+     2-3-2      2-3-2      2-3-2
+</PRE>
+   such that
+<P>
+ 
+<PRE>
+   M = [y1]   [y2]   [y3] ,                             (3)
+           2      3      2
+</PRE>
+   and
+<P>
+ 
+<PRE>
+   y1 = f1      ( M ),
+          2-3-2
+ 
+   y2 = f2      ( M ),
+          2-3-2
+ 
+   y3 = f3      ( M )
+          2-3-2
+</PRE>
+   without having to derive
+<P>
+ 
+<PRE>
+   f1     ,   f2     ,   f3
+     2-3-2      2-3-2      2-3-2
+</PRE>
+   from scratch.
+<P>
+ 
+   We'll start out by using a new basis, relative to which the right hand
+   side of (3) is not a 2-3-2, but rather a 3-1-3 rotation. It is important
+   to note here that bases are ordered sets of vectors; changing the order
+   changes the basis.
+<P>
+ 
+   Let the basis B1 be the ordered set of vectors
+<P>
+ 
+<PRE>
+   {e(1), e(2), e(3)},
+</PRE>
+   and let the basis B2 be the ordered set of vectors
+<P>
+ 
+<PRE>
+   {e(3), e(1), e(2)}.
+</PRE>
+   Now the rotation matrix
+<P>
+ 
+<PRE>
+   [y]
+      2
+</PRE>
+   expressed relative to B1 represents the same rotation as the matrix
+<P>
+ 
+<PRE>
+   [y]
+      3
+</PRE>
+   expressed relative to B2. Both matrices represent a rotation of y
+   radians about the vector e(2). Similarly, the matrix
+<P>
+ 
+<PRE>
+   M  =  [y1]  [y2]  [y3]
+             2     3     2
+</PRE>
+   expressed relative to B1 represents the same rotation as the matrix
+<P>
+ 
+<PRE>
+   M' =  [y1]  [y2]  [y3]
+             3     1     3
+</PRE>
+   expressed relative to B2. So if C is the matrix whose columns are the
+   elements of B2, expressed relative to B1, namely
+<P>
+ 
+<PRE>
+        +-       -+
+        | 0  1  0 |
+   C =  | 0  0  1 |,
+        | 1  0  0 |
+        +-       -+
+</PRE>
+   then
+<P>
+ 
+<PRE>
+    -1
+   C   M  C   =  M'                                     (4)
+</PRE>
+   We can use the functions
+<P>
+ 
+<PRE>
+   f1     ,  f2     ,  f3
+     3-1-3     3-1-3     3-1-3
+</PRE>
+   to factor M' as a 3-1-3 product: applying (4), we have
+<P>
+ 
+<PRE>
+              -1
+   y1 = f1 ( C   M  C ),                                (5)
+ 
+              -1
+   y2 = f2 ( C   M  C ),                                (6)
+ 
+              -1
+   y3 = f3 ( C   M  C ),                                (7)
+</PRE>
+   so we've found functions that yield the angles y1, y2 and y3 that we
+   sought. ``No muss, no fuss.''
+<P>
+ 
+   How much mileage can we get out of our 3-1-3 factorization functions?
+   Looking at our example, we see that the main ``trick'' is to find a
+   basis so that the factorization we want is a 3-1-3 factorization with
+   respect to that basis. It is important the new basis be right-handed;
+   otherwise the form of the matrices
+<P>
+ 
+<PRE>
+   [w]
+      i
+</PRE>
+   is not preserved. It turns out that for any axis sequence of the form
+   a-b-a, we can find a right-handed basis such that the factorization we
+   want is a 3-1-3 factorization with respect to that basis. There are two
+   cases: if we define a successor function s on the integers 1, 2, 3 such
+   that
+<P>
+ 
+<PRE>
+   s(1) = 2,
+   s(2) = 3,
+   s(3) = 1,
+</PRE>
+   we either have b = s(a) or a = s(b).
+<P>
+ 
+   In the first case, b = s(a), and if our original ordered basis is
+<P>
+ 
+<PRE>
+   B1 = { e(1), e(2), e(3) },
+</PRE>
+   then
+<P>
+ 
+<PRE>
+   B2 = { e(b), e( s(b) ), e(a) }
+</PRE>
+   is the right-handed basis we're looking for. You can check that
+<P>
+ 
+<PRE>
+   e(a) = e(b) x e( s(b) ).
+</PRE>
+   We recall that the transformation matrix C we require has the elements
+   of B2 as columns.
+<P>
+ 
+   For example, if a is 2 and b is 3, then B2 is
+<P>
+ 
+<PRE>
+   { e(3), e(1), e(2) },
+</PRE>
+   and the matrix C is
+<P>
+ 
+<PRE>
+        +-       -+
+        | 0  1  0 |
+   C =  | 0  0  1 |,
+        | 1  0  0 |
+        +-       -+
+</PRE>
+   as we have seen previously.
+<P>
+ 
+   The axis sequences that can be handled by the above procedure are 1-2-1,
+   2-3-2, and 3-1-3.
+<P>
+ 
+   In the second case, a = s(b), and if our original ordered basis is
+<P>
+ 
+<PRE>
+   B1 = { e(1), e(2), e(3) },
+</PRE>
+   then
+<P>
+ 
+<PRE>
+   B2 = { e(b), -e( s(a) ), e(a) }
+</PRE>
+   is the right-handed basis we're looking for. Again, you can verify this
+   by taking cross products. The transformation matrix C we require has the
+   elements of B2 as columns.
+<P>
+ 
+   For example, if a = 2 and b = 1, then B2 is
+<P>
+ 
+<PRE>
+   { e(1), -e(3), e(2)) }
+</PRE>
+   and the matrix C is
+<P>
+ 
+<PRE>
+        +-       -+
+        | 1  0  0 |
+   C =  | 0  0  1 |.
+        | 0 -1  0 |
+        +-       -+
+</PRE>
+   The axis sequences that can be handled by the above procedure are 1-3-1,
+   2-1-2, and 3-2-3. So we can use our 3-1-3 formula to handle all of the
+   a-b-a factorizations, just by computing the correct transformation
+   matrix C.
+<P>
+ 
+   What about a-b-c factorizations? As you might guess, the procedure we've
+   described also applies to these, with very little modification.
+<P>
+ 
+   Suppose we have the formulas we need to carry out a 1-2-3 factorization.
+   We'd like to find a basis that allows us to represent the a-b-c product
+<P>
+ 
+<PRE>
+   [w1]   [w2]   [w3]
+       a      b      c
+</PRE>
+   as the product
+<P>
+ 
+<PRE>
+   [w1]   [w2]   [w3] .
+       1      2      3
+</PRE>
+   Again, there are two cases, depending on whether b is the successor of a
+   or a is the successor of b, according to our cyclic ordering.
+<P>
+ 
+   In the case where b is the successor of a, the right-handed basis we
+   want is
+<P>
+ 
+<PRE>
+   B2 = { e(a), e(b), e(c) }.
+</PRE>
+   With respect to the basis B2, our a-b-c factorization is a 1-2-3
+   factorization. Again, we can form the transformation matrix C by letting
+   its columns be the elements of B2.
+<P>
+ 
+   In the second case, a is the successor of b. Our new basis is
+<P>
+ 
+<PRE>
+   B2 = { e(a), e(b), -e(c)}.
+</PRE>
+   In this case, there is a slight twist: the change of basis we use
+   negates the third rotation angle. This is not a serious problem; the
+   change of basis converts the product
+<P>
+ 
+<PRE>
+   [w1]   [w2]   [w3]
+       a      b      c
+</PRE>
+   to
+<P>
+ 
+<PRE>
+   [w1]   [w2]   [-w3] ,
+       1      2       3
+</PRE>
+   so we can still recover the angles w1, w2, and w3 easily. So our 1-2-3
+   factorization formula allows us to handle all the a-b-c factorizations.
+<P>
+ 
+   Having shown that we can perform all of the a-b-a and a-b-c
+   factorizations using just one formula for each type of factorization, we
+   now proceed to derive those formulas. This is not a particularly
+   instructive procedure, but the derivations ought to be written down
+   somewhere, and this is as good a place as any.
+<P>
+ 
+<BR><BR>
+<A NAME="Euler angle recovery: a-b-a case"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Euler angle recovery: a-b-a case
+</H3><P><BR><BR>
+   We'll derive the formulas for a 3-1-3 factorization.
+<P>
+ 
+   In this case, the right hand side of (1) is
+<P>
+ 
+<PRE>
+   +-                     -+     +-                      -+
+   |  cos(w1)  sin(w1)  0  |     | 1       0        0     |
+   | -sin(w1)  cos(w1)  0  |  *  | 0    cos(w2)  sin(w2)  |  *
+   |      0       0     1  |     | 0   -sin(w2)  cos(w2)  |
+   +-                     -+     +-                      -+
+ 
+   +-                     -+
+   |  cos(w3)  sin(w3)  0  |
+   | -sin(w3)  cos(w3)  0  |
+   |     0        0     1  |
+   +-                     -+
+</PRE>
+   which equals
+<P>
+ 
+<PRE>
+   +-                     -+
+   |  cos(w1)  sin(w1)  0  |
+   | -sin(w1)  cos(w1)  0  |   *
+   |      0       0     1  |
+   +-                     -+
+   +-                                            -+
+   |          cos(w3)       sin(w3)         0     |
+   |  -cos(w2)sin(w3)   cos(w2)cos(w3)   sin(w2)  |
+   |   sin(w2)sin(w3)  -sin(w2)cos(w3)   cos(w2)  |
+   +-                                            -+
+</PRE>
+   which comes out to
+<P>
+ 
+<PRE>
+   +-                                                              -+
+   |         cos(w1)cos(w3)          cos(w1)sin(w3)  sin(w1)sin(w2) |
+   | -sin(w1)cos(w2)sin(w3)  +sin(w1)cos(w2)cos(w3)                 |
+   |                                                                |
+   |        -sin(w1)cos(w3)         -sin(w1)sin(w3)  cos(w1)sin(w2) |.
+   | -cos(w1)cos(w2)sin(w3)  +cos(w1)cos(w2)cos(w3)                 |
+   |                                                                |
+   |         sin(w2)sin(w3)         -sin(w2)cos(w3)         cos(w2) |
+   +-                                                              -+
+</PRE>
+   At this point, we can recover w1, w2, and w3 from the elements of M. The
+   inverse trigonometric functions used below are borrowed from Fortran. We
+   find w2 from the relation
+<P>
+ 
+<PRE>
+   w2 = ACOS( M(3,3) ).
+</PRE>
+   (So w2 is in [0, pi].)
+<P>
+ 
+   If w2 is not equal to 0 or pi, then we can recover w1 as follows:
+<P>
+ 
+<PRE>
+   M(1,3)       sin(w1)sin(w2)
+   ------   =   --------------  =  tan(w1),
+   M(2,3)       cos(w1)sin(w2)
+ 
+   w1 = ATAN2 ( M(1,3), M(2,3) ).
+</PRE>
+   We find w3 in an analogous fashion, again assuming w2 is not equal to 0
+   or pi. We find
+<P>
+ 
+<PRE>
+    M(3,1)       sin(w2)sin(w3)
+   -------   =   --------------  =  tan(w3),
+   -M(3,2)       sin(w2)cos(w3)
+ 
+   w3 = ATAN2 ( M(3,1), -M(3,2) ).
+</PRE>
+   Note the minus sign used in the second ATAN2 argument. For ATAN2 to
+   determine the correct value, it is necessary that the first and second
+   arguments have the same signs as sin(w3) and cos(w3), respectively.
+<P>
+ 
+   Now if w2 is equal to zero or pi, we have a degenerate case: M is the
+   product of two rotations about the third coordinate axis. The angles of
+   the rotations are not determined uniquely, only the sum of the angles
+   is. One way of finding a factorization is to set w3 to zero, and solve
+   for w1. The matrix M then is equal to
+<P>
+ 
+<PRE>
+   +-                                 -+
+   |  cos(w1)  cos(w2)sin(w1)     0    |
+   | -sin(w1)  cos(w2)cos(w1)     0    |,
+   |    0            0         cos(w2) |
+   +-                                 -+
+</PRE>
+   so we can recover w1 by computing
+<P>
+ 
+<PRE>
+   w1 = ATAN2( -M(2,1), M(1,1) ).
+</PRE>
+<BR><BR>
+<A NAME="Euler angle recovery: a-b-c case"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Euler angle recovery: a-b-c case
+</H3><P><BR><BR>
+   We'll derive the formulas for a 1-2-3 factorization.
+<P>
+ 
+   In this case, the right hand side of (1) is
+<P>
+ 
+<PRE>
+   +-                      -+     +-                      -+
+   | 1       0        0     |     | cos(w2)   0  -sin(w2)  |
+   | 0    cos(w1)  sin(w1)  |  *  |    0      1      0     |  *
+   | 0   -sin(w1)  cos(w1)  |     | sin(w2)   0   cos(w2)  |
+   +-                      -+     +-                      -+
+ 
+   +-                      -+
+   |  cos(w3)  sin(w3)  0   |
+   | -sin(w3)  cos(w3)  0   |
+   |     0        0     1   |
+   +-                      -+
+</PRE>
+   which equals
+<P>
+ 
+<PRE>
+   +-                      -+
+   | 1       0        0     |
+   | 0    cos(w1)  sin(w1)  |  *
+   | 0   -sin(w1)  cos(w1)  |
+   +-                      -+
+ 
+   +-                                              -+
+   | cos(w2)cos(w3)   cos(w2)sin(w3)      -sin(w2)  |
+   |                                                |
+   |       -sin(w3)          cos(w3)          0     |
+   |                                                |
+   | sin(w2)cos(w3)   sin(w2)sin(w3)       cos(w2)  |
+   +-                                              -+
+</PRE>
+   which comes out to
+<P>
+ 
+<PRE>
+   +-                                                              -+
+   |         cos(w2)cos(w3)          cos(w2)sin(w3)        -sin(w2) |
+   |                                                                |
+   |        -cos(w1)sin(w3)          cos(w1)cos(w3)  sin(w1)cos(w2) |
+   | +sin(w1)sin(w2)cos(w3)  +sin(w1)sin(w2)sin(w3)                 |.
+   |                                                                |
+   |         sin(w1)sin(w3)         -sin(w1)cos(w3)  cos(w1)cos(w2) |
+   | +cos(w1)sin(w2)cos(w3)  +cos(w1)sin(w2)sin(w3)                 |
+   +-                                                              -+
+</PRE>
+   We recover w2 by
+<P>
+ 
+<PRE>
+   w2 = ASIN ( -M(1,3) ),
+</PRE>
+   so w2 is in the interval [-pi/2, pi/2].
+<P>
+ 
+   As long as w2 does not equal pi/2 or -pi/2, we can find w1 by the
+   formula
+<P>
+ 
+<PRE>
+   w1 = ATAN2 ( M(2,3), M(3,3) ),
+</PRE>
+   and w3 from the formula
+<P>
+ 
+<PRE>
+   w3 = ATAN2 ( M(1,2), M(1,1) ).
+</PRE>
+   If w2 is -pi/2 or pi/2, we have a degenerate case. The sum of w1 and w3
+   is determined, but w1 and w3 are not determined individually. We can set
+   w3 to zero, which reduces our right hand side to
+<P>
+ 
+<PRE>
+   +-                                       -+
+   |         0            0        -sin(w2)  |
+   |  sin(w1)sin(w2)    cos(w1)       0      |,
+   |  cos(w1)sin(w2)   -sin(w1)       0      |
+   +-                                       -+
+</PRE>
+   so we can recover w1 from the formula
+<P>
+ 
+<PRE>
+   w1 = ATAN2 ( -M(3,2), M(2,2) ).
+</PRE>
+<BR><BR>
+<A NAME="Appendix A: Document Revision History"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Appendix A: Document Revision History
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+<BR><BR>
+<A NAME="May 27, 2010"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> May 27, 2010
+</H3><P><BR><BR>
+   Minor edit to eliminate typo.
+<P>
+ 
+<BR><BR>
+<A NAME="November 17, 2005"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> November 17, 2005
+</H3><P><BR><BR>
+   Documentation of the routines <a href="../cspice/qxq_c.html">qxq_c</a>, <a href="../cspice/qdq2av_c.html">qdq2av_c</a> was added.
+<P>
+ 
+<BR><BR>
+<A NAME="January 10, 2005"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> January 10, 2005
+</H3><P><BR><BR>
+   A few corrections were made to environment tags in the .ftm source for
+   this document.
+<P>
+ 
+<BR><BR>
+<A NAME="February 2, 2004"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> February 2, 2004
+</H3><P><BR><BR>
+   Performed a spell-check on text.
+<P>
+ 
+<BR><BR>
+<A NAME="December 2, 2002"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> December 2, 2002
+</H3><P><BR><BR>
+<UL>
+<TT>&#32;&#32;</TT> The relationship between Euler angles and the C-matrix is defined
+differently by different projects. Modifications have been made to clarify
+the definitions used by Cassini, Voyager and Galileo.
+<BR><BR></UL>
+<BR><BR>
+<A NAME="April 26, 1999"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> April 26, 1999
+</H3><P><BR><BR>
+<UL>
+<TT>&#32;&#32;</TT> An equation involving quaternion multiplication was corrected: the
+expression v*v = 0 was replaced by v*v = -1.
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> Quotation style was changed from British to American.
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> Some variable names were changed to remove underscores.
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> Some minor re-wording was done to simplify creation of the CSPICE version
+of this document.
+<BR><BR></UL>
+
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+
+</BODY>
+
+</HTML>

@@ -1,0 +1,257 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dafus</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dafus</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DAFUS unpacks an array summary into its double precision and
+   integer components.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      sum   an containing the DAF array summary. This identifies the
+            contents and location of a single array within a DAF.
+
+            [1,n] = size(sum); double = class(sum)
+
+      nd    the size of the return double precision array.
+
+            [1,1] = size(nd); int32 = class(nd)
+
+      ni    the size of the return integer array.
+
+            [1,1] = size(ni); int32 = class(ni)
+
+      For an SPK file, 'nd' always equals 2, 'ni' always equals 6. The precise
+      contents of the vectors depend on the type of DAF but the
+      final two elements of the 'ic' (integer) vector always contains the
+      initial and final addresses respectively of the array.
+
+   the call:
+
+      [dc, ic] = <b>cspice_dafus</b>( sum, nd, ni )
+
+   returns:
+
+      dc   the array of double precision components of the summary.
+
+           [1,nd] = size(dc); double = class(dc)
+
+      ic   the array of integer components of the summary.
+
+           [1,ni] = size(ic); int32 = class(ic)
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Local constants
+      %
+      META   =  '<a href= "standard.html">standard.tm</a>';
+      ND     =  2;
+      NI     =  6;
+
+      %
+      % Load a meta-kernel that specifies a planetary SPK file
+      % and leapseconds kernel. The contents of this meta-kernel
+      % are displayed above.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( META )
+
+      %
+      % Get the NAIF ID code for the Pluto system barycenter.
+      % This is a built-in ID code, so something's seriously
+      % wrong if we can't find the code.
+      %
+      [idcode, found] = <a href="cspice_bodn2c.html">cspice_bodn2c</a>( 'PLUTO BARYCENTER' );
+
+      if ~found
+         <a href="cspice_kclear.html">cspice_kclear</a>
+         error( 'SPICE(BUG)' )
+      end
+
+      %
+      % Pick a request time; convert to seconds past J2000 TDB.
+      %
+      reqtim = '2011 FEB 18 UTC';
+
+      et = <a href="cspice_str2et.html">cspice_str2et</a>( reqtim );
+
+      %
+      % Find a loaded segment for the specified body and time.
+      %
+
+      [handle, descr, segid, found] = <a href="cspice_spksfs.html">cspice_spksfs</a>( idcode, et );
+
+      if ~found
+         <a href="cspice_kclear.html">cspice_kclear</a>
+         txt = sprintf( 'No descriptor found for the body %d at time %s', ...
+                         idcode, et );
+         error( txt )
+      else
+
+         %
+         % Display the DAF file handle.
+         %
+         fprintf( 'DAF handle:    %d\n', handle )
+
+         %
+         % Display the segment ID.
+         %
+         %
+         % Unpack the descriptor. Display the contents.
+         %
+         [dc, ic] = <b>cspice_dafus</b>( descr, ND, NI );
+
+         fprintf( 'Segment ID:       %s\n', segid )
+         fprintf( 'Body ID code:     %d\n', ic(1) )
+         fprintf( 'Center ID code:   %d\n', ic(2) )
+         fprintf( 'Frame ID code:    %d\n', ic(3) )
+         fprintf( 'SPK data type:    %d\n', ic(4) )
+         fprintf( 'Start time (TDB): %f\n', dc(1) )
+         fprintf( 'Stop time  (TDB): %f\n', dc(2) )
+
+      end
+
+      %
+      % It's always good form to unload kernels after use,
+      % particularly in IDL due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   Matlab outputs:
+
+      DAF handle:    5
+      Segment ID:       DE-0421LE-0421
+      Body ID code:     9
+      Center ID code:   0
+      Frame ID code:    1
+      SPK data type:    2
+      Start time (TDB): -3169195200.000000
+      Stop time  (TDB): 1696852800.000000
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   The components of array summaries are packed into double
+   precision arrays.
+
+   The total size of the summary is
+
+           (ni - 1)
+      nd + -------- + 1
+               2
+
+   double precision words (where nd, ni are nonnegative).
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/dafus_c.html">dafus_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/daf.html">DAF.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 29-OCT-2012, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   get DAF summary
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:36 2014</pre>
+
+</body>
+</html>
+

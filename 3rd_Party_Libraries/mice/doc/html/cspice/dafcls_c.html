@@ -1,0 +1,360 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>dafcls_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>dafcls_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void dafcls_c ( SpiceInt handle )
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   Close the DAF associated with a given handle.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+   <a href="../req/daf.html">DAF</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+   DAF
+   FILES
+
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+   Variable  I/O  Description
+   --------  ---  --------------------------------------------------
+   handle     I   Handle of DAF to be closed.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+   handle      is the file handle of a previously opened DAF file.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+    None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+   1) If the specified handle is not known to the DAF subsystem
+      (because it does not belong to a file opened via the DAF
+      API), nothing happens.
+
+   2) If this routine is used to close a file whose handle is
+      known to the DAF subsystem, and if the file handle is
+      attached to a non-DAF file, routines called by this
+      routine signal an error.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+   Because the DAF subsystem must keep track of what files are open at
+   any given time, it is important that DAF files be closed only with
+   <b>dafcls_c</b>, to prevent the remaining DAF routines from failing,
+   sometimes mysteriously.
+
+   Note that when a file is opened more than once for read access,
+   <a href="dafopr_c.html">dafopr_c</a> returns the same handle each time it is re-opened.
+   Each time the file is closed, <b>dafcls_c</b> checks to see if any other
+   claims on the file are still active before physically closing
+   the file.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+   Example (1):
+
+   In the following code fragment, the arrays in a file are examined in
+   order to determine whether the file contains any arrays whose names
+   begin with the word TEST. The complete names for these arrays are
+   printed to the screen. The file is closed at the end of the search.
+
+      #include &quot;SpiceUsr.h&quot;
+          .
+          .
+          .
+      <a href="dafopr_c.html">dafopr_c</a> ( fname, &amp;handle );
+      <a href="dafbfs_c.html">dafbfs_c</a> ( handle );
+      <a href="daffna_c.html">daffna_c</a> ( &amp;found );
+
+      while ( found )
+      {
+         <a href="dafgn_c.html">dafgn_c</a> ( name );
+
+         if (  strncmp( name, &quot;TEST&quot;, 4 ) == 0  )
+         {
+            printf ( &quot;%s\n&quot;, name );
+         }
+         <a href="daffna_c.html">daffna_c</a> ( &amp;found );
+      }
+
+      <b>dafcls_c</b> ( handle );
+
+
+   Note that if the file has been opened already by a DAF routine
+   at some other place in the calling program, it remains open.
+   This makes it possible to examine files that have been opened for
+   use by other modules without interfering with the operation of
+   those routines.
+
+   Example (2):
+
+   Use a simple routine to output the double precision and integer
+   values stored in an SPK's segments descriptors. This function
+   opens a DAF for read, performs a forwards search for the DAF
+   arrays, prints segments description for each array found, then
+   closes the DAF.
+
+      #include &lt;stdio.h&gt;
+      #include &quot;SpiceUsr.h&quot;
+
+      int main()
+         {
+
+         /.
+         Local constants
+         ./
+
+         /.
+         Define the summary parameters appropriate
+         for an SPK file.
+         ./
+
+         #define ND              2
+         #define NI              6
+         #define MAXSUM          125
+
+         SpiceInt                ic  [ NI ];
+         SpiceInt                handle;
+
+         SpiceDouble             dc  [ ND ];
+         SpiceDouble             sum [ MAXSUM ];
+
+         SpiceChar             * kernel = &quot;de421.bsp&quot;;
+
+         SpiceBoolean            found;
+
+
+         /.
+         Open a DAF for read. Return a handle referring to the file.
+         ./
+         <a href="dafopr_c.html">dafopr_c</a> ( kernel, &amp;handle );
+
+         /.
+         Begin a forward search on the file.
+         ./
+         <a href="dafbfs_c.html">dafbfs_c</a> ( handle );
+
+         /.
+         Search until a DAF array is found.
+         ./
+         <a href="daffna_c.html">daffna_c</a> ( &amp;found );
+
+         /.
+         Loop while the search finds subsequent DAF arrays.
+         ./
+         while ( found )
+            {
+
+            <a href="dafgs_c.html">dafgs_c</a> ( sum );
+            <a href="dafus_c.html">dafus_c</a> ( sum, ND, NI, dc, ic );
+
+            printf( &quot; Doubles: %f %f \n&quot;, dc[0], dc[1] );
+            printf( &quot;Integers: %ld %ld %ld %ld %ld %ld\n\n&quot;,
+                    ic[0], ic[1], ic[2], ic[3], ic[4], ic[5] );
+
+
+            /.
+            Check for another segment.
+            ./
+            <a href="daffna_c.html">daffna_c</a> ( &amp;found );
+            }
+
+         /.
+         Safely close the DAF.
+         ./
+         <b>dafcls_c</b> ( handle  );
+
+         return ( 0 );
+         }
+
+   The program outputs:
+
+       Doubles:   -3169195200.0000000        1696852800.0000000
+      Integers:         1        0        1        2      641   310404
+       Doubles:   -3169195200.0000000        1696852800.0000000
+      Integers:         2        0        1        2   310405   423048
+       Doubles:   -3169195200.0000000        1696852800.0000000
+      Integers:         3        0        1        2   423049   567372
+       Doubles:   -3169195200.0000000        1696852800.0000000
+      Integers:         4        0        1        2   567373   628976
+       Doubles:   -3169195200.0000000        1696852800.0000000
+      Integers:         5        0        1        2   628977   674740
+       Doubles:   -3169195200.0000000        1696852800.0000000
+      Integers:         6        0        1        2   674741   715224
+       Doubles:   -3169195200.0000000        1696852800.0000000
+      Integers:         7        0        1        2   715225   750428
+       Doubles:   -3169195200.0000000        1696852800.0000000
+      Integers:         8        0        1        2   750429   785632
+       Doubles:   -3169195200.0000000        1696852800.0000000
+      Integers:         9        0        1        2   785633   820836
+       Doubles:   -3169195200.0000000        1696852800.0000000
+      Integers:        10        0        1        2   820837   944040
+       Doubles:   -3169195200.0000000        1696852800.0000000
+      Integers:       301        3        1        2   944041  1521324
+       Doubles:   -3169195200.0000000        1696852800.0000000
+      Integers:       399        3        1        2  1521325  2098608
+       Doubles:   -3169195200.0000000        1696852800.0000000
+      Integers:       199        1        1        2  2098609  2098620
+       Doubles:   -3169195200.0000000        1696852800.0000000
+      Integers:       299        2        1        2  2098621  2098632
+       Doubles:   -3169195200.0000000        1696852800.0000000
+      Integers:       499        4        1        2  2098633  2098644
+
+      Note, the final entries in the integer array contains the segment
+      start/end indexes. The output indicates the search proceeded
+      from the start of the file (low value index) towards the end
+      (high value index).
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   N.J. Bachman    (JPL)
+   K.R. Gehringer  (JPL)
+   W.L. Taber      (JPL)
+   I.M. Underwood  (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.0.2, 10-OCT-2012 (EDW)
+
+      Added a functional code example to the Examples section.
+
+      Removed the obsolete Reference citation to &quot;NAIF
+      Document 167.0.&quot;
+
+   -CSPICE Version 1.0.1, 28-JAN-2004 (NJB)
+
+      Header update:  the exceptions section now lists the
+      case of attempting to close a non-DAF file using this
+      routine.
+
+   -CSPICE Version 1.0.0, 01-AUG-1999 (NJB) (KRG) (WLT) (IMU)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   close daf
+</PRE>
+<h4>Link to routine dafcls_c source file <a href='../../../src/cspice/dafcls_c.c'>dafcls_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:29 2014</pre>
+
+</body>
+</html>
+

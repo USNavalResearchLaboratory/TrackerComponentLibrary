@@ -1,0 +1,223 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_wnextd</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_wnextd</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_WNEXTD extracts the left or right endpoints from
+   a double precision window.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      side     indicating whether to extract the left or right endpoints of
+               the intervals in 'window'
+
+               [1,m] = size(side); char = class(side)
+
+                 'L', 'l'       Left endpoints.
+                 'R', 'r'       Right endpoints.
+
+      window   SPICE window containing zero or more intervals.
+
+               [2n,1] = size(window); double = class(window)
+
+   the call:
+
+      window_f = <b>cspice_wnextd</b>( side, window)
+
+   returns:
+
+      window   SPICE window containing zero or more intervals, representing
+               the collection of singleton intervals containing either the
+               left or the right endpoints of the intervals in the original
+               'window'
+
+               [2n,1] = size(window); double = class(window)
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Let 'window' contain the intervals
+      %
+      window = [ [ 1; 3 ]; [ 7; 11 ]; [ 23; 27 ]; [ 29; 29 ]; ];
+
+      %
+      %
+      %
+      left  = <b>cspice_wnextd</b>( 'L', window )
+
+      right = <b>cspice_wnextd</b>( 'R', window )
+
+   MATLAB outputs:
+
+      left =
+
+           1
+           1
+           7
+           7
+          23
+          23
+          29
+          29
+
+      right =
+
+           3
+           3
+          11
+          11
+          27
+          27
+          29
+          29
+
+      %
+      % A similar operation using MATLAB native functionality,
+      % though the returned arrays are not Mice windows identical
+      % to the <b>cspice_wnextd</b> result.
+      %
+      index_left = 1: 2 : numel(window);
+      index_right= index_left + 1;
+
+      left  = window( index_left )
+      right = window( index_right)
+
+   MATLAB outputs:
+
+      left =
+
+           1
+           7
+          23
+          29
+
+      right =
+
+           3
+          11
+          27
+          29
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This function returns a window composed of singleton intervals
+   containing one of the endpoints of the intervals in 'window'.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/wnextd_c.html">wnextd_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/windows.html">WINDOWS.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.1, 12-MAR-2012, EDW (JPL), SCK (JPL)
+
+      Edited I/O section to conform to NAIF standard for Mice documentation.
+
+   -Mice Version 1.0.0, 24-JUL-2007, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   extract the endpoints from a d.p. window
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:39 2014</pre>
+
+</body>
+</html>
+

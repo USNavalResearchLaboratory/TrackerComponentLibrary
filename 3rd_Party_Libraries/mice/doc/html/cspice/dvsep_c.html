@@ -1,0 +1,293 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>dvsep_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>dvsep_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   SpiceDouble dvsep_c (ConstSpiceDouble s1[6], ConstSpiceDouble s2[6] ) 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Calculate the time derivative of the separation angle between
+   two input states, S1 and S2.
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   GEOMETRY
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   VARIABLE  I/O  DESCRIPTION 
+   --------  ---  -------------------------------------------------- 
+   s1         I   State vector of the first body 
+   s2         I   State vector of the second  body 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   s1         the state vector of the first target body as seen from 
+              the observer 
+ 
+   s2         the state vector of the second target body as seen from 
+              the observer 
+ 
+   An implicit assumption exists that both states lie in the same 
+   refrence frame with the same observer for the same epoch. If this 
+   is not the case, the numerical result has no meaning. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   The function returns the double precision value of the time derivative 
+   of the angular separation between S1 and S2.
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+    None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+   1) The error SPICE(NUMERICOVERFLOW) signals if the inputs S1, S2
+      define states with an angular separation rate ~ DPMAX().
+
+   2) If called in RETURN mode, the return has value 0.
+
+   3) Linear dependent position components of S1 and S1 constitutes
+      a non-error exception. The function returns 0 for this case.
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+    None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+
+   In this discussion, the notation
+
+      &lt; V1, V2 &gt;
+
+   indicates the dot product of vectors V1 and V2. The notation
+
+      V1 x V2
+
+   indicates the cross product of vectors V1 and V2.
+
+   To start out, note that we need consider only unit vectors,
+   since the angular separation of any two non-zero vectors
+   equals the angular separation of the corresponding unit vectors.
+   Call these vectors U1 and U2; let their velocities be V1 and V2.
+
+   For unit vectors having angular separation
+
+      THETA
+
+   the identity
+
+      || U1 x U1 || = ||U1|| * ||U2|| * sin(THETA)                (1)
+
+   reduces to
+
+      || U1 x U2 || = sin(THETA)                                  (2)
+
+   and the identity
+
+      | &lt; U1, U2 &gt; | = || U1 || * || U2 || * cos(THETA)           (3)
+
+   reduces to
+
+      | &lt; U1, U2 &gt; | = cos(THETA)                                 (4)
+
+   Since THETA is an angular separation, THETA is in the range
+
+      0 : Pi
+
+   Then letting s be +1 if cos(THETA) &gt; 0 and -1 if cos(THETA) &lt; 0, 
+     we have for any value of THETA other than 0 or Pi
+
+
+                                2          1/2
+      cos(THETA) = s * ( 1 - sin (THETA)  )                       (5)
+
+   or  
+
+                                2          1/2
+      &lt; U1, U2 &gt; = s * ( 1 - sin (THETA)  )                       (6)
+
+
+   At this point, for any value of THETA other than 0 or Pi,
+   we can differentiate both sides with respect to time (T) 
+   to obtain
+
+                                                    2        -1/2
+      &lt; U1, V2 &gt; + &lt; V1, U2 &gt; =    s * (1/2)(1 - sin (THETA))
+
+                                 * (-2) sin(THETA)*cos(THETA)
+
+                                 * d(THETA)/dT                   (7a)
+
+
+   Using equation (5), and noting that s = 1/s, we can cancel 
+   the cosine terms on the right hand side
+
+                                                    -1
+      &lt; U1, V2 &gt; + &lt; V1, U2 &gt; =    (1/2)(cos(THETA))
+
+                                 * (-2) sin(THETA)*cos(THETA)
+
+                                 * d(THETA)/dT                   (7b)
+
+   With (7b) reducing to
+
+      &lt; U1, V2 &gt; + &lt; V1, U2 &gt; = - sin(THETA) * d(THETA)/dT        (8)
+
+   Using equation (2) and switching sides, we obtain
+
+      || U1 x U2 || * d(THETA)/dT  =  - &lt; U1, V2 &gt; - &lt; V1, U2 &gt;   (9)
+
+   or, provided U1 and U2 are linearly independent,
+     
+      d(THETA)/dT = ( - &lt; U1, V2 &gt; - &lt; V1, U2 &gt; ) / ||U1 x U2||  (10)
+
+   Note for times when U1 and U2 have angular separation 0 or Pi
+   radians, the derivative of angular separation with respect to
+   time doesn't exist. (Consider the graph of angular separation
+   with respect to time; typically the graph is roughly v-shaped at
+   the singular points.)
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+   None. 
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   None. 
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+   None. 
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   E.D. Wright    (JPL) 
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.0.0, 09-MAR-2009 (EDW) (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   time derivative of angular separation 
+ </PRE>
+<h4>Link to routine dvsep_c source file <a href='../../../src/cspice/dvsep_c.c'>dvsep_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:31 2014</pre>
+
+</body>
+</html>
+

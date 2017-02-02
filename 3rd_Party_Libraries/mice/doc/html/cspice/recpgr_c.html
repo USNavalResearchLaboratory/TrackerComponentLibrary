@@ -1,0 +1,593 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>recpgr_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>recpgr_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void recpgr_c ( ConstSpiceChar   * body,
+                   SpiceDouble        rectan[3],
+                   SpiceDouble        re,
+                   SpiceDouble        f,
+                   SpiceDouble      * lon,
+                   SpiceDouble      * lat,
+                   SpiceDouble      * alt       ) 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Convert rectangular coordinates to planetographic coordinates. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/kernel.html">KERNEL</a> 
+   <a href="../req/naif_ids.html">NAIF_IDS</a> 
+   <a href="../req/pck.html">PCK</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   CONVERSION 
+   COORDINATES 
+   GEOMETRY 
+   MATH 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   VARIABLE  I/O  DESCRIPTION 
+   --------  ---  -------------------------------------------------- 
+   body       I   Body with which coordinate system is associated. 
+   rectan     I   Rectangular coordinates of a point. 
+   re         I   Equatorial radius of the reference spheroid. 
+   f          I   Flattening coefficient. 
+   lon        O   Planetographic longitude of the point (radians). 
+   lat        O   Planetographic latitude of the point (radians). 
+   alt        O   Altitude of the point above reference spheroid. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   body       Name of the body with which the planetographic 
+              coordinate system is associated. 
+ 
+              `body' is used by this routine to look up from the 
+              kernel pool the prime meridian rate coefficient giving 
+              the body's spin sense.  See the Files and Particulars 
+              header sections below for details. 
+ 
+ 
+   rectan     The rectangular coordinates of a point.  Units 
+              are arbitrary, except that the input `re' must be 
+              expressed in the same units. 
+ 
+ 
+   re         Equatorial radius of a reference spheroid.  This 
+              spheroid is a volume of revolution:  its horizontal 
+              cross sections are circular.  The shape of the 
+              spheroid is defined by an equatorial radius `re' and a 
+              polar radius `rp'.  Units of `re' must match those of 
+              `rectan'. 
+ 
+ 
+   f          Flattening coefficient =  
+ 
+                 (re-rp) / re 
+ 
+              where `rp' is the polar radius of the spheroid, and the 
+              units of `rp' match those of `re'. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   lon        Planetographic longitude of the input point.  This is 
+              the angle between the prime meridian and the meridian 
+              containing `rectan'.  For bodies having prograde (aka 
+              direct) rotation, the direction of increasing 
+              longitude is positive west:  from the +X axis of the 
+              rectangular coordinate system toward the -Y axis. 
+              For bodies having retrograde rotation, the direction 
+              of increasing longitude is positive east:  from the +X 
+              axis toward the +Y axis. 
+ 
+              The earth, moon, and sun are exceptions: 
+              planetographic longitude is measured positive east for 
+              these bodies. 
+ 
+              The default interpretation of longitude by this 
+              and the other planetographic coordinate conversion 
+              routines can be overridden; see the discussion in 
+              Particulars below for details. 
+ 
+              `lon' is output in radians.  The nominal range of `lon' is 
+              given by: 
+ 
+                 0  &lt;  lon  &lt;  2*pi 
+                    -        
+ 
+              However, round-off error could cause `lon' to equal 2*pi. 
+ 
+ 
+   lat        Planetographic latitude of the input point.  For a 
+              point P on the reference spheroid, this is the angle 
+              between the XY plane and the outward normal vector at 
+              P. For a point P not on the reference spheroid, the 
+              planetographic latitude is that of the closest point 
+              to P on the spheroid. 
+ 
+              `lat' is output in radians. The range of `lat' is given 
+              by:  
+               
+                 -pi/2  &lt;  lat  &lt;  pi/2
+                        -       - 
+  
+ 
+   alt        Altitude of point above the reference spheroid. 
+ 
+              The units associated with `alt' are those associated 
+              with the input `rectan' and `re'. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1) If the body name `body' cannot be mapped to a NAIF ID code, 
+      and if `body' is not a string representation of an integer, 
+      the error SPICE(IDCODENOTFOUND) will be signaled. 
+ 
+   2) If the kernel variable   
+ 
+         BODY&lt;ID code&gt;_PGR_POSITIVE_LON 
+ 
+      is present in the kernel pool but has a value other than one 
+      of 
+ 
+          'EAST' 
+          'WEST' 
+ 
+      the error SPICE(INVALIDOPTION) will be signaled.  Case 
+      and blanks are ignored when these values are interpreted. 
+ 
+   3) If polynomial coefficients for the prime meridian of `body' 
+      are not available in the kernel pool, and if the kernel 
+      variable BODY&lt;ID code&gt;_PGR_POSITIVE_LON is not present in 
+      the kernel pool, the error SPICE(MISSINGDATA) will be signaled. 
+       
+   4) If the equatorial radius is non-positive, the error 
+      SPICE(VALUEOUTOFRANGE) is signaled. 
+ 
+   5) If the flattening coefficient is greater than or equal to one, 
+      the error SPICE(VALUEOUTOFRANGE) is signaled. 
+ 
+   6) For points inside the reference ellipsoid, the nearest point 
+      on the ellipsoid to `rectan' may not be unique, so latitude may 
+      not be well-defined. 
+
+   7) The error SPICE(EMPTYSTRING) is signaled if the input
+      string `body' does not contain at least one character, since the
+      input string cannot be converted to a Fortran-style string in
+      this case.
+      
+   8) The error SPICE(NULLPOINTER) is signaled if the input string
+      pointer `body' is null.
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   This routine expects a kernel variable giving body's prime 
+   meridian angle as a function of time to be available in the 
+   kernel pool.  Normally this item is provided by loading a PCK 
+   file.  The required kernel variable is named  
+ 
+      BODY&lt;body ID&gt;_PM  
+ 
+   where &lt;body ID&gt; represents a string containing the NAIF integer  
+   ID code for `body'.  For example, if `body' is &quot;JUPITER&quot;, then  
+   the name of the kernel variable containing the prime meridian  
+   angle coefficients is  
+ 
+      BODY599_PM 
+ 
+   The optional kernel variable  
+    
+      BODY&lt;body ID&gt;_PGR_POSITIVE_LON 
+ 
+   also is normally defined via loading a text kernel. When this 
+   variable is present in the kernel pool, the prime meridian 
+   coefficients for `body' are not required by this routine. See the 
+   Particulars section below for details. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   Given the body-fixed rectangular coordinates of a point, this 
+   routine returns the planetographic coordinates of the point. The 
+   body-fixed rectangular frame is that having the X-axis pass 
+   through the 0 degree latitude 0 degree longitude direction, the 
+   Z-axis pass through the 90 degree latitude direction, and the 
+   Y-axis equal to the cross product of the unit Z-axis and X-axis 
+   vectors. 
+ 
+   The planetographic definition of latitude is identical to the 
+   planetodetic (also called &quot;geodetic&quot; in SPICE documentation) 
+   definition. In the planetographic coordinate system, latitude is 
+   defined using a reference spheroid.  The spheroid is 
+   characterized by an equatorial radius and a polar radius. For a 
+   point P on the spheroid, latitude is defined as the angle between 
+   the X-Y plane and the outward surface normal at P.  For a point P 
+   off the spheroid, latitude is defined as the latitude of the 
+   nearest point to P on the spheroid.  Note if P is an interior 
+   point, for example, if P is at the center of the spheroid, there 
+   may not be a unique nearest point to P. 
+ 
+   In the planetographic coordinate system, longitude is defined 
+   using the spin sense of the body.  Longitude is positive to the 
+   west if the spin is prograde and positive to the east if the spin 
+   is retrograde.  The spin sense is given by the sign of the first 
+   degree term of the time-dependent polynomial for the body's prime 
+   meridian Euler angle &quot;W&quot;:  the spin is retrograde if this term is 
+   negative and prograde otherwise.  For the sun, planets, most 
+   natural satellites, and selected asteroids, the polynomial 
+   expression for W may be found in a SPICE PCK kernel. 
+ 
+   The earth, moon, and sun are exceptions: planetographic longitude 
+   is measured positive east for these bodies. 
+ 
+   If you wish to override the default sense of positive longitude 
+   for a particular body, you can do so by defining the kernel 
+   variable 
+ 
+      BODY&lt;body ID&gt;_PGR_POSITIVE_LON 
+ 
+   where &lt;body ID&gt; represents the NAIF ID code of the body. This 
+   variable may be assigned either of the values 
+ 
+      'WEST' 
+      'EAST' 
+ 
+   For example, you can have this routine treat the longitude 
+   of the earth as increasing to the west using the kernel 
+   variable assignment 
+ 
+      BODY399_PGR_POSITIVE_LON = 'WEST' 
+       
+   Normally such assignments are made by placing them in a text 
+   kernel and loading that kernel via <a href="furnsh_c.html">furnsh_c</a>. 
+ 
+   The definition of this kernel variable controls the behavior of 
+   the CSPICE planetographic routines 
+ 
+      <a href="pgrrec_c.html">pgrrec_c</a> 
+      <b>recpgr_c</b> 
+      <a href="dpgrdr_c.html">dpgrdr_c</a> 
+      <a href="drdpgr_c.html">drdpgr_c</a> 
+ 
+   It does not affect the other CSPICE coordinate conversion 
+   routines. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+ 
+   Numerical results shown for this example may differ between 
+   platforms as the results depend on the SPICE kernels used as 
+   input and the machine specific arithmetic implementation. 
+ 
+ 
+   1) Find the planetographic coordinates of the point having Mars 
+      rectangular coordinates: 
+ 
+         X (km) =      0.0 
+         Y (km) =  -2620.678914818178 
+         Z (km) =   2592.408908856967  
+ 
+      (These input values have been chosen to create &quot;simple&quot; output 
+      values.) 
+ 
+ 
+            #include &lt;stdio.h&gt;
+            #include &quot;SpiceUsr.h&quot;
+
+            int main()
+         {
+            /.
+            Local variables 
+            ./
+            SpiceDouble             alt;
+            SpiceDouble             f;
+            SpiceDouble             lat;
+            SpiceDouble             lon;
+            SpiceDouble             radii  [3];
+            SpiceDouble             re;
+            SpiceDouble             rectan [3];
+            SpiceDouble             rp;
+
+            SpiceInt                n;
+
+
+            /.
+            Load a PCK file containing a triaxial
+            ellipsoidal shape model and orientation
+            data for Mars.
+            ./
+            <a href="furnsh_c.html">furnsh_c</a> ( &quot;pck00008.tpc&quot; );
+
+            /.
+            Look up the radii for Mars.  Although we
+            omit it here, we could first call <a href="badkpv_c.html">badkpv_c</a>
+            to make sure the variable BODY499_RADII
+            has three elements and numeric data type.
+            If the variable is not present in the kernel
+            pool, <a href="bodvrd_c.html">bodvrd_c</a> will signal an error.
+            ./
+            <a href="bodvrd_c.html">bodvrd_c</a> ( &quot;MARS&quot;, &quot;RADII&quot;, 3, &amp;n, radii );
+
+            /.
+            Compute flattening coefficient.
+            ./
+            re  =  radii[0];
+            rp  =  radii[2];
+            f   =  ( re - rp ) / re;
+
+            /.
+            Do the conversion. 
+            ./
+            rectan[0] =      0.0;
+            rectan[1] =  -2620.678914818178;
+            rectan[2] =   2592.408908856967;
+
+            <b>recpgr_c</b> ( &quot;mars&quot;, rectan, re, f, &amp;lon, &amp;lat, &amp;alt );
+
+
+            printf ( &quot;\n&quot;
+                     &quot;Rectangular coordinates:\n&quot;
+                     &quot;\n&quot;
+                     &quot;  X (km)                 = %18.9e\n&quot;
+                     &quot;  Y (km)                 = %18.9e\n&quot;
+                     &quot;  Z (km)                 = %18.9e\n&quot;
+                     &quot;\n&quot;
+                     &quot;Ellipsoid shape parameters:\n&quot;
+                     &quot;\n&quot;
+                     &quot;  Equatorial radius (km) = %18.9e\n&quot;
+                     &quot;  Polar radius      (km) = %18.9e\n&quot;
+                     &quot;  Flattening coefficient = %18.9e\n&quot;
+                     &quot;\n&quot;
+                     &quot;Planetographic coordinates:\n&quot;
+                     &quot;\n&quot;
+                     &quot;  Longitude (deg)        = %18.9e\n&quot;
+                     &quot;  Latitude  (deg)        = %18.9e\n&quot;
+                     &quot;  Altitude  (km)         = %18.9e\n&quot;
+                     &quot;\n&quot;,
+                     rectan[0],
+                     rectan[1],
+                     rectan[2],
+                     re,
+                     rp,
+                     f,
+                     lon / <a href="rpd_c.html">rpd_c</a>(),
+                     lat / <a href="rpd_c.html">rpd_c</a>(),
+                     alt                   );
+
+            return ( 0 );
+         }
+
+ 
+      Output from this program should be similar to the following 
+      (rounding and formatting will differ across platforms): 
+
+
+         Rectangular coordinates:
+
+           X (km)                 =    0.000000000e+00
+           Y (km)                 =   -2.620678915e+03
+           Z (km)                 =    2.592408909e+03
+
+         Ellipsoid shape parameters:
+
+           Equatorial radius (km) =    3.396190000e+03
+           Polar radius      (km) =    3.376200000e+03
+           Flattening coefficient =    5.886007556e-03
+
+         Planetographic coordinates:
+
+           Longitude (deg)        =    9.000000000e+01
+           Latitude  (deg)        =    4.500000000e+01
+           Altitude  (km)         =    3.000000000e+02
+
+ 
+ 
+   2) Below is a table showing a variety of rectangular coordinates 
+      and the corresponding Mars planetographic coordinates.  The 
+      values are computed using the reference spheroid having radii 
+ 
+         Equatorial radius:    3397 
+         Polar radius:         3375 
+ 
+      Note:  the values shown above may not be current or suitable 
+             for your application. 
+ 
+ 
+      Corresponding rectangular and planetographic coordinates are 
+      listed to three decimal places. 
+
+  rectan[0]    rectan[1]   rectan[2]    lon        lat         alt  
+  ------------------------------------------------------------------ 
+   3397.000      0.000      0.000       0.000      0.000       0.000  
+  -3397.000      0.000      0.000     180.000      0.000       0.000  
+  -3407.000      0.000      0.000     180.000      0.000      10.000  
+  -3387.000      0.000      0.000     180.000      0.000     -10.000  
+      0.000  -3397.000      0.000      90.000      0.000       0.000  
+      0.000   3397.000      0.000     270.000      0.000       0.000  
+      0.000      0.000   3375.000       0.000     90.000       0.000  
+      0.000      0.000  -3375.000       0.000    -90.000       0.000  
+      0.000      0.000      0.000       0.000     90.000   -3375.000 
+ 
+ 
+ 
+   3)  Below we show the analogous relationships for the earth, 
+       using the reference ellipsoid radii 
+ 
+          Equatorial radius:    6378.140 
+          Polar radius:         6356.750 
+ 
+       Note the change in longitudes for points on the +/- Y axis 
+       for the earth vs the Mars values. 
+ 
+  rectan[0]    rectan[1]   rectan[2]    lon        lat         alt  
+  ----------------------------------  ------------------------------- 
+   6378.140      0.000      0.000       0.000      0.000       0.000  
+  -6378.140      0.000      0.000     180.000      0.000       0.000  
+  -6388.140      0.000      0.000     180.000      0.000      10.000  
+  -6368.140      0.000      0.000     180.000      0.000     -10.000  
+      0.000  -6378.140      0.000     270.000      0.000       0.000  
+      0.000   6378.140      0.000      90.000      0.000       0.000  
+      0.000      0.000   6356.750       0.000     90.000       0.000  
+      0.000      0.000  -6356.750       0.000    -90.000       0.000  
+      0.000      0.000      0.000       0.000     90.000   -6356.750 
+ 
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   C.H. Acton      (JPL) 
+   N.J. Bachman    (JPL) 
+   H.A. Neilan     (JPL) 
+   B.V. Semenov    (JPL) 
+   W.L. Taber      (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.0.1, 23-JAN-2008 (EDW)
+
+        Corrected typo in LAT range description, from:
+
+                   -pi/2  &lt;  LAT  &lt;  pi
+                          -       -
+
+        to:
+
+                   -pi/2  &lt;  LAT  &lt;  pi/2
+                          -       -
+ 
+   -CSPICE Version 1.0.0, 26-DEC-2004 (CHA) (NJB) (HAN) (BVS) (WLT)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   convert rectangular to planetographic coordinates 
+ </PRE>
+<h4>Link to routine recpgr_c source file <a href='../../../src/cspice/recpgr_c.c'>recpgr_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:41 2014</pre>
+
+</body>
+</html>
+

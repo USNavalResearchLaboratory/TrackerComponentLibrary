@@ -1,0 +1,1276 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>sincpt_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>sincpt_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void sincpt_c ( ConstSpiceChar      * method,
+                   ConstSpiceChar      * target,
+                   SpiceDouble           et,
+                   ConstSpiceChar      * fixref,
+                   ConstSpiceChar      * abcorr,
+                   ConstSpiceChar      * obsrvr,
+                   ConstSpiceChar      * dref,
+                   ConstSpiceDouble      dvec   [3],
+                   SpiceDouble           spoint [3],
+                   SpiceDouble         * trgepc,
+                   SpiceDouble           srfvec [3],
+                   SpiceBoolean        * found       )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Given an observer and a direction vector defining a ray, compute 
+   the surface intercept of the ray on a target body at a specified 
+   epoch, optionally corrected for light time and stellar 
+   aberration. 
+ 
+   This routine supersedes <a href="srfxpt_c.html">srfxpt_c</a>. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/frames.html">FRAMES</a>
+   <a href="../req/naif_ids.html">NAIF_IDS</a> 
+   <a href="../req/pck.html">PCK</a> 
+   <a href="../req/spk.html">SPK</a> 
+   <a href="../req/time.html">TIME</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   GEOMETRY 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   method     I   Computation method. 
+   target     I   Name of target body. 
+   et         I   Epoch in ephemeris seconds past J2000 TDB. 
+   fixref     I   Body-fixed, body-centered target body frame. 
+   abcorr     I   Aberration correction. 
+   obsrvr     I   Name of observing body. 
+   dref       I   Reference frame of ray's direction vector. 
+   dvec       I   Ray's direction vector. 
+   spoint     O   Surface intercept point on the target body. 
+   trgepc     O   Intercept epoch. 
+   srfvec     O   Vector from observer to intercept point. 
+   found      O   Flag indicating whether intercept was found. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   method      is a short string providing parameters defining 
+               the computation method to be used.
+ 
+               The only choice currently supported is 
+ 
+                  &quot;Ellipsoid&quot;        The intercept computation uses 
+                                     a triaxial ellipsoid to model 
+                                     the surface of the target body. 
+                                     The ellipsoid's radii must be 
+                                     available in the kernel pool. 
+ 
+               Neither case nor white space are significant in  
+               `method'. For example, the string ' eLLipsoid ' is  
+               valid.                  
+
+                
+   target      is the name of the target body. `target' is 
+               case-insensitive, and leading and trailing blanks in 
+               `target' are not significant. Optionally, you may 
+               supply a string containing the integer ID code  
+               for the object. For example both &quot;MOON&quot; and &quot;301&quot; 
+               are legitimate strings that indicate the Moon is the 
+               target body. 
+ 
+               When the target body's surface is represented by a 
+               tri-axial ellipsoid, this routine assumes that a 
+               kernel variable representing the ellipsoid's radii is 
+               present in the kernel pool. Normally the kernel 
+               variable would be defined by loading a PCK file. 
+ 
+ 
+   et          is the epoch of participation of the observer, 
+               expressed as ephemeris seconds past J2000 TDB: `et' is 
+               the epoch at which the observer's state is computed. 
+ 
+               When aberration corrections are not used, `et' is also 
+               the epoch at which the position and orientation of the 
+               target body are computed. 
+ 
+               When aberration corrections are used, the position and
+               orientation of the target body are computed at et-lt or
+               et+lt, where `lt' is the one-way light time between the
+               intercept point and the observer, and the sign applied
+               to `lt' depends on the selected correction. See the
+               description of `abcorr' below for details.
+ 
+                                 
+   fixref      is the name of the body-fixed, body-centered 
+               reference frame associated with the target body. The 
+               output intercept point `spoint' and the observer to 
+               intercept vector `srfvec' will be expressed relative to 
+               this reference frame. 
+ 
+ 
+   abcorr      indicates the aberration corrections to be applied when
+               computing the target's position and orientation.
+ 
+               For remote sensing applications, where the apparent
+               target surface intercept point seen by the observer is
+               desired, normally the correction
+             
+                  &quot;CN+S&quot; 
+    
+               should be used. This and the other supported options 
+               are described below. `abcorr' may be any of the  
+               following: 
+ 
+                  &quot;NONE&quot;     Apply no correction. Return the  
+                             geometric surface intercept point on the 
+                             target body. 
+ 
+               Let `lt' represent the one-way light time between the 
+               observer and the surface intercept point (note: NOT 
+               between the observer and the target body's center). 
+               The following values of `abcorr' apply to the 
+               &quot;reception&quot; case in which photons depart from the 
+               intercept point's location at the light-time 
+               corrected epoch et-lt and *arrive* at the observer's 
+               location at `et': 
+ 
+ 
+                  &quot;LT&quot;       Correct for one-way light time (also 
+                             called &quot;planetary aberration&quot;) using a 
+                             Newtonian formulation. This correction 
+                             yields the location of the surface 
+                             intercept point at the moment it 
+                             emitted photons arriving at the 
+                             observer at `et'. 
+  
+                             The light time correction uses an 
+                             iterative solution of the light time 
+                             equation. The solution invoked by the 
+                             &quot;LT&quot; option uses one iteration. 
+ 
+                             Both the target position as seen by the 
+                             observer, and rotation of the target 
+                             body, are corrected for light time. 
+ 
+                  &quot;LT+S&quot;     Correct for one-way light time and stellar
+                             aberration using a Newtonian formulation.
+                             This option modifies the surface intercept
+                             obtained with the &quot;LT&quot; option to account
+                             for the observer's velocity relative to
+                             the solar system barycenter. These
+                             computations yield the apparent surface
+                             intercept point.
+
+                  &quot;CN&quot;       Converged Newtonian light time correction.
+                             In solving the light time equation, the
+                             &quot;CN&quot; correction iterates until the
+                             solution converges. Both the position and
+                             rotation of the target body are corrected
+                             for light time.
+ 
+                  &quot;CN+S&quot;     Converged Newtonian light time and stellar
+                             aberration corrections. This option
+                             produces a solution that is at least as
+                             accurate at that obtainable with the &quot;LT+S&quot;
+                             option. Whether the &quot;CN+S&quot; solution is
+                             substantially more accurate depends on the
+                             geometry of the participating objects and
+                             on the accuracy of the input data. In all
+                             cases this routine will execute more
+                             slowly when a converged solution is
+                             computed.
+ 
+                             For reception-case applications involving
+                             intercepts near the target body limb, this
+                             option should be used
+ 
+               The following values of `abcorr' apply to the 
+               &quot;transmission&quot; case in which photons *depart* from 
+               the observer's location at `et' and arrive at the 
+               intercept point at the light-time corrected epoch 
+               et+lt: 
+ 
+ 
+                  &quot;XLT&quot;      &quot;Transmission&quot; case: correct for 
+                             one-way light time using a Newtonian 
+                             formulation. This correction yields the 
+                             intercept location at the moment it 
+                             receives photons emitted from the 
+                             observer's location at `et'.  
+ 
+                             The light time correction uses an 
+                             iterative solution of the light time 
+                             equation. The solution invoked by the 
+                             &quot;XLT&quot; option uses one iteration. 
+
+                             Both the target position as seen by the 
+                             observer, and rotation of the target 
+                             body, are corrected for light time. 
+ 
+                  &quot;XLT+S&quot;    &quot;Transmission&quot; case: correct for 
+                             one-way light time and stellar 
+                             aberration using a Newtonian 
+                             formulation  This option modifies the 
+                             intercept obtained with the &quot;XLT&quot; 
+                             option to account for the observer's 
+                             velocity relative to the solar system 
+                             barycenter. 
+ 
+                  &quot;XCN&quot;      Converged Newtonian light time 
+                             correction. This is the same as XLT 
+                             correction but with further iterations 
+                             to a converged Newtonian light time 
+                             solution.  
+ 
+                  &quot;XCN+S&quot;    &quot;Transmission&quot; case: converged Newtonian
+                             light time and stellar aberration
+                             corrections. This option produces a
+                             solution that is at least as accurate at
+                             that obtainable with the &quot;XLT+S&quot; option.
+                             Whether the &quot;XCN+S&quot; solution is
+                             substantially more accurate depends on the
+                             geometry of the participating objects and
+                             on the accuracy of the input data. In all
+                             cases this routine will execute more
+                             slowly when a converged solution is
+                             computed.
+ 
+                             For transmission-case applications
+                             involving intercepts near the target body
+                             limb, this option should be used.
+ 
+               Case and embedded blanks are not significant in `abcorr'.
+               For example, the string 
+
+                  &quot;Cn + s&quot;
+
+               is valid.
+
+ 
+   obsrvr      is the name of the observing body. This is typically 
+               a spacecraft, the earth, or a surface point on the 
+               earth. `obsrvr' is case-insensitive, and leading and 
+               trailing blanks in `obsrvr' are not significant. 
+               Optionally, you may supply a string containing the 
+               integer ID code for the object. For example both 
+               &quot;MOON&quot; and &quot;301&quot; are legitimate strings that indicate 
+               the Moon is the observer. 
+ 
+ 
+   dref        is the name of the reference frame relative to which the
+               ray's direction vector is expressed. This may be any
+               frame supported by the SPICE system, including built-in
+               frames (documented in the Frames Required Reading) and
+               frames defined by a loaded frame kernel (FK). The string
+               `dref' is case-insensitive, and leading and trailing
+               blanks in `dref' are not significant.
+ 
+               When `dref' designates a non-inertial frame, the 
+               orientation of the frame is evaluated at an epoch 
+               dependent on the frame's center and, if the center is 
+               not the observer, on the selected aberration 
+               correction. See the description of the direction 
+               vector `dvec' for details. 
+ 
+ 
+   dvec        Ray direction vector emanating from the observer. The
+               intercept with the target body's surface of the ray
+               defined by the observer and `dvec' is sought.
+ 
+               `dvec' is specified relative to the reference frame 
+               designated by `dref'. 
+ 
+               Non-inertial reference frames are treated as follows: 
+               if the center of the frame is at the observer's 
+               location, the frame is evaluated at `et'. If the 
+               frame's center is located elsewhere, then letting 
+               `ltcent' be the one-way light time between the observer 
+               and the central body associated with the frame, the 
+               orientation of the frame is evaluated at et-ltcent, 
+               et+ltcent, or `et' depending on whether the requested 
+               aberration correction is, respectively, for received 
+               radiation, transmitted radiation, or is omitted. 
+               `ltcent' is computed using the method indicated by 
+               `abcorr'. 
+                
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+ 
+   spoint      is the surface intercept point on the target body of 
+               the ray defined by the observer and the direction 
+               vector. If the ray intersects the target body in 
+               multiple points, the selected intersection point is 
+               the one closest to the observer. The output argument 
+               `found' (see below) indicates whether an intercept was 
+               found. 
+ 
+               `spoint' is expressed in Cartesian coordinates, 
+               relative to the target body-fixed frame designated by 
+               `fixref'. The body-fixed target frame is evaluated at 
+               the intercept epoch `trgepc' (see description below). 
+ 
+               When light time correction is used, the duration of
+               light travel between `spoint' to the observer is
+               considered to be the one way light time. When both light
+               time and stellar aberration corrections are used,
+               `spoint' is selected such that, when `spoint' is
+               corrected for light time an stellar aberration, `spoint'
+               lies on the ray defined by the observer's location and
+               `dvec'.
+ 
+               The components of `spoint' are given in units of km. 
+ 
+ 
+   trgepc      is the &quot;intercept epoch.&quot; `trgepc' is defined as
+               follows: letting `lt' be the one-way light time between
+               the observer and the intercept point, `trgepc' is the
+               epoch et-lt, et+lt, or `et' depending on whether the
+               requested aberration correction is, respectively, for
+               received radiation, transmitted radiation, or omitted.
+               `lt' is computed using the method indicated by `abcorr'.
+ 
+               `trgepc' is expressed as seconds past J2000 TDB. 
+ 
+ 
+   srfvec      is the vector from the observer's position at `et' to
+               the aberration-corrected (or optionally, geometric)
+               position of `spoint', where the aberration corrections
+               are specified by `abcorr'. `srfvec' is expressed in the
+               target body-fixed reference frame designated by
+               `fixref', evaluated at `trgepc'.
+
+               The components of `srfvec' are given in units of km. 
+ 
+               One can use the CSPICE function <a href="vnorm_c.html">vnorm_c</a> to obtain the 
+               distance between the observer and `spoint': 
+ 
+                  dist = <a href="vnorm_c.html">vnorm_c</a> ( srfvec );
+ 
+               The observer's position `obspos', relative to the 
+               target body's center, where the center's position is 
+               corrected for aberration effects as indicated by 
+               `abcorr', can be computed via the call: 
+ 
+                  <a href="vsub_c.html">vsub_c</a> ( spoint, srfvec, obspos );
+ 
+               To transform the vector `srfvec' from a reference frame
+               `fixref' at time `trgepc' to a time-dependent reference
+               frame `ref' at time `et', the routine <a href="pxfrm2_c.html">pxfrm2_c</a> should be
+               called. Let `xform' be the 3x3 matrix representing the
+               rotation from the reference frame `fixref' at time
+               `trgepc' to the reference frame `ref' at time `et'. Then
+               `srfvec' can be transformed to the result `refvec' as
+               follows:
+ 
+                  <a href="pxfrm2_c.html">pxfrm2_c</a> ( fixref, ref,    trgepc, et, xform );
+                  <a href="mxv_c.html">mxv_c</a>    ( xform,  srfvec, refvec            );
+
+               The second example in the Examples header section 
+               below presents a complete program that demonstrates 
+               this procedure. 
+    
+ 
+   found       A logical flag indicating whether or not the ray 
+               intersects the target. If an intersection exists 
+               `found' will be returned as SPICETRUE If the ray misses 
+               the target, `found' will be returned as SPICEFALSE.
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+ 
+   1)  If the specified aberration correction is unrecognized, the
+       error will be diagnosed and signaled by a routine in the call
+       tree of this routine.
+
+   2)  If either the target or observer input strings cannot be
+       converted to an integer ID code, the error SPICE(IDCODENOTFOUND)
+       is signaled.
+ 
+   3)  If `obsrvr' and `target' map to the same NAIF integer ID code, 
+       the error SPICE(BODIESNOTDISTINCT) is signaled. 
+ 
+   4)  If the input target body-fixed frame `fixref' is not recognized,
+       the error SPICE(NOFRAME) is signaled. A frame name may fail
+       to be recognized because a required frame specification kernel
+       has not been loaded; another cause is a misspelling of the 
+       frame name.
+ 
+   5)  If the input frame `fixref' is not centered at the target body,
+       the error SPICE(INVALIDFRAME) is signaled.
+
+   6)  If the input argument `method' is not recognized, the error 
+       SPICE(INVALIDMETHOD) is signaled. 
+
+   7)  If the target and observer have distinct identities but are
+       at the same location (for example, the target is Mars and
+       the observer is the Mars barycenter), the error 
+       SPICE(NOSEPARATION) is signaled.
+
+   8)  If insufficient ephemeris data have been loaded prior to 
+       calling <b>sincpt_c</b>, the error will be diagnosed and signaled by a 
+       routine in the call tree of this routine. Note that when 
+       light time correction is used, sufficient ephemeris data 
+       must be available to propagate the states of both observer 
+       and target to the solar system barycenter. 
+ 
+   9)  If the computation method specifies an ellipsoidal target shape
+       and triaxial radii of the target body have not been loaded 
+       into the kernel pool prior to calling <b>sincpt_c</b>, the error will 
+       be diagnosed and signaled by a routine in the call tree of 
+       this routine. 
+ 
+   10) The target must be an extended body: if any of the radii of  
+       the target body are non-positive, the error will be diagnosed 
+       and signaled by routines in the call tree of this routine. 
+  
+   11) If PCK data specifying the target body-fixed frame orientation
+       have not been loaded prior to calling <b>sincpt_c</b>, the error will 
+       be diagnosed and signaled by a routine in the call tree of 
+       this routine. 
+
+   12) If the reference frame designated by `dref' is not recognized
+       by the SPICE frame subsystem, the error SPICE(NOFRAME)
+       will be signaled.
+
+   13) If the direction vector `dvec' is the zero vector, the error
+       SPICE(ZEROVECTOR) will be signaled.
+
+   14) The error SPICE(EMPTYSTRING) is signaled if any input string
+       argument does not contain at least one character, since the
+       input string cannot be converted to a Fortran-style string in
+       this case.
+      
+   15) The error SPICE(NULLPOINTER) is signaled if any input
+       string argument pointer is null.
+ 
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   Appropriate kernels must be loaded by the calling program before
+   this routine is called. 
+ 
+   The following data are required: 
+ 
+      - SPK data: ephemeris data for target and observer must be 
+        loaded. If aberration corrections are used, the states of 
+        target and observer relative to the solar system barycenter 
+        must be calculable from the available ephemeris data. 
+        Typically ephemeris data are made available by loading one 
+        or more SPK files via <a href="furnsh_c.html">furnsh_c</a>. 
+ 
+      - PCK data: if the computation method is specified as 
+        &quot;Ellipsoid,&quot; triaxial radii for the target body must be  
+        loaded into the kernel pool. Typically this is done by 
+        loading a text PCK file via <a href="furnsh_c.html">furnsh_c</a>. 
+ 
+      - Further PCK data: rotation data for the target body must 
+        be loaded. These may be provided in a text or binary PCK 
+        file.  
+  
+   The following data may be required: 
+ 
+      - Frame data: if a frame definition is required to convert 
+        the observer and target states to the body-fixed frame of 
+        the target, that definition must be available in the kernel 
+        pool. Similarly, the frame definition required to map 
+        between the frame designated by `dref' and the target 
+        body-fixed frame must be available. Typically the 
+        definitions of frames not already built-in to SPICE are 
+        supplied by loading a frame kernel. 
+
+      - CK data: if the frame to which `dref' refers is fixed to a
+        spacecraft instrument or structure, at least one CK file will
+        be needed to permit transformation of vectors between that
+        frame and both the J2000 and the target body-fixed frames.
+ 
+      - SCLK data: if a CK file is needed, an associated SCLK 
+        kernel is required to enable conversion between encoded SCLK 
+        (used to time-tag CK data) and barycentric dynamical time 
+        (TDB). 
+ 
+   In all cases, kernel data are normally loaded once per program 
+   run, NOT every time this routine is called. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   Given a ray defined by a direction vector and the location of an 
+   observer, <b>sincpt_c</b> computes the surface intercept point of the ray 
+   on a specified target body. <b>sincpt_c</b> also determines the vector 
+   from the observer to the surface intercept point. 
+ 
+   When aberration corrections are used, this routine finds the 
+   value of `spoint' such that, if `spoint' is regarded as an ephemeris 
+   object, after the selected aberration corrections are applied to 
+   the vector from the observer to `spoint', the resulting vector is 
+   parallel to the direction vector `dvec'. 
+ 
+   This routine computes light time corrections using light time 
+   between the observer and the surface intercept point, as opposed 
+   to the center of the target. Similarly, stellar aberration 
+   corrections done by this routine are based on the direction of 
+   the vector from the observer to the light-time corrected 
+   intercept point, not to the target center. This technique avoids 
+   errors due to the differential between aberration corrections 
+   across the target body. Therefore it's valid to use aberration 
+   corrections with this routine even when the observer is very 
+   close to the intercept point, in particular when the 
+   observer-intercept point distance is much less than the 
+   observer-target center distance. It's also valid to use stellar 
+   aberration corrections even when the intercept point is near or 
+   on the limb (as may occur in occultation computations using a 
+   point target). 
+ 
+   When comparing surface intercept point computations with results 
+   from sources other than SPICE, it's essential to make sure the 
+   same geometric definitions are used. 
+    </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+  
+   The numerical results shown for this example may differ across 
+   platforms. The results depend on the SPICE kernels used as 
+   input, the compiler and supporting libraries, and the machine  
+   specific arithmetic implementation.  
+ 
+
+   1) The following program computes surface intercept points on 
+      Mars for the boresight and FOV boundary vectors of the MGS MOC
+      narrow angle camera. The intercepts are computed for a single
+      observation epoch. Light time and stellar aberration corrections
+      are used. For simplicity, camera distortion is ignored.
+     
+      Use the meta-kernel shown below to load the required SPICE 
+      kernels. 
+
+           KPL/MK
+ 
+           File: mgs_example2.tm
+
+           This meta-kernel is intended to support operation of SPICE
+           example programs. The kernels shown here should not be
+           assumed to contain adequate or correct versions of data
+           required by SPICE-based user applications.
+ 
+           In order for an application to use this meta-kernel, the
+           kernels referenced here must be present in the user's
+           current working directory.
+ 
+           The names and contents of the kernels referenced
+           by this meta-kernel are as follows:
+
+              File name                     Contents
+              ---------                     --------
+              de418.bsp                     Planetary ephemeris
+              pck00008.tpc                  Planet orientation and
+                                            radii
+              naif0008.tls                  Leapseconds
+              mgs_moc_v20.ti                MGS MOC instrument
+                                            parameters
+              mgs_sclkscet_00061.tsc        MGS SCLK coefficients
+              mgs_sc_ext12.bc               MGS s/c bus attitude
+              mgs_ext12_ipng_mgs95j.bsp     MGS ephemeris
+ 
+           \begindata
+ 
+              KERNELS_TO_LOAD = ( 'de418.bsp',
+                                  'pck00008.tpc',
+                                  'naif0008.tls',
+                                  'mgs_moc_v20.ti',
+                                  'mgs_sclkscet_00061.tsc',
+                                  'mgs_sc_ext12.bc',
+                                  'mgs_ext12_ipng_mgs95j.bsp' )
+           \begintext
+
+
+     Example code begins here. 
+
+      #include &lt;stdio.h&gt;
+      #include &lt;string.h&gt;
+      #include &quot;SpiceUsr.h&quot;
+      #include &quot;SpiceZmc.h&quot;
+
+      int main()
+      {
+         /.
+         Local parameters 
+         ./
+         #define META                &quot;mgs_example2.tm&quot; 
+         #define ABCLEN              20
+         #define LNSIZE              81
+         #define NAMLEN              33
+         #define TIMLEN              51
+         #define SHPLEN              81
+         #define NCORNR               4
+
+         /. 
+         Local variables 
+         ./
+         SpiceBoolean            found;
+
+         SpiceChar             * abcorr  = &quot;CN+S&quot;;
+         SpiceChar             * camera  = &quot;MGS_MOC_NA&quot;;
+         SpiceChar               dref    [NAMLEN];
+         SpiceChar             * fixref  = &quot;IAU_MARS&quot;;
+         SpiceChar             * method  = &quot;Ellipsoid&quot;;
+         SpiceChar             * obsrvr  = &quot;MGS&quot;;
+         SpiceChar               shape   [ SHPLEN ];
+         SpiceChar             * target  = &quot;Mars&quot;;
+         SpiceChar               title   [ LNSIZE ];
+         SpiceChar             * utc     = &quot;2003 OCT 13 06:00:00 UTC&quot;;
+
+         SpiceDouble             bounds  [NCORNR][3];
+         SpiceDouble             bsight  [3];
+         SpiceDouble             dist;
+         SpiceDouble             dvec    [3];
+         SpiceDouble             et;
+         SpiceDouble             lat;
+         SpiceDouble             lon;
+         SpiceDouble             radius;
+         SpiceDouble             spoint [3];
+         SpiceDouble             srfvec [3];
+         SpiceDouble             trgepc;
+
+         SpiceInt                camid;
+         SpiceInt                i;
+         SpiceInt                n;
+
+
+         /.
+         Load kernel files:
+         ./
+         <a href="furnsh_c.html">furnsh_c</a> ( META );
+
+         /.
+         Convert the UTC request time to ET (seconds past
+         J2000, TDB). 
+         ./ 
+         <a href="str2et_c.html">str2et_c</a> ( utc, &amp;et );
+
+         /.
+         Get the MGS MOC Narrow angle camera (MGS_MOC_NA) 
+         ID code. Then look up the field of view (FOV) 
+         parameters. 
+         ./ 
+         <a href="bodn2c_c.html">bodn2c_c</a> ( camera, &amp;camid, &amp;found );
+
+         if ( !found )
+         {
+             <a href="setmsg_c.html">setmsg_c</a> ( &quot;Could not find ID code for &quot;
+                        &quot;instrument #.&quot;               );
+             <a href="errch_c.html">errch_c</a>  ( &quot;#&quot;, camera                   );
+             <a href="sigerr_c.html">sigerr_c</a> ( &quot;SPICE(NOTRANSLATION)&quot;        );
+         }
+
+         /.
+         <a href="getfov_c.html">getfov_c</a> will return the name of the camera-fixed frame
+         in the string `dref', the camera boresight vector in
+         the array `bsight', and the FOV corner vectors in the
+         array `bounds'.
+         ./
+         <a href="getfov_c.html">getfov_c</a> ( camid, NCORNR, SHPLEN, NAMLEN,
+                    shape, dref,   bsight, &amp;n,     bounds );
+
+         printf ( &quot;\n&quot;
+                  &quot;Surface Intercept Locations for Camera\n&quot; 
+                  &quot;FOV Boundary and Boresight Vectors\n&quot; 
+                  &quot;\n&quot; 
+                  &quot;   Instrument:             %s\n&quot; 
+                  &quot;   Epoch:                  %s\n&quot; 
+                  &quot;   Aberration correction:  %s\n&quot; 
+                  &quot;\n&quot;,
+                  camera, utc, abcorr                             ); 
+
+         /. 
+         Now compute and display the surface intercepts for the 
+         boresight and all of the FOV boundary vectors. 
+         ./ 
+
+         for ( i = 0;  i &lt;= NCORNR;  i++ )
+         {
+            if ( i &lt; NCORNR )
+            {
+               sprintf ( title, &quot;Corner vector %ld&quot;, i );
+
+               <a href="vequ_c.html">vequ_c</a> ( bounds[i], dvec );
+            }
+            else
+            {
+               strcpy ( title,  &quot;Boresight vector&quot; );
+
+               <a href="vequ_c.html">vequ_c</a> ( bsight, dvec );
+            }
+
+            /.  
+            Compute the surface intercept point using 
+            the specified aberration corrections. 
+            ./
+            <b>sincpt_c</b> ( method, 
+                       target,  et,     fixref, abcorr, 
+                       obsrvr,  dref,   dvec,   spoint,  
+                       &amp;trgepc, srfvec, &amp;found         );
+
+            if ( found )
+            {
+               /.
+               Compute range from observer to apparent intercept. 
+               ./
+               dist = <a href="vnorm_c.html">vnorm_c</a>( srfvec );
+
+               /.
+               Convert rectangular coordinates to planetocentric 
+               latitude and longitude. Convert radians to degrees. 
+               ./ 
+               <a href="reclat_c.html">reclat_c</a> ( spoint, &amp;radius, &amp;lon, &amp;lat );
+
+               lon *= <a href="dpr_c.html">dpr_c</a> ();
+               lat *= <a href="dpr_c.html">dpr_c</a> ();
+
+               /.
+               Display the results. 
+               ./
+
+               printf ( &quot;\n&quot;
+                        &quot;%s\n&quot;, title );
+
+               sprintf ( title, &quot;  Vector in %s frame = &quot;, dref );
+
+               printf ( &quot;\n&quot;
+                        &quot;%s\n&quot;, title );
+
+               if ( i &lt; NCORNR )
+               {
+                   printf ( &quot;   %18.10e %18.10e %18.10e\n&quot;, 
+                            bounds[i][0], bounds[i][1], bounds[i][2] );
+               }
+               else
+               {
+                  printf ( &quot;   %18.10e %18.10e %18.10e\n&quot;, 
+                           bsight[0],    bsight[1],    bsight[2]    );
+               }
+
+               printf ( &quot;\n&quot;
+                        &quot;  Intercept:\n&quot;
+                        &quot;\n&quot;                     
+                        &quot;     Radius                   (km)  = %18.10e\n&quot;
+                        &quot;     Planetocentric Latitude  (deg) = %18.10e\n&quot;
+                        &quot;     Planetocentric Longitude (deg) = %18.10e\n&quot;
+                        &quot;     Range                    (km)  = %18.10e\n&quot;
+                        &quot;\n&quot;,
+                        radius,  lat,  lon,  dist                          );
+            } 
+            else 
+            { 
+                printf ( &quot;\n&quot;
+                         &quot;Intercept not found.\n&quot;
+                         &quot;\n&quot;                     );
+            }
+
+         }
+         return ( 0 );
+      }
+
+
+   When this program was executed on a PC/Linux/gcc platform, the 
+   output was:
+ 
+      Surface Intercept Locations for Camera
+      FOV Boundary and Boresight Vectors
+
+         Instrument:             MGS_MOC_NA
+         Epoch:                  2003 OCT 13 06:00:00 UTC
+         Aberration correction:  CN+S
+
+
+      Corner vector 0
+
+        Vector in MGS_MOC_NA frame =
+           1.8571383810e-06  -3.8015622659e-03   9.9999277403e-01
+
+        Intercept:
+
+           Radius                   (km)  =   3.3849411359e+03
+           Planetocentric Latitude  (deg) =  -4.8477481924e+01
+           Planetocentric Longitude (deg) =  -1.2347407905e+02
+           Range                    (km)  =   3.8898310366e+02
+
+
+      Corner vector 1
+
+        Vector in MGS_MOC_NA frame =
+           1.8571383810e-06   3.8015622659e-03   9.9999277403e-01
+
+        Intercept:
+
+           Radius                   (km)  =   3.3849396987e+03
+           Planetocentric Latitude  (deg) =  -4.8481636340e+01
+           Planetocentric Longitude (deg) =  -1.2339882297e+02
+           Range                    (km)  =   3.8897512130e+02
+
+
+      Corner vector 2
+
+        Vector in MGS_MOC_NA frame =
+          -1.8571383810e-06   3.8015622659e-03   9.9999277403e-01
+
+        Intercept:
+
+           Radius                   (km)  =   3.3849396899e+03
+           Planetocentric Latitude  (deg) =  -4.8481661910e+01
+           Planetocentric Longitude (deg) =  -1.2339882618e+02
+           Range                    (km)  =   3.8897466238e+02
+
+
+      Corner vector 3
+
+        Vector in MGS_MOC_NA frame =
+          -1.8571383810e-06  -3.8015622659e-03   9.9999277403e-01
+
+        Intercept:
+
+           Radius                   (km)  =   3.3849411271e+03
+           Planetocentric Latitude  (deg) =  -4.8477507498e+01
+           Planetocentric Longitude (deg) =  -1.2347408220e+02
+           Range                    (km)  =   3.8898264472e+02
+
+
+      Boresight vector
+
+        Vector in MGS_MOC_NA frame =
+           0.0000000000e+00   0.0000000000e+00   1.0000000000e+00
+
+        Intercept:
+
+           Radius                   (km)  =   3.3849404102e+03
+           Planetocentric Latitude  (deg) =  -4.8479579822e+01
+           Planetocentric Longitude (deg) =  -1.2343645396e+02
+           Range                    (km)  =   3.8897573572e+02
+
+
+
+   2) Use <a href="subpnt_c.html">subpnt_c</a> to find the sub-spacecraft point on Mars for the 
+      Mars Reconnaissance Orbiter spacecraft (MRO) at a specified 
+      time, using the &quot;near point: ellipsoid&quot; computation method. 
+      Use both LT+S and CN+S aberration corrections to illustrate 
+      the differences. 
+ 
+      Convert the spacecraft to sub-observer point vector obtained 
+      from <a href="subpnt_c.html">subpnt_c</a> into the MRO_HIRISE_LOOK_DIRECTION reference frame 
+      at the observation time. Perform a consistency check with this 
+      vector: compare the Mars surface intercept of the ray 
+      emanating from the spacecraft and pointed along this vector 
+      with the sub-observer point. 
+ 
+      Use the meta-kernel shown below to load the required SPICE 
+      kernels. 
+ 
+ 
+         KPL/MK 
+ 
+         File: mro_example.tm 
+ 
+         This meta-kernel is intended to support operation of SPICE 
+         example programs. The kernels shown here should not be 
+         assumed to contain adequate or correct versions of data 
+         required by SPICE-based user applications. 
+ 
+         In order for an application to use this meta-kernel, the 
+         kernels referenced here must be present in the user's 
+         current working directory. 
+ 
+         The names and contents of the kernels referenced 
+         by this meta-kernel are as follows: 
+ 
+            File name                     Contents 
+            ---------                     -------- 
+            de418.bsp                     Planetary ephemeris 
+            pck00008.tpc                  Planet orientation and 
+                                               radii 
+            naif0008.tls                  Leapseconds 
+            mro_psp4_ssd_mro95a.bsp       MRO ephemeris 
+            mro_v11.tf                    MRO frame specifications 
+            mro_sclkscet_00022_65536.tsc  MRO SCLK coefficients and 
+                                               parameters 
+            mro_sc_psp_070925_071001.bc   MRO attitude 
+ 
+ 
+         \begindata 
+ 
+            KERNELS_TO_LOAD = ( 'de418.bsp', 
+                                'pck00008.tpc', 
+                                'naif0008.tls', 
+                                'mro_psp4_ssd_mro95a.bsp', 
+                                'mro_v11.tf', 
+                                'mro_sclkscet_00022_65536.tsc', 
+                                'mro_sc_psp_070925_071001.bc'  ) 
+         \begintext 
+ 
+ 
+     Example code begins here. 
+ 
+
+     /.
+     Program EX2
+     ./
+     #include &lt;stdio.h&gt;
+     #include &quot;SpiceUsr.h&quot;
+
+     int main()
+     {
+        /.
+        Local constants
+        ./
+        #define META            &quot;mro_example.tm&quot;
+        #define NCORR           2
+
+        /.    
+        Local variables
+        ./
+        SpiceBoolean            found;
+
+        static SpiceChar      * abcorr[NCORR] =
+                                {
+                                   &quot;LT+S&quot;, &quot;CN+S&quot;
+                                };
+
+        static SpiceChar      * hiref;
+        static SpiceChar      * method;
+
+        SpiceDouble             alt;
+        SpiceDouble             et;
+        SpiceDouble             lat;
+        SpiceDouble             lon;
+        SpiceDouble             mrovec [3];
+        SpiceDouble             r1     [3][3];
+        SpiceDouble             r2     [3][3];
+        SpiceDouble             radius;
+        SpiceDouble             spoint [3];
+        SpiceDouble             srfvec [3];
+        SpiceDouble             trgepc;
+        SpiceDouble             xepoch;
+        SpiceDouble             xform  [3][3];
+        SpiceDouble             xpoint [3];
+        SpiceDouble             xvec   [3];
+
+        SpiceInt                i;
+
+        /.
+        Load kernel files via the meta-kernel.
+        ./
+        <a href="furnsh_c.html">furnsh_c</a> ( META );
+
+        /.
+        Convert the TDB request time string to seconds past
+        J2000, TDB.
+        ./
+        <a href="str2et_c.html">str2et_c</a> ( &quot;2007 SEP 30 00:00:00 TDB&quot;, &amp;et );
+
+        /.
+        Compute the sub-spacecraft point using the
+        &quot;NEAR POINT: ELLIPSOID&quot; definition.
+        Compute the results using both LT+S and CN+S
+        aberration corrections.
+        ./
+        method = &quot;Near point: ellipsoid&quot;;
+
+        printf ( &quot;\nComputation method = %s\n&quot;, method );
+
+        for ( i = 0;  i &lt; 2;  i++ )
+        {
+           <a href="subpnt_c.html">subpnt_c</a> ( method,                                      
+                      &quot;mars&quot;, et,     &quot;iau_mars&quot;, abcorr[i], 
+                      &quot;mro&quot;,  spoint, &amp;trgepc,    srfvec    );
+
+           /.
+           Compute the observer's altitude above `spoint'.
+           ./
+           alt = <a href="vnorm_c.html">vnorm_c</a> ( srfvec );
+
+           /.
+           Express `srfvec' in the MRO_HIRISE_LOOK_DIRECTION
+           reference frame at epoch `et'. Since `srfvec' is expressed
+           relative to the IAU_MARS frame at `trgepc', we must
+           call <a href="pxfrm2_c.html">pxfrm2_c</a> to compute the position transformation matrix
+           from IAU_MARS at `trgepc' to the MRO_HIRISE_LOOK_DIRECTION
+           frame at time `et'.
+
+           To make code formatting a little easier, we'll store
+           the long MRO reference frame name in a variable:
+           ./
+           hiref = &quot;MRO_HIRISE_LOOK_DIRECTION&quot;;
+
+           <a href="pxfrm2_c.html">pxfrm2_c</a> ( &quot;iau_mars&quot;, hiref,  trgepc, et, xform );
+           <a href="mxv_c.html">mxv_c</a>    (  xform,     srfvec, mrovec            );
+
+           /.
+           Convert rectangular coordinates to planetocentric
+           latitude and longitude. Convert radians to degrees.
+           ./
+           <a href="reclat_c.html">reclat_c</a> ( spoint, &amp;radius, &amp;lon, &amp;lat );
+
+           lon *= <a href="dpr_c.html">dpr_c</a>();
+           lat *= <a href="dpr_c.html">dpr_c</a>();
+
+           /.
+           Write the results.
+           ./
+           printf ( &quot;\n&quot;
+                    &quot;Aberration correction = %s\n\n&quot;
+                    &quot;  MRO-to-sub-observer vector in\n&quot;
+                    &quot;  MRO HIRISE look direction frame\n&quot;
+                    &quot;     X-component             (km) = %21.9f\n&quot;
+                    &quot;     Y-component             (km) = %21.9f\n&quot;
+                    &quot;     Z-component             (km) = %21.9f\n&quot;
+                    &quot;  Sub-observer point radius  (km) = %21.9f\n&quot;
+                    &quot;  Planetocentric latitude   (deg) = %21.9f\n&quot;
+                    &quot;  Planetocentric longitude  (deg) = %21.9f\n&quot;
+                    &quot;  Observer altitude          (km) = %21.9f\n&quot;,
+                    abcorr[i],
+                    mrovec[0],
+                    mrovec[1],
+                    mrovec[2],
+                    radius,
+                    lat,
+                    lon,
+                    alt         );
+
+           /.
+           Consistency check: find the surface intercept on
+           Mars of the ray emanating from the spacecraft and having
+           direction vector MROVEC in the MRO HIRISE look direction
+           reference frame at ET. Call the intercept point
+           XPOINT. XPOINT should coincide with SPOINT, up to a
+           small round-off error.
+           ./
+           <b>sincpt_c</b> ( &quot;ellipsoid&quot;, &quot;mars&quot;,  et,    &quot;iau_mars&quot;,  
+                      abcorr[i],   &quot;mro&quot;,   hiref, mrovec, 
+                      xpoint,      &amp;xepoch, xvec,  &amp;found     );
+
+           if ( !found )
+           {
+              printf ( &quot;Bug: no intercept\n&quot; );        
+           }
+           else
+           {
+              /.
+              Report the distance between XPOINT and SPOINT.
+              ./
+              printf ( &quot;  Intercept comparison error (km) = %21.9f\n\n&quot;,
+                       <a href="vdist_c.html">vdist_c</a>( xpoint, spoint )                        );
+           }
+        }
+
+        return ( 0 );
+     } 
+ 
+ 
+   When this program was executed on a PC/Linux/gcc platform, the 
+   output was: 
+
+
+      Computation method = Near point: ellipsoid
+
+      Aberration correction = LT+S
+
+        MRO-to-sub-observer vector in
+        MRO HIRISE look direction frame
+           X-component             (km) =           0.286931987
+           Y-component             (km) =          -0.260417167
+           Z-component             (km) =         253.816284981
+        Sub-observer point radius  (km) =        3388.299078207
+        Planetocentric latitude   (deg) =         -38.799836879
+        Planetocentric longitude  (deg) =        -114.995294746
+        Observer altitude          (km) =         253.816580760
+        Intercept comparison error (km) =           0.000002144
+
+
+      Aberration correction = CN+S
+
+        MRO-to-sub-observer vector in
+        MRO HIRISE look direction frame
+           X-component             (km) =           0.286931866
+           Y-component             (km) =          -0.260417914
+           Z-component             (km) =         253.816274506
+        Sub-observer point radius  (km) =        3388.299078205
+        Planetocentric latitude   (deg) =         -38.799836883
+        Planetocentric longitude  (deg) =        -114.995294968
+        Observer altitude          (km) =         253.816570285
+        Intercept comparison error (km) =           0.000000001  
+
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   A cautionary note: if aberration corrections are used, and  
+   if `dref' is the target body-fixed frame, the epoch at which that 
+   frame is evaluated is offset from `et' by the light time between 
+   the observer and the *center* of the target body. This light time 
+   normally will differ from the light time between the observer and 
+   intercept point. Consequently the orientation of the target 
+   body-fixed frame at `trgepc' will not match that of the target 
+   body-fixed frame at the epoch associated with `dref'. As a result, 
+   various derived quantities may not be as expected: for example, 
+   `srfvec' would not be parallel to `dvec'.
+ 
+   In many applications the errors arising from this frame 
+   discrepancy may be insignificant; however a safe approach is to 
+   always use as `dref' a frame other than the target body-fixed 
+   frame. 
+    </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman   (JPL) 
+   S.C. Krening   (JPL)
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.0.2, 02-APR-2011 (NJB) (SCK)
+
+       References to the new <a href="pxfrm2_c.html">pxfrm2_c</a> routine were added, which
+       changed the Detailed Output section and the second example. 
+
+       Miscellaneous, minor header comment corrections were made.
+
+   -CSPICE Version 1.0.1, 06-FEB-2009 (NJB)
+ 
+       Typos in the Detailed Input section's description of `dref'
+       were corrected. Incorrect frame name fixfrm was changed to
+       fixref in documentation.
+
+       In the header examples, meta-kernel names were updated to use
+       the suffix
+
+          &quot;.tm&quot;
+
+   -CSPICE Version 1.0.0, 02-MAR-2008 (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   find surface intercept point 
+   find intersection of ray and target body surface 
+   find intercept of ray on target body surface 
+ </PRE>
+<h4>Link to routine sincpt_c source file <a href='../../../src/cspice/sincpt_c.c'>sincpt_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:43 2014</pre>
+
+</body>
+</html>
+

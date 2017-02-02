@@ -1,0 +1,833 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>ilumin_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>ilumin_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void ilumin_c ( ConstSpiceChar          * method,
+                   ConstSpiceChar          * target,
+                   SpiceDouble               et,
+                   ConstSpiceChar          * fixref, 
+                   ConstSpiceChar          * abcorr, 
+                   ConstSpiceChar          * obsrvr, 
+                   ConstSpiceDouble          spoint [3],
+                   SpiceDouble             * trgepc,
+                   SpiceDouble               srfvec [3],
+                   SpiceDouble             * phase,
+                   SpiceDouble             * solar,
+                   SpiceDouble             * emissn     )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Find the illumination angles (phase, solar incidence, and
+   emission) at a specified surface point of a target body.
+ 
+   This routine supersedes <a href="illum_c.html">illum_c</a>.
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/frames.html">FRAMES</a>
+   <a href="../req/naif_ids.html">NAIF_IDS</a> 
+   <a href="../req/pck.html">PCK</a>
+   <a href="../req/spk.html">SPK</a> 
+   <a href="../req/time.html">TIME</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   GEOMETRY 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   method     I   Computation method. 
+   target     I   Name of target body. 
+   et         I   Epoch in ephemeris seconds past J2000 TDB.
+   fixref     I   Body-fixed, body-centered target body frame. 
+   abcorr     I   Desired aberration correction. 
+   obsrvr     I   Name of observing body. 
+   spoint     I   Body-fixed coordinates of a target surface point. 
+   trgepc     O   Target surface point epoch. 
+   srfvec     O   Vector from observer to target surface point. 
+   phase      O   Phase angle at the surface point. 
+   solar      O   Solar incidence angle at the surface point. 
+   emissn     O   Emission angle at the surface point. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+
+   method      is a short string providing parameters defining
+               the computation method to be used. Parameters
+               include, but are not limited to, the shape model
+               used to represent the surface of the target body.
+
+               The only choice currently supported is
+
+                  &quot;Ellipsoid&quot;        The illumination angle computation
+                                     uses a triaxial ellipsoid to model
+                                     the surface of the target body.
+                                     The ellipsoid's radii must be
+                                     available in the kernel pool.
+
+               Neither case nor white space are significant in
+               `method'. For example, the string ' eLLipsoid ' is
+               valid.
+   
+
+   target      is the name of the target body. `target' is
+               case-insensitive, and leading and trailing blanks in
+               `target' are not significant. Optionally, you may supply
+               a string containing the integer ID code for the object.
+               For example both &quot;MOON&quot; and &quot;301&quot; are legitimate strings
+               that indicate the Moon is the target body.
+
+ 
+   et          is the epoch, specified as ephemeris seconds past J2000
+               TDB, at which the apparent illumination angles at the
+               specified surface point on the target body, as seen from
+               the observing body, are to be computed.
+
+ 
+   fixref      is the name of the body-fixed, body-centered reference
+               frame associated with the target body. The input surface
+               point `spoint' and the output vector `srfvec' are
+               expressed relative to this reference frame. The string
+               `fixref' is case-insensitive, and leading and trailing
+               blanks in `fixref' are not significant.
+ 
+
+   abcorr      is the aberration correction to be used in computing the
+               position and orientation of the target body and the
+               location of the Sun.
+
+               For remote sensing applications, where the apparent
+               illumination angles seen by the observer are desired,
+               normally either of the corrections
+
+                  &quot;LT+S&quot;
+                  &quot;CN+S&quot;
+
+               should be used. These and the other supported options
+               are described below. `abcorr' may be any of the
+               following:
+
+                  &quot;NONE&quot;     No aberration correction.
+
+ 
+               Let `lt' represent the one-way light time between the
+               observer and `spoint' (note: NOT between the observer
+               and the target body's center). The following values of
+               `abcorr' apply to the &quot;reception&quot; case in which photons
+               depart from `spoint' at the light-time corrected epoch
+               et-lt and *arrive* at the observer's location at `et':
+ 
+                  &quot;LT&quot;       Correct both the position of `spoint' as
+                             seen by the observer, and the position of
+                             the Sun as seen by the target, for light
+                             time.
+
+                  &quot;LT+S&quot;     Correct both the position of `spoint' as
+                             seen by the observer, and the position of
+                             the Sun as seen by the target, for light
+                             time and stellar aberration.
+
+                  &quot;CN&quot;       Converged Newtonian light time correction.
+                             In solving the light time equations for
+                             target and the Sun, the &quot;CN&quot; correction
+                             iterates until the solution converges.
+
+                  &quot;CN+S&quot;     Converged Newtonian light time and
+                             stellar aberration corrections. This
+                             option produces a solution that is at
+                             least as accurate at that obtainable
+                             with the &quot;LT+S&quot; option. Whether the
+                             &quot;CN+S&quot; solution is substantially more
+                             accurate depends on the geometry of the
+                             participating objects and on the
+                             accuracy of the input data. In all
+                             cases this routine will execute more
+                             slowly when a converged solution is
+                             computed.
+
+               Neither case nor white space are significant in
+               `abcorr'. For example, the string
+
+                 &quot;Lt + s&quot;
+
+               is valid.
+
+
+   obsrvr      is the name of the observing body.  This is typically a
+               spacecraft, the earth, or a surface point on the earth.
+               `obsrvr' is case-insensitive, and leading and trailing
+               blanks in `obsrvr' are not significant. Optionally, you
+               may supply a string containing the integer ID code for
+               the object. For example both &quot;MOON&quot; and &quot;301&quot; are
+               legitimate strings that indicate the Moon is the
+               observer.
+ 
+               `obsrvr' may be not be identical to `target'.
+
+
+   spoint      is a surface point on the target body, expressed in
+               Cartesian coordinates, relative to the body-fixed
+               target frame designated by `fixref'.
+
+               `spoint' need not be visible from the observer's
+               location at the epoch `et'.
+
+               The components of `spoint' have units of km.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   trgepc      is the &quot;surface point point epoch.&quot; `trgepc' is defined
+               as follows: letting `lt' be the one-way light time
+               between the observer and the input surface point
+               `spoint', `trgepc' is either the epoch et-lt or `et'
+               depending on whether the requested aberration correction
+               is, respectively, for received radiation or omitted.
+               `lt' is computed using the method indicated by `abcorr'.
+ 
+               `trgepc' is expressed as seconds past J2000 TDB.
+ 
+ 
+   srfvec      is the vector from the observer's position at `et' to
+               the aberration-corrected (or optionally, geometric)
+               position of `spoint', where the aberration corrections
+               are specified by `abcorr'. `srfvec' is expressed in the
+               target body-fixed reference frame designated by
+               `fixref', evaluated at `trgepc'.
+ 
+               The components of `srfvec' are given in units of km. 
+ 
+               One can use the CSPICE function <a href="vnorm_c.html">vnorm_c</a> to obtain the 
+               distance between the observer and `spoint': 
+ 
+                  dist = <a href="vnorm_c.html">vnorm_c</a> ( srfvec );
+ 
+               The observer's position `obspos', relative to the 
+               target body's center, where the center's position is 
+               corrected for aberration effects as indicated by 
+               `abcorr', can be computed via the call: 
+ 
+                  <a href="vsub_c.html">vsub_c</a> ( spoint, srfvec, obspos );
+
+               To transform the vector `srfvec' from a reference frame
+               `fixref' at time `trgepc' to a time-dependant reference
+               frame `ref' at time `et', the routine <a href="pxfrm2_c.html">pxfrm2_c</a> should be
+               called. Let `xform' be the 3x3 matrix representing the
+               rotation from the reference frame `fixref' at time
+               `trgepc' to the reference frame `ref' at time `et'. Then
+               `srfvec' can be transformed to the result `refvec' as
+               follows:
+ 
+                  <a href="pxfrm2_c.html">pxfrm2_c</a> ( fixref, ref,    trgepc, et, xform );
+                  <a href="mxv_c.html">mxv_c</a>    ( xform,  srfvec, refvec            );
+
+ 
+   phase       is the phase angle at `spoint', as seen from `obsrvr' at
+               time `et'. This is the angle between the spoint-obsrvr
+               vector and the spoint-sun vector. Units are radians. The
+               range of `phase' is [0, pi]. See Particulars below for a
+               detailed discussion of the definition.
+ 
+
+   solar       is the solar incidence angle at `spoint', as seen from
+               `obsrvr' at time `et'. This is the angle between the
+               surface normal vector at `spoint' and the spoint-sun
+               vector. Units are radians. The range of `solar' is [0,
+               pi]. See Particulars below for a detailed discussion of
+               the definition.
+ 
+ 
+   emissn      is the emission angle at `spoint', as seen from `obsrvr'
+               at time `et'. This is the angle between the surface
+               normal vector at `spoint' and the spoint-observer
+               vector. Units are radians. The range of `emissn' is [0,
+               pi]. See Particulars below for a detailed discussion of
+               the definition.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1)  If the specified aberration correction is relativistic or
+       calls for stellar aberration but not light time correction,
+       the error SPICE(NOTSUPPORTED) is signaled. If the specified 
+       aberration correction is any other unrecognized value, the 
+       error will be diagnosed and signaled by a routine in the call 
+       tree of this routine.  
+
+   2)  If either the target or observer input strings cannot be
+       converted to an integer ID code, the error SPICE(IDCODENOTFOUND)
+       is signaled.
+ 
+   3)  If `obsrvr' and `target' map to the same NAIF integer ID code, 
+       the error SPICE(BODIESNOTDISTINCT) is signaled. 
+ 
+   4)  If the input target body-fixed frame `fixref' is not recognized,
+       the error SPICE(NOFRAME) is signaled. A frame name may fail
+       to be recognized because a required frame specification kernel
+       has not been loaded; another cause is a misspelling of the 
+       frame name.
+ 
+   5)  If the input frame `fixref' is not centered at the target body,
+       the error SPICE(INVALIDFRAME) is signaled.
+
+   6)  If the input argument `method' is not recognized, the error 
+       SPICE(INVALIDMETHOD) is signaled. 
+
+   7)  If the target and observer have distinct identities but are
+       at the same location (for example, the target is Mars and
+       the observer is the Mars barycenter), the error 
+       SPICE(NOSEPARATION) is signaled.
+
+   8)  If insufficient ephemeris data have been loaded prior to 
+       calling <b>ilumin_c</b>, the error will be diagnosed and signaled by a 
+       routine in the call tree of this routine. Note that when 
+       light time correction is used, sufficient ephemeris data 
+       must be available to propagate the states of observer,
+       target, and the Sun to the solar system barycenter. 
+ 
+   9)  If the computation method specifies an ellipsoidal target shape
+       and triaxial radii of the target body have not been loaded 
+       into the kernel pool prior to calling <b>ilumin_c</b>, the error will 
+       be diagnosed and signaled by a routine in the call tree of 
+       this routine. 
+ 
+   10) The target must be an extended body: if any of the radii of  
+       the target body are non-positive, the error will be diagnosed 
+       and signaled by routines in the call tree of this routine. 
+  
+   11) If PCK data specifying the target body-fixed frame orientation
+       have not been loaded prior to calling <b>ilumin_c</b>, the error will 
+       be diagnosed and signaled by a routine in the call tree of 
+       this routine. 
+
+   12) The error SPICE(EMPTYSTRING) is signaled if any input string
+       argument does not contain at least one character, since the
+       input string cannot be converted to a Fortran-style string in
+       this case.
+      
+   13) The error SPICE(NULLPOINTER) is signaled if any input
+       string argument pointer is null.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+ 
+   Appropriate kernels must be loaded by the calling program before
+   this routine is called.
+
+   The following data are required:
+
+      - SPK data: ephemeris data for target, observer, and the
+        Sun must be loaded. If aberration corrections are used, the
+        states of target, observer, and the Sun relative to the
+        solar system barycenter must be calculable from the
+        available ephemeris data. Typically ephemeris data are made
+        available by loading one or more SPK files via <a href="furnsh_c.html">furnsh_c</a>.
+
+      - PCK data: if the target body shape is modeled as an
+        ellipsoid, triaxial radii for the target body must be loaded
+        into the kernel pool. Typically this is done by loading a
+        text PCK file via <a href="furnsh_c.html">furnsh_c</a>.
+
+      - Further PCK data: rotation data for the target body must be
+        loaded. These may be provided in a text or binary PCK file.
+
+      - Frame data: if a frame definition is required to convert the
+        observer and target states to the body-fixed frame of the
+        target, that definition must be available in the kernel
+        pool. Typically the definition is supplied by loading a
+        frame kernel via <a href="furnsh_c.html">furnsh_c</a>.
+
+   In all cases, kernel data are normally loaded once per program
+   run, NOT every time this routine is called.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+
+   The term &quot;illumination angles&quot; refers to following set of
+   angles:
+
+
+      phase angle              Angle between the vectors from the
+                               surface point to the observer and from
+                               the surface point to the Sun.
+
+      solar incidence angle    Angle between the surface normal at
+                               the specified surface point and the
+                               vector from the surface point to the
+                               Sun.
+
+      emission angle           Angle between the surface normal at
+                               the specified surface point and the
+                               vector from the surface point to the
+                               observer.
+
+
+   The diagram below illustrates the geometric relationships
+   defining these angles. The labels for the solar incidence,
+   emission, and phase angles are &quot;s.i.&quot;, &quot;e.&quot;, and &quot;phase&quot;.
+
+
+                                                    *
+                                                   Sun
+
+                  surface normal vector
+                            ._                 _.
+                            |\                 /|  Sun vector
+                              \    phase      /
+                               \   .    .    /
+                               .            .
+                                 \   ___   /
+                            .     \/     \/
+                                  _\ s.i./
+                           .    /   \   /
+                           .   |  e. \ /
+       *             &lt;--------------- *  surface point on
+    viewing            vector            target body
+    location           to viewing
+    (observer)         location
+
+
+   Note that if the target-observer vector, the target normal vector
+   at the surface point, and the target-sun vector are coplanar,
+   then phase is the sum of incidence and emission. This is rarely
+   true; usually
+
+      phase angle  &lt;  solar incidence angle + emission angle
+
+   All of the above angles can be computed using light time
+   corrections, light time and stellar aberration corrections, or
+   no aberration corrections. In order to describe apparent
+   geometry as observed by a remote sensing instrument, both
+   light time and stellar aberration corrections should be used.
+
+   The way aberration corrections are applied by this routine
+   is described below.
+
+      Light time corrections
+      ======================
+
+         Observer-target surface point body vector
+         -----------------------------------------
+
+         Let `et' be the epoch at which an observation or remote
+         sensing measurement is made, and let et - lt (&quot;lt&quot; stands
+         for &quot;light time&quot;) be the epoch at which the photons
+         received at `et' were emitted from the surface point `spoint'.
+         Note that the light time between the surface point and
+         observer will generally differ from the light time between
+         the target body's center and the observer.
+
+
+         Target body's orientation
+         -------------------------
+
+         Using the definitions of `et' and `lt' above, the target body's
+         orientation at et-lt is used. The surface normal is
+         dependent on the target body's orientation, so the body's
+         orientation model must be evaluated for the correct epoch.
+
+
+         Target body -- Sun vector
+         -------------------------
+
+         The surface features on the target body near `spoint' will
+         appear in a measurement made at `et' as they were at et-lt. In
+         particular, lighting on the target body is dependent on the
+         apparent location of the Sun as seen from the target body at
+         et-lt. So, a second light time correction is used to compute
+         the position of the Sun relative to the surface point.
+
+
+      Stellar aberration corrections
+      ==============================
+
+      Stellar aberration corrections are applied only if
+      light time corrections are applied as well.
+
+         Observer-target surface point vector
+         ------------------------------------
+
+         When stellar aberration correction is performed, the direction
+         vector `srfvec' is adjusted so as to point to the apparent
+         position of `spoint': considering `spoint' to be an ephemeris
+         object, `srfvec' points from the observer's position at `et'
+         to the light time and stellar aberration corrected position of
+         `spoint'.
+
+         Target body-Sun vector
+         ----------------------
+
+         The target body-Sun vector is the apparent position of the
+         Sun, corrected for light time and stellar aberration, as
+         seen from the target body at time et-lt. 
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   
+   1) Find the phase, solar incidence, and emission angles at the
+      sub-solar and sub-spacecraft points on Mars as seen from the Mars
+      Global Surveyor spacecraft at a user-specified UTC time. Use
+      light time and stellar aberration corrections. 
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+         KPL/MK
+
+         File: mgs_example.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de418.bsp                     Planetary ephemeris
+            pck00008.tpc                  Planet orientation and
+                                          radii
+            naif0008.tls                  Leapseconds
+            mgs_ext13_ipng_mgs95j.bsp     MGS ephemeris
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de418.bsp',
+                                'pck00008.tpc',
+                                'naif0008.tls',
+                                'mgs_ext13_ipng_mgs95j.bsp'  )
+         \begintext
+
+
+      Example code begins here.
+
+
+      #include &lt;string.h&gt;
+      #include &lt;stdio.h&gt;
+      #include &quot;SpiceUsr.h&quot;
+
+      int main()
+      { 
+         /.
+         Local constants 
+         ./
+         #define  META           &quot;mgs_example.tm&quot; 
+
+         /.
+         Local variables 
+         ./
+         SpiceChar             * abcorr;
+         SpiceChar             * obsrvr;
+         SpiceChar             * target;
+         SpiceChar             * utc;
+
+         SpiceDouble             et;
+         SpiceDouble             srfvec  [3];   
+         SpiceDouble             sscemi;
+         SpiceDouble             sscphs;
+         SpiceDouble             sscpt   [3];   
+         SpiceDouble             sscsol;
+         SpiceDouble             sslemi;
+         SpiceDouble             sslphs;
+         SpiceDouble             sslsol;
+         SpiceDouble             ssolpt  [3];
+         SpiceDouble             trgepc;
+
+         /.
+         Load kernel files.
+         ./
+         <a href="furnsh_c.html">furnsh_c</a> ( META );
+ 
+         /.
+         Convert the UTC request time string to seconds past J2000 TDB.
+         ./
+         utc = &quot;2004 JAN 1 12:00:00&quot;;
+
+         <a href="str2et_c.html">str2et_c</a> ( utc, &amp;et );
+                
+         /.
+         Assign observer and target names. The acronym MGS
+         indicates Mars Global Surveyor. See NAIF_IDS for a 
+         list of names recognized by SPICE. Also set the
+         aberration correction flag.
+         ./
+         target = &quot;Mars&quot;;
+         obsrvr = &quot;MGS&quot;;
+         abcorr = &quot;CN+S&quot;;
+ 
+         /.
+         Find the sub-solar point on the Earth as seen from 
+         the MGS spacecraft at et. Use the &quot;near point: ellipsoid&quot; 
+         style of sub-point definition. 
+         ./
+         <a href="subslr_c.html">subslr_c</a> ( &quot;near point: ellipsoid&quot;,  
+                    target, et,     &quot;iau_mars&quot;, abcorr, 
+                    obsrvr, ssolpt, &amp;trgepc,    srfvec  );
+ 
+         /.
+         Now find the sub-spacecraft point. 
+         ./                
+         <a href="subpnt_c.html">subpnt_c</a> ( &quot;near point: ellipsoid&quot;,  
+                    target, et,    &quot;iau_mars&quot;, abcorr, 
+                    obsrvr, sscpt, &amp;trgepc,    srfvec  );
+
+         /.
+         Find the phase, solar incidence, and emission 
+         angles at the sub-solar point on the Earth as seen 
+         from MGS at time et. 
+         ./
+         <b>ilumin_c</b> ( &quot;Ellipsoid&quot;,
+                    target,  et,      &quot;IAU_MARS&quot;, abcorr,  
+                    obsrvr,  ssolpt,  &amp;trgepc,    srfvec,
+                    &amp;sslphs, &amp;sslsol, &amp;sslemi            ); 
+
+         /.
+         Do the same for the sub-spacecraft point. 
+         ./
+         <b>ilumin_c</b> ( &quot;Ellipsoid&quot;,
+                    target,  et,      &quot;IAU_MARS&quot;, abcorr,
+                    obsrvr,  sscpt,   &amp;trgepc,    srfvec,
+                    &amp;sscphs, &amp;sscsol, &amp;sscemi            ); 
+
+         /.
+         Convert the angles to degrees and write them out. 
+         ./
+         sslphs *= <a href="dpr_c.html">dpr_c</a>(); 
+         sslsol *= <a href="dpr_c.html">dpr_c</a>(); 
+         sslemi *= <a href="dpr_c.html">dpr_c</a>(); 
+
+         sscphs *= <a href="dpr_c.html">dpr_c</a>(); 
+         sscsol *= <a href="dpr_c.html">dpr_c</a>(); 
+         sscemi *= <a href="dpr_c.html">dpr_c</a>(); 
+
+         printf ( &quot;\n&quot;
+                  &quot;UTC epoch is %s\n&quot;
+                  &quot;\n&quot;
+                  &quot;Illumination angles at the sub-solar point:\n&quot;
+                  &quot;\n&quot;
+                  &quot;Phase angle             (deg):  %f\n&quot;
+                  &quot;Solar incidence angle   (deg):  %f\n&quot;
+                  &quot;Emission angle          (deg):  %f\n&quot;
+                  &quot;\n&quot;
+                  &quot;The solar incidence angle should be 0.\n&quot;
+                  &quot;The emission and phase angles should be &quot;
+                  &quot;equal.\n&quot;
+                  &quot;\n&quot;
+                  &quot;\n&quot;
+                  &quot;Illumination angles at the sub-s/c point:\n&quot;
+                  &quot;\n&quot;
+                  &quot;Phase angle             (deg):  %f\n&quot;
+                  &quot;Solar incidence angle   (deg):  %f\n&quot;
+                  &quot;Emission angle          (deg):  %f\n&quot;
+                  &quot;\n&quot;
+                  &quot;The emission angle should be 0.\n&quot;
+                  &quot;The solar incidence and phase angles &quot;
+                  &quot;should be equal.\n&quot;
+                  &quot;\n&quot;,
+                  utc,
+                  sslphs,
+                  sslsol,
+                  sslemi,                 
+                  sscphs,
+                  sscsol,
+                  sscemi                                    );
+
+         return ( 0 );
+      }
+          
+          
+   When this program was executed on a PC/Linux/gcc platform,
+   the output was:   
+
+      UTC epoch is 2004 JAN 1 12:00:00
+
+      Illumination angles at the sub-solar point:
+
+      Phase angle             (deg):  115.542001
+      Solar incidence angle   (deg):  0.000000
+      Emission angle          (deg):  115.542001
+
+      The solar incidence angle should be 0.
+      The emission and phase angles should be equal.
+
+
+      Illumination angles at the sub-s/c point:
+
+      Phase angle             (deg):  62.084003
+      Solar incidence angle   (deg):  62.084003
+      Emission angle          (deg):  0.000000
+
+      The emission angle should be 0.
+      The solar incidence and phase angles should be equal.
+
+          </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   None.
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman   (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.0.2, 17-OCT-20011 (SCK)
+ 
+       References to the new <a href="pxfrm2_c.html">pxfrm2_c</a> routine were added
+       to the Detailed Output section.
+
+   -CSPICE Version 1.0.1, 06-FEB-2009 (NJB)
+ 
+       Incorrect frame name fixfrm was changed to fixref in
+       documentation.
+ 
+       In the header examples, meta-kernel names were updated to use
+       the suffix
+
+          &quot;.tm&quot;
+
+   -CSPICE Version 1.0.0, 02-MAR-2008 (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   illumination angles 
+   lighting angles
+   phase angle
+   emission angle
+   solar incidence angle
+ </PRE>
+<h4>Link to routine ilumin_c source file <a href='../../../src/cspice/ilumin_c.c'>ilumin_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:36 2014</pre>
+
+</body>
+</html>
+

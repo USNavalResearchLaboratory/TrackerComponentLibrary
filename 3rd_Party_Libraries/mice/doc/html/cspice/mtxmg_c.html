@@ -1,0 +1,253 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>mtxmg_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>mtxmg_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void mtxmg_c ( const void  * m1,
+                  const void  * m2,
+                  SpiceInt      ncol1,
+                  SpiceInt      nr1r2,
+                  SpiceInt      ncol2,
+                  void        * mout  )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   Multiply the transpose of a matrix with another matrix,
+   both of arbitrary size. (The dimensions of the matrices must be
+   compatible with this multiplication.)
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   MATRIX
+
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   m1         I   nr1r2 X ncol1 double precision matrix.
+   m2         I   nr1r2 X ncol2 double precision matrix.
+   ncol1      I   Column dimension of m1 and row dimension of mout.
+   nr1r2      I   Row dimension of m1 and m2.
+   ncol2      I   Column dimension of m2 (and also mout).
+   mout       O   Transpose of m1 times m2.
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+   m1         is any double precision matrix of arbitrary size.
+
+   m2         is any double precision matrix of arbitrary size.
+              The number of rows in m2 must match the number of
+              rows in m1.
+
+   ncol1      is the number of columns in m1 and the number of rows of
+              mout.
+
+   nr1r2      is the number of rows in both m1 and (by necessity) m2.
+
+   ncol2      is the number of columns in both m2 and mout.
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+   mout       mout is the product matrix defined as the transpose of 
+              m1 times m2, that is
+              
+                            t
+                 mout = (m1)  x (m2)
+                 
+              where the superscript t denotes the transpose of m1.
+              
+              mout is a double precision matrix of dimension ncol1 x 
+              ncol2.
+              
+              mout may overwrite m1 or m2.  Note that this capability 
+              does not exist in the Fortran version of SPICELIB; in the
+              Fortran version, the output must not overwrite either 
+              input.</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+   1) If dynamic allocation of memory fails, the error 
+      SPICE(MEMALLOCFAILED) is signalled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+   The code reflects precisely the following mathematical expression
+
+   For each value of the subscript i from 1 to ncol1, and j from 1
+   to ncol2:
+
+      mout(i,j) = Summation from k=1 to nr1r2 of  m1(k,i) * m2(k,j)
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   1)  Suppose that m1 = | 1  2  3  0 |
+                         | 1  1  1  1 |
+ 
+       and that     m2 = | 1  2  3 |
+                         | 0  0  0 |
+ 
+       Then calling <b>mtxmg_c</b> as shown
+ 
+          <b>mtxmg_c</b> ( m1, m2, 4, 2, 3, mout )
+ 
+       will yield the following value for mout:
+ 
+                 | 1  2  3 |
+          mout = | 2  4  6 |
+                 | 3  6  9 |
+                 | 0  0  0 |
+       </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   1) No error checking is performed to prevent numeric overflow or
+      underflow.
+
+   2) No error checking performed to determine if the input and
+      output matrices have, in fact, been correctly dimensioned.
+   </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   N.J. Bachman       (JPL)
+   W.M. Owen          (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.2.2, 16-JAN-2008   (EDW)
+
+      Corrected typos in header titles:
+      
+      Detailed Input to Detailed_Input
+      Detailed Output to Detailed_Output
+      
+   -CSPICE Version 1.2.1, 10-NOV-2006   (EDW)
+
+      Added Parameters section header. 
+
+   -CSPICE Version 1.2.0, 28-AUG-2001 (NJB)
+
+      Const-qualified input arrays.
+
+   -CSPICE Version 1.0.0, 16-APR-1999 (NJB)
+   </PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   matrix transpose times matrix n-dimensional_case
+</PRE>
+<h4>Link to routine mtxmg_c source file <a href='../../../src/cspice/mtxmg_c.c'>mtxmg_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:38 2014</pre>
+
+</body>
+</html>
+

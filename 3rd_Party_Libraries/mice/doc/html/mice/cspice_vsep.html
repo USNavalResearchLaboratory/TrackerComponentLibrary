@@ -1,0 +1,242 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_vsep</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_vsep</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_VSEP returns the scalar double precision
+   separation angle in radians between two double precision,
+   3-vectors.  This angle is defined as zero if either vector
+   is zero.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      v1   is an arbitrary double precision, 3-dimensional vector
+           or 3xN array
+
+      v2   is also an arbitrary double precision, 3-dimensional
+           vector or 3xN array
+
+              'v1' or 'v2' or both may be the zero vector.
+
+      An implicit assumption exists that 's1' and 's2' are specified
+      in the same reference frame. If this is not the case, the numerical
+      result has no meaning.
+
+   the call:
+
+      vsep = <b>cspice_vsep</b>(v1, v2)
+
+   returns:
+
+      vsep   the double precision, positive definite, scalar or
+             1xN array of the angular separation(s) between 'v1' and 'v2'
+             expressed in radians. If either 'v1' or 'v2' is the zero
+             vector, then <b>cspice_vsep</b> return value has value 0 radians.
+
+             'sep' returns with the same measure of vectorization (N) as
+             'v1' and 'v2'
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Define a set of vectors, calculate angular
+      % separation as measured in radians.
+      %
+      v1 = [1; 0; 0]
+      v2 = [1; 0; 0]
+
+      sep = <b>cspice_vsep</b>( v1, v2 )
+
+   MATLAB outputs:
+
+      v1 =
+
+           1
+           0
+           0
+
+      v2 =
+
+           1
+           0
+           0
+
+      sep =
+
+           0
+
+      %
+      % Another vector set.
+      %
+
+      v1 = [1; 0; 0]
+      v2 = [0; 1; 0]
+
+      sep = <b>cspice_vsep</b>( v1, v2 )
+
+   MATLAB outputs:
+
+      v1 =
+
+           1
+           0
+           0
+
+      v2 =
+
+           0
+           1
+           0
+
+      sep =
+
+         1.57079632679490
+
+      %
+      % Instead of two calls with 3-vectors,
+      % vectorize the input as two 3X2 array.
+      %
+      v1 = [ [1; 0; 0], [1; 0; 0] ]
+      v2 = [ [1; 0; 0], [0; 1; 0] ]
+
+      sep = <b>cspice_vsep</b>( v1, v2 )
+
+   MATLAB outputs:
+
+      v1 =
+
+           1     1
+           0     0
+           0     0
+
+      v2 =
+
+           1     0
+           0     1
+           0     0
+
+      sep =
+
+         0   1.57079632679490
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/vsep_c.html">vsep_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 10-APR-2010, EDW (JPL)
+
+      Edits to header I/O section.
+
+   -Mice Version 1.0.0, 22-NOV-2005, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   angular separation of 3-dimensional vectors
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:39 2014</pre>
+
+</body>
+</html>
+

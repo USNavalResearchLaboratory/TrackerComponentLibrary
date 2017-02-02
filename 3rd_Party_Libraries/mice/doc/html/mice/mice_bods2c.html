@@ -1,0 +1,228 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>mice_bods2c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>mice_bods2c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   MICE_BODS2C translates a string containing a body name or
+   ID code to the corresponding integer code.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      name   the scalar string or NXM character array of names of a set
+             of bodies or objects, such as planets, satellites, comets,
+             asteroids, barycenters, DSN stations, spacecraft, or
+             instruments, &quot;known&quot; to the SPICE system, whether through
+             hard-coded registration or run-time registration in
+             the SPICE kernel pool
+
+             If 'name' is a string representation of an integer,
+             for example
+
+                '399'
+
+             the string will be translated to the equivalent integer
+             datum.  The input integer need not be one recognized by
+             the SPICE system:  the integer need not be a built-in
+             NAIF ID code, nor need it be associated with a name via
+             run-time registration.
+
+   the call:
+
+      ID = <b>mice_bods2c</b>( name )
+
+   returns:
+
+      ID   the scalar or 1xN array of structures containing
+           two fields:
+
+              name   the name or ID code of a particular body. If a mapping
+                     does not exist or 'name' does not represent a
+                     string version of an integer, the 'name' field returns
+                     as NULL
+
+              code   a scalar integer SPICE code assigned either
+                     by SPICE or the user to 'name'. If the input argument
+                    'name' represents an integer, the same integer
+                     is returned. If neither mapping exists the 'code'
+                     field returns as 0.
+
+              'ID' returns with the same vectorization measure (N)
+              as 'name'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+      %
+      % Retrieve the NAIF ID associated to a body name.
+      %
+      disp( 'Scalar:' )
+      name = 'Hyperion';
+      ID   = <b>mice_bods2c</b>( name );
+
+      %
+      % Output the mapping if it exists.
+      %
+      if ( ID.found )
+         txt = sprintf( 'String %s maps to ID %i', ...
+                         ID.name, ID.code );
+         disp(txt)
+      end
+
+      disp(' ')
+
+      %
+      % Create an array of strings. Include one string not an integer
+      % and unknown to the SPICE system.
+      %
+      disp( 'Vector:' )
+      name = strvcat( 'Cassini'   , '399',  ...
+                      'Planet Bob', 'MARS', ...
+                      '-123456'   , '987654' );
+      ID   = <b>mice_bods2c</b>( name );
+
+      n_elements = size(ID);
+
+      %
+      % Loop over the output array.
+      %
+      for i=1:n_elements(1)
+
+         %
+         % Check for a valid name/ID mapping.
+         %
+         if( ID(i).found ) )
+            txt = sprintf( 'String %s maps to ID %i', ...
+                            ID(i).name, ID(i).code );
+            disp(txt)
+         else
+            txt = sprintf( 'Unknown string ID %s', name(i,:) );
+            disp(txt)
+         end
+
+   MATLAB outputs:
+
+      Scalar:
+      String Hyperion maps to ID 607
+
+      Vector:
+      String Cassini    maps to ID -82
+      String 399        maps to ID 399
+      Unknown string ID Planet Bob
+      String MARS       maps to ID 499
+      String -123456    maps to ID -123456
+      String 987654     maps to ID 987654
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   A sister version of this routine exists named <a href="cspice_bods2c.html">cspice_bods2c</a> that returns
+   the structure field data as separate arguments.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/bods2c_c.html">bods2c_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/naif_ids.html">NAIF_IDS.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 22-NOV-2005, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   body name to code
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:39 2014</pre>
+
+</body>
+</html>
+

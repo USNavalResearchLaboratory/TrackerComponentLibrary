@@ -1,0 +1,1294 @@
+ 
+A Permuted Index for Mice APIs
+===========================================================================
+ 
+   This document is an index for NAIF's Mice routines. The index entries
+   are short phrases that describe the functionality of the routines.
+   Each phrase is followed by the name of the routine that performs the
+   described function.
+ 
+   The reason we call this a ``permuted'' index is that each index
+   entry occurs in multiple (cyclic) permutations, allowing each
+   significant word in every functional description of a routine to
+   occur first in at least one index entry. For example, the routine
+   cspice_pxform (which returns the matrix that transforms position
+   vectors from one specified frame to another at a specified epoch)
+   can be found under the entries
+ 
+      FIND a position transformation matrix               cspice_pxform
+      MATRIX, find a position transformation              cspice_pxform
+      POSITION transformation matrix, find a              cspice_pxform
+      TRANSFORMATION matrix, find a position              cspice_pxform
+ 
+   Some descriptions map to multiple routines; this happens when
+   there are routines that perform the same function on different
+   data types.
+ 
+   This index is alphabetically ordered by the index entries.
+ 
+ 
+Version
+--------------------------------------------------------
+ 
+   This index applies to version N0065 of the Mice Toolkit configured
+   by NAIF on Tue Jul 15 14:04:05 PDT 2014.
+ 
+ 
+Index
+--------------------------------------------------------
+ 
+1900.0, besselian date                                     cspice_b1900
+1900.0 jan 0.5, julian date of                             cspice_j1900
+1950.0, besselian date                                     cspice_b1950
+1950.0 jan 1.0, julian date of                             cspice_j1950
+ 
+2000 jan 1.5, julian date of                               cspice_j2000
+2100 jan 1.5, julian date of                               cspice_j2100
+ 
+3-DIMENSIONAL unit vector and norm                         cspice_unorm
+3-DIMENSIONAL vector, norm of                              cspice_vnorm
+3-DIMENSIONAL vector, unitize a                            cspice_vhat
+3-DIMENSIONAL vectors, angular separation of               cspice_vsep
+3-DIMENSIONAL vectors, distance between                    cspice_vdist
+3-VECTOR norm, derivative of                               cspice_dvnorm
+3-VECTOR, perpendicular component of a                     cspice_vperp
+3-VECTOR projection                                        cspice_vproj
+ 
+ABBREVIATED years, set the interval of expansion for       cspice_tsetyr
+ABERRATIONS, get state relative to observer corrected for  cspice_spkezr
+                                                           mice_spkezr
+ABERRATIONS, position relative to observer corrected for   cspice_spkpos
+                                                           mice_spkpos
+ADD comments to a binary DAF                               cspice_dafac
+ADDITIVE numeric time system to another, convert one       cspice_unitim
+ADDITIVE numeric time systems, transform between two       cspice_unitim
+ADDRESS, read data from DAF                                cspice_dafgda
+ANGLE, emission                                            cspice_ilumin
+ANGLE, phase                                               cspice_ilumin
+ANGLE search, gf phase                                     cspice_gfpa
+ANGLE, solar incidence                                     cspice_ilumin
+ANGLE to rotation, axis and                                cspice_axisar
+ANGLES and derivatives from state transformation, euler    cspice_xf2eul
+ANGLES and derivatives, state transformation from euler    cspice_eul2xf
+ANGLES, illumination                                       cspice_ilumin
+ANGLES, lighting                                           cspice_ilumin
+ANGLES, matrix to euler                                    cspice_m2eul
+ANGLES to matrix, euler                                    cspice_eul2m
+ANGULAR separation of 3-dimensional vectors                cspice_vsep
+ANGULAR separation search, gf                              cspice_gfsep
+ANGULAR separation, time derivative of                     cspice_dvsep
+ANGULAR velocity, get CK pointing and                      cspice_ckgpav
+ANGULAR velocity, state transformation to rotation and     cspice_rav2xf
+                                                           cspice_xf2rav
+APPEND comments to a DAF comment area                      cspice_dafac
+AREA, append comments to a DAF comment                     cspice_dafac
+AREA, delete DAF comment                                   cspice_dafdc
+ARRAY, find next DAF                                       cspice_daffna
+                                                           cspice_daffpa
+ARRAY name, get DAF                                        cspice_dafgn
+ATTRIBUTES, fetch reference frame                          cspice_cidfrm
+                                                           cspice_cnmfrm
+                                                           cspice_frinfo
+AXIS and angle to rotation                                 cspice_axisar
+AXIS of a matrix, rotation                                 cspice_raxisa
+AXIS, vector rotation about an                             cspice_vrotv
+ 
+BACKWARD search, begin DAF                                 cspice_dafbbs
+BEGIN DAF backward search                                  cspice_dafbbs
+BEGIN DAF forward search                                   cspice_dafbfs
+BESSELIAN date 1900.0                                      cspice_b1900
+BESSELIAN date 1950.0                                      cspice_b1950
+BETWEEN 3-dimensional vectors, distance                    cspice_vdist
+BETWEEN coordinate systems, state transformation           cspice_xfmsta
+BETWEEN ephemeris time and UTC, difference                 cspice_deltet
+BETWEEN line and ellipsoid, distance                       cspice_npedln
+BETWEEN line of sight and body, distance                   cspice_npedln
+BETWEEN point and line, distance                           cspice_nplnpt
+BETWEEN two additive numeric time systems, transform       cspice_unitim
+BETWEEN two uniform numeric time systems, transform        cspice_unitim
+BINARY DAF, add comments to a                              cspice_dafac
+BODY, distance between line of sight and                   cspice_npedln
+BODY, find nearest point to observer on target             cspice_subpnt
+                                                           mice_subpnt
+BODY, find nearest point to sun on target                  cspice_subslr
+                                                           mice_subslr
+BODY, find sub-observer point on target                    cspice_subpnt
+                                                           mice_subpnt
+BODY, find sub-solar point on target                       cspice_subslr
+                                                           mice_subslr
+BODY from the kernel pool, fetch constants for a           cspice_bodvcd
+                                                           cspice_bodvrd
+BODY id code to name                                       cspice_bodc2n
+                                                           mice_bodc2n
+BODY id code to string                                     cspice_bodc2s
+BODY name to code                                          cspice_bodn2c
+                                                           cspice_bods2c
+                                                           mice_bodn2c
+                                                           mice_bods2c
+BODY name/id code definition                               cspice_boddef
+BODY names get target state relative to an observer, using cspice_spkezr
+                                                           mice_spkezr
+BODY, physical constants for a                             cspice_bodvcd
+                                                           cspice_bodvrd
+BODY surface, find intercept of ray on target              cspice_sincpt
+BODY surface, find intersection of ray and target          cspice_sincpt
+BUFFER, load the kernel pool from an internal text         cspice_lmpool
+BUILD a right handed coordinate frame                      cspice_frame
+ 
+C-KERNEL, --- see CK
+CALENDAR date, convert ephemeris time to a formal          cspice_etcal
+CALENDARS, gregorian and julian                            cspice_timdef_get
+                                                           cspice_timdef_set
+CARDINALITY of a d.p. window                               cspice_wncard
+CENTER and generating vectors, ellipse to                  cspice_el2cgv
+CENTER and generating vectors to ellipse                   cspice_cgv2el
+CHANGE default convergence tolerance for gf routines       cspice_gfstol
+CHANGE time software defaults.                             cspice_timdef_get
+                                                           cspice_timdef_set
+CHARACTER column entry, fetch element from                 cspice_ekgc
+CHARACTER kernel pool variable, set the value of a         cspice_pcpool
+CHARACTER value of a pooled kernel variable, return the    cspice_gcpool
+CK file, close a                                           cspice_ckcls
+CK file, find id codes in                                  cspice_ckobj
+CK file, open a new                                        cspice_ckopn
+CK object, get coverage window for                         cspice_ckcov
+CK pointing and angular velocity, get                      cspice_ckgpav
+CK pointing, get                                           cspice_ckgp
+CK type 1 pointing data segment, write                     cspice_ckw01
+CK type 2 pointing data segment, write                     cspice_ckw02
+CK type 3 pointing data segment, write                     cspice_ckw03
+CLEAR the keeper system                                    cspice_kclear
+CLEAR the pool of kernel variables                         cspice_clpool
+CLOCK, --- also see spacecraft clock
+CLOSE a CK file                                            cspice_ckcls
+CLOSE an SPK file                                          cspice_spkcls
+CLOSE DAF                                                  cspice_dafcls
+CODE, body name to                                         cspice_bodn2c
+                                                           cspice_bods2c
+                                                           mice_bodn2c
+                                                           mice_bods2c
+CODE definition, body name/id                              cspice_boddef
+CODE parameters, include occultation                       miceoccult
+CODE to frame name translation, frame id                   cspice_frmnam
+CODE to name, body id                                      cspice_bodc2n
+                                                           mice_bodc2n
+CODE to string, body id                                    cspice_bodc2s
+CODE translation, frame name to frame id                   cspice_namfrm
+CODES in CK file, find id                                  cspice_ckobj
+CODES in SPK file, find id                                 cspice_spkobj
+COLUMN entry, fetch element from character                 cspice_ekgc
+COLUMN entry, fetch element from double precision          cspice_ekgd
+COLUMN entry, fetch element from integer                   cspice_ekgi
+COLUMN entry, return the number of elements in a           cspice_eknelt
+COMMENT area, append comments to a DAF                     cspice_dafac
+COMMENT area, delete DAF                                   cspice_dafdc
+COMMENTS from a DAF, extract                               cspice_dafec
+COMMENTS to a binary DAF, add                              cspice_dafac
+COMMENTS to a DAF comment area, append                     cspice_dafac
+COMPARE two d.p. windows                                   cspice_wnreld
+COMPLEMENT a d.p. window                                   cspice_wncomd
+COMPONENT of a 3-vector, perpendicular                     cspice_vperp
+COMPUTE a unit cross product and its derivative            cspice_ducrss
+COMPUTE the derivative of a cross product                  cspice_dvcrss
+COMPUTE the local time for a point on a body.              cspice_et2lst
+COMPUTE the phase of two objects wrt an illumination sourcecspice_phaseq
+COMPUTE uplink and downlink light time                     cspice_ltime
+CONIC elements from state                                  cspice_oscelt
+CONIC elements, state from                                 cspice_conics
+CONSTANT, plane to normal vector and                       cspice_pl2nvc
+CONSTANT position observer, state relative to              cspice_spkcpo
+CONSTANT position surface point, state relative to         cspice_spkcpo
+CONSTANT position target, state of                         cspice_spkcpt
+CONSTANT to plane, normal vector and                       cspice_nvc2pl
+CONSTANT velocity observer, state relative to              cspice_spkcvo
+CONSTANT velocity surface point, state relative to         cspice_spkcvo
+CONSTANT velocity target, state of                         cspice_spkcvt
+CONSTANTS for a body from the kernel pool, fetch           cspice_bodvcd
+                                                           cspice_bodvrd
+CONSTANTS for a body, physical                             cspice_bodvcd
+                                                           cspice_bodvrd
+CONSTRAINTS, search using illumination angle               cspice_gfilum
+CONSTRAINTS, solve for emission angle                      cspice_gfilum
+CONSTRAINTS, solve for illumination angle                  cspice_gfilum
+CONSTRAINTS, solve for phase angle                         cspice_gfilum
+CONSTRAINTS, solve for solar incidence angle               cspice_gfilum
+CONTINUE searching, select a DAF to                        cspice_dafcs
+CONTINUED string value from the kernel pool, retrieve a    cspice_stpool
+CONTINUOUS spacecraft clock ticks, ephemeris time to       cspice_sce2c
+CONTRACT the intervals of a d.p. window                    cspice_wncond
+CONVERGENCE tolerance for gf routines, change default      cspice_gfstol
+CONVERT a string to tdb seconds past the J2000 epoch       cspice_str2et
+CONVERT and format d.p. seconds past J2000 as a string     cspice_timout
+CONVERT ephemeris time to a formal calendar date           cspice_etcal
+CONVERT one additive numeric time system to another        cspice_unitim
+CONVERT one uniform numeric time system to another         cspice_unitim
+CONVERT planetographic to rectangular coordinates          cspice_pgrrec
+CONVERT rectangular to planetographic coordinates          cspice_recpgr
+CONVERT spacecraft clock string to ticks                   cspice_sctiks
+CONVERT state                                              cspice_xfmsta
+CONVERT state to osculating elements                       cspice_oscelt
+CONVERT units                                              cspice_convrt
+COORDINATE frame, build a right handed                     cspice_frame
+COORDINATE search, gf position                             cspice_gfposc
+COORDINATE search, gf subpoint                             cspice_gfsubc
+COORDINATE search, gf surface intercept                    cspice_gfsntc
+COORDINATE systems, state transformation between           cspice_xfmsta
+COORDINATED universal time, --- see UTC
+COORDINATES, convert planetographic to rectangular         cspice_pgrrec
+COORDINATES, convert rectangular to planetographic         cspice_recpgr
+COORDINATES, geodetic to rectangular                       cspice_georec
+COORDINATES, jacobian of cylindrical w.r.t. rectangular    cspice_dcyldr
+COORDINATES, jacobian of geodetic w.r.t. rectangular       cspice_dgeodr
+COORDINATES, jacobian of planetographic w.r.t. rectangular cspice_dpgrdr
+COORDINATES, jacobian of rectangular w.r.t. cylindrical    cspice_drdcyl
+COORDINATES, jacobian of rectangular w.r.t. geodetic       cspice_drdgeo
+COORDINATES, jacobian of rectangular w.r.t. latitudinal    cspice_dlatdr
+                                                           cspice_drdlat
+COORDINATES, jacobian of rectangular w.r.t. planetographic cspice_drdpgr
+COORDINATES, jacobian of rectangular w.r.t. spherical      cspice_drdsph
+COORDINATES, jacobian of spherical w.r.t. rectangular      cspice_dsphdr
+COORDINATES, latitudinal to cylindrical                    cspice_latcyl
+COORDINATES, latitudinal to rectangular                    cspice_latrec
+COORDINATES, latitudinal to spherical                      cspice_latsph
+COORDINATES, range ra and dec to rectangular               cspice_radrec
+COORDINATES, rectangular to cylindrical                    cspice_reccyl
+COORDINATES, rectangular to latitudinal                    cspice_reclat
+COORDINATES, rectangular to spherical                      cspice_recsph
+COORDINATES, spherical to cylindrical                      cspice_sphcyl
+COORDINATES, spherical to latitudinal                      cspice_sphlat
+COORDINATES, spherical to rectangular                      cspice_sphrec
+COORDINATES to ra and dec, rectangular                     cspice_recrad
+CORRECTED for aberrations, get state relative to observer  cspice_spkezr
+                                                           mice_spkezr
+CORRECTED for aberrations, position relative to observer   cspice_spkpos
+                                                           mice_spkpos
+COVERAGE window for CK object, get                         cspice_ckcov
+COVERAGE window for SPK object, get                        cspice_spkcov
+CROSS product and its derivative, compute a unit           cspice_ducrss
+CROSS product, compute the derivative of a                 cspice_dvcrss
+CYLINDRICAL coordinates, jacobian of rectangular w.r.t.    cspice_drdcyl
+CYLINDRICAL coordinates, latitudinal to                    cspice_latcyl
+CYLINDRICAL coordinates, rectangular to                    cspice_reccyl
+CYLINDRICAL coordinates, spherical to                      cspice_sphcyl
+CYLINDRICAL to latitudinal                                 cspice_cyllat
+CYLINDRICAL to rectangular                                 cspice_cylrec
+CYLINDRICAL to spherical                                   cspice_cylsph
+CYLINDRICAL w.r.t. rectangular coordinates, jacobian of    cspice_dcyldr
+ 
+D.P. kernel pool variable, set the value of a              cspice_pdpool
+D.P. seconds past J2000 as a string, convert and format    cspice_timout
+D.P. value of a pooled kernel variable, return the         cspice_gdpool
+D.P. window, cardinality of a                              cspice_wncard
+D.P. window, complement a                                  cspice_wncomd
+D.P. window, contract the intervals of a                   cspice_wncond
+D.P. window, element of a                                  cspice_wnelmd
+D.P. window, expand the intervals of a                     cspice_wnexpd
+D.P. window, extract the endpoints from a                  cspice_wnextd
+D.P. window, fetch an interval from a                      cspice_wnfetd
+D.P. window, fill small gaps in a                          cspice_wnfild
+D.P. window, filter small intervals from a                 cspice_wnfltd
+D.P. window, included in a                                 cspice_wnincd
+D.P. window, insert an interval into a                     cspice_wninsd
+D.P. window, summary of a                                  cspice_wnsumd
+D.P. window, validate a                                    cspice_wnvald
+D.P. windows, compare two                                  cspice_wnreld
+D.P. windows, difference two                               cspice_wndifd
+D.P. windows, intersect two                                cspice_wnintd
+D.P. windows, union two                                    cspice_wnunid
+DAF, add comments to a binary                              cspice_dafac
+DAF address, read data from                                cspice_dafgda
+DAF array, find next                                       cspice_daffna
+                                                           cspice_daffpa
+DAF array name, get                                        cspice_dafgn
+DAF backward search, begin                                 cspice_dafbbs
+DAF, close                                                 cspice_dafcls
+DAF comment area, append comments to a                     cspice_dafac
+DAF comment area, delete                                   cspice_dafdc
+DAF, extract comments from a                               cspice_dafec
+DAF for read, open                                         cspice_dafopr
+DAF for write, open                                        cspice_dafopw
+DAF forward search, begin                                  cspice_dafbfs
+DAF summary, get                                           cspice_dafgs
+                                                           cspice_dafus
+DAF to continue searching, select a                        cspice_dafcs
+DATA, find EK                                              cspice_ekfind
+DATA from a list of items, load spice                      cspice_furnsh
+DATA from DAF address, read                                cspice_dafgda
+DATA, read ephemeris                                       cspice_spkezr
+                                                           cspice_spkpos
+                                                           mice_spkezr
+                                                           mice_spkpos
+DATA, read trajectory                                      cspice_spkezr
+                                                           cspice_spkpos
+                                                           mice_spkezr
+                                                           mice_spkpos
+DATA segment, write CK type 1 pointing                     cspice_ckw01
+DATA segment, write CK type 2 pointing                     cspice_ckw02
+DATA segment, write CK type 3 pointing                     cspice_ckw03
+DATA segment, write SPK type 8 ephemeris                   cspice_spkw08
+DATE 1900.0, besselian                                     cspice_b1900
+DATE 1950.0, besselian                                     cspice_b1950
+DATE, convert ephemeris time to a formal calendar          cspice_etcal
+DATE of 1900.0 jan 0.5, julian                             cspice_j1900
+DATE of 1950.0 jan 1.0, julian                             cspice_j1950
+DATE of 2000 jan 1.5, julian                               cspice_j2000
+DATE of 2100 jan 1.5, julian                               cspice_j2100
+DAY, seconds per                                           cspice_spd
+DEC, rectangular coordinates to ra and                     cspice_recrad
+DEC to rectangular coordinates, range ra and               cspice_radrec
+DECLINATION, rectangular to right ascension and            cspice_recrad
+DECLINATION to rectangular, right ascension and            cspice_radrec
+DECODE spacecraft clock                                    cspice_scdecd
+DEFAULT convergence tolerance for gf routines, change      cspice_gfstol
+DEFINE an orthonormal frame from two vectors               cspice_twovec
+DEFINITION, body name/id code                              cspice_boddef
+DEGREE, radians per                                        cspice_rpd
+DEGREES per radian                                         cspice_dpr
+DELETE a kernel pool variable                              cspice_dvpool
+DELETE DAF comment area                                    cspice_dafdc
+DERIVATIVE, compute a unit cross product and its           cspice_ducrss
+DERIVATIVE of 3-vector norm                                cspice_dvnorm
+DERIVATIVE of a cross product, compute the                 cspice_dvcrss
+DERIVATIVE of a dot product, time                          cspice_dvdot
+DERIVATIVE of angular separation, time                     cspice_dvsep
+DERIVATIVES from state transformation, euler angles and    cspice_xf2eul
+DERIVATIVES, state transformation from euler angles and    cspice_eul2xf
+DIFFERENCE between ephemeris time and UTC                  cspice_deltet
+DIFFERENCE two d.p. windows                                cspice_wndifd
+DIFFERENT epochs, position transformation matrix for       cspice_pxfrm2
+DISTANCE between 3-dimensional vectors                     cspice_vdist
+DISTANCE between line and ellipsoid                        cspice_npedln
+DISTANCE between line of sight and body                    cspice_npedln
+DISTANCE between point and line                            cspice_nplnpt
+DISTANCE from point to ellipsoid                           cspice_nearpt
+                                                           mice_nearpt
+DISTANCE search, gf                                        cspice_gfdist
+                                                           cspice_surfpt
+DOT product, time derivative of a                          cspice_dvdot
+DOUBLE precision, --- see d.p.
+DOUBLE precision array file, --- see DAF
+DOUBLE precision column entry, fetch element from          cspice_ekgd
+DOWNLINK light time, compute uplink and                    cspice_ltime
+ 
+EK data, find                                              cspice_ekfind
+EK query, issue                                            cspice_ekfind
+ELEMENT from character column entry, fetch                 cspice_ekgc
+ELEMENT from double precision column entry, fetch          cspice_ekgd
+ELEMENT from integer column entry, fetch                   cspice_ekgi
+ELEMENT of a d.p. window                                   cspice_wnelmd
+ELEMENTS, convert state to osculating                      cspice_oscelt
+ELEMENTS from state, conic                                 cspice_oscelt
+ELEMENTS from state, osculating                            cspice_oscelt
+ELEMENTS in a column entry, return the number of           cspice_eknelt
+ELEMENTS, state from conic                                 cspice_conics
+ELLIPSE and plane, intersection of                         cspice_inelpl
+ELLIPSE, center and generating vectors to                  cspice_cgv2el
+ELLIPSE from generating vectors, semi-axes of              cspice_saelgv
+ELLIPSE onto plane, project                                cspice_pjelpl
+ELLIPSE to center and generating vectors                   cspice_el2cgv
+ELLIPSE to point, nearest point on                         cspice_npelpt
+ELLIPSOID and plane, intersection of                       cspice_inedpl
+ELLIPSOID, distance between line and                       cspice_npedln
+ELLIPSOID, distance from point to                          cspice_nearpt
+                                                           mice_nearpt
+ELLIPSOID, find penumbral terminator on                    cspice_edterm
+ELLIPSOID, find terminator on                              cspice_edterm
+ELLIPSOID, find umbral terminator on                       cspice_edterm
+ELLIPSOID limb                                             cspice_edlimb
+ELLIPSOID, nearest point on an                             cspice_nearpt
+                                                           mice_nearpt
+ELLIPSOID, surface normal vector on an                     cspice_surfnm
+ELLIPSOID to line, nearest point on                        cspice_npedln
+EMISSION angle                                             cspice_ilumin
+EMISSION angle constraints, solve for                      cspice_gfilum
+ENCODE spacecraft clock                                    cspice_scencd
+ENDPOINTS from a d.p. window, extract the                  cspice_wnextd
+ENTRY, fetch element from character column                 cspice_ekgc
+ENTRY, fetch element from double precision column          cspice_ekgd
+ENTRY, fetch element from integer column                   cspice_ekgi
+ENTRY, return the number of elements in a column           cspice_eknelt
+EPHEMERIS data, read                                       cspice_spkezr
+                                                           cspice_spkpos
+                                                           mice_spkezr
+                                                           mice_spkpos
+EPHEMERIS data segment, write SPK type 8                   cspice_spkw08
+EPHEMERIS time and UTC, difference between                 cspice_deltet
+EPHEMERIS time, spacecraft clock string to                 cspice_scs2e
+EPHEMERIS time, spacecraft clock ticks to                  cspice_sct2e
+EPHEMERIS time to a formal calendar date, convert          cspice_etcal
+EPHEMERIS time to continuous spacecraft clock ticks        cspice_sce2c
+EPHEMERIS time to spacecraft clock string                  cspice_sce2s
+EPHEMERIS time to UTC                                      cspice_et2utc
+EPOCH, convert a string to tdb seconds past the J2000      cspice_str2et
+EPOCHS, position transformation matrix for different       cspice_pxfrm2
+ET, --- see ephemeris time
+EULER angles and derivatives from state transformation     cspice_xf2eul
+EULER angles and derivatives, state transformation from    cspice_eul2xf
+EULER angles, matrix to                                    cspice_m2eul
+EULER angles to matrix                                     cspice_eul2m
+EXPAND the intervals of a d.p. window                      cspice_wnexpd
+EXPANSION for abbreviated years, set the interval of       cspice_tsetyr
+EXTENDED object, state of landmark on                      cspice_spkcpt
+                                                           cspice_spkcvt
+EXTENDED object, state of surface point on                 cspice_spkcpt
+                                                           cspice_spkcvt
+EXTENDED object, state relative to landmark on             cspice_spkcpo
+                                                           cspice_spkcvo
+EXTENDED object, state relative to surface point on        cspice_spkcpo
+                                                           cspice_spkcvo
+EXTRACT comments from a DAF                                cspice_dafec
+EXTRACT the endpoints from a d.p. window                   cspice_wnextd
+ 
+FETCH an interval from a d.p. window                       cspice_wnfetd
+FETCH constants for a body from the kernel pool            cspice_bodvcd
+                                                           cspice_bodvrd
+FETCH element from character column entry                  cspice_ekgc
+FETCH element from double precision column entry           cspice_ekgd
+FETCH element from integer column entry                    cspice_ekgi
+FETCH information about a loaded spice kernel              cspice_kinfo
+FETCH reference frame attributes                           cspice_cidfrm
+                                                           cspice_cnmfrm
+                                                           cspice_frinfo
+FIELD of view at specified time, ray in instrument         cspice_fovray
+FIELD of view at specified time, target in instrument      cspice_fovtrg
+FILE and segment, select SPK                               cspice_spkpvn
+                                                           cspice_spksfs
+FILE, close a CK                                           cspice_ckcls
+FILE, close an SPK                                         cspice_spkcls
+FILE, find id codes in CK                                  cspice_ckobj
+FILE, find id codes in SPK                                 cspice_spkobj
+FILE, open a new CK                                        cspice_ckopn
+FILE, open a new SPK                                       cspice_spkopn
+FILL small gaps in a d.p. window                           cspice_wnfild
+FILTER small intervals from a d.p. window                  cspice_wnfltd
+FIND a position transformation matrix                      cspice_pxform
+FIND a state transformation matrix                         cspice_sxform
+FIND EK data                                               cspice_ekfind
+FIND id codes in CK file                                   cspice_ckobj
+FIND id codes in SPK file                                  cspice_spkobj
+FIND intercept of ray on target body surface               cspice_sincpt
+FIND intersection of ray and target body surface           cspice_sincpt
+FIND nearest point to observer on target body              cspice_subpnt
+                                                           mice_subpnt
+FIND nearest point to sun on target body                   cspice_subslr
+                                                           mice_subslr
+FIND next DAF array                                        cspice_daffna
+                                                           cspice_daffpa
+FIND penumbral terminator on ellipsoid                     cspice_edterm
+FIND sub-observer point on target body                     cspice_subpnt
+                                                           mice_subpnt
+FIND sub-solar point on target body                        cspice_subslr
+                                                           mice_subslr
+FIND surface intercept point                               cspice_sincpt
+FIND terminator on ellipsoid                               cspice_edterm
+FIND umbral terminator on ellipsoid                        cspice_edterm
+FORMAT d.p. seconds past J2000 as a string, convert and    cspice_timout
+FORMAT picture, use a sample time string to produce a time cspice_tpictr
+FORWARD search, begin DAF                                  cspice_dafbfs
+FOV at specified time, ray in instrument                   cspice_fovray
+FOV at specified time, target in instrument                cspice_fovtrg
+FOV parameters, return instrument's                        cspice_getfov
+FOV search, gf ray in instrument                           cspice_gfrfov
+FOV search, gf target in instrument                        cspice_gftfov
+FRAME attributes, fetch reference                          cspice_cidfrm
+                                                           cspice_cnmfrm
+                                                           cspice_frinfo
+FRAME, build a right handed coordinate                     cspice_frame
+FRAME from two vectors, define an orthonormal              cspice_twovec
+FRAME id code to frame name translation                    cspice_frmnam
+FRAME id code translation, frame name to                   cspice_namfrm
+FRAME name to frame id code translation                    cspice_namfrm
+FRAME name translation, frame id code to                   cspice_frmnam
+ 
+GAPS in a d.p. window, fill small                          cspice_wnfild
+GENERATE a rotation matrix                                 cspice_rotate
+GENERATING vectors, ellipse to center and                  cspice_el2cgv
+GENERATING vectors, semi-axes of ellipse from              cspice_saelgv
+GENERATING vectors to ellipse, center and                  cspice_cgv2el
+GEODETIC coordinates, jacobian of rectangular w.r.t.       cspice_drdgeo
+GEODETIC, rectangular to                                   cspice_recgeo
+GEODETIC to rectangular coordinates                        cspice_georec
+GEODETIC w.r.t. rectangular coordinates, jacobian of       cspice_dgeodr
+GET CK pointing                                            cspice_ckgp
+GET CK pointing and angular velocity                       cspice_ckgpav
+GET coverage window for CK object                          cspice_ckcov
+GET coverage window for SPK object                         cspice_spkcov
+GET DAF array name                                         cspice_dafgn
+GET DAF summary                                            cspice_dafgs
+                                                           cspice_dafus
+GET state relative to observer corrected for aberrations   cspice_spkezr
+                                                           mice_spkezr
+GET target position relative to an observer, using names   cspice_spkpos
+                                                           mice_spkpos
+GET target state relative to an observer, using body names cspice_spkezr
+                                                           mice_spkezr
+GF angular separation search                               cspice_gfsep
+GF distance search                                         cspice_gfdist
+                                                           cspice_surfpt
+GF occultation search                                      cspice_gfoclt
+GF phase angle search                                      cspice_gfpa
+GF position coordinate search                              cspice_gfposc
+GF range rate search                                       cspice_gfrr
+GF ray in instrument fov search                            cspice_gfrfov
+GF routines, change default convergence tolerance for      cspice_gfstol
+GF subpoint coordinate search                              cspice_gfsubc
+GF surface intercept coordinate search                     cspice_gfsntc
+GF target in instrument fov search                         cspice_gftfov
+GIVEN type, number of loaded kernels of a                  cspice_ktotal
+GLOBAL variables, include                                  miceuser
+GREGORIAN and julian calendars                             cspice_timdef_get
+                                                           cspice_timdef_set
+ 
+HALF the value of pi                                       cspice_halfpi
+HANDED coordinate frame, build a right                     cspice_frame
+ 
+ID code to frame name translation, frame                   cspice_frmnam
+ID code to name, body                                      cspice_bodc2n
+                                                           mice_bodc2n
+ID code to string, body                                    cspice_bodc2s
+ID code translation, frame name to frame                   cspice_namfrm
+ID codes in CK file, find                                  cspice_ckobj
+ID codes in SPK file, find                                 cspice_spkobj
+ILLUMINATION angle constraints, search using               cspice_gfilum
+ILLUMINATION angle constraints, solve for                  cspice_gfilum
+ILLUMINATION angles                                        cspice_ilumin
+ILLUMINATION source, compute the phase of two objects wrt acspice_phaseq
+INCIDENCE angle, solar                                     cspice_ilumin
+INCLUDE global variables                                   miceuser
+INCLUDE occultation code parameters                        miceoccult
+INCLUDED in a d.p. window                                  cspice_wnincd
+INFORMATION about a kernel pool variable, return summary   cspice_dtpool
+                                                           mice_dtpool
+INFORMATION about a loaded spice kernel, fetch             cspice_kinfo
+INFORMATION on loaded spice kernels, retrieve              cspice_kdata
+INSERT an interval into a d.p. window                      cspice_wninsd
+INSTRUMENT field of view at specified time, ray in         cspice_fovray
+INSTRUMENT field of view at specified time, target in      cspice_fovtrg
+INSTRUMENT fov at specified time, ray in                   cspice_fovray
+INSTRUMENT fov at specified time, target in                cspice_fovtrg
+INSTRUMENT fov search, gf ray in                           cspice_gfrfov
+INSTRUMENT fov search, gf target in                        cspice_gftfov
+INSTRUMENT'S fov parameters, return                        cspice_getfov
+INTEGER column entry, fetch element from                   cspice_ekgi
+INTEGER value of a pooled kernel variable, return the      cspice_gipool
+INTERCEPT coordinate search, gf surface                    cspice_gfsntc
+INTERCEPT of ray on target body surface, find              cspice_sincpt
+INTERCEPT point, find surface                              cspice_sincpt
+INTERCEPT point, surface                                   mice_srfxpt
+INTERNAL text buffer, load the kernel pool from an         cspice_lmpool
+INTERSECT two d.p. windows                                 cspice_wnintd
+INTERSECTION of ellipse and plane                          cspice_inelpl
+INTERSECTION of ellipsoid and plane                        cspice_inedpl
+INTERSECTION of ray and plane                              cspice_inrypl
+INTERSECTION of ray and target body surface, find          cspice_sincpt
+INTERVAL from a d.p. window, fetch an                      cspice_wnfetd
+INTERVAL into a d.p. window, insert an                     cspice_wninsd
+INTERVAL of expansion for abbreviated years, set the       cspice_tsetyr
+INTERVALS from a d.p. window, filter small                 cspice_wnfltd
+INTERVALS of a d.p. window, contract the                   cspice_wncond
+INTERVALS of a d.p. window, expand the                     cspice_wnexpd
+INVERT a pseudo orthogonal matrix                          cspice_invort
+INVERT the lengths of the rows, transpose a matrix and     cspice_invort
+ISSUE EK query                                             cspice_ekfind
+ITEMS, load spice data from a list of                      cspice_furnsh
+ 
+J2000 as a string, convert and format d.p. seconds past    cspice_timout
+J2000 epoch, convert a string to tdb seconds past the      cspice_str2et
+JACOBIAN of cylindrical w.r.t. rectangular coordinates     cspice_dcyldr
+JACOBIAN of geodetic w.r.t. rectangular coordinates        cspice_dgeodr
+JACOBIAN of planetographic w.r.t. rectangular coordinates  cspice_dpgrdr
+JACOBIAN of rectangular w.r.t. cylindrical coordinates     cspice_drdcyl
+JACOBIAN of rectangular w.r.t. geodetic coordinates        cspice_drdgeo
+JACOBIAN of rectangular w.r.t. latitudinal coordinates     cspice_dlatdr
+                                                           cspice_drdlat
+JACOBIAN of rectangular w.r.t. planetographic coordinates  cspice_drdpgr
+JACOBIAN of rectangular w.r.t. spherical coordinates       cspice_drdsph
+JACOBIAN of spherical w.r.t. rectangular coordinates       cspice_dsphdr
+JULIAN calendars, gregorian and                            cspice_timdef_get
+                                                           cspice_timdef_set
+JULIAN date of 1900.0 jan 0.5                              cspice_j1900
+JULIAN date of 1950.0 jan 1.0                              cspice_j1950
+JULIAN date of 2000 jan 1.5                                cspice_j2000
+JULIAN date of 2100 jan 1.5                                cspice_j2100
+JULIAN year, number of seconds per                         cspice_jyear
+ 
+KERNEL, fetch information about a loaded spice             cspice_kinfo
+KERNEL pool, fetch constants for a body from the           cspice_bodvcd
+                                                           cspice_bodvrd
+KERNEL pool from an internal text buffer, load the         cspice_lmpool
+KERNEL pool, retrieve a continued string value from the    cspice_stpool
+KERNEL pool variable, delete a                             cspice_dvpool
+KERNEL pool variable, return summary information about a   cspice_dtpool
+                                                           mice_dtpool
+KERNEL pool variable, set the value of a character         cspice_pcpool
+KERNEL pool variable, set the value of a d.p.              cspice_pdpool
+KERNEL pool variable, set the value of a numeric           cspice_pipool
+KERNEL pool variables matching a template, return names of cspice_gnpool
+KERNEL, unload a spice                                     cspice_unload
+KERNEL variable, return the character value of a pooled    cspice_gcpool
+KERNEL variable, return the d.p. value of a pooled         cspice_gdpool
+KERNEL variable, return the integer value of a pooled      cspice_gipool
+KERNEL variable, return the numeric value of a pooled      cspice_gdpool
+KERNEL variable, return the string value of a pooled       cspice_gcpool
+KERNEL variables, clear the pool of                        cspice_clpool
+KERNELS of a given type, number of loaded                  cspice_ktotal
+KERNELS, retrieve information on loaded spice              cspice_kdata
+KERNELS, unload all                                        cspice_kclear
+ 
+LANDMARK on extended object, state of                      cspice_spkcpt
+                                                           cspice_spkcvt
+LANDMARK on extended object, state relative to             cspice_spkcpo
+                                                           cspice_spkcvo
+LATITUDINAL coordinates, jacobian of rectangular w.r.t.    cspice_dlatdr
+                                                           cspice_drdlat
+LATITUDINAL coordinates, rectangular to                    cspice_reclat
+LATITUDINAL coordinates, spherical to                      cspice_sphlat
+LATITUDINAL, cylindrical to                                cspice_cyllat
+LATITUDINAL to cylindrical coordinates                     cspice_latcyl
+LATITUDINAL to rectangular coordinates                     cspice_latrec
+LATITUDINAL to spherical coordinates                       cspice_latsph
+LIGHT in a vacuum, measured velocity of                    cspice_clight
+LIGHT time, compute uplink and downlink                    cspice_ltime
+LIGHTING angles                                            cspice_ilumin
+LIMB, ellipsoid                                            cspice_edlimb
+LINE and ellipsoid, distance between                       cspice_npedln
+LINE, distance between point and                           cspice_nplnpt
+LINE, nearest point on ellipsoid to                        cspice_npedln
+LINE of sight and body, distance between                   cspice_npedln
+LINE to point, nearest point on                            cspice_nplnpt
+LIST of items, load spice data from a                      cspice_furnsh
+LOAD spice data from a list of items                       cspice_furnsh
+LOAD the kernel pool from an internal text buffer          cspice_lmpool
+LOADED kernels of a given type, number of                  cspice_ktotal
+LOADED spice kernel, fetch information about a             cspice_kinfo
+LOADED spice kernels, retrieve information on              cspice_kdata
+LOCAL time for a point on a body., compute the             cspice_et2lst
+ 
+MATCHING a template, return names of kernel pool variables cspice_gnpool
+MATRIX and invert the lengths of the rows, transpose a     cspice_invort
+MATRIX, euler angles to                                    cspice_eul2m
+MATRIX, find a position transformation                     cspice_pxform
+MATRIX, find a state transformation                        cspice_sxform
+MATRIX for different epochs, position transformation       cspice_pxfrm2
+MATRIX, generate a rotation                                cspice_rotate
+MATRIX, invert a pseudo orthogonal                         cspice_invort
+MATRIX, quaternion to                                      cspice_q2m
+MATRIX, rotate a                                           cspice_rotmat
+MATRIX, rotation axis of a                                 cspice_raxisa
+MATRIX to euler angles                                     cspice_m2eul
+MATRIX to quaternion                                       cspice_m2q
+MEASURED velocity of light in a vacuum                     cspice_clight
+ 
+NAME, body id code to                                      cspice_bodc2n
+                                                           mice_bodc2n
+NAME, get DAF array                                        cspice_dafgn
+NAME to code, body                                         cspice_bodn2c
+                                                           cspice_bods2c
+                                                           mice_bodn2c
+                                                           mice_bods2c
+NAME to frame id code translation, frame                   cspice_namfrm
+NAME translation, frame id code to frame                   cspice_frmnam
+NAME/ID code definition, body                              cspice_boddef
+NAMES get target position relative to an observer, using   cspice_spkpos
+                                                           mice_spkpos
+NAMES get target state relative to an observer, using body cspice_spkezr
+                                                           mice_spkezr
+NAMES of kernel pool variables matching a template, return cspice_gnpool
+NEAREST point on an ellipsoid                              cspice_nearpt
+                                                           mice_nearpt
+NEAREST point on ellipse to point                          cspice_npelpt
+NEAREST point on ellipsoid to line                         cspice_npedln
+NEAREST point on line to point                             cspice_nplnpt
+NEAREST point to observer on target body, find             cspice_subpnt
+                                                           mice_subpnt
+NEAREST point to sun on target body, find                  cspice_subslr
+                                                           mice_subslr
+NEW CK file, open a                                        cspice_ckopn
+NEW SPK file, open a                                       cspice_spkopn
+NEXT DAF array, find                                       cspice_daffna
+                                                           cspice_daffpa
+NORM, 3-dimensional unit vector and                        cspice_unorm
+NORM, derivative of 3-vector                               cspice_dvnorm
+NORM of 3-dimensional vector                               cspice_vnorm
+NORMAL vector and constant, plane to                       cspice_pl2nvc
+NORMAL vector and constant to plane                        cspice_nvc2pl
+NORMAL vector and point, plane to                          cspice_pl2nvp
+NORMAL vector and point to plane                           cspice_nvp2pl
+NORMAL vector on an ellipsoid, surface                     cspice_surfnm
+NUMBER of elements in a column entry, return the           cspice_eknelt
+NUMBER of loaded kernels of a given type                   cspice_ktotal
+NUMBER of seconds per julian year                          cspice_jyear
+NUMBER of seconds per tropical year                        cspice_tyear
+NUMERIC kernel pool variable, set the value of a           cspice_pipool
+NUMERIC time system to another, convert one additive       cspice_unitim
+NUMERIC time system to another, convert one uniform        cspice_unitim
+NUMERIC time systems, transform between two additive       cspice_unitim
+NUMERIC time systems, transform between two uniform        cspice_unitim
+NUMERIC value of a pooled kernel variable, return the      cspice_gdpool
+ 
+OBJECT, get coverage window for CK                         cspice_ckcov
+OBJECT, get coverage window for SPK                        cspice_spkcov
+OBJECTS wrt an illumination source, compute the phase of twcspice_phaseq
+OBSERVER corrected for aberrations, get state relative to  cspice_spkezr
+                                                           mice_spkezr
+OBSERVER corrected for aberrations, position relative to   cspice_spkpos
+                                                           mice_spkpos
+OBSERVER on target body, find nearest point to             cspice_subpnt
+                                                           mice_subpnt
+OBSERVER, using body names get target state relative to an cspice_spkezr
+                                                           mice_spkezr
+OBSERVER, using names get target position relative to an   cspice_spkpos
+                                                           mice_spkpos
+OCCULTATION code parameters, include                       miceoccult
+OCCULTATION search, gf                                     cspice_gfoclt
+OCCULTATION type at a specified time                       cspice_occult
+OPEN a new CK file                                         cspice_ckopn
+OPEN a new SPK file                                        cspice_spkopn
+OPEN DAF for read                                          cspice_dafopr
+OPEN DAF for write                                         cspice_dafopw
+ORTHOGONAL, --- see perpendicular
+ORTHOGONAL matrix, invert a pseudo                         cspice_invort
+ORTHONORMAL frame from two vectors, define an              cspice_twovec
+OSCULATING elements, convert state to                      cspice_oscelt
+OSCULATING elements from state                             cspice_oscelt
+ 
+PARALLEL to a state vector, state of a unit vector         cspice_dvhat
+PARAMETERS, include occultation code                       miceoccult
+PARAMETERS, return instrument's fov                        cspice_getfov
+PAST J2000 as a string, convert and format d.p. seconds    cspice_timout
+PAST the J2000 epoch, convert a string to tdb seconds      cspice_str2et
+PENUMBRAL terminator on ellipsoid, find                    cspice_edterm
+PERPENDICULAR component of a 3-vector                      cspice_vperp
+PHASE angle                                                cspice_ilumin
+PHASE angle constraints, solve for                         cspice_gfilum
+PHASE angle search, gf                                     cspice_gfpa
+PHASE of two objects wrt an illumination source, compute thcspice_phaseq
+PHYSICAL constants for a body                              cspice_bodvcd
+                                                           cspice_bodvrd
+PI, half the value of                                      cspice_halfpi
+PI, twice the value of                                     cspice_twopi
+PI, value of                                               cspice_pi
+PICTURE, use a sample time string to produce a time format cspice_tpictr
+PLANE, intersection of ellipse and                         cspice_inelpl
+PLANE, intersection of ellipsoid and                       cspice_inedpl
+PLANE, intersection of ray and                             cspice_inrypl
+PLANE, normal vector and constant to                       cspice_nvc2pl
+PLANE, normal vector and point to                          cspice_nvp2pl
+PLANE, project ellipse onto                                cspice_pjelpl
+PLANE to normal vector and constant                        cspice_pl2nvc
+PLANE to normal vector and point                           cspice_pl2nvp
+PLANE to point and spanning vectors                        cspice_pl2psv
+                                                           cspice_psv2pl
+PLANE, vector projection onto                              cspice_vprjp
+                                                           cspice_vprjpi
+PLANETOGRAPHIC coordinates, convert rectangular to         cspice_recpgr
+PLANETOGRAPHIC coordinates, jacobian of rectangular w.r.t. cspice_drdpgr
+PLANETOGRAPHIC to rectangular coordinates, convert         cspice_pgrrec
+PLANETOGRAPHIC w.r.t. rectangular coordinates, jacobian of cspice_dpgrdr
+POINT and line, distance between                           cspice_nplnpt
+POINT and spanning vectors, plane to                       cspice_pl2psv
+                                                           cspice_psv2pl
+POINT, find surface intercept                              cspice_sincpt
+POINT, nearest point on ellipse to                         cspice_npelpt
+POINT, nearest point on line to                            cspice_nplnpt
+POINT on a body., compute the local time for a             cspice_et2lst
+POINT on an ellipsoid, nearest                             cspice_nearpt
+                                                           mice_nearpt
+POINT on ellipse to point, nearest                         cspice_npelpt
+POINT on ellipsoid to line, nearest                        cspice_npedln
+POINT on line to point, nearest                            cspice_nplnpt
+POINT on target body, find sub-observer                    cspice_subpnt
+                                                           mice_subpnt
+POINT on target body, find sub-solar                       cspice_subslr
+                                                           mice_subslr
+POINT, plane to normal vector and                          cspice_pl2nvp
+POINT, sub-observer                                        mice_subpt
+POINT, surface intercept                                   mice_srfxpt
+POINT to ellipsoid, distance from                          cspice_nearpt
+                                                           mice_nearpt
+POINT to observer on target body, find nearest             cspice_subpnt
+                                                           mice_subpnt
+POINT to plane, normal vector and                          cspice_nvp2pl
+POINT to sun on target body, find nearest                  cspice_subslr
+                                                           mice_subslr
+POINTING and angular velocity, get CK                      cspice_ckgpav
+POINTING data segment, write CK type 1                     cspice_ckw01
+POINTING data segment, write CK type 2                     cspice_ckw02
+POINTING data segment, write CK type 3                     cspice_ckw03
+POINTING, get CK                                           cspice_ckgp
+POOL, fetch constants for a body from the kernel           cspice_bodvcd
+                                                           cspice_bodvrd
+POOL from an internal text buffer, load the kernel         cspice_lmpool
+POOL of kernel variables, clear the                        cspice_clpool
+POOL, retrieve a continued string value from the kernel    cspice_stpool
+POOL variable, delete a kernel                             cspice_dvpool
+POOL variable, return summary information about a kernel   cspice_dtpool
+                                                           mice_dtpool
+POOL variable, set the value of a character kernel         cspice_pcpool
+POOL variable, set the value of a d.p. kernel              cspice_pdpool
+POOL variable, set the value of a numeric kernel           cspice_pipool
+POOL variables matching a template, return names of kernel cspice_gnpool
+POOLED kernel variable, return the character value of a    cspice_gcpool
+POOLED kernel variable, return the d.p. value of a         cspice_gdpool
+POOLED kernel variable, return the integer value of a      cspice_gipool
+POOLED kernel variable, return the numeric value of a      cspice_gdpool
+POOLED kernel variable, return the string value of a       cspice_gcpool
+POSITION coordinate search, gf                             cspice_gfposc
+POSITION relative to an observer, using names get target   cspice_spkpos
+                                                           mice_spkpos
+POSITION relative to observer corrected for aberrations    cspice_spkpos
+                                                           mice_spkpos
+POSITION transformation matrix, find a                     cspice_pxform
+POSITION transformation matrix for different epochs        cspice_pxfrm2
+PRECISION column entry, fetch element from double          cspice_ekgd
+PRODUCE a time format picture, use a sample time string to cspice_tpictr
+PRODUCT and its derivative, compute a unit cross           cspice_ducrss
+PRODUCT, compute the derivative of a cross                 cspice_dvcrss
+PRODUCT, time derivative of a dot                          cspice_dvdot
+PROJECT ellipse onto plane                                 cspice_pjelpl
+PROJECTION, 3-vector                                       cspice_vproj
+PROJECTION onto plane, vector                              cspice_vprjp
+                                                           cspice_vprjpi
+ 
+QUATERNION, matrix to                                      cspice_m2q
+QUATERNION to matrix                                       cspice_q2m
+QUERY, issue EK                                            cspice_ekfind
+ 
+RA and dec, rectangular coordinates to                     cspice_recrad
+RA and dec to rectangular coordinates, range               cspice_radrec
+RADIAN, degrees per                                        cspice_dpr
+RADIANS per degree                                         cspice_rpd
+RANGE ra and dec to rectangular coordinates                cspice_radrec
+RANGE rate search, gf                                      cspice_gfrr
+RATE search, gf range                                      cspice_gfrr
+RAY and plane, intersection of                             cspice_inrypl
+RAY and target body surface, find intersection of          cspice_sincpt
+RAY in instrument field of view at specified time          cspice_fovray
+RAY in instrument fov at specified time                    cspice_fovray
+RAY in instrument fov search, gf                           cspice_gfrfov
+RAY on target body surface, find intercept of              cspice_sincpt
+RE-INITIALIZE the keeper system                            cspice_kclear
+READ data from DAF address                                 cspice_dafgda
+READ ephemeris data                                        cspice_spkezr
+                                                           cspice_spkpos
+                                                           mice_spkezr
+                                                           mice_spkpos
+READ, open DAF for                                         cspice_dafopr
+READ trajectory data                                       cspice_spkezr
+                                                           cspice_spkpos
+                                                           mice_spkezr
+                                                           mice_spkpos
+RECTANGULAR coordinates, convert planetographic to         cspice_pgrrec
+RECTANGULAR coordinates, geodetic to                       cspice_georec
+RECTANGULAR coordinates, jacobian of cylindrical w.r.t.    cspice_dcyldr
+RECTANGULAR coordinates, jacobian of geodetic w.r.t.       cspice_dgeodr
+RECTANGULAR coordinates, jacobian of planetographic w.r.t. cspice_dpgrdr
+RECTANGULAR coordinates, jacobian of spherical w.r.t.      cspice_dsphdr
+RECTANGULAR coordinates, latitudinal to                    cspice_latrec
+RECTANGULAR coordinates, range ra and dec to               cspice_radrec
+RECTANGULAR coordinates, spherical to                      cspice_sphrec
+RECTANGULAR coordinates to ra and dec                      cspice_recrad
+RECTANGULAR, cylindrical to                                cspice_cylrec
+RECTANGULAR, right ascension and declination to            cspice_radrec
+RECTANGULAR to cylindrical coordinates                     cspice_reccyl
+RECTANGULAR to geodetic                                    cspice_recgeo
+RECTANGULAR to latitudinal coordinates                     cspice_reclat
+RECTANGULAR to planetographic coordinates, convert         cspice_recpgr
+RECTANGULAR to right ascension and declination             cspice_recrad
+RECTANGULAR to spherical coordinates                       cspice_recsph
+RECTANGULAR w.r.t. cylindrical coordinates, jacobian of    cspice_drdcyl
+RECTANGULAR w.r.t. geodetic coordinates, jacobian of       cspice_drdgeo
+RECTANGULAR w.r.t. latitudinal coordinates, jacobian of    cspice_dlatdr
+                                                           cspice_drdlat
+RECTANGULAR w.r.t. planetographic coordinates, jacobian of cspice_drdpgr
+RECTANGULAR w.r.t. spherical coordinates, jacobian of      cspice_drdsph
+REFERENCE frame attributes, fetch                          cspice_cidfrm
+                                                           cspice_cnmfrm
+                                                           cspice_frinfo
+RELATIVE to an observer, using body names get target state cspice_spkezr
+                                                           mice_spkezr
+RELATIVE to an observer, using names get target position   cspice_spkpos
+                                                           mice_spkpos
+RELATIVE to constant position observer, state              cspice_spkcpo
+RELATIVE to constant position surface point, state         cspice_spkcpo
+RELATIVE to constant velocity observer, state              cspice_spkcvo
+RELATIVE to constant velocity surface point, state         cspice_spkcvo
+RELATIVE to landmark on extended object, state             cspice_spkcpo
+                                                           cspice_spkcvo
+RELATIVE to observer corrected for aberrations, get state  cspice_spkezr
+                                                           mice_spkezr
+RELATIVE to observer corrected for aberrations, position   cspice_spkpos
+                                                           mice_spkpos
+RELATIVE to surface point on extended object, state        cspice_spkcpo
+                                                           cspice_spkcvo
+RETRIEVE a continued string value from the kernel pool     cspice_stpool
+RETRIEVE information on loaded spice kernels               cspice_kdata
+RETURN compile time, date, and version                     cspice_mice
+RETURN instrument's fov parameters                         cspice_getfov
+RETURN names of kernel pool variables matching a template  cspice_gnpool
+RETURN summary information about a kernel pool variable    cspice_dtpool
+                                                           mice_dtpool
+RETURN the character value of a pooled kernel variable     cspice_gcpool
+RETURN the d.p. value of a pooled kernel variable          cspice_gdpool
+RETURN the integer value of a pooled kernel variable       cspice_gipool
+RETURN the number of elements in a column entry            cspice_eknelt
+RETURN the numeric value of a pooled kernel variable       cspice_gdpool
+RETURN the string value of a pooled kernel variable        cspice_gcpool
+RETURN version strings                                     cspice_tkvrsn
+RIGHT ascension and declination, rectangular to            cspice_recrad
+RIGHT ascension and declination to rectangular             cspice_radrec
+RIGHT handed coordinate frame, build a                     cspice_frame
+ROTATE a matrix                                            cspice_rotmat
+ROTATION about an axis, vector                             cspice_vrotv
+ROTATION and angular velocity, state transformation to     cspice_rav2xf
+                                                           cspice_xf2rav
+ROTATION, axis and angle to                                cspice_axisar
+ROTATION axis of a matrix                                  cspice_raxisa
+ROTATION matrix, generate a                                cspice_rotate
+ROUTINES, change default convergence tolerance for gf      cspice_gfstol
+ 
+S/P-KERNEL, --- see SPK
+SAMPLE time string to produce a time format picture, use a cspice_tpictr
+SCLK, --- see spacecraft clock
+SEARCH, begin DAF backward                                 cspice_dafbbs
+SEARCH, begin DAF forward                                  cspice_dafbfs
+SEARCH, gf angular separation                              cspice_gfsep
+SEARCH, gf distance                                        cspice_gfdist
+                                                           cspice_surfpt
+SEARCH, gf occultation                                     cspice_gfoclt
+SEARCH, gf phase angle                                     cspice_gfpa
+SEARCH, gf position coordinate                             cspice_gfposc
+SEARCH, gf range rate                                      cspice_gfrr
+SEARCH, gf ray in instrument fov                           cspice_gfrfov
+SEARCH, gf subpoint coordinate                             cspice_gfsubc
+SEARCH, gf surface intercept coordinate                    cspice_gfsntc
+SEARCH, gf target in instrument fov                        cspice_gftfov
+SEARCH using illumination angle constraints                cspice_gfilum
+SEARCHING, select a DAF to continue                        cspice_dafcs
+SECONDS past J2000 as a string, convert and format d.p.    cspice_timout
+SECONDS past the J2000 epoch, convert a string to tdb      cspice_str2et
+SECONDS per day                                            cspice_spd
+SECONDS per julian year, number of                         cspice_jyear
+SECONDS per tropical year, number of                       cspice_tyear
+SEGMENT, select SPK file and                               cspice_spkpvn
+                                                           cspice_spksfs
+SEGMENT, write CK type 1 pointing data                     cspice_ckw01
+SEGMENT, write CK type 2 pointing data                     cspice_ckw02
+SEGMENT, write CK type 3 pointing data                     cspice_ckw03
+SEGMENT, write SPK type 8 ephemeris data                   cspice_spkw08
+SELECT a DAF to continue searching                         cspice_dafcs
+SELECT SPK file and segment                                cspice_spkpvn
+                                                           cspice_spksfs
+SEMI-AXES of ellipse from generating vectors               cspice_saelgv
+SEPARATION of 3-dimensional vectors, angular               cspice_vsep
+SEPARATION search, gf angular                              cspice_gfsep
+SEPARATION, time derivative of angular                     cspice_dvsep
+SET the interval of expansion for abbreviated years        cspice_tsetyr
+SET the value of a character kernel pool variable          cspice_pcpool
+SET the value of a d.p. kernel pool variable               cspice_pdpool
+SET the value of a numeric kernel pool variable            cspice_pipool
+SIGHT and body, distance between line of                   cspice_npedln
+SMALL gaps in a d.p. window, fill                          cspice_wnfild
+SMALL intervals from a d.p. window, filter                 cspice_wnfltd
+SOFTWARE defaults., change time                            cspice_timdef_get
+                                                           cspice_timdef_set
+SOLAR incidence angle                                      cspice_ilumin
+SOLAR incidence angle constraints, solve for               cspice_gfilum
+SOLVE for emission angle constraints                       cspice_gfilum
+SOLVE for illumination angle constraints                   cspice_gfilum
+SOLVE for phase angle constraints                          cspice_gfilum
+SOLVE for solar incidence angle constraints                cspice_gfilum
+SOURCE, compute the phase of two objects wrt an illuminatiocspice_phaseq
+SPACECRAFT clock, decode                                   cspice_scdecd
+SPACECRAFT clock, encode                                   cspice_scencd
+SPACECRAFT clock string, ephemeris time to                 cspice_sce2s
+SPACECRAFT clock string to ephemeris time                  cspice_scs2e
+SPACECRAFT clock string to ticks, convert                  cspice_sctiks
+SPACECRAFT clock ticks, ephemeris time to continuous       cspice_sce2c
+SPACECRAFT clock ticks to ephemeris time                   cspice_sct2e
+SPANNING vectors, plane to point and                       cspice_pl2psv
+                                                           cspice_psv2pl
+SPECIFIED time, occultation type at a                      cspice_occult
+SPECIFIED time, ray in instrument field of view at         cspice_fovray
+SPECIFIED time, ray in instrument fov at                   cspice_fovray
+SPECIFIED time, target in instrument field of view at      cspice_fovtrg
+SPECIFIED time, target in instrument fov at                cspice_fovtrg
+SPHERICAL coordinates, jacobian of rectangular w.r.t.      cspice_drdsph
+SPHERICAL coordinates, latitudinal to                      cspice_latsph
+SPHERICAL coordinates, rectangular to                      cspice_recsph
+SPHERICAL, cylindrical to                                  cspice_cylsph
+SPHERICAL to cylindrical coordinates                       cspice_sphcyl
+SPHERICAL to latitudinal coordinates                       cspice_sphlat
+SPHERICAL to rectangular coordinates                       cspice_sphrec
+SPHERICAL w.r.t. rectangular coordinates, jacobian of      cspice_dsphdr
+SPK file and segment, select                               cspice_spkpvn
+                                                           cspice_spksfs
+SPK file, close an                                         cspice_spkcls
+SPK file, find id codes in                                 cspice_spkobj
+SPK file, open a new                                       cspice_spkopn
+SPK object, get coverage window for                        cspice_spkcov
+SPK type 8 ephemeris data segment, write                   cspice_spkw08
+STATE, conic elements from                                 cspice_oscelt
+STATE, convert                                             cspice_xfmsta
+STATE from conic elements                                  cspice_conics
+STATE of a unit vector parallel to a state vector          cspice_dvhat
+STATE of constant position target                          cspice_spkcpt
+STATE of constant velocity target                          cspice_spkcvt
+STATE of landmark on extended object                       cspice_spkcpt
+                                                           cspice_spkcvt
+STATE of surface point on extended object                  cspice_spkcpt
+                                                           cspice_spkcvt
+STATE, osculating elements from                            cspice_oscelt
+STATE relative to an observer, using body names get target cspice_spkezr
+                                                           mice_spkezr
+STATE relative to constant position observer               cspice_spkcpo
+STATE relative to constant position surface point          cspice_spkcpo
+STATE relative to constant velocity observer               cspice_spkcvo
+STATE relative to constant velocity surface point          cspice_spkcvo
+STATE relative to landmark on extended object              cspice_spkcpo
+                                                           cspice_spkcvo
+STATE relative to observer corrected for aberrations, get  cspice_spkezr
+                                                           mice_spkezr
+STATE relative to surface point on extended object         cspice_spkcpo
+                                                           cspice_spkcvo
+STATE to osculating elements, convert                      cspice_oscelt
+STATE transformation between coordinate systems            cspice_xfmsta
+STATE transformation, euler angles and derivatives from    cspice_xf2eul
+STATE transformation from euler angles and derivatives     cspice_eul2xf
+STATE transformation matrix, find a                        cspice_sxform
+STATE transformation to rotation and angular velocity      cspice_rav2xf
+                                                           cspice_xf2rav
+STATE vector, state of a unit vector parallel to a         cspice_dvhat
+STRING, body id code to                                    cspice_bodc2s
+STRING, convert and format d.p. seconds past J2000 as a    cspice_timout
+STRING, ephemeris time to spacecraft clock                 cspice_sce2s
+STRING to ephemeris time, spacecraft clock                 cspice_scs2e
+STRING to produce a time format picture, use a sample time cspice_tpictr
+STRING to tdb seconds past the J2000 epoch, convert a      cspice_str2et
+STRING to ticks, convert spacecraft clock                  cspice_sctiks
+STRING value from the kernel pool, retrieve a continued    cspice_stpool
+STRING value of a pooled kernel variable, return the       cspice_gcpool
+STRINGS, return version                                    cspice_tkvrsn
+SUB-OBSERVER point                                         mice_subpt
+SUB-OBSERVER point on target body, find                    cspice_subpnt
+                                                           mice_subpnt
+SUB-SOLAR point on target body, find                       cspice_subslr
+                                                           mice_subslr
+SUBPOINT coordinate search, gf                             cspice_gfsubc
+SUMMARY, get DAF                                           cspice_dafgs
+                                                           cspice_dafus
+SUMMARY information about a kernel pool variable, return   cspice_dtpool
+                                                           mice_dtpool
+SUMMARY of a d.p. window                                   cspice_wnsumd
+SUN on target body, find nearest point to                  cspice_subslr
+                                                           mice_subslr
+SURFACE, find intercept of ray on target body              cspice_sincpt
+SURFACE, find intersection of ray and target body          cspice_sincpt
+SURFACE intercept coordinate search, gf                    cspice_gfsntc
+SURFACE intercept point                                    mice_srfxpt
+SURFACE intercept point, find                              cspice_sincpt
+SURFACE normal vector on an ellipsoid                      cspice_surfnm
+SURFACE point on extended object, state of                 cspice_spkcpt
+                                                           cspice_spkcvt
+SURFACE point on extended object, state relative to        cspice_spkcpo
+                                                           cspice_spkcvo
+SURFACE point, state relative to constant position         cspice_spkcpo
+SURFACE point, state relative to constant velocity         cspice_spkcvo
+SYSTEM, clear the keeper                                   cspice_kclear
+SYSTEM, re-initialize the keeper                           cspice_kclear
+SYSTEM to another, convert one additive numeric time       cspice_unitim
+SYSTEM to another, convert one uniform numeric time        cspice_unitim
+SYSTEMS, state transformation between coordinate           cspice_xfmsta
+SYSTEMS, transform between two additive numeric time       cspice_unitim
+SYSTEMS, transform between two uniform numeric time        cspice_unitim
+ 
+TARGET body, find nearest point to observer on             cspice_subpnt
+                                                           mice_subpnt
+TARGET body, find nearest point to sun on                  cspice_subslr
+                                                           mice_subslr
+TARGET body, find sub-observer point on                    cspice_subpnt
+                                                           mice_subpnt
+TARGET body, find sub-solar point on                       cspice_subslr
+                                                           mice_subslr
+TARGET body surface, find intercept of ray on              cspice_sincpt
+TARGET body surface, find intersection of ray and          cspice_sincpt
+TARGET in instrument field of view at specified time       cspice_fovtrg
+TARGET in instrument fov at specified time                 cspice_fovtrg
+TARGET in instrument fov search, gf                        cspice_gftfov
+TARGET position relative to an observer, using names get   cspice_spkpos
+                                                           mice_spkpos
+TARGET state relative to an observer, using body names get cspice_spkezr
+                                                           mice_spkezr
+TDB seconds past the J2000 epoch, convert a string to      cspice_str2et
+TEMPLATE, return names of kernel pool variables matching a cspice_gnpool
+TERMINATOR on ellipsoid, find                              cspice_edterm
+TERMINATOR on ellipsoid, find penumbral                    cspice_edterm
+TERMINATOR on ellipsoid, find umbral                       cspice_edterm
+TEXT buffer, load the kernel pool from an internal         cspice_lmpool
+TICKS, convert spacecraft clock string to                  cspice_sctiks
+TICKS, ephemeris time to continuous spacecraft clock       cspice_sce2c
+TICKS to ephemeris time, spacecraft clock                  cspice_sct2e
+TIME and UTC, difference between ephemeris                 cspice_deltet
+TIME, compute uplink and downlink light                    cspice_ltime
+TIME, coordinated universal, --- see UTC
+TIME derivative of a dot product                           cspice_dvdot
+TIME derivative of angular separation                      cspice_dvsep
+TIME for a point on a body., compute the local             cspice_et2lst
+TIME format picture, use a sample time string to produce a cspice_tpictr
+TIME, occultation type at a specified                      cspice_occult
+TIME, ray in instrument field of view at specified         cspice_fovray
+TIME, ray in instrument fov at specified                   cspice_fovray
+TIME software defaults., change                            cspice_timdef_get
+                                                           cspice_timdef_set
+TIME, spacecraft clock string to ephemeris                 cspice_scs2e
+TIME, spacecraft clock ticks to ephemeris                  cspice_sct2e
+TIME string to produce a time format picture, use a sample cspice_tpictr
+TIME system to another, convert one additive numeric       cspice_unitim
+TIME system to another, convert one uniform numeric        cspice_unitim
+TIME systems, transform between two additive numeric       cspice_unitim
+TIME systems, transform between two uniform numeric        cspice_unitim
+TIME, target in instrument field of view at specified      cspice_fovtrg
+TIME, target in instrument fov at specified                cspice_fovtrg
+TIME to a formal calendar date, convert ephemeris          cspice_etcal
+TIME to continuous spacecraft clock ticks, ephemeris       cspice_sce2c
+TIME to spacecraft clock string, ephemeris                 cspice_sce2s
+TIME to UTC, ephemeris                                     cspice_et2utc
+TIME zones                                                 cspice_timdef_get
+                                                           cspice_timdef_set
+TOLERANCE for gf routines, change default convergence      cspice_gfstol
+TRAJECTORY data, read                                      cspice_spkezr
+                                                           cspice_spkpos
+                                                           mice_spkezr
+                                                           mice_spkpos
+TRANSFORM between two additive numeric time systems        cspice_unitim
+TRANSFORM between two uniform numeric time systems         cspice_unitim
+TRANSFORMATION between coordinate systems, state           cspice_xfmsta
+TRANSFORMATION, euler angles and derivatives from state    cspice_xf2eul
+TRANSFORMATION from euler angles and derivatives, state    cspice_eul2xf
+TRANSFORMATION matrix, find a position                     cspice_pxform
+TRANSFORMATION matrix, find a state                        cspice_sxform
+TRANSFORMATION matrix for different epochs, position       cspice_pxfrm2
+TRANSFORMATION to rotation and angular velocity, state     cspice_rav2xf
+                                                           cspice_xf2rav
+TRANSLATION, frame id code to frame name                   cspice_frmnam
+TRANSLATION, frame name to frame id code                   cspice_namfrm
+TRANSPOSE a matrix and invert the lengths of the rows      cspice_invort
+TROPICAL year, number of seconds per                       cspice_tyear
+TWICE the value of pi                                      cspice_twopi
+TYPE 1 pointing data segment, write CK                     cspice_ckw01
+TYPE 2 pointing data segment, write CK                     cspice_ckw02
+TYPE 3 pointing data segment, write CK                     cspice_ckw03
+TYPE 8 ephemeris data segment, write SPK                   cspice_spkw08
+TYPE at a specified time, occultation                      cspice_occult
+TYPE, number of loaded kernels of a given                  cspice_ktotal
+ 
+UMBRAL terminator on ellipsoid, find                       cspice_edterm
+UNIFORM numeric time system to another, convert one        cspice_unitim
+UNIFORM numeric time systems, transform between two        cspice_unitim
+UNION two d.p. windows                                     cspice_wnunid
+UNIT cross product and its derivative, compute a           cspice_ducrss
+UNIT vector and norm, 3-dimensional                        cspice_unorm
+UNIT vector parallel to a state vector, state of a         cspice_dvhat
+UNITIZE a 3-dimensional vector                             cspice_vhat
+UNITS, convert                                             cspice_convrt
+UNIVERSAL time, coordinated, --- see UTC
+UNLOAD a spice kernel                                      cspice_unload
+UNLOAD all kernels                                         cspice_kclear
+UPLINK and downlink light time, compute                    cspice_ltime
+USE a sample time string to produce a time format picture  cspice_tpictr
+USING body names get target state relative to an observer  cspice_spkezr
+                                                           mice_spkezr
+USING illumination angle constraints, search               cspice_gfilum
+USING names get target position relative to an observer    cspice_spkpos
+                                                           mice_spkpos
+UTC, difference between ephemeris time and                 cspice_deltet
+UTC, ephemeris time to                                     cspice_et2utc
+ 
+VACUUM, measured velocity of light in a                    cspice_clight
+VALIDATE a d.p. window                                     cspice_wnvald
+VALUE from the kernel pool, retrieve a continued string    cspice_stpool
+VALUE of a character kernel pool variable, set the         cspice_pcpool
+VALUE of a d.p. kernel pool variable, set the              cspice_pdpool
+VALUE of a numeric kernel pool variable, set the           cspice_pipool
+VALUE of a pooled kernel variable, return the character    cspice_gcpool
+VALUE of a pooled kernel variable, return the d.p.         cspice_gdpool
+VALUE of a pooled kernel variable, return the integer      cspice_gipool
+VALUE of a pooled kernel variable, return the numeric      cspice_gdpool
+VALUE of a pooled kernel variable, return the string       cspice_gcpool
+VALUE of pi                                                cspice_pi
+VALUE of pi, half the                                      cspice_halfpi
+VALUE of pi, twice the                                     cspice_twopi
+VARIABLE, delete a kernel pool                             cspice_dvpool
+VARIABLE, return summary information about a kernel pool   cspice_dtpool
+                                                           mice_dtpool
+VARIABLE, return the character value of a pooled kernel    cspice_gcpool
+VARIABLE, return the d.p. value of a pooled kernel         cspice_gdpool
+VARIABLE, return the integer value of a pooled kernel      cspice_gipool
+VARIABLE, return the numeric value of a pooled kernel      cspice_gdpool
+VARIABLE, return the string value of a pooled kernel       cspice_gcpool
+VARIABLE, set the value of a character kernel pool         cspice_pcpool
+VARIABLE, set the value of a d.p. kernel pool              cspice_pdpool
+VARIABLE, set the value of a numeric kernel pool           cspice_pipool
+VARIABLES, clear the pool of kernel                        cspice_clpool
+VARIABLES, include global                                  miceuser
+VARIABLES matching a template, return names of kernel pool cspice_gnpool
+VECTOR and constant, plane to normal                       cspice_pl2nvc
+VECTOR and constant to plane, normal                       cspice_nvc2pl
+VECTOR and norm, 3-dimensional unit                        cspice_unorm
+VECTOR and point, plane to normal                          cspice_pl2nvp
+VECTOR and point to plane, normal                          cspice_nvp2pl
+VECTOR, norm of 3-dimensional                              cspice_vnorm
+VECTOR on an ellipsoid, surface normal                     cspice_surfnm
+VECTOR parallel to a state vector, state of a unit         cspice_dvhat
+VECTOR projection onto plane                               cspice_vprjp
+                                                           cspice_vprjpi
+VECTOR rotation about an axis                              cspice_vrotv
+VECTOR, state of a unit vector parallel to a state         cspice_dvhat
+VECTOR, unitize a 3-dimensional                            cspice_vhat
+VECTORS, angular separation of 3-dimensional               cspice_vsep
+VECTORS, define an orthonormal frame from two              cspice_twovec
+VECTORS, distance between 3-dimensional                    cspice_vdist
+VECTORS, ellipse to center and generating                  cspice_el2cgv
+VECTORS, plane to point and spanning                       cspice_pl2psv
+                                                           cspice_psv2pl
+VECTORS, semi-axes of ellipse from generating              cspice_saelgv
+VECTORS to ellipse, center and generating                  cspice_cgv2el
+VELOCITY, get CK pointing and angular                      cspice_ckgpav
+VELOCITY of light in a vacuum, measured                    cspice_clight
+VELOCITY, state transformation to rotation and angular     cspice_rav2xf
+                                                           cspice_xf2rav
+VERSION, return compile time, date, and                    cspice_mice
+VERSION strings, return                                    cspice_tkvrsn
+ 
+WINDOW, cardinality of a d.p.                              cspice_wncard
+WINDOW, complement a d.p.                                  cspice_wncomd
+WINDOW, contract the intervals of a d.p.                   cspice_wncond
+WINDOW, element of a d.p.                                  cspice_wnelmd
+WINDOW, expand the intervals of a d.p.                     cspice_wnexpd
+WINDOW, extract the endpoints from a d.p.                  cspice_wnextd
+WINDOW, fetch an interval from a d.p.                      cspice_wnfetd
+WINDOW, fill small gaps in a d.p.                          cspice_wnfild
+WINDOW, filter small intervals from a d.p.                 cspice_wnfltd
+WINDOW for CK object, get coverage                         cspice_ckcov
+WINDOW for SPK object, get coverage                        cspice_spkcov
+WINDOW, included in a d.p.                                 cspice_wnincd
+WINDOW, insert an interval into a d.p.                     cspice_wninsd
+WINDOW, summary of a d.p.                                  cspice_wnsumd
+WINDOW, validate a d.p.                                    cspice_wnvald
+WINDOWS, compare two d.p.                                  cspice_wnreld
+WINDOWS, difference two d.p.                               cspice_wndifd
+WINDOWS, intersect two d.p.                                cspice_wnintd
+WINDOWS, union two d.p.                                    cspice_wnunid
+WRITE CK type 1 pointing data segment                      cspice_ckw01
+WRITE CK type 2 pointing data segment                      cspice_ckw02
+WRITE CK type 3 pointing data segment                      cspice_ckw03
+WRITE, open DAF for                                        cspice_dafopw
+WRITE SPK type 8 ephemeris data segment                    cspice_spkw08
+WRT an illumination source, compute the phase of two objectcspice_phaseq
+ 
+YEAR, number of seconds per julian                         cspice_jyear
+YEAR, number of seconds per tropical                       cspice_tyear
+YEARS, set the interval of expansion for abbreviated       cspice_tsetyr
+ 
+ZONES, time                                                cspice_timdef_get
+                                                           cspice_timdef_set

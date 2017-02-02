@@ -1,0 +1,361 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>pjelpl_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>pjelpl_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void pjelpl_c ( ConstSpiceEllipse  * elin,
+                   ConstSpicePlane    * plane,
+                   SpiceEllipse       * elout  ) 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Project an ellipse onto a plane, orthogonally. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/ellipses.html">ELLIPSES</a> 
+   <a href="../req/planes.html">PLANES</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   ELLIPSE 
+   GEOMETRY 
+   MATH 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   elin       I   A CSPICE ellipse to be projected. 
+   plane      I   A plane onto which elin is to be projected. 
+   elout      O   A CSPICE ellipse resulting from the projection. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   elin, 
+   plane          are, respectively, a cspice ellipse and a 
+                  cspice plane.  The geometric ellipse represented 
+                  by elin is to be orthogonally projected onto the 
+                  geometric plane represented by plane. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   elout          is a cspice ellipse that represents the geometric 
+                  ellipse resulting from orthogonally projecting the 
+                  ellipse represented by inel onto the plane 
+                  represented by plane. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1)  If the input plane is invalid, the error will be diagnosed 
+       by routines called by this routine. 
+ 
+   2)  The input ellipse may be degenerate--its semi-axes may be 
+       linearly dependent.  Such ellipses are allowed as inputs. 
+ 
+   3)  The ellipse resulting from orthogonally projecting the input 
+       ellipse onto a plane may be degenerate, even if the input 
+       ellipse is not. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   Projecting an ellipse orthogonally onto a plane can be thought of 
+   finding the points on the plane that are `under' or `over' the 
+   ellipse, with the `up' direction considered to be perpendicular 
+   to the plane.  More mathematically, the orthogonal projection is 
+   the set of points Y in the plane such that for some point X in 
+   the ellipse, the vector Y - X is perpendicular to the plane. 
+   The orthogonal projection of an ellipse onto a plane yields 
+   another ellipse. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   1)  With  center  = { 1.,  1.,  1. }, 
+             vect1   = { 2.,  0.,  0. }, 
+             vect2   = { 0.,  1.,  1. }, 
+             normal  = { 0.,  0.,  1. }
+ 
+       the code fragment 
+ 
+             <a href="nvc2pl_c.html">nvc2pl_c</a> ( normal,  0.,      plane           ); 
+             <a href="cgv2el_c.html">cgv2el_c</a> ( center,  vect1,   vect2,   elin   ); 
+             <b>pjelpl_c</b> ( elin,    plane,   elout           ); 
+             <a href="el2cgv_c.html">el2cgv_c</a> ( elout,   prjctr,  prjmaj,  prjmin ); 
+ 
+       returns 
+ 
+             prjctr  = { 1.,  1.,  0. },
+             prjmaj  = { 2.,  0.,  0. },
+             prjmin  = { 0.,  1.,  0. } 
+ 
+ 
+   2)  With  vect1   = { 2.,  0.,  0. },
+             vect2   = { 1.,  1.,  1. }, 
+             center  = { 0.,  0.,  0. }, 
+             normal  = { 0.,  0.,  1. }, 
+ 
+       the code fragment 
+ 
+             <a href="nvc2pl_c.html">nvc2pl_c</a> ( normal,  0.,      plane           ); 
+             <a href="cgv2el_c.html">cgv2el_c</a> ( center,  vect1,   vect2,   elin   ); 
+             <b>pjelpl_c</b> ( elin,    plane,   elout           ); 
+             <a href="el2cgv_c.html">el2cgv_c</a> ( elout,   prjctr,  prjmaj,  prjmin ); 
+ 
+       returns 
+ 
+             prjctr  = { 0.,  0.,  0. };
+ 
+             prjmaj  = { -2.227032728823213, 
+                         -5.257311121191336e-1, 
+                          0.                  };
+ 
+             prjmin  = {  2.008114158862273e-1, 
+                         -8.506508083520399e-1, 
+                          0.                  };
+ 
+ 
+ 
+   3)    An example of actual use:   Suppose we wish to compute the 
+         distance from an ellipsoid to a line.   Let the line be 
+         defined by a point P and a direction vector DIRECT; the 
+         line is the set of points 
+ 
+            P   +   t * DIRECT, 
+ 
+         where t is any real number.  Let the ellipsoid have semi- 
+         axis lengths A, B, and C. 
+ 
+         We can reduce the problem to that of finding the distance 
+         between the line and an ellipse on the ellipsoid surface by 
+         considering the fact that the surface normal at the nearest 
+         point to the line will be orthogonal to DIRECT; the set of 
+         surface points where this condition holds lies in a plane, 
+         and hence is an ellipse on the surface.  The problem can be 
+         further simplified by projecting the ellipse orthogonally 
+         onto the plane defined by 
+ 
+            &lt; X, DIRECT &gt;  =  0. 
+ 
+         The problem is then a two dimensional one:  find the 
+         distance of the projected ellipse from the intersection of 
+         the line and this plane (which is necessarily one point). 
+         A `paraphrase' of the relevant code is: 
+ 
+            #include &quot;SpiceUsr.h&quot;
+                 .
+                 .
+                 .
+            /.
+            Step 1.   Find the candidate ellipse cand. 
+                      normal is a normal vector to the plane 
+                      containing the candidate ellipse.  The 
+                      ellipse must exist, since it's the 
+                      intersection of an ellipsoid centered at 
+                      the origin and a plane containing the 
+                      origin.  For this reason, we don't check 
+                      <a href="inedpl_c.html">inedpl_c</a>'s &quot;found flag&quot; found below. 
+            ./
+            
+            normal[0]  =  direct[0] / (a*a); 
+            normal[1]  =  direct[1] / (b*b);
+            normal[2]  =  direct[2] / (c*c);
+
+            <a href="nvc2pl_c.html">nvc2pl_c</a> ( normal, 0., &amp;candpl );
+
+            <a href="inedpl_c.html">inedpl_c</a> ( a, b, c, &amp;candpl, cand, &amp;found );
+ 
+ 
+            /.
+            Step 2.   Project the candidate ellipse onto a 
+                      plane orthogonal to the line.  We'll 
+                      call the plane prjpl and the 
+                      projected ellipse prjel. 
+            ./ 
+            <a href="nvc2pl_c.html">nvc2pl_c</a> ( direct,  0.,     &amp;prjpl ); 
+            <b>pjelpl_c</b> ( &amp;cand,   &amp;prjpl, &amp;prjel );
+ 
+ 
+            /.
+            Step 3.   Find the point on the line lying in the 
+                      projection plane, and then find the 
+                      near point pjnear on the projected 
+                      ellipse.  Here prjpt is the point on the 
+                      input line that lies in the projection 
+                      plane.  The distance between prjpt and 
+                      pjnear is dist. 
+            ./
+            
+            <a href="vprjp_c.html">vprjp_c</a>  ( linept,  &amp;prjpl,  prjpt          );
+            <a href="npelpt_c.html">npelpt_c</a> ( &amp;prjel,   prjpt,  pjnear,  &amp;dist );
+ 
+              
+            /.
+            Step 4.  Find the near point pnear on the 
+                     ellipsoid by taking the inverse 
+                     orthogonal projection of PJNEAR; this is 
+                     the point on the candidate ellipse that 
+                     projects to pjnear.  Note that the output 
+                     dist was computed in step 3. 
+        
+                     The inverse projection of pjnear is 
+                     guaranteed to exist, so we don't have to 
+                     check found. 
+            ./
+            <a href="vprjpi_c.html">vprjpi_c</a> ( pjnear, &amp;prjpl, &amp;candpl, pnear, &amp;found ); 
+ 
+  
+            /.
+            The value of dist returned is the distance we're looking 
+            for. 
+ 
+            The procedure described here is carried out in the routine 
+            <a href="npedln_c.html">npedln_c</a>. 
+            ./
+            
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman   (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 02-SEP-1999 (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   project ellipse onto plane 
+ </PRE>
+<h4>Link to routine pjelpl_c source file <a href='../../../src/cspice/pjelpl_c.c'>pjelpl_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:40 2014</pre>
+
+</body>
+</html>
+

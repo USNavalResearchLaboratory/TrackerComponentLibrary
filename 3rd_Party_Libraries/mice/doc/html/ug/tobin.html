@@ -1,0 +1,181 @@
+<HTML>
+<HEAD>
+<TITLE> TOBIN User's Guide </TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+
+<A NAME="top"></A>
+
+<TABLE STYLE="text-align: left; margin-left: auto; margin-right: auto; width: 800px;" BORDER="0" CELLPADDING="5" CELLSPACING="2">
+<TBODY>
+<TR>
+  <TD STYLE="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+  <DIV ALIGN="right">
+    <SMALL><SMALL><A HREF="index.html">Index Page</A></SMALL></SMALL>
+  </DIV>
+  <B>TOBIN User's Guide</B> </TD>
+</TR>
+<TR>
+  <TD STYLE="vertical-align: top;">
+
+<H2> Table of Contents
+</H2>
+
+<PRE>
+   <A HREF="#TOBIN User's Guide">TOBIN User's Guide</A>
+      <A HREF="#Abstract">Abstract</A>
+      <A HREF="#Summary">Summary</A>
+      <A HREF="#Particulars">Particulars</A>
+         <A HREF="#Examples">Examples</A>
+      <A HREF="#Note about DAF Run-Time Binary File Format Translation">Note about DAF Run-Time Binary File Format Translation</A>
+
+</PRE>
+
+<HR SIZE=3 NOSHADE>
+
+<BR><BR>
+<A NAME="TOBIN User's Guide"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> TOBIN User's Guide
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Last revised on 2002 DEC 06 by B. V. Semenov.
+<P>
+ 
+<BR><BR>
+<A NAME="Abstract"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Abstract
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   TOBIN is a command-line program that converts transfer format SPK, CK
+   and EK files to binary format.
+<P>
+ 
+<BR><BR>
+<A NAME="Summary"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Summary
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   TOBIN is a utility program providing command line, or ``batch,''
+   oriented method for converting portable transfer files into SPICE binary
+   kernel files. The name ``tobin'' is obviously derived from ``to
+   binary,'' as in ``convert to binary''.
+<P>
+ 
+<BR><BR>
+<A NAME="Particulars"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Particulars
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   TOBIN converts a SPICE transfer format file into it's binary format for
+   use in a particular computing environment. TOBIN requires at least the
+   name of the input transfer file, which is the first argument on the
+   command line. Optionally, a name for the output binary file may be
+   specified as the second argument on the command line. If a name for the
+   output file is provided it overrides the automatic naming conventions
+   used by the program.
+<P>
+ 
+   If only the name of the input transfer file is provided on the command
+   line, TOBIN will generate a name for the output binary kernel file that
+   has the same base name as the input transfer file and an appropriate
+   filename extension, based on the filename extension of the transfer
+   file. If TOBIN does not recognize the filename extension of the input
+   transfer file, or there is no filename extension on the input transfer
+   file, a filename extension of '.bin' will be used as the filename
+   extension of the output binary file. If a file having the same name as
+   the output file already exists, TOBIN signals an error and stops. We
+   assume that it is bad form to overwrite or replace an existing file.
+<P>
+ 
+   TOBIN recognizes the transfer filename extensions ``.xc'', ``.xee'',
+   ``.xpc'', and ``.xsp'' associated with transfer files for SPICE data
+   products. These are converted to the SPICE binary kernel filename
+   extensions ``.bc'', ``.bee'', ``.bpc'', and ``.bsp,'' respectively. Also
+   recognized are the old transfer file extensions ``.tc'', ``.tee'',
+   ``.tpc'', and ``.tsp,'' which are converted into the appropriate
+   filename extensions for a binary kernel file.
+<P>
+ 
+<BR><BR>
+<A NAME="Examples"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Examples
+</H3><P><BR><BR>
+   TOBIN requires the name of the file to be converted and, optionally, the
+   name of the file to be produced, e.g.,
+<P>
+ 
+<PRE>
+   prompt &gt; tobin thisfile.xsp
+</PRE>
+   and
+<P>
+ 
+<PRE>
+   prompt &gt; tobin thisfile.xsp thisfile.bsp
+</PRE>
+   would both produce the file `thisfile.bsp' in the current directory.
+<P>
+ 
+   In the first example, the name for the binary file produced is derived
+   from the name of the transfer file, using the full base name and
+   replacing the letter `x' in the file name extension with the letter `b',
+   to indicate that the file is a binary file. In the second example, the
+   name for the binary file produced is taken directly from the command
+   line.
+<P>
+ 
+<UL>
+<TT>--</TT> Example 1: Convert the transfer file 'ephem.xsp' into a binary kernel file.
+<BR><BR></UL>
+<PRE>
+            &gt; tobin ephem.xsp
+</PRE>
+<UL>
+<TT>&#32;&#32;</TT> This will create the binary kernel file 'ephem.bsp'.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Example 2: This is the same as Example 1, except we explicitly set the
+output filename on the command line.
+<BR><BR></UL>
+<PRE>
+            &gt; tobin ephem.xsp myephem.bsp
+</PRE>
+<UL>
+<TT>&#32;&#32;</TT> This will create the binary kernel file 'myephem.bsp'.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Example 3: For this example, we provide a filename extension on the input
+transfer file that TOBIN does not recognize.
+<BR><BR></UL>
+<PRE>
+            &gt; tobin mydata.ttt
+</PRE>
+<UL>
+<TT>&#32;&#32;</TT> This will create the binary file 'mydata.bin'.
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Note about DAF Run-Time Binary File Format Translation"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Note about DAF Run-Time Binary File Format Translation
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Starting with the N0052 release of the SPICE Toolkit (January, 2002)
+   certain supported platforms are able to read DAF-based binary files
+   (SPK, CK and binary PCK) that were written using a different, or
+   non-native, binary representation. This capability eliminated the need
+   to use transfer format to move DAF-based files between some of the
+   platforms. Refer to the Convert User's Guide (<a href="../ug/convert.html">convert.ug</a>) to see if
+   using transfer format files is indeed necessary in your data exchange
+   path.
+<P>
+ 
+
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+
+</BODY>
+
+</HTML>

@@ -1,0 +1,259 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>prompt_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>prompt_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   SpiceChar * prompt_c ( ConstSpiceChar * prmptStr,
+                          SpiceInt         lenout,
+                          SpiceChar      * buffer )
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   This function prompts a user for keyboard input.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+   UTILITY
+
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+   Variable  I/O  Description
+   --------  ---  --------------------------------------------------
+   prmptStr   I   The prompt string to display when asking for input.
+   lenout     I   Minimum number of characters for response plus one.
+   buffer     O   The string containing the response typed by a user.
+
+   The routine also returns a pointer to the output buffer.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+   prmptStr   A character string displayed from the current cursor
+              position which describes the requested input.  The prompt
+              string should be relatively short, i.e., 50 or fewer
+              characters, so a response may be typed on the line where
+              the prompt appears.
+
+              All characters (including trailing blanks) in prmptStr
+              are considered significant and will be displayed.
+
+   lenout     The integer number of characters plus one for the
+              response string.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+   buffer     The user supplied string which holds the response.  The
+              string's memory is allocated in the calling routine.
+
+   The routine returns a pointer to buffer as well as passing the
+   pointer back via an argument.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+   1) If the output string has length less than two characters, it
+      is too short to contain one character of output data plus a null
+      terminator, so it cannot be passed to the underlying Fortran
+      routine.  In this event, the error SPICE(STRINGTOOSHORT) is
+      signaled and a null pointer is returned.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+   This is a utility that allows you to &quot;easily&quot; request information
+   from a program user.  The calling program declares an array or
+   allocate memory to contain the user's response to the prompt.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+   Suppose you have an interactive program that computes state
+   vectors by calling <a href="spkezr_c.html">spkezr_c</a>.  The program prompts the user for
+   the inputs to <a href="spkezr_c.html">spkezr_c</a>.  After each prompt is written, the program
+   leaves the cursor at the end of the string as shown here:
+
+      Enter UTC epoch  &gt; _
+
+   (The underscore indicates the cursor position).
+
+   The following program illustrates the aquisition of input
+   values using <b>prompt_c</b>:
+
+   #include &lt;stdlib.h&gt;
+   #include &lt;stdio.h&gt;
+
+   #include &quot;SpiceUsr.h&quot;
+
+   #define   STRLEN    32
+
+   void main()
+      {
+      SpiceChar    utc    [STRLEN];
+      SpiceChar    obs    [STRLEN];
+      SpiceChar    targ   [STRLEN];
+      SpiceChar  * utc1;
+      SpiceChar  * obs1;
+      SpiceChar  * targ1;
+
+
+      /. Call the routine as a subroutine. ./
+
+      <b>prompt_c</b> ( &quot;Enter UTC epoch             &gt; &quot;, STRLEN, utc  );
+      <b>prompt_c</b> ( &quot;Enter observer name         &gt; &quot;, STRLEN, obs  );
+      <b>prompt_c</b> ( &quot;Enter target name           &gt; &quot;, STRLEN, targ );
+
+
+      /. Or call the routine as a function. ./
+
+      utc1   = ( SpiceChar * ) malloc (STRLEN);
+      obs1   = ( SpiceChar * ) malloc (STRLEN);
+      targ1  = ( SpiceChar * ) malloc (STRLEN);
+
+
+      utc1 = <b>prompt_c</b> ( &quot;Enter UTC epoch        &gt; &quot;, STRLEN, utc1 );
+      obs1 = <b>prompt_c</b> ( &quot;Enter observer name    &gt; &quot;, STRLEN, obs1 );
+      targ1= <b>prompt_c</b> ( &quot;Enter target name      &gt; &quot;, STRLEN, targ1);
+
+
+      /.
+      Now do stuff with your strings.
+      ./
+
+        ...
+
+      }
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   N.J. Bachman    (JPL)
+   K.R. Gehringer  (JPL)
+   W.L. Taber      (JPL)
+   E.D. Wright     (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.0.0, 25-JUN-1999 (EDW) (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   Prompt for keyboard input
+   Prompt for input with a user supplied message
+</PRE>
+<h4>Link to routine prompt_c source file <a href='../../../src/cspice/prompt_c.c'>prompt_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:40 2014</pre>
+
+</body>
+</html>
+

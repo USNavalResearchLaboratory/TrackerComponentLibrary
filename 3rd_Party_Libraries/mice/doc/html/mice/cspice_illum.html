@@ -1,0 +1,337 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_illum</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_illum</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_ILLUM calculates the illumination angles at a specified
+   surface point of a target body.
+
+   Deprecated: This routine has been superseded by the routine
+   <a href="cspice_ilumin.html">cspice_ilumin</a>. This routine is supported for purposes of
+   backward compatibility only.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      target   the scalar string name of the target body. 'target' is
+               case-insensitive, and leading and trailing blanks in
+               'target' are not significant. Optionally, you may supply
+               a string containing the integer ID code for the object.
+               For example both 'MOON' and '301' are legitimate strings
+               that indicate the moon is the target body.
+
+               The target and observer define a state vector whose
+               position component points from the observer to the target.
+
+      et       the double precision scalar or 1xN array of epochs,
+               specified in ephemeris seconds past J2000, at which the
+               apparent illumination angles at the specified surface
+               point on the target body, as seen from the observing
+               body, are to be computed.
+
+      abcorr   the aberration correction to be used in computing the
+               location and orientation of the target body and the location
+               of the Sun.
+
+      obsrvr   the scalar string name of the observing body, typically a
+               spacecraft, the earth, or a surface point on the earth. 'obsrvr'
+               is case-insensitive, and leading and trailing blanks in 'obsrvr'
+               are not significant. Optionally, you may supply a string
+               containing the integer ID code for the object.  For example
+               both &quot;EARTH&quot; and &quot;399&quot; are legitimate strings that indicate
+               the earth is the observer.
+
+      spoint   a double precision 3x1 or 3xN array representing a surface
+               point or points on the target body, expressed in
+               rectangular body-fixed (body equator and prime meridian)
+               coordinates. Each 'spoint' element (spoint(:,i))
+               corresponds to the same element index in 'et' (et(i)) and need
+               not be visible from the observer's location at time 'et'.
+
+               Note: The design of <b>cspice_illum</b> supposes the input 'spoint'
+               originates as the output of another Mice routine. Still, in
+               the event the user requires an 'spoint' constant over a vector
+               of 'et', such as a constant station location at (x,y,z),
+               construct 'spoint' with the MATLAB code:
+
+                  N            = numel(et);
+                  spoint       = eye(3, N);
+                  spoint(1,:)  = x;
+                  spoint(2,:)  = y;
+                  spoint(3,:)  = z;
+
+   the call:
+
+      [phase, solar, emissn] = <b>cspice_illum</b>( target, et, abcorr, ...
+                                             obsrvr, spoint)
+
+   returns:
+
+      phase    the double precision scalar or 1xN array of phase angles at
+               'spoint', as seen from 'obsrvr' at time 'et'.  This is the
+               angle between the  'spoint'-'obsrvr' vector and the
+               'spoint'-sun vector. Units are radians.  The range of
+               'phase' is [0, pi].
+
+      solar    the double precision, scalar or 1xN array of solar incidence
+               angles at `spoint', as seen from 'obsrvr' at time 'et'.
+               This is the angle between the surface normal vector at
+               'spoint' and the 'spoint'-sun vector.  Units are radians.
+               The range of 'solar' is [0, pi].
+
+      emissn   the double precision, scalar or 1xN array of emission angles
+               at 'spoint', as seen from  'obsrvr' at time 'et'.  This is the
+               angle between the surface normal vector at 'spoint' and the
+               'spoint'-observer vector.  Units are radians.  The range of
+               'emissn' is [0, pi].
+
+               'phase', 'solar', 'emissn' return with the same
+               vectorization measure (N) as 'et'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      % Compute the time evolution of the phase, solar, and
+      % emission angles for the intercept sub-point of the
+      % MGS orbiter from Feb 1, 2003 to April 1, 2003.
+      %
+      TARGET   = 'MARS';
+      OBSERVER = 'MGS';
+      CORRECT  = 'LT+S';
+
+      %
+      % Assign the MGS SPK kernel path-name to a string variable.
+      %
+      MGS = '/kernels/MGS/spk/spk_m_030102-030403_021004.bsp';
+
+      %
+      % Define the start and stop time for the computations.
+      %
+      START_TIME = '1 Feb 2003';
+      STOP_TIME  = '1 APR 2003';
+
+      %
+      % Number of steps?
+      %
+      STEP = 75;
+
+      %
+      % Load the standard leapseconds and PCK kernels, and the MGS SPK
+      % kernel.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( MGS )
+
+      %
+      % Convert the strings to ephemeris time J2000.
+      %
+      et_start = <a href="cspice_str2et.html">cspice_str2et</a>( START_TIME );
+      et_stop = <a href="cspice_str2et.html">cspice_str2et</a>( STOP_TIME );
+
+      %
+      % Length of a step in seconds for STEP steps.
+      %
+      space = (et_stop - et_start)/STEP;
+
+      %
+      % Create a vector of ephemeris times.
+      %
+      et = [0:(STEP-1)]*space + et_start;
+
+      %
+      % Start at 'et_start', take STEP steps
+      % of space 'length'. At each time, calculate the
+      % intercept sub-point of the observer, then calculate
+      % the illumination angles at the sub-point.
+      %
+      [pos, alt] = <a href="cspice_subpt.html">cspice_subpt</a>( 'Intercept', TARGET, et, CORRECT, OBSERVER );
+
+      [ phase, solar, emissn] = <b>cspice_illum</b>( TARGET, et, CORRECT, ...
+                                               OBSERVER, pos );
+
+      %
+      % Convert the et value to UTC for human comprehension.
+      %
+      utc    = <a href="cspice_et2utc.html">cspice_et2utc</a>( et, 'C', 3 );
+      phase  = phase  * <a href="cspice_dpr.html">cspice_dpr</a>;
+      solar  = solar  * <a href="cspice_dpr.html">cspice_dpr</a>;
+      emissn = emissn * <a href="cspice_dpr.html">cspice_dpr</a>;
+
+      for i = 1:STEP
+
+         %
+         % Output the times and lighting angles in degrees.
+         %
+         txt = sprintf( 'UTC           : %s', utc(i,:) );
+         disp( txt )
+
+         txt = sprintf( 'Emission angle: %14.6f', emissn(i) );
+         disp( txt )
+
+         txt = sprintf( 'Solar angle   : %14.6f', solar(i)  );
+         disp( txt )
+
+         txt = sprintf( 'Phase angle   : %14.6f', phase(i)  );
+         disp( txt )
+
+         disp( ' ' )
+      end
+
+   MATLAB outputs:
+
+      UTC           : 2003 FEB 01 00:00:00.000
+      Emission angle:     0.128603
+      Solar angle   :    49.308223
+      Phase angle   :    49.230858
+
+      UTC           : 2003 FEB 01 18:52:48.000
+      Emission angle:     0.301783
+      Solar angle   :   143.954297
+      Phase angle   :   144.017336
+
+                   ...
+
+      UTC           : 2003 MAR 30 10:14:24.000
+      Emission angle:       0.160300
+      Solar angle   :     139.575312
+      Phase angle   :     139.585791
+
+      UTC           : 2003 MAR 31 05:07:12.000
+      Emission angle:       0.291396
+      Solar angle   :      58.922414
+      Phase angle   :      58.711270
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/illum_c.html">illum_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/kernel.html">KERNEL.REQ</a>
+   <a href="../req/naif_ids.html">NAIF_IDS.REQ</a>
+   <a href="../req/spk.html">SPK.REQ</a>
+   <a href="../req/time.html">TIME.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.2, 18-MAY-2010, BVS (JPL)
+
+      Index lines now state that this routine is deprecated.
+
+   -Mice Version 1.0.1, 30-DEC-2008, EDW (JPL)
+
+      Edits to header; Abstract now states that this routine is
+      deprecated.
+
+      Corrected misspellings.
+
+    -Mice Version 1.0.0, 15-DEC-2005, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   DEPRECATED illumination angles
+   DEPRECATED lighting angles
+   DEPRECATED phase angle
+   DEPRECATED emission angle
+   DEPRECATED solar incidence angle
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:37 2014</pre>
+
+</body>
+</html>
+

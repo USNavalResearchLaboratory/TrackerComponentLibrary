@@ -1,0 +1,329 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_sxform</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_sxform</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SXFORM returns the state transformation matrix from one
+   frame to another at a specified epoch.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      from   the scalar string name of a reference frame in which
+             a position is known.
+
+      to     the scalar string name of a reference frame in which
+             it is desired to represent the position.
+
+      et     the double precision scalar or 1XN-vector of epochs in
+             ephemeris seconds past the epoch of J2000 (TDB) at which
+             the state transformation matrix should be evaluated.
+
+   the call:
+
+      xform = <b>cspice_sxform</b>( from, to, et )
+
+   returns:
+
+      xform   a double precision, 6x6 or 6x6xN array state
+              transformation matrix that transforms states from the
+              reference frame 'from' to frame 'to' at epoch 'et'
+
+              'xform' returns with the same vectorization measure (N)
+               as 'et'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Suppose you have geodetic coordinates of a station on the
+      % surface of Earth and that you need the inertial (J2000)
+      % state of this station.  The following code fragment
+      % illustrates how to transform the geodetic state of the
+      % station to a J2000 state.
+      %
+
+      %
+      % Load the SPK, PCK and LSK kernels.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % Define a geodetic longitude, latitude, altitude
+      % coordinate set. These coordinates are defined in the
+      % non-inertial, earth fixed frame &quot;IAU_EARTH&quot;.
+      %
+      lon = 118.25 * <a href="cspice_rpd.html">cspice_rpd</a>;
+      lat = 34.05  * <a href="cspice_rpd.html">cspice_rpd</a>;
+      alt = 0.;
+
+      %
+      % Define a UTC time of interest. Convert the 'utc' string
+      % to ephemeris time J2000.
+      %
+      utc = 'January 1, 1990';
+      et = <a href="cspice_str2et.html">cspice_str2et</a>( utc );
+
+      %
+      % Retrieve the equatorial and polar axis of the earth (body 399).
+      %
+      abc = <a href="cspice_bodvrd.html">cspice_bodvrd</a>( 'EARTH', 'RADII', 3 );
+      equatr =  abc(1);
+      polar  =  abc(3);
+
+      %
+      % Calculate the flattening factor for earth.
+      %
+      f =  ( equatr - polar  ) / equatr;
+
+      %
+      % Calculate the Cartesian coordinates on earth for the
+      % location at 'lon', 'lat', 'alt'.
+      %
+      estate = <a href="cspice_georec.html">cspice_georec</a>( lon, lat, alt, equatr, f);
+
+      %
+      % <a href="cspice_georec.html">cspice_georec</a> returned the position vector of the geodetic
+      % coordinates, but we want the state vector. Since it is a fixed
+      % location referenced in the &quot;IAU_EARTH&quot; frame, the location has
+      % no velocity. We need to extend estate to a 6-vector, the final
+      % three elements with value 0.d.
+      %
+      estate = [ estate; [0.; 0.; 0.] ];
+
+      %
+      % Retrieve the transformation matrix from &quot;IAU_EARTH&quot;
+      % to &quot;J2000&quot; at epoch 'et'.
+      %
+      xform = <b>cspice_sxform</b>( 'IAU_EARTH', 'J2000', et );
+
+      jstate = xform * estate;
+
+      disp( 'Scalar' )
+      txt = sprintf( 'Cartesian position in J2000 frame at epoch: %f ', et );
+      disp( txt )
+      txt = sprintf( '%16.8f %16.8f %16.8f ', jstate(1:3) );
+      disp( txt )
+
+      disp( 'Cartesian velocity in J2000 frame' )
+      txt = sprintf( '%16.8f %16.8f %16.8f ', jstate(4:6) );
+      disp( txt )
+
+      %
+      % Return the state transformation matrices from &quot;IAU_EARTH&quot;
+      % to &quot;J2000&quot; approximately every month for the time
+      % interval January 1, 1990 to January 1, 2010 (UTC).
+      %
+      %
+      % Define the time bounds for the time interval,
+      % 20 years,  convert to ephemeris time J2000.
+      %
+      utc_bounds = strvcat( '1 Jan 1990', '1 Jan 2010' );
+      et_bounds = <a href="cspice_str2et.html">cspice_str2et</a>( utc_bounds );
+
+      %
+      % Step in units of a month. 20 years ~ 240 months.
+      %
+      step = (et_bounds(2) - et_bounds(1) ) / 240.;
+
+      %
+      % Create an array of 240 ephemeris times starting at
+      % et_bound(1) in intervals of 'step'.
+      %
+      et = [0:239]*step + et_bounds(1);
+
+      %
+      % Convert the 240-vector of 'et' to an array of corresponding
+      % transformation matrices (dimensions (6,6,240) ).
+      %
+      xform = <b>cspice_sxform</b>( 'IAU_EARTH', 'J2000', et );
+
+      %
+      % Show the dimensions of the 'xform'.
+      %
+      disp (' ' )
+      disp( 'Vector' )
+      disp( 'Dimension of xform:' )
+      disp( size(xform) )
+
+      %
+      % Apply the first and last of the transform matrices to the
+      % 'estate' vector.
+      %
+      % Transform the Cartesian state vector from &quot;IAU_EARTH&quot;
+      % to &quot;J2000&quot; at et(1) (initial epoch).
+      %
+      jstate = xform(:,:,1) * estate;
+
+      txt = sprintf( 'Cartesian position in J2000 frame at epoch: %f', et(1) );
+      disp( txt )
+      txt =  sprintf( '%24.8f %24.8f %24.8f', jstate(1:3) );
+      disp( txt )
+
+      disp( 'Cartesian velocity in J2000 frame ')
+      txt =  sprintf( '%24.12f %24.12f %24.12f', jstate(4:6) );
+      disp( txt )
+
+      disp (' ' )
+
+      %
+      % Same transformation, but at et(240) (final epoch).
+      %
+      jstate = xform(:,:,240) * estate;
+
+      txt = ...
+         sprintf( 'Cartesian position in J2000 frame at epoch: %f', et(240) );
+      disp( txt )
+
+      txt =  sprintf( '%24.8f %24.8f %24.8f', jstate(1:3) );
+      disp( txt )
+
+      disp( 'Cartesian velocity in J2000 frame ')
+      txt =  sprintf( '%24.12f %24.12f %24.12f', jstate(4:6) );
+      disp( txt )
+
+      %
+      % It's always good form to unload kernels after use,
+      % particularly in MATLAB due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+      Scalar
+      Cartesian position in J2000 frame at epoch: -315575942.816070
+        -4131.46296088   -3308.37067191    3547.02152550
+      Cartesian velocity in J2000 frame
+            0.24124981      -0.30101944       0.00023422
+
+      Vector
+      Dimension of xform:
+           6     6   240
+
+      Cartesian position in J2000 frame at epoch: -315575942.816070
+                -4131.46296088        -3308.37067191       3547.02152550
+      Cartesian velocity in J2000 frame
+                0.241249810257       -0.301019439927       0.000234215852
+
+      Cartesian position in J2000 frame at epoch: 312946264.154758
+                 4533.62043540        2731.85929290        3546.67378733
+      Cartesian velocity in J2000 frame
+               -0.199210494903        0.330347334014       0.000192387677
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/sxform_c.html">sxform_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/rotation.html">ROTATION.REQ</a>
+   <a href="../req/frames.html">FRAMES.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 22-NOV-2005, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Find a state transformation matrix
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:39 2014</pre>
+
+</body>
+</html>
+

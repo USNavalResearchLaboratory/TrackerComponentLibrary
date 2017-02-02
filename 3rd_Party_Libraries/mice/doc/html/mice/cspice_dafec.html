@@ -1,0 +1,256 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dafec</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dafec</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DAFEC reads comment text from the comment area of a DAF.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      handle   file handle referring to a DAF file.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+      bufsiz   the maximum number of comment lines to copy to 'buffer'.
+
+               [1,1] = size(bufsiz); int32 = class(bufsiz)
+
+      lenout   allowed length of each string element of the output 'buffer'.
+               This length must be large enough to hold the longest output
+               string. The SPICE system imposes no limit on the length of
+               comment lines, so 'lenout' normally should be set to a
+               &quot;generous&quot; value that is unlikely to be exceeded.
+
+               [1,1] = size(lenout); int32 = class(lenout)
+
+   the call:
+
+      [buffer, done] = <b>cspice_dafec</b>( handle, bufsiz, lenout )
+
+   returns:
+
+      buffer   array containing the comment lines read from the DAF
+               associated with 'handle'.
+
+               On output, 'buffer' contains 'bufsiz' or less strings of comment
+               text, with one comment line per string ( bufsiz &gt;= n).
+
+               [n,c1] = size(buffer); char = class(buffer)
+
+      done     logical indicating whether or not all of the comment
+               lines from the comment area of the DAF have been read. This
+               variable has value true after the last comment line has been
+               read. It will have a false value otherwise.
+
+               If no comments exist in the comment area, this variable
+               returns as true.
+
+               [1,1] = size(done); logical = class(done)
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Define an SPK from which to extract the comment area.
+      %
+      SPK        = 'de421.bsp';
+
+      %
+      % Define the size of the comment area to read from the SPK.
+      % 15 lines, each with length 80 characters.
+      %
+      BUFSIZE    = 15;
+      LINLEN     = 80;
+
+      %
+      % Open the 'SPK' for reading, return the corresponding
+      % file handle to 'handle'.
+      %
+      handle = <a href="cspice_dafopr.html">cspice_dafopr</a>( SPK );
+
+      done = false;
+
+      [buf, done] = <b>cspice_dafec</b>( handle, BUFSIZE, LINLEN );
+      output = cellstr(buf);
+
+      for i=1:numel(output)
+         fprintf( '%s\n', char(output(i)) );
+      end
+
+      if done
+         fprintf( 'All comments read from file.\n' );
+      else
+         fprintf( 'Not all comments read from file.\n' );
+      end
+
+      %
+      % SAFELY close the file.
+      %
+      <a href="cspice_dafcls.html">cspice_dafcls</a>( handle )
+
+   Matlab outputs:
+
+      ; de421.bsp LOG FILE
+      ;
+      ; Created 2008-02-12/11:33:34.00.
+      ;
+      ; BEGIN NIOSPK COMMANDS
+
+      LEAPSECONDS_FILE    = naif0007.tls
+      SPK_FILE            = de421.bsp
+        SPK_LOG_FILE      = de421_spk_conversion.log
+        NOTE              = NIOSPK 6.1.0 Conversion
+        SOURCE_NIO_FILE   = de421.nio
+          BEGIN_TIME      = CAL-ET 1899 JUL 29 00:00:00.000
+          END_TIME        = CAL-ET 2053 OCT 09 00:00:00.000
+
+      ; END NIOSPK COMMANDS
+
+      Not all comments read from file.
+
+   The program outputs BUFSIZ (15) lines from the 'SPK' comment area.
+   Additional calls to <b>cspice_dafec</b> will read more comment lines
+   from the SPK in slices of BUFSIZ.
+
+   Reading all comment lines from 'SPK' requires a large value for BUFSIZ.
+   In this case, a BUFSIZ value of 50 will read all comment lines from
+   'SPK' in a single <b>cspice_dafec</b>.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   A binary DAF contains an area which is reserved for storing
+   annotations or descriptive textual information describing the data
+   contained in a file. This area is referred to as the ``comment
+   area'' of the file. The comment area of a DAF is a line
+   oriented medium for storing textual information. The comment
+   area preserves any leading or embedded white space in the line(s)
+   of text which are stored, so that the appearance of the of
+   information will be unchanged when it is retrieved (extracted) at
+   some other time. Trailing blanks, however, are NOT preserved,
+   due to the way that character strings are represented in
+   standard Fortran 77.
+
+   This routine will read the comments from the comment area of
+   a binary DAF, placing them into a line buffer. If the line
+   buffer is not large enough to hold the entire comment area,
+   the portion read will be returned to the caller, and the DONE
+   flag will be set to false. This allows the comment area to be
+   read in ``chunks,'' a buffer at a time. After all of the comment
+   lines have been read, the `done' flag will be set to SPICETRUE.
+
+   This routine can be used to ``simultaneously'' extract comments
+   from the comment areas of multiple binary DAFs.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/dafec_c.html">dafec_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/daf.html">DAF.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 20-JUL-2012, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+    extract comments from a DAF
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:36 2014</pre>
+
+</body>
+</html>
+

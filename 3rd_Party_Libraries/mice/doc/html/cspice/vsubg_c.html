@@ -1,0 +1,214 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>vsubg_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>vsubg_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void vsubg_c ( ConstSpiceDouble  * v1,
+                  ConstSpiceDouble  * v2,
+                  SpiceInt            ndim,
+                  SpiceDouble       * vout )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+    Compute the difference between two double precision vectors of
+    arbitrary dimension.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+    VECTOR
+
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+    VARIABLE  I/O  DESCRIPTION
+    --------  ---  --------------------------------------------------
+     v1        I     First vector (minuend).
+     v2        I     Second vector (subtrahend).
+     ndim      I     Dimension of v1, v2, and vout.
+     vout      O     Difference vector, v1 - v2.
+                     vout can overwrite either v1 or v2.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+    v1      is a double precision vector of arbitrary dimension which
+            is the minuend (i.e. first or left-hand member) in the
+            vector subtraction.
+
+    v2      is a double precision vector of arbitrary dimension which
+            is the subtrahend (i.e. second or right-hand member) in
+            the vector subtraction.
+
+    ndim    is the dimension of v1 and v2 (and vout).
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+    vout    is a double precision vector containing the difference
+            v1 - v2.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+    Error free.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+    None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+    For each value of the index i from 0 to (ndim - 1), this subroutine
+    performs the following subtraction:
+
+       vout(i) = v1(i) - v2(i)
+
+    No error checking is performed to guard against numeric overflow
+    or underflow.  vout may overwrite v1 or v2.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+    The following table shows the results of <b>vsubg_c</b> from various
+    inputs.
+
+     v1                v2             ndim         vout
+    -----------------------------------------------------------------
+    (1, 2, 3, 4)     ( 1, 1, 1, 1 )    4         ( 0, 1, 2, 3 )
+    (1, 2, 3, 4)     (-1,-2,-3,-4 )    4         ( 2, 4, 6, 8 )
+    (1, 2, 3, 4)     (-1, 2,-3, 4 )    4         ( 2, 0, 6, 0 )
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+    No error checking is performed to guard against numeric overflow.
+    The programmer is thus required to insure that the values in v1
+    and v2 are reasonable and will not cause overflow.
+
+    It is assumed the proper amount of memory has been allocated for
+    v1, v2 and vout.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+    None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+    W.M. Owen       (JPL)
+    E.D. Wright     (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.1.0, 22-OCT-1998 (NJB)
+
+      Made input vectors const.
+
+   -CSPICE Version 1.0.0, 05-MAR-1998 (EDW)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   n-dimensional vector subtraction
+</PRE>
+<h4>Link to routine vsubg_c source file <a href='../../../src/cspice/vsubg_c.c'>vsubg_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:48 2014</pre>
+
+</body>
+</html>
+

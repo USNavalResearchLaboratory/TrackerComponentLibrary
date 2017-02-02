@@ -1,0 +1,224 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cylsph_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cylsph_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void cylsph_c ( SpiceDouble    r,
+                   SpiceDouble    lonc,
+                   SpiceDouble    z,
+                   SpiceDouble *  radius,
+                   SpiceDouble *  colat,
+                   SpiceDouble *  lon )
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   Convert from cylindrical to spherical coordinates.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+   CONVERSION
+   COORDINATES
+
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  -------------------------------------------------
+   r          I   Distance of point from z axis.
+   lonc       I   Angle (radians) of point from XZ plane.
+   z          I   Height of point above XY plane.
+   radius     O   Distance of point from origin.
+   colat      O   Polar angle (co-latitude in radians) of point.
+   lon        O   Azimuthal angle (longitude) of point (radians).
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+   r          Distance of the point of interest from z axis.
+
+   lonc       Cylindrical angle (radians) of the point from the
+              XZ plane.
+
+   z          Height of the point above XY plane.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+   radius     Distance of the point from origin.
+
+   colat      Polar angle (co-latitude in radians) of the point.
+
+   lon        Azimuthal angle (longitude) of the point (radians).
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+   Error free.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+   This returns the spherical coordinates of a point whose position
+   is input through cylindrical coordinates.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+   Below are two tables:  The first is a set of input values
+   the second is the result of the following sequence of
+   calls to Spicelib routines.  Note all input and output angular
+   quantities are in degrees.
+
+       <a href="convrt_c.html">convrt_c</a> ( lonc, &quot;DEGREES&quot;, &quot;RADIANS&quot;, lonc  );
+
+       <b>cylsph_c</b> ( r, lonc, z, &amp;radius, &amp;colat, &amp;lon );
+
+       <a href="convrt_c.html">convrt_c</a> ( lon,  &quot;RADIANS&quot;, &quot;DEGREES&quot;, lon   );
+       <a href="convrt_c.html">convrt_c</a> ( lat,  &quot;RADIANS&quot;, &quot;DEGREES&quot;, lat   );
+
+
+
+   Inputs:                         Results:
+
+   r        lonc     z             radius   lon      colat
+   ------   ------   ------        ------   ------   ------
+   1.0000     0       0            1.0000     0       90.00
+   1.0000    90.00    0            1.0000    90.00    90.00
+   1.0000   180.00    1.000        1.4142   180.00    45.00
+   1.0000   180.00   -1.000        1.4142   180.00   135.00
+   0.0000   180.00    1.000        1.0000   180.00     0.00
+   0.0000    33.00    0            0.0000    33.00     0.00
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   E.D. Wright     (JPL)
+   W.L. Taber      (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.0.1, 08-FEB-1998 (EDW)
+
+       Corrected and clarified header entries.
+
+   -CSPICE Version 1.0.0, 25-OCT-1997 (EDW)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   cylindrical to spherical
+</PRE>
+<h4>Link to routine cylsph_c source file <a href='../../../src/cspice/cylsph_c.c'>cylsph_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:28 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,288 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>vrelg_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>vrelg_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   SpiceDouble vrelg_c ( ConstSpiceDouble * v1,
+                         ConstSpiceDouble * v2,
+                         SpiceInt           ndim  )
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   Return the relative difference between two vectors of general
+   dimension.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+   MATH
+   VECTOR
+
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+   Variable  I/O  Description
+   --------  ---  --------------------------------------------------
+    v1,v2     I   Input vectors.
+    ndim      I   Dimension of v1 and v2.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+    v1, v2        are two vectors for which the relative difference
+                  is to be computed.
+
+    ndim          is the dimension of v1 and v2.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+    <b>vrelg_c</b>       is the relative difference between v1 and v2.
+                  It is defined as:
+                                              || v1 - v2 ||
+                            <b>vrelg_c</b>  =   ----------------------
+                                       max ( ||v1||, ||v2|| )
+
+                  where || x || indicates the euclidean norm of
+                  the vector x ( ||x|| = sqrt( x . x ) ).
+
+                  <b>vrelg_c</b> assumes values in the range [0,2]. If both
+                  v1 and v2 are zero vectors then <b>vrelg_c</b> is defined
+                  to be zero.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+   Error free.
+
+   If both v1 and v2 are zero vectors then <b>vrelg_c</b> is defined to be
+   zero.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+   This function computes the relative difference between two vectors
+   of general dimension as defined above.
+
+   The function <a href="vrel_c.html">vrel_c</a> may be used to find the relative difference
+   for two 3-dimensional vectors.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+   This example determines if the state of Jupiter, with respect
+   to Voyager 2, for a set of times is the same for two different
+   ephemeris files. Instead of insisting on absolute equality
+   between the state vectors, the program will check if the relative
+   difference between the vectors is greater than a fixed tolerance.
+
+         #include &quot;SpiceUsr.h&quot;
+               .
+               .
+               .
+         /.
+         The NAIF code for Jupiter is 599 and for Voyager 2 is -32.
+         Set the tolerance to be 0.0005.
+         ./
+
+         #define            NUM   500
+         #define            JUP   599
+         #define            VG2   -32
+         #define            TOL   .0005
+
+         /.
+         Local variables
+         ./
+         SpiceDouble        state1 [6][NUM];
+         SpiceDouble        state2 [6][NUM];
+         SpiceDouble        et     [NUM];
+         SpiceDouble        lt;
+         SpiceDouble        diff;
+
+         SpiceInt           i;
+
+         .
+         .
+         .
+
+         /.
+         Load  the first SPK file.
+         ./
+         <a href="furnsh_c.html">furnsh_c</a> ( &quot;VG2_SOURCE_1.BSP&quot; );
+
+
+         /.
+         Find the states for each time in the array ET.
+         This example assumes that the SPK file can
+         provide states for all of the times in the array.
+         ./
+         for ( i = 0; i &lt; NUM; i++ )
+            {
+            <a href="spkez_c.html">spkez_c</a> ( JUP, et[i], &quot;J2000&quot;, &quot;lt&quot;, VG2,
+                                   state1[1][i], &amp;lt  );
+            }
+
+
+         /.
+         Unload the first file and load the second one.
+         ./
+         <a href="unload_c.html">unload_c</a> ( &quot;VG2_SOURCE_1.BSP&quot; );
+
+         <a href="furnsh_c.html">furnsh_c</a> ( &quot;VG2_SOURCE_2.BSP&quot; );
+
+
+         /.
+         Find the states from the new file.
+         ./
+         for ( i = 0; i &lt; NUM; i++ )
+            {
+            <a href="spkez_c.html">spkez_c</a> ( JUP, et[i], &quot;J2000&quot;, &quot;lt&quot;,
+                      VG2, state2[1][i], &amp;lt  );
+            }
+
+
+         /.
+         Now compare the two state vectors for each time.
+         ./
+         for ( i = 0; i &lt; NUM; i++ )
+            {
+            diff = <b>vrelg_c</b> ( state1[1][i], state2[1][i], 6 );
+
+            if ( diff &gt; TOL )
+               {
+                 ...
+               }
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   J.M. Lynch     (JPL)
+   E.D. Wright    (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.1.0, 28-AUG-2001 (NJB) 
+   
+      Include interface macro definition file SpiceZim.h. 
+      Made some minor updates and corrections in the code example.
+      
+   -CSPICE Version 1.0.0, 6-JUL-1999
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   relative difference of n-dimensional vectors
+</PRE>
+<h4>Link to routine vrelg_c source file <a href='../../../src/cspice/vrelg_c.c'>vrelg_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:48 2014</pre>
+
+</body>
+</html>
+

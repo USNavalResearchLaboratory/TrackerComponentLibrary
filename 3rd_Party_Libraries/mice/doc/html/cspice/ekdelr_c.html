@@ -1,0 +1,268 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>ekdelr_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>ekdelr_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void ekdelr_c ( SpiceInt   handle,
+                   SpiceInt   segno,
+                   SpiceInt   recno ) 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Delete a specified record from a specified E-kernel segment. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/ek.html">EK</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   EK
+   UTILITY 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   handle     I   File handle. 
+   segno      I   Segment number. 
+   recno      I   Record number. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   handle         is a file handle of an EK open for write access. 
+ 
+   segno          is the number of the segment to which the record 
+                  is to be added.  EK segment numbers range from
+                  zero to N-1, where N is the number of segments
+                  in the kernel.
+ 
+   recno          is the index of the record to delete.  recno must 
+                  be in the range 0 : N, where N is the 
+                  number of records in the segment prior to the 
+                  insertion. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   None.  See the $Particulars section for a description of the 
+   effect of this routine. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1)  If handle is invalid, the error will be diagnosed by routines 
+       called by this routine.  The file will not be modified. 
+ 
+   2)  If segno is out of range, the error SPICE(INVALIDINDEX) 
+       will be signalled.  The file will not be modified. 
+ 
+   3)  If recno is out of range, the error SPICE(INVALIDINDEX) 
+       will be signalled.  The file will not be modified. 
+ 
+   4)  If an I/O error occurs while reading or writing the indicated 
+       file, the error will be diagnosed by routines called by this 
+       routine.  The file may be corrupted. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   See the EK Required Reading for a discussion of the EK file 
+   format. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   This routine operates by side effects:  it deletes a record 
+   from an EK segment.  Deleting a record implies: 
+ 
+      1) All column entries in the record are deleted. 
+ 
+      2) Link counts are decremented for data pages containing 
+         column entries in the record to be deleted.  Pages whose 
+         link counts drop to zero are freed. 
+ 
+      3) All column indexes are updated for the parent segment. 
+ 
+      4) The link count is decremented for the page containing the 
+         record pointer structure of the record to be deleted.  If 
+         the link count drops to zero, the page is freed. 
+ 
+      5) The pointer to the deleted record is deleted from the 
+         record tree for the parent segment. 
+ 
+      6) The segment's metadata is updated to reflect the new 
+         record count. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   1)  Suppose the second segment of an EK file designated by 
+       handle contains 5 records: 
+ 
+          +-----------------+ 
+          |     Record 0    | 
+          +-----------------+ 
+          |     Record 1    | 
+          +-----------------+ 
+          |     Record 2    | 
+          +-----------------+ 
+          |     Record 3    | 
+          +-----------------+ 
+          |     Record 4    | 
+          +-----------------+ 
+ 
+       Then the call 
+ 
+          <b>ekdelr_c</b> ( handle, 1, 2 ) 
+ 
+       deletes the third record from the segment, leaving the 
+       segment's contents as follows: 
+ 
+          +-----------------+ 
+          |     Record 0    | 
+          +-----------------+ 
+          |     Record 1    | 
+          +-----------------+ 
+          |     Record 3    | 
+          +-----------------+ 
+          |     Record 4    | 
+          +-----------------+ 
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman   (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 16-JUN-2000 (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   delete record from an EK segment 
+ </PRE>
+<h4>Link to routine ekdelr_c source file <a href='../../../src/cspice/ekdelr_c.c'>ekdelr_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:31 2014</pre>
+
+</body>
+</html>
+

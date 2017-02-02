@@ -1,0 +1,908 @@
+ 
+Toolkit Contents Description
+===========================================================================
+ 
+ 
+Introduction
+===========================================================================
+ 
+   This document describes the structure and contents of the latest version
+   of the NAIF mice Toolkit for INTEL MAC computers using MAC OS-X
+   operating system.
+ 
+   Most C compilers come with a large set of compilation options that can
+   be used when compiling source code. The compiler options we (NAIF) used
+   when creating the various object libraries are discussed in the section
+   "LIB" that appears later in this document.
+ 
+ 
+Version Information
+--------------------------------------------------------
+ 
+      Creation Date: Fri Jul 18 20:24:15 PDT 2014
+      Version      : MICE.................V.N0065
+ 
+ 
+Directory Structure and Contents
+===========================================================================
+ 
+   The top level directory, mice, contains the file makeall.csh. This is a
+   script that builds all of the object libraries and executables in the
+   mice Toolkit.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            makeall.csh
+ 
+   mice also contains several subdirectories that will be described in more
+   detail in the following sections.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            data
+            doc
+            etc
+            exe
+            include
+            lib
+            src
+ 
+       1.   DATA
+ 
+            This directory contains example data files for use with various
+            programs. These files are provided only as examples and are not
+            intended for use for any serious analysis or planning work.
+ 
+       2.   DOC
+ 
+            This directory contains all of the documentation for this
+            package. This includes User's Guides for the programs, Required
+            Reading files for the library subsystems, and documents
+            describing the contents and installation of this package.
+ 
+       3.   ETC
+ 
+            The subdirectories of this directory contain product-specific
+            files that are neither source, documentation, nor data. This
+            includes configuration files, set up files, and help files.
+ 
+       4.   EXE
+ 
+            This directory contains all of the package executables, and
+            where applicable, scripts or batch files to run the
+            executables.
+ 
+       5.   INCLUDE
+ 
+            This directory contains the header files that are required by
+            applications that call library functions.
+ 
+       6.   LIB
+ 
+            This directory contains all of the object libraries.
+ 
+       7.   SRC
+ 
+            The subdirectories of this directory contain all of the source
+            for the products in this package.
+ 
+ 
+DATA
+--------------------------------------------------------
+ 
+   The DATA directory contains all of the data that are pertinent for this
+   package. These data files are intended only to be used with the cookbook
+   programs, and are included only to help you get started using the mice
+   Toolkit.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            data
+               |
+               cook_01.tc
+               cook_01.tls
+               cook_01.tpc
+               cook_01.tsc
+               cook_01.tsp
+               cook_02.tc
+               cook_02.tsp
+               geophysical.ker
+ 
+ 
+DOC
+--------------------------------------------------------
+ 
+   The DOC directory contains all of the NAIF documentation for this
+   package that is available on-line. This includes the User's Guides for
+   the programs, Required Reading files for the library subsystems, and
+   documents describing the installation and contents of this package.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            doc
+               |
+               dscriptn.txt
+               version.txt
+               cspice.idx
+               mice.idx
+               *.ug
+               *.req
+               *.txt
+ 
+   This package also includes HTML version of the documentation. It is
+   provided in the HTML subdirectory of the DOC directory. The
+   ``index.html'' file contains links to the individual HTML documents
+   spread across numerous branches of this subdirectory tree.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            doc
+               |
+               html
+                  |
+                  index.html
+                  ...
+ 
+ 
+ETC
+--------------------------------------------------------
+ 
+   The ETC directory contains all files for the mice Toolkit products that
+   are not source, documentation, or data such as set up files,
+   configuration files or help files.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            etc
+ 
+ 
+EXE
+--------------------------------------------------------
+ 
+   The EXE directory contains the mice Toolkit executables and, where
+   applicable, scripts to run executables.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            exe
+               |
+               brief
+               chronos
+               ckbrief
+               commnt
+               simple
+               states
+               subpt
+               tictoc
+               frmdiff
+               inspekt
+               mkspk
+               msopck
+               spacit
+               spkdiff
+               spkmerge
+               tobin
+               toxfr
+               version
+ 
+ 
+INCLUDE
+--------------------------------------------------------
+ 
+   The INCLUDE directory contains all of the mice Toolkit include files
+   that are part of the public interface to the CSPICE library. Users will
+   need to include the master include file SpiceUsr.h into their C code
+   that references CSPICE functions. Code that references underlying f2c'd
+   routines directly should include SpiceZfc.h as well.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            include
+               |
+               SpiceCK.h
+               SpiceCel.h
+               SpiceEK.h
+               SpiceEll.h
+               SpiceErr.h
+               SpiceFrm.h
+               SpiceGF.h
+               SpiceOccult.h
+               SpicePln.h
+               SpiceSPK.h
+               SpiceUsr.h
+               SpiceZad.h
+               SpiceZdf.h
+               SpiceZfc.h
+               SpiceZim.h
+               SpiceZmc.h
+               SpiceZpl.h
+               SpiceZpr.h
+               SpiceZrnm.h
+               SpiceZst.h
+               f2c.h
+               f2cMang.h
+               fio.h
+               fmt.h
+               fp.h
+               lio.h
+               rawio.h
+               signal1.h
+               zzalloc.h
+               zzerror.h
+ 
+ 
+LIB
+--------------------------------------------------------
+ 
+   The LIB directory contains the object libraries for this mice Toolkit
+   package.
+ 
+   All static libraries are compiled using the following compiler options:
+ 
+      -m64 -c -ansi -O2 -fPIC -DNON_UNIX_STDIO
+ 
+   The libraries contained in this directory are listed below. Each library
+   is discussed in more detail later in the section devoted to the SRC
+   directory.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            lib
+               |
+               cspice.a
+               csupport.a
+               mice.*
+ 
+ 
+SRC
+--------------------------------------------------------
+ 
+   The SRC directory contains one subdirectory for each product in the mice
+   Toolkit. Each of these product directories contains the source code
+   files and procedures to create the executable or object library.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            src
+               |
+               brief_c
+               chrnos_c
+               ckbref_c
+               commnt_c
+               cook_c
+               frmdif_c
+               inspkt_c
+               mkspk_c
+               msopck_c
+               spacit_c
+               cspice
+               spkdif_c
+               spkmrg_c
+               csupport
+               tobin_c
+               toxfr_c
+               versn_c
+               mice
+               micecook
+ 
+ 
+BRIEF
+ 
+   BRIEF is a utility program that allows you to summarize the ephemeris
+   coverage for one or more SPK files.
+ 
+   This directory contains the BRIEF main program, supporting routines, and
+   a script to create the executable program brief.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            src
+               |
+               brief_c
+                  |
+                  main.x
+                  brief.pgm
+                  *.c
+                  *.h
+                  mkprodct.csh
+ 
+ 
+CHRONOS
+ 
+   CHRONOS is a utility program that allows you to easily convert from one
+   representation of time to another.
+ 
+   This directory contains the CHRONOS main program, supporting routines,
+   and a script to create the executable program chronos.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            src
+               |
+               chrnos_c
+                  |
+                  main.x
+                  chronos.pgm
+                  *.c
+                  mkprodct.csh
+ 
+ 
+CKBRIEF
+ 
+   CKBRIEF is a utility program that allows you to summarize the ephemeris
+   coverage for one or more CK files.
+ 
+   This directory contains the CKBRIEF main program, supporting routines,
+   and a script to create the executable program ckbrief.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            src
+               |
+               ckbref_c
+                  |
+                  main.x
+                  ckbrief.pgm
+                  *.c
+                  mkprodct.csh
+ 
+ 
+COMMNT
+ 
+   COMMNT is a utility program that is used to add comments, extract
+   comments, read comments, or delete comments in SPICE SPK, CK and EK
+   files.
+ 
+   This directory contains the COMMNT main program and a script to create
+   the executable file commnt.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            src
+               |
+               commnt_c
+                  |
+                  main.x
+                  commnt.pgm
+                  *.h
+                  mkprodct.csh
+ 
+ 
+COOKBOOK
+ 
+   The cookbook programs are sample programs that demonstrate how to use
+   CSPICE routines to obtain state vectors, convert between different time
+   representations, and solve simple geometry problems.
+ 
+   This directory contains the COOKBOOK source files and a script to create
+   the executable files.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            src
+               |
+               cook_c
+                  |
+                  simple.pgm
+                  states.pgm
+                  subpt.pgm
+                  tictoc.pgm
+                  mkprodct.csh
+ 
+ 
+FRMDIFF
+ 
+   FRMDIFF is a program that provides a simple way of sampling orientation
+   of a frame or comparing orientations of two frames known to SPICE and
+   supported by data from SPICE kernels.
+ 
+   This directory contains the FRMDIFF main program, supporting routines,
+   and a script to create the executable program frmdiff.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            src
+               |
+               frmdif_c
+                  |
+                  main.x
+                  frmdiff.pgm
+                  *.c
+                  *.h
+                  mkprodct.csh
+ 
+ 
+INSPEKT
+ 
+   INSPEKT is a program that allows you to examine the contents of an
+   events component of an E-kernel.
+ 
+   This directory contains the INSPEKT main program, supporting routines,
+   and a script to create the executable program inspekt.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            src
+               |
+               inspkt_c
+                  |
+                  main.x
+                  inspekt.pgm
+                  *.c
+                  *.h
+                  mkprodct.csh
+ 
+ 
+MKSPK
+ 
+   MKSPK is a program that creates SPK files from a reasonably general text
+   file.
+ 
+   This directory contains the MKSPK main program, supporting routines, and
+   a script to create the executable program mkspk.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            src
+               |
+               mkspk_c
+                  |
+                  main.x
+                  mkspk.pgm
+                  *.c
+                  *.h
+                  mkprodct.csh
+ 
+ 
+MSOPCK
+ 
+   MSOPCK is a command-line program that converts attitude data provided in
+   a text file as UTC, SCLK, or ET-tagged quaternions, Euler angles, or
+   matrices, optionally accompanied by angular velocities, into a type 1,
+   2, or 3 SPICE C-kernel.
+ 
+   This directory contains the MSOPCK main program, supporting routines,
+   and a script to create the executable program msopck.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            src
+               |
+               msopck_c
+                  |
+                  main.x
+                  msopck.pgm
+                  *.c
+                  *.h
+                  mkprodct.csh
+ 
+ 
+SPACIT
+ 
+   SPACIT (space-it) is a utility program that performs three functions: it
+   converts transfer format SPK, CK and EK files to binary format, it
+   converts binary SPK, CK and EK files to transfer format, and it
+   summarizes the contents of binary SPK, CK and EK files.
+ 
+   This directory contains the SPACIT main program, supporting routines,
+   and a script to create the executable program spacit.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            src
+               |
+               spacit_c
+                  |
+                  main.x
+                  spacit.pgm
+                  *.c
+                  *.h
+                  mkprodct.csh
+ 
+ 
+CSPICE
+ 
+   This directory contains the CSPICE C source files needed for creating
+   the CSPICE object library. The library contains about 1500 functions.
+ 
+   This directory also contains a script for creating CSPICE.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            src
+               |
+               cspice
+                  |
+                  *.c
+                  *.h
+                  mkprodct.csh
+ 
+ 
+SPKDIFF
+ 
+   SPKDIFF is a program that computes differences between geometric states
+   obtained from two SPK files and either displays these differences or
+   shows statistics about them.
+ 
+   This directory contains the SPKDIFF main program, supporting routines,
+   and a script to create the executable program spkdiff.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            src
+               |
+               spkdif_c
+                  |
+                  main.x
+                  spkdiff.pgm
+                  *.c
+                  *.h
+                  mkprodct.csh
+ 
+ 
+SPKMERGE
+ 
+   SPKMERGE is a utility program that is used to subset and merge a
+   collection of SPK files into a single SPK file.
+ 
+   This directory contains the SPKMERGE main program, supporting routines,
+   and a script to create the executable file spkmerge.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            src
+               |
+               spkmrg_c
+                  |
+                  main.x
+                  spkmerge.pgm
+                  *.c
+                  *.h
+                  mkprodct.csh
+ 
+ 
+CSUPPORT
+ 
+   CSUPPORT is a C source code library that contains routines that support
+   the Toolkit programs. These routines are not intended to be used by
+   anyone except NAIF. These routines are not officially supported and may
+   undergo radical changes such as calling sequence changes. They may even
+   be deleted. Do not use them!
+ 
+   This directory contains the CSUPPORT library source files and a script
+   to create the object library csupport.a.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            src
+               |
+               csupport
+                  |
+                  *.c
+                  *.h
+                  mkprodct.csh
+ 
+ 
+TOBIN
+ 
+   TOBIN (to-bin) is a command line utility program that converts transfer
+   format SPK, CK and EK files to binary format.
+ 
+   This directory contains the TOBIN main program, supporting routines, and
+   a script to create the executable program tobin.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            src
+               |
+               tobin_c
+                  |
+                  main.x
+                  tobin.pgm
+                  *.h
+                  mkprodct.csh
+ 
+ 
+TOXFR
+ 
+   TOXFR (to-transfer) is a command line utility program that converts
+   binary format SPK, CK and EK files to transfer format.
+ 
+   This directory contains the TOXFR main program, supporting routines, and
+   a script to create the executable program toxfr.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            src
+               |
+               toxfr_c
+                  |
+                  main.x
+                  toxfr.pgm
+                  *.h
+                  mkprodct.csh
+ 
+ 
+VERSION
+ 
+   VERSION is a command line utility program that prints the current
+   version number of the SPICE Toolkit.
+ 
+   This directory contains the VERSION main program. and a script to create
+   the executable program version.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            src
+               |
+               version
+                  |
+                  main.x
+                  version.pgm
+                  mkprodct.csh
+ 
+ 
+MICE
+ 
+   MICE is the ANSI C based interface between the MATLAB environment, a
+   product of Mathworks, Inc., and the CSPICE library. It uses the MATLAB
+   external interface functionality (MEX) to provide MATLAB users access to
+   selected CSPICE routines from within MATLAB.
+ 
+   This directory contains the MICE C and MATLAB source code and a script
+   to create the MICE shared object library.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            src
+               |
+               mice
+                  |
+                  *.m
+                  *.h
+                  *.c
+                  mkprodct.csh
+ 
+ 
+MICECOOK
+ 
+   The MICE cookbooks are sample MATLAB modules that demonstrate how to use
+   MICE functions to obtain state vectors, convert between different time
+   representations, and solve simple geometry problems.
+ 
+   This directory contains the MICECOOK MATLAB modules.
+ 
+      (installation directory)
+         |
+         mice
+            |
+            src
+               |
+               micecook
+                  |
+                  *.m
+ 
+ 
+Using the Toolkit
+===========================================================================
+ 
+ 
+All Users
+--------------------------------------------------------
+ 
+   After completing your Toolkit installation it is extremely important
+   that you carefully read the ``whats.new'' description of changes and
+   additions if you haven't done so prior to the installation.
+ 
+   The Toolkit contains two styles of documentation: a plain text version
+   and a hyper-linked HTML version. NAIF recommends you use the HTML
+   version because of the convenience of the hyper-linking. To do that load
+   the top level index of the HTML documentation -- ``doc/html/index.html''
+   -- into a web browser.
+ 
+ 
+Repeat Users
+--------------------------------------------------------
+ 
+   If you are not a first time user, save your own application executables
+   in a safe place and then re-link those application programs to the newly
+   installed library, creating new executables. NAIF suggests you carefully
+   re-test any critical applications to be sure they are working correctly
+   -- you may have unknowingly taken advantage of a bug in the old library
+   that has since been fixed.
+ 
+   Be aware that sometimes a bug fix or a small algorithmic change in the
+   new SPICE code could result in small changes in numeric results; this
+   could show up in your regression test cases.
+ 
+ 
+First Time Users
+--------------------------------------------------------
+ 
+   NAIF provides several means to help you get started using SPICE --
+   tutorials, ``open book'' programming lessons, several ``cookbook
+   programs,'' and extensive documentation. Which of these will best suit
+   your needs, and in what order you should use these materials, depends on
+   your training/background and your immediate needs for using SPICE. NAIF
+   suggests you become familiar with the offerings from the NAIF website
+   (http://naif.jpl.nasa.gov), most particularly the tutorials and lessons
+   collections. You might also take time to read the ``Introduction to the
+   SPICE System'' document.
+ 
+   Please note that NAIF assumes you are familiar with how to write code in
+   the language you have chosen, and that you know how to compile, link
+   (``make'') and execute programs on your computer. If this is not the
+   case you should first take some generic programming lessons before
+   trying to tackle SPICE.
+ 
+ 
+Appendix -- NAIF's File Naming Conventions
+===========================================================================
+ 
+   NAIF follows a set of conventions for naming files based on the contents
+   of the files. This allows you to find certain types of files in a
+   directory tree quickly.
+ 
+   Source code modules:
+ 
+      *.pgm           Fortran or C source files for program modules.
+ 
+      *.for           Fortran source code files.
+      *.f
+ 
+      *.inc           Fortran include files.
+ 
+      *.c             C source code files.
+ 
+      *.h             C header files.
+ 
+      *.pro           IDL source code files.
+ 
+      *.m             MATLAB source code files.
+ 
+      *.java          Java source code files.
+ 
+   Executables, libraries, object files:
+ 
+      (no ext)        Executable files.
+      *.exe
+ 
+      *.o             Object files.
+      *.obj
+ 
+      *.a             Object library files.
+      *.lib
+      *.olb
+ 
+      *.so            Shared object library files.
+      *.dll
+ 
+      *.mex*          MATLAB shared object library files.
+ 
+      *.dlm           IDL and MATLAB library definition modules.
+      *.def
+ 
+      *.class         Java class files.
+ 
+   Documents:
+ 
+      *.req           Text format Required Reading files.
+ 
+      *.ug            Text format User's Guides.
+ 
+      *.idx           Permuted index files.
+ 
+      *.txt           Text format documentation files.
+ 
+      *.tex           TeX files.
+ 
+      *.dvi           Device independent files produced by TeX.
+ 
+      *.ps            Postscript files.
+ 
+      *.pdf           PDF files.
+ 
+      *.htm           HTML files.
+      *.html
+ 
+      *.css           Style sheet files.
+ 
+      *.args          Javadoc arguments files.
+ 
+   SPICE Kernel files:
+ 
+      *.bc            Binary CK (pointing) files.
+      *.bdb           Binary DBK (database) files.
+      *.bds           Binary DSK (digital shape) files.
+      *.bep           Binary EK (events) Science Plan files.
+      *.bes           Binary EK (events) Sequence files.
+      *.bpc           Binary PCK (planetary rotation) files.
+      *.bsp           Binary SPK (ephemeris) files.
+ 
+      *.ten           Text EK (events) Experimenter's Notebook files.
+      *.tep           Text EK (events) Science Plan files.
+      *.tf            Text FK (frame definitions) files.
+      *.ti            Text IK (instrument parameters) files.
+      *.tls           Text LSK (leapseconds) files.
+      *.tm            Text MK (meta-kernels, aka ``furnsh'') files
+      *.tpc           Text PCK (planetary constants) files.
+      *.tsc           Text SCLK (spacecraft clock) files.
+ 
+      *.xc            Transfer format CK (pointing) files.
+      *.xdb           Transfer format DBK (database) files.
+      *.xds           Transfer format DSK (digital shape) files.
+      *.xep           Transfer format EK (events) Science Plan files.
+      *.xes           Transfer format EK (events) Sequence files.
+      *.xpc           Transfer format PCK (planetary rotation) files.
+      *.xsp           Transfer format SPK (ephemeris) files.
+ 
+   Build scripts:
+ 
+      mkprodct.csh    Unix build scripts.
+      mkprodct.sh
+      mkprodct.tcsh
+ 
+      mkprodct.com    VAX/Dec Alpha build scripts.
+ 
+      mkprodct.bat    PC/DOS, PS/WIN build scripts.
+ 
+      mkprodct.mpw    MAC MPW build scripts.
+ 
+      mkprodct.mas    MAC Apple Script build scripts.
+ 

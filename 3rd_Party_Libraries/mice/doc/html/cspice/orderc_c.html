@@ -1,0 +1,252 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>orderc_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>orderc_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void orderc_c ( SpiceInt      lenvals,
+                   const void  * array,
+                   SpiceInt      ndim,
+                   SpiceInt    * iorder  ) 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Determine the order of elements in an array of character strings. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   ARRAY,  SORT 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   VARIABLE  I/O  DESCRIPTION 
+   --------  ---  -------------------------------------------------- 
+   lenvals    I   String length.
+   array      I   Input array. 
+   ndim       I   Dimension of array. 
+   iorder     O   Order vector for array. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   lenvals     is the declared length of the strings in the input
+               string array, including null terminators.  The input   
+               array should be declared with dimension 
+
+                  [ndim][lenvals]
+
+   array       is the input array. 
+ 
+   ndim        is the number of elements in the input array. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   iorder      is the order vector for the input array. 
+               iorder[0] is the index of the smallest element 
+               of array; iorder[1] is the index of the next 
+               smallest; and so on. Strings are ordered according 
+               to the ASCII collating sequence.  Trailing white space
+               is ignored when comparing strings.
+
+               The elements of iorder range from zero to ndim-1.
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1) If the input string pointer is null, the error
+      SPICE(NULLPOINTER) will be signaled.
+ 
+   2) If the input array string's length is less than 2, the error
+      SPICE(STRINGTOOSHORT) will be signaled.
+
+   3) If ndim &lt; 1, this routine returns immediately.  This case is not 
+      considered an error.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   <b>orderc_c</b> finds the index of the smallest element of the input 
+   array. This becomes the first element of the order vector. 
+   The process is repeated for the rest of the elements. 
+ 
+   The order vector returned by <b>orderc_c</b> may be used by any of 
+   the reord* routines to sort sets of related arrays, as shown 
+   in the example below. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   In the following example, the order and reord routines are 
+   used to sort four related arrays (containing the names, 
+   masses, integer ID codes, and visual magnitudes for a group   
+   of satellites). This is representative of the typical use of 
+   these routines. 
+
+
+       #include &quot;SpiceUsr.h&quot;
+           .
+           .
+           .
+       /.
+       Sort the object arrays by name. 
+       ./ 
+       
+       <b>orderc_c</b> ( namlen, names, n,  iorder ); 
+ 
+       <a href="reordc_c.html">reordc_c</a> ( iorder, n, namlen, names  );
+       <a href="reordd_c.html">reordd_c</a> ( iorder, n,         masses ); 
+       <a href="reordi_c.html">reordi_c</a> ( iorder, n,         codes  ); 
+       <a href="reordd_c.html">reordd_c</a> ( iorder, n,         vmags  );    
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+  
+   1)  String comparisons performed by this routine are Fortran-style:
+       trailing blanks in the input array or key value are ignored.
+       This gives consistent behavior with CSPICE code generated by
+       the f2c translator, as well as with the Fortran SPICE Toolkit.
+      
+       Note that this behavior is not identical to that of the ANSI
+       C library functions strcmp and strncmp.
+  </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman    (JPL)
+   I.M. Underwood  (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 18-JUL-2002 (NJB) (IMU)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   order of a character array 
+ </PRE>
+<h4>Link to routine orderc_c source file <a href='../../../src/cspice/orderc_c.c'>orderc_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:39 2014</pre>
+
+</body>
+</html>
+

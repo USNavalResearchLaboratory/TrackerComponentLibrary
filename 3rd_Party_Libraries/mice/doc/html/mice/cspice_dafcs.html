@@ -1,0 +1,259 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dafcs</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dafcs</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DAFCS sets the active DAF to search. A search must be
+   in progress for the DAF.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      handle   the file handle referring to a DAF to
+               set as the &quot;active&quot; file for a search.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+   the call:
+
+      <b>cspice_dafcs</b>( handle )
+
+   causes all DAF search activity apply to the file
+   referred to by 'handle'.
+
+   returns:
+
+      None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   Example(1):
+
+      %
+      % Define two SPK test files.
+      %
+      SPK1 = 'test.bsp';
+      SPK2 = 'test8.bsp';
+
+      %
+      % Open the DAFs for read
+      %
+      han1 = <a href="cspice_dafopr.html">cspice_dafopr</a>( SPK1 );
+      han2 = <a href="cspice_dafopr.html">cspice_dafopr</a>( SPK2 );
+
+      %
+      % Begin a forward search on SPK1
+      %
+      <a href="cspice_dafbfs.html">cspice_dafbfs</a>( han1 )
+      found = <a href="cspice_daffna.html">cspice_daffna</a>;
+
+      %
+      % Begin a backwards search on SPK2
+      %
+      <a href="cspice_dafbbs.html">cspice_dafbbs</a>( han2 )
+      found2 = <a href="cspice_daffpa.html">cspice_daffpa</a>;
+
+      %
+      % Reinstitute the search on han1, loop
+      % so long as segment data are found.
+      %
+      <b>cspice_dafcs</b>( han1 )
+
+      while ( found )
+
+         segid    = <a href="cspice_dafgn.html">cspice_dafgn</a>;
+         found    = <a href="cspice_daffna.html">cspice_daffna</a>;
+
+         %
+         % Output each segment ID.
+         %
+         fprintf( '%s\n', segid )
+
+      end
+
+      %
+      % Close the files.
+      %
+      <a href="cspice_dafcls.html">cspice_dafcls</a>( han1 )
+      <a href="cspice_dafcls.html">cspice_dafcls</a>( han2 )
+
+   Matlab outputs:
+
+      PHOENIX SPACECRAFT
+      MERCURY BARYCENTER
+      VENUS BARYCENTER
+      EARTH BARYCENTER
+      MARS BARYCENTER
+      JUPITER BARYCENTER
+      SATURN BARYCENTER
+      URANUS BARYCENTER
+      NEPTUNE BARYCENTER
+      PLUTO BARYCENTER
+      MOON
+      PHOBOS
+      DEIMOS
+      IO
+      EUROPA
+      GANYMEDE
+      CALLISTO
+      TETHYS
+      DIONE
+      RHEA
+      TITAN
+      HYPERION
+      IAPETUS
+      ARIEL
+      UMBRIEL
+      TITANIA
+      OBERON
+      MIRANDA
+      TRITON
+      NERIED
+      CHARON
+      MERCURY
+      VENUS
+      EARTH
+      MARS
+      JUPITER
+      SATURN
+      URANUS
+      NEPTUNE
+      PLUTO
+      SUN
+      GOLDSTONE
+      CANBERRA
+      MADRID
+      PHOBOS BASECAMP
+      TRANQUILITY BASE
+
+   Example(2), switch the definitions for SPK1 and SPK2:
+
+      %
+      % Define two SPK test files.
+      %
+      SPK2 = 'test.bsp';
+      SPK1 = 'test8.bsp';
+
+         ... remainder of example unchanged ..
+
+   Matlab outputs:
+
+      SPK type 8 test segment
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/dafcs_c.html">dafcs_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/daf.html">DAF.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 10-JUL-2012, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   select a DAF to continue searching
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:36 2014</pre>
+
+</body>
+</html>
+

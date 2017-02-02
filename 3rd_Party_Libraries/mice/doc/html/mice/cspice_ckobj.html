@@ -1,0 +1,367 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ckobj</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ckobj</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_CKOBJ returns the set of ID codes of all objects in a
+   specified CK file.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      ck      the name(s) for SPICE CKs .
+
+              [1,c1] = size(ck), char = class(ck)
+
+                 or
+
+              [m,c2] = size(ck), char = class(ck)
+
+                 or
+
+              [1,m] = size(ck), cell = class(ck)
+
+      room    the maximum number of CK IDs to return from 'ck'.
+
+              [1,1] = size(room), int32 = class(room)
+
+      ids_i   an optional input describing an array of CK ID
+              codes. Inclusion of this array results in an output
+              array consisting of a union of the data retrieved from
+              the 'ck' kernels and the data in 'ids_i'.
+
+              [n,1] = size(ids_i), int32 = class(ids_i)
+
+                 or
+
+              [0,0] = size(ids_i), int32 = class(ids_i)
+
+   the call:
+
+      ids = <b>cspice_ckobj</b>( ck, room, ids_i)
+
+         or
+
+      ids = <b>cspice_ckobj</b>( ck, room)
+
+   returns:
+
+      ids   the set of unique CK ID codes for which pointing data exists
+            in 'ck'. If 'ids_i' exists in the argument list, 'ids' returns 
+            as a union of the coverage data found in 'ck' and the data in
+            'ids_i'. 'ids' can overwrite 'ids_i'.
+
+            [p,1] = size(ids), int32 = class(ids)
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   Use a simple function to display the CK IDs found in a CK, or set of
+   CKs, and the time coverage of the data corresponding to those IDs.
+   This example calls both <b>cspice_ckobj</b> and <a href="cspice_ckcov.html">cspice_ckcov</a>. In practice,
+   algorithms using <b>cspice_ckobj</b> will also use <a href="cspice_ckcov.html">cspice_ckcov</a> and
+   vice-versa.
+
+   function ckcov_t( CK, SCLK, LEVEL )
+
+         MAXIV  = 100000;
+         WINSIZ = 2 * MAXIV;
+         MAXOBJ = 1000;
+         LSK    = 'naif0010.tls';
+
+         %
+         % Load a leapseconds kernel and the SCLK corresponding to the
+         % input CK.
+         %
+         % Note, neither <a href="cspice_ckcov.html">cspice_ckcov</a> or <b>cspice_ckobj</b> require these
+         % kernels to function. We need these data for output time
+         % conversion.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( LSK )
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( SCLK)
+
+         %
+         % Find the set of objects in the CK file.
+         %
+         ids = <b>cspice_ckobj</b>( CK, MAXOBJ );
+
+         %
+         % We want to display the coverage for each object. Loop over
+         % the contents of the ID code set, find the coverage for
+         % each item in the set, and display the coverage.
+         %
+         for i=1:numel(ids)
+
+            %
+            % Extract the coverage data for object 'ids(i)'.
+            %
+            cover    = <a href="cspice_ckcov.html">cspice_ckcov</a>(CK, ids(i), 0, LEVEL, 0.0, 'TDB', WINSIZ);
+            [row,col]= size(cover);
+
+            %
+            % Display a simple banner.
+            %
+            fprintf( '========================================\n')
+            fprintf( 'Coverage for object %d\n', ids(i) )
+
+            %
+            %  'cover' has dimension 2Nx1, where 'row' has the value 2N with
+            %  each window defined as a pair of endpoints such that:
+            %
+            %  window 1 = cover(1:2)
+            %  window 2 = cover(3:4)
+            %  window 3 = cover(5:6)
+            %        ...
+            %  window N = cover(2N-1,2N)
+            %
+            % Loop from 1 to 'row' with stepsize 2.
+            %
+            for j=1:2:row
+
+               %
+               % Convert the endpoints to TDB calendar format time strings
+               % and display them. Pass the endpoints in an array,
+               % so <a href="cspice_timout.html">cspice_timout</a> returns an array of time strings.
+               %
+               % Recall a vectorized input has dimension 1xM so transpose
+               % the 'cover' slice.
+               %
+               timstr = <a href="cspice_timout.html">cspice_timout</a>( cover(j:j+1)', ...
+                                   'YYYY MON DD HR:MN:SC.### (TDB) ::TDB' );
+               fprintf('Interval: %d\n'  , (j+1)/2 )
+               fprintf('   Start: %s\n'  , timstr(1,:) )
+               fprintf('    Stop: %s\n\n', timstr(2,:) )
+
+            end
+
+         end
+
+         %
+         % Empty the kernel pool.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+   Example (1):
+
+      Assign a CK kernel list as and SCLK:
+
+      &gt;&gt; SCLK = '/kernels/cassini/sclk/cas00101.tsc';
+      &gt;&gt; CK   = { '/kernels/cassini/ck/05357_05362ra.bc', ...
+                  '/kernels/cassini/ck/05362_06002ra.bc'   };
+
+      Output data using the 'INTERVAL' level.
+
+      &gt;&gt; ckcov_t( CK, SCLK, 'INTERVAL' )
+
+   MATLAB outputs:
+
+      ========================================
+      Coverage for object -82000
+      Interval: 1
+         Start: 2005 DEC 23 00:01:07.900 (TDB)
+          Stop: 2005 DEC 23 15:36:55.540 (TDB)
+
+      Interval: 2
+         Start: 2005 DEC 23 15:37:39.539 (TDB)
+          Stop: 2005 DEC 23 16:59:35.508 (TDB)
+
+      Interval: 3
+         Start: 2005 DEC 23 17:00:43.507 (TDB)
+          Stop: 2005 DEC 24 13:55:59.025 (TDB)
+
+      Interval: 4
+         Start: 2005 DEC 24 13:56:19.024 (TDB)
+          Stop: 2005 DEC 24 17:25:42.944 (TDB)
+
+                ... continued ...
+
+      Interval: 24
+         Start: 2005 DEC 31 15:49:11.103 (TDB)
+          Stop: 2006 JAN 01 15:18:34.561 (TDB)
+
+      Interval: 25
+         Start: 2006 JAN 01 15:20:30.560 (TDB)
+          Stop: 2006 JAN 01 16:43:38.528 (TDB)
+
+      Interval: 26
+         Start: 2006 JAN 01 16:45:02.528 (TDB)
+          Stop: 2006 JAN 01 22:52:10.386 (TDB)
+
+      Interval: 27
+         Start: 2006 JAN 01 22:52:38.386 (TDB)
+          Stop: 2006 JAN 02 00:01:02.360 (TDB)
+
+   Example (2):
+
+      Output data using the 'SEGMENT' level.
+
+      &gt;&gt; ckcov_t( CK, SCLK, 'SEGMENT' )
+
+   MATLAB outputs:
+
+      ========================================
+      Coverage for object -82000
+      Interval: 1
+         Start: 2005 DEC 23 00:01:07.900 (TDB)
+          Stop: 2005 DEC 28 00:01:01.130 (TDB)
+
+      Interval: 2
+         Start: 2005 DEC 28 00:01:05.130 (TDB)
+          Stop: 2006 JAN 02 00:01:02.360 (TDB)
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/ckobj_c.html">ckobj_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/windows.html">WINDOWS.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.3.0, 03-APR-2012, EDW (JPL)
+
+      Edits to Example code and comments. No change to Example code
+      functionality.
+
+      Added error check on 'ids_i' to ensure the argument either has
+      shape [N,1] or is an empty array with shape [0,0].
+
+      Renamed the argument 'size' to 'room'. &quot;size&quot; is a Matlab function
+      name and it's seriously dumb to use a function name word as an argument
+      name.
+
+      Edited I/O section to conform to NAIF standard for Mice documentation.
+
+      Explicitly described ID variables as &quot;CK IDs.&quot;
+
+   -Mice Version 1.2.0, 13-AUG-2009, EDW (JPL)
+
+      The union of 'ids_i'  with the interface return argument 'ids'
+      again calculated using the &quot;unique&quot; function, replacing &quot;union.&quot;
+      This implementation results in the expected behavior of the
+      call in octave when 'ids_i' contains zero or one element.
+
+      Corrected typo in previous Version entry.
+
+   -Mice Version 1.1.0, 29-DEC-2008, EDW (JPL)
+
+      Corrected error in comment description for 'ids_i'.
+      Removed the line:
+
+         Note: 'ids_i' cannot be an empty array.
+
+      The argument can have the empty array value, [], on
+      input.
+
+      Corrected several typos.
+
+      'ids_i' union with interface return call now calculated
+      using the 'union' function instead of 'unique'.
+
+   -Mice Version 1.0.0, 19-JUN-2007, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   find ID codes in ck file
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:36 2014</pre>
+
+</body>
+</html>
+

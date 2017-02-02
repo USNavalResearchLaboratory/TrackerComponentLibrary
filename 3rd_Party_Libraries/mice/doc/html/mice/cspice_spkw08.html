@@ -1,0 +1,270 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_spkw08</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_spkw08</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SPKW08 writes a type 8 segment to an SPK file.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      handle   the file handle of an SPK file open for writing.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+      body     the SPICE ID code for an ephemeris object
+               whose state relative to another body is described
+               by the segment to be created.
+
+               [1,1] = size(body); int32 = class(body)
+
+      center   the SPICE ID code for the center of motion
+               of the object identified by body.
+
+               [1,1] = size(center); int32 = class(center)
+
+      frame    the name for a reference frame relative to which the state
+               information for body is specified.
+
+               [1,c1] = size(fname); char = class(fname)
+
+                  or
+
+               [1,1] = size(fname); cell = class(fname)
+
+      first,
+      last     are, respectively, the start and stop times of
+               the time interval over which the segment defines
+               the state of body.
+
+               [1,1] = size(first); double = class(first)
+               [1,1] = size(last);  double = class(last)
+
+      segid    is the segment identifier.  An SPK segment
+               identifier may contain up to 40 characters.
+
+      degree   the degree of the Lagrange polynomials used to
+               interpolate the states.  All components of the
+               state vectors are interpolated by polynomials of
+               fixed degree.
+
+               [1,1] = size(degree); int32 = class(degree)
+
+      states   contains a time-ordered array of geometric states
+               ( x, y, z, dx/dt, dy/dt, dz/dt, in kilometers and
+               kilometers per second ) of body relative to center,
+               specified relative to frame.
+
+               [6,m] = size(states); double = class(states)
+
+      epoch1   the epoch corresponding to the first state in
+               the state array.  Because extra states are needed
+               at the beginning and end of the segment in order
+               for the interpolation method to work, epoch1 will
+               normally precede first.
+
+               [1,1] = size(epoch1); double = class(epoch1)
+
+      step     the time step separating the epochs of adjacent
+               states in the input state array.  step is specified
+               in TDB seconds.
+
+               [1,1] = size(step); double = class(step)
+
+   the call:
+
+      <b>cspice_spkw08</b>( handle, body,  center, frame,  first,  ...
+                     last,   segid, degree, states, epoch1, ...
+                     step )
+
+   returns:
+
+   The routine writes to the SPK file referred to by 'handle' a type 8 SPK
+   segment containing the data listed in 'states'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   Example:
+
+
+      %
+      % Define the segment identifier parameters.
+      %
+      BODY       = 3;
+      CENTER     = 10;
+      REF        = 'J2000';
+      POLY_DEG   = 3;
+      SPK8       = 'test8.bsp';
+      N_DISCRETE = 9;
+
+      %
+      % A set of epochs.
+      %
+      DISCRETEEPOCHS = (1:9)*100;
+
+      %
+      % An array of discrete states to write to the SPK segment.
+      %
+      base = [ (1:6)*100 ]';
+
+      %
+      % Create the 6xN array of states.
+      %
+      DISCRETESTATES = [(base+1), (base+2), (base+3), ...
+                        (base+4), (base+5), (base+6), ...
+                        (base+7), (base+8), (base+9) ];
+
+      %
+      % Create a segment identifier.
+      %
+      segid = 'SPK type 8 test segment';
+
+      %
+      % Open a new SPK file. Delete if a file of the same name exists.
+      %
+      if ( exist( SPK8, 'file' ) == 2 )
+         delete( SPK8 )
+      end
+
+      handle = <a href="cspice_spkopn.html">cspice_spkopn</a>( SPK8, segid, 4 );
+
+      step   = DISCRETEEPOCHS(2) - DISCRETEEPOCHS(1);
+
+      %
+      % Create a type 8 segment.
+      %
+      <b>cspice_spkw08</b>( handle,                       ...
+                     BODY,                         ...
+                     CENTER,                       ...
+                     REF,                          ...
+                     DISCRETEEPOCHS(1),            ...
+                     DISCRETEEPOCHS(N_DISCRETE),   ...
+                     segid,                        ...
+                     POLY_DEG,                     ...
+                     DISCRETESTATES,               ...
+                     DISCRETEEPOCHS(1),            ...
+                     step )
+
+      %
+      % Close the SPK file.
+      %
+      <a href="cspice_spkcls.html">cspice_spkcls</a>( handle )
+
+   MATLAB outputs:
+
+      SPK file &quot;test8.bsp&quot; created containing a single type 8 segment.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/spkw08_c.html">spkw08_c</a>.
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 23-MAY-2012, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   write spk type_8 ephemeris data segment
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:38 2014</pre>
+
+</body>
+</html>
+

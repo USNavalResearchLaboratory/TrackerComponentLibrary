@@ -1,0 +1,245 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_boddef</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_boddef</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_BODDEF Define a body name/ID code pair for later translation via
+  <a href="cspice_bodn2c.html">cspice_bodn2c</a> or <a href="cspice_bodc2n.html">cspice_bodc2n</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      name   the scalar string defining the name to associate to the ID value
+             'code'.
+
+             The case and positions of blanks in a name are significant.
+             <a href="cspice_bodc2n.html">cspice_bodc2n</a> returns the same string (case and space) most
+             recently mapped to a code. When 'name' consists of more than one
+             word, the words require separation by at least one blank.
+
+             The kernel sub-system stores 'name' as described in the
+             <b>cspice_boddef</b> call, but creates an equivalence class based on
+             'name' for comparisons in <a href="cspice_bodn2c.html">cspice_bodn2c</a>. This class ignores
+             leading and trailing whitespace, compresses interior whitespace
+             to a single space, and ignores character case.
+
+             The following strings belong to the same equivalence
+             class:
+
+                       'JUPITER BARYCENTER'
+                       'Jupiter Barycenter'
+                       'JUPITER BARYCENTER   '
+                       'JUPITER    BARYCENTER'
+                       '   JUPITER BARYCENTER'
+
+             However, 'JUPITERBARYCENTER' is distinct from the names above.
+
+      code   the integer defining the NAIF ID code corresponding
+             to 'name'.
+
+   the call:
+
+      <b>cspice_boddef</b>( name, code )
+
+   performs the mapping assignment
+
+      'name' -&gt; 'code'
+
+   and
+
+      'code' -&gt; 'name'
+
+   The 'code' -&gt; 'name' assignment supersedes any other mapping for 'code'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Map a non-existent code and name to each other.
+      %
+      <b>cspice_boddef</b>( 'spud',  -69 );
+
+      %
+      % Retrieve the code for name 'spud'.
+      %
+      [ code, found ] = <a href="cspice_bodn2c.html">cspice_bodn2c</a>( 'spud' );
+
+      %
+      % Check we found a mapping.
+      %
+      if ( found )
+         txt = sprintf( 'ID for spud : %i', code );
+      else
+         txt = 'Found no mapping for spud.';
+      end
+
+      disp( txt )
+
+      %
+      % Retrieve the name for ID -69.
+      %
+      [ name, found ] = <a href="cspice_bodc2n.html">cspice_bodc2n</a>( -69 );
+
+      %
+      % Check we found a mapping.
+      %
+      if (found)
+         txt = sprintf( 'Name for -69: %s', name );
+      else
+         txt = 'Found no mapping for -69.';
+      end
+
+     disp( txt )
+
+   MATLAB outputs:
+
+      ID for spud : -69
+      Name for -69: spud.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   <b>cspice_boddef</b> is one of five related subroutines,
+
+      <a href="cspice_bods2c.html">cspice_bods2c</a>      Body string to code
+      <a href="cspice_bodc2s.html">cspice_bodc2s</a>      Body code to string
+      <a href="cspice_bodn2c.html">cspice_bodn2c</a>      Body name to code
+      <a href="cspice_bodc2n.html">cspice_bodc2n</a>      Body code to name
+      <b>cspice_boddef</b>      Body name/code definition
+
+   <a href="cspice_bods2c.html">cspice_bods2c</a>, <a href="cspice_bodc2s.html">cspice_bodc2s</a>, <a href="cspice_bodn2c.html">cspice_bodn2c</a>, and <a href="cspice_bodc2n.html">cspice_bodc2n</a>
+   perform translations between body names and their corresponding
+   integer ID codes which are used in SPICE files and routines.
+
+   <a href="cspice_bods2c.html">cspice_bods2c</a> is a slightly more general version of <a href="cspice_bodn2c.html">cspice_bodn2c</a>:
+   support for strings containing ID codes in string format enables a caller
+   to identify a body using a string, even when no name is associated with
+   that body.
+
+   <a href="cspice_bodc2s.html">cspice_bodc2s</a> is a general version of <a href="cspice_bodc2n.html">cspice_bodc2n</a>; the routine returns
+   either the name assigned in the body ID to name mapping or a string
+   representation of the 'code' value if no mapping exists.
+
+   <b>cspice_boddef</b> assigns a body name to ID mapping. The mapping has
+   priority in name-to-ID and ID-to-name translations.
+
+   Refer to <a href="../req/naif_ids.html">NAIF_IDS.REQ</a> for the list of name/code associations built
+   into SPICE, and for details concerning adding new name/code
+   associations at run time by loading text kernels.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/boddef_c.html">boddef_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/naif_ids.html">NAIF_IDS.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.1, 16-MAY-2009 (EDW)
+
+       Edit to Particulars section to document the <a href="cspice_bodc2s.html">cspice_bodc2s</a> routine.
+       Extended argument descriptions in the I/O section.
+
+   -Mice Version 1.0.0, 22-NOV-2005, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   body name/id code definition
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:36 2014</pre>
+
+</body>
+</html>
+

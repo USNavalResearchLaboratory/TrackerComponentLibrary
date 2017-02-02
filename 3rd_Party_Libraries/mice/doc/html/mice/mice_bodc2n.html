@@ -1,0 +1,215 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>mice_bodc2n</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>mice_bodc2n</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   MICE_BODC2N returns the body name corresponding to an input numeric
+   ID value.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      code   a scalar integer SPICE code or 1XN array of integer SPICE
+             codes for a set of bodies: planets, satellites, barycenters,
+             DSN stations, spacecraft, asteroids, comets, or other
+             ephemeris object
+
+   the call:
+
+      ID = <b>mice_bodc2n</b>( code )
+
+   returns:
+
+      ID   the scalar or 1xN array of structures associating
+           a body name with a corresponding NAIF ID. Each structure
+           contains two fields:
+
+              name   the &quot;name&quot; of a particular body. If a mapping
+                     does not exist, the 'name' field returns as NULL
+
+              code   a scalar integer SPICE code assigned either
+                     by SPICE or the user to 'name'. If a mapping
+                     does not exist, the 'code' field returns as 0.
+
+              found  a scalar boolean indicating if a mapping exists (true)
+
+              'ID' returns with the same vectorization measure (N) as 'code'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Retrieve the current body name associated to a given NAIF ID.
+      %
+      disp( 'Scalar:' )
+      naif_id = 501;
+      ID      = <b>mice_bodc2n</b>( naif_id );
+
+      %
+      % Output the mapping if it exists.
+      %
+      if ( ID.found )
+         txt = sprintf( 'Body ID %i maps to name %s', ...
+                         ID.code, ID.name );
+         disp(txt)
+      end
+
+      disp( ' ' )
+
+      %
+      % Create an array of IDs. Include one unknown ID.
+      %
+      disp( 'Vector:' )
+      naif_id = [ 502, 503, 504, 505, 5006 ];
+      ID      = <b>mice_bodc2n</b>( naif_id );
+
+      n_elements = size(ID);
+
+      %
+      % Loop over the output array.
+      %
+      for i=1:n_elements(1)
+
+         %
+         % Check for a valid name/ID mapping.
+         %
+         if( ID(i).found )
+            txt = sprintf( 'Body ID %i maps to name %s', ...
+                            ID(i).code, ID(i).name );
+            disp(txt)
+         else
+            txt = sprintf( 'Unknown body ID %i', naif_id(i) );
+            disp(txt)
+         end
+
+      end
+
+   MATLAB outputs:
+
+      Scalar:
+      Body ID 501 maps to name IO
+
+      Vector:
+      Body ID 502 maps to name EUROPA
+      Body ID 503 maps to name GANYMEDE
+      Body ID 504 maps to name CALLISTO
+      Body ID 505 maps to name AMALTHEA
+      Unknown body ID 5006
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   A sister version of this routine exists named <a href="cspice_bodc2n.html">cspice_bodc2n</a> that returns
+   the structure field data as separate arguments.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/bodc2n_c.html">bodc2n_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/naif_ids.html">NAIF_IDS.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 22-NOV-2005, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   body id code to name
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:39 2014</pre>
+
+</body>
+</html>
+

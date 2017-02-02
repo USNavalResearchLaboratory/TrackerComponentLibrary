@@ -1,0 +1,696 @@
+sofa_lib.lis                                               2016 March 10
+
+                     ----------------------
+                     SOFA Astronomy Library
+                     ----------------------
+
+
+PREFACE
+
+The routines described here comprise the SOFA astronomy library.  Their
+general appearance and coding style conforms to conventions agreed by
+the SOFA Board, and their functions, names and algorithms have been
+ratified by the Board.  Procedures for soliciting and agreeing additions
+to the library are still evolving.
+
+
+PROGRAMMING LANGUAGES
+
+The SOFA routines are available in two programming languages at present:
+Fortran 77 and ANSI C.
+
+Except for a single obsolete Fortran routine, which has no C equivalent,
+there is a one-to-one relationship between the two language versions.
+The naming convention is such that a SOFA routine referred to
+generically as "EXAMPL" exists as a Fortran subprogram iau_EXAMPL and a
+C function iauExampl.  The calls for the two versions are very similar,
+with the same arguments in the same order.  In a few cases, the C
+equivalent of a Fortran SUBROUTINE subprogram uses a return value rather
+than an argument.
+
+
+GENERAL PRINCIPLES
+
+The principal function of the SOFA Astronomy Library is to provide
+definitive algorithms.  A secondary function is to provide software
+suitable for convenient direct use by writers of astronomical
+applications.
+
+The astronomy routines call on the SOFA vector/matrix library routines,
+which are separately listed.
+
+The routines are designed to exploit the full floating-point accuracy
+of the machines on which they run, and not to rely on compiler
+optimizations.  Within these constraints, the intention is that the code
+corresponds to the published formulation (if any).
+
+Dates are always Julian Dates (except in calendar conversion routines)
+and are expressed as two double precision numbers which sum to the
+required value.
+
+A distinction is made between routines that implement IAU-approved
+models and those that use those models to create other results.  The
+former are referred to as "canonical models" in the preamble comments;
+the latter are described as "support routines".
+
+Using the library requires knowledge of positional astronomy and
+time-scales.  These topics are covered in "Explanatory Supplement to the
+Astronomical Almanac", 3rd Edition,  Sean E. Urban &
+P. Kenneth Seidelmann (eds.), University Science Books, 2013.  Recent
+developments are documented in the scientific journals, and references
+to the relevant papers are given in the SOFA code as required.  The IERS
+Conventions are also an essential reference.  The routines concerned
+with Earth attitude (precession-nutation etc.) are described in the SOFA
+document sofa_pn.pdf.  Those concerned with transformations between
+different time scales are described in sofa_ts_f.pdf (Fortran) and
+sofa_ts_c.pdf (C).  Those concerned with astrometric transformations
+are described in sofa_ast_f.pdf (Fortran) and sofa_ast_c (C).
+
+
+ROUTINES
+
+  Calendars
+
+     CAL2JD    Gregorian calendar to Julian Day number
+     EPB       Julian Date to Besselian Epoch
+     EPB2JD    Besselian Epoch to Julian Date
+     EPJ       Julian Date to Julian Epoch
+     EPJ2JD    Julian Epoch to Julian Date
+     JD2CAL    Julian Date to Gregorian year, month, day, fraction
+     JDCALF    Julian Date to Gregorian date for formatted output
+
+  Astrometry
+
+     AB        apply stellar aberration
+     APCG      prepare for ICRS <-> GCRS, geocentric, special
+     APCG13    prepare for ICRS <-> GCRS, geocentric
+     APCI      prepare for ICRS <-> CIRS, terrestrial, special
+     APCI13    prepare for ICRS <-> CIRS, terrestrial
+     APCO      prepare for ICRS <-> observed, terrestrial, special
+     APCO13    prepare for ICRS <-> observed, terrestrial
+     APCS      prepare for ICRS <-> CIRS, space, special
+     APCS13    prepare for ICRS <-> CIRS, space
+     APER      insert ERA into context
+     APER13    update context for Earth rotation
+     APIO      prepare for CIRS <-> observed, terrestrial, special
+     APIO13    prepare for CIRS <-> observed, terrestrial
+     ATCI13    catalog -> CIRS
+     ATCIQ     quick ICRS -> CIRS
+     ATCIQN    quick ICRS -> CIRS, multiple deflections
+     ATCIQZ    quick astrometric ICRS -> CIRS
+     ATCO13    ICRS -> observed
+     ATIC13    CIRS -> ICRS
+     ATICQ     quick CIRS -> ICRS
+     ATCIQN    quick CIRS -> ICRS, multiple deflections
+     ATIO13    CIRS -> observed
+     ATIOQ     quick CIRS -> observed
+     ATOC13    observed -> astrometric ICRS
+     ATOI13    observed -> CIRS
+     ATOIQ     quick observed -> CIRS
+     LD        light deflection by a single solar-system body
+     LDN       light deflection by multiple solar-system bodies
+     LDSUN     light deflection by the Sun
+     PMPX      apply proper motion and parallax
+     PMSAFE    apply proper motion, with zero-parallax precautions
+     PVTOB     observatory position and velocity
+     PVSTAR    space motion pv-vector to star catalog data
+     REFCO     refraction constants
+     STARPM    apply proper motion
+     STARPV    star catalog data to space motion pv-vector
+
+  Time scales
+
+     D2DTF     format 2-part JD for output
+     DAT       Delta(AT) (=TAI-UTC) for a given UTC date
+     DTDB      TDB-TT
+     DTF2D     encode time and date fields into 2-part JD
+     TAITT     TAI to TT
+     TAIUT1    TAI to UT1
+     TAIUTC    TAI to UTC
+     TCBTDB    TCB to TDB
+     TCGTT     TCG to TT
+     TDBTCB    TDB to TCB
+     TDBTT     TDB to TT
+     TTTAI     TT to TAI
+     TTTCG     TT to TCG
+     TTTDB     TT to TDB
+     TTUT1     TT to UT1
+     UT1TAI    UT1 to TAI
+     UT1TT     UT1 to TT
+     UT1UTC    UT1 to UTC
+     UTCTAI    UTC to TAI
+     UTCUT1    UTC to UT1
+
+  Earth rotation angle and sidereal time
+
+     EE00      equation of the equinoxes, IAU 2000
+     EE00A     equation of the equinoxes, IAU 2000A
+     EE00B     equation of the equinoxes, IAU 2000B
+     EE06A     equation of the equinoxes, IAU 2006/2000A
+     EECT00    equation of the equinoxes complementary terms, IAU 2000
+     EQEQ94    equation of the equinoxes, IAU 1994
+     ERA00     Earth rotation angle, IAU 2000
+     GMST00    Greenwich mean sidereal time, IAU 2000
+     GMST06    Greenwich mean sidereal time, IAU 2006
+     GMST82    Greenwich mean sidereal time, IAU 1982
+     GST00A    Greenwich apparent sidereal time, IAU 2000A
+     GST00B    Greenwich apparent sidereal time, IAU 2000B
+     GST06     Greenwich apparent ST, IAU 2006, given NPB matrix
+     GST06A    Greenwich apparent sidereal time, IAU 2006/2000A
+     GST94     Greenwich apparent sidereal time, IAU 1994
+
+  Ephemerides (limited precision)
+
+     EPV00     Earth position and velocity
+     PLAN94    major-planet position and velocity
+
+  Precession, nutation, polar motion
+
+     BI00      frame bias components, IAU 2000
+     BP00      frame bias and precession matrices, IAU 2000
+     BP06      frame bias and precession matrices, IAU 2006
+     BPN2XY    extract CIP X,Y coordinates from NPB matrix
+     C2I00A    celestial-to-intermediate matrix, IAU 2000A
+     C2I00B    celestial-to-intermediate matrix, IAU 2000B
+     C2I06A    celestial-to-intermediate matrix, IAU 2006/2000A
+     C2IBPN    celestial-to-intermediate matrix, given NPB matrix, IAU 2000
+     C2IXY     celestial-to-intermediate matrix, given X,Y, IAU 2000
+     C2IXYS    celestial-to-intermediate matrix, given X,Y and s
+     C2T00A    celestial-to-terrestrial matrix, IAU 2000A
+     C2T00B    celestial-to-terrestrial matrix, IAU 2000B
+     C2T06A    celestial-to-terrestrial matrix, IAU 2006/2000A
+     C2TCIO    form CIO-based celestial-to-terrestrial matrix
+     C2TEQX    form equinox-based celestial-to-terrestrial matrix
+     C2TPE     celestial-to-terrestrial matrix given nutation, IAU 2000
+     C2TXY     celestial-to-terrestrial matrix given CIP, IAU 2000
+     EO06A     equation of the origins, IAU 2006/2000A
+     EORS      equation of the origins, given NPB matrix and s
+     FW2M      Fukushima-Williams angles to r-matrix
+     FW2XY     Fukushima-Williams angles to X,Y
+     LTP       long-term precession matrix
+     LTPB      long-term precession matrix, including ICRS frame bias
+     LTPECL    long-term precession of the ecliptic
+     LTPEQU    long-term precession of the equator
+     NUM00A    nutation matrix, IAU 2000A
+     NUM00B    nutation matrix, IAU 2000B
+     NUM06A    nutation matrix, IAU 2006/2000A
+     NUMAT     form nutation matrix
+     NUT00A    nutation, IAU 2000A
+     NUT00B    nutation, IAU 2000B
+     NUT06A    nutation, IAU 2006/2000A
+     NUT80     nutation, IAU 1980
+     NUTM80    nutation matrix, IAU 1980
+     OBL06     mean obliquity, IAU 2006
+     OBL80     mean obliquity, IAU 1980
+     PB06      zeta,z,theta precession angles, IAU 2006, including bias
+     PFW06     bias-precession Fukushima-Williams angles, IAU 2006
+     PMAT00    precession matrix (including frame bias), IAU 2000
+     PMAT06    PB matrix, IAU 2006
+     PMAT76    precession matrix, IAU 1976
+     PN00      bias/precession/nutation results, IAU 2000
+     PN00A     bias/precession/nutation, IAU 2000A
+     PN00B     bias/precession/nutation, IAU 2000B
+     PN06      bias/precession/nutation results, IAU 2006
+     PN06A     bias/precession/nutation results, IAU 2006/2000A
+     PNM00A    classical NPB matrix, IAU 2000A
+     PNM00B    classical NPB matrix, IAU 2000B
+     PNM06A    classical NPB matrix, IAU 2006/2000A
+     PNM80     precession/nutation matrix, IAU 1976/1980
+     P06E      precession angles, IAU 2006, equinox based
+     POM00     polar motion matrix
+     PR00      IAU 2000 precession adjustments
+     PREC76    accumulated precession angles, IAU 1976
+     S00       the CIO locator s, given X,Y, IAU 2000A
+     S00A      the CIO locator s, IAU 2000A
+     S00B      the CIO locator s, IAU 2000B
+     S06       the CIO locator s, given X,Y, IAU 2006
+     S06A      the CIO locator s, IAU 2006/2000A
+     SP00      the TIO locator s', IERS 2003
+     XY06      CIP, IAU 2006/2000A, from series
+     XYS00A    CIP and s, IAU 2000A
+     XYS00B    CIP and s, IAU 2000B
+     XYS06A    CIP and s, IAU 2006/2000A
+
+  Fundamental arguments for nutation etc.
+
+     FAD03     mean elongation of the Moon from the Sun
+     FAE03     mean longitude of Earth
+     FAF03     mean argument of the latitude of the Moon
+     FAJU03    mean longitude of Jupiter
+     FAL03     mean anomaly of the Moon
+     FALP03    mean anomaly of the Sun
+     FAMA03    mean longitude of Mars
+     FAME03    mean longitude of Mercury
+     FANE03    mean longitude of Neptune
+     FAOM03    mean longitude of the Moon's ascending node
+     FAPA03    general accumulated precession in longitude
+     FASA03    mean longitude of Saturn
+     FAUR03    mean longitude of Uranus
+     FAVE03    mean longitude of Venus
+
+  Star catalog conversions
+
+     FK52H     transform FK5 star data into the Hipparcos system
+     FK5HIP    FK5 to Hipparcos rotation and spin
+     FK5HZ     FK5 to Hipparcos assuming zero Hipparcos proper motion
+     H2FK5     transform Hipparcos star data into the FK5 system
+     HFK5Z     Hipparcos to FK5 assuming zero Hipparcos proper motion
+
+  Ecliptic coordinates
+
+     ECEQ06    ecliptic to ICRS, IAU 2006
+     ECM06     rotation matrix, ICRS to ecliptic, IAU 2006
+     EQEC06    ICRS to ecliptic, IAU 2006
+     LTECEQ    ecliptic to ICRS, long term
+     LTECM     rotation matrix, ICRS to ecliptic, long-term
+     LTEQEC    ICRS to ecliptic, long term
+
+  Galactic coordinates
+
+     G2ICRS    transform IAU 1958 galactic coordinates to ICRS
+     ICRS2G    transform ICRS coordinates to IAU 1958 Galactic
+
+  Geodetic/geocentric
+
+     EFORM     a,f for a nominated Earth reference ellipsoid
+     GC2GD     geocentric to geodetic for a nominated ellipsoid
+     GC2GDE    geocentric to geodetic given ellipsoid a,f
+     GD2GC     geodetic to geocentric for a nominated ellipsoid
+     GD2GCE    geodetic to geocentric given ellipsoid a,f
+
+  Obsolete
+
+     C2TCEO    former name of C2TCIO
+
+
+CALLS: FORTRAN VERSION
+
+   CALL iau_AB     ( PNAT, V, S, BM1, PPR )
+   CALL iau_APCG   ( DATE1, DATE2, EB, EH, ASTROM )
+   CALL iau_APCG13 ( DATE1, DATE2, ASTROM )
+   CALL iau_APCI   ( DATE1, DATE2, EB, EH, X, Y, S, ASTROM )
+   CALL iau_APCI13 ( DATE1, DATE2, ASTROM, EO )
+   CALL iau_APCO   ( DATE1, DATE2, EB, EH, X, Y, S,
+  :                  THETA, ELONG, PHI, HM, XP, YP, SP,
+  :                  REFA, REFB, ASTROM )
+   CALL iau_APCO13 ( UTC1, UTC2, DUT1, ELONG, PHI, HM, XP, YP,
+  :                  PHPA, TC, RH, WL, ASTROM, EO, J )
+   CALL iau_APCS   ( DATE1, DATE2, PV, EB, EH, ASTROM )
+   CALL iau_APCS13 ( DATE1, DATE2, PV, ASTROM )
+   CALL iau_APER   ( THETA, ASTROM )
+   CALL iau_APER13 ( UT11, UT12, ASTROM )
+   CALL iau_APIO   ( SP, THETA, ELONG, PHI, HM, XP, YP,
+  :                  REFA, REFB, ASTROM )
+   CALL iau_APIO13 ( UTC1, UTC2, DUT1, ELONG, PHI, HM, XP, YP,
+  :                  PHPA, TC, RH, WL, ASTROM, J )
+   CALL iau_ATCI13 ( RC, DC, PR, PD, PX, RV, DATE1, DATE2, RI, DI, EO )
+   CALL iau_ATCIQ  ( RC, DC, PR, PD, PX, RV, ASTROM, RI, DI )
+   CALL iau_ATCIQN ( RC, DC, PR, PD, PX, RV, ASTROM, N, B, RI, DI )
+   CALL iau_ATCIQZ ( RC, DC, ASTROM, RI, DI )
+   CALL iau_ATCO13 ( RC, DC, PR, PD, PX, RV, UTC1, UTC2, DUT1, ELONG,
+  :                  PHI, HM, XP, YP, PHPA, TC, RH, WL,
+  :                  AOB, ZOB, HOB, DOB, ROB, EO, J )
+   CALL iau_ATIC13 ( RI, DI, DATE1, DATE2, RC, DC, EO )
+   CALL iau_ATICQ  ( RI, DI, ASTROM, RC, DC )
+   CALL iau_ATCIQN ( RI, DI, ASTROM, N, B, RC, DC )
+   CALL iau_ATIO13 ( RI, DI, UTC1, UTC2, DUT1, ELONG, PHI, HM, XP, YP,
+                     PHPA, TC, RH, WL, AOB, ZOB, HOB, DOB, ROB, J )
+   CALL iau_ATIOQ  ( RI, DI, ASTROM, AOB, ZOB, HOB, DOB, ROB )
+   CALL iau_ATOC13 ( TYPE, OB1, OB2, UTC1, UTC2, DUT1,
+  :                  ELONG, PHI, HM, XP, YP, PHPA, TC, RH, WL,
+  :                  RC, DC, J )
+   CALL iau_ATOI13 ( TYPE, OB1, OB2, UTC1, UTC2, DUT1,
+  :                  ELONG, PHI, HM, XP, YP, PHPA, TC, RH, WL,
+  :                  RI, DI, J  )
+   CALL iau_ATOIQ  ( TYPE, OB1, OB2, ASTROM, RI, DI )
+   CALL iau_BI00   ( DPSIBI, DEPSBI, DRA )
+   CALL iau_BP00   ( DATE1, DATE2, RB, RP, RBP )
+   CALL iau_BP06   ( DATE1, DATE2, RB, RP, RBP )
+   CALL iau_BPN2XY ( RBPN, X, Y )
+   CALL iau_C2I00A ( DATE1, DATE2, RC2I )
+   CALL iau_C2I00B ( DATE1, DATE2, RC2I )
+   CALL iau_C2I06A ( DATE1, DATE2, RC2I )
+   CALL iau_C2IBPN ( DATE1, DATE2, RBPN, RC2I )
+   CALL iau_C2IXY  ( DATE1, DATE2, X, Y, RC2I )
+   CALL iau_C2IXYS ( X, Y, S, RC2I )
+   CALL iau_C2T00A ( TTA, TTB, UTA, UTB, XP, YP, RC2T )
+   CALL iau_C2T00B ( TTA, TTB, UTA, UTB, XP, YP, RC2T )
+   CALL iau_C2T06A ( TTA, TTB, UTA, UTB, XP, YP, RC2T )
+   CALL iau_C2TCEO ( RC2I, ERA, RPOM, RC2T )
+   CALL iau_C2TCIO ( RC2I, ERA, RPOM, RC2T )
+   CALL iau_C2TEQX ( RBPN, GST, RPOM, RC2T )
+   CALL iau_C2TPE  ( TTA, TTB, UTA, UTB, DPSI, DEPS, XP, YP, RC2T )
+   CALL iau_C2TXY  ( TTA, TTB, UTA, UTB, X, Y, XP, YP, RC2T )
+   CALL iau_CAL2JD ( IY, IM, ID, DJM0, DJM, J )
+   CALL iau_D2DTF  ( SCALE, NDP, D1, D2, IY, IM, ID, IHMSF, J )
+   CALL iau_DAT    ( IY, IM, ID, FD, DELTAT, J )
+   D =  iau_DTDB   ( DATE1, DATE2, UT, ELONG, U, V )
+   CALL iau_DTF2D  ( SCALE, IY, IM, ID, IHR, IMN, SEC, D1, D2, J )
+   CALL iau_ECEQ06 ( DATE1, DATE2, DL, DB, DR, DD )
+   CALL iau_ECM06  ( DATE1, DATE2, RM );
+   D =  iau_EE00   ( DATE1, DATE2, EPSA, DPSI )
+   D =  iau_EE00A  ( DATE1, DATE2 )
+   D =  iau_EE00B  ( DATE1, DATE2 )
+   D =  iau_EE06A  ( DATE1, DATE2 )
+   D =  iau_EECT00 ( DATE1, DATE2 )
+   CALL iau_EFORM  ( N, A, F, J )
+   D =  iau_EO06A  ( DATE1, DATE2 )
+   D =  iau_EORS   ( RNPB, S )
+   D =  iau_EPB    ( DJ1, DJ2 )
+   CALL iau_EPB2JD ( EPB, DJM0, DJM )
+   D =  iau_EPJ    ( DJ1, DJ2 )
+   CALL iau_EPJ2JD ( EPJ, DJM0, DJM )
+   CALL iau_EPV00  ( DJ1, DJ2, PVH, PVB, J )
+   CALL iau_EQEC06 ( DATE1, DATE2, DR, DD, DL, DB )
+   D =  iau_EQEQ94 ( DATE1, DATE2 )
+   D =  iau_ERA00  ( DJ1, DJ2 )
+   D =  iau_FAD03  ( T )
+   D =  iau_FAE03  ( T )
+   D =  iau_FAF03  ( T )
+   D =  iau_FAJU03 ( T )
+   D =  iau_FAL03  ( T )
+   D =  iau_FALP03 ( T )
+   D =  iau_FAMA03 ( T )
+   D =  iau_FAME03 ( T )
+   D =  iau_FANE03 ( T )
+   D =  iau_FAOM03 ( T )
+   D =  iau_FAPA03 ( T )
+   D =  iau_FASA03 ( T )
+   D =  iau_FAUR03 ( T )
+   D =  iau_FAVE03 ( T )
+   CALL iau_FK52H  ( R5, D5, DR5, DD5, PX5, RV5,
+  :                  RH, DH, DRH, DDH, PXH, RVH )
+   CALL iau_FK5HIP ( R5H, S5H )
+   CALL iau_FK5HZ  ( R5, D5, DATE1, DATE2, RH, DH )
+   CALL iau_FW2M   ( GAMB, PHIB, PSI, EPS, R )
+   CALL iau_FW2XY  ( GAMB, PHIB, PSI, EPS, X, Y )
+   CALL iau_G2ICRS ( DL, DB, DR, DD )
+   CALL iau_GC2GD  ( N, XYZ, ELONG, PHI, HEIGHT, J )
+   CALL iau_GC2GDE ( A, F, XYZ, ELONG, PHI, HEIGHT, J )
+   CALL iau_GD2GC  ( N, ELONG, PHI, HEIGHT, XYZ, J )
+   CALL iau_GD2GCE ( A, F, ELONG, PHI, HEIGHT, XYZ, J )
+   D =  iau_GMST00 ( UTA, UTB, TTA, TTB )
+   D =  iau_GMST06 ( UTA, UTB, TTA, TTB )
+   D =  iau_GMST82 ( UTA, UTB )
+   D =  iau_GST00A ( UTA, UTB, TTA, TTB )
+   D =  iau_GST00B ( UTA, UTB )
+   D =  iau_GST06  ( UTA, UTB, TTA, TTB, RNPB )
+   D =  iau_GST06A ( UTA, UTB, TTA, TTB )
+   D =  iau_GST94  ( UTA, UTB )
+   CALL iau_H2FK5  ( RH, DH, DRH, DDH, PXH, RVH,
+  :                  R5, D5, DR5, DD5, PX5, RV5 )
+   CALL iau_HFK5Z  ( RH, DH, DATE1, DATE2, R5, D5, DR5, DD5 )
+   CALL iau_ICRS2G ( DR, DD, DL, DB  )
+   CALL iau_JD2CAL ( DJ1, DJ2, IY, IM, ID, FD, J )
+   CALL iau_JDCALF ( NDP, DJ1, DJ2, IYMDF, J )
+   CALL iau_LD     ( BM, P, Q, E, EM, DLIM, P1 )
+   CALL iau_LDN    ( N, B, OB, SC, SN )
+   CALL iau_LDSUN  ( P, E, EM, P1 )
+   CALL iau_LTECEQ ( EPJ, DL, DB, DR, DD )
+   CALL iau_LTECM  ( EPJ, RM] )
+   CALL iau_LTEQEC ( EPJ, DR, DD, DL, DB )
+   CALL iau_LTP    ( EPJ, RP )
+   CALL iau_LTPB   ( EPJ, RPB )
+   CALL iau_LTPECL ( EPJ, VEC )
+   CALL iau_LTPEQU ( EPJ, VEQ )
+   CALL iau_NUM00A ( DATE1, DATE2, RMATN )
+   CALL iau_NUM00B ( DATE1, DATE2, RMATN )
+   CALL iau_NUM06A ( DATE1, DATE2, RMATN )
+   CALL iau_NUMAT  ( EPSA, DPSI, DEPS, RMATN )
+   CALL iau_NUT00A ( DATE1, DATE2, DPSI, DEPS )
+   CALL iau_NUT00B ( DATE1, DATE2, DPSI, DEPS )
+   CALL iau_NUT06A ( DATE1, DATE2, DPSI, DEPS )
+   CALL iau_NUT80  ( DATE1, DATE2, DPSI, DEPS )
+   CALL iau_NUTM80 ( DATE1, DATE2, RMATN )
+   D =  iau_OBL06  ( DATE1, DATE2 )
+   D =  iau_OBL80  ( DATE1, DATE2 )
+   CALL iau_PB06   ( DATE1, DATE2, BZETA, BZ, BTHETA )
+   CALL iau_PFW06  ( DATE1, DATE2, GAMB, PHIB, PSIB, EPSA )
+   CALL iau_PLAN94 ( DATE1, DATE2, NP, PV, J )
+   CALL iau_PMAT00 ( DATE1, DATE2, RBP )
+   CALL iau_PMAT06 ( DATE1, DATE2, RBP )
+   CALL iau_PMAT76 ( DATE1, DATE2, RMATP )
+   CALL iau_PMPX   ( RC, DC, PR, PD, PX, RV, PMT, POB, PCO )
+   CALL iau_PMSAFE ( RA1, DEC1, PMR1, PMD1, PX1, RV1,
+  :                  EP1A, EP1B, EP2A, EP2B,
+  :                  RA2, DEC2, PMR2, PMD2, PX2, RV2, J )
+   CALL iau_PN00   ( DATE1, DATE2, DPSI, DEPS,
+  :                  EPSA, RB, RP, RBP, RN, RBPN )
+   CALL iau_PN00A  ( DATE1, DATE2,
+  :                  DPSI, DEPS, EPSA, RB, RP, RBP, RN, RBPN )
+   CALL iau_PN00B  ( DATE1, DATE2,
+  :                  DPSI, DEPS, EPSA, RB, RP, RBP, RN, RBPN )
+   CALL iau_PN06   ( DATE1, DATE2, DPSI, DEPS,
+  :                  EPSA, RB, RP, RBP, RN, RBPN )
+   CALL iau_PN06A  ( DATE1, DATE2,
+  :                  DPSI, DEPS, RB, RP, RBP, RN, RBPN )
+   CALL iau_PNM00A ( DATE1, DATE2, RBPN )
+   CALL iau_PNM00B ( DATE1, DATE2, RBPN )
+   CALL iau_PNM06A ( DATE1, DATE2, RNPB )
+   CALL iau_PNM80  ( DATE1, DATE2, RMATPN )
+   CALL iau_P06E   ( DATE1, DATE2,
+  :                  EPS0, PSIA, OMA, BPA, BQA, PIA, BPIA,
+  :                  EPSA, CHIA, ZA, ZETAA, THETAA, PA, GAM, PHI, PSI )
+   CALL iau_POM00  ( XP, YP, SP, RPOM )
+   CALL iau_PR00   ( DATE1, DATE2, DPSIPR, DEPSPR )
+   CALL iau_PREC76 ( DATE01, DATE02, DATE11, DATE12, ZETA, Z, THETA )
+   CALL iau_PVSTAR ( PV, RA, DEC, PMR, PMD, PX, RV, J )
+   CALL iau_PVTOB  ( ELONG, PHI, HM, XP, YP, SP, THETA, PV )
+   CALL iau_REFCO  ( PHPA, TC, RH, WL, REFA, REFB )
+   D =  iau_S00    ( DATE1, DATE2, X, Y )
+   D =  iau_S00A   ( DATE1, DATE2 )
+   D =  iau_S00B   ( DATE1, DATE2 )
+   D =  iau_S06    ( DATE1, DATE2, X, Y )
+   D =  iau_S06A   ( DATE1, DATE2 )
+   D =  iau_SP00   ( DATE1, DATE2 )
+   CALL iau_STARPM ( RA1, DEC1, PMR1, PMD1, PX1, RV1,
+  :                  EP1A, EP1B, EP2A, EP2B,
+  :                  RA2, DEC2, PMR2, PMD2, PX2, RV2, J )
+   CALL iau_STARPV ( RA, DEC, PMR, PMD, PX, RV, PV, J )
+   CALL iau_TAITT  ( TAI1, TAI2, TT1, TT2, J )
+   CALL iau_TAIUT1 ( TAI1, TAI2, DTA, UT11, UT12, J )
+   CALL iau_TAIUTC ( TAI1, TAI2, UTC1, UTC2, J )
+   CALL iau_TCBTDB ( TCB1, TCB2, TDB1, TDB2, J )
+   CALL iau_TCGTT  ( TCG1, TCG2, TT1, TT2, J )
+   CALL iau_TDBTCB ( TDB1, TDB2, TCB1, TCB2, J )
+   CALL iau_TDBTT  ( TDB1, TDB2, DTR, TT1, TT2, J )
+   CALL iau_TTTAI  ( TT1, TT2, TAI1, TAI2, J )
+   CALL iau_TTTCG  ( TT1, TT2, TCG1, TCG2, J )
+   CALL iau_TTTDB  ( TT1, TT2, DTR, TDB1, TDB2, J )
+   CALL iau_TTUT1  ( TT1, TT2, DT, UT11, UT12, J )
+   CALL iau_UT1TAI ( UT11, UT12, TAI1, TAI2, J )
+   CALL iau_UT1TT  ( UT11, UT12, DT, TT1, TT2, J )
+   CALL iau_UT1UTC ( UT11, UT12, DUT, UTC1, UTC2, J )
+   CALL iau_UTCTAI ( UTC1, UTC2, DTA, TAI1, TAI2, J )
+   CALL iau_UTCUT1 ( UTC1, UTC2, DUT, UT11, UT12, J )
+   CALL iau_XY06   ( DATE1, DATE2, X, Y )
+   CALL iau_XYS00A ( DATE1, DATE2, X, Y, S )
+   CALL iau_XYS00B ( DATE1, DATE2, X, Y, S )
+   CALL iau_XYS06A ( DATE1, DATE2, X, Y, S )
+
+
+CALLS: C VERSION
+
+       iauAb     ( pnat, v, s, bm1, ppr );
+       iauApcg   ( date1, date2, eb, eh, &astrom );
+       iauApcg13 ( date1, date2, &astrom );
+       iauApci   ( date1, date2, eb, eh, x, y, s, &astrom );
+       iauApci13 ( date1, date2, &astrom, &eo );
+       iauApco   ( date1, date2, eb, eh, x, y, s,
+                   theta, elong, phi, hm, xp, yp, sp,
+                   refa, refb, &astrom );
+   i = iauApco13 ( utc1, utc2, dut1, elong, phi, hm, xp, yp,
+                   phpa, tc, rh, wl, &astrom, &eo );
+       iauApcs   ( date1, date2, pv, eb, eh, &astrom );
+       iauApcs13 ( date1, date2, pv, &astrom );
+       iauAper   ( theta, &astrom );
+       iauAper13 ( ut11, ut12, &astrom );
+       iauApio   ( sp, theta, elong, phi, hm, xp, yp, refa, refb,
+                   &astrom );
+   i = iauApio13 ( utc1, utc2, dut1, elong, phi, hm, xp, yp,
+                   phpa, tc, rh, wl, &astrom );
+       iauAtci13 ( rc, dc, pr, pd, px, rv, date1, date2,
+                   &ri, &di, &eo );
+       iauAtciq  ( rc, dc, pr, pd, px, rv, &astrom, &ri, &di );
+       iauAtciqn ( rc, dc, pr, pd, px, rv, astrom, n, b, &ri, &di );
+       iauAtciqz ( rc, dc, &astrom, &ri, &di );
+   i = iauAtco13 ( rc, dc, pr, pd, px, rv, utc1, utc2, dut1,
+                   elong phi, hm, xp, yp, phpa, tc, rh, wl,
+                   aob, zob, hob, dob, rob, eo );
+       iauAtic13 ( ri, di, date1, date2, &rc, &dc, &eo );
+       iauAticq  ( ri, di, &astrom, &rc, &dc );
+       iauAtciqn ( ri, di, astrom, n, b, &rc, &dc );
+   i = iauAtio13 ( ri, di, utc1, utc2, dut1, elong, phi, hm, xp, yp,
+                   phpa, tc, rh, wl, aob, zob, hob, dob, rob );
+       iauAtioq  ( ri, di, &astrom, &aob, &zob, &hob, &dob, &rob );
+   i = iauAtoc13 ( type, ob1, ob2, utc1, utc2, dut1,
+                   elong, phi, hm, xp, yp, phpa, tc, rh, wl,
+                   &rc, &dc );
+   i = iauAtoi13 ( type, ob1, ob2, utc1, utc2, dut1, elong, phi, hm,
+                   xp, yp, phpa, tc, rh, wl, &ri, &di  );
+       iauAtoiq  ( type, ob1, ob2, &astrom, &ri, &di );
+       iauBi00   ( &dpsibi, &depsbi, &dra );
+       iauBp00   ( date1, date2, rb, rp, rbp );
+       iauBp06   ( date1, date2, rb, rp, rbp );
+       iauBpn2xy ( rbpn, &x, &y );
+       iauC2i00a ( date1, date2, rc2i );
+       iauC2i00b ( date1, date2, rc2i );
+       iauC2i06a ( date1, date2, rc2i );
+       iauC2ibpn ( date1, date2, rbpn, rc2i );
+       iauC2ixy  ( date1, date2, x, y, rc2i );
+       iauC2ixys ( x, y, s, rc2i );
+       iauC2t00a ( tta, ttb, uta, utb, xp, yp, rc2t );
+       iauC2t00b ( tta, ttb, uta, utb, xp, yp, rc2t );
+       iauC2t06a ( tta, ttb, uta, utb, xp, yp, rc2t );
+       iauC2tcio ( rc2i, era, rpom, rc2t );
+       iauC2teqx ( rbpn, gst, rpom, rc2t );
+       iauC2tpe  ( tta, ttb, uta, utb, dpsi, deps, xp, yp, rc2t );
+       iauC2txy  ( tta, ttb, uta, utb, x, y, xp, yp, rc2t );
+   i = iauCal2jd ( iy, im, id, &djm0, &djm );
+   i = iauD2dtf  ( scale, ndp, d1, d2, &iy, &im, &id, ihmsf );
+   i = iauDat    ( iy, im, id, fd, &deltat );
+   d = iauDtdb   ( date1, date2, ut, elong, u, v );
+   i = iauDtf2d  ( scale, iy, im, id, ihr, imn, sec, &d1, &d2 );
+       iauEceq06 ( date1, date2, dl, db, &dr, &dd );
+       iauEcm06  ( date1, date2, rm );
+   d = iauEe00   ( date1, date2, epsa, dpsi );
+   d = iauEe00a  ( date1, date2 );
+   d = iauEe00b  ( date1, date2 );
+   d = iauEe06   ( date1, date2 );
+   d = iauEect00 ( date1, date2 );
+   i = iauEform  ( n, &a, &f );
+   d = iauEo06   ( date1, date2 );
+   d = iauEors   ( rnpb, s );
+   d = iauEpb    ( dj1, dj2 );
+       iauEpb2jd ( epb, &djm0, &djm );
+   d = iauEpj    ( dj1, dj2 );
+       iauEpj2jd ( epj, &djm0, &djm );
+   i = iauEpv00  ( dj1, dj2, pvh, pvb );
+       iauEqec06 ( date1, date2, dr, dd, &dl, &db );
+   d = iauEqeq94 ( date1, date2 );
+   d = iauEra00  ( dj1, dj2 );
+   d = iauFad03  ( t );
+   d = iauFae03  ( t );
+   d = iauFaf03  ( t );
+   d = iauFaju03 ( t );
+   d = iauFal03  ( t );
+   d = iauFalp03 ( t );
+   d = iauFama03 ( t );
+   d = iauFame03 ( t );
+   d = iauFane03 ( t );
+   d = iauFaom03 ( t );
+   d = iauFapa03 ( t );
+   d = iauFasa03 ( t );
+   d = iauFaur03 ( t );
+   d = iauFave03 ( t );
+       iauFk52h  ( r5, d5, dr5, dd5, px5, rv5,
+                   &rh, &dh, &drh, &ddh, &pxh, &rvh );
+       iauFk5hip ( r5h, s5h );
+       iauFk5hz  ( r5, d5, date1, date2, &rh, &dh );
+       iauFw2m   ( gamb, phib, psi, eps, r );
+       iauFw2xy  ( gamb, phib, psi, eps, &x, &y );
+       iauG2icrs ( dl, db, &dr, &dd );
+   i = iauGc2gd  ( n, xyz, &elong, &phi, &height );
+   i = iauGc2gde ( a, f, xyz, &elong, &phi, &height );
+   i = iauGd2gc  ( n, elong, phi, height, xyz );
+   i = iauGd2gce ( a, f, elong, phi, height, xyz );
+   d = iauGmst00 ( uta, utb, tta, ttb );
+   d = iauGmst06 ( uta, utb, tta, ttb );
+   d = iauGmst82 ( uta, utb );
+   d = iauGst00a ( uta, utb, tta, ttb );
+   d = iauGst00b ( uta, utb );
+   d = iauGst06  ( uta, utb, tta, ttb, rnpb );
+   d = iauGst06a ( uta, utb, tta, ttb );
+   d = iauGst94  ( uta, utb );
+       iauH2fk5  ( rh, dh, drh, ddh, pxh, rvh,
+                   &r5, &d5, &dr5, &dd5, &px5, &rv5 );
+       iauHfk5z  ( rh, dh, date1, date2,
+                   &r5, &d5, &dr5, &dd5 );
+       iauIcrs2g ( dr, dd, &dl, &db );
+   i = iauJd2cal ( dj1, dj2, &iy, &im, &id, &fd );
+   i = iauJdcalf ( ndp, dj1, dj2, iymdf );
+       iauLd     ( bm, p, q, e, em, dlim, p1 );
+       iauLdn    ( n, b, ob, sc, sn );
+       iauLdsun  ( p, e, em, p1 );
+       iauLteceq ( epj,  dl, db, &dr, &dd );
+       iauLtecm  ( epj,  rm );
+       iauLteqec ( epj,  dr,  dd, &dl, &db );
+       iauLtp    ( epj,  rp );
+       iauLtpb   ( epj,  rpb );
+       iauLtpecl ( epj,  vec );
+       iauLtpequ ( epj,  veq );
+       iauNum00a ( date1, date2, rmatn );
+       iauNum00b ( date1, date2, rmatn );
+       iauNum06a ( date1, date2, rmatn );
+       iauNumat  ( epsa, dpsi, deps, rmatn );
+       iauNut00a ( date1, date2, &dpsi, &deps );
+       iauNut00b ( date1, date2, &dpsi, &deps );
+       iauNut06a ( date1, date2, &dpsi, &deps );
+       iauNut80  ( date1, date2, &dpsi, &deps );
+       iauNutm80 ( date1, date2, rmatn );
+   d = iauObl06  ( date1, date2 );
+   d = iauObl80  ( date1, date2 );
+       iauPb06   ( date1, date2, &bzeta, &bz, &btheta );
+       iauPfw06  ( date1, date2, &gamb, &phib, &psib, &epsa );
+   i = iauPlan94 ( date1, date2, np, pv );
+       iauPmat00 ( date1, date2, rbp );
+       iauPmat06 ( date1, date2, rbp );
+       iauPmat76 ( date1, date2, rmatp );
+       iauPmpx   ( rc, dc, pr, pd, px, rv, pmt, pob, pco );
+   i = iauPmsafe ( ra1, dec1, pmr1, pmd1, px1, rv1,
+                   ep1a, ep1b, ep2a, ep2b,
+                   &ra2, &dec2, &pmr2, &pmd2, &px2, &rv2);
+       iauPn00   ( date1, date2, dpsi, deps,
+                   &epsa, rb, rp, rbp, rn, rbpn );
+       iauPn00a  ( date1, date2,
+                   &dpsi, &deps, &epsa, rb, rp, rbp, rn, rbpn );
+       iauPn00b  ( date1, date2,
+                   &dpsi, &deps, &epsa, rb, rp, rbp, rn, rbpn );
+       iauPn06   ( date1, date2, dpsi, deps,
+                   &epsa, rb, rp, rbp, rn, rbpn );
+       iauPn06a  ( date1, date2,
+                   &dpsi, &deps, &epsa, rb, rp, rbp, rn, rbpn );
+       iauPnm00a ( date1, date2, rbpn );
+       iauPnm00b ( date1, date2, rbpn );
+       iauPnm06a ( date1, date2, rnpb );
+       iauPnm80  ( date1, date2, rmatpn );
+       iauP06e   ( date1, date2,
+                   &eps0, &psia, &oma, &bpa, &bqa, &pia, &bpia,
+                   &epsa, &chia, &za, &zetaa, &thetaa, &pa,
+                   &gam, &phi, &psi );
+       iauPom00  ( xp, yp, sp, rpom );
+       iauPr00   ( date1, date2, &dpsipr, &depspr );
+       iauPrec76 ( date01, date02, date11, date12, &zeta, &z, &theta );
+   i = iauPvstar ( pv, &ra, &dec, &pmr, &pmd, &px, &rv );
+       iauPvtob  ( elong, phi, hm, xp, yp, sp, theta, pv );
+       iauRefco  ( phpa, tc, rh, wl, refa, refb );
+   d = iauS00    ( date1, date2, x, y );
+   d = iauS00a   ( date1, date2 );
+   d = iauS00b   ( date1, date2 );
+   d = iauS06    ( date1, date2, x, y );
+   d = iauS06a   ( date1, date2 );
+   d = iauSp00   ( date1, date2 );
+   i = iauStarpm ( ra1, dec1, pmr1, pmd1, px1, rv1,
+                   ep1a, ep1b, ep2a, ep2b,
+                   &ra2, &dec2, &pmr2, &pmd2, &px2, &rv2 );
+   i = iauStarpv ( ra, dec, pmr, pmd, px, rv, pv );
+   i = iauTaitt  ( tai1, tai2, &tt1, &tt2 );
+   i = iauTaiut1 ( tai1, tai2, dta, &ut11, &ut12 );
+   i = iauTaiutc ( tai1, tai2, &utc1, &utc2 );
+   i = iauTcbtdb ( tcb1, tcb2, &tdb1, &tdb2 );
+   i = iauTcgtt  ( tcg1, tcg2, &tt1, &tt2 );
+   i = iauTdbtcb ( tdb1, tdb2, &tcb1, &tcb2 );
+   i = iauTdbtt  ( tdb1, tdb2, dtr, &tt1, &tt2 );
+   i = iauTttai  ( tt1, tt2, &tai1, &tai2 );
+   i = iauTttcg  ( tt1, tt2, &tcg1, &tcg2 );
+   i = iauTttdb  ( tt1, tt2, dtr, &tdb1, &tdb2 );
+   i = iauTtut1  ( tt1, tt2, dt, &ut11, &ut12 );
+   i = iauUt1tai ( ut11, ut12, &tai1, &tai2 );
+   i = iauUt1tt  ( ut11, ut12, dt, &tt1, &tt2 );
+   i = iauUt1utc ( ut11, ut12, dut, &utc1, &utc2 );
+   i = iauUtctai ( utc1, utc2, dta, &tai1, &tai2 );
+   i = iauUtcut1 ( utc1, utc2, dut, &ut11, &ut12 );
+       iauXy06   ( date1, date2, &x, &y );
+       iauXys00a ( date1, date2, &x, &y, &s );
+       iauXys00b ( date1, date2, &x, &y, &s );
+       iauXys06a ( date1, date2, &x, &y, &s );

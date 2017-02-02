@@ -1,0 +1,1313 @@
+<HTML>
+<HEAD>
+<TITLE>Most Used Mice APIs</TITLE>
+</HEAD>
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A NAME="TOP"></A>
+
+
+<TABLE STYLE="text-align: left; margin-left: auto; margin-right: auto; width: 800px;" BORDER="0" CELLPADDING="5" CELLSPACING="2">
+<TBODY>
+
+<TR>
+  <TD STYLE="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+  <DIV ALIGN="right">
+    <SMALL><SMALL><A HREF="../index.html">Main Page</A></SMALL></SMALL>
+  </DIV>
+  <B>Most Used Mice APIs</B> </TD>
+</TR>
+
+<TR>
+  <TD STYLE="vertical-align: top;">
+
+<HR>
+
+<H3>Mice APIs for accessing SPICE kernel data</H3>
+<UL>
+<LI><A HREF="#A">Loading and unloading SPICE kernels</A>&nbsp;
+<LI><A HREF="#B">Converting between UTC and Ephemeris Time (LSK)</A>&nbsp;
+<LI><A HREF="#C">Converting between Ephemeris Time and spacecraft clock (SCLK)</A>&nbsp;
+<LI><A HREF="#D">Retrieving constants and orientation for natural bodies (PCK)</A>&nbsp;
+<LI><A HREF="#E">Computing transformations between reference frames (FK)</A>&nbsp;
+<LI><A HREF="#F">Computing positions of spacecraft and natural bodies (SPK)</A>&nbsp;
+<LI><A HREF="#G">Computing orientations of spacecraft and instruments (CK)</A>&nbsp;
+<LI><A HREF="#H">Retrieving instrument parameters (IK)</A>&nbsp;
+<LI><A HREF="#I">Mapping between object names and NAIF IDs</A>&nbsp;
+</UL>
+
+<H3>Mice APIs for computing derived geometry</H3>
+<UL>
+<LI><A HREF="#N">Computing planetocentric, planetodetic, and planetographic coordinates</A>&nbsp;
+<LI><A HREF="#J">Computing surface intercept point</A>&nbsp;
+<LI><A HREF="#K">Computing sub-observer and sub-solar points</A>&nbsp;
+<LI><A HREF="#L">Computing illumination angles</A>&nbsp;
+<LI><A HREF="#M">Computing and propagating orbital elements</A>&nbsp;
+</UL>
+
+<H3>Mice APIs for checking geometric conditions</H3>
+<UL>
+<LI><A HREF="#4">Checking for in Field-Of-View (FOV) conditions</A>&nbsp;
+<LI><A HREF="#5">Checking for occultation conditions</A>&nbsp;
+</UL>
+
+<H3>Mice APIs for finding times of geometric events</H3>
+<UL>
+<LI><A HREF="#1">Finding times of events satisfying numerical constraints</A>&nbsp;
+<LI><A HREF="#2">Finding times of events satisfying FOV constraints</A>&nbsp;
+<LI><A HREF="#3">Finding times of occultations</A>&nbsp;
+</UL>
+
+<H3>Mice APIs for coordinate conversions</H3>
+<UL>
+<LI><A HREF="#O">Converting from and to rectangular coordinates</A>&nbsp;
+<LI><A HREF="#P">Converting from and to spherical coordinates</A>&nbsp;
+<LI><A HREF="#Q">Converting from and to cylindrical coordinates</A>&nbsp;
+<LI><A HREF="#R">Converting from and to latitudinal coordinates</A>&nbsp;
+<LI><A HREF="#S">Converting from and to R, RA, DEC</A>&nbsp;
+<LI><A HREF="#T">Converting from and to geodetic coordinates</A>&nbsp;
+<LI><A HREF="#6">Transforming states from one coordinate system to another</A>&nbsp;
+</UL>
+
+<H3>Mice APIs for operations with 3D vectors and matrices</H3>
+<UL>
+<LI><A HREF="#U">Performing simple operations on 3D vectors</A>&nbsp;
+<LI><A HREF="#V">Projecting, combining and rotating 3D vectors</A>&nbsp;
+<LI><A HREF="#X">Creating and converting transformation matrices</A>&nbsp;
+</UL>
+
+<H3>Miscellaneous Mice APIs</H3>
+<UL>
+<LI><A HREF="#Y">Accessing physical and mathematical constants</A>&nbsp;
+</UL>
+
+<HR>
+
+<A NAME="A"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Loading and Unloading SPICE Kernels</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_furnsh.html">cspice_furnsh</a></SAMP> - loads an individual kernel or a collection of kernels
+<LI><SAMP><a href="../mice/cspice_unload.html">cspice_unload</a></SAMP> - unloads an individual kernel or a collection of kernels
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   Generic LSK and PCK files listed in a meta-kernel named
+   "mykernels.furnsh" and containing
+
+      \begindata
+         KERNELS_TO_LOAD = (
+                            '/kernels/gen/lsk/naif0008.tls'
+                            '/kernels/gen/pck/pck00008.tps'
+                           )
+      \begintext
+
+   are loaded with a single call to <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>:
+
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'mykernels.furnsh' )
+</PRE>
+<H4>Reference documents:</H4>
+<UL>
+<LI><SAMP><a href="../req/kernel.html">kernel.req</a></SAMP> - reference on loading/unloading kernels and text kernel format
+</UL>
+
+<HR>
+
+<A NAME="B"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Converting between UTC and Ephemeris Time (LSK)</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_furnsh.html">cspice_furnsh</a></SAMP> - loads an individual kernel or a collection of kernels
+<LI><SAMP><a href="../mice/cspice_str2et.html">cspice_str2et</a></SAMP> - converts a time string to ET seconds past J2000
+<LI><SAMP><a href="../mice/cspice_timout.html">cspice_timout</a></SAMP> - converts ET seconds past J2000 to a time string
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example loads an LSK file, converts a UTC string to ET
+   seconds, adds 1 day and converts TDB seconds back to a UTC string in
+   ISO DOY format:
+
+      %
+      % load LSK file
+      %
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'naif0008.tls' ) 
+
+      %
+      % convert UTC to ET
+      %
+      et = <a href="../mice/cspice_str2et.html">cspice_str2et</a>( '2005 DEC 31 12:00' )
+
+      %
+      % add 1 day to ET and convert it back to UTC
+      %
+      utc = <a href="../mice/cspice_timout.html">cspice_timout</a>( et+<a href="../mice/cspice_spd.html">cspice_spd</a>, ... 
+                           'YYYY-DOYTHR:MN:SC.### ::RND' )
+</PRE>
+<H4>Reference documents:</H4>
+<UL>
+<LI><SAMP><a href="../req/time.html">time.req</a></SAMP> - reference on time systems and conversions supported in SPICE
+<LI><SAMP><a href="../req/kernel.html">kernel.req</a></SAMP> - reference on loading/unloading kernels and text kernel format
+</UL>
+
+<HR>
+
+<A NAME="C"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Converting between Ephemeris Time and Spacecraft Clock (SCLK)</H3>
+
+<H4>APIs:</H4>
+    <code></code><UL>
+<LI><SAMP><a href="../mice/cspice_furnsh.html">cspice_furnsh</a></SAMP> - loads individual kernels and collections of kernels
+<LI><SAMP><a href="../mice/cspice_scs2e.html">cspice_scs2e</a></SAMP> - converts an SCLK string to ET seconds past J2000
+<LI><SAMP><a href="../mice/cspice_sce2s.html">cspice_sce2s</a></SAMP> - converts ET seconds past J2000 to SCLK string
+<LI><SAMP><a href="../mice/cspice_sct2e.html">cspice_sct2e</a></SAMP> - converts an encoded SCLK to ET seconds past J2000
+<LI><SAMP><a href="../mice/cspice_sce2c.html">cspice_sce2c</a></SAMP> - converts ET seconds past J2000 to encoded SCLK
+<LI><SAMP><a href="../mice/cspice_scencd.html">cspice_scencd</a></SAMP> - converts an SCLK string to encoded SCLK
+<LI><SAMP><a href="../mice/cspice_scdecd.html">cspice_scdecd</a></SAMP> - converts an  encoded SCLK to SCLK string
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example loads an LSK file and an MGS SCLK file, then
+   converts an MGS SCLK string to ET and encoded SCLK:
+
+      scid = -94;
+
+      %
+      % load LSK and SCLK files
+      %
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'naif0008.tls'           )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'mgs_sclkscet_00061.tsc' )
+
+      %
+      % convert string SCLK to ET and to encoded SCLK
+      %
+      sclk = '820584056:121'
+      et = <a href="../mice/cspice_scs2e.html">cspice_scs2e</a>( scid, sclk ) 
+      sclkdp = <a href="../mice/cspice_scencd.html">cspice_scencd</a>( scid, sclk ) 
+</PRE>
+<H4>Reference documents:</H4>
+<UL>
+<LI><SAMP><a href="../req/sclk.html">sclk.req</a></SAMP> - reference on on-board clock (SCLK) implementation in SPICE
+<LI><SAMP><a href="../req/kernel.html">kernel.req</a></SAMP> - reference on loading/unloading kernels and text kernel format
+</UL>
+
+<HR>
+
+<A NAME="D"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Constants and Orientation for Natural Bodies (PCK)</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_furnsh.html">cspice_furnsh</a></SAMP> - loads individual kernels and collections of kernels
+<LI><SAMP><a href="../mice/cspice_bodvrd.html">cspice_bodvrd</a></SAMP> - retrieves from the kernel pool the values of an item associated with a body.
+<LI><SAMP><a href="../mice/cspice_pxform.html">cspice_pxform</a></SAMP> - returns the 3x3 matrix rotating a position vector one frame to another.
+<LI><SAMP><a href="../mice/cspice_sxform.html">cspice_sxform</a></SAMP> - returns the 6x6 matrix rotating a state vector from one frame to another.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example retrieves radii for Mars and computes
+   orientation of the Mars body-fixed frame:
+
+      %
+      % load LSK and PCK files
+      %
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'naif0008.tls' )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'pck00008.tpc' )
+
+      %
+      % retrieve Mars radii
+      %
+      radii = <a href="../mice/cspice_bodvrd.html">cspice_bodvrd</a>( 'MARS', 'RADII', 3 )
+
+      %
+      % convert UTC to ET
+      %
+      et = <a href="../mice/cspice_str2et.html">cspice_str2et</a>( '2005-DEC-28 12:00' );
+
+      %
+      % compute Mars orientation relative to the J2000 frame
+      %
+      mat = <a href="../mice/cspice_pxform.html">cspice_pxform</a>( 'J2000', 'IAU_MARS', et )
+</PRE>
+<H4>Reference documents:</H4>
+<UL>
+<LI><SAMP><a href="../req/pck.html">pck.req</a></SAMP> - reference on Planetary Constants Kernel (PCK) subsystem of SPICE
+<LI><SAMP><a href="../req/kernel.html">kernel.req</a></SAMP> - reference on loading/unloading kernels and text kernel format
+</UL>
+
+<HR>
+
+<A NAME="E"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Computing Transformations Between Frames (FK)</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_furnsh.html">cspice_furnsh</a></SAMP> - loads individual kernels and collections of kernels
+<LI><SAMP><a href="../mice/cspice_pxform.html">cspice_pxform</a></SAMP> - returns the 3x3 matrix rotating a position vector one frame to another.
+<LI><SAMP><a href="../mice/cspice_sxform.html">cspice_sxform</a></SAMP> - returns the 6x6 matrix rotating a state vector from one frame to another.
+<LI><SAMP><a href="../mice/cspice_pxfrm2.html">cspice_pxfrm2</a></SAMP> - returns the 3x3 matrix rotating a position vector from one frame at a specified epoch to another frame at a different epoch.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example computes orientation of the CASSINI ISS WAC
+   camera relative to the Saturn body-fixed frame:
+
+      %
+      % load kernels: LSK, PCK, CASSINI SCLK, FK and CK
+      %
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'naif0008.tls'     )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'pck00008.tpc'     )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'cas00101.tsc'     )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'cas_v39.tf'       )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( '05362_06002ra.bc' )
+      
+      %
+      % convert UTC to ET
+      %
+      et = <a href="../mice/cspice_str2et.html">cspice_str2et</a>( '2005-DEC-28 12:00' );
+
+      %
+      % compute orientation of CASSINI relative to J2000 frame
+      %
+      mat = <a href="../mice/cspice_pxform.html">cspice_pxform</a>( 'IAU_SATURN', 'CASSINI_ISS_WAC', et )
+</PRE>
+<H4>Reference documents:</H4>
+<UL>
+<LI><SAMP><a href="../req/frames.html">frames.req</a></SAMP> - reference on Frames Kernel (FK) and Frames subsystem of SPICE
+<LI><SAMP><a href="../req/kernel.html">kernel.req</a></SAMP> - reference on loading/unloading kernels and text kernel format
+</UL>
+
+<HR>
+
+<A NAME="F"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Computing Positions of Spacecraft and Natural Bodies (SPK)</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_furnsh.html">cspice_furnsh</a></SAMP> - loads individual kernels and collections of kernels
+<LI><SAMP><a href="../mice/cspice_spkezr.html">cspice_spkezr</a></SAMP> - returns the state of a target body relative to an observing body
+<LI><SAMP><a href="../mice/cspice_spkpos.html">cspice_spkpos</a></SAMP> - returns the position of a target body relative to an observing body.
+<LI><SAMP><a href="../mice/cspice_spkcpo.html">cspice_spkcpo</a></SAMP> - returns the state of a target body relative to a constant-position observer location.
+<LI><SAMP><a href="../mice/cspice_spkcpt.html">cspice_spkcpt</a></SAMP> - returns the state of a constant-position target location relative to an observing body.
+<LI><SAMP><a href="../mice/cspice_spkcvo.html">cspice_spkcvo</a></SAMP> - returns the state of a target body relative to a constant-velocity observer location.
+<LI><SAMP><a href="../mice/cspice_spkcvt.html">cspice_spkcvt</a></SAMP> - returns the state of a constant-velocity target location relative to an observing body.
+<LI><SAMP><a href="../mice/cspice_spkobj.html">cspice_spkobj</a></SAMP> - finds the set of ID codes for all objects in a specified SPK file.
+<LI><SAMP><a href="../mice/cspice_spkcov.html">cspice_spkcov</a></SAMP> - finds the coverage window for a specified object in a specified SPK file.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example computes the geometric state (position and
+   velocity) of MGS relative to Mars in the J2000 reference frame:
+
+      %
+      % load kernels: LSK and MGS and DE SPKs
+      %
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'naif0008.tls'  )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'de405.bsp'     )        
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'mgs_ext22.bsp' )        
+
+      %
+      % convert UTC to ET
+      %
+      et = <a href="../mice/cspice_str2et.html">cspice_str2et</a>( '2006 JAN 31 01:00' );
+
+      %
+      % compute geometric state of MGS relative to Mars
+      %
+      [ state, ltime ] = <a href="../mice/cspice_spkezr.html">cspice_spkezr</a>( 'MGS', et, 'J2000', ...
+                                        'NONE', 'MARS' )
+</PRE>
+<H4>Reference documents:</H4>
+<UL>
+<LI><SAMP><a href="../req/spk.html">spk.req</a></SAMP> - reference on Spacecraft and Planet Ephemeris (SPK) subsystem of SPICE
+<LI><SAMP><a href="../req/frames.html">frames.req</a></SAMP> - reference on Frames Kernel (FK) and Frames subsystem of SPICE
+<LI><SAMP><a href="../req/kernel.html">kernel.req</a></SAMP> - reference on loading/unloading kernels and text kernel format
+</UL>
+
+<HR>
+
+<A NAME="G"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Computing Orientation for Spacecraft and Instruments (CK)</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_furnsh.html">cspice_furnsh</a></SAMP> - loads individual kernels and collections of kernels
+<LI><SAMP><a href="../mice/cspice_pxform.html">cspice_pxform</a></SAMP> - returns the 3x3 matrix rotating a position vector one frame to another.
+<LI><SAMP><a href="../mice/cspice_sxform.html">cspice_sxform</a></SAMP> - returns the 6x6 matrix rotating a state vector from one frame to another.
+<LI><SAMP><a href="../mice/cspice_ckobj.html">cspice_ckobj</a></SAMP> - finds the set of ID codes for all objects in a specified CK file.
+<LI><SAMP><a href="../mice/cspice_ckcov.html">cspice_ckcov</a></SAMP> - finds the coverage window for a specified object in a specified CK file.
+<LI><SAMP><a href="../mice/cspice_ckgp.html">cspice_ckgp</a></SAMP> - gets pointing for a specified CK ID at a specified SCLK time.
+<LI><SAMP><a href="../mice/cspice_ckgpav.html">cspice_ckgpav</a></SAMP> - gets pointing and angular velocity for a specified CK ID at a specified SCLK time.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example computes orientation of the CASSINI spacecraft
+   provided in CK files using the Frames subsystem routine
+   <a href="../mice/cspice_pxform.html">cspice_pxform</a>:
+
+      %
+      % load kernels: LSK, CASSINI SCLK, FK and CK
+      %
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'naif0008.tls'     )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'cas00101.tsc'     )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'cas_v39.tf'       )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( '05362_06002ra.bc' )
+      
+      %
+      % convert UTC to ET
+      %
+      et = <a href="../mice/cspice_str2et.html">cspice_str2et</a>( '2005-DEC-28 12:00' );
+
+      %
+      % compute orientation of CASSINI relative to J2000 frame
+      %
+      mat = <a href="../mice/cspice_pxform.html">cspice_pxform</a>( 'J2000', 'CASSINI_SC_COORD', et )
+</PRE>
+<H4>Reference documents:</H4>
+<UL>
+<LI><SAMP><a href="../req/ck.html">ck.req</a></SAMP> - reference on spacecraft orientation (CK) subsystem of SPICE
+<LI><SAMP><a href="../req/frames.html">frames.req</a></SAMP> - reference on Frames Kernel (FK) and Frames subsystem of SPICE
+<LI><SAMP><a href="../req/kernel.html">kernel.req</a></SAMP> - reference on loading/unloading kernels and text kernel format
+</UL>
+
+<HR>
+
+<A NAME="H"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Retrieving Instrument Parameters (IK)</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_furnsh.html">cspice_furnsh</a></SAMP> - loads individual kernels and collections of kernels
+<LI><SAMP><a href="../mice/cspice_getfov.html">cspice_getfov</a></SAMP> - returns the field-of-view (FOV) configuration for a specified instrument.
+<LI><SAMP><a href="../mice/cspice_gdpool.html">cspice_gdpool</a></SAMP> - returns the double precision value of a kernel variable from the kernel pool.
+<LI><SAMP><a href="../mice/cspice_gipool.html">cspice_gipool</a></SAMP> - returns the integer value of a kernel variable from the kernel pool.
+<LI><SAMP><a href="../mice/cspice_gcpool.html">cspice_gcpool</a></SAMP> - returns the character value of a kernel variable from the kernel pool.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example retrieves the M01 THEMIS IR camera focal
+   length and FOV parameters:
+
+      %
+      % load THEMIS IK
+      %
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'm01_themis_v31.ti' )
+
+      %
+      % retrieve M01 THEMIS IR pixel size
+      %
+      [ fl, found ] = <a href="../mice/cspice_gdpool.html">cspice_gdpool</a>( 'INS-53031_FOCAL_LENGTH', 0, 1 )
+
+      %
+      % retrieve M01 THEMIS IR FOV parameters
+      %
+      [ shape, frame, bsight, bounds ] = <a href="../mice/cspice_getfov.html">cspice_getfov</a>( -53031, 4 )
+</PRE>
+<H4>Reference documents:</H4>
+<UL>
+<LI><SAMP><a href="../req/kernel.html">kernel.req</a></SAMP> - reference on loading/unloading kernels and text kernel format
+</UL>
+
+<HR>
+
+<A NAME="I"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Mapping Between Object Names and NAIF IDs</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_furnsh.html">cspice_furnsh</a></SAMP> - loads individual kernels and collections of kernels
+<LI><SAMP><a href="../mice/cspice_bodc2n.html">cspice_bodc2n</a></SAMP> - translates the NAIF integer code of a body into a common name for that body.
+<LI><SAMP><a href="../mice/cspice_bodn2c.html">cspice_bodn2c</a></SAMP> - translates the name of a body or object to the corresponding NAIF integer ID code.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example uses <a href="../mice/cspice_bodn2c.html">cspice_bodn2c</a> to get the NAIF ID for
+   Phobos (built into the SPICE system) and for the M01 THEMIS IR
+   camera (defined in the M01 FK file):
+
+      %
+      % load FK defining M01 name-ID mappings      
+      %
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'm01_v28.tf' )
+
+      %
+      % get NAIF ID for Phobos
+      %
+      [ phobos_id, found ] = <a href="../mice/cspice_bodn2c.html">cspice_bodn2c</a>( 'PHOBOS' )
+
+      %
+      % get NAIF ID for THEMIS IR camera
+      %
+      [ themis_ir_id, found ] = <a href="../mice/cspice_bodn2c.html">cspice_bodn2c</a>( 'M01_THEMIS_IR' )
+</PRE>
+<H4>Reference documents:</H4>
+<UL>
+<LI><SAMP><a href="../req/naif_ids.html">naif_ids.req</a></SAMP> - reference on object names and IDs supported in SPICE
+<LI><SAMP><a href="../req/kernel.html">kernel.req</a></SAMP> - reference on loading/unloading kernels and text kernel format
+</UL>
+
+<HR>
+
+<A NAME="N"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Computing Planetocentric, Planetodetic, and Planetographic Coordinates</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_reclat.html">cspice_reclat</a></SAMP> - converts from rectangular to planetocentric coordinates.
+<LI><SAMP><a href="../mice/cspice_latrec.html">cspice_latrec</a></SAMP> - converts from planetocentric to rectangular coordinates.
+<LI><SAMP><a href="../mice/cspice_recgeo.html">cspice_recgeo</a></SAMP> - converts from rectangular to geodetic coordinates.
+<LI><SAMP><a href="../mice/cspice_georec.html">cspice_georec</a></SAMP> - converts from geodetic to rectangular coordinates.
+<LI><SAMP><a href="../mice/cspice_recpgr.html">cspice_recpgr</a></SAMP> - converts from rectangular to planetographic coordinates.
+<LI><SAMP><a href="../mice/cspice_pgrrec.html">cspice_pgrrec</a></SAMP> - converts from planetographic to rectangular coordinates.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example computes the planetocentric, planetodetic and
+   planetographic coordinates for a point given as a Cartesian vector
+   with respect to Mars in the Mars body-fixed frame (IAU_MARS):
+
+      %
+      % load PCK file
+      %
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'pck00008.tpc' )
+
+      %
+      % retrieve Mars radii
+      %
+      radii = <a href="../mice/cspice_bodvrd.html">cspice_bodvrd</a>( 'MARS', 'RADII', 3 );
+      f = (radii(1) - radii(3))/radii(1);
+
+      %
+      % package 3D vector
+      %
+      vec = [3373.850; -351.034; -117.267]
+
+      %
+      % compute planetocentric coordinates
+      %
+      [ pcr, pclon, pclat ] = <a href="../mice/cspice_reclat.html">cspice_reclat</a>( vec )
+
+      %
+      % compute planetodetic coordinates
+      %
+      [ pdlon, pdlat, pdalt ] = <a href="../mice/cspice_recgeo.html">cspice_recgeo</a>( vec, radii(1), f ) 
+
+      %
+      % compute planetographic coordinates
+      %
+      [ pglon, pglat, pgalt ] = <a href="../mice/cspice_recpgr.html">cspice_recpgr</a>( 'MARS', vec, radii(1), f )
+</PRE>
+
+<H4>Reference documents:</H4>
+<UL>
+<LI><SAMP><a href="../req/pck.html">pck.req</a></SAMP> - reference on Planetary Constants Kernel (PCK) subsystem of SPICE
+</UL>
+
+<HR>
+
+<A NAME="J"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Computing Surface Intercept Point</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_sincpt.html">cspice_sincpt</a></SAMP> - computes the surface intercept point of the ray on a body at a specified epoch.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example computes the surface intercept point of the
+   MGS MOC NA camera boresight with the surface of Mars:
+
+      %
+      % load kernels: LSK, PCK, MGS SCLK, planet/satellite 
+      % ephemeris SPK, MGS spacecraft SPK, MGS spacecraft
+      % CK, MGS FK, and MOC IK
+      %
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'naif0008.tls'           )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'mars_iau2000_v0.tpc'    )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'mgs_sclkscet_00061.tsc' )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'mar063.bsp'             )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'mgs_ext22.bsp'          )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'mgs_sc_ext22.bc'        )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'mgs_v10.tf'             )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'mgs_moc_v20.ti'         )
+
+      %
+      % retrieve MOC NA camera boresight direction
+      %
+      [ shape, frame, bsight, bounds ] = <a href="../mice/cspice_getfov.html">cspice_getfov</a>( -94031, 4 ); 
+
+      %
+      % convert UTC to ET
+      %
+      et = <a href="../mice/cspice_str2et.html">cspice_str2et</a>( '2006 JAN 31 01:00' );
+
+      %
+      % compute surface intercept point
+      %
+      [ spoint, trgepc, srfvec, found ] = ...
+         <a href="../mice/cspice_sincpt.html">cspice_sincpt</a>( 'Ellipsoid', 'MARS', et, 'IAU_MARS', ...
+                        'CN+S', 'MGS', frame, bsight )
+</PRE>
+
+<HR>
+
+<A NAME="K"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Computing Sub-observer and Sub-solar Points</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_subpnt.html">cspice_subpnt</a></SAMP> - computes the sub-observer point on a body at a particular epoch.
+<LI><SAMP><a href="../mice/cspice_subslr.html">cspice_subslr</a></SAMP> - computes the sub-solar point on a body as seen by an observer at a particular epoch.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example computes the sub-spacecraft and sub-solar
+   points on Mars for MGS:
+
+      %
+      % load kernels: LSK, PCK, planet/satellite SPK
+      % and MGS spacecraft SPK
+      %
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'naif0008.tls'        )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'mars_iau2000_v0.tpc' )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'mar063.bsp'          )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'mgs_ext22.bsp'       )
+
+      %
+      % convert UTC to ET
+      %
+      et = <a href="../mice/cspice_str2et.html">cspice_str2et</a>( '2006 JAN 31 01:00' );
+
+      %
+      % compute sub-spacecraft point
+      %
+      [ scraft, trgepc, srfvec ] = ...
+         <a href="../mice/cspice_subpnt.html">cspice_subpnt</a>( 'Near point: ellipsoid', 'MARS', ...
+                        et, 'IAU_MARS', 'LT+S', 'MGS' )
+
+      %
+      % compute sub-solar point
+      %
+      [ ssolar, trgepc, srfvec ] = ...
+         <a href="../mice/cspice_subslr.html">cspice_subslr</a>( 'Near point: ellipsoid', 'MARS', ...
+                        et, 'IAU_MARS', 'LT+S', 'MGS' )
+</PRE>
+
+<HR>
+
+<A NAME="L"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Computing Illumination Angles</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_ilumin.html">cspice_ilumin</a></SAMP> - finds the illumination angles at a specified surface point of a target body.
+<LI><SAMP><a href="../mice/cspice_phaseq.html">cspice_phaseq</a></SAMP> - computes the apparent phase angle between the centers of target, observer, and illuminator ephemeris objects. 
+<</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example computes the illumination angles for a point
+   specified using planetocentric coordinates, observed by MGS:
+
+      r   = 3390.42;
+      lon =  175.30;
+      lat =  -14.59;
+
+      %
+      % load kernels: LSK, PCK, planet/satellite SPK
+      % and MGS spacecraft SPK
+      %
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'naif0008.tls'        )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'mars_iau2000_v0.tpc' )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'mar063.bsp'          )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'mgs_ext22.bsp'       )
+
+      %
+      % convert planetocentric r/lon/lat to Cartesian vector
+      %
+      point = <a href="../mice/cspice_latrec.html">cspice_latrec</a>( r, lon * <a href="../mice/cspice_rpd.html">cspice_rpd</a>, lat * cspice_rpd )
+
+      %
+      % convert UTC to ET
+      %
+      et = <a href="../mice/cspice_str2et.html">cspice_str2et</a>( '2006 JAN 31 01:00' );
+
+      %
+      % compute illumination angles
+      %
+      [ trgepc, srfvec, phase, solar, emissn ] = ...
+         <a href="../mice/cspice_ilumin.html">cspice_ilumin</a>( 'Ellipsoid', 'MARS', et, 'IAU_MARS', ...
+                        'LT+S', 'MGS', point )
+</PRE>
+
+<HR>
+
+<A NAME="M"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Computing and Propagating Orbital Elements</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_conics.html">cspice_conics</a></SAMP> - determines the state of an orbiting body from a set orbital elements.
+<LI><SAMP><a href="../mice/cspice_oscelt.html">cspice_oscelt</a></SAMP> - determines the set of orbital elements corresponding to the state of a body.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example computes the set of orbital elements for the
+   state of the Mars Express spacecraft at a given time:
+
+      %
+      % load kernels: LSK, MEX trajectory SPK, and gravity PCK
+      %
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'naif0008.tls'                 )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'ORMM__050901000000_00165.BSP' )
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'DE403-MASSES.TPC'             )
+
+      %
+      % retrieve GM for Mars
+      %
+      gm = <a href="../mice/cspice_bodvrd.html">cspice_bodvrd</a>( 'MARS', 'GM', 1 );
+
+      %
+      % convert UTC to ET
+      %
+      et = <a href="../mice/cspice_str2et.html">cspice_str2et</a>( '2005 SEP 02 04:50:45' );
+
+      %
+      % compute state of MEX at given UTC
+      %
+      [ state, lt ] = <a href="../mice/cspice_spkezr.html">cspice_spkezr</a>( 'MEX', et, ...
+                                     'MARSIAU', 'NONE', 'MARS' );
+
+      %
+      % compute orbital elements
+      %
+      elts = <a href="../mice/cspice_oscelt.html">cspice_oscelt</a>( state, et, gm )
+</PRE>
+
+<HR>
+
+<A NAME="4"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Checking for in Field-Of-View (FOV) conditions</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><a href="../mice/cspice_fovray.html">cspice_fovray</a><SAMP></SAMP> - determines if a specified ray is within the FOV of a specified instrument at a given time.
+<LI><a href="../mice/cspice_fovtrg.html">cspice_fovtrg</a><SAMP></SAMP> - determines if a specified ephemeris object is within the FOV of a specified instrument at a given time.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example determines if Phoebe is in the CASSINI
+   ISS NAC FOV on 2004-06-11 18:00 UTC:
+
+      %        
+      % Load kernels.
+      %
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'cas_2004_v17.tm' )
+
+      %
+      % Convert UTC to ET.
+      %
+      et = <a href="../mice/cspice_str2et.html">cspice_str2et</a>( '2004-06-11 18:00' );
+ 
+      %
+      % Check for in-FOV condition.
+      %
+      visibl = <a href="../mice/cspice_fovtrg.html">cspice_fovtrg</a>( 'CASSINI_ISS_NAC', 'PHOEBE',       ...
+                              'ELLIPSOID', 'IAU_PHOEBE', 'CN+S', ...
+                              'CASSINI', et );
+</PRE>
+
+<HR>
+
+<A NAME="5"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Checking for occultation conditions</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><a href="../mice/cspice_occult.html">cspice_occult</a><SAMP></SAMP> - determines the occultation condition (not occulted, partially, etc.) of one target relative to another target as seen by an observer at a given time.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example determines if the Sun is occulted by Saturn as
+   seen from CASSINI on 2005-05-03 06:00 UTC:
+
+      %        
+      % Load kernels.
+      %
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'cas_2005_v17.tm' )
+
+      %
+      % Convert UTC to ET.
+      %
+      et = <a href="../mice/cspice_str2et.html">cspice_str2et</a>( '2005-05-03 06:00' );
+
+      %
+      % Check for in-FOV condition.
+      %
+      ocltid = <a href="../mice/cspice_occult.html">cspice_occult</a>( 'SATURN', 'ELLIPSOID', 'IAU_SATURN', ...
+                              'SUN',    'ELLIPSOID', 'IAU_SUN',    ...
+                              'CN',     'CASSINI',   et );
+
+      if ( ocltid > 0 )
+         disp( 'CASSINI IS IN SATURN SHADOW.' )
+      end
+</PRE>
+
+<HR>
+
+<A NAME="1"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Finding times of events satisfying numerical constraints</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_gfdist.html">cspice_gfdist</a></SAMP> - determines time intervals when a specified constraint on observer-target distance is met.
+<LI><SAMP><a href="../mice/cspice_gfilum.html">cspice_gfilum</a></SAMP> - determines time intervals when a specified constraint on the observed phase, solar incidence, or emission angle at a surface point is met.
+<LI><SAMP><a href="../mice/cspice_gfpa.html">cspice_gfpa</a></SAMP> - determines time intervals when a specified constraint on the phase angle between the illuminator, target, and observer body centers is met.
+<LI><SAMP><a href="../mice/cspice_gfposc.html">cspice_gfposc</a></SAMP> - determines time intervals when a coordinate of an observer-target position vector satisfies a numerical constraint.
+<LI><SAMP><a href="../mice/cspice_gfrr.html">cspice_gfrr</a></SAMP> - determines time intervals when a specified constraint on the observer-target range rate is met.
+<LI><SAMP><a href="../mice/cspice_gfsep.html">cspice_gfsep</a></SAMP> - determines time intervals when the angular separation between the position vectors of two target bodies relative to an observer satisfies a numerical relationship.
+<LI><SAMP><a href="../mice/cspice_gfsntc.html">cspice_gfsntc</a></SAMP> - determines time intervals when a coordinate of a ray-surface intercept position vector satisfies a numerical constraint.
+<LI><SAMP><a href="../mice/cspice_gfsubc.html">cspice_gfsubc</a></SAMP> - determines time intervals when a coordinate of a sub-observer point position vector satisfies a numerical constraint.
+
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example determines time intervals between Jan 1 and
+   and April 1, 2007 when the distance between the Moon and the Earth
+   was greater than 400,000 km.
+
+      %
+      % Load kernels.
+      % 
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'naif0008.tls' );
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'de421.bsp'    );
+
+      %
+      % Store the time bounds in the confinement window.
+      %
+      et = <a href="../mice/cspice_str2et.html">cspice_str2et</a>( { '2007 JAN 01', '2007 APR 01'} );
+      cnfine = <a href="../mice/cspice_wninsd.html">cspice_wninsd</a>( et(1), et(2) );
+
+      % 
+      % Set search parameters. Use a step size of 1 day (in units of
+      % seconds).
+      %
+      MAXWIN  = 1000;
+
+      target  = 'MOON';
+      abcorr  = 'NONE';
+      obsrvr  = 'EARTH';
+      relate  = '>';
+      refval  = 4.e5;
+      adjust  = 0.;
+
+      step    = 1.*<a href="../mice/cspice_spd.html">cspice_spd</a>;
+
+      %
+      % Perform search.
+      %
+      result = <a href="../mice/cspice_gfdist.html">cspice_gfdist</a>( target, abcorr, obsrvr, ...
+			      relate, refval, adjust, ...
+			      step,   MAXWIN,        ...
+			      cnfine);
+</PRE>
+<H4>Reference documents:</H4>
+<UL>
+<LI><SAMP><a href="../req/gf.html">gf.req</a></SAMP> - reference on the Geometry Finder (GF) subsystem of SPICE
+</UL>
+
+<HR>
+
+<A NAME="2"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Finding times of events satisfying FOV constraints</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_gfrfov.html">cspice_gfrfov</a></SAMP> - determines time intervals when a specified ray intersects the space bounded by the field-of-view (FOV) of a specified instrument.
+<LI><SAMP><a href="../mice/cspice_gftfov.html">cspice_gftfov</a></SAMP> - determines time intervals when a specified ephemeris object intersects the space bounded by the field-of-view (FOV) of a specified instrument.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example determines time intervals between 09:00 and
+   11:15 UTC on Jun 11, 2004 when Saturn's satellite Phoebe was within
+   the FOV of the Cassini narrow angle camera (CASSINI_ISS_NAC).
+
+      %
+      % Load kernels.
+      %
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'naif0009.tls'              );
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'cpck05Mar2004.tpc'         );
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( '981005_PLTEPH-DE405S.bsp'  );
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( '020514_SE_SAT105.bsp'      );
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( '030201AP_SK_SM546_T45.bsp' );
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'cas_v37.tf'                );
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( '04135_04171pc_psiv2.bc'    );
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'cas00084.tsc'              );
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'cas_iss_v09.ti'            );
+
+      %
+      % Store the time bounds in the confinement window.
+      %
+      et = <a href="../mice/cspice_str2et.html">cspice_str2et</a>( { '2004 JUN 11 09:00', ...
+			    '2004 JUN 11 11:15' } );
+      cnfine = <a href="../mice/cspice_wninsd.html">cspice_wninsd</a>( et(1), et(2) );
+
+      %
+      % Set search parameters. Use a step size of 10 seconds.
+      %
+      MAXWIN = 1000;
+
+      inst   = 'CASSINI_ISS_NAC';
+      target = 'PHOEBE';
+      tshape = 'ELLIPSOID';
+      tframe = 'IAU_PHOEBE';
+      abcorr = 'LT+S';
+      obsrvr = 'CASSINI';
+
+      step   = 10.;
+
+      %
+      % Perform search.
+      %
+      result = <a href="../mice/cspice_gftfov.html">cspice_gftfov</a>( inst,  target, tshape, tframe, ...
+			      abcorr, obsrvr, step, cnfine, MAXWIN);
+</PRE>
+<H4>Reference documents:</H4>
+<UL>
+<LI><SAMP><a href="../req/gf.html">gf.req</a></SAMP> - reference on the Geometry Finder (GF) subsystem of SPICE
+</UL>
+
+<HR>
+
+<A NAME="3"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Finding times of occultations</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_gfoclt.html">cspice_gfoclt</a></SAMP> - determines time intervals when an observer sees one target occulted by another.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example determines time intervals in December, 2001
+   when the Sun is occulted by the Moon (solar eclipses) as seen from
+   the center of the Earth.
+
+      %
+      % Load kernels.
+      % 
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'naif0008.tls' );
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'de421.bsp'    );
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'pck00008.tpc' );
+
+      %
+      % Store the time bounds the confinement window.
+      %
+      et = <a href="../mice/cspice_str2et.html">cspice_str2et</a>( { '2001 DEC 01', '2002 JAN 01'} );  
+      cnfine = <a href="../mice/cspice_wninsd.html">cspice_wninsd</a>( et(1), et(2) );
+
+      % 
+      % Set search parameters. Select a 3-minute step.
+      % 
+      MAXWIN  = 1000;
+
+      occtyp  = 'ANY';
+      front   = 'MOON';
+      fshape  = 'ELLIPSOID';
+      fframe  = 'IAU_MOON';
+      back    = 'SUN';
+      bshape  = 'ELLIPSOID';
+      bframe  = 'IAU_SUN';
+      obsrvr  = 'EARTH';
+      abcorr  = 'LT';
+
+      step    = 180.;
+
+      %
+      % Perform search.
+      %
+      result = <a href="../mice/cspice_gfoclt.html">cspice_gfoclt</a>( occtyp, front, fshape, fframe, ...
+			      back, bshape, bframe,          ...
+			      abcorr, obsrvr, step, cnfine,  ...
+			      MAXWIN);
+</PRE>
+<H4>Reference documents:</H4>
+<UL>
+<LI><SAMP><a href="../req/gf.html">gf.req</a></SAMP> - reference on the Geometry Finder (GF) subsystem of SPICE
+</UL>
+
+<HR>
+
+<A NAME="O"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Converting from and to rectangular coordinates</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_reclat.html">cspice_reclat</a></SAMP> - converts from rectangular to latitudinal coordinates.
+<LI><SAMP><a href="../mice/cspice_latrec.html">cspice_latrec</a></SAMP> - converts from latitudinal to rectangular coordinates.
+<LI><SAMP><a href="../mice/cspice_recgeo.html">cspice_recgeo</a></SAMP> - converts from rectangular to geodetic coordinates.
+<LI><SAMP><a href="../mice/cspice_georec.html">cspice_georec</a></SAMP> - converts from geodetic to rectangular coordinates.
+<LI><SAMP><a href="../mice/cspice_recpgr.html">cspice_recpgr</a></SAMP> - converts from rectangular to planetographic coordinates.
+<LI><SAMP><a href="../mice/cspice_pgrrec.html">cspice_pgrrec</a></SAMP> - converts from planetographic to rectangular coordinates.
+<LI><SAMP><a href="../mice/cspice_recrad.html">cspice_recrad</a></SAMP> - converts from rectangular coordinates to range, right ascension, and declination.
+<LI><SAMP><a href="../mice/cspice_radrec.html">cspice_radrec</a></SAMP> - converts from range, right ascension, and declination to rectangular coordinates.
+<LI><SAMP><a href="../mice/cspice_recsph.html">cspice_recsph</a></SAMP> - converts from rectangular to spherical coordinates.
+<LI><SAMP><a href="../mice/cspice_sphrec.html">cspice_sphrec</a></SAMP> - converts from spherical to rectangular coordinates.
+<LI><SAMP><a href="../mice/cspice_reccyl.html">cspice_reccyl</a></SAMP> - converts from rectangular to cylindrical coordinates.
+<LI><SAMP><a href="../mice/cspice_cylrec.html">cspice_cylrec</a></SAMP> - converts from cylindrical to rectangular coordinates.
+</UL>
+
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example computes the planetocentric, planetodetic and
+   planetographic coordinates for a point given as a Cartesian vector
+   with respect to Mars in the Mars body-fixed frame (IAU_MARS):
+
+      %
+      % load PCK file
+      %
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'pck00008.tpc' )
+
+      %
+      % retrieve Mars radii
+      %
+      radii = <a href="../mice/cspice_bodvrd.html">cspice_bodvrd</a>( 'MARS', 'RADII', 3 );
+      f = (radii(1) - radii(3))/radii(1);
+
+      %
+      % package 3D vector
+      %
+      vec = [3373.850; -351.034; -117.267]
+
+      %
+      % compute planetocentric coordinates
+      %
+      [ pcr, pclon, pclat ] = <a href="../mice/cspice_reclat.html">cspice_reclat</a>( vec )
+
+      %
+      % compute planetodetic coordinates
+      %
+      [ pdlon, pdlat, pdalt ] = <a href="../mice/cspice_recgeo.html">cspice_recgeo</a>( vec, radii(1), f ) 
+
+      %
+      % compute planetographic coordinates
+      %
+      [ pglon, pglat, pgalt ] = <a href="../mice/cspice_recpgr.html">cspice_recpgr</a>( 'MARS', vec, radii(1), f )
+</PRE>
+
+<HR>
+
+<A NAME="P"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Converting from and to Spherical Coordinates</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_sphrec.html">cspice_sphrec</a></SAMP> - converts from spherical to rectangular coordinates.
+<LI><SAMP><a href="../mice/cspice_recsph.html">cspice_recsph</a></SAMP> - converts from rectangular to spherical coordinates.
+<LI><SAMP><a href="../mice/cspice_sphcyl.html">cspice_sphcyl</a></SAMP> - converts from spherical to cylindrical coordinates.
+<LI><SAMP><a href="../mice/cspice_cylsph.html">cspice_cylsph</a></SAMP> - converts from cylindrical to spherical coordinates.
+<LI><SAMP><a href="../mice/cspice_sphlat.html">cspice_sphlat</a></SAMP> - converts from spherical to latitudinal coordinates.
+<LI><SAMP><a href="../mice/cspice_latsph.html">cspice_latsph</a></SAMP> - converts from latitudinal to spherical coordinates.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example computes the spherical coordinates of a point
+   specified as a Cartesian vector:
+
+      vec = [ 1.0; 1.0; 1.0 ]
+
+      [ r, colat, lon ] = <a href="../mice/cspice_recsph.html">cspice_recsph</a>( vec )
+</PRE>
+
+<HR>
+
+<A NAME="Q"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Converting from and to cylindrical coordinates</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_cylrec.html">cspice_cylrec</a></SAMP> - converts from cylindrical to rectangular coordinates.
+<LI><SAMP><a href="../mice/cspice_reccyl.html">cspice_reccyl</a></SAMP> - converts from rectangular to cylindrical coordinates.
+<LI><SAMP><a href="../mice/cspice_cylsph.html">cspice_cylsph</a></SAMP> - converts from cylindrical to spherical coordinates.
+<LI><SAMP><a href="../mice/cspice_sphcyl.html">cspice_sphcyl</a></SAMP> - converts from spherical to cylindrical coordinates.
+<LI><SAMP><a href="../mice/cspice_cyllat.html">cspice_cyllat</a></SAMP> - converts from cylindrical to latitudinal coordinates.
+<LI><SAMP><a href="../mice/cspice_latcyl.html">cspice_latcyl</a></SAMP> - converts from latitudinal to cylindrical coordinates.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example computes the cylindrical coordinates of a
+   point specified as a Cartesian vector:
+
+      vec = [ 1.0; 1.0; 1.0 ]
+
+      [ r, lon, z ] = <a href="../mice/cspice_reccyl.html">cspice_reccyl</a>( vec )
+</PRE>
+
+<HR>
+
+<A NAME="R"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Converting from and to Latitudinal Coordinates</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_latrec.html">cspice_latrec</a></SAMP> - converts from latitudinal to rectangular coordinates.
+<LI><SAMP><a href="../mice/cspice_reclat.html">cspice_reclat</a></SAMP> - converts from rectangular to latitudinal coordinates.
+<LI><SAMP><a href="../mice/cspice_latsph.html">cspice_latsph</a></SAMP> - converts from latitudinal to spherical coordinates.
+<LI><SAMP><a href="../mice/cspice_sphlat.html">cspice_sphlat</a></SAMP> - converts from spherical to latitudinal coordinates.
+<LI><SAMP><a href="../mice/cspice_latcyl.html">cspice_latcyl</a></SAMP> - converts from latitudinal to cylindrical coordinates.
+<LI><SAMP><a href="../mice/cspice_cyllat.html">cspice_cyllat</a></SAMP> - converts from cylindrical to latitudinal coordinates.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example converts the planetocentric coordinates of a
+   point to a Cartesian vector:
+      
+      r   = 3390.42;
+      lon =  175.30;
+      lat =  -14.59;
+
+      vec = <a href="../mice/cspice_latrec.html">cspice_latrec</a>( r, lon * <a href="../mice/cspice_rpd.html">cspice_rpd</a>, lat * cspice_rpd ) 
+</PRE>
+
+<HR>
+
+<A NAME="S"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Converting from and to R, RA, and DEC</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_radrec.html">cspice_radrec</a></SAMP> - converts from range, right ascension, and declination to rectangular coordinates.
+<LI><SAMP><a href="../mice/cspice_recrad.html">cspice_recrad</a></SAMP> - converts from rectangular coordinates to range, right ascension, and declination.
+</UL>
+
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example computes the unit vector corresponding to an
+   RA and DEC given in degrees:
+
+      ra  = 120.0;
+      dec = -30.0;
+
+      vec = <a href="../mice/cspice_radrec.html">cspice_radrec</a>( 1.0, ra * <a href="../mice/cspice_rpd.html">cspice_rpd</a>, dec * cspice_rpd )
+</PRE>
+
+<HR>
+
+<A NAME="T"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Converting from and to Geodetic Coordinates</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_georec.html">cspice_georec</a></SAMP> - converts from geodetic to rectangular coordinates.
+<LI><SAMP><a href="../mice/cspice_recgeo.html">cspice_recgeo</a></SAMP> - converts from rectangular to geodetic coordinates.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example converts the areodetic coordinates of a
+   landing site (Lon = 175.3 deg, Lat = -14.59 deg, Alt = -1.91 km),
+   given relative to the IAU 2000 Mars ellipsoid, to a Cartesian
+   vector:
+
+      <a href="../mice/cspice_furnsh.html">cspice_furnsh</a>( 'pck00008.tpc' )
+
+      radii = <a href="../mice/cspice_bodvrd.html">cspice_bodvrd</a>( 'MARS', 'RADII', 3 );
+
+      lon =  175.30 * <a href="../mice/cspice_rpd.html">cspice_rpd</a>;
+      lat =  -14.59 * <a href="../mice/cspice_rpd.html">cspice_rpd</a>;
+      alt =   -1.91;
+
+      f = (radii(1)-radii(3))/radii(1);
+
+      vec = <a href="../mice/cspice_georec.html">cspice_georec</a>( lon, lat, alt, radii(1), f )
+</PRE>
+
+<HR>
+
+<A NAME="6"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Transforming states from one coordinate system to another</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_xfmsta.html">cspice_xfmsta</a></SAMP> - transforms states between coordinate systems -- rectangular, cylindrical, latitudinal, spherical, geodetic, and planetographic.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example converts a state specified in the 
+   rectangular coordinate system (X, Y, Z, DX, DY, DZ) to 
+   the state specified in the latitudinal coordinate system 
+   (R, LONG, LAT, DR, DLONG, DLAT):
+
+      istate(1) = 1000.0;
+      istate(2) = 2000.0;
+      istate(3) = 3000.0;
+      istate(4) =   20.0;
+      istate(5) =  -40.0;
+      istate(6) =  -60.0;
+
+      ostate = <a href="../mice/cspice_xfmsta.html">cspice_xfmsta</a>( istate, 'RECTANGULAR', ...
+                              'LATITUDINAL', ' ' );
+
+      txt = sprintf( 'R     = %20.10f KM\n',    ostate(1) );
+      disp( txt )
+      txt = sprintf( 'LONG  = %20.10f RAD\n',   ostate(2) );
+      disp( txt )
+      txt = sprintf( 'LAT   = %20.10f RAD\n',   ostate(3) );
+      disp( txt )
+      txt = sprintf( 'DR    = %20.10f KM/S\n',  ostate(4) );
+      disp( txt )
+      txt = sprintf( 'DLONG = %20.10f RAD/S\n', ostate(5) );
+      disp( txt )
+      txt = sprintf( 'DLAT  = %20.10f RAD/S\n', ostate(6) );
+      disp( txt )
+</PRE>
+
+<HR>
+
+<A NAME="U"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Performing simple operations on 3D vectors</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_vsep.html">cspice_vsep</a></SAMP> - finds the separation angle between two 3D vectors.
+<LI><SAMP><a href="../mice/cspice_vdist.html">cspice_vdist</a></SAMP> - returns the distance between two 3D vectors.
+<LI><SAMP><a href="../mice/cspice_vhat.html">cspice_vhat</a></SAMP> - finds the unit vector along a 3D vector.
+<LI><SAMP><a href="../mice/cspice_vrotv.html">cspice_vrotv</a></SAMP> - rotates a 3D vector about a specified axis 3D vector by a specified angle.
+<LI><SAMP><a href="../mice/cspice_vnorm.html">cspice_vnorm</a></SAMP> - computes the magnitude of a 3D vector.
+<LI><SAMP><a href="../mice/cspice_unorm.html">cspice_unorm</a></SAMP> - normalizes a 3D vector and return its magnitude.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example computes the angular separation between two 3D
+   vectors, in degrees:
+
+      a = [ 1.0; 0.0; 0.0 ]; 
+      b = [ 1.0; 1.0; 0.0 ]; 
+
+      angle = <a href="../mice/cspice_vsep.html">cspice_vsep</a>( a, b ) * <a href="../mice/cspice_dpr.html">cspice_dpr</a>
+</PRE>
+
+<HR>
+
+<A NAME="V"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Projecting, Combining and Rotating 3D vectors</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_vperp.html">cspice_vperp</a></SAMP> - finds the component of a 3D vector that is perpendicular to a second 3D vector.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example finds the component of a 3D vector that is 
+   perpendicular to a second 3D vector:
+
+      p = <a href="../mice/cspice_vperp.html">cspice_vperp</a>( a, b )
+</PRE>
+
+<HR>
+
+<A NAME="X"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Creating and Converting Transformation Matrices</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_rotate.html">cspice_rotate</a></SAMP> - calculates the 3x3 matrix for a rotation of an angle about the X, Y or Z axis.
+<LI><SAMP><a href="../mice/cspice_rotmat.html">cspice_rotmat</a></SAMP> - applies a rotation of an angle about the X, Y, or Z axis to a matrix.
+<LI><SAMP><a href="../mice/cspice_twovec.html">cspice_twovec</a></SAMP> - builds the transformation to a frame based on two vectors.
+<LI><SAMP><a href="../mice/cspice_eul2m.html">cspice_eul2m</a></SAMP> - constructs a rotation matrix from a set of Euler angles.
+<LI><SAMP><a href="../mice/cspice_m2eul.html">cspice_m2eul</a></SAMP> - factors a matrix as a product of three rotations about specified axes.
+<LI><SAMP><a href="../mice/cspice_raxisa.html">cspice_raxisa</a></SAMP> - computes the axis of the rotation given by a matrix and the angle about that axis.
+<LI><SAMP><a href="../mice/cspice_axisar.html">cspice_axisar</a></SAMP> - construct a rotation matrix that rotates vectors by an angle about an axis.
+<LI><SAMP><a href="../mice/cspice_m2q.html">cspice_m2q</a></SAMP> - finds a unit quaternion corresponding to a specified rotation matrix.
+<LI><SAMP><a href="../mice/cspice_q2m.html">cspice_q2m</a></SAMP> - find the rotation matrix corresponding to a specified unit quaternion.
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example creates a transformation matrix from right
+   ascension, declination, and twist given in degrees:
+
+      ra    =   10.0;
+      dec   =   20.0;
+      twist = -135.0;
+
+      ra    = ra    * <a href="../mice/cspice_rpd.html">cspice_rpd</a>;
+      dec   = dec   * <a href="../mice/cspice_rpd.html">cspice_rpd</a>;
+      twist = twist * <a href="../mice/cspice_rpd.html">cspice_rpd</a>;
+
+      mat = <a href="../mice/cspice_eul2m.html">cspice_eul2m</a>( twist, <a href="../mice/cspice_halfpi.html">cspice_halfpi</a> - dec, ra, ...
+                          3,     2,                   3       )
+</PRE>
+
+<H4>Reference documents:</H4>
+<UL>
+<LI><SAMP><a href="../req/rotation.html">rotation.req</a></SAMP> - reference on different representations of rotation transformations
+</UL>
+
+<HR>
+
+<A NAME="Y"></A><p align="right"><a href="#TOP"><small>Top</small></a></p>
+<H3>Accessing Physical and Mathematical Constants</H3>
+
+<H4>APIs:</H4>
+<UL>
+<LI><SAMP><a href="../mice/cspice_halfpi.html">cspice_halfpi</a></SAMP> - returns half the value of pi.
+<LI><SAMP><a href="../mice/cspice_pi.html">cspice_pi</a></SAMP> - returns the value of pi.
+<LI><SAMP><a href="../mice/cspice_twopi.html">cspice_twopi</a></SAMP> - returns twice the value of pi.
+<LI><SAMP><a href="../mice/cspice_dpr.html">cspice_dpr</a></SAMP> - returns the number of degrees per radian.
+<LI><SAMP><a href="../mice/cspice_rpd.html">cspice_rpd</a></SAMP> - returns the number of radians per degree.
+<LI><SAMP><a href="../mice/cspice_spd.html">cspice_spd</a></SAMP> - returns the number of seconds in a day.
+<LI><SAMP><a href="../mice/cspice_jyear.html">cspice_jyear</a></SAMP> - returns the number of seconds per Julian year.
+<LI><SAMP><a href="../mice/cspice_tyear.html">cspice_tyear</a></SAMP> - returns the number of seconds per tropical year.
+<LI><SAMP><a href="../mice/cspice_clight.html">cspice_clight</a></SAMP> - returns the speed of light in vacuo (km/sec)
+<LI><SAMP><a href="../mice/cspice_b1900.html">cspice_b1900</a></SAMP> - returns the Julian Date corresponding to Besselian date 1900.0.
+<LI><SAMP><a href="../mice/cspice_b1950.html">cspice_b1950</a></SAMP> - returns the Julian Date corresponding to Besselian date 1950.0.
+<LI><SAMP><a href="../mice/cspice_j1900.html">cspice_j1900</a></SAMP> - returns the Julian Date of 1899 DEC 31 12:00:00 (1900 JAN 0.5).
+<LI><SAMP><a href="../mice/cspice_j1950.html">cspice_j1950</a></SAMP> - returns the Julian Date of 1950 JAN 01 00:00:00 (1950 JAN 1.0).
+<LI><SAMP><a href="../mice/cspice_j2000.html">cspice_j2000</a></SAMP> - returns the Julian Date of 2000 JAN 01 12:00:00 (2000 JAN 1.5).
+<LI><SAMP><a href="../mice/cspice_j2100.html">cspice_j2100</a></SAMP> - returns the Julian Date of 2100 JAN 01 12:00:00 (2100 JAN 1.5).
+</UL>
+
+<H4>Brief Example:</H4>
+<PRE>
+   The following example sets angle to pi/2 and prints it in degrees:
+
+      angle = <a href="../mice/cspice_halfpi.html">cspice_halfpi</a>;
+
+      angle_deg = angle * <a href="../mice/cspice_dpr.html">cspice_dpr</a>
+</PRE>
+
+<HR>
+
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+
+</BODY>
+</HTML>

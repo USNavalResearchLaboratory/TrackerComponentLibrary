@@ -1,0 +1,205 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_twovec</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_twovec</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_calculates the transformation matrix to the
+   right-handed reference frame having an input vector as a
+   specified axis and a second input vector lying in a
+   define coordinate plane.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      axdef    a double precision 3x1 array defining the principal
+               axes of a coordinate frame
+
+      indexa   the integer scalar signifying which of the three coordinate
+               axes contains 'axdef' (1, 2 or 3)
+
+                  If 'indexa' is 1 then axdef defines the X axis of the
+                  coordinate frame.
+
+                  If 'indexa' is 2 then axdef defines the Y axis of the
+                  coordinate frame.
+
+                  If 'indexa' is 3 then axdef defines the Z axis of the
+                  coordinate frame
+
+      plndef   a double precision 3x1 array defining a vector in the same
+               plane as 'axdef'
+
+      indexp   the integer scalar signifying the second principle axis,
+               orthogonal to 'axdef' (1, 2 or 3)
+
+                  If 'indexp' is 1, the second axis of the principal
+                  plane is the X-axis.
+
+                  If 'indexp' is 2, the second axis of the principal
+                  plane is the Y-axis.
+
+                  If 'indexp' is 3, the second axis of the principal plane
+                  is the Z-axis.
+
+   the call:
+
+      mout = <b>cspice_twovec</b>( axdef, indexa, plndef, indexp)
+
+   returns:
+
+      mout   a double precision 3x3 array defining a rotation matrix from
+             the frame of the original vectors to the new frame
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   Example:
+
+      %
+      % A trivial example. Define the reference vectors...
+      %
+      %  The i unit vector
+      %
+      axdef  = [ 1.; 0; 0.];
+      indexa = 1 ;
+
+      %
+      %  The -j unit vector. For this example, any vector
+      %  in the x-y plane linearly independent of 'axdef'
+      %  will suffice.
+      %
+      plndef = [ 0.; -1.; 0.];
+      indexp = 2;
+
+      %
+      % Calculate the transformation matrix. The new frame
+      % has 'axdef' as axis 'indexa', with 'plndef' in the same
+      % plane, the direction axis 'indexp' in that plane
+      % and orthogonal to 'axdef'. A third direction vector
+      % completes the right handed frame.
+      %
+      mout = <b>cspice_twovec</b>( axdef, indexa, plndef, indexp )
+
+   MATLAB outputs:
+
+      mout =
+
+           1     0     0
+           0    -1     0
+           0     0    -1
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/twovec_c.html">twovec_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+    -Mice Version 1.0.0, 10-JAN-2006, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   define an orthonormal frame from two vectors
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:39 2014</pre>
+
+</body>
+</html>
+

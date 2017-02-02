@@ -1,0 +1,225 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cylrec_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cylrec_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void cylrec_c ( SpiceDouble r,
+                   SpiceDouble lon,
+                   SpiceDouble z,
+                   SpiceDouble rectan[3] )
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   Convert from cylindrical to rectangular coordinates.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+   CONVERSION
+   COORDINATES
+
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  -------------------------------------------------
+   r          I   Distance of a point from z axis.
+   lon        I   Angle (radians) of a point from xZ plane
+   z          I   Height of a point above xY plane.
+   rectan     O   Rectangular coordinates of the point.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+   r          Distance of the point of interest from z axis.
+
+   lon        Cylindrical angle (in radians) of the point of
+              interest from XZ plane.
+
+   z          Height of the point above XY plane.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+   rectan     Rectangular coordinates of the point of interest.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+   Error free.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+   This routine transforms the coordinates of a point from
+   cylindrical to rectangular coordinates.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+   Below are two tables.
+
+   Listed in the first table (under r, lon and z ) are
+   cylindrical coordinate triples that approximately represent
+   points whose rectangular coordinates are taken from the set
+   {-1, 0, 1}.  (Angular quantities are given in degrees.)
+
+   The result of the code fragment
+
+        Use the CSPICE routine <a href="convrt_c.html">convrt_c</a> to convert the angular
+        quantities to radians
+
+        <a href="convrt_c.html">convrt_c</a> (  lon, &quot;DEGREES&quot;, &quot;RADIANS&quot;, lon );
+
+        <b>cylrec_c</b> ( r, lon, z, x );
+
+
+   are listed in the second parallel table under x(1), x(2) and x(3).
+
+
+     r         lon     z            x(1)       x(2)     x(3)
+     -------------------------       --------------------------
+     0.0000    0.0000   0.0000       0.0000     0.0000   0.0000
+     1.0000    0.0000   0.0000       1.0000     0.0000   0.0000
+     1.0000   90.0000   0.0000       0.0000     1.0000   0.0000
+     0.0000    0.0000   1.0000       0.0000     0.0000   1.0000
+     1.0000  180.0000   0.0000      -1.0000     0.0000   0.0000
+     1.0000  270.0000   0.0000       0.0000    -1.0000   0.0000
+     0.0000    0.0000  -1.0000       0.0000     0.0000  -1.0000
+     1.4142   45.0000   0.0000       1.0000     1.0000   0.0000
+     1.0000    0.0000   1.0000       1.0000     0.0000   1.0000
+     1.0000   90.0000   1.0000       0.0000     1.0000   1.0000
+     1.4142   45.0000   1.0000       1.0000     1.0000   1.0000
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   E.D. Wright     (JPL)
+   W.L. Taber      (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.0.1, 08-FEB-1998 (EDW)
+
+       Corrected and clarified header entries.  Removed return call.
+
+   -CSPICE Version 1.0.0, 25-OCT-1997 (EDW)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   cylindrical to rectangular
+</PRE>
+<h4>Link to routine cylrec_c source file <a href='../../../src/cspice/cylrec_c.c'>cylrec_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:28 2014</pre>
+
+</body>
+</html>
+

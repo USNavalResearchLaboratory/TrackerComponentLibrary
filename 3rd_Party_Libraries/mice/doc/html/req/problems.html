@@ -1,0 +1,1484 @@
+<HTML>
+<HEAD>
+<TITLE> Common Problems </TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+
+<A NAME="top"></A>
+
+<TABLE STYLE="text-align: left; margin-left: auto; margin-right: auto; width: 800px;" BORDER="0" CELLPADDING="5" CELLSPACING="2">
+<TBODY>
+<TR>
+  <TD STYLE="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+  <DIV ALIGN="right">
+    <SMALL><SMALL><A HREF="index.html">Index Page</A></SMALL></SMALL>
+  </DIV>
+  <B>Common Problems</B> </TD>
+</TR>
+<TR>
+  <TD STYLE="vertical-align: top;">
+
+<H2> Table of Contents
+</H2>
+
+<PRE>
+   <A HREF="#Common Problems">Common Problems</A>
+      <A HREF="#Abstract">Abstract</A>
+      <A HREF="#Introduction">Introduction</A>
+      <A HREF="#Getting it Right">Getting it Right</A>
+   <A HREF="#Problems by Functional Area">Problems by Functional Area</A>
+      <A HREF="#Accuracy">Accuracy</A>
+         <A HREF="#Problem: Arithmetic on time values yields incorrect results">Problem: Arithmetic on time values yields incorrect results</A>
+         <A HREF="#Problem: States from the SPK and NAVIO systems are not identical">Problem: States from the SPK and NAVIO systems are not identical</A>
+         <A HREF="#Problem: UTC-TDB conversion in SPICE does not appear accurate">Problem: UTC-TDB conversion in SPICE does not appear accurate</A>
+         <A HREF="#Problem: Light time corrections in SPICE seem to be inaccurate">Problem: Light time corrections in SPICE seem to be inaccurate</A>
+      <A HREF="#Body-Fixed Frames">Body-Fixed Frames</A>
+         <A HREF="#Problem: Inertial/Bodyfixed position conversion gives SPICE error">Problem: Inertial/Bodyfixed position conversion gives SPICE error</A>
+         <A HREF="#Problem: Inertial/Bodyfixed position conversion is incorrect">Problem: Inertial/Bodyfixed position conversion is incorrect</A>
+         <A HREF="#Problem: Inertial/Body-fixed state conversion is incorrect">Problem: Inertial/Body-fixed state conversion is incorrect</A>
+      <A HREF="#CK/C-Kernel/C-Matrix/Pointing">CK/C-Kernel/C-Matrix/Pointing</A>
+         <A HREF="#Problem: How does one determine the attributes of a C-kernel?">Problem: How does one determine the attributes of a C-kernel?</A>
+         <A HREF="#Problem: no pointing found at desired epoch">Problem: no pointing found at desired epoch</A>
+         <A HREF="#Problem: unclear what lookup tolerance to use">Problem: unclear what lookup tolerance to use</A>
+         <A HREF="#Problem: SPICE quaternions appear invalid">Problem: SPICE quaternions appear invalid</A>
+      <A HREF="#Coordinates">Coordinates</A>
+         <A HREF="#Problem: SPICE does not produce expected lat/lon values">Problem: SPICE does not produce expected lat/lon values</A>
+      <A HREF="#Documentation">Documentation</A>
+         <A HREF="#Problem: ``I can't find the function I need''">Problem: ``I can't find the function I need''</A>
+      <A HREF="#E-kernel">E-kernel</A>
+         <A HREF="#Problem: Query takes forever to complete">Problem: Query takes forever to complete</A>
+         <A HREF="#Problem: Writing EK file takes forever">Problem: Writing EK file takes forever</A>
+         <A HREF="#Problem: EK routines signal very mysterious errors">Problem: EK routines signal very mysterious errors</A>
+      <A HREF="#Error Handling">Error Handling</A>
+         <A HREF="#Problem: SPICE errors abort my application program">Problem: SPICE errors abort my application program</A>
+         <A HREF="#Problem: SPICE error messages are written to standard output">Problem: SPICE error messages are written to standard output</A>
+         <A HREF="#Problem: SPICE(NAMESDONOTMATCH) error is displayed">Problem: SPICE(NAMESDONOTMATCH) error is displayed</A>
+         <A HREF="#Problem: ``Oh, by the way...'' message is annoying">Problem: ``Oh, by the way...'' message is annoying</A>
+         <A HREF="#Problem: SPICE errors are not written to stderr">Problem: SPICE errors are not written to stderr</A>
+      <A HREF="#Euler Angles">Euler Angles</A>
+         <A HREF="#Problem: m2eul_c or xf2eul_c don't produce the expected angles">Problem: m2eul_c or xf2eul_c don't produce the expected angles</A>
+      <A HREF="#File I/O">File I/O</A>
+         <A HREF="#Problem: File open error is signaled from SPICE-based utility">Problem: File open error is signaled from SPICE-based utility</A>
+         <A HREF="#Problem: SPICE kernel reads fail within user's application">Problem: SPICE kernel reads fail within user's application</A>
+         <A HREF="#Problem: Logical unit conflict">Problem: Logical unit conflict</A>
+         <A HREF="#Problem: Error occurs when trying to close EK or DAS file">Problem: Error occurs when trying to close EK or DAS file</A>
+      <A HREF="#File Transfer">File Transfer</A>
+         <A HREF="#Problem: A text kernel causes a SPICE(INCOMPATIBLEEOL) error">Problem: A text kernel causes a SPICE(INCOMPATIBLEEOL) error</A>
+         <A HREF="#Problem: binary kernel imported from a second system does not work">Problem: binary kernel imported from a second system does not work</A>
+      <A HREF="#Installing the SPICE Toolkit">Installing the SPICE Toolkit</A>
+         <A HREF="#Problem: SPICE routines don't compile, link, or run">Problem: SPICE routines don't compile, link, or run</A>
+      <A HREF="#Linear Algebra">Linear Algebra</A>
+         <A HREF="#Problem: Bogus results returned by general-dimension functions">Problem: Bogus results returned by general-dimension functions</A>
+      <A HREF="#PCK/Pc-Kernel/Planetary constants">PCK/Pc-Kernel/Planetary constants</A>
+         <A HREF="#Problem: PCK file does not contain desired contents">Problem: PCK file does not contain desired contents</A>
+         <A HREF="#Problem: Earth orientation given by a text PCK is too inaccurate">Problem: Earth orientation given by a text PCK is too inaccurate</A>
+      <A HREF="#Performance">Performance</A>
+         <A HREF="#Problem: SPICE-based application is too slow">Problem: SPICE-based application is too slow</A>
+      <A HREF="#Quaternions">Quaternions</A>
+         <A HREF="#Problem: NAIF quaternions appear incorrect">Problem: NAIF quaternions appear incorrect</A>
+         <A HREF="#NAIF matrix--quaternion conversion appears incorrect">NAIF matrix--quaternion conversion appears incorrect</A>
+      <A HREF="#Reference frames">Reference frames</A>
+         <A HREF="#Problem: EME50 vectors from SPICE appear incorrect">Problem: EME50 vectors from SPICE appear incorrect</A>
+         <A HREF="#Problem: Vectors in body-fixed frame appear incorrect">Problem: Vectors in body-fixed frame appear incorrect</A>
+      <A HREF="#Software Application Integration">Software Application Integration</A>
+         <A HREF="#Problem: SPICE function names conflict with application's names">Problem: SPICE function names conflict with application's names</A>
+         <A HREF="#Problem: SPICE code is not thread safe.">Problem: SPICE code is not thread safe.</A>
+         <A HREF="#Problem: Application requires SPICE error output to be trapped">Problem: Application requires SPICE error output to be trapped</A>
+      <A HREF="#SPK/Ephemeris/States">SPK/Ephemeris/States</A>
+         <A HREF="#Problem: How can I interactively determine the coverage of an SPK?">Problem: How can I interactively determine the coverage of an SPK?</A>
+         <A HREF="#Problem: Can't determine what states are computable from SPK files">Problem: Can't determine what states are computable from SPK files</A>
+         <A HREF="#Problem: SPICE(SPKINSUFFDATA) error is signaled">Problem: SPICE(SPKINSUFFDATA) error is signaled</A>
+         <A HREF="#Problem: no data found for times near SPK endpoints">Problem: no data found for times near SPK endpoints</A>
+         <A HREF="#Problem: states vary over different program runs">Problem: states vary over different program runs</A>
+         <A HREF="#Problem: Velocity in rotating frame is incorrect">Problem: Velocity in rotating frame is incorrect</A>
+         <A HREF="#Problem: SPK file contains clearly invalid data">Problem: SPK file contains clearly invalid data</A>
+         <A HREF="#Problem: Osculating elements are wrong">Problem: Osculating elements are wrong</A>
+         <A HREF="#Problem: Aberration-corrected states are not as expected">Problem: Aberration-corrected states are not as expected</A>
+         <A HREF="#Problem: System barycenter-relative states are inconsistent">Problem: System barycenter-relative states are inconsistent</A>
+      <A HREF="#System errors">System errors</A>
+         <A HREF="#Problem: divide by zero">Problem: divide by zero</A>
+         <A HREF="#Problem: subscript out of range">Problem: subscript out of range</A>
+         <A HREF="#Problem: segmentation fault/memory access violation">Problem: segmentation fault/memory access violation</A>
+         <A HREF="#Problem: arithmetic overflow">Problem: arithmetic overflow</A>
+         <A HREF="#Problem: arithmetic underflow">Problem: arithmetic underflow</A>
+      <A HREF="#Time">Time</A>
+         <A HREF="#Problem: SPICE conversion between ET and UTC is incorrect">Problem: SPICE conversion between ET and UTC is incorrect</A>
+         <A HREF="#Problem: Stepping from start UTC to end UTC in loop fails">Problem: Stepping from start UTC to end UTC in loop fails</A>
+         <A HREF="#Problem: SPICE time strings do not have the desired format">Problem: SPICE time strings do not have the desired format</A>
+         <A HREF="#Problem: conversion between ET and SCLK fails">Problem: conversion between ET and SCLK fails</A>
+         <A HREF="#Problem: conversion of SCLK string to encoded SCLK fails">Problem: conversion of SCLK string to encoded SCLK fails</A>
+         <A HREF="#Problem: SCLK string is misinterpreted">Problem: SCLK string is misinterpreted</A>
+      <A HREF="#Icy">Icy</A>
+         <A HREF="#Problem: IDL segmentation fault">Problem: IDL segmentation fault</A>
+
+</PRE>
+
+<HR SIZE=3 NOSHADE>
+
+<BR><BR>
+<A NAME="Common Problems"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Common Problems
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+<PRE>
+   Failure is not an option.
+ 
+    -- "Apollo 13"
+</PRE>
+   Last revised on 2007 FEB 11 by E. D. Wright
+<P>
+ 
+<BR><BR>
+<A NAME="Abstract"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Abstract
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Descriptions of the more commonly encountered SPICE problems, broken
+   down into functional areas with suggestions on how to avoid problems.
+<P>
+ 
+<BR><BR>
+<A NAME="Introduction"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Introduction
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   While NAIF strives to make correct use of SPICE an effortless
+   experience, more remains to be done. NAIF's decade of experience with
+   SPICE customers shows certain problems seem to recur fairly regularly.
+   This document aims to assist you in preventing these problems, or if
+   necessary, troubleshooting them.
+<P>
+ 
+   Most of this document is concerned with matching symptoms to possible
+   causes and solutions. However, before starting to write a SPICE-based
+   application, we strongly encourage you to consider the steps necessary
+   to avoid problems.
+<P>
+ 
+<BR><BR>
+<A NAME="Getting it Right"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Getting it Right
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   It's generally much easier and quicker to make sure you're doing things
+   right in the first place than it is to explain why your program isn't
+   behaving as expected. For best results, carefully ascertain you have the
+   proper input data and problem definition before proceeding.
+<P>
+ 
+   One of the most frequently occurring user-support questions fielded by
+   NAIF is basically ``I compared my results from SPICE with [an alternate
+   source], and they disagree. Why?'' The answer usually is the two
+   computations are for some unintended reason solving different problems.
+<P>
+ 
+   Here's a checklist of things to get right before embarking on solving a
+   problem with SPICE, or comparing SPICE results with those obtained from
+   alternate sources.
+<P>
+ 
+<UL>
+<TT>1.</TT> Read the directions: read the relevant SPICE documentation, both function
+headers and Required Reading files. SPICE software interfaces aspire to be
+intuitively clear, but may fall short.
+<BR><BR></UL>
+<UL>
+<TT>2.</TT> Understand the definitions: many geometric quantities have a variety of
+definitions. For example, there are a variety of ways of computing a
+sub-observer point, involving both different applications of light time
+corrections and different definitions of ``sub-point'' (closest point to
+the observer vs. surface intercept of observer-target center vector).
+<BR><BR></UL>
+<UL>
+<TT>3.</TT> Understand the expected accuracy and precision: for example, the
+Astronomical Almanac frequently presents results having claimed accuracy of
+0.01 degree. These cannot be expected to agree with SPICE results at the
+arcsecond level. On the other hand, if your application requires
+extraordinarily high accuracy, you may need to check whether SPICE meets
+your requirements.
+<BR><BR></UL>
+<UL>
+<TT>4.</TT> Use the right files: this is probably the single most frequent cause of
+disagreements. You MUST use the same ephemeris, rotational elements, shape
+models, pointing, instrument models, frame definitions, leapseconds,
+spacecraft clock coefficients, and so forth if you're attempting to match
+results from alternative computations.
+<BR><BR></UL>
+<UL>
+<TT>5.</TT> Use the right time: another major cause of disagreements. Is the input time
+supposed to be UTC, ``ET'' or TDB (barycentric dynamical time), TDT
+(terrestrial dynamical time), TAI, etc.? Frequently calendar dates and
+Julian dates are written down without specification of whether they're UTC
+or TDB, even though the distinction is critical for high-accuracy work.
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> In order for SPICE-based time conversions to be correct, current
+leapseconds and/or SCLK (spacecraft clock) kernels are essential.
+<BR><BR></UL>
+<UL>
+<TT>6.</TT> Use the right reference frame: state vectors will not compare well if
+they're specified relative to different reference frames. ``EME50'' frames
+are problematic because there are a variety of similar but non-identical
+frames all designated by this name. Examples are: B1950, FK4, DE-125.
+Implementations of body-fixed frames may differ as well. Also, some
+extended bodies have a variety of frames associated with them: Jupiter
+system I vs. system III for example.
+<BR><BR></UL>
+<UL>
+<TT>7.</TT> Use the right coordinate system: sometimes disagreements result from
+mismatched coordinate systems, for example planetocentric vs. planetodetic
+coordinates.
+<BR><BR></UL>
+<UL>
+<TT>8.</TT> Use the right aberration corrections: there can be a large difference
+between geometric (uncorrected) states and states corrected for light-time
+or light time and stellar aberration. When computing quantities involving
+surface locations on extended bodies, whether or not the rotation is
+retarded by light time is an issue.
+<BR><BR></UL>
+<UL>
+<TT>9.</TT> Use the current software: out-of-date Toolkits may contain bugs corrected
+in the current release.
+<BR><BR></UL>
+<UL>
+<TT>10.</TT> When diagnosing a problem, make sure a problem exists. Correct answers are
+sometimes counterintuitive. Not infrequently, a disagreement between a
+SPICE result and a ``cross-check'' result occurs because the latter is not
+mathematically equivalent to the former.
+<BR><BR></UL>
+   In the discussion below, it's implicit that any of the problem areas
+   listed above should be examined whenever you diagnose a failure.
+<P>
+ 
+<BR><BR>
+<A NAME="Problems by Functional Area"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Problems by Functional Area
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   The functional areas are listed alphabetically.
+<P>
+ 
+<BR><BR>
+<A NAME="Accuracy"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Accuracy
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   While for general applications, SPICE is usually capable of much higher
+   accuracy than required, for some specialized applications such as radio
+   science, certain SPICE-based computations may not be sufficiently
+   accurate.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: Arithmetic on time values yields incorrect results"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: Arithmetic on time values yields incorrect results
+</H3><P><BR><BR>
+   Within the SPICE system TDB times are represented as double precision
+   numbers, and these are not generally accurate to better than 1.E-7
+   second.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: States from the SPK and NAVIO systems are not identical"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: States from the SPK and NAVIO systems are not identical
+</H3><P><BR><BR>
+   This problem to date has proved illusory.
+<P>
+ 
+   State vectors obtained from SPK files have been tested and shown to
+   agree with those obtained from the parent NAVIO files to levels orders
+   of magnitude below the knowledge error in the data. The differences in
+   state vectors returned by the two systems tend to reflect round-off
+   level differences in the handling of time.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: UTC-TDB conversion in SPICE does not appear accurate"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: UTC-TDB conversion in SPICE does not appear accurate
+</H3><P><BR><BR>
+   This is not truly a common problem; it has arisen only in the context of
+   radio science applications.
+<P>
+ 
+   The UTC-TDB conversion in SPICE is accurate to about 4.E-5 seconds.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: Light time corrections in SPICE seem to be inaccurate"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: Light time corrections in SPICE seem to be inaccurate
+</H3><P><BR><BR>
+   Versions of the SPICE Toolkit released prior to May, 1995 used an
+   unnecessarily inaccurate light time computation: they returned the
+   distance between the geometric positions of observer and target at the
+   request time, divided by the speed of light. Later versions of SPICE use
+   the position of the target evaluated at the light-time corrected epoch.
+<P>
+ 
+   Be aware the SPICE aberration corrections do not account for
+   relativistic effects.
+<P>
+ 
+<BR><BR>
+<A NAME="Body-Fixed Frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Body-Fixed Frames
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Problem: Inertial/Bodyfixed position conversion gives SPICE error"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: Inertial/Bodyfixed position conversion gives SPICE error
+</H3><P><BR><BR>
+   Make sure you're using the correct ID code for the body.
+<P>
+ 
+   Check your kernel file lists data for the body in question at the epoch
+   of interest. If you're using a text PCK, this problem occurs because
+   data is simply absent for the body in question.
+<P>
+ 
+   Binary PCK files have coverage for limited time spans. Make sure the
+   request time falls within the coverage interval for the body if a binary
+   PCK is used. The available coverage may be ascertained by summarizing
+   the PCK file with SPACIT.
+<P>
+ 
+   If the rotation of the body is retarded by one-way light time, remember
+   PCK data for the body must be available at the light-time corrected
+   epoch.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: Inertial/Bodyfixed position conversion is incorrect"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: Inertial/Bodyfixed position conversion is incorrect
+</H3><P><BR><BR>
+   Rotational models for extended bodies vary. For any given body, the
+   model and model parameter values may evolve over time, so verify the
+   version you're using is correct.
+<P>
+ 
+   Some bodies have rotational models based on different physical
+   attributes, for example rotation of the magnetic field or rotation of
+   the atmosphere. Confirm the model you expect is provided by the PCK file
+   you're using.
+<P>
+ 
+   The epoch at which the target body's orientation should be evaluated
+   depends on whether the actual or apparent orientation of the body is to
+   be computed. Check whether the request epoch should be adjusted for
+   light time.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: Inertial/Body-fixed state conversion is incorrect"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: Inertial/Body-fixed state conversion is incorrect
+</H3><P><BR><BR>
+   All of the considerations listed above apply.
+<P>
+ 
+   Additionally, note that velocity transformations involve the time
+   derivative of the inertial-to-bodyfixed transformation. If P and V are
+   inertially-referenced position and velocity vectors, M is the
+   inertial-to-bodyfixed transformation matrix, and P_b and V_b are the
+   body-fixed position and velocity, then we have (by the Chain Rule for
+   derivatives):
+<P>
+ 
+<PRE>
+   P_b = M*P
+   V_b = M*V +  (dM/dt)*P
+</PRE>
+   Some applications external to SPICE erroneously ignore the second term
+   in the second equation.
+<P>
+ 
+<BR><BR>
+<A NAME="CK/C-Kernel/C-Matrix/Pointing"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> CK/C-Kernel/C-Matrix/Pointing
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Problem: How does one determine the attributes of a C-kernel?"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: How does one determine the attributes of a C-kernel?
+</H3><P><BR><BR>
+   Use CKBRIEF or SPACIT to summarize the kernel. Depending on your
+   computer system, you may need to log the output to a file to view it
+   conveniently.
+<P>
+ 
+   C-kernel data are contained in a series of one or more chunks called
+   ``segments.'' SPACIT will output a series of summaries, one for each
+   segment. SPACIT will tell you what instrument the pointing data is for,
+   which base frame the pointing is referenced to, whether angular velocity
+   data are also present in the segment, and the data type (internal
+   representation) of the segment. The time bounds of each segment are also
+   shown.
+<P>
+ 
+   CKBRIEF is a more flexible and robust summary program than SPACIT; you
+   normally will find CKBRIEF more convenient to use. However, the current
+   version of CKBRIEF does not output the data types of segments.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: no pointing found at desired epoch"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: no pointing found at desired epoch
+</H3><P><BR><BR>
+   Check the ID code you're supplying to the CK reader matches that in the
+   C-kernel. If you're interested in pointing for a spacecraft instrument,
+   you may need to get pointing for another entity, usually the spacecraft
+   bus or a scan platform, then apply pointing offsets from a Frame kernel
+   or Instrument kernel to obtain instrument pointing.
+<P>
+ 
+   If the ID code is correct, it may be the tolerance value supplied to the
+   C-kernel reader function, either <a href="../cspice/ckgp_c.html">ckgp_c</a> or <a href="../cspice/ckgpav_c.html">ckgpav_c</a>, should be
+   increased. By increasing the tolerance value you supply to the CK reader
+   called in your application, you may be able to pick up pointing at a
+   nearby time sufficiently close to your time of interest.
+<P>
+ 
+   There may be no nearby pointing due to coverage gaps in the C-kernel,
+   either between segments or in the interior of some segment. C-kernel
+   segments, unlike SPK segments, do not necessarily have continuous
+   coverage. In fact, type 1 C-kernels contain discrete pointing and do not
+   yield interpolated pointing. C-kernel data types 2-4 have coverage over
+   a series of time intervals, but there may be gaps between the intervals.
+<P>
+ 
+   Finally, you may be using the CK wrong reader. The reader <a href="../cspice/ckgpav_c.html">ckgpav_c</a>
+   returns pointing data only if pointing data AND angular velocity data
+   exists at the request time. You should use <a href="../cspice/ckgp_c.html">ckgp_c</a> if your C-kernel lacks
+   angular velocity data as <a href="../cspice/ckgp_c.html">ckgp_c</a> doesn't require the presence such data.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: unclear what lookup tolerance to use"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: unclear what lookup tolerance to use
+</H3><P><BR><BR>
+   The choice of lookup tolerance can be a complex issue involving
+   trade-offs between accuracy and completing as much data processing as
+   possible. Choosing a non-zero tolerance means accepting pointing for a
+   time other than your time of interest. What magnitude of inaccuracy is
+   introduced by this choice? It depends on how much the structure of
+   interest can or did move during the tolerance interval. Knowledge of the
+   spacecraft or structure dynamics may be required to select the maximum
+   acceptable tolerance. This may vary depending on mission phase, ACS
+   (attitude control system) state, the specific structure for which
+   pointing is desired, or other time-dependent factors.
+<P>
+ 
+   There are a few cases that do admit simple guidelines:
+<P>
+ 
+   If you're using a type 1 C-kernel (discrete pointing), the tolerance
+   should normally be at least half the nominal spacing between the
+   pointing instances. Otherwise, no pointing will be found at request
+   times near the midpoints between times where pointing is available.
+<P>
+ 
+   If you're using a C-kernel of type 2, 3, or 4, and you know the data
+   does not suffer from gaps, you may use a tolerance of zero. This choice
+   guarantees you'll get pointing interpolated to your request time. A
+   tolerance of zero is frequently acceptable when using predict pointing,
+   which normally should not have any coverage anomalies.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: SPICE quaternions appear invalid"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: SPICE quaternions appear invalid
+</H3><P><BR><BR>
+   See ``Quaternions'' below.
+<P>
+ 
+<BR><BR>
+<A NAME="Coordinates"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Coordinates
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Problem: SPICE does not produce expected lat/lon values"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: SPICE does not produce expected lat/lon values
+</H3><P><BR><BR>
+   See ``Body-Fixed Frames'' above.
+<P>
+ 
+   If the Cartesian body-fixed coordinates of a point are as expected,
+   latitude and longitude may differ because of
+<P>
+ 
+<UL>
+<TT>--</TT> The difference between planetocentric and planetodetic latitude.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> The difference between planetocentric and planetographic latitude or
+longitude.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Differences in the range of allowed longitude values.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Differences in angular units. SPICE uses radians in all coordinate
+transformation functions.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> For planetodetic or planetographic coordinates, latitude is a function of
+the equatorial and polar radii of the defining body. Check these values are
+as expected.
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Documentation"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Documentation
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Problem: ``I can't find the function I need''"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: ``I can't find the function I need''
+</H3><P><BR><BR>
+   Use the SPICE permuted index in the /doc subdirectory of your SPICE
+   Toolkit installation. The permuted index associates short functional
+   descriptions with names of CSPICE functions. You can browse this
+   document or search/grep it for keywords.
+<P>
+ 
+   Only a small fraction of the functions in CSPICE tend to be called
+   directly from users' applications. To familiarize yourself with this
+   subset of functions, look at the document ``Most Used Subroutines'' in
+   the /doc directory of your SPICE Toolkit installation.
+<P>
+ 
+   To quickly get up to speed in using the elementary features of SPICE,
+   examine the cookbook programs in the
+<P>
+ 
+<PRE>
+   /src/cookbook
+</PRE>
+   subdirectory of your SPICE installation.
+<P>
+ 
+   For help in understanding how SPICE routines are combined to solve more
+   involved problems, examine the code examples in the Required Reading
+   files in the /doc subdirectory of your Toolkit.
+<P>
+ 
+<BR><BR>
+<A NAME="E-kernel"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> E-kernel
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Problem: Query takes forever to complete"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: Query takes forever to complete
+</H3><P><BR><BR>
+   For queries not involving the ordering of output, this sometimes happens
+   because inadequate constraints were supplied. Queries on large databases
+   should employ a WHERE clause to restrict to a manageable size the set of
+   matching rows. A typical example of a query generating a huge number of
+   matching rows would be an attempted equi-join with the equi-join
+   constraint accidentally omitted.
+<P>
+ 
+   For queries involving ordering on a single column, generating more than
+   50000 matching rows will guarantee a long wait, because scratch files
+   will be used to store temporary results.
+<P>
+ 
+   Queries involving multiple order-by columns are typically slow because
+   scratch files are used when comparisons are required on columns other
+   than the primary order-by column.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: Writing EK file takes forever"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: Writing EK file takes forever
+</H3><P><BR><BR>
+   Use the ``fast loader'' routines, which are roughly two orders of
+   magnitude faster than the record-oriented writers. See the header of
+   <a href="../cspice/ekifld_c.html">ekifld_c</a> (EK, initiate fast load) for an example.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: EK routines signal very mysterious errors"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: EK routines signal very mysterious errors
+</H3><P><BR><BR>
+   Because of the complexity of the EK system, errors in application calls
+   to EK routines are sometimes diagnosed at locations very remote from the
+   original error. Mismatched arguments in function calls are the typical
+   root cause of these error messages.
+<P>
+ 
+<BR><BR>
+<A NAME="Error Handling"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Error Handling
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Problem: SPICE errors abort my application program"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: SPICE errors abort my application program
+</H3><P><BR><BR>
+   The default error handling response is to abort the application. This
+   response can be changed so SPICE routines return on entry. See the Error
+   Required Reading, <a href="../req/error.html">error.req</a>, or the function <a href="../cspice/erract_c.html">erract_c</a>.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: SPICE error messages are written to standard output"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: SPICE error messages are written to standard output
+</H3><P><BR><BR>
+   The target file for SPICE error messages can be reset. See the Error
+   Required Reading, <a href="../req/error.html">error.req</a>, or the function <a href="../cspice/errdev_c.html">errdev_c</a>.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: SPICE(NAMESDONOTMATCH) error is displayed"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: SPICE(NAMESDONOTMATCH) error is displayed
+</H3><P><BR><BR>
+   If your application directly calls <a href="../cspice/chkin_c.html">chkin_c</a> and <a href="../cspice/chkout_c.html">chkout_c</a>, unpaired calls
+   to these routines may result in this error message. Due to recursion
+   restrictions in FORTRAN, this message does not pass through the normal
+   SPICE error handling mechanism.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: ``Oh, by the way...'' message is annoying"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: ``Oh, by the way...'' message is annoying
+</H3><P><BR><BR>
+   The set of SPICE error messages can be re-configured. Any type of
+   message (long, short, traceback, default) can be suppressed. See the
+   Error Required Reading document, <a href="../req/error.html">error.req</a>, or the function <a href="../cspice/errprt_c.html">errprt_c</a>.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: SPICE errors are not written to stderr"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: SPICE errors are not written to stderr
+</H3><P><BR><BR>
+   The current CSPICE error handling response is inherited from the FORTRAN
+   library SPICELIB. In Standard ANSI FORTRAN 77 there is no distinct error
+   stream.
+<P>
+ 
+<BR><BR>
+<A NAME="Euler Angles"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Euler Angles
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Problem: m2eul_c or xf2eul_c don't produce the expected angles"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: <a href="../cspice/m2eul_c.html">m2eul_c</a> or <a href="../cspice/xf2eul_c.html">xf2eul_c</a> don't produce the expected angles
+</H3><P><BR><BR>
+   Generally, Euler angles are unique only when their ranges are
+   appropriately restricted. Otherwise, there are usually multiple
+   combinations of angles that map to the same rotation matrix.
+<P>
+ 
+   Review the headers of <a href="../cspice/m2eul_c.html">m2eul_c</a> or <a href="../cspice/xf2eul_c.html">xf2eul_c</a> carefully to determine what
+   output ranges are used.
+<P>
+ 
+<BR><BR>
+<A NAME="File I/O"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> File I/O
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Problem: File open error is signaled from SPICE-based utility"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: File open error is signaled from SPICE-based utility
+</H3><P><BR><BR>
+   Attempts to open a file for read access will fail if that file does not
+   exist.
+<P>
+ 
+   Attempts to open a new file will normally fail if that file exists.
+<P>
+ 
+   Any open attempt will fail if the application attempting the operation
+   does not have permission to access the file.
+<P>
+ 
+   SPICE utilities and some CSPICE functions use scratch files. Scratch
+   files are sometimes kept in locations other than the user's current or
+   home directory. If permission to write to the scratch directory is not
+   granted, a write error will occur.
+<P>
+ 
+   SPICE kernel loader routines attempt to diagnose and report errors when
+   used to open inappropriate kernel types.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: SPICE kernel reads fail within user's application"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: SPICE kernel reads fail within user's application
+</H3><P><BR><BR>
+   Read errors can occur when a file is corrupted. They also can occur when
+   a file is deleted while a SPICE application is attempting a read.
+<P>
+ 
+   Logical unit conflicts can cause nonsense data to be returned when
+   reading SPICE kernels. The symptoms can be obscure. See below.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: Logical unit conflict"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: Logical unit conflict
+</H3><P><BR><BR>
+   Logical unit conflicts are peculiar to FORTRAN applications. However,
+   they may occur in C applications that link to both CSPICE and other C
+   code generated by running f2c on FORTRAN source code.
+<P>
+ 
+   The SPICE kernel loaders allocate logical units at run time. SPICE does
+   not allocate logical units currently in use.
+<P>
+ 
+   If a user application loads kernels or otherwise performs actions that
+   cause SPICE to allocate logical units, and then uses those same logical
+   units for its own I/O operations, a logical unit conflict exists. SPICE
+   will then attempt to read from whatever file the application has
+   connected to the logical units SPICE had allocated. This will typically
+   result in SPICE reading something other than valid kernel data.
+<P>
+ 
+   There are a couple of simple solutions. First, if an application is
+   known to use a particular set of units, you can tell SPICE not to touch
+   those units by calling reslun_.
+<P>
+ 
+   If you are writing a new application, it may be convenient to use
+   getlun_ to allocate logical units at run time. This avoids hard-coded
+   logical units, which may cause portability and integration problems.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: Error occurs when trying to close EK or DAS file"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: Error occurs when trying to close EK or DAS file
+</H3><P><BR><BR>
+   The SPICE DAS system, which underlies the EK system, requires a scratch
+   file for sorting when a newly written file is closed. Attempting to open
+   this file could cause a system limit on open files or logical units to
+   be encountered, resulting in a file open error.
+<P>
+ 
+   If the application does not have permission to open the scratch file, an
+   error will be signaled. See also ``File I/O.''
+<P>
+ 
+   If the scratch file is opened successfully, it is possible the disk
+   space will be exhausted while writing to the file. This will result in a
+   write error.
+<P>
+ 
+<BR><BR>
+<A NAME="File Transfer"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> File Transfer
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Problem: A text kernel causes a SPICE(INCOMPATIBLEEOL) error"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: A text kernel causes a SPICE(INCOMPATIBLEEOL) error
+</H3><P><BR><BR>
+   These problems usually occur after accidentally performing a binary ftp
+   transfer of the text file in question. SPICE use of such files can be
+   expected to work only if the transfer is between systems having
+   identical text file formats.
+<P>
+ 
+   It is also possible the file was corrupted in transfer due to running
+   out of disk space on the target system during the transfer.
+<P>
+ 
+   SPICE Toolkits since version N57 include an error check to text file
+   readers to ensure the files had the correct line terminators for the
+   platform. NAIF added this check as loading non-native text kernels
+   proved a continual problem for SPICE users - trying to load a non-native
+   kernel usually caused no change to the kernel pool state resulting in
+   unexpected results and confused users.
+<P>
+ 
+   Most (if not all) modern Microsoft compilers perform an internal
+   conversion from DOS terminators to Unix terminators, explaining why one
+   seldom saw this problem on Windows. The implementation of the error
+   check may cause the error signal on Windows when
+<P>
+ 
+   As of Toolkit version N59, CSPICE/Icy text kernel loaders perform the
+   conversion between text line terminators on Windows and Unix platforms;
+   SPICELIB (the FORTRAN toolkit library) lacks this conversion capability
+   and so signals INCOMPATIBLEEOL.
+<P>
+ 
+   If the file being transferred is a NAIF ``transfer format'' version of a
+   binary kernel, TOBIN can often diagnose file corruption when attempting
+   the conversion to binary format.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: binary kernel imported from a second system does not work"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: binary kernel imported from a second system does not work
+</H3><P><BR><BR>
+   If the file was transferred between two systems with compatible binary
+   file formats, for example, between HP and Sun workstations, the problem
+   may be due to accidentally having transferred the file in ASCII rather
+   than binary ftp mode.
+<P>
+ 
+   Also, it is possible the disk space was exhausted on the target system
+   during the transfer.
+<P>
+ 
+   If the file was transferred between two systems with incompatible binary
+   file formats, for example an HP workstation and a PC, the problem is
+   that binary kernels on one system are not designed to work on the other.
+   The kernel must be converted to transfer format on the source system,
+   the transfer format file must be transferred in ASCII mode, and the
+   received transfer file must be converted back to binary format on the
+   target system. Use TOXFR and TOBIN, respectively, to perform conversions
+   from binary to transfer format and from transfer format to binary
+   format. The utility SPACIT is also capable of performing these
+   conversions. See the User's Guides for any of these utilities --
+   <a href="../ug/tobin.html">tobin.ug</a>, toxfr.ug, <a href="../ug/spacit.html">spacit.ug</a> -- for further information.
+<P>
+ 
+<BR><BR>
+<A NAME="Installing the SPICE Toolkit"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Installing the SPICE Toolkit
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Problem: SPICE routines don't compile, link, or run"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: SPICE routines don't compile, link, or run
+</H3><P><BR><BR>
+   First, the C compiler must be capable of being invoked from the command
+   line in the directory where the installation is done.
+<P>
+ 
+   On some systems, the compiler may not be installed, or libraries
+   required by the compiler may not be available.
+<P>
+ 
+   If your application cannot link against CSPICE, or it links but does not
+   run, there may be a compiler or system library version incompatibility.
+   This problem can occur if you have installed the CSPICE library simply
+   by unpacking a delivery tar file, and there is a discrepancy between the
+   version of your compiler and that used to create the object modules in
+   the delivery tar file. This problem may be solved by doing a complete
+   build of the SPICE Toolkit on your system. See the installation
+   instructions for details.
+<P>
+ 
+   In general, if you have difficulty building the SPICE Toolkit, it may be
+   a useful test to see whether you can build a simple ``hello world''
+   program in the same environment. If that test fails, it's time to
+   consult with your system administrator.
+<P>
+ 
+<BR><BR>
+<A NAME="Linear Algebra"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Linear Algebra
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Problem: Bogus results returned by general-dimension functions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: Bogus results returned by general-dimension functions
+</H3><P><BR><BR>
+   The general-dimension matrix and vector functions, unlike their
+   3-dimensional counterparts, usually do not permit overwriting input
+   arguments with output values. Check the function headers for details.
+<P>
+ 
+<BR><BR>
+<A NAME="PCK/Pc-Kernel/Planetary constants"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> PCK/Pc-Kernel/Planetary constants
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Problem: PCK file does not contain desired contents"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: PCK file does not contain desired contents
+</H3><P><BR><BR>
+   PCK kernels supplied by NAIF normally contain data intended for use by a
+   general class of users. PCK kernels are text files and can be edited, so
+   you can easily customize an existing one, deleting unnecessary data,
+   adding new data, or changing existing values.
+<P>
+ 
+   If you modify a kernel supplied by NAIF, it's a good idea to comment the
+   file so as to make clear what changes were made. All NAIF text kernels
+   allow comments to be inserted. See Kernel Required Reading, <a href="../req/kernel.html">kernel.req</a>,
+   for further information on the NAIF text kernel format.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: Earth orientation given by a text PCK is too inaccurate"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: Earth orientation given by a text PCK is too inaccurate
+</H3><P><BR><BR>
+   The CSPICE PCK system supports binary PCK files that are capable of
+   supporting high-accuracy rotation models. Currently NAIF has the
+   capability of producing high-accuracy PCK files for the earth; these
+   take into account precession, nutation, TAI-UT1, polar motion, and
+   nutation corrections.
+<P>
+ 
+   NAIF is also developing the capability of producing high-accuracy PCK
+   files for the moon.
+<P>
+ 
+<BR><BR>
+<A NAME="Performance"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Performance
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Problem: SPICE-based application is too slow"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: SPICE-based application is too slow
+</H3><P><BR><BR>
+   Loading kernel files in a loop causes slow execution. Normally, kernel
+   files should be loaded once per program run, usually during
+   initialization.
+<P>
+ 
+   Two possible ``global'' improvements are using compiler optimization and
+   disabling CSPICE call tracing.
+<P>
+ 
+   The FORTRAN library SPICELIB is normally built without using compiler
+   optimization. On some systems, in particular Sun Sparc machines running
+   Sun FORTRAN, using optimization has resulted in some code generation
+   errors. NAIF is working to resolve this problem. CSPICE on the other
+   hand is always built using compiler optimization. If you have the
+   opportunity to use either library, using CSPICE may result in a
+   considerable speed-up.
+<P>
+ 
+   CSPICE applications can be speed up somewhat by disabling the function
+   call tracing done internally by CSPICE. This is done by calling <a href="../cspice/trcoff_c.html">trcoff_c</a>
+   once during program initialization:
+<P>
+ 
+<PRE>
+   <a href="../cspice/trcoff_c.html">trcoff_c</a>();
+</PRE>
+   Normally it is desirable to retain CSPICE's call tracing while an
+   application is still being debugged. See Error Required Reading,
+   <a href="../req/error.html">error.req</a>, or the header of <a href="../cspice/trcoff_c.html">trcoff_c</a> for further information.
+<P>
+ 
+   It's also possible to achieve speed gains via local code modifications.
+   Before trying this, it's a good idea to profile your application to
+   locate bottlenecks.
+<P>
+ 
+   Often it's possible to re-organize your SPICE calls so as to minimize
+   the number of expensive operations. There is usually a speed/complexity
+   trade-off to consider when making such changes. For example, if you're
+   computing a large number of geometric quantities that all require the
+   same spacecraft-to-target state vector, and each quantity is computed by
+   a separate function, you may want to compute the state vector once and
+   pass it into the geometry routines.
+<P>
+ 
+   Sometimes speed gains can be achieved by calling lower-level CSPICE
+   functions. For example, if you're computing the apparent states of many
+   targets as seen from a single observer at a given epoch, rather than
+   using the high-level reader <a href="../cspice/spkezr_c.html">spkezr_c</a>, you can look up the observer state
+   relative to the solar system barycenter via <a href="../cspice/spkssb_c.html">spkssb_c</a>, then separately
+   look up each apparent target state relative to the solar system
+   barycenter via <a href="../cspice/spkapp_c.html">spkapp_c</a>. This eliminates redundant computations of the
+   observer's state.
+<P>
+ 
+<BR><BR>
+<A NAME="Quaternions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Quaternions
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Problem: NAIF quaternions appear incorrect"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: NAIF quaternions appear incorrect
+</H3><P><BR><BR>
+   There are two styles of quaternions in common use. The NAIF style is in
+   common use by mathematicians and physicists; the alternate style is in
+   common use throughout JPL and elsewhere in the aerospace engineering
+   community.
+<P>
+ 
+   NAIF style quaternions are related to rotations as follows: if a
+   rotation transformation rotates a vector V in the right-handed sense
+   about an axis
+<P>
+ 
+<PRE>
+   A = (a1, a2, a3)
+</PRE>
+   by an angle of theta radians, then the NAIF quaternion representing this
+   rotation is
+<P>
+ 
+<PRE>
+   ( cos(theta/2), sin(theta/2)a1, sin(theta/2)a2, sin(theta/2)a3 )
+</PRE>
+   A NAIF quaternion
+<P>
+ 
+<PRE>
+   ( q0, q1, q2, q3 )
+</PRE>
+   can be transformed to the alternate style
+<P>
+ 
+<PRE>
+   ( q0', q1', q2', q3' )
+</PRE>
+   by the equations
+<P>
+ 
+<PRE>
+   q0'  =  -q1
+   q1'  =  -q2
+   q2'  =  -q3
+   q3'  =   q0
+</PRE>
+   These equations also indicate how to transform the alternate quaternion
+   style to the NAIF style.
+<P>
+ 
+<BR><BR>
+<A NAME="NAIF matrix--quaternion conversion appears incorrect"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> NAIF matrix--quaternion conversion appears incorrect
+</H3><P><BR><BR>
+   The formulas for conversion between quaternions and matrices depend on
+   the quaternion style in use. See the section above.
+<P>
+ 
+<BR><BR>
+<A NAME="Reference frames"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Reference frames
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Problem: EME50 vectors from SPICE appear incorrect"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: EME50 vectors from SPICE appear incorrect
+</H3><P><BR><BR>
+   See discussion of reference frames in ``Getting it Right.''
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: Vectors in body-fixed frame appear incorrect"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: Vectors in body-fixed frame appear incorrect
+</H3><P><BR><BR>
+   See ``Body-Fixed Frames.''
+<P>
+ 
+<BR><BR>
+<A NAME="Software Application Integration"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Software Application Integration
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Problem: SPICE function names conflict with application's names"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: SPICE function names conflict with application's names
+</H3><P><BR><BR>
+   NAIF cannot change the names of functions in its published interfaces.
+   However, NAIF can supply on request a special version of a library
+   having special suffixed or prefixed names that are unlikely to collide
+   with names used elsewhere.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: SPICE code is not thread safe."></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: SPICE code is not thread safe.
+</H3><P><BR><BR>
+   No mechanisms to ensure thread safe behavior exist in standard ANSI C or
+   FORTRAN 77. NAIF has no plans to use non-standard features in CSPICE.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: Application requires SPICE error output to be trapped"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: Application requires SPICE error output to be trapped
+</H3><P><BR><BR>
+   See ``Error Handling.''
+<P>
+ 
+<BR><BR>
+<A NAME="SPK/Ephemeris/States"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> SPK/Ephemeris/States
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Problem: How can I interactively determine the coverage of an SPK?"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: How can I interactively determine the coverage of an SPK?
+</H3><P><BR><BR>
+   Use the SPICE utility program BRIEF to summarize the SPK file.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: Can't determine what states are computable from SPK files"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: Can't determine what states are computable from SPK files
+</H3><P><BR><BR>
+   Good question. SPICE does not currently contain routines that provide a
+   convenient answer.
+<P>
+ 
+   It is possible to examine loaded kernels at run time to determine their
+   coverage. This is done via the DAF search functions. See the DAF
+   Required Reading, <a href="../req/daf.html">daf.req</a>, or the headers of <a href="../cspice/dafbfs_c.html">dafbfs_c</a>, <a href="../cspice/dafbbs_c.html">dafbbs_c</a>,
+   <a href="../cspice/daffna_c.html">daffna_c</a>, <a href="../cspice/daffpa_c.html">daffpa_c</a>, <a href="../cspice/dafgs_c.html">dafgs_c</a>, and <a href="../cspice/dafus_c.html">dafus_c</a>.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: SPICE(SPKINSUFFDATA) error is signaled"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: SPICE(SPKINSUFFDATA) error is signaled
+</H3><P><BR><BR>
+   The most common reason for this is that the user neglected to load a
+   necessary SPK file.
+<P>
+ 
+   Computation of aberration-corrected states requires that sufficient data
+   be available to compute the observer and target states relative to the
+   solar system barycenter. The target state must be computable over the
+   interval from the request time back to the request time minus one-way
+   light-time. So don't request an aberration-corrected state at or near
+   the coverage start time of an SPK file.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: no data found for times near SPK endpoints"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: no data found for times near SPK endpoints
+</H3><P><BR><BR>
+   SPK coverage boundaries shown by SPACIT are approximate.
+<P>
+ 
+   Also, if aberration corrections are used, state requests will result in
+   look-ups of the target state for epochs prior to the request time. See
+   ``SPICE(SPKINSUFFDATA) error is signaled'' above.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: states vary over different program runs"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: states vary over different program runs
+</H3><P><BR><BR>
+   If multiple SPK files contain ``competing'' data, that is redundant
+   ephemeris data for a given body, center and time, then the SPK system
+   selects the data based on the order in which the competing files were
+   loaded, with files loaded last taking precedence.
+<P>
+ 
+   Varying the order in which the files were loaded can affect the state
+   vectors returned by the SPK system.
+<P>
+ 
+   Of course, any change in the set of kernels used may affect results
+   computed by the SPICE system.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: Velocity in rotating frame is incorrect"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: Velocity in rotating frame is incorrect
+</H3><P><BR><BR>
+   See ``Body-Fixed Frames.''
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: SPK file contains clearly invalid data"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: SPK file contains clearly invalid data
+</H3><P><BR><BR>
+   The file may be corrupted. See ``File Transfer.''
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: Osculating elements are wrong"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: Osculating elements are wrong
+</H3><P><BR><BR>
+   Conversion of a single state to osculating elements does not yield mean
+   elements.
+<P>
+ 
+   For some orbits, some elements are not easily recovered from state
+   vectors. For example, argument of periapsis cannot be determined for a
+   circular orbit.
+<P>
+ 
+   Check that the central mass is valid.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: Aberration-corrected states are not as expected"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: Aberration-corrected states are not as expected
+</H3><P><BR><BR>
+   See ``Accuracy.''
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: System barycenter-relative states are inconsistent"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: System barycenter-relative states are inconsistent
+</H3><P><BR><BR>
+   Note that system barycenter locations change as mass estimates change.
+<P>
+ 
+   The solar system barycenter is very sensitive to mass estimates for the
+   outer planetary systems. Therefore, state vectors of bodies relative to
+   the solar system barycenter cannot be expected to compare well across
+   planetary SPK files based on different integrations (having different
+   underlying planetary ephemerides).
+<P>
+ 
+<BR><BR>
+<A NAME="System errors"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> System errors
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   SPICE attempts to catch errors before they result in system-level
+   exceptions. Some types of errors are beyond SPICE's ability to
+   intercept.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: divide by zero"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: divide by zero
+</H3><P><BR><BR>
+   Often due to missing data or uninitialized variables.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: subscript out of range"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: subscript out of range
+</H3><P><BR><BR>
+   May be due to inconsistent input arguments supplied to SPICE routines.
+   However, SPICE generally has no graceful way of determining that it's
+   writing beyond the bounds of an array passed in by an application.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: segmentation fault/memory access violation"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: segmentation fault/memory access violation
+</H3><P><BR><BR>
+   Often caused by mismatched argument lists. Applications must supply
+   arguments that match in data type and dimension with those expected by
+   SPICE functions.
+<P>
+ 
+   Sometimes this error results from a constant actual argument being
+   supplied where an output argument is expected.
+<P>
+ 
+   When this error occurs on a Unix system immediately upon program
+   execution, the cause may be that the user stack is too small. See the
+   Unix ``limit'' man page.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: arithmetic overflow"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: arithmetic overflow
+</H3><P><BR><BR>
+   Usually caused by invalid input data.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: arithmetic underflow"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: arithmetic underflow
+</H3><P><BR><BR>
+   SPICE does not attempt to detect or prevent underflow.
+<P>
+ 
+<BR><BR>
+<A NAME="Time"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Time
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Problem: SPICE conversion between ET and UTC is incorrect"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: SPICE conversion between ET and UTC is incorrect
+</H3><P><BR><BR>
+   Possible causes:
+<P>
+ 
+<UL>
+<TT>--</TT> Leapseconds kernel is out of date.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> SPICE parsing of input time string is not as user expects (applicable only
+to string-to-ET conversion).
+<BR><BR></UL>
+<UL>
+<TT>--</TT> SPICE rounding or truncation is not as user expects.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> user expects to input or output Terrestrial Dynamical Time (TDT); SPICE
+default is Barycentric Dynamical time (TDB).
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Problem: Stepping from start UTC to end UTC in loop fails"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: Stepping from start UTC to end UTC in loop fails
+</H3><P><BR><BR>
+   Note that TDB and UTC advance at different rates. UTC times that are 10
+   seconds apart are not 10 TDB seconds apart.
+<P>
+ 
+   The problem may be solved by converting times to TDT in order to perform
+   stepping. UTC may be converted to TDT by first calling <a href="../cspice/str2et_c.html">str2et_c</a> to
+   produce TDB, then calling <a href="../cspice/unitim_c.html">unitim_c</a> to convert TDB to TDT. Also, be sure
+   to account for round-off in the loop termination test.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: SPICE time strings do not have the desired format"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: SPICE time strings do not have the desired format
+</H3><P><BR><BR>
+   SPICE supports an enormous variety of input and output formats. See the
+   Time Required Reading, <a href="../req/time.html">time.req</a>, and the headers of the functions
+   <a href="../cspice/str2et_c.html">str2et_c</a> and <a href="../cspice/timout_c.html">timout_c</a>.
+<P>
+ 
+<BR><BR>
+<A NAME="Problem: conversion between ET and SCLK fails"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: conversion between ET and SCLK fails
+</H3><P><BR><BR>
+   Possible causes:
+<P>
+ 
+<UL>
+<TT>--</TT> SCLK or leapseconds kernel is out of date.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> SPICE parsing of input time string is not as user expects.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Input string lacks partition information and is ambiguous without it.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> SPICE rounding is not as user expects. When converting ET to discrete
+ticks, SPICE rounds. Some alternate algorithms truncate.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> ET time value is out of range covered by SCLK kernel.
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Problem: conversion of SCLK string to encoded SCLK fails"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: conversion of SCLK string to encoded SCLK fails
+</H3><P><BR><BR>
+   Possible causes:
+<P>
+ 
+<UL>
+<TT>--</TT> Conversion was not done using the CSPICE function <a href="../cspice/scencd_c.html">scencd_c</a>. Alternate
+conversion methods may not be reliable.
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Problem: SCLK string is misinterpreted"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: SCLK string is misinterpreted
+</H3><P><BR><BR>
+   Some SCLK string formats look like floating point constants. It's easy
+   to mistake the least significant SCLK field for a decimal fraction; that
+   interpretation is usually not correct. See SCLK Required Reading,
+   <a href="../req/sclk.html">sclk.req</a>, for a discussion of SCLK strings.
+<P>
+ 
+<BR><BR>
+<A NAME="Icy"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Icy
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Problem: IDL segmentation fault"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Problem: IDL segmentation fault
+</H3><P><BR><BR>
+   When using the N59 or N60 distributions of Icy 1.2, the IDL executive
+   command
+<P>
+ 
+<PRE>
+   .full_reset_session
+</PRE>
+   may cause a segmentation fault on OS X, Linux and Windows platforms
+   (dependent on the version of IDL). The solution requires editing of the
+   icy.dlm text file. Open icy.dlm, locate the consecutive description
+   entries:
+<P>
+ 
+<PRE>
+   PROCEDURE   CSPICE_RECSPH     0 15
+   PROCEDURE   CSPICE_REMOVD     0 15
+</PRE>
+   Add a new entry for CSPICE_REMOVC.
+<P>
+ 
+<PRE>
+   PROCEDURE   CSPICE_RECSPH     0 15
+   PROCEDURE   CSPICE_REMOVC     0 15
+   PROCEDURE   CSPICE_REMOVD     0 15
+</PRE>
+   Then save and close icy.dlm.
+<P>
+ 
+   NAIF corrected the problem for Icy 1.3, the N61 distribution.
+<P>
+ 
+
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+
+</BODY>
+
+</HTML>

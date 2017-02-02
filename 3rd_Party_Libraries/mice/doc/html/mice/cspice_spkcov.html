@@ -1,0 +1,399 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_spkcov</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_spkcov</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SPKCOV returns the coverage window for a specified ephemeris
+   object in a specified SPK file.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      spk       tthe string name, or cell of strings, of SPICE CK files.
+
+                [1,c] = size(spk), char = class(spk)
+
+                  or
+
+                [1,m] = size(spk), cell = class(spk)
+
+      idcode    the integer scalar NAIF ID code of an object for which
+                ephemeris data are expected to exist in the specified SPK file.
+
+                [1,1] = size(idcode), int32 = class(idcode)
+
+      room      an integer scalar defining the number of intervals for use
+                as a workspace by the routine. This value should equal at least
+                the number of intervals corresponding to 'idcode' in 'spk'.
+
+                [1,1] = size(room), int32 = class(room)
+
+      cover_i   an optional input describing a either an empty window or a
+                window array created from a previous <b>cspice_spkcov</b> call.
+                Inclusion of this window argument results in an output
+                window consisting of a union of the data retrieved from the
+                'spk' kernels and the data in 'cover_i'.
+
+                [2m,1] = size(cover_i), double = class(cover_i)
+
+                   or
+
+                [0,0] = size(cover_i), double = class(cover_i)
+
+   the call:
+
+      cover = <b>cspice_spkcov</b>( spk, idcode, room, cover_i )
+
+         or
+
+      cover = <b>cspice_spkcov</b>( spk, idcode, room )
+
+   returns:
+
+      cover   a double precision 2Nx1 array (window) containing the coverage
+              for 'idcode'', i.e. the set of time intervals for which 'idcode'
+              data exist in the file 'spk'. The array 'cover'
+              contains the pairs of endpoints of these intervals.
+
+               Each window defined as a pair of endpoints such that:
+
+                  window 1 = cover(1:2)
+                  window 2 = cover(3:4)
+                  window 3 = cover(5:6)
+                           ...
+                  window N = cover(2N-1,2N)
+
+              The interval endpoints contained in 'cover' are ephemeris
+              times, expressed as seconds past J2000 TDB.
+
+              'cover' returns an empty set if 'spk' lacks coverage for
+              'idcode'.  If 'cover_i' exists in the argument list, 'cover'
+              returns as a union of the coverage data found in 'spk' and
+              the data in 'cover_i'. 'cover' can overwrite 'cover_i'.
+
+              [2p,1] = size(cover), double = class(cover)
+
+                 or
+
+              [0,1] = size(cover), double = class(cover)
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   Use a simple function to display the CK IDs found in a CK, or set of
+   CKs, and the time coverage of the data corresponding to those IDs.
+   This example calls both <a href="cspice_ckobj.html">cspice_ckobj</a> and <a href="cspice_ckcov.html">cspice_ckcov</a>. In practice,
+   algorithms using <a href="cspice_spkobj.html">cspice_spkobj</a> will also use <b>cspice_spkcov</b> and
+   vice-versa.
+
+   function spkcov_t(SPK)
+
+      MAXOBJ = 1000;
+      WINSIZ = 1000;
+      LSK    = 'naif0010.tls';
+
+      %
+      % Note, neither <b>cspice_spkcov</b> or <a href="cspice_spkobj.html">cspice_spkobj</a> requires this
+      % kernel to function. We need the data for output time
+      % conversion.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( LSK )
+
+      %
+      % Find the set of objects in the SPK file.
+      %
+      ids = <a href="cspice_spkobj.html">cspice_spkobj</a>( SPK, MAXIV );
+
+      %
+      % We want to display the coverage for each object. Loop over
+      % the contents of the ID code set, find the coverage for
+      % each item in the set, and display the coverage.
+      %
+      for i=1:numel(ids)
+
+         %
+         % Extract the coverage data for object 'ids(i)'.
+         %
+         cover     = <b>cspice_spkcov</b>( SPK, ids(i), WINSIZ );
+         [row,col] = size(cover);
+
+         %
+         % Display a simple banner.
+         %
+         fprintf( '========================================\n')
+         fprintf( 'Coverage for object %d\n', ids(i) )
+
+         %
+         %  'cover' has dimension 2Nx1, where 'row' has the value 2N with
+         %  each window defined as a pair of endpoints such that:
+         %
+         %  window 1 = cover(1:2)
+         %  window 2 = cover(3:4)
+         %  window 3 = cover(5:6)
+         %        ...
+         %  window N = cover(2N-1,2N)
+         %
+         % Loop from 1 to 'row' with step size 2.
+         %
+         for j=1:2:row
+
+            %
+            % Convert the endpoints to TDB calendar format time strings
+            % and display them. Pass the endpoints in an array,
+            % so <a href="cspice_timout.html">cspice_timout</a> returns an array of time strings.
+            %
+            % Recall a vectorized input has dimension 1xM so transpose
+            % the 'cover' slice.
+            %
+            timstr = <a href="cspice_timout.html">cspice_timout</a>( cover(j:j+1)', ...
+                                'YYYY MON DD HR:MN:SC.### (TDB) ::TDB' );
+            fprintf('Interval: %d\n'  , (j+1)/2 )
+            fprintf('   Start: %s\n'  , timstr(1,:) )
+            fprintf('    Stop: %s\n\n', timstr(2,:) )
+
+         end
+
+      end
+
+      %
+      % Empty the kernel pool.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   Example (1):
+
+      Assign an SPK kernel list as:
+
+      &gt;&gt; SPK = { '/kernels/gen/spk/de405_2000-2050.bsp', ...
+                 '/kernels/gen/spk/jup100.bsp' };
+
+      &gt;&gt; spkobj_t(SPK)
+
+   MATLAB outputs:
+
+      ========================================
+      Coverage for object 1
+      Interval: 1
+         Start: 2000 JAN 01 00:01:04.183 (TDB)
+          Stop: 2050 JAN 01 00:01:04.183 (TDB)
+
+      ========================================
+      Coverage for object 2
+      Interval: 1
+         Start: 2000 JAN 01 00:01:04.183 (TDB)
+          Stop: 2050 JAN 01 00:01:04.183 (TDB)
+
+      ========================================
+      Coverage for object 3
+      Interval: 1
+         Start: 1973 NOV 01 00:00:00.000 (TDB)
+          Stop: 2050 JAN 01 00:01:04.183 (TDB)
+
+      ========================================
+      Coverage for object 4
+      Interval: 1
+         Start: 2000 JAN 01 00:01:04.183 (TDB)
+          Stop: 2050 JAN 01 00:01:04.183 (TDB)
+
+      ========================================
+      Coverage for object 5
+      Interval: 1
+         Start: 1973 NOV 01 00:00:00.000 (TDB)
+          Stop: 2050 JAN 01 00:01:04.183 (TDB)
+
+             ... continued ...
+
+      ========================================
+      Coverage for object 501
+      Interval: 1
+         Start: 1973 NOV 01 00:00:00.000 (TDB)
+          Stop: 2023 NOV 03 00:00:00.000 (TDB)
+
+      ========================================
+      Coverage for object 502
+      Interval: 1
+         Start: 1973 NOV 01 00:00:00.000 (TDB)
+          Stop: 2023 NOV 03 00:00:00.000 (TDB)
+
+      ========================================
+      Coverage for object 503
+      Interval: 1
+         Start: 1973 NOV 01 00:00:00.000 (TDB)
+          Stop: 2023 NOV 03 00:00:00.000 (TDB)
+
+      ========================================
+      Coverage for object 504
+      Interval: 1
+         Start: 1973 NOV 01 00:00:00.000 (TDB)
+          Stop: 2023 NOV 03 00:00:00.000 (TDB)
+
+      ========================================
+      Coverage for object 599
+      Interval: 1
+         Start: 1973 NOV 01 00:00:00.000 (TDB)
+          Stop: 2023 NOV 03 00:00:00.000 (TDB)
+
+   Example (2):
+
+      Assign the SPK kernel list as:
+
+      &gt;&gt; SPK = { '/kernels/Hubble/1990-01-01_1996-01-01.bsp', ...
+                 '/kernels/Hubble/2002-01-01_2006-12-31.bsp' };
+
+      &gt;&gt; spkobj_t(SPK)
+
+   MATLAB outputs:
+
+      ========================================
+      Coverage for object -48
+      Interval: 1
+         Start: 1990 APR 25 02:01:40.071 (TDB)
+          Stop: 1995 DEC 31 17:42:03.755 (TDB)
+
+      Interval: 2
+         Start: 2002 JAN 01 02:02:00.084 (TDB)
+          Stop: 2006 DEC 29 09:36:39.732 (TDB)
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/spkcov_c.html">spkcov_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/spk.html">SPK.REQ</a>
+   <a href="../req/cells.html">CELLS.REQ</a>
+   <a href="../req/daf.html">DAF.REQ</a>
+   <a href="../req/time.html">TIME.REQ</a>
+   <a href="../req/windows.html">WINDOWS.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.2.0, 03-APR-2012, EDW (JPL)
+
+      Edits to Example code and comments. No change to Example code
+      functionality.
+
+      Renamed the argument 'size' to 'room'. &quot;size&quot; is a Matlab function
+      name and it's seriously dumb to use a function name word as an argument
+      name.
+
+      Edited I/O section to conform to NAIF standard for Mice documentation.
+
+   -Mice Version 1.1.0, 29-DEC-2008, EDW (JPL)
+
+      Edited description of 'size'; 'size' now defines the maximum
+      number of intervals for the internal workspace window.
+
+      The 'cover_i' argument may now have the empty array value, [],
+      on input.
+
+      Added range restriction on size.
+
+      Corrected several typos.
+
+   -Mice Version 1.0.0, 18-JUN-2007, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   get coverage window for spk object
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:38 2014</pre>
+
+</body>
+</html>
+

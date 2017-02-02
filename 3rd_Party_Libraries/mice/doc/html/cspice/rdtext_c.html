@@ -1,0 +1,271 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>rdtext_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>rdtext_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void rdtext_c ( ConstSpiceChar * file,
+                   SpiceInt         lenout,
+                   SpiceChar      * line,
+                   SpiceBoolean   * eof    )
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   Read the next line of text from a text file.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+   FILES
+   TEXT
+
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  ---------------------------------------------------
+   file       I   Name of text file.
+   lenout     I   Available room in output line.
+   line       O   Next line from the text file.
+   eof        O   End-of-file indicator.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+   file        is the name of the text file from which the next
+               line is to be read. If the file is not currently
+               open, it is opened with a logical unit determined
+               at run time, and the first line of the file is
+               returned. Otherwise, the next line not yet read
+               from the file is read and returned.
+               
+   lenout      is the available room in the output line, including
+               the terminating null.  If the maximum expected length
+               of an output line is N, lenout should be at least N+1.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+   line        is next line of text in the specified file.
+               If the end of the file is reached, LINE is blank.
+
+   eof         is true when the end of the file is reached, and is
+               otherwise false.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+   1) If too many files are open already, the error
+      SPICE(TOOMANYFILESOPEN) is signaled.
+
+   2) If the attempt to open the file fails, the error
+      SPICE(FILEOPENFAILED) is signaled.
+
+   3) If the attempt to read from the file fails, the error
+      SPICE(FILEREADFAILED) is signaled.
+
+   4) If the attempt to &quot;inquire&quot; the status of the file fails,
+      the error SPICE(INQUIREFAILED) is signaled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+   See input FILE.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+   <b>rdtext_c</b> reads the next line from a text file. If the file is
+   not currently open, it is opened with a logical unit determined
+   at run time, and the first line of the file is returned.
+   Otherwise, the next line not yet read from the file is returned.
+
+   If the end of the file is reached, an empty line is returned,
+   the end-of-file indicator is true, and the file is closed.
+
+   Several files may be opened and read simultaneously. Thus,
+   you may begin reading from one file before the end of another
+   file has been reached. <b>rdtext_c</b> maintains a separate file pointer
+   for each file.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+   Let FILE.1 contain the following lines.
+
+      Mary had a little lamb
+      Everywhere that Mary went
+
+   Let FILE.2 contain the following lines.
+
+      Its fleece was white as snow.
+      The lamb was sure to go.
+
+      Note:  You do not what and end-of-file on the same line as
+      text.  That text will be ignored.
+
+
+   Then the code fragment
+
+   #include &quot;SpiceUsr.h&quot;
+   #define LENOUT 32
+
+   main(void)
+      {
+
+      SpiceBoolean eof;
+      SpiceChar    line[LENOUT];
+
+      eof = SPICEFALSE;
+
+      do {
+         <b>rdtext_c</b> ( &quot;file.1&quot;, LENOUT, line, &amp;eof );
+         printf ( &quot;%s \n&quot;, line );
+
+         <b>rdtext_c</b> ( &quot;file.2&quot;, LENOUT, line, &amp;eof );
+         printf ( &quot;%s \n&quot;, line );
+         }
+      while ( !eof );
+
+      }
+
+   produces the following output
+
+      Mary had a little lamb
+      Its fleece was white as snow.
+      Everywhere that Mary went
+      The lamb was sure to go.
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   N.J. Bachman    (JPL)
+   H.A. Neilan     (JPL)
+   M.J. Spencer    (JPL)
+   I.M. Underwood  (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 2.0.0, 07-OCT-1999   (NJB)
+
+      Changed argument list to conform to SPICE convention:  LENOUT
+      now precedes the output string.
+      
+      Added description of lenout to the header.
+      
+      Added local logical variable for EOF flag.
+      
+   -CSPICE Version 1.0.0, 25-MAY-1999   (EDW)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   read a line from a text file
+</PRE>
+<h4>Link to routine rdtext_c source file <a href='../../../src/cspice/rdtext_c.c'>rdtext_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:41 2014</pre>
+
+</body>
+</html>
+

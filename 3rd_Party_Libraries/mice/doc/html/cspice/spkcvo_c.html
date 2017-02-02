@@ -1,0 +1,1460 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>spkcvo_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>spkcvo_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void spkcvo_c ( ConstSpiceChar       * target,
+                   SpiceDouble            et,
+                   ConstSpiceChar       * outref,
+                   ConstSpiceChar       * refloc,
+                   ConstSpiceChar       * abcorr,
+                   ConstSpiceDouble       obssta [6],
+                   SpiceDouble            obsepc,
+                   ConstSpiceChar       * obsctr,
+                   ConstSpiceChar       * obsref,
+                   SpiceDouble            state  [6],
+                   SpiceDouble          * lt         ) 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Return the state of a specified target relative to an &quot;observer,&quot; 
+   where the observer has constant velocity in a specified reference 
+   frame.  The observer's state is provided by the calling program 
+   rather than by loaded SPK files. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/frames.html">FRAMES</a> 
+   <a href="../req/pck.html">PCK</a>
+   <a href="../req/spk.html">SPK</a> 
+   <a href="../req/time.html">TIME</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   EPHEMERIS 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   target     I   Name of target ephemeris object. 
+   et         I   Observation epoch. 
+   outref     I   Reference frame of output state. 
+   refloc     I   Output reference frame evaluation locus. 
+   abcorr     I   Aberration correction. 
+   obssta     I   Observer state relative to center of motion. 
+   obsepc     I   Epoch of observer state. 
+   obsctr     I   Center of motion of observer. 
+   obsref     I   Frame of observer state. 
+   state      O   State of target with respect to observer. 
+   lt         O   One way light time between target and 
+                  observer. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   target      is the name of a target body. Optionally, you may supply
+               the ID code of the object as an integer string. For
+               example, both &quot;EARTH&quot; and &quot;399&quot; are legitimate strings
+               to supply to indicate the target is earth.
+ 
+               Case and leading and trailing blanks are not significant
+               in the string `target'.
+ 
+ 
+   et          is the ephemeris time at which the state of the target
+               relative to the observer is to be computed. `et' is
+               expressed as seconds past J2000 TDB. `et' refers to time
+               at the observer's location.
+ 
+               `et' is independent of the observer epoch `obsepc'.
+ 
+ 
+   outref      is the name of the reference frame with respect to which
+               the output state is expressed.
+ 
+               When `outref' is time-dependent (non-inertial), its
+               orientation relative to the J2000 frame is evaluated in
+               the manner commanded by the input argument `refloc' (see
+               description below).
+ 
+               Case and leading and trailing blanks are not significant
+               in the string `outref'.
+  
+ 
+   refloc      is a string indicating the output reference frame 
+               evaluation locus: this is the location associated 
+               with the epoch at which this routine is to evaluate 
+               the orientation, relative to the J2000 frame, of the 
+               output frame `outref'. The values and meanings of 
+               `refloc' are: 
+ 
+                  &quot;OBSERVER&quot;  Evaluate `outref' at the observer's 
+                              epoch `et'. 
+ 
+                              Normally the locus &quot;OBSERVER&quot; should 
+                              be selected when `outref' is centered 
+                              at the observer. 
+ 
+ 
+                  &quot;TARGET&quot;    Evaluate `outref' at the target epoch; 
+                              letting `lt' be the one-way light time  
+                              between the target and observer, the 
+                              target epoch is 
+ 
+                                 et-lt  if reception aberration 
+                                        corrections are used 
+ 
+                                 et+lt  if transmission aberration 
+                                        corrections are used 
+ 
+                                 et     if no aberration corrections 
+                                        are used 
+ 
+                              Normally the locus &quot;TARGET&quot; should 
+                              be selected when `outref' is centered
+                              at the target object.
+ 
+ 
+                  &quot;CENTER&quot;    Evaluate the frame `outref' at the epoch 
+                              associated its center. This epoch, 
+                              which we'll call `etctr', is determined 
+                              as follows: 
+ 
+                                 Let `ltctr' be the one-way light time 
+                                 between the observer and the center  
+                                 of `outref'. Then `etctr' is 
+ 
+                                    et-ltctr  if reception 
+                                              aberration corrections 
+                                              are used 
+ 
+                                    et+ltctr  if transmission 
+                                              aberration corrections 
+                                              are used 
+ 
+                                    et        if no aberration 
+                                              corrections are used 
+ 
+ 
+                              The locus &quot;CENTER&quot; should be selected 
+                              when the user intends to obtain 
+                              results compatible with those produced 
+                              by <a href="spkezr_c.html">spkezr_c</a>.  
+  
+               When `outref' is inertial, all choices of `refloc'  
+               yield the same results. 
+    
+               Case and leading and trailing blanks are not 
+               significant in the string `refloc'. 
+ 
+ 
+   abcorr      indicates the aberration corrections to be applied to 
+               the observer-target state to account for one-way 
+               light time and stellar aberration. 
+                 
+               `abcorr' may be any of the following: 
+ 
+                  &quot;NONE&quot;     Apply no correction. Return the  
+                             geometric state of the target  
+                             relative to the observer.   
+ 
+               The following values of `abcorr' apply to the 
+               &quot;reception&quot; case in which photons depart from the 
+               target's location at the light-time corrected epoch 
+               et-lt and *arrive* at the observer's location at `et': 
+ 
+                  &quot;LT&quot;       Correct for one-way light time (also 
+                             called &quot;planetary aberration&quot;) using a 
+                             Newtonian formulation. This correction 
+                             yields the state of the target at the 
+                             moment it emitted photons arriving at 
+                             the observer at `et'. 
+ 
+                             The light time correction uses an 
+                             iterative solution of the light time 
+                             equation. The solution invoked by the 
+                             &quot;LT&quot; option uses one iteration. 
+ 
+                  &quot;LT+S&quot;     Correct for one-way light time and 
+                             stellar aberration using a Newtonian 
+                             formulation. This option modifies the 
+                             state obtained with the &quot;LT&quot; option to 
+                             account for the observer's velocity 
+                             relative to the solar system 
+                             barycenter. The result is the apparent 
+                             state of the target---the position and 
+                             velocity of the target as seen by the 
+                             observer. 
+ 
+                  &quot;CN&quot;       Converged Newtonian light time 
+                             correction. In solving the light time 
+                             equation, the &quot;CN&quot; correction iterates 
+                             until the solution converges. 
+ 
+                  &quot;CN+S&quot;     Converged Newtonian light time 
+                             and stellar aberration corrections. 
+ 
+ 
+               The following values of `abcorr' apply to the 
+               &quot;transmission&quot; case in which photons *depart* from 
+               the observer's location at `et' and arrive at the 
+               target's location at the light-time corrected epoch 
+               et+lt: 
+ 
+                  &quot;XLT&quot;      &quot;Transmission&quot; case:  correct for 
+                             one-way light time using a Newtonian 
+                             formulation. This correction yields the 
+                             state of the target at the moment it 
+                             receives photons emitted from the 
+                             observer's location at `et'. 
+ 
+                  &quot;XLT+S&quot;    &quot;Transmission&quot; case:  correct for 
+                             one-way light time and stellar 
+                             aberration using a Newtonian 
+                             formulation  This option modifies the 
+                             state obtained with the &quot;XLT&quot; option to 
+                             account for the observer's velocity 
+                             relative to the solar system 
+                             barycenter. The position component of 
+                             the computed target state indicates the 
+                             direction that photons emitted from the 
+                             observer's location must be &quot;aimed&quot; to 
+                             hit the target. 
+ 
+                  &quot;XCN&quot;      &quot;Transmission&quot; case:  converged  
+                             Newtonian light time correction. 
+ 
+                  &quot;XCN+S&quot;    &quot;Transmission&quot; case:  converged  
+                             Newtonian light time and stellar  
+                             aberration corrections. 
+ 
+ 
+               Neither special nor general relativistic effects are 
+               accounted for in the aberration corrections applied 
+               by this routine. 
+ 
+               Case and leading and trailing blanks are not 
+               significant in the string `abcorr'. 
+ 
+ 
+   obssta      is the geometric state of an observer moving at 
+               constant velocity relative to its center of motion 
+               `obsctr', expressed in the reference frame `obsref', at 
+               the epoch `obsepc'. 
+ 
+               `obssta' is a six-dimensional vector representing 
+               position and velocity in cartesian coordinates: the 
+               first three components represent the position of an 
+               observer relative to its center of motion; the last 
+               three components represent the velocity of the 
+               observer. 
+ 
+               Units are always km and km/sec. 
+ 
+   
+   obsepc      is the epoch, expressed as seconds past J2000 TDB, at 
+               which the observer state `obssta' is applicable. For 
+               other epochs, the position of the observer relative 
+               to its center of motion is linearly extrapolated 
+               using the velocity component of `obssta'. 
+ 
+               `obsepc' is independent of the epoch `et' at which the 
+               state of the target relative to the observer is to be 
+               computed. 
+ 
+   obsctr      is the name of the center of motion of `obssta'. The 
+               ephemeris of `obsctr' is provided by loaded SPK files. 
+ 
+               Optionally, you may supply the integer ID code for 
+               the object as an integer string. For example both 
+               &quot;MOON&quot; and &quot;301&quot; are legitimate strings that indicate 
+               the moon is the center of motion. 
+ 
+               Case and leading and trailing blanks are not 
+               significant in the string `obsctr'. 
+ 
+ 
+   obsref      is the name of the reference frame relative to which 
+               the input state `obssta' is expressed. The observer has 
+               constant velocity relative to its center of motion  
+               in this reference frame. 
+ 
+               Case and leading and trailing blanks are not 
+               significant in the string `obsref'. 
+ 
+                                </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+ 
+   state       is a Cartesian state vector representing the position 
+               and velocity of the target relative to the specified 
+               observer. `state' is corrected for the specified 
+               aberrations and is expressed with respect to the 
+               reference frame specified by `outref'. The first three 
+               components of `state' represent the x-, y- and 
+               z-components of the target's position; the last three 
+               components form the corresponding velocity vector. 
+ 
+               The position component of `state' points from the 
+               observer's location at `et' to the aberration-corrected 
+               location of the target. Note that the sense of the 
+               position vector is independent of the direction of 
+               radiation travel implied by the aberration 
+               correction. 
+ 
+               The velocity component of `state' is the derivative 
+               with respect to time of the position component of 
+               `state'. 
+ 
+               Units are always km and km/sec. 
+ 
+               When `state' is expressed in a time-dependent 
+               (non-inertial) output frame, the orientation of that 
+               frame relative to the J2000 frame is evaluated in the 
+               manner indicated by the input argument `refloc' (see 
+               description above). 
+ 
+ 
+   lt          is the one-way light time between the observer and 
+               target in seconds. If the target state is corrected  
+               for aberrations, then `lt' is the one-way light time  
+               between the observer and the light time corrected  
+               target location. 
+ 
+  </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1)  If either the name of the center of motion or the target 
+       cannot be translated to its NAIF ID code, the error 
+       SPICE(IDCODENOTFOUND) is signaled. 
+ 
+   2)  If the reference frame `outref' is unrecognized, the error 
+       SPICE(IDCODENOTFOUND) is signaled. 
+ 
+   3)  If the reference frame `obsref' is unrecognized, the error will 
+       be diagnosed by a routine in the call tree of this routine. 
+ 
+   4)  If the frame evaluation locus `refloc' is not recognized, 
+       the error SPICE(NOTSUPPORTED) is signaled. 
+ 
+   5)  If the loaded kernels provide insufficient data to compute 
+       the requested state vector, the deficiency will be diagnosed 
+       by a routine in the call tree of this routine. 
+ 
+   6)  If an error occurs while reading an SPK or other kernel file, 
+       the error  will be diagnosed by a routine in the call tree of 
+       this routine. 
+ 
+   7)  If the aberration correction `abcorr' is not recognized,  
+       the error will be diagnosed by a routine in the call tree of 
+       this routine. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   Appropriate kernels must be loaded by the calling program before 
+   this routine is called. 
+ 
+   The following data are required: 
+ 
+      -  SPK data: ephemeris data for the observer center and target
+         must be loaded. If aberration corrections are used, the 
+         states of the observer center and target relative to the solar 
+         system barycenter must be calculable from the available 
+         ephemeris data. Typically ephemeris data are made available 
+         by loading one or more SPK files using <a href="furnsh_c.html">furnsh_c</a>. 
+ 
+   The following data may be required: 
+ 
+      -  PCK data: if the target frame is a PCK frame, rotation data 
+         for the target frame must be loaded. These may be provided 
+         in a text or binary PCK file. 
+ 
+      -  Frame data: if a frame definition not built into SPICE is 
+         required, for example to convert the observer-target state 
+         to the output frame, that definition must be available in 
+         the kernel pool. Typically frame definitions are supplied 
+         by loading a frame kernel using <a href="furnsh_c.html">furnsh_c</a>. 
+ 
+      -  Additional kernels: if any frame used in this routine's 
+         state computation is a CK frame, then at least one CK and 
+         corresponding SCLK kernel is required. If dynamic frames 
+         are used, additional SPK, PCK, CK, or SCLK kernels may be 
+         required. 
+ 
+   In all cases, kernel data are normally loaded once per program 
+   run, NOT every time this routine is called. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+    
+   This routine computes observer-target states for observers whose 
+   trajectories are not provided by SPK files. 
+ 
+   Observers supported by this routine must have constant velocity 
+   with respect to a specified center of motion, expressed in a 
+   caller-specified reference frame. The state of the center of 
+   motion relative to the target must be computable using  
+   loaded SPK data. 
+ 
+   For applications in which the observer has zero velocity 
+   relative to its center of motion, the CSPICE routine  
+ 
+      <a href="spkcpo_c.html">spkcpo_c</a>     { SPK, constant position observer } 
+ 
+   can be used. <a href="spkcpo_c.html">spkcpo_c</a> has a simpler interface than that of <b>spkcvo_c</b>.
+    
+   This routine is suitable for computing states of target ephemeris 
+   objects, as seen from landmarks on the surface of an extended 
+   object, in cases where no SPK data are available for those 
+   landmarks. 
+ 
+   This routine's treatment of the output reference frame differs 
+   from that of the principal SPK API routines 
+ 
+      <a href="spkezr_c.html">spkezr_c</a> 
+      <a href="spkez_c.html">spkez_c</a> 
+      <a href="spkpos_c.html">spkpos_c</a> 
+      <a href="spkezp_c.html">spkezp_c</a> 
+ 
+   which require both observer and target ephemerides to be provided 
+   by loaded SPK files: 
+ 
+      The SPK API routines listed above evaluate the orientation of the
+      output reference frame (with respect to the J2000 frame) at an
+      epoch corrected for one-way light time between the observer and
+      the center of the output frame. When the center of the output
+      frame is not the target (for example, when the target is on the
+      surface of Mars and the output frame is centered at Mars'
+      center), the epoch of evaluation may not closely match the
+      light-time corrected epoch associated with the target itself. A
+      similar problem may occur when the observer is a surface point on
+      an extended body and the output frame is centered at the body
+      center: the listed routines will correct the orientation of the
+      output frame for one-way light time between the frame center and
+      the observer.
+  
+      This routine allows the caller to dictate how the orientation 
+      of the output reference frame is to be evaluated. The caller 
+      passes to this routine an input string called the output 
+      frame's evaluation &quot;locus.&quot; This string specifies the location 
+      associated with the output frame's evaluation epoch. The three 
+      possible values of the locus are 
+ 
+         &quot;TARGET&quot; 
+         &quot;OBSERVER&quot; 
+         &quot;CENTER&quot;         
+ 
+      The choice of locus has an effect when aberration corrections 
+      are used and the output frame is non-inertial. 
+ 
+      When the locus is &quot;TARGET&quot; and light time corrections are 
+      used, the orientation of the output frame is evaluated at the 
+      epoch obtained by correcting the observation epoch `et' for 
+      one-way light time `lt'. The evaluation epoch will be either 
+      et-lt or et+lt for reception or transmission corrections 
+      respectively. 
+ 
+      For remote sensing applications where the target is a surface 
+      point on an extended object, and the orientation of that 
+      object should be evaluated at the emission time, the locus 
+      &quot;TARGET&quot; should be used. 
+ 
+      When the output frame's orientation should be evaluated at 
+      the observation epoch `et', which is the case when the  
+      output frame is centered at the observer, the locus  
+      &quot;OBSERVER&quot; should be used. 
+       
+      The locus option &quot;CENTER&quot; is provided for compatibility 
+      with existing SPK state computation APIs such as <a href="spkezr_c.html">spkezr_c</a>. 
+ 
+      Note that the output frame evaluation locus does not affect 
+      the computation of light time between the target and 
+      observer.  
+ 
+ 
+   The SPK routines that compute observer-target states for 
+   combinations of objects having ephemerides provided by the SPK 
+   system and objects having constant position or constant velocity 
+   are 
+ 
+      <a href="spkcpo_c.html">spkcpo_c</a> {SPK, Constant position observer} 
+      <a href="spkcpt_c.html">spkcpt_c</a> {SPK, Constant position target} 
+      <b>spkcvo_c</b> {SPK, Constant velocity observer} 
+      <a href="spkcvt_c.html">spkcvt_c</a> {SPK, Constant velocity target} 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   The numerical results shown for these examples may differ across 
+   platforms. The results depend on the SPICE kernels used as 
+   input, the compiler and supporting libraries, and the machine  
+   specific arithmetic implementation.  
+ 
+ 
+   1) Compute apparent solar azimuth and elevation as seen from a 
+      specified surface point on the earth. 
+ 
+      Task Description 
+      ================ 
+ 
+      In this example we'll use the location of the DSN station  
+      DSS-14 as our surface point. 
+ 
+      We'll perform the solar azimuth and elevation computation two 
+      ways: 
+ 
+         - Using a station frame kernel to provide the  
+           specification of a topocentric reference frame 
+           centered at DSS-14. 
+ 
+         - Computing inline the transformation from the earth-fixed, 
+           earth-centered frame ITRF93 to a topocentric frame 
+           centered at DSS-14. 
+             
+           Note that results of the two computations will differ
+           slightly. This is due to differences in the orientations
+           of the topocentric frames. There are two sources of the
+           differences:
+
+              1) The station position is time-dependent due to tectonic
+                 plate motion, and epochs of the station positions used
+                 to specify the axes of the topocentric frame are
+                 different in the two cases. This gives rise to different
+                 orientations of the frame's axes relative to the frame
+                 ITRF93.
+
+              2) The two computations use different earth radii; this
+                 results in computation of different geodetic latitudes
+                 of the station. This difference also affects the
+                 topocentric frame orientation relative to ITRF93.
+
+ 
+      Kernels 
+      =======      
+ 
+      Use the meta-kernel shown below to load the required SPICE 
+      kernels. 
+ 
+ 
+      KPL/MK 
+ 
+         File name: spkcvo.tm 
+ 
+         This is the meta-kernel file for the header code example for 
+         the subroutine <b>spkcvo_c</b>. These kernel files can be found on 
+         the NAIF website. 
+ 
+         In order for an application to use this meta-kernel, the 
+         kernels referenced here must be present in the user's 
+         current working directory. 
+ 
+         The names and contents of the kernels referenced 
+         by this meta-kernel are as follows: 
+ 
+            File name                        Contents 
+            ---------                        -------- 
+            de421.bsp                        Planetary ephemeris 
+            pck00010.tpc                     Planet orientation and 
+                                             radii 
+            naif0010.tls                     Leapseconds 
+            earth_720101_070426.bpc          Earth historical 
+                                             binary PCK 
+            earthstns_itrf93_050714.bsp      DSN station SPK 
+            earth_topo_050714.tf             DSN station FK 
+            mgs_moc_v20.ti                   MGS MOC instrument 
+                                             parameters 
+            mgs_sclkscet_00061.tsc           MGS SCLK coefficients 
+            mgs_sc_ext12.bc                  MGS s/c bus attitude 
+            mgs_ext12_ipng_mgs95j.bsp        MGS ephemeris 
+ 
+         \begindata 
+ 
+         KERNELS_TO_LOAD = ( 'de421.bsp', 
+                             'pck00010.tpc', 
+                             'naif0010.tls', 
+                             'earth_720101_070426.bpc', 
+                             'earthstns_itrf93_050714.bsp', 
+                             'earth_topo_050714.tf', 
+                             'mgs_moc_v20.ti', 
+                             'mgs_sclkscet_00061.tsc', 
+                             'mgs_sc_ext12.bc', 
+                             'mgs_ext12_ipng_mgs95j.bsp'  ) 
+ 
+         \begintext 
+ 
+         End of meta-kernel. 
+ 
+ 
+      Example code begins here. 
+    
+         /.
+            Program spkcvo_ex1
+
+            This program uses <b>spkcvo_c</b> to compute solar azimuth
+            and elevation at a given surface point on the earth. 
+
+         ./
+
+         #include &lt;stdio.h&gt;
+         #include &lt;string.h&gt;
+         #include &lt;stdlib.h&gt;
+         #include &quot;SpiceUsr.h&quot;
+
+         int main()
+         {   
+            /.
+            Local constants 
+            ./
+            #define  META     &quot;spkcvo.tm&quot;
+            #define  FRNMLN   33
+            #define  SHAPLN   33
+            #define  TIMFMT   &quot;YYYY MON DD HR:MN:SC.###### UTC&quot;
+            #define  TIMFM2   &quot;YYYY MON DD HR:MN:SC.###### TDB ::TDB&quot;
+            #define  TIMLEN   41
+
+            /.
+            Local variables 
+            ./   
+            SpiceChar             * abcorr;
+            SpiceChar               emitim  [ TIMLEN ];
+            SpiceChar               epcstr  [ TIMLEN ];
+            SpiceChar             * refloc;
+            SpiceChar             * obsctr;
+            SpiceChar             * obsref;
+            SpiceChar             * obstim;
+            SpiceChar             * outref;
+            SpiceChar             * target;
+            
+            SpiceDouble             az;
+            SpiceDouble             el;
+            SpiceDouble             et;
+            SpiceDouble             f;
+            SpiceDouble             lat;
+            SpiceDouble             lon;
+            SpiceDouble             lt0;
+            SpiceDouble             lt1;
+            SpiceDouble             normal [ 3 ] ;
+            SpiceDouble             obsalt;
+            SpiceDouble             obslat;
+            SpiceDouble             obslon;
+            SpiceDouble             obsepc;
+            SpiceDouble             obssta [ 6 ];
+            SpiceDouble             r;
+            SpiceDouble             radii  [ 3 ];
+            SpiceDouble             re;
+            SpiceDouble             rp;
+            SpiceDouble             state0 [ 6 ];
+            SpiceDouble             state1 [ 6 ];
+            SpiceDouble             topvec [ 3 ];
+            SpiceDouble             xform  [ 3 ][ 3 ];
+
+            SpiceDouble             z [ 3 ]  = { 0.0, 0.0, 1.0 };
+
+            SpiceInt                n;
+
+
+            /.
+            Load SPICE kernels. 
+            ./
+            <a href="furnsh_c.html">furnsh_c</a> ( META );
+
+            /.
+            Convert the observation time to seconds past J2000 TDB.
+            ./
+            obstim = &quot;2003 OCT 13 06:00:00.000000 UTC&quot;;
+
+            <a href="str2et_c.html">str2et_c</a> ( obstim, &amp;et );
+
+            /.
+            Set the target, observer center, and observer frame.
+            ./
+            target = &quot;SUN&quot;;
+            obsctr = &quot;EARTH&quot;;
+            obsref = &quot;ITRF93&quot;;
+
+            /.
+            Set the state of DSS-14 relative to the earth's 
+            center at the J2000 epoch, expressed in the 
+            ITRF93 reference frame. Values come from the 
+            earth station SPK specified in the meta-kernel.
+
+            The velocity is non-zero due to tectonic
+            plate motion.
+            ./
+            obsepc    =  0.0;
+
+            obssta[0] =  -2353.6213656676991;
+            obssta[1] =  -4641.3414911499403;
+            obssta[2] =   3677.0523293197439;
+            obssta[3] =     -0.00000000000057086;
+            obssta[4] =      0.00000000000020549;
+            obssta[5] =     -0.00000000000012171;
+
+            /.
+            Find the apparent state of the sun relative
+            to the station in the DSS-14_TOPO reference frame.
+            Evaluate the output frame's orientation, that is the
+            orientation of the DSS-14_TOPO frame relative to the
+            J2000 frame, at the observation epoch. This
+            correction is obtained by setting `refloc' to
+            &quot;OBSERVER&quot;.
+            ./
+ 
+            outref = &quot;DSS-14_TOPO&quot;;
+            abcorr = &quot;CN+S&quot;;
+
+            refloc = &quot;OBSERVER&quot;;
+
+            /.
+            Compute the observer-target state. 
+            ./
+            <b>spkcvo_c</b> ( target, et,     outref, refloc,
+                       abcorr, obssta, obsepc, obsctr,
+                       obsref, state0, &amp;lt0            );
+
+            /.
+            Compute planetocentric coordinates of the
+            observer-target position in the local
+            topocentric reference frame DSS-14_TOPO.
+            ./
+            <a href="reclat_c.html">reclat_c</a> ( state0, &amp;r, &amp;lon, &amp;lat );
+
+            /.
+            Compute solar azimuth. The latitude we've
+            already computed is the elevation. Express
+            both angles in degrees.
+            ./
+            el =   lat * <a href="dpr_c.html">dpr_c</a>();
+            az = - lon * <a href="dpr_c.html">dpr_c</a>();
+
+            if ( az &lt; 0.0 ) 
+            {
+               az +=  360.0;
+            }
+
+            /. 
+            Display the computed state, light time. and angles.
+            ./
+            <a href="timout_c.html">timout_c</a> ( et-lt0, TIMFMT, TIMLEN, emitim );
+            <a href="timout_c.html">timout_c</a> ( obsepc, TIMFM2, TIMLEN, epcstr );
+
+            printf ( &quot;\n&quot;
+                     &quot; Frame evaluation locus:     %s\n&quot;
+                     &quot;\n&quot;
+                     &quot; Target:                     %s\n&quot;
+                     &quot; Observation time:           %s\n&quot;
+                     &quot; Observer center:            %s\n&quot;
+                     &quot; Observer-center state time: %s\n&quot;
+                     &quot; Observer frame:             %s\n&quot;
+                     &quot; Emission time:              %s\n&quot;
+                     &quot; Output reference frame:     %s\n&quot;
+                     &quot; Aberration correction:      %s\n&quot;
+                     &quot;\n&quot;
+                     &quot; Observer-target position (km):\n&quot;
+                     &quot;   %20.8f %20.8f %20.8f\n&quot;
+                     &quot; Observer-target velocity (km/s):\n&quot;
+                     &quot;   %20.8f %20.8f %20.8f\n&quot;
+                     &quot; Light time (s):        %20.8f\n&quot;,
+
+                     refloc,    target,    obstim,    obsctr, 
+                     epcstr,    obsref,    emitim,    outref,   
+                     abcorr,    state0[0], state0[1], state0[2],
+                     state0[3], state0[4], state0[5], lt0   );
+
+            printf ( &quot;\n&quot;
+                     &quot; Solar azimuth (deg):   %20.8f\n&quot;
+                     &quot; Solar elevation (deg): %20.8f\n&quot;,
+                     az, el                             );
+                    
+  
+            /.
+            For an arbitrary surface point, we might not
+            have a frame kernel available. In this case
+            we can look up the state in the observer frame
+            using <b>spkcvo_c</b> and then convert the state to
+            the local topocentric frame. We'll first
+            create the transformation matrix for converting
+            vectors in the observer frame to the topocentric
+            frame.
+
+            First step: find the geodetic (planetodetic)
+            coordinates of the observer. We need the
+            equatorial radius and flattening coefficient
+            of the reference ellipsoid.
+            ./
+            <a href="bodvrd_c.html">bodvrd_c</a> ( &quot;EARTH&quot;, &quot;RADII&quot;, 3, &amp;n, radii );
+
+            re = radii[0];
+            rp = radii[2];
+
+            f  = ( re - rp ) / re;
+
+            <a href="recgeo_c.html">recgeo_c</a> ( obssta, re, f, &amp;obslon, &amp;obslat, &amp;obsalt );
+
+            /.
+            Find the outward surface normal on the reference
+            ellipsoid at the observer's longitude and latitude.
+            ./
+            <a href="latrec_c.html">latrec_c</a> ( 1.0, obslon, obslat, normal );
+
+            /.
+            The topocentric frame has its +Z axis aligned
+            with NORMAL and its +X axis pointed north.
+            The north direction is aligned with the component
+            of the ITRF93 +Z axis orthogonal to the topocentric
+            +Z axis.
+            ./
+            <a href="twovec_c.html">twovec_c</a> ( normal, 3, z, 1, xform );
+
+            outref = &quot;ITRF93&quot;;
+            abcorr = &quot;CN+S&quot;;
+
+            refloc = &quot;OBSERVER&quot;;
+
+            /.
+            Compute the observer-target state. 
+            ./
+            <b>spkcvo_c</b> ( target, et,     outref, refloc,
+                       abcorr, obssta, obsepc, obsctr,
+                       obsref, state1, &amp;lt1            );
+            /.
+            Convert the position to the topocentric frame.
+            ./
+            <a href="mxv_c.html">mxv_c</a> ( xform, state1, topvec );
+
+            /.
+            Compute azimuth and elevation.
+            ./
+            <a href="reclat_c.html">reclat_c</a> ( topvec, &amp;r, &amp;lon, &amp;lat );
+
+            el =   lat * <a href="dpr_c.html">dpr_c</a>();
+            az = - lon * <a href="dpr_c.html">dpr_c</a>();
+
+            if ( az &lt; 0.0 ) 
+            {
+               az +=  360.0;
+            }
+
+            printf ( &quot;\n\n\n&quot;
+                     &quot; AZ/EL computed without frame kernel:\n\n&quot; 
+                     &quot; Distance between last two &quot;
+                     &quot;positions (km):   %20.8f\n&quot;,
+                     <a href="vdist_c.html">vdist_c</a>( state0, topvec )   );
+
+            printf ( &quot;\n&quot;
+                     &quot; Solar azimuth (deg):   %20.8f\n&quot;
+                     &quot; Solar elevation (deg): %20.8f\n&quot;
+                     &quot;\n&quot;,
+                     az, el                             );
+
+            return ( 0 );
+         }
+
+
+      When this program was executed on a PC/Linux/gcc 
+      platform, the output was: 
+
+
+         Frame evaluation locus:     OBSERVER
+
+         Target:                     SUN
+         Observation time:           2003 OCT 13 06:00:00.000000 UTC
+         Observer center:            EARTH
+         Observer-center state time: 2000 JAN 01 12:00:00.000000 TDB
+         Observer frame:             ITRF93
+         Emission time:              2003 OCT 13 05:51:42.068322 UTC
+         Output reference frame:     DSS-14_TOPO
+         Aberration correction:      CN+S
+
+         Observer-target position (km):
+              62512272.82076501    58967494.42506485  -122059095.46751761
+         Observer-target velocity (km/s):
+                  2475.97326517       -9870.26706232       -3499.90809969
+         Light time (s):                497.93167797
+
+         Solar azimuth (deg):           316.67141599
+         Solar elevation (deg):         -54.85253168
+
+
+
+         AZ/EL computed without frame kernel:
+
+         Distance between last two positions (km):             3.07056970
+
+         Solar azimuth (deg):           316.67141786
+         Solar elevation (deg):         -54.85253216
+
+ 
+ 
+ 
+   2) Demonstrate applications of the output frame evaluation locus.  
+    
+      The following program is not necessarily realistic: for 
+      brevity, it combines several unrelated computations. 
+ 
+      Task Description 
+      ================ 
+ 
+      Find the state of the Mars Global Surveyor spacecraft, as seen 
+      from a given surface point on earth, corrected for light time 
+      and stellar aberration, expressed in the earth fixed reference 
+      frame ITRF93. The surface point is the position of the DSN 
+      station DSS-14. 
+ 
+      Contrast the states computed by setting the output frame 
+      evaluation locus to &quot;OBSERVER&quot; and to &quot;CENTER&quot;. Show that the 
+      latter choice produces results very close to those that 
+      can be obtained using <a href="spkezr_c.html">spkezr_c</a>.  
+ 
+      Also compute the central meridian longitude on Mars of DSS-14.
+      This computation performs aberration corrections for the center
+      of Mars.
+
+      Note that in general, the routine <a href="subpnt_c.html">subpnt_c</a> should be used for
+      sub-observer point computations when high-accuracy aberration
+      corrections are desired.
+  
+      The observation epoch is 2003 OCT 13 06:00:00 UTC. 
+ 
+ 
+      Kernels 
+      =======      
+ 
+      Use the meta-kernel of example 1 above. 
+ 
+ 
+      Example code begins here. 
+ 
+
+         /.
+            Program spkcvo_ex2 
+
+
+               This program demonstrates the use of <b>spkcvo_c</b>.
+               Computations are performed using all three possible
+               values of the output frame evaluation locus `refloc':
+
+                  &quot;OBSERVER&quot;
+                  &quot;CENTER&quot;
+                  &quot;TARGET&quot;
+
+               Several unrelated computations are performed in this
+               program. In particular, computation of the
+               central meridian longitude on Mars is included simply 
+               to demonstrate use of the &quot;TARGET&quot; option.
+         ./
+
+         #include &lt;stdio.h&gt;
+         #include &lt;string.h&gt;
+         #include &lt;stdlib.h&gt;
+         #include &quot;SpiceUsr.h&quot;
+
+         int main()
+         {   
+            /.
+            Local constants 
+            ./
+
+            #define  META     &quot;spkcvo.tm&quot;
+            #define  FRNMLN   33
+            #define  SHAPLN   33
+            #define  TIMFMT   &quot;YYYY MON DD HR:MN:SC.###### UTC&quot;
+            #define  TIMFM2   &quot;YYYY MON DD HR:MN:SC.###### TDB ::TDB&quot;
+            #define  TIMLEN   41
+
+            /.
+            Local variables 
+            ./   
+            SpiceChar             * abcorr;
+            SpiceChar               emitim  [ TIMLEN ];
+            SpiceChar               epcstr  [ TIMLEN ];
+            SpiceChar             * refloc;
+            SpiceChar             * obsctr;
+            SpiceChar             * obsref;
+            SpiceChar             * obsrvr;
+            SpiceChar             * obstim;
+            SpiceChar             * outref;
+            SpiceChar             * target;
+
+            SpiceDouble             et;
+            SpiceDouble             lat;
+            SpiceDouble             lon;
+            SpiceDouble             lt0;
+            SpiceDouble             lt1;
+            SpiceDouble             lt2;
+            SpiceDouble             lt3;
+            SpiceDouble             obsepc;
+            SpiceDouble             obssta [ 6 ];
+            SpiceDouble             obsvec [ 3 ];
+            SpiceDouble             r;
+            SpiceDouble             state0 [ 6 ];
+            SpiceDouble             state1 [ 6 ];
+            SpiceDouble             state2 [ 6 ];
+            SpiceDouble             state3 [ 6 ];
+
+
+            /.
+            Load SPICE kernels. 
+            ./
+            <a href="furnsh_c.html">furnsh_c</a> ( META );
+
+            /.
+            Convert the observation time to seconds past J2000 TDB.
+            ./
+            obstim = &quot;2003 OCT 13 06:00:00.000000 UTC&quot;;
+
+            <a href="str2et_c.html">str2et_c</a> ( obstim, &amp;et );
+
+            /.
+            Set the target, observer center, and observer frame.
+            ./
+            target = &quot;MGS&quot;;
+            obsctr = &quot;EARTH&quot;;
+            obsref = &quot;ITRF93&quot;;
+
+            /.
+            Set the state of DSS-14 relative to the earth's 
+            center at the J2000 epoch, expressed in the 
+            ITRF93 reference frame. Values come from the 
+            earth station SPK specified in the meta-kernel.
+
+            The velocity is non-zero due to tectonic
+            plate motion.
+            ./
+            obsepc    =  0.0;
+
+            obssta[0] =  -2353.6213656676991;
+            obssta[1] =  -4641.3414911499403;
+            obssta[2] =   3677.0523293197439;
+            obssta[3] =     -0.00000000000057086;
+            obssta[4] =      0.00000000000020549;
+            obssta[5] =     -0.00000000000012171;
+
+            /.
+            Find the apparent state of the spacecraft relative
+            to the station in the ITRF93 reference frame.
+            Evaluate the earth's orientation, that is the
+            orientation of the ITRF93 frame relative to the
+            J2000 frame, at the observation epoch. This
+            correction is obtained by setting `refloc' to
+            &quot;OBSERVER&quot;.
+            ./
+ 
+            outref = &quot;ITRF93&quot;;
+            abcorr = &quot;CN+S&quot;;
+
+            refloc = &quot;OBSERVER&quot;;
+
+            /.
+            Compute the observer-target state. 
+            ./
+            <b>spkcvo_c</b> ( target, et,     outref, refloc,
+                       abcorr, obssta, obsepc, obsctr,
+                       obsref, state0, &amp;lt0            );
+
+            /. 
+            Display the computed state and light time.
+            ./
+            <a href="timout_c.html">timout_c</a> ( et-lt0, TIMFMT, TIMLEN, emitim );
+            <a href="timout_c.html">timout_c</a> ( obsepc, TIMFM2, TIMLEN, epcstr );
+
+            printf ( &quot;\n&quot;
+                     &quot; Frame evaluation locus:     %s\n&quot;
+                     &quot;\n&quot;
+                     &quot; Target:                     %s\n&quot;
+                     &quot; Observation time:           %s\n&quot;
+                     &quot; Observer center:            %s\n&quot;
+                     &quot; Observer-center state time: %s\n&quot;
+                     &quot; Observer frame:             %s\n&quot;
+                     &quot; Emission time:              %s\n&quot;
+                     &quot; Output reference frame:     %s\n&quot;
+                     &quot; Aberration correction:      %s\n&quot;
+                     &quot;\n&quot;
+                     &quot; Observer-target position (km):\n&quot;
+                     &quot;   %20.8f %20.8f %20.8f\n&quot;
+                     &quot; Observer-target velocity (km/s):\n&quot;
+                     &quot;   %20.8f %20.8f %20.8f\n&quot;
+                     &quot; Light time (s):   %20.8f\n&quot;,
+
+                     refloc,    target,    obstim,    obsctr, 
+                     epcstr,    obsref,    emitim,    outref,   
+                     abcorr,    state0[0], state0[1], state0[2],
+                     state0[3], state0[4], state0[5], lt0   );
+
+            /.
+            Repeat the computation, this time evaluating the
+            earth's orientation at the epoch obtained by
+            subtracting from the observation time the one way
+            light time from the earth's center.
+
+            This is equivalent to looking up the observer-target
+            state using <a href="spkezr_c.html">spkezr_c</a>.
+            ./   
+            refloc = &quot;CENTER&quot;;
+
+            <b>spkcvo_c</b> ( target, et,     outref, refloc,
+                       abcorr, obssta, obsepc, obsctr,
+                       obsref, state1, &amp;lt1            );
+
+            /. 
+            Display the computed state and light time.
+            ./
+            <a href="timout_c.html">timout_c</a> ( et-lt1, TIMFMT, TIMLEN, emitim );
+ 
+            printf ( &quot;\n\n&quot;
+                     &quot; Frame evaluation locus:     %s\n&quot;
+                     &quot;\n&quot;
+                     &quot; Target:                     %s\n&quot;
+                     &quot; Observation time:           %s\n&quot;
+                     &quot; Observer center:            %s\n&quot;
+                     &quot; Observer-center state time: %s\n&quot;
+                     &quot; Observer frame:             %s\n&quot;
+                     &quot; Emission time:              %s\n&quot;
+                     &quot; Output reference frame:     %s\n&quot;
+                     &quot; Aberration correction:      %s\n&quot;
+                     &quot;\n&quot;
+                     &quot; Observer-target position (km):\n&quot;
+                     &quot;   %20.8f %20.8f %20.8f\n&quot;
+                     &quot; Observer-target velocity (km/s):\n&quot;
+                     &quot;   %20.8f %20.8f %20.8f\n&quot;
+                     &quot; Light time (s):   %20.8f\n&quot;,
+
+                     refloc,    target,    obstim,    obsctr, 
+                     epcstr,    obsref,    emitim,    outref,   
+                     abcorr,    state1[0], state1[1], state1[2],
+                     state1[3], state1[4], state1[5], lt1      );
+
+            printf ( &quot;\n&quot;
+                     &quot; Distance between above positions (km):  &quot;
+                     &quot;       %20.8f\n&quot;
+                     &quot; Velocity difference magnitude  (km/s):&quot;
+                     &quot;         %20.8f\n&quot;,
+                     <a href="vdist_c.html">vdist_c</a>( state0,   state1   ),
+                     <a href="vdist_c.html">vdist_c</a>( state0+3, state1+3 )                     );
+
+            /.
+            Check: compare the state computed directly above
+            to one produced by <a href="spkezr_c.html">spkezr_c</a>: 
+            ./
+            obsrvr = &quot;DSS-14&quot;;
+
+            <a href="spkezr_c.html">spkezr_c</a> ( target,  et,      outref,  abcorr, 
+                       obsrvr,  state2,  &amp;lt2            );
+
+            printf ( &quot;\n\n&quot;
+                     &quot; State computed using <a href="spkezr_c.html">spkezr_c</a>:\n&quot;
+                     &quot;\n&quot;
+                     &quot; Target:                 %s\n&quot;
+                     &quot; Observation time:       %s\n&quot;
+                     &quot; Output reference frame: %s\n&quot;
+                     &quot; Aberration correction:  %s\n&quot;
+                     &quot; Observer:               %s\n&quot;
+                     &quot;\n&quot;
+                     &quot; Observer-target position (km):\n&quot;
+                     &quot;   %20.8f %20.8f %20.8f\n&quot;
+                     &quot; Observer-target velocity (km/s):\n&quot;
+                     &quot;   %20.8f %20.8f %20.8f\n&quot;
+                     &quot; Light time (s): %20.8f\n&quot;,
+
+                     target,    obstim,    outref, 
+                     abcorr,    obsrvr,  
+                     state2[0], state2[1], state2[2],
+                     state2[3], state2[4], state2[5], lt2   );
+
+            printf ( &quot;\n&quot;
+                     &quot; Distance between last two &quot;
+                     &quot;positions (km):   %20.8f\n&quot;
+                     &quot; Velocity difference magnitude    &quot;
+                     &quot; (km/s):   %20.8f\n&quot;,
+                     <a href="vdist_c.html">vdist_c</a>( state1,   state2   ),       
+                     <a href="vdist_c.html">vdist_c</a>( state1+3, state2+3 )          );
+
+            /.
+            Finally, compute an observer-target state in
+            a frame centered at the target.
+            This state can be used to compute the sub-observer
+            longitude. The reference frame is the Mars-fixed 
+            frame IAU_MARS.
+            ./
+
+            target = &quot;MARS&quot;;
+            outref = &quot;IAU_MARS&quot;;
+ 
+            refloc = &quot;TARGET&quot;; 
+
+            <b>spkcvo_c</b> ( target, et,     outref, refloc,
+                       abcorr, obssta, obsepc, obsctr,
+                       obsref, state3, &amp;lt3            );
+
+            /. 
+            Central meridian longitude is the longitude of the
+            observer relative to the target center, so we must
+            negate the position portion of the state we just
+            computed.
+            ./
+            <a href="vminus_c.html">vminus_c</a> ( state3, obsvec );
+
+            <a href="reclat_c.html">reclat_c</a> ( obsvec, &amp;r, &amp;lon, &amp;lat );
+
+            printf ( &quot;\n\n&quot;
+                     &quot; Frame evaluation locus:     %s\n&quot;
+                     &quot;\n&quot;
+                     &quot; Target:                     %s\n&quot;
+                     &quot; Observation time:           %s\n&quot;
+                     &quot; Observer center:            %s\n&quot;
+                     &quot; Observer-center state time: %s\n&quot;
+                     &quot; Observer frame:             %s\n&quot;
+                     &quot; Emission time:              %s\n&quot;
+                     &quot; Output reference frame:     %s\n&quot;
+                     &quot; Aberration correction:      %s\n&quot;
+                     &quot;\n&quot;
+                     &quot; Observer-target position (km):\n&quot;
+                     &quot;   %20.8f %20.8f %20.8f\n&quot;
+                     &quot; Observer-target velocity (km/s):\n&quot;
+                     &quot;   %20.8f %20.8f %20.8f\n&quot;
+                     &quot; Light time (s):   %20.8f\n&quot;,
+
+                     refloc,    target,    obstim,    obsctr, 
+                     epcstr,    obsref,    emitim,    outref,   
+                     abcorr,    state3[0], state3[1], state3[2],
+                     state3[3], state3[4], state3[5], lt3   ); 
+ 
+            printf ( &quot;\n&quot;
+                     &quot; Central meridian\n&quot;
+                     &quot; longitude (deg):  %20.8f\n\n\n&quot;,
+                     lon * <a href="dpr_c.html">dpr_c</a>()                       );
+
+
+            return ( 0 );
+         }
+        
+ 
+      When this program was executed on a PC/Linux/gcc 
+      platform, the output was: 
+ 
+
+         Frame evaluation locus:     OBSERVER
+
+         Target:                     MGS
+         Observation time:           2003 OCT 13 06:00:00.000000 UTC
+         Observer center:            EARTH
+         Observer-center state time: 2000 JAN 01 12:00:00.000000 TDB
+         Observer frame:             ITRF93
+         Emission time:              2003 OCT 13 05:55:44.201144 UTC
+         Output reference frame:     ITRF93
+         Aberration correction:      CN+S
+
+         Observer-target position (km):
+             -53720675.37940782   -51381249.05338467   -18838416.34716543
+         Observer-target velocity (km/s):
+                 -3751.69274754        3911.73417167          -2.17503628
+         Light time (s):           255.79885530
+
+
+         Frame evaluation locus:     CENTER
+
+         Target:                     MGS
+         Observation time:           2003 OCT 13 06:00:00.000000 UTC
+         Observer center:            EARTH
+         Observer-center state time: 2000 JAN 01 12:00:00.000000 TDB
+         Observer frame:             ITRF93
+         Emission time:              2003 OCT 13 05:55:44.201144 UTC
+         Output reference frame:     ITRF93
+         Aberration correction:      CN+S
+
+         Observer-target position (km):
+             -53720595.74378239   -51381332.31467460   -18838416.34737090
+         Observer-target velocity (km/s):
+                 -3751.69880992        3911.72835653          -2.17503628
+         Light time (s):           255.79885530
+
+         Distance between above positions (km):                 115.21404098
+         Velocity difference magnitude  (km/s):                   0.00840050
+
+
+         State computed using <a href="spkezr_c.html">spkezr_c</a>:
+
+         Target:                 MGS
+         Observation time:       2003 OCT 13 06:00:00.000000 UTC
+         Output reference frame: ITRF93
+         Aberration correction:  CN+S
+         Observer:               DSS-14
+
+         Observer-target position (km):
+             -53720595.74378239   -51381332.31467460   -18838416.34737090
+         Observer-target velocity (km/s):
+                 -3751.69880992        3911.72835653          -2.17503628
+         Light time (s):         255.79885530
+
+         Distance between last two positions (km):             0.00000000
+         Velocity difference magnitude     (km/s):             0.00000000
+
+
+         Frame evaluation locus:     TARGET
+
+         Target:                     MARS
+         Observation time:           2003 OCT 13 06:00:00.000000 UTC
+         Observer center:            EARTH
+         Observer-center state time: 2000 JAN 01 12:00:00.000000 TDB
+         Observer frame:             ITRF93
+         Emission time:              2003 OCT 13 05:55:44.201144 UTC
+         Output reference frame:     IAU_MARS
+         Aberration correction:      CN+S
+
+         Observer-target position (km):
+             -71445232.12767348     2312773.74169024    27766441.52046534
+         Observer-target velocity (km/s):
+                   155.65895286        5061.78618477           5.09447029
+         Light time (s):           255.79702283
+
+         Central meridian
+         longitude (deg):           -1.85409037
+
+ 
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   1)  This routine may not be suitable for work with stars or other 
+       objects having large distances from the observer, due to loss 
+       of precision in position vectors. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman    (JPL) 
+   S.C. Krening    (JPL) 
+   B.V. Semenov    (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 27-MAR-2012 (NJB) (SCK) (BVS)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   state relative to constant_velocity_observer 
+   state relative to constant_velocity surface_point 
+   state relative to surface_point on extended_object 
+   state relative to landmark on extended_object 
+ </PRE>
+<h4>Link to routine spkcvo_c source file <a href='../../../src/cspice/spkcvo_c.c'>spkcvo_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:43 2014</pre>
+
+</body>
+</html>
+

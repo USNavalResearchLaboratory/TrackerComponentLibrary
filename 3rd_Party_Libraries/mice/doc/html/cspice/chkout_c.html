@@ -1,0 +1,260 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>chkout_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>chkout_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void chkout_c ( ConstSpiceChar  * module )
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   Inform the CSPICE error handling mechanism of exit from a
+   routine.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+   <a href="../req/error.html">ERROR</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+   ERROR
+
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   module     I   The name of the calling routine.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+   module         is the name of the routine calling <b>chkout_c</b>.  The
+                  named routine is supposed to be `checking out'
+                  when it calls <b>chkout_c</b>; that is, the call should be
+                  the last executable statement preceding any exit
+                  from the routine.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+   <b>chkout_c</b> does not signal errors; rather it writes error messages,
+   so as to avoid recursion.
+
+   1)  If the input module name module does not match the name popped
+       from the trace stack, the short error message
+       SPICE(NAMESDONOTMATCH) is written to the error output device.
+
+   2)  If the trace stack is empty, the short error message
+       SPICE(TRACESTACKEMPTY) is written to the error output device.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+   This routine is part of the CSPICE error handling mechanism.
+
+   Conceptually, the effect of this routine is to `pop' a module
+   name from a stack.  The routine <a href="chkin_c.html">chkin_c</a> performs the inverse, or
+   `push' operation.
+
+   Every routine that participates in the traceback scheme should
+   have a call to <a href="chkin_c.html">chkin_c</a> as the second executable statement.
+   The first executable statements should be:
+
+      if ( <a href="return_c.html">return_c</a>() )
+         {
+         return;
+         }
+      else
+         {
+         <a href="chkin_c.html">chkin_c</a> ( module );
+         }
+
+
+   Here module is the name of the routine in which this code appears.
+
+   The line of code preceding the exit or any return statement
+   should be
+
+      <b>chkout_c</b>  ( module );
+
+   All CSPICE routines should call <a href="chkin_c.html">chkin_c</a> and <b>chkout_c</b>, unless they
+   are classified as `error free'.  Programs linked with CSPICE
+   may also use <a href="chkin_c.html">chkin_c</a> and <b>chkout_c</b>.
+
+   Routines that don't call <a href="chkin_c.html">chkin_c</a> and <b>chkout_c</b> won't appear in the
+   traceback.
+
+   All routines that call <a href="chkin_c.html">chkin_c</a> must also call <b>chkout_c</b>, or else the
+   trace mechanism will become very confused and need alot of therapy.
+
+   It is possible to disable check-ins (and check-outs) by calling
+   the <a href="trcoff_c.html">trcoff_c</a>.  <a href="chkin_c.html">chkin_c</a> and <b>chkout_c</b> will return immediately
+   upon entry after <a href="trcoff_c.html">trcoff_c</a> has been called.  It is not possible to
+   re-enable check-ins and check-outs after calling <a href="trcoff_c.html">trcoff_c</a>. Routines
+   that don't call <a href="chkin_c.html">chkin_c</a> and <b>chkout_c</b> won't appear in the traceback.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+   1)  Call <b>chkout_c</b> before a return statement:
+
+          if ( failed() )
+             {
+             <b>chkout_c</b> ( module );
+             return;
+             }
+
+
+   2)  Call <b>chkout_c</b> before an exit statement:
+
+          <b>chkout_c</b> ( module );
+          exit;
+
+
+   3)  Only ONE call to <b>chkout_c</b> is needed here:
+
+          <b>chkout_c</b> ( module ) ;
+          return;
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   Routines that call this routine must call <a href="chkin_c.html">chkin_c</a> as the second
+   executable statement. (The first is a call to <a href="return_c.html">return_c</a>() ).
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   N.J. Bachman    (JPL)
+   K.R. Gehringer  (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 2.0.1, 08-FEB-1998 (EDW)
+
+      Corrected and clarified header entries.
+
+   -CSPICE Version 2.0.0, 09-JAN-1998 (NJB)
+
+      Input argument filename was changed to type ConstSpiceChar *.
+
+      Re-implemented routine without dynamically allocated, temporary
+      strings.
+
+   -CSPICE Version 1.0.0, 25-OCT-1997 (EDW)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   module check out
+</PRE>
+<h4>Link to routine chkout_c source file <a href='../../../src/cspice/chkout_c.c'>chkout_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:27 2014</pre>
+
+</body>
+</html>
+

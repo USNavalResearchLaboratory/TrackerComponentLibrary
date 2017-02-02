@@ -1,0 +1,224 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_npedln</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_npedln</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_NPEDLN calculates the nearest point on a triaxial
+   ellipsoid to a specified line, and the distance from the
+   ellipsoid point to the line.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      a        
+      b        
+      c        [1,1] = size(a); double = class(a)
+               [1,1] = size(b); double = class(b)
+               [1,1] = size(c); double = class(c)
+
+               are the lengths of the semi-axes of a triaxial ellipsoid.
+               The ellipsoid is centered at the origin and oriented so that
+               its axes lie on the x, y and z axes. 'a', 'b', and 'c' are
+               the lengths of the semi-axes that respectively point in the
+               x, y, and z directions.
+
+      linept   
+      linedr   [3,n] = size(linept); double = class(linept)
+               [3,n] = size(linedr); double = class(linedr)
+
+               are, respectively, a point and a direction vector that define a
+               line.  The line is the set of vectors
+
+                     linept   +   t * linedr
+
+               where t is any real number.
+
+   the call:
+
+      [ pnear, dist ] = <b>cspice_npedln</b>( a, b, c, linept, linedr )
+
+   returns:
+
+      pnear   the point on the ellipsoid closest to the line, if the line
+              doesn't intersect the ellipsoid.
+
+              [3,n] = size(pnear); double = class(pnear)
+
+              If the line intersects the ellipsoid, pnear will be a point
+              of intersection.  If linept is outside of the ellipsoid, 'pnear'
+              will be the closest point of intersection.  If linept is inside
+              ellipsoid, pnear will not necessarily be the  the closest point
+              of intersection.
+
+      dist    , the distance of the line from the ellipsoid. This is the
+              minimum distance between any point on the line and any point on
+              the ellipsoid.
+
+              [1,n] = size(dist); double = class(dist)
+
+              If the line intersects the ellipsoid, 'dist' is zero.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % We can find the distance between an instrument optic axis ray
+      % and the surface of a body modeled as a tri-axial ellipsoid
+      % using this routine.  If the instrument position and pointing
+      % unit vector in body-fixed coordinates are:
+      %
+      linept = [ 1.0e6,  2.0e6,  3.0e6 ]';
+      linedr = [ -4.472091234e-1, -8.944182469e-1, -4.472091234e-3 ]';
+
+      %
+      % The body semi-axes lengths:
+      %
+      a = 7.0e5;
+      b = 7.0e5;
+      c = 6.0e5;
+
+      %
+      % The call to <b>cspice_npedln</b> yields a value for 'pnear', the nearest
+      % point on the body to the optic axis ray and a value for 'dist',
+      % the distance to the ray.
+      %
+      [ pnear, dist ] = <b>cspice_npedln</b>( a, b, c, linept, linedr )
+
+   MATLAB outputs:
+
+      pnear =
+
+          -1.633311079234085e+03
+          -3.266622215782081e+03
+           5.999918335000672e+05
+
+      dist =
+
+           2.389967933829971e+06
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   For any ellipsoid and line, if the line does not intersect the
+   ellipsoid, there is a unique point on the ellipsoid that is
+   closest to the line.  Therefore, the distance dist between
+   ellipsoid and line is well-defined.  The unique line segment of
+   length dist that connects the line and ellipsoid is normal to
+   both of these objects at its endpoints.
+
+   If the line intersects the ellipsoid, the distance between the
+   line and ellipsoid is zero.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/npedln_c.html">npedln_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/ellipses.html">ELLIPSES.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 12-MAR-2012, EDW (JPL), SCK (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   distance between line and ellipsoid
+   distance between line of sight and body
+   nearest point on ellipsoid to line
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:38 2014</pre>
+
+</body>
+</html>
+

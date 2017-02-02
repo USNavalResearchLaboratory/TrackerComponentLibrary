@@ -1,0 +1,178 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_npelpt</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_npelpt</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_NPELPT calculates the location on an ellipse closest
+   to a specified point, both in three-dimensional space,
+   and the distance between the ellipse and the point.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      point     a 3-vector defining a location in 3-dimensional space.
+
+                [3,1] = size(point); double = class(point)
+
+      ellipse   a SPICE ellipse.
+
+                [1,1] = size(ellipse); struct = class(ellipse)
+
+                The structure has the fields:
+
+                center:    [3,1] = size(center); double = class(center)
+                semiMinor: [3,1] = size(semiMinor); double = class(semiMinor)
+                semiMajor: [3,1] = size(semiMajor); double = class(semiMajor)
+
+   the call:
+
+      [ pnear, dist ] = <b>cspice_npelpt</b>( point, ellipse )
+
+   returns:
+
+      pnear   the 3-vector defining the location on the ellipse nearest
+              to 'point'.
+
+              [3,1] = size(point); double = class(point)
+
+      dist    the distance between the calculated point 'pnear' 
+              and 'point'.
+
+              dist = || pnear - point ||
+
+              [1,1] = size(dist); double = class(dist)
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Given an ellipse and a point in 3-dimensional space, if the
+   orthogonal projection of the point onto the plane of the ellipse
+   is on or outside of the ellipse, then there is a unique point on
+   the ellipse closest to the original point.  This routine finds
+   that nearest point on the ellipse.  If the projection falls inside
+   the ellipse, there may be multiple points on the ellipse that are
+   at the minimum distance from the original point.  In this case,
+   one such closest point will be returned.
+
+   This routine returns a distance, rather than an altitude, in
+   contrast to the Icy routine <a href="cspice_nearpt.html">cspice_nearpt</a>.  Because our ellipse is
+   situated in 3-space and not 2-space, the input point is not
+   `inside' or `outside' the ellipse, so the notion of altitude does
+   not apply to the problem solved by this routine.  In the case of
+   <a href="cspice_nearpt.html">cspice_nearpt</a>, the input point is on, inside, or outside the ellipsoid,
+   so it makes sense to speak of its altitude.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/npelpt_c.html">npelpt_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/ellipses.html">ELLIPSES.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 14-NOV-2014, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   nearest point on ellipse to point
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:38 2014</pre>
+
+</body>
+</html>
+

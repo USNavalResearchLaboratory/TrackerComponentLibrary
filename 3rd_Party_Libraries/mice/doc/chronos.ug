@@ -1,0 +1,1763 @@
+ 
+CHRONOS User's Guide
+===========================================================================
+ 
+   Last revised on 2007 FEB 13 by B. V. Semenov.
+ 
+ 
+Abstract
+--------------------------------------------------------
+ 
+   CHRONOS is a command-line program that converts between several time
+   systems and time formats.
+ 
+ 
+Summary
+--------------------------------------------------------
+ 
+   CHRONOS is a utility program that converts time between various time
+   systems. It supports the following time systems:
+ 
+         UTC    Universal Time Coordinated; UTC is a system of time keeping
+                that gives a name to each instant of time of the
+                International Atomic Time system; refer to the NAIF Toolkit
+                TIME.REQ document for more discussion regarding UTC;
+ 
+         ET     Ephemeris Time; Ephemeris time is the uniform time scale
+                represented by the independent variable in the differential
+                equations that describe the motions of the planets, sun and
+                moon. CHRONOS deals with one of the two forms of ET --
+                Barycentric Dynamical Time (TDB) which is used when
+                describing the motion of bodies with respect to the solar
+                system barycenter; refer to the NAIF Toolkit TIME.REQ
+                document for more discussion regarding ET;
+ 
+         SCLK   Spacecraft On-Board Clock Time; SCLK is the onboard
+                time-keeping mechanism that triggers most spacecraft events
+                and is the fundamental time measurement for referencing
+                most spacecraft activities and instrument data; refer to
+                the NAIF Toolkit SCLK.REQ document for more discussion
+                regarding SCLK;
+ 
+         LST    Local Solar Time; LST is simply a measure of angles between
+                landing (sub-spacecraft) and sub-solar meridians on the
+                surface of a body expressed as a "24 hour" local clock.
+ 
+   Within the supported time systems CHRONOS recognizes multiple time
+   types. The types supported for each system are described below.
+ 
+ 
+UTC Time Types
+ 
+   The following time types are supported for the UTC system:
+ 
+         SCET      Spacecraft Event Time; SCET is the time of an event
+                   on-board a spacecraft; in CHRONOS input/output SCET can
+                   be represented by any time string acceptable in SPICE
+                   time conversion routines;
+ 
+         ERT       Earth Received Time; ERT is the time of an event
+                   measured on the ground, such as the time when a signal
+                   about an event on-board of a spacecraft was received on
+                   the Earth; in CHRONOS input/output ERT can be
+                   represented by any time string acceptable in SPICE time
+                   conversion routines.
+ 
+         ETT       Earth Transmit Time; ETT is the time when a signal
+                   received on-board a spacecraft, was transmitted from the
+                   Earth; in CHRONOS input/output ETT can be represented by
+                   any time string acceptable in SPICE time conversion
+                   routines.
+ 
+         LT        One-way Light Time; LT is the one-way light time between
+                   the Earth center of mass and a spacecraft; LT cannot be
+                   input to the program; on output LT is always expressed
+                   as a number of seconds; note that LT is computed using
+                   only Newtonian assumptions about the propagation of
+                   light;
+ 
+   Note that on the input and output SCET, ERT or ETT time in the UTC
+   system can be an Earth time zone time if corresponding modifiers are
+   present in an input time string or output format picture. A few example
+   further in the document demonstrate this.
+ 
+ 
+ET Time Types
+ 
+   All of the above time types are supported ET time types. Also available
+   is:
+ 
+         SECONDS   Ephemeris Seconds past epoch J2000 (2000 JAN 01
+                   12:00:00); ET seconds is the internal SPICE
+                   representation for ET.
+ 
+ 
+SCLK Time Types
+ 
+   The following time types are supported for the SCLK system:
+ 
+         SCLK      String Spacecraft Clock; string SCLK consists of a
+                   series of one or more fields, each containing an integer
+                   counter; a partition number preceding the first
+                   (leftmost) field counter and separated from it by a
+                   slash can be present in the string to identify which
+                   partition (interval between resets) this counter's
+                   readout belongs to; SCLK examples:
+ 
+                                3/1248531085.006
+                                1248543443
+                                1437200032:006:23
+ 
+         HEX       HEX Spacecraft Clock; HEX SCLK has exactly the same
+                   format as string SCLK except that the counter fields
+                   contain HEX representations of the corresponding integer
+                   numbers; HEX examples:
+ 
+                                4A8ADDCA:48
+                                4A2A34BB
+                                2/4A8A5052.48.1A
+ 
+         TICKS     Spacecraft Clock Ticks; SCLK Ticks is the internal SPICE
+                   representation for SCLK; it's a total number of ticks --
+                   smallest increments of on-board clock -- since the clock
+                   was turned on;
+ 
+ 
+LST Time Types
+ 
+   The following time types are supported for the LST system:
+ 
+         LST       Local Solar Time; LST is the local solar time expressed
+                   by the number of local solar days (SOLs) from a landing
+                   date and using a "24-hour" clock readout within the
+                   current local solar day (HR:MN:SC); LST is a true local
+                   solar time and computed using positions of the Sun and
+                   the landing site from SPICE kernels specified in CHRONOS
+                   setup file; if a landing date is unknown to the program
+                   it cannot convert input LST to any other time system and
+                   can compute LST only without SOL number for the output;
+                   LST examples:
+ 
+                                SOL 12  12:00:01
+                                SOL 132 01:22:32.498
+                                SOL 2 9
+ 
+         LSUN      Longitude of the Sun; LSUN (also known as "L-sub-s") is
+                   the planetocentric longitude of the sun, as seen from a
+                   specified body; LSUN is often used as a measure of the
+                   season on a body: for the northern hemisphere LSUN
+                   changes from 0 (spring) ---- +90 (summer) ---- +/-180
+                   (autumn) ---- -90 (winter) ---- 0 (spring) and so on;
+                   geometrically LSUN is defined in the following frame:
+                   the positive Z direction is given by the instantaneous
+                   planetocentric North pole of the central body; the
+                   positive X direction is the cross product of the
+                   positive Z direction with the instantaneous orbital
+                   angular velocity vector; the positive Y direction is the
+                   cross product of Z and X.
+ 
+   Note that CHRONOS doesn't support any approximate local times such as
+   computed by approximating over precomputed local midnight or noon epochs
+   or computed using mean position of the Sun.
+ 
+ 
+Usage
+--------------------------------------------------------
+ 
+   CHRONOS is a command line program. To convert time from one supported
+   system/type to another, CHRONOS is used with the following command line
+   options. Those shown within square brackets are optional. A vertical bar
+   separates choices, only one of which may be used.
+ 
+         % CHRONOS  -SETUP <setup file name OR kernel file name(s)>
+                    -FROM <"from" time system>
+                   [-FROMTYPE <"from" time type>]
+                    -TO <"to" time system>
+                   [-TOTYPE <"to" time type>]
+                   [-FORMAT <output time format picture>]
+                    -TIME <input time> | -BATCH
+                   [-SC <sc ID>]
+                   [-CENTER <central body ID>]
+                   [-LANDINGTIME <UTC time of the landing>]
+                   [-SOL1INDEX <index of the first SOL>]
+                   [-NOLABEL]
+                   [-TRACE]
+ 
+   The command line options above have the following meanings:
+ 
+         -SETUP         this is used to specify a setup file name or
+                        directly list the names of the SPICE kernels to be
+                        used by CHRONOS; providing a setup file name on the
+                        command line is optional; if it's not present or is
+                        blank, CHRONOS tries to obtain it from the
+                        environment variable CHRONOS_SETUP_FILE;
+ 
+         -FROM          this is used to specify the time system of the
+                        input time; specifying the "from" time system is
+                        required;
+ 
+         -FROMTYPE      this is used to specify the time type of the input
+                        time; specifying "from" time type is optional; if
+                        it's not present or is blank, CHRONOS assumes the
+                        default time type for the input time system (SCET
+                        for UTC and ET, SCLK for SCLK, and LST for LST);
+ 
+         -TO            this is used to specify the time system of the
+                        output time; specifying the "to" time system is
+                        required;
+ 
+         -TOTYPE        this is used to specify the time type of the output
+                        time; specifying "to" time type is optional; if
+                        it's not present or is blank, CHRONOS assumes the
+                        default time type for the output time system (SCET
+                        for UTC and ET, SCLK for SCLK and LST for LST);
+ 
+         -FORMAT        this is used to specify a custom format for the
+                        output time; specifying a format on the command
+                        line is optional; if a format specification is not
+                        present or is blank, CHRONOS looks for a
+                        specification in the setup file and, if such is
+                        also not available, it uses the default format;
+                        note that only times in UTC and ET systems can be
+                        formatted as a time time strings on output; refer
+                        to Appendix 3 and Appendix 4 for more information
+                        on syntax of the output format specifications for
+                        time strings and DP numbers;
+ 
+         -TIME          this is used to specify the input time on the
+                        command line; most time types of UTC and ET systems
+                        require input time to be in a form of a time string
+                        recognized by TIME subsystem of SPICE; refer to
+                        Appendix 2 for information on acceptable input time
+                        specifications;
+ 
+         -BATCH         this is used to tell the program to take input
+                        time(s) from standard input instead of the command
+                        line; if it's present, the program ignores any
+                        input time provided after using the ``-TIME''
+                        command line option;
+ 
+         -SC            this is the NAIF ID for the spacecraft; specifying
+                        it on the command line is optional; if the s/c ID
+                        is not present on the command line, CHRONOS looks
+                        for it in the setup file;
+ 
+         -CENTER        this is the NAIF ID for the center body; specifying
+                        it on the command line is optional; if the center
+                        body ID is not present on the command line, CHRONOS
+                        looks for it in the setup file;
+ 
+         -LANDINGTIME   this is the UTC time of the landing; specifying it
+                        on the command line is optional; if this time is
+                        not present on the command line, CHRONOS looks for
+                        it in the setup file;
+ 
+         -SOL1INDEX     this is the SOL index for the first day on surface;
+                        specifying it on the command line is optional; if
+                        this index is not present on the command line,
+                        CHRONOS looks for it in the setup file;
+ 
+         -NOLABEL       this is used to tell the program to not display
+                        [SYSTEM]/[TYPE] following the output time string;
+ 
+         -TRACE         this is used to tell the program to display trace
+                        information including, complete the command line,
+                        names of the loaded SPICE kernel files, all
+                        relevant setup information, etc.; this option
+                        overrules the ``-NOLABEL'' option;
+ 
+   CHRONOS displays help information if the ``-HELP'' or ``-H'' key is
+   specified on the command line:
+ 
+         % CHRONOS -HELP|-H
+ 
+   If ``-USAGE'', ``-U'' or nothing is provided on the command line,
+   CHRONOS displays usage information:
+ 
+         % CHRONOS [-USAGE|-U]
+ 
+   If ``-TEMPLATE'' command line option is specified, CHRONOS displays
+   setup file template:
+ 
+         % CHRONOS  -TEMPLATE
+ 
+   Command line parameters specified in [] are optional. Command line keys
+   '-XXXXXXX' are case insensitive. Any of the command line options can be
+   present in the command line multiple times (in such cases the last
+   appearance of a key takes precedence.) The order in which options are
+   specified is insignificant.
+ 
+ 
+Usage Examples -- Mars Pathfinder
+ 
+   In these examples the command extends over two or three lines with the
+   backslash character indicating continuation. The output appears on the
+   very next line.
+ 
+   The examples below assume that a setup file ``setup.mpf'' exists and
+   contains correct pointers to the needed MPF SPICE kernel files.
+ 
+   To compute SCET UTC for a given HEX SCLK CHRONOS must be run with the
+   following command line options:
+ 
+      > chronos -setup setup.mpf -from sclk -fromtype hex \
+               -to utc -totype scet -time 4A8ADDCA:48
+      1997-08-18 16:57:36.110                          (UTC/SCET)
+      >
+ 
+   To compute LST for a given UTC/ERT CHRONOS must be run as follows:
+ 
+      > chronos -setup setup.mpf -from lst -to utc -totype ert \
+               -time SOL 12 13:00
+      1997-07-16 10:39:34.287                          (UTC/ERT)
+      >
+ 
+   In the example above the "-FROMTYPE" option was not needed since the
+   time type used was the default.
+ 
+   The same example using the ``-NOLABEL'' option and formatting the output
+   time ``a-la'' UNIX date command output will look like:
+ 
+      > chronos -setup setup.mpf -from lst -to utc -totype ert \
+               -time SOL 12 13:00 -nolabel \
+               -format 'Wkd Month DD HR:MN:SC PDT YYYY ::UTC-7'
+      Wed July 16 03:39:34 PDT 1997
+      >
+ 
+   Note that in the previous example the ``::UTC-7'' format modifier caused
+   time on the output to be Pacific Day Time (PDT) instead of Greenwich
+   Meridian Time (GMT) which is default time zone for UTC.
+ 
+   The opposite conversion with trace ON (``-TRACE'') will produce the
+   following output (note that in this example CHRONOS recognized PDT token
+   in the input string and processed input time as Pacific Day Time):
+ 
+      > chronos -setup setup.mpf -from utc -fromtype ert -to lst \
+               -time July 16, 1997 3:39:34 PDT -trace
+ 
+      CHRONOS -- Universal Time Conversion Tool
+      Version 1.0.0, May 14, 1998
+ 
+       Actual command line: -setup setup.mpf -from utc -fromtype ert
+                            -to lst -time July 16, 1997 3:39:34 -trace
+ 
+                Setup file: setup.mpf
+ 
+      Loaded SPICE kernels:
+                       LSK: using LSK parameters from the setup file.
+                      SCLK: /mpf/pds/data/sclk/mpf_final.tsc
+                       SPK: /mpf/pds/data/spk/de405.bsp
+                       SPK: /mpf/pds/data/spk/mpf_ls.bsp
+                       SPK: /mpf/pds/data/spk/mpf_surf.bsp
+                        CK: /mpf/pds/data/ck/mpf_ll.bc
+                        CK: /mpf/pds/data/ck/mpf_sf.bc
+                    FRAMES: /mpf/pds/data/frames/mpf.tfd
+                       PCK: using PCK parameters from the setup file.
+ 
+      Converting time from: UTC/ERT
+                        to: LST/LST
+        Output time format: NOT APPLICABLE
+        Spacecraft NAIF ID: -53
+       Center body NAIF ID: 499
+         Landing date/time: 1997 JUL 5 09:00
+        SOL 1 midnight UTC: 1997 JUL 04 13:53:14.703
+      Average local second: 1.0277116753731E+00 ET seconds
+ 
+      July 16, 1997 3:39:34                                (UTC/ERT)
+      SOL 12 13:00:00                                      (LST/LST)
+ 
+      >
+ 
+   In the next example CHRONOS is used to convert a few UTC/SCET times
+   provided in an external file ``input.times'' (each input time on a line
+   by itself with no blank line between them) to the corresponding SCLK
+   times written to an output file ``output.times'':
+ 
+      > chronos -setup setup.mpf -from utc -to sclk \
+               -batch -nolabel < input.times > output.times
+      >
+ 
+   If input file ``input.times'' contained the following lines:
+ 
+      1997-07-06 12:00:00.000
+      1997-07-06 13:00:00.000
+      1997-07-06 14:00:00.000
+      1997-07-06 15:00:00.000
+ 
+   then output file ``output.times'' will contain:
+ 
+      3/1246881607.104
+      3/1246885207.101
+      3/1246888807.099
+      3/1246892407.096
+ 
+ 
+Using CHRONOS with Calling Scripts or Aliases
+ 
+   Specifying all command line options every time you run the program can
+   be quite tiring, especially taking into account that most command lines
+   require several character strings and selected combinations of
+   input/output time systems/types are probably used many times. Therefore,
+   it could be very convenient to define a set of aliases or create a
+   number of wrapper scripts which will contain preset combinations of
+   command line parameters for a given input/output time system/type pair.
+   For example, conversion from UTC/SCET to UTC/ERT can be implemented by
+   the following alias:
+ 
+      alias utc2ert 'chronos -from utc  -fromtype scet -to utc  \
+                    -totype ert  -format -time'
+ 
+   or c-shell script ``utc2ert'':
+ 
+      #!/bin/csh -f
+      chronos -from utc  -fromtype scet -to utc \
+                    -totype ert  -format -time $argv[*]
+ 
+   Then to perform the conversion you need to type only
+ 
+      > utc2ert 1998 jan 12 13:00
+      1998-01-12 13:18:04.672                                 (UTC/ERT)
+      >
+ 
+   Note that since for both the alias and the script a setup file name
+   wasn't specified on the command line, CHRONOS used the name provided in
+   the environment variable CHRONOS_SETUP_FILE.
+ 
+   A set of aliases mimicking time tools that were used by the Mars
+   Pathfinder project is provided in Appendix 1 at the end of the document.
+   It doesn't cover all possible combinations of the input/output time
+   system/type pairs but it could be easily extended to do so.
+ 
+   Using aliases makes using CHRONOS easy, but it seems that by setting
+   command line options in these aliases we are taking away some of the
+   program's flexibility. This is not true. That CHRONOS allows any command
+   line option to be specified as many times as desired (then the last
+   appearance/value of it is used) and that blank values are permitted,
+   allows one to use any pre-specified alias in the same way as the program
+   itself.
+ 
+   For example, if you want to specify a custom output format while using
+   the ``utc2ert'' alias, it can be done with the ``-FORMAT'' command line
+   option as it would be while using CHRONOS without any wrappers:
+ 
+      > utc2ert 1998 JAN 12 11:24 -format YYYY-DOY//HR:MN:SC
+ 
+   or
+ 
+      > utc2ert -format YYYY-DOY//HR:MN:SC -time 1998 JAN 12 11:24
+ 
+   or
+ 
+      > utc2ert -time 1998 JAN 12 11:24 -format YYYY-DOY//HR:MN:SC
+ 
+   Note that in the first case the ``-TIME'' command line option wasn't
+   needed because it's already present in the ``utc2ert'' alias, while in
+   the second example it was required to tell the program that ``1998 JAN
+   12 11:24'' is an input time but not a part of the format string
+   specified after ``-FORMAT''. In the third case, it seems that we have
+   the ``-TIME'' key repeated two times because it's present in the alias
+   and on the command line. This is not a problem for CHRONOS, it just
+   ignores the first ``-TIME'' and the blank value which appears after it.
+ 
+   This example can be easily extended to demonstrate other possibilities:
+ 
+       --   using a different setup file:
+ 
+               > utc2ert -setup setup.m98lnd -time 1998 JAN 12 11:24
+ 
+       --   turning tracing ON:
+ 
+               > utc2ert 1998 JAN 12 11:24 -trace
+ 
+       --   running in the batch mode:
+ 
+               > utc2ert -batch < input.times > output.times
+ 
+       --   using a different output time type:
+ 
+               > utc2ert -totype ett -time 1998 JAN 12 11:24
+ 
+       --   or a combination of all of the above:
+ 
+               > utc2ert -setup setup.m98lnd \
+                         -totype ett \
+                         -trace \
+                         -batch < input.times > output.times
+ 
+ 
+Setup File
+--------------------------------------------------------
+ 
+   CHRONOS requires a few parameters to be provided in a setup file. The
+   name of a setup file is usually provided on the command line. If it's
+   not present there, the program looks for the name associated with the
+   environment variable CHRONOS_SETUP_FILE.
+ 
+   The setup file format must follow the SPICE Kernel Text file format
+   rules, i.e. it must contain data formatted as a set of KEYWORD=VALUE
+   assignments enclosed between
+ 
+      \begindata
+      \begintext
+ 
+   markers. Each assignment and marker must be on a line by itself.
+ 
+   The following parameters may be provided in a setup file:
+ 
+      \begindata
+         LEAPSECONDS_FILE  = 'name of a LSK file'
+         SCLK_FILE         = 'name of a SCLK file for the mission'
+         PCK_FILE          = 'name of a PCK file'
+         SPK_FILES         = ( 'name of an SPK file', '...' )
+         CK_FILES          = ( 'name of a CK file', '...' )
+         FRAMES_FILE       = 'name of a frame definitions file'
+         SPACECRAFT_ID     = NAIF ID for the spacecraft
+         CENTER_ID         = NAIF ID for the center body
+         LANDING_TIME      = 'UTC time of the landing'
+         LANDING_SOL_INDEX = SOL index of the landing
+      \begintext
+ 
+   Note that either or all of the SPACECRAFT_ID, CENTER_ID, LANDING_TIME,
+   and LANDING_SOL_INDEX parameters can also be provided using the command
+   line switches. If done so, the setup file value corresponding to a
+   command line value is not needed, and, if present, is ignored by the
+   program.
+ 
+   Similarly, the kernels files to be loaded can be provided using the
+   standard SPICE interface -- with the KERNELS_TO_LOAD parameter:
+ 
+      \begindata
+         KERNELS_TO_LOAD = (
+                            'name of a LSK file',
+                            'name of a SCLK file ',
+                            'name of a PCK file',
+                            'name of an SPK file',
+                            '...',
+                            'name of a CK file',
+                            '...',
+                            'name of an FK file'
+                           )
+      \begintext
+ 
+   or using KERNELS_TO_LOAD with additional path specification keywords --
+   PATH_VALUES/PATH_SYMBOLS:
+ 
+      \begindata
+         PATH_VALUES      = (
+                             '/directory/where/kernels/are'
+                            )
+         PATH_SYMBOLS     = (
+                             'KERNELS'
+                            )
+         KERNELS_TO_LOAD  = (
+                             '$KERNELS/name of a LSK file',
+                             '$KERNELS/name of a SCLK file ',
+                             '$KERNELS/name of a PCK file',
+                             '$KERNELS/name of an SPK file',
+                             '$KERNELS/...',
+                             '$KERNELS/name of a CK file',
+                             '$KERNELS/...',
+                             '$KERNELS/name of an FK file'
+                            )
+      \begintext
+ 
+   or even by simply listing them after the -SETUP command line switch. If
+   KERNELS_TO_LOAD, or KERNELS_TO_LOAD + PATH_VALUES/PATH_SYMBOLS, or
+   listing kernel names directly on the command line is used, specifying
+   the LEAPSECONDS_FILE, SCLK_FILE, PCK_FILE, SPK_FILES, CK_FILES, and
+   FRAMES_FILE setup file parameters is not necessary.
+ 
+   Note that if some data from the LSK or PCK kernels is included directly
+   into the setup file, they get loaded into the program automatically. In
+   such cases program checks whether required LSK values are already loaded
+   and if so it's doesn't load external LSK file(s).
+ 
+   Custom format for a particular time system/type pair can be specified in
+   a setup file using keywords [SYSTEM]_{TYPE}_FORMAT, where [SYSTEM] and
+   {TYPE} are corresponding character designations (for example:
+   UTC_SCET_FORMAT = 'YYYY-DOY//HR:MN')
+ 
+ 
+Setup File Examples
+ 
+   Below are three setup file examples. The first one is for MER-2, the
+   second one is the M98 Lander, and the third one is for Mars Pathfinder.
+ 
+   MER-2 CHRONOS setup file, using FURNSH-style kernel file name
+   specification:
+ 
+      \begindata
+         PATH_VALUES       = (
+                             '/ftp/pub/naif/MER/kernels'
+                             )
+         PATH_SYMBOLS      = (
+                             'KERNELS'
+                             )
+         KERNELS_TO_LOAD   = (
+                             '$KERNELS/lsk/naif0007.tls'
+                             '$KERNELS/sclk/MER_254_SCLKSCET.00003.tsc'
+                             '$KERNELS/pck/mars_iau2000_v0.tpc'
+                             '$KERNELS/spk/de410.bsp'
+                             '$KERNELS/spk/mer2_ls_ep55a2_iau2000_v1.bsp'
+                             '$KERNELS/spk/mer2_still_at_ls_v1.bsp'
+                             )
+         SPACECRAFT_ID     = -254
+         CENTER_ID         = 499
+         LANDING_TIME      = '2004-01-04 04:20'
+         LANDING_SOL_INDEX = 1
+      \begintext
+ 
+      Sun GM from pck00006.tpc.
+ 
+      \begindata
+         BODY10_GM  =   132712440041.939
+      \begintext
+ 
+   M98 Lander CHRONOS setup file:
+ 
+      \begindata
+         LEAPSECONDS_FILE = '/kernels/gen/lsk/naif0006.tls'
+         SCLK_FILE = '/kernels/m98lnd/sclk/m98lnd.test.tsc'
+         PCK_FILE = '/kernels/gen/pck/pck00006.tpc'
+         SPK_FILES = (
+                     '/kernels/gen/spk/de405s.bsp',
+                     '/kernels/m98lnd/spk/landsite/m98lndst.bsp'
+                      )
+         SPACECRAFT_ID = -116
+         CENTER_ID = 499
+         LANDING_TIME = '1999 DEC 1 12:00'
+         LANDING_SOL_INDEX = 0
+      \begintext
+ 
+   MPF CHRONOS setup file:
+ 
+      =====================================================
+      CHRONOS Setup Keywords.
+      =====================================================
+      \begindata
+         LEAPSECONDS_FILE = '/mpf/pds/data/lsk/mpf.tls'
+         SCLK_FILE = '/mpf/pds/data/sclk/mpf_final.tsc'
+         PCK_FILE = '/mpf/pds/data/pck/mpf.tpc'
+         SPK_FILES = (
+                      '/mpf/pds/data/spk/de405.bsp',
+                      '/mpf/pds/data/spk/mpf_ls.bsp',
+                      '/mpf/pds/data/spk/mpf_surf.bsp'
+                      )
+         CK_FILES = (
+                      '/mpf/pds/data/ck/mpf_ll.bc',
+                      '/mpf/pds/data/ck/mpf_sf.bc'
+                      )
+         FRAMES_FILE = '/mpf/pds/data/frames/mpf.tfd'
+         SPACECRAFT_ID = -53
+         CENTER_ID = 499
+         LANDING_TIME = '1997 JUL 5 09:00'
+         UTC_ERT_FORMAT = 'YYYY-DOY//HR:MN:SC.### ERT'
+         UTC_SCET_FORMAT = 'YYYY-DOY//HR:MN:SC.###'
+         ET_SCET_FORMAT = 'YYYY-DOY//HR:MN:SC.### ET-ERT'
+         ET_ERT_FORMAT = 'YYYY-DOY//HR:MN:SC.### ET'
+      \begintext
+      =====================================================
+      Required LSK parameters. Extracted from naif0006.tls.
+      =====================================================
+      \begindata
+         DELTET/DELTA_T_A       =   32.184
+         DELTET/K               =    1.657D-3
+         DELTET/EB              =    1.671D-2
+         DELTET/M               = (  6.239996D0   1.99096871D-7 )
+         DELTET/DELTA_AT        = ( 10,   @1972-JAN-1
+                                    11,   @1972-JUL-1
+                                    12,   @1973-JAN-1
+                                    13,   @1974-JAN-1
+                                    14,   @1975-JAN-1
+                                    15,   @1976-JAN-1
+                                    16,   @1977-JAN-1
+                                    17,   @1978-JAN-1
+                                    18,   @1979-JAN-1
+                                    19,   @1980-JAN-1
+                                    20,   @1981-JUL-1
+                                    21,   @1982-JUL-1
+                                    22,   @1983-JUL-1
+                                    23,   @1985-JUL-1
+                                    24,   @1988-JAN-1
+                                    25,   @1990-JAN-1
+                                    26,   @1991-JAN-1
+                                    27,   @1992-JUL-1
+                                    28,   @1993-JUL-1
+                                    29,   @1994-JUL-1
+                                    30,   @1996-JAN-1
+                                    31,   @1997-JUL-1 )
+      \begintext
+      =====================================================
+      Required PCK constants. Extracted from pck00006.tpc.
+      =====================================================
+      \begindata
+         BODY499_POLE_RA          = (  317.68143     -0.1061       0.  )
+         BODY499_POLE_DEC         = (  +52.88650     -0.0609       0.  )
+         BODY499_PM               = (  176.901   +350.89198226     0.  )
+         BODY10_GM  =   132712440041.939
+      \begintext
+ 
+   Note that in MPF case more SPICE data is needed to support time
+   conversions. It even needs some CK files. The reason is that MPF Lander
+   location in the corresponding SPK file is given relative to the surface
+   fixed frame rather than relative to the center on Mars in the Mars fixed
+   frame as is done for the M98 Lander. Therefore, to compute the location
+   of the MPF Lander relative to the Sun or Earth, which is needed for
+   converting from/to local time or for computing ERT or ETT, CHRONOS needs
+   to load all SPICE kernels containing positions and frame transformation
+   information needed to perform such computations.
+ 
+   The setup file for MPF also contains DOY-style output format pictures
+   for UTC/ERT, UTC/SCET, ERT/ERT and ER/SCET system/types.
+ 
+   As already mentioned CHRONOS automatically loads any KEYWORD=VALUE
+   definitions present in the setup file. This can be used to speed program
+   execution by placing required LSK and PCK parameters in the setup file
+   instead of making the program read them from standard LSK and PCK files
+   which will take more time. (Loading data only from one file is is much
+   quicker than loading data from two or three text kernels.)
+ 
+ 
+Appendix 1: Aliases Mimicing MPF Time Tools
+--------------------------------------------------------
+ 
+   The following command line time conversion utilities were created by the
+   MPF NAV team (Robin Vaughan) and widely used by MPF during mission
+   operations:
+ 
+      ert2hex   hex2ert   lst2ert   sclk2ert   sol2ert   utc2ert
+      ert2lst   hex2lst   lst2hex   sclk2hex   sol2hex   utc2ett
+      ert2ltmst hex2ltmst lst2ltmst sclk2lst   sol2sclk  utc2hex
+      ert2sclk  hex2sclk  lst2sclk  sclk2ltmst sol2utc   utc2lst
+      ert2utc   hex2utc   lst2utc   sclk2utc             utc2lsun
+                                                         utc2ltmst
+                                                         utc2sclk
+ 
+   In the above tool names:
+ 
+         ``utc''     represented the system/type UTC/SCET;
+ 
+         ``ert''     UTC/ERT;
+ 
+         ``ett''     UTC/ETT;
+ 
+         ``hex''     SCLK/HEX;
+ 
+         ``sclk''    SCLK/SCLK;
+ 
+         ``sol''     approximation of the LST/LST computed using
+                     interpolation over precalculated local midnight UTC
+                     times; this time contained SOL day number;
+ 
+         ``lsun''    LST/LSUN;
+ 
+         ``ltmst''   local true solar time (equivalent of CHRONOS's
+                     LST/LST) and local mean solar time computed using mean
+                     Sun position;
+ 
+         ``lst''     approximation of the LST/LST computed using
+                     interpolation over precalculated local midnight UTC
+                     times; this time contained year and day;
+ 
+   Most of these utilities (except those dealing with approximated local
+   times):
+ 
+      ert2hex   hex2ert   sclk2ert   sol2ert   utc2ert
+      ert2sol   hex2sol   sclk2hex   sol2hex   utc2hex
+      ert2sclk  hex2sclk  sclk2sol   sol2sclk  utc2sol
+      ert2utc   hex2utc   sclk2utc   sol2utc   utc2sclk
+                                               utc2lsun
+                                               utc2ett
+ 
+   can be implemented by using aliases to CHRONOS with the right
+   combination of command line options. Note that in aliases ``sol''
+   designates LST/LST rather than approximated local solar time as it was
+   on MPF.
+ 
+   The c-shell script ``mpf.chronos.aliases'' shown below sets these
+   aliases. The aliases in the script must be made available to the UNIX
+   c-shell by loading the script with the ``source'' command:
+ 
+      > source mpf.chronos.aliases
+ 
+   ``mpf.chronos.aliases'' script:
+ 
+      alias ert2hex  'chronos -from utc  -fromtype ert       \'\
+                            '-to   sclk -totype   hex  -time'
+      alias ert2sol  'chronos -from utc  -fromtype ert       \'\
+                            '-to   lst  -totype   lst  -time'
+      alias ert2sclk 'chronos -from utc  -fromtype ert       \'\
+                            '-to   sclk -totype   sclk -time'
+      alias ert2utc  'chronos -from utc  -fromtype ert       \'\
+                            '-to   utc  -totype   scet -time'
+      alias hex2ert  'chronos -from sclk -fromtype hex       \'\
+                            '-to   utc  -totype   ert  -time'
+      alias hex2sol  'chronos -from sclk -fromtype hex       \'\
+                            '-to   lst  -totype   lst  -time'
+      alias hex2sclk 'chronos -from sclk -fromtype hex       \'\
+                            '-to   sclk -totype   sclk -time'
+      alias hex2utc  'chronos -from sclk -fromtype hex       \'\
+                            '-to   utc  -totype   scet -time'
+      alias sol2ert  'chronos -from lst  -fromtype lst       \'\
+                            '-to   utc  -totype   ert  -time'
+      alias sol2hex  'chronos -from lst  -fromtype lst       \'\
+                            '-to   sclk -totype   hex  -time'
+      alias sol2sclk 'chronos -from lst  -fromtype lst       \'\
+                            '-to   sclk -totype   sclk -time'
+      alias sol2utc  'chronos -from lst  -fromtype lst       \'\
+                            '-to   utc  -totype   scet -time'
+      alias sclk2ert 'chronos -from sclk -fromtype sclk      \'\
+                            '-to   utc  -totype   ert  -time'
+      alias sclk2hex 'chronos -from sclk -fromtype sclk      \'\
+                            '-to   sclk -totype   hex  -time'
+      alias sclk2sol 'chronos -from sclk -fromtype sclk      \'\
+                            '-to   lst  -totype   lst  -time'
+      alias sclk2utc 'chronos -from sclk -fromtype sclk      \'\
+                            '-to   utc  -totype   scet -time'
+      alias utc2ert  'chronos -from utc  -fromtype scet      \'\
+                            '-to   utc  -totype   ert  -time'
+      alias utc2et   'chronos -from utc  -fromtype scet      \'\
+                            '-to   et   -totype   scet -time'
+      alias utc2hex  'chronos -from utc  -fromtype scet      \'\
+                            '-to   sclk -totype   hex  -time'
+      alias utc2sol  'chronos -from utc  -fromtype scet      \'\
+                            '-to   lst  -totype   lst  -time'
+      alias utc2sclk 'chronos -from utc  -fromtype scet      \'\
+                            '-to   sclk -totype   sclk -time'
+      alias utc2lsun 'chronos -from utc  -fromtype scet      \'\
+                            '-to   lst  -totype   lsun -time'
+      alias utc2ett  'chronos -from utc  -fromtype scet      \'\
+                            '-to   utc  -totype   ett  -time'
+ 
+   Note that each of the command defined by these aliases will expect a
+   setup file name to be provided using the CHRONOS_SETUP_FILE environment
+   variable unless aliases are modified to include it on the command line
+   using the ``-SETUP'' option.
+ 
+ 
+Appendix 2: Input UTC and ET Time string formats
+--------------------------------------------------------
+ 
+   UTC/(SCET,ERT,ETT) and ET/(SCET,ERT,ETT) times used as input must be
+   provided as time strings that can be parsed by the SPICE STR2ET routine.
+   Below is an extract from the STR2ET subroutine header, explaining
+   acceptable formats and providing some examples.
+ 
+      The variety of ways people have developed for representing
+      times is enormous. It is unlikely that any single subroutine
+      can accommodate the wide variety of custom time formats that
+      have arisen in various computing contexts. However, we
+      believe that this routine will correctly interpret most time
+      formats used throughout the planetary science community.
+      For example this routine supports ISO time formats, UNIX
+      `date` output formats, VMS time formats, MS-DOS formats,
+      etc.  One obvious omission from the strings recognized by
+      this routine are strings of the form
+ 
+           93234.1829  or 1993234.1829
+ 
+      Some readers may recognize this as the epoch that is 0.1829
+      days past the beginning of the 234'th day of 1993.  However,
+      other readers may regard this interpretation as a bit
+      obscure.
+ 
+      Below we outline some of the rules used in the interpretation
+      of strings.  A more complete discussion of the interpretation
+      of strings is given in the routine TPARTV.
+ 
+ 
+      Default Behavior
+      ----------------
+ 
+      Consider the string
+ 
+           1988 June 13, 3:29:48
+ 
+      There is nothing in this string to indicate what time system
+      the date and time belong to.  Moreover, there is nothing to
+      indicate whether the time is based on a 24-hour clock or
+      twelve hour clock.
+ 
+      In the absence of such indicators, the default interpretation
+      of this string is to regard the time of day to be a time on
+      a 24-hour clock in the UTC time system.  The date is a date
+      on the Gregorian Calendar (this is the calendar used in nearly
+      all western societies).
+ 
+      Labels
+      ------
+ 
+      If you add more information to the string, STR2ET can then
+      make a more informed interpretation of the time string.
+      For example:
+ 
+           1988 June 13, 3:29:48 P.M.
+ 
+      is still regarded as a UTC epoch.  However, with the addition
+      of the 'P.M.' label it is now interpreted as the same epoch
+      as the unlabeled epoch 1988 June 13, 15:29:48.   Similarly
+ 
+           1988 June 13, 12:29:48 A.M.
+ 
+      is interpreted as
+ 
+            1988 June 13, 00:29:48
+ 
+      For the record: 12:00 A.M. corresponds to Midnight (00:00 on the
+      24 hour clock.  12:00 P.M. corresponds to Noon. (12:00) on the
+      24 hour clock.
+ 
+      You may add still further indicators to the string.  For example
+ 
+          1988 June 13, 3:29:48 P.M. PST
+ 
+      is interpreted as an epoch in the Pacific Standard Time system.
+      This is equivalent to
+ 
+          1988 June 13, 07:29:48 UT
+ 
+      The following U.S. time zones are recognized.
+ 
+         EST   --- Eastern Standard Time  ( UTC-5:00 )
+         CST   --- Central Standard Time  ( UTC-6:00 )
+         MST   --- Mountain Standard Time ( UTC-7:00 )
+         PST   --- Pacific Standard Time  ( UTC-8:00 )
+ 
+         EDT   --- Eastern Daylight Time  ( UTC-4:00 )
+         CDT   --- Central Daylight Time  ( UTC-5:00 )
+         MDT   --- Mountain Daylight Time ( UTC-6:00 )
+         PDT   --- Pacific Daylight Time  ( UTC-7:00 )
+ 
+      Any other time zone may be specified by
+      representing its offset from UTC.
+ 
+      This notation starts with the letters 'UTC' followed by a
+      '+' for time zones east of Greenwich and '-' for time zones
+      west of Greenwich.  This is followed by the number of hours
+      to add or subtract from UTC.  This is optionally followed
+      by a colon ':' and the number of minutes to add or subtract
+      to get the local time zone.  Thus to specify the time zone of
+      Calcutta (which is 5 and 1/2 hours ahead of UTC) you would
+      specify the time zone to be UTC+5:30.  To specify the time zone
+      of Newfoundland (which is 3 and 1/2 hours behind UTC) use the
+      offset notation UTC-3:30.
+ 
+      For the Record:  Leapseconds occur at the same time in all
+      time zones.  In other words, the seconds component of a time
+      string is the same for any time zone as is the seconds
+      component of UTC.  Thus the following are all legitimate
+      ways to represent an epoch of some event that occurred
+      in the leapsecond
+ 
+           1995 December 31 23:59:60.5  (UTC)
+ 
+ 
+           1996 January   1, 05:29:60.5  (UTC+5:30 --- Calcutta Time)
+           1995 December 31, 20:29:60.5  (UTC-3:30 --- Newfoundland)
+           1995 December 31  18:59:60.5  (EST)
+           1995 December 31  17:59:60.5  (CST)
+           1995 December 31  16:59:60.5  (MST)
+           1995 December 31  15:59:60.5  (PST)
+ 
+ 
+      In addition to specifying time zones, you may specify
+      that the string be interpreted as a formal calendar
+      representation in either the Barycentric Dynamical Time system
+      (TDB) or the Terrestrial Dynamical Time system (TDT).  In
+      These systems there are no leapseconds.  Times in TDB
+      are written as
+ 
+        1988 June 13, 12:29:48 TDB
+ 
+      TDT times are written as:
+ 
+        1988 June 13, 12:29:48 TDT
+ 
+      Finally, you may explicitly state that the time system is UT
+ 
+        1988 June 13, 12:29:48 UTC.
+ 
+ 
+      Note that you may not specify two different time systems
+      simultaneously.  For example
+ 
+        1988 June 13, 12:29:48 PDT TDT
+ 
+      You might be able to make some kind of reasonable guess as
+      to the meaning of this string, but we've decided to regard
+      such strings as errors.
+ 
+      Abbreviating Years
+      ------------------
+ 
+      Although it can lead to confusion, many people are in the
+      habit of abbreviating years when they write them in dates.
+      For example
+ 
+         99 Jan 13,  12:28:24
+ 
+      Upon seeing such a string, most of us would regard this
+      as being 1999 January 13, 12:28:24 and not January 13 of
+      the year 99.  This routine interprets years that are less
+      than 100 as belonging either to the 1900's or 2000's.  Years
+      greater than 68 ( 69 - 99 ) are regarded as being an
+      abbreviation with the '19' suppressed (1969 - 1999).  Years
+      smaller than 69 ( 00 - 68 ) are regarded as being an
+      abbreviation with the '20' suppressed (2000 - 2068).
+ 
+      Note that in general it is usually a good idea to write
+      out the year.  Or if you'd like to save some typing
+      abbreviate 1999 as '99.
+ 
+      If you need to specify an epoch whose year
+      is less than 1000, we recommend that you specify the era
+      along with the year.  For example if you want to specify
+      the year 13 A.D. write it as
+ 
+        13 A.D. Jan 12
+ 
+      When specifying the era it should immediately follow the year.
+      Both the A.D. and B.C. eras are supported.
+ 
+ 
+      Changing Default Behavior
+      -------------------------
+ 
+      As discussed above, if a string is unlabelled, it is regarded
+      as representing a string in the UTC time system on the
+      Gregorian calendar.  Abbreviated years are
+      regarded as abbreviations of the years from 1969 to 2068.
+ 
+      You may modify these defaults through the routines TIMDEF
+      and TSETYR (an entry point of TEXPYR).
+ 
+      You may:
+ 
+        Set the calendar to be Gregorian, Julian or a mixture of
+        the two using TIMDEF;
+ 
+        Set the time system to be UTC, TDB, TDT or any time zone
+        using TIMDEF;
+ 
+        Set the range of year abbreviations to be any 100 year
+        interval using TSETYR.
+ 
+      See the routines TEXPYR and TIMDEF for details on changing
+      defaults.
+ 
+      These alterations affect only the interpretation of unlabelled
+      strings.  If an input string is labelled the specification
+      in the label is used.
+ 
+ 
+      If some component of a date or time is "out-of-range" STR2ET
+      regards the string as erroneous.  Below is a list of
+      erroneous strings and why they are regarded as such.
+ 
+        1997 Jan 32 12:29:29     --- there are only 31 days in January
+ 
+        '98 Jan 12 13:29:29 A.M. --- Hours must be between 1 and 12
+                                     inclusive when A.M. or P.M. is
+                                     specified.
+ 
+        1997 Feb 29, 12:29:20.0  --- February has only 28 days in
+                                     1997. This would be ok if the
+                                     year was 1996.
+ 
+ 
+        1992 Mar 12 12:62:20     --- Minutes must be between 0 and 59
+                                     inclusive.
+ 
+        1993 Mar 18 15:29:60.5   --- Seconds is out of range for this
+                                     date.  It would not be out of
+                                     range for Dec 31 23:59:60.5 or
+                                     Jun 30 23:59:60.5 because these
+                                     can be leapseconds (UTC).
+ 
+      Specifics On Interpretation of the Input String
+      -----------------------------------------------
+ 
+      The process of examining the string to determine its meaning
+      is called "parsing" the string. The string is parsed by first
+      determining its recognizable substrings (integers, punctuation
+      marks, names of months, names of weekdays, time systems, time
+      zones, etc.)  These recognizable substrings are called the
+      tokens of the input string.  The meaning of some tokens are
+      immediately determined.  For example named months, weekdays and
+      time systems have clear meanings.  However, the meaning of
+      a numeric component must be deciphered from its magnitude
+      and location in the string relative to the immediately recognized
+      components of the input string.
+ 
+      To determine the meaning of the numeric tokens in the input
+      string, a set of "production rules" and transformations are
+      applied to the full set of tokens in the string.  These
+      transformations are repeated until the meaning of every token
+      has been determined or until further transformations yield
+      no new clues into the meaning of the numeric tokens.
+ 
+      1)  Unless the substring 'JD' or 'jd' is present, the string is
+          assumed to be a calendar format (day-month-year or year and
+          day of year).  If the substring JD or jd is present, the
+          string is assumed to represent a Julian date.
+ 
+      2)  If the Julian date specifier is not present, any integer
+          greater than 999 is regarded as being a year specification.
+ 
+      3)  A dash '-' can represent a minus sign only if it precedes
+          the first digit in the string and the string contains
+          the Julian date specifier (JD).  (No negative years,
+          months, days, etc are allowed).
+ 
+      4)  Numeric components of a time string must be separated
+          by a character that is not a digit or decimal point.
+          Only one decimal component is allowed.  For example
+          1994219.12819 is sometimes interpreted as the
+          219th day of 1994 + 0.12819 days.  STR2ET does not
+          support such strings.
+ 
+          No exponential components are allowed.  For example you
+          can't input 1993 Jun 23 23:00:01.202E-4 you have
+          to explicitly list all zeros that follow the decimal
+          point: i.e.  1993 Jun 23 23:00:00.0001202
+ 
+      5)  The single colon (:) when used to separate numeric
+          components of a string is interpreted as separating
+          Hours, Minutes, and Seconds of time.
+ 
+      6)  If a double slash (//) or double colon (::) follows
+          a pair of integers, those integers are assumed  to
+          represent the year and day of year.
+ 
+      7)  A quote followed by an integer less than 100 is regarded
+          as an abbreviated year.  For example: '93 would be regarded
+          as the 93rd year of the reference century.  See TEXPYR
+          for further discussion of abbreviated years.
+ 
+       8) An integer followed by 'B.C.' or 'A.D.' is regarded as
+          a year in the era associated with that abbreviation.
+ 
+       9) All dates are regarded as belonging to the extended
+          Gregorian Calendar (the Gregorian calendar is the calendar
+          currently used by western society).  See the routine TIMDEF
+          to modify this behavior.
+ 
+      10) If the International Standard Organization (ISO)
+          date-time separator (T) is present in the string
+          ISO allowed token patterns are examined for a match
+          with the current token list.  If no match is found the
+          search is abandoned and appropriate diagnostic messages
+          are generated.
+ 
+      11) If two delimiters are found in succession in the time
+          string, the time string is diagnosed as an erroneous
+          string.  ( Delimiters are comma, white space, dash, forward
+          slash, period, day of year mark "//" or "::" )
+ 
+          Note the delimiters do not have to be the same. The pair
+          of characters ",-" counts as two successive delimiters.
+ 
+      12) White space and commas serve only to delimit tokens in the
+          input string.  They do not affect the meaning of any
+          of the tokens.
+ 
+      13) If an integer is greater than 1000 (and the 'JD' label
+          is not present, the integer is regarded as a year.
+ 
+      14) When the size of the integer components does not clearly
+          specify a year the following patterns are assumed
+ 
+          Calendar Format
+ 
+              Year Month Day
+              Month Day Year
+              Year Day Month
+ 
+              Where Month is the name of a month, not its numeric
+              value.
+ 
+              When integer components are separated by slashes (/)
+              as in 3/4/5.  Month, Day, Year is assumed (2005 March 4)
+ 
+           Day of Year Format.
+ 
+              If a day of year marker is present (// or ::) the
+              pattern
+ 
+              I-I// or I-I:: (where I stands for an integer)
+              is interpreted as Year Day-of-Year. However, I-I/ is
+              regarded as ambiguous.
+ 
+ 
+ 
+      Examples
+      --------
+ 
+      Below is a sampling of some of the time formats that
+      are acceptable as inputs to STR2ET and the way they
+      are interpreted. A complete discussion
+      of permissible formats is given in the SPICE routine
+      TPARTV as well as the reference file time.req
+      located in the /doc directory of the toolkit. "na"
+      means Not Applicable.
+ 
+      ISO (T) Formats
+ 
+      String                        Year Mon  DOY DOM  HR Min Sec
+      ----------------------------  ---- ---  --- ---  -- --- ------
+      1996-12-18T12:28:28           1996 Dec   na  18  12  28 28
+      1986-01-18T12                 1986 Jan   na  18  12  00 00
+      1986-01-18T12:19              1986 Jan   na  18  12  19 00
+      1986-01-18T12:19:52.18        1986 Jan   na  18  12  19 52.18
+      1995-08T18:28:12              1995  na  008  na  18  28 12
+      1995-18T                      1995  na  018  na  00  00 00
+ 
+ 
+      Calendar Formats
+ 
+      String                        Year   Mon DOM  HR Min  Sec
+      ----------------------------  ----   --- ---  -- ---  ------
+      Tue Aug  6 11:10:57  1996     1996   Aug  06  11  10  57
+      1 DEC 1997 12:28:29.192       1997   Dec  01  12  28  29.192
+      2/3/1996 17:18:12.002         1996   Feb  03  17  18  12.002
+      Mar 2 12:18:17.287 1993       1993   Mar  02  12  18  17.287
+      1992 11:18:28  3 Jul          1992   Jul  03  11  18  28
+      June 12, 1989 01:21           1989   Jun  12  01  21  00
+      1978/3/12 23:28:59.29         1978   Mar  12  23  28  59.29
+      17JUN1982 18:28:28            1982   Jun  17  18  28  28
+      13:28:28.128 1992 27 Jun      1992   Jun  27  13  28  28.128
+      1972 27 jun 12:29             1972   Jun  27  12  29  00
+      '93 Jan 23 12:29:47.289       1993*  Jan  23  12  29  47.289
+      27 Jan 3, 19:12:28.182        2027*  Jan  03  19  12  28.182
+      23 A.D. APR 4, 18:28:29.29    0023** Apr  04  18  28  29.29
+      18 B.C. Jun 3, 12:29:28.291   -017** Jun  03  12  29  28.291
+      29 Jun  30 12:29:29.298       2029+  Jun  30  12  29  29.298
+      29 Jun '30 12:29:29.298       2030*  Jun  29  12  29  29.298
+ 
+      Day of Year Formats
+ 
+      String                        Year  DOY HR Min Sec
+      ----------------------------  ----  --- -- --- ------
+      1997-162::12:18:28.827        1997  162 12  18 28.827
+      162-1996/12:28:28.287         1996  162 12  28 28.287
+      1993-321/12:28:28.287         1993  231 12  28 28.287
+      1992 183// 12 18 19           1992  183 12  18 19
+      17:28:01.287 1992-272//       1992  272 17  28 01.287
+      17:28:01.282 272-1994//       1994  272 17  28 01.282
+      '92-271/ 12:28:30.291         1992* 271 12  28 30.291
+      92-182/ 18:28:28.281          1992* 182 18  28 28.281
+      182-92/ 12:29:29.192          0182+ 092 12  29 29.192
+      182-'92/ 12:28:29.182         1992  182 12  28 29.182
+ 
+ 
+      Julian Date Strings
+ 
+      jd 28272.291                  Julian Date   28272.291
+      2451515.2981 (JD)             Julian Date 2451515.2981
+      2451515.2981 JD               Julian Date 2451515.2981
+ 
+                                   Abbreviations Used in Tables
+ 
+                                      na    --- Not Applicable
+                                      Mon   --- Month
+                                      DOY   --- Day of Year
+                                      DOM   --- Day of Month
+                                      Wkday --- Weekday
+                                      Hr    --- Hour
+                                      Min   --- Minutes
+                                      Sec   --- Seconds
+ 
+      * The default interpretation of a year that has been abbreviated
+      with a leading quote as in 'xy (such as '92) is to treat
+      the year as 19xy if xy > 68 and to treat it is 20xy otherwise.
+      Thus '70 is interpreted as 1970 and '67 is treated as 2067.
+      However, you may change the "split point" and centuries through
+      use of the SPICE routine TSETYR which is an entry point in
+      the SPICE module TEXPYR.  See that routine for a discussion of
+      how you may reset the split point.
+ 
+      ** All epochs are regarded as belonging to the Gregorian
+      calendar.  We formally extend the Gregorian calendar backward
+      and forward in time for all epochs.
+ 
+      +  When a day of year format or calendar format string is
+      input and neither of the integer components of the date
+      is greater than 1000, the first integer
+      is regarded as being the year.
+      ...
+ 
+ 
+Appendix 3: Output Time String Formatting Rules
+--------------------------------------------------------
+ 
+   UTC/(SCET,ERT,ETT) and ET/(SCET,ERT,ETT) times output from CHRONOS are
+   formatted as time string in accordance with the format picture
+   specification recognized by SPICE's TIMOUT routine. Below is an extract
+   from the TIMOUT subroutine header, explaining acceptable specifications
+   of output format pictures and providing some examples.
+ 
+      A format picture is simply a string of letters that lets
+      TIMOUT know where various components of a time representation
+      should be placed during creation of the time string.
+      Here's an example of such a picture:
+ 
+         MON DD,YYYY  HR:MN:SC.#### (TDB) ::TDB
+ 
+      Here is a sample of times that would be created by
+      using this format.
+ 
+         JAN 12,1992  12:28:18.2772 (TDB)
+         FEB 13,1994  23:18:25.2882 (TDB)
+         AUG 21,1995  00:02:00.1881 (TDB)
+ 
+      As you can see from the samples above, the format picture
+      specifies that every time string created should begin
+      with a three-letter abbreviation for the month, followed
+      by a space and the day of the month. The day of month is
+      followed immediately by a comma and the year. The year
+      component is followed by two spaces. The next outputs are
+      hours represented as a two digit integer, a colon, minutes as
+      represented a two digit integer, another colon, and seconds
+      rounded to 4 decimal places and having a two digit integer
+      part. This is followed by a space and the string (TDB). The
+      special marker `::TDB' in the time picture is an
+      ``invisible'' marker. It is used to specify the time
+      system that should be used in creating the time string
+      (in this case Barycentric Dynamical Time).
+ 
+      TIMOUT does not recognize all of the parts of the time
+      format picture in the example above. The list of recognized
+      parts and unrecognized parts is shown in the table below.
+ 
+        Recognized       Unrecognized
+        ----------       ------------
+        'MON'            ' '
+        'DD'             ','
+        'YYYY'           '  '
+        'HR'             ':'
+        'MN'             '(TDB)'
+        'SC'
+        '.####'
+        '::TDB'
+ 
+      The unrecognized parts are called literal markers.  They are
+      copied exactly as they appear in PICTUR into the output string.
+      The recognized parts of the picture are replaced by a
+      component of time or, as in the case of `::TDB', are used
+      as instructions about the overall properties of the time
+      string.
+ 
+      The full list of recognized markers, their classification
+      and meaning are given below.
+ 
+      MARKER       CLASS     MEANING
+      -----------  --------  -----------------------------------------
+      '.##...'     modifier  represent a numeric   component that
+                             immediately precedes this in a decimal
+                             format.  Number of decimal places
+                             equals the number of '#'  characters
+      '::GCAL'     meta      dates are reported in Gregorian Calendar
+      '::JCAL'     meta      dates are reported in Julian Calendar
+      '::MCAL'     meta      dates after 15 October, 1582 are reported
+                             in Gregorian Calendar, before that
+                             dates are reported in Julian Calendar
+ 
+      '::RND'      meta      round output to places specified by
+                             least significant component
+ 
+      '::TDB'      meta      all components should be TDB
+ 
+      '::TDT'      meta      all components should be TDT
+ 
+      '::TRNC'     meta      truncate all output components (default)
+      '::UTC'      meta      all components should be UTC (default)
+      '::UTC+h:m'  meta      all components in UTC offset by +h (hours)
+                             and +m (minutes) so as to allow time zones.
+      '::UTC-h:m'  meta      all components in UTC offset by -h (hours)
+                             and -m (minutes) so as to allow time zones.
+      'AMPM'       string    String (either 'A.M.'  or 'P.M.')
+                             indicating whether hours are before
+                             or after noon.
+      'ampm'       string    String (either 'a.m.'  or 'p.m.')
+                             indicating whether hours are before
+                             or after noon.
+      'AP'         numeric   AM/PM equivalents of the hour component
+                             of a time.
+      'DD'         numeric   Day of month
+      'DOY'        numeric   Day of year
+      'ERA'        string    String (either 'B.C.'  or 'A.D.') giving
+                             era associated with an epoch.
+      'era'        string    String (either 'b.c.'  or 'a.d.') giving
+                             era associated with an epoch.
+      'HR'         numeric   hour component of time
+      'JULIAND'    numeric   Julian date component of time
+      'MM'         numeric   numeric representation of month component
+      'MN'         numeric   minute component of time
+      'MON'        string    upper case three letter abbreviation for
+                             month
+      'Mon'        string    capitalized three letter abbreviation for
+                             month
+      'mon'        string    lower case three letter abbreviation for
+                             month
+      'MONTH'      string    upper case full name of month
+      'Month'      string    capitalized full name of month
+      'month'      string    lower case full name of month
+      'SC'         numeric   seconds component of time
+      'SP1950'     numeric   seconds past 1950 component of time
+      'SP2000'     numeric   seconds past 2000 component of time
+      'YR'         numeric   last two digits of year component of time
+      'YYYY'       numeric   year component of time
+      'WEEKDAY'    string    upper case day of week
+      'Weekday'    string    capitalized day of week
+      'weekday'    string    lower case day of week
+      'WKD'        string    upper case three letter abbreviation for
+                             day of week.
+      'Wkd'        string    capitalized three letter abbreviation for
+                             day of week.
+      'wkd'        string    lower case three letter abbreviation for
+                             day of week.
+ 
+      String Markers
+ 
+         String markers are portions of the format picture that
+         will be replaced with a character string that represents
+         the corresponding component of a time.
+ 
+      Numeric Markers
+ 
+         Numeric markers are portions of the format picture that
+         will be replaced with a decimal string that represents
+         the corresponding component of a time.
+ 
+      Meta Markers
+ 
+         Meta markers (listed under the class ``meta'' in the
+         table above) are used to indicate `global' properties of
+         your time string. You may specify time scale and how
+         rounding should be performed on the components of time
+         in your output string. Meta markers may be placed anywhere
+         in your format picture. They do not contribute to placement
+         of characters in output time strings. Also there are no
+         restrictions on how many meta markers you may place in
+         the format picture. However, if you supply conflicting
+         `meta' markers (for example ::TDT and ::TDB) in your
+         picture the first marker listed (in left to right order)
+         overrules the conflicting marker that appears later in
+         the picture.
+ 
+      Default Meta Markers
+ 
+         If you do not specify a time system, calendar, or time
+         zone through the use of a Meta Marker, TIMOUT uses the
+         values returned by the SPICE routine TIMDEF. The default
+         time system, calendar returned by TIMDEF are UTC and
+         the Gregorian calendar.  The default time zone returned
+         by TIMDEF is a blank indicating that no time zone offset
+         should be used.
+ 
+         See the header for the routine TIMDEF for a more complete
+         discussion of setting and retrieving default values.
+ 
+      Modifier Markers
+ 
+         The numeric markers listed in the table above stand
+         for integers unless they are modified through use of a
+         modifier marker. The strings
+ 
+            .#
+            .##
+            .###
+            .####
+ 
+         are used to this end. When a numeric marker is followed
+         immediately by one of these modifiers, the corresponding
+         time component will be written with the number of decimal
+         places indicated by the number of successive occurrences of
+         the character '#'. Any numeric token may be modified.
+ 
+      Rounding vs. Truncation
+ 
+         The meta markers ::TRNC and ::RND allow you to control
+         how the output time picture is rounded. If you specify
+         ::TRNC all components of time are simply truncated to
+         the precision specified by the marker and any modifier.
+         If you specify ::RND the output time is rounded to the
+         least significant component of the format picture. The
+         default action is truncation.
+ 
+         Whether an output time string should be rounded or
+         truncated depends upon what you plan to do with the
+         string. For example suppose you simply want to get the
+         calendar date associated with a time and not the time of
+         day. Then you probably do not want to round your output.
+         Rounding 1992 Dec 31, 13:12:00 to the nearest day
+         produces 1993 Jan 1. Thus in this case rounding is probably
+         not appropriate.
+ 
+         However, if you are producing output for plotting using
+         Julian Date, seconds past 1950 or seconds past
+         2000, you will probably want your output rounded so as
+         to produce a smoother plot.
+ 
+      Time Systems
+ 
+         TIMOUT can produce output strings for epochs relative to
+         any of the three systems UTC, TDT, or TDB.  If you do not
+         explicitly specify a time system, TIMOUT will produce strings
+         relative to the time system returned by the SPICE routine
+         TIMDEF.  Unless you call TIMDEF and change it, the default time
+         system is UTC.  However, by using one of the Meta Markers
+         ::UTC, ::TDT, or ::TDB you may specify that TIMOUT produce
+         time strings relative to the UTC, TDT, or TDB system
+         respectively.
+ 
+      Time Zones
+ 
+         The meta markers ::UTC+h:m  and ::UTC-h:m  allow you
+         offset UTC times so that you may represent times in
+         a time zone other than GMT.  For example you can
+         output times in Pacific Standard time by placing the
+         meta-marker ::UTC-8 in your format picture.
+ 
+         For instance, if you use the picture
+ 
+            YYYY Mon DD, HR:MN:SC ::UT
+ 
+         you will get output strings such as:
+ 
+            1995 Jan 03, 12:00:00
+ 
+         If you use the picture
+ 
+            YYYY Mon DD, HR:MN:SC ::UTC-8
+ 
+         you will get output strings such as:
+ 
+            1995 Jan 03, 04:00:00
+ 
+         Finally, if you use the picture
+ 
+            YYYY Mon DD, HR:MN:SC ::UTC-8:15
+ 
+         you will get output strings such as
+ 
+            1995 Jan 03, 03:45:00
+ 
+         Note that the minutes are always added or subtracted
+         based on the sign present in the time zone specifier.
+         In the case of ::UTC+h:m, minutes are added. In the
+         case ::UTC-h:m, minutes are subtracted.
+ 
+         The unsigned part of the hours component can be no more
+         than 12.  The unsigned part of the minutes component can
+         be no more than 59.
+ 
+      Calendars
+ 
+         The calendar currently used by western countries is the
+         Gregorian calendar.  This calendar begins on Oct 15, 1582.
+         Prior to Gregorian calendar the Julian calendar was used.
+         The last Julian calendar date prior to the beginning
+         of the Gregorian calendar is Oct 5, 1582.
+ 
+         The primary difference between the Julian and Gregorian
+         calendars is in the determination of leap years.
+         Nevertheless both can be formally extended backward and
+         forward in time indefinitely.
+ 
+         By default TIMOUT uses the default calendar returned by TIMDEF.
+         Under most circumstances this will be the Gregorian calendar
+         (::GCAL).  However you may specify that TIMOUT use a specific
+         calendar through use of one of the calendar Meta Markers. You
+         may specify that TIMOUT use the Julian calendar (::JCAL), the
+         Gregorian calendar (::GCAL)  or a mixture of both (::MCAL).
+ 
+         If you specify ::MCAL, epochs that occur after the
+         beginning of the Gregorian calendar will be represented
+         using the Gregorian calendar and epochs prior to the
+         beginning of the Gregorian calendar will be represented
+         using the Julian calendar.
+ 
+      Getting Software to Construct Pictures for You.
+ 
+         Although it is not difficult to construct time format
+         pictures, you do need to be aware of the various markers
+         that may appear in a format picture.
+ 
+         There is an alternative means for getting a format picture.
+         The routine TPICTR constructs format pictures from a sample
+         time string. For example, suppose you would like your
+         time strings to look like the basic pattern of the string
+         below.
+ 
+            'Fri Jul 26 12:22:09 PDT 1996'
+ 
+         You can call TPICTR with this string, and it will create
+         the appropriate PICTUR for use with TIMOUT.
+ 
+            CALL TPICTR ( 'Fri Jul 26 12:22:09 PDT 1996', PICTUR, OK )
+ 
+         The result will be:
+ 
+            'Wkd Mon DD HR:MN:SC (PDT) ::UTC-7'
+ 
+         Note: not every date that you can read is interpretable
+         by TPICTR.  For example, you might be able to understand
+         that 19960212121116 is Feb 2 1996, 12:11:16.  However,
+         TPICTR cannot recognize this string.  Thus it is important
+         to check the logical output OK to make sure that TPICTR was
+         able to understand the time picture you provided.
+ 
+         Even thought TPICTR can not recognize every time pattern
+         that has been used by various people, it does recognize
+         nearly all patterns that you use when you want to communicate
+         outside your particular circle of colleagues.
+      ...
+ 
+ 
+Appendix 4: Output DP Number Formatting Rules
+--------------------------------------------------------
+ 
+   On output UTC/LT, ET/(LT,SECONDS) and LST/LSUN are formatted as DP
+   numbers in accordance with a format picture specification recognized by
+   SPICE's DPFMT routine. Below is an extract from the DPFMT subroutine
+   header explaining acceptable specifications of an output DP format
+   picture and providing some examples.
+ 
+      Format Picture Construction Rules
+      ---------------------------------
+ 
+      A format picture is a string used to describe the format of
+      the output string.  There are four special characters
+      recognized by DPFMT --- a leading + or -, a leading
+      zero ( '0' ) or a zero that follows a leading + or -,
+      and the first decimal point of the string.
+ 
+      All other non-blank characters are regarded as
+      equivalent.  The picture ends at the first blank
+      character.  The effects associated with the various
+      characters in a picture are spelled out in the
+      description of the output STRING.
+ 
+      The following pictures are treated as errors.
+ 
+      ' ', '+', '-', '.', '+.', '-.'
+ 
+      If the first character of the picture is a minus sign,
+      the first character in the output string will be
+      a blank if the number is non-negative, a minus sign
+      if the number is negative.
+ 
+      If the first character of the picture is a plus sign,
+      the first character of the output string will be a
+      plus if the number is positive, a blank if the number
+      is zero, and a minus sign if the number is negative.
+ 
+      If the first character of the string is NOT a sign
+      (plus or minus) the first character of the output
+      string will be a minus sign if the number is negative
+      and will be the first character of the integer part
+      of the number otherwise.
+ 
+      The integer portion of STRING will contain the same
+      number of characters as appear before the decimal point
+      (or last character if there is no decimal point) but
+      after a leading + or -.
+ 
+      If the picture begins with any of the following
+ 
+         '+0', '-0', or '0'
+ 
+      it is said to have a leading zero.  If a picture has
+      a leading zero and the integer portion is not large
+      enough to fill up the integer space specified by
+      PICTUR, STRING will be zero padded from the sign (if
+      one is required) up to the first character of the
+      integer part of the number.
+ 
+      If picture does NOT have a leading zero and
+      the integer portion is not large enough to fill up
+      the space specified by PICTUR, STRING will be blank
+      padded on the left between the sign (if one is required)
+      and the first character of the integer part of the
+      number.
+ 
+      If a decimal point ( '.' ) is present in PICTUR it
+      will be present following the integer portion of
+      STRING. Moreover, the decimal portion of STRING will
+      contain the same number of digits as there are
+      non-blank characters following the decimal point in
+      PICTUR.  However, only the first 14 digits starting
+      with the first non-zero digit are meaningful.
+ 
+      If the format specified by PICTUR does not provide
+      enough room for the integer portion of X, the routine
+      determines whether or not the number of characters
+      present in the picture is sufficient to create a
+      representation for X using scientific notation.  If
+      so, the output is displayed using scientific notation
+      (leading signs if they are present in PICTUR, will
+      also appear in STRING).   If the format specified
+      by PICTUR is too short to accommodate scientific
+      notation, the output string is filled with '*' to
+      the same length as the length of PICTUR. Leading
+      signs are not preserved in this overflow case.
+ 
+      Examples
+      --------
+ 
+      Suppose that X has the binary representation of PI.
+      Then the table below illustrates the strings that
+      would be produced by a variety of different pictures.
+ 
+      PICTUR         |    STRING
+      -------------------------------
+      '0x.xxx'       |  '03.142'
+      'xx.xxx'       |  ' 3.142'
+      '+xxx.yyyy'    |  '+  3.1416'
+      '-.yyyy'       |  '******'
+      'xxxxxxxx'     |  '       3'
+      '00xx'         |  '0003'
+      '-00.0000000'  |  ' 03.1415927'
+      '00'           |  '03'
+      'x.'           |  '3.'
+      '.mynumber'    |  '3.142E+00'
+      'my dog spot'  |  ' 3'
+      'my.dog spot'  |  ' 3.142'
+      '+my.dog,spot' |  '+ 3.14159265'
+ 
+ 
+ 
+      Suppose that X has the binary representation of 2/3.
+      Then the table below illustrates the strings that
+      would be produced by a variety of different pictures.
+ 
+      PICTUR         |    STRING
+      -------------------------------
+      '+x.xxx'       |  '+0.667'
+      '+xx.xxx'      |  '+ 0.667'
+      'xxx.yyyy'     |  '  0.6667'
+      '.yyyy'        |  '.6667'
+      'xxxxxxxx'     |  '       1'
+      '00xx'         |  '0001'
+      '-0.0000000'   |  ' 0.6666667'
+      '00'           |  '01'
+      'x.'           |  '1.'
+      'mynumber'     |  '       1'
+      'my dog spot'  |  ' 1'
+      'my.dog spot'  |  ' 0.667'
+      'my.dog,spot'  |  ' 0.66666667'
+ 
+      Suppose that X has the binary representation of
+      -8/9. Then the table below illustrates the strings
+      that would be produced by a variety of different
+      pictures.
+ 
+ 
+      PICTUR         |    STRING
+      -------------------------------
+      '+x.xxx'       |  '-0.889'
+      '-00.xxxx'     |  '-00.8889'
+      'xxx.xxx'      |  ' -0.889'
+      '000.000'      |  '-00.889'
+ 

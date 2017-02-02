@@ -1,0 +1,244 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_vnorm</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_vnorm</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_VNORM returns the magnitude of a double precision, 3-dimensional
+   array or set of such arrays.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      v1   any arbitrary 3-vector(s).
+
+           [3,n] = size(v1); double = class(v1)
+
+   the call:
+
+      vnorm = <b>cspice_vnorm</b>(v1)
+
+   returns:
+
+      vnorm   the positive definite magnitude(s) of 'v1', ||v1||, calculated
+              in a numerically stable way.
+
+              [1,n] = size(vnorm); double = class(vnorm)
+
+              'vnorm' returns with the same measure of vectorization (N)
+              as 'v1'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Set a size for the Nx1 array of ephemeris times.
+      %
+      N = 1000;
+
+      %
+      %  Load a set of kernels: an SPK file, a PCK
+      %  file and a leapseconds file. Use a meta
+      %  kernel for convenience.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % Set a reference epoch, convert the string representation
+      % to ET.
+      %
+      utc = 'Jan 1 2010 12:34:56';
+      et_0 = <a href="cspice_str2et.html">cspice_str2et</a>( utc );
+
+      %
+      % Create an array of N elements off the reference epoch in
+      % steps of one day in ET seconds.
+      %
+      et = [1:N]*<a href="cspice_spd.html">cspice_spd</a>() + et_0;
+
+      %
+      % Calculate the geometric position of Mercury with respect to
+      % the earth, without aberration correction, at time 'et'.
+      %
+      target   = 'Mercury';
+      frame    = 'J2000';
+      abcorr   = 'none';
+      observer = 'Earth';
+
+      disp('Scalar')
+
+      [pos, ltime] = <a href="cspice_spkpos.html">cspice_spkpos</a>( target, et_0, frame, abcorr, observer );
+
+      %
+      % Calculate the  magnitude of the position vector returned
+      % from <a href="cspice_spkpos.html">cspice_spkpos</a>.
+      %
+      vmag = [ <b>cspice_vnorm</b>( pos ) ]'
+
+
+      disp('Vectorized')
+
+      [pos, ltime] = <a href="cspice_spkpos.html">cspice_spkpos</a>( target, et, frame, abcorr, observer );
+
+      %
+      % Calculate the 1xN array of magnitudes of the N position vectors
+      % returned from <a href="cspice_spkpos.html">cspice_spkpos</a>.
+      %
+      vmag = [ <b>cspice_vnorm</b>( pos ) ]'
+
+      %
+      % It's always good form to unload kernels after use,
+      % particularly in Matlab due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   Matlab outputs:
+
+      Scalar
+
+      vmag =
+
+           1.041179020016839e+08
+
+      Vectorized
+
+      vmag =
+
+           1.025277808532095e+08
+           1.013810734850024e+08
+           1.006917331078249e+08
+           1.004611905399685e+08
+           1.006785378087216e+08
+           1.013217510356714e+08
+
+                   ...
+
+           2.076962759877405e+08
+           2.072238879729207e+08
+           2.066729526239417e+08
+           2.060458187524104e+08
+           2.053445529777324e+08
+           2.045709570882183e+08
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   The magnitude calculation takes care to avoid overflow while computing
+   the norm of the input vector 'v1'. The logic determines the component of
+   'v1' whose magnitude is the largest. Calling this magnitude v1max, the
+   norm is computed using the formula
+
+       vnorm  =  v1max *  ||  (1/v1max) * v1  ||
+
+   where the notation ||x|| indicates the norm of the vector x.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/vnorm_c.html">vnorm_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 24-APR-2010 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   norm of 3-dimensional vector
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:39 2014</pre>
+
+</body>
+</html>
+

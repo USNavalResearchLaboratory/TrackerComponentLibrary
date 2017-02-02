@@ -1,0 +1,206 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_bodc2s</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_bodc2s</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_BODC2S translates a body ID code to either the corresponding name
+   or if no name to ID code mapping exists, the string representation of
+   the body ID value.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      code   an integer scalar or integer 1XN array of SPICE ID codes
+             for a body: planet, satellite, barycenter, spacecraft,
+             asteroid, comet, or other ephemeris object.
+
+   the call:
+
+      [name] = <b>cspice_bodc2s</b>( code )
+
+   returns:
+
+      name   the scalar string or NXM character array of names of the
+             bodies identified by 'code' if a mapping between 'code' and
+             a body name exists within SPICE.
+
+             If 'code' has more than one translation, then the most recently
+             defined 'name' corresponding to 'code' is returned. 'name' will
+             have the exact format (case and blanks) as when the name/code pair
+             was defined.
+
+             If the input value of 'code' does not map to a body name, 'name'
+             returns with the string representation of 'code'.
+
+             'name' returns with the same vectorization measure (N) as 'code'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Assign an array of body ID codes. Not all the listed codes
+      % map to a body name.
+      %
+      code = [ 399, 0, 3, -77, 11, -1, 6000001 ];
+
+      name = <b>cspice_bodc2s</b>( code );
+
+      for i=1:7
+         fprintf( '%8d  %s\n', code(i), name(i,:) )
+      end
+
+   MATLAB outputs:
+
+          399  EARTH
+            0  SOLAR SYSTEM BARYCENTER
+            3  EARTH BARYCENTER
+          -77  GALILEO ORBITER
+           11  11
+           -1  GEOTAIL
+      6000001  6000001
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   A sister version of this routine exists named <a href="mice_bodc2n.html">mice_bodc2n</a> that returns
+   the output arguments as fields in a single structure.
+
+   <a href="cspice_bodc2n.html">cspice_bodc2n</a> is one of five related subroutines,
+
+      <a href="cspice_bods2c.html">cspice_bods2c</a>      Body string to code
+      <b>cspice_bodc2s</b>      Body code to string
+      <a href="cspice_bodn2c.html">cspice_bodn2c</a>      Body name to code
+      <a href="cspice_bodc2n.html">cspice_bodc2n</a>      Body code to name
+      <a href="cspice_boddef.html">cspice_boddef</a>      Body name/code definition
+
+   <a href="cspice_bods2c.html">cspice_bods2c</a>, <b>cspice_bodc2s</b>, <a href="cspice_bodn2c.html">cspice_bodn2c</a>, and <a href="cspice_bodc2n.html">cspice_bodc2n</a>
+   perform translations between body names and their corresponding
+   integer ID codes which are used in SPICE files and routines.
+
+   <a href="cspice_bods2c.html">cspice_bods2c</a> is a slightly more general version of <a href="cspice_bodn2c.html">cspice_bodn2c</a>:
+   support for strings containing ID codes in string format enables a caller
+   to identify a body using a string, even when no name is associated with
+   that body.
+
+   <b>cspice_bodc2s</b> is a general version of <a href="cspice_bodc2n.html">cspice_bodc2n</a>; the routine returns
+   either the name assigned in the body ID to name mapping or a string
+   representation of the 'code' value if no mapping exists.
+
+   <a href="cspice_boddef.html">cspice_boddef</a> assigns a body name to ID mapping. The mapping has
+   priority in name-to-ID and ID-to-name translations.
+
+   Refer to <a href="../req/naif_ids.html">NAIF_IDS.REQ</a> for the list of name/code associations built
+   into SPICE, and for details concerning adding new name/code
+   associations at run time by loading text kernels.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/bodc2s_c.html">bodc2s_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/naif_ids.html">NAIF_IDS.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 01-JUN-2009, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   body id code to string
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:36 2014</pre>
+
+</body>
+</html>
+

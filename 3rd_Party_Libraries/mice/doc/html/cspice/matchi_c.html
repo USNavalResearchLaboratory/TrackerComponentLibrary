@@ -1,0 +1,257 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>matchi_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>matchi_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   SpiceBoolean matchi_c ( ConstSpiceChar      * string,
+                           ConstSpiceChar      * templ,
+                           SpiceChar             wstr,
+                           SpiceChar             wchr   )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+    Determine whether a string is matched by a template containing 
+    wild cards.  The pattern comparison is case-insensitive.
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+    None. 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+    CHARACTER,  COMPARE 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+    VARIABLE  I/O  DESCRIPTION 
+    --------  ---  -------------------------------------------------- 
+    string     I   String to be tested. 
+    templ      I   Template (with wild cards) to test against string. 
+    wstr       I   Wild string token. 
+    wchr       I   Wild character token. 
+    
+    The function returns the value SPICETRUE if string matches templ,
+    SPICEFALSE if not.
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+    string      is the input character string to be tested for 
+                a match against the input template. Leading and 
+                trailing blanks are ignored. 
+ 
+    templ       is the input template to be tested for a match 
+                against the input string. TEMPL may contain wild 
+                cards. Leading and trailing blanks are ignored. 
+ 
+    wstr        is the wild string token used in the input template. 
+                The wild string token may represent from zero to 
+                any number of characters. 
+ 
+    wchr        is the wild character token used in the input 
+                template. The wild character token represents 
+                exactly one character. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+    The function returns SPICETRUE when the input string matches the
+    input template, and SPICEFALSE otherwise. The string and template
+    match whenever the template can expand (through replacement of its
+    wild cards) to become the input string.
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1) If either the input string pointer is null, the error 
+      SPICE(NULLPOINTER) will be signaled.  The function will
+      return SPICEFALSE.
+      
+   2) If either input string has length zero, the error 
+      SPICE(EMPTYSTRING) will be signaled.  The function will
+      return SPICEFALSE.
+      </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+    None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   <b>matchi_c</b> ignores leading and trailing blanks in both the string 
+   and the template. All of the following are equivalent:  they 
+   all return SPICETRUE. 
+
+      #include &quot;SpiceUsr.h&quot;
+            .
+            .
+            .
+      <b>matchi_c</b> ( &quot;ALCATRAZ&quot;,       &quot;A*Z&quot;,      '*', '%' ); 
+      <b>matchi_c</b> ( &quot;  ALCATRAZ  &quot;,   &quot;a*z&quot;,      '*', '%' ); 
+      <b>matchi_c</b> ( &quot;alcatraz&quot;,       &quot;  A*Z  &quot;,  '*', '%' ); 
+      <b>matchi_c</b> ( &quot;  ALCATRAZ  &quot;,   &quot;  A*Z  &quot;,  '*', '%' ); 
+
+   <b>matchi_c</b> is case-insensitive:  uppercase characters match 
+   lowercase characters, and vice versa.  Wild characters match 
+   characters of both cases. 
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   Let 
+         string  = &quot;  ABCDEFGHIJKLMNOPQRSTUVWXYZ  &quot; 
+         wstr    = '*' 
+         wchr    = '%' 
+
+   Then 
+         if TEMPL is  &quot;*A*&quot;        <b>matchi_c</b> is SPICETRUE 
+                      &quot;A%D*&quot;                     SPICEFALSE 
+                      &quot;A%C*&quot;                   SPICETRUE 
+                      &quot;%A*&quot;                      SPICEFALSE 
+                      &quot;%%CD*Z&quot;                 SPICETRUE 
+                      &quot;%%CD&quot;                     SPICEFALSE 
+                      &quot;A*MN*Y*Z&quot;               SPICETRUE 
+                      &quot;A*MN*Y*%Z&quot;                SPICEFALSE 
+                      &quot;*BCD*Z*&quot;                SPICETRUE
+                      &quot;*bdc*z*&quot;                  SPICEFALSE
+                      &quot; *bcD*Z*  &quot;             SPICETRUE 
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+    None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+    N.J. Bachman    (JPL)
+    W.L. Taber      (JPL) 
+    I.M. Underwood  (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.0.0, 17-AUG-1999 (NJB) (WLT) (IMU)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   match string against wildcard template 
+   test whether a string matches a wildcard template 
+ </PRE>
+<h4>Link to routine matchi_c source file <a href='../../../src/cspice/matchi_c.c'>matchi_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:38 2014</pre>
+
+</body>
+</html>
+

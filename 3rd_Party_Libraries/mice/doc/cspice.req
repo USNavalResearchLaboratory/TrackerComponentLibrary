@@ -1,0 +1,780 @@
+ 
+CSPICE Required Reading
+===========================================================================
+ 
+   Last revised on 2006 NOV 20 by B. V. Semenov.
+ 
+ 
+Abstract
+--------------------------------------------------------
+ 
+   CSPICE is an ANSI C version of the SPICE Toolkit. CSPICE provides
+   essentially the same functionality as the Fortran SPICE Toolkit, with
+   very slight differences where necessitated by differences in the
+   capabilities of standard ANSI C as opposed to Fortran.
+ 
+ 
+Design Concept
+--------------------------------------------------------
+ 
+   Like the Fortran SPICE Toolkit, CSPICE contains library routines,
+   executable programs, documentation, and example ``cookbook'' programs.
+   Source code is provided for both libraries and executables.
+ 
+   NAIF creates the basis for CSPICE by running the Fortran-to-C
+   translation utility, f2c, on the Fortran SPICELIB code base.
+ 
+ 
+Programming Standards
+ 
+   NAIF intends CSPICE source code to comply with the ANSI C standard and
+   meant to be compiled under ANSI compliant C compilers; the code relies
+   on features supplied in ANSI C not present in the original Kernighan and
+   Ritchie version of C.
+ 
+   All CSPICE source code written by NAIF uses ANSI C. C source code
+   produced by running f2c on SPICELIB Fortran source code has been
+   generated using the f2c processor's "ANSI" option (-A). The degree of
+   deviation of this code from the ANSI standard, if any, is not currently
+   known. The degree of ANSI compliance of the source code in the f2c I77
+   and F77 libraries is also unknown.
+ 
+ 
+Testing
+ 
+   NAIF subjects CSPICE to an extensive set of tests designed to exercise
+   the f2c's and wrapper code. These tests run on all supported platforms.
+ 
+ 
+CSPICE functionality
+ 
+       --   SPK: loader, readers, writers
+ 
+       --   Binary PCK: loader, readers
+ 
+       --   CK: loader, readers, writers
+ 
+       --   EK: loader, query and fetch functions, fast writers,
+            record-oriented write, update, and read functions, summary
+            functions
+ 
+       --   DAF: array search and summary functions
+ 
+       --   Kernel pool: loader, summary, fetch, watcher, kernel pool write
+            access routines
+ 
+       --   Coordinate systems: translation between rectangular and
+            cylindrical, latitudinal, geodetic, and RA/Dec systems.
+ 
+       --   Body name/code translation
+ 
+       --   Matrix and vector functions
+ 
+       --   Rotation functions
+ 
+       --   Euler angle functions
+ 
+       --   Quaternion functions
+ 
+       --   Time conversion functions
+ 
+       --   Spacecraft clock functions
+ 
+       --   Ellipsoid functions: near point, surface intercept, outward
+            normal
+ 
+       --   SPICE ellipse and plane functions
+ 
+       --   SPICE error handling functions
+ 
+       --   Higher level geometry functions: sub-observer point, sub-solar
+            point, illumination angles
+ 
+       --   Constant functions: standard epochs, radian/degree conversion,
+            speed of light
+ 
+       --   Array manipulation functions
+ 
+       --   Frame utilities: map body to associated frame, get descriptive
+            information for a specified frame
+ 
+       --   File utilities: map kernel to architecture and type, close file
+            opened by translated Fortran code, test whether file exists
+ 
+       --   String utilities: case-insensitive string equivalence, white
+            space equivalence, last non-blank, case conversion.
+ 
+       --   Numeric utilities: maximum and minimum integers and double
+            precision numbers, maximum and minimum of sets of scalars
+ 
+       --   Windows, Set, and Cell functions
+ 
+   CSPICE contains counterparts of the Fortran SPICE Toolkit's executables:
+ 
+       --   Brief - A command line utility used to summarize the
+            information within an SPK file.
+ 
+       --   Chronos - A utility used to convert time values between various
+            formats, e.g. UTC to ET, Et to SCLK, etc.
+ 
+       --   CKbrief - A command line utility used to summarize the pointing
+            data within a CK file.
+ 
+       --   Commnt - A utility, usable in either interactive or command
+            line mode, used to examine and manipulate the comment area of a
+            SPICE binary kernel.
+ 
+       --   Inspekt - An interactive program used to examine and query to
+            contents of an E-kernel.
+ 
+       --   MkSPK - An application used to create, or append to, SPK files.
+ 
+       --   Spacit - An interactive application used to manipulate and
+            examine SPK files.
+ 
+       --   SPKmerge - An application used to merge several SPK files or
+            subsets of SPK files into a single SPK file.
+ 
+       --   Tobin - A command line utility used to convert SPICE ASCII
+            transfer files to architecture native binary kernels.
+ 
+       --   Toxfr - A command line utility used to convert SPICE binary
+            kernels to ASCII transfer format.
+ 
+       --   Version - A command line utility that outputs the SPICE toolkit
+            version and platform specific parameters: System, OS, Compiler,
+            binary file type (big/little endian IEEE, non-IEEE, etc.), line
+            terminator, values for min/max DPs, and values for min/max
+            INTs.
+ 
+   The CSPICE versions of these executables function identically to that of
+   the Fortran versions. The sole difference is cosmetic: in some cases,
+   the appearance of white space in these programs' output differs slightly
+   from that produced by the corresponding Fortran SPICE Toolkit
+   implementations.
+ 
+   CSPICE contains the following cookbook programs:
+ 
+       --   SIMPLE: this program calculates the angular separation of two
+            target bodies as seen from a specified observer.
+ 
+       --   STATES: this program calculates the state (position and
+            velocity) of a target body relative to an observer, at a
+            specified epoch. Observer and target are specified by the user.
+ 
+       --   SUBPT: this program calculates the planetocentric latitude and
+            longitude of the nearest point on a target body to an observer.
+            The target, observer, and epoch are user-specified.
+ 
+       --   TICTOC: this program performs conversion between UTC and ET.
+ 
+   Cookbook programs are intended to provide a simple, concrete
+   introduction to programming with CSPICE. If you are a new CSPICE user,
+   NAIF recommends that you examine the source code of the cookbook
+   programs and that you also try building and running them.
+ 
+ 
+The CSPICE API
+--------------------------------------------------------
+ 
+   The CSPICE API is designed to mimic the corresponding Fortran interface,
+   while adhering to natural C-language argument list conventions. The
+   following conventions are followed:
+ 
+       --   String arguments are C-style: strings are always
+            null-terminated on input and output.
+ 
+       --   Each output string argument has a corresponding input length
+            argument via which the caller indicates how much room is
+            available in the output string.
+ 
+       --   Multi-dimensional arrays have normal C-style storage order: the
+            rightmost index varies the fastest. For 2-dimensional matrices,
+            this means the matrix storage is in row-major order. This is
+            the transpose of the Fortran order.
+ 
+       --   Arguments involving arrays of strings are implemented as
+            two-dimensional character arrays, not arrays of character
+            pointers.
+ 
+       --   CSPICE typedefs (discussed below) are used to declare all
+            arguments and function return values.
+ 
+   Functions not belonging to the API DO NOT FOLLOW the above conventions.
+ 
+   Each API function contains a complete NAIF-style header documenting the
+   specification of that function. These hand-coded API functions are
+   called ``wrappers.'' They typically serve to encapsulate C code
+   generated by f2c. However, many of the simpler routines, such as the
+   linear algebra functions, are fully coded anew in C and do not call
+   translated Fortran routines.
+ 
+   Wrapper calls are denoted by file names ending with the suffix
+ 
+      _c
+ 
+   Wrapper source files have file names ending in
+ 
+      _c.c
+ 
+   Functions created by f2c have names ending with the suffix
+ 
+      _
+ 
+   (underscore). The underscore does not appear in the corresponding source
+   file names.
+ 
+   The few routines written in C that replace modules generated by f2c
+   follow the same function and source file naming conventions as the code
+   generated by f2c.
+ 
+   Users' application functions calling the CSPICE API must include the
+   CSPICE header file SpiceUsr.h. This header file defines function
+   prototypes for each CSPICE API routine. Also, typedefs used in the
+   prototypes are declared by this header.
+ 
+   Below is a code fragment showing inclusion of SpiceUsr.h and a call to
+   the SPK reader function spkezr_c.
+ 
+      #include "SpiceUsr.h"
+ 
+      SpiceDouble    et;
+      SpiceDouble    lt;
+      SpiceDouble    state [6];
+                .
+                .
+                .
+      spkezr_c ( "SUN", et, "J2000", "LT+S", "EARTH", state, &lt );
+ 
+ 
+Documentation
+--------------------------------------------------------
+ 
+   The CSPICE documentation set consists of:
+ 
+       --   Reference Guide. A set of HTML pages consisting of the header
+            information from each wrapper file. The pages include
+            cross-links to other reference pages when a header references
+            any wrapper, i.e. if a page refers to another wrapper, a link
+            exists to that wrapper's HTML page.
+ 
+       --   Required Reading files. These are C-oriented versions of the
+            corresponding documents in the Fortran SPICE Toolkit. CSPICE
+            provides C versions of the following Required Reading files:
+ 
+               cells.req
+               ck.req
+               ek.req
+               error.req
+               frames.req
+               kernel.req
+               naif_ids.req
+               pck.req
+               problems.req
+               rotation.req
+               sclk.req
+               sets.req
+               spc.req
+               spk.req
+               time.req
+               windows.req
+ 
+            Several Fortran Required Reading files have not yet been
+            converted to C style; the Fortran versions of these are
+            included in CSPICE. These files are:
+ 
+               daf.req
+               das.req
+               ellipses.req
+               planes.req
+               scanning.req
+               symbols.req
+ 
+       --   User's Guides. These are the same documents provided in the
+            Fortran SPICE Toolkit.
+ 
+               brief.ug
+               chronos.ug
+               ckbrief.ug
+               commnt.ug
+               convert.ug
+               inspekt.ug
+               mkspk.ug
+               msopck.ug
+               simple.ug
+               spacit.ug
+               spkdiff.ug
+               spkmerge.ug
+               states.ug
+               subpt.ug
+               tictoc.ug
+               tobin.ug
+               toxfr.ug
+               version.ug
+ 
+       --   A permuted index, cspice.idx. This document maps brief
+            abstracts describing functionality of routines to names of
+            routines.
+ 
+   The documentation includes the User's Guides and Required Readings in
+   text and HTML format. The index.html file in the icy/doc/html
+   subdirectory is the CSPICE HTML documentation "homepage."
+ 
+ 
+Kernel files
+--------------------------------------------------------
+ 
+   For each platform, CSPICE uses the same binary and text kernels as the
+   Fortran SPICE Toolkit for that platform.
+ 
+   As of release N0059, the kernel pool readers (ldpool_c, furnsh_c) have
+   the capability to read non platform-native text kernels, e.g. read a DOS
+   native text file on a Unix platform and vice-versa. This capability does
+   not exist in the Fortran toolkit.
+ 
+   Transfer format files produced by the CSPICE versions of SPACIT and
+   TOXFR have very slight white space differences as compared with transfer
+   format files produced by the Fortran counterparts of these programs.
+   These differences do not affect the functioning of the transfer files:
+   those produced by the Fortran SPICE Toolkit may be used with CSPICE and
+   vice versa.
+ 
+ 
+Installation
+--------------------------------------------------------
+ 
+   CSPICE is obtained and installed in a manner completely analogous to
+   that used for the Fortran SPICE Toolkit. Access the NAIF site for
+   download instructions at URL:
+ 
+         http://naif.jpl.nasa.gov/naif/toolkit.html
+ 
+ 
+Directory Structure
+ 
+   The package has the same directory structure as SPICELIB, with the
+   addition of an html subdirectory of the doc directory:
+ 
+                                    cspice
+                                       |
+                                       |
+      /data   /doc   /etc   /exe   /include   /lib   /src   makeall
+                |                               |      |
+                |                               |      |
+                |                               |      |
+            /html  *.req ...                    |  /cspice /cook_c ...
+                |                               |
+            index.html                          |
+                                                |
+                                       cspice.a  csupport.a
+ 
+   with 'makeall' a master build script specific to the platform
+   architecture.
+ 
+ 
+Platforms
+ 
+   CSPICE currently is supported on the following platforms:
+ 
+      Hardware      Operating system    Compiler
+      --------      ----------------    --------
+      PC            Linux               gcc
+      PC            MS Windows          MS Visual Studio C++/C .Net
+      Sun Sparc     Solaris 32 bit      Sun C
+      Sun Sparc     Solaris 64 bit      Sun C
+      Sun Sparc     Solaris 32 bit      gcc
+      Macintosh     OS X                cc (gcc)
+ 
+ 
+Calling CSPICE Wrappers
+--------------------------------------------------------
+ 
+   As indicated above, functions calling the CSPICE API must include the
+   header file SpiceUsr.h. The code in this header file makes use of ANSI C
+   features, so functions including it must be compiled as ANSI C. No
+   special precompiler flags are needed to compile SpiceUsr.h.
+ 
+   On a Unix system, a typical compiler invocation for a function that
+   calls CSPICE would look like:
+ 
+      cc -c <ANSI flag> userfunc.c
+ 
+   This presumes that SpiceUsr.h is present in the current working
+   directory. Under some compilers, the option
+ 
+      -I<path>
+ 
+   may be used to designate a path to search for include files.
+ 
+   Examples of ANSI flags are:
+ 
+      Sun C compiler              -Xc
+      gcc                         -ansi
+ 
+   So, on a Sun/Solaris system, with CSPICE installed in the path
+ 
+      /home/cspice
+ 
+   a function userfunc.c that calls CSPICE could be compiled using the
+   command
+ 
+      cc -c -Xc -I/home/cspice/src/cspice userfunc.c
+ 
+   Under Microsoft Visual C/C++, the compiler invocation requires no
+   special flag to indicate usage of ANSI C. On this platform, you may find
+   it necessary to set the INCLUDE, LIB, and PATH environment variables in
+   order to use the command line compiler and linker, as shown below.
+ 
+      Set DOS Environment variables (XP) for Visual Studio 7:
+ 
+      To set:
+         Control Panel -> System
+                          select "Advanced" tab
+                          push "Environment Variables" button
+                          chose variable name
+                          push "Edit" button
+                          paste-in or type path strings
+ 
+      INCLUDE
+      C:\Program Files\Microsoft Visual Studio .NET\Vc7\include\;
+      C:\Program Files\Microsoft Visual Studio .NETFrameworkSDK\include\
+ 
+      LIB
+      C:\Program Files\Microsoft Visual Studio .NET\Vc7\lib\;
+      C:\Program Files\Microsoft Visual Studio .NETFrameworkSDK\Lib\
+ 
+      PATH
+      C:\Program Files\Microsoft Visual Studio .Net\Vc7\bin
+ 
+ 
+Linking against CSPICE
+ 
+   On Unix systems, programs linking against CSPICE must also link against
+   the C math library; this is normally accomplished using the ``-lm'' flag
+   following cspice.a in the link command. A typical link command might
+   look like
+ 
+      cc -o myprog myprog.o <user objects> <user libs> \
+      <lib path>/cspice.a -lm
+ 
+   Under Microsoft Visual C/C++, no reference to the C math library is
+   required. On this platform, a typical link command would look like:
+ 
+      cl myprog.obj <user objects> <user libs> <lib path>\cspice.lib
+ 
+   It is not necessary to reference the CSUPPORT library in link
+   statements: CSPICE does not reference it. CSUPPORT is required only to
+   build the CSPICE utility programs.
+ 
+ 
+CSPICE data types
+ 
+   To assist with long-term maintainability, CSPICE uses typedefs to
+   represent data types occurring in argument lists and as return values of
+   CSPICE functions. The CSPICE typedefs for fundamental types are:
+ 
+      SpiceBoolean
+      SpiceChar
+      SpiceDouble
+      SpiceInt
+      ConstSpiceBoolean
+      ConstSpiceChar
+      ConstSpiceDouble
+      ConstSpiceInt
+ 
+   The SPICE typedefs map in an arguably natural way to ANSI C types:
+ 
+      SpiceBoolean -> int
+      SpiceChar    -> char
+      SpiceDouble  -> double
+      SpiceInt     -> int or long
+      ConstX       -> const X  (X = any of the above types)
+ 
+   The type SpiceInt is a special case: the corresponding type is picked so
+   as to be half the size of a double. On all currently supported
+   platforms, type double occupies 8 bytes and type int occupies 4 bytes.
+   Other platforms may require a SpiceInt to map to type long.
+ 
+   Ellipses and planes are represented by structures; these and their
+   const-qualified counterparts are:
+ 
+      SpiceEllipse
+      ConstSpiceEllipse
+      SpicePlane
+      ConstSpicePlane
+ 
+   A small number of more specialized types have been introduced to support
+   the EK query interface. These are:
+ 
+      SpiceEKAttDsc      {EK column attribute descriptor}
+      SpiceEKSegSum      {EK segment summary}
+      SpiceEKDataType    {Column data types}
+      SpiceEKExprClass   {SELECT clause expression class}
+ 
+   These are described in the header SpiceEK.h.
+ 
+   While other data types may be used internally in CSPICE, no other types
+   appear in the API.
+ 
+ 
+Interface macros
+ 
+   To better support calling the CSPICE API from within C++, as well as to
+   provide better compile-time error checking, CSPICE prototypes declare
+   input-only array or pointer arguments using const qualification.
+ 
+   For example, here is the function prototype for mxm_c, CSPICE's 3 by 3
+   matrix multiplication function:
+ 
+      void              mxm_c    ( ConstSpiceDouble    m1  [3][3],
+                                   ConstSpiceDouble    m2  [3][3],
+                                   SpiceDouble         mout[3][3] );
+ 
+   It turns out that various popular compilers issue compilation warnings
+   when non-const-qualified actual arguments are supplied to functions
+   whose prototypes call for const inputs.
+ 
+   For example, the code fragment:
+ 
+      double m1   [3][3];
+      double m2   [3][3];
+      double mout [3][3];
+          .
+          .
+          .
+      mxm_c ( m1, m2, mout );
+ 
+   would generate compilation warnings on some systems: the diagnostics
+   would complain that m1 and m2 are not const, even though there's no
+   particular risk of error introduced by passing these arrays to a routine
+   expecting const inputs.
+ 
+   Explicitly adding type casts to satisfy the compiler is possible but
+   awkward: the call to mxm_c would then look like:
+ 
+      mxm_c ( (const double (*)[3])m1,
+              (const double (*)[3])m2, mout);
+ 
+   Instead, to suppress these spurious diagnostics, CSPICE supplies
+   interface macros which automatically provide the desired type casts.
+   These macros have the same names and argument counts as the wrapper
+   functions which they call.
+ 
+   The interface macros have been designed to be transparent to users; they
+   do not differ from their underlying wrappers in the way arguments are
+   evaluated; in particular they do not have any unusual side effects.
+ 
+   As an example, here is the interface macro for mxm_c:
+ 
+      #define  mxm_c( m1, m2, mout )                             \
+                                                                 \
+           (   mxm_c ( CONST_MAT(m1), CONST_MAT(m2), (mout) )   )
+ 
+   The macro CONST_MAT is defined as
+ 
+      #define  CONST_MAT          ( ConstSpiceDouble   (*) [3] )
+ 
+   With this macro defined, the call
+ 
+      mxm_c ( m1, m2, mout );
+ 
+   actually invokes the mxm_c interface macro, which in turn generates a
+   call to the function mxm_c with const-qualified inputs.
+ 
+   The definitions of the interface macros are automatically included when
+   a calling program includes the CSPICE header file SpiceUsr.h.
+ 
+ 
+CSPICE public declarations
+ 
+   In addition to the interface macros discussed above, CSPICE declares a
+   small set of public macros.
+ 
+   Boolean values:
+ 
+      SPICEFALSE
+      SPICETRUE
+ 
+   Status codes:
+ 
+      SPICEFAILURE
+      SPICESUCCESS
+ 
+   EK public constants:
+ 
+      SPICE_EK_*
+ 
+   There are no definitions of variables or functions introduced by the
+   public header file SpiceUsr.h.
+ 
+ 
+CSPICE function prototypes
+ 
+   Because CSPICE function prototypes enable substantial compile-time error
+   checking, we recommend that user applications always reference them.
+   Include the header file SpiceUsr.h in any module that calls CSPICE to
+   make the prototypes available.
+ 
+ 
+Calling functions generated by f2c
+--------------------------------------------------------
+ 
+ 
+f2c's specification
+ 
+   The specification of the automatic Fortran-to-C translation program f2c
+   can be summarized thusly: f2c attempts to create C code whose
+   functionality is identical to that of the source Fortran code. Due to
+   limitations of C and the system-dependent behavior of Fortran I/O, f2c
+   cannot always completely succeed in fulfilling its nominal
+   specification. However, the function argument lists generated by f2c can
+   be understood by remembering that they act very much like Fortran,
+   rather than C, argument lists.
+ 
+   f2c's treatment of argument data types occurring in the Fortran library
+   SPICELIB are discussed below.
+ 
+ 
+Header files
+ 
+   Prototypes and associated declarations for functions generated by f2c
+   are provided in the header file SpiceZfc.h. This header must be included
+   by any application code that calls these translated functions. The
+   typical sequence of header inclusions is:
+ 
+      #include "SpiceUsr.h"
+      #include "SpiceZfc.h"
+ 
+ 
+f2c data types
+ 
+   f2c uses typedefs to represent C data types used in the translated
+   Fortran functions f2c creates. The Fortran data types used in the
+   Fortran library SPICELIB and the corresponding typedefs generated by f2c
+   are as follows:
+ 
+      Fortran type                f2c typedef
+      ------------                -----------
+ 
+      DOUBLE PRECISION            doublereal
+      INTEGER                     integer
+      LOGICAL                     logical
+      CHARACTER                   char
+ 
+   In addition, there is a special typedef used for arguments used to
+   represent string lengths:
+ 
+      ftnlen
+ 
+   See ``Strings'' below for more about string arguments.
+ 
+ 
+Call by reference
+ 
+   With one exception, all arguments of functions generated by f2c are
+   pointers. Passing input arguments by value is not permitted. To supply a
+   value as an input argument, the value must be placed in a variable, and
+   the address of the variable passed as an actual argument.
+ 
+   The one exception to the rule is string length arguments. These are
+   always passed by value.
+ 
+ 
+Arrays
+ 
+   The CSPICE wrappers handle the differences between C and Fortran
+   concerning the ordering of array data in memory.
+ 
+   In Fortran, the ordering in memory of array elements is such that the
+   index corresponding to the leftmost dimension of the array varies the
+   most rapidly. For example, for two-dimensional arrays, the first column
+   is at the start of the memory occupied by the array, the second column
+   comes next, and so on. This is called ``column major'' order, and is the
+   transpose of the order used in C.
+ 
+   Consequently, matrix arguments to functions generated by f2c must be
+   transposed prior to input and after output in order to be correctly used
+   by a calling C program. The CSPICE functions xpose_c and xpose6_c may be
+   used to transpose 3x3 and 6x6 matrices respectively.
+ 
+ 
+Strings
+ 
+   In Fortran, the ability to determine the declared length of a string is
+   built into the language. Fortran strings are not null terminated; unused
+   space in the trailing portion of a string is padded with blanks.
+ 
+   Functions generated by f2c must be able to determine the length of
+   strings on input without relying on null termination; on output, strings
+   are returned from these functions blank-padded without null termination.
+ 
+   When f2c processes a Fortran character string argument, the argument
+   list of the output C function contains two arguments corresponding to
+   the single Fortran string argument: a character pointer argument and a
+   string length argument. The string length arguments occur consecutively
+   at the end of the function's argument list. The nth string length
+   argument gives the string length of the nth string argument.
+ 
+   For example, the Fortran argument list:
+ 
+      CHARACTER*(80)     TARG
+      DOUBLE PRECISION   ET
+      CHARACTER*(10)     REF
+      CHARACTER*(4)      ABCORR
+      CHARACTER*(80)     OBS
+      DOUBLE PRECISION   STATE
+      DOUBLE PRECISION   LT
+ 
+      SPKEZR ( TARG, ET, REF, ABCORR, OBS, STATE, LT )
+ 
+   translates to the C argument list:
+ 
+      int spkezr_ (  char        * targ,
+                     doublereal  * et,
+                     char        * ref,
+                     char        * abcorr,
+                     char        * obs,
+                     doublereal  * state,
+                     doublereal  * lt,
+                     ftnlen        target_namlen,
+                     ftnlen        ref_namlen,
+                     ftnlen        abcorr_namlen,
+                     ftnlen        obs_namlen     )
+ 
+   Note: An API wrapper function exists for spkezr_; the prototype for the
+   wrapper function spkezr_c is the simpler:
+ 
+      void spkezr_c ( ConstSpiceChar    * targ,
+                      SpiceDouble         et,
+                      ConstSpiceChar    * ref,
+                      ConstSpiceChar    * abcorr,
+                      ConstSpiceChar    * obs,
+                      SpiceDouble         state[6],
+                      SpiceDouble       * lt       )
+ 
+   The string length arguments give counts of characters excluding
+   terminating nulls. For input arguments, the strlen function can be used
+   to compute string lengths.
+ 
+   The character string arguments generated by f2c are expected to contain
+   Fortran-style strings: a string argument should not contain a null
+   terminator unless it is part of the string's data. Output strings will
+   not be null-terminated but will be padded up to the designated length
+   with trailing blanks.
+ 
+ 
+Arrays of strings
+ 
+   In f2c created functions, string array arguments are particularly tricky
+   because of the difference in the way C and Fortran determine string
+   lengths. A C array of N strings of declared length M maps to a Fortran
+   array of N strings of length M-1, since the Fortran string array
+   contains no null terminators. So, preparing a C string array to be
+   passed as an input to a function generated by f2c requires creating a
+   new array without null terminators. Similarly, an output string array
+   from a function generated by f2c must have null terminators added.
+ 
+   If you find it necessary to call one of these functions, we suggest you
+   contact NAIF; we'll provide you with a C wrapper for the function in
+   question.
+ 

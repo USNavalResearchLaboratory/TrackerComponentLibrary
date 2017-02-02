@@ -1,0 +1,304 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>wnvald_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>wnvald_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void wnvald_c ( SpiceInt       size,
+                   SpiceInt       n,
+                   SpiceCell    * window ) 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Form a valid double precision window from the contents 
+   of a window array. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/windows.html">WINDOWS</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   WINDOWS 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   VARIABLE  I/O  DESCRIPTION 
+   --------  ---  -------------------------------------------------- 
+   size       I   Size of window. 
+   n          I   Original number of endpoints. 
+   window    I,O  Input, output window. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   size        is the size of the window to be validated. This 
+               is the maximum number of endpoints that the cell 
+               used to implement the window is capable of holding 
+               at any one time. 
+ 
+   n           is the original number of endpoints in the input 
+               cell. 
+ 
+   window      on input, is a (possibly uninitialized) cell array 
+               containing n endpoints of (possibly unordered 
+               and non-disjoint) intervals. 
+
+               window must be declared as a double precision SpiceCell.
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   window      on output, is a window containing the union of the 
+               intervals in the input cell.  
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1) If the input window does not have double precision type,
+      the error SPICE(TYPEMISMATCH) is signaled.
+  
+   2) If the number of endpoints n is odd, the error 
+      SPICE(UNMATCHENDPTS) is signaled. 
+ 
+   3) If the number of end points of the window exceeds its size, the 
+      error SPICE(WINDOWTOOSMALL) is signaled. 
+ 
+   4) If any left endpoint is greater than the corresponding right endpoint,
+      the error SPICE(BADENDPOINTS) is signaled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   This routine takes as input a cell array containing pairs of 
+   endpoints and validates it to form a window. 
+ 
+   On input, window is a cell of size size containing n endpoints. 
+   During validation, the intervals are ordered, and overlapping 
+   intervals are merged. On output, the cardinality of window is 
+   the number of endpoints remaining, and window is ready for use with 
+   any of the window routines. 
+ 
+   Because validation is done in place, there is no chance of 
+   overflow. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   The following small program 
+
+      #include &lt;stdio.h&gt;
+      #include &lt;string.h&gt;
+      #include &quot;SpiceUsr.h&quot;
+
+      int main()
+      {
+         #define WINSIZ     20
+
+         SPICEDOUBLE_CELL ( window, WINSIZ );
+
+         SpiceDouble        winData [WINSIZ] = 
+                            {
+                               0.0,    0.0,
+                              10.0,   12.0, 
+                               2.0,    7.0, 
+                              13.0,   15.0, 
+                               1.0,    5.0, 
+                              23.0,   29.0,  
+                               0.0,    0.0,
+                               0.0,    0.0,
+                               0.0,    0.0,
+                               0.0,    0.0
+                            };
+
+         SpiceInt           i;
+
+
+
+         memmove ( (SpiceDouble *)(window.data), 
+                    winData, 
+                    WINSIZ * sizeof(SpiceDouble) );
+
+         <b>wnvald_c</b> ( 20, 16, &amp;window );
+
+         printf ( &quot;Current intervals:   %ld\n&quot;,  <a href="card_c.html">card_c</a>(&amp;window)/2  );
+         printf ( &quot;Maximum intervals:   %ld\n&quot;,  <a href="size_c.html">size_c</a>(&amp;window)/2  );
+         printf ( &quot;\nIntervals\n\n&quot; );
+
+         for ( i = 0;   i &lt; <a href="card_c.html">card_c</a>(&amp;window);   i+=2 )
+         {   
+            printf ( &quot;%10.6f   %10.6f\n&quot;,  
+                     SPICE_CELL_ELEM_D (&amp;window, i  ),
+                     SPICE_CELL_ELEM_D (&amp;window, i+1)  );
+         }
+
+         return ( 0 );
+      } 
+
+   produces the following output (possibly with different formatting). 
+
+
+     Current intervals:   5
+     Maximum intervals:   10
+
+     Intervals
+
+       0.000000     0.000000
+       1.000000     7.000000
+      10.000000    12.000000
+      13.000000    15.000000
+      23.000000    29.000000
+ 
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman    (JPL) 
+   H.A. Neilan     (JPL) 
+   W.L. Taber      (JPL) 
+   I.M. Underwood  (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.0.2, 18-DEC-2008 (EDW)
+   
+      Corrected a typo in the version ID of the 08-OCT-2004
+      Version entry. 1.0.0 changed to 1.0.1.
+ 
+   -CSPICE Version 1.0.1, 08-OCT-2004 (NJB)
+
+       Corrected typo in code example; also added &quot;return&quot;
+       statement to code example.
+
+   -CSPICE Version 1.0.0, 29-JUL-2002 (NJB) (HAN) (WLT) (IMU)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   validate a d.p. window 
+ </PRE>
+<h4>Link to routine wnvald_c source file <a href='../../../src/cspice/wnvald_c.c'>wnvald_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:49 2014</pre>
+
+</body>
+</html>
+

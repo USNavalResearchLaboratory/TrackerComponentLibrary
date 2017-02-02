@@ -1,0 +1,622 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>inrypl_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>inrypl_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void inrypl_c ( ConstSpiceDouble     vertex [3],
+                   ConstSpiceDouble     dir    [3],
+                   ConstSpicePlane    * plane,
+                   SpiceInt           * nxpts,
+                   SpiceDouble          xpt    [3] ) 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Find the intersection of a ray and a plane. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   <a href="../req/planes.html">PLANES</a> 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   GEOMETRY 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   Variable  I/O  Description 
+   --------  ---  -------------------------------------------------- 
+   vertex, 
+   dir        I   Vertex and direction vector of ray. 
+   plane      I   A CSPICE plane. 
+   nxpts      O   Number of intersection points of ray and plane. 
+   xpt        O   Intersection point, if nxpts = 1. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   vertex, 
+   dir            are a point and direction vector that define a 
+                  ray in three-dimensional space. 
+ 
+   plane          is a CSPICE plane. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   nxpts          is the number of points of intersection of the 
+                  input ray and plane.  Values and meanings of 
+                  nxpts are: 
+ 
+                     0     No intersection. 
+ 
+                     1     One point of intersection.  Note that 
+                           this case may occur when the ray's 
+                           vertex is in the plane. 
+ 
+                    -1     An infinite number of points of 
+                           intersection; the ray lies in the plane. 
+ 
+ 
+   xpt            is the point of intersection of the input ray 
+                  and plane, when there is exactly one point of 
+                  intersection. 
+                  
+                  If the ray lies in the plane, xpt is set equal to
+                  vertex.
+                  
+                  If there is no intersection, xpt is the zero vector. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1)  If the ray's direction vector is the zero vector, the error 
+       SPICE(ZEROVECTOR) is signaled.  nxpts and xpt are not 
+       modified. 
+ 
+ 
+   2)  If the ray's vertex is further than <a href="dpmax_c.html">dpmax_c</a>() / 3 from the 
+       origin, the error SPICE(VECTORTOOBIG) is signaled.  nxpts 
+       and xpt are not modified. 
+ 
+ 
+   3)  If the input plane is s further than <a href="dpmax_c.html">dpmax_c</a>() / 3 from the 
+       origin, the error SPICE(VECTORTOOBIG) is signaled.  nxpts 
+       and xpt are not modified. 
+ 
+ 
+   4)  The input plane should be created by one of the CSPICE 
+       routines 
+ 
+          <a href="nvc2pl_c.html">nvc2pl_c</a>
+          pnv2pl_c
+          <a href="psv2pl_c.html">psv2pl_c</a>
+ 
+       Invalid input planes will cause unpredictable results. 
+ 
+ 
+   5)  In the interest of good numerical behavior, in the case 
+       where the ray's vertex is not in the plane, this routine 
+       considers that an intersection of the ray and plane occurs 
+       only if the distance between the ray's vertex and the 
+       intersection point is less than <a href="dpmax_c.html">dpmax_c</a>() / 3. 
+ 
+       If vertex is not in the plane and this condition is not 
+       met, then nxpts is set to 0 and xpt is set to the zero 
+       vector. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   The intersection of a ray and plane in three-dimensional space 
+   can be a the empty set, a single point, or the ray itself. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   1)  Find the camera projection of the center of an extended 
+       body.  For simplicity, we assume: 
+ 
+          -- The camera has no distortion;  the image of a point 
+             is determined by the intersection of the focal plane 
+             and the line determined by the point and the camera's 
+             focal point. 
+ 
+          -- The camera's pointing matrix (C-matrix) is available 
+             in a C-kernel. 
+ 
+ 
+             /.
+             Load Leapseconds and SCLK kernels to support time 
+             conversion. 
+             ./
+             
+             <a href="furnsh_c.html">furnsh_c</a> ( &quot;leap.ker&quot; ); 
+             <a href="furnsh_c.html">furnsh_c</a> ( &quot;sclk.ker&quot; );
+ 
+             /.
+             Load an SPK file containing ephemeris data for 
+             observer (a spacecraft, whose NAIF integer code 
+             is sc) and target at the UTC epoch of observation. 
+             ./
+             <a href="furnsh_c.html">furnsh_c</a> ( &quot;spk.bsp&quot; );
+ 
+             /.
+             Load a C-kernel containing camera pointing for 
+             the UTC epoch of observation. 
+             ./
+             <a href="furnsh_c.html">furnsh_c</a> ( &quot;ck.bc&quot; ) ;
+ 
+            
+             /.
+             Find the ephemeris time (barycentric dynamical time) 
+             and encoded spacecraft clock times corresponding to 
+             the UTC epoch of observation. 
+             ./
+             <a href="utc2et_c.html">utc2et_c</a> ( utc, &amp;et          ); 
+             <a href="sce2c_c.html">sce2c_c</a>  ( sc,  et,  &amp;sclkdp ); 
+ 
+             /.
+             Encode the pointing lookup tolerance. 
+             ./
+             <a href="sctiks_c.html">sctiks_c</a> ( sc, tolch, &amp;toldp ); 
+ 
+            
+             /.
+             Find the observer-target vector at the observation 
+             epoch.  In this example, we'll use a light-time and stellar
+             aberration corrected state vector. 
+             ./
+             
+             <a href="spkez_c.html">spkez_c</a> ( target, et, &quot;J2000&quot;, &quot;LT+S&quot;, sc, state, &amp;lt );
+  
+             /.
+             Look up camera pointing. 
+             ./
+             <a href="ckgp_c.html">ckgp_c</a> ( camera, sclkdp, toldp, &quot;J2000&quot;, cmat, &amp;clkout, 
+                      &amp;found                                        ); 
+ 
+             if ( !found )
+             {
+                /.
+                No pointing was available.  
+                ./
+                
+                [Handle this case...]
+                
+                return;
+             }
+             
+             /.
+             Negate the spacecraft-to-target body vector and 
+             convert it to camera coordinates. 
+             ./
+             <a href="vminus_c.html">vminus_c</a> ( state, dir       );
+             <a href="mxv_c.html">mxv_c</a>    ( cmat,  dir,  dir );
+ 
+            
+             /.
+             If FL is the camera's focal length, the effective 
+             focal point is 
+         
+                FL * ( 0, 0, 1 ) 
+             ./
+             
+             <a href="vscl_c.html">vscl_c</a> ( FL, zvec, focus ); 
+ 
+            
+             /.
+             The camera's focal plane contains the origin in 
+             camera coordinates, and the z-vector is orthogonal 
+             to the plane.  Make a CSPICE plane representing 
+             the focal plane. 
+             ./
+             <a href="nvc2pl_c.html">nvc2pl_c</a> ( zvec, 0., &amp;fplane );
+ 
+             /.
+             The image of the target body's center in the focal 
+             plane is defined by the intersection with the focal 
+             plane of the ray whose vertex is the focal point and 
+             whose direction is dir. 
+             ./
+           
+             <b>inrypl_c</b> ( focus, dir, fplane, &amp;nxpts, image );
+ 
+             if ( nxpts == 1 )   
+             {
+                /.
+                The body center does project to the focal plane. 
+                Check whether the image is actually in the 
+                camera's field of view... 
+                ./
+                
+                [Handle this case...]
+             }
+             else
+             {
+                /.
+                The body center does not map to the focal plane. 
+                ./
+                
+                [Handle this case...]
+             } 
+ 
+  
+   2)  Find the Saturn ring plane intercept of a spacecraft-mounted
+       instrument's boresight vector.  We want the find the point
+       in the ring plane that will be observed by an instrument
+       with a give boresight direction at a specified time.  We
+       must account for light time and stellar aberration in order
+       to find this point.  The intercept point will be expressed
+       in Saturn body-fixed coordinates.
+ 
+          -- The ring plane is equatorial. 
+ 
+          -- Light travels in a straight line. 
+ 
+          -- The light time correction for the ring plane intercept 
+             can be obtained by performing three light-time 
+             correction iterations.  If this assumption does not 
+             lead to a sufficiently accurate result, additional 
+             iterations can be performed. 
+ 
+          -- A Newtonian approximation of stellar aberration
+             suffices.
+
+          -- The boresight vector is given in J2000 coordinates. 
+ 
+          -- The observation epoch is et ephemeris seconds past 
+             J2000. 
+ 
+          -- The boresight vector, spacecraft and planetary 
+             ephemerides, and ring plane orientation are all known 
+             with sufficient accuracy for the application. 
+
+          -- All necessary kernels are loaded by the caller of
+             this example routine.
+
+
+       (A similar technique could be used to obtain low-accuracy 
+       predictions of radio occultations.  In that case, the 
+       instrument boresight ray's direction vector would be replaced 
+       by the vector from the observer to the light-time corrected 
+       radio source position.) 
+ 
+       We omit display of the portion of the code that loads SPICE 
+       kernels. 
+
+          #include &quot;SpiceUsr.h&quot;
+          #include &quot;SpiceZfc.h&quot;
+
+
+          void ring_xpt ( ConstSpiceChar    * sc,
+                          SpiceDouble         et,
+                          ConstSpiceDouble    borvec[3],
+                          SpiceDouble       * sbfxpt,
+                          SpiceBoolean      * found    )
+          {
+
+             /.
+             Local constants 
+             ./  
+             #define SATURN          699
+
+             /.
+             Local variables
+             ./
+             SpiceBoolean            fnd;
+
+             SpiceDouble             borv2  [3];
+             SpiceDouble             corvec [3];
+             SpiceDouble             lt;
+             SpiceDouble             satssb [6];
+             SpiceDouble             scpos  [3];
+             SpiceDouble             scssb  [6];
+             SpiceDouble             state  [6];
+             SpiceDouble             stcorr [3];
+             SpiceDouble             tau;
+             SpiceDouble             tipm   [3][3];
+             SpiceDouble             xpt    [3];
+             SpiceDouble             zvec   [3];
+
+             SpiceInt                i;
+             SpiceInt                nxpts;
+             SpiceInt                scid;
+
+             SpicePlane              plane;
+
+
+             /.
+             First step:  account for stellar aberration.  Since the
+             instrument pointing is given, we need to find the intercept
+             point such that, when the stellar aberration correction is
+             applied to the vector from the spacecraft to that point,
+             the resulting vector is parallel to borvec.  An easy solution
+             is to apply the inverse of the normal stellar aberration
+             correction to borvec, and then solve the intercept problem
+             with this corrected boresight vector.
+
+             Find the position of the observer relative
+             to the solar system barycenter at et.
+             ./
+             <a href="bodn2c_c.html">bodn2c_c</a> ( sc, &amp;scid, &amp;fnd );
+
+             if ( !fnd )
+             {
+                <a href="setmsg_c.html">setmsg_c</a> ( &quot;ID code for body # was not found.&quot; );
+                <a href="errch_c.html">errch_c</a>  ( &quot;#&quot;,  sc                            );
+                <a href="sigerr_c.html">sigerr_c</a> ( &quot;SPICE(NOTRANSLATION&quot;               );
+                return;
+             }
+
+             <a href="spkssb_c.html">spkssb_c</a> ( scid, et, &quot;j2000&quot;, scssb );
+
+
+             /.
+             We now wish to find the vector corvec that, when corrected for
+             stellar aberration, yields borvec.  A good first approximation is
+             obtained by applying the stellar aberration correction for
+             transmission to borvec.  Note that the routine called is not
+             a wrapper, so there is no letter 'c' at the end of its name.
+             The prototype for this routine is declared in SpiceZfc.h.
+             ./
+             stlabx_ ( (doublereal *) borvec, scssb+3, corvec );
+
+             /.
+             The inverse of the stellar aberration correction
+             applicable to corvec should be a very good estimate of
+             the correction we need to apply to borvec.  Apply
+             this correction to borvec to obtain an improved estimate
+             of corvec.
+             ./
+             <a href="stelab_c.html">stelab_c</a>  ( corvec, scssb+3,  borv2  );
+             <a href="vsub_c.html">vsub_c</a>    ( borv2,  corvec,   stcorr );
+             <a href="vsub_c.html">vsub_c</a>    ( borvec, stcorr,   corvec );
+
+             /.
+             Because the ring plane intercept may be quite far from
+             Saturn's center, we cannot assume light time from the intercept
+             to the observer is well approximated by light time from
+             Saturn's center to the observer.  We compute the light time
+             explicitly using an iterative approach.
+
+             We can however use the light time from Saturn's center to
+             the observer to obtain a first estimate of the actual light
+             time.
+             ./
+             <a href="spkezr_c.html">spkezr_c</a> ( &quot;SATURN&quot;, et, &quot;J2000&quot;, &quot;LT&quot;, sc, state, &amp;lt );
+
+             tau = lt;
+
+             /.
+             Find the ring plane intercept and calculate the
+             light time from it to the spacecraft.
+             Perform three iterations.
+             ./
+             i       =  0;
+             *found  =  SPICETRUE;
+
+             while (  ( i &lt; 3 ) &amp;&amp; ( *found )  )
+             { 
+                /.
+                Find the position of Saturn relative
+                to the solar system barycenter at et-tau.
+                ./
+                <a href="spkssb_c.html">spkssb_c</a> ( SATURN, et-tau, &quot;J2000&quot;, satssb );
+
+                /.
+                Find the Saturn-to-observer vector defined by these
+                two position vectors.
+                ./
+                <a href="vsub_c.html">vsub_c</a> ( scssb, satssb, scpos );
+
+                /.
+                Look up Saturn's pole at et-tau; this is the third
+                row of the matrix that transforms J2000 
+                coordinates to Saturn body-fixed coordinates.
+                ./
+                <a href="pxform_c.html">pxform_c</a> ( &quot;J2000&quot;, &quot;IAU_SATURN&quot;, et-tau, tipm );
+
+                <a href="vequ_c.html">vequ_c</a> ( tipm[2], zvec );
+
+                /.
+                Make a CSPICE plane representing the ring plane.
+                We're treating Saturn's center as the origin, so
+                the plane constant is 0.
+                ./
+                <a href="nvc2pl_c.html">nvc2pl_c</a> ( zvec, 0.0, &amp;plane );
+
+                /.
+                Find the intersection of the ring plane and the
+                ray having vertex scpos and direction vector
+                corvec.
+                ./
+                <b>inrypl_c</b> ( scpos, corvec, &amp;plane, &amp;nxpts, xpt );
+
+                /.
+                If the number of intersection points is 1,
+                find the next light time estimate.
+                ./
+                if ( nxpts == 1 )
+                { 
+                   /.
+                   Find the light time (zero-order) from the
+                   intercept point to the spacecraft.
+                   ./
+                   tau  =  <a href="vdist_c.html">vdist_c</a> ( scpos, xpt )  /  <a href="clight_c.html">clight_c</a>();
+                   i++;
+                }
+                else
+                {
+                   *found = SPICEFALSE;
+                }
+             } 
+             /.
+             At this point, if found is SPICETRUE, we iterated
+             three times, and xpt is our estimate of the
+             position of the ring plane intercept point
+             relative to Saturn in the J2000 frame.  This is the
+             point observed by an instrument pointed in direction
+             borvec at et at mounted on the spacecraft sc.
+
+             If found is SPICEFALSE, the boresight ray does not
+             intersect the ring plane.
+
+             As a final step, tranform xpt to Saturn body-fixed
+             coordinates.
+             ./
+             if ( *found )
+             {
+                <a href="mxv_c.html">mxv_c</a> ( tipm, xpt, sbfxpt );
+             }
+
+          }
+
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman   (JPL) 
+   W.L. Taber     (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.0.1, 12-DEC-2002 (NJB)
+
+       Header fix:  ring plane intercept algorithm was corrected. 
+       Now light time is computed accurately, and stellar aberration 
+       is accounted for.  Example was turned into a complete
+       subroutine.
+ 
+   -CSPICE Version 1.0.0, 26-JUN-1999 (NJB)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   intersection of ray and plane 
+ </PRE>
+<h4>Link to routine inrypl_c source file <a href='../../../src/cspice/inrypl_c.c'>inrypl_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:36 2014</pre>
+
+</body>
+</html>
+

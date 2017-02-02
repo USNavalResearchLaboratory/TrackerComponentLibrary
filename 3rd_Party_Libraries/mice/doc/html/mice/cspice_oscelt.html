@@ -1,0 +1,319 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_oscelt</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_oscelt</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_OSCELT calculates the set of osculating conic
+   orbital elements corresponding to the state 6-vector
+   (position, velocity) of a body at an epoch.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      state  a double precision 6-vector or 6xN array of
+             states of the body at some epoch. Components
+             are x, y, z, dx/dt, dy/dt, dz/dt. `state' must be
+             expressed relative to an inertial reference frame.
+             Units are km and km/sec.
+
+      et     the double precision scalar or 1XN-vector of ephemeris
+             time epochs corresponding to each 'state' in ephemeris
+             seconds past J2000
+
+      mu     the gravitational parameter of the primary
+             body for 'state'
+
+   the call:
+
+      elts = <b>cspice_oscelt</b>( state, et, mu )
+
+   returns:
+
+      elts   a double precision 8-vector or 8xN array containing
+             the equivalent conic elements describing the orbit
+             of the body around its primary. The elements are,
+             in order:
+
+                 elts(1)  contains rp, perifocal distance.
+                 elts(2)  contains ecc, eccentricity.
+                 elts(3)  contains inc, inclination.
+                 elts(4)  contains lnode, longitude of the ascending node.
+                 elts(5)  contains argp, argument of periapsis.
+                 elts(6)  contains m0, mean anomaly at epoch.
+                 elts(7)  contains t0, epoch.
+                 elts(8)  contains mu, gravitational parameter.
+
+             The epoch of the elements is the epoch of the input
+             state. Units are km, rad, rad/sec. The same elements
+             are used to describe all three types (elliptic,
+             hyperbolic, and parabolic) of conic orbit
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+
+      Example(1):
+
+      %
+      % Determine the osculating elements of the moon wrt the
+      % Earth at some arbitrary time in the J2000 inertial frame.
+      %
+      % Load the meta kernel listing the needed SPK, PCK, LSK
+      % kernels.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>('<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % Convert the time string to ephemeris time
+      %
+      et = <a href="cspice_str2et.html">cspice_str2et</a>( 'Dec 25, 2007' );
+
+      %
+      % Make the <a href="cspice_spkezr.html">cspice_spkezr</a> call to retrieve the state of the
+      % moon wrt the Earth in J2000.
+      %
+      [state, ltime] = <a href="cspice_spkezr.html">cspice_spkezr</a>( 'Moon', et, 'J2000', 'LT+S', 'EARTH' );
+
+      %
+      % <b>cspice_oscelt</b> requires body mass information, so load a
+      % mass PCK kernel.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '/kernels/gen/pck/masses3.tpc' )
+
+      %
+      % Read the gravitational parameter for Earth.
+      %
+      mu = <a href="cspice_bodvrd.html">cspice_bodvrd</a>( 'EARTH', 'GM', 1 );
+
+      %
+      % make the <b>cspice_oscelt</b> call to convert the state 6-vector
+      % to the elts 8-vector. Note: the  <a href="cspice_bodvrd.html">cspice_bodvrd</a> returns
+      % data as arrays, so to access the gravitational parameter
+      % (the only value in the array), we use mu(1).
+      %
+      elts = <b>cspice_oscelt</b>( state, et, mu(1) );
+
+      %
+      % Output the elts vector in a column format.
+      %
+      txt = sprintf( '%24.8f\n', elts );
+      disp( txt)
+
+      %
+      % It's always good form to unload kernels after use,
+      % particularly in MATLAB due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+         360956.91440370
+              0.07820299
+              0.48717811
+              6.18584105
+              1.28603872
+              0.55386000
+      251812864.18370920
+         398600.44800000
+
+      Example(2):
+
+      %
+      % Calculate the history of the Moon's orbit plane
+      % inclination with respect to the Earth in the
+      % J2000 frame at intervals of one month for a
+      % time interval of 14 years.
+      %
+      % Load the needed SPK , PCK and LSK kernels.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % <b>cspice_oscelt</b> also requires mass information, so load
+      % a mass PCK.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '/kernels/gen/pck/masses3.tpc' )
+      mu = <a href="cspice_bodvrd.html">cspice_bodvrd</a>( 'EARTH', 'GM', 1 );
+
+      %
+      % The start epoch.
+      %
+      et0 = <a href="cspice_str2et.html">cspice_str2et</a>( 'Jan 1, 2000 12:00:00' );
+
+      %
+      % A step of one month - in seconds.
+      %
+      step = 30. * <a href="cspice_spd.html">cspice_spd</a>;
+
+      %
+      % Define an array of ephemeris times, covering,
+      % 14 years of months in steps of one month starting
+      % approximately Feb 1, 2000.
+      %
+      et = [0: (14*12) - 1]*step + et0;
+
+      % Retrieve the state; convert to osculating elements.
+      %
+      [state,ltime] = <a href="cspice_spkezr.html">cspice_spkezr</a>( 'Moon', et, 'J2000', 'LT+S', 'EARTH');
+      elts          = <b>cspice_oscelt</b>( state, et, mu(1) );
+
+      elts(3,:) = [ elts(3,:) * <a href="cspice_dpr.html">cspice_dpr</a> ];
+
+      %
+      % Convert the ephemeris time of the state lookup to
+      % calendar UTC, then print the calendar string and the
+      % inclination in degrees of the Moon wrt Earth at the
+      % time.
+      %
+      utcstr = <a href="cspice_et2utc.html">cspice_et2utc</a>( et, 'C', 3, );
+
+      %
+      % Convert the angular measures to degrees.
+      %
+
+      %
+      % Output the epoch and corresponding inclination.
+      %
+      for n=1:14*12
+         fprintf( '%s %12.6f\n', utcstr(n,:), elts(3,n) );
+      end
+
+      %
+      % It's always good form to unload kernels after use,
+      % particularly in MATLAB due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+      ... a partial output ...
+
+      2012 NOV 23 12:00:00.001    20.903479
+      2012 DEC 23 12:00:00.000    20.902973
+      2013 JAN 22 11:59:59.999    20.802204
+      2013 FEB 21 11:59:59.999    20.565404
+      2013 MAR 23 11:59:59.998    20.309740
+      2013 APR 22 11:59:59.998    20.171117
+      2013 MAY 22 11:59:59.999    20.162453
+      2013 JUN 21 12:00:00.000    20.173366
+      2013 JUL 21 12:00:00.000    20.082464
+      2013 AUG 20 12:00:00.001    19.867300
+      2013 SEP 19 12:00:00.002    19.628911
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/oscelt_c.html">oscelt_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 22-NOV-2005, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   conic elements from state
+   osculating elements from state
+   convert state to osculating elements
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:38 2014</pre>
+
+</body>
+</html>
+

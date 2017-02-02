@@ -1,0 +1,278 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dvpool</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dvpool</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DVPOOL deletes a variable from the kernel pool.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      name   name(s) of a pool variable(s) to delete from the kernel pool. The
+             name and associated values are removed from the kernel pool,
+             freeing the occupied space.
+
+             [n,m] = size(name); char = class(name)
+
+             If watches are set on the variable(s) designated by 'name',
+             the corresponding agents are placed on the list of agents
+             to notify of a kernel variable update.
+
+   the call:
+
+      <b>cspice_dvpool</b>( name )
+
+   performs the delete operation.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+         KPL/MK
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            pck00009.tpc                  Planet orientation and
+                                          radii
+            naif0009.tls                  Leapseconds
+
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( '/kernels/gen/lsk/naif0009.tls'
+                                '/kernels/gen/spk/de421.bsp'
+                                '/kernels/gen/pck/pck00009.tpc'
+                      )
+
+         \begintext
+
+
+      %
+      % Load a kernel set.
+      %
+      <a href="cspice_furnsh.html">cspice_furnsh</a>( '<a href= "standard.html">standard.tm</a>' )
+
+      %
+      % A template for the leapseconds kernel variables.
+      %
+      VAR = 'DELTET*';
+
+      %
+      % Query for the variable name, return 10 or less matches from
+      % index 1.
+      %
+      INDEX  = 1;
+      ROOM   = 10;
+
+
+      txt = sprintf( 'Kernel pool state after load.' );
+      disp( txt )
+
+      [kervar, found] = <a href="cspice_gnpool.html">cspice_gnpool</a>( VAR, INDEX, ROOM );
+
+      if( found )
+
+         n_elements = size(kervar, 1);
+
+         %
+         % Output the returned variable names.
+         %
+         for n=1: n_elements
+            txt = sprintf( 'Variable %d matching %s: %s', ...
+                                        n, VAR, kervar(n,:) );
+            disp( txt )
+         end
+
+      else
+         txt = sprintf( ['Failed to find  ' VAR ' in the kernel pool.'] );
+         disp( txt )
+      end
+
+
+      %
+      % Delete the kernel pool variables returned from <a href="cspice_gnpool.html">cspice_gnpool</a>.
+      %
+      <b>cspice_dvpool</b>( kervar )
+
+      txt = sprintf( '\nKernel pool state after deletion.' );
+      disp( txt )
+
+      %
+      % Confirm the variables were deleted from the pool.
+      %
+      [kervar, found] = <a href="cspice_gnpool.html">cspice_gnpool</a>( VAR, INDEX, ROOM );
+
+      if ( found )
+
+         n_elements = size(kervar, 1);
+
+         %
+         % Output the returned variable names.
+         %
+         for n=1: n_elements
+            txt = sprintf( 'Variable %d matching %s: %s', ...
+                                        n, VAR, kervar(n,:) );
+            disp( txt )
+         end
+
+      else
+         txt = sprintf( ['Failed to find  ' VAR ' in the kernel pool.'] );
+         disp( txt )
+      end
+
+
+      %
+      % It's always good form to unload kernels after use,
+      % particularly in Matlab due to data persistence.
+      %
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   MATLAB outputs:
+
+      Kernel pool state after load.
+      Variable 1 matching DELTET*: DELTET/DELTA_T_A
+      Variable 2 matching DELTET*: DELTET/DELTA_AT
+      Variable 3 matching DELTET*: DELTET/K
+      Variable 4 matching DELTET*: DELTET/M
+      Variable 5 matching DELTET*: DELTET/EB
+
+      Kernel pool state after deletion.
+      Failed to find  DELTET* in the kernel pool.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine enables users to programmatically remove variables
+   from the kernel pool, as opposed to having to clear the pool and
+   reload it.
+
+   Note that it is not necessary to remove kernel variables in order
+   to simply update them; this routine should be used only when
+   variables are to be removed.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/dvpool_c.html">dvpool_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/kernel.html">KERNEL.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 12-MAR-2012, EDW (JPL), SCK (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   delete a kernel pool variable
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:37 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,998 @@
+<HTML>
+<HEAD>
+<TITLE> SPC Required Reading: Comments in binary DAFs </TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+
+<A NAME="top"></A>
+
+<TABLE STYLE="text-align: left; margin-left: auto; margin-right: auto; width: 800px;" BORDER="0" CELLPADDING="5" CELLSPACING="2">
+<TBODY>
+<TR>
+  <TD STYLE="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+  <DIV ALIGN="right">
+    <SMALL><SMALL><A HREF="index.html">Index Page</A></SMALL></SMALL>
+  </DIV>
+  <B>SPC Required Reading: Comments in binary DAFs</B> </TD>
+</TR>
+<TR>
+  <TD STYLE="vertical-align: top;">
+
+<H2> Table of Contents
+</H2>
+
+<PRE>
+   <A HREF="#SPC Required Reading: Comments in binary DAFs">SPC Required Reading: Comments in binary DAFs</A>
+      <A HREF="#Abstract">Abstract</A>
+      <A HREF="#Introduction">Introduction</A>
+      <A HREF="#The Comment Area">The Comment Area</A>
+      <A HREF="#A note on Fortran logical units">A note on Fortran logical units</A>
+      <A HREF="#Accessing the Comment Area">Accessing the Comment Area</A>
+         <A HREF="#Adding comments">Adding comments</A>
+         <A HREF="#Extracting comments">Extracting comments</A>
+         <A HREF="#Deleting comments">Deleting comments</A>
+         <A HREF="#Reading comments line by line">Reading comments line by line</A>
+         <A HREF="#Pictorial example">Pictorial example</A>
+         <A HREF="#Example of typical usage">Example of typical usage</A>
+         <A HREF="#Example of how to search through Comment Areas">Example of how to search through Comment Areas</A>
+         <A HREF="#Example of how to edit comments">Example of how to edit comments</A>
+      <A HREF="#Summary of SPC Functions">Summary of SPC Functions</A>
+      <A HREF="#Summary of Calling Sequences">Summary of Calling Sequences</A>
+   <A HREF="#Appendix: Document Revision History">Appendix: Document Revision History</A>
+         <A HREF="#December 26, 2004">December 26, 2004</A>
+         <A HREF="#April 28, 1999">April 28, 1999</A>
+
+</PRE>
+
+<HR SIZE=3 NOSHADE>
+
+<BR><BR>
+<A NAME="SPC Required Reading: Comments in binary DAFs"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> SPC Required Reading: Comments in binary DAFs
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Last revised on 2004 DEC 26 by B. V. Semenov.
+<P>
+ 
+<BR><BR>
+<A NAME="Abstract"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Abstract
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   SPC routines deal with the comment area of binary kernel files based on
+   the DAF architecture -- SPKs, CKs, binary PCKs.
+<P>
+ 
+<BR><BR>
+<A NAME="Introduction"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Introduction
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Within the SPICE system, every kernel file may have its own internal
+   documentation, called comments, that describe the type of data contained
+   within the file, for example, its origin, pedigree, recommended use, and
+   catalog information. These comments are internal to the file and thus
+   attached to the data. However, the presence of comments does not
+   interfere with the use of the data.
+<P>
+ 
+   The SPICE system contains three types of kernel files: sequential text
+   kernel files and two types of direct access binary kernel files: DAF and
+   DAS. You may comment text SPICE kernels simply by editing the files
+   using any text editor.
+<P>
+ 
+   Usually the easiest way to comment DAF and DAS files is to use the
+   CSPICE program COMMNT, which is able to add, read, delete, or extract
+   comments to or from a DAF or DAS file.
+<P>
+ 
+   User application programs can manipulate the comment area of a DAF-based
+   binary format file---for example an SPK, binary PCK, or CK---by calling
+   the family of functions described in this document.
+<P>
+ 
+   This SPC Required Reading is a supplement to the DAF Required Reading,
+   <a href="../req/daf.html">daf.req</a>.
+<P>
+ 
+<BR><BR>
+<A NAME="The Comment Area"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> The Comment Area
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   SPK, binary PCK, and CK files are instances of the CSPICE Double
+   Precision Array File (DAF). Typically, you need know little about DAFs
+   when reading these files using their associated reader functions or when
+   accessing the comment area using the SPC functions. However, we briefly
+   introduce DAF here in order to explain the comment area. For additional
+   information about the DAF architecture and its associated functions,
+   refer to the DAF Required Reading, <a href="../req/daf.html">daf.req</a>.
+<P>
+ 
+   A DAF is a direct access binary file which is organized into five types
+   of fixed-length (1024 bytes on most supported systems) logical records.
+<P>
+ 
+   Both the C and Fortran versions of the SPICE system use the exact same
+   binary files; the logical records in a DAF are seen as physical records
+   by the Fortran SPICE system. In fact, the DAF format was originally
+   designed for use with the Fortran SPICE system.
+<P>
+ 
+   One of the DAF record types is a ``comment record.'' (These were
+   referred to in some older documentation as ``reserved records.'')
+   Comment records store lines of text. We call this text ``comments,'' and
+   the comment records themselves are the physical area of the file that we
+   call the ``comment area.''
+<P>
+ 
+   A DAF may contain any number of comment records, and there are DAF
+   functions that add and remove comment records.
+<P>
+ 
+   The following restrictions apply to the comment area of a DAF:
+<P>
+ 
+<UL>
+<TT>--</TT> The comment area may contain ONLY text (printable ASCII characters, namely
+ASCII 32-126).
+<BR><BR></UL>
+<UL>
+<TT>--</TT> The maximum line length in the comment area should not exceed 80
+characters. If you abide by this rule, your commented DAF files will be
+portable to practically any computer platform.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> The CSPICE function spcac_ is the ONLY function that you may use to store
+comments in a DAF.
+<BR><BR></UL>
+   While the purpose of this document is not to define the kind of
+   information that these comments should include, the following
+   suggestions may be helpful.
+<P>
+ 
+<UL>
+<TT>--</TT> Comments in a file should provide summary and pedigree information that
+would assist users of that data, or should at least include a pointer to
+that information, such as the name and address of a person who knows it.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Where possible, comments should be in a well-defined parseable format such
+as the ``keyword = value'' syntax used by JPL's Spaceflight Operations
+Center (SFOC) and Planetary Data System (PDS). Before commenting a file,
+think about how you or some other user may want to process that
+information.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Comments should be consistent from file to file. For example, the same
+keyword should have the same meaning in each file, and two different
+keywords should not have the same meaning.
+<BR><BR></UL>
+<BR><BR>
+<A NAME="A note on Fortran logical units"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> A note on Fortran logical units
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   In the following discussion the term ``unit'' or variable name ``UNIT''
+   appears repeatedly. This term refers to Fortran logical units: integers
+   which in the Fortran language play a role analogous to pointers to FILE
+   structures in C. In Fortran, when a file is opened and a logical unit is
+   associated with the file, the file and unit are said to be
+   ``connected.''
+<P>
+ 
+   Since this document refers to functions generated by f2c, various
+   functions discussed below do refer to files via integer arguments that
+   represent logical units. CSPICE contains two functions that open a file
+   and return a logical unit:
+<P>
+ 
+<PRE>
+   txtopn_ ( ConstSpiceChar  * filename,
+             SpiceInt        * unit,
+             ftnlen            filename_length ) {open new file}
+ 
+   txtopr_ ( ConstSpiceChar  * filename,
+             SpiceInt        * unit,
+             ftnlen            filename_length ) {open for read
+                                                  access}
+</PRE>
+   These functions should be used in conjunction with SPC functions that
+   require a logical unit to refer to a file: input and output files
+   designated by units in the SPC API should be opened with the functions
+   shown above.
+<P>
+ 
+<BR><BR>
+<A NAME="Accessing the Comment Area"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Accessing the Comment Area
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The following five CSPICE functions may be used to access the comment
+   area of a DAF:
+<P>
+ 
+<DL><DT>
+<B>
+ spcac_
+</B><BR><BR>
+<DD>
+ add comments from a text file<BR>
+</DL>
+<DL><DT>
+<B>
+ spcec_
+</B><BR><BR>
+<DD>
+ extract comments to a text file<BR>
+</DL>
+<DL><DT>
+<B>
+ spcdc_
+</B><BR><BR>
+<DD>
+ delete all comments<BR>
+</DL>
+<DL><DT>
+<B>
+ spcrfl_
+</B><BR><BR>
+<DD>
+ read first line of comments<BR>
+</DL>
+<DL><DT>
+<B>
+ spcrnl_
+</B><BR><BR>
+<DD>
+ read next line of comments<BR>
+</DL>
+   The term ``text file'' used above and throughout this document, refers
+   to a file containing only printable ASCII characters (ASCII 32-126). You
+   may create such a file with a standard text editor such as EDT, EVE, or
+   TPU on a VAX, vi or emacs on a UNIX system, or EDIT on a MS/DOS system,
+   but remember not to put in tabs or other non-printable characters.
+   Alternatively, you may create a text file with a C program that first
+   calls the CSPICE function txtopn_ to open the file and then writes
+   printable character data to it. A file created using a word processor
+   such as Word Perfect or MacWord would likely not be suitable; these
+   files usually contain hidden control characters.
+<P>
+ 
+   The term ``text file'' should not be confused with references to a
+   transfer format SPK or CK kernel file found elsewhere in this or other
+   NAIF Toolkit documentation.
+<P>
+ 
+   Descriptions of how to add, extract, delete, and read comments below are
+   followed by an extensive pictorial example plus examples of typical
+   usage of these functions. Also, the NAIF Toolkit utility program COMMNT
+   performs the functions that are illustrated in the examples; refer to
+   the COMMNT User's Guide, <a href="../ug/commnt.html">commnt.ug</a>, for details.
+<P>
+ 
+<BR><BR>
+<A NAME="Adding comments"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Adding comments
+</H3><P><BR><BR>
+   Use spcac_ to add comments to a binary SPK or CK file from an existing
+   text file. If the binary SPK or CK file is not open for write access,
+   use the CSPICE function dafopw_ to open it. Also, if the text file is
+   not open for read access, open it using txtopr_. Then pass the DAF
+   file's `handle' and the text file's `unit' to spcac_:
+<P>
+ 
+<PRE>
+   spcac_ ( &amp;handle, &amp;unit,          bmark,
+            emark,   strlen(bmark),  strlen(emark) );
+</PRE>
+   The calling sequence above also includes a character string begin
+   marker, `bmark', and an end marker, `emark'. The lines of the text file
+   located between `bmark' and `emark' are those that spcac_ adds to the
+   comment area. Specifically, the following rules apply to the use of
+   these markers:
+<P>
+ 
+<UL>
+<TT>--</TT> The first line of comments to be added to the binary file is the line that
+follows the first line of the file equivalent to `bmark' (if `bmark' is not
+a blank string).
+<BR><BR></UL>
+<UL>
+<TT>--</TT> The last line of comments to be added to the binary file is the line that
+precedes the next line of the text file equivalent to `emark' (if `emark'
+is not a blank string).
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Leading and trailing blanks are ignored when testing for equivalence.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> If `bmark' is a blank string, then the first line of comments to be added
+to the binary file is the first line of the text file.
+<BR><BR></UL>
+<UL>
+<TT>--</TT> If `emark' is a blank string, then the last line of comments to be added to
+the binary file is the last line of the text file.
+<BR><BR></UL>
+   ``Blank strings'' contain only blank characters prior to their
+   terminating null. They always contain at least one blank and a
+   terminating null, and they do not contain other white space characters.
+<P>
+ 
+   If the comment area of the binary file already has some comments from a
+   previous call to spcac_, the new comments are appended to the previous
+   comments with a blank line in between. spcac_ creates space in the file
+   for the additional comments as needed.
+<P>
+ 
+<BR><BR>
+<A NAME="Extracting comments"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Extracting comments
+</H3><P><BR><BR>
+   spcec_ extracts the comments from the comment area of the binary DAF and
+   writes them to a text file. If the binary file is not open for read
+   access, open it using dafopr_. If a text file isn't open for write
+   access, open one with txtopn_. Then pass the `handle' and `unit' to
+   spcec_:
+<P>
+ 
+<PRE>
+   spcec_ ( &amp;handle, &amp;unit );
+</PRE>
+   spcec_ does not modify the comment area; it just copies its contents to
+   a text file. For this reason, the binary DAF need only be open for read
+   access.
+<P>
+ 
+<BR><BR>
+<A NAME="Deleting comments"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Deleting comments
+</H3><P><BR><BR>
+   spcdc_ deletes everything in the comment area of the binary DAF. It
+   requires the handle of the binary file which has been opened for write
+   access.
+<P>
+ 
+<PRE>
+   spcdc_ ( &amp;handle );
+</PRE>
+   Deleting comments does not reduce the physical size of the file, but
+   does make that space available for adding more comments or additional
+   data arrays.
+<P>
+ 
+<BR><BR>
+<A NAME="Reading comments line by line"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Reading comments line by line
+</H3><P><BR><BR>
+   If you wish to examine the contents of the comment area of a DAF
+   directly without writing them to a file, use spcrfl_ and spcrnl_.
+   spcrfl_ takes the handle of the binary file, opened with read access,
+   and returns the first line of comments. spcrnl_ may then be called
+   repetitively to return subsequent lines of comments from that same file.
+   Both functions have an argument `eoc' that has the logical value
+   SPICETRUE when the end-of-comments has been reached.
+<P>
+ 
+<PRE>
+   spcrfl_ ( &amp;handle, line, &amp;eoc, LINELEN );
+ 
+   while ( !eoc )
+   {
+         .
+         .
+         .
+      spcrnl_ ( line, &amp;eoc, LINELEN );
+   }
+</PRE>
+   Here LINELEN indicates the available space in the character array line,
+   excluding room for the terminating null.
+<P>
+ 
+<BR><BR>
+<A NAME="Pictorial example"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Pictorial example
+</H3><P><BR><BR>
+   Assume INPUT.TXT is the name of an existing text file, and OUT1.TXT and
+   OUT2.TXT are the output text files. SPC.BIN is the name of the binary
+   SPK or CK file. First we'll open these files:
+<P>
+ 
+<PRE>
+   #include "SpiceUsr.h"
+   #include "SpiceZfc.h"
+           .
+           .
+           .
+   SpiceInt        handle;
+   SpiceInt        input;
+   SpiceInt        out1;
+   SpiceInt        out2;
+ 
+   txtopr_ ( "INPUT.TXT", &amp;input,  strlen("INPUT.TXT") );
+   txtopn_ ( "OUT1.TXT",  &amp;out1,   strlen("OUT1.TXT")  );
+   txtopn_ ( "OUT2.TXT",  &amp;out2,   strlen("OUT2.TXT")  );
+   dafopw_ ( "SPC.BIN",   &amp;handle, strlen("SPC.BIN")   );
+</PRE>
+   Assume the initial contents are
+<P>
+ 
+<PRE>
+                 Comment Area
+   INPUT.TXT     of SPC.BIN     OUT1.TXT     OUT2.TXT
+    +-----+      +-----+        +-----+      +-----+
+    | AA  |      (Empty)        (Empty)      (Empty)
+    | BB  |
+    | CC  |
+    | DD  |
+    +-----+
+</PRE>
+   Call spcac_ and specify that the lines of text in the input file between
+   the markers ``AA'' and ``CC'' should be added to the comment area. In
+   this case there is just one line.
+<P>
+ 
+<PRE>
+   spcac_ ( &amp;handle, &amp;input, "AA", "CC", 2, 2 );
+ 
+                 Comment Area
+   INPUT.TXT     of SPC.BIN     OUT1.TXT     OUT2.TXT
+    +-----+      +-----+        +-----+      +-----+
+    | AA  |      | BB  |        (Empty)      (Empty)
+    | BB  |      +-----+
+    | CC  |
+    | DD  |
+    +-----+
+</PRE>
+   Now, as seen above, the comment area contains the line ``BB.'' Call
+   spcac_ again to add the entire contents of the input file to the comment
+   area, appending them to the comments that have already been written. We
+   specify the entire input file by using blank strings as markers.
+<P>
+ 
+<PRE>
+   spcac_ ( &amp;handle, &amp;input, " ", " ", 1, 1 );
+ 
+                 Comment Area
+   INPUT.TXT     of SPC.BIN     OUT1.TXT     OUT2.TXT
+    +-----+      +-----+        +-----+      +-----+
+    | AA  |      | BB  |        (Empty)      (Empty)
+    | BB  |      |     |
+    | CC  |      | AA  |
+    | DD  |      | BB  |
+    +-----+      | CC  |
+                 | DD  |
+                 +-----+
+</PRE>
+   After this second call to spcac_, the comment area contains the line
+   ``BB,'' followed by the contents of the input file with a blank line in
+   between. Now call spcec_ to extract the comments and write them to the
+   first output file connected to unit `out1'.
+<P>
+ 
+<PRE>
+   spcec_ ( &amp;handle, &amp;out1 );
+ 
+                 Comment Area
+   INPUT.TXT     of SPC.BIN     OUT1.TXT     OUT2.TXT
+    +-----+      +-----+        +-----+     +-----+
+    | AA  |      | BB  |        | BB  |     (Empty)
+    | BB  |      |     |        |     |
+    | CC  |      | AA  |        | AA  |
+    | DD  |      | BB  |        | BB  |
+    +-----+      | CC  |        | CC  |
+                 | DD  |        | DD  |
+                 +-----+        +-----+
+</PRE>
+   The result of calling spcec_ is that the file connected to `out1'
+   contains a copy of the comments from the comment area as seen above.
+   Now, delete the comment area with a call to spcdc_.
+<P>
+ 
+<PRE>
+   spcdc_ ( &amp;handle );
+ 
+                 Comment Area
+   INPUT.TXT     of SPC.BIN     OUT1.TXT     OUT2.TXT
+    +-----+      +-----+        +-----+     +-----+
+    | AA  |      (Empty)        | BB  |     (Empty)
+    | BB  |                     |     |
+    | CC  |                     | AA  |
+    | DD  |                     | BB  |
+    +-----+                     | CC  |
+                                | DD  |
+                                +-----+
+</PRE>
+   The comment area is now empty. Now call spcec_ to try to extract
+   comments from the comment area and write them to the second output file
+   (OUT2).
+<P>
+ 
+<PRE>
+   spcec_ ( &amp;handle, &amp;out2 );
+ 
+                 Comment Area
+   INPUT.TXT     of SPC.BIN     OUT1.TXT     OUT2.TXT
+    +-----+      +-----+        +-----+     +-----+
+    | AA  |      (Empty)        | BB  |     (Empty)
+    | BB  |                     |     |
+    | CC  |                     | AA  |
+    | DD  |                     | BB  |
+    +-----+                     | CC  |
+                                | DD  |
+                                +-----+
+</PRE>
+   Notice that nothing happened. The comment area is empty, so there are no
+   comments to extract and nothing to write to the output file. Add some
+   comments again by calling spcac_. Specify the lines of text in the input
+   file that precede the line ``BB.'' Remember that a blank string as a
+   begin marker means that the first line of the text file is the first
+   line of the comments to add to the binary file.
+<P>
+ 
+<PRE>
+   spcac_ ( &amp;handle, &amp;input, " ", "BB", 1, 2 );
+ 
+                 Comment Area
+   INPUT.TXT     of SPC.BIN     OUT1.TXT     OUT2.TXT
+    +-----+      +-----+        +-----+     +-----+
+    | AA  |      | AA  |        | BB  |     (Empty)
+    | BB  |      +-----+        |     |
+    | CC  |                     | AA  |
+    | DD  |                     | BB  |
+    +-----+                     | CC  |
+                                | DD  |
+                                +-----+
+</PRE>
+   Only one line precedes ``BB' in the input file---the comment area now
+   contains the line ``AA.'' We can extract this line and write it to the
+   second output file (`out2') as follows:
+<P>
+ 
+<PRE>
+   spcec_ ( &amp;handle, &amp;out2 );
+ 
+                 Comment Area
+   INPUT.TXT     of SPC.BIN     OUT1.TXT     OUT2.TXT
+    +-----+      +-----+        +-----+     +-----+
+    | AA  |      | AA  |        | BB  |     | AA  |
+    | BB  |      +-----+        |     |     +-----+
+    | CC  |                     | AA  |
+    | DD  |                     | BB  |
+    +-----+                     | CC  |
+                                | DD  |
+                                +-----+
+</PRE>
+<BR><BR>
+<A NAME="Example of typical usage"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Example of typical usage
+</H3><P><BR><BR>
+   Suppose we have a binary SPK file called A.BSP, and we don't know where
+   it came from nor what it contains, how and when it is to be used, and
+   why it was created. We can run the NAIF utility program called SPACIT to
+   summarize the data and display the comments. Suppose the comments
+   consist of the following:
+<P>
+ 
+<PRE>
+   SOURCE = John Smith, JPL, ph. (818) 354-1234
+   FILE ID = 9999
+</PRE>
+   These comments do not answer our questions directly, but we can call
+   John Smith, and he can provide the needed information. Suppose we do
+   call John Smith and he gives us the following information which we type
+   into a text file called MORE.TXT:
+<P>
+ 
+<PRE>
+   DATE_OF_CREATION = 1990 Nov 10
+   PURPOSE = Ephemeris generated for use during Galileo Earth flyby
+   SOURCE = Includes TCM-8 data and DE-125.
+</PRE>
+   We can put this new information into the comment area of A.BSP,
+   appending it to the comments that are already there with the following
+   program. Note that the NAIF Toolkit utility program COMMNT provides this
+   same functionality.
+<P>
+ 
+<PRE>
+   #include "SpiceUsr.h"
+   #include "SpiceZfc.h"
+   #include &lt;string.h&gt;
+ 
+   int main()
+   {
+      #define      SPK     "A.BSP"
+      #define      TXT     "MORE.TXT"
+ 
+      SpiceInt     handle;
+      SpiceInt     unit;
+ 
+      dafopw_  ( SPK, &amp;handle, strlen(SPK) );
+      txtopr_  ( TXT, &amp;unit,   strlen(TXT) );
+ 
+      spcac_   ( &amp;handle, &amp;unit, " ", " ", 1, 1 );
+ 
+      dafcls_  ( &amp;handle );
+      <a href="../cspice/ftncls_c.html">ftncls_c</a> ( unit    );
+ 
+      return (0);
+   }
+</PRE>
+<BR><BR>
+<A NAME="Example of how to search through Comment Areas"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Example of how to search through Comment Areas
+</H3><P><BR><BR>
+   If you have several DAFs, all with comments containing keyword and value
+   labels of consistent format, it is a simple task to search through the
+   files for a particular keyword and compare the value associated with
+   that keyword from each file.
+<P>
+ 
+   The following function called `getval' takes the name of a file and a
+   keyword. It searches for that keyword in the comment area of the file
+   and returns the value associated with it. The keyword and value are
+   assumed to be on a single line and separated by an equal sign.
+<P>
+ 
+<PRE>
+ 
+   #include "SpiceUsr.h"
+   #include "SpiceZfc.h"
+   #include &lt;string.h&gt;
+ 
+      void getval ( ConstSpiceChar       * file,
+                    ConstSpiceChar       * keywd,
+                    SpiceInt               lenout,
+                    SpiceChar            * value,
+                    SpiceBoolean         * found )
+   {
+      /*
+      Constants
+      */
+ 
+      #define  LINELEN         257
+      #define  TOKENLEN        81
+ 
+      /*
+      Local variables
+      */
+ 
+      SpiceBoolean             eoc;
+ 
+      SpiceChar                equal;
+      SpiceChar                first [ TOKENLEN ];
+      SpiceChar                line  [ LINELEN  ];
+ 
+      SpiceInt                 handle;
+ 
+ 
+      /*
+      Open the file for read access.
+      */
+      dafopr_ ( file, &amp;handle, strlen(file) );
+ 
+ 
+      /*
+      Read the first line of comments.  Null-terminate the
+      line.
+      */
+      spcrfl_ ( &amp;handle, line, &amp;eoc, LINELEN-1 );
+ 
+      line  [ LINELEN-1  ] = (char)0;
+ 
+ 
+      /*
+      Search through the comment area line by line, until
+      we find the desired keyword, or until we run out of
+      comments.
+      */
+ 
+      *found = SPICEFALSE;
+ 
+      while (  ( !eoc ) &amp;&amp; ( !(*found) )  )
+      {
+ 
+         /*
+         Get the first word of the line.  Null-terminate
+         the output strings.
+         */
+         nextwd_ ( line,       first,       line,
+                   LINELEN-1,  TOKENLEN-1,  LINELEN-1 );
+ 
+         first [ TOKENLEN-1 ] = (char)0;
+         line  [ LINELEN-1  ] = (char)0;
+ 
+         printf ( "%s\n", first );
+ 
+         /*
+         What is the first word?
+         */
+ 
+         if (  <a href="../cspice/eqstr_c.html">eqstr_c</a>( first, keywd )  )
+         {
+            /*
+            We've found what we're looking for.
+            */
+ 
+            *found = SPICETRUE;
+ 
+ 
+            /*
+            Get the value which follows the equal sign.
+            */
+            nextwd_ ( line,       &amp;equal,   value,
+                      LINELEN-1,  1,        lenout-1  );
+ 
+            line  [ LINELEN-1  ] = (char)0;
+            value [ lenout-1   ] = (char)0;
+         }
+         else
+         {
+ 
+            /*
+            We haven't found the keyword yet.
+            Get the next line of comments.
+            */
+            spcrnl_ ( line, &amp;eoc, LINELEN-1 );
+ 
+            line  [ LINELEN-1  ] = (char)0;
+         }
+      }
+ 
+      /*
+      Close the file.
+      */
+      dafcls_ ( &amp;handle );
+   }
+</PRE>
+   Now, suppose we have two SPK files, A.BSP and B.BSP. Each file has a
+   line in its comment area of the form
+<P>
+ 
+<PRE>
+   DATE_OF_CREATION = (date)
+</PRE>
+   We wish to compare these two dates from the two files to see which file
+   was created earlier so the program can load the most recently created
+   file last. (Last loaded files get searched first by SPK reader
+   functions). The following code fragment accomplishes the task, using the
+   function `getval' given above.
+<P>
+ 
+<PRE>
+         .
+         .
+         .
+      #include "SpiceUsr.h"
+         .
+         .
+         .
+      #define   TIMLEN        33
+ 
+      SpiceBoolean            found1;
+      SpiceBoolean            found2;
+ 
+      SpiceChar               adate [ TIMLEN ];
+      SpiceChar               bdate [ TIMLEN ];
+ 
+      SpiceDouble             asecs;
+      SpiceDouble             bsecs;
+         .
+         .
+         .
+      /*
+      Get the date of creation for each file.
+      */
+      getval ( "A.BSP", "DATE_OF_CREATION", adate,  &amp;found1 );
+      getval ( "B.BSP", "DATE_OF_CREATION", bdate,  &amp;found2 );
+ 
+      if (  !( found1 &amp;&amp; found2  )  )
+      {
+         [ Handle error condition ]
+      }
+ 
+      /*
+      adate and bdate are UTC time strings.
+      Load the leapseconds file into the kernel
+      pool, then convert the UTC times to ET
+      seconds past J2000 for easy comparison.
+      */
+ 
+      <a href="../cspice/furnsh_c.html">furnsh_c</a> ( "LEAP.KER" );
+ 
+      <a href="../cspice/str2et_c.html">str2et_c</a> ( adate, &amp;asecs );
+      <a href="../cspice/str2et_c.html">str2et_c</a> ( bdate, &amp;bsecs );
+ 
+      /*
+      Compare dates.  Load the latest one last.
+      */
+ 
+      if ( asecs &lt;= bsecs )
+      {
+         <a href="../cspice/furnsh_c.html">furnsh_c</a> ( "A.BSP" );
+         <a href="../cspice/furnsh_c.html">furnsh_c</a> ( "B.BSP" );
+      }
+      else
+      {
+         <a href="../cspice/furnsh_c.html">furnsh_c</a> ( "B.BSP" );
+         <a href="../cspice/furnsh_c.html">furnsh_c</a> ( "A.BSP" );
+      }
+         .
+         .
+         .
+</PRE>
+<BR><BR>
+<A NAME="Example of how to edit comments"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Example of how to edit comments
+</H3><P><BR><BR>
+   Another example of typical usage of the SPC functions is when we have an
+   SPK or CK file with comments and we want to edit those comments. (This
+   functionality is included in the COMMNT program.)
+<P>
+ 
+   First we must extract the comments to a text file. Suppose we have a
+   binary CK file called PLATFORM.BC. The following program extracts the
+   comments to a text file called COMMENTS.TXT.
+<P>
+ 
+<PRE>
+   #include "SpiceUsr.h"
+   #include "SpiceZfc.h"
+   #include &lt;string.h&gt;
+ 
+   int main()
+   {
+      #define  CK             "PLATFORM.BC"
+      #define  TXT            "COMMENTS.TXT"
+ 
+      SpiceInt                handle;
+      SpiceInt                unit;
+ 
+ 
+      dafopr_ ( CK,  &amp;handle, strlen(CK)  );
+      txtopn_ ( TXT, &amp;unit,   strlen(TXT) );
+ 
+      spcec_  ( &amp;handle, &amp;unit );
+ 
+      return ( 0 );
+   }
+</PRE>
+   Suppose the comment text extracted into the file COMMENTS.TXT is as
+   shown below.
+<P>
+ 
+<PRE>
+   DATE_OF_CREATION = 1991 JAN 3
+ 
+   PURPOSE = Painting data for the scan platform
+</PRE>
+   Using a standard text editor, we edit COMMENTS.TXT. We remove a blank
+   line, add three lines, and fix a spelling error. The final contents are
+   the following.
+<P>
+ 
+<PRE>
+   DATE_OF_UPDATE = 1991 MAR 12
+   REASON_FOR_UPDATE = Minor revision to comment area
+   DATE_OF_CREATION = 1991 JAN 3
+   PURPOSE = Pointing data for the scan platform
+   SOURCE = Jane Doe, JPL, ph. (818) 354-1234
+</PRE>
+   Finally, we run the following program to delete the old comments from
+   the CK file and add the revised set of comments.
+<P>
+ 
+<PRE>
+   #include "SpiceUsr.h"
+   #include "SpiceZfc.h"
+   #include &lt;string.h&gt;
+ 
+   int main()
+   {
+      #define  CK             "PLATFORM.BC"
+      #define  TXT            "COMMENTS.TXT"
+ 
+      SpiceInt                handle;
+      SpiceInt                unit;
+ 
+ 
+      dafopw_  ( CK,  &amp;handle, strlen(CK)  );
+      txtopr_  ( TXT, &amp;unit,   strlen(TXT) );
+ 
+      spcdc_   ( &amp;handle );
+      spcac_   ( &amp;handle, &amp;unit, " ", " ", 1, 1 );
+ 
+      dafcls_  ( &amp;handle );
+      <a href="../cspice/ftncls_c.html">ftncls_c</a> ( unit    );
+ 
+      return ( 0 );
+   }
+</PRE>
+<BR><BR>
+<A NAME="Summary of SPC Functions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Summary of SPC Functions
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   In the pattern of other families of CSPICE functions, the name of each
+   function in this family begins with the letters ```spc''' which stands
+   for ``SPk and Ck'', followed by a two- or three-character mnemonic.
+   Below is a complete list of SPC functions with the expansion of their
+   mnemonic names.
+<P>
+ 
+   Accessing the Comment Area
+<P>
+ 
+<PRE>
+   spcac_      Add Comments
+   spcec_      Extract Comments
+   spcdc_      Delete Comments
+   spcrfl_     Read First Line
+   spcrfl_     Read Next Line
+</PRE>
+<BR><BR>
+<A NAME="Summary of Calling Sequences"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Summary of Calling Sequences
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<PRE>
+   spcac_  ( &amp;handle, &amp;unit, bmark, emark, bmark_len, emark_len )
+   spcec_  ( &amp;handle, &amp;unit )
+   spcdc_  ( &amp;handle )
+   spcrfl_ ( &amp;handle, line, &amp;eoc, line_len )
+   spcrnl_ ( &amp;handle, line, &amp;eoc, line_len )
+</PRE>
+   Because these functions are generated by f2c, all normal arguments are
+   passed by reference, and each string argument has a corresponding length
+   argument at the end of the argument list.
+<P>
+ 
+<BR><BR>
+<A NAME="Appendix: Document Revision History"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Appendix: Document Revision History
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+<BR><BR>
+<A NAME="December 26, 2004"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> December 26, 2004
+</H3><P><BR><BR>
+   Replaced lower level kernel loader routines with FURNSH in all examples.
+<P>
+ 
+<BR><BR>
+<A NAME="April 28, 1999"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> April 28, 1999
+</H3><P><BR><BR>
+   This is the first release of this document for CSPICE.
+<P>
+ 
+   Because the SPC functions are expected to be replaced with new DAF
+   functions, there are no CSPICE wrappers supporting the current API.
+   Instead, the functions shown here have been created by running f2c on
+   their original Fortran counterparts. See the CSPICE Required Reading,
+   <a href="../req/cspice.html">cspice.req</a>, for more information on the calling sequence conventions of
+   routines generated by f2c.
+<P>
+ 
+
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+
+</BODY>
+
+</HTML>

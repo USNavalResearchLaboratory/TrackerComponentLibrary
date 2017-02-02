@@ -1,0 +1,231 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dafgda</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dafgda</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DAFGDA reads the double precision data bounded by two addresses
+   within a DAF.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      handle   file handle referring to a DAF.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+      baddr,
+      eaddr    initial and final addresses of a contiguous set of double
+               precision numbers within a DAF. Presumably, these make up
+               all or part of a particular array.
+
+               Note that DAF addresses begin at 1 as in the
+               FORTRAN version of the SPICE Toolkit.
+
+               [1,1] = size(baddr); int32 = class(baddr)
+               [1,1] = size(eaddr); int32 = class(eaddr)
+
+   the call:
+
+      data = <b>cspice_dafgda</b>( handle, baddr, eaddr )
+
+   returns:
+
+      data   are the double precision data contained between
+             the specified addresses within the specified file.
+
+             'data' has length = end - begin + 1.
+
+             [1,length] = size(data); double = class(data)
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      %
+      % Open the type 8 SPK &quot;gda.bsp&quot; for read access then read the
+      % data from the first segment. The segment contains 100
+      % 6 element records plus four additional elements.
+      %
+      handle = <a href="cspice_dafopr.html">cspice_dafopr</a>( 'gda.bsp');
+
+      %
+      % Begin a forward search; find the first segment; read the
+      % segment summary.
+      %
+      <a href="cspice_dafbfs.html">cspice_dafbfs</a>( handle )
+      found    = <a href="cspice_daffna.html">cspice_daffna</a>;
+      [dc, ic] = <a href="cspice_dafgs.html">cspice_dafgs</a>( 2, 6 );
+
+      %
+      % Retrieve the data begin and end addresses.
+      %
+      baddr = ic(5);
+      eaddr = ic(6);
+
+      fprintf( 'Beginning address       : %d\n', baddr )
+      fprintf( 'Ending address          : %d\n', eaddr )
+      fprintf( 'Number of data elements : %d\n', eaddr - baddr + 1 )
+
+      %
+      % Extract all data bounded by the begin and end addresses.
+      %
+      data = <b>cspice_dafgda</b>( handle, baddr, eaddr );
+
+      %
+      % Check 'data'. It should show an array of 604 doubles (4 + 6 * 100).
+      %
+      fprintf( 'Size of data array      : ' )
+      fprintf( '%d ', size(data) )
+      fprintf('\n\n')
+
+      %
+      % Check the data. Each set of 6 element records should possess the
+      % property:
+      %
+      %   record(6) = record(6)  + 1000.
+      %        i            i-1
+      %
+      fprintf( ' %7.2f ', data(1:6) )
+      fprintf('\n')
+
+      fprintf( ' %6.2f ', data(7:12) )
+      fprintf('\n')
+
+      %
+      % SAFELY close the file
+      %
+      <a href="cspice_dafcls.html">cspice_dafcls</a>(handle)
+
+   Matlab outputs:
+
+      Beginning address       : 385
+      Ending address          : 988
+      Number of data elements : 604
+      Size of data array      : 1 604
+
+          0.00     1.00     2.00     3.00     4.00     5.00
+       1000.00  1001.00  1002.00  1003.00  1004.00  1005.00
+
+   <b>cspice_dafgda</b> returned 604 double precision data values between DAF
+   addresses 385 and 988. The second 6-vector shows the property of 1000
+   more than the previous set, as expected.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   The principal reason that DAFs are so easy to use is that
+   the data in each DAF are considered to be one long contiguous
+   set of double precision numbers. You can grab data from anywhere
+   within a DAF without knowing (or caring) about the physical
+   records in which they are stored.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/dafgda_c.html">dafgda_c</a>.
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/daf.html">DAF.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 17-JUL-2012, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   read data from DAF address
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:36:36 2014</pre>
+
+</body>
+</html>
+

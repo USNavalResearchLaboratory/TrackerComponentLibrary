@@ -1,0 +1,258 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>tpictr_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>tpictr_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void tpictr_c ( ConstSpiceChar * sample,
+                   SpiceInt         lenout,
+                   SpiceInt         lenerr,
+                   SpiceChar      * pictur,
+                   SpiceBoolean   * ok,
+                   SpiceChar      * errmsg )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   Given a sample time string, create a time format picture
+   suitable for use by the routine <a href="timout_c.html">timout_c</a>.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+    None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+    TIME
+
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   sample     I   A sample time string.
+   lenout     I   The length for the output picture string.
+   lenerr     I   The length for the output error string.
+   pictur     O   A format picture that describes sample.
+   ok         O   Flag indicating whether sample parsed successfully.
+   errmsg     O   Diagnostic returned if sample cannot be parsed.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+   sample     is a representative time string to use as a model to
+              format time strings.
+
+   lenout     is the allowed length for the output picture.  This length
+              must large enough to hold the output string plus the null
+              terminator.  If the output string is expected to have x
+              characters, lenout needs to be x + 1.  80 is a reasonable
+              value for lenout (79 characters plus the null
+              terminator).  
+
+   lenerr     is the allowed length for the output error string.    
+   
+   </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+   pictur     is a format picture suitable for use with the SPICE
+              routine <a href="timout_c.html">timout_c</a>.  This picture, when used to format an
+              epoch via <a href="timout_c.html">timout_c</a>, will yield the same time components in
+              the same order as the components in sample.
+
+   ok         is a logical flag indicating whether the input format
+              sample could be parsed. If all of the components of
+              sample are recognizable, ok will be returned with the
+              value SPICEFALSE.  If some part of pictur cannot be
+              parsed, ok will be returned with the value SPICEFALSE.
+
+   errmsg     is a diagnostic message that indicates what part of
+              sample was not recognizable.  If sample was successfully
+              parsed, ok will be SPICEFALSE and errmsg will be
+              returned as an empty string.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+   Error free.
+
+   1) All problems with the inputs are diagnosed via ok and errmsg.
+
+   2) If a format picture can not be created from the sample
+      time string, pictur is returned as a blank string.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+   Although the routine <a href="timout_c.html">timout_c</a> provides CSPICE users with a great
+   deal of flexibility in formatting time strings, users must
+   master the means by which a time picture is constructed
+   suitable for use by <a href="timout_c.html">timout_c</a>.
+
+   This routine allows CSPICE users to supply a sample time string
+   from which a corresponding time format picture can be created,
+   freeing users from the task of mastering the intricacies of
+   the routine <a href="timout_c.html">timout_c</a>.
+
+   Note that <a href="timout_c.html">timout_c</a> can produce many time strings whose patterns
+   can not be discerned by this routine.  When such outputs are
+   called for, the user must consult <a href="timout_c.html">timout_c</a> and construct the
+   appropriate format picture &quot;by hand.&quot;  However, these exceptional
+   formats are not widely used and are not generally recognizable
+   to an uninitiated reader.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+   Suppose you need to print epochs corresponding to some events and
+   you wish the epochs to have the same arrangement of components as in
+   the string &quot;10:23 P.M. PDT January 3, 1993&quot;.
+
+   The following subroutine call will construct the appropriate format
+   picture for use with <a href="timout_c.html">timout_c</a>.
+
+   <b>tpictr_c</b> ( &quot;10:23 P.M. PDT January 3, 1993&quot;,
+               lenout, lenerr, pictur, &amp;ok, errmsg );
+
+   The resulting picture is:
+
+      &quot;AP:MN AMPM PDT Month DD, YYYY ::UTC-7&quot;
+
+   This picture can be used with <a href="timout_c.html">timout_c</a> to format a sequence
+   of epochs, et[0],...,et[n-1] (given as ephemeris seconds past J2000)
+   as shown in the loop below:
+
+      #include &quot;SpiceUsr.h&quot;
+          .
+          .
+          .
+      for ( i = 0; i &lt; n; i++ )
+      {
+         <a href="timout_c.html">timout_c</a> ( et[i], pictur, string );
+         printf ( &quot;Epoch: %d --- %s\n&quot;, i, string );
+      }
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+   None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+   
+   W.L. Taber      (JPL)
+   E.D. Wright     (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.0.0, 23-JUL-1999   (EDW) (WLT)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+   Use a sample time string to produce a time format picture
+</PRE>
+<h4>Link to routine tpictr_c source file <a href='../../../src/cspice/tpictr_c.c'>tpictr_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:46 2014</pre>
+
+</body>
+</html>
+

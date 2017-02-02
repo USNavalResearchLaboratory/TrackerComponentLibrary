@@ -1,0 +1,245 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>vsep_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>vsep_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   SpiceDouble vsep_c ( ConstSpiceDouble v1[3], ConstSpiceDouble v2[3] ) 
+
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Find the separation angle in radians between two double 
+   precision, 3-dimensional vectors.  This angle is defined as zero 
+   if either vector is zero. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   ANGLE,  VECTOR 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   VARIABLE  I/O  DESCRIPTION 
+   --------  ---  -------------------------------------------------- 
+    v1        I     First vector. 
+    v2        I     Second vector. 
+ 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   v1      is an arbitrary double precision, 3-dimensional vector. 
+   v2      is also an arbitrary double precision, 3-dimensional 
+            vector.  v1 or v2 or both may be the zero vector. 
+ </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   <b>vsep_c</b>    is the angle between v1 and v2 expressed in radians. 
+            <b>vsep_c</b> is strictly non-negative.  If either v1 or v2 is 
+            the zero vector, then <b>vsep_c</b> is defined to be 0 radians. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   Error free. 
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   In the plane, it is a simple matter to calculate the angle 
+   between two vectors once the two vectors have been made to be 
+   unit length.  Then, since the two vectors form the two equal 
+   sides of an isosceles triangle, the length of the third side 
+   is given by the expression 
+ 
+          length = 2.0 * sin ( vsep /2.0 ) 
+ 
+   The length is given by the magnitude of the difference of the 
+   two unit vectors 
+ 
+          length = norm_c ( u1 - u2 ) 
+ 
+   Once the length is found, the value of <b>vsep_c</b> may be calculated 
+   by inverting the first expression given above as 
+ 
+          vsep  = 2.0 * arcsin ( length/2.0 ) 
+ 
+   This expression becomes increasingly unstable when <b>vsep_c</b> gets 
+   larger than PI/2 or 90 degrees.  In this situation (which is 
+   easily detected by determining the sign of the dot product of 
+   v1 and v2) the supplementary angle is calculated first and 
+   then <b>vsep_c</b> is given by 
+ 
+          vsep  = pi - supplementary_angle 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   The following table gives sample values for v1, v2 and <b>vsep_c</b> 
+   implied by the inputs. 
+ 
+   v1                        v2                      <b>vsep_c</b> 
+   ----------------------------------------------------------------- 
+   (1, 0, 0)                (1, 0, 0)                0.0 
+   (1, 0, 0)                (0, 1, 0)                PI/2 (=1.571...) 
+ 
+ </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   The user is required to insure that the input vectors will not 
+   cause floating point overflow upon calculation of the vector 
+   dot product since no error detection or correction code is 
+   implemented.  In practice, this is not a significant 
+   restriction. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   K.R. Gehringer  (JPL) 
+   W.M. Owen       (JPL) 
+   W.L. Taber      (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+ 
+   -CSPICE Version 1.1.1, 17-APR-2006 (EDW)
+
+      Typo correction to the value of PI/2 in the Examples
+      section, 1.571 instead of 1.71.
+
+   -CSPICE Version 1.1.0, 22-OCT-1998 (NJB)
+
+      Made input vectors const.
+
+   -CSPICE Version 1.0.0, 08-FEB-1998   (EDW)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   angular separation of 3-dimensional vectors 
+ </PRE>
+<h4>Link to routine vsep_c source file <a href='../../../src/cspice/vsep_c.c'>vsep_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:48 2014</pre>
+
+</body>
+</html>
+

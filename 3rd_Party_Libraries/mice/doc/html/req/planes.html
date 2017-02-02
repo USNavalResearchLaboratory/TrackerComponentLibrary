@@ -1,0 +1,747 @@
+<HTML>
+<HEAD>
+<TITLE> Planes Required Reading </TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+
+<A NAME="top"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+
+<TABLE STYLE="text-align: left; margin-left: auto; margin-right: auto; width: 800px;" BORDER="0" CELLPADDING="5" CELLSPACING="2">
+<TBODY>
+<TR>
+  <TD STYLE="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+  <DIV ALIGN="right">
+    <SMALL><SMALL><A HREF="index.html">Index Page</A></SMALL></SMALL>
+  </DIV>
+  <B>Planes Required Reading</B> </TD>
+</TR>
+<TR>
+  <TD STYLE="vertical-align: top;">
+
+<H2> Table of Contents
+</H2>
+
+<PRE>
+   <A HREF="#Planes Required Reading">Planes Required Reading</A>
+      <A HREF="#Abstract">Abstract</A>
+      <A HREF="#Introduction">Introduction</A>
+         <A HREF="#References">References</A>
+      <A HREF="#Plane Data Type Description">Plane Data Type Description</A>
+      <A HREF="#Plane routines">Plane routines</A>
+         <A HREF="#Constructing planes">Constructing planes</A>
+         <A HREF="#Construct a plane from a normal vector and constant">Construct a plane from a normal vector and constant</A>
+         <A HREF="#Construct a plane from a normal vector and a point">Construct a plane from a normal vector and a point</A>
+         <A HREF="#Construct a plane from a point and spanning vectors">Construct a plane from a point and spanning vectors</A>
+         <A HREF="#Access plane data elements">Access plane data elements</A>
+      <A HREF="#Examples">Examples</A>
+         <A HREF="#Converting between representations of planes">Converting between representations of planes</A>
+         <A HREF="#Translating planes">Translating planes</A>
+         <A HREF="#Applying linear transformations to planes">Applying linear transformations to planes</A>
+         <A HREF="#Finding the limb of an ellipsoid">Finding the limb of an ellipsoid</A>
+         <A HREF="#Header examples">Header examples</A>
+         <A HREF="#Use of ellipses with planes">Use of ellipses with planes</A>
+   <A HREF="#Summary of routines">Summary of routines</A>
+   <A HREF="#Appendix: Document Revision History">Appendix: Document Revision History</A>
+         <A HREF="#2012 JAN 23, EDW (JPL)">2012 JAN 23, EDW (JPL)</A>
+         <A HREF="#2008 JAN 17, BVS (JPL)">2008 JAN 17, BVS (JPL)</A>
+         <A HREF="#2002 DEC 12, NAIF (JPL)">2002 DEC 12, NAIF (JPL)</A>
+
+</PRE>
+
+<HR SIZE=3 NOSHADE>
+
+<BR><BR>
+<A NAME="Planes Required Reading"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Planes Required Reading
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Last revised on 2012 JAN 23 by E. D. Wright.
+<P>
+ 
+<BR><BR>
+<A NAME="Abstract"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Abstract
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Mice contains a substantial set of subroutines that solve common
+   mathematical problems involving planes.
+<P>
+ 
+<BR><BR>
+<A NAME="Introduction"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Introduction
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   In Mice, the `plane' is a data representation describing planes in
+   three-dimensional space. The purpose of the plane data type is to
+   simplify the calling sequences of some geometry routines. Also, using a
+   "plane" data type helps to centralize error checking and facilitate
+   conversion between different representations of planes.
+<P>
+ 
+<BR><BR>
+<A NAME="References"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> References
+</H3><P><BR><BR>
+<UL>
+<TT>1.</TT> `Calculus, Vol. II'. Tom Apostol. John Wiley and Sons, 1969. See Chapter 5,
+`Eigenvalues of Operators Acting on Euclidean Spaces'.
+<BR><BR></UL>
+<UL>
+<TT>2.</TT> Ellipses required reading (<a href="../req/ellipses.html"><a href="../req/ellipses.html">ellipses.req</a></a>).
+<BR><BR></UL>
+<UL>
+<TT>3.</TT> Mice required reading (<a href="../req/mice.html"><a href="../req/mice.html">mice.req</a></a>).
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Plane Data Type Description"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Plane Data Type Description
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   NAIF defines a SPICE plane using a unit vector N, normal to the plane,
+   and a scalar constant C. Let
+<P>
+ 
+<PRE>
+   &lt; X, Y &gt;
+</PRE>
+   denote the inner product of the vectors X and Y, then the relationship
+<P>
+ 
+<PRE>
+   &lt; X, N &gt; = C
+</PRE>
+   holds for all vectors X in the plane. C is the distance of the plane
+   from the origin. The vector
+<P>
+ 
+<PRE>
+   C * N
+</PRE>
+   is the closest point in the plane to the origin. For planes that do not
+   contain the origin, the vector N points from the origin toward the
+   plane.
+<P>
+ 
+   The internal design of the plane data type is not part of its
+   specification. The design is an implementation choice based on the
+   programming language and so the design may change. Users should not
+   write code based on the current implementation; such code might fail
+   when used with a future version of Mice.
+<P>
+ 
+   NAIF implemented the SPICE plane data type in Matlab as a structure with
+   the fields
+<P>
+ 
+<PRE>
+      normal:     (3x1 ARRAY, DOUBLE)
+      constant:   (SCALAR, DOUBLE)
+</PRE>
+   'normal' contains the unit normal vector N; 'constant' contains the
+   plane constant C.
+<P>
+ 
+<BR><BR>
+<A NAME="Plane routines"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Plane routines
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Constructing planes"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Constructing planes
+</H3><P><BR><BR>
+   The Mice routines that create SPICE planes from various forms of data
+   that define geometric planes:
+<P>
+ 
+<DL><DT>
+<B>
+ <a href="../mice/cspice_nvc2pl.html">cspice_nvc2pl</a>
+</B><BR><BR>
+<DD>
+ Normal vector and constant to plane<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../mice/cspice_nvp2pl.html">cspice_nvp2pl</a>
+</B><BR><BR>
+<DD>
+ Normal vector and point to plane<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../mice/cspice_psv2pl.html">cspice_psv2pl</a>
+</B><BR><BR>
+<DD>
+ Point and spanning vectors to plane<BR>
+</DL>
+   Mice routines that take planes as input arguments can accept planes
+   created by any of the routines listed above.
+<P>
+ 
+   The information stored in SPICE planes is not necessarily the input
+   information you supply to a plane-making routine. SPICE planes use a
+   single, uniform internal representation for planes, no matter what data
+   you use to create them. As a consequence, when you create a SPICE plane
+   and then break it apart into data that define a plane, the returned data
+   will not necessarily be the data you originally supplied, though they
+   define the same geometric plane as the data you originally supplied.
+<P>
+ 
+   This `loss of information' may seem to be a liability at first but turns
+   out to be a convenience in the end: the Mice routines that break apart
+   SPICE planes into various representations return outputs that are
+   particularly useful for many geometric computations. In the case of the
+   routine <a href="../mice/cspice_pl2nvp.html">cspice_pl2nvp</a> (Plane to normal vector and point), the output
+   normal vector is always a unit vector, and the output point is always
+   the closest point in the plane to the origin. The normal vector points
+   from the origin toward the plane, if the plane does not contain the
+   origin.
+<P>
+ 
+   You can convert any of the following representations of planes to a
+   SPICE plane:
+<P>
+ 
+<DL><DT>
+<B>
+ A normal vector<BR> and a constant
+</B><BR><BR>
+<DD>
+ If N is a normal vector and C is a constant, then the plane is the set
+of points X such that<BR>
+</DL>
+<PRE>
+                              &lt; X, N &gt; = C.
+</PRE>
+<DL><DT>
+<B>
+ A normal vector<BR> and a point
+</B><BR><BR>
+<DD>
+ If P is a point in the plane and N is a normal vector, then the plane
+is the set of points X such that<BR>
+</DL>
+<PRE>
+                              &lt; X - P,  N &gt; = 0.
+</PRE>
+<DL><DT>
+<B>
+ A point and two<BR> spanning vectors
+</B><BR><BR>
+<DD>
+ If P is a point in the plane and V1 and V2 are two linearly independent
+but not necessarily orthogonal vectors, then the plane is the set of
+points<BR>
+</DL>
+<PRE>
+                              P   +   s * V1   +   t * V2,
+</PRE>
+<DL><DT>
+<DD>
+ where s and t are real numbers.<BR>
+</DL>
+   The calling sequences of the Mice routines that create planes are
+   described below. For examples of how you might use these routines in a
+   program, see the Examples section.
+<P>
+ 
+<BR><BR>
+<A NAME="Construct a plane from a normal vector and constant"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Construct a plane from a normal vector and constant
+</H3><P><BR><BR>
+   Let `n' represent a vector normal to a plane, and `c', a scalar
+   constant.
+<P>
+ 
+   After `n' and `c' have been assigned values, you can construct a SPICE
+   plane that represents the plane having normal `n' and constant `c' by
+   calling <a href="../mice/cspice_nvc2pl.html">cspice_nvc2pl</a>:
+<P>
+ 
+<PRE>
+   plane = <a href="../mice/cspice_nvc2pl.html">cspice_nvc2pl</a>( n, c )
+</PRE>
+<BR><BR>
+<A NAME="Construct a plane from a normal vector and a point"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Construct a plane from a normal vector and a point
+</H3><P><BR><BR>
+   Let `n' represent a vector normal to a plane, and `p', a point on the
+   plane.
+<P>
+ 
+   After `n' and `p' have been assigned values, you can construct a SPICE
+   plane that represents the plane containing point `p' and having normal
+   `n' by calling <a href="../mice/cspice_nvp2pl.html">cspice_nvp2pl</a>:
+<P>
+ 
+<PRE>
+   plane = <a href="../mice/cspice_nvp2pl.html">cspice_nvp2pl</a>( n, p )
+</PRE>
+<BR><BR>
+<A NAME="Construct a plane from a point and spanning vectors"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Construct a plane from a point and spanning vectors
+</H3><P><BR><BR>
+   Let `p' represent a point on a plane, `v1' and `v2', two vectors in the
+   plane.
+<P>
+ 
+   After `p', `v1', and `v2' have been assigned values, you can construct a
+   SPICE plane that represents the plane spanned by the vectors V1 and V2
+   and containing the point P by calling <a href="../mice/cspice_psv2pl.html">cspice_psv2pl</a>:
+<P>
+ 
+<PRE>
+   plane = <a href="../mice/cspice_psv2pl.html">cspice_psv2pl</a>( p, v1, v2 )
+</PRE>
+<BR><BR>
+<A NAME="Access plane data elements"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Access plane data elements
+</H3><P><BR><BR>
+   You can `take planes apart' as well as put them together. Any SPICE
+   plane, regardless of which routine created it, can be converted to any
+   of the representations listed in the previous section: normal vector and
+   constant, point and normal vector, or point and spanning vectors.
+<P>
+ 
+   The Mice routines that break planes apart into data that define
+   geometric planes are
+<P>
+ 
+<DL><DT>
+<B>
+ <a href="../mice/cspice_pl2nvc.html">cspice_pl2nvc</a>
+</B><BR><BR>
+<DD>
+ Plane to normal vector and constant<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../mice/cspice_pl2nvp.html">cspice_pl2nvp</a>
+</B><BR><BR>
+<DD>
+ Plane to normal vector and point<BR>
+</DL>
+<DL><DT>
+<B>
+ <a href="../mice/cspice_pl2psv.html">cspice_pl2psv</a>
+</B><BR><BR>
+<DD>
+ Plane to point and spanning vectors<BR>
+</DL>
+   In the following discussion, `plane' is a SPICE plane, `n' is a normal
+   vector, `p' is a point, `c' is a scalar constant, and V1 and V2 are
+   spanning vectors. We omit the declarations; all are as in the previous
+   section.
+<P>
+ 
+   To find a unit normal vector `n' and a plane constant `c' that define
+   `plane', use <a href="../mice/cspice_pl2nvc.html">cspice_pl2nvc</a>:
+<P>
+ 
+<PRE>
+   [n, c] = <a href="../mice/cspice_pl2nvc.html">cspice_pl2nvc</a>( plane )
+</PRE>
+   The constant `c' is the distance of the plane from the origin. The
+   vector
+<P>
+ 
+<PRE>
+   C * N
+</PRE>
+   will be the closest point in the plane to the origin.
+<P>
+ 
+   To find a unit normal vector `n' and a point `p' that define `plane',
+   use <a href="../mice/cspice_pl2nvp.html">cspice_pl2nvp</a>:
+<P>
+ 
+<PRE>
+   [n, p] = <a href="../mice/cspice_pl2nvp.html">cspice_pl2nvp</a>( plane )
+</PRE>
+   `p' will be the closest point in the plane to the origin. The unit
+   normal vector `n' will point from the origin toward the plane.
+<P>
+ 
+   To find a point `p' and two spanning vectors `v1' and `v2' that define
+   `plane', use <a href="../mice/cspice_pl2psv.html">cspice_pl2psv</a>:
+<P>
+ 
+<PRE>
+   [p, v1, v2] = <a href="../mice/cspice_pl2psv.html">cspice_pl2psv</a>( plane )
+</PRE>
+   `p' will be the closest point in the plane to the origin. The vectors
+   `v1' and `v2' are mutually orthogonal unit vectors and are also
+   orthogonal to `p'.
+<P>
+ 
+   It is important to note that the xxx2PL and PL2xxx routines are not
+   exact inverses of each other. The pairs of calls
+<P>
+ 
+<PRE>
+   plane       = <a href="../mice/cspice_pl2nvc.html">cspice_pl2nvc</a>( n, c )
+   [n, c]      = <a href="../mice/cspice_pl2nvc.html">cspice_pl2nvc</a>( plane )
+ 
+   plane       = <a href="../mice/cspice_nvp2pl.html">cspice_nvp2pl</a>( p, n )
+   [p, n]      = <a href="../mice/cspice_pl2nvp.html">cspice_pl2nvp</a>( plane )
+ 
+   plane       = <a href="../mice/cspice_psv2pl.html">cspice_psv2pl</a>( v1, v2, p )
+   [v1, v2, p] = <a href="../mice/cspice_pl2psv.html">cspice_pl2psv</a>( plane )
+</PRE>
+   do not necessarily preserve the input arguments supplied to the xxx2PL
+   routines. This is because the uniform internal representation of SPICE
+   planes causes them to `forget' what data they were created from; all
+   sets of data that define the same geometric plane have the same internal
+   representation in SPICE planes.
+<P>
+ 
+   In general, the routines <a href="../mice/cspice_pl2nvc.html">cspice_pl2nvc</a>, <a href="../mice/cspice_pl2nvp.html">cspice_pl2nvp</a>, and <a href="../mice/cspice_pl2psv.html">cspice_pl2psv</a>
+   are used in routines that accept planes as input arguments. In this
+   role, they simplify the routines that call them, because the calling
+   routines no longer check the input planes' validity.
+<P>
+ 
+<BR><BR>
+<A NAME="Examples"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Examples
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<BR><BR>
+<A NAME="Converting between representations of planes"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Converting between representations of planes
+</H3><P><BR><BR>
+   The Mice plane routines can also be used as a convenient way to convert
+   one representation of a plane to another. For example, suppose that
+   given a normal vector `n' and constant `c' defining a plane, you must
+   produce the closest point in the plane to the origin. The code fragment
+<P>
+ 
+<PRE>
+   plane       = <a href="../mice/cspice_nvc2pl.html">cspice_nvc2pl</a>( n, c )
+   [n,  point] = <a href="../mice/cspice_pl2nvp.html">cspice_pl2nvp</a>( plane )
+</PRE>
+<BR><BR>
+<A NAME="Translating planes"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Translating planes
+</H3><P><BR><BR>
+   A `translation' T is a vector space mapping defined by the relation
+<P>
+ 
+<PRE>
+   T(X) = X + A   for all vectors X
+</PRE>
+   where A is a constant vector. While it's not difficult to directly apply
+   a translation map to a plane, using SPICE plane routines provides the
+   convenience of automatically computing the closest point to the origin
+   in the translated plane.
+<P>
+ 
+   Suppose a plane is defined by the point `p' and the normal vector `n',
+   and you wish to translate it by the vector `x'. That is, you wish to
+   find data defining the plane that results from adding `x' to every
+   vector in the original plane. You can do this with the code fragment
+<P>
+ 
+<PRE>
+   p       = p + x
+   plane   = <a href="../mice/cspice_nvp2pl.html">cspice_nvp2pl</a>( n, p )
+   [ n, p] = <a href="../mice/cspice_pl2nvp.html">cspice_pl2nvp</a>( plane )
+</PRE>
+   Now, `p' is the closest point in the translated plane to the origin.
+<P>
+ 
+<BR><BR>
+<A NAME="Applying linear transformations to planes"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Applying linear transformations to planes
+</H3><P><BR><BR>
+   Suppose we have a normal vector N and constant C defining a plane, and
+   we wish to apply a non-singular linear transformation T to the plane. We
+   want to find a unit normal vector and constant that define the
+   transformed plane; the constant should be the distance of the plane from
+   the origin.
+<P>
+ 
+<PRE>
+        Let T be represented by the matrix M.
+ 
+        If Y is a point in the transformed plane, then
+ 
+            -1
+           M   Y
+ 
+        is a point in the original plane, so
+ 
+                 -1
+           &lt; N, M  Y &gt;  =  C.
+ 
+        But
+ 
+                 -1           T  -1
+           &lt; N, M  Y &gt;  =    N  M   Y
+ 
+                                  -1 T     T
+                        =   (  ( M  )  N  )   Y
+ 
+                                  -1 T
+                        =   &lt;  ( M  )  N,  Y &gt;
+ 
+        So
+ 
+              -1 T
+           ( M  )  N,  C
+ 
+        are, respectively, a normal vector and constant for the
+        transformed plane.
+</PRE>
+   We can solve the problem using the following code fragments.
+<P>
+ 
+   Make a SPICE plane from `n' and `c', and then find a point in `plane'
+   and spanning vectors for `plane'. `n' need not be a unit vector.
+<P>
+ 
+<PRE>
+   plane             = <a href="../mice/cspice_nvc2pl.html">cspice_nvc2pl</a>( n, c )
+   [ point, v1, v2 ] = <a href="../mice/cspice_pl2psv.html">cspice_pl2psv</a>( plane )
+</PRE>
+   Apply the linear transformation to the point and spanning vectors. All
+   we need to do is multiply these vectors by M, since for any linear
+   transformation T,
+<P>
+ 
+<PRE>
+              T ( POINT   +     t1 * V1     +   t2 * V2 )
+ 
+           =  T (POINT)   +   t1 * T (V1)   +   t2 * T (V2),
+</PRE>
+   which means that T(POINT), T(V1), and T(V2) are a a point and spanning
+   vectors for the transformed plane.
+<P>
+ 
+<PRE>
+   tpoint = m * point
+   tv1    = m * v1
+   tv2    = m * v2
+</PRE>
+   Construct a new SPICE plane `tplane' from the transformed point and
+   spanning vectors, and find a unit normal and constant for this new
+   plane.
+<P>
+ 
+<PRE>
+   tplane     = <a href="../mice/cspice_psv2pl.html">cspice_psv2pl</a>( tpoint,   tv1,  tv2 )
+   [ tn, tc ] = <a href="../mice/cspice_pl2nvc.html">cspice_pl2nvc</a>( tplane )
+</PRE>
+<BR><BR>
+<A NAME="Finding the limb of an ellipsoid"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Finding the limb of an ellipsoid
+</H3><P><BR><BR>
+   This problem is somewhat artificial, because the SPICE routine
+   <a href="../mice/cspice_edlimb.html">cspice_edlimb</a> already solves this problem. Nonetheless, it is a good
+   illustration of how Mice plane routines are used.
+<P>
+ 
+   We'll work in body-fixed coordinates, which is to say that the ellipsoid
+   is centered at the origin and has axes aligned with the x, y and z axes.
+   Suppose that the semi-axes of the ellipsoid has lengths A, B, and C, and
+   call our observation point
+<P>
+ 
+<PRE>
+   P = ( p1, p2, p3 ).
+</PRE>
+   Then every point
+<P>
+ 
+<PRE>
+   X = ( x1, x2, x3 )
+</PRE>
+   on the limb satisfies
+<P>
+ 
+<PRE>
+   &lt; P - X, N &gt; = 0
+</PRE>
+   where N a surface normal vector at X. In particular, the gradient vector
+<P>
+ 
+<PRE>
+         2      2      2
+   ( x1/A , x2/B , x3/C  )
+</PRE>
+   is a surface normal, so X satisfies
+<P>
+ 
+<PRE>
+   0 = &lt; P - X, N &gt;
+ 
+                     2      2      2
+     = &lt; P - X, (x1/A , x2/B , x3/C ) &gt;
+ 
+                 2      2      2                  2      2      2
+     = &lt; P, (x1/A , x2/B , x3/C ) &gt;  -  &lt; X, (x1/A , x2/B , x3/C ) &gt;
+ 
+              2      2      2
+     = &lt; (p1/A , p2/B , p3/C ), X &gt;  -  1
+</PRE>
+   So the limb plane has normal vector
+<P>
+ 
+<PRE>
+             2      2      2
+   N = ( p1/A , p2/B , p3/C  )
+</PRE>
+   and constant 1. We can create a SPICE plane representing the limb with
+   the code fragment
+<P>
+ 
+<PRE>
+   n = [ p(1)/a^2, p(2)/b^2, p(3)/c^2 ]
+ 
+   plane = <a href="../mice/cspice_nvc2pl.html">cspice_nvc2pl</a>( n, 1. )
+</PRE>
+   The limb is the intersection of the limb plane and the ellipsoid. To
+   find the intersection, we use the Mice routine <a href="../mice/cspice_inedpl.html">cspice_inedpl</a>
+   (Intersection of ellipsoid and plane):
+<P>
+ 
+<PRE>
+   [ ellips, found ] = <a href="../mice/cspice_pjelpl.html">cspice_pjelpl</a>( a, b, c, plane )
+</PRE>
+   `ellips' is a SPICE `ellipse', a data type analogous to the SPICE plane.
+   We can use the Mice routine <a href="../mice/cspice_el2cgv.html">cspice_el2cgv</a> (Ellipse to center and
+   generating vectors) to find the limb's center, semi-major axis, and
+   semi-minor axis:
+<P>
+ 
+<PRE>
+   [ center, smajor, sminor] = <a href="../mice/cspice_el2cgv.html">cspice_el2cgv</a>( ellips )
+</PRE>
+<BR><BR>
+<A NAME="Header examples"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Header examples
+</H3><P><BR><BR>
+   The headers of the plane routines (see <a href="../req/planes.html"><a href="../req/planes.html">planes.req</a></a>) list additional
+   ellipse usage examples.
+<P>
+ 
+<BR><BR>
+<A NAME="Use of ellipses with planes"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Use of ellipses with planes
+</H3><P><BR><BR>
+   The nature of geometry problems involving planes often includes use of
+   the SPICE ellipse data type. The example code listed in the headers of
+   the routines <a href="../mice/cspice_inelpl.html">cspice_inelpl</a> and <a href="../mice/cspice_pjelpl.html">cspice_pjelpl</a> show examples of problems
+   solved using both the ellipse and plane data type.
+<P>
+ 
+<BR><BR>
+<A NAME="Summary of routines"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Summary of routines
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   The following table summarizes the Mice plane routines.
+<P>
+ 
+<PRE>
+   <a href="../mice/cspice_inedpl.html">cspice_inedpl</a>        Intersection of ellipsoid and plane
+   <a href="../mice/cspice_inelpl.html">cspice_inelpl</a>        Intersection of ellipse and plane
+   <a href="../mice/cspice_inrypl.html">cspice_inrypl</a>        Intersection of ray and plane
+   <a href="../mice/cspice_nvc2pl.html">cspice_nvc2pl</a>        Normal vector and constant to plane
+   <a href="../mice/cspice_nvp2pl.html">cspice_nvp2pl</a>        Normal vector and point to plane
+   <a href="../mice/cspice_pjelpl.html">cspice_pjelpl</a>        Project ellipse onto plane
+   <a href="../mice/cspice_pl2nvc.html">cspice_pl2nvc</a>        Plane to normal vector and constant)
+   <a href="../mice/cspice_pl2nvp.html">cspice_pl2nvp</a>        Plane to normal vector and point
+   <a href="../mice/cspice_pl2psv.html">cspice_pl2psv</a>        Plane to point and spanning vectors
+   <a href="../mice/cspice_psv2pl.html">cspice_psv2pl</a>        Point and spanning vectors to plane
+   <a href="../mice/cspice_vprjp.html">cspice_vprjp</a>         Vector projection onto plane
+   <a href="../mice/cspice_vprjpi.html">cspice_vprjpi</a>        Vector projection onto plane, inverted
+</PRE>
+<BR><BR>
+<A NAME="Appendix: Document Revision History"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Appendix: Document Revision History
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+<BR><BR>
+<A NAME="2012 JAN 23, EDW (JPL)"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> 2012 JAN 23, EDW (JPL)
+</H3><P><BR><BR>
+   Added descriptions and examples for CSPICE, Icy, and Mice distributions.
+   Rewrote and restructured document sections for clarity and to conform to
+   NAIF documentation standard.
+<P>
+ 
+<BR><BR>
+<A NAME="2008 JAN 17, BVS (JPL)"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> 2008 JAN 17, BVS (JPL)
+</H3><P><BR><BR>
+   Previous edits
+<P>
+ 
+<BR><BR>
+<A NAME="2002 DEC 12, NAIF (JPL)"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> 2002 DEC 12, NAIF (JPL)
+</H3><P><BR><BR>
+   Corrections were made to comments in code example that computes altitude
+   of ray above the limb of an ellipsoid. Previously, the quantity computed
+   was incorrectly described as the altitude of a ray above an ellipsoid.
+<P>
+ 
+
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+
+
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+
+</BODY>
+
+
+</HTML>

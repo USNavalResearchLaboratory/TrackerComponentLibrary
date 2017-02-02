@@ -1,0 +1,351 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>kdata_c</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>kdata_c</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+              <a href="#Detailed_Input">Detailed_Input<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   void kdata_c ( SpiceInt          which,
+                  ConstSpiceChar  * kind,
+                  SpiceInt          fillen,
+                  SpiceInt          typlen,
+                  SpiceInt          srclen,
+                  SpiceChar       * file,
+                  SpiceChar       * filtyp,
+                  SpiceChar       * source,
+                  SpiceInt        * handle,
+                  SpiceBoolean    * found  )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+ 
+   Return data for the nth kernel that is among a list of specified 
+   kernel types. 
+ </PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+ 
+   KERNEL 
+ 
+
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+ 
+   VARIABLE  I/O  DESCRIPTION 
+   --------  ---  -------------------------------------------------- 
+   which      I   Index of kernel to fetch from the list of kernels. 
+   kind       I   The kind of kernel to which fetches are limited. 
+   fillen     I   Available space in output file string.
+   typlen     I   Available space in output kernel type string.
+   srclen     I   Available space in output source string.
+   file       O   The name of the kernel file. 
+   filtyp     O   The type of the kernel. 
+   source     O   Name of the source file used to load file. 
+   handle     O   The handle attached to file. 
+   found      O   SPICETRUE if the specified file could be located. 
+ </PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+ 
+   which      is the number of the kernel to fetch (matching the 
+              type specified by kind) from the list of kernels that 
+              have been loaded through the entry point <a href="furnsh_c.html">furnsh_c</a> but 
+              that have not been unloaded through the entry point 
+              <a href="unload_c.html">unload_c</a>. 
+              
+              The range of which is 0 to count-1, where count is 
+              the number of kernels loaded via <a href="furnsh_c.html">furnsh_c</a>.  This
+              count may be obtained by calling <a href="ktotal_c.html">ktotal_c</a>.  See the 
+              Examples section for an illustrative code fragment.
+              
+ 
+   kind       is a list of types of kernels to be considered when 
+              fetching kernels from the list of loaded kernels. KIND 
+              should consist of a list of words of kernels to 
+              examine.  Recognized types are 
+ 
+                 SPK  --- All SPK files are counted in the total. 
+                 CK   --- All CK files are counted in the total. 
+                 PCK  --- All binary PCK files are counted in the 
+                          total. 
+                 EK   --- All EK files are counted in the total. 
+                 TEXT --- All text kernels that are not meta-text 
+                          kernels are included in the total. 
+                 META --- All meta-text kernels are counted in the 
+                          total. 
+                 ALL  --- Every type of kernel is counted in the 
+                          total. 
+ 
+               kind is case insensitive.  If a word appears in kind 
+               that is not one of those listed above it is ignored. 
+ 
+               See the entry point <a href="ktotal_c.html">ktotal_c</a> for examples of the use 
+               of kind. 
+ 
+   fillen      is the amount of available space in the output file 
+               string, including room for the terminating null. 
+               Normally, this is the declared length of the output
+               string.
+               
+   typlen      is the amount of available space in the output kernel 
+               type string.
+               
+   srclen      is the amount of available space in the output kernel 
+               source string.
+               
+               </PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+ 
+   file        is the name of the file having index which in the 
+               sequence of files of type kind currently loaded via 
+               <a href="furnsh_c.html">furnsh_c</a>.  file will be blank if there is no such kernel
+               is loaded. 
+ 
+   filtyp      is the type of the kernel specified by file.  filtyp 
+               will be empty if there is no file matching the 
+               specification of which and kind. 
+ 
+   source      is the name of the source file that was used to 
+               specify file as one to load.  If file was loaded 
+               directly via a call to <a href="furnsh_c.html">furnsh_c</a>, source will be empty. 
+               If there is no file matching the specification of 
+               which and kind, source will be empty. 
+ 
+   handle      is the handle attached to file if it is a binary 
+               kernel.  If file is a text kernel or meta-text kernel 
+               handle will be zero.  If there is no file matching 
+               the specification of which and kind, handle will be 
+               set to zero. 
+ 
+   found       is returned SPICETRUE if a file matching the 
+               specification of which and kind exists.  If there is no 
+               such file, found will be set to SPICEFALSE. 
+ </PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+ 
+   1) If a file is not loaded matching the specification of which 
+      and kind, found will be SPICEFALSE; file, filtyp, and source 
+      will be empty and handle will be set to zero. 
+
+   2) If any input or output character argument pointer is null, the 
+      error SPICE(NULLPOINTER) will be signaled.
+      
+   3) If any of the output string length arguments are less than 1, the
+      error SPICE(STRINGTOOSHORT) will be signaled. 
+
+   4) If any output string has length at least 1 but is too short to
+      contain the output string, the corresponding is truncated on the 
+      right.  The output string is still null-terminated.
+ </PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+ 
+   This entry point allows you to determine which kernels have 
+   been loaded via <a href="furnsh_c.html">furnsh_c</a> and to obtain information sufficient 
+   to directly query those files. 
+ </PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+ 
+   The following example shows how you could print a summary 
+   of SPK files that have been loaded through the interface 
+   <a href="furnsh_c.html">furnsh_c</a>. 
+    
+      #include &lt;stdio.h&gt;
+      #include &quot;SpiceUsr.h&quot;
+
+      #define  FILLEN   128
+      #define  TYPLEN   32
+      #define  SRCLEN   128
+
+      SpiceInt        which;
+      SpiceInt        count;
+      SpiceInt        handle;
+
+      SpiceChar       file  [FILLEN];
+      SpiceChar       filtyp[TYPLEN];
+      SpiceChar       source[SRCLEN];
+
+      SpiceBoolean    found;
+
+      int main()
+         { 
+         <a href="furnsh_c.html">furnsh_c</a>( &quot;/kernels/standard.tm&quot; );
+   
+         <a href="ktotal_c.html">ktotal_c</a> ( &quot;spk&quot;, &amp;count );
+    
+         if ( count == 0 )
+            {
+            printf ( &quot;No SPK files loaded at this time.\n&quot; );
+            }
+         else
+            {
+            printf ( &quot;The loaded SPK files are: \n\n&quot; );
+            }
+    
+         for ( which = 0;  which &lt; count;  which++ )
+            {
+            <b>kdata_c</b> ( which,  &quot;spk&quot;,    FILLEN,   TYPLEN, SRCLEN, 
+                      file,   filtyp,  source,  &amp;handle,  &amp;found ); 
+            printf ( &quot;%s\n&quot;,  file   );
+            }
+
+         }      
+    </PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+ 
+   None. 
+ </PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+ 
+   N.J. Bachman    (JPL)
+   W.L. Taber      (JPL) 
+ </PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   -CSPICE Version 1.1.3, 02-MAY-2008 (EDW)
+
+      standard.ker renamed standard.tm
+
+   -CSPICE Version 1.1.2, 05-SEP-2007 (EDW)
+ 
+      Expanded Examples section to a full, compilable program. 
+ 
+   -CSPICE Version 1.1.1, 29-DEC-2004 (LSE)
+
+      Corrected example code to match routine's argument list.
+      (2 arguments reversed)
+ 
+   -CSPICE Version 1.1.0, 02-FEB-2003 (EDW)
+
+      Corrected example code to match routine's argument list.
+
+   -CSPICE Version 1.0.0, 12-SEP-1999 (NJB) (WLT)
+</PRE>
+<h4><a name="Index_Entries">Index_Entries</a></h4>
+<PRE>
+ 
+   Retrieve information on loaded SPICE kernels 
+ </PRE>
+<h4>Link to routine kdata_c source file <a href='../../../src/cspice/kdata_c.c'>kdata_c.c</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:31:37 2014</pre>
+
+</body>
+</html>
+
