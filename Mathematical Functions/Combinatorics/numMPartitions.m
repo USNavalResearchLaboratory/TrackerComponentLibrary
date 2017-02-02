@@ -3,7 +3,7 @@ function val=numMPartitions(n,m)
 %                 into m parts, where order does not matter (unlike
 %                 compositions, where order matters). That is the number of
 %                 ways of getting m nonzero integers that sum to n. The
-%                 amount of memory for this implementation  is proportional
+%                 amount of memory for this implementation is proportional
 %                 to n*m and thus the solution becomes slow for very large
 %                 n and m values.
 %

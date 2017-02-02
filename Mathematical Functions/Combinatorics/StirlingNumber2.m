@@ -1,17 +1,18 @@
 function val=StirlingNumber2(n,k)
-%%STIRLINGNUMBER2 Compute the Stirling number of the second kind {n,k}.
-%                 This is the number of ways to partition a set of n
-%                 objects into k non-empty subsets. The number is computed
-%                 using a recursion that will not overflow unless the
-%                 actual number overflows. When n is very large, the
-%                 function can be slow.
+%%STIRLINGNUMBER2 Compute the Stirling number of the second kind {n,k},
+%                 which is also called a Stirling set number. This is the
+%                 number of ways to partition a set of n objects into k
+%                 non-empty subsets. The number is computed using a
+%                 recursion that will not overflow unless the actual number
+%                 overflows. When n is very large, the function can be
+%                 slow.
 %                 
 %INPUTS:  n The integer total number of items in the set n>=0.
 %         k The desired integer number of non-empty subsets of the set.
 %           k>=0.
 %
 %OUTPUTS: val The number of ways of partitioning n items into k subsets. If
-%             an overflow occurs, this will be infinite.
+%             anfunct overflow occurs, this will be infinite.
 %
 %The implementation uses the recurrence relation from [1].
 %

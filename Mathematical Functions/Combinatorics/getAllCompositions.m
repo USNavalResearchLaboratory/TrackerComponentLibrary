@@ -2,7 +2,8 @@ function tuples=getAllCompositions(d,sumVal)
 %%GETALLCOMPOSITIONS Find all permutations of d positive (nonzero) integers
 %                   that sum to a given constant sumVal (constant-sum
 %                   d-tuples). That is, find all compositions of sumVal
-%                   into d parts such that no part is ever empty.
+%                   into d parts such that no part is ever empty. There is
+%                   a total of binomial(sumVal-1,d-1) compositions.
 %
 %INPUTS:      d The integer dimensionality of the vectors of integers to
 %               generate.

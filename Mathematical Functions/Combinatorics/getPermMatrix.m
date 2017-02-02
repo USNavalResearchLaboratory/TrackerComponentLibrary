@@ -8,7 +8,7 @@ function chi=getPermMatrix(rank,n,dim)
 %                [0 1 2 ... n-1] in lexicographic order. Note 
 %                that 0<=rank<=(n!-1).
 %           n    The number of elements in the desired permutation; the
-%                number of that might be reordered with this matrix.
+%                number of things that might be reordered with this matrix.
 %           dim  The dimensionality of the n things being reordered.
 %
 %OUTPUTS:   chi  The permutation matrix (consisting of ones and zeros) that
@@ -22,7 +22,7 @@ function chi=getPermMatrix(rank,n,dim)
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    perm=unrankPermutation(rank,n)+1;%Get the permutation.
+    permVal=unrankPermutation(rank,n);%Get the permutation.
     chi=zeros(n*dim,n*dim);%Allocate space.
     
     %Insert little identity matrices at the correct positions in each
@@ -30,7 +30,7 @@ function chi=getPermMatrix(rank,n,dim)
     for k=1:n
         minIdxR=(k-1)*dim+1;
         maxIdxR=minIdxR+dim-1;
-        minIdxC=(perm(k)-1)*dim+1;
+        minIdxC=(permVal(k)-1)*dim+1;
         maxIdxC=minIdxC+dim-1;
         
         chi(minIdxR:maxIdxR,minIdxC:maxIdxC)=eye(dim);

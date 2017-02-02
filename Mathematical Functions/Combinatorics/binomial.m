@@ -41,8 +41,7 @@ function val = binomial(n,k)
     elseif(n>=800&&k>=100)
         %If k is this large for large n, then numerical precision problems
         %would have already cut off a few digits of the result, so using a
-        %faster but numerically less precise but faster method won't
-        %matter.
+        %faster but numerically less precise method won't matter.
         val=exp(gammaln(n+1)-gammaln(k+1)-gammaln(n-k+1));
     else
         val=1;

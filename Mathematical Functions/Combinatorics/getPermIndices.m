@@ -23,7 +23,7 @@ function vec=getPermIndices(rank,n,dim)
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    perm=unrankPermutation(rank,n)+1;
+    perm=unrankPermutation(rank,n);
     vec=zeros(dim*n,1);
     
     for curPerm=1:n
