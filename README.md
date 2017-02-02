@@ -1,5 +1,6 @@
 **Tracker Component Library Release 2.0, August 2016**
-https://github.com/DavidFCrouse/Tracker-Component-Library
+Moved to an afficial NRL GitHub site February 2017
+https://github.com/USNavalResearchLaboratory/TrackerComponentLibrary
 
 These are the release notes for the second release of the Tracker Component
 Library. The Tracker Component Library is a collection of Matlab routines
