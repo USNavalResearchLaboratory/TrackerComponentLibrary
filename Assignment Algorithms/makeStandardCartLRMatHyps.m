@@ -50,12 +50,12 @@ function [A,xHyp,PHyp]=makeStandardCartLRMatHyps(xPred,SPred,H,zCart,SRCart,PD,l
 %              target existence probabilities. If omitted or an empty
 %              matrix is passed, then rPred=1 is used (everything exists).
 %  measJacob,zNative If these two inputs are omitted, then it is assumed
-%              that lambda is given in Cartesian cooridnates. Otherwise, it
-%              is assumed that lambda is given in the native coordinate system of
-%              the (Cartesian-converted) measurements and thus has to be
-%              "converted" to Cartesian cordinates too. However, such a
-%              conversion will typically yield a different lambda at every
-%              single point. Thus, the value of lambda given at the
+%              that lambda is given in Cartesian coordinates. Otherwise, it
+%              is assumed that lambda is given in the native coordinate
+%              system of the (Cartesian-converted) measurements and thus
+%              has to be "converted" to Cartesian cordinates too. However,
+%              such a conversion will typically yield a different lambda at
+%              every single point. Thus, the value of lambda given at the
 %              measurement location is used. For the ith measurement, this
 %              is det(measJacob(zNative(:,i)))*lambda. Thus, zNative is a
 %              zOrigDimXnumMeas matrix of measurements and measJacob

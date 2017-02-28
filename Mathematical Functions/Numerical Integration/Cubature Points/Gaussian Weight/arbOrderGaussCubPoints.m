@@ -6,16 +6,22 @@ function [xi,w]=arbOrderGaussCubPoints(numDim,n,beta)
 %               For beta=0, the weighting function is just the standard
 %               normal PDF.
 %
-%INPUTS:  numDim An integer specifying the dimensionality of the points to
-%                be generated.
-%              n A positive integer such that 2n-1 is the highest degree to
-%                which the cubature  points are accurate.
+%INPUTS: numDim An integer specifying the dimensionality of the points to
+%               be generated.
+%             n A positive integer such that 2n-1 is the highest degree to
+%               which the cubature  points are accurate.
 %          beta An integer specifying the exponent of the norm(x) term in
 %               the weighting function (the thing times the normal PDF in
 %               the weighting function). beta>-numDim. If omitted or an
 %               empty matrix is passed, beta=0 is used.
 %
-%The algorithm is as described in Chapter 2.6 of [1]. The transformation to
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
+%
+%The algorithm is as described in Chapter 2.6 of [1]. The specialization
+%for Gaussian problems starts near Euaation 2.6-16. The transformation to
 %a Gaussian PDF is performed by scaling the points and weights.
 %
 %REFERENCES:
@@ -29,7 +35,7 @@ if(nargin<3||isempty(beta))
    beta=0; 
 end
 
-[r,Ar]=quadraturePoints1D(n,12,numDim-1+beta);
+[r,Ar]=quadraturePoints1D(n,9,numDim-1+beta);
 numRVals=length(r);
 
 %Allocate space for the second set of points.
@@ -39,7 +45,7 @@ Ak=zeros(numGegenbauerPoints,numDim-1);
 
 %First, find all of the yk and Ak values
 for k=1:(numDim-1)
-    [yCur,AkCur]=quadraturePoints1D(n,6,(k-1)/2);
+    [yCur,AkCur]=quadraturePoints1D(n,3,(k-1)/2);
     
     y(:,k)=yCur(:);
     Ak(:,k)=AkCur;
@@ -80,7 +86,7 @@ end
 
 %We now have cubature points and weights for integrating with a weighting
 %function of w(x)=|x|^beta*exp(-x'*x). We will transform these to
-%integrating over the normal o-I distribution times |x|^beta.
+%integrating over the normal 0-I distribution times |x|^beta.
 w=pi^(-numDim/2)*sqrt(2)^(beta)*w;
 xi=sqrt(2)*xi;
 

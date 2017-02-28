@@ -3,7 +3,7 @@ function [xi,w]=spherSurfPoints2GaussPoints(xiSurf,wSurf,order,beta)
 %               integration over the surface of a unit (hyper-)sphere,
 %               obtain cubature points for integration over a multivariate
 %               Gaussian PDF times |x|^beta (beta=0 means just the Gaussian
-%               PDF). THe weighting function is thus
+%               PDF). The weighting function is thus
 %               w(x)=1/(2*pi)^(numDim/2)*norm(x)^beta*exp(-x'*x/2).
 %
 %INPUTS: xiSurf, wSurf A numDimXnumPoints set of cubture points and the
@@ -16,6 +16,11 @@ function [xi,w]=spherSurfPoints2GaussPoints(xiSurf,wSurf,order,beta)
 %               the weighting function (the thing times the normal PDF in
 %               the weighting function). beta>-numDim. If omitted or an
 %               empty matrix is passed, beta=0 is used.
+%
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %The method of taking a spherical shell and a formula for a 1D integral
 %over exp(-x^2) times |x|^beta and transforming it for multiple dimensions
@@ -39,14 +44,14 @@ function [xi,w]=spherSurfPoints2GaussPoints(xiSurf,wSurf,order,beta)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 if(nargin<4||isempty(beta))
-   beta=0; 
+    beta=0; 
 end
 
 numDim=size(xiSurf,1);
 deltaStep=size(xiSurf,2);
 
 num1DPoints=ceil((order+1)/2);
-[r,A]=quadraturePoints1D(num1DPoints,12,numDim-1+beta);
+[r,A]=quadraturePoints1D(num1DPoints,9,numDim-1+beta);
 %We discard the negative half of the points as mentioned in Chapter 2.8.
 %That changes the points from integrating from -1 to 1 to integrating from
 %0 to 1. This only works, because of the symmetry of the points about 0.

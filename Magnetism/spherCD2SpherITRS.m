@@ -1,5 +1,5 @@
 function zSpher=spherCD2SpherITRS(zCD,param1,param2,S11)
-%%SPHERCD2SPHERITRS Convert a point given in spherical cooridnates in
+%%SPHERCD2SPHERITRS Convert a point given in spherical coordinates in
 %          centered dipole (CD) coordinates into spherical coordinates in
 %          the International Terrestrial Reference System (ITRS), a
 %          standard Earth-Cenetred-Earth-fixed (ECEF) coordinate system. CD

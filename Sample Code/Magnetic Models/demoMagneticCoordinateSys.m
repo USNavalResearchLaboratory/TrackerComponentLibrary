@@ -80,7 +80,7 @@ colorbar
 
 %Finally, we consider quasi-dipole coordinates.
 display('Computing latitudes in magnetic quasi-dipole coordinates. This can be slow.')
-display('Quasi-dipole cooridnates are similar to apex coordinates.')
+display('Quasi-dipole coordinates are similar to apex coordinates.')
 zCart=ellips2Cart([latLonEllipse;zeros(1,totalGridPoints)]);
 
 zQD=ITRS2QD(zCart);

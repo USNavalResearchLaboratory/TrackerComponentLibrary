@@ -285,7 +285,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     //Next, to be able to transform the velocity, the rotation of the Earth
     //has to be taken into account. This requires first transforming from
     //GCRS to TIRS coordinates, where the rotational axis is the z-axis.
-    //Then, transform from TIRS coordinates to ITRS cooridnates via a
+    //Then, transform from TIRS coordinates to ITRS coordinates via a
     //simple rotation.
     //To get the rotation matrix to go from GCRS to TIRS, it is the same
     //but without the polar motion matrix. We can get the correct result by

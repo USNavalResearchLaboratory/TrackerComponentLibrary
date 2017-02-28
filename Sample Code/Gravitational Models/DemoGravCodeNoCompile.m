@@ -28,7 +28,7 @@ lambda=-20*pi/180;%Longitude
 theta=80*pi/180;%Ellipsoidal latitude
 %The zero altitude places the point on the reference ellipsoid.
 pointEllips=[theta;lambda;0];
-pointSpher=ellips2Sphere(pointEllips);%Convert to spherical cooridnates.
+pointSpher=ellips2Sphere(pointEllips);%Convert to spherical coordinates.
 
 %Compute the potential and acceleration due to gravity.
 [V,gradV]=spherHarmonicEval(C,S,pointSpher,a,c);

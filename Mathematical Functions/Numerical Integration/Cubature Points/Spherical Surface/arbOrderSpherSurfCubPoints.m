@@ -3,15 +3,15 @@ function [xi,w]=arbOrderSpherSurfCubPoints(numDim,n)
 %               the surface of the unit (hyper-)sphere of an arbitrary
 %               order.
 %
-%INPUTS:  numDim An integer specifying the dimensionality of the points to
-%                to be generated.
-%              n A positive integer such that 2n-1 is the highest degree to
-%                which the cubature  points are accurate.
+%INPUTS: numDim An integer specifying the dimensionality of the points to
+%               be generated.
+%             n A positive integer such that 2n-1 is the highest degree to
+%               which the cubature points are accurate.
 %
-%OUTPUTS:   xi   A numDim X numCubaturePoints matrix containing the
-%                cubature points. (Each "point" is a vector)
-%           w    A numCubaturePoints X 1 vector of the weights
-%                associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points (Each "point" is a vector).
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %The algorithm of theorem 2.7-3 in Chapter 2.7 of [1] is used to generate
 %the points.
@@ -32,7 +32,7 @@ Ak=zeros(numGegenbauerPoints,numDim-1);
 
 %Find all of the yk and Ak values
 for k=1:(numDim-1)
-    [yCur,AkCur]=quadraturePoints1D(n,6,(k-1)/2);
+    [yCur,AkCur]=quadraturePoints1D(n,3,(k-1)/2);
     
     y(:,k)=yCur(:);
     Ak(:,k)=AkCur;
