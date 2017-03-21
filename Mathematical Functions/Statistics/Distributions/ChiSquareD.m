@@ -1,10 +1,10 @@
 classdef ChiSquareD
-%Functions to handle the central or non-central chi-squared distributions.
-%These distributions arise when summing the squares of independent normal
-%random variables. The result is central if the mean of the normal random
-%variables was zero.
+%%CHISQUARED Functions to handle the central or non-central chi-squared
+%            distributions. These distributions arise when summing the
+%            squares of independent normal random variables. The result is
+%            central if the mean of the normal random variables was zero.
 %Implemented methods are: mean, var, PDF, CDF, invCDF (only for the central
-%chi squared distribution), rand
+%                         chi squared distribution), rand
 %
 %DEPENDENCIES: GammaD.m
 %
@@ -40,16 +40,16 @@ function val=mean(nu,lambda)
 end
 
 function val=var(nu,lambda)
-%%VAR   Obtain the variance of chi squared probability distribution for the
-%       given number of degrees of freedom.
+%%VAR Obtain the variance of chi squared probability distribution for the
+%     given number of degrees of freedom.
 %
-%INPUTS: nu    The number of degrees of freedom of the chi-square
-%              distribution. Note that nu>0.
-%       lambda The non-centrality parameter of the distribution. In the
-%              central chi-squared distribution, this is zero.
+%INPUTS: nu The number of degrees of freedom of the chi-square
+%           distribution. Note that nu>0.
+%    lambda The non-centrality parameter of the distribution. In the
+%           central chi-squared distribution, this is zero.
 %
-%OUTPUTS: val  The variance of the chi squared distribution under
-%              consideration.
+%OUTPUTS: val The variance of the chi squared distribution under
+%             consideration.
 %
 %The noncentral chi-squared distribution is descirbed in [1].
 %
@@ -68,17 +68,17 @@ function val=var(nu,lambda)
 end
     
 function val=PDF(x,nu,lambda)
-%%PDF          Evaluate the chi squared probability distribution function
-%              (PDF) at desired points.
+%%PDF Evaluate the chi squared probability distribution function (PDF) at
+%     the desired points.
 %
-%INPUTS:   x   The point(s) at which the chi-squared PDF is to be 
-%              evaluated. Note that x>=0.
-%          nu  The number of degrees of freedom of the chi-square
-%              distribution. Note that nu>0.
-%       lambda The non-centrality parameter of the distribution. In the
-%              central chi-squared distribution, this is zero.
+%INPUTS: x The point(s) at which the chi-squared PDF is to be  evaluated.
+%          Note that x>=0.
+%       nu The number of degrees of freedom of the chi-square distribution.
+%          Note that nu>0.
+%   lambda The non-centrality parameter of the distribution. In the central
+%          chi-squared distribution, this is zero.
 %
-%OUTPUTS:   val The value(s) of the chi squared PDF evaluated at x.
+%OUTPUTS: val The value(s) of the chi squared PDF evaluated at x.
 %
 %The noncentral chi-squared distribution is descirbed in [1].
 %
@@ -103,29 +103,31 @@ function val=PDF(x,nu,lambda)
     if(lambda==0)
         val=(1/(2^(nu/2)*gamma(nu/2))).*x.^((nu-2)/2).*exp(-x/2);
     else
-        val=0.5*exp(-(x+lambda)/2+(nu/4-0.5)*(log(x)-log(lambda)))*besseli(nu/2-1,sqrt(lambda*x));
+        val=0.5*exp(-(x+lambda)/2+(nu/4-0.5)*(log(x)-log(lambda))).*besseli(nu/2-1,sqrt(lambda*x));
         
         if(~isfinite(val))
             val=(1/(2^(nu/2)*gamma(nu/2))).*x.^((nu-2)/2).*exp(-x/2);
         end
     end
+    
+    val(x<0)=0;
 end
 
 function prob=CDF(x,nu,lambda)
-%%CDF          Evaluate the cumulative distribution function (CDF) of the
-%              central chi-squared distribution at desired points.
+%%CDF Evaluate the cumulative distribution function (CDF) of the central or
+%     noncentral chi-squared distribution at desired points.
 %
-%INPUTS:    x   The point(s) at which the chi-squared CDF is to be 
-%               evaluated. Note that x>=0.
-%           nu  The number of degrees of freedom of the chi-square
-%               distribution. Note that nu>0. When lambda is not zero, the
-%               CDF function is only numerically stable over a wide range
-%               of values when nu is an integer.
-%       lambda  The non-centrality parameter of the distribution. In the
-%               central chi-squared distribution, this is zero.
+%INPUTS: x The point(s) at which the chi-squared CDF is to be  evaluated.
+%          Note that x>=0.
+%       nu The number of degrees of freedom of the chi-square distribution.
+%          Note that nu>0. When lambda is not zero, the CDF function is
+%          numerically stabler when nu is an integer.
+%   lambda The non-centrality parameter of the distribution. In the central
+%          chi-squared distribution, this is zero.
 %
-%OUTPUTS:   prob The value(s) of the CDF of the chi-squared distribution
-%                with nu degrees of freedom evaluated at x.
+%OUTPUTS: prob The value(s) of the CDF of the chi-squared distribution with
+%              nu degrees of freedom and noncentrality parameter lambda
+%              evaluated at x.
 %
 %The CDF of the central chi squared function with nu degrees of freedom
 %evaluated at x is just a special case of the incomplete gamma function, as
@@ -185,23 +187,20 @@ function val=invCDF(prob,nu)
 end
 
 function vals=rand(N,nu,lambda)
-%%RAND           Generate chi-squared distributed random variables
-%                with the given parameters.
+%%RAND Generate chi-squared distributed random variables with the given
+%      parameters.
 %
-%INPUTS:    N      If N is a scalar, then rand returns an NXN matrix of
-%                  random variables. If N=[M,N1] is a two-element  row
-%                  vector, then rand returns an MXN1 matrix of random
-%                  variables.
-%           nu     The number of degrees of freedom of the chi-squared
-%                  distribution. Note that nu>0. If lambda is not zero,
-%                  nu >=1.
-%       lambda     The non-centrality parameter of the distribution. In the
-%                  central chi-squared distribution, this is zero. If this
-%                  parameter is omitted or an empty matrix is passed, then
-%                  0 is used.
+%INPUTS: N If N is a scalar, then rand returns an NXN matrix of random
+%          variables. If N=[M,N1] is a two-element row vector, then rand
+%          returns an MXN1 matrix of random variables.
+%       nu The number of degrees of freedom of the chi-squared
+%          distribution. Note that nu>0. If lambda is not zero, nu >=1.
+%   lambda The non-centrality parameter of the distribution. In the central
+%          chi-squared distribution, this is zero. If this parameter is
+%          omitted or an empty matrix is passed, then 0 is used.
 %
-%OUTPUTS:   vals   A matrix whose dimensions are determined by N of the
-%                  generated chi-squared random variables.
+%OUTPUTS: vals A matrix whose dimensions are determined by N of the
+%              generated chi-squared random variables.
 %
 %The algorithm for the central chi squared distribution is an
 %implementation of the inverse transform algorithm of Chapter 5.1 of [1].
@@ -234,7 +233,7 @@ function vals=rand(N,nu,lambda)
         vals=ChiSquareD.invCDF(U,nu);
     else
         U=rand(dims);
-        vals=ChiSquareD.invCDF(U,nu)+(sqrt(lambda)+randn(N)).^2;
+        vals=ChiSquareD.invCDF(U,nu-1)+(sqrt(lambda)+randn(N)).^2;
     end
 end
 
