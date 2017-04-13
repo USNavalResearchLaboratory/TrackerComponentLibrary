@@ -12,7 +12,7 @@ function val=StirlingNumber2(n,k)
 %           k>=0.
 %
 %OUTPUTS: val The number of ways of partitioning n items into k subsets. If
-%             anfunct overflow occurs, this will be infinite.
+%             an overflow occurs, this will be infinite.
 %
 %The implementation uses the recurrence relation from [1].
 %

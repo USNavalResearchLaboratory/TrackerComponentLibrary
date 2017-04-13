@@ -1,4 +1,4 @@
-function [zCart,RCart]=spher2CartCubature(spherPoint,SR,xi,w,systemType,useHalfRange,zTx,zRx,M)
+function [zCart,RCart]=spher2CartCubature(spherPoint,SR,systemType,useHalfRange,zTx,zRx,M,xi,w)
 %%SPHER2CARTCUBATURE Use cubature integration to approximate the moments
 %                    of a noise-corrupted spherical location converted into
 %                    3D Cartesian coordinates. An option allows for
@@ -7,34 +7,27 @@ function [zCart,RCart]=spher2CartCubature(spherPoint,SR,xi,w,systemType,useHalfR
 %                    considering bistatic measurements in a local spherical
 %                    coordinate system.
 %
-%INPUTS:spherPoint One or more points given in terms of range, azimuth and
-%                  elevation, with the angles in radians To convert N
-%                  points, spherPoint is a 3XN matrix with each column
-%                  having the format [range;azimuth; elevation].
-%               SR The 3X3XN lower-triangular square roots of the
-%                  covariance matrices associated with polPoint. If all of
-%                  the matrices are the same, then this can just be a
-%                  single 3X3 matrix.
-%               xi A 3 X numCubaturePoints matrix of cubature points for the
-%                  numeric integration. If this and the next parameter are
-%                  omitted or empty matrices are passed, then
-%                  fifthOrderCubPoints is used to generate cubature points.
-%                w A numCubaturePoints X 1 vector of the weights associated
-%                  with the cubature points.
-%      systemType An optional parameter specifying the axes from which
-%                 the angles are measured. Possible vaues are
-%                   0 (The default if omitted) Azimuth is measured
-%                     counterclockwise from the x-axis in the x-y plane.
-%                     Elevation is measured up from the x-y plane (towards
-%                     the z-axis). This is consistent with common spherical
-%                     coordinate systems for specifying longitude (azimuth)
-%                     and geocentric latitude (elevation).
-%                   1 Azimuth is measured counterclockwise from the z-axis
-%                     in the z-x plane. Elevation is measured up from the
-%                     z-x plane (towards the y-axis). This is consistent
-%                     with some spherical coordinate systems that use the z
-%                     axis as the boresight direction of the radar.
-%useHalfRange An optional boolean value specifying whether the bistatic
+%INPUTS: spherPoint One or more points given in terms of range, azimuth and
+%           elevation, with the angles in radians To convert N points,
+%           spherPoint is a 3XN matrix with each column having the
+%           format [range;azimuth; elevation].
+%        SR The 3X3XN lower-triangular square roots of the covariance
+%           matrices associated with polPoint. If all of the matrices
+%           are the same, then this can just be a single 3X3 matrix.
+% systemType An optional parameter specifying the axis from which the
+%           angles are measured. Possible values are
+%           0 (The default if omitted) Azimuth is measured
+%             counterclockwise from the x-axis in the x-y plane. Elevation
+%             is measured up from the x-y plane (towards the z-axis). This
+%             is consistent with common spherical coordinate systems for
+%             specifying longitude (azimuth) and geocentric latitude
+%             (elevation).
+%           1 Azimuth is measured counterclockwise from the z-axis in the
+%             z-x plane. Elevation is measured up from the z-x plane
+%             (towards the y-axis). This is consistent with some spherical
+%             coordinate systems that use the z axis as the boresight
+%             direction of the radar.
+% useHalfRange An optional boolean value specifying whether the bistatic
 %           (round-trip) range value has been divided by two. This normally
 %           comes up when operating in monostatic mode (the most common
 %           type of spherical coordinate system), so that the range
@@ -63,12 +56,18 @@ function [zCart,RCart]=spher2CartCubature(spherPoint,SR,xi,w,systemType,useHalfR
 %           with the global and M=eye(3) --the identity matrix is used. If
 %           only a single 3X3 matrix is passed, then is is assumed to be
 %           the same for all of the N conversions.
+%        xi A 3 X numCubaturePoints matrix of cubature points for the
+%           numeric integration. If this and the next parameter are
+%           omitted or empty matrices are passed, then
+%           fifthOrderCubPoints is used to generate cubature points.
+%         w A numCubaturePoints X 1 vector of the weights associated
+%           with the cubature points.
 %
-%OUTPUTS:   zCart   The approximate means of the PDF of the Cartesian
-%                   converted measurements in [x;y;z] Cartesian coordinates
-%                   for each measurement. This is a 3XN matrix.
-%           RCart   The approximate 3X3XN set of covariance matrices of the
-%                   PDFs of the Cartesian converted measurements.
+%OUTPUTS: zCart The approximate means of the PDF of the Cartesian converted
+%               measurements in [x;y;z] Cartesian coordinates for each
+%               measurement. This is a 3XN matrix.
+%         RCart The approximate 3X3XN set of covariance matrices of the
+%               PDFs of the Cartesian converted measurements.
 %
 %Details of the numerical integration used in the conversion are given in
 %[1].
@@ -81,7 +80,7 @@ function [zCart,RCart]=spher2CartCubature(spherPoint,SR,xi,w,systemType,useHalfR
 %February 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    if(nargin<5||isempty(systemType))
+    if(nargin<3||isempty(systemType))
         systemType=0;
     end
 
@@ -96,41 +95,35 @@ function [zCart,RCart]=spher2CartCubature(spherPoint,SR,xi,w,systemType,useHalfR
         SR=repmat(SR,[1,1,numPoints]);
     end
     
-    if(nargin<3||isempty(xi))
+    if(nargin<8||isempty(xi))
        [xi,w]=fifthOrderCubPoints(numDim);
     end
     
-    if(nargin<7||isempty(zTx))
+    if(nargin<5||isempty(zTx))
         zTx=[];
     end
 
-    if(nargin<8||isempty(zRx))
+    if(nargin<6||isempty(zRx))
         zRx=[];
     end
 
-    if(nargin<9||isempty(M))
+    if(nargin<7||isempty(M))
        M=[]; 
     end
     
-    if(isempty(zTx)&&(nargin<6||isempty(useHalfRange)))
+    if(isempty(zTx)&&(nargin<4||isempty(useHalfRange)))
         useHalfRange=true;
-    elseif(~isempty(zTx)&&(nargin<6||isempty(useHalfRange)))
+    elseif(~isempty(zTx)&&(nargin<4||isempty(useHalfRange)))
         useHalfRange=false;
     end
+    
+    h=@(x)spher2Cart(x,systemType,useHalfRange,zTx,zRx,M);
     
     %Allocate space for the return variables.
     zCart=zeros(numDim,numPoints);
     RCart=zeros(numDim,numDim,numPoints);
-    
     for curPoint=1:numPoints
-        %Transform the cubature points to match the given Gaussian. 
-        cubPoints=transformCubPoints(xi,spherPoint(:,curPoint),SR(:,:,curPoint));
-        
-        %Transform the points
-        CartPoints=spher2Cart(cubPoints,systemType,useHalfRange,zTx,zRx,M);
-    
-        %Extract the first two moments of the transformed points.
-        [zCart(:,curPoint),RCart(:,:,curPoint)]=calcMixtureMoments(CartPoints,w);
+        [zCart(:,curPoint),RCart(:,:,curPoint)]=calcCubPointMoments(spherPoint(:,curPoint),SR(:,:,curPoint),h,xi,w);
     end
 end
 

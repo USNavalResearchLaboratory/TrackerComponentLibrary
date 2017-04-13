@@ -1,5 +1,5 @@
 classdef NakagamiD
-%Functions to handle the Nakagami-m distribution.
+%%NAKAGAMID Functions to handle the Nakagami-m distribution.
 %Implemented methods are: mean, var, PDF, CDF, invCDF, rand
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

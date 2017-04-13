@@ -30,7 +30,7 @@ function cartPoints=ellipsHarmon2Cart(pointsHarmon,E)
 %January 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    if(nargin<2)
+    if(nargin<2||isempty(E))
         a=Constants.WGS84SemiMajorAxis;
         f=Constants.WGS84Flattening;
         b=a*(1 - f);

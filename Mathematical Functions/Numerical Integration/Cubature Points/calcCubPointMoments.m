@@ -21,13 +21,12 @@ function [mu, P]=calcCubPointMoments(z,S,h,xi,w)
 %       xi  An optional numDim X numPoints matrix of cubature points for
 %           normal 0-I distribution. If this and w are omitted, then a
 %           default (probably inefficient) set of cubature points and
-%           weights is generated using linCubPoints2MultiDim for fifth-
-%           order points.
+%           weights is generated using fifthOrderCubPoints.
 %       w   A numPoints X 1 vector of the weights associated with each of
 %           the cubature points in xi. Note that all w>=0 and normally
 %           sum(w)=1. If this and xi are omitted, then a default (probably
 %           inefficient) set of cubature points and weights is generated
-%           using linCubPoints2MultiDim for fifth-order points.
+%           using fifthOrderCubPoints.
 %
 %OUTPUTS: mu  The mean of h(x) found using cubature integration.
 %         P   The covariance matrix of h(x) found using cubature
@@ -45,7 +44,7 @@ function [mu, P]=calcCubPointMoments(z,S,h,xi,w)
 numDim=size(z,1);
 
 if(nargin<4)
-    [xi,w]=linCubPoints2MultiDim(numDim,6);
+    [xi,w]=fifthOrderCubPoints(numDim);
 end
 
 xi=h(transformCubPoints(xi,z,S));

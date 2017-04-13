@@ -8,25 +8,22 @@ function uDot=uDotEllipsoid(u,x,t,a,f)
 %               a coordinate system evolving as per this coordinate system
 %               will follow geodesic curves, not rhumb lines.
 %
-%INPUTS:    u       The orthonormal basis vectors for the local coordinate
-%                   system. u(:,3) is the local vertical.
-%           x       An nX1 vector whose first three elements are Cartesian
-%                   position in the global ECEF coordinate system and whose
-%                   next three elements are velocity in the local
-%                   (flat-Earth) coordinate system. Other elements of x do
-%                   not matter.
-%           t       An unused time component that is just here so that this
-%                   function can be passed to functions that expect the
-%                   basis vectors to be time-dependent.
-%           a       The semi-major axis of the reference ellipsoid. If
-%                   this argument is omitted, the value in
-%                   Constants.WGS84SemiMajorAxis is used.
-%           f       The flattening factor of the reference ellipsoid. If
-%                   this argument is omitted, the value in
-%                   Constants.WGS84Flattening is used.
+%INPUTS: u The orthonormal basis vectors for the local coordinate system.
+%          u(:,3) is the local vertical.
+%        x An nX1 vector whose first three elements are Cartesian position
+%          in the global ECEF coordinate system and whose next three
+%          elements are velocity in the local (flat-Earth) coordinate
+%          system. Other elements of x do not matter.
+%        t An unused time component that is just here so that this function
+%          can be passed to functions that expect the basis vectors to be
+%          time-dependent.
+%        a The semi-major axis of the reference ellipsoid. If this argument
+%          is omitted, the value in Constants.WGS84SemiMajorAxis is used.
+%        f The flattening factor of the reference ellipsoid. If this
+%          argument is omitted, the value in Constants.WGS84Flattening is
+%          used.
 %
-%OUTPUTS:   uDot    The derivative of the basis vector u with respect to
-%                   time.
+%OUTPUTS: uDot The derivative of the basis vector u with respect to time.
 %
 %The solution is detailed in [1], and has been simplified for an
 %ellipsoidal Earth so that numerical differentiation is not necessary.
@@ -39,11 +36,11 @@ function uDot=uDotEllipsoid(u,x,t,a,f)
 %September 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    if(nargin<5)
+    if(nargin<5||isempty(f))
         f=Constants.WGS84Flattening;
     end
 
-    if(nargin<4)
+    if(nargin<4||isempty(a))
         a=Constants.WGS84SemiMajorAxis;
     end
 
@@ -53,11 +50,12 @@ function uDot=uDotEllipsoid(u,x,t,a,f)
     %The current position.
     r=x(1:3,1);
     rDotLocal=x(4:6,1);
+    
     %Get the velocity in global coordinates.
     rDot=getGlobalVectors(rDotLocal,u);
     
     %Convert to ellipsoidal coordinates.
-    rEllipse=Cart2Ellipse(r,a,f);
+    rEllipse=Cart2Ellipse(r,[],a,f);
     
     %The ellipsoidal latitude
     phi=rEllipse(1);
@@ -76,11 +74,13 @@ function uDot=uDotEllipsoid(u,x,t,a,f)
  
     %The normal radius of curvature.
     Rp=a/sqrt(1-e^2*sin(phi)^2);
+    
     %The radius of curvature of the meridian line.
     Rm=Rp*(1-e^2)/(1-e^2*sin(phi)^2);
 
     %The rotation rate North.
     omegaN=vE/(Rp+h);
+    
     %The rotation rate East.
     omegaE=-vN/(Rm+h);
     

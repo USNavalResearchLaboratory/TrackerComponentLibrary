@@ -63,7 +63,7 @@ function [knownSols,targetStates,exitFlag]=orbDet3Dir(numHalfRevs,obsLocs,unitDi
 %               GM   An optional value of the universal gravitational
 %                    constant times the mass of the Earth. If omitted, the
 %                    value Constants.WGS84GMWithAtmosphere is used. The
-%                    units are usually km^3/sec^2.
+%                    units are usually m^3/sec^2.
 %
 %OUTPUTS: knownSols The input matrix knownSols augmented with the newly
 %                   found solutions for the ranges from the observer to the
@@ -333,7 +333,7 @@ algConverged=false;
 %performed. rho13EstVec is returned again along with curInitNumber in the
 %event that a failure occurred and a new intiialization was tried. If p2Est
 %is empty, then a total failure occurred. Only parameters that are modified
-%are passed to the function; the function implicitely takes a number of
+%are passed to the function; the function implicitly takes a number of
 %other parameters.
 [p2Est,rho13EstVec,fc,fCost,curInitNumber,eNormal,eInPlane,targetStates]=getP2ForNewIter(rho13EstVec,curInitNumber);
  
@@ -604,7 +604,7 @@ function [p2Est,rho13EstVec,fc,fCost,curInitNumber,eNormal,eInPlane,targetStates
         end
  
         %If no solution was found by reducing the step size, then we will
-        %essentially reset the iterative process using some ad-hoc vaues.
+        %essentially reset the iterative process using some ad-hoc values.
     end
         
     %Try ad-hoc initialization routines.

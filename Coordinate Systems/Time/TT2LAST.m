@@ -11,7 +11,7 @@ function LAST=TT2LAST(Jul1,Jul2,rObsITRS,version,deltaT,xpyp)
 %         rObsITRS The 3X1 location of the observer in the International
 %                  Terrestrial Reference System (ITRS). Only the direction
 %                  matters, not the magnitude.
-%        version   An optional integer specifying the theory to use for
+%          version An optional integer specifying the theory to use for
 %                  GMST. The theory chosen should be consistent with other
 %                  values used in astronomical routines. Possible values
 %                  are
@@ -22,16 +22,16 @@ function LAST=TT2LAST(Jul1,Jul2,rObsITRS,version,deltaT,xpyp)
 %                  2006 (The default if omitted) Compute GMST in line with
 %                     IAU 2006 resolutions related to precession and
 %                     nutation.
-%        deltaT    An optional parameter specifying the offset between TT
+%           deltaT An optional parameter specifying the offset between TT
 %                  and UT1 in seconds. If this parameter is omitted or if
 %                  an empty matrix is passed, then the value of the
 %                  function getEOP will be used.
-%       xpyp       xpyp=[xp;yp] are the polar motion coordinates in radians
+%             xpyp xpyp=[xp;yp] are the polar motion coordinates in radians
 %                  including the effects of tides and librations. If this
 %                  parameter is omitted or if an empty matrix is passed,
 %                  the value from the function getEOP will be used.
 %
-%OUTPUTS: LAST     The local apparent sidereal time in radians.
+%OUTPUTS: LAST The local apparent sidereal time in radians.
 %
 %The relation between LMST and Greenwhich apparent sidereal time (GAST) is
 %documented in [1]. LAST is GAST added to the the East longitude of the

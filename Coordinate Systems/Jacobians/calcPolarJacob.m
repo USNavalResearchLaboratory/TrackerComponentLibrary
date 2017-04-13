@@ -1,58 +1,67 @@
-function J=calcPolarJacob(point,systemType)
-%%CALCPOLARJACOB  Compute the Jacobian matrix for a point in polar
-%                 [range;azimuth] coordinates.  The angle can be measured
-%                 either counterclockwise from the x-axis, which is
-%                 standard in mathematics, or clockwise from the y axis,
-%                 which is more common in navigation.
+function J=calcPolarJacob(x,systemType,useHalfRange,lTx,lRx,M)
+%%CALCPOLARJACOB Calculate the Jacobian for a 2D polar measurement,
+%                ignoring atmospheric effects with respect to Cartesian
+%                position.
 %
-%INPUTS: point   A point in the format [range;azimuth], where the angle is
-%                given in radians.
-%      systemType   An optional parameter specifying the axes from which
-%                   the azimuth angle is measured. Possible vaues are
-%                   0 (The default if omitted) The azimuth angle is
-%                     counterclockwise from the x axis.
-%                   1 The azimuth angle is measured clockwise from the y
-%                     axis.
+%INPUTS:   x The 2X1 position of the target in Cartesian coordinates in the
+%            order [x;y].
+% systemType An optional parameter specifying the axis from which the
+%          angles are measured. Possible values are
+%          0 (The default if omitted or an empty matrix is passed) The
+%            azimuth angle is counterclockwise from the x axis.
+%          1 The azimuth angle is measured clockwise from the y axis.
+%useHalfRange A boolean value specifying whether the bistatic range value
+%           should be divided by two. This normally comes up when operating
+%           in monostatic mode, so that the range reported is a one-way
+%           range. The default if this parameter is not provided, or an
+%           empty matrix is passed, is true.
+%       lTx The 2X1 [x;y] location vector of the transmitter in global
+%           Cartesian coordinates. If this parameter is omitted or an
+%           empty matrix is passed, then the transmitter is assumed to be
+%           at the origin.
+%       lRx The 2X1 [x;y] location vector of the receiver in global
+%           Cartesian coordinates. If this parameter is omitted or an
+%           empty matrix is passed, then the receiver is assumed to be at
+%           the origin.
+%         M A 2X2 rotation matrices to go from the alignment of the global
+%           coordinate system to that at the receiver. If omitted or an
+%           empty matrix is passed, then it is assumed that the local
+%           coordinate system is aligned with the global and M=eye(2) --the
+%           identity matrix is used.
 %
-%OUTPUTS: J     The 2X2 Jacobian matrix. Each row is a components of range,
-%               and azimuth (in that order by row) with derivatives taken
-%               with respect to [x,y] by column.
+%OUTPUTS: J The Jacobian matrix with derivatives with respect to position
+%           components. Each row is a component of range and azimuth in
+%           that order with derivatives taken with respect to [x,y] across
+%           columns.
 %
-%May 2014 David F.Crouse, Naval Research Laboratory, Washington D.C.
+%This function just calls rangeGradient and polAngGradient.
+%
+%February 2017 David F.Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<2)
-    systemType=0;
+if(nargin<6||isempty(M))
+	M=eye(2,2); 
 end
 
-CartPoint=pol2Cart(point,systemType);
-x=CartPoint(1);
-y=CartPoint(2);
+if(nargin<5||isempty(lRx))
+	lRx=zeros(2,1); 
+end
 
-r=point(1);
+if(nargin<4||isempty(lTx))
+    lTx=zeros(2,1);
+end
+
+if(nargin<3||isempty(useHalfRange))
+	useHalfRange=true; 
+end
+
+if(nargin<2||isempty(systemType))
+	systemType=0; 
+end
+
 J=zeros(2,2);
-
-switch(systemType)
-    case 0
-        %Derivatives with respect to x.
-        J(1,1)=x/r;
-        J(2,1)=-y/(x^2+y^2);
-
-        %Derivatives with respect to y.
-        J(1,2)=y/r;
-        J(2,2)=x/(x^2+y^2);
-    case 1
-        %Derivatives with respect to x.
-        J(1,1)=x/r;
-        J(2,1)=y/(x^2+y^2);
-        
-        %Derivatives with respect to y.
-        J(1,2)=y/r;
-        J(2,2)=-x/(x^2+y^2);
-    otherwise
-        error('Invalid system type specified.')
-end
-
+J(1,:)=rangeGradient(x(1:2),useHalfRange,lTx(1:2),lRx(1:2));
+J(2,:)=polAngGradient(x(1:2),systemType,lRx(1:2),M);
 end
 
 %LICENSE:

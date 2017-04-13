@@ -77,7 +77,7 @@ function [C,S]=getEGM2008TerrainCoeffs(M)
 %January 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<1)
+if(nargin<1||isempty(M))
     M=2190;
 end
 

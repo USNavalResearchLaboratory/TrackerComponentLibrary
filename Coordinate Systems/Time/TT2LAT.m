@@ -13,38 +13,37 @@ function [LATRad,equationOfTime,LAT1,LAT2]=TT2LAT(TT1,TT2,rObsITRS,deltaTTUT1,xp
 %        via the function solarBodyVec. The equation of time is also
 %        returned.
 %
-%INPUTS: TT1,TT2 Two parts of a Julian date given in TT. The
-%                  units of the date are days. The full date is the sum of
-%                  both terms. The date is broken into two parts to
-%                  provide more bits of precision. It does not matter how
-%                  the date is split.
-%         rObsITRS The 3X1 location of the observer in the International
-%                  Terrestrial Reference System (ITRS). Only the direction
-%                  matters, not the magnitude.
-%deltaTTUT1    An optional parameter specifying the difference between TT
-%              and UT1 in seconds. This information can be obtained from
-%http://www.iers.org/nn_11474/IERS/EN/DataProducts/EarthOrientationData/eop.html?__nnn=true
-%              or 
-%http://www.usno.navy.mil/USNO/earth-orientation/eo-products
-%              If this parameter is omitted or if an empty matrix is
-%              passed, then the value provided by the function getEOP
-%              will be used instead.
-%       xpyp       xpyp=[xp;yp] are the polar motion coordinates in radians
-%                  including the effects of tides and librations. If this
-%                  parameter is omitted or if an empty matrix is passed,
-%                  the value from the function getEOP will be used.
-%dXdY          dXdY=[dX;dY] are the celestial pole offsets with respect to
-%              the IAU 2006/2000A precession/nutation model in radians If
-%              this parameter is omitted, the value from the function
-%              getEOP will be used.
+%INPUTS: TT1,TT2 Two parts of a Julian date given in TT. The units of the
+%                date are days. The full date is the sum of both terms. The
+%                date is broken into two parts to provide more bits of
+%                precision. It does not matter how the date is split.
+%       rObsITRS The 3X1 location of the observer in the International
+%                Terrestrial Reference System (ITRS). Only the direction
+%                matters, not the magnitude.
+%     deltaTTUT1 An optional parameter specifying the difference between TT
+%                and UT1 in seconds. This information can be obtained from
+%                http://www.iers.org/nn_11474/IERS/EN/DataProducts/EarthOrientationData/eop.html?__nnn=true
+%                or 
+%                http://www.usno.navy.mil/USNO/earth-orientation/eo-products
+%                If this parameter is omitted or if an empty matrix is
+%                passed, then the value provided by the function getEOP
+%                will be used instead.
+%           xpyp xpyp=[xp;yp] are the polar motion coordinates in radians
+%                including the effects of tides and librations. If this
+%                parameter is omitted or if an empty matrix is passed,
+%                the value from the function getEOP will be used.
+%           dXdY dXdY=[dX;dY] are the celestial pole offsets with respect
+%                to the IAU 2006/2000A precession/nutation model in
+%                radians. If this parameter is omitted, the value from the
+%                function getEOP will be used.
 %
-%OUTPUTS: LATRad  The local apparent solar time (LAT) in radians. 0 radians
+%OUTPUTS:  LATRad The local apparent solar time (LAT) in radians. 0 radians
 %                 is solar midnight. pi radians is solar noon. The mapping
 %                 is 2*pi radians for 24 hours. Thus, LATRad*(24/(2*pi))
 %                 gives the time of day in hours.
 %  equationOfTime The equation of time in radians. This is the difference
 %                 between LAT and local mean solar time (LMT).
-%      LAT1,LAT2  Two parts of the local apparent solar time in Julian
+%       LAT1,LAT2 Two parts of the local apparent solar time in Julian
 %                 days. The date is split so that LAT1 is the integer part
 %                 and LAT2 is the fractional part. Like UT1, a zero
 %                 fractional part of the day corresponds to noon, not

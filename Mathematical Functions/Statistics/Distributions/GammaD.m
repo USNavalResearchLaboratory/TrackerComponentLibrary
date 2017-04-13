@@ -1,5 +1,5 @@
 classdef GammaD
-%Functions to handle the central and noncentral univariate gamma
+%%GAMMAD Functions to handle the central and noncentral univariate gamma
 %distributions.
 %Methods implemented for both central and noncentral distributions are:
 %PDF, CDF
@@ -11,15 +11,15 @@ classdef GammaD
 methods(Static)
 
 function val=mean(k, theta, lambda)
-%%MEAN  Obtain the mean of the gamma distribution for given shape and scale
-%       parameters.
+%%MEAN Obtain the mean of the gamma distribution for given shape and scale
+%      parameters.
 %
-%INPUTS:    k       The shape parameter of the distribution; k>0.
-%           theta   The scale parameter of the distribution; theta>0.
-%           lambda  The noncentrality parameter of the distribution. If
-%                   this parameter is omitted or an empty matrix is passed,
-%                   a value of 0, indicating the central gamma
-%                   distribution, is used.
+%INPUTS: k The shape parameter of the distribution; k>0.
+%    theta The scale parameter of the distribution; theta>0.
+%   lambda The noncentrality parameter of the distribution. If this
+%          parameter is omitted or an empty matrix is passed, a value of 0,
+%          indicating the central gamma distribution, is used. This
+%          function is currently only implemented for lambda=0.
 %
 %OUTPUTS: val  The mean of the gamma distribution.
 %
@@ -39,17 +39,17 @@ end
 end
 
 function val=var(k,theta,lambda)
-%%VAR   Obtain the variance of the gamma distribution for given shape and
-%       scale parameters.
+%%VAR Obtain the variance of the gamma distribution for given shape and
+%     scale parameters.
 %
-%INPUTS:    k       The shape parameter of the distribution; k>0.
-%           theta   The scale parameter of the distribution; theta>0..
-%           lambda  The noncentrality parameter of the distribution. If
-%                   this parameter is omitted or an empty matrix is passed,
-%                   a value of 0, indicating the central gamma
-%                   distribution, is used.
+%INPUTS: k The shape parameter of the distribution; k>0.
+%    theta The scale parameter of the distribution; theta>0..
+%   lambda The noncentrality parameter of the distribution. If this
+%          parameter is omitted or an empty matrix is passed, a value of 0,
+%          indicating the central gamma distribution, is used. This
+%          function is currently only implemented for lambda=0.
 %
-%OUTPUTS: val  The variance of the gamma distribution.
+%OUTPUTS: val The variance of the gamma distribution.
 %
 %%Currently, the algorithm is only implemented for the case where lambda=0.
 %
@@ -66,32 +66,26 @@ else
 end
 end    
     
-
 function val=PDF(x,k,theta,lambda,errTol,maxIter)
 %%PDF      Evaluate the noncentral gamma probability distribution function
 %          at a desired point.
 %
-%INPUTS:    x       The point(s) at which the noncentral gamma PDF 
-%                   is to be evaluated. Note that the PDF is only nonzero
-%                   for x>=0.
-%           k       The shape parameter of the distribution; k>0.
-%           theta   The scale parameter of the distribution; theta>0.
-%           lambda  The noncentrality parameter of the distribution. If
-%                   this parameter is omitted or an empty matrix is passed,
-%                   a value of 0, indicating the central gamma
-%                   distribution, is used.
-%           errTol  Error tolerance for determining convergence of the
-%                   algorithm whem lambda~=0. If this parameter is omitted
-%                   or an empty matrix is passed, the default of eps(1) is
-%                   used.
-%           maxIter The maximum number of iterations to allow. This is only
-%                   used matters when lambda~=0. If this parameter is
-%                   omitted or an empty matrix is passed, then a default
-%                   value of 5000 is used.
+%INPUTS: x The point(s) at which the noncentral gamma PDF is to be
+%          evaluated. Note that the PDF is only nonzero for x>=0.
+%        k The shape parameter of the distribution; k>0.
+%    theta The scale parameter of the distribution; theta>0.
+%   lambda The noncentrality parameter of the distribution. If this
+%          parameter is omitted or an empty matrix is passed, a value of 0,
+%          indicating the central gamma distribution, is used.
+%   errTol Error tolerance for determining convergence of the algorithm
+%          when lambda~=0. If this parameter is omitted or an empty matrix
+%          is passed, the default of eps(1) is used.
+%  maxIter The maximum number of iterations to allow. This is only used
+%          matters when lambda~=0. If this parameter is omitted or an empty
+%          matrix is passed, then a default value of 5000 is used.
 %
-%OUTPUTS:   val The value(s) of the PDF of the noncentral gamma
-%               distribution with parameters k, theta, and lambda evaluated
-%               at x.
+%OUTPUTS: val The value(s) of the PDF of the noncentral gamma distribution
+%             with parameters k, theta, and lambda evaluated at x.
 %
 %This is an implementation of the distribution computations from [1]. The
 %work in [1] concerns algorithms that implement the distribution
@@ -113,8 +107,10 @@ if(nargin<4||isempty(lambda))
    lambda=0; 
 end
 
-%Clip negative values to zero to ensure convergence.
-x(x<0)=0;
+%Clip negative values to zero to ensure convergence. At the end, negative
+%values will be set to zero.
+y=x;
+x(y<0)=0;
 
 if(lambda == 0) % Central gamma case
     val=x.^(k-1).*exp(-x/theta)/(theta^k*gamma(k));
@@ -161,34 +157,32 @@ else
         end
         ii = ii+1;
     end
-    val = g; % convergence achieved
+    val = g; %Convergence achieved
 end
+
+val(y<0)=0;
 end
 
 function prob=CDF(x,k,theta,lambda,errTol,maxIter)
-%%CDF      Evaluate the cumulative distribution function of the
-%          noncentral gamma distribution at desired points.
+%%CDF Evaluate the cumulative distribution function of the noncentral gamma
+%     distribution at desired points.
 %
-%INPUTS:       x   The point(s) at which the noncentral gamma CDF is 
-%                  to be evaluated. Note that x>=0.
-%              k   The shape parameter of the distribution; k>0.
-%            theta The scale parameter of the distribution; theta>0.
-%           lambda  The noncentrality parameter of the distribution. If
-%                   this parameter is omitted or an empty matrix is passed,
-%                   a value of 0, indicating the central gamma
-%                   distribution, is used.
-%           errTol  Error tolerance for determining convergence of the
-%                   algorithm whem lambda~=0. If this parameter is omitted
-%                   or an empty matrix is passed, the default of eps(1) is
-%                   used.
-%           maxIter The maximum number of iterations to allow. This is only
-%                   used matters when lambda~=0. If this parameter is
-%                   omitted or an empty matrix is passed, then a default
-%                   value of 5000 is used.
+%INPUTS: x The point(s) at which the noncentral gamma CDF is  to be
+%          evaluated. Note that x>=0.
+%        k The shape parameter of the distribution; k>0.
+%    theta The scale parameter of the distribution; theta>0.
+%   lambda The noncentrality parameter of the distribution. If this
+%          parameter is omitted or an empty matrix is passed, a value of 0,
+%          indicating the central gamma distribution, is used.
+%   errTol Error tolerance for determining convergence of the algorithm
+%          when lambda~=0. If this parameter is omitted or an empty matrix
+%          is passed, the default of eps(1) is used.
+%  maxIter The maximum number of iterations to allow. This is only used
+%          matters when lambda~=0. If this parameter is omitted or an
+%          empty matrix is passed, then a default value of 5000 is used.
 %
-%OUTPUTS:   prob The value(s) of the CDF of the noncentral gamma
-%                distribution with parameters k and theta evaluated
-%                at x.
+%OUTPUTS: prob The value(s) of the CDF of the noncentral gamma distribution
+%              with parameters k and theta evaluated at x.
 %
 %This is an implementation of the distribution computations from [1]. The
 %work in [1] concerns algorithms that implement the distribution
@@ -197,8 +191,8 @@ function prob=CDF(x,k,theta,lambda,errTol,maxIter)
 %the central gamma case, a simple explicit formula is available.
 %
 %REFERENCES:
-%[1] I.R.C. de Oliveria and D.F. Ferreira, "Computing the noncentral gamma
-%    distribution, its inverse and the noncentrality parameter," 
+%[1] I. R. C. de Oliveria and D. F. Ferreira, "Computing the noncentral
+%    gamma distribution, its inverse and the noncentrality parameter," 
 %    Computational Statistics, vol. 28, no. 4, pp.1663-1680, 01 Aug 2013.
 %[2] L. Knüsel and B. Bablok, "Computation of the noncentral gamma
 %    distribution," SIAM Journal on Scientific Computing, vol. 17, no. 5,
@@ -266,17 +260,17 @@ end
 end
 
 function val=invCDF(prob,k,theta,lambda)
-%%INVCDF      Evaluate the inverse of the cumulative distribution
-%             function of the gamma distribution.
+%%INVCDF Evaluate the inverse of the cumulative distribution function of
+%        the gamma distribution.
 %
-%INPUTS:       prob The probability or probabilities (0<=prob<=1) at which the 
-%                   argument of the CDF is desired.
-%              k    The shape parameter of the distribution; k>0.
-%             theta The scale parameter of the distribution; theta>0.
-%           lambda  The noncentrality parameter of the distribution. If
-%                   this parameter is omitted or an empty matrix is passed,
-%                   a value of 0, indicating the central gamma
-%                   distribution, is used.
+%INPUTS: prob The probability or probabilities (0<=prob<=1) at which the 
+%             argument of the CDF is desired.
+%           k The shape parameter of the distribution; k>0.
+%       theta The scale parameter of the distribution; theta>0.
+%      lambda The noncentrality parameter of the distribution. If this
+%             parameter is omitted or an empty matrix is passed, a value of
+%             0, indicating the central gamma distribution, is used. This
+%             function is currently only implemented for lambda=0.
 %
 %OUTPUTS:   val  The argument(s) of the CDF that would give the probability
 %                or probabilities in prob.
@@ -307,22 +301,21 @@ end
 end
 
 function vals=rand(N,k,theta,lambda)
-%%RAND       Generate gamma distributed random variables with the given
-%            parameters.
+%%RAND Generate gamma distributed random variables with the given
+%      parameters.
 %
-%INPUTS:    N      If N is a scalar, then rand returns an NXN matrix
-%                  of random variables. If N=[M,N1] is a two-element row 
-%                  vector, then rand returns an MXN1 matrix of random
-%                  variables.
-%           k      The shape parameter of the distribution; k>0.
-%           theta  The scale parameter of the distribution; theta>0.
-%          lambda  The noncentrality parameter of the distribution. If
-%                   this parameter is omitted or an empty matrix is passed,
-%                   a value of 0, indicating the central gamma
-%                   distribution, is used.
+%INPUTS: N If N is a scalar, then rand returns an NXN matrix of random
+%          variables. If N=[M,N1] is a two-element row vector, then rand
+%          returns an MXN1 matrix of random variables.
+%        k The shape parameter of the distribution; k>0.
+%    theta The scale parameter of the distribution; theta>0.
+%   lambda The noncentrality parameter of the distribution. If this
+%          parameter is omitted or an empty matrix is passed, a value of 0,
+%          indicating the central gamma distribution, is used. This
+%          function is currently only implemented for lambda=0.
 %
-%OUTPUTS:   vals   A matrix whose dimensions are determined by N of the
-%                  generated gamma random variables.
+%OUTPUTS: vals A matrix whose dimensions are determined by N of the
+%              generated gamma random variables.
 %
 %This is an implementation of the inverse transform algorithm of Chapter
 %5.1 of [1].
@@ -353,7 +346,6 @@ else
     error('This function is not currently supported for noncentral gamma distribution');
 end
 end
-    
 end
 end
 

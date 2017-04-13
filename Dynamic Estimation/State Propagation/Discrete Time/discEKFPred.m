@@ -2,30 +2,29 @@ function [xPred, PPred]=discEKFPred(xPrev,PPrev,f,FJacob,Q,FHessian)
 %DISCEKFPRED Perform the discrete-time prediction step that comes with 
 %            the first- or second-order order extended Kalman filter (EKF).
 %
-%INPUTS:    xPrev   The xDim X 1 state estimate at the previous time-step.
-%           PPrev   The xDim X xDim state covariance matrix at the previous
-%                   time-step.
-%           f       A function handle for the state transition function
-%                   that takes the state as its parameter.
-%           FJacob  A function handle for calculating the xDim X xDim
-%                   Jacobian of f, or the xDim X xDim Jacobian matrix
-%                   itself. If an empty matrix is passed, then
-%                   FJacob will be found using numerical differentiation 
-%                   via the numDiff function with default parameters.
-%           Q       The xDimX xDim process noise covariance matrix.
-%         FHessian  This parameter is only provided if a second-order EKF
-%                   is desired. This is either a function handle for the
-%                   state transition Hessian hypermatrix, or it is the
-%                   state transition Hessian hypermatrix itself. The matrix
-%                   is xDim X xDim X xDim. The matrix FH=FHessian(x) is
-%                   such that FH(i,j,k) is the second derivative of the
-%                   kth element of the vector returned by f with
-%                   respect to the ith and jth components of x. The Hessian
-%                   matrix is symmetric. If this parameter is omitted, a
-%                   first-order EKF is used.
+%INPUTS: xPrev The xDim X 1 state estimate at the previous time-step.
+%        PPrev The xDim X xDim state covariance matrix at the previous
+%              time-step.
+%            f A function handle for the state transition function that
+%              takes the state as its parameter.
+%       FJacob A function handle for calculating the xDim X xDim Jacobian
+%              of f, or the xDim X xDim Jacobian matrix itself. If an empty
+%              matrix is passed, then FJacob will be found using numerical
+%              differentiation  via the numDiff function with default
+%              parameters.
+%            Q The xDimX xDim process noise covariance matrix.
+%     FHessian This parameter is only provided if a second-order EKF is
+%              desired. This is either a function handle for the state
+%              transition Hessian hypermatrix, or it is the state
+%              transition Hessian hypermatrix itself. The matrix is
+%              xDim X xDim X xDim. The matrix FH=FHessian(x) is such that
+%              FH(i,j,k) is the second derivative of the kth element of the
+%              vector returned by f with respect to the ith and jth
+%              components of x. The Hessian matrix is symmetric. If this
+%              parameter is omitted, a first-order EKF is used.
 %
-%OUTPUTS:   xPred   The xDim X 1 predicted state estimate.
-%           PPred   The xDim X xDim predicted state covariance matrix.
+%OUTPUTS:   xPred The xDim X 1 predicted state estimate.
+%           PPred The xDim X xDim predicted state covariance matrix.
 %
 %The first-order EKF is summarized in Figure 10.3.3-1 in Chapter 10.3.3 of
 %[1]. The second-order EKF is described in Chapter 10.3.2 of the same text.

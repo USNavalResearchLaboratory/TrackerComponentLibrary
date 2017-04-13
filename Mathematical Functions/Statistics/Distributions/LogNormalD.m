@@ -1,23 +1,24 @@
-classdef logNormalD
-%Functions to handle the scalar and multivariate lognormal distribution.
-%A lognormal random variable is obtained by evaluating e^x, where x is a
-%normal random variable. If x is a vector, then the exponent is performed
-%element-by-element.
+classdef LogNormalD
+%%LOGNORMALD Functions to handle the scalar and multivariate lognormal
+%   distribution. A lognormal random variable is obtained by evaluating
+%   e^x, where x is a normal random variable. If x is a vector, then the
+%   exponent is performed element-by-element.
 %Implemented methods are: mean,cov, PDF, CDF, rand
 %
 %An expression for the PDF of a multivariate lognormal distribution is
-%given in
-%S. J. Fletcher and M. Zupanski, "A hybrid multivariate normal and
-%lognormal distribution for data assimilation," Atmospheric Science
-%Letters, vol. 7, no. 2, pp. 43?46, Apr./Jun. 2006.
-%where it is shown that a joint multivariate log-normal and normal PDF can
-%be formed.
+%given in [1], where it is shown that a joint multivariate log-normal and
+%normal PDF can be formed.
 %
-%Note that as derived in
-%C. C. Heyde, "On a property of the lognormal distribution," The Journal
-%of the Royal Statistical Society Series B (Methodological), vol. 25, no.
-%2, pp. 392-393, 1963.
-%the lognormal distribution cannot be uniquely identified via its moments.
+%Note that as derived in [2], the lognormal distribution cannot be uniquely
+%identified via its moments.
+%
+%REFERENCES:
+%[1] S. J. Fletcher and M. Zupanski, "A hybrid multivariate normal and
+%    lognormal distribution for data assimilation," Atmospheric Science
+%    Letters, vol. 7, no. 2, pp. 43?46, Apr./Jun. 2006.
+%[2] C. C. Heyde, "On a property of the lognormal distribution," The
+%    Journal of the Royal Statistical Society Series B (Methodological),
+%    vol. 25, no. 2, pp. 392-393, 1963.
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 

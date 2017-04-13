@@ -17,15 +17,17 @@ function [xi,w]=seventhOrderSpherSurfCubPoints(numDim,algorithm)
 %                  2^numDim+(4/3)*numDim*(numDim-1)*(numDim-2)+2*numDim*(numDim-1)
 %                  points, numDim>=4.
 %                3 Formula from [2], 2^n+2*n^2 points, numDim>=3
-%                4 Un 7-2 from [3], 2^n*(n+1) points
-%                5 U3 7-1 in [3], 24 points, numDim=3
-%                6 U3 7-2 in [3], 26 points, numDim=3
-%                7 U4 7-1 in [3], 48 points, numDim=4
+%                4 Un 7-1 from [3], 2^n+2*n^2 points, with the correction
+%                  from Table I of [4], numDim>=3.
+%                5 Un 7-2 from [3], 2^n*(n+1) points
+%                6 U3 7-1 in [3], 24 points, numDim=3
+%                7 U3 7-2 in [3], 26 points, numDim=3
+%                8 U4 7-1 in [3], 48 points, numDim=4
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %REFERENCES:
 %[1] A. H. Stroud, "Some seventh degree integration formulas for the
@@ -36,6 +38,8 @@ function [xi,w]=seventhOrderSpherSurfCubPoints(numDim,algorithm)
 %    37-44, Mar. 1967.
 %[3] A.H. Stroud, Approximate Calculation of Multiple Integrals. Cliffs,
 %    NJ: Prentice-Hall, Inc., 1971.
+%[4] R. Cools, "An encyclopedia of cubature formulas," Journal of
+%    Complexity, vol. 19, no. 3, pp. 445?453, Jun. 2003.
 %
 %October 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -130,7 +134,24 @@ switch(algorithm)
         
         xi=[xi1,xi2,xi3];
         w=[repmat(A1,[size(xi1,2),1]);repmat(A2,[size(xi2,2),1]);repmat(A3,[size(xi3,2),1])];
-    case 4%Un 7-2 from [3], 2^n*(n+1) points
+    case 4%Un 7-1 from [3], 2^n+2*n^2 points
+        n=numDim;
+        V=2*pi^(n/2)/gamma(n/2);
+        
+        r=1;
+        s=sqrt(1/n);
+        t=sqrt(1/2);
+        
+        xi=[fullSymPerms([r;zeros(n-1,1)]),PMCombos(s*ones(n,1)),fullSymPerms([t;t;zeros(n-2,1)])];
+
+        B=((8-n)/(n*(n+2)*(n+4)))*V;
+        C=((2^(-n)*n^3)/(n*(n+2)*(n+4)))*V;
+        D=(4/(n*(n+2)*(n+4)))*V;
+        
+        w=[B*ones(2*n,1);
+           C*ones(2^n,1);
+           D*ones(2*n*(n-1),1)];
+    case 5%Un 7-2 from [3], 2^n*(n+1) points
 
         r=sqrt(1/numDim);
         s=sqrt(5/(numDim+4));
@@ -143,7 +164,7 @@ switch(algorithm)
         
         xi=[PMCombos(repmat(r,[numDim,1])),fullSymPerms([s;t*ones(numDim-1,1)])];
         w=[A*ones(2^numDim,1);B*ones(numDim*2^numDim,1)];
-    case 5%U3 7-1 in [3], 24 points, numDim=3
+    case 6%U3 7-1 in [3], 24 points, numDim=3
         if(numDim~=3)
            error('numDim must be 3 to use this formula.') 
         end
@@ -169,7 +190,7 @@ switch(algorithm)
         V=2*pi^(numDim/2)/gamma(numDim/2);
         B=V/24;
         w=ones(24,1)*B;
-    case 6%U3 7-2 in [3], 26 points, numDim=3
+    case 7%U3 7-2 in [3], 26 points, numDim=3
         if(numDim~=3)
            error('numDim must be 3 to use this formula.') 
         end
@@ -188,7 +209,7 @@ switch(algorithm)
         w(7:18)=(32/840)*V;
         xi(:,19:26)=PMCombos([t;t;t]);
         w(19:26)=(27/840)*V;
-    case 7%U4 7-1 in [3], 48 points, numDim=4
+    case 8%U4 7-1 in [3], 48 points, numDim=4
         if(numDim~=4)
            error('numDim must be 4 to use this formula.') 
         end

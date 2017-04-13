@@ -48,7 +48,7 @@ function maxBound=numPolySolBoundBezout(termMats,method)
 %
 %EXAMPLE 1:
 %The example here is that used in [1]. We have a system of eight equations.
-%(Implicitely, this means all of these equations=0).
+%(Implicitly, this means all of these equations=0).
 % termMats=cell(8,1);
 % theEq='x1^2+x2^2-1';
 % termMats{1}=string2Terms(theEq,8);

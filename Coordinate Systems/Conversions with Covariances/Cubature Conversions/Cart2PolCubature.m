@@ -1,129 +1,90 @@
-function [zPol,RPol]=Cart2PolCubature(cartPoint,SR,zRx,xi,w)
-%%CART2POLCUBATURE Use cubature integration to approximate the moments of a
-%          noise-corrupted Cartesian location converted into 2D polar
-%          coordinates. A monostatic, one-way range-rate component can also
-%          be computed, if desired. The polar angle (azimuth) is measured
-%          from the x-axis counterlockwise. The Cartesian points must be in
-%          2D dimensions. This function ignores all propagation effects,
-%          such as atmospheric refraction. The range rate does not include
-%          special relativistic effects.
+function [zPol,RPol]=Cart2PolCubature(x,S,systemType,useHalfRange,zTx,zRx,M,xi,w)
+%%CART2POLCUBATURE Use cubature integration to approximate the moments of
+%          a noise-corrupted Cartesian location converted into 2D polar
+%          coordinates. This function ignores all propagation effects,
+%          such as atmospheric refraction.
 %
-%INPUTS: cartPoints A 2XN set of N Cartesian points of the form [x;y] that
-%               are to be converted into polar coordinates. If range rate
-%               is desired, then this should be a 4XN vector of the format
-%               [x;y;xdot;ydot].
-%            SR The lower-triangular square root of the covariance matrix
-%               of cartPoints for positions, if 2X2XN in size, or a 4X4XN
-%               covariance matrix including the velocity components if
-%               range rate is desired. If all of the covariance matrices
-%               are the same, then one can just pass a single 2X2 or 4X4
-%               matrix.
-%           zRx The 2X1 [x;y] location vector of the receiver in
-%               Cartesian coordinates. If range-rate is desired, then this
-%               should be a vector of the format [x;y;xdot;ydot]. If
-%               this parameter is omitted or an empty matrix is passed,
-%               then the receiver is made stationary at the origin.
-%           xi  A 2 X numCubaturePoints (for position-only) or
-%               4 X numCubaturePoints (if range rate is desired) matrix of
-%               cubature points for the numeric integration. If this and
-%               the final parameter are omitted or empty matrices are
-%               passed, then fifthOrderCubPoints is used to generate
-%               cubature points.
-%           w   A numCubaturePoints X 1 vector of the weights associated
-%               with the cubature points.
+%INPUTS: x A 2XN set of N Cartesian points of the form [x;y] that are to be
+%          converted into polar coordinates.
+%        S The 2X2XN lower-triangular square root of the covariance
+%          matrices of x. If all of the covariance matrices are the same,
+%          then one can just pass a single 2X2 matrix.
+% systemType An optional parameter specifying the axes from which the
+%          angles are measured. Possible values are
+%          0 (The default if omitted) The azimuth angle is counterclockwise
+%            from the x axis.
+%          1 The azimuth angle is measured clockwise from the y axis.
+% useHalfRange A boolean value specifying whether the bistatic range value
+%          should be divided by two. This normally comes up when operating
+%          in monostatic mode, so that the range reported is a one-way
+%          range. The default if this parameter is not provided (or an
+%          empty matrix is provided) is true.
+%      zTx The 2XN [x;y] location vectors of the transmitters in global
+%          Cartesian coordinates. If this parameter is omitted or an
+%          empty matrix is passed, then the transmitters are assumed to be
+%          at the origin. If only a single vector is passed, then the
+%          transmitter location is assumed the same for all of the target
+%          states being converted.
+%      zRx The 2XN [x;y] location vectors of the receivers in Cartesian
+%          coordinates. If this parameter is omitted or an empty matrix is
+%          passed, then the receivers are assumed to be at the origin. If
+%          only a single vector is passed, then the receiver location is
+%          assumed the same for all of the target states being converted.
+%        M A 2X2 rotation matrix to go from the alignment of the global
+%          coordinate system to that at the receiver. If omitted
+%          or an empty matrix is passed, then it is assumed that the local
+%          coordinate system is aligned with the global and M=eye(2) --the
+%          identity matrix is used.
+%       xi A 2 X numCubaturePoints matrix of cubature points for the
+%          numeric integration. If this and the final parameter are omitted
+%          or empty matrices are passed, then fifthOrderCubPoints is used
+%          to generate cubature points.
+%        w A numCubaturePoints X 1 vector of the weights associated with
+%          the cubature points.
 %
-%OUTPUTS: zPol   The approximate mean of the PDF of the polar-converted
-%                measurement in [r;theta] polar coordinates or as
-%                [r;theta;rangeRate], if a monostatic range rate is
-%                requested. The angle theta is wrapped to remain in the
-%                range of -pi to pi.
-%         RPol   The approximate 2 X 2 covariance matrix of the PDF of
-%                the polar-converted measurement, or the 3X3 covariance
-%                matrix of the polar converted measurement with range rate,
-%                if the monostatic range rate is requested.
+%OUTPUTS: zPol The 2XN approximate means of the PDFs of the polar-converted
+%              measurements in [r;theta] polar coordinates. The angle theta'
+%              is wrapped to remain in the range of -pi to pi.
+%         RPol The approximate 2X2XN set of covariance matrices of the PDF
+%              of the polar-converted measurements.
 %
-%Details of the basic numerical integration used in the conversion are
-%given in [1]. However, a few changes had to be made to handle the circular
-%nature of the measurements. The weighed average of the angular component
-%was done using the meanAng function, and the differences in angle for
-%computing the covariance matrix were also wrapped to +/-pi to handle the
-%circular nature of the angular component.
+%This function just calls the function state2PolRRCubature in such a way
+%that range rate is not computed.
 %
-%REFERENCES:
-%[1] David F. Crouse , "Basic tracking using nonlinear 3D monostatic and
-%    bistatic measurements," IEEE Aerospace and Electronic Systems 
-%    Magazine, vol. 29, no. 8, Part II, pp. 4-53, Aug. 2014.
-%
-%May 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%February 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    numDim=size(cartPoint,1);
-    numPoints=size(cartPoint,2);
+    numPoints=size(x,2);
     
-    if(numDim~=2&&numDim~=4)
-        error('The Cartesian points have the wrong dimensionality')
-    end
-    
-    if(size(SR,3)==1)
-        SR=repmat(SR,[1,1,numPoints]);
+    if(nargin<8||isempty(xi))
+    	[xi,w]=fifthOrderCubPoints(2);
     end
 
-    if(nargin<3||isempty(zRx))
-        zRx=zeros(numDim,1);
+    if(nargin<7||isempty(M))
+        M=eye(2);
     end
-    
-    if(nargin<5||isempty(xi))
-        [xi,w]=fifthOrderCubPoints(numDim,1);
-    end
-    
-    numCubPoints=length(w);
-    
-    %Allocate space for the return variables.
-    if(numDim==2)%I there is no range rate.
-        zPol=zeros(2,numPoints);
-        RPol=zeros(2,2,numPoints);
-        
-        %The function to transform measurement differences, accounting
-        %for the circular nature of the measurements.
-        measDiffWrap=@(deltaZ)[deltaZ(1,:);
-                       wrapRange(deltaZ(2,:),-pi,pi)];
-    else%If there is range rate.
-        zPol=zeros(3,numPoints);
-        RPol=zeros(3,3,numPoints);
-        %The function to transform measurement differences, accounting
-        %for the circular nature of the measurements, with range rate.
-        measDiffWrap=@(deltaZ)[deltaZ(1,:);
-                               wrapRange(deltaZ(2,:),-pi,pi);
-                               deltaZ(3,:)];
-    end
-    
-    for curPoint=1:numPoints
-        %Deal with the offset from the origin, including motion.
-        cartPoint(:,curPoint)=cartPoint(:,curPoint)-zRx;
 
-        %Transform the cubature points to match the given Gaussian. 
-        cubPoints=transformCubPoints(xi,cartPoint(:,curPoint),SR(:,:,curPoint));
-
-        %Convert all of the points into polar coordinates.
-        if(numDim==2)
-            polPoints=Cart2Pol(cubPoints(1:2,:));
-        else%If range rate is requested.
-            %Get a one-way, monostatic range rate.
-            rrPoints=getRangeRate(cubPoints,true,zeros(4,numCubPoints),zeros(4,numCubPoints),2);
-            polPoints=[Cart2Pol(cubPoints(1:2,:));rrPoints];
-            
-            zPol(3,curPoint)=calcMixtureMoments(polPoints(3,:),w);
-        end
-
-        %Extract the first two moments of the transformed points, taking
-        %into account the circular nature of the angular measurement.
-        zPol(1,curPoint)=calcMixtureMoments(polPoints(1,:),w);
-        zPol(2,curPoint)=meanAng(polPoints(2,:),w');
-        
-        zDiffPoints=bsxfun(@times,measDiffWrap(bsxfun(@minus,polPoints,zPol(:,curPoint))),sqrt(w)');
-        
-        RPol(:,:,curPoint)=zDiffPoints*zDiffPoints';
+    if(nargin<6||isempty(zRx))
+        zRx=zeros(2,1);
     end
+
+    if(nargin<5||isempty(zTx))
+        zTx=zeros(2,1);
+    end
+
+    if(nargin<4||isempty(useHalfRange))
+        useHalfRange=true;
+    end
+
+    if(nargin<3||isempty(systemType))
+        systemType=0; 
+    end
+    
+    if(size(S,3)==1)
+        S=repmat(S,[1,1,numPoints]);
+    end
+    
+    [zPol,RPol]=state2PolRRCubature(x(1:2,:),S,systemType,useHalfRange,zTx(1:2,:),zRx(1:2,:),M,xi,w);
 end
 
 %LICENSE:

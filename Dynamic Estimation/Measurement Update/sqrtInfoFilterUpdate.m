@@ -9,17 +9,17 @@ function [ySqrtUpdate,PInvSqrtUpdate]=sqrtInfoFilterUpdate(ySqrtPred,PInvSqrtPre
 %                  If P is the covariance matrix of a Gaussian state x,
 %                  then P=PSqrt*PSqrt' and PInvSqrtPred=inv(PSqrt). This
 %                  can be either upper triangular or lower triangular.
-%        z         The zDim X 1 vector measurement.
-%        SR        The zDim X zDim lower-triangular square root of  
+%                z The zDim X 1 vector measurement.
+%               SR The zDim X zDim lower-triangular square root of  
 %                  the measurement covariance matrix. This matrix must be
 %                  invertible.
-%        H         The zDim X xDim measurement matrix for a linear
+%                H The zDim X xDim measurement matrix for a linear
 %                  measurement model. That is z=H*x+w, where w is
 %                  measurement noise having covariance matrix R.
 %
-%OUTPUTS:ySqrtUpdate    The xDimX1 updated information state vector.
-%        PInvSqrtUpdate The xDimXxDim upper-triangular updated inverse
-%                       square root information matrix.
+%OUTPUTS: ySqrtUpdate The xDimX1 updated information state vector.
+%      PInvSqrtUpdate The xDimXxDim upper-triangular updated inverse square
+%                     root information matrix.
 %
 %The algorithm is that of the linear square root information filter that
 %is described in the paper [1]. However, it has been implemented without

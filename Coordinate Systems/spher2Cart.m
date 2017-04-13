@@ -6,34 +6,37 @@ function cartPoints=spher2Cart(points,systemType,useHalfRange,zTx,zRx,M)
 %             bistatic range can be used when considering bistatic
 %             measurements in a local spherical coordinate system. 
 %
-%INPUTS:  points  One or more points given in terms of range, azimuth and
-%                 elevation, with the angles in radians, or in terms of
-%                 just azimuth and elevation if Cartesian unit vectors are
-%                 desired. To convert N points, points is a 3XN matrix with
-%                 each column having the format [range;azimuth; elevation]
-%                 or it is a 2XN matrix with each column having format
-%                 [azimuth; elevation] if unit vectors are desired.
-%      systemType An optional parameter specifying the axes from which
-%                 the angles are measured. Possible vaues are
-%                   0 (The default if omitted) Azimuth is measured
-%                     counterclockwise from the x-axis in the x-y plane.
-%                     Elevation is measured up from the x-y plane (towards
-%                     the z-axis). This is consistent with common spherical
-%                     coordinate systems for specifying longitude (azimuth)
-%                     and geocentric latitude (elevation).
-%                   1 Azimuth is measured counterclockwise from the z-axis
-%                     in the z-x plane. Elevation is measured up from the
-%                     z-x plane (towards the y-axis). This is consistent
-%                     with some spherical coordinate systems that use the z
-%                     axis as the boresight direction of the radar.
-%useHalfRange An optional boolean value specifying whether the bistatic
+%INPUTS: points One or more points given in terms of range, azimuth and
+%           elevation, with the angles in radians, or in terms of just
+%           azimuth and elevation if Cartesian unit vectors are desired. To
+%           convert N points, points is a 3XN matrix with each column
+%           having the format [range;azimuth; elevation] or it is a 2XN
+%           matrix with each column having format [azimuth; elevation] if
+%           unit vectors are desired. Note that many math texts use a polar
+%           angle (pi/2-elevation) in place of elevation. A polar angle is
+%           also known as a colatitude, an inclination angle, a zenith
+%           angle, and a normal angle.
+% systemType An optional parameter specifying the axis from which the
+%           angles are measured in radians. Possible values are
+%           0 (The default if omitted) Azimuth is measured 
+%             counterclockwise from the x-axis in the x-y plane. Elevation
+%             is measured up from the x-y plane (towards the z-axis). This
+%             is consistent with common spherical coordinate systems for
+%             specifying longitude (azimuth) and geocentric latitude
+%             (elevation).
+%           1 Azimuth is measured counterclockwise from the z-axis in the
+%             z-x plane. Elevation is measured up from the z-x plane
+%             (towards the y-axis). This is consistent with some spherical
+%             coordinate systems that use the z axis as the boresight
+%             direction of the radar.
+% useHalfRange An optional boolean value specifying whether the bistatic
 %           (round-trip) range value has been divided by two. This normally
 %           comes up when operating in monostatic mode (the most common
 %           type of spherical coordinate system), so that the range
 %           reported is a one-way range (or just half a bistatic range).
 %           The default if this parameter is not provided is false if zTx
-%           and zRx are provided and true if they are omitted (monostatic).
-%           If no range values are provided, an empty matrix can be passed.
+%           and is provided and true if it is is omitted (monostatic). If
+%           no range values are provided, an empty matrix can be passed.
 %       zTx The 3XN [x;y;z] location vectors of the transmitters in global
 %           Cartesian coordinates. If this parameter is omitted, then the
 %           transmitters are assumed to be at the origin. If only a single
@@ -48,7 +51,7 @@ function cartPoints=spher2Cart(points,systemType,useHalfRange,zTx,zRx,M)
 %           same for all of the target states being converted. zRx can have
 %           more than 3 rows; additional rows are ignored. If monostatic or
 %           no range values are provided, an empty matrix can be passed.
-%        M  A 3X3XN hypermatrix of the rotation matrices to go from the
+%         M A 3X3XN hypermatrix of the rotation matrices to go from the
 %           alignment of the global coordinate system to that at the
 %           receiver. The z-axis of the local coordinate system of the
 %           receiver is the pointing direction of the receiver. If omitted,
@@ -57,10 +60,10 @@ function cartPoints=spher2Cart(points,systemType,useHalfRange,zTx,zRx,M)
 %           only a single 3X3 matrix is passed, then is is assumed to be
 %           the same for all of the N conversions.
 %
-%OUTPUTS:   cartPoints For N points, cartPoints is a 3XN matrix of the
-%                      converted points with each column having the format
-%                      [x;y;z]. If no range values were passed, then all of
-%                      the vectors are unit direction vectors.
+%OUTPUTS: cartPoints For N points, cartPoints is a 3XN matrix of the
+%                    converted points with each column having the format
+%                    [x;y;z]. If no range values were passed, then all of
+%                    the vectors are unit direction vectors.
 %
 %The conversion from spherical to Cartesian coordinates is given in [1].
 %However, when considering the bistatic scenario, concepts from the
@@ -78,22 +81,26 @@ function cartPoints=spher2Cart(points,systemType,useHalfRange,zTx,zRx,M)
 %July 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<2||isempty(systemType))
-    systemType=0;
-end
-
-if(nargin<4)
+if(nargin<4||isempty(zTx))
     zTx=[];
 end
 
-if(nargin<5)
+if(nargin<5||isempty(zRx))
     zRx=[];
 end
 
-if(isempty(zTx)&&(nargin<3||isempty(useHalfRange)))
+if(nargin<6||isempty(M))
+    M=[]; 
+end
+
+if((nargin<4||isempty(zTx))&&(nargin<3||isempty(useHalfRange)))
     useHalfRange=true;
-elseif(~isempty(zTx)&&(nargin<3||isempty(useHalfRange)))
+elseif(nargin<3||isempty(useHalfRange))
     useHalfRange=false;
+end
+
+if(nargin<2||isempty(systemType))
+    systemType=0;
 end
 
 %Extract the coordinates
@@ -194,10 +201,10 @@ for curPoint=1:N
     %This is the Cartesian location in the local coordinate system of
     %the receiver.
     zL=r1*uVec;
-    %Convert to global Cartesian coordinates.
-    cartPoints(:,curPoint)=M(:,:,curPoint)\zL+zRx(:,curPoint);
+    %Convert to global Cartesian coordinates. The transpose of a rotation
+    %matrix is its inverse.
+    cartPoints(:,curPoint)=M(:,:,curPoint)'*zL+zRx(:,curPoint);
 end
-
 end
 
 %LICENSE:
@@ -217,4 +224,3 @@ end
 %SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY THE NAVAL
 %RESEARCH LABORATORY FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE ACTIONS
 %OF RECIPIENT IN THE USE OF THE SOFTWARE.
-

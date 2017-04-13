@@ -17,9 +17,9 @@ function b=ChebyshevPolyDerivCoeffs(a,tauStart,tauEnd)
 %                generally not useful for interpolating much outside of the
 %                valid range.
 %
-%INPUTS: b   An (n)X1 vector of coefficients for a weighted sum
-%            of Chebyshev polynomials of order 0 to n-1 that can be used in
-%            the ChebyshevPolySynth function to find the derivative of the
+%INPUTS: b   An nX1 vector of coefficients for a weighted sum of Chebyshev
+%            polynomials of order 0 to n-1 that can be used in the
+%            ChebyshevPolySynth function to find the derivative of the
 %            function given by a. If a is 1X1, then b=0 will be returned.
 %
 %The derivative of a weighted Chebyshev polynomial series is another

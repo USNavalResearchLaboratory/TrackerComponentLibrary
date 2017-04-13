@@ -4,20 +4,20 @@ function [xUpdate,PUpdate,innov,Pzz]=KalmanUpdate(xPred,PPred,z,R,H)
 %             and the measurement are both multivariate Gaussian
 %             distributed.
 %
-%INPUTS:    xPred     The xDim X 1 predicted target state.
-%           PPred     The xDim X xDim predicted state covariance matrix.
-%           z         The zDim X 1 vector measurement.
-%           R         The zDim X zDim measurement covariance matrix. 
-%           H         The zDim X xDim measurement matrix for a linear
-%                     measurement model. That is z=H*x+w, where w is
-%                     measurement noise having covariance matrix R.
+%INPUTS: xPred The xDim X 1 predicted target state.
+%        PPred The xDim X xDim predicted state covariance matrix.
+%            z The zDim X 1 measurement vector.
+%            R The zDim X zDim measurement covariance matrix. 
+%            H The zDim X xDim measurement matrix for a linear measurement
+%              model. That is z=H*x+w, where w is measurement noise having
+%              covariance matrix R.
 %
-%OUTPUTS:      xUpdate  The xDim X 1 updated state vector.
-%              PUpdate  The updated xDim X xDim state covariance matrix.
-%           innov, Pzz  The zDimX1 innovation and the zDimXzDim innovation
-%                       covariance matrix are returned in case one wishes
-%                       to analyze the consistency of the estimator or use
-%                       those values in gating or likelihood evaluation.
+%OUTPUTS: xUpdate The xDim X 1 updated target state vector.
+%         PUpdate The updated xDim X xDim state covariance matrix.
+%      innov, Pzz The zDimX1 innovation and the zDimXzDim innovation
+%                 covariance matrix are returned in case one wishes to
+%                 analyze the consistency of the estimator or use those
+%                 values in gating or likelihood evaluation.
 %
 %Given a prediction of the target state xPred with an associated covariance
 %matrix PPred, and assuming that they are the mean and covariance matrix of

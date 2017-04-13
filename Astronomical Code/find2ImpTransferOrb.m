@@ -35,7 +35,7 @@ function [deltaV1,deltaV2,TOpt]=find2ImpTransferOrb(stateVec1,stateVec2,costSel,
 %               GM An optional value of the universal gravitational
 %                  constant times the mass of the Earth. If omitted, the
 %                  value Constants.WGS84GMWithAtmosphere is used. The
-%                  units are km^3/sec^2.
+%                  units are m^3/sec^2.
 %
 %The function orbVelDet2Pt determines the velocities of an orbit given two
 %points and a propagation time. The propagation time needed to optimize the

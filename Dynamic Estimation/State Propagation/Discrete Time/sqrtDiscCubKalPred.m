@@ -58,15 +58,15 @@ function [xPred, SPred, xPropCenPoints]=sqrtDiscCubKalPred(xPrev,SPrev,f,SQ,xi,w
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    if(nargin<7)
+    if(nargin<7||isempty(stateDiffTrans))
         stateDiffTrans=@(x)x;
     end
     
-    if(nargin<8)
+    if(nargin<8||isempty(stateAvgFun))
         stateAvgFun=@(x,w)calcMixtureMoments(x,w);
     end
     
-    if(nargin<9)
+    if(nargin<9||isempty(stateTrans))
         stateTrans=@(x)x;
     end
     

@@ -3,32 +3,32 @@ function [xi, w]=thirdOrderCubPoints(numDim,algorithm,w0)
 %           involving a multidimensional Gaussian probability density
 %           function (PDF).
 %
-%INPUTS:    numDim  An integer specifying the dimensionality of the points
-%                   to be generated. numDim>1.
-%         algorithm An optional parameter specifying the algorithm to be
-%                   used to generate the points. Possible values are
-%                   0 (The default if omitted or an empty matrix is passed)
-%                     Use the algorithm of [1] (The "cubature Kalman
-%                     filter") set of points.
-%                   1 Use the "basic points" for the unscented Kalman
-%                     filter given in Section IIIA of [2].
-%                   2 Use the "extended symmetric set" from Section IVA of
-%                     [2].
-%                   3 Formula E_n^{r^2} 3-1 on page 315 of [3],2*numDim
-%                     points.
-%                   4 Formula E_n^{r^2} 3-2 on page 316 of [3],2^numDim
-%                     points.
-%               w0 An optional input parameter that is only used in
-%                  algorithms 2. This is the value of w(1), the coefficient
-%                  associated with a cubature point placed at the origin.
-%                  It is required that w(0)>0. Making w0 larger than 1 will
-%                  lead to having mostly negative weights. If omitted or an
-%                  empty matrix is passed, a default value of 1/3 is used. 
+%INPUTS: numDim An integer specifying the dimensionality of the points to
+%               be generated; numDim>=1.
+%     algorithm An optional parameter specifying the algorithm to be used
+%               to generate the points. Possible values are
+%               0 (The default if omitted or an empty matrix is passed and
+%                 numDim~=1) Use
+%                 the algorithm of [1] (The "cubature Kalman filter") set
+%                 of points.
+%               1 Use the "basic points" for the unscented Kalman filter
+%                 given in Section IIIA of [2].
+%               2 Use the "extended symmetric set" from Section IVA of [2].
+%               3 Formula E_n^{r^2} 3-1 on page 315 of [3],2*numDim points.
+%               4 Formula E_n^{r^2} 3-2 on page 316 of [3],2^numDim points.
+%               5 (The default if numDim==1) Call quadraturePoints1D(2), 2
+%                 points, numDim=1.
+%            w0 An optional input parameter that is only used in algorithm
+%               2. This is the value of w(1), the coefficient associated
+%               with a cubature point placed at the origin. It is required
+%               that w(0)>0. Making w0 larger than 1 will lead to having
+%               mostly negative weights. If omitted or an empty matrix is
+%               passed, a default value of 1/3 is used. 
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points (Each "point" is a vector).
+%         w  A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %Algorithms 1-2 are not normally identified as being "third-order".
 %However, due to their symmetry of the points, their odd moments are all
@@ -51,7 +51,11 @@ function [xi, w]=thirdOrderCubPoints(numDim,algorithm,w0)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
     if(nargin<2||isempty(algorithm))
-        algorithm=0;
+        if(numDim~=1)
+            algorithm=0;
+        else
+            algorithm=5;
+        end
     end
 
     if(nargin<3||isempty(w0))
@@ -112,7 +116,11 @@ function [xi, w]=thirdOrderCubPoints(numDim,algorithm,w0)
             %The sqrt(2) makes it for a normal 0-I distribution.
             xi=sqrt(2)*PMCombos(r*ones(numDim,1));
             w=2^(-numDim)*ones(2^numDim,1);
-        case 5
+        case 5%Use quadraturePoints1D(2) for 1D points
+            if(numDim~=1)
+                error('This algorithm requires numDim=1.')
+            end
+            [xi,w]=quadraturePoints1D(2);
         otherwise
             error('Unknown algorithm specified')
     end

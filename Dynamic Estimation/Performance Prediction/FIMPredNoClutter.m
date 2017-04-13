@@ -30,7 +30,7 @@ function J=FIMPredNoClutter(H,F,R,Q,PD)
 %This algorithm just takes the posterior FIM and puts it through the
 %a recursive step for the FIM without a measurement update.
 %For more information on how the function works, see the function 
-%FIMPostNoClutter
+%FIMPostNoClutter, which cites the papers used to obtain the equations.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -38,7 +38,7 @@ function J=FIMPredNoClutter(H,F,R,Q,PD)
 JPost=FIMPostNoClutter(H,F,R,Q,PD);
 
 if(rcond(Q)<1e-15)
-   J=inv(Q+F*inv(JPost)*F');
+    J=inv(Q+F*inv(JPost)*F');
 else
     QInv=inv(Q);
     D11=F'*QInv*F;

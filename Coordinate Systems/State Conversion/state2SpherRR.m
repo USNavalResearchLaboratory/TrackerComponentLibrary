@@ -6,53 +6,55 @@ function z=state2SpherRR(xTar,systemType,useHalfRange,xTx,xRx,M)
 %               bistatic range can be used when considering bistatic
 %               measurements in a local spherical coordinate system.
 %
-%INPUTS:    xTar A xDimXN matrix of N target states consisting of 3D
-%                position and velocity components in the order
-%                xTar=[xPosition;xVelocity] and possible other components,
-%                which will be ignored.
-%        systemType An optional parameter specifying the axes from which
-%                   the angles are measured. Possible vaues are
-%                   0 (The default if omitted) Azimuth is measured
-%                     counterclockwise from the x-axis in the x-y plane.
-%                     Elevation is measured up from the x-y plane (towards
-%                     the z-axis). This is consistent with common spherical
-%                     coordinate systems for specifying longitude (azimuth)
-%                     and geocentric latitude (elevation).
-%                   1 Azimuth is measured counterclockwise from the z-axis
-%                     in the z-x plane. Elevation is measured up from the
-%                     z-x plane (towards the y-axis). This is consistent
-%                     with some spherical coordinate systems that use the z
-%                     axis as the boresight direction of the radar.
-%   useHalfRange A boolean value specifying whether the bistatic range
-%                value should be divided by two. This normally comes up
-%                when operating in monostatic mode, so that the range
-%                reported is a one-way range. The default if this parameter
-%                is not provided is true.
-%           xTx  An xTxDimXN matrix of the states of the transmitters
-%                consisting of stacked 3D position and velocity components.
-%                Other components will be ignored. If this parameter is
-%                omitted, the transmitters are assumed to be stationary at
-%                the origin. If only a single vector is passed, then the
-%                transmitter state is assumed the same for all of the
-%                target states being converted.
-%           xRx  An xRxDimXN matrix of the states of the receivers
-%                consisting of stacked 3D position and velocity components.
-%                Other components will be ignored. If this parameter is
-%                omitted, the receivers are assumed to be stationary at
-%                the origin. If only a single vector is passed, then the
-%                receiver state is assumed the same for all of the target
-%                states being converted.
-%           M    A 3X3XN hypermatrix of the rotation matrices to go from 
-%                the alignment of the global coordinate system to that at
-%                the receiver. The z-axis of the local coordinate system
-%                of the receiver is the pointing direction of the receiver.
-%                If omitted, then it is assumed that the local coordinate
-%                system is aligned with the global and M=eye(3) --the
-%                identity matrix is used. If only a signle 3X3 matrix is
-%                passed, then is is assumed to be the same for all of the
-%                N conversions.
+%INPUTS: xTar A xDimXN matrix of N target states consisting of 3D position
+%             and velocity components in the order
+%             xTar=[xPosition;xVelocity] and possible other components,
+%             which will be ignored.
+%  systemType An optional parameter specifying the axes from which
+%             the angles are measured. Possible vaues are
+%             0 (The default if omitted) Azimuth is measured
+%               counterclockwise from the x-axis in the x-y plane.
+%               Elevation is measured up from the x-y plane (towards the
+%               z-axis). This is consistent with common spherical
+%               coordinate systems for specifying longitude (azimuth)
+%               and geocentric latitude (elevation).
+%             1 Azimuth is measured counterclockwise from the z-axis in
+%               the z-x plane. Elevation is measured up from the z-x plane
+%               (towards the y-axis). This is consistent with some
+%               spherical coordinate systems that use the z axis as
+%               the boresight direction of the radar.
+% useHalfRange An optional boolean value specifying whether the bistatic
+%             (round-trip) range value has been divided by two. This
+%             normally comes up when operating in monostatic mode (the most
+%             common type of spherical coordinate system), so that the
+%             range reported is a one-way range (or just half a bistatic
+%             range). The default if this parameter is not provided is
+%             false if xTx is provided and true if it is omitted
+%             (monostatic).
+%         xTx An xTxDimXN matrix of the states of the transmitters
+%             consisting of stacked 3D position and velocity components.
+%             Other components will be ignored. If this parameter is
+%             omitted, the transmitters are assumed to be stationary at the
+%             origin. If only a single vector is passed, then the
+%             transmitter state is assumed the same for all of the target
+%             states being converted.
+%         xRx An xRxDimXN matrix of the states of the receivers
+%             consisting of stacked 3D position and velocity components.
+%             Other components will be ignored. If this parameter is
+%             omitted, the receivers are assumed to be stationary at the
+%             origin. If only a single vector is passed, then the
+%             receiver state is assumed the same for all of the target
+%             states being converted.
+%           M A 3X3XN hypermatrix of the rotation matrices to go from the
+%             alignment of the global coordinate system to that at the
+%             receiver. The z-axis of the local coordinate system of the
+%             the receiver is the pointing direction of the receiver. If
+%             omitted, then it is assumed that the local coordinate system
+%             is aligned with the global and M=eye(3) --the identity matrix
+%             is used. If only a single 3X3 matrix is passed, then is is
+%             assumed to be the same for all of the N conversions.
 %
-%OUTPUTS: z   A 4XN matrix of the target states in xTar converted into
+%OUTPUTS:   z A 4XN matrix of the target states in xTar converted into
 %             bistatic spherical and bistatic range rate coordinates. If
 %             useHalfRange=true, then the r component is half the bistatic
 %             range and the range rate is correspondingly halved.
@@ -69,29 +71,39 @@ function z=state2SpherRR(xTar,systemType,useHalfRange,xTx,xRx,M)
 
 N=size(xTar,2);
 
-if(nargin<6)
+if(nargin<6||isempty(M))
     M=repmat(eye(3),[1,1,N]);
-elseif(size(M,3)==1)
+elseif(size(M,3)==1&&N>1)
     M=repmat(M,[1,1,N]);
 end
 
+if(nargin<4)
+    xTx=[];
+end
+
 if(nargin<5)
+    xRx=[];
+end
+
+if(isempty(xTx)&&(nargin<3||isempty(useHalfRange)))
+    useHalfRange=true;
+elseif(nargin<3||isempty(useHalfRange))
+    useHalfRange=false;
+end
+
+if(nargin<5||isempty(xRx))
     xRx=zeros(6,N);
-elseif(size(xRx,2)==1)
+elseif(size(xRx,2)==1&&N>1)
     xRx=repmat(xRx,[1,N]);
 end
 
-if(nargin<4)
+if(nargin<4||isempty(xTx))
     xTx=zeros(6,N);
-elseif(size(xTx,2)==1)
+elseif(size(xTx,2)==1&&N>1)
     xTx=repmat(xTx,[1,N]);
 end
 
-if(nargin<3)
-   useHalfRange=true; 
-end
-
-if(nargin<2)
+if(nargin<2||isempty(systemType))
     systemType=0;
 end
 
@@ -99,10 +111,10 @@ end
 z=zeros(4,N);
 
 %Convert the positions.
-z(1:3,:)=Cart2Sphere(xTar(1:3,:),systemType,useHalfRange,xTx(1:3,:),xRx(1:3,:),M);
+z(1:3,:)=Cart2Sphere(xTar,systemType,useHalfRange,xTx,xRx,M);
 
 %Compute the bistatic range rates.
-z(4,:)=getRangeRate(xTar,useHalfRange,xTx,xRx);
+z(4,:)=getRangeRate(xTar(1:6,:),useHalfRange,xTx,xRx);
 end
 
 %LICENSE:

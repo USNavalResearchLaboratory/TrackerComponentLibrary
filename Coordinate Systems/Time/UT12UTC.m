@@ -1,5 +1,5 @@
 function [UTC1,UTC2]=UT12UTC(UT11,UT12,deltaUTCUT1)
-%%UT12UTC  Convert from UT1, which is a nonuniform timescale based on the
+%%UT12UTC Convert from UT1, which is a nonuniform timescale based on the
 %         rotation rate of the Earth, to Coordinated Universal Time (UTC),
 %         which is the "standard" time that pretty much every country uses
 %         (the time zone is that of the United Kingdom) including
@@ -11,7 +11,7 @@ function [UTC1,UTC2]=UT12UTC(UT11,UT12,deltaUTCUT1)
 %                  terms. The date is broken into two parts to provide
 %                  more bits of precision. It does not matter how the date
 %                  is split.
-%     deltaUTCUT1  An optional parameter specifying the offset between UTC
+%      deltaUTCUT1 An optional parameter specifying the offset between UTC
 %                  and UT1 in seconds. If this parameter is omitted, then
 %                  the value of the function getEOP will be used and
 %                  iterations will be performed, because the correct

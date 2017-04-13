@@ -1,7 +1,7 @@
 classdef NormInvGaussD
-%Function related to the multivariate normal inverse Gaussian distribution.
-%This distribution has been used in applications related to synthetic
-%aperture radar (SAR), as in [1].
+%%NORMINVGAUSSD Function related to the multivariate normal inverse
+%    Gaussian distribution. This distribution has been used in applications
+%    related to synthetic aperture radar (SAR), as in [1].
 %Implemented methods are: mean, cov, PDF, rand
 %
 %REFERENCES:
@@ -206,7 +206,7 @@ methods(Static)
         lambdaZ=delta;
         muZ=delta/sqrt(alpha^2-beta'*Gamma*beta);
         for curVal=1:N
-            Z=invGaussianD.rand(1,muZ,lambdaZ);
+            Z=InvGaussianD.rand(1,muZ,lambdaZ);
             Y=randn(numDim,1);
 
             X(:,curVal)=mu+Z*Gamma*beta+sqrt(Z)*SGamma*Y;

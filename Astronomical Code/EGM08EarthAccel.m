@@ -9,116 +9,101 @@ function [accel,C,S]=EGM08EarthAccel(rVec,accelOptions,M,TT1,TT2,effectsToInclud
 %            drift of the coefficients over time. The EGM2008 acceleration
 %            model is used for parameters.
 %
-%INPUTS:         rVec A 3XN (or 6XN) set of vectors of position (and
-%                     velocity) in meters in the same coordinate system as
-%                     desired for the output as specified by the parameter
-%                     accelOptions. This is the set of N positions where
-%                     the acceleration due to he Earth's gravity is
-%                     desired. The velocity component is only required if
-%                     accelOptions specified an Earth-fixed coordinate
-%                     system. Specifically, if accelOptions is 0, 3, or 5.
-%                     This cannot be all zeros.
-%        accelOptions An optional parameter indicating the coordinate
-%                     system and options for the acceleration. Possible
-%                     values are
-%                     0 (The default if omitted) The acceleration is found
-%                       in a generic ECEF coordinate system using either a
-%                       Keplerian model (if M=1) the J2 gravitational
-%                       model (if M=2, the default) with J2 given by the
-%                       corresponding coefficient from the zero-tide
-%                       EGM2008 model without correcting for polar motion,
-%                       other tides, or the drift of the coefficients over
-%                       time. It is assumed that the rotation axis is
-%                       aligned with the z axis. Being an accelerating
-%                       coordinate system, Newtonian corrections for the
-%                       Coriolis effect are used. Values M>=3 are invalid.
-%                       No Earth orientation parameters are used. The time
-%                       is also not used and neither is the
-%                       effectsToInclude nor C and S.
-%                     1 The same as 0 but in a generic Earth-centered
-%                       inertial coordinate system, meaning that the
-%                       Coriolis effect is not taken into account.
-%                     2 The acceleration is found using the first M
-%                       elements of the EGM2008 model in GCRS coordinates.
-%                       The additional effects accounted for (beyond just
-%                       using a zero-tide model) are determined by the 
-%                       effectsToInclude boolean vector. If C and S are not
-%                       provided, then the getEGMGravCoeffs function is
-%                       used. Earth orientation parameters are used,
-%                       including the length-of-day (LOD) parameter for the
-%                       rotation rate of the Earth.
-%                     3 The same as 2 but in ITRS coordinates, meaning that
-%                       a Newtonian Coriolis term is added to the
-%                       coefficients, because it is an accelerating
-%                       coordinate system.
-%                   M  The number of terms in the EGM2008 model to include.
-%                      If accelOptions=0 or accelOptions=1, then M chooses
-%                      between Keplerian, J2, and J4 models. Otherwise, the
-%                      number indicates the highest order of the full
-%                      EGM2008 model used. If omitted, or an empty matrix
-%                      is passed, a default value of 2 is used. If Inf or
-%                      another number larger than the highest coefficient
-%                      order in the EGM2008 model is passed, then the total
-%                      number of coefficients in the EGM2008 model is used.
-%             TT1,TT2  Two parts of a Julian date given in terrestrial time
-%                      (TT). The units of the date are days. The full date
-%                      is the sum of both terms. The date is broken into
-%                      two parts to provide more bits of precision. It does
-%                      not matter how the date is split. The date is only
-%                      used for accelOptions=2-3. Otherwise it can be
-%                      omitted or empty matrices can be passed.
-%     effectsToInclude A boolean vector indicating which effects are to be
-%                      included (if accelOptions>1). If an element of the
-%                      vector is 1, that means that the effect will be
-%                      taken into account. If omitted, the default is 
-%                      [1;1;0;0;0]; The elements of the vector are:
-%                      1) The drift of the low-order coefficients over
-%                         time, as given by the getGravCoeffOffset4Drift
-%                         function.
-%                      2) The effects of polar motion on the coefficients,
-%                         as given by the getAdjustedGravCoeffs4PolarMotion
-%                         function. They are added after tidal effects (if
-%                         any).
-%                      3) The effects of solid Earth tides as given by the 
-%                         gravSolidTideOffset function.
-%                      4) The effects of pole tides as given by the
-%                         gravPoleTideOffset function.
-%                      5) The effects of ocean tides as given by the
-%                         gravOceanTideOffset function.
-%                EOP   A structure containing the Earth orientation
-%                      parameters at the given time. If omitted or an empty
-%                      matrix is passed, the values from the getEOP
-%                      function are used. These are not used if
-%                      accelOptions=0 or 1. The elements of the structure
-%                      are:
-%                       xpyp    These are the polar motion coordinates in
-%                               radians including the effects of tides and
-%                               librations.
-%                       dXdY    The celestial pole offsets with respect to
-%                               the IAU 2006/2000A precession/nutation
-%                               model in radians.
-%                       deltaTTUT1 The difference between TT and UT1 in
-%                               seconds
-%                       LOD     The difference between the length of the
-%                               day using TT and the length of the day in
-%                               UT1. This is an instantaneous parameter (a
-%                               derivative). The units are seconds.
-%               C, S   Optionally, the TIDE FREE EGM2008 coefficients with
-%                      adjType=0 (the default) as obtained from the
-%                      getEGMGravCoeffs function. Passing these saves a 
-%                      call to the getEGMGravCoeffs function and speeds up
-%                      multiple calls to this function. These parameters
-%                      are ignored if accelOptions=0 or 1.
+%INPUTS: rVec A 3XN (or 6XN) set of vectors of position (and velocity) in
+%             meters in the same coordinate system as desired for the
+%             output as specified by the parameter accelOptions. This is
+%             the set of N positions where the acceleration due to the
+%             Earth's gravity is desired. The velocity component is only
+%             required if accelOptions specified an Earth-fixed coordinate
+%             system. Specifically, if accelOptions is 0, 3, or 5. This
+%             cannot be all zeros.
+% accelOptions An optional parameter indicating the coordinate system and
+%             options for the acceleration. Possible values are
+%             0 (The default if omitted) The acceleration is found in a
+%               generic ECEF coordinate system using either a Keplerian
+%               model (if M=1) the J2 gravitational model (if M=2, the
+%               default) with J2 given by the corresponding coefficient
+%               from the zero-tide EGM2008 model without correcting for
+%               polar motion, other tides, or the drift of the coefficients
+%               over time. It is assumed that the rotation axis is aligned
+%               with the z axis. Being an accelerating coordinate system,
+%               Newtonian corrections for the Coriolis effect are used.
+%               Values M>=3 are invalid. No Earth orientation parameters 
+%               are used. The time is also not used and neither is the
+%               effectsToInclude nor C and S.
+%             1 The same as 0 but in a generic Earth-centered inertial
+%               coordinate system, meaning that the Coriolis effect is not
+%               taken into account.
+%             2 The acceleration is found using the first M elements of the
+%               EGM2008 model in GCRS coordinates. The additional effects
+%               accounted for (beyond just using a zero-tide model) are
+%               determined by the effectsToInclude boolean vector. If C and
+%               S are not provided, then the getEGMGravCoeffs function is
+%               used. Earth orientation parameters are used, including the
+%               length-of-day (LOD) parameter for the rotation rate of the
+%               Earth.
+%             3 The same as 2 but in ITRS coordinates, meaning that a
+%               Newtonian Coriolis term is added to the coefficients,
+%               because it is an accelerating coordinate system.
+%           M The number of terms in the EGM2008 model to include. If
+%             accelOptions=0 or accelOptions=1, then M chooses between
+%             Keplerian, J2, and J4 models. Otherwise, the number indicates
+%             the highest order of the full EGM2008 model used. If omitted,
+%             or an empty matrix is passed, a default value of 2 is used.
+%             If Inf or another number larger than the highest coefficient
+%             order in the EGM2008 model is passed, then the total number
+%             of coefficients in the EGM2008 model is used.
+%     TT1,TT2 Two parts of a Julian date given in terrestrial time (TT).
+%             The units of the date are days. The full date is the sum of
+%             both terms. The date is broken into two parts to provide more
+%             bits of precision. It does not matter how the date is split.
+%             The date is only used for accelOptions=2-3. Otherwise it can
+%             be omitted or empty matrices can be passed.
+% effectsToInclude A boolean vector indicating which effects are to be
+%             included (if accelOptions>1). If an element of the vector is
+%             1, that means that the effect will be taken into account. If
+%             omitted, the default is [1;1;0;0;0]; The elements of the
+%             vector are:
+%             1) The drift of the low-order coefficients over time, as
+%                given by the getGravCoeffOffset4Drift function.
+%             2) The effects of polar motion on the coefficients, as given
+%                by the getAdjustedGravCoeffs4PolarMotion function. They
+%                are added after tidal effects (if any).
+%             3) The effects of solid Earth tides as given by the 
+%                gravSolidTideOffset function.
+%             4) The effects of pole tides as given by the
+%                gravPoleTideOffset function.
+%             5) The effects of ocean tides as given by the
+%                gravOceanTideOffset function.
+%         EOP A structure containing the Earth orientation parameters at
+%             the given time. If omitted or an empty matrix is passed, the
+%             values from the getEOP function are used. These are not used
+%             if accelOptions=0 or 1. The elements of the structure are:
+%             xpyp These are the polar motion coordinates in radians
+%                  including the effects of tides and librations.
+%             dXdY The celestial pole offsets with respect to the IAU
+%                  2006/2000A precession/nutation model in radians.
+%             deltaTTUT1 The difference between TT and UT1 in seconds
+%              LOD The difference between the length of the day using TT
+%                  and the length of the day in UT1. This is an
+%                  instantaneous parameter (a derivative). The units are
+%                  seconds.
+%              C,S Optionally, the TIDE FREE EGM2008 coefficients with
+%                  adjType=0 (the default) as obtained from the
+%                  getEGMGravCoeffs function. Passing these saves a call to
+%                  the getEGMGravCoeffs function and speeds up multiple
+%                  calls to this function. These parameters are ignored if
+%                  accelOptions=0 or 1.
 %
-%OUTPUTS: accel  A 3XN matrix of the N accelerations due to gravity of the
-%                Earth in meters per second squared in the specified
-%                coordinate system (one for each input rVec).
-%           C,S  Values of the tide-free EGM2008 spherical harmonic
-%                coefficients that can be passed to subsequent calls of
-%                this function with the same options). Note that C and S
-%                are modified (and then changed back), so care must be
-%                taken with multithreading. Emptyt matrices are returned if
-%                accelOptions=0 or accelOptions=1;
+%OUTPUTS: accel A 3XN matrix of the N accelerations due to gravity of the
+%               Earth in meters per second squared in the specified
+%               coordinate system (one for each input rVec).
+%           C,S Values of the tide-free EGM2008 spherical harmonic
+%               coefficients that can be passed to subsequent calls of this
+%               function with the same options). Note that C and S are
+%               modified (and then changed back), so care must be taken
+%               with multithreading. Emptyt matrices are returned if
+%               accelOptions=0 or accelOptions=1;
 %
 %For simple models, many parameters can be omitted.
 %The J2 model in an ECEF system can be obtained using
@@ -180,7 +165,7 @@ if(accelOptions==0||accelOptions==1)
         case 1%Simple Keplerian dynamics.
             accel=aNewton;
         case 2%The J2 dynamic model
-            %Putting this in explicitely saves a call to getEGMGravCoeffs
+            %Putting this in explicitly saves a call to getEGMGravCoeffs
             %for just one parameter. This is the zero-tide value.
             C20Bar=-0.484169317366974e-03;
             C20=C20Bar*sqrt(5);
@@ -233,10 +218,6 @@ end
 if(nargin<6)
     effectsToInclude=[1;1;0;0;0];
 end
-
-%Duplicate C and S to add all of the offsets.
-COffset=C.duplicate();
-SOffset=S.duplicate();
 
 %The second one is added after all of the others.
 numDelta=sum(effectsToInclude)-effectsToInclude(2);

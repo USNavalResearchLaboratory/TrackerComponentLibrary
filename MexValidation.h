@@ -4,7 +4,10 @@
  *
  *The following functions that can be used in both C and C++ programs:
  *checkRealDoubleArray      Gives an error if an array is not composed of
- *                          real doubles.
+ *                          real doubles and has more than two indices.
+ *checkRealDoubleHypermatrix This is the same as checkRealDoubleArray
+ *                          except it does not throw an error if the matrix
+ *                          has more than two indices.
  *verifySizeReal            Verify that a Matlab matrix is 2D, has the
  *                          desired dimensions, and is real.
  *convert2DReal2DoubleMat   Convert a Matlab matrix of real values for
@@ -200,6 +203,7 @@ double fMin(double a,double b) {
 #endif
 
 void checkRealDoubleArray(const mxArray * const val);
+void checkRealDoubleHypermatrix(const mxArray * const val);
 void verifySizeReal(const size_t M, const size_t N, const mxArray * const val);
 mxArray *convert2DReal2DoubleMat(const mxArray * const val);
 mxArray *convert2DReal2SignedIntMat(const mxArray * const val);
@@ -239,6 +243,24 @@ void checkRealDoubleArray(const mxArray * const val){
     
     if(mxGetNumberOfDimensions(val)>2){
         mexErrMsgTxt("A parameter has too many dimensions.");
+    }
+    
+    if(mxGetClassID(val)!=mxDOUBLE_CLASS) {
+        mexErrMsgTxt("A parameter that should be a real double is of a different data type.");
+    }
+}
+
+void checkRealDoubleHypermatrix(const mxArray * const val){
+    if(mxIsComplex(val)==true) {
+        mexErrMsgTxt("A parameter that should be real matrix of doubles has complex components.");
+    }
+    
+    if(mxIsEmpty(val)) {
+        mexErrMsgTxt("A parameter that should be real matrix of doubles is empty.");
+    }
+    
+    if(mxGetNumberOfDimensions(val)<1){
+        mexErrMsgTxt("A parameter has too few dimensions.");
     }
     
     if(mxGetClassID(val)!=mxDOUBLE_CLASS) {

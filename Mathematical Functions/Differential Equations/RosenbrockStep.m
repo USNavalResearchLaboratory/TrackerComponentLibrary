@@ -32,7 +32,7 @@ function [xPredMain,xPredSubsid,k,orders]=RosenbrockStep(xCur,tCur,f,deltaT,fCur
 %           tCur    The time at which xCur is taken.
 %           f       f(x,t) returns the derivative of x with respect to time
 %                   taken at time t.
-%           fCur    The value f(xCur,tCur). This is explicitely provided
+%           fCur    The value f(xCur,tCur). This is explicitly provided
 %                   rather than just using the function f, because when
 %                   performing multiple steps, sometimes the value is
 %                   computed while computing xPredSubsid and can thus be

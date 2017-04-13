@@ -1,5 +1,5 @@
-function [V1Comp,V2Comp,alpha]=orbVelDet2Pt(r1Val,r2Val,deltaT,angParam,isECEF,longWay,GM)
-%%ORBVELDET2PT  Solve Lambert's problem. That is, given two position
+function [V1Comp,V2Comp,alpha]=orbVelDet2Pt(r1Val,r2Val,deltaT,angParam,isECEF,longWay,GM,EarthRotRate)
+%%ORBVELDET2PT Solve Lambert's problem. That is, given two position
 %            measurements of a ballistic (orbital) object and the time
 %            difference of the measurements, determine the velocities of
 %            the object at each of the two points assuming a Keplerian
@@ -12,10 +12,9 @@ function [V1Comp,V2Comp,alpha]=orbVelDet2Pt(r1Val,r2Val,deltaT,angParam,isECEF,l
 %            (ECEF) coordinate system. That is, rather than being
 %            rigorously-defined in terms of precession, nutation, Earth
 %            orientation parameters, etc, the inputs are given in a generic
-%            ECEF coordinate system that rotates at a rate of
-%            Constants.EGM2008EarthRotationRate radians per second about
-%            the z-axis with respect to a generic Earth centered inertial
-%            (ECI) coordinate system.
+%            ECEF coordinate system that rotates at a rate of EarthRotRate
+%            radians per second about the z-axis with respect to a generic
+%            Earth centered inertial (ECI) coordinate system.
 %
 %INPUTS: The function can be called either as
 %        orbVelDet2Pt(r1Vec,r2Vec,deltaT,m,longWay,GM), where one passes
@@ -33,9 +32,9 @@ function [V1Comp,V2Comp,alpha]=orbVelDet2Pt(r1Val,r2Val,deltaT,angParam,isECEF,l
 %                    units are assumed meters. Alternatively, they can just
 %                    be a 1XN set of ranges to the target if non-Cartesian
 %                    outputs are desired.
-%           deltaT   The positive time in seconds between when r1Val and
+%             deltaT The positive time in seconds between when r1Val and
 %                    r2Val are measured.
-%          angParam  If r1Val and r2Val are just ranges, then angParam is
+%           angParam If r1Val and r2Val are just ranges, then angParam is
 %                    the angle between the two full position vectors.
 %                    angParam can be grater than 2*pi to indicate that a
 %                    full orbital revolution was made between the points.
@@ -47,14 +46,14 @@ function [V1Comp,V2Comp,alpha]=orbVelDet2Pt(r1Val,r2Val,deltaT,angParam,isECEF,l
 %                    there might not always be a solution to Lambert's
 %                    problem or there might be two solutions. If omitted, a
 %                    value of 0 is used.
-%            isECEF  An optional boolean value indicating whether the r1Val
+%             isECEF An optional boolean value indicating whether the r1Val
 %                    and r2Val are given in a generic ECEF coordinate
 %                    system and thus the outputs V1Comp and V2Comp are
 %                    given in ECEF coordinates. The default if omitted is
 %                    false. This must be false if r1Val and r2Val are just
 %                    ranges. If true, then r1Val and r2Val must be given in
 %                    units of meters and deltaT in units of seconds.
-%           longWay  This is only used if r1Val and r2Val are vectors (An
+%            longWay This is only used if r1Val and r2Val are vectors (An
 %                    empty matrix can be passed otherwise). longWay is an
 %                    An optional boolean value indicating whether the
 %                    orbital path goes the long way around during the time.
@@ -63,10 +62,14 @@ function [V1Comp,V2Comp,alpha]=orbVelDet2Pt(r1Val,r2Val,deltaT,angParam,isECEF,l
 %                    the period deltaT (longWay=false) or it could have
 %                    moved 359 degrees (longWay=true). The default if
 %                    omitted is false.
-%               GM   An optional value of the universal gravitational
+%                 GM An optional value of the universal gravitational
 %                    constant times the mass of the Earth. If omitted, the
 %                    value Constants.EGM2008GM is used. The units are
-%                    km^3/sec^2.
+%                    m^3/sec^2.
+%      EarthRotRate The rotation rate of the Earth in radians per second.
+%                   This parameter is only used if isECEF=true. If this
+%                   parameter is omitted or an empty matrix is passed, then
+%                   Constants.EGM2008EarthRotationRate is used.
 %
 %OUTPUTS: V1Comp If r1Val and r2Val scalar ranges, then V1Comp is a
 %                2XnumSol vector containing the radial and transverse
@@ -139,19 +142,23 @@ function [V1Comp,V2Comp,alpha]=orbVelDet2Pt(r1Val,r2Val,deltaT,angParam,isECEF,l
 
 N=size(r1Val,2);%The number of problems to solve.
 
-if(nargin<7)
+if(nargin<8||isempty(EarthRotRate))
+    EarthRotRate=Constants.EGM2008EarthRotationRate;
+end
+
+if(nargin<7||isempty(GM))
     GM=Constants.EGM2008GM;
 end
 
-if(nargin<6)
+if(nargin<6||isempty(longWay))
     longWay=false;
 end
 
-if(nargin<5)
+if(nargin<5||isempty(isECEF))
     isECEF=false;
 end
 
-if(nargin<4)
+if(nargin<4||isempty(angParam))
     m=0;
 else
     m=angParam;
@@ -159,7 +166,7 @@ end
     
 %If one value is provided, then return that directly.
 if(N==1)
-    [V1Comp,V2Comp,alpha]=solve1LambertProblem(r1Val,r2Val,deltaT,m,isECEF,longWay,GM);
+    [V1Comp,V2Comp,alpha]=solve1LambertProblem(r1Val,r2Val,deltaT,m,isECEF,longWay,GM,EarthRotRate);
     return;
 end
 
@@ -169,11 +176,11 @@ V1Comp=cell(N,1);
 V2Comp=cell(N,1);
 alpha=cell(N,1);
 for curProb=1:N
-    [V1Comp{curProb},V2Comp{curProb},alpha{curProb}]=solve1LambertProblem(r1Val(:,curProb),r2Val(:,curProb),deltaT,m,isECEF,longWay,GM);
+    [V1Comp{curProb},V2Comp{curProb},alpha{curProb}]=solve1LambertProblem(r1Val(:,curProb),r2Val(:,curProb),deltaT,m,isECEF,longWay,GM,EarthRotRate);
 end
 end
 
-function [V1Comp,V2Comp,alpha]=solve1LambertProblem(r1Val,r2Val,deltaT,m,isECEF,longWay,GM)
+function [V1Comp,V2Comp,alpha]=solve1LambertProblem(r1Val,r2Val,deltaT,m,isECEF,longWay,GM,omega)
 rDim=size(r1Val,1);
 usingVecInputs=(rDim==3);
 %The error tolerance for the convergence of x.
@@ -192,7 +199,7 @@ else
     r2=norm(r2Val);
     
     if(isECEF)%Rotate r2 into the ECI position
-        omega=Constants.EGM2008EarthRotationRate;%The rotation rate.
+        %omega is the rotation rate of the Earth.
         Omega=[0;0;1]*omega;%The z-axis is the axis of rotation.
         theta=deltaT*omega;%The angle rotated between detections.
         ECEF2ECI2=axisAng2RotMat([0;0;1],theta);%Rotation matrix.
@@ -274,7 +281,7 @@ function [V1Vec,V2Vec,alpha]=VALAMB(GM,r1,r2,theta,deltaT,epsVal)
 %
 %INPUTS: GM   The universal gravitational constant times the mass of the
 %             gravitating body (Earth). The units are The units are
-%             km^3/sec^2.
+%             m^3/sec^2.
 %       r1,r2 The scalar distances from the center of the massive body to
 %             the object at two times (meters).
 %       theta The angle in radians between the vectors that r1 and r2 are
@@ -383,7 +390,7 @@ function [x,xpl,N]=xlamb(m,q,qsqfm1,Tin,epsVal)
 %October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
 %Empirical values from Appendix B of Goodwin's paper/ Appendix D of the
-%report that are not all explicitely defined in the text.
+%report that are not all explicitly defined in the text.
 c0=1.7;
 c1=0.5;
 c2=0.03;

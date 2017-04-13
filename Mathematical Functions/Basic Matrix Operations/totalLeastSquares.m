@@ -27,8 +27,8 @@ function [X,E0,R0]=totalLeastSquares(A,B,d,t)
 %Chapter 6.3.1 of [1].
 %
 %REFERENCES:
-%G. H. Golub and C. F. Van Loan, Matrix Computations, 4th ed.
-%Baltimore: Johns Hopkins University Press, 2013.
+%[1] G. H. Golub and C. F. Van Loan, Matrix Computations, 4th ed.
+%    Baltimore: Johns Hopkins University Press, 2013.
 %
 %April 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

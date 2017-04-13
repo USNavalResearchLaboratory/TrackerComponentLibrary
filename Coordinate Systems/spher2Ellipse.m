@@ -41,11 +41,11 @@ function points=spher2Ellipse(points,a,f)
 %December 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<3)
+if(nargin<3||isempty(f))
     f=Constants.WGS84Flattening;
 end
 
-if(nargin<2)
+if(nargin<2||isempty(a))
     a=Constants.WGS84SemiMajorAxis;
 end
 
@@ -70,7 +70,7 @@ if(pDim<3)
         points=geodetLat;
     end
 else
-    points=Cart2Ellipse(spher2Cart(points),a,f);
+    points=Cart2Ellipse(spher2Cart(points),[],a,f);
 end
 end
 

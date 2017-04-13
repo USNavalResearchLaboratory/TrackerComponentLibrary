@@ -3,18 +3,17 @@ function [xi, w]=secondOrderCubPoints(numDim,w0)
 %           integration involving a multidimensional Gaussian probability
 %           density function (PDF).
 %
-%INPUTS:    numDim  An integer specifying the dimensionality of the points
-%                   to be generated.
-%               w0 An optional input parameter. This is the value of w(1),
-%                  the coefficient associated with a cubature point placed
-%                  at the origin. It is required that 1>w0>0. If omitted or
-%                  an empty matrix is passed, a default value of 1/3 is
-%                  used.
+%INPUTS: numDim An integer specifying the dimensionality of the points to
+%               be generated.
+%            w0 An optional input parameter. This is the value of w(1), the
+%               coefficient associated with a cubature point placed at the
+%               origin. It is required that 1>w0>0. If omitted or an empty
+%               matrix is passed, a default value of 1/3 is used.
 %
-%OUTPUTS:   xi   A numDim X numCubaturePoints matrix containing the
-%                cubature points. (Each "point" is a vector)
-%           w    A numCubaturePoints X 1 vector of the weights
-%                 associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %The algorithm implemented is for the spherical simplex sigma points from
 %Appendix III of [1]. It is modified because all of the quadrature points,

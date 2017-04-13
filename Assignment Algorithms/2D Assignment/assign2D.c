@@ -57,7 +57,7 @@
 /* string.h is needed for the memset function.*/
 #include <string.h>
 /*We need this for INFINITY to be defined, but if a compiler does not
- *support C99, then it must be explicitely defined.*/
+ *support C99, then it must be explicitly defined.*/
 #include <math.h>
 #ifndef INFINITY
 #include<stdint.h>

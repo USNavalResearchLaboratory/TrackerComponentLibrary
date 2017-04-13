@@ -1,4 +1,4 @@
-function corr=correlation(x,y)
+function [corr,offsets]=correlation(x,y,scaling)
 %%CORRELATION Estimate the correlation between two discrete sequences x and
 %             y. The strict definition of the autocorrelation is 
 %             r(m)=sum_{n=-Inf}^Inf x(n+m)*y(n)' m=0,+/-1, +/-2, etc.
@@ -15,12 +15,22 @@ function corr=correlation(x,y)
 %INPUTS: x A numDimX X 1 or a 1X numDimX sequence.
 %        y If y is omitted, then an autocorrelation of x is computed (the
 %          same as y=x. If y is provided, then is is a numDimY X1  or
-%          1 X numDimY sequence. If numDImX~=numDimY, the shorted sequence
+%          1 X numDimY sequence. If numDimX~=numDimY, the shorted sequence
 %          is zero-padded at the end to make tham have equal length.
+%  scaling This optionally specifies how the output is normalized. Possible
+%          values are:
+%          'none' (The default if omitted or an empty matrix is passed) No
+%                 scaling is performed.
+%          'biased' The output corr is divided by max(numDimX,numDimY).
+%          'unbiased' The ith element of the output corr is divided by
+%                     max(numDimX,numDimY)+abs(offets(i))
 %
 %OUTPUTS: corr The (2*N-1) X 1 autocorrelation vector such that if
 %              N=max(numDimX,numDimY), corr(N+k) is the correlation of an
-%              offset of k in the sequence.
+%              offset of k in the sequence for k being positive and
+%              negative.
+%      offsets The (2*N-1) X 1 set of offsets associated with the values in
+%              corr - positive and negative.
 %
 %As discussed in Chapter 2.9.3 of [1], discrete correlations can be easily
 %expressed in terms of convolutions. As mentioned in Chapter 5.7 of [1],
@@ -54,8 +64,12 @@ function corr=correlation(x,y)
 %December 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<2)
+if(nargin<2||isempty(y))
     y=x;%Compute an autocorrelation.
+end
+
+if(nargin<3||isempty(scaling))
+   scaling='none';
 end
 
 numX=length(x);
@@ -75,6 +89,18 @@ r=ifft(fft(x(:),FFTLength).*conj(fft(y(:),FFTLength)));
 %Keeps values corresponding to lags -(numEls-1):(numEls-1)
 corr=[r((end-numEls+2):end);r(1:numEls)];
 
+maxLag=fix((2*numEls-1)/2);
+offsets=(-(maxLag):maxLag)';
+
+switch(scaling)
+    case 'none'
+    case 'biased'
+        corr=corr/numEls;
+    case 'unbiased'
+        corr=corr./(numEls-abs(offsets));
+    otherwise
+        error('Unknown scaling specified')     
+end
 end
 
 %LICENSE:

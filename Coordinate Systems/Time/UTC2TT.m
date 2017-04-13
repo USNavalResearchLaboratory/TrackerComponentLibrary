@@ -1,18 +1,17 @@
 function [Jul1,Jul2]=UTC2TT(Jul1,Jul2)
-%%UTC2TT   Convert from universal coordinated time (UTC) given as a
-%          two-part pseudo-Julian date to terrestrial time (TT),
-%          represented as a two-part Julian date.
+%%UTC2TT Convert from universal coordinated time (UTC) given as a two-part
+%        pseudo-Julian date to terrestrial time (TT), represented as a two-
+%        part Julian date.
 %
-%INPUTS:    Jul1, Jul2  Matrices of two parts of a pseudo-Julian date given
-%                       in UTC. The units of the date are days. The full
-%                       date is the sum of both terms. The date is broken
-%                       into two parts to provide more bits of precision.
-%                       It does not matter how the date is split.
-%                       Corresponding elements in each matrix are times
-%                       that are converted.
+%INPUTS: Jul1, Jul2 Matrices of two parts of a pseudo-Julian date given in
+%                   UTC. The units of the date are days. The full date is
+%                   the sum of both terms. The date is broken into two
+%                   parts to provide more bits of precision. It does not
+%                   matter how the date is split. Corresponding elements in
+%                   each matrix are times that are converted.
 %
-%OUTPUTS:   Jul1, Jul2  The time as a Julian date in TT with the same
-%                       dimensionalities as the input sets of dates.
+%OUTPUTS: Jul1, Jul2 The time as a Julian date in TT with the same
+%                    dimensionalities as the input sets of dates.
 %
 %The UTC date is only pseudo-Julian, because there is not a fixed number
 %of seconds in a Julian day. The convention used in the IAU standard is

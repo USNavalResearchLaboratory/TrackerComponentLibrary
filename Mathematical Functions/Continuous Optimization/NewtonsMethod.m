@@ -3,7 +3,7 @@ function [xMin,fMin,exitCode]=NewtonsMethod(f,fHess,x0,epsilon,deltaTestDist,del
 %               method. Unlike quasiNetwonBFGS, the Hessian matrix must be
 %               provided. However, while quasiNetwonBFGS can only minimize
 %               a function, NewtonsMethod can also zero a vector that is
-%               given as the "gradient" in which case the "HEssian" is a
+%               given as the "gradient" in which case the "Hessian" is a
 %               Jacobian. While a real Hessian must be symmetric, this
 %               Jacobian need not be symmetric.
 %
@@ -11,17 +11,19 @@ function [xMin,fMin,exitCode]=NewtonsMethod(f,fHess,x0,epsilon,deltaTestDist,del
 %                     the minimization is to be performed. The function
 %                     [fVal,grad,Hess]=f(x) takes the NX1 x vector returns
 %                     the real scalar function value fVal, and the gradient
-%                     grad, at the point x.
+%                     grad, at the point x. If the Hessian is not given
+%                     separately by fHess, then it can be given as a third
+%                     output and fHess set to an empty matrix.
 %               fHess A handle to the Hessian of the function f. This is
-%                     not taken to be an output of f as the Hessian is not
-%                     needed as often as the gradient and function value.
-%                     This must be positive definite for the algorithm to
-%                     work. As shown in the examplce code below, the
-%                     "Hessian" can actually be a (non-symmetric) Jacobian
-%                     matrix when the optimization is meant to zero a
-%                     vector and not minimize a function. If an empty
-%                     matrix is passed, then it is assumed that f returns
-%                     the Hessian after the function value and gradient.
+%                     only needed if f does not return the Hessian ass a
+%                     third output. This must be positive definite for the
+%                     algorithm to work. As shown in the example code
+%                     below, the "Hessian" can actually be a (non-
+%                     symmetric) Jacobian matrix when the optimization is
+%                     meant to zero a vector and not minimize a function.
+%                     If an empty matrix is passed, then it is assumed that
+%                     f returns the Hessian after the function value and
+%                     gradient.
 %                  x0 The NX1-dimensional point from which the
 %                     minimization starts.
 %             epsilon The parameter determining the accuracy of the
@@ -264,7 +266,7 @@ function [xMin,fMin,exitCode]=NewtonsMethod(f,fHess,x0,epsilon,deltaTestDist,del
                 return;
             end
             
-            %Get the descen direction, taking advantage of the
+            %Get the descent direction, taking advantage of the
             %lower-triangular structure of L.
             D=-linsolve(L',linsolve(L,gradFPrev,optsLT),optsUT);
         else

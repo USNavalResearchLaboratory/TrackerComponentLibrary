@@ -3,56 +3,56 @@ function [xi,w]=fifthOrderCubPoints(numDim,algorithm)
 %           involving a multidimensional Gaussian probability density
 %           function (PDF).
 %
-%INPUTS:    numDim  An integer specifying the dimensionality of the points
-%                   to be generated. numDim>1.
-%         algorithm An optional parameter specifying the algorithm to be
-%                   used to generate the points. Possible values are:
-%                   0 (The default if omitted or an empty matrix is passed
-%                     and numDim~=2)
-%                     Use algorithm E_n^{r^2} 5-3 on page 317 of [1],
-%                     requires 2^numDim+2*numDim points and numDim>=3.
-%                   1 Use formula I of [2], where some typos were corrected
-%                     by referring back to [3]. Note that for numDim>7,
-%                     some of the weights produced by the formula will be
-%                     negative. It is required that numDim>=4.This formula
-%                     uses fewer points than algorithm 1.
-%                   2 (The default if numDim==2) Use the cubature points
-%                     first mentioned in [4], implemented as described in
-%                     Section 6.2.3 of [5]. The points are labeled as
-%                     being fourth-order. However, due to their symmetry,
-%                     they are actually fifth-order. The points are also
-%                     given in [6]. numDim>=2.
-%                   3 Formula E_n^{r^2} 5-2 on page 317 of [1],
-%                     2*numDim^2+1 points.
-%                   4 Formula E_n^{r^2} 5-4 on page 318 of [1],
-%                     2^(numDim+1)-1 points.
-%                   5 Formula E_n^{r^2} 5-5 on page 318 of [1], choosing
-%                     the upper signs, numDim*2^(numDim)+1 points
-%                   6 Formula E_n^{r^2} 5-6 on page 318 of [1],
-%                     2^numDim*(numDim+1) points, numDim>=5.
-%                   7 Formula E_2^{r^2} 5-1 on page 324 of [1], 7 points,
-%                     numDim=2.
-%                   8 Formula E_2^{r^2} 5-2 on page 324 of [1], 9 points,
-%                     numDim=2.
-%                   9 Formula E_3^{r^2} 5-1 on page 326 of [1], 13 points,
-%                     numDim=3.
-%                  10 Formula E_3^{r^2} 5-2 on page 327 of [1], 14 points,
-%                     numDim=3 (the first of two variants), corrected to
-%                     take the fully symmetric permutations of the second
-%                     vector.
-%                  11 Formula E_3^{r^2} 5-2 on page 327 of [1], 15 points,
-%                     numDim=3 (the second of two variants), corrected to
-%                     take the fully symmetric permutations of the second
-%                     vector.
-%                  12 Formula E_3^{r^2} 5-3 on page 326 of [1], 21 points,
-%                     numDim=3.
-%                  13 Formula E_4^{r^2} 5-1 on page 328 of [1], 25 points,
-%                     numDim=4.
+%INPUTS: numDim  An integer specifying the dimensionality of the points to
+%                be generated; numDim>=1.
+%      algorithm An optional parameter specifying the algorithm to be used
+%                to generate the points. Possible values are:
+%                0 (The default if omitted or an empty matrix is passed
+%                  and numDim~=2 and numDim~=1) Use algorithm E_n^{r^2} 5-3
+%                  on page 317 of [1], requires 2^numDim+2*numDim points
+%                  and numDim>=3.
+%                1 Use formula I of [2], where some typos were corrected by
+%                  referring back to [3]. Note that for numDim>7, some of
+%                  the weights produced by the formula will be negative. It
+%                  is required that numDim>=4.This formula uses fewer
+%                  points than algorithm 1.
+%                2 (The default if numDim==2) Use the cubature points first
+%                  mentioned in [4], implemented as described in Section
+%                  6.2.3 of [5]. The points are labeled as being fourth-
+%                  order. However, due to their symmetry, they are actually
+%                  fifth-order. The points are also given in [6].
+%                  numDim>=2.
+%                3 Formula E_n^{r^2} 5-2 on page 317 of [1],
+%                  2*numDim^2+1 points.
+%                4 Formula E_n^{r^2} 5-4 on page 318 of [1], 2^(numDim+1)-1
+%                  points.
+%                5 Formula E_n^{r^2} 5-5 on page 318 of [1], choosing the
+%                  upper signs, numDim*2^(numDim)+1 points
+%                6 Formula E_n^{r^2} 5-6 on page 318 of [1],
+%                  2^numDim*(numDim+1) points, numDim>=5.
+%                7 Formula E_2^{r^2} 5-1 on page 324 of [1], 7 points,
+%                  numDim=2.
+%                8 Formula E_2^{r^2} 5-2 on page 324 of [1], 9 points,
+%                  numDim=2.
+%                9 Formula E_3^{r^2} 5-1 on page 326 of [1], 13 points,
+%                  numDim=3.
+%               10 Formula E_3^{r^2} 5-2 on page 327 of [1], 14 points,
+%                  numDim=3 (the first of two variants), corrected to take
+%                  the fully symmetric permutations of the second vector.
+%               11 Formula E_3^{r^2} 5-2 on page 327 of [1], 15 points,
+%                  numDim=3 (the second of two variants), corrected to take
+%                  the fully symmetric permutations of the second vector.
+%               12 Formula E_3^{r^2} 5-3 on page 326 of [1], 21 points,
+%                  numDim=3.
+%               13 Formula E_4^{r^2} 5-1 on page 328 of [1], 25 points,
+%                  numDim=4.
+%               14 (The default if numDim==1) Call quadraturePoints1D(3), 3
+%                  points, numDim=1.
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %This function returns fifth order cubature points and weights of the
 %specified dimensions for Gaussian cubature integration over a normal
@@ -102,6 +102,8 @@ function [xi,w]=fifthOrderCubPoints(numDim,algorithm)
     if(nargin<2||isempty(algorithm))
         if(numDim==2)
             algorithm=2;
+        elseif(numDim==1)
+            algorithm=14;
         else
             algorithm=0;
         end
@@ -434,7 +436,12 @@ function [xi,w]=fifthOrderCubPoints(numDim,algorithm)
             
             %Scaling by sqrt(2) to make it for the normal 0-I distribution.
             xi=sqrt(2)*[zeros(4,1),fullSymPerms([r;r;0;0])];
-            w=[A;B*ones(24,1)];  
+            w=[A;B*ones(24,1)];
+        case 14%Use quadraturePoints1D(3) for 1D points
+            if(n~=1)
+                error('This algorithm requires numDim=1.')
+            end
+            [xi,w]=quadraturePoints1D(3);
         otherwise
             error('Unknown cubature algorithm selected')
     end

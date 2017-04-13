@@ -35,7 +35,7 @@ function val=HermitePoly(x,orders,V, type)
 %Gram-Charlier series A expansions, among other places.
 %
 %The algorithm implements Equation 1.7 of [1]. Note that when comparing to
-%the explicitely given formulae in [1], the solution for H_{22} differs.
+%the explicitly given formulae in [1], the solution for H_{22} differs.
 %The 2*z_1*z_2*mu_{11} term in the expression for H_{22} should actually be
 %4*z_1*z_2*mu_{11} as the product in the sum of Equation 1.7 involves two
 %binomial terms that equal one. Thus, it appears that this implementation

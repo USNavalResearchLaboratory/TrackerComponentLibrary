@@ -11,11 +11,10 @@ function curPoly=terms2String(termMat,xVar,maxDigits,complexFormat)
 %           n is the highest numbered used to index a variable in
 %           theString, or is numVars, whichever is larger. Note that there
 %           should not be repeated monomials.
-%      xVar An nX1 cell array where xVar{j} corresponds to the variable for
-%           coefficient aj in termMat. These are the names of the variables
-%           given as character strings, which are used by PHCpack to
-%           represent the unknown random variables. The names cannot being
-%           with a number.
+%      xVar An nX1 or 1Xn cell array where xVar{j} corresponds to the
+%           variable for coefficient aj in termMat. These are the names of
+%           the variables given as character strings. The names cannot
+%           begin with a number.
 % maxDigits The maximum number of digits to display for each number. The
 %           default if this parameter is omitted or an empty matrix is
 %           passed is 16, which is sufficient for floating point numbers.

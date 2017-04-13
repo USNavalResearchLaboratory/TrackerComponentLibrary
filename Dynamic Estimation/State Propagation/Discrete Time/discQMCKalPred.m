@@ -50,15 +50,15 @@ if(nargin<5||isempty(numSamples))
    numSamples=100; 
 end
 
-if(nargin<6)
+if(nargin<6||isempty(stateDiffTrans))
     stateDiffTrans=@(x)x;
 end
 
-if(nargin<7)
+if(nargin<7||isempty(stateAvgFun))
     stateAvgFun=@(x,w)calcMixtureMoments(x,w);
 end
 
-if(nargin<8)
+if(nargin<8||isempty(stateTrans))
     stateTrans=@(x)x;
 end
 

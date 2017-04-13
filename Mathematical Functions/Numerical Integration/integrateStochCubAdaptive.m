@@ -6,7 +6,7 @@ function [I,V,N]=integrateStochCubAdaptive(func,mu,SR,algorithm,epsVal2,NMax)
 %                rather than more traditional Monte Carlo appraoches.
 %
 %INPUTS: func The handle to the function that is multiplies by a Gaussian
-%             PDF before integration is performed. The function can talke a
+%             PDF before integration is performed. The function can take a
 %             multidimensional input, but must produce a real univariate
 %             output.
 %          mu The numDimX1 mean of the Gaussian PDF.

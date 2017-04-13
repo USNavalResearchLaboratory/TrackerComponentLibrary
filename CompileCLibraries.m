@@ -5,14 +5,14 @@
 %                   compiled mex function rather than the (usually slower)
 %                   Matlab code.
 %
-%The file has been sucessfully run on Mac OS X 10.10 and under Windows 7.1
-%with the Microsoft SDK installed. If a compiler used under Windows is
-%something other than the one installed with the Microsoft SDK or with
-%Microsoft Visual Studio, then the link command to create static libraries
-%for the IAU SOFA library and LibAIS might need to be changed. Under Mac OS
-%X/ *NIX, make files suffice to compile the libraries. Under Windows, this
-%file serves as a makefile. The proper shell environment variables under
-%Windows are taken from those used to setup Matlab's mex commmand.
+%The file has been sucessfully run on Mac OS X 10.11 and under Windows 10
+%with the Microsoft Visual Studio installed. If a compiler used under
+%Windows is something other than the one installed with Microsoft Visual
+%Studio, then the link command to create static libraries for the IAU SOFA
+%library and LibAIS might need to be changed. Under Mac OS X/ *NIX, make
+%files suffice to compile the libraries. Under Windows, this file serves as
+%a makefile. The proper shell environment variables under Windows are taken
+%from those used to setup Matlab's mex commmand.
 %
 %The option '-U__STDC_UTF_16__' is included in all of the mex commands to
 %get rid of an error that can occur when using older versions of Matlab
@@ -66,14 +66,14 @@ mex('-v','CFLAGS="$CFLAGS -std=c99"','-largeArrayDims','-U__STDC_UTF_16__','-out
 
 %Compile navigation code
 %Compile indirectGeodeticProb
-mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./3rd_Party_Libraries/GeographicLib-1.46/include','-I./Container Classes/Shared C++ Code/','-I./Mathematical Functions/Shared C++ Code/','./Navigation/indirectGeodeticProb.cpp','./Mathematical Functions/Shared C++ Code/wrapRangeCPP.cpp','./3rd_Party_Libraries/GeographicLib-1.46/src/Geodesic.cpp','./3rd_Party_Libraries/GeographicLib-1.46/src/GeodesicExact.cpp','./3rd_Party_Libraries/GeographicLib-1.46/src/GeodesicLine.cpp','./3rd_Party_Libraries/GeographicLib-1.46/src/GeodesicLineExact.cpp','./3rd_Party_Libraries/GeographicLib-1.46/src/EllipticFunction.cpp','./3rd_Party_Libraries/GeographicLib-1.46/src/Math.cpp','./3rd_Party_Libraries/GeographicLib-1.46/src/GeodesicExactC4.cpp');
+mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./3rd_Party_Libraries/GeographicLib-1.47/include','-I./Container Classes/Shared C++ Code/','-I./Mathematical Functions/Shared C++ Code/','./Navigation/indirectGeodeticProb.cpp','./Mathematical Functions/Shared C++ Code/wrapRangeCPP.cpp','./3rd_Party_Libraries/GeographicLib-1.47/src/Geodesic.cpp','./3rd_Party_Libraries/GeographicLib-1.47/src/GeodesicExact.cpp','./3rd_Party_Libraries/GeographicLib-1.47/src/GeodesicLine.cpp','./3rd_Party_Libraries/GeographicLib-1.47/src/GeodesicLineExact.cpp','./3rd_Party_Libraries/GeographicLib-1.47/src/EllipticFunction.cpp','./3rd_Party_Libraries/GeographicLib-1.47/src/Math.cpp','./3rd_Party_Libraries/GeographicLib-1.47/src/GeodesicExactC4.cpp');
 
 %Compile directGeodeticProb
-mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./3rd_Party_Libraries/GeographicLib-1.46/include','-I./Container Classes/Shared C++ Code/','-I./Mathematical Functions/Shared C++ Code/','./Navigation/directGeodeticProb.cpp','./Mathematical Functions/Shared C++ Code/wrapRangeCPP.cpp','./3rd_Party_Libraries/GeographicLib-1.46/src/Geodesic.cpp','./3rd_Party_Libraries/GeographicLib-1.46/src/GeodesicExact.cpp','./3rd_Party_Libraries/GeographicLib-1.46/src/GeodesicLine.cpp','./3rd_Party_Libraries/GeographicLib-1.46/src/GeodesicLineExact.cpp','./3rd_Party_Libraries/GeographicLib-1.46/src/EllipticFunction.cpp','./3rd_Party_Libraries/GeographicLib-1.46/src/Math.cpp','./3rd_Party_Libraries/GeographicLib-1.46/src/GeodesicExactC4.cpp');
+mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./3rd_Party_Libraries/GeographicLib-1.47/include','-I./Container Classes/Shared C++ Code/','-I./Mathematical Functions/Shared C++ Code/','./Navigation/directGeodeticProb.cpp','./Mathematical Functions/Shared C++ Code/wrapRangeCPP.cpp','./3rd_Party_Libraries/GeographicLib-1.47/src/Geodesic.cpp','./3rd_Party_Libraries/GeographicLib-1.47/src/GeodesicExact.cpp','./3rd_Party_Libraries/GeographicLib-1.47/src/GeodesicLine.cpp','./3rd_Party_Libraries/GeographicLib-1.47/src/GeodesicLineExact.cpp','./3rd_Party_Libraries/GeographicLib-1.47/src/EllipticFunction.cpp','./3rd_Party_Libraries/GeographicLib-1.47/src/Math.cpp','./3rd_Party_Libraries/GeographicLib-1.47/src/GeodesicExactC4.cpp');
 
 %Compile general coordinate system code.
-%Compile calcSpherJacob
-mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Coordinate Systems/Shared C++ Code/','./Coordinate Systems/Jacobians/calcSpherJacob.cpp','./Coordinate Systems/Shared C++ Code/calcSpherJacobCPP.cpp','./Coordinate Systems/Shared C++ Code/spher2CartCPP.cpp');
+%Compile spher2Cart
+mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Coordinate Systems/Shared C++ Code/','./Coordinate Systems/spher2Cart.cpp','./Coordinate Systems/Shared C++ Code/spher2CartCPP.cpp');
 %Compile getENUAxes
 mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Coordinate Systems/Shared C++ Code/','./Coordinate Systems/getENUAxes.cpp','./Coordinate Systems/Shared C++ Code/getENUAxesCPP.cpp');
 %Compile getEllipsHarmAxes
@@ -83,17 +83,25 @@ mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-
 %Compile Cart2Ellipse
 mex('-v','CFLAGS="$CFLAGS -std=c99"','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','./Coordinate Systems/Cart2Ellipse.c')
 
+%Compile coordinate system gradient code
+%Compile rangeGradient
+mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Coordinate Systems/Shared C++ Code/','./Coordinate Systems/Jacobians/Component Gradients/rangeGradient.cpp','./Coordinate Systems/Shared C++ Code/rangeGradientCPP.cpp');
+%Compile spherAngGradient
+mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Coordinate Systems/Shared C++ Code/','./Coordinate Systems/Jacobians/Component Gradients/spherAngGradient.cpp','./Coordinate Systems/Shared C++ Code/spherAngGradientCPP.cpp');
+%Compile calcSpherConvJacob
+mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Coordinate Systems/Shared C++ Code/','./Coordinate Systems/Jacobians/Converted Jacobians/calcSpherConvJacob.cpp','./Coordinate Systems/Shared C++ Code/calcSpherConvJacobCPP.cpp','./Coordinate Systems/Shared C++ Code/spher2CartCPP.cpp','./Coordinate Systems/Shared C++ Code/rangeGradientCPP.cpp','./Coordinate Systems/Shared C++ Code/spherAngGradientCPP.cpp');
+
 %Compile the relativity code
 mex('-v','CFLAGS="$CFLAGS -std=c99"','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Coordinate Systems/Relativity/Shared C Code/','./Coordinate Systems/Relativity/relVecAdd.c','./Coordinate Systems/Relativity/Shared C Code/relVecAddC.c');
 
 %Compile the magnetic and gravitational code.
 mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Container Classes/Shared C++ Code/','-I./Mathematical Functions/Shared C++ Code/','./Mathematical Functions/Polynomials/NALegendreCosRat.cpp','./Mathematical Functions/Shared C++ Code/NALegendreCosRatCPP.cpp');
 mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Container Classes/Shared C++ Code/','-I./Mathematical Functions/Shared C++ Code/','./Mathematical Functions/Polynomials/normHelmholtz.cpp','./Mathematical Functions/Shared C++ Code/normHelmholtzCPP.cpp');
-mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Container Classes/Shared C++ Code/','-I./Mathematical Functions/Shared C++ Code/','-I./Coordinate Systems/Shared C++ Code/','./Mathematical Functions/spherHarmonicEvalCPPInt.cpp','./Mathematical Functions/Shared C++ Code/spherHarmonicEvalCPP.cpp','./Mathematical Functions/Shared C++ Code/NALegendreCosRatCPP.cpp','./Mathematical Functions/Shared C++ Code/normHelmholtzCPP.cpp','./Coordinate Systems/Shared C++ Code/spher2CartCPP.cpp','./Coordinate Systems/Shared C++ Code/calcSpherJacobCPP.cpp');
+mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Container Classes/Shared C++ Code/','-I./Mathematical Functions/Shared C++ Code/','-I./Coordinate Systems/Shared C++ Code/','./Mathematical Functions/spherHarmonicEvalCPPInt.cpp','./Mathematical Functions/Shared C++ Code/spherHarmonicEvalCPP.cpp','./Mathematical Functions/Shared C++ Code/NALegendreCosRatCPP.cpp','./Mathematical Functions/Shared C++ Code/normHelmholtzCPP.cpp','./Coordinate Systems/Shared C++ Code/spher2CartCPP.cpp','./Coordinate Systems/Shared C++ Code/calcSpherConvJacobCPP.cpp','./Coordinate Systems/Shared C++ Code/rangeGradientCPP.cpp','./Coordinate Systems/Shared C++ Code/spherAngGradientCPP.cpp');
 mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Container Classes/Shared C++ Code/','-I./Mathematical Functions/Shared C++ Code/','-I./Coordinate Systems/Shared C++ Code/','./Mathematical Functions/spherHarmonicCovCPPInt.cpp','./Mathematical Functions/Shared C++ Code/spherHarmonicCovCPP.cpp','./Mathematical Functions/Shared C++ Code/normHelmholtzCPP.cpp','./Coordinate Systems/Shared C++ Code/spher2CartCPP.cpp');
 
 %Compile the 2D assignment algorithms
-mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Mathematical Functions/Combinatorics/Shared C++ Code/','./Assignment Algorithms/Association Probabilities/calc2DAssignmentProbs.cpp','./Mathematical Functions/Combinatorics/Shared C++ Code/getNextComboCPP.cpp','./Mathematical Functions/Combinatorics/Shared C++ Code/permCPP.cpp');
+mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Mathematical Functions/Combinatorics/Shared C++ Code/','./Assignment Algorithms/Association Probabilities and Specific Updates/calc2DAssignmentProbs.cpp','./Mathematical Functions/Combinatorics/Shared C++ Code/getNextComboCPP.cpp','./Mathematical Functions/Combinatorics/Shared C++ Code/permCPP.cpp');
 mex('-v','CFLAGS="$CFLAGS -std=c99"','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','./Sample Code/2D Assignment/assign2DByCol.c');
 mex('-v','CFLAGS="$CFLAGS -std=c99"','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','./Assignment Algorithms/2D Assignment/assign2D.c');
 mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Assignment Algorithms/Shared C++ Code/','./Sample Code/2D Assignment/assign2DAlt.cpp','./Assignment Algorithms/Shared C++ Code/ShortestPathCPP.cpp');
@@ -116,7 +124,7 @@ mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-
 mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Mathematical Functions/Combinatorics/Shared C++ Code/','./Mathematical Functions/Combinatorics/getNextCombo.cpp','./Mathematical Functions/Combinatorics/Shared C++ Code/getNextComboCPP.cpp');
 mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Mathematical Functions/Combinatorics/Shared C++ Code/','./Mathematical Functions/Combinatorics/getNextGrayCode.cpp');
 mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Mathematical Functions/Shared C++ Code/','-I./Container Classes/Shared C++ Code/','./Mathematical Functions/findFirstMax.cpp','./Mathematical Functions/Shared C++ Code/findFirstMaxCPP.cpp')
-mex('-v','CFLAGS="$CFLAGS -std=c99"','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Mathematical Functions/Shared C Code/','./Mathematical Functions/binSearch.c','./Mathematical Functions/Shared C Code/binSearchC.c')
+mex('-v','CFLAGS="$CFLAGS -std=c99"','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Mathematical Functions/Shared C Code/','./Mathematical Functions/Searching/binSearchDoubles.c','./Mathematical Functions/Shared C Code/binSearchC.c')
 mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Assignment Algorithms/Shared C++ Code/','-I./Mathematical Functions/MMOSPAApprox/Shared C++ Code/','./Mathematical Functions/MMOSPAApprox/MMOSPAApprox.cpp','./Mathematical Functions/MMOSPAApprox/Shared C++ Code/MMOSPAApproxCPP.cpp','./Assignment Algorithms/Shared C++ Code/ShortestPathCPP.cpp');
 mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Container Classes/Shared C++ Code/','-I./Mathematical Functions/Shared C++ Code/','./Mathematical Functions/wrapRange.cpp','./Mathematical Functions/Shared C++ Code/wrapRangeCPP.cpp')
 mex('-v','CFLAGS="$CFLAGS -std=c99"','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','./Mathematical Functions/Basic Matrix Operations/kronSym.c')

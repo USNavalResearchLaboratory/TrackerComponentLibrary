@@ -1,19 +1,20 @@
 function NEES=calcNEES(xTrue,xEst,PEst)
-%CALCNEES  Given a batch of estimates and associated true target states,
-%          compute the normalized estimation error squared. This version is
-%          normalized such that the mean of a consistent estimator,
-%          regardless of the dimensionality of the state, should be one.
+%CALCNEES Given a batch of estimates and associated true values, compute
+%         the normalized estimation error squared (NEES). This version is
+%         normalized such that the mean of a consistent estimator,
+%         regardless of the dimensionality of the state, should be one.
 %
-%INPUTS: xTrue  The truth data. If the truth is the same for all samples of
-%               the estimate, then this is an xDimX1 vector. Otherwise,
-%               this is an xDimXN matrix where N is the number of
-%               samples in the batch.
-%        xEst   An xDim X N set of estimates.
-%        PEst   An xDim X xDim XN set of covariance matrices associated
-%               with the estimates. if the covariance matrix is supposed to
-%               be the same for all estimates, then PEst is just xDimXxDim.
+%INPUTS: xTrue The truth data. If the truth is the same for all samples of
+%              the estimate, then this is an xDimX1 vector. Otherwise, this
+%              is an xDimXN matrix where N is the number of samples in the
+%              batch.
+%         xEst An xDim X N set of estimates.
+%         PEst An xDim X xDim XN set of covariance matrices associated
+%              with the estimates. If the covariance matrix is supposed to
+%              be the same for all estimates, then PEst is just xDimXxDim.
+%              These should not be singular.
 %
-%OUTPUTS: NEES  The normalized estimation error squared of the estimates.
+%OUTPUTS: NEES The normalized estimation error squared of the estimates.
 %
 %The NEES is a measure of how well the provided by an estimator matches the
 %actual accuracy of the estimates. The concept of the NEES is discussed in 
@@ -41,6 +42,7 @@ end
 NEES=0;
 for curEst=1:numEst
     diff=xTrue(:,curEst)-xEst(:,curEst);
+
     NEES=NEES+invSymQuadForm(diff,PEst(:,:,curEst));%=NEES+diff'*inv(PEst(:,:,curEst))*diff;
 end
 NEES=NEES/(xDim*numEst);

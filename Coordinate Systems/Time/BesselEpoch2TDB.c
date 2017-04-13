@@ -22,7 +22,7 @@
 *
 *This is a mex wrapper for the function iauEpb2jd in the International
 *Astronomical Union's (IAU) Standard's of Fundamental Astronomy library.
-*Though the IAU's library does not explicitely say that the Julian date
+*Though the IAU's library does not explicitly say that the Julian date
 *must be in TDB, the Besselian epoch does not make sense unless the Julian
 *date is in TDB as one can ascertain from [1]. 
 *

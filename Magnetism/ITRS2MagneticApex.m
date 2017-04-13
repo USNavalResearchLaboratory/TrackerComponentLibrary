@@ -203,7 +203,7 @@ for curPoint=1:numPoints
         %for the longitude.
         phi=NaN;
     else
-        ellipsApex=Cart2Ellipse(apexPoint,a,f);
+        ellipsApex=Cart2Ellipse(apexPoint,[],a,f);
         hA=ellipsApex(3);%The ellipsoidal height of the apex point.
         %The apex longitude is the centered dipole longitude of
         %the apex location;

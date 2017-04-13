@@ -1,7 +1,8 @@
 classdef EmpiricalD
-%Functions to handle the empirical distribution for scalar samples. This
-%is a discrete distribution whose values are determined by samples of data.
-%Optionally, the samples can be weighted.
+%%EMPIRICALD Functions to handle the empirical distribution for scalar
+%            samples. This is a discrete distribution whose values are
+%            determined by samples of data. Optionally, the samples can be
+%            weighted.
 %Implemented methods are: mean, var, PMF, CDF, rand
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

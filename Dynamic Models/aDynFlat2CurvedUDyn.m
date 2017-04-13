@@ -10,32 +10,31 @@ function val=aDynFlat2CurvedUDyn(xStacked,t,aDyn,uDyn)
 %                 function of the state, then use the function
 %                 aDynFlat2CurvedUDet.
 %
-%INPUTS:    xStacked The target state such that the first three elements
-%                    are position in the global coordinate system, the next
-%                    three elements are velocity in the local, flat-Earth
-%                    coordinate system, and all other elements can be
-%                    arbitrarily chosen in the local, flat-earth coordinate
-%                    system. The final 9 elements of xStacked are the three
-%                    unit basis vectors. The first corresponds to the local
-%                    x-axis, the second the local-y and the third the local
-%                    x. The global x,y and z position coordinates are the
-%                    first three entries of xStacked.
-%           t        The time at which the drift function should be
-%                    evaluated.
-%        aDyn        The flat-Earth drift function of the form aDyn(x,t),
-%                    where is the the non-stakced state. It is assumed that
-%                    the first three components returned by aDyn are the
-%                    local velocity components of the state and that
-%                    nothing in aDyn is position-dependent.
-%        uDyn        The drift function of the basis vectors. The function
-%                    takes inputs of the form uDyn(u,x,t), where u is the
-%                    9X9 set of coordinate bases and x is the non-stacked
-%                    state. The function returns a 9X9 matrix of
-%                    derivatives with respect to time.
+%INPUTS: xStacked The target state such that the first three elements are
+%                 position in the global coordinate system, the next three
+%                 elements are velocity in the local, flat-Earth coordinate
+%                 system, and all other elements can be arbitrarily chosen
+%                 in the local, flat-earth coordinate system. The final 9
+%                 elements of xStacked are the three unit basis vectors.
+%                 The first corresponds to the local x-axis, the second the
+%                 local y- and the third the local z-axis. The global x, y
+%                 and z position coordinates are the first three entries of
+%                 xStacked.
+%               t The time at which the drift function should be evaluated.
+%            aDyn The flat-Earth drift function of the form aDyn(x,t),
+%                 where is the the non-stakced state. It is assumed that
+%                 the first three components returned by aDyn are the local
+%                 velocity components of the state and that nothing in aDyn
+%                 is position-dependent.
+%            uDyn The drift function of the basis vectors. The function
+%                 takes inputs of the form uDyn(u,x,t), where u is the 9X9
+%                 set of coordinate bases and x is the non-stacked state.
+%                 The function returns a 9X9 matrix of derivatives with
+%                 respect to time.
 %
-%OUTPUTS:   val         The stacked derivatives of the state (global
-%                       position derivative, local other derivatives) and
-%                       the local basis vectors.
+%OUTPUTS: val The stacked derivatives of the state (global position
+%             derivative, local other derivatives) and the local basis
+%             vectors.
 %
 %A discussion on mapping flat-Earth models to a curved Earth is given in
 %[1].

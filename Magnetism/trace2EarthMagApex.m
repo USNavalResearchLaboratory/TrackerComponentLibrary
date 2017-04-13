@@ -253,7 +253,7 @@ for curPoint=1:numPoints
             apexPoint=polyValNewton(minFrac,interpPolyA,interpPolyC);
 
             break;
-        elseif(Cart2Ellipse(xCur,true)>=1e37)
+        elseif(Cart2Ellipse(xCur,[],a,f)>=1e37)
             %If the ellipsoidal height exceeds 1e37m, then just declare it
             %to be at infinity. This helps near the magnetic poles.
             apexPoint=[Inf;Inf;Inf];
@@ -280,7 +280,7 @@ function uVert=getEllipsVert(xCart,a,f)
 %Get a vector pointing in the direction of the ellipsoidal vertical. This
 %requires the position to be converted into ellipsoidal coordinates.
 
-    ellipsCur=Cart2Ellipse(xCart,a,f);
+    ellipsCur=Cart2Ellipse(xCart,[],a,f);
     justVertical=true;
     uVert=getENUAxes(ellipsCur,justVertical,a,f);
 end

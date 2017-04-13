@@ -10,9 +10,9 @@ function [xUpdate,innov]=fixedGainUpdate(W,xPred,z,H)
 %           H           The zDim X xDim measurement matrix for a linear
 %                       measurement model. That is z=H*x.
 %
-%OUTPUTS    xUpdate     The xDim X 1 updated state vector.
-%           innov       The zDimX1 innovation of the filter. This is
-%                       sometimes used in gating and likelihood evaluation.
+%OUTPUTS: xUpdate The xDim X 1 updated state vector.
+%           innov The zDimX1 innovation of the filter. This is sometimes
+%                 used in gating and likelihood evaluation.
 %
 %The update in a fixed gain linear filter is just
 %xUpdate=xPred+W*(z-H*xPred);

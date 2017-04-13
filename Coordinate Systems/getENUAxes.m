@@ -3,28 +3,28 @@ function [u,c]=getENUAxes(plhPoint,justVertical,a,f)
 %            as the magnitudes of the derivatives of a position vector with
 %            respect to latitude, longitude and height.
 %
-%INPUTS:   plhPoint The point at which the axes are to be found given in
-%                   terms of [latitude;longitude] (with an assumed
-%                   ellipsoidal height of 0) or [latitude;longitude;height]
-%                   with the geodetic latitude and longitude in radians and
-%                   the height in meters. The latitude should be between
-%                   -pi/2 and pi/2. The height does not change the unit
-%                   direction vectors u but it does change c.
-%      justVertical An optional parameter. If this is given and is
-%                   true, then u and c only for the Up direction will be
-%                   returned. The default is false.
-%           a       The semi-major axis of the reference ellipsoid. If
-%                   this argument is omitted, the value in
-%                   Constants.WGS84SemiMajorAxis is used.
-%           f       The flattening factor of the reference ellipsoid. If
-%                   this argument is omitted, the value in
-%                   Constants.WGS84Flattening is used.
+%INPUTS: plhPoint The point at which the axes are to be found given in
+%                 terms of [latitude;longitude] (with an assumed
+%                 ellipsoidal height of 0) or [latitude;longitude;height]
+%                 with the geodetic latitude and longitude in radians and
+%                 the height in meters. The latitude should be between
+%                 -pi/2 and pi/2. The height does not change the unit
+%                 direction vectors u but it does change c.
+%    justVertical An optional parameter. If this is given and is true, then
+%                 u and c only for the Up direction will be returned. The
+%                 default is false.
+%               a The semi-major axis of the reference ellipsoid. If this
+%                 argument is omitted, the value in
+%                 Constants.WGS84SemiMajorAxis is used.
+%               f The flattening factor of the reference ellipsoid. If this
+%                 argument is omitted, the value in
+%                 Constants.WGS84Flattening is used.
 %
-%OUTPUTS:   u       u(:,1), u(:,2), and u(:,3) are respectively the East,
-%                   North and Up unit vectors.
-%           c       c(1), c(2), and c(3) are the respective magnitudes of
-%                   the derivative of the Cartesian position with respect
-%                   to latitude, longitude, and height.
+%OUTPUTS: u u(:,1), u(:,2), and u(:,3) are respectively the East, North and
+%           Up unit vectors.
+%         c c(1), c(2), and c(3) are the respective magnitudes of the
+%           derivative of the Cartesian position with respect to latitude,
+%           longitude, and height.
 %
 %The local East-North-Up coordinate system is an orthonormal coordinate
 %system given by the normalized derivatives of a Cartesian position vector
@@ -55,15 +55,15 @@ else
     h=plhPoint(3);
 end
 
-if(nargin<2)
+if(nargin<2||isempty(justVertical))
     justVertical=false;
 end
 
-if(nargin<4)
+if(nargin<4||isempty(f))
     f=Constants.WGS84Flattening;
 end
 
-if(nargin<3)
+if(nargin<3||isempty(a))
     a=Constants.WGS84SemiMajorAxis;
 end
 

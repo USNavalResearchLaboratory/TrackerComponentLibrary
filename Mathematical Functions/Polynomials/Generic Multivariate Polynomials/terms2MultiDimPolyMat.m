@@ -34,6 +34,10 @@ numIdx=size(termMat,1)-1;
 
 numDims=zeros(1,numIdx);
 
+if(isscalar(numDims))
+    numDims=[numDims,1];
+end
+
 for idx=1:numIdx
     numDims(idx)=max(termMat(idx+1,:))+1; 
 end

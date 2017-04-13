@@ -15,10 +15,10 @@ function J2=numDiff2(x,f,fDim,N,epsilon)
 %               should be a scalar or a column vector.
 %         fDim  The dimensionality of the output of f.
 %           N   A number >=1 specifying the order of the second derivative
-%               approximation. Values for n=1 through 3 are explicitely
+%               approximation. Values for n=1 through 3 are explicitly
 %               coded in. For values 3 and above, the coefficients of the
 %               second derivative of the Lagrange interpolating polynomial
-%               are explicitely solved. If omitted, a value of N=1 is used.
+%               are explicitly solved. If omitted, a value of N=1 is used.
 %       epsilon A scalar or xDimX1 vector quantity specifying the
 %               finite step size used for numerical differentiation. If a
 %               scalar value is given, that value is used for

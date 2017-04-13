@@ -1,38 +1,36 @@
 function J=numDiff(x,f,fDim,N,epsilon)
-%%NUMDIFF   Numerical differentiation using central difference formulae
-%           based on Lagrange interpolating polynomials. The algorithm is
-%           made to alert (and not crash) in the event that f fails.
-%           Specifically, if f returns an empty matrix or it any of the
-%           components of f are NaNs, then the numDiff function will
-%           terminate early, returning an empty matrix to indicate failure.          
+%%NUMDIFF Numerical differentiation using central difference formulae based
+%         on Lagrange interpolating polynomials. The algorithm is made to
+%         alert (and not crash) in the event that f fails. Specifically, if
+%         f returns an empty matrix or it any of the components of f are
+%         NaNs, then the numDiff function will terminate early, returning
+%         an empty matrix to indicate failure.          
 %
-%INPUTS:    x   The xDimX1 vector or scalar point at which the derivative
-%               of the (possibly vector) function is desired.
-%           f   The scalar or vector function that is to be differentiated.
-%               The function f must take x as its parameter and its output
-%               should be a scalar or a column vector.
-%         fDim  The dimensionality of the output of f.
-%           N   A number >=1 specifying the order of the derivative
-%               approximation. N+1 is the order of the error terms. Thus,
-%               N=1 means that the error terms scale as O(N^2). If N and
-%               is omitted or an empty matrix is passed, then N=2 is
-%               assumed. Values for N=1 through 8 are explicitely coded in.
-%               For values 9 and above, the coefficients of the derivative
-%               of the Lagrange interpolating polynomial are explicitely
-%               solved.
-%       epsilon A scalar or xDimX1 vector quantity specifying the
-%               finite step size used for numerical differentiation. If a
-%               scalar value is given, that value is used for
-%               differentiating with respect to elements of xDim. If an
-%               xDimX1 value is given, then the corresponding element of
-%               epsilon is used to differentiate each element of x. If
-%               epsilon is omitted or an empty matrix is passed, then
-%               epsilon=max(1e-5*x,1e-7); is used.
+%INPUTS: x The xDimX1 vector or scalar point at which the derivative of the
+%          (possibly vector) function is desired.
+%        f The scalar or vector function that is to be differentiated. The
+%          function f must take x as its parameter and its output should be
+%          a scalar or a column vector.
+%     fDim The dimensionality of the output of f.
+%        N An integer >=1 specifying the order of the derivative
+%          approximation. N+1 is the order of the error terms. Thus, N=1
+%          means that the error terms scale as O(N^2). If N and is omitted
+%          or an empty matrix is passed, then N=2 is assumed. Values for
+%          N=1 through 8 are explicitly coded in. For values 9 and above,
+%          the coefficients of the derivative of the Lagrange interpolating
+%          polynomial are explicitly solved.
+%  epsilon A scalar or xDimX1 vector quantity specifying the finite step
+%          size used for numerical differentiation. If a scalar value is
+%          given, that value is used for differentiating with respect to
+%          elements of xDim. If an xDimX1 value is given, then the
+%          corresponding element of epsilon is used to differentiate each
+%          element of x. If epsilon is omitted or an empty matrix is
+%          passed, then epsilon=max(1e-5*x,1e-7); is used.
 %
-%OUTPUTS:  J    A fDimXxDim Jacobian matrix. Each column is the derivative
-%               vector of f with respect to the corresponding element of x.
-%               If at any point the function f returned a NaN or an empty
-%               matrix, J will be an empty matrix.
+%OUTPUTS: J A fDimXxDim Jacobian matrix. Each column is the derivative
+%           vector of f with respect to the corresponding element of x. If
+%           at any point the function f returned a NaN or an empty matrix,
+%           J will be an empty matrix.
 %
 %Central-difference numerical differentiation is discussed in terms of
 %Lagrange interpolating polynomials in Chapter 4.1 of [1]. The Lagrange

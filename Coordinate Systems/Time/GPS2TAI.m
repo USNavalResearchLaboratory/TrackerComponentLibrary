@@ -1,15 +1,15 @@
 function [Jul1,Jul2]=GPS2TAI(Jul1,Jul2)
-%GPS2TAI  Convert from the timescale used by the Global Positioning System
-%         (GPS)  given as a two-part Julian date to international atomic
-%         time (TAI), represented as a two-part Julian date.
+%GPS2TAI Convert from the timescale used by the Global Positioning System
+%        (GPS)  given as a two-part Julian date to international atomic
+%        time (TAI), represented as a two-part Julian date.
 %
-%INPUTS:    Jul1, Jul2  Two parts of a Julian date given in GPS time. The
-%                       units of the date are days. The full date is the
-%                       sum of both terms. The date is broken into two
-%                       parts to provide more bits of precision. It does
-%                       not matter how the date is split.
+%INPUTS: Jul1, Jul2 Two parts of a Julian date given in GPS time. The units
+%                   of the date are days. The full date is the sum of both
+%                   terms. The date is broken into two parts to provide
+%                   more bits of precision. It does not matter how the date
+%                   is split.
 %
-%OUTPUTS:   Jul1, Jul2  The time as a Julian date in TAI.
+%OUTPUTS: Jul1, Jul2 The time as a Julian date in TAI.
 %
 %GPS time is the same as TAI, but is always 19 seconds behind.
 %

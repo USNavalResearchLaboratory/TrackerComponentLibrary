@@ -4,36 +4,36 @@ function [xi,w]=thirdOrderSimplexCubPoints(numDim,algorithm)
 %               points such that sum(x)<=1 and all x>=0, where x is a
 %               numDimX1 vector.
 %
-%INPUTS:  numDim An integer specifying the dimensionality of the points
-%                to be generated.
-%      algorithm A value indicating which algorithm should be used.
-%                Possible values are
-%                0 (The default if omitted or an empty matrix is passed)
-%                  Formula T_n 3-1 in [1], pg. 308, numDim+2 points.
-%                1 Formula T_n 3-2 in [1], pg. 308, 2*numDim+2 points.
-%                2 Formula T_n 3-3 in [1], pg. 308, 2*n+3 points.
-%                3 Formula T_n 3-4 in [1], pg. 308,
-%                  (numDim+1)*(numDim+2)/2 points, numDim<7 with a
-%                  correction to the denominator of B.
-%                4 FormulaT_n 3-5 in [1], pg. 309, (numDim+1)*(numDim+4)/2
-%                  points, numDim>=3.
-%                5 Formula T_n 3-7 in [1], pg. 309,
-%                  (numDim^3+5*numDim+12)/6 points.
-%                6 Formula T_n 3-8 in [1], pg. 310,
-%                  (numDim^3+11*numDim+12)/6 points.
-%                7 Formula T_n 3-9 in [1], pg. 310,
-%                  (numDim+1)*(numDim+2)*(numDim+3)/6 points.
-%                8 Formula T_n 3-10 in [1], pg. 310,
-%                  (numDim^3-numDim+3)/3 points, numDim>=3 and numDim~=5.
-%                9 Formula T_n 3-11 in [1], pg. 311,
-%                  (numDim^3+2*numDim+3)/3 points, numDim>=3 and numDim~=5.
-%               10 Formula T_2 3-1 in [1], pg. 314, 6 points, numDim=2.
-%               11 Formula T_5 3-1 in [1], pg. 315, 16 points, numDim=5.
+%INPUTS: numDim An integer specifying the dimensionality of the points to
+%               be generated.
+%     algorithm A value indicating which algorithm should be used. Possible
+%               values are:
+%               0 (The default if omitted or an empty matrix is passed)
+%                 Formula T_n 3-1 in [1], pg. 308, numDim+2 points.
+%               1 Formula T_n 3-2 in [1], pg. 308, 2*numDim+2 points.
+%               2 Formula T_n 3-3 in [1], pg. 308, 2*n+3 points.
+%               3 Formula T_n 3-4 in [1], pg. 308,
+%                 (numDim+1)*(numDim+2)/2 points, numDim<7 with a
+%                 correction to the denominator of B.
+%               4 FormulaT_n 3-5 in [1], pg. 309, (numDim+1)*(numDim+4)/2
+%                 points, numDim>=3.
+%               5 Formula T_n 3-7 in [1], pg. 309,
+%                 (numDim^3+5*numDim+12)/6 points.
+%               6 Formula T_n 3-8 in [1], pg. 310,
+%                 (numDim^3+11*numDim+12)/6 points.
+%               7 Formula T_n 3-9 in [1], pg. 310,
+%                 (numDim+1)*(numDim+2)*(numDim+3)/6 points.
+%               8 Formula T_n 3-10 in [1], pg. 310,
+%                 (numDim^3-numDim+3)/3 points, numDim>=3 and numDim~=5.
+%               9 Formula T_n 3-11 in [1], pg. 311,
+%                 (numDim^3+2*numDim+3)/3 points, numDim>=3 and numDim~=5.
+%              10 Formula T_2 3-1 in [1], pg. 314, 6 points, numDim=2.
+%              11 Formula T_5 3-1 in [1], pg. 315, 16 points, numDim=5.
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points (Each "point" is a vector).
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %REFERENCES:
 %[1] A.H. Stroud, Approximate Calculation of Multiple Integrals. Cliffs,

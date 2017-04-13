@@ -2,7 +2,7 @@ function val=aPoly(x,t,numDim)
 %%APOLY     The drift function for a linear continuous-time motion model
 %           with a given order in a specified number of Cartesian
 %           dimensions. The order of the linear filter, that is the number
-%           of moments of position, does not ned to be explicitely
+%           of moments of position, does not ned to be explicitly
 %           specified.
 %
 %INPUTS:    x The xDimXN state vector of N targets in the order of

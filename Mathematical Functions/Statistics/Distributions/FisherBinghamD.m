@@ -1,7 +1,8 @@
 classdef FisherBinghamD
-%Functions to handle the Fisher-Bingham distribution which is a common,
-%general directional distribution on the n-sphere. The 4D distribution is
-%often used for directional estimation using quaternions.
+%%FISHERBINGHAMD Functions to handle the Fisher-Bingham distribution which
+%                is a common, general directional distribution on the
+%                n-sphere. The 4D distribution is often used for
+%                orientation estimation using quaternions.
 %Implemented methods are: PDF, (only for the Bingham distribution)
 %                         covApprox, normProdDist, Gauss2FisherBingham,
 %                         normConstApprox, (only for the Bingham

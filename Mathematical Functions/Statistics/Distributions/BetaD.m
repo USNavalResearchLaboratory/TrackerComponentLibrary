@@ -1,5 +1,5 @@
 classdef BetaD
-%Functions to handle the beta distribution of the first kind.
+%%BETAD Functions to handle the beta distribution of the first kind.
 %Implemented methods are: mean, var, PDF, CDF, rand
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

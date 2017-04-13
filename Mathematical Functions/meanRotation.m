@@ -4,7 +4,7 @@ function meanRot=meanRotation(param1,w)
 %               directions). The weights are scalar and the cost function
 %               finds the rotation matrix REst to minimize the sum of 
 %               w(i)*norm(REst-R{i},'fro'), where R{i} is the ith rotation
-%               matrix to be averaged (either given explicitely as a
+%               matrix to be averaged (either given explicitly as a
 %               rotation matrix or given as a quaternion).
 %
 %INPUTS: param1 A 3X3XN hypermatrix of N rotation matrices that are to be

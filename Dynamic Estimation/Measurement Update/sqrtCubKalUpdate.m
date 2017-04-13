@@ -1,70 +1,63 @@
-function [xUpdate, SUpdate, innov, Szz]=sqrtCubKalUpdate(xPred,SPred,z,SR,h,xi,w,innovTrans,measAvgFun,stateDiffTrans,stateTrans)
+function [xUpdate,SUpdate,innov,Szz]=sqrtCubKalUpdate(xPred,SPred,z,SR,h,xi,w,innovTrans,measAvgFun,stateDiffTrans,stateTrans)
 %SQRTCUBKALUPDATE Perform the measurement update step in the square root 
 %                 cubature Kalman filter with additive measurement noise.
 %                 Unlike the non-square root version, the covariance update
 %                 is such that finite precision problems cannot lead to a
-%                 non-positive (semi-)definite covariance. However, unlike the
-%                 non-square root version, all of the cubature weights must
-%                 be positive.
+%                 non-positive (semi-)definite covariance. However, unlike
+%                 the non-square root version, all of the cubature weights
+%                 must be positive.
 %
-%INPUTS:    xPred      The xDim X 1 predicted target state.
-%           SPred      The xDim X xDim lower-triangular predicted state
-%                      covariance matrix.
-%           z          The zDim X 1 vector measurement.
-%           SR         The zDim X zDim lower-triangular square root of the
-%                      measurement covariance matrix in the native 
-%                      coordinate system of the measurement.
-%           h          A function handle for the measurement function that
-%                      takes the state as its argument.
-%           xi         An xDim X numCubPoints matrix of cubature points. If
-%                      this and the next parameter are omitted or empty
-%                      matrices are passed, then fifthOrderCubPoints(xDim)
-%                      is used for xDim>1 and quadraturePoints1D(3) for
-%                      xDim=1. It is suggested that xi and w be provided to
-%                      avoid needless recomputation of the cubature points.
-%           w          A numCubPoints X 1 vector of the weights associated
-%                      with the cubature points.
-%          innovTrans  An optional function handle that transforms the
-%                      value of the difference between the observation and
-%                      any predicted points. This must be able to handle
-%                      sets of differences. For a zDim measurement, this
-%                      must be able to handle a zDimXN matrix of N
-%                      differences. This only needs to be supplied when a
-%                      measurement difference must be restricted to a
-%                      certain range. For example, the innovation between
-%                      two angles will be 2*pi if one angle is zero and the
-%                      other 2*pi, even though they are the same direction.
-%                      In such an instance, a function handle to the
-%                      wrapRange function with the appropriate parameters
-%                      should be passed for innovTrans.
-%           measAvgFun An optional function handle that, when given N
-%                      measurement values with weights, produces the
-%                      weighted average. This function only has to be
-%                      provided if the domain of the measurement is not
-%                      linear. For example, when averaging angular values,
-%                      then the function meanAng should be used.
-%       stateDiffTrans An optional function handle that, like innovTrans
-%                      does for the measurements, takes an xDimXN matrix of
-%                      N differences between states and transforms them
-%                      however might be necessary. For example, a state
-%                      containing angular components will generally need to
-%                      be transformed so that the difference between the
-%                      angles is wrapped to -pi/pi.
-%           stateTrans An optional function that takes a state estimate and
-%                      transforms it. This is useful if one wishes the
-%                      elements of the state to be bound to a certain
-%                      domain. For example, if an element of the state is
-%                      an angle, one might generally want to bind it to the
-%                      region +/-pi.
+%INPUTS: xPred The xDim X 1 predicted target state.
+%        SPred The xDim X xDim lower-triangular square root predicted state
+%              covariance matrix.
+%            z The zDim X 1 vector measurement.
+%           SR The zDim X zDim lower-triangular square root of the
+%              measurement covariance matrix in the native coordinate
+%              system of the measurement.
+%            h A function handle for the measurement function that the
+%              state as its argument.
+%           xi An xDim X numCubPoints matrix of cubature points. If this
+%              and the next parameter are omitted or empty matrices are
+%              passed, then fifthOrderCubPoints(xDim). It is suggested that
+%              xi and w be provided to avoid needless recomputation of the
+%              cubature points.
+%            w A numCubPoints X 1 vector of the weights associated with the
+%              cubature points.
+%   innovTrans An optional function handle that transforms the value of the
+%              difference between the observation and any predicted points.
+%              This must be able to handle sets of differences. For a zDim
+%              measurement, this must be able to handle a zDimXN matrix of
+%              N differences. This only needs to be supplied when a
+%              measurement difference must be restricted to a certain
+%              range. For example, the innovation between two angles will
+%              be 2*pi if one angle is zero and the other 2*pi, even though
+%              they are the same direction. In such an instance, a function
+%              handle to the wrapRange function with the appropriate
+%              parameters should be passed for innovTrans.
+%   measAvgFun An optional function handle that, when given N measurement
+%              values with weights, produces the weighted average. This
+%              function only has to be provided if the domain of the
+%              measurement is not linear. For example, when averaging
+%              angular values, then the function meanAng should be used.
+% stateDiffTrans An optional function handle that, like innovTrans does for
+%              the measurements, takes an xDimXN matrix of N differences
+%              between states and transforms them however might be
+%              necessary. For example, a state containing angular
+%              components will generally need to be transformed so that the
+%              difference between the angles is wrapped to -pi/pi.
+%   stateTrans An optional function that takes a state estimate and
+%              transforms it. This is useful if one wishes the elements of
+%              the state to be bound to a certain domain. For example, if
+%              an element of the state is an angle, one might generally
+%              want to bind it to the region +/-pi.
 %
-%OUTPUTS:   xUpdate     The xDim X 1 updated state vector.
-%           SUpdate     The updated xDim X xDim lower-triangular square 
-%                       root state covariance matrix.
-%        innov, Szz     The zDimX1 innovation and the zDimXzDim square
-%                       root innovation covariance matrix are returned in
-%                       case one wishes to analyze the consistency of the
-%                       estimator or use those values in gating or
-%                       likelihood evaluation.
+%OUTPUTS: xUpdate The xDim X 1 updated state vector.
+%         SUpdate The updated xDim X xDim lower-triangular square root
+%                 state covariance matrix.
+%      innov, Szz The zDimX1 innovation and the zDimXzDim square root
+%                 innovation covariance matrix are returned in case one
+%                 wishes to analyze the consistency of the estimator or uae
+%                 those values in gating or likelihood evaluation.
 %
 %If the function h needs additional parameters beyond the state, then the
 %parameters can be passed by using an anonymous function as the function
@@ -112,11 +105,7 @@ function [xUpdate, SUpdate, innov, Szz]=sqrtCubKalUpdate(xPred,SPred,z,SR,h,xi,w
     xDim=size(xPred,1);
     
     if(nargin<6||isempty(xi))
-        if(xDim>1)
-            [xi,w]=fifthOrderCubPoints(xDim);
-        else
-            [xi,w]=quadraturePoints1D(3);
-        end
+        [xi,w]=fifthOrderCubPoints(xDim);
     end
 
     if(nargin<8||isempty(innovTrans))

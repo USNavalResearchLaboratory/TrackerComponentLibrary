@@ -1,4 +1,4 @@
-classdef invGaussianD
+classdef InvGaussianD
 %Functions to handle the scalar inverse Gaussian distribution. This
 %distribution is used to describe the amount of time it takes a scalar
 %Brownian motion model to reach a fixed value
@@ -98,7 +98,7 @@ function val=CDF(x,mu,lambda)
 % mu=5;
 % lambda=1;
 % x=linspace(0,50,100);
-% vals=invGaussianD.CDF(x,mu,lambda);
+% vals=InvGaussianD.CDF(x,mu,lambda);
 % figure(1)
 % clf
 % plot(x,vals,'-k','linewidth',2)
@@ -213,16 +213,16 @@ function val=rand(N,mu,lambda)
 % mu=4;
 % lambda=2;
 % numSamp=100000;
-% samp=invGaussianD.rand([numSamp,1],mu,lambda);
+% samp=InvGaussianD.rand([numSamp,1],mu,lambda);
 % figure(1)
 % clf
 % hold on
 % h=histogram(samp,'Normalization','pdf');
 % %We will plot the PDF.
-% sigma=sqrt(invGaussianD.var(mu,lambda));
+% sigma=sqrt(InvGaussianD.var(mu,lambda));
 % numPoints=100;
 % x=linspace(0,mu+4*sigma,numPoints);
-% PDFVals=invGaussianD.PDF(x,mu,lambda);
+% PDFVals=InvGaussianD.PDF(x,mu,lambda);
 % plot(x,PDFVals,'-r','linewidth',2)
 %
 %REFERENCES:

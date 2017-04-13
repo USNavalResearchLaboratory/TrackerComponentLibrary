@@ -25,7 +25,7 @@ function [geoidHeight,coeffData]=getEGMGeoidHeight(latLon,tideSys,useNGAApprox,m
 %                  using the gamma (magnitude of the acceleration due to
 %                  gravity) that is appropriate for the point in question,
 %                  just use the constant factor of -41cm (EGM2008) or -53cm
-%                  (EGM96) that the NGA uses. ALso, omit a correction for
+%                  (EGM96) that the NGA uses. Also, omit a correction for
 %                  differences in the value of GM and the Earth's
 %                  semi-major axis when computing the distrubing potential
 %                  T. Using this approximation makes the results match the
@@ -39,7 +39,7 @@ function [geoidHeight,coeffData]=getEGMGeoidHeight(latLon,tideSys,useNGAApprox,m
 %                  NGA presumably dervied their correction terms
 %        modelType  An optional parameter specifying coefficient model to
 %                   load. Possible values are
-%                   0 (the default if omitted) Load the EGM2008 model.
+%                   0 (The default if omitted) Load the EGM2008 model.
 %                   1 Load the EGM96 model.
 %       coeffData  A set of pre-loaded coefficients that can speed up the
 %                  computation by eliminating the need to compute them on

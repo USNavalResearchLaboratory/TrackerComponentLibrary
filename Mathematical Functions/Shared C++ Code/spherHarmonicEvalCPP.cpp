@@ -141,7 +141,7 @@ void spherHarmonicEvalCPP(double *V, double *gradV, const ClusterSetCPP<double> 
             double u, theta;
             
             //Compute the sine and cosine terms 
-            //Explicitely set the first two terms.
+            //Explicitly set the first two terms.
             SinVec[0]=0;
             CosVec[0]=1;
             SinVec[1]=sin(lambda);
@@ -248,12 +248,12 @@ void spherHarmonicEvalCPP(double *V, double *gradV, const ClusterSetCPP<double> 
 
                 dVdr=-(c/(r*r))*dVdr/scalFactor;
                 dVdLambda=(c/r)*dVdLambda/scalFactor;
-            //The minus sign is because the input coordinate was with respect
-            //to latitude, not the co-latitude that the NALegendreCosRat
-            //function uses.
+            //The minus sign is because the input coordinate was with
+            //respect to latitude, not the co-latitude that the
+            //NALegendreCosRat function uses.
                 dVdTheta=-(c/r)*dVdTheta/scalFactor;
 
-                calcSpherJacobCPP(J, point+3*curPoint,0);
+                calcSpherConvJacobCPP(J, point+3*curPoint,0);
 
                 //Now, multiply the transpose of the Jacobian Matrix by the
                 //vector of [dVdr;dVdLambda;dVdTheta]

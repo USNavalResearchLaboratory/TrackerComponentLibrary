@@ -24,7 +24,7 @@ void normHelmHoltzCPP(ClusterSetCPP<double> &HBar,const double u, const double s
     size_t n,m;
     double nf, mf;
     
-    //Set the first few terms explicitely.
+    //Set the first few terms explicitly.
     HBar[0][0]=1.0*scalFactor;
     HBar[1][1]=sqrt(3.0)*scalFactor;
     HBar[1][0]=sqrt(3.0)*u*scalFactor;

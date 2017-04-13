@@ -1,5 +1,9 @@
 classdef GeometricD
-%Functions to handle two variants of the geometric distribution.
+%%GEOMETRICD Functions to handle two variants of the geometric
+%            distribution. A geometric random variable with probability p
+%            arises when determinign the number of independent Bernoulli
+%            trials that must be performed until a success is obtained. The
+%            probability of success for each trial is p.
 %Implemented methods are: mean, var, PMF, CDF, invCDF, momentGenFun,
 %                         cumGenFun, rand
 %

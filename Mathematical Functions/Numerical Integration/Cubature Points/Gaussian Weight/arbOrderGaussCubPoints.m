@@ -1,4 +1,4 @@
-function [xi,w]=arbOrderGaussCubPoints(numDim,n,beta)
+function [xi,w]=arbOrderGaussCubPoints(numDim,n,beta,algorithm)
 %%ARBORDERGAUSSCUBPOINTS Generate cubature points for integrating with a
 %               weighting function of a standard 0-I multivariate Gaussian
 %               PDF times |x|^beta. That is,
@@ -14,6 +14,21 @@ function [xi,w]=arbOrderGaussCubPoints(numDim,n,beta)
 %               the weighting function (the thing times the normal PDF in
 %               the weighting function). beta>-numDim. If omitted or an
 %               empty matrix is passed, beta=0 is used.
+%     algorithm An optional parameter specifying which algorithm to use to
+%               generate arbitrary order Gaussian cubature points. Possible
+%               values are:
+%               0 (The default if omitted or an empty matrix is passed) Use
+%                 the algorithm described in Chapter 2.6 of [1]. The
+%                 specialization for Gaussian problems starts near Equation
+%                 2.6-16. The transformation to a Gaussian PDF is performed
+%                 by scaling the points and weights.
+%               1 Combine the functions arbOrderSpherSurfCubPoints and
+%                 spherSurfPoints2GaussPoints to obtain arbitrary order
+%                 points.
+%               2 Use the tensor product rule of linCubPoints2MultiDim
+%                 applied to 1D points. This option only supports beta=0. 
+%               3 Use Smolyak's algorithm via linCubPoints2MultiDim
+%                 applied to 1D points. This option only supports beta=0. 
 %
 %OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
 %            points. (Each "point" is a vector)
@@ -21,7 +36,7 @@ function [xi,w]=arbOrderGaussCubPoints(numDim,n,beta)
 %            the cubature points.
 %
 %The algorithm is as described in Chapter 2.6 of [1]. The specialization
-%for Gaussian problems starts near Euaation 2.6-16. The transformation to
+%for Gaussian problems starts near Equation 2.6-16. The transformation to
 %a Gaussian PDF is performed by scaling the points and weights.
 %
 %REFERENCES:
@@ -31,65 +46,90 @@ function [xi,w]=arbOrderGaussCubPoints(numDim,n,beta)
 %October 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release
 
+if(nargin<4||isempty(algorithm))
+   algorithm=0; 
+end
+
 if(nargin<3||isempty(beta))
    beta=0; 
 end
 
-[r,Ar]=quadraturePoints1D(n,9,numDim-1+beta);
-numRVals=length(r);
+switch(algorithm)
+    case 0
+        [r,Ar]=quadraturePoints1D(n,9,numDim-1+beta);
+        numRVals=length(r);
 
-%Allocate space for the second set of points.
-numGegenbauerPoints=n;
-y=zeros(numGegenbauerPoints,numDim-1);
-Ak=zeros(numGegenbauerPoints,numDim-1);
+        %Allocate space for the second set of points.
+        numGegenbauerPoints=n;
+        y=zeros(numGegenbauerPoints,numDim-1);
+        Ak=zeros(numGegenbauerPoints,numDim-1);
 
-%First, find all of the yk and Ak values
-for k=1:(numDim-1)
-    [yCur,AkCur]=quadraturePoints1D(n,3,(k-1)/2);
-    
-    y(:,k)=yCur(:);
-    Ak(:,k)=AkCur;
-end
+        %First, find all of the yk and Ak values
+        for k=1:(numDim-1)
+            [yCur,AkCur]=quadraturePoints1D(n,3,(k-1)/2);
 
-%Allocate space
-numPoints=numRVals*numGegenbauerPoints;
-xi=zeros(numDim,numPoints);
-w=zeros(numPoints,1);
-
-dims=numGegenbauerPoints*ones(numDim-1,1);
-curCubPoint=1;
-%Go through all of the ranges
-for curR=1:numRVals
-    curIdx=1;
-    i=index2NDim(dims,curIdx);
-    
-    %Now, we go through all the tuples
-    while(~isempty(i))
-        xi(numDim,curCubPoint)=r(curR)*y(i(numDim-1),numDim-1);
-        wProd=Ak(i(numDim-1),numDim-1);
-        
-        prodRecur=1;
-        for k=(numDim-1):-1:2
-            prodRecur=prodRecur*sqrt(1-y(i(k),k)^2);
-            xi(k,curCubPoint)=r(curR)*prodRecur*y(i(k-1),k-1);
-            wProd=wProd*Ak(i(k-1),k-1);
+            y(:,k)=yCur(:);
+            Ak(:,k)=AkCur;
         end
-        prodRecur=prodRecur*sqrt(1-y(i(1),1)^2);
-        xi(1,curCubPoint)=r(curR)*prodRecur;
-        w(curCubPoint)=wProd*Ar(curR);
-        
-        curCubPoint=curCubPoint+1;
-        curIdx=curIdx+1;
-        i=index2NDim(dims,curIdx);
-    end
+
+        %Allocate space
+        numPoints=numRVals*numGegenbauerPoints;
+        xi=zeros(numDim,numPoints);
+        w=zeros(numPoints,1);
+
+        dims=numGegenbauerPoints*ones(numDim-1,1);
+        curCubPoint=1;
+        %Go through all of the ranges
+        for curR=1:numRVals
+            curIdx=1;
+            i=index2NDim(dims,curIdx);
+
+            %Now, we go through all the tuples
+            while(~isempty(i))
+                xi(numDim,curCubPoint)=r(curR)*y(i(numDim-1),numDim-1);
+                wProd=Ak(i(numDim-1),numDim-1);
+
+                prodRecur=1;
+                for k=(numDim-1):-1:2
+                    prodRecur=prodRecur*sqrt(1-y(i(k),k)^2);
+                    xi(k,curCubPoint)=r(curR)*prodRecur*y(i(k-1),k-1);
+                    wProd=wProd*Ak(i(k-1),k-1);
+                end
+                prodRecur=prodRecur*sqrt(1-y(i(1),1)^2);
+                xi(1,curCubPoint)=r(curR)*prodRecur;
+                w(curCubPoint)=wProd*Ar(curR);
+
+                curCubPoint=curCubPoint+1;
+                curIdx=curIdx+1;
+                i=index2NDim(dims,curIdx);
+            end
+        end
+
+        %We now have cubature points and weights for integrating with a
+        %weighting function of w(x)=|x|^beta*exp(-x'*x). We will transform
+        %these to integrating over the normal 0-I distribution times
+        %|x|^beta.
+        w=pi^(-numDim/2)*sqrt(2)^(beta)*w;
+        xi=sqrt(2)*xi;
+    case 1
+    %Obtain arbitrary order spherical surface points and turn them into
+    %points for integrating over a Gaussian distribution using the
+    %spherSurfPoints2GaussPoints function.
+        [xiSurf,wSurf]=arbOrderSpherSurfCubPoints(numDim,n);
+        [xi,w]=spherSurfPoints2GaussPoints(xiSurf,wSurf,2*n-1,beta);
+    case 2
+        if(beta~=0)
+           error('This algorithmic option is not supported with beta~=0') 
+        end
+        [xi,w]=linCubPoints2MultiDim(numDim,n,0);
+    case 3
+        if(beta~=0)
+           error('This algorithmic option is not supported with beta~=0') 
+        end
+        [xi,w]=linCubPoints2MultiDim(numDim,n,1);
+    otherwise
+        error('Unknown algorithm specified')
 end
-
-%We now have cubature points and weights for integrating with a weighting
-%function of w(x)=|x|^beta*exp(-x'*x). We will transform these to
-%integrating over the normal 0-I distribution times |x|^beta.
-w=pi^(-numDim/2)*sqrt(2)^(beta)*w;
-xi=sqrt(2)*xi;
-
 end
 
 %LICENSE:

@@ -43,14 +43,13 @@ function [xUpdate,SUpdate,innov,Szz]=sqrtDDFNonAdditiveUpdate(xPred,SPred,z,SR,h
 %                        appropriate parameters should be passed for
 %                        innovTrans.
 %
-%OUTPUTS    xUpdate     The xDim X 1 updated state vector.
-%           SUpdate     The updated xDim X xDim lower-triangular square 
-%                       root state covariance matrix.
-%       innov, Szz      The zDimX1 innovation and the zDimXzDim square
-%                       root innovation covariance matrix are returned
-%                       in case one wishes to analyze the consistency
-%                       of the estimator or use those values in gating or
-%                       likelihood evaluation.
+%OUTPUTS: xUpdate The xDim X 1 updated state vector.
+%         SUpdate The updated xDim X xDim lower-triangular square root
+%                 state covariance matrix.
+%      innov, Szz The zDimX1 innovation and the zDimXzDim square root
+%                 innovation covariance matrix are returned in case one
+%                 wishes to analyze the consistency of the estimator or use
+%                 those values in gating or likelihood evaluation.
 %
 %The divided difference filters are implemented as described in [1] and
 %[2], where they are only derived for non-additive noise and the square

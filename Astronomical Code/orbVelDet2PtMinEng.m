@@ -17,10 +17,10 @@ function [vMinStartEllip,tMinEllip,tMinParab]=orbVelDet2PtMinEng(r1Vec,r2Vec,GM)
 %                    coordinates where the massive body is at the origin.
 %                    For example, Earth-centered inertial. The units are
 %                    assumed meters per second.
-%               GM   An optional value of the universal gravitational
+%                 GM An optional value of the universal gravitational
 %                    constant times the mass of the Earth. If omitted, the
 %                    value Constants.WGS84GMWithAtmosphere is used. The
-%                    units are km^3/sec^2.
+%                    units are m^3/sec^2.
 %
 %OUTPUTS: vMinStartEllip The velocity vector at r1Vec for the minimum
 %                        energy elliptical trajectory from r1Vec to r2Vec.

@@ -1,5 +1,5 @@
 classdef PoissonD
-%Functions to handle the Poisson distribution.
+%%POISSOND Functions to handle the Poisson distribution.
 %Implemented methods are: mean, var, PMF, CDF, momentGenFun, cumGenFun,
 %                         rand
 %
@@ -8,15 +8,22 @@ classdef PoissonD
 methods(Static)
 
 function val=mean(lambda)
-%%MEAN  Obtain the mean of the Poisson distribution for the specified mean
-%       parameter
+%%MEAN Obtain the mean of the Poisson distribution for the specified mean
+%      parameter.
 %
-%INPUTS: lambda  The mean (and variance) of the Poisson distribution 
-%                under consideration.
+%INPUTS: lambda The mean (and variance) of the Poisson distribution.
 %
-%OUTPUTS: val  The mean of the Poisson distribution under consideration.
+%OUTPUTS: val The mean of the Poisson distribution under consideration.
 %
 %The Poisson distribution is discussed in Chapter 2.8 of [1].
+%
+%EXAMPLE:
+%We verify the computed mean by comparing it to the sample mean.
+% lambda=10;
+% meanVal=PoissonD.mean(lambda)
+% numSamp=1e5;
+% sampMeanVal=mean(PoissonD.rand([1,numSamp],lambda))
+%One will find both values are about 10.
 %
 %REFERENCES:
 %[1] S. M. Ross, Simulation, 4th ed. Amsterdam: Academic Press, 2006.
@@ -27,8 +34,8 @@ function val=mean(lambda)
 end
 
 function val=var(lambda)
-%%VAR   Obtain the variance of the Poisson distribution for the specified
-%       mean parameter
+%%VAR Obtain the variance of the Poisson distribution for the specified
+%     mean parameter
 %
 %INPUTS: lambda  The mean (and variance) of the Poisson distribution 
 %                under consideration.
@@ -37,6 +44,15 @@ function val=var(lambda)
 %              consideration.
 %
 %The Poisson distribution is discussed in Chapter 2.8 of [1].
+%
+%EXAMPLE:
+%We verify that the computed variance by comparing it to the sample
+%variance.
+% lambda=10;
+% varVal=PoissonD.var(lambda)
+% numSamp=1e5;
+% sampVarVal=var(PoissonD.rand([1,numSamp],lambda))
+%One will find both values are about 10.
 %
 %REFERENCES:
 %[1] S. M. Ross, Simulation, 4th ed. Amsterdam: Academic Press, 2006.
@@ -47,41 +63,71 @@ function val=var(lambda)
 end
 
 function val=PMF(x,lambda)
-%%PMF        Evaluate the Poisson probability mass function (PMF) at given
-%            points with a specified mean parameter.
+%%PMF Evaluate the Poisson probability mass function (PMF) at given points
+%     with a specified mean parameter.
 %
-%INPUTS:    x       The point(s) at which the Poisson PMF is to be 
-%                   evaluated. x is an integer greater than or equal to
-%                   zero.
-%           lambda  The mean (and variance) of the Poisson distribution 
-%                   under consideration.
+%INPUTS: x The point(s) at which the Poisson PMF is to be evaluated. x is
+%          an integer. For nonzero PMF values, x>=0.
+%   lambda The mean (and variance) of the Poisson distribution under
+%          consideration.
 %
-%OUTPUTS:   val The value(s) of the Poisson PMF with mean lambda.
+%OUTPUTS: val The value(s) of the Poisson PMF with mean lambda.
 %
 %The Poisson distribution is discussed in Chapter 2.8 of [1].
+%
+%EXAMPLE:
+%Here, we validate the PMF by generating random samples and comparing the
+%PMF plot with a histogram of the random samples.
+% lambda=6;
+% numSamples=1e5;
+% figure(1)
+% clf
+% histogram(PoissonD.rand([numSamples,1],lambda),'BinWidth',1,'Normalization','pdf')
+% hold on
+% x=0:16;
+% vals=PoissonD.PMF(x,lambda);
+% stem(x,vals,'linewidth',2)
+% h1=xlabel('x');
+% h2=ylabel('PDF(x)');
+% set(gca,'FontSize',14,'FontWeight','bold','FontName','Times')
+% set(h1,'FontSize',14,'FontWeight','bold','FontName','Times')
+% set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
+%One will see that the histogram matches well with the plot.
 %
 %REFERENCES:
 %[1] S. M. Ross, Simulation, 4th ed. Amsterdam: Academic Press, 2006.
 %
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
+    
+    val=zeros(size(x));
+    sel=(x>=0);
 
-    val=(lambda.^x./factorial(x))*exp(-lambda);
+    val(sel)=(lambda.^x(sel)./factorial(x(sel)))*exp(-lambda);
 end
 
 function [FVal,pVal]=CDF(x,lambda)
-%%CDF        Evaluate the cumulative distribution function of the
-%            Poisson distribution at desired points.
+%%CDF Evaluate the cumulative distribution function of the Poisson
+%     distribution at desired points.
 %
-%INPUTS:    x       The point(s) at which the Poisson CDF is evaluated.
-%           lambda  The mean (and variance) of the Poisson distribution 
-%                   under consideration.
+%INPUTS: x The integer point(s) at which the Poisson CDF is evaluated.
+%   lambda The mean (and variance) of the Poisson distribution.
 %
-%OUTPUTS: FVal    The CDF of the Poisson distribution evaluated at the
-%                 desired point(s).
-%         pVal    The value of the PMF of the Poisson distribution at the
-%                 desired point(s).
+%OUTPUTS: FVal The CDF of the Poisson distribution evaluated at the desired
+%              point(s).
+%         pVal The value of the PMF of the Poisson distribution at the
+%              desired point(s).
 %
 %The recursion is from Chapter 4.2 of [1].
+%
+%EXAMPLE:
+%We validate the CDF value by comparing it to a value computed from random
+%samples.
+% lambda=6;
+% x=3;
+% numSamples=1e5;
+% prob=PoissonD.CDF(x,lambda)
+% probSamp=mean(PoissonD.rand([numSamples,1],lambda)<=x)
+%One will find the values ot both be about 0.151.
 %
 %REFERENCES:
 %[1] S. M. Ross, Simulation, 4th ed. Amsterdam: Academic Press, 2006.
@@ -91,6 +137,7 @@ function [FVal,pVal]=CDF(x,lambda)
     FVal=zeros(size(x));
     pVal=zeros(size(x));
     
+    x=floor(x);%In case decimals were passed.
     numEls=numel(x);
 
     for curEl=1:numEls
@@ -103,6 +150,8 @@ function [FVal,pVal]=CDF(x,lambda)
         FVal(curEl)=F;
         pVal(curEl)=p;
     end
+    FVal(x<0)=0;
+    pVal(x<0)=0;
 end
 
 function momentVal=momentGenFun(lambda,numDerivs,t)
@@ -112,14 +161,13 @@ function momentVal=momentGenFun(lambda,numDerivs,t)
 %              it at t=0 provides the kth noncentral moment of the
 %              distribution.
 %
-%INPUTS: lambda  The mean (and variance) of the Poisson distribution 
-%                under consideration.
-%     numDerivs  The number of derivatives to take with respect to the
-%                argument of the moment generating function. numDerivs>=0.
-%             t  The numPointsX1 or 1XnumPoints vector of points where the
-%                moment generating function should be evaluated. If this
-%                parameter is omitted or an empty matrix is passed, the
-%                default value of 0 is used.
+%INPUTS: lambda The mean (and variance) of the Poisson distribution..
+%     numDerivs The number of derivatives to take with respect to the
+%               argument of the moment generating function. numDerivs>=0.
+%             t The numPointsX1 or 1XnumPoints vector of points where the
+%               moment generating function should be evaluated. If this
+%               parameter is omitted or an empty matrix is passed, the
+%               default value of 0 is used.
 %
 %OUTPUTS: momentVal A numPointsX1 vector of the values of the derivatives
 %                   of the moment generating function given at the points
@@ -183,15 +231,13 @@ function cumVal=cumGenFun(lambda,numDerivs,t)
 %           generating function is the natural logarithm of the moment
 %           generating function.
 %
-%INPUTS: lambda  The mean (and variance) of the Poisson distribution 
-%                under consideration.
-%     numDerivs  The number of derivatives to take with respect to the
-%                argument of the cumulant generating function.
-%                numDerivs>=0.
-%             t  The numPointsX1 or 1XnumPoints vector of points where the
-%                moment generating function should be evaluated. If this
-%                parameter is omitted or an empty matrix is passed, the
-%                default value of 0 is used.
+%INPUTS: lambda The mean (and variance) of the Poisson distribution.
+%     numDerivs The number of derivatives to take with respect to the
+%               argument of the cumulant generating function, numDerivs>=0.
+%             t The numPointsX1 or 1XnumPoints vector of points where the
+%               moment generating function should be evaluated. If this
+%               parameter is omitted or an empty matrix is passed, the
+%               default value of 0 is used.
 %
 %OUTPUTS: cumVal A numPointsX1 or 1XnumPoints vector of the values of the
 %                derivatives of the cumulant generating function given at
@@ -226,15 +272,13 @@ end
 function vals=rand(N,lambda)
 %%RAND Generate Poisson random variables with a given mean.
 %
-%INPUTS:    N      If N is a scalar, then rand returns an NXN matrix
-%                  of random variables. If N=[M,N1] is a two-element row 
-%                  vector, then rand returns an MXN1 matrix of 
-%                  random variables.
-%           lambda The mean (and variance) of the Poisson distribution 
-%                  under consideration. 
+%INPUTS: N If N is a scalar, then rand returns an NXN matrix of random
+%          variables. If N=[M,N1] is a two-element row vector, then rand
+%          returns an MXN1 matrix of random variables.
+%   lambda The mean (and variance) of the Poisson distribution.
 %
-%OUTPUTS:   vals   A matrix whose dimensions are determined by N of the
-%                  generated Poisson random variables.
+%OUTPUTS: vals A matrix whose dimensions are determined by N of the
+%              generated Poisson random variables.
 %
 %The Poisson random variables are generated according to the the simple
 %method given in Chapter 4.2 of [1].
@@ -289,11 +333,8 @@ function vals=rand(N,lambda)
             vals(curRow ,curCol)=I;
         end
     end
-
 end
-
 end
-
 end
 
 %LICENSE:

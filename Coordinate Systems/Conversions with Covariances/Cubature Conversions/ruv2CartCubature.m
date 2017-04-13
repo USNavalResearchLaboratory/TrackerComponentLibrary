@@ -1,46 +1,44 @@
-function [zCart, RCart]=ruv2CartCubature(z,SR,useHalfRange,zTx,zRx,M,xi,w)
+function [zCart,RCart]=ruv2CartCubature(z,SR,useHalfRange,zTx,zRx,M,xi,w)
 %RUV2CARTCUBATURE Use cubature integration to approximate the moments of
 %                 measurements converted from bistatic r-u-v coordinates
 %                 into Cartesian coordinates. For a two-way monostatic
-%                 conversion, set zTx=[0;0;0]; to make the transmitter and
+%                 conversion, set zTx=zRx to make the transmitter and
 %                 receiver collocated.
 %
-%INPUTS:      z A 3XnumMeas matrix of numMeas vectors to convert. Each
-%               has elements [r;u;v], where r is the bistatic range from
-%               the transmitter to the target to the receiver, and u and v
-%               are direction cosines.
-%            SR The 3X3 lower-triangular square roots of the
-%               measurement covariance matrices for the measurements.
-% useHalfRange  A boolean value specifying whether the bistatic range value
-%               has been divided by two. This normally comes up when
-%               operating in monostatic mode, so that the range reported is
-%               a one-way range. The default if this parameter is not
-%               provided is false.
-%           zTx The 3X1 [x;y;z] location vector of the transmitter in
-%               global Cartesian coordinates.  If this parameter is omitted
-%               or an empty matrix is passed, then the receiver is placed
-%               at the origin.
-%           zRx The 3X1 [x;y;z] location vector of the receiver in global
-%               Cartesian coordinates. If this parameter is omitted or an
-%               empty matrix is passed, then the receiver is placed at the
-%               origin.
-%             M A 3X3 rotation matrix to go from the alignment of the
-%               global coordinate system to the local alignment of the
-%               receiver. The z vector of the local coordinate system of
-%               the receiver is the pointing direction of the receiver. If
-%               this matrix is omitted, then the identity matrix is used.
-%            xi A 3XnumCubaturePoints matrix of cubature points for the
-%               numeric integration. If this and the final parameter are
-%               omitted or empty matrices are passed, then
-%               fifthOrderCubPoints is used to generate cubature points.
-%             w A numCubaturePointsX1 vector of the weights associated
-%               with the cubature points.
+%INPUTS: z A 3XnumMeas matrix of numMeas vectors to convert. Each has
+%          elements [r;u;v], where r is the bistatic range from the
+%          transmitter to the target to the receiver, and u and v are
+%          direction cosines.
+%       SR The 3X3XnumMeas lower-triangular square roots of the measurement
+%          covariance matrices for the measurements. If the matrices are
+%          all the same, then a single 3X3 matrix can be passed.
+% useHalfRange A boolean value specifying whether the bistatic range value
+%          has been divided by two. This normally comes up when operating
+%          in monostatic mode, so that the range reported is a one-way
+%          range. The default if this parameter is not provided is false.
+%      zTx The 3X1 [x;y;z] location vector of the transmitter in global
+%          Cartesian coordinates.  If this parameter is omitted or an empty
+%          matrix is passed, then the transmitter is placed at the origin.
+%      zRx The 3X1 [x;y;z] location vector of the receiver in global
+%          Cartesian coordinates. If this parameter is omitted or an empty
+%          matrix is passed, then the receiver is placed at the origin.
+%        M A 3X3 rotation matrix to go from the alignment of the global
+%          coordinate system to the local alignment of the receiver. The z
+%          vector of the local coordinate system of the receiver is the
+%          pointing direction of the receiver. If this matrix is omitted,
+%          then the identity matrix is used.
+%       xi A 3XnumCubaturePoints matrix of cubature points for the numeric
+%          integration. If this and the final parameter are omitted or
+%          empty matrices are passed, then fifthOrderCubPoints is used to
+%          generate cubature points.
+%        w A numCubaturePointsX1 vector of the weights associated with the
+%          cubature points.
 %
-%OUTPUTS:   zCart The approximate means of the PDF of the Cartesian
-%                 converted measurements in [x;y;z] Cartesian coordinates
-%                 for each measurement. This is a 3XnumMeas matrix.
-%           RCart The approximate 3X3XnumMeas set of covariance matrices of
-%                 the PDFs of the Cartesian converted measurements.
+%OUTPUTS: zCart The approximate means of the PDF of the Cartesian converted
+%               measurements in [x;y;z] Cartesian coordinates for each
+%               measurement. This is a 3XnumMeas matrix.
+%         RCart The approximate 3X3XnumMeas set of covariance matrices of
+%               the PDFs of the Cartesian converted measurements.
 %
 %Details of the conversion are given in [1].
 %
@@ -53,7 +51,7 @@ function [zCart, RCart]=ruv2CartCubature(z,SR,useHalfRange,zTx,zRx,M,xi,w)
 %+/- 90 degrees from the boresight, when cubature points are added for the
 %integration, this can push u^2+v^2 above 1. At such extremes, however, the
 %Gaussian approximation tends to be invalid anyway. Of course, utilizing
-%r-u-v-w coordiantes (with an often singular covariance matrix) can cause
+%r-u-v-w coordinates (with an often singular covariance matrix) can cause
 %this issue to be avoided.
 %
 %REFERENCES:
@@ -84,28 +82,18 @@ if(nargin<3||isempty(useHalfRange))
     useHalfRange=false;
 end
 
-%Perform the conversion
-numCubaturePoints=size(xi,2);
-
 numMeas=size(z,2);
 
 if(size(SR,3)==1)
     SR=repmat(SR,[1,1,numMeas]);
 end
 
+h=@(x)ruv2Cart(x,useHalfRange,zTx,zRx,M);
+
 zCart=zeros(3,numMeas);
 RCart=zeros(3,3,numMeas);
 for curMeas=1:numMeas
-    %Transform the cubature points to match the given Gaussian.
-    cubPoints=transformCubPoints(xi,z(:,curMeas),SR(:,:,curMeas));
-
-    %Convert all of the points into Cartesian space
-    for curPoint=1:numCubaturePoints
-        cubPoints(:,curPoint)=ruv2Cart(cubPoints(:,curPoint),useHalfRange,zTx,zRx,M);
-    end
-
-    %Extract the first two moments of the transformed points.
-    [zCart(:,curMeas),RCart(:,:,curMeas)]=calcMixtureMoments(cubPoints,w);
+    [zCart(:,curMeas),RCart(:,:,curMeas)]=calcCubPointMoments(z(:,curMeas),SR(:,:,curMeas),h,xi,w);
 end
 end
 

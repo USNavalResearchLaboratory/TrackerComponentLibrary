@@ -13,10 +13,10 @@ function [xi,w]=arbOrderSpherCubPoints(numDim,n,alpha)
 %                sum(x.^2)^(-alpha/2). alpha>-numDim. If omitted or an
 %                empty matrix is passed, alpha=0 is used.
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %The algorithm of theorem 2.6-2 in Chapter 2.6 of [1] is used to generate
 %the points.
@@ -32,7 +32,7 @@ if(nargin<3||isempty(alpha))
    alpha=0; 
 end
 
-[r,Ar]=quadraturePoints1D(n,11,numDim-1+alpha);
+[r,Ar]=quadraturePoints1D(n,8,numDim-1+alpha);
 numRVals=length(r);
 
 %Allocate space for the second set of points.
@@ -42,7 +42,7 @@ Ak=zeros(numGegenbauerPoints,numDim-1);
 
 %First, find all of the yk and Ak values
 for k=1:(numDim-1)
-    [yCur,AkCur]=quadraturePoints1D(n,6,(k-1)/2);
+    [yCur,AkCur]=quadraturePoints1D(n,3,(k-1)/2);
     
     y(:,k)=yCur(:);
     Ak(:,k)=AkCur;

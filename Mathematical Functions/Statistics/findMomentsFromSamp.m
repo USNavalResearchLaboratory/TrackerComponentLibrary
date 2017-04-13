@@ -1,8 +1,9 @@
-function momentMat=findMomentsFromSamp(xSamp,wSamp,maxDeg,maxDegType)
+function momentMat=findMomentsFromSamp(xSamp,wSamp,maxDeg,maxDegType,normalize)
 %%FINDMOMENTSFROMSAMP Given a set of samples of a univariate or
 %               multivariate random variable, determine all of the
 %               (non-central) sample moments up to a certain maximum degree
-%               for each element of the multivariate vector.
+%               for each element of the multivariate vector. To only find a
+%               single moment, use the function findMomentFromSamp.
 %
 %INPUTS: xSamp An nXnumSamp matrix of numSamp samples from which moments
 %              are to be computed.
@@ -24,6 +25,10 @@ function momentMat=findMomentsFromSamp(xSamp,wSamp,maxDeg,maxDegType)
 %                maxDeg specifies the maximum order of the moments.
 %              1 maxDeg specifies the maximum degree of each component of x
 %                going into the moments. This is slower than maxDegType 0.
+%    normalize An optional boolean value indicating whether the weights in
+%              wSamp should be normalized prior to use. The default if
+%              this parameter is omitted is false. The weights cannot be
+%              normalized if they sum to zero.
 %
 %OUTPUTS: momentMat A matrix taking n indices, where 
 %               momentMat(a1,a2,a3...an) corresponds to the coefficient of 
@@ -62,6 +67,10 @@ function momentMat=findMomentsFromSamp(xSamp,wSamp,maxDeg,maxDegType)
 %September 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<5||isempty(normalize))
+    normalize=false; 
+end
+
 if(nargin<4||isempty(maxDegType))
     maxDegType=0;
 end
@@ -70,9 +79,13 @@ n=size(xSamp,1);
 numSamp=size(xSamp,2);
 
 if(isempty(wSamp))
-    wSamp=ones(numSamp,1);
+    wSamp=ones(numSamp,1)/numSamp;
 end
-normConst=sum(wSamp);
+if(normalize)
+    normConst=sum(wSamp);
+else
+    normConst=1;
+end
 
 %Allocate space for the return values; zero the components.
 numMaxDims=repmat(maxDeg+1,[1,n]);

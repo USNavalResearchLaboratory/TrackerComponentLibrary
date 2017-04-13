@@ -16,7 +16,12 @@ function [yPred,PInvPred]=discCubInfoPred(yPrev,PInvPrev,f,Q,xi,w,stateDiffTrans
 %           f       A function handle for the state transition function
 %                   that takes the state as its parameter.
 %           Q       The xDimX xDim process noise covariance matrix.
-%           xi      An xDim X numCubPoints matrix of cubature points.        
+%           xi      A (xDim+cDim) X numCubPoints matrix of cubature points.
+%                   If this and the next parameter are omitted or empty
+%                   matrices are passed, then
+%                   fifthOrderCubPoints(xDim+cDim) is used. It is suggested
+%                   that xi and w be provided to avoid needless
+%                   recomputation of the cubature points.     
 %           w       A numCubPoints X 1 vector of the weights associated
 %                   with the cubature points.
 % stateDiffTrans    An optional function handle that takes an xDimXN matrix
@@ -55,15 +60,23 @@ function [yPred,PInvPred]=discCubInfoPred(yPrev,PInvPrev,f,Q,xi,w,stateDiffTrans
 %October 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<7)
+if(nargin<5)
+   xi=[]; 
+end
+
+if(nargin<5)
+   w=[]; 
+end
+
+if(nargin<7||isempty(stateDiffTrans))
     stateDiffTrans=@(x)x;
 end
 
-if(nargin<8)
+if(nargin<8||isempty(stateAvgFun))
     stateAvgFun=@(x,w)calcMixtureMoments(x,w);
 end
 
-if(nargin<9)
+if(nargin<9||isempty(stateTrans))
     stateTrans=@(x)x;
 end
 

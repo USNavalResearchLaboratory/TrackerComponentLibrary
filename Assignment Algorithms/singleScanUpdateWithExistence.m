@@ -27,7 +27,7 @@ function [xUpdate,PUpdate,rUpdate,probNonTargetMeas]=singleScanUpdateWithExisten
 %           PD The a priori detection probabilities of the targets given
 %              that they exist. This can either be a numTarX1 vector if the
 %              targets have different detection probabilities. Otherwise,
-%              this can be a scalar value if all targets ahve the same
+%              this can be a scalar value if all targets have the same
 %              detection probability.
 %        rPred A numTarX1 vector of the predicted probabilities of target
 %              existence.
@@ -46,8 +46,8 @@ function [xUpdate,PUpdate,rUpdate,probNonTargetMeas]=singleScanUpdateWithExisten
 %              target exists (the appropriate entry in rHyp). For example,
 %              a typical missed detection likelihood ratio for the ith
 %              target might be 1-Pd*rHyp(i). where Pd is the detection
-%              probability. The function makeStandardCartLRMatHyps can be
-%              used to make such likelihood ratio matrices in certain
+%              probability. The function makeStandardCartOnlyLRMatHyps can
+%              be used to make such likelihood ratio matrices in certain
 %              Gaussian/Cartesian problems.
 %      algSel1 An optional parameter that selects the assignment algorithm
 %              to use. Approximate variants of the algorithms also use
@@ -206,9 +206,10 @@ switch(algSel1)
         error('Unknown algorithm selected')
 end
 
-%Updated probabilities of target existence.
+rPred=rPred(:);
 
-rUpdate=sum(betas(:,1:(end-1)),2)+((1-PD).*rPred)./(1-PD.*rPred).*betas(:,end);
+%Updated probabilities of target existence.
+rUpdate=(sum(betas(:,1:(end-1)),2)+((1-PD).*rPred)./(1-PD.*rPred).*betas(:,end)).';
 
 %The probability that each measurement did not originate from a known
 %target.

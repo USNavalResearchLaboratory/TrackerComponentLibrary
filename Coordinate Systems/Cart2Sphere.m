@@ -6,27 +6,29 @@ function points=Cart2Sphere(cartPoints,systemType,useHalfRange,zTx,zRx,M)
 %             coordinate system.
 %
 %INPUTS: cartPoints A matrix of the points in Cartesian coordinates that
-%                   are to be transformed into spherical coordinates. Each
-%                   columns of cartPoints is of the format [x;y;z].
-%        systemType An optional parameter specifying the axes from which
-%                   the angles are measured. Possible values are
-%                   0 (The default if omitted) Azimuth is measured
-%                     counterclockwise from the x-axis in the x-y plane.
-%                     Elevation is measured up from the x-y plane (towards
-%                     the z-axis). This is consistent with common spherical
-%                     coordinate systems for specifying longitude (azimuth)
-%                     and geocentric latitude (elevation).
-%                   1 Azimuth is measured counterclockwise from the z-axis
-%                     in the z-x plane. Elevation is measured up from the
-%                     z-x plane (towards the y-axis). This is consistent
-%                     with some spherical coordinate systems that use the z
-%                     axis as the boresight direction of the radar.
-%useHalfRange A boolean value specifying whether the bistatic range
-%           value should be divided by two. This normally comes up when
-%           operating in monostatic mode (the most common type of spherical
-%           coordinate system), so that the range reported is a
-%           one-way range. The default if this parameter is not provided is
-%           true.
+%           are to be transformed into spherical coordinates. Each column
+%           of cartPoints is of the format [x;y;z]. Extra rows will be
+%           ignored.
+% systemType An optional parameter specifying the axes from which the
+%           angles are measured in radians. Possible values are
+%           0 (The default if omitted) Azimuth is measured
+%             counterclockwise from the x-axis in the x-y plane. Elevation
+%             is measured up from the x-y plane (towards the z-axis). This
+%             is consistent with common spherical coordinate systems for
+%             specifying longitude (azimuth) and geocentric latitude
+%             (elevation).
+%           1 Azimuth is measured counterclockwise from the z-axis in the
+%             z-x plane. Elevation is measured up from the z-x plane
+%             (towards the y-axis). This is consistent with some spherical
+%             coordinate systems that use the z axis as the boresight
+%             direction of the radar.
+% useHalfRange An optional boolean value specifying whether the bistatic
+%           (round-trip) range value has been divided by two. This normally
+%           comes up when operating in monostatic mode (the most common
+%           type of spherical coordinate system), so that the range
+%           reported is a one-way range (or just half a bistatic range).
+%           The default if this parameter is not provided is false if zTx
+%           is provided and true if it is omitted (monostatic).
 %       zTx The 3XN [x;y;z] location vectors of the transmitters in global
 %           Cartesian coordinates. If this parameter is omitted, then the
 %           transmitters are assumed to be at the origin. If only a single
@@ -48,9 +50,9 @@ function points=Cart2Sphere(cartPoints,systemType,useHalfRange,zTx,zRx,M)
 %           only a single 3X3 matrix is passed, then is is assumed to be
 %           the same for all of the N conversions.
 %
-%OUTPUTS:   points  A matrix of the converted points. Each column of the
-%                   matrix has the format [r;azimuth;elevation],
-%                   with azimuth and elevation given in radians.
+%OUTPUTS: points A matrix of the converted points. Each column of the
+%                matrix has the format [r;azimuth;elevation], with azimuth
+%                and elevation given in radians.
 %
 %The conversion from Cartesian to spherical coordinates is given in Chapter
 %14.4.4.2 of [1]. Modifications have been made to deal with local, bistatic
@@ -59,17 +61,18 @@ function points=Cart2Sphere(cartPoints,systemType,useHalfRange,zTx,zRx,M)
 %REFERENCES:
 %[1] R. L. Duncombe, "Computational techniques," in Explanatory Supplement
 %    to the Astronomical Almanac, 3rd ed., S. E. Urban and P. K.
-%    Seidelmann, Eds. Mill Valley, CA: University Science Books, 2013,
+%    Seidelmann, Eds. Mill Valley, CA: University Science Books, 2013.
 %
 %July 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<2)
+if(nargin<2||isempty(systemType))
     systemType=0;
 end
 
 %If a simple, standard spherical coordinate system conversion can be used.
 if(nargin<3)
+    %Here, we assume useHalfRange=true;
     %Extract the coordinates
     x=cartPoints(1,:);
     y=cartPoints(2,:);
@@ -90,24 +93,38 @@ if(nargin<3)
     return;
 end
 
-N=size(cartPoints,2);
-
-%If any type of bistatic range thing is done.
-if(nargin<6)
-    M=repmat(eye(3),[1,1,N]);
-elseif(size(M,3)==1)
-    M=repmat(M,[1,1,N]);
+if(nargin<4)
+    zTx=[];
 end
 
 if(nargin<5)
+    zRx=[];
+end
+
+if(isempty(zTx)&&(nargin<3||isempty(useHalfRange)))
+    useHalfRange=true;
+elseif(nargin<3||isempty(useHalfRange))
+    useHalfRange=false;
+end
+
+N=size(cartPoints,2);
+
+%If any type of bistatic range thing is done.
+if(nargin<6||isempty(M))
+    M=repmat(eye(3),[1,1,N]);
+elseif(size(M,3)==1&&N>1)
+    M=repmat(M,[1,1,N]);
+end
+
+if(nargin<5||isempty(zRx))
     zRx=zeros(3,N);
-elseif(size(zRx,2)==1)
+elseif(size(zRx,2)==1&&N>1)
     zRx=repmat(zRx,[1,N]);
 end
 
-if(nargin<4)
+if(nargin<4||isempty(zTx))
     zTx=zeros(3,N);
-elseif(size(zTx,2)==1)
+elseif(size(zTx,2)==1&&N>1)
     zTx=repmat(zTx,[1,N]);
 end
 
@@ -115,9 +132,9 @@ end
 points=zeros(3,N);
 for curPoint=1:N
     %The target location in the receiver's coordinate system.
-    zCL=M(:,:,curPoint)*(cartPoints(:,curPoint)-zRx(:,curPoint));
+    zCL=M(:,:,curPoint)*(cartPoints(1:3,curPoint)-zRx(1:3,curPoint));
     %The transmitter location in the receiver's local coordinate system.
-    zTxL=M(:,:,curPoint)*(zTx(:,curPoint)-zRx(:,curPoint));
+    zTxL=M(:,:,curPoint)*(zTx(1:3,curPoint)-zRx(1:3,curPoint));
 
 %Perform the conversion.
     r1=norm(zCL);%Receiver to target.

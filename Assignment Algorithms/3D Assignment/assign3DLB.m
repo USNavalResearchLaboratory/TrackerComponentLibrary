@@ -29,7 +29,7 @@ function lowerBound=assign3DLB(C,method)
 %                 (implemented using the Jonker-Volgenant algorrithm in
 %                 assign2D in place of the Hungarian algorithm). This
 %                 algorithm requires that n1=n2=n3, so if that is not the
-%                 case, the cost matrix is implicitely augmented so the
+%                 case, the cost matrix is implicitly augmented so the
 %                 lower bound can still be used. The implicit augmentation
 %                 is discussed in the comments to the code.
 %               1 Use the simple (first) method of summing the minimum

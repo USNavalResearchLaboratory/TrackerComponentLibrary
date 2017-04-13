@@ -61,7 +61,7 @@ function [ellipsPoints,coeffData]=MSL2EllipseHelmert(points,useNGAApprox,coeffDa
 %January 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<2)
+if(nargin<2||isempty(useNGAApprox))
     useNGAApprox=false;
 end
 

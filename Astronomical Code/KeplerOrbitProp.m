@@ -14,7 +14,7 @@ function statePred=KeplerOrbitProp(stateOrig,deltaT,GM,epsVal)
 %             GM   An optional value of the universal gravitational
 %                  constant times the mass of the Earth. If omitted, the
 %                  value Constants.WGS84GMWithAtmosphere is used. The
-%                  units are km^3/sec^2.
+%                  units are m^3/sec^2.
 %           epsVal An optional parameter that is used to determine the
 %                  cutoff for when e is zero, one, when the angular
 %                  momentum is zero, and when the specific energy is zero.

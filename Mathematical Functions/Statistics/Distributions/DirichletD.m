@@ -1,5 +1,5 @@
 classdef DirichletD
-%Functions to handle the Dirichlet distribution.
+%%DIRICHLETD Functions to handle the Dirichlet distribution.
 %Implemented methods are: mean, cov, PDF, rand
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

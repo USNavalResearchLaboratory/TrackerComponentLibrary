@@ -52,7 +52,7 @@ function R=quat2RotMat(q,handed)
 %August 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<2)
+if(nargin<2||isempty(handed))
     handed='right';
 end
 

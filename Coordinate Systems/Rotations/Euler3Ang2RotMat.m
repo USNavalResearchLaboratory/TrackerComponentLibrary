@@ -45,7 +45,7 @@ function M=Euler3Ang2RotMat(theta1,theta2,theta3,series,handed)
 %September 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<5)
+if(nargin<5||isempty(handed))
     handed='right';
 end
 

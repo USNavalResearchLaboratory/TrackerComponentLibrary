@@ -103,12 +103,12 @@ function [V,gradV]=spherHarmonicEval(C,S,point,a,c,fullyNormalized,scalFactor)
 %\bar{P}_{nm}(x) and when Schmidt semi-normalized coefficients are used
 %(fullyNormalized=false), then P^m_n(x) is replaced with S^m_n(x), the
 %Schmidt semi-normalized legendre functions. This function does not
-%explicitely handle coefficients that have no normalization, as they are
+%explicitly handle coefficients that have no normalization, as they are
 %not commonly used in practice.
 %
 %Note that models will often separate out the n=0 term, since
 %sin(0*lambda)=0, cos(0*lambda)=1 and P^0_0(x)=1 and \bar{P}_{00}(x)=1 for
-%any x. In such an instance, a C(0+1,0+1) might need to be explicitely
+%any x. In such an instance, a C(0+1,0+1) might need to be explicitly
 %added. For example, when using the coefficients for the EGM96 and EGM2008
 %gravitational models provided by the National Geospatial Intelligence
 %Agency (NGA), one has to insert C(0+1,0+1)=1.
@@ -160,7 +160,7 @@ function [V,gradV]=spherHarmonicEval(C,S,point,a,c,fullyNormalized,scalFactor)
 %(elevation) in its spherical coordinate system. Thus, the sine term for
 %the fully normalized associated Legendre function in the
 %sum becomes a cosine term. That is, \bar{P}_{nm}(cos(\tilde{\theta})).
-%However, the paper abbreviates the notation and does not explicitely write
+%However, the paper abbreviates the notation and does not explicitly write
 %the cosine operator Thus, one might be led to erroneously believe that the
 %paper is evaluating \bar{P}_{nm}(\tilde{\theta}).
 %
@@ -418,7 +418,7 @@ for curPoint=1:numPoints
             %latitude, not the co-latitude that the NALegendreCosRat function uses.
             dVdTheta=-(c/r)*dVdTheta/scalFactor;
 
-            gradV(:,curPoint) = calcSpherJacob(point(:,curPoint))'*[dVdr;dVdLambda;dVdTheta];
+            gradV(:,curPoint)=calcSpherConvJacob(point(:,curPoint))'*[dVdr;dVdLambda;dVdTheta];
         end
     else
         %At latitudes that are near the poles, the non-singular algorithm of
@@ -527,7 +527,7 @@ function [SinVec,CosVec]=calcSinCosTerms(lambda,M)
     %Compute sin(m*lambda) and cos(m*lambda) for m=0 to m=M.
     SinVec=zeros(M+1,1);
     CosVec=zeros(M+1,1);
-    %Explicitely set the first two terms.
+    %Explicitly set the first two terms.
     SinVec(0+1)=0;
     CosVec(0+1)=1;
     SinVec(1+1)=sin(lambda);

@@ -96,7 +96,7 @@ methods
     %                   This will destroy any previous initialization of
     %                   the tree.
     %
-    %INPUTS: theTree   The implicitely passed kdTree object.
+    %INPUTS: theTree   The implicitly passed kdTree object.
     %        dataBatch A kXN array of points that are to be stored in the
     %                  kd tree. k is the dimensionality of the points and N
     %                  is the number of points.
@@ -160,7 +160,7 @@ methods
     %%RANGEQUERY Perform one or more orthogonal range queries for the given
     %            bounds specified in rectMin and rectMax.
     %
-    %INPUT: theTree  The implicitely passed kdTree object.
+    %INPUT: theTree  The implicitly passed kdTree object.
     %       rectMin  For k-dimensional data, this is a kXm vector of the
     %                minimum bounds of the m hyperrectangles in which one
     %                is to search for data points.
@@ -223,7 +223,7 @@ methods
     %%RANGECOUNT Count the number of elements in one or more orthogonal
     %            range queries without actually returning the elements.
     %
-    %INPUT: theTree  The implicitely passed kdTree object.
+    %INPUT: theTree  The implicitly passed kdTree object.
     %       rectMin  For k-dimensional data, this is a kXm vector of the
     %                minimum bounds of the m hyperrectangles in which one
     %                is to search for data points.
@@ -273,7 +273,7 @@ methods
     %              and the squared distances of the nearest neighbors to
     %              the point.
     %
-    %INPUTS: theTree  The implicitely passed kdTree object.
+    %INPUTS: theTree  The implicitly passed kdTree object.
     %        point    A kXn matrix of n points whose m nearest neighbors
     %                 are desired.
     %        m        The number of nearest neighbors to find for each

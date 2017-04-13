@@ -1,5 +1,5 @@
 classdef InverseWishartD
-%Functions to handle the inverse Wishart distribution.
+%%INVERSEWISHARTD Functions to handle the inverse Wishart distribution.
 %Implemented methods are: PDF, mean,rand
 %
 %DEPENDENCIES: WishartD.m

@@ -3,20 +3,20 @@ function [xi,w]=firstOrderNDimCubPoints(numDim,algorithm)
 %               integration over a numDim-dimensional cube with bounds in
 %               coordinates of (-1,1).
 %
-%INPUTS:    numDim  An integer specifying the dimensionality of the points
-%                   to be generated. numDim>0.
-%         algorithm An optional parameter specifying the algorithm to be
-%                   used to generate the points. Possible values are:
-%                   0 Formula Cn 1-1 in [1], pg. 229, 1 point.
-%                   1 (the default if omtted or an empty matrix is passed)
-%                     Formula Cn 1-2 in [1], pg. 229. 2^numDim points.
-%                   2 Formula C2 1-1 in [1], pg. 242, 4 points, numDim=2.
-%                   3 Formula C2 1-2 in [1], pg. 243, 9 points, numDim=2.
+%INPUTS: numDim An integer specifying the dimensionality of the points to
+%               be generated. numDim>0.
+%     algorithm An optional parameter specifying the algorithm to be used
+%               to generate the points. Possible values are:
+%               0 Formula Cn 1-1 in [1], pg. 229, 1 point.
+%               1 (the default if omtted or an empty matrix is passed)
+%                 Formula Cn 1-2 in [1], pg. 229. 2^numDim points.
+%               2 Formula C2 1-1 in [1], pg. 242, 4 points, numDim=2.
+%               3 Formula C2 1-2 in [1], pg. 243, 9 points, numDim=2.
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %REFERENCES:
 %[1] A.H. Stroud, Approximate Calculation of Multiple Integrals. Cliffs,

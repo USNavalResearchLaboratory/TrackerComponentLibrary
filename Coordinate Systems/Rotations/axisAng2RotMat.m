@@ -3,22 +3,20 @@ function M=axisAng2RotMat(u,theta,handed)
 %                theta counterlockwise (right-handed) or clockwise
 %                (left-handed) about an axis given by the unit vector u.
 %
-%INPUTS:         u  A unit vector representing the axis about which a
-%                   vector should be rotated using the rotation matrix.
-%             theta The angle in radians by which a vector is to be
-%                   rotated is to be rotated about the axis u when
-%                   multiplied by the rotation matrix.
-%           handed  The handedness of the rotation angle. If omitted, it
-%                   is assumed that the rotation is right-handed
-%                   (the standard). Possible values are
-%                   'right' The default if omitted. The rotation is
-%                           right-handed.
-%                   'left'  The rotation is left-handed. The rotation angle
-%                           is counterclockwise when one is looking in the
-%                           same direction that the rotation axis points.
+%INPUTS: u A unit vector representing the axis about which a vector should
+%          be rotated using the rotation matrix.
+%    theta The angle in radians by which a vector is to be rotated is to be
+%          rotated about the axis u when multiplied by the rotation matrix.
+%   handed The handedness of the rotation angle. If omitted, it is assumed
+%          that the rotation is right-handed (the standard). Possible
+%          values are
+%          'right' The default if omitted. The rotation is right-handed.
+%           'left' The rotation is left-handed. The rotation angle is
+%                  counterclockwise when one is looking in the same
+%                  direction that the rotation axis points.
 %
-%OUTPUTS:      M    The rotation matrix such that M*v rotates the vector v
-%                   by the desired rotation.
+%OUTPUTS: M The rotation matrix such that M*v rotates the vector v by the
+%           desired rotation.
 %
 %To rotate a 3D vector x an angle of theta about the axis u, simply
 %evaluate M*x.
@@ -35,7 +33,7 @@ function M=axisAng2RotMat(u,theta,handed)
 %December 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<3)
+if(nargin<3||isempty(handed))
     handed='right';
 end
 

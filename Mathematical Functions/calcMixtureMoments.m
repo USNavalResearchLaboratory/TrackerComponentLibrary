@@ -11,38 +11,38 @@ function [mu, P]=calcMixtureMoments(xi,w,PHyp,muHyp,diffTransFun)
 %                    error matrix for an estimate muHyp rather than a
 %                    covariance matrix.
 %
-%INPUTS:    xi  A numDim X numPoints matrix of column vectors.
-%           w   A numPoints X 1 or 1XnumPoints vector of the weights
-%               associated with each of the column vectors. Normally all
-%               w>0 to assure that P is positive definite. If this
-%               parameter is omitted or an empty matrix is passed, then all
-%               values in w are set to 1/numPoints (uniform distribution).
-%         PHyp  An optional numDimXnumDimXnumPoints parameter. If one
-%               wants to find the covariance matrix of a mixture
-%               distribution, then this is the set of covariances of the
-%               individual components (whose means are xi). If omitted or
-%               an empty matrix is passed, P will be computed as the
-%               covariance matrix of a bunch of points. If P is not
-%               requested on the output, this argument has no effect.
-%         muHyp An optional input that changes how the covariance matrix is
-%               computed. If something other than an empty matrix is
-%               provided, the output P will not be computed centered about
-%               mu (it will not be the covariance) but will be computed
-%               centered around muHyp, thus making P a mean-squared error
-%               matrix. This input can be useful when using
-%               calcMixtureMoments to compute updates for the nearest
-%               neighbor joint probabilistic data association filter.
-%  diffTransFun An optional function handle that transforms differences
-%               between values when computing the covariance. THough
-%               calcMixtureMoments is not meant for use with circular data,
-%               passing a function to wrap data can be used as an ad-hoc
-%               fix for computing a covariance matrix when using circular
-%               data, such as when dealing with longitudinal values.
+%INPUTS: xi A numDim X numPoints matrix of column vectors.
+%         w A numPoints X 1 or 1XnumPoints vector of the weights associated
+%           with each of the column vectors. Normally all w>0 to assure
+%           that P is positive definite. It is assumed that the weights sum
+%           to 1 when computing the mu and P. If this parameter is omitted
+%           or an empty matrix is passed, then all values in w are set to
+%           1/numPoints (uniform distribution).
+%      PHyp An optional numDimXnumDimXnumPoints parameter. If one wants to
+%           find the covariance matrix of a mixture distribution, then this
+%           is the set of covariances of the individual components (whose
+%           means are xi). If omitted or an empty matrix is passed, P will
+%           be computed as the covariance matrix of a bunch of points. If P
+%           is not requested on the output, this argument has no effect.
+%     muHyp An optional input that changes how the covariance matrix is
+%           computed. If something other than an empty matrix is provided,
+%           the output P will not be computed centered about mu (it will
+%           not be the covariance) but will be computed centered around
+%           muHyp, thus making P a mean-squared error matrix. This input
+%           can be useful when using calcMixtureMoments to compute updates
+%           for the nearest neighbor joint probabilistic data association
+%           filter.
+% diffTransFun An optional function handle that transforms differences
+%           between values when computing the covariance. Though
+%           calcMixtureMoments is not meant for use with circular data,
+%           passing a function to wrap data can be used as an ad-hoc fix
+%           for computing a covariance matrix when using circular data,
+%           such as when dealing with longitudinal values.
 %
-%OUTPUTS:   mu  The mean taking the values of mu as values of a probability
-%               mass function at the points in xi.
-%           P   The covariance matrix taking the values of mu as values of
-%               a probability mass function at the points in xi.
+%OUTPUTS: mu The mean taking the values of mu as values of a probability
+%            mass function at the points in xi.
+%          P The covariance matrix taking the values of mu as values of a
+%            probability mass function at the points in xi.
 %
 %This function can be used to conveniently compute the mean and covariance
 %of a set of cubature points and weights. It can also be used to compute

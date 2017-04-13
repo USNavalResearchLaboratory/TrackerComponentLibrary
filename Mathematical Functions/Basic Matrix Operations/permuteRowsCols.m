@@ -127,16 +127,15 @@ end
 %C/ Fortran based off this function, then sigma and tau would have to be
 %returned to their original values.
 sigma=abs(sigma);
-if(tau(1)>0)
-    return;
-end
 tau=abs(tau);
 
-%Undo the inversion
-if(doInversePermutation==false)
-    [~,~,sigma]=permutationCycles(sigma,-1);
-    [~,~,tau]=permutationCycles(tau,-1);
-end
+%Undo the inversion. Again, this would only be necessary if this function
+%were written in C or a similar language and used the input parameters
+%sigma and tau as scratch space rather than creating copies.
+% if(doInversePermutation==false)
+%     [~,~,sigma]=permutationCycles(sigma,-1);
+%     [~,~,tau]=permutationCycles(tau,-1);
+% end
 
 end
 

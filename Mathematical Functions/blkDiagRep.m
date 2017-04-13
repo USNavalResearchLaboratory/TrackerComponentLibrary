@@ -1,23 +1,21 @@
 function FBig=blkDiagRep(F,numTimes)
-%%BLKDIAGREP    Create a block diagonal matrix either where where the 
-%               matrices in hypermatrix F are placed on the diagonal or the
-%               matrix F is repeated numTime on the main diagonal.
+%%BLKDIAGREP Create a block diagonal matrix either where where the matrices
+%            in hypermatrix F are placed on the diagonal or the matrix F is
+%            repeated numTime on the main diagonal.
 %
-%INPUTS: F          If numTimes is provided, then F is a two-dimensional
-%                   matrix that is repeated on the main diagonal of a
-%                   larger matrix numTimes. Otherwise, if the numTimes
-%                   argument is omitted, F is a 3D hypermatrix and each 2D
-%                   element as parameterized by the third will be placed on
-%                   the main diagonal of a large 2D matrix.
-%        numTimes   The number of times (>=1) that a matrix is repeated on
-%                   the block diagonal of the larger matrix if F is a 2D
-%                   matrix to be repeated. Otherwise, this parameter is
-%                   ignored.
+%INPUTS: F If numTimes is provided, then F is a two-dimensional matrix that
+%          is repeated on the main diagonal of a larger matrix numTimes.
+%          Otherwise, if the numTimes argument is omitted, F is a 3D
+%          hypermatrix and each 2D element as parameterized by the third
+%          will be placed on the main diagonal of a large 2D matrix.
+% numTimes The number of times (>=1) that a matrix is repeated on the block
+%          diagonal of the larger matrix if F is a 2D matrix to be
+%          repeated. Otherwise, this parameter is ignored.
 %
-%OUTPUTS: FBig      A large block diagonal matrix either with the 2D matrix
-%                   F repeated numTimes on the diagonal or a block diagonal
-%                   matrix with the 2D components matrices in a 3D
-%                   hypermatrix F placed on the main diagonal.
+%OUTPUTS: FBig A large block diagonal matrix either with the 2D matrix F
+%              repeated numTimes on the diagonal or a block diagonal matrix
+%              with the 2D components matrices in a 3D hypermatrix F placed
+%              on the main diagonal.
 %
 %The Matlab function blkdiag requires that the number of times a matrix is
 %put onto a diagonal be fixed from the start. For example, for 2D, one uses
@@ -64,7 +62,6 @@ else
         FBig(spanX,spanY)=F(:,:,curBlock);
     end
 end
-
 end
 
 %LICENSE:

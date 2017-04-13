@@ -180,14 +180,14 @@ for curPoint=1:numPoints
         %for the longitude.
         phi=NaN;
     else
-        ellipsApex=Cart2Ellipse(apexPoint,a,f);
+        ellipsApex=Cart2Ellipse(apexPoint,[],a,f);
         hA=ellipsApex(3);%The ellipsoidal height of the apex point.
         %The longitude is the centered dipole longitude of the apex location;
         ApexCDSpher=Cart2Sphere(ITRS2CartCD(apexPoint,C(1+1,1+0),C(1+1,1+1),S(1+1,1+1)));
         phi=ApexCDSpher(2);%The centered dipole longitude (azimuth).
     end
     
-    zEllipse=Cart2Ellipse(zITRS);
+    zEllipse=Cart2Ellipse(zITRS,[],a,f);
     h=zEllipse(3);%The ellipsoidal height of the point.
     
     %The QD latitude. The sign is determined by the vertical component of

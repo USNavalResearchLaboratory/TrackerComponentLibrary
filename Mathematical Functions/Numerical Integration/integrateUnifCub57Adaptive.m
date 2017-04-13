@@ -18,16 +18,16 @@ function [intEst,totalErr,exitCode]=integrateUnifCub57Adaptive(f,lowerBounds,upp
 %                is passed, the default value of 500 is used. The number of
 %                function evaluations to split each region is a constant
 %                that depends on the dimensionality of the problem.
-%         RelTol The maximum relative error tolerance allowed, a
-%                positive scalar or a vector/ matrix if the output is
-%                multidimensional and different tolerances apply to
-%                different dimensions. If omitted or an empty matrix is
-%                passed, the default value of 1e-9 is used.
 %         AbsTol The absolute error tolerance allowed,a positive scalar or
 %                a vector/ matrix if the output is multidimensional and
 %                different tolerances apply to different dimensions. If
 %                omitted or an empty matrix is passed, the default value of
 %                1e-12 is used.
+%         RelTol The maximum relative error tolerance allowed, a
+%                positive scalar or a vector/ matrix if the output is
+%                multidimensional and different tolerances apply to
+%                different dimensions. If omitted or an empty matrix is
+%                passed, the default value of 1e-9 is used.
 %
 %OUTPUTS:   intEst The estimated value of the integral. The dimensionality
 %                  of this is the dimensionality of the output of f.

@@ -66,7 +66,7 @@ function [editDist,editCount,T]=findEditDistance(string1,string2,costs)
 %         editedString(curEdit)=string2(insertIdx);
 %     end
 %
-%     Deletion operations occur implicitely due to i indices being omitted.
+%     %Deletion operations occur implicitly due to i indices being omitted.
 %
 %     %Perform any change operations.
 %     curEdit=curEdit+1;

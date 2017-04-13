@@ -29,7 +29,7 @@ function [mu,P]=importanceSampExpecVal(h,f,g,gSamp,numTrials)
 %            This will be an empty matrix if numTrials=1, because no
 %            unbiased estimate is available. 
 %
-%Importance Sampling is described in Chapter 8.6 of [1]. The basic idea of
+%Importance sampling is described in Chapter 8.6 of [1]. The basic idea of
 %Monte Carlo integration is discussed in Chapter 3.2 of [1]. The matrix P
 %comes from the fact that each sample has the covariance matrix associated
 %with h(x)f(x)/g(x) and the covariance matrix of the average is 1/numTrials

@@ -9,7 +9,7 @@
  *
  * If the initWithClusterSizes method is used to allocate space for the
  * class, then the allocated memory is freed when the destructor is called.
- * One can also explicitely set the elements of the class to one's own
+ * One can also explicitly set the elements of the class to one's own
  * buffers, and never call initWithClusterSizes, in which case the
  * destructor does not free the memory.
  *

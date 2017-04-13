@@ -1,4 +1,4 @@
-function [xEnsemb,xUpdate,PUpdate,wSamp]=EnKFUpdate(xEnsemb,z,SR,h,filterType,innovTrans,measAvgFun,stateDiffTrans,stateAvgFun,stateTrans,wSamp)
+function [xEnsemb,xUpdate,PUpdate,wSamp,Pzz,innovPoints]=EnKFUpdate(xEnsemb,z,SR,h,filterType,innovTrans,measAvgFun,stateDiffTrans,stateAvgFun,stateTrans,wSamp)
 %ENKFUPDATE Perform the measurement update step in the ensemble Kalman
 %           filter. Such a filter is similar to the pure propagation
 %           filter, but adjusts the covariance of the propagated points by
@@ -12,85 +12,87 @@ function [xEnsemb,xUpdate,PUpdate,wSamp]=EnKFUpdate(xEnsemb,z,SR,h,filterType,in
 %           available for display, but do not directly play a role in the
 %           filter.
 %
-%INPUTS:      xEnsemb  An xDim X numSamples matrix of the prior predicted
-%                      target state samples (ensemble points).
-%                   z  The zDim X 1 vector measurement.
-%                   SR The zDim X zDim lower-triangular square root of the
-%                      measurement covariance matrix. If wSamp is provided,
-%                      then an empty matrix can be passed for this.
-%                    h A function handle for the measurement function that
-%                      takes the state as its argument (z=h(x)). If 
-%                      filterType=1, then h takes the state and the
-%                      measurement noise as its arguments (z=h(x,w))
-%          filterType  A parameter effecting how the filter performs the
-%                      measurement update. Possible values are:
-%                      0) (The default if omitted or an empty matrix is
-%                         passed) The randomly generated (additive)
-%                         measurement noise is added to the predicted
-%                         samples prior to computing the cross correlations
-%                         for the gain. This is not consistent with [1] and
-%                         [2], but is consistent with the normal definition
-%                         of the innovation covariance used in the gain.
-%                      1) This is the same as filterType 0, but with
-%                         non-additive noise, so h has the form h(x,w),
-%                         where w is the measurement noise.
-%                      2) Here, the filter is implemented as in [1] and
-%                         [2], where the additive noise is not included in
-%                         the computation of the gain. Rather, it is only
-%                         included in the innovation term.
-%          innovTrans  An optional function handle that transforms the
-%                      value of the difference between the observation
-%                      and any predicted points. This must be able to
-%                      handle sets of differences. For a zDim measurement,
-%                      this must be able to handle a zDimXN matrix of N
-%                      differences. This only needs to be supplied when a
-%                      measurement difference must be restricted to a
-%                      certain range. For example, the innovation between
-%                      two angles will be 2*pi if one angle is zero and
-%                      the other 2*pi, even though they are the same
-%                      direction. In such an instance, a function handle to
-%                      the wrapRange function with the appropriate
-%                      parameters should be passed for innovTrans.
-%           measAvgFun An optional function handle that, when given N
-%                      measurement values, produces the average. This
-%                      function only has to be provided if the domain of
-%                      the measurement is not linear. For example, when
-%                      averaging angular values, then the function meanAng
-%                      should be used.
-%       stateDiffTrans An optional function handle that, like innovTrans
-%                      does for the measurements, takes an xDimXN matrix of
-%                      N differences between states and transforms them
-%                      however might be necessary. For example, a state
-%                      containing angular components will generally need to
-%                      be transformed so that the difference between the
-%                      angles is wrapped to -pi/pi.
-%        stateAvgFun   An optional function that given an xDimXN matrix of N
-%                      state estimates and provides the average of the
-%                      state estimates. This is necessary if, for example,
-%                      states with angular components are averaged.
-%        stateTrans    An optional function that takes a matrix of N state
-%                      estimates and transforms them. This is useful if one
-%                      wishes the elements of the state to be bound to a
-%                      certain domain. For example, if an element of the
-%                      state is an angle, one might generally want to bind
-%                      it to the region +/-pi.
-%              wSamp   An optional zDimXnumSamples matrix of noise
-%                      samples that are to be used to perturb measurement
-%                      terms. This is available as a parameter in case one
-%                      wishes to use a deterministic sampling method. If
-%                      omitted, the noise samples are randomly drawn from
-%                      an N(O,SR*SR') Gaussian distribution and forced to
-%                      be zero-mean. This is consistent with the suggestion
-%                      in [2] that strives to avoid changing the best
-%                      estimates.
+%INPUTS: xEnsemb An xDim X numSamples matrix of the prior predicted target
+%                state samples (ensemble points).
+%              z The zDim X 1 vector measurement.
+%             SR The zDim X zDim lower-triangular square root of the
+%                measurement covariance matrix. If wSamp is provided, then
+%                an empty matrix can be passed for this.
+%              h A function handle for the measurement function that takes
+%                the state as its argument (z=h(x)). If filterType=1, then
+%                h takes the state and the measurement noise as its
+%                arguments (z=h(x,w))
+%     filterType A parameter effecting how the filter performs the
+%                measurement update. Possible values are:
+%                0) (The default if omitted or an empty matrix is passed)
+%                   The randomly generated (additive) measurement noise is
+%                   added to the predicted samples prior to computing the
+%                   cross correlations for the gain. This is not consistent
+%                   with [1] and [2], but is consistent with the normal
+%                   definition of the innovation covariance used in the
+%                   gain.
+%                1) This is the same as filterType 0, but with non-
+%                   additive noise, so h has the form h(x,w), where w is
+%                   the measurement noise.
+%                2) Here, the filter is implemented as in [1] and [2],
+%                   where the additive noise is not included in the
+%                   computation of the gain. Rather, it is only included in
+%                   the innovation term.
+%     innovTrans An optional function handle that transforms the value of
+%                the difference between the observation and any predicted
+%                points. This must be able to handle sets of differences.
+%                For a zDim measurement, this must be able to handle a
+%                zDimXN matrix of N differences. This only needs to be
+%                supplied when a measurement difference must be restricted
+%                to a certain range. For example, the innovation between
+%                two angles will be 2*pi if one angle is zero and the other
+%                2*pi, even though they are the same direction. In such an
+%                instance, a function handle to the wrapRange function with
+%                the appropriate parameters should be passed for
+%                innovTrans.
+%     measAvgFun An optional function handle that, when given N measurement
+%                values, produces the average. This function only has to be
+%                provided if the domain of the measurement is not linear.
+%                For example, when averaging angular values, then the
+%                function meanAng should be used.
+% stateDiffTrans An optional function handle that, like innovTrans does for
+%                the measurements, takes an xDimXN matrix of N differences
+%                between states and transforms them however might be
+%                necessary. For example, a state containing angular
+%                components will generally need to be transformed so that
+%                the difference between the angles is wrapped to -pi/pi.
+%    stateAvgFun An optional function that given an xDimXN matrix of N
+%                state estimates and provides the average of the state
+%                estimates. This is necessary if, for example, states with
+%                angular components are averaged.
+%     stateTrans An optional function that takes a matrix of N state
+%                estimates and transforms them. This is useful if one
+%                wishes the elements of the state to be bound to a certain
+%                domain. For example, if an element of the state is an
+%                angle, one might generally want to bind it to the region
+%                +/-pi.
+%          wSamp An optional zDimXnumSamples matrix of noise samples that
+%                are to be used to perturb measurement terms. This is
+%                available as a parameter in case one wishes to use a
+%                deterministic sampling method. If omitted, the noise
+%                samples are randomly drawn from an N(O,SR*SR') Gaussian
+%                distribution and forced to be zero-mean. This is
+%                consistent with the suggestion in [2] that strives to
+%                avoid changing the best estimates.
 %
 %OUTPUTS: xEnsemb The updated ensemble points.
-%         xUpdate The  mean of the updated ensemble points.
+%         xUpdate The mean of the updated ensemble points.
 %         PUpdate The covariance matrix associated with the updated sample
 %                 points.
 %           wSamp The measurement noise samples used. If wSamp is provided
 %                 as an input, this is the input. Otherwise, this is the
 %                 randomly generated samples (with forced zero-mean).
+% Pzz, innovPoints The zDimXzDim innovation covariance matrix and the
+%                 zDimXnumSamples innovation value for each of the points
+%                 are returned in case one wishes to analyze the
+%                 consistency of the estimator or use those values in
+%                 gating or likelihood evaluation. One will typically use
+%                 the average of innovPoints over all of the samples.
 %
 %The basic algorithm is described in [1] and [2]. However, as described,
 %the innovation covariance (the covariance matrix of the measurement and
@@ -207,18 +209,21 @@ Pxz=(1/(numSamples-1))*(xPredCenPoints*zPertCenPoints');
 %singular).
 K=Pxz*pinv(Pzz);
 
+innovPoints=zeros(zDim,1);
 if(filterType==0||filterType==1)
     %Update the ensemble points, without noise added to the measurement,
     %because it is included in the predicted points.
     for curP=1:numSamples
-        xEnsemb(:,curP)=stateTrans(xEnsemb(:,curP)+K*innovTrans(z-zPertPoints(:,curP)));
+        innovPoints(:,curP)=innovTrans(z-zPertPoints(:,curP));
+        xEnsemb(:,curP)=stateTrans(xEnsemb(:,curP)+K*innovPoints(:,curP));
     end
 else
     %Update the ensemble points adding in the noise to the measurement,
     %because it is not included in the ensemble points. This is how it is
     %in [1] and [2].
     for curP=1:numSamples
-        xEnsemb(:,curP)=stateTrans(xEnsemb(:,curP)+K*innovTrans(z+wSamp(:,curP)-zPertPoints(:,curP)));
+        innovPoints(:,curP)=innovTrans(z+wSamp(:,curP)-zPertPoints(:,curP));
+        xEnsemb(:,curP)=stateTrans(xEnsemb(:,curP)+K*innovPoints(:,curP));
     end
 end
 

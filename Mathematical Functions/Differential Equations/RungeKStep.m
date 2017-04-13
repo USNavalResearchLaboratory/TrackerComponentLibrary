@@ -1,7 +1,7 @@
 function [xPredMain,xPredSubsid,k,orders,isFSAL]=RungeKStep(xVal,curT,f,deltaT,fCur,order,solutionChoice)
 %%RUNGEKSTEP Perform a single step of an explicit Runge-Kutta method whose
 %            main integrating order is given by order. All implemented
-%            RUnge-Kutta routines are embedded routines, meaning that a
+%            Runge-Kutta routines are embedded routines, meaning that a
 %            secondary result of a different order, either one order higher
 %            or one lower, can also be returned along with the order of the
 %            second output. This second output can be used in an algorithm

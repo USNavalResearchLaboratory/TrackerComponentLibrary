@@ -1,4 +1,4 @@
-function zNew=ruv2Ruv(z,useHalfRange,zTx1,zRx1,M1,zTx2,zRx2,M2)
+function zNew=ruv2Ruv(z,useHalfRange,zTx1,zRx1,M1,zTx2,zRx2,M2,includeW)
 %%RUV2RUV Convert from bistatic r-u-v (or r-u-v-w) coordinates with respect
 %         to one bistatic radar pair into those for another. This function
 %         can be useful for converting bistatically received measurements
@@ -50,6 +50,15 @@ function zNew=ruv2Ruv(z,useHalfRange,zTx1,zRx1,M1,zTx2,zRx2,M2)
 % zTx2,zRx2,M2 These are the same as aTx1,zRx1, and M1, but for the
 %           coordinate system into which the bistatic r-u-v(-w)
 %           measurements should be converted.
+%  includeW An optional boolean value indicating whether a third direction
+%           cosine component should be included in the output (regardless
+%           of whether it was provided in the input). The u and v direction
+%           cosines are two parts of a 3D unit vector. Generally, one might
+%           assume that the target is in front of the sensor, so the third
+%           component would be positive and is not needed. However, the
+%           third component can be included if ambiguity exists. The
+%           default if this parameter is omitted or an empty matrix is
+%           passed is false if the input z is 3XN and true if z is 4XN.
 %
 %OUTPUTS: zNew The measurements converted into the other coordinate system.
 %              If z was 3XN, then this is 3XN. If z was 4XN, then this is
@@ -64,8 +73,11 @@ function zNew=ruv2Ruv(z,useHalfRange,zTx1,zRx1,M1,zTx2,zRx2,M2)
 
 numDim=size(z,1);
 
-%4D means r-u-v-w coordinates, so the W cordinate must be included.
-includeW=(numDim==4);
+if(nargin<9||isempty(includeW))
+    %4D means r-u-v-w coordinates, so assume that the w coordinate should
+    %be included.
+    includeW=(numDim==4);
+end
 
 zC=ruv2Cart(z,useHalfRange,zTx1,zRx1,M1);
 zNew=Cart2Ruv(zC,useHalfRange,zTx2,zRx2,M2,includeW);

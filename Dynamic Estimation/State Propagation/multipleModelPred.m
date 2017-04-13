@@ -74,7 +74,7 @@ function [xPredSet,PPredSet]=multipleModelPred(AlgSel,xSet,PSet,transFuns,numSta
 %                 xDimMaxXxDimMaxXnumModelsXnumModels in size.
 %
 %Multiple model routines for target tracking are discussed in general in
-%Chapter 11.6 of [4]. The multiple model algorithms assume that model swaps
+%Chapter 11.6 of [3]. The multiple model algorithms assume that model swaps
 %only occur at discrete times during the measurement update. Thus, while
 %continuous-time propagation routines can be used here, the model swapping
 %method is inherently discrete. One way to handle that would be to set a

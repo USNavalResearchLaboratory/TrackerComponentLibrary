@@ -1,5 +1,5 @@
 classdef WishartD
-%Functions to handle the Wishart distribution.
+%%WISHARTD Functions to handle the Wishart distribution.
 %Implemented methods are: PDF, mean, rand
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

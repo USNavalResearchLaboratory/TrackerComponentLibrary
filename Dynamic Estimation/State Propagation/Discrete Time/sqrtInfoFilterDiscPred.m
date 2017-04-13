@@ -107,7 +107,7 @@ function [ySqrtPred, PInvSqrtPred,RwPred,RwxPred]=sqrtInfoFilterDiscPred(ySqrtPr
 
    ySqrtPred=T((QDim+1):end,end);
    PInvSqrtPred=T((QDim+1):end,(end-xDim):(end-1));
-   if nargout>2
+   if(nargout>2)
        RwPred=T(1:QDim,1:QDim);
        RwxPred=T(1:QDim,(QDim+1):(end-1));
    end

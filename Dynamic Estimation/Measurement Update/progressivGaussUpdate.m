@@ -9,25 +9,25 @@ function [xUpdate,SUpdate]=progressivGaussUpdate(xPred,SPred,zLike,xi,w,stepSize
 %               (with renormalization each step) from the prior to the
 %               posterior distribution.
 %              
-%INPUTS: xPred  The xDim X 1 predicted target state.
-%        SPred  The xDim X xDim lower-triangular square root of the
-%               predicted state covariance matrix.
-%        zLike  A function handle such that zLike(x) returns the
-%               conditional likelikoods of the measurement given a matrix
-%               of N target states. That is, an xDimXN matrix. The
-%               likelihoods can be returned as a 1XN vector or an NX1
-%               vector. It does not matter if they are all off by a
-%               constant multiplicative factor from their true values.
-%           xi  An xDim X numCubPoints matrix of cubature points.
-%            w  A numCubPoints X 1 vector of the weights associated with
-%               the cubature points. These should be all greater than zero
-%               and sum to one.
-%stepSizeBounds An optional 2X1 or 1X2 vector giving bounds on the adaptive
-%               step size used for the progressive measurement update.
-%               These values are between 0 and 1, representing the
-%               minimum/maximum change in the homotopy parameter each step.
-%               If this parameter is omitted or an empty matrix is passed,
-%               the default value of [1/100; 0.5] is used.
+%INPUTS: xPred The xDim X 1 predicted target state.
+%        SPred The xDim X xDim lower-triangular square root of the
+%              predicted state covariance matrix.
+%        zLike A function handle such that zLike(x) returns the conditional
+%              likelikoods of the measurement given a matrix of N target
+%              states. That is, an xDimXN matrix. The likelihoods can be
+%              returned as a 1XN vector or an NX1 vector. It does not
+%              matter if they are all off by a constant positive
+%              multiplicative factor from their true values.
+%           xi An xDim X numCubPoints matrix of cubature points.
+%            w A numCubPoints X 1 vector of the weights associated with the
+%              cubature points. These should be all greater than zero and
+%              sum to one.
+% stepSizeBounds An optional 2X1 or 1X2 vector giving bounds on the
+%              adaptive step size used for the progressive measurement
+%              update. These values are between 0 and 1, representing the
+%              minimum/maximum change in the homotopy parameter each step.
+%              If this parameter is omitted or an empty matrix is passed,
+%              the default value of [1/100; 0.5] is used.
 %
 %OUTPUTS: xUpdate The xDim X 1 updated state vector. If zLike ever returned
 %                 all zeros when evaluating a particular set of cubature

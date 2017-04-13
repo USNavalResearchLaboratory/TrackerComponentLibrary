@@ -16,7 +16,7 @@ function x= BesseliRatio(nu,kappa,maxIter)
 %OUTPUTS: x The value of the raio I_nu(kappa)/I_{nu-1}(kappa).
 %
 %Numerical precision limitations can make the evaluation of Bessel function
-%radios difficult if one tries to explicitely evaluate the functions. Here,
+%radios difficult if one tries to explicitly evaluate the functions. Here,
 %the algorithm of Perron described in [1] is implemented.
 %
 %REFERENCES:

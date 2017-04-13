@@ -105,7 +105,7 @@ function DeltaR=solidTideShift(rStation,rSun,rMoon,Jul1,Jul2,addPermTide)
 %respect to lunar parameters and 2 refers to a value with respect to solar
 %parameters.
 
-if(nargin<4)
+if(nargin<6||isempty(addPermTide))
     addPermTide=false;
 end
 

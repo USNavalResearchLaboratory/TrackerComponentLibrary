@@ -37,7 +37,7 @@ function [u,theta,q]=rotMat2AxisAng(R,handed)
 %March 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<2)
+if(nargin<2||isempty(handed))
     handed='right';
 end
 

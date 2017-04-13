@@ -73,7 +73,7 @@ if(derivDim>numIdx||dimSizeList(derivDim)==1)
     return;
 end
 
-%Rather than explicitely programming the loops, which would be slow in
+%Rather than explicitly programming the loops, which would be slow in
 %Matlab, we take advantage of being able to index Matlab variables using
 %cell arrays. Here, we zero all terms that do not include derivDim.
 idxVec=cell(numIdx,1);

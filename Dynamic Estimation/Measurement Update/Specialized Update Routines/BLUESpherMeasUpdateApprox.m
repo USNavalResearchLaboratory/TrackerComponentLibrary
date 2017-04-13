@@ -19,12 +19,12 @@ function [xStateUpdate,PUpdate,innov,S]=BLUESpherMeasUpdateApprox(xStatePred,PPr
 %                   measurement z. Any cross terms present in R will be
 %                   ignored.
 %
-%OUTPUTS:   xStateUpdate The 6 X 1 updated state vector.
-%           PUpdate     The updated 6 X 6 state covariance matrix.
-%           innov, S    The 3X1 innovation and the 3X3 innovation
-%                       covariance matrix are returned in case one wishes
-%                       to analyze the consistency of the estimator or use
-%                       those values in gating or likelihood evaluation.
+%OUTPUTS: xStateUpdate The 6X1 updated state vector.
+%              PUpdate The updated 6X6 state covariance matrix.
+%             innov, S The 3X1 innovation and the 3X3 innovation covariance
+%                      matrix are returned in case one wishes to analyze
+%                      the consistency of the estimator or use those values
+%                      in gating or likelihood evaluation.
 %
 %The algorithm is the set of equations taken from Table I of [1].
 %

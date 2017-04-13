@@ -1,6 +1,6 @@
 classdef VonMisedD
-%Functions to handle the von Mises distribution, which is a common circular
-%distribution.
+%%VONMISESD Functions to handle the von Mises distribution, which is a
+%    common circular distribution.
 %Implemented methods are: PDF, CDF, trigMoment, normProdDist, rand
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

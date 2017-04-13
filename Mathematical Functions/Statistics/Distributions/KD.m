@@ -1,11 +1,11 @@
 classdef KD
-%Functions to handle the scalar K-distribution. The K-distirbution is often
-%used to model the observed radar cross section (RCS) of radar returns due
-%to clutter, as mentioned in [1]. Multiple definitions of _the_ K
-%distribution exist depending on how many parameters there are. This
-%function implements the distributions for one, two, and three parameters.
-%These are often called the K0, K and K' distributions (or all just the K
-%distribution) as in [2].
+%%KD Functions to handle the scalar K-distribution. The K-distirbution is
+%    often used to model the observed radar cross section (RCS) of radar
+%    returns due to clutter, as mentioned in [1]. Multiple definitions of
+%    _the_ K distribution exist depending on how many parameters there are.
+%    This function implements the distributions for one, two, and three
+%    parameters. These are often called the K0, K and K' distributions (or
+%    all just the K distribution) as in [2].
 %Implemented methods are: mean, var, PDF, moments, rand
 %
 %REFERENCES:

@@ -1,62 +1,55 @@
 function [azStart,dist,azEnd]=indirectGeodeticProbGen(latLonStart,latLonEnd,height,useHeightApprox,a,f,numSteps4Circ)
 %%INDIRECTGEODETICPROBGEN  Solve the indirect geodetic problem. That is,
-%                       given two points on an ellipsoidal Earth, find the
-%                       initial bearing and distance one must travel to
-%                       take the shortest (geodesic) path between the
-%                       points. This function is general in that it will
-%                       also solve the indirect geodetic problem at a fixed
-%                       height above the reference ellipsoid either using a
-%                       simple approximation, or using a slow exact
-%                       technique.
+%           given two points on an ellipsoidal Earth, find the initial
+%           bearing and distance one must travel to take the shortest
+%           (geodesic) path between the points. This function is general in
+%           that it will also solve the indirect geodetic problem at a
+%           fixed height above the reference ellipsoid either using a
+%           simple approximation, or using a slow exact technique.
 %
 %INPUTS:latLonStart The initial point given in geodetic latitude and
-%                   longitude in radians of the format
-%                   [latitude;longitude].
-%        latLonEnd  The final point for the geodesic path given
-%                   in geodetic latitude  and longitude in radians.
-%                   latLonEnd has the same format at latLonStart.
-%         height    The height above the reference ellipsoid at which the
-%                   trajectory should be determined. This changes the
-%                   distance traveled, but not the azimuthal angle of
-%                   departure. If this parameter is omitted, then the
-%                   default value of 0 is used.
-%  useHeightApprox  If true, and the height is not zero, then an
-%                   approximation is made for how dist scales with
-%                   altitude. Specifically, an equiatorial trajectory will
-%                   scale as (a+height)/a. Thus, this scaling factor is
-%                   applied to any trajectory to scale dist with altitude.
-%                   If height is false, a significantly slower iterative
-%                   optimization technique is used. The default value is
-%                   true. The difference made when useHeightApprox=false is
-%                   can generally be assumed to be less than 80m. This
-%                   parameter is ignored if height=0.
-%           a       The semi-major axis of the reference ellipsoid (in
-%                   meters). If this argument is omitted, the value in
-%                   Constants.WGS84SemiMajorAxis is used.
-%           f       The flattening factor of the reference ellipsoid. If
-%                   this argument is omitted, the value in
-%                   Constants.WGS84Flattening is used.
-%   numSteps4Circ   If height!=0 then an algorithm propagating a state
-%                   in ECEF coordinates around the curved Earth is used to
-%                   solve the direct geodetic problem as a step in solving
-%                   the indirect geodetic problem. This parameter
-%                   determines the number of steps that would be needed in
-%                   the direct geodetic problem for a target that
-%                   circumnavigates the globe around the equator. The
-%                   default value if this parameter is not provided is
-%                   2000. A value of 6000 appears to be about the best
-%                   number for overall precision. Reducing the number of
-%                   steps will speed up the function. This parameter is not
-%                   used if height=0.
+%           longitude in radians of the format [latitude;longitude].
+% latLonEnd The final point for the geodesic path given in geodetic
+%           latitude and longitude in radians. latLonEnd has the same
+%           format at latLonStart.
+%    height The height above the reference ellipsoid at which the
+%           trajectory should be determined. This changes the distance
+%           traveled, but not the azimuthal angle of departure. If this
+%           parameter is omitted, then the default value of 0 is used.
+% useHeightApprox If true, and the height is not zero, then an
+%           approximation is made for how dist scales with altitude.
+%           Specifically, an equiatorial trajectory will scale as
+%           (a+height)/a. Thus, this scaling factor is applied to any
+%           trajectory to scale dist with altitude. If height is false, a
+%           significantly slower iterative optimization technique is used.
+%           The default value is true. The difference made when
+%           useHeightApprox=false can generally be assumed to be less than
+%           80m. This parameter is ignored if height=0.
+%         a The semi-major axis of the reference ellipsoid (in meters). If
+%           this argument is omitted, the value in
+%           Constants.WGS84SemiMajorAxis is used.
+%         f The flattening factor of the reference ellipsoid. If this
+%           argument is omitted, the value in Constants.WGS84Flattening is
+%           used.
+% numSteps4Circ If height!=0 then an algorithm propagating a state in ECEF
+%           coordinates around the curved Earth is used to solve the direct
+%           geodetic problem as a step in solving the indirect geodetic
+%           problem. This parameter determines the number of steps that
+%           would be needed in the direct geodetic problem for a target
+%           that circumnavigates the globe around the equator. The default
+%           value if this parameter is not provided is 2000. A value of
+%           6000 appears to be about the best number for overall precision.
+%           Reducing the number of steps will speed up the function. This
+%           parameter is not used if height=0.
 %
-%OUTPUTS: azStart   The forward azimuth at the starting point in radians
-%                   East of true North on the reference ellipsoid. This is
-%                   the initial heading one would travel to go between the
-%                   two points.
-%         dist      The geodetic distance between the starting and stopping
-%                   points in meters.
-%         azEnd     The forward azimuth at the ending point in radians
-%                   East of true North on the reference ellipsoid.
+%OUTPUTS: azStart The forward azimuth at the starting point in radians East
+%                 of true North on the reference ellipsoid. This is the
+%                 initial heading one would travel to go between the two
+%                 points.
+%            dist The geodetic distance between the starting and stopping
+%                 points in meters.
+%           azEnd The forward azimuth at the ending point in radians East
+%                 of true North on the reference ellipsoid.
 %
 %The algorithm initially solves the indirect geodetic problem on the
 %surface of the reference ellipsoid using the function

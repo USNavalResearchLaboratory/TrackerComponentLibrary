@@ -1,22 +1,20 @@
 function [CartPoint,latLong]=randEllipsoidLoc(N,a,f)
-%%RANDELLIPSOIDLOC  Generate a random point uniformly distributed on a
-%              reference ellipsoid, such as the WGS-84 reference ellipsoid.
-%              The point is provided in Cartesian coordinates as well as in
-%              terms of latitude and longitude.
+%%RANDELLIPSOIDLOC  Generate a random point uniformly distributed on the
+%              surface of a reference ellipsoid, such as the WGS-84
+%              reference ellipsoid. The point is provided in Cartesian
+%              coordinates as well as in terms of latitude and longitude.
 %
-%INPUTS:    N       The number of random samples on the reference ellipsoid
-%                   to draw.
-%           a       The semi-major axis of the reference ellipsoid. If
-%                   this argument is omitted, the value in
-%                   Constants.WGS84SemiMajorAxis is used.
-%           f       The flattening factor of the reference ellipsoid. If
-%                   this argument is omitted, the value in
-%                   Constants.WGS84Flattening is used.
+%INPUTS: N The number of random samples on the reference ellipsoid to draw.
+%        a The semi-major axis of the reference ellipsoid. If this argument
+%          is omitted, the value in Constants.WGS84SemiMajorAxis is used.
+%        f The flattening factor of the reference ellipsoid. If this
+%          argument is omitted, the value in Constants.WGS84Flattening is
+%          used.
 %
 %OUTPUTS: CartPoint A 3XN matrix of random Cartesian [x;y;z] points on the
 %                   ellipsoid with the given semi-major axis and flattening
 %                   factor.
-%         latLong   A 2XN matrix of ellipsoidal latitude and longitude
+%           latLong A 2XN matrix of ellipsoidal latitude and longitude
 %                   corresponding to points in CartPoint.
 %
 %The problem of generating a uniformly distributed sample on a reference
@@ -87,7 +85,7 @@ for curSamp=1:N
 end
 
 if(nargout>1)
-    point=Cart2Ellipse(CartPoint,a,f);
+    point=Cart2Ellipse(CartPoint,[],a,f);
     latLong=point(1:2,:);
 end
 end

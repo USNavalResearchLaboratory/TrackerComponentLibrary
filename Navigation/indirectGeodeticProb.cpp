@@ -12,10 +12,10 @@
  *        latLonEnd The 2XN matrix of final points for the geodesic path
  *                  given in geodetic latitude  and longitude in radians.
  *                  latLonEnd has the same format at latLonStart.
- *          a       The semi-major axis of the reference ellipsoid (in
+ *                a The semi-major axis of the reference ellipsoid (in
  *                  meters). If this argument is omitted, the value in
  *                  Constants.WGS84SemiMajorAxis is used.
- *          f       The flattening factor of the reference ellipsoid. If
+ *                f The flattening factor of the reference ellipsoid. If
  *                  this argument is omitted, the value in
  *                  Constants.WGS84Flattening is used.
  *
@@ -24,9 +24,9 @@
  *                  This is the initial heading one would travel to go
  *                  between latLonStart and latLonEnd for each of the point
  *                  pairs
- *        dist      The NX1 vector of geodetic distances between the
+ *             dist The NX1 vector of geodetic distances between the
  *                  starting and stopping points in meters.
- *        azEnd     The forward azimuth at the ending point in radians
+ *            azEnd The forward azimuth at the ending point in radians
  *                  East of true North on the reference ellipsoid.
  *
  *The function is essentially a Matlab interface for the implementation in

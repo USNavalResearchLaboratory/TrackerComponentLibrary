@@ -3,23 +3,23 @@ function [xi,w]=seventhOrderExpCubPoints(numDim,algorithm)
 %               integration over real space involving the weighting
 %               function w(x)=exp(-sqrt(sum(x.*x))).
 %
-%INPUTS:  numDim An integer specifying the dimensionality of the points
-%                to be generated.
-%      algorithm A value indicating which algorithm should be used.
-%                Possible values are
-%                0 (The default if omitted or an empty matrix is passed)
-%                  Formula E_n^r 7-1 in [1], pg. 331, 2^numDim+2*numDim^2+1
-%                  points, 3<=numDim<=7.
-%                1 Formula E_2^r 7-1 in [1], pg. 332, 12 points, numDim=2.
-%                2 Formula E_3^r 7-1 in [1], pg. 334, 27 points, numDim=3,
-%                  with a correction for the denominator of the D term.
-%                3 Formula E_3^r 7-2 in [1], pg. 335, 33 ppints, numDim=3.
-%                4 Formula E_4^r 7-1 in [1], pg. 335, 49 points, numDim=4.
+%INPUTS: numDim An integer specifying the dimensionality of the points to
+%               be generated.
+%     algorithm A value indicating which algorithm should be used. Possible
+%               values are:
+%               0 (The default if omitted or an empty matrix is passed)
+%                 Formula E_n^r 7-1 in [1], pg. 331, 2^numDim+2*numDim^2+1
+%                 points, 3<=numDim<=7.
+%               1 Formula E_2^r 7-1 in [1], pg. 332, 12 points, numDim=2.
+%               2 Formula E_3^r 7-1 in [1], pg. 334, 27 points, numDim=3,
+%                 with a correction for the denominator of the D term.
+%               3 Formula E_3^r 7-2 in [1], pg. 335, 33 ppints, numDim=3.
+%               4 Formula E_4^r 7-1 in [1], pg. 335, 49 points, numDim=4.
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %REFERENCES:
 %[1] A.H. Stroud, Approximate Calculation of Multiple Integrals. Cliffs,

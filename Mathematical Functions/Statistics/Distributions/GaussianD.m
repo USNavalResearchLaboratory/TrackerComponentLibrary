@@ -1,5 +1,6 @@
 classdef GaussianD
-%Functions to handle the scalar and multivariate Gaussian distribution.
+%%GAUSSIAND Functions to handle the scalar and multivariate Gaussian
+%           distribution.
 %Implemented methods are: mean,cov, PDF, PDFI, PDFIDerivs (for multivariate
 %                         derivatives of the PDF), PDFS, PDFSGradHessVechS
 %                         (for the gradient and Hessian of the elements of
@@ -38,6 +39,10 @@ function val=cov(Sigma)
 %INPUTS: Sigma The variance (if scalar) or covariance matrix (if
 %               multidimensional) of the PDF. The variance cannot be zero
 %               and the covariance matrix cannot be singular.
+%
+%The Gaussian distribution is parameterized by its mean and covariance
+%matrix. Thus, this function just returns the covariance matrix it is
+%given.
 %
 %OUTPUTS: val  The covariance matrix of the Gaussian distribution.
 %
@@ -271,9 +276,9 @@ function val=PDFS(z,mu,S)
     if(nargin<2||isempty(mu))
         mu=zeros(numDim,1);
     end
-    
+
     if(nargin<3||isempty(S))
-       S=eye(numDim,numDim); 
+    	S=eye(numDim,numDim); 
     end
 
 %Note that (S*S')^(-1)=(S')^(-1)*S^(-1)
@@ -529,7 +534,7 @@ function [mu,SigmaInv,multiConst]=normProdDist(mu1,SigmaInv1,mu2,SigmaInv2)
 %
 %The derivation of the product of two normal PDFs is a standard exercise in
 %many statistics classes. The product distribution is also given
-%explicitely in [1].
+%explicitly in [1].
 %
 %Note that while SigmaInv1 and SigmaInv2 can each be singular, the sum must
 %be non-singular. Note that for products involving distributions with
@@ -795,15 +800,15 @@ function x=rand(N,mu,P)
 %%RAND   Generate multivariate Gaussian random variables with a given
 %        mean vector and covariance matrix.
 %
-%INPUTS:  N  The number of random variables to generate.
-%        mu  The xDim X1 mean of the multivariate Gaussian to generate.
-%        P   The xDim X xDim positive definite covariance matrix of the
-%            multivariate Gaussian to generate. If this parameter is
-%            omitted or an empty matrix is passed, then the identity matrix
-%            will be used.
+%INPUTS: N The number of random variables to generate.
+%       mu The xDim X1 mean of the multivariate Gaussian to generate.
+%       P  The xDim X xDim positive definite covariance matrix of the
+%          multivariate Gaussian to generate. If this parameter is omitted
+%          or an empty matrix is passed, then the identity matrix will be
+%          used.
 %
-%OUTPUT: x   An xDimXN matrix of random instances of the multivariate
-%            Gaussian distribution.
+%OUTPUT: x An xDimXN matrix of random instances of the multivariate
+%          Gaussian distribution.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 

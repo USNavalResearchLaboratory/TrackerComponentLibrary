@@ -45,6 +45,7 @@ function [xEst,PEst,logLikes]=singleScanUpdate(xHyp,PHyp,A,algSel1,algSel2,param
 %              5) JPDA*
 %              6) Approximate GNN-JPDA
 %              7) Approximate JPDA 
+%              8) Set JPDA
 %      algSel2 An optional parameter that further specifies the algorithm
 %              used when algSel1=6-7. If omitted but algSel1 is specified,
 %              a default value of 0 is used. If both algSel1 and algSel2
@@ -97,7 +98,7 @@ function [xEst,PEst,logLikes]=singleScanUpdate(xHyp,PHyp,A,algSel1,algSel2,param
 %
 %One possible way to form the A matrix is to use likelihood ratios going
 %into the dimensionless score function from [4]. This is implemented for a
-%standard Cartesian/Gaussian model using makeStandardCartLRMatHyps.
+%standard Cartesian/Gaussian model using makeStandardCartOnlyLRMatHyps.
 %
 %REFERENCES:
 %[1] Y. Bar-Shalom, P. K. Willett, and X. Tian, Tracking and Data Fusion.
@@ -299,6 +300,15 @@ function [xEst,PEst,logLikes]=singleScanUpdate(xHyp,PHyp,A,algSel1,algSel2,param
             %If a likelihood is desired, then find the weighted likelihood.
             if(nargout>2)
                 logLikes=logLikefromABeta(A,beta);
+            end
+        case 8%Set JPDAF
+            %This is the same as the JPDA, except the method for computing
+            %the betas is different.
+            %Compute the Set JPDAF probabilities.
+            [xEst,PEst]=calcSetJPDAUpdate(xHyp,PHyp,A,AlgSel2);
+
+            if(nargout>2)
+                logLikes=[];
             end
         otherwise
             error('Unknown algorithm selected.')

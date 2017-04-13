@@ -1,4 +1,4 @@
-function [xUpdate,PUpdate]=HInfinityUpdate(xPred,PPred,z,RInv,H,gammaVal,QBar)
+function [xUpdate,PUpdate,innov]=HInfinityUpdate(xPred,PPred,z,RInv,H,gammaVal,QBar)
 %%HINFINITYUPDATE Perform the measurement update step of the finite-horizon
 %                 H-infinity-filter. This filter is similar to the Kalman
 %                 filter, but is more robust to model mismatch errors. Note
@@ -7,30 +7,32 @@ function [xUpdate,PUpdate]=HInfinityUpdate(xPred,PPred,z,RInv,H,gammaVal,QBar)
 %                 the Kalman filter, and thus the function discKalPred can
 %                 be used for prediction.
 %
-%INPUTS:    xPred  The xDim X 1 predicted target state.
-%           PPred  The xDim X xDim predicted state covariance matrix. This
-%                  must be positive definite.
-%           z      The zDim X 1 vector measurement.
-%           RInv   The zDim X zDim inverse of the measurement covariance
-%                  matrix. 
-%           H      The zDim X xDim measurement matrix for a linear 
-%                  measurement model. That is z=H*x+w, where w is
-%                  measurement noise having covariance matrix R.
-%        gammaVal  The inverse of the positive scalar bound on the cost
-%                  function as given in Equation 4 of [1]. If this is zero
-%                  (unbounded), then the update is equavalent to the Kalman
-%                  filter update. This can be seen by comparing the
-%                  update equation with those of the information filter in
-%                  Chapter 7.2.2 of [2].
-%            QBar  A symmetric matrix that goes into the cost function. If
-%                  one is not interested in the state x itself, but is
-%                  actually interested in L*x, where L is some matrix, then
-%                  QBar=L'*QT*L, where QT is a matrix that goes into the
-%                  cost function. If this parameter is omitted or an empty
-%                  matrix is passed, then the identity matrix will be used.
+%INPUTS: xPred The xDim X 1 predicted target state.
+%        PPred The xDim X xDim predicted state covariance matrix. This must
+%              be positive definite.
+%            z The zDim X 1 vector measurement.
+%         RInv The zDim X zDim inverse of the measurement covariance
+%              matrix. 
+%            H The zDim X xDim measurement matrix for a linear measurement
+%              model. That is z=H*x+w, where w is measurement noise having
+%              covariance matrix R.
+%     gammaVal The inverse of the positive scalar bound on the cost
+%              function as given in Equation 4 of [1]. If this is zero
+%              (unbounded), then the update is equavalent to the Kalman
+%              filter update. This can be seen by comparing the update
+%              equation with those of the information filter in Chapter
+%              7.2.2 of [2].
+%          QBar A symmetric matrix that goes into the cost function. If one
+%              is not interested in the state x itself, but is actually
+%              interested in L*x, where L is some matrix, then
+%              QBar=L'*QT*L, where QT is a matrix that goes into the cost
+%              function. If this parameter is omitted or an empty matrix is
+%              passed, then the identity matrix will be used.
 %
-%OUTPUTS:      xUpdate  The xDim X 1 updated state vector.
-%              PUpdate  The updated xDim X xDim state covariance matrix.
+%OUTPUTS: xUpdate The xDim X 1 updated state vector.
+%         PUpdate The updated xDim X xDim state covariance matrix.
+%           innov The zDimX1 innovation of the filter. This is sometimes
+%                 used in gating and likelihood evaluation.
 %
 %The H-infinity filter optimizes over a cost function given in Equation 3
 %in [1]. The numerator of the cost function includes the QT term and is

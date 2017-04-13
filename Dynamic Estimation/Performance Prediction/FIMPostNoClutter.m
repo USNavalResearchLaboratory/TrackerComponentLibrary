@@ -11,7 +11,8 @@ function J=FIMPostNoClutter(H,F,R,Q,PD)
 %               discrete-time k+1 is modeled as F times the state at time k
 %               plus zero-mean Gaussian process noise with covariance
 %               matrix Q.
-%           R   The zDim X zDim measurement covariance matrix.
+%           R   The zDim X zDim measurement covariance matrix. This must be
+%               positive definite.
 %           Q   The xDim X xDim process noise covariance matrix. If this is
 %               singular, an iterative solution is used. Otherwise, an
 %               explicit algorithm is used. If Q is singular, then the
@@ -41,6 +42,18 @@ function J=FIMPostNoClutter(H,F,R,Q,PD)
 %RiccatiPostNoClutter. Otherwise, the inverse FIM is less than the output
 %of RiccatiPostNoClutter.
 %
+%EXAMPLE:
+% T=1;
+% F=FPolyKal(T,zeros(6,1),1);
+% q0=1;
+% Q=QPolyKal(T,zeros(6,1),1,q0);
+% R=diag([10;10;10]);
+% H=[1,0,0,0,0,0;
+%    0,1,0,0,0,0;
+%    0,0,1,0,0,0];
+% PD=0.5;
+% P=FIMPostNoClutter(H,F,R,Q,PD)
+%
 %REFERENCES:
 %[1] Y. Bar-Shalom, X. Zhang, and P. Willett, "Simplification of the
 %    dynamic Cramér-Rao bound for target tracking in clutter," IEEE
@@ -60,32 +73,38 @@ function J=FIMPostNoClutter(H,F,R,Q,PD)
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<5)
+if(nargin<5||isempty(PD))
    PD=1; 
 end
 
 n=size(H,2);
 
-epsilon=1e-12;
-
 %If the Q matrix is singular, then use an iterative approach, otherwise use
-%the expllicit solution.
+%the explicit solution.
 if(rcond(Q)<1e-15)
     maxIter=5000;
-    %Iterate until convergence of the Frobenis norm or until a maximum
+    
+    %The convergence criteria that are used if the Q matrix is singular or
+    %nealy singular.
+    RelTol=1e-12;
+    AbsTol=1e-15;
+    
+    %Iterate until convergence or until a maximum
     %number of iterations has occurred.
     curIter=0;
     JPrev=eye(size(F));
     Jz=PD*H'*inv(R)*H;
     while(curIter<maxIter)
         J=inv(Q+F*inv(JPrev)*F')+Jz;
-        if(norm(J-JPrev,'fro')/norm(J,'fro')<epsilon)
+        
+        diffMag=abs(J-JPrev);
+        if(all((diffMag(:)<=RelTol*abs(J(:)))|(diffMag(:)<=AbsTol)))
             return;
         end
         JPrev=J;
         curIter=curIter+1;
     end
-    display('Warning: Max (5000) Iterations Reached without Convergence.')
+    warning('Max (5000) Iterations Reached without Convergence.')
 else
     QInv=inv(Q);
     D11=F'*QInv*F;

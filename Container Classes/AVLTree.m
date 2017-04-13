@@ -25,7 +25,7 @@ classdef AVLTree < handle
 %more complicated memory management structures.
 %
 %A C++ implementation of this class for Matlab is difficult to make, since
-%Matlab allows for than just pointers or scalars as the values in the
+%Matlab allows for more than just pointers or scalars as the values in the
 %KeyVal class. Due to the overhead of classes in Matlab, it is not
 %guaranteed that using an AVL tree is going to be faster than if one put
 %the key-value pairs in an array and resorted the array every single time
@@ -39,10 +39,10 @@ classdef AVLTree < handle
 %
 %April 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
-
+    
     %Duplicate keys are not permitted
     properties
-        height        
+        height
         keyVal
         left
         right
@@ -61,7 +61,7 @@ classdef AVLTree < handle
         %
         %The initialization routine is based on page 319 of the Preiss
         %book.
-
+            
             %The constructor
             if(nargin<1)
                 theTree.keyVal=[];
@@ -75,33 +75,53 @@ classdef AVLTree < handle
             theTree.right=[];
         end
         
+        function theTree=clear(theTree)
+        %%CLEAR Clear the tree.
+        %
+        %
+        %OUTPUTS: theTree  An empty AVLTree object.
+        %
+        %This function clears all the KeyVals stored in the tree.
+            
+            theTree.keyVal=[];
+            theTree.height=-1;
+            theTree.left=[];
+            theTree.right=[];
+        end
+        function val=isempty(theTree)
+        %%ISEMPTY This returns true if there are no KeyVal pairs in this
+        %         tree.
+            
+            val=(theTree.height==-1);
+        end
+        
         %Accessor methods
         function val=KeyVal(theTree)
         %%KEYVAL Get the KeyVal object with which the instance was
         %        initialized. This is empty if there is nothing in the
         %        tree. If nothing is in the tree, then this is an empty
         %        matrix.
-            val=theTree.keyVal; 
+            val=theTree.keyVal;
         end
-              
+        
         function insert(theTree,keyVal2Insert)
         %%INSERT  Insert a new keyVal pair into the tree. An error is
         %         raised if a node with the same key already exists in the
         %         tree.
         %
-        %INPUTS: theTree    The implicitely passed AVLTree object.
+        %INPUTS: theTree    The implicitly passed AVLTree object.
         %        key2Insert An instance of the KeyVal class containing the
         %                   key and its associated value to insert.
         %
         %OUTPUTS: none
         %
-        %This function is based on page 312 of the Preiss book. 
+        %This function is based on page 312 of the Preiss book.
             
             if(isempty(theTree.keyVal))
-               %If this node is empty, then just attach the key.
+                %If this node is empty, then just attach the key.
                 theTree.height=0;
                 theTree.keyVal=keyVal2Insert;
-               return;
+                return;
             else
                 if(keyVal2Insert<theTree.keyVal)
                     if(isempty(theTree.left))
@@ -122,14 +142,14 @@ classdef AVLTree < handle
                     error('Attempted to insert a duplicate key!')
                 end
             end
-
+            
             theTree.balance();
         end
         
         function didSucceed=remove(theTree,theKey)
         %%REMOVE    Remove a node having the given key from the tree.
         %
-        %INPUTS: theTree    The implicitely passed AVLTree object.
+        %INPUTS: theTree    The implicitly passed AVLTree object.
         %        theKey     The key of the object to remove from the tree.
         %
         %OUTPUTS: didSucceed A boolean value indicating whether the key was
@@ -141,7 +161,7 @@ classdef AVLTree < handle
         %nodes are completely removed from the tree rather than left empty,
         %except for a node at the root of the tree, which will just be made
         %empty if this function is called.
-        
+            
             %If the tree is empty, then there is nothing to get rid of.
             if(isempty(theTree.keyVal))
                 didSucceed=false;
@@ -162,7 +182,7 @@ classdef AVLTree < handle
                     theTree.keyVal=theTree.right.findMin();
                     theTree.right.remove(theTree.keyVal);
                     
-                     %If the right node should be deleted.
+                    %If the right node should be deleted.
                     if(isempty(theTree.right.keyVal))
                         delete(theTree.right);
                         theTree.right=[];
@@ -194,7 +214,7 @@ classdef AVLTree < handle
                 didSucceed=false;
                 return;
             end
-
+            
             %Rebalance the tree.
             theTree.balance();
         end
@@ -204,7 +224,7 @@ classdef AVLTree < handle
         %       If a key is not in the tree, then an empty matrix is
         %       returned.
         %
-        %INPUTS: theTree    The implicitely passed AVLTree object.
+        %INPUTS: theTree    The implicitly passed AVLTree object.
         %        key2Find   The key to find in the tree.
         %
         %OUTPUTS: foundKeyVal The keyVal object having the provided key. If
@@ -281,7 +301,7 @@ classdef AVLTree < handle
         %                   traversal of an AVL tree is the same as a
         %                   depth-first traversal.
         %
-        %INPUTS: theTree    The implicitely passed AVLTree object. If the
+        %INPUTS: theTree    The implicitly passed AVLTree object. If the
         %                   tree is empty, then evalFuncHandle will never
         %                   be called.
         %    evalFuncHandle A handle for a function that is called at every
@@ -290,11 +310,15 @@ classdef AVLTree < handle
         %
         %OUTPUTS: none
         %
+        %Note that in returning information via the evalFuncHandle, the
+        %HandleWrapper class might be useful in allowing different levels
+        %of recursion modify the same data without returning anything.
+        %
         %This is based on the description of such a traversal from page 289
         %of the Preiss book.
-        
+            
             if(~isempty(theTree.left))
-               theTree.left.inOrderTraversal(evalFuncHandle);
+                theTree.left.inOrderTraversal(evalFuncHandle);
             end
             
             if(isempty(theTree.keyVal))
@@ -308,8 +332,60 @@ classdef AVLTree < handle
             end
         end
         
+        function theKeys=getAllKeys(theTree)
+        %%GETALLKEYS This function returns a cell array containing all of
+        %            the keys below this node in the tree.
+            
+            %We do not know the total number of keys, but this is an upper
+            %bound.
+            maxNumKeys=2^(theTree.height+1)-1;
+            
+            keyList=[];
+            keyList.numInList=0;
+            keyList.theList=cell(maxNumKeys,1);
+            %We use a handleWrapper so that the same data can be modified
+            %in each of the recursive steps.
+            keyListWrapper=HandleWrapper(keyList);
+            evalFuncHandle=@(theKeyVal)addKey(theKeyVal,keyListWrapper);
+            
+            %Fill in the values.
+            theTree.inOrderTraversal(evalFuncHandle);
+            
+            %Shrink to fit for return.
+            theKeys=keyListWrapper.data.theList(1:keyListWrapper.data.numInList);
+            
+            function addKey(theKeyVal,theWrapper)
+                theWrapper.data.numInList=theWrapper.data.numInList+1;
+                theWrapper.data.theList{theWrapper.data.numInList}=theKeyVal.key;
+            end
+        end
+        
+        function val=count(theTree)
+        %%COUNT Return the total number of KeyVal values in the tree.
+            
+            %IF the tree is empty
+            if(theTree.height==-1)
+                val=0;
+                return
+            end
+            
+            %We have to use a handle wrapper so that all of the recursions
+            %in the inOrderTraversal function edit the same data.
+            theWrapper=HandleWrapper(0);
+            evalFuncHandle=@(x)incVal(x,theWrapper);
+            
+            %Count how many things are in the tree.
+            theTree.inOrderTraversal(evalFuncHandle);
+            val=theWrapper.data;
+            
+            function incVal(~,theWrapper)
+                theWrapper.data=theWrapper.data+1;
+            end
+        end
+        
         function delete(theTree)
-            %The destructor.
+            %DELETE The destructor.
+            
             if(~isempty(theTree.left))
                 delete(theTree.left);
             end
@@ -320,6 +396,7 @@ classdef AVLTree < handle
         end
     end
     
+    
     methods(Access=private)
         function val=balanceFactor(theTree)
         %%BALANCEFACTOR Return how well balanced this node is. This is used
@@ -327,11 +404,11 @@ classdef AVLTree < handle
         %               rebalanced.
         %
         %This is based on the description on page 319 of the Preiss book.
-
+            
             %If there is nothing in the tree.
             if(isempty(theTree.keyVal))
-               val=0;
-               return;
+                val=0;
+                return;
             end
             
             if(isempty(theTree.left))
@@ -353,7 +430,7 @@ classdef AVLTree < handle
         %              rotations for rebalancing.
         %
         %This is based on the description on page 319 of the Preiss book.
-
+            
             if(isempty(theTree.keyVal))
                 theTree.height=-1;
             else
@@ -379,7 +456,7 @@ classdef AVLTree < handle
         %            not empty.
         %
         %This is based on the description on page 324 of the Preiss book.
-
+            
             temp=theTree.right;
             theTree.right=theTree.left;
             theTree.left=theTree.right.left;
@@ -401,7 +478,7 @@ classdef AVLTree < handle
         %
         %This is just a mirror image of the LL rotation. That is, one
         %switches all left and right.
-        
+            
             temp=theTree.left;
             theTree.left=theTree.right;
             theTree.right=theTree.left.right;
@@ -422,7 +499,7 @@ classdef AVLTree < handle
         %            empty.
         %
         %This is based on the description on page 325 of the Preiss book.
-
+            
             theTree.left.RRRotation();
             theTree.LLRotation();
         end
@@ -434,11 +511,11 @@ classdef AVLTree < handle
         %
         %This is just a mirror image of the LR rotation. That is, one
         %switches all left and right.
-        
+            
             theTree.right.LLRotation();
             theTree.RRRotation();
         end
-
+        
         function balance(theTree)
         %%BALANCE Balance this node in the tree using rotations, assuming
         %         that the lack of balance is no more than once node.

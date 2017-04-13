@@ -19,7 +19,7 @@ function vLocal=getLocalVectors(vGlobal,uList)
 
     numVel=size(vGlobal,2);
     
-    if size(uList,3)==1
+    if(size(uList,3)==1)
         uList=repmat(uList,[1,1,numVel]);
     end
     

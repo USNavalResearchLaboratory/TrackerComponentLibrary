@@ -2,49 +2,42 @@ function [xUpdate,SUpdate,innov,Szz]=sqrtEKFUpdate(xPred,SPred,z,SR,h,HJacob,inn
 %SQRTEKFUPDATE Perform the measurement update step in a square-root version
 %              of the first-order Extended Kalman Filter (EKF).
 %
-%INPUTS:    xPred           The xDim X 1 predicted target state.
-%           SPred           The xDim X xDim lower-triangular predicted
-%                           state covariance matrix.
-%           z               The zDim X 1 vector measurement.
-%           SR              The zDim X zDim lower-triangular square root of  
-%                           the measurement covariance matrix in the native 
-%                           coordinate system of the measurement.
-%           h               A function handle for the measurement function
-%                           that takes the state as its argument.
-%           HJacob          A function handle for the measurement Jacobian
-%                           matrix that takes the target state as a
-%                           parameter.If not supplied or an empty matrix
-%                           is passed, then HJacob will be found using
-%                           numerical differentiation via the numDiff
-%                           function with default parameters.
-%          innovTrans       An optional function handle that transforms the
-%                           value of the difference between the observation
-%                           and any predicted points. This only
-%                           needs to be supplied when a measurement
-%                           difference must be restricted to a certain
-%                           range. For example, the innovation between two
-%                           angles will be 2*pi if one angle is zero and
-%                           the other 2*pi, even though they are the same
-%                           direction. In such an instance, a function
-%                           handle to the wrapRange function with the
-%                           appropriate parameters should be passed for
-%                           innovTrans.
-%             stateTrans    An optional function that takes a state
-%                           estimate and transforms it. This is
-%                           useful if one wishes the elements of the state
-%                           to be bound to a certain domain. For example,
-%                           if an element of the state is an angle, one
-%                           should generally want to bind it to the region
-%                           +/-pi.
+%INPUTS: xPred The xDim X 1 predicted target state.
+%        SPred The xDim X xDim lower-triangular predicted state covariance
+%              matrix.
+%            z The zDim X 1 vector measurement.
+%           SR The zDim X zDim lower-triangular square root of the
+%              measurement covariance matrix in the native coordinate
+%              system of the measurement.
+%            h A function handle for the measurement function that takes
+%              the state as its argument.
+%       HJacob A function handle for the measurement Jacobian matrix that
+%              takes the target state as a parameter.If not supplied or an
+%              empty matrix is passed, then HJacob will be found using
+%              numerical differentiation via the numDiff function with
+%              default parameters.
+%   innovTrans An optional function handle that transforms the value of the
+%              difference between the observation and any predicted points.
+%              This only needs to be supplied when a measurement
+%              difference must be restricted to a certain range. For
+%              example, the innovation between two angles will be 2*pi if
+%              one angle is zero and the other 2*pi, even though they are
+%              the same direction. In such an instance, a function handle
+%              to the wrapRange function with the appropriate parameters
+%              should be passed for innovTrans.
+%   stateTrans An optional function that takes a state estimate and
+%              transforms it. This is useful if one wishes the elements of
+%              the state to be bound to a certain domain. For example, if
+%              an element of the state is an angle, one should generally
+%              want to bind it to the region +/-pi.
 %
-%OUTPUTS    xUpdate     The xDim X 1 updated state vector.
-%           SUpdate     The updated xDim X xDim lower-triangular square 
-%                       root state covariance matrix.
-%           innov, Szz  The zDimX1 innovation and the zDimXzDim square
-%                       root innovation covariance matrix are returned
-%                       in case one wishes to analyze the consistency
-%                       of the estimator or use those values in gating or
-%                       likelihood evaluation.
+%OUTPUTS:   xUpdate The xDim X 1 updated state vector.
+%           SUpdate The updated xDim X xDim lower-triangular square root
+%                   state covariance matrix.
+%        innov, Szz The zDimX1 innovation and the zDimXzDim square root
+%                   innovation covariance matrix are returned in case one
+%                   wishes to analyze the consistency of the estimator or
+%                   use those values in gating or likelihood evaluation.
 %
 %The first-order EKF is summarized in Figure 10.3.3-1 in Chapter 10.3.3 of 
 %[1]. The Joseph-form covariance update given in Chapter 5 of the same book

@@ -4,38 +4,36 @@
  *         in terms of the Gregorian calendar in years, months, days and
  *         the fraction of a day.
  *
- *INPUTS:    Jul1, Jul2  Vectors or matrices of the two parts of Julian
- *                       dates given in UTC. The units of the date are
- *                       days. The full date is the sum of both terms. The
- *                       date is broken into two parts to provide more bits
- *                       of precision. It does not matter how the date is
- *                       split.
- *           giveDayFrac An optional boolean variable specifying whether
- *                       the output should be as years months, days and a
- *                       fraction of a day. If this parameter is omitted,
- *                       the default is false. That means that the output
- *                       will be given as years, months, days, hours,
- *                       minutes, and seconds.
+ *INPUTS: Jul1, Jul2 Vectors or matrices of the two parts of Julian dates
+ *                   given in UTC. The units of the date are days. The full
+ *                   date is the sum of both terms. The date is broken into
+ *                   two parts to provide more bits of precision. It does
+ *                   not matter how the date is split.
+ *       giveDayFrac An optional boolean variable specifying whether the
+ *                   output should be as years months, days and a fraction
+ *                   of a day. If this parameter is omitted, the default is
+ *                   false. That means that the output will be given as
+ *                   years, months, days, hours, minutes, and seconds.
  *
  *OUTPUTS: Regardless of the value of giveDayFrac, the first three outputs
  *         are the same. They are:
- *          year    A vector or matrix of years in the Gregorian calendar
- *                  under UTC time, one for for each Julian date.
- *          month   A vector or matrix of months in the Gregorian calendar
- *                  under UTC time, one for each Julian date. 1<=month<=12
- *          day     A vector or matrix of days in the Gregorian calendar
- *                  under UTC time, one for each Julian date. Days count
- *                  from 1.
+ *           year A vector or matrix of years in the Gregorian calendar
+ *                under UTC time, one for for each Julian date.
+ *          month A vector or matrix of months in the Gregorian calendar
+ *                under UTC time, one for each Julian date. 1<=month<=12
+ *            day A vector or matrix of days in the Gregorian calendar
+ *                under UTC time, one for each Julian date. Days count from
+ *                1.
  *          If giveDayFrac is omitted or is false, then three additional
  *          outputs are
- *          hour    A vector or matrix of hours in the Gregorian calendar
- *                  under UTC time, one for each Julian date. 0<=hour<=23.
- *          minute  A vector or matrix of minutes in the Gregorian calendar
- *                  under UTC time, one for each Julian date.
- *                  0<=minute<=59.
- *          second  A vector or matrix of seconds in the Gregorian calendar
- *                  under UTC time, one for each Julian date. This includes
- *                  the possibility of a leap second on the day in question.
+ *           hour  A vector or matrix of hours in the Gregorian calendar
+ *                 under UTC time, one for each Julian date. 0<=hour<=23.
+ *          minute A vector or matrix of minutes in the Gregorian calendar
+ *                 under UTC time, one for each Julian date.
+ *                 0<=minute<=59.
+ *          second A vector or matrix of seconds in the Gregorian calendar
+ *                 under UTC time, one for each Julian date. This includes
+ *                 the possibility of a leap second on the day in question.
  *          On the other hand, if giveDayFrac is true, then the one
  *          additional output is
  *          dayFrac A vector or matrix of values >=0 and <1 indicating the

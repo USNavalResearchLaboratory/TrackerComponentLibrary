@@ -1,4 +1,4 @@
-function P=RiccatiPredNoClutter(H,F,R,Q,PD,maxIter)
+function P=RiccatiPredNoClutter(H,F,R,Q,PD,AbsTol,RelTol,maxIter)
 %%RICCATIPREDNOCLUTTER Solve the predicted Riccati equation that has been
 %                      modified for a probability of detection less
 %                      than or equal to 1. This provides the average 
@@ -18,11 +18,16 @@ function P=RiccatiPredNoClutter(H,F,R,Q,PD,maxIter)
 %               not be a singular matrix.
 %           PD  The optional detection probability of the target at each
 %               scan. If omitted, PD is assumed to be one.
+%        RelTol The maximum relative error tolerance allowed, a positive
+%               scalar. This tolerance applies to all elements in the
+%               matrix and is only needed if PD<1. If omitted or an empty
+%               matrix is passed, the default value of 1e-13 is used.
+%        AbsTol The absolute error tolerance allowed, a positive scalar.
+%               This tolerance applies to all elements in the matrix and
+%               is only needed if PD<1. If omitted or an empty
+%               matrix is passed, the default value of 1e-10 is used.
 %       maxIter An optional integer specifying the maximum number of
 %               iterations. By default, if omitted, this is 5000.
-%               Convergence is declared if all of the components of the
-%               matrix are changed by less than 1 part in 10^12 on an
-%               iteration.
 %
 %OUTPUTS:   P The average asymptotic error covariance matrix of the
 %             linear Kalman filter with a probability of detection of PD
@@ -36,6 +41,18 @@ function P=RiccatiPredNoClutter(H,F,R,Q,PD,maxIter)
 %P=F*P*F'-PD*F*P*H'*inv(H*P*H'+R)*H*P*F'+Q
 %and is derived by substitution as described in chapter 5.2.5 of [2].
 %
+%EXAMPLE:
+% T=1;
+% F=FPolyKal(T,zeros(6,1),1);
+% q0=1;
+% Q=QPolyKal(T,zeros(6,1),1,q0);
+% R=diag([10;10;10]);
+% H=[1,0,0,0,0,0;
+%    0,1,0,0,0,0;
+%    0,0,1,0,0,0];
+% PD=0.5;
+% P=RiccatiPredNoClutter(H,F,R,Q,PD)
+%
 %REFERENCES:
 %[1] Y. Boers and H. Driessen, "Modified Riccati equation and its
 %    application to target tracking," IEE Proceedings Radar, Sonar and
@@ -47,15 +64,21 @@ function P=RiccatiPredNoClutter(H,F,R,Q,PD,maxIter)
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<5)
+if(nargin<5||isempty(PD))
    PD=1; 
 end
 
-if(nargin<6)
-   maxIter=5000; 
+if(nargin<6||isempty(AbsTol))
+    AbsTol=1e-13;
 end
 
-epsilon=1e-10;%The convergence criterion.
+if(nargin<7||isempty(RelTol))
+    RelTol=1e-10;
+end
+
+if(nargin<8||isempty(maxIter))
+   maxIter=5000; 
+end
 
 %Get an initial estimate by solving the Riccati equation with PD=1.
 PPrev=RiccatiSolveD(F',H',Q,R);
@@ -68,15 +91,15 @@ if(PD~=1)
     while(curIter<maxIter)
         P=F*PPrev*F'-PD*F*PPrev*H'*inv(H*PPrev*H'+R)*H*PPrev*F'+Q;
         
-        diff=P-PPrev;
-        if(sum(sum(abs(diff)./abs(P)>epsilon))==0)
+        diffMag=abs(P-PPrev);
+        if(all((diffMag(:)<=RelTol*abs(P(:)))|(diffMag(:)<=AbsTol)))
             return;
         end
 
         PPrev=P;
         curIter=curIter+1;
     end
-    display('Warning: Max Iterations Reached without Convergence.')
+    warning('Max Iterations Reached without Convergence.')
 else
     P=PPrev;
 end

@@ -15,11 +15,21 @@ function [hashVal,hexVal]=genHashVal(inputArray,algorithm)
 %                   'simple' (the default) Use a simple, non-cryptographic
 %                            hash function to get a single integer hash for
 %                            the input.
-%                   'MD5'    Use the MD5 algorithm to get a cryptographic
-%                            hash, along with its hexidecimal string.
+%                   'MD2'    Use the MD2 algorithm to get a weak 
+%                            cryptographic hash, along with its hexidecimal
+%                            string.
+%                   'MD5'    Use the MD5 algorithm to get a weak 
+%                            cryptographic hash, along with its hexidecimal
+%                            string.
 %                   'SHA-1'  Use the SHA-1 algorithm to get a cryptographic
 %                            hash along with its hexidecimal string.
-%                 'SHA-256'  Use the SHA-256 algorithm to get a
+%                  'SHA-384' Use the SHA-384 algorithm to get a
+%                            cryptographic hash along with its hexidecimal
+%                            string.
+%                  'SHA-256' Use the SHA-256 algorithm to get a
+%                            cryptographic hash along with its hexidecimal
+%                            string.
+%                  'SHA-512' Use the SHA-512 algorithm to get a
 %                            cryptographic hash along with its hexidecimal
 %                            string.
 %
@@ -57,14 +67,6 @@ if(strcmp(algorithm,'simple'))
     %Java's integers are always 32-bits.
     hexVal=dec2hex(typecast(int32(hashVal),'uint32'),8);
     return;
-end
-
-switch(algorithm)
-    case 'MD5'
-    case 'SHA-1'
-    case 'SHA-256'
-    otherwise
-        error('An unsupported algorithm was given')
 end
 
 %The cryptographic has functions work on bytes, not strings.

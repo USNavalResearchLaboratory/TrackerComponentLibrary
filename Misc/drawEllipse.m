@@ -1,31 +1,32 @@
-function drawEllipse(z,A,gamma,varargin)
+function h=drawEllipse(z,A,gammaVal,varargin)
 %DRAWELLIPSE Draw 2D ellipses or 3D ellipsoids on the curren plot, where a
 %            point zp on the ellipse/ ellipsoid satisfies the equation
-%            (zp-z)'*A*(zp-z)=gamma. If z is a 2D/3D location estimate and 
-%            inv(A) a Gaussian covariance matrix associated with the
+%            (zp-z)'*A*(zp-z)=gammaVal. If z is a 2D/3D location estimate 
+%            and inv(A) a Gaussian covariance matrix associated with the
 %            estimate, then the ellipse is a probability region, where
-%            gamma determines what amount of probability is in the region.
-%            If omitted, gamma=16.2235 for 2D or gamma=18.8049 for 3D,
-%            which corresponds to approximately to the 99.97% confidence
-%            region, is used (The value comes from respectively
-%            ChiSquareD.invCDF(0.9997,2) and ChiSquareD.invCDF(0.9997,3)).
+%            gammaVal determines what amount of probability is in the
+%            region. If omitted, gammaVal=16.2235 for 2D or
+%            gammaVal=18.8049 for 3D, which corresponds to approximately to
+%            the 99.97% confidence region, is used (The value comes from
+%            respectively ChiSquareD.invCDF(0.9997,2) and
+%            ChiSquareD.invCDF(0.9997,3)).
 %
-%INPUTS: z  A 2XN or 3XNvector corresponding to the centers of the N
+%INPUTS: z  A 2XN or 3XN vector corresponding to the centers of the N
 %           ellipses or ellipsoids that should be drawn.
 %        A  A 2X2XN or 3X3XN set of N positive definite matrices that
 %           specify the size and shape of the ellipse or ellipsoids, where
 %           a point zp is on the ith ellipse/ ellipsoid if
-%           (zp-z(:,i))'*A(:,:,i)*(zp-z(:,i))=gamma.
+%           (zp-z(:,i))'*A(:,:,i)*(zp-z(:,i))=gammaVal.
 %           In three dimensions, A can have one zero eigenvalue, in which
 %           case the fill3 command is used to draw an ellipse in 3D.
-%     gamma An optional parameter specifying the size of the ellipse/
+%  gammaVal An optional parameter specifying the size of the ellipse/
 %           ellipsoid. If omitted or an empty matrix is passed, then
-%           gamma=16.2235 in 2D or gamma=18.8049 in 3D is used. gamma must be
-%           positive.
+%           gammaVal=16.2235 in 2D or gammaVal=18.8049 in 3D is used.
+%           gammaVal must be positive.
 %  varargin Sets of values that should be passed to the plot function to
 %           format the ellipses or that will be passed to the surf function
 %           to format the ellipsoids. For example, one could call the
-%           function as drawEllipse(z,A,gamma,'--r','linewidth',2) to plot
+%           function as drawEllipse(z,A,gammaVal,'--r','linewidth',2) to plot
 %           ellipses as thick, red lines. Note that Matlab will not always
 %           properly render dashed lines due to the number of points used
 %           to plot the shape. Also, if the ellipsoid is in 3D, but is
@@ -34,13 +35,16 @@ function drawEllipse(z,A,gamma,varargin)
 %           ellipse black. Otherwise, if this parameter is given, the user
 %           must specify the ellipse color as it is not done here.
 %
-%OUTPUTS: None. The results are plotted.
+%OUTPUTS: h A NX1 cell array containing the plot objects for each of the
+%           ellipses. This can be useful if, for example, one wishes to
+%           change the transparency of object i to 50%, one can use the
+%           alpha(h{i},0.5) command.
 %
 %An eigendecomposition of a matrix A breaks it into parts V and D such that
 %V*D*V'=A, where V is a rotation matrix and D is a diagonal matrix.
 %Considering the problem here, this means that (zp-z)'*A*(zp-z)=
 %(V'*zp-V'*z)'*D*(V'*zp-V'*z). If we substitute kp=V'*zp and k=V'*z, then
-%the equation is (kp-k)'*D*(kp-k)=gamma, which is the equation for an
+%the equation is (kp-k)'*D*(kp-k)=gammaVal, which is the equation for an
 %ellipse where the axes are aligned with the coordinate axes. Thus, one can
 %first find the points for an ellipse that is aligned with the coordinate
 %axes (the kp points), and then rotate it back to the proper alignment (the
@@ -50,22 +54,22 @@ function drawEllipse(z,A,gamma,varargin)
 %
 %When considering an ellipse, suppose that l=[x;y] and D=diag(a,b). Then
 %the ellipse equation is
-%x^2*a+y^2*b=gamma
+%x^2*a+y^2*b=gammaVal
 %Solving for y in terms of x, we have
-%y=+/-sqrt((gamma-x^2*a)/b).
+%y=+/-sqrt((gammaVal-x^2*a)/b).
 %The x values are limited so that the argument of the square root is
-%positive. Thus the x values range from -sqrt(gamma/a) to +sqrt(gamma/a).
-%Thus, a simple way to plot this centered, axis-aligned ellipse is to
-%generate x-values in the valid range and then find the two sets of y
-%values. This function does that and transforms the results to get the
-%corresponding z values. 1000 points are used in the plot.
+%positive. Thus the x values range from -sqrt(gammaVal/a) to
+%+sqrt(gammaVal/a). Thus, a simple way to plot this centered, axis-aligned
+%ellipse is to generate x-values in the valid range and then find the two
+%sets of y values. This function does that and transforms the results to
+%get the corresponding z values. 1000 points are used in the plot.
 %
 %To find the points on an axis-aligned ellipsoid, we will use the ellipsoid
 %function that is built into Matlab. Suppose that l=[x;y;z] and
-%D=diag(a,b,c). Then the ellipsoid equation is x^2*a+y^2*b+z^2c=gamma. This
-%means that the semi-axis lengths of this centered, axis-aligned ellipsoid
-%are sqrt(gamma/a), sqrt(gamma/b), and sqrt(gamma/c). 2501 vertices are
-%used in the ellipsoids.
+%D=diag(a,b,c). Then the ellipsoid equation is x^2*a+y^2*b+z^2c=gammaVal.
+%This means that the semi-axis lengths of this centered, axis-aligned
+%ellipsoid are sqrt(gammaVal/a), sqrt(gammaVal/b), and sqrt(gammaVal/c).
+%2501 vertices are used in the ellipsoids.
 %
 %July 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -78,25 +82,32 @@ holdVal=ishold();
 
 numDim=size(z,1);
 
+if(nargout>0)
+    h=cell(numEllipse,1);
+end
+
 switch(numDim)
     case 2
-        if(nargin<3||isempty(gamma))
-            gamma=16.2235;
+        if(nargin<3||isempty(gammaVal))
+            gammaVal=16.2235;
         end
 
         numPoints=1000;
-        
         for curEllip=1:numEllipse
             %Perform an eigenvalue decomposition of A.
             [V,D]=eig(A(:,:,curEllip));
-            
+            %We will put the smallest eigenvalue at the start, if it is
+            %not already there.
+            [~,idx]=sort(diag(D),'ascend');
+            V=V(idx,idx);
+            D=D(idx,idx);
             a=D(1,1);
             b=D(2,2);
 
-            xBound=sqrt(gamma/a);
+            xBound=sqrt(gammaVal/a);
             x=linspace(-xBound,xBound,numPoints);
             %The real command deals with possible finite precision issues.
-            y=real(sqrt((gamma-x.^2*a)/b));
+            y=real(sqrt((gammaVal-x.^2*a)/b));
             %The centered, axis-aligned ellipse points.
             l=[x,fliplr(x);
                y,-fliplr(y)];
@@ -106,11 +117,15 @@ switch(numDim)
             if(curEllip~=1)
                 hold on
             end
-            plot(zp(1,:),zp(2,:),varargin{:});
+            x=plot(zp(1,:),zp(2,:),varargin{:});
+            
+            if(nargout>0)
+               h{curEllip}=x;
+            end
         end
     case 3
-        if(nargin<3||isempty(gamma))
-            gamma=18.8049;
+        if(nargin<3||isempty(gammaVal))
+            gammaVal=18.8049;
         end
 
         for curEllip=1:numEllipse
@@ -121,7 +136,7 @@ switch(numDim)
                 
                 %Perform an eigenvalue decomposition of A.
                 [V,D]=eig(A(:,:,curEllip));
-                %We will put the zero eigenvalue at the statrt, if it is
+                %We will put the zero eigenvalue at the start, if it is
                 %not already there.
                 [~,idx]=sort(diag(D),'ascend');
                 V=V(idx,idx);
@@ -130,11 +145,11 @@ switch(numDim)
                 a=D(2,2);
                 b=D(3,3);
                 
-                xBound=sqrt(gamma/a);
+                xBound=sqrt(gammaVal/a);
                 x=linspace(-xBound,xBound,numPoints);
                 %The real command deals with possible finite precision
                 %issues.
-                y=real(sqrt((gamma-x.^2*a)/b));
+                y=real(sqrt((gammaVal-x.^2*a)/b));
                 %The centered, axis-aligned ellipse points.
                 l=[zeros(1,2*numPoints);
                    x,fliplr(x);
@@ -146,9 +161,12 @@ switch(numDim)
                 end
                 %Draw the ellipse as a filled shape.
                 if(isempty(varargin))
-                    fill3(zp(1,:),zp(2,:),zp(3,:),'k');
+                    x=fill3(zp(1,:),zp(2,:),zp(3,:),'k');
                 else
-                    fill3(zp(1,:),zp(2,:),zp(3,:),varargin{:});
+                    x=fill3(zp(1,:),zp(2,:),zp(3,:),varargin{:});
+                end
+                if(nargout>0)
+                    h{curEllip}=x;
                 end
             else
                 numPoints=50;
@@ -156,7 +174,7 @@ switch(numDim)
                 [V,D]=eig(A(:,:,curEllip));
                 zCur=z(:,curEllip);
 
-                [xp,yp,zp] = ellipsoid(0,0,0,sqrt(gamma/D(1,1)),sqrt(gamma/D(2,2)),sqrt(gamma/D(3,3)),numPoints);
+                [xp,yp,zp] = ellipsoid(0,0,0,sqrt(gammaVal/D(1,1)),sqrt(gammaVal/D(2,2)),sqrt(gammaVal/D(3,3)),numPoints);
 
                 %Rotate to the correct orientation
                 xyzPoints=V*[xp(:)';yp(:)';zp(:)'];
@@ -169,8 +187,10 @@ switch(numDim)
                     hold on
                 end
 
-                surf(xp,yp,zp,varargin{:});
-            
+                x=surf(xp,yp,zp,varargin{:});
+                if(nargout>0)
+                    h{curEllip}=x;
+                end
             end
         end
     otherwise

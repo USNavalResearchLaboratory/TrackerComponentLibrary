@@ -37,11 +37,11 @@ function geoEastOfNorth=uVec2GeogHeading(point,u,a,f)
 %April 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<4)
+if(nargin<4||isempty(f))
     f=Constants.WGS84Flattening;
 end
 
-if(nargin<3)
+if(nargin<3||isempty(a))
     a=Constants.WGS84SemiMajorAxis;
 end
 

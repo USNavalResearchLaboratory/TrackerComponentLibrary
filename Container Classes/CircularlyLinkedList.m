@@ -11,7 +11,7 @@ classdef CircularlyLinkedList < handle
 %The concepts behind linked lists and circularly linked lists are covered
 %in many introductory computer science textbooks.
 %
-%When the linked list is deleted, delete is not explicitely called for the
+%When the linked list is deleted, delete is not explicitly called for the
 %data within the nodes, though Matlab's garbage collection should
 %eventually call the destructors if nothing else points to them.
 %

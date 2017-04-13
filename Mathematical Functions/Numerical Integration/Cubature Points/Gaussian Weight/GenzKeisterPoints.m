@@ -30,10 +30,10 @@ function [xi,w]=GenzKeisterPoints(numDim,m,algorithm,epsVal)
 %              If this parameter is omitted or an empty matrix is passed,
 %              the default value of eps(1) is used.
 %              
-%OUTPUTS:  xi  A d X numCubaturePoints matrix containing the cubature
-%              points. (Each "point" is a vector)
-%           w  A numCubaturePoints X 1 vector of the weights associated
-%              with the cubature points.
+%OUTPUTS: xi A d X numCubaturePoints matrix containing the cubature points.
+%            (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %The algorithm of [1], which is an extension of that of [2] is used. For
 %more details on how to use these points when integrating over a Gaussian
@@ -271,7 +271,7 @@ function w = computeW(m,p,innerTerms4Weights)
 %%COMPUTEW Compute the weight w for a given partition using the unnumbered
 %          equation before Equation 1 in [1], which is Equation 2.4 in [2].
 %          The efficient method of going through the values of k without
-%          explicitely computing k is based on correspondece with Dr. Genz
+%          explicitly computing k is based on correspondece with Dr. Genz
 %          of [1], and [2].
 
 n=length(p);

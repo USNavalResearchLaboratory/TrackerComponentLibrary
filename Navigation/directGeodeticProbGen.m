@@ -63,7 +63,7 @@ function [latLonEnd,azEnd]=directGeodeticProbGen(latLonStart,azStart,dist,height
 %April 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<7)
+if(nargin<7||isempty(numSteps4Circ))
 %This is the number of steps that would be taken to travel a distance of
 %2*pi*a (circumnavigate the globe the long way). This is a design parameter
 %that should be large enough to ensure that the results are accurate.
@@ -71,11 +71,11 @@ if(nargin<7)
     numSteps4Circ=2000;
 end
 
-if(nargin<6)
+if(nargin<6||isempty(f))
     f=Constants.WGS84Flattening;
 end
 
-if(nargin<5)
+if(nargin<5||isempty(a))
     a=Constants.WGS84SemiMajorAxis;
 end
 
@@ -91,7 +91,7 @@ end
 latLonEnd=zeros(2,N);
 azEnd=zeros(N,1);
 
-if(nargin<4)
+if(nargin<4||isempty(height))
    height=zeros(N,1); 
 end
 
@@ -139,7 +139,7 @@ for curTraj=1:N
     %Compute the Cartesian position and velocity of the target over the entire
     %trajectory. USe a fourth-order Runge-Kutta method.
     [xList,uList]=RungeKCurvedAtTimes(xInit,uInit,[0;1],aDyn,uDyn,stepSize,4);
-    plhEnd=Cart2Ellipse(xList(1:3,end),a,f);
+    plhEnd=Cart2Ellipse(xList(1:3,end),[],a,f);
     latLonEnd(:,curTraj)=plhEnd(1:2);%The Cartesian location at the end of the trajectory.
 
     %The deviation of plhEnd(3) from the desired height can be used as a

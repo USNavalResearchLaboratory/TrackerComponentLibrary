@@ -5,33 +5,32 @@ function [charString,hashValue]=genUUID(UUIDType,data)
 %         unique across space and time. Thus, entities can create and
 %         exchange UUIDs without cantral planning.
 %
-%INPUTS: UUIDType  An optional parameter specifying the UUID type. Possible
-%                  values are:
-%                  0 (The default if omitted) Create a random UUID. This is
-%                    the best if one is creating numerous IDs over time.
-%                  1 Create a name-based ID. The second parameter data must
-%                    provide the name either as a character string, like
-%                    'NAME', or as a vector of integer values representing
-%                    the name, like [78;65;77;69], which are the numeric
-%                    values corresponding to the characters in 'NAME'. ID's
-%                    created with the name name ar identical.
-%                  2 Get a UUID given the character string for a UUID given
-%                    in data. This will make the output value charString
-%                    have the same value as data, but the hashValue will
-%                    also be obtained.
-%             data This parameter is only needed if UUIDType is not zero.
-%                  if UUIDType is one, then this is either the character
-%                  string or integer number array of the name. If UUIDType
-%                  is 2, then this is the character string of the UUID
-%                  value.
+%INPUTS: UUIDType An optional parameter specifying the UUID type. Possible
+%                 values are:
+%                 0 (The default if omitted) Create a random UUID. This is
+%                   the best if one is creating numerous IDs over time.
+%                 1 Create a name-based ID. The second parameter data must
+%                   provide the name either as a character string, like
+%                   'NAME', or as a vector of integer values representing
+%                   the name, like [78;65;77;69], which are the numeric
+%                   values corresponding to the characters in 'NAME'. ID's
+%                   created with the name name ar identical.
+%                 2 Get a UUID given the character string for a UUID given
+%                   in data. This will make the output value charString
+%                   have the same value as data, but the hashValue will
+%                   also be obtained.
+%            data This parameter is only needed if UUIDType is not zero. If
+%                 UUIDType is one, then this is either the character string
+%                 or integer number array of the name. If UUIDType is 2,
+%                 then this is the character string of the UUID value.
 %
 %OUTPUTS:charString A character string representing the UUID. The cahacter
-%                   string is of the format <time_low> "-" <time_mid> "-"
-%           <time_high_and_version> "-"  <variant_and_sequence> "-" <node>
-%           For example, f2fdf31c-6ceb-4a67-a888-697dbffe8bd7 is a valid
-%           character string. The character string can be compared to other
-%           UUIDs to see if they are the same.
-%       hashValue   The integer hash code of the UUID.
+%                  string is of the format <time_low> "-" <time_mid> "-"
+%                  <time_high_and_version> "-"  <variant_and_sequence> "-"
+%                  <node> For example, f2fdf31c-6ceb-4a67-a888-697dbffe8bd7
+%                  is a valid character string. The character string can be
+%                  compared to other UUIDs to see if they are the same.
+%        hashValue The integer hash code of the UUID.
 %
 %UUIDs are standardized in the Internet Engineering Task Force's (IETF)
 %request for comments (RFC) number 4122, which can be found online at

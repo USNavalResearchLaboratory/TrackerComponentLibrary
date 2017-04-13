@@ -16,7 +16,7 @@ function vertices=findConvexHull2D(points)
 %Graham's algorithm is described in Chapter 33.3 of[1], though no method
 %for sorting the points in the necessary counterclockwise order is given
 %and the sorting step is the most difficult part. The sorting can be done
-%without explicitely computing angles as discussed in Chapter 3.5 of [2].
+%without explicitly computing angles as discussed in Chapter 3.5 of [2].
 %However, the author suggests that one only use integers to avoid horrible
 %finite precision problems. Here, the method of determining whether points
 %are oriented  left uses the function turnOrientation, which makes use of

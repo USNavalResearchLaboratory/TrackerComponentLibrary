@@ -72,7 +72,7 @@ classdef metricTree < handle
         function buildTreeFromBatch(theTree,dataBatch)
         %BUILDTREEFROMBATCH Build a metric tree from a batch of data.
         %
-        %INPUTS: theTree   The implicitely passed metricTree object.
+        %INPUTS: theTree   The implicitly passed metricTree object.
         %        dataBatch A kXN array of points that are to be stored in
         %                  the metric tree. k is the dimensionality of the
         %                  points and N is the number of points.
@@ -110,7 +110,7 @@ classdef metricTree < handle
         %              located within a given search radius of within a
         %              given radius about a given point.
         %
-        %INPUTS: theTree  The implicitely passed metricTree object.
+        %INPUTS: theTree  The implicitly passed metricTree object.
         %        point    A kXm matrix of k-dimensional points about which
         %                 range searches will be performed.
         %       radius    An mX1 vector of the search radii about each

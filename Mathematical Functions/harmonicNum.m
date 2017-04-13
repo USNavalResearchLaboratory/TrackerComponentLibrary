@@ -3,7 +3,9 @@ function val=harmonicNum(n)
 %             \sum_{k=1}^n(1/k). Harmonic numbers arise in a number of
 %             areas of statistics.
 %
-%INPUTS: n   A scalar or matrix of integer Harmonic number positions, n>0.
+%INPUTS:   n A scalar or matrix of Harmonic number positions. Non-integer
+%            values are allowed. As are negative values. Note that negative
+%            integers produce an infinite result.
 %
 %OUTPUTS: val The values of the Harmonic numbers at the positions given in
 %             n.
@@ -26,7 +28,7 @@ function val=harmonicNum(n)
 %November 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-val=Constants.EulerMascheroni+psi(0,n+1);
+val=Constants.EulerMascheroni+polygamma(0,n+1);
 
 end
 

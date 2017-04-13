@@ -1,6 +1,6 @@
 classdef LaplaceD
-%Functions to handle the multivariate Laplace distribution. In one
-%dimension, it reduces to the traditional Laplace distribution.
+%%LAPLACED Functions to handle the multivariate Laplace distribution. In
+%       one dimension, it reduces to the traditional Laplace distribution.
 %Implemented methods are: mean, cov, PDF, CDF (for scalar distributions),
 %                         momentGenFun, cumGenFun, rand
 %
@@ -154,7 +154,7 @@ function vals=CDF(x,lambda,mu,Gamma)
 %OUTPUTS: vals The CDF of the laplace distribution evaluated at the
 %              specified points.
 %
-%The CDF of the Laplace distribution can be found explicitely by
+%The CDF of the Laplace distribution can be found explicitly by
 %integrating the scalar PDF in Equation 5 of [1].
 %
 %REFERENCES:

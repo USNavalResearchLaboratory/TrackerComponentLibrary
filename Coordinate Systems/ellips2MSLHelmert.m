@@ -59,7 +59,7 @@ function [MSLPoints,coeffData]=ellips2MSLHelmert(points,useNGAApprox,coeffData)
 %January 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<2)
+if(nargin<2||isempty(useNGAApprox))
     useNGAApprox=false;
 end
 
@@ -69,12 +69,12 @@ else
     [geoidHeight,coeffData]=getEGM2008GeoidHeight(points(1:2,:),1,useNGAApprox);
 end
 
-    MSLHeight=points(3,:)-geoidHeight';
-    numPoints=size(points,2);
-    
-    MSLPoints=zeros(3,numPoints);
-    MSLPoints(1:2,:)=points(1:2,:);
-    MSLPoints(3,:)=MSLHeight;
+MSLHeight=points(3,:)-geoidHeight';
+numPoints=size(points,2);
+
+MSLPoints=zeros(3,numPoints);
+MSLPoints(1:2,:)=points(1:2,:);
+MSLPoints(3,:)=MSLHeight;
 end
 
 %LICENSE:

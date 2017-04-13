@@ -1,41 +1,39 @@
 function D=DPoly(x,t,q0,order,numDim)
-%%DPOLY       The diffusion matrix for a continuous-time additive noise 
-%             model in numDim dimensions of motion with order moments of
-%             position whereby the noise is only added to the highest-order
-%             derivatives of position when used with a linear motion model.
-%             When order=1, this is the continuous white noise acceleration
-%             (CWNA) model. When order=2, this is the continuous Wiener
-%             process acceleration model (CWPA), also known as the white
-%             noise jerk model.
+%%DPOLY The diffusion matrix for a continuous-time additive noise model in
+%       numDim dimensions of motion with order moments of position whereby
+%       the noise is only added to the highest-order derivatives of
+%       position when used with a linear motion model. When order=1, this 
+%       is the continuous white noise acceleration (CWNA) model. When
+%       order=2, this is the continuous Wiener process acceleration model
+%       (CWPA), also known as the white noise jerk model.
 %
-%INPUTS:   x  The target state(s). Only the second dimension is used to 
-%             indicate the number of D matrices to be returned (the third
-%             dimension of the D matrix, The basic additive noise model
-%             does not depend on the target state. To be consistent with
-%             the other parameters x should be a (order+1)*numDim X
-%             N, where N is the number of D matrices on the output. If an
-%             empty matrix is apssed, it is assumed that 
-%          t  The time at which the diffusion matrix is desired. This is
-%             unused, since the diffusion matrix in the basic additive
-%             noise model is time-invariant. This is here so that DPoly
-%             can be used with Runge-Kutta methods that expect the function
-%             to take two arguments.
-%        q0   The power spectral density of the noise for each dimension.
-%             If the power spectral density of the noise is the same in all
-%             dimensions, the a scalar q0 can be passed.
-%      order  The order >=0 of the filter. If order=1, then it is 
-%             constant velocity, 2 means constant acceleration, 3 means
-%             constant jerk, etc. If this parameter is omitted, then
-%             order=1 is assumed.
-%      numDim The number of dimensions of the simulation problem. If
-%             the numDim parameter is omitted, then numDim=3 (3D motion)
-%             is assumed.
+%INPUTS: x The target state(s). Only the second dimension is used to 
+%          indicate the number of D matrices to be returned (the third
+%          dimension of the D matrix, The basic additive noise model does
+%          not depend on the target state. To be consistent with the other
+%          parameters x should be a (order+1)*numDim X N, where N is the
+%          number of D matrices on the output. If an empty matrix is
+%          passed, then it is assumed only one output is desired.
+%        t The time at which the diffusion matrix is desired. This is
+%          unused, since the diffusion matrix in the basic additive noise
+%          model is time-invariant. This is here so that DPoly can be used
+%          with Runge-Kutta methods that expect the function to take two
+%          arguments.
+%       q0 The power spectral density of the noise for each dimension. If
+%          the power spectral density of the noise is the same in all
+%          dimensions, the a scalar q0 can be passed.
+%    order The order >=0 of the filter. If order=1, then it is constant
+%          velocity, 2 means constant acceleration, 3 means constant jerk,
+%          etc. If this parameter is omitted, then order=1 is assumed.
+%   numDim The number of dimensions of the simulation problem. If the
+%          numDim parameter is omitted, then numDim=3 (3D motion) is
+%          assumed.
 %
-%OUTPUT: D    The diffusion matrix of a continuous-time linear additive
-%             noise model where the noise is only added to the highest
-%             order terms of the state. If the input x has multiple
-%             columns, then the same number of copies of D are returned
-%             with D(:,:,i) being the ith one.
+%OUTPUT: D The diffusion matrix of a continuous-time linear additive noise
+%          model where the noise is only added to the highest order terms
+%          of the state. If the input x has multiple columns, then the same
+%          number of copies of D are returned with D(:,:,i) being the ith
+%          one.
 %
 %It is assumed that the state is ordered
 %[position;velocity;acceleration;etc] for up to order moments of
@@ -57,11 +55,11 @@ function D=DPoly(x,t,q0,order,numDim)
     %The max allows the user to pass an empty matrix.
     numD=max(size(x,2),1);
     
-    if(nargin<5)
+    if(nargin<5||isempty(numDim))
         numDim=3;
     end
     
-    if(nargin<4)
+    if(nargin<4||isempty(order))
        order=1; 
     end
     
@@ -81,7 +79,6 @@ function D=DPoly(x,t,q0,order,numDim)
     if(numD>1)
        D=repmat(D,[1,1,numD]); 
     end
-    
 end
 
 %LICENSE:

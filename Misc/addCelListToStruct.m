@@ -34,7 +34,7 @@ function opts=addCelListToStruct(opts,args)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
     if nargin < 2
-        error('invalid number of arguments');
+        error('Invalid number of arguments');
     end
     
     if(isempty(args))
@@ -45,21 +45,21 @@ function opts=addCelListToStruct(opts,args)
     assert(iscell(args),'args should be a cell array');
     assert(isvector(args),'args should be a vector');
     n = length(args);
-    if mod(n,2)~= 0
+    if(mod(n,2)~=0)
         error('args should be given as field-value pairs');
     end
     
-    % get the option names as specifed in opts
-    optnames = fieldnames(opts);
+    %Get the option names as specifed in opts
+    optnames=fieldnames(opts);
     for arg=1:2:n
         name = args{arg};
-        if ~ischar(name)
+        if(~ischar(name))
              warning('MATLAB:invalid_fieldname','encountered a non-string option name');
         end
-        % look for a match in the field names
+        %Look for a match in the field names
         idx = find(strcmpi(optnames,name),1);
-        if ~isempty(idx)
-            opts.(optnames{idx}) = args{arg+1};
+        if(~isempty(idx))
+            opts.(optnames{idx})=args{arg+1};
         else
             warning('MATLAB:invalid_option',['unrecognized option ',name,' skipping...']);
         end

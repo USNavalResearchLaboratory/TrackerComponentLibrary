@@ -1,32 +1,31 @@
 function xDot=aDynFlat2CurvedUDet(x,t,aDyn,uBasis)
-%%ADYNFLAT2CURVEDUDET Adapts a flat-Earth drift function to a curved
-%                 Earth. The position components of the state are kept in
-%                 the global coordinate system, whereas the other
-%                 components are kept in the local (flat Earth) coordinate
-%                 system and the basis vectors between them are assumed to
-%                 be deterministically known as a function of the state,
-%                 and are given by uBasis. In the event that the changes in
-%                 the basis vectors depend on the changes in the state, the
-%                 function aDynFlat2CurvedUDyn can be used to map a
-%                 flat-Earth drift function to a curved Earth when given
-%                 only the derivatives of the basis vectors.
+%%ADYNFLAT2CURVEDUDET Adapts a flat-Earth drift function to a curved Earth.
+%         The position components of the state are kept in the global
+%         coordinate system, whereas the other components are kept in the
+%         local (flat Earth) coordinate system and the basis vectors
+%         between them are assumed to be deterministically known as a
+%         function of the state, and are given by uBasis. In the event that
+%         the changes in the basis vectors depend on the changes in the
+%         state, the function aDynFlat2CurvedUDyn can be used to map a
+%         flat-Earth drift function to a curved Earth when given only the
+%         derivatives of the basis vectors.
 %
-%INPUTS:    x     The target state such that the first three elements are
-%                 position in the global coordinate system, the next three
-%                 elements are velocity in the local, flat-Earth coordinate
-%                 system, and all other elements can be arbitrarily chosen
-%                 in the local, flat-earth coordinate system.
-%           t     The time at which the drift function should be evaluated.
-%        aDyn     The flat-Earth drift function of the form aDyn(x,t). It
-%                 is assumed that the first three components returned by
-%                 aDyn are the local velocity components of the state and
-%                 that nothing in aDyn is position-dependent.
-%      uBasis     The function to get the basis vectors. The function takes
-%                 inputs of the form uBasis(x,t)and returns the 9X9 set of
-%                 coordinate bases.
+%INPUTS: x The target state such that the first three elements are position
+%          in the global coordinate system, the next three elements are
+%          velocity in the local, flat-Earth coordinate system, and all
+%          other elements can be arbitrarily chosen in the local, flat-
+%          earth coordinate system.
+%        t The time at which the drift function should be evaluated.
+%     aDyn The flat-Earth drift function of the form aDyn(x,t). It is
+%          assumed that the first three components returned by aDyn are the
+%          local velocity components of the state and that nothing in aDyn
+%          is position-dependent.
+%   uBasis The function to get the basis vectors. The function takes inputs
+%          of the form uBasis(x,t)and returns the 9X9 set of coordinate
+%          bases.
 %
-%OUTPUTS:   xDot  The derivative of x with respect to time. This maps the
-%                 drift function aDyn to a curved Earth.
+%OUTPUTS: xDot The derivative of x with respect to time. This maps the
+%              drift function aDyn to a curved Earth.
 %
 %A discussion on mapping flat-Earth models to a curved Earth is given in
 %[1].

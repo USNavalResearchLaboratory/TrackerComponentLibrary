@@ -57,7 +57,7 @@ function [xHat, P]=DiscPriorPModel(k,xInit,param3,param4,mode)
 %October 2013 David F.Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<5)
+if(nargin<5||isempty(mode))
    mode=0; 
 end
 

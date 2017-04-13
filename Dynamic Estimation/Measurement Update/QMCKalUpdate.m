@@ -6,56 +6,50 @@ function [xUpdate,PUpdate,innov,Pzz]=QMCKalUpdate(xPred,PPred,z,R,h,numSamples,i
 %              positive (semi-)definite. This filter is essentially the
 %              cubature Kalman filter update using random cubature points.
 %
-%INPUTS:        xPred  The xDim X 1 predicted target state.
-%               PPred  The xDim X xDim predicted state covariance matrix.                     
-%                   z  The zDim X 1 vector measurement.
-%                   R  The zDim X zDim measurement covariance matrix in the
-%                      native coordinate system of the measurement.
-%                   h  A function handle for the measurement function that
-%                      takes the state as its argument.
-%          numSamples  The number of samples to use for the Monte Carlo
-%                      integration in the filter. If this parameter is
-%                      omitted or an empty matrix is passed, then a default
-%                      of 100 is used.
-%          innovTrans  An optional function handle that transforms the
-%                      value of the difference between the observation and 
-%                      any predicted points. This must be able to handle
-%                      sets of differences. For a zDim measurement, this
-%                      must be able to handle a zDimXN matrix of N
-%                      differences. This only needs to be supplied when a
-%                      measurement difference must be restricted to a
-%                      certain range. For example, the innovation between
-%                      two angles will be 2*pi if one angle is zero and the
-%                      other 2*pi, even though they are the same direction.
-%                      In such an instance, a function handle to the
-%                      wrapRange function with the appropriate parameters
-%                      should be passed for innovTrans.
-%           measAvgFun An optional function handle that, when given N
-%                      measurement values with weights, produces the
-%                      weighted average. This function only has to be
-%                      provided if the domain of the measurement is not
-%                      not linear. For example, when averaging angular
-%                      values, then the function meanAng should be used.
-%       stateDiffTrans An optional function handle that, like innovTrans
-%                      does for the measurements, takes an xDimXN matrix of
-%                      N differences between states and transforms them
-%                      however might be necessary. For example, a state
-%                      containing angular components will generally need to
-%                      be transformed so that the difference between the
-%                      angles is wrapped to -pi/pi.
-%           stateTrans An optional function that takes a state estimate and
-%                      transforms it. This is useful if one wishes the
-%                      elements of the state to be bound to a certain
-%                      domain. For example, if an element of the state is
-%                      an angle, one might generally want to bind it to the
-%                      region +/-pi.
+%INPUTS: xPred The xDim X 1 predicted target state.
+%        PPred The xDim X xDim predicted state covariance matrix.                     
+%            z The zDim X 1 vector measurement.
+%            R The zDim X zDim measurement covariance matrix in the native
+%              coordinate system of the measurement.
+%            h A function handle for the measurement function that takes
+%              the state as its argument.
+%   numSamples The number of samples to use for the Monte Carlo integration
+%              in the filter. If this parameter is omitted or an empty
+%              matrix is passed, then a default of 100 is used.
+%   innovTrans An optional function handle that transforms the value of the
+%              difference between the observation and any predicted points.
+%              This must be able to handle sets of differences. For a zDim
+%              measurement, this must be able to handle a zDimXN matrix of
+%              N differences. This only needs to be supplied when a
+%              measurement difference must be restricted to a certain
+%              range. For example, the innovation between two angles will
+%              be 2*pi if one angle is zero and the other 2*pi, even though
+%              they are the same direction. In such an instance, a function
+%              handle to the wrapRange function with the appropriate
+%              parameters should be passed for innovTrans.
+%   measAvgFun An optional function handle that, when given N measurement
+%              values with weights, produces the weighted average. This
+%              function only has to be provided if the domain of the
+%              measurement is not linear. For example, when averaging
+%              angular values, then the function meanAng should be used.
+% stateDiffTrans An optional function handle that, like innovTrans does for
+%              the measurements, takes an xDimXN matrix of N differences
+%              between states and transforms them however might be
+%              necessary. For example, a state containing angular
+%              components will generally need to be transformed so that the
+%              difference between the angles is wrapped to -pi/pi.
+%   stateTrans An optional function that takes a state estimate and
+%              transforms it. This is useful if one wishes the elements of
+%              the state to be bound to a certain domain. For example, if
+%              an element of the state is an angle, one might generally
+%              want to bind it to the region +/-pi.
 %
-%OUTPUTS:   xUpdate    The xDim X 1 updated state vector.
-%           PUpdate    The updated xDim X xDim state covariance matrix.
-%        innov, Pzz    The zDimX1 innovation and the zDimXzDim innovation
-%                      covariance matrix are returned in case one wishes to
-%                      analyze the consistency of the estimator or use
-%                      those values in gating or likelihood evaluation.
+%OUTPUTS: xUpdate The xDim X 1 updated state vector.
+%         PUpdate The updated xDim X xDim state covariance matrix.
+%      innov, Pzz The zDimX1 innovation and the zDimXzDim innovation
+%                 covariance matrix are returned in case one wishes to
+%                 analyze the consistency of the estimator or use those
+%                 values in gating or likelihood evaluation.
 %
 %This implements the measurement update step in Section III of [1]
 %(Algorithm 1). This is essentially a Cubature Kalman filter that performs
@@ -101,7 +95,7 @@ if(nargin<9||isempty(stateDiffTrans))
    stateDiffTrans=@(x)x; 
 end
 
-if(nargin<10)
+if(nargin<10||isempty(stateTrans))
    stateTrans=@(x)x; 
 end
 

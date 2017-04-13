@@ -1,9 +1,7 @@
-**Tracker Component Library Release 2.0, August 2016**
-
-Moved to an official NRL GitHub site February 2017
+**Tracker Component Library Release 2.5, March 2017**
 https://github.com/USNavalResearchLaboratory/TrackerComponentLibrary
 
-These are the release notes for the second release of the Tracker Component
+These are the release notes for the version 2.5 of the Tracker Component
 Library. The Tracker Component Library is a collection of Matlab routines
 (some written in C/C++ requiring compilation compilation) for simulating
 and tracking targets in various scenarios. Due to the complexity of the
@@ -31,18 +29,20 @@ in the folder "Astronomical Code/data".
 
 COMPILED CODE:
 
-The library has been tested under Matlab2016a for Windows 7 and Mac OS X
-10.10. However, most of it should work under other versions of Matlab and
-under other operating systems.  To use the full library, add the library
-and all of its subfolders to your active path in Matlab. Some functions are
-available as C/C++ files for use in Matlab either because they use third-
-party libraries or because the native Matlab implementations provided are
-too slow to use. If the library was downloaded without precompiled versions
-of these files, then they can be compiled by running the CompileCLibraries
-function. Note that a C/C++ compiler supported by Matlab must be
-installed. Additionally, to decode AIS data, the compiler must support
-C++11. As thie commands for the compilation of the AIS data are at the end
-of the CompileCLibraries function,
+The compilation of the library has been tested under Matlab2016b for Mac OS
+X 10.11 using clang-800.0.42.1. However, the code should work under other
+versions of Matlab, compilers, and operating systems.  To use the full
+library, add the library and all of its subfolders to your active path in
+Matlab. Some functions are available as C/C++ files for use in Matlab
+either because they use third-party libraries or because the native Matlab
+implementations provided are too slow to use. If the library was downloaded
+without precompiled versions of these files, then they can be compiled by
+running the CompileCLibraries function. Note that a C/C++ compiler
+supported by Matlab must be installed. Additionally, to decode AIS data,
+the compiler must support C++11. As the commands for the compilation of the
+AIS data are at the end of the CompileCLibraries function, if a compiler
+without C++11 support is used, the rest of the library should be
+successfully compiled before an error ocurs while compiling the AIS code.
 
 EXTERNAL SOLVERS:
 

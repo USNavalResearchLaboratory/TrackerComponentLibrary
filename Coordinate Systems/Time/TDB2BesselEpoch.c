@@ -3,16 +3,15 @@
 *                  related to the apparent position of the Sun and are
 *                  generaly considered outdated.
 *
-*INPUTS:    Jul1, Jul2 Matrices of two parts of a Julian date given
-*                      in TDB. The units of the date are days. The full
-*                      date is the sum of both terms. The date is broken
-*                      into two parts to provide more bits of precision.
-*                      It does not matter how the date is split.
-*                      Corresponding elements in each matrix are times
-*                      that are converted.
+*INPUTS: Jul1, Jul2 Matrices of two parts of a Julian date given in TDB.
+*                   The units of the date are days. The full date is the
+*                   sum of both terms. The date is broken into two parts to
+*                   provide more bits of precision. It does not matter how
+*                   the date is split. Corresponding elements in each
+*                   matrix are times that are converted.
 *
-*OUTPUTS: bessEpoch    The time as a Besselian epoch with the same
-*                      dimensionality as the input sets of dates.
+*OUTPUTS: bessEpoch The time as a Besselian epoch with the same
+*                   dimensionality as the input sets of dates.
 *
 *The relationship between Julian dates in TDB and Besselian epochs is given
 *in [1]. A Besselian epoch is a factional year number denominated in terms

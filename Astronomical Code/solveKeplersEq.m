@@ -287,7 +287,7 @@ function x=GoodingHyperSinDiffFun(g1,s)
 %%GOODINGHYPERSINDIFFFUN Evaluate the function s-(1-g1)*asinh(s) when
 %                        (g1,s) is close to (0,0) using Gooding's method.
 %                        This is supposed to have a higher precision than
-%                        just explicitely evaluating the function.
+%                        just explicitly evaluating the function.
 %
 %The algorithm is the SHMKEP function taken from Appendix B of 
 %R. H. Gooding and A. W. Odell, "The hyperbolic Kepler's equation,

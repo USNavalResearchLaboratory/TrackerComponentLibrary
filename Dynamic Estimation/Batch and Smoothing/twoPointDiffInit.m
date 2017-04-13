@@ -9,24 +9,28 @@ function [x,P]=twoPointDiffInit(T,z,R,q)
 %INPUTS:    T   The time delta between the measurements, in seconds. The
 %               transition matrix is assumed to have the form of a matrix
 %               with position and velocity components as in FPolyKal.
-%           z   The zDimX2 matrix of Cartesian position measurements. zDim
-%               can be 2 or 3. The second measurement is assumed to arrive
-%               at time T after the first.
-%           R   The zDimXzDimX2 hypermatrix of measurement covariance
+%           z   The zDimX2XN matrix of Cartesian position measurements.
+%               zDim can be 2 or 3. The second measurement is assumed to
+%               arrive at time T after the first. The N dimensions allows
+%               for multiple simultaneous conversions.
+%           R   The zDimXzDimX2XN hypermatrix of measurement covariance
 %               matrices. If just a zDimXzDim matrix is passed, then it is
 %               assumed that both measurements have the same measurement
-%               matrix.
+%               matrix for all N conversions. If just a zDimXzDimX2 matrix
+%               is passed, then it is assumed that the same set of R
+%               matrices is used in each of the N conversions.
 %           q   The optional process noise parameter. If this parameter is
 %               omitted or an empty matrix is passed, then it is assumed
 %               there is no process noise. A discretized dynamic model
 %               is used, so q has units of length^2/time^3 and is the
 %               power spectral density parameters as in the function
 %               QPolyKal.
-
-%OUTPUTS:   x   The (2*zDim)X1 initialized state vector. consisting of
+%
+%OUTPUTS:   x   The (2*zDim)XN initialized state vectors consisting of
 %               of position and velocity with all position components 
 %               coming before any of the velocity components.
-%           P   The (2*zDim)X(2*zDim) covariance matrix.
+%           P   The (2*zDim)X(2*zDim)XN covariance matrixces, one for each
+%               of the N initiations.
 %
 %Two point differencing assuming a linear dynamic model without process
 %noise is given in Equations 39 and 40 in [1]. The inclusion of process
@@ -51,27 +55,34 @@ if(size(R,3)==1)
    R=repmat(R,[1,1,2]);
 end
 
+N=size(z,3);
+if(size(R,4)==1)
+   R=repmat(R,[1,1,1,N]);
+end
+
 xDim=2*zDim;
-x=zeros(xDim,1);
-P=zeros(xDim,xDim);
+x=zeros(xDim,N);
+P=zeros(xDim,xDim,N);
 
 posIdx=1:zDim;
 velIdx=(zDim+1):(2*zDim);
 
-%Equation 39 in [1].
-%The position components
-x(posIdx)=z(:,2);
-%The velocity components
-x(velIdx)=(z(:,2)-z(:,1))/T;
+for idx=1:N
+    %Equation 39 in [1].
+    %The position components
+    x(posIdx,idx)=z(:,2,idx);
+    %The velocity components
+    x(velIdx,idx)=(z(:,2,idx)-z(:,1,idx))/T;
 
-%Equation 40 in [1].
-P(posIdx,posIdx)=R(:,:,2);
-P(posIdx,velIdx)=R(:,:,2)/T;
-P(velIdx,posIdx)=R(:,:,2)/T;
-P(velIdx,velIdx)=sum(R,3)/T^2;
+    %Equation 40 in [1].
+    P(posIdx,posIdx,idx)=R(:,:,2,idx);
+    P(posIdx,velIdx,idx)=R(:,:,2,idx)/T;
+    P(velIdx,posIdx,idx)=R(:,:,2,idx)/T;
+    P(velIdx,velIdx,idx)=sum(R(:,:,:,idx),3)/T^2;
 
-%The bias due to process noise as given in Equation 56 of [1].
-P(velIdx,velIdx)=P(velIdx,velIdx)+(1/3)*q*T*eye(zDim,zDim);
+    %The bias due to process noise as given in Equation 56 of [1].
+    P(velIdx,velIdx,idx)=P(velIdx,velIdx,idx)+(1/3)*q*T*eye(zDim,zDim);
+end
 
 end
 

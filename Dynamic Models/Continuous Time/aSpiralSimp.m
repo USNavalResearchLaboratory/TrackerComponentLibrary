@@ -1,7 +1,7 @@
 function aVals=aSpiralSimp(xPoints,t)
 %%ASPIRALSIMP The drift function for a non-ballistic spiraling target
 %         motion model in 3 dimensions, formulated in a manner such that it
-%         si simple to make a spiraling target follow a nominal trajectory.
+%         is simple to make a spiraling target follow a nominal trajectory.
 %         This model is probably bad to design into a target tracking
 %         algorithm, but might be good for designing spiraling trajectories
 %         to use to test target tracking algorithms.
@@ -13,7 +13,7 @@ function aVals=aSpiralSimp(xPoints,t)
 %                spiral rate of the target. Thus xDim=10. If x is an
 %                xDim X numStates matrix, then the spiraling model is
 %                evaluated for all of the state vectors.
-%        t       An unused time component so that aSpiral can be used with
+%             t  An unused time component so that aSpiral can be used with
 %                Runge-Kutta methods that expect the function to take two
 %                parameters.
 %
@@ -38,7 +38,7 @@ function aVals=aSpiralSimp(xPoints,t)
     
     aVals(1:3,:)=xPoints(4:6,:);
     vs=xPoints(4:6,:)-vl;
-    ul=vl./sqrt(sum(vl.*vl,1));
+    ul=bsxfun(@rdivide,vl,sqrt(sum(vl.*vl,1)));
     vsDot=omega.*bsxfun(@cross,ul,vs);
     aVals(4:6,:)=vsDot;
 end

@@ -98,7 +98,7 @@ elseif(nargin==4)
     h11=S11;
 end
 
-%The paper does not explicitely state it, but from Equation 5 of [1]
+%The paper does not explicitly state it, but from Equation 5 of [1]
 %(assuming one uses a four-quadrant inverse tangent), one can infer that
 %the pole being used is given by the following vector in terms of
 %geomagnetic components:

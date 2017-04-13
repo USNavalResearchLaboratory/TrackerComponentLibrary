@@ -13,15 +13,14 @@ classdef ChiSquareD
 methods(Static)
 
 function val=mean(nu,lambda)
-%%MEAN  Obtain the mean of chi squared probability distribution.
+%%MEAN Obtain the mean of chi squared probability distribution.
 %
-%INPUTS: nu    The number of degrees of freedom of the chi-square
-%              distribution. Note that nu>0.
+%INPUTS: nu  The number of degrees of freedom of the chi-squared
+%            distribution. Note that nu>0.
 %       lambda The non-centrality parameter of the distribution. In the
 %              central chi-squared distribution, this is zero.
 %
-%OUTPUTS: val  The mean of the chi squared distribution under
-%              consideration.
+%OUTPUTS: val The mean of the chi squared distribution under consideration.
 %
 %The noncentral chi-squared distribution is descirbed in [1].
 %
@@ -71,8 +70,8 @@ function val=PDF(x,nu,lambda)
 %%PDF Evaluate the chi squared probability distribution function (PDF) at
 %     the desired points.
 %
-%INPUTS: x The point(s) at which the chi-squared PDF is to be  evaluated.
-%          Note that x>=0.
+%INPUTS: x The point(s) at which the chi-squared PDF is to be evaluated.
+%          Note that x>=0 for nonzero probabilities.
 %       nu The number of degrees of freedom of the chi-square distribution.
 %          Note that nu>0.
 %   lambda The non-centrality parameter of the distribution. In the central
@@ -117,8 +116,8 @@ function prob=CDF(x,nu,lambda)
 %%CDF Evaluate the cumulative distribution function (CDF) of the central or
 %     noncentral chi-squared distribution at desired points.
 %
-%INPUTS: x The point(s) at which the chi-squared CDF is to be  evaluated.
-%          Note that x>=0.
+%INPUTS: x The point(s) at which the chi-squared CDF is to be evaluated.
+%          Note that x>0 for nonzero values.
 %       nu The number of degrees of freedom of the chi-square distribution.
 %          Note that nu>0. When lambda is not zero, the CDF function is
 %          numerically stabler when nu is an integer.
@@ -155,21 +154,21 @@ function prob=CDF(x,nu,lambda)
     else
         prob=GammaD.CDF(x,nu/2,2,lambda);
     end
+    prob(x<=0)=0;
 end
     
 function val=invCDF(prob,nu)
-%%INVCDF          Evaluate the inverse of the cumulative distribution
-%                 function (CDF) of the central chi squared distribution.
-%                 This is only implemented for the central Chi-Square
-%                 distribution.
+%%INVCDF Evaluate the inverse of the cumulative distribution function (CDF)
+%        of the central chi squared distribution. This is only implemented
+%        for the central chi-squared distribution.
 %
-%INPUTS:    prob The probability or probabilities (0<=prob<=1) at which the 
-%                argument of the CDF is desired.
-%           nu   The number of degrees of freedom of the chi-square
-%                distribution. Note that nu>0.
+%INPUTS:prob The probability or probabilities (0<=prob<=1) at which the 
+%            argument of the CDF is desired.
+%         nu The number of degrees of freedom of the chi-squared
+%            distribution. Note that nu>0.
 %
-%OUTPUTS:   val  The argument(s) of the CDF that would give the probability
-%                or probabilities in prob.
+%OUTPUTS: val The argument(s) of the CDF that would give the probability or
+%             probabilities in prob.
 %
 %The CDF of the chi squared function with nu degrees of freedom evaluated
 %at x is just a special case of the incomplete gamma function, as described
@@ -223,7 +222,7 @@ function vals=rand(N,nu,lambda)
     end
 
     if(isscalar(N))
-        dims=[N N];
+        dims=[N, N];
     else
         dims=N;
     end

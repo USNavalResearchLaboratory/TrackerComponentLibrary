@@ -18,7 +18,7 @@ function y=exp10m1(x)
 %For the first one, one will get 0, for the second,
 %2.302585092994046e-17. Compare this to a value computed using
 %higher-precision arithmetic of 2.3025850929940457105274820070764*10^-17
-%and it is clear that this function is more accurate than explicitely
+%and it is clear that this function is more accurate than explicitly
 %evaluating the expression.
 %
 %November 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.

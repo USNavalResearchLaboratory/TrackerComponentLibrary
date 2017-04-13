@@ -1,6 +1,7 @@
 classdef LogisticD
-%Functions to handle the logistic distribution. The logistic distribution
-%is similar to the scalar normal distribution, but has heavier tails.
+%%LOGISTICD Functions to handle the logistic distribution. The logistic
+%    distribution is similar to the scalar normal distribution, but has
+%    heavier tails.
 %Implemented methods are: mean, var, PDF, CDF, invCDF, rand
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -52,10 +53,10 @@ end
 
 
 function val=PDF(x,mu,s)
-%%PDF    Evaluate the scalar logistic  probability distribution function
+%%PDF    Evaluate the scalar logistic probability distribution function
 %        (PDF) at one or more desired points.
 %
-%INPUTS: x The point(s) at which the logistic PDF is to be  evaluated.
+%INPUTS: x The point(s) at which the logistic PDF is to be evaluated.
 %       mu The mean (location parameter) of the distribution.
 %        s The scale parameter of the distribution s>=0.
 %

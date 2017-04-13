@@ -4,14 +4,14 @@ function [xPred,MPred,DPred,PPred,Lambda]=reducedStateDiscPred(xPrev,MPrev,DPrev
 %               filter that takes measurements in Cartesian coordinates and
 %               assumes that the dynamic model includes an input parameter
 %               that depends on an unknown bounded parameter lambda. The
-%               filter
-%               separates contributions due to measurement errors and
-%               dynamic model mismatch errors. This implementation allows
-%               for one to use general algorithms of [1] by specifying F,
-%               G, a matrix for LambdaChoice, and Gammau,Gammadu. However,
-%               by using the modParams input and omitting other inputs, one
-%               can very easily use the maneuvering models of [2] without
-%               having to explicitely create the necessary inputs.
+%               filter separates contributions due to measurement errors
+%               and dynamic model mismatch errors. This implementation
+%               allows for one to use general algorithms of [1] by
+%               specifying F, G, a matrix for LambdaChoice, and Gammau,
+%               Gammadu. However, by using the modParams input and omitting
+%               other inputs, one can very easily use the maneuvering
+%               models of [2] without having to explicitly create the
+%               necessary inputs.
 %
 %INPUTS: xPrev The xDimX1 state estimate at the previous time-step.
 %        MPrev The xDimXxDim matrix contributing to the total predicted

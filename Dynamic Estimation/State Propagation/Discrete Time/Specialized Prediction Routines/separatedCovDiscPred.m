@@ -16,21 +16,21 @@ function [xPred,LPred,TPred,PPred]=separatedCovDiscPred(xPrev,PPrev,LPrev,F,Ba,c
 %              columns represents a choice in how the algorithm was
 %              generalized to multiple dimensions.
 %           F  The xDim X xDim state transition matrix.
-%           Ba An xDimXzDim vector that represents the effects of the maximum
-%              possible acceleration (or other moment) on the target state
-%              over the duration of the prediction interval. This only
-%              matters for the computation of the lag term in the filter
-%              and the sign of all of the elements is generally positive.
-%              For example, for a 3D linear dynamic model with additive
-%              Gaussian noise consisting of a state having 3 position and
-%              3 velocity components, one might use
+%           Ba An xDimXzDim vector that represents the effects of the
+%              maximum possible acceleration (or other moment) on the
+%              target state over the duration of the prediction interval.
+%              This only matters for the computation of the lag term in the
+%              filter and the sign of all of the elements is generally
+%              positive. For example, for a 3D linear dynamic model with
+%              additive Gaussian noise consisting of a state having 3
+%              position and 3 velocity components, one might use
 %              Ba=[T^2/2,   0,      0;
 %                  0,       T^2/2,  0;
 %                  0,       0,      T^2/2;
 %                  T,       0,      0;
 %                  0,       T,      0;
 %                  0,       0,      T]*aMax;
-%              where aMax is the maximum allowable acceleration. IN 2D,
+%              where aMax is the maximum allowable acceleration. In 2D,
 %              this would be
 %              Ba=[T^2/2,   0;
 %                  0,       T^2/2;
@@ -39,8 +39,8 @@ function [xPred,LPred,TPred,PPred]=separatedCovDiscPred(xPrev,PPrev,LPrev,F,Ba,c
 %              and in 1D, as in the paper, this is
 %              Ba=[T^2/2;
 %                  T]*aMax;
-%              However, analogous filters can work witha  target state
-%              consisitng of position velocity and acceleration where Ba
+%              However, analogous filters can work with a target state
+%              consisting of position velocity and acceleration where Ba
 %              adds in the effects of a maximum jerk term.
 %            c The confidence region under consideration by the filter.
 %              0<c<1. If this parameter is omitted or an empty matrix is

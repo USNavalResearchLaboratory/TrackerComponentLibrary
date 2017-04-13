@@ -1,4 +1,4 @@
-function [xi,w]=seventhOrderCubPoints(numDim, algorithm)
+function [xi,w]=seventhOrderCubPoints(numDim,algorithm)
 %%SEVENTHORDERCUBPOINTS Generate seventh order cubature points for
 %                       integration involving a multidimensional Gaussian
 %                       probability density function (PDF). Note that if
@@ -6,40 +6,41 @@ function [xi,w]=seventhOrderCubPoints(numDim, algorithm)
 %                       weights (and are thus eliminated) and if numDim>8,
 %                       then some points will have negative weights.
 %
-%INPUTS:    numDim  An integer specifying the dimensionality of the points
-%                   to be generated. This must be >2.
-%         algorithm An optional parameter specifying the algorithm to be
-%                   used to generate the points. Possible values are
-%                   0 (The default if omitted or an empty matrix is passed
-%                     and numDim~=2) Use  algorithm E_n^{r^2} 7-1 on page
-%                     318 of [1], requiring 2^numDim+2*numDim^2+1 points.
-%                     Note, however, that the formula in the book contains
-%                     a typo. Using [2] and [3], one can get the correct
-%                     formulae, which are summarized in [4].
-%                   1 E_n^{r^2} 7-1 on page 318 of [1], requires
-%                     2^numDim+2*numDim^2+1 points, numDim=3,4,6,7.
-%                   2 (The default if numDim==2) E_2^{r^2} 7-1, page 324 of
-%                     [1], 12 points, numDim=2.
-%                   3 E_2^{r^2} 7-2, page 324 of [1], 16 points, numDim=2.
-%                     This includes a correction as a scale factor of (4/3)
-%                     was missing from the squared expressions for r and
-%                     s.
-%                   4 E_3^{r^2} 7-1, page 327 of [1], 27 points, numDim=3,
-%                     first variant using the upper signs.
-%                   5 E_3^{r^2} 7-1, page 327 of [1], 27 points, numDim=3,
-%                     second variant using the lower signs.
-%                   6 E_3^{r^2} 7-2, page 328 of [1], 33 points, numDim=3,
-%                     first variant using the upper signs.
-%                   7 E_3^{r^2} 7-2, page 328 of [1], 33 points, numDim=3,
-%                     second variant using the lower signs.
-%                   8 E_4^{r^2} 7-1, page 329 of [1], 49 points, numDim=4,
-%                     first variant using the upper signs, corrected by
-%                     multiplying s,t, and r by a factor of sqrt(4/5).
+%INPUTS: numDim An integer specifying the dimensionality of the points to
+%               be generated; numDim>=1.
+%     algorithm An optional parameter specifying the algorithm to be used
+%               to generate the points. Possible values are
+%               0 (The default if omitted or an empty matrix is passed and
+%                 numDim~=2 and numDim~=1) Use  algorithm E_n^{r^2} 7-1 on
+%                 page 318 of [1], requiring 2^numDim+2*numDim^2+1 points.
+%                 Note, however, that the formula in the book contains a
+%                 typo. Using [2] and [3], one can get the correct
+%                 formulae, which are summarized in [4].
+%               1 E_n^{r^2} 7-1 on page 318 of [1], requires
+%                 2^numDim+2*numDim^2+1 points, numDim=3,4,6,7.
+%               2 (The default if numDim==2) E_2^{r^2} 7-1, page 324 of
+%                 [1], 12 points, numDim=2.
+%               3 E_2^{r^2} 7-2, page 324 of [1], 16 points, numDim=2. This
+%                 includes a correction as a scale factor of (4/3) was
+%                 missing from the squared expressions for r and s.
+%               4 E_3^{r^2} 7-1, page 327 of [1], 27 points, numDim=3,
+%                 first variant using the upper signs.
+%               5 E_3^{r^2} 7-1, page 327 of [1], 27 points, numDim=3,
+%                 second variant using the lower signs.
+%               6 E_3^{r^2} 7-2, page 328 of [1], 33 points, numDim=3,
+%                 first variant using the upper signs.
+%               7 E_3^{r^2} 7-2, page 328 of [1], 33 points, numDim=3,
+%                 second variant using the lower signs.
+%               8 E_4^{r^2} 7-1, page 329 of [1], 49 points, numDim=4,
+%                 first variant using the upper signs, corrected by
+%                 multiplying s,t, and r by a factor of sqrt(4/5).
+%               9 (The default if numDim==1) Call quadraturePoints1D(4), 4
+%                  points, numDim=1.
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %%For more details on how to use these points, see the comments in the
 %function fifthOrderCubPoints.m.
@@ -65,8 +66,10 @@ function [xi,w]=seventhOrderCubPoints(numDim, algorithm)
     if(nargin<2||isempty(algorithm))
         if(n>2)
             algorithm=0;
-        else
+        elseif(n==2)
             algorithm=2;
+        else%Assume %n==1
+            algorithm=9;
         end
     end
     
@@ -254,6 +257,11 @@ function [xi,w]=seventhOrderCubPoints(numDim, algorithm)
             %The sqrt(2) makes it for the normal 0-I distribution.
             xi=sqrt(2)*[zeros(4,1),fullSymPerms([r;0;0;0]),PMCombos([s;s;s;s]),fullSymPerms([t;t;0;0])];
             w=[A;B*ones(24,1);C*ones(24,1)];
+        case 9%Use quadraturePoints1D(4) for 1D points
+            if(n~=1)
+                error('This algorithm requires numDim=1.')
+            end
+            [xi,w]=quadraturePoints1D(4);
         otherwise
             error('Unknown algorithm selected')
     end

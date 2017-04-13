@@ -55,7 +55,7 @@ function [azimuth, dist]=indirectRhumbProblem(latLonStart,latLonEnd,height,useHe
 %If height=0, the algorithm is mostly taken from [1]. However, a formula
 %using isometric latitudes, which are described in Chapter 3 of [2] to get
 %the azimuth angle was used, because it is simpler. The formula is also
-%explicitely mentioned in Equation 2 of [3]. However, the expression for
+%explicitly mentioned in Equation 2 of [3]. However, the expression for
 %computing the distance from that paper is only for a sphere, not for an 
 %llipsoid, which is why the Carlton-Wippern distance computation using an
 %incomplete elliptic integral of the second kind is preferred.
@@ -97,23 +97,23 @@ function [azimuth, dist]=indirectRhumbProblem(latLonStart,latLonEnd,height,useHe
 %September 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<7)
+if(nargin<7||isempty(numSteps4Circ))
    numSteps4Circ=2000; 
 end
 
-if(nargin<6)
+if(nargin<6||isempty(f))
     f=Constants.WGS84Flattening;
 end
 
-if(nargin<5)
+if(nargin<5||isempty(a))
     a=Constants.WGS84SemiMajorAxis;
 end
 
-if(nargin<4)
+if(nargin<4||isempty(useHeightApprox))
    useHeightApprox=true; 
 end
 
-if(nargin<3)
+if(nargin<3||isempty(height))
    height=0; 
 end
 

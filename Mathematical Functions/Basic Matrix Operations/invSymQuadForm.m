@@ -37,7 +37,7 @@ function dist=invSymQuadForm(x,M,matType)
 %C*y=x
 %Since C is lower-triangular, we can find x using forward substitution.
 %This should be the same as one of the many ways that Matlab solves the
-%equation C*y=x when one uses the \ operator. One can explicitely tell
+%equation C*y=x when one uses the \ operator. One can explicitly tell
 %Matlab that the matrix is lower triangular when using the linsolve
 %function, thus avoiding the need for loops or for Matlab to check the
 %structure of the matrix on its own.

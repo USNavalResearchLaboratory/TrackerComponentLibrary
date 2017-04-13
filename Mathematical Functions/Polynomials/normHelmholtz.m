@@ -58,7 +58,7 @@ function [HBar,dHBardu,d2HBardu2]=normHelmholtz(u,M,scalFactor)
     clustSizes=1:(M+1);
     HBar=ClusterSet(totalP,clustSizes);
     
-    %Set the first few terms explicitely.
+    %Set the first few terms explicitly.
     HBar(0+1,0+1)=1*scalFactor;
     HBar(1+1,1+1)=sqrt(3)*scalFactor;
     HBar(1+1,0+1)=sqrt(3)*u*scalFactor;

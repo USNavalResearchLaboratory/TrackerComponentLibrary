@@ -10,10 +10,10 @@ function [xi,w]=eleventhOrderSpherCubPoints(algorithm)
 %                  Formula S2 11-1 in [1], pg. 285, 28 points, numDim=2.
 %                1 Formula S2 11-4 in [1], pg.286, 32 points, numDim=2.
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %REFERENCES:
 %[1] A.H. Stroud, Approximate Calculation of Multiple Integrals. Cliffs,

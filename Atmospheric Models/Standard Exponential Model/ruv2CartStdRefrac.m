@@ -192,7 +192,7 @@ if(useHalfRange)
 end
 
 %The location of the observer in ellipsoidal coordinates.
-plhPoint=Cart2Ellipse(zRx,a,f);
+plhPoint=Cart2Ellipse(zRx,[],a,f);
 
 %Find the radius of the Earth at the location of the observer. Use the
 %ellipsoidal Earth approximation. This will be the radius used in the local

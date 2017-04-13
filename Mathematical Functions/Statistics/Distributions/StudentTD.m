@@ -1,9 +1,20 @@
 classdef StudentTD
-%Functions to handle the multivariate Student-t distribution. Note that the
-%multivariate Student-t distribution with one degree of freedom is the same
-%as the multivariate Cauchy distribution.
+%%STUDENTD Functions to handle the multivariate Student-t distribution.
+%    Note that the multivariate Student-t distribution with one degree of
+%    freedom is the same as the multivariate Cauchy distribution.
+%    Also the scalar student-t distribution is the distribution of
+%    x/sqrt(y/n) where x is a normal random variable, y is a central
+%    chi squared random variable and n is the number of degrees of freedom
+%    of y. In terms of tracking, the distribution can be of interest,
+%    because, as noted in [1], angular measurements in the presence of
+%    glint have been fit to Cauchy distributions in some instances.
 %Implemented methods are: mean, cov, PDF, rand (only for scalar, central,
-%                                               non-scaled distributions). 
+%                                               non-scaled distributions).
+%
+%REFERENCES:
+%[1] U. Nickel, "Angular superresolution with phased array radar: A review
+%    of algorithms and operational constraints," IEEE Proceedings, vol.
+%    134, Part F, no. 1, pp. 53-59, Feb. 1987.
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
@@ -13,11 +24,11 @@ function val=mean(mu,nu)
 %%MEAN  Obtain the mean of the multivariate Student-t distribution for 
 %       given location and scale parameters and degrees of freedom.
 %
-%INPUTS: mu     The DX1 location vector of the student's-t distribution.
-%        nu     The scalar number of degrees of freedom of the Student-t
-%               distribution. nu>=0.
+%INPUTS: mu The DX1 location vector of the student's-t distribution.
+%        nu The scalar number of degrees of freedom of the Student-t
+%           distribution. nu>=0.
 %
-%OUTPUTS: val  The mean of the multivariate Student-t distribution.
+%OUTPUTS: val The mean of the multivariate Student-t distribution.
 %
 %The mean is undefined if nu<=1.
 %
@@ -35,12 +46,12 @@ function val=cov(Sigma,nu)
 %       distribution for given location and scale parameters and degrees 
 %       of freedom.
 %
-%INPUTS: Sigma  The DXD symmetric, positive definite scale matrix.
-%        nu     The scalar number of degrees of freedom of the Student-t
-%               distribution. nu>=0.
+%INPUTS: Sigma The DXD symmetric, positive definite scale matrix.
+%           nu The scalar number of degrees of freedom of the Student-t
+%              distribution. nu>=0.
 %
-%OUTPUTS: val  The covariance matrix of the multivariate Student-t
-%              distribution.
+%OUTPUTS: val The covariance matrix of the multivariate Student-t
+%             distribution.
 %
 %The covariance matrix is undefined if nu<=2.
 %
@@ -54,18 +65,18 @@ function val=cov(Sigma,nu)
 end 
     
 function val=PDF(x,mu,Sigma,nu)
-%%PDF  Evaluate the monovariate or multivariate Student-t
-%              distribution at the desired point.
+%%PDF Evaluate the monovariate or multivariate Student-t distribution at
+%     the desired point.
 %
-%INPUTS: x      The DX1 vector at which the (possibly multivariate)
-%               Student's-t distribution is to be evaluated.
-%        mu     The DX1 location vector of the student's-t distribution.
-%       Sigma   The DXD symmetric, positive definite scale matrix.
-%        nu     The scalar number of degrees of freedom of the Student-t
-%               distribution. nu>=0.
+%INPUTS: x The DX1 vector at which the (possibly multivariate) Student's-t
+%          distribution is to be evaluated.
+%       mu The DX1 location vector of the student's-t distribution.
+%    Sigma The DXD symmetric, positive definite scale matrix.
+%       nu The scalar number of degrees of freedom of the Student-t
+%          distribution. nu>=0.
 %
-%OUTPUTS: val   The PDF of the Student's-t distribution at x with the given
-%               parameters.
+%OUTPUTS: val The PDF of the Student's-t distribution at x with the given
+%             parameters.
 %
 %The vector version of the Student-t Distribution is given in Appendix B of
 %[1]. As nu->Inf, the distribution reduces to a multivariate Gaussian
@@ -97,15 +108,14 @@ function vals=rand(N,nu)
 %%RAND Generate scalar Student-t random variables with unit scale factor
 %      and a given number of degrees of freedom.
 %
-%INPUTS: N      If N is a scalar, then rand returns an NXN matrix
-%               of random variables. If N=[M,N1] is a two-element row 
-%               vector, then rand returns an MXN1 matrix of 
-%               random variables.
-%        nu     The scalar number of degrees of freedom of the Student-t
-%               distribution. nu>=0.
+%INPUTS: N If N is a scalar, then rand returns an NXN matrix of random
+%          variables. If N=[M,N1] is a two-element row vector, then rand
+%          returns an MXN1 matrix of random variables.
+%       nu The scalar number of degrees of freedom of the Student-t
+%          distribution. nu>=0.
 %
-%OUTPUTS:   vals   A matrix whose dimensions are determined by N of the
-%                  generated scalar Student-t random variables.
+%OUTPUTS: vals A matrix whose dimensions are determined by N of the
+%              generated scalar Student-t random variables.
 %
 %The algorithm implemented is the TIR algorithm in [1].
 %
@@ -210,9 +220,7 @@ for curVal=1:numVals
         end
     end
 end
-
 end
-
 end
 end
 

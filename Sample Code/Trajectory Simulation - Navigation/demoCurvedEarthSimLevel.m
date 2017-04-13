@@ -24,7 +24,7 @@ function demoCurvedEarthSimLevel()
 %Simulate level-flight from Hilo Hawaii to Füssen, Germany at a constant
 %altitude on an ellipsoidal Earth, traveling at a constant speed.
 
-display('Level Flight from Hilo, Hawaii to Füssen, Germany at 8km (ellipsoidal) Altitude and Mach 1')
+disp('Level Flight from Hilo, Hawaii to Füssen, Germany at 8km (ellipsoidal) Altitude and Mach 1')
 ellipsAlt=8e3;%8km ellipsoidal altitude.
 
 %The target should be traveling at Mach 1-> the speed of sound. The speed
@@ -34,9 +34,9 @@ cSoundSTP=speedOfSoundInAir();
 %Then one would obtain a reference speed of sound for standard temperature,
 %pressure and humidity.
 
-display(['The speed of sound at standard temperature, pressure (STP) and humidity is ',num2str(cSoundSTP),'m/s,'])
-display('which will be used to define Mach 1.')
-display(' ')%All a line-break to the output.
+disp(['The speed of sound at standard temperature, pressure (STP) and humidity is ',num2str(cSoundSTP),'m/s,'])
+disp('which will be used to define Mach 1.')
+disp(' ')%All a line-break to the output.
 
 %The latitude and longitude of the Mauna Kea Observatory in Hilo, Hawaii.
 phi=19.823*pi/180;%North latitude in radians.
@@ -49,7 +49,7 @@ phi=47.5575*pi/180;%North latitude
 lambda=10.7500*pi/180;%East longitude
 latLonEnd=[phi;lambda];
 
-display('1) Computing the initial heading and distance to navigate on a geodesic curve from Hilo to Füssen')
+disp('1) Computing the initial heading and distance to navigate on a geodesic curve from Hilo to Füssen')
 %The initial heading (in local East-North-Up coordinate) and distance
 %traveled to get from Hilo, Hawaii to Füssen, Germany is the solution to
 %the indirect geodetic problem. When the altitude is not zero, traditional
@@ -62,51 +62,51 @@ display('1) Computing the initial heading and distance to navigate on a geodesic
 tic;%True means use the approximation for non-zero altitude flight.
 [azStart0,dist0]=indirectGeodeticProb(latLonStart,latLonEnd);
 time0=toc;
-display(['Assuming a zero altitude, the computation took ', num2str(time0), ' seconds.'])
+disp(['Assuming a zero altitude, the computation took ', num2str(time0), ' seconds.'])
 
 tic;%True means use the approximation for non-zero altitude flight.
 [azStartF,distF]=indirectGeodeticProbGen(latLonStart,latLonEnd,ellipsAlt,true);
 time1=toc;
 
-display(['Using an approximation to handle the non-zero altitude took ', num2str(time1), ' seconds.'])
+disp(['Using an approximation to handle the non-zero altitude took ', num2str(time1), ' seconds.'])
 
 tic;%False means use the exact iteration for non-zero altitude flight.
 [azStartE,distE]=indirectGeodeticProbGen(latLonStart,latLonEnd,ellipsAlt,false);
 time2=toc;
-display(['Using an exact algorithm to handle the non-zero altitude took ', num2str(time2), ' seconds.'])
+disp(['Using an exact algorithm to handle the non-zero altitude took ', num2str(time2), ' seconds.'])
 
-display(['The difference in distance computed between the approximation and the exact algorithms'])
-display(['is only ', num2str(abs(distE-distF)), ' meters.'])
+disp(['The difference in distance computed between the approximation and the exact algorithms'])
+disp(['is only ', num2str(abs(distE-distF)), ' meters.'])
 
-display(['The difference in distance computed between zero and exact non-zero altitudes is ',num2str(abs(distE-dist0)), ' meters'])
-display(['out of a total transit distance of ', num2str(distE), ' meters.'])
+disp(['The difference in distance computed between zero and exact non-zero altitudes is ',num2str(abs(distE-dist0)), ' meters'])
+disp(['out of a total transit distance of ', num2str(distE), ' meters.'])
 
-display(' ')%Insert line break
-display('2) Computing the heading and distance to navigate on a rhumb line (constant-heading trajectory)')
-display('from Hilo to Füssen')
+disp(' ')%Insert line break
+disp('2) Computing the heading and distance to navigate on a rhumb line (constant-heading trajectory)')
+disp('from Hilo to Füssen')
 tic;
 [azimuthRhumb0, distRhumb0]=indirectRhumbProblem(latLonStart,latLonEnd);
 time0=toc;
-display(['Using a zero altitude, the computation took ', num2str(time0), ' seconds.'])
+disp(['Using a zero altitude, the computation took ', num2str(time0), ' seconds.'])
 
 tic;
 [azimuthRhumbA, distRhumbA]=indirectRhumbProblem(latLonStart,latLonEnd,ellipsAlt,true);
 time1=toc;
-display(['Using an approximation to handle the non-zero altitude took ', num2str(time1), ' seconds.'])
+disp(['Using an approximation to handle the non-zero altitude took ', num2str(time1), ' seconds.'])
 
 tic;
 [azimuthRhumbE, distRhumbE]=indirectRhumbProblem(latLonStart,latLonEnd,ellipsAlt,false);
 time2=toc;
-display(['Using an exact algorithm to handle the non-zero altitude took ', num2str(time2), ' seconds.'])
+disp(['Using an exact algorithm to handle the non-zero altitude took ', num2str(time2), ' seconds.'])
 
-display(['The difference in distance computed between the approximation and the exact algorithms is ', num2str(abs(distRhumbE-distRhumbA)), ' meters.'])
+disp(['The difference in distance computed between the approximation and the exact algorithms is ', num2str(abs(distRhumbE-distRhumbA)), ' meters.'])
 
-display(['The difference in distance computed between zero and exact non-zero altitudes is ',num2str(abs(distRhumbE-distRhumb0)), ' meters'])
-display(['out of a total transit distance of ', num2str(distRhumbE), ' meters.'])
+disp(['The difference in distance computed between zero and exact non-zero altitudes is ',num2str(abs(distRhumbE-distRhumb0)), ' meters'])
+disp(['out of a total transit distance of ', num2str(distRhumbE), ' meters.'])
 
-display(' ')%Insert line break
-display('3) Computing the trajectory at 1000 points of a non-maneuvering target flying the geodesic path using')
-display('analytical derivatives.')
+disp(' ')%Insert line break
+disp('3) Computing the trajectory at 1000 points of a non-maneuvering target flying the geodesic path using')
+disp('analytical derivatives.')
 %The continuous-time drift function for a 3D, flat-Earth dynamic model is
 aFlatEarth3D=@(x,t)aPoly(x,t,3);
 %The initial local coordinate system is defined as East-North-Up,
@@ -147,10 +147,10 @@ tic;
 xList=RungeKCurvedAtTimes(xInit,uInit,times,aFlatEarth3D,uDyn);
 timeGeo=toc;
 
-display(['Analytic trajectory determination took ', num2str(timeGeo),' seconds.'])
+disp(['Analytic trajectory determination took ', num2str(timeGeo),' seconds.'])
 
-display('Computing the trajectory at 1000 points of a non-maneuvering target flying the geodesic path using')
-display('numerical differentiation.')
+disp('Computing the trajectory at 1000 points of a non-maneuvering target flying the geodesic path using')
+disp('numerical differentiation.')
 %For travel on/ over a general surface, where determining the
 %time-derivatives of the local basis vectors can be difficult, one can use
 %a numerical differentiation solution as long as one can express the local
@@ -163,9 +163,9 @@ uDer=@(u,x,t)uDotNumeric(u,x,t,downVecFunc);
 tic;
 xListNumeric=RungeKCurvedAtTimes(xInit,uInit,times,aFlatEarth3D,uDer);
 timeGeoNum=toc;
-display(['Numerical trajectory determination took ', num2str(timeGeoNum),' seconds.'])
+disp(['Numerical trajectory determination took ', num2str(timeGeoNum),' seconds.'])
 
-display('Computing the trajectory at 1000 points of a non-maneuvering target flying the rhumb path.')
+disp('Computing the trajectory at 1000 points of a non-maneuvering target flying the rhumb path.')
 
 %The initial heading for the Rhumb-line path is different than that of the
 %geodesic curve, because it does not change with time/
@@ -197,10 +197,10 @@ tic
 xListRhumb=RungeKCurvedAtTimes(xInit,[],times,aFlatEarth3D,uDet);
 timeRhumb=toc;
 
-display(['Rhumb trajectory determination took ', num2str(timeRhumb),' seconds.'])
+disp(['Rhumb trajectory determination took ', num2str(timeRhumb),' seconds.'])
 
-display(' ')%Insert line break
-display('4) Displaying The Geodesic and Rhumb Trajectories. Red=Geodesic; Green=Rhumb.')
+disp(' ')%Insert line break
+disp('4) Displaying The Geodesic and Rhumb Trajectories. Red=Geodesic; Green=Rhumb.')
 
 %Display a map of the Earth
 figure(1)

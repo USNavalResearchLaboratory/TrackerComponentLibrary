@@ -21,11 +21,11 @@
 %October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-display('NOTE: The CompileCLibraries function should be run prior to')
-display('running this script or else the execution time will be unusably slow.')
+disp('NOTE: The CompileCLibraries function should be run prior to')
+disp('running this script or else the execution time will be unusably slow.')
 
 %%%%%PLOT THE GEOID HEIGHT%%%%%
-display('Computing the Geoid Height Plot')
+disp('Computing the Geoid Height Plot')
 numPoints=700;
 %Geodetic (ellipsoidal) latitude and longitude values in radians.
 lat=linspace(-90,90,numPoints)*pi/180;
@@ -87,7 +87,7 @@ set(gca,'visible','off')%Do not show the axes
 colormap(jet(256))
 
 %%%%%PLOT THE TIDE-FREE GRAVITY ANOMALY AND VERTICAL DEFLECTION AT 9KM ELEVATION%%%%%
-display('Computing the Tide-Free Gravity Anomaly and Vertical Deflection Plots')
+disp('Computing the Tide-Free Gravity Anomaly and Vertical Deflection Plots')
 %The gravity anomaly is the difference between the magnitude of the "true"
 %acceleration due to gravity (in this case using the EGM2008 model) and
 %acceleration due to gravity from a model, in this case the WGS84

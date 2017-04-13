@@ -1,5 +1,5 @@
 classdef RiceD
-%Functions to handle the Rice distribution.
+%%RICED Functions to handle the Rice distribution.
 %Implemented methods are: mean, var, PDF, CDF, rand
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -90,18 +90,17 @@ end
 
 
 function vals=rand(N,s,sigma)
-%%RAND     Generate Rice-distributed random variables with the given
-%          parameters.
+%%RAND Generate Rice-distributed random variables with the given
+%      parameters.
 %
-%INPUTS:    N      If N is a scalar, then rand returns an NXN matrix of
-%                  random variables. If N=[M,N1] is a two-element row 
-%                  vector, then rand returns an MXN1 matrix of random
-%                  variables.
-%           s      The noncentrality parameter of the distribution.
-%           sigma  The scale parameter of the distribution.
+%INPUTS: N If N is a scalar, then rand returns an NXN matrix of random
+%          variables. If N=[M,N1] is a two-element row vector, then rand
+%          returns an MXN1 matrix of random variables.
+%        s The noncentrality parameter of the distribution.
+%    sigma The scale parameter of the distribution.
 %
-%OUTPUTS:   vals   A matrix whose dimensions are determined by N of the
-%                  generated Rice random variables.
+%OUTPUTS: vals A matrix whose dimensions are determined by N of the
+%              generated Rice random variables.
 %
 %This generates Rice distributed random variables by transforming normally
 %distributed random variables using the identity given in Chapter 2.1.4 of

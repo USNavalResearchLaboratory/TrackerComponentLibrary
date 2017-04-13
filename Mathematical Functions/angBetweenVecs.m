@@ -1,13 +1,14 @@
 function angDiff=angBetweenVecs(v1,v2)
-%%ANGBETWEENVECS  Given vector pairs in threespace, find the angular
-%                 distances between them (non-negative values). A
-%                 cross-product formula is used instead of the more logical
-%                 dot-product formula so as to maximize numerical precision
-%                 when vectors are nearly parallel. The vectors do not need
-%                 to have the same magnitudes.
+%%ANGBETWEENVECS Given vector pairs in threespace, find the angular
+%                distances between them (non-negative values). A
+%                cross-product formula is used instead of the more logical
+%                dot-product formula so as to maximize numerical precision
+%                when vectors are nearly parallel. The vectors do not need
+%                to have the same magnitudes.
 %
-%INPUTS: v1       A 3XN matrix of N real vectors.
-%        v2       A 3XN matrix of N real vectors.
+%INPUTS: v1 A 3XN matrix of N real vectors.
+%        v2 A 3XN matrix of N real vectors or a single 3X1 vector if all of
+%           them are the same.
 %
 %OUTPUTS: angDiff An NX1 matrix of the angular differences (in radians)
 %                 between the vectors in v1 and the correspinding vectors
@@ -22,6 +23,10 @@ function angDiff=angBetweenVecs(v1,v2)
 
 %The number of vectors.
 N=size(v1,2);
+
+if(size(v2,1)==1)
+   v2=repmat(v2,1,N); 
+end
 
 angDiff=zeros(N,1);
 for curVec=1:N

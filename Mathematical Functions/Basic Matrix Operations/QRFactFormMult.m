@@ -1,7 +1,7 @@
 function C=QRFactFormMult(QFactForm,C)
 %%QRFACTFORMMULT Given a Q matrix from a QR decomposition in factorial
 %           form, multiply the matrix by another matrix C. That is evaluate
-%           Q*C where Q is given in factorial form (not explicitely given).
+%           Q*C where Q is given in factorial form (not explicitly given).
 %
 %INPUTS: QFactForm The Q matrix from a QR decomposition in factorial form.
 %                  This can be obtained from the HouseholderQR function.

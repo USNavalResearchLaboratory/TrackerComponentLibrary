@@ -161,7 +161,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
             mxFree(dims);//Free allocated memory
             mexErrMsgTxt("The dimensions vector is an unsupported type.");
     }
-    //If an extra signleton index is added.
+    //If an extra singleton index is added.
     if(extraIdx!=0) {
         dims[numIdx]=1;
         numIdx++;

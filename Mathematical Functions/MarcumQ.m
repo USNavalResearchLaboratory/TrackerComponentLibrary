@@ -2,14 +2,15 @@ function Q=MarcumQ(mu,alpha,beta)
 %%MARCUMQ  Evaluate the generalized Marcum Q function of a desired order,
 %          Q_M(alpha,beta) including when the order is not an integer.
 %
-%INPUTS: mu     The scalar order (mu>0) of the Marcum Q function. The
-%               function is most stable if mu is an integer or if alpha is
-%               zero if mu is not an integer.
-%     alpha     The scalar first parameter of the Q function (alpha>=0).
-%      beta     The scalar second parameter of the Q function (beta>=0).
+%INPUTS: mu The scalar order (mu>0) of the Marcum Q function. The function
+%           is most stable if mu is an integer or if alpha is zero if mu is
+%           not an integer.
+%     alpha The scalar first parameter of the Q function (alpha>=0).
+%      beta The scalar second parameter of the Q function (beta>=0).
 %
-%OUTPUTS: Q     The value of the generalized Marcum Q function with the
-%               given parameters.
+%OUTPUTS: Q The value of the generalized Marcum Q function with the given
+%           parameters.
+%
 %DEPENDENCIES: GammaD.m
 %
 %Note that the parameter order is different from that used in the marcumq

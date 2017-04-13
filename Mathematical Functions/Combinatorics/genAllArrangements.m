@@ -14,7 +14,8 @@ function arrs=genAllArrangements(n,m)
 %Arragements are generating by going through all possible combinations of
 %which of the n elements are in the m slots and then permuting the ordering
 %of the elements into the slots. The getNextCombo function is used to
-%generate the combinations.
+%generate the combinations and the perms function is used to generate the
+%permutations.
 %
 %September 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

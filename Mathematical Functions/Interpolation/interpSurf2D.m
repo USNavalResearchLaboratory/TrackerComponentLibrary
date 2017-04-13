@@ -6,7 +6,7 @@ function [zInterp,gradInterp,gradDerivMatInterp]=interpSurf2D(xyPoints,xyPointsR
 %               interpolated gradeint at the points.
 %
 %INPUTS: xyPoints A 2XN set of N 2D (x,y) points at which interplation and
-%                 gradeints are desired.
+%                 gradients are desired.
 %     xyPointsRef The 2XnumRef set of numRef (x,y) points in two-dimensions
 %                 that define the locations at which the zPointsRef
 %                 (surface heights) are provided. There should be no
@@ -31,7 +31,7 @@ function [zInterp,gradInterp,gradDerivMatInterp]=interpSurf2D(xyPoints,xyPointsR
 %Rather the summaries given in [2] and [3] where the routine is compared to
 %a number of other algorithms were used.
 %
-%None of those methods explicitely provides the derivatives, but analytic
+%None of those methods explicitly provides the derivatives, but analytic
 %derivatives for the interpolating function are simple to find.
 %The interpolating function is
 %fInterp(x,y)=sum_{i=1}^{numRef} c_i sqrt((x-x_i)^2+(y-y_i)^2+smoothTerm)

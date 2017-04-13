@@ -4,24 +4,24 @@ function [Jul1,Jul2]=Cal2TT(year,month,day,hour,minute,second)
 %         universal coordinated time (UTC) to a two-part Julian
 %         date in terrestrial time (TT).
 %
-%INPUTS:   year    A matrix of integer  years in the Gregorian
-%                  calendar under UTC time.
-%          month   A matrix of integer months in the Gregorian calendar
-%                  under UTC time. 1<=month<=12
-%          day     A matrix of integer days in the Gregorian calendar
-%                  under UTC time. Days count from 1.
-%          hour    A matrix of integer hour the Gregorian calendar under.
-%                  UTC time 0<=hour<=23
-%          minute  A matrix of integer minutes in the Gregorian calendar
-%                  under UTC time. 0<=minute<=59.
-%          second  A matrix of double floating point second in the
-%                  Gregorian calendar under UTC time. This is normally
-%                  less than 60, but can be a value less than 61 or 59 at
-%                  the right hour on a day with a leap second.
+%INPUTS: year A matrix of integer  years in the Gregorian calendar under
+%             UTC time.
+%       month A matrix of integer months in the Gregorian calendar under
+%             UTC time. 1<=month<=12
+%         day A matrix of integer days in the Gregorian calendar under UTC
+%             time. Days count from 1.
+%        hour A matrix of integer hour the Gregorian calendar under UTC
+%             time 0<=hour<=23
+%      minute A matrix of integer minutes in the Gregorian calendar under
+%             UTC time. 0<=minute<=59.
+%      second A matrix of double floating point second in the Gregorian
+%             calendar under UTC time. This is normally less than 60, but
+%             can be a value less than 61 or 59 at the right hour on a day
+%             with a leap second.
 %
-%OUTPUTS:   Jul1, Jul2  Matrices of the time as pseudo-Julian dates in TT
-%                       where each row/column corresponds to the values in
-%                       the same row/column of the input matrices.
+%OUTPUTS: Jul1, Jul2 Matrices of the time as pseudo-Julian dates in TT,
+%                    where each row/column corresponds to the values in the
+%                    same row/column of the input matrices.
 %
 %This function just calls the function Cal2UTC and then UTC2TT.
 %

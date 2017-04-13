@@ -17,7 +17,7 @@ function [q,recurVals]=getNextSetPartition(param1,recurVals)
 %               If two inputs are provided, then param 1 is
 %               q The current set partition that should be updated to get
 %                 the next set partition.
-%recurVals A structure containing elements p and nc, which are necessary
+% recurVals A structure containing elements p and nc, which are necessary
 %          to get the next item in the sequence (these values would be
 %          supplied by the previous iteration). The elements of the
 %          structure are

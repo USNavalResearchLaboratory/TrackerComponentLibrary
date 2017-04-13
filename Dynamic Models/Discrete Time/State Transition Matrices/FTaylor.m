@@ -1,32 +1,31 @@
 function F=FTaylor(deltaT,xCur,curT,a,dadx,d2adx,method)
-%%FTAYLOR        Simulate a nonlinear continuous-time random process
-%                specified by the Langevin equation forward in time by a
-%                step-size of deltaT using a Taylor scheme.
+%%FTAYLOR Simulate a nonlinear continuous-time random process specified by
+%         the Langevin equation forward in time by a step-size of deltaT
+%         using a Taylor scheme.
 %
-%INPUTS:deltaT   The size of the single step over which to generate the
-%                state transition matrix.
-%        xCur    The initial target state at time curT.
-%        curT    The time of the initial state xCur.
-%        a       The drift function in the continuous-time stochastic
-%                dynamic model. It takes the state and a time variable
-%                as its arguments, a(x,t).
-%     dadx       A xDimXxDim matrix of the derivative of the drift function
-%                with respect to the state at state xCur and time curT.
-%                This can also be a function that takes the state and a
-%                time variable as its arguments, dadx(x,t).
-%    d2adx       A xDimXxDimXxDim matrix of the second derivative of the
-%                drift function with respect to the state at state xCur and
-%                time curT. The value at point (m,k,l) represents
-%                d2a(m)/dx(k)dx(l). This can also be a function that takes
-%                the state and a time variable as its arguments,
-%                d2adx(x,t). If not provided, this is assumed to be zero.
-%    method      Set to 0 for the shorter Euler-Maruyama expansion, 
-%                otherwise will use Taylor expansion (default).
+%INPUTS: deltaT The size of the single step over which to generate the
+%               state transition matrix.
+%          xCur The initial target state at time curT.
+%          curT The time of the initial state xCur.
+%             a The drift function in the continuous-time stochastic
+%               dynamic model. It takes the state and a time variable as
+%               its arguments, a(x,t).
+%          dadx A xDimXxDim matrix of the derivative of the drift function
+%               with respect to the state at state xCur and time curT.
+%               This can also be a function that takes the state and a time
+%               variable as its arguments, dadx(x,t).
+%         d2adx A xDimXxDimXxDim matrix of the second derivative of the
+%               drift function with respect to the state at state xCur and
+%               time curT. The value at point (m,k,l) represents
+%               d2a(m)/dx(k)dx(l). This can also be a function that takes
+%               the state and a time variable as its arguments,
+%               d2adx(x,t). If not provided, this is assumed to be zero.
+%        method Set to 0 for the shorter Euler-Maruyama expansion, 
+%               otherwise will use Taylor expansion (default).
 %
-%OUTPUTS: F     The state transition matrix under a nonlinear
-%               continuous-time random process specified by the Langevin
-%               equation forward in time by a step-size of deltaT using a
-%               strong Taylor scheme.
+%OUTPUTS: F The state transition matrix under a nonlinear continuous-time
+%           random process specified by the Langevin equation forward in
+%           time by a step-size of deltaT using a strong Taylor scheme.
 %
 %The state prediction matrix is derived from the stochastic order 1.5
 %Taylor scheme described in 10.4 of [1].

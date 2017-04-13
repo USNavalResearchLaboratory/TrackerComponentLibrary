@@ -71,7 +71,7 @@ function [xEst,PEst,xBatchEst,exitCode]=batchLSNonlinMeasLinDynLM(xInit,z,h,F,R,
 %                   to the function LSEstLMarquardt.
 %
 %The algorithm is an implementation of the nonlinear ML technique discussed
-%in  [1]. The aforementioned paper does not explicitely say how to perform
+%in  [1]. The aforementioned paper does not explicitly say how to perform
 %the necessary least-squares optimization. Here, a form of the
 %Levenburg-Marquart algorithm is used that does not require the evaluation
 %of any gradients. If a covariance matrix estimate is desired, after a

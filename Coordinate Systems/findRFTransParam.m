@@ -10,46 +10,42 @@ function M=findRFTransParam(plhPoint,az,el,zRot,a,f)
 %            (after the azimuthal rotation), and zRot being nonzero then
 %            rotates the x-y axes about the z axis counterclockwise.
 %
-%INPUTS:   plhPoint The point at which the axes are to be found given in
-%                   terms of [latitude;longitude] with the geodetic
-%                   latitude and longitude. The latitude should be between
-%                   -pi/2 and pi/2. A height term can also be included, but
-%                   it will be ignored. This point defines the local
-%                   East-North-Up coordinate system with respect to a
-%                   reference ellipsoid.
-%          az       The radar azimuth, in radians. If not provided, a value
-%                   of zero is assumed. The azimuth is the radians East of
-%                   true North (clockwise), as defined by the reference 
-%                   ellipsoid, of the pointing direction of the radar. the
-%                   default if omitted or an empty matrix is passed is
-%                   zero.
-%          el       The radar elevation, in radians. If not provided, a
-%                   value of zero is assumed. This is the angle above the
-%                   horizon (local level --the tangent to the reference
-%                   ellipsoid) of the pointing direction of the radar. The
-%                   default is omitted or an empty matrix is passed is
-%                   zero.
-%          zRot     This is an additional (counterclockwise) rotation in
-%                   radians about the pointing direction of the radar (the
-%                   z-axis). The default if omitted or an empty matrix is
-%                   passed is zero.
-%           a       The semi-major axis of the reference ellipsoid. If
-%                   this argument is omitted, the value in
-%                   Constants.WGS84SemiMajorAxis is used.
-%           f       The flattening factor of the reference ellipsoid. If
-%                   this argument is omitted, the value in
-%                   Constants.WGS84Flattening is used.
+%INPUTS: plhPoint The point at which the axes are to be found given in
+%               terms of [latitude;longitude] with the geodetic latitude
+%               and longitude. The latitude should be between -pi/2 and
+%               pi/2. A height term can also be included, but it will be
+%               ignored. This point defines the local East-North-Up
+%               coordinate system with respect to a reference ellipsoid.
+%            az The radar azimuth, in radians. If not provided, a value of
+%               zero is assumed. The azimuth is the radians East of true
+%               North (clockwise), as defined by the reference ellipsoid,
+%               of the pointing direction of the radar. the default if
+%               omitted or an empty matrix is passed is zero.
+%            el The radar elevation, in radians. If not provided, a value
+%               of zero is assumed. This is the angle above the horizon
+%               (local level --the tangent to the reference ellipsoid) of
+%               the pointing direction of the radar. The default is omitted
+%               or an empty matrix is passed is zero.
+%          zRot This is an additional (counterclockwise) rotation in
+%               radians about the pointing direction of the radar (the
+%               z-axis). The default if omitted or an empty matrix is
+%               passed is zero.
+%             a The semi-major axis of the reference ellipsoid. If this
+%               argument is omitted, the value in
+%               Constants.WGS84SemiMajorAxis is used.
+%            f  The flattening factor of the reference ellipsoid. If this
+%               argument is omitted, the value in Constants.WGS84Flattening
+%               is used.
 %
-%OUTPUTS:   M       A rotation matrix for the transformation from global
-%                   Cartesian coordinates to local radar-facing
-%                   coordinates. The z axis represents the pointing
-%                   direction of the radar. This can be directly fed into
-%                   the RUV coordinate transform functions.
+%OUTPUTS: M A rotation matrix for the transformation from global Cartesian
+%           coordinates to local radar-facing coordinates. The z axis
+%           represents the pointing direction of the radar. This can be
+%           directly fed into the RUV coordinate transform functions.
 %
 %Details of this transformation can be found in Chapter 5 of [1].
 %
 %EXAMPLE:
-%Confision sometimes arises regarding the  direction of the x and y axes
+%Confusion sometimes arises regarding the  direction of the x and y axes
 %when pointing a radar. Here, we try to show this through an example.
 % at the San Juan Airport (SJU; ICAO: TJSJ)
 % radarLocDegs=[ 18.437082;-66.001724; 0];%Latitude, longitude, altitude.
@@ -113,14 +109,14 @@ end
 u=getENUAxes(plhPoint,false,a,f);
 
 %Cartesian ENU to radar-face XYZ
-A = [-cos(az)         sin(az)           0;
-     -sin(az)*sin(el) -cos(az)*sin(el)  cos(el);
-      sin(az)*cos(el)  cos(az)*cos(el)	sin(el)];
+A = [-cos(az),                  sin(az),          0;
+     -sin(az)*sin(el), -cos(az)*sin(el),    cos(el);
+      sin(az)*cos(el),	cos(az)*cos(el),    sin(el)];
 
 %Rotate around the local z axis in radar-face XYZ
 Mz=Euler1Ang2RotMat(zRot,'z','right');
 
-M = Mz*A*u.';
+M=Mz*A*u.';
 end
 
 %LICENSE:

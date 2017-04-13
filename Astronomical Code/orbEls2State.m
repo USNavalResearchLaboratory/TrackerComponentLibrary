@@ -25,7 +25,7 @@ function stateVec=orbEls2State(orbEls,deltaT,elType,GM,epsVal)
 %            GM   An optional value of the universal gravitational
 %                 constant times the mass of the Earth. If omitted, the
 %                 value Constants.WGS84GMWithAtmosphere is used. The
-%                 units are km^3/sec^2.
+%                 units are m^3/sec^2.
 %         epsVal  If universal orbital elements are chosen, this is a
 %                 precision bound used on the alpha term (GM divided by the
 %                 semi-major axis) for determining whether the trajectory

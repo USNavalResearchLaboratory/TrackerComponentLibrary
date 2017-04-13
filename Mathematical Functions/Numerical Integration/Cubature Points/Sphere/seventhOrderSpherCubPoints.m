@@ -3,24 +3,24 @@ function [xi,w]=seventhOrderSpherCubPoints(numDim,algorithm)
 %               integration over a unit spherical (or hyperspherical)
 %               region. The weighting function is 1.
 %
-%INPUTS:  numDim An integer specifying the dimensionality of the points
-%                to be generated.
-%      algorithm A value indicating which algorithm should be used.
-%                Possible values are
-%                0 (The default if omitted or an empty matrix is passed)
-%                  Formula Sn 7-2 in [1], pg. 271, 2^(numDim+1)+4*numDim^2
-%                  points, numDim>=3.
-%                1 Formula S2 7-1 in [1], pg. 281, 12 points, numDim=2,
-%                  with a correction of a coefficient for B2 from 4 to 41.
-%                2 Formula S2 7-2 in [1], pg. 281, 16 points, numDim=2.
-%                3 Formula S3 7-2 in [1], pg. 291, 32 points, numDim=3.
-%                4 Formula S3 7-3 in [1], pg. 291, 33 points, numDim=3.
-%                5 Formula S4 7-2 in [1], pg. 292, 72 points, numDim=4.
+%INPUTS: numDim An integer specifying the dimensionality of the points to
+%               be generated.
+%     algorithm A value indicating which algorithm should be used.
+%               Possible values are
+%               0 (The default if omitted or an empty matrix is passed)
+%                 Formula Sn 7-2 in [1], pg. 271, 2^(numDim+1)+4*numDim^2
+%                 points, numDim>=3.
+%               1 Formula S2 7-1 in [1], pg. 281, 12 points, numDim=2,
+%                 with a correction of a coefficient for B2 from 4 to 41.
+%               2 Formula S2 7-2 in [1], pg. 281, 16 points, numDim=2.
+%               3 Formula S3 7-2 in [1], pg. 291, 32 points, numDim=3.
+%               4 Formula S3 7-3 in [1], pg. 291, 33 points, numDim=3.
+%               5 Formula S4 7-2 in [1], pg. 292, 72 points, numDim=4.
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points (Each "point" is a vector).
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %REFERENCES:
 %[1] A.H. Stroud, Approximate Calculation of Multiple Integrals. Cliffs,

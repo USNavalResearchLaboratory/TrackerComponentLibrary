@@ -156,7 +156,7 @@ void kdTreeCPP::buildTreeFromBatch(const double *dataBatch){
  * call any allocation routines during the recursion to add all of the
  * data.
  * 
- * Unlike the Matlab implementation, a subarray is not explicitely sorted
+ * Unlike the Matlab implementation, a subarray is not explicitly sorted
  * during each recursion. Rather, an array of indices, idx, is sorted
  * according to the values in the current dimension  of the data. To be
  * able to scan the data across all points for a particular dimension of

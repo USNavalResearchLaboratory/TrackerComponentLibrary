@@ -6,10 +6,10 @@ function [xi,w]=fourteenthOrderSpherSurfCubPoints(numDim)
 %INPUTS: numDim  An integer specifying the dimensionality of the points
 %                to be generated. Currently, only numDim=3 is supported.
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points (Each "point" is a vector).
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %Algorithm U3 14-1 in [1], pg. 302, using 72 points, is used.
 %

@@ -4,49 +4,43 @@ function [xUpdate,SUpdate,innov,Szz]=sqrtDDFUpdate(xPred,SPred,z,SR,h,algorithm,
 %               first or second order divided difference filter (DDF) with
 %               additive measurement noise.
 %
-%INPUTS:    xPred        The xDim X 1 predicted target state.
-%           SPred        The xDim X xDim lower-triangular predicted state
-%                        covariance matrix.
-%           z            The zDim X 1 vector measurement.
-%           SR           The zDim X zDim lower-triangular square root of  
-%                        the measurement covariance matrix in the native 
-%                        coordinate system of the measurement.
-%           h            A function handle for the measurement function
-%                        that takes the state as its argument.
-%          algorithm     An optional parameter specifying which algorithm
-%                        should be used for the prediction. Possible values
-%                        are:
-%                        0 Use the CDF of [3]. This is actually the same
-%                          as a first-order DDF of [1] and [2], but with a
-%                          different step size for the finite differences.
-%                        1 (the default if omitted or an empty matrix is
-%                          passed) Use the first-order divided difference
-%                          filter of [1] and [2].
-%                        2 Use the second-order divided difference filter
-%                          of [1] and [2].
-%          innovTrans    An optional function handle that transforms the
-%                        value of the difference between the observation
-%                        and any predicted points. This must be able to
-%                        handle sets of differences. For a zDim 
-%                        measurement, this must be able to handle a zDimXN
-%                        matrix of N differences. This only needs to be
-%                        supplied when a measurement difference must be
-%                        restricted to a certain range. For example, the
-%                        innovation between two angles will be 2*pi if one
-%                        angle is zero and the other 2*pi, even though they
-%                        are the same direction. In such an instance, a
-%                        function handle to the wrapRange function with the
-%                        appropriate parameters should be passed for
-%                        innovTrans.
+%INPUTS: xPred The xDim X 1 predicted target state.
+%        SPred The xDim X xDim lower-triangular predicted state covariance
+%              matrix.
+%            z The zDim X 1 vector measurement.
+%           SR The zDim X zDim lower-triangular square root of the
+%              measurement covariance matrix in the native coordinate
+%              system of the measurement.
+%            h A function handle for the measurement function that takes
+%              the state as its argument.
+%    algorithm An optional parameter specifying which algorithm should be
+%              used for the prediction. Possible values are:
+%              0 Use the CDF of [3]. This is actually the same as a first-
+%                order DDF of [1] and [2], but with a different step size
+%                for the finite differences.
+%              1 (The default if omitted or an empty matrix is passed) Use
+%                the first-order divided difference filter of [1] and [2].
+%              2 Use the second-order divided difference filter of [1] and
+%                [2].
+%   innovTrans An optional function handle that transforms the value of the
+%              difference between the observation and any predicted points.
+%              This must be able to handle sets of differences. For a zDim 
+%              measurement, this must be able to handle a zDimXN matrix of
+%              N differences. This only needs to be supplied when a
+%              measurement difference must be restricted to a certain
+%              range. For example, the innovation between two angles will
+%              be 2*pi if one angle is zero and the other 2*pi, even though
+%              they are the same direction. In such an instance, a function
+%              handle to the wrapRange function with the appropriate
+%              parameters should be passed for innovTrans.
 %
-%OUTPUTS    xUpdate     The xDim X 1 updated state vector.
-%           SUpdate     The updated xDim X xDim lower-triangular square 
-%                       root state covariance matrix.
-%       innov, Szz      The zDimX1 innovation and the zDimXzDim square
-%                       root innovation covariance matrix are returned
-%                       in case one wishes to analyze the consistency
-%                       of the estimator or use those values in gating or
-%                       likelihood evaluation.
+%OUTPUTS: xUpdate The xDim X 1 updated state vector.
+%         SUpdate The updated xDim X xDim lower-triangular square root
+%                 state covariance matrix.
+%      innov, Szz The zDimX1 innovation and the zDimXzDim square root
+%                 innovation covariance matrix are returned in case one
+%                 wishes to analyze the consistency of the estimator or use
+%                 those values in gating or likelihood evaluation.
 %
 %The divided difference filters are implemented as described in [1] and
 %[2], where they are only derived for non-additive noise and the square

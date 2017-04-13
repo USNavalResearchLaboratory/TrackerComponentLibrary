@@ -8,7 +8,7 @@ function val=PMCombos(x,zp)
 %           number of zeros. If there are zero elements, then the total
 %           number of combinations is 2^(n-numZero).
 %
-%INPUTS: x  An NX1 vector.
+%INPUTS:  x An NX1 or 1XN vector.
 %        zp An optinal parameter specifying the number of zeros to pad to
 %           the end of the combinations. If this parameter is omitted, then
 %           a value of zero is used (no zero padding).
@@ -31,6 +31,8 @@ function val=PMCombos(x,zp)
 if(nargin<2||isempty(zp))
     zp=0;
 end
+
+x=x(:);
 
 n=length(x);
 

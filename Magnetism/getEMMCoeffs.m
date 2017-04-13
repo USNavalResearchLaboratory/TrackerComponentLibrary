@@ -73,16 +73,16 @@ function [C,S,a,c]=getEMMCoeffs(M,year,fullyNormalize)
 %June 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<1)
+if(nargin<1||isempty(M))
     M=Inf;%Load all of the coefficients.
 end
 
 yearRef=2015.0;
-if(nargin<2)
+if(nargin<2||isempty(year))
     year=yearRef;
 end
 
-if(nargin<3)
+if(nargin<3||isempty(fullyNormalize))
     fullyNormalize=true;
 end
 

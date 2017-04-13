@@ -1,20 +1,70 @@
-function perms=genAllMultisetPermutations(E)
+function thePerms=genAllMultisetPermutations(a,algorithm)
+%%GENALLMULTISETPERMUATIONS Generate all unique permuations of the elements
+%               in a multiset. A multiset is a set of elements where some
+%               elements can be repeated. The algorithm chosen affects the
+%               ordering of the outputs.
+%
+%INPUTS:  a An nX1 or 1Xn vector of the elements in the multiset, including
+%           repetitions. The elements of a must be finite; a cannot contain
+%           any NaNs.
+% algorithm An optional parameter specifying the algorithm to use. possible
+%           values are:
+%           0 (The default if this parameter is omitted or an empty matrix
+%             is passed). Use algorithm L of Chapter 7.2.1 of [1]. This
+%             produces the multiset permutations in lexicographic order.
+%             This algorithm comes from Narayana Pandita in 14th century
+%             India.
+%           1 Use the algorithm of [2], implemented with arrays rather than
+%             explicit data structures for linked lists. The permutations
+%             of the multiset are ordered such that neighboring
+%             permutations are related by a minimal change. This is not
+%             lexicographic order.
+%
+%OUTPUS: thePerms A nXnumPerm matrix of the permutations of the multiset.
+%                 The ordering is specified by the algorithm used.
+%
+%REFERENCES:
+%[1] D. E. Knuth, The Art of Computer Programming. Vol. 4, Fascicle 3:
+%    Generating all Combinations and Partitions, Upper Saddle River, NJ:
+%    Addison-Wesley, 2009.
+%[2] A. Williams, "Loopless generation of multiset permutations by prefix
+%    shifts," in Proceedings of the Twentieth Annual ACM-SIAM Symposium
+%    on Discrete Algorithms, New York, NY, 4?6 Jan. 2009, pp. 987-996.
+%
+%January 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+if(nargin<2||isempty(algorithm))
+   algorithm=0; 
+end
+
+switch(algorithm)
+    case 0
+        thePerms=genAllMultisetPermsAlgL(a);
+    case 1
+        thePerms=multisetPermsMinOrder(a);
+    otherwise
+        error('Unknown algorithm specified');
+end
+end
+
+function thePerms=multisetPermsMinOrder(E)
 %%GENALLMULTISETPERMUTATIONS Generate all unique permutations of the
-%               elements in a multiset. A multiset is a set of elements
-%               where some elements are repeated.
+%               elements in a multiset using the minimum order algorithm of
+%               [1].
 %
 %INPUTS: E An nX1 or 1Xn vector of the elements in the multiset, including
 %          repetitions. The elements of E must be finite; E cannot contain
 %          any NaNs.
 %
-%OUTPUS: perms A nXnumPerm matrix of the permutations of the multiset
+%OUTPUS: thePerms A nXnumPerm matrix of the permutations of the multiset
 %              ordered such that neighboring permutations are related by a
 %              minimal change. This is not lexicographic order. 
 %
 %This function implements Algorithm 1 in [1]. However, this implementation
 %uses arrays rather than explicit data structures for the linked list. The
-%function numMultisetPermutations prodives the number of multiset
-%permutations for a fiven vector of elements in the multiset.
+%function numMultisetPermutations provides the number of multiset
+%permutations for a given vector of elements in the multiset.
 %
 %REFERENCES:
 %[1] A. Williams, "Loopless generation of multiset permutations by prefix
@@ -30,7 +80,7 @@ EList=sort(E,'descend');
 EList=EList(:);
 
 numPerms=numMultisetPermutations(EList);
-perms=zeros(n,numPerms);
+thePerms=zeros(n,numPerms);
 
 nextList=[2:n,0];
 head=1;
@@ -38,7 +88,7 @@ i=n-1;
 afterI=n;
 
 %Visit the first value, which is the list sorted in descending order.
-perms(:,1)=EList;
+thePerms(:,1)=EList;
 
 curPerm=2;
 while(nextList(afterI)~=0||EList(afterI)<EList(head))
@@ -61,12 +111,71 @@ while(nextList(afterI)~=0||EList(afterI)<EList(head))
     %reaching the end.
     curNode=head;
     for curIdx=1:n
-        perms(curIdx,curPerm)=EList(curNode);
+        thePerms(curIdx,curPerm)=EList(curNode);
         curNode=nextList(curNode);
     end
     curPerm=curPerm+1;
 end
 
+end
+
+function thePerms=genAllMultisetPermsAlgL(a)
+%%GENALLMULTISETPERMSALGL Generate all multiset permutations in
+%               lexicographic order using algorithm L of Chapter 7.2.1.2 of
+%               [1].
+%
+%INPUTS: a An nX1 or 1Xn vector of the elements in the multiset, including
+%          repetitions. The elements of a must be finite; a cannot contain
+%          any NaNs.
+%
+%OUTPUS: thePerms A nXnumPerm matrix of the permutations of the multiset
+%                 given in lexicographic order.
+%
+%REFERENCES:
+%[1] D. E. Knuth, The Art of Computer Programming. Vol. 4, Fascicle 3:
+%    Generating all Combinations and Partitions, Upper Saddle River, NJ:
+%    Addison-Wesley, 2009.
+%
+%January 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+n=length(a);
+
+numPerms=numMultisetPermutations(a);
+thePerms=zeros(n,numPerms);
+
+%The first element is the a(0) term added for convenience.
+a=sort(a(:),'ascend');
+
+curPerm=1;
+while(1)
+    %Step L1, visit the permutation
+    thePerms(:,curPerm)=a(1:n);
+    if(curPerm==numPerms)
+        break;
+    end
+
+    %Step L2, find j. Here, we do not need a check for j=0, because we
+    %previously checked for termination.
+    j=n-1;
+    while(a(j)>=a(j+1))
+        j=j-1;
+    end
+
+    %Step L3
+    l=n;
+    while(a(j)>=a(l))
+        l=l-1;
+    end
+    temp=a(j);
+    a(j)=a(l);
+    a(l)=temp;
+    
+    %Step L4
+    a((j+1):n)=a(n:-1:(j+1));
+
+    curPerm=curPerm+1;
+end
 end
 
 %LICENSE:

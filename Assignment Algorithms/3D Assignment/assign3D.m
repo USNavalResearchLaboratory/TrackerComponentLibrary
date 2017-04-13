@@ -35,7 +35,8 @@ function [phi2,phi3,dimsOrder,minCostVal,costGap]=assign3D(C,maximize,algorithm,
 %            solve the 3D assignment problem. Possible values are
 %          0 Use the relaxation approximation of [1], which is a special
 %            case of [2]. Note that this method does not support the use of
-%            n2Limits or n3Limits that are not all ones.
+%            n2Limits or n3Limits that are not all ones. However, it is
+%            usually better than algorithm 1 on relevant problems.
 %          1 (The default if omitted or an empty matrix is passed) Use the
 %            relaxation approximation of [3] applied to the problem at
 %            hand.
@@ -80,7 +81,7 @@ function [phi2,phi3,dimsOrder,minCostVal,costGap]=assign3D(C,maximize,algorithm,
 %                    However, if the dimensions had to be permuted, then
 %                    this is the permutation of them so that one knows what
 %                    phi2 and phi3 refer to.
-%         minCostVal The cost calue of the optimal assignment found.
+%         minCostVal The cost value of the optimal assignment found.
 %            costGap If algorithm=2, then costGap=0 as minCostVal is
 %                    optimal. On the other hand, if algorithm~=2, then
 %                    costGap is an upper bound for the difference between
@@ -165,7 +166,6 @@ else
 end
 
 C=permute(C,dimsOrder);
-
 n1=nVals(1);
 n2=nVals(2);
 n3=nVals(3);
@@ -416,17 +416,14 @@ switch(algorithm)
         end
 
         %Find the brute-force solution.
-        n1Fact=factorial(n1);
-        %The number of ways n2 elements can be permuted into n1 spaces.
-        numArrange2=binomial(n2,n1)*n1Fact;
 
         %Allocate space
         CInner=zeros(n1,n3);
         minCostVal=Inf;
         col4Row=zeros(n1,1);
-        for rank1=0:(numArrange2-1)
-            arrange1=unrankArrangement(rank1,n2,n1);
 
+        [arrange1,data]=getNextArrangement(n2,n1);
+        while(~isempty(arrange1))
             for i=1:n1
                 CInner(i,:)=reshape(C(i,arrange1(i),:),[1,n3]);
             end
@@ -447,6 +444,8 @@ switch(algorithm)
                 phi2=arrange1;
                 phi3=col4Row;
             end
+            
+            [arrange1,data]=getNextArrangement(data);
         end
         
         %The globally optimal solution has no cost gap.

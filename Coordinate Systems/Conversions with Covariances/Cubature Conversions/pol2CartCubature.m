@@ -1,28 +1,48 @@
-function [zCart,RCart]=pol2CartCubature(polPoint,SR,zRx,xi,w)
+function [zCart,RCart]=pol2CartCubature(z,SR,systemType,useHalfRange,zTx,zRx,M,xi,w)
 %%POL2CARTCUBATURE Use cubature integration to approximate the moments of a
-%          noise-corrupted polar location converted into 2D Cartesian
-%          coordinates. The polar angle (azimuth) is measured from the
-%          x-axis counterlockwise. This function ignores all propagation
-%          effects, such as atmospheric refraction.
+%          noise-corrupted bistatic polar location converted into 2D
+%          Cartesian coordinates. This function ignores all propagation
+%          effects, such as atmospheric refraction. The angle can measured
+%          either counterclockwise from the x-axis, which is standard in
+%          mathematics, or clockwise from the y axis, which is more common
+%          in navigation.
 %
-%INPUTS: polPoint A 2XN set of N polar points of the form [range;azimuth]
-%               that are to be converted into Cartesian coordinates. The
-%               range is one-way monostatic; the azimuth is in radians.
-%           SR  The 2X2XN lower-triangular square roots of the covariance
-%               matrices associated with polPoint. If all of the matrices
-%               are the same, then this can just be a single 2X2 matrix.
-%           zRx The optional 2XN [x;y] location vectors of the receiver in
-%               Cartesian coordinates. If only a single 2X1 vector is
-%               passed, then all measurements are assumed to be from that
-%               location. If omitted or an empty matrix is passed, the
-%               receiver is placed at the origin.
-%           xi  A 2XnumCubaturePoints (for position-only) matrix of
-%               cubature points for the numeric integration. If this and
-%               the final parameter are omitted or empty matrices are
-%               passed, then fifthOrderCubPoints is used to generate
-%               cubature points.
-%           w   A numCubaturePointsX1 vector of the weights associated
-%               with the cubature points.
+%INPUTS: z A 2XN set of N polar points of the form [range;azimuth] that are
+%          to be converted into Cartesian coordinates. The azimuth is in
+%          radians.
+%       SR The 2X2XN lower-triangular square roots of the covariance
+%          matrices associated with polPoint. If all of the matrices are
+%          the same, then this can just be a single 2X2 matrix.
+% systemType An optional parameter specifying the axis from which the
+%          angles are measured. Possible values are
+%          0 (The default if omitted or an empty matrix is passed) The
+%            azimuth angle is counterclockwise from the x axis.
+%          1 The azimuth angle is measured clockwise from the y axis.
+%useHalfRange A boolean value specifying whether the bistatic range value
+%          should be divided by two. This normally comes up when operating
+%          in monostatic mode, so that the range reported is a one-way
+%          range. The default if this parameter is not provided, or an
+%          empty matrix is passed, is true.
+%      zTx The 2X1 [x;y] location vector of the transmitter in global
+%          Cartesian coordinates. If this parameter is omitted or an empty
+%          matrix is passed, then the transmitter is assumed to be at the
+%          origin. zTx can have more than 3 rows; additional rows are
+%          ignored.
+%      zRx The 2X1 [x;y] location vector of the receiver in Cartesian
+%          coordinates.  If this parameter is omitted or an empty matrix is
+%          passed, then the receiver is assumed to be at the origin. zRx
+%          can have more than 3 rows; additional rows are ignored.
+%        M A 2X2 rotation matrices to go from the alignment of the global
+%          coordinate system to that at the receiver. If omitted or an
+%          empty matrix is passed, then it is assumed that the local
+%          coordinate system is aligned with the global and M=eye(2) --the
+%          identity matrix is used.
+%       xi A 2XnumCubaturePoints (for position-only) matrix of cubature
+%          points for the numeric integration. If this and the final
+%          parameter are omitted or empty matrices are passed, then
+%          fifthOrderCubPoints is used to generate cubature points.
+%        w A numCubaturePointsX1 vector of the weights associated with the
+%          cubature points.
 %
 %OUTPUTS: zCart The 2XN approximate means of the PDF of the polar
 %               measurements converted to [x;y] Cartesian coordinates.
@@ -40,45 +60,44 @@ function [zCart,RCart]=pol2CartCubature(polPoint,SR,zRx,xi,w)
 %May 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    numDim=size(polPoint,1);
-    numPoints=size(polPoint,2);
+    numPoints=size(z,2);
     
-    if(numDim~=2)
-        error('The polar points have the wrong dimensionality')
+    if(nargin<8||isempty(xi))
+        [xi,w]=fifthOrderCubPoints(2);
+    end
+
+    if(nargin<7||isempty(M))
+        M=eye(2);
+    end
+
+    if(nargin<6||isempty(zRx))
+        zRx=zeros(2,1);
+    end
+
+    if(nargin<5||isempty(zTx))
+        zTx=zeros(2,1);
+    end
+
+    if(nargin<4||isempty(useHalfRange))
+        useHalfRange=true;
+    end
+
+    if(nargin<3||isempty(systemType))
+        systemType=0; 
     end
     
+    numMeas=size(z,2);
+
     if(size(SR,3)==1)
-        SR=repmat(SR,[1,1,numPoints]);
-    end
-
-    if(nargin<3||isempty(zRx))
-        zRx=zeros(numDim,1);
+        SR=repmat(SR,[1,1,numMeas]);
     end
     
-    if(nargin<5||isempty(xi))
-       [xi,w]=fifthOrderCubPoints(2);
-    end
+    h=@(z)pol2Cart(z,systemType,useHalfRange,zTx(1:2,:),zRx(1:2,:),M);
     
-    if(size(zRx,2)==1)
-        zRx=repmat(zRx,[1,numPoints]);
-    end
-    
-    %Allocate space for the return variables.
-    zCart=zeros(numDim,numPoints);
-    RCart=zeros(numDim,numDim,numPoints);
-    
-    for curPoint=1:numPoints
-        %Transform the cubature points to match the given Gaussian. 
-        cubPoints=transformCubPoints(xi,polPoint(:,curPoint),SR(:,:,curPoint));
-
-        %Transform the points
-        CartPoints=pol2Cart(cubPoints(1:2,:));
-        
-        %Extract the first two moments of the transformed points.
-        [zCart(:,curPoint),RCart(:,:,curPoint)]=calcMixtureMoments(CartPoints,w);
-        
-        %Deal with the offset from the origin.
-        zCart(:,curPoint)=zCart(:,curPoint)+zRx(:,curPoint);
+    zCart=zeros(2,numPoints);
+    RCart=zeros(2,2,numPoints);
+    for curMeas=1:numPoints
+        [zCart(:,curMeas), RCart(:,:,curMeas)]=calcCubPointMoments(z(:,curMeas),SR(:,:,curMeas),h,xi,w);
     end
 end
 

@@ -13,45 +13,45 @@ function zC=ruv2Cart(z,useHalfRange,zTx,zRx,M)
 %         For monostatic coordinate conversion where the range is a one-way
 %         range, set useHalfRange=true and zTx and zRx to the same value.
 %
-%INPUTS: z  A 3XN matrix of vectors with elements [r;u;v], where r is the
-%           bistatic range from the transmitter to the target to the
-%           receiver, and u and v are direction cosines. Each u,v pair
-%           should have a magnitude less than or equal to one. If the
-%           magnitude is greater than one, then the pair is normalized
-%           before conversion to avoid imaginary results. Alternatively,
-%           one can pass a 4XN matrix of [r;u;v;w] vectors where [u;v;w]
-%           form a full unit vector in the receiver's local 3D Cartesian
-%           coordinates.
-%useHalfRange A boolean value specifying whether the bistatic range value
-%           should be divided by two. This normally comes up when operating
-%           in monostatic mode, so that the range reported is a one-way
-%           range. The default if this parameter is not provided, or an
-%           empty matrix is passed, is false.
-%       zTx The 3XN [x;y;z] location vectors of the transmitters in global
-%           Cartesian coordinates. If this parameter is omitted or an
-%           empty matrix is passed, then the transmitters are assumed to
-%           be at the origin. If only a single vector is passed, then the
-%           transmitter location is assumed the same for all of the target
-%           states being converted. zTx can have more than 3 rows;
-%           additional rows are ignored.
-%       zRx The 3XN [x;y;z] location vectors of the receivers in Cartesian
-%           coordinates.  If this parameter is omitted or an empty matrix
-%           is passed, then the receivers are assumed to be at the origin.
-%           If only a single vector is passed, then the receiver location
-%           is assumed the same for all of the target states being
-%           converted. zRx can have more than 3 rows; additional rows are
-%           ignored.
-%       M   A 3X3XN hypermatrix of the rotation matrices to go from the
-%           alignment of the global coordinate system to that at the
-%           receiver. The z-axis of the local coordinate system of the
-%           receiver is the pointing direction of the receiver. If omitted
-%           or an empty matrix is passed, then it is assumed that the local
-%           coordinate system is aligned with the global and M=eye(3) --the
-%           identity matrix is used. If only a single 3X3 matrix is passed,
-%           then is is assumed to be the same for all of the N conversions.
+%INPUTS: z A 3XN matrix of vectors with elements [r;u;v], where r is the
+%          bistatic range from the transmitter to the target to the
+%          receiver, and u and v are direction cosines. Each u,v pair
+%          should have a magnitude less than or equal to one. If the
+%          magnitude is greater than one, then the pair is normalized
+%          before conversion to avoid imaginary results. Alternatively, one
+%          can pass a 4XN matrix of [r;u;v;w] vectors where [u;v;w] form a
+%          full unit vector in the receiver's local 3D Cartesian
+%          coordinates.
+% useHalfRange A boolean value specifying whether the bistatic range value
+%          should be divided by two. This normally comes up when operating
+%          in monostatic mode, so that the range reported is a one-way
+%          range. The default if this parameter is not provided, or an
+%          empty matrix is passed, is false.
+%      zTx The 3XN [x;y;z] location vectors of the transmitters in global
+%          Cartesian coordinates. If this parameter is omitted or an empty
+%          matrix is passed, then the transmitters are assumed to be at the
+%          origin. If only a single vector is passed, then the transmitter
+%          location is assumed the same for all of the target states being
+%          converted. zTx can have more than 3 rows; additional rows are
+%          ignored.
+%      zRx The 3XN [x;y;z] location vectors of the receivers in Cartesian
+%          coordinates.  If this parameter is omitted or an empty matrix
+%          is passed, then the receivers are assumed to be at the origin.
+%          If only a single vector is passed, then the receiver location
+%          is assumed the same for all of the target states being
+%          converted. zRx can have more than 3 rows; additional rows are
+%          ignored.
+%        M A 3X3XN hypermatrix of the rotation matrices to go from the
+%          alignment of the global coordinate system to that at the
+%          receiver. The z-axis of the local coordinate system of the
+%          receiver is the pointing direction of the receiver. If omitted
+%          or an empty matrix is passed, then it is assumed that the local
+%          coordinate system is aligned with the global and M=eye(3) --the
+%          identity matrix is used. If only a single 3X3 matrix is passed,
+%          then is is assumed to be the same for all of the N conversions.
 %
-%OUTPUTS:   zC  The 3XN matrix of the converted points in [x;y;z] Cartesian
-%               coordinates.
+%OUTPUTS: zC The 3XN matrix of the converted points in [x;y;z] Cartesian
+%            coordinates.
 %
 %Basic u and v direction cosines do not specify which side of the radar the
 %target is on. That is, they do not specify the sign of z. This
@@ -123,7 +123,8 @@ function zC=ruv2Cart(z,useHalfRange,zTx,zRx,M)
             %quite work due to finite precision errors.
             uVec=[u(curPoint);v(curPoint);real(sqrt(1-u(curPoint)^2-v(curPoint)^2))];
         end
-        %The transmitter location in the receiver's local coordinate system.
+        %The transmitter location in the receiver's local coordinate
+        %system.
         zTxL=M(:,:,curPoint)*(zTx(1:3,curPoint)-zRx(1:3,curPoint));
 
         r1=(rB(curPoint)^2-norm(zTxL)^2)/(2*(rB(curPoint)-dot(uVec,zTxL)));

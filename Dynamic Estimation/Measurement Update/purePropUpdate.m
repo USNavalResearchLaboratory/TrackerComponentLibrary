@@ -1,4 +1,4 @@
-function [xi,xUpdate,PUpdate]=purePropUpdate(xi,w,z,R,h,innovTrans,measAvgFun,stateDiffTrans,stateTrans)
+function [xi,xUpdate,PUpdate,Pzz,innovPoints]=purePropUpdate(xi,w,z,R,h,innovTrans,measAvgFun,stateDiffTrans,stateTrans)
 %%PUREPROPUPDATE Perform the measurement update step of a pure propagation
 %                (cubature) filter. Such a filter is similar to a cubature
 %                (unscented) Kalman filter in that cubature points are
@@ -55,6 +55,12 @@ function [xi,xUpdate,PUpdate]=purePropUpdate(xi,w,z,R,h,innovTrans,measAvgFun,st
 %    xUpdate The weighed mean of the updated sample points.
 %    PUpdate The covariance matrix associated with the updated sample
 %            points.
+% Pzz, innovPoints The zDimXzDim innovation covariance matrix and the
+%            zDimXnumCubPoints innovation value for each of the points are
+%            returned in case one wishes to analyze the consistency of the
+%            estimator or use those values in gating or likelihood
+%            evaluation. One will typically use the average of innovPoints
+%            over all of the cubature points.
 %
 %The algorithm is based on that of [1], but in [1], the sigma-point
 %covariance increase method is specifically tailored for the points used in

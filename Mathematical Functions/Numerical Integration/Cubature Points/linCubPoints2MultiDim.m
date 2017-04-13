@@ -9,47 +9,43 @@ function [xi, w]=linCubPoints2MultiDim(d,k,algorithm,linRule)
 %                   as well as methods for integrating over a unit cube
 %                   among others.
 %
-%INPUTS:    d      A positive integer specifying the dimensionality of the
-%                  points to be generated.
-%           k      A number specifying the maximum number of points from
-%                  the 1D integration rule to consider using in multiple
-%                  dimensions. When using Gauss-Hermite interpolation
-%                  points from the quadraturePoints1D(n) function
-%                  (the default), the minimum polynomial order of algorithm
-%                  0 (tensor product method) is 2*k-1. That of algorithm 1
-%                  (Smolyak's method) is 2*(k-d)+1.
-%        algorithm An optional value indicating which algorithm to use to
-%                  transform the 1D quadrature methods into multiple
-%                  dimensions. Possible values are
-%                  0 (The default if omitted or an empty matrix is passed)
-%                    Use the tensor product rule described, for example, in
-%                    Section III of [1]. Though this method generates a
-%                    very large number of points, when used with a 1D
-%                    quadrature method that generates all positive weights,
-%                    the weights returned by this function will also be all
-%                    positive.
-%                  1 Use Smolyak's algorithm, descibed in [2]. This tends
-%                    to require fewer points for the same polynomial
-%                    accuracy as the tensor product method, but it can
-%                    result in negative weights from the 1D quadrature
-%                    method are positive.
-%          linRule An optional function handle such that [xi,w]=linRule(n)
-%                  provides n cubature points and weights in 1D. The
-%                  polynomial order of of the points presumably increases
-%                  with the number of points. When using algorithm 0,
-%                  linRule only needs to work with k as the argument. When
-%                  using algorithm 1, linRule must work with values from 1
-%                  to k-d+1. If omitted or an empty matrix is passed, then
-%                  a handle to the quadraturePoints1D(n) function, for
-%                  integration with a Gaussian PDF as the weighting
-%                  function, is passed. An alternative could be, for
-%                  example, the GaussLegendrePoints1D function for
-%                  integrating over the region -1,1.
+%INPUTS: d A positive integer specifying the dimensionality of the points
+%          to be generated.
+%        k A number specifying the maximum number of points from the 1D
+%          integration rule to consider using in multiple dimensions. When
+%          using Gauss-Hermite interpolation points from the
+%          quadraturePoints1D(n) function (the default), the minimum
+%          polynomial order of algorithm 0 (tensor product method) is
+%          2*k-1. That of algorithm 1 (Smolyak's method) is 2*(k-d)+1.
+% algorithm An optional value indicating which algorithm to use to
+%          transform the 1D quadrature methods into multiple dimensions.
+%          Possible values are:
+%          0 (The default if omitted or an empty matrix is passed) Use the
+%            tensor product rule described, for example, in Section III of
+%            [1]. Though this method generates a very large number of
+%            points, when used with a 1D quadrature method that generates
+%            all positive weights, the weights returned by this function
+%            will also be all positive.
+%          1 Use Smolyak's algorithm, descibed in [2]. This tends to
+%            require fewer points for the same polynomial accuracy as the
+%            tensor product method, but it can result in negative weights
+%            even if the weights from the 1D quadrature method are
+%            positive.
+%  linRule An optional function handle such that [xi,w]=linRule(n) provides
+%          n cubature points and weights in 1D. The polynomial order of
+%          the points presumably increases with the number of points. When
+%          using algorithm 0, linRule only needs to work with k as the
+%          argument. When using algorithm 1, linRule must work with values
+%          from 1 to k-d+1. If omitted or an empty matrix is passed, then a
+%          handle to the quadraturePoints1D(n) function, for integration
+%          with a Gaussian PDF as the weighting function, is passed. An
+%          alternative could be, for example, the GaussLegendrePoints1D
+%          function for integrating over the region from -1 to 1.
 %
-%OUTPUTS:   xi      A d X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A d X numCubaturePoints matrix containing the cubature points
+%            (Each "point" is a vector).
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %For more details on how to use these points when integrating over a
 %Gaussian PDF, see the comments in the function fifthOrderCubPoints.m.

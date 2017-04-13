@@ -18,7 +18,7 @@ function [xEst,PTaylor,PCRLB]=rangeOnlyStaticLocEst(rBi,zLoc1,zLoc2,RCov)
 %           RCov If a covariance matrix for the estimate is desired on the
 %                output, then RCov, a measurement covariance matrix must be
 %                provided. Otherwise, RCov can be omitted as the algorithm
-%                implicitely assumes that all of the measurements have the
+%                implicitly assumes that all of the measurements have the
 %                same accuracy.
 %
 %OUTPUTS:   xEst    The Cartesian target location estimate. If onlt the

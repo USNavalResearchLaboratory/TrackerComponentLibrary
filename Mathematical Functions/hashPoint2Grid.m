@@ -13,7 +13,8 @@ function hashVal=hashPoint2Grid(point,cellSizes,numCellsPerDim)
 %                trying to gate all targets with all measurements.
 %
 %INPUTS: point A numDimXN set of N points that one wishes to hash onto a
-%               grid.
+%               grid. The grid starts from 0, so the points should be
+%               appropriately shifted in all dimensions.
 %     cellSizes A numDimX1 or 1XnumDim array of the widths of the cells in
 %               each dimension of the grid.
 %numCellsPerDim A numDimX1 or 1XnumDim array listing the number of cells in
@@ -44,14 +45,17 @@ function hashVal=hashPoint2Grid(point,cellSizes,numCellsPerDim)
 %not careful. For example, suppose that point contains scalar values from
 %minVal to maxVal. One might want to put the values in point into numBins
 %bins between minVal and maxVal. One might initially try
-% points=points-min(point);
+% points=points-min(points);
 % delta=max(points);
 % cellSizes=delta/numBins;
 % hashVal=hashPoint2Grid(points,cellSizes,numBins);
 %However, this would alias the uppermost point into the same bin as the
-%lowermost point. The solution to this is to use
+%lowermost point, because delta*numBins is the non-inclusive upper bound on
+%the binned values, it is not the center of a bin. One solution to this is
+%to use
 % hashVal=hashPoint2Grid(points,cellSizes+eps(cellSizes),numBins);
-%so that the final bin ends just slightly after the final point.
+%so that the final bin ends just slightly after the final point. Another
+%solution is to just add one one extra bin after the end fo the range.
 %
 %REFERENCES:
 %[1] E. J. Hastings, J. Mesit, and R. K. Guha, "Optimization of large-

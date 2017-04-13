@@ -2,7 +2,7 @@ function [c,E,exitVal]=minimaxPolyFit(f,xSpan,n,RelTol,maxIter)
 %MINIMAXPOLYFIT  Find an interpolating polynomial of order n to minimize
 %                the maximum error approximating a scalar function f in
 %                the range [xSpan(1);xSpan(2)]. The Remez algorithm is
-%                used. The resulting polynomial is 
+%                used.
 %                
 %INPUTS: f  A handle to the function that is to be approximated. The use
 %           y=f(x) take a scalar x and returns a value y.
@@ -34,7 +34,7 @@ function [c,E,exitVal]=minimaxPolyFit(f,xSpan,n,RelTol,maxIter)
 %           interpolated value of f where xRel is the fractional distance
 %           between xSpan(1) and xSpan(2). The value xRel ranges from 0 to
 %           1. The development of the interpolation across 0 and 1 is often
-%           numerically better than explicitely makign the polynomial for
+%           numerically better than explicitly making the polynomial for
 %           values from xSpan(1) to xSpan(2).
 %         E The maximum error of the interpolating polynomial.
 %   exitVal A value indicating how the algorithm terminated. Possible

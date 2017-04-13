@@ -1,5 +1,5 @@
 classdef ChiD
-%Functions to handle the chi distribution. 
+%%CHID Functions to handle the chi distribution. 
 %These distributions arise when taking the square root of the sum of the
 %squares of independent normal random variables.
 %Implemented methods are: mean, var, moments, PDF, CDF, (supports

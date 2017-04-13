@@ -11,24 +11,23 @@ function [LMTRad,LMT1,LMT2]=TT2LMT(TT1,TT2,rObsITRS,deltaT,xpyp)
 %         rObsITRS The 3X1 location of the observer in the International
 %                  Terrestrial Reference System (ITRS). Only the direction
 %                  matters, not the magnitude.
-%        deltaT    An optional parameter specifying the offset between TT
+%           deltaT An optional parameter specifying the offset between TT
 %                  and UT1 in seconds. If this parameter is omitted or if
 %                  an empty matrix is passed, then the value of the
 %                  function getEOP will be used.
-%       xpyp       xpyp=[xp;yp] are the polar motion coordinates in radians
+%             xpyp xpyp=[xp;yp] are the polar motion coordinates in radians
 %                  including the effects of tides and librations. If this
 %                  parameter is omitted or if an empty matrix is passed,
 %                  the value from the function getEOP will be used.
 %
-%OUTPUTS: LMTRad     The local apparent solar time in radians. 0 radians is
-%                    solar midnight. pi radians is solar noon. The mapping 
-%                    is 2*pi radians for 24 hours. Thus, LATRad*(24/(2*pi))
-%                    gives the time of day in hours.
-%         LMT1,LMT2  Two parts of the local mean solar time in Julian days.
-%                    The date is split so that LMT1 is the integer part and
-%                    LMT2 is the fractional part. Like UT1, a zero
-%                    fractional part of the day corresponds to noon, not
-%                    midnight.
+%OUTPUTS: LMTRad The local apparent solar time in radians. 0 radians is
+%                solar midnight. pi radians is solar noon. The mapping is
+%                is 2*pi radians for 24 hours. Thus, LATRad*(24/(2*pi))
+%                gives the time of day in hours.
+%      LMT1,LMT2 Two parts of the local mean solar time in Julian days. The
+%                date is split so that LMT1 is the integer part and LMT2 is
+%                the fractional part. Like UT1, a zero fractional part of
+%                the day corresponds to noon, not midnight.
 %
 %The local mean solar time is UT1 plus the East longitude of the observer
 %in radians in the Terrestrial Intermediate Reference System (TIRS). The

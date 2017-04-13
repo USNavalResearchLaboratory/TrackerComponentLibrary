@@ -74,7 +74,7 @@ reached=false(numVertices,1);
 count1=0;
 
 %These extra arrays are so that we can keep track of the sets that were
-%found; they are not explicitely described in the paper.
+%found; they are not explicitly described in the paper.
 setStartList=zeros(numVertices,1);
 setIdxList=zeros(numVertices,1);
 totalInSetIdxList=0;

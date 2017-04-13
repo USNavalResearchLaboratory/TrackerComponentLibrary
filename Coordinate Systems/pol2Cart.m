@@ -1,46 +1,125 @@
-function cartPoints=pol2Cart(polarPoints,systemType)
-%%POL2CART  Convert points from polar coordinates to 2D Cartesian
-%           coordinates. The angle can measured either ounterclockwise from
-%           the x-axis, which is standard in mathematics, or clockwise from
-%           the y axis, which is more common in navigation.
+function cartPoints=pol2Cart(z,systemType,useHalfRange,zTx,zRx,M)
+%%POL2CART  Convert points from bistatic polar coordinates to 2D Cartesian
+%           coordinates. The angle can measured either counterclockwise
+%           from the x-axis, which is standard in mathematics, or clockwise
+%           from the y axis, which is more common in navigation.
 %
-%INPUTS: polarPoints A 2XN matrix of points in polar coordinates. Each
-%                    column of the matrix has the format [r;azimuth], with
-%                    azimuth given in radians.
-%      systemType   An optional parameter specifying the axes from which
-%                   the angles are measured. Possible vaues are
-%                   0 (The default if omitted) The azimuth angle is
-%                     counterclockwise from the x axis.
-%                   1 The azimuth angle is measured clockwise from the y
-%                     axis.
+%INPUTS: z A 2XN matrix of points in polar coordinates. Each column of the
+%          matrix has the format [r;azimuth], with azimuth given in
+%          radians.
+% systemType An optional parameter specifying the axis from which the
+%          angles are measured. Possible values are
+%          0 (The default if omitted or an empty matrix is passed) The
+%            azimuth angle is counterclockwise from the x axis.
+%          1 The azimuth angle is measured clockwise from the y axis.
+%useHalfRange A boolean value specifying whether the bistatic range value
+%           should be divided by two. This normally comes up when operating
+%           in monostatic mode, so that the range reported is a one-way
+%           range. The default if this parameter is not provided, or an
+%           empty matrix is passed, is true.
+%       zTx The 2XN [x;y] location vectors of the transmitters in global
+%           Cartesian coordinates. If this parameter is omitted or an
+%           empty matrix is passed, then the transmitters are assumed to
+%           be at the origin. If only a single vector is passed, then the
+%           transmitter location is assumed the same for all of the target
+%           states being converted. zTx can have more than 2 rows;
+%           additional rows are ignored.
+%       zRx The 2XN [x;y] location vectors of the receivers in Cartesian
+%           coordinates.  If this parameter is omitted or an empty matrix
+%           is passed, then the receivers are assumed to be at the origin.
+%           If only a single vector is passed, then the receiver location
+%           is assumed the same for all of the target states being
+%           converted. zRx can have more than 2 rows; additional rows are
+%           ignored.
+%         M A 2X2XN hypermatrix of the rotation matrices to go from the
+%           alignment of the global coordinate system to that at the
+%           receiver. If omitted or an empty matrix is passed, then it is
+%           assumed that the local coordinate system is aligned with the
+%           global and M=eye(2) --the identity matrix is used. If only a
+%           single 2X2 matrix is passed, then is is assumed to be the same
+%           for all of the N conversions.
 %
 %OUTPUTS: cartPoints A 2XN or matrix of the points transformed into
-%                    Cartesian coordinates. Each columns of cartPoints is of
-%                    the format [x;y].
+%                    Cartesian coordinates. Each columns of cartPoints is
+%                    of the format [x;y].
 %
-%April 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%The conversion utilizing bistatic polar measurements in 2D is similar to
+%that using bistatic r-u-v measurements in 3D, which is discussed in [1].
+%In both instances, one turns the direction components into a unit vector
+%and the multiplied it by a one-way monostatic range that has to be
+%computed.
+%
+%REFERENCES:
+%[1] David F. Crouse , "Basic tracking using nonlinear 3D monostatic and
+%    bistatic measurements," IEEE Aerospace and Electronic Systems 
+%    Magazine, vol. 29, no. 8, Part II, pp. 4-53, Aug. 2014.
+%
+%February 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<2)
+N=size(z,2);
+
+if(nargin<6||isempty(M))
+    M=repmat(eye(2),[1,1,N]);
+elseif(size(M,3)==1)
+    M=repmat(M,[1,1,N]);
+end
+
+if(nargin<5||isempty(zRx))
+    zRx=zeros(2,N);
+elseif(size(zRx,2)==1)
+    zRx=repmat(zRx,[1,N]);
+end
+
+if(nargin<4||isempty(zTx))
+    zTx=zeros(2,N);
+elseif(size(zTx,2)==1)
+    zTx=repmat(zTx,[1,N]);
+end
+
+if(nargin<3||isempty(useHalfRange))
+    useHalfRange=true;
+end
+
+if(nargin<2||isempty(systemType))
     systemType=0;
 end
 
-%Extract the coordinates
-r=polarPoints(1,:);
-azimuth=polarPoints(2,:);
+%Extract the components.
+rB=z(1,:);
+azimuth=z(2,:);
 
+%The bistatic range is used in the conversions below.
+if(useHalfRange)
+   rB=2*rB; 
+end
+
+%Get unit vectors from the azimuth.
+u=zeros(2,N);
 switch(systemType)
     case 0
-        x=r.*cos(azimuth);
-        y=r.*sin(azimuth);
+        u(1,:)=cos(azimuth);
+        u(2,:)=sin(azimuth);
     case 1
-        x=r.*sin(azimuth);
-        y=r.*cos(azimuth);
+        u(1,:)=sin(azimuth);
+        u(2,:)=cos(azimuth);
     otherwise
         error('Invalid system type specified.')
 end
 
-cartPoints=[x;y];
+cartPoints=zeros(2,N);
+for curPoint=1:N
+    %The transmitter location in the receiver's local coordinate
+    %system.
+    zTxL=M(:,:,curPoint)*(zTx(1:2,curPoint)-zRx(1:2,curPoint));
+
+    r1=(rB(curPoint)^2-norm(zTxL)^2)/(2*(rB(curPoint)-dot(u(:,curPoint),zTxL)));
+    %This is the Cartesian location in the local coordinate system of
+    %the receiver.
+    zL=r1*u(:,curPoint);
+    %Convert to global Cartesian coordinates.
+    cartPoints(:,curPoint)=M(:,:,curPoint)\zL+zRx(1:2,curPoint);
+end
 end
 
 %LICENSE:

@@ -296,7 +296,7 @@ function [range,uArrive,uDepart]=atmosRefracMeas(xObs,xObj,Ns,ce,a,f)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 %The location of the observer in ellipsoidal coordinates.
-plhPoint=Cart2Ellipse(xObs,a,f);
+plhPoint=Cart2Ellipse(xObs,[],a,f);
 
 %Find the radius of the Earth at the location of the observer. Use the
 %ellipsoidal Earth approximation. This will be the radius used in the local

@@ -1,8 +1,8 @@
 classdef GammaConjugateID
-%Functions to handle the gamma conjugate type I distribution. This
-%distribution is introduced in [1] as the conjugate prior to the central
-%gamma distribution with a known scale parameter when the shape parameter
-%is being estimated.
+%%GAMMACONJUGATEID Functions to handle the gamma conjugate type I
+%          distribution. This distribution is introduced in [1] as the
+%          conjugate prior to the central gamma distribution with a known
+%          scale parameter when the shape parameter is being estimated.
 %Implemented methods are: mean, PDF, normConst
 %
 %REFERENCES:

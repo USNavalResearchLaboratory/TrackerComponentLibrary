@@ -3,13 +3,13 @@ function [Jul1,Jul2]=TAI2TCG(Jul1,Jul2)
 %         Julian date to geocentric coordinate time (TCG), represented as a
 %         two-part Julian date.
 %
-%INPUTS:    Jul1, Jul2  Two parts of a Julian date given in TAI. The units
-%                       of the date are days. The full date is the sum of
-%                       both terms. The date is broken into two parts to
-%                       provide more bits of precision. It does not matter
-%                       how the date is split.
+%INPUTS: Jul1, Jul2 Two parts of a Julian date given in TAI. The units of
+%                   the date are days. The full date is the sum of both
+%                   terms. The date is broken into two parts to provide
+%                   more bits of precision. It does not matter how the date
+%                   is split.
 %
-%OUTPUTS:   Jul1, Jul2  The time as a Julian date in TCG.
+%OUTPUTS: Jul1, Jul2 The time as a Julian date in TCG.
 %
 %This just calls a number of intermediate conversion functions out of the
 %International Astronomical Union's (IAU) Standard's of Fundamental

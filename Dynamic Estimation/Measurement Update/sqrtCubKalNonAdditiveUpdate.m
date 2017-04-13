@@ -56,14 +56,13 @@ function [xUpdate, SUpdate,innov,Szz]=sqrtCubKalNonAdditiveUpdate(xPred,SPred,z,
 %                      an angle, one might generally want to bind it to the
 %                      region +/-pi.
 %
-%OUTPUTS    xUpdate    The xDim X 1 updated state vector.
-%           SUpdate    The updated xDim X xDim lower-triangular square root
-%                      state covariance matrix.
-%       innov, Szz     The zDimX1 innovation and the zDimXzDim square root
-%                      innovation covariance matrix are returned in case
-%                      one wishes to analyze the consistency of the
-%                      estimator or use those values in gating or
-%                      likelihood evaluation.
+%OUTPUTS: xUpdate The xDim X 1 updated state vector.
+%         SUpdate The updated xDim X xDim lower-triangular square root
+%                 state covariance matrix.
+%      innov, Szz The zDimX1 innovation and the zDimXzDim square root
+%                 innovation covariance matrix are returned in case one
+%                 wishes to analyze the consistency of the estimator or use
+%                 those values in gating or likelihood evaluation.
 %
 %%The mathematics behind the function sqrtCubKalNonAdditiveUpdate are
 %described in more detail in Section IX of [1]

@@ -23,21 +23,21 @@ function [yUpdate,PInvUpdate,innov]=EIFUpdate(yPred,PInvPred,z,RInv,h,HJacob,inn
 %                  default parameters.
 %       innovTrans An optional function handle that transforms the value of
 %                  the difference between the observation and any predicted
-%                  points. This only needs to be supplied when a measurement
-%                  difference must be restricted to a certain range. For
-%                  example, the innovation between two angles will be 2*pi
-%                  if one angle is zero and the other 2*pi, even though
-%                  they are the same direction. In such an instance, a
-%                  function handle to the wrapRange function with the
-%                  appropriate parameters should be passed for innovTrans.
+%                  points. This only needs to be supplied when a
+%                  measurement difference must be restricted to a certain
+%                  range. For example, the innovation between two angles
+%                  will be 2*pi if one angle is zero and the other 2*pi,
+%                  even though they are the same direction. In such an
+%                  instance, a function handle to the wrapRange function
+%                  with the appropriate parameters should be passed for
+%                  innovTrans.
 %
-%OUTPUTS:   yUpdate  The xDim X 1 updated (posterior) information state
-%                    vector.
-%         PInvUpdate The updated xDim X xDim inverse state covariance
-%                    matrix.
-%              innov The zDimX1 innovation. This is the difference between
-%                    the measurement and the predicted measurement. This is
-%                    sometimes used for gating measurements.
+%OUTPUTS: yUpdate The xDim X 1 updated (posterior) information state
+%                 vector.
+%      PInvUpdate The updated xDim X xDim inverse state covariance matrix.
+%           innov The zDimX1 innovation. This is the difference between the
+%                 measurement and the predicted measurement. This is
+%                 sometimes used for gating measurements.
 %
 %This is an implementation of the measurement update step of an extended
 %information filter as described in [1].

@@ -1,5 +1,5 @@
 classdef RayleighD
-%Functions to handle the Rayleigh distribution.
+%%RAYLEIGHD Functions to handle the Rayleigh distribution.
 %Implemented methods are: mean, var, PDF, CDF, invCDF, rand, momentGenFun
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -7,13 +7,21 @@ classdef RayleighD
 methods(Static)
     
 function val=mean(sigma)
-%%MEAN  Obtain the mean of the Rayleigh distribution for a given parameter.
+%%MEAN Obtain the mean of the Rayleigh distribution for a given parameter.
 %
-%INPUTS:  sigma The parameter of the Rayleigh distribution.
+%INPUTS: sigma The parameter of the Rayleigh distribution.
 %
-%OUTPUTS:   val The mean of the Rayleigh distribution.
+%OUTPUTS: val The mean of the Rayleigh distribution.
 %
-%The mean of the Rayligh distribution is given on the inside cover of [1].
+%The mean of the Rayleigh distribution is given on the inside cover of [1].
+%
+%EXAMPLE:
+%We verify the computed mean by comparing it to the sample mean.
+% sigma=4;
+% meanVal=RayleighD.mean(sigma)
+% numSamp=1e6;
+% sampMeanVal=mean(RayleighD.rand([numSamp,1],sigma))
+%One will find both values are about 5.013
 %
 %REFERENCES:
 %[1] A. Papoulis and S. U. Pillai, Probability, Random Variables and
@@ -25,15 +33,23 @@ function val=mean(sigma)
 end
 
 function val=var(sigma)
-%%VAR   Obtain the variance of the Rayleigh distribution for a given
-%       parameter.
+%%VAR Obtain the variance of the Rayleigh distribution for a given
+%     parameter.
 %
-%INPUTS:  sigma The parameter of the Rayleigh distribution.
+%INPUTS: sigma The parameter of the Rayleigh distribution.
 %
-%OUTPUTS:   val The variance of the Rayleigh distribution.
+%OUTPUTS:  val The variance of the Rayleigh distribution.
 %
 %The variance of the Rayligh distribution is given on the inside cover of
 %[1].
+%
+%EXAMPLE:
+%We verify the computed variance by comparing it to the sample variance.
+% sigma=4;
+% varVal=RayleighD.var(sigma)
+% numSamp=1e6;
+% sampVarVal=var(RayleighD.rand([numSamp,1],sigma))
+%One will find both values are about 6.867
 %
 %REFERENCES:
 %[1] A. Papoulis and S. U. Pillai, Probability, Random Variables and
@@ -45,17 +61,36 @@ function val=var(sigma)
 end  
     
 function val=PDF(x,sigma)
-%%PDF          Evaluate the Rayleigh probability distribution
-%              function (PDF) at one or more desired points.
+%%PDF Evaluate the Rayleigh probability distribution function (PDF) at one
+%     or more desired points.
 %
-%INPUTS:      x The point(s) at which the Rayleigh PDF is to be 
-%               evaluated.
-%         sigma The parameter of the Rayleigh distribution.
+%INPUTS: x The point(s) at which the Rayleigh PDF is to be  evaluated.
+%    sigma The parameter of the Rayleigh distribution.
 %
-%OUTPUTS:   val The value(s) of the Rayleigh PDF with parameter sigma
-%               evaluated at x.
+%OUTPUTS: val The value(s) of the Rayleigh PDF with parameter sigma
+%             evaluated at x.
 %
-%The PDF of the Rayligh distribution is given in Chapter 4.3 of [1].
+%The PDF of the Rayleigh distribution is given in Chapter 4.3 of [1].
+%
+%EXAMPLE:
+%Here, we validate the PDF by generating random samples and comparing the
+%PDF plot with a histogram of the random samples.
+% sigma=5;
+% numSamples=1e5;
+% figure(1)
+% clf
+% histogram(RayleighD.rand([numSamples,1],sigma),'Normalization','pdf')
+% hold on
+% numPoints=1000;
+% x=linspace(0,20,numPoints);
+% vals=RayleighD.PDF(x,sigma);
+% plot(x,vals,'linewidth',2)
+% h1=xlabel('x');
+% h2=ylabel('PDF(x)');
+% set(gca,'FontSize',14,'FontWeight','bold','FontName','Times')
+% set(h1,'FontSize',14,'FontWeight','bold','FontName','Times')
+% set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
+%One will see that the histogram matches well with the plot.
 %
 %REFERENCES:
 %[1] A. Papoulis and S. U. Pillai, Probability, Random Variables and
@@ -70,19 +105,28 @@ function val=PDF(x,sigma)
 end
 
 function val=CDF(x,sigma)
-%%CDF          Evaluate the cumulative distribution function (CDF) of the
-%              Rayleigh distribution at one or more desired points.
+%%CDF Evaluate the cumulative distribution function (CDF) of the Rayleigh
+%     distribution at one or more desired points.
 %
-%INPUTS:      x The point(s) at which the Rayleigh CDF is to be 
-%               evaluated.
-%         sigma The parameter of the Rayleigh distribution.
+%INPUTS: x The point(s) at which the Rayleigh CDF is to be evaluated.
+%    sigma The parameter of the Rayleigh distribution.
 %
-%OUTPUTS:   val The value(s) of the Rayleigh CDF with parameter sigma
-%               evaluated at x.
+%OUTPUTS: val The value(s) of the Rayleigh CDF with parameter sigma
+%             evaluated at x.
 %
-%The CDF of the Rayligh distribution can be easily derived by integration
+%The CDF of the Rayleigh distribution can be easily derived by integration
 %the PDF of the Rayleigh distribution, which is given in Chapter 4.3 of
 %[1].
+%
+%EXAMPLE:
+%We validate the CDF value by comparing it to a value computed from random
+%samples.
+% sigma=5;
+% x=3;
+% numSamples=1e5;
+% prob=RayleighD.CDF(x,sigma)
+% probSamp=mean(RayleighD.rand([numSamples,1],sigma)<=x)
+%One will see that both values are about 0.1647.
 %
 %REFERENCES:
 %[1] A. Papoulis and S. U. Pillai, Probability, Random Variables and
@@ -97,20 +141,28 @@ function val=CDF(x,sigma)
 end
 
 function val=invCDF(prob,sigma)
-%%INVCDF         Evaluate the inverse of the cumulative distribution
-%                function of the Rayleigh distribution.
+%%INVCDF Evaluate the inverse of the cumulative distribution function of
+%        the Rayleigh distribution.
 %
-%INPUTS:    prob The probability or probabilities (0<=prob<=1) at which the 
-%                argument of the CDF is desired.
-%          sigma The parameter of the Rayleigh distribution.
+%INPUTS: prob The probability or probabilities (0<=prob<=1) at which the 
+%             argument of the CDF is desired.
+%       sigma The parameter of the Rayleigh distribution.
 %
-%OUTPUTS:    val The argument(s) of the CDF that would give the probability
-%                or probabilities in prob.
+%OUTPUTS: val The argument(s) of the CDF that would give the probability or
+%             probabilities in prob.
 %
 %The CDF of the Rayleigh distribution is simple and can be easily inverted
-%using logarithms. The CDF of the Rayligh distribution can be easily
+%using logarithms. The CDF of the Rayleigh distribution can be easily
 %derived by integration the PDF of the Rayleigh distribution, which is
 %given in Chapter 4.3 of [1].
+%
+%EXAMPLE:
+%Here, we validate the inverse CDF by showing it to be the inverse of the
+%CDF.
+% sigma=5;
+% x=3;
+% xBack=RayleighD.invCDF(RayleighD.CDF(x,sigma),sigma)
+%One will see that xBack is the same as x.
 %
 %REFERENCES:
 %[1] A. Papoulis and S. U. Pillai, Probability, Random Variables and
@@ -124,14 +176,13 @@ end
 function vals=rand(N,sigma)
 %%RAND Generate Rayleigh random variables with a given parameter sigma.
 %
-%INPUTS:        N  If N is a scalar, then rand returns an NXN
-%                  matrix of random variables. If N=[M,N1] is a two-element 
-%                  row vector, then rand returns an MXN1 matrix of 
-%                  random variables.
-%           sigma  The parameter of the Rayleigh distribution.
+%INPUTS: N If N is a scalar, then rand returns an NXN matrix of random
+%          variables. If N=[M,N1] is a two-element row vector, then rand
+%          returns an MXN1 matrix of  random variables.
+%    sigma The parameter of the Rayleigh distribution.
 %
-%OUTPUTS:    vals  A matrix whose dimensions are determined by N of the
-%                  generated Rayleigh random variables.
+%OUTPUTS: vals A matrix whose dimensions are determined by N of the
+%              generated Rayleigh random variables.
 %
 %This generates Rayleigh distributed random variables by transforming 
 %normally distributed random variables using the identity given in

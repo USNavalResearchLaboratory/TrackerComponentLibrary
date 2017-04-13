@@ -12,8 +12,8 @@ function demoCurvedEarthSimSpiral()
 %October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-display('Spiraling flight from Mauna Loa, Hawaii to Honolulu, Hawaii at 20km initial')
-display('ellipsoidal) altitude and an average progression along the path of Mach 1')
+disp('Spiraling flight from Mauna Loa, Hawaii to Honolulu, Hawaii at 20km initial')
+disp('ellipsoidal) altitude and an average progression along the path of Mach 1')
 ellipsAlt=20e3;%20km initial ellipsoidal altitude.
 
 %The reference speed of sound for standard temperature, pressure and
@@ -31,23 +31,23 @@ phi=21.3000*pi/180;
 lambda=-157.8167*pi/180;
 latLonEnd=[phi;lambda];
 
-display('1) Computing the initial heading and distance to navigate on a geodesic curve from')
-display('Mauna Loa to Honolulu')
+disp('1) Computing the initial heading and distance to navigate on a geodesic curve from')
+disp('Mauna Loa to Honolulu')
 
 %This uses an approximate method of dealing with the non-zero altitude,
 %which is significantly faster than the exact method.
 [azStartF,distF]=indirectGeodeticProbGen(latLonStart,latLonEnd,ellipsAlt,true);
 
-display('3) Computing the spiraling trajectory with parameters:')
+disp('3) Computing the spiraling trajectory with parameters:')
 SpiralOffset=5e3;
-display(['Spiral radius:', num2str(SpiralOffset/10^3),' km'])
+disp(['Spiral radius:', num2str(SpiralOffset/10^3),' km'])
 Nw=6;
-display(['Number of spirals along route:', num2str(Nw)])
+disp(['Number of spirals along route:', num2str(Nw)])
 numSteps=200;
-display(['Number of steps for the simulation:', num2str(numSteps)])
+disp(['Number of steps for the simulation:', num2str(numSteps)])
 
 %The axes for the local ENU coordinates, which will be the initial local
-%system used and thus the system in whcih the initial heading is specified.
+%system used and thus the system in which the initial heading is specified.
 uInit=getENUAxes([latLonStart;ellipsAlt]);
 
 %When traveling the geodesic path, the total time take for the simulation.
@@ -72,8 +72,8 @@ xListGeo=RungeKCurvedAtTimes(xInit,uInit,times,aDyn);
 %Convert the Cartesian locations into ellipsoidal coordinates.
 latLonAlt=Cart2Ellipse(xListGeo(1:3,:));
 
-display('2) Plotting the trajectory and the ellipsoidal height as a function of time.')
-display('Note that the altitude does not slowly increase due to unmodeled curvature.')
+disp('2) Plotting the trajectory and the ellipsoidal height as a function of time.')
+disp('Note that the altitude does not slowly increase due to unmodeled curvature.')
 
 figure(1)
 clf

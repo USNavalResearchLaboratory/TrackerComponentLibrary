@@ -8,7 +8,7 @@ function permVals=fullSymPerms(x)
 %              permutation sets arise often when generating cubature
 %              integration points, as in Chapter 8 of [1].
 %
-%INPUTS:    x  An NX1 vector.
+%INPUTS: x An NX1 vector.
 %
 %OUTPUTS: permVals An NXnumVals matrix of all unique fully symmetric
 %                  permutations of the elements in x.
@@ -44,8 +44,6 @@ for curPerm=1:numMultiset
     permVals(:,curStart:(curStart+numCombos-1))=PMCombos(multiSetPerms(:,curPerm));
     curStart=curStart+numCombos;
 end
-
-
 end
 
 %LICENSE:

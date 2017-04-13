@@ -1,5 +1,5 @@
 classdef WeibullD
-%Functions to handle the Weibull distribution.
+%%WEIBULLD Functions to handle the Weibull distribution.
 %Implemented methods are: mean, var, PDF, CDF, invCDF, rand
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -17,6 +17,15 @@ function val=mean(lambda,k)
 %
 %The mean of the Weibull distribution is given on the inside of the front
 %cover of [1].
+%
+%EXAMPLE:
+%We verify the computed mean by comparing it to the sample mean.
+% lambda=2.2;
+% k=3.1;
+% meanVal=WeibullD.mean(lambda,k)
+% numSamp=1e6;
+% sampMeanVal=mean(WeibullD.rand([numSamp,1],lambda,k))
+%One will find both values are about 1.967
 %
 %REFERENCES:
 %[1] A. Papoulis and S. U. Pillai, Probability, Random Variables and
@@ -39,6 +48,15 @@ function val=var(lambda,k)
 %The variance of the Weibull distribution is given on the inside of the front
 %cover of [1].
 %
+%EXAMPLE:
+%We verify the computed variance by comparing it to the sample variance.
+% lambda=2.2;
+% k=3.1;
+% varVal=WeibullD.var(lambda,k)
+% numSamp=1e6;
+% sampVarVal=var(WeibullD.rand([numSamp,1],lambda,k))
+%One will find both values are about 0.4821
+%
 %REFERENCES:
 %[1] A. Papoulis and S. U. Pillai, Probability, Random Variables and
 %    Stochastic Processes, 4th ed. Boston: McGraw Hill, 2002.
@@ -52,14 +70,36 @@ function val=PDF(x,lambda,k)
 %%PDF Evaluate the probability density function (PDF) of the Weibull
 %     distribution at one or more points.
 %
-%INPUTS:    x   The point(s) at which the Weibull PDF is to be evaluated.
-%        lambda The scale parameter of the distribution. lambda>0.
-%             k The shape parameter of the distribution. k>0.
+%INPUTS: x The point(s) at which the Weibull PDF is to be evaluated. x>=0
+%          for nonzero PDF values.
+%   lambda The scale parameter of the distribution. lambda>0.
+%        k The shape parameter of the distribution. k>0.
 %
-%OUTPUTS:   val The value(s) of the Weibull PDF.
+%OUTPUTS: val The value(s) of the Weibull PDF.
 %
 %The PDF of the Weibull distribution is given on the inside of the front
 %cover of [1].
+%
+%EXAMPLE:
+%Here, we validate the PDF by generating random samples and comparing the
+%PDF plot with a histogram of the random samples.
+% lambda=2.2;
+% k=3.1;
+% numSamples=1e5;
+% figure(1)
+% clf
+% histogram(WeibullD.rand([numSamples,1],lambda,k),'Normalization','pdf')
+% hold on
+% numPoints=1000;
+% x=linspace(0,6,numPoints);
+% vals=WeibullD.PDF(x,lambda,k);
+% plot(x,vals,'linewidth',2)
+% h1=xlabel('x');
+% h2=ylabel('PDF(x)');
+% set(gca,'FontSize',14,'FontWeight','bold','FontName','Times')
+% set(h1,'FontSize',14,'FontWeight','bold','FontName','Times')
+% set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
+%One will see that the histogram matches well with the plot.
 %
 %REFERENCES:
 %[1] A. Papoulis and S. U. Pillai, Probability, Random Variables and
@@ -75,15 +115,26 @@ function val=CDF(x,lambda,k)
 %%CDF Evaluate the cumulative distribution function (CDF) of the Weibull
 %     distirbution at one or more desired points.
 %
-%INPUTS:    x   The point(s) at which the Weibull CDF is to be evaluated.
-%        lambda The scale parameter of the distribution. lambda>0.
-%             k The shape parameter of the distribution. k>0.
+%INPUTS: x The point(s) at which the Weibull CDF is to be evaluated.
+%   lambda The scale parameter of the distribution. lambda>0.
+%        k The shape parameter of the distribution. k>0.
 %
-%OUTPUTS:   val The value(s) of the Weibull CDF.
+%OUTPUTS: val The value(s) of the Weibull CDF.
 %
 %The CDF is the integral from 0 to x of the PDF. The Weibull PDF is
 %fairely simple and the integral is not hard. The Weibull PDF is given on
 %the inside of the front cover of [1].
+%
+%EXAMPLE:
+%We validate the CDF value by comparing it to a value computed from random
+%samples.
+% lambda=2.2;
+% k=3.1;
+% x=2;
+% numSamples=1e5;
+% prob=WeibullD.CDF(x,lambda,k)
+% probSamp=mean(WeibullD.rand([numSamples,1],lambda,k)<=x)
+%One will see that both values are about 0.5249.
 %
 %REFERENCES:
 %[1] A. Papoulis and S. U. Pillai, Probability, Random Variables and
@@ -99,17 +150,26 @@ function val=invCDF(prob,lambda,k)
 %%INVCDF Evaluate the inverse of the cumulative distribution function (CDF)
 %        of the Weibull distribution.
 %
-%INPUTS:   prob The probability or probabilities (0<=prob<=1) at which the 
-%               argument of the CDF is desired.
-%        lambda The scale parameter of the distribution. lambda>0.
-%             k The shape parameter of the distribution. k>0.
+%INPUTS: prob The probability or probabilities (0<=prob<=1) at which the 
+%             argument of the CDF is desired.
+%      lambda The scale parameter of the distribution. lambda>0.
+%           k The shape parameter of the distribution. k>0.
 %
-%OUTPUTS:   val  The argument(s) of the CDF that would give the probability
-%                or probabilities in prob.
+%OUTPUTS: val The argument(s) of the CDF that would give the probability or
+%             probabilities in prob.
 %
 %The CDF of the Weibull distribution can be easily algebraicly inverted,
 %which is what is done here. The Weibull CDF is the integral from 0 to x of
 %the Weibull PDF, which is given on the inside of the front cover of [1].
+%
+%EXAMPLE:
+%Here, we validate the inverse CDF by showing it to be the inverse of the
+%CDF.
+% lambda=2.2;
+% k=3.1;
+% x=2;
+% xBack=WeibullD.invCDF(WeibullD.CDF(x,lambda,k),lambda,k)
+%One will see that xBack is the same as x.
 %
 %REFERENCES:
 %[1] A. Papoulis and S. U. Pillai, Probability, Random Variables and
@@ -126,14 +186,14 @@ function vals=rand(N,lambda,k)
 %%RAND Generate Weibull distributed random variables with the given
 %      parameters.
 %
-%INPUTS:    N   If N is a scalar, then rand returns an NXN matrix of random
-%               variables. If N=[M,N1] is a two-element row vector, then
-%               rand returns an MXN1 matrix of random variables.
-%        lambda The scale parameter of the distribution. lambda>0.
-%             k The shape parameter of the distribution. k>0.
+%INPUTS: N If N is a scalar, then rand returns an NXN matrix of random
+%          variables. If N=[M,N1] is a two-element row vector, then rand
+%          returns an MXN1 matrix of random variables.
+%   lambda The scale parameter of the distribution. lambda>0.
+%        k The shape parameter of the distribution. k>0.
 %
-%OUTPUTS:   vals   A matrix whose dimensions are determined by N of the
-%                  generated Weibull random variables.
+%OUTPUTS: vals A matrix whose dimensions are determined by N of the
+%              generated Weibull random variables.
 %
 %This is an implementation of the inverse transform algorithm of Chapter
 %5.1 of [1].

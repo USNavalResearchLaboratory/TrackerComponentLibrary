@@ -48,7 +48,7 @@ function [yPred, PInvPred]=infoFilterDiscPredRev(yPrev,PInvPrev,F,Q,u)
 
     DInv=inv(F')+PInvPrev*Q/(F');
     PInvPred=DInv\PInvPrev*(F);
-    if(nargin<5)
+    if(nargin<5||isempty(u))
         yPred=DInv\yPrev;
     else
         yPred=DInv\yPrev-PInvPred/F*u;

@@ -339,7 +339,7 @@ display('Computing the IMM scenario with two linear Kalman filters with differen
 %The covariance matrix for the low-noise model.
 QLow=QPolyKalDirectDisc(T,zeros(4,1),1,0.1^2);%0.1m/s^2 process noise
 %The covariance matrix for the high-noice model.
-QHigh=QPolyKalDirectDisc(T,zeros(4,1),1,2^2);%2m/s process noise.
+QHigh=QPolyKalDirectDisc(T,zeros(4,1),1,2^2);%2m/s^2 process noise.
 
 %The propagation routines for each model
 transFuns{1}=@(xPrev,PPrev)discKalPred(xPrev,PPrev,F,QLow);

@@ -2,21 +2,21 @@ function [yUpdate, PInvUpdate]=infoFilterUpdate(yPred,PInvPred,z,R,H)
 %%INFOFILTERUPDATE Perform the measurement update step in the standard 
 %                  linear information filter.
 %
-%INPUTS: yPred      The xDimX1 predicted information state. The information
-%                   state is the inverse covariance matrix times the target
-%                   state.
-%        PInvPred   The xDimXxDim inverse of the predicted state covariance
-%                   matrix.
-%        z          The zDim X 1 vector measurement.
-%        R          The zDim X zDim measurement covariance matrix. 
-%        H          The zDim X xDim measurement matrix for a linear
-%                   measurement model. That is z=H*x+w, where w is
-%                   measurement noise having covariance matrix R.
+%INPUTS: yPred The xDimX1 predicted information state. The information
+%              state is the inverse covariance matrix times the target
+%              state.
+%     PInvPred The xDimXxDim inverse of the predicted state covariance
+%              matrix.
+%            z The zDim X 1 vector measurement.
+%            R The zDim X zDim measurement covariance matrix. This must be
+%              positive definite.
+%            H The zDim X xDim measurement matrix for a linear measurement
+%              model. That is z=H*x+w, where w is measurement noise having
+%              covariance matrix R.
 %
-%OUTPUTS: yUpdate     The xDim X 1 updated (posterior) information state
-%                     vector.
-%         PInvUpdate  The updated xDim X xDim inverse state covariance
-%                     matrix.
+%OUTPUTS: yUpdate The xDim X 1 updated (posterior) information state
+%                 vector.
+%      PInvUpdate The updated xDim X xDim inverse state covariance matrix.
 %
 %The information filter is algebraically equivalent to the standard linear
 %Kalman filter, but allows for track propagation with very uncertain

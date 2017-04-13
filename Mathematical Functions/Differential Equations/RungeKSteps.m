@@ -2,28 +2,26 @@ function xList=RungeKSteps(xInit,t0,f,deltaT,numSteps,order,solutionChoice)
 %%RUNGEKSTEPS Perform multiple steps of Runge-Kutta propagation with a
 %             fixed time interval between steps.
 %
-%INPUTS:    xInit    The initial value of the state (scalar or vector) over
-%                    which integration is being performed.
-%           t0       The time at which xInit is taken.
-%           f        f(xVal,curT) returns the derivative of xVal taken at
-%                    time curT.
-%           deltaT   The size of the steps in the Runge-Kutta integration.
-%           numSteps The number of steps over which Runge-Kutta integration
-%                    is performed.
-%           order   The order of the Runge-Kutta method. If this parameter
-%                   is omitted, then the default order of 4 is used. Order
-%                   can range from 1 to 7.
-%   solutionChoice  When multiple formulae are implemented, this selects
-%                   which one to use. Otherwise, this parameter is not
-%                   used. Currently, only the order=4 method has multiple
-%                   solutions implemented in which case omitting this
-%                   parameter or setting it to zero used the Dormand and
-%                   Prince Algorithm, and setting it to 1 uses the Fehlberg
-%                   algorithm.
+%INPUTS: xInit The initial value of the state (scalar or vector) over which
+%              integration is being performed.
+%           t0 The time at which xInit is taken.
+%            f f(xVal,curT) returns the derivative of xVal taken at time
+%              curT.
+%       deltaT The size of the steps in the Runge-Kutta integration.
+%     numSteps The number of steps over which Runge-Kutta integration is
+%              performed.
+%        order The order of the Runge-Kutta method. If this parameter is
+%              omitted, then the default order of 4 is used. Order can
+%              range from 1 to 7.
+% solutionChoice When multiple formulae are implemented, this selects which
+%              one to use. Otherwise, this parameter is not used.
+%              Currently, only the order=4 method has multiple solutions
+%              implemented in which case omitting this parameter or setting
+%              it to zero used the Dormand and Prince Algorithm, and
+%              setting it to 1 uses the Fehlberg algorithm.
 %
-%OUTPUTS:   xList   The first column of xList is xInit. The subsequent
-%                   columns are the state propagated forward at intervals
-%                   of deltaT.
+%OUTPUTS: xList The first column of xList is xInit. The subsequent columns
+%              are the state propagated forward at intervals of deltaT.
 %
 %This function calls the RungeKStep function to propagate forward the
 %target state each step of duration deltaT. See the comments in RungeKStep

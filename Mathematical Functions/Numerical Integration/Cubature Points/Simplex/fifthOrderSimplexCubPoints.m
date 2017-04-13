@@ -4,24 +4,24 @@ function [xi,w]=fifthOrderSimplexCubPoints(numDim,algorithm)
 %               points such that sum(x)<=1 and all x>=0, where x is a
 %               numDimX1 vector.
 %
-%INPUTS:  numDim An integer specifying the dimensionality of the points
-%                to be generated.
-%      algorithm A value indicating which algorithm should be used.
-%                Possible values are
-%                0 (The default if omitted or an empty matrix is passed,
-%                  unless numDim=2 or 3) Formula T_n 5-2 in [1], pg. 312,
-%                  factorial(numDim+5)/(factorial(5)*factorial(numDim))
-%                  points, numDim>=4, where the denominator of B1 has been
-%                  corrected.
-%                1 (The default if numDim=2) Formula T_2 5-1 in [1], pg.
-%                  314, 7 points, numDim=2.
-%                2 (The default if numDim=3) Formula T_3 5-1 in [1], pg.
-%                  315, 15 points, numDim=3.
+%INPUTS: numDim An integer specifying the dimensionality of the points to
+%               to be generated.
+%     algorithm A value indicating which algorithm should be used.
+%               Possible values are
+%               0 (The default if omitted or an empty matrix is passed,
+%                 unless numDim=2 or 3) Formula T_n 5-2 in [1], pg. 312,
+%                 factorial(numDim+5)/(factorial(5)*factorial(numDim))
+%                 points, numDim>=4, where the denominator of B1 has been
+%                 corrected.
+%               1 (The default if numDim=2) Formula T_2 5-1 in [1], pg.
+%                 314, 7 points, numDim=2.
+%               2 (The default if numDim=3) Formula T_3 5-1 in [1], pg.
+%                 315, 15 points, numDim=3.
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %REFERENCES:
 %[1] A.H. Stroud, Approximate Calculation of Multiple Integrals. Cliffs,

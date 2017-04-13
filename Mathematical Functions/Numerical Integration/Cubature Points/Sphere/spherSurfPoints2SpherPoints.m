@@ -28,10 +28,10 @@ function [xi,w]=spherSurfPoints2SpherPoints(xiSurf,wSurf,order,method)
 %                 required an adjustment to the weights as compared to
 %                 the approach used in algorithm S14-1 in [1]. 
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %The conversion is based on the development of Chapter 2.8 of [1], which is
 %used in developing formula S3 14-1 in [1], pg. 292.
@@ -83,7 +83,7 @@ switch(method)
            error('This formula can only be used when the number of dimensions is odd');
         end
 
-        [r,A]=quadraturePoints1D(ceil((order+1)/2),11,numDim-1);
+        [r,A]=quadraturePoints1D(ceil((order+1)/2),8,numDim-1);
         %We discard the negative half of the points as described in the
         %development to Formula S3 14-1 in [1], pg. 292. That changes the
         %points from integrating from -1 to 1 to integrating from 0 to 1.
@@ -94,7 +94,7 @@ switch(method)
         num1DPoints=length(r);
     case 1%Use orthogonal polynomials directly for w(x)=x^c1 on 0-1.
         num1DPoints=ceil((order+1)/2);
-        [r,A]=quadraturePoints1D(num1DPoints,10,numDim-1);
+        [r,A]=quadraturePoints1D(num1DPoints,7,numDim-1);
     case 2%Half a set of Legendre polynomials is to be used.
         linPointOrder=order+numDim-1;
         [r,A]=GaussLegendrePoints1D(ceil((linPointOrder+1)/2));

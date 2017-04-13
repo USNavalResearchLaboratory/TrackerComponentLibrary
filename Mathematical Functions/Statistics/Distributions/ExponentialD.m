@@ -1,5 +1,5 @@
 classdef ExponentialD
-%Functions to handle the exponential distribution.
+%%EXPONENTIALD Functions to handle the exponential distribution.
 %Implemented methods are: mean, var, PDF, CDF, invCDF, momentGenFun,
 %                         cumGenFun, rand
 %
@@ -7,14 +7,22 @@ classdef ExponentialD
 
 methods(Static)
 function val=mean(lambda)
-%%VAR   Obtain the mean of the exponential distribution for a given
-%       rate parameter.
+%%MEAN Obtain the mean of the exponential distribution for a given rate
+%      parameter.
 %
-%INPUTS:    lambda The rate parameter of the distribution. lambda>0.
+%INPUTS: lambda The rate parameter of the distribution. lambda>0.
 %
 %OUTPUTS: val  The mean of the exponential distribution.
 %
 %The mean of the exponential distribution is given in Chapter 2.9 of [1].
+%
+%EXAMPLE:
+%We verify the computed mean by comparing it to the sample mean.
+% lambda=4;
+% meanVal=ExponentialD.mean(lambda)
+% numSamp=1e6;
+% sampMeanVal=mean(ExponentialD.rand([numSamp,1],lambda))
+%One will find both values are about 0.25
 %
 %REFERENCES:
 %[1] S. M. Ross, Simulation, Ed. 4, Amsterdam: Elsevier, 2006.
@@ -28,12 +36,20 @@ function val=var(lambda)
 %%VAR   Obtain the variance of the exponential distribution for a given
 %       rate parameter.
 %
-%INPUTS:    lambda The rate parameter of the distribution. lambda>0.
+%INPUTS: lambda The rate parameter of the distribution. lambda>0.
 %
 %OUTPUTS: val  The variance of the exponential distribution.
 %
 %The variance of the exponential distribution is given in Chapter 2.9 of
 %[1].
+%
+%EXAMPLE:
+%We verify the computed variance by comparing it to the sample variance.
+% lambda=4;
+% varVal=ExponentialD.var(lambda)
+% numSamp=1e6;
+% sampVarVal=var(ExponentialD.rand([numSamp,1],lambda))
+%One will find both values are about 0.0625
 %
 %REFERENCES:
 %[1] S. M. Ross, Simulation, Ed. 4, Amsterdam: Elsevier, 2006.
@@ -44,17 +60,37 @@ function val=var(lambda)
 end
 
 function val=PDF(x,lambda)
-%%PDF          Evaluate the PDF of the exponential probability distribution
-%              function at one or more desired points.
+%%PDF Evaluate the PDF of the exponential probability distribution function
+%     at one or more desired points.
 %
-%INPUTS:    x   The point(s) at which the expoenntial distribution is to be 
-%               evaluated.
-%        lambda The rate parameter of the distribution. lambda>0.
+%INPUTS: x The point(s) at which the expoenntial distribution is to be 
+%          evaluated.
+%   lambda The rate parameter of the distribution. lambda>0.
 %
-%OUTPUTS:   val The value(s) of the exponential PDF with given rate
-%                parameter evaluated at x.
+%OUTPUTS: val The value(s) of the exponential PDF with given rate parameter
+%             evaluated at x.
 %
 %The PDF of the exponential distribution is given in Chapter 2.9 of [1].
+%
+%EXAMPLE:
+%Here, we validate the PDF by generating random samples and comparing the
+%PDF plot with a histogram of the random samples.
+% lambda=5;
+% numSamples=1e5;
+% figure(1)
+% clf
+% histogram(ExponentialD.rand([numSamples,1],lambda),'Normalization','pdf')
+% hold on
+% numPoints=1000;
+% x=linspace(0,2,numPoints);
+% vals=ExponentialD.PDF(x,lambda);
+% plot(x,vals,'linewidth',2)
+% h1=xlabel('x');
+% h2=ylabel('PDF(x)');
+% set(gca,'FontSize',14,'FontWeight','bold','FontName','Times')
+% set(h1,'FontSize',14,'FontWeight','bold','FontName','Times')
+% set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
+%One will see that the histogram matches well with the plot.
 %
 %REFERENCES:
 %[1] S. M. Ross, Simulation, Ed. 4, Amsterdam: Elsevier, 2006.
@@ -68,17 +104,27 @@ function val=PDF(x,lambda)
 end
 
 function val=CDF(x,lambda)
-%%CDF       Evaluate the CDF of the Nakagami-m probability distribution
-%           function at one or more desired points.
+%%CDF Evaluate the CDF of the Nakagami-m probability distribution function
+%     at one or more desired points.
 %
-%INPUTS:    x   The point(s) at which the Nakagami-m CDF is to be 
-%               evaluated. Note that x>=0.
-%        lambda The rate parameter of the distribution. lambda>0.
+%INPUTS: x The point(s) at which the Nakagami-m CDF is to be evaluated.
+%          Note that x>=0.
+%   lambda The rate parameter of the distribution. lambda>0.
 %
-%OUTPUTS:   prob The value(s) of the expoenntial CDF with given rate
-%                parameter evaluated at x.
+%OUTPUTS: prob The value(s) of the expoenntial CDF with given rate
+%              parameter evaluated at x.
 %
 %The CDF of the exponential distribution is given in Chapter 2.9 of [1].
+%
+%EXAMPLE:
+%We validate the CDF value by comparing it to a value computed from random
+%samples.
+% lambda=5;
+% x=0.25;
+% numSamples=1e5;
+% prob=ExponentialD.CDF(x,lambda)
+% probSamp=mean(ExponentialD.rand([numSamples,1],lambda)<=x)
+%One will see that both values are about 0.713.
 %
 %REFERENCES:
 %[1] S. M. Ross, Simulation, Ed. 4, Amsterdam: Elsevier, 2006.
@@ -95,16 +141,24 @@ function val=invCDF(prob,lambda)
 %%INVCDF Evaluate the inverse of the cumulative distribution function of
 %        the exponential distribution.
 %
-%INPUTS:    prob The probability or probabilities (0<=prob<=1) at which the 
-%                argument of the CDF is desired.
-%         lambda The rate parameter of the distribution. lambda>0.
+%INPUTS: prob The probability or probabilities (0<=prob<=1) at which the 
+%             argument of the CDF is desired.
+%      lambda The rate parameter of the distribution. lambda>0.
 %
-%OUTPUTS:   val  The argument(s) of the CDF that would give the probability
-%                or probabilities in prob.
+%OUTPUTS: val The argument(s) of the CDF that would give the probability or
+%             probabilities in prob.
 %
 %The CDF of the exponential distribution is very simple and is easily
 %inverted using logarithms, as is done here. The CDF of the exponential
 %distribution is given in Chapter 2.9 of [1].
+%
+%EXAMPLE:
+%Here, we validate the inverse CDF by showing it to be the inverse of the
+%CDF.
+% lambda=5;
+% x=0.25;
+% xBack=ExponentialD.invCDF(ExponentialD.CDF(x,lambda),lambda)
+%One will see that xBack is the same as x.
 %
 %REFERENCES:
 %[1] S. M. Ross, Simulation, Ed. 4, Amsterdam: Elsevier, 2006.
@@ -157,15 +211,14 @@ function cumVal=cumGenFun(lambda,numDerivs,t)
 %           generating function is the natural logarithm of the moment
 %           generating function.
 %
-%INPUTS: lambda  The rate parameter of the distribution. lambda>0.
-%     numDerivs  The number of derivatives to take with respect to the
-%                argument of the cumulant generating function.
-%                numDerivs>=0.
-%             t  The numPointsX1 or 1XnumPoints vector of points where the
-%                moment generating function should be evaluated. If this
-%                parameter is omitted or an empty matrix is passed, the
-%                default value of 0 is used. This function is only valid
-%                for t<lambda.
+%INPUTS: lambda The rate parameter of the distribution. lambda>0.
+%     numDerivs The number of derivatives to take with respect to the
+%               argument of the cumulant generating function, numDerivs>=0.
+%             t The numPointsX1 or 1XnumPoints vector of points where the
+%               moment generating function should be evaluated. If this
+%               parameter is omitted or an empty matrix is passed, the
+%               default value of 0 is used. This function is only valid
+%               for t<lambda.
 %
 %OUTPUTS: cumVal A numPointsX1 or 1XnumPoints vector of the values of the
 %                derivatives of the cumulant generating function given at
@@ -197,17 +250,16 @@ function cumVal=cumGenFun(lambda,numDerivs,t)
 end
 
 function vals=rand(N,lambda)
-%%RAND          Generate exponentially distributed random variables with 
-%               the specified rate parameter.
+%%RAND Generate exponentially distributed random variables with the
+%      specified rate parameter.
 %
-%INPUTS:    N      If N is a scalar, then rand returns an NXN 
-%                  matrix of random variables. If N=[M,N1] is a two-element  
-%                  row vector, then rand  returns an MXN1 matrix of 
-%                  random variables.
-%          lambda  The rate parameter of the distribution. lambda>0.
+%INPUTS: N If N is a scalar, then rand returns an NXN matrix of random
+%          variables. If N=[M,N1] is a two-element row vector, then rand 
+%          returns an MXN1 matrix of random variables.
+%   lambda The rate parameter of the distribution. lambda>0.
 %
-%OUTPUTS:   vals   A matrix whose dimensions are determined by N of the
-%                  generated exponential random variables.
+%OUTPUTS: vals A matrix whose dimensions are determined by N of the
+%              generated exponential random variables.
 %
 %This is an implementation of the inverse transform algorithm of Chapter
 %5.1 of [1].

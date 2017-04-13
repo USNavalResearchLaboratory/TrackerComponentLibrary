@@ -10,11 +10,11 @@ function [Jul1,Jul2]=TAI2TDB(Jul1,Jul2,deltaT,clockLoc)
 %                  terms. The date is broken into two parts to provide
 %                  more bits of precision. It does not matter how the date
 %                  is split.
-%        deltaT    An optional parameter specifying the offset between TT
+%           deltaT An optional parameter specifying the offset between TT
 %                  and UT1 in seconds. If this parameter is omitted or an
 %                  empty matrix is passed, then the value of the function
 %                  deltaTTUT1 will be used.
-%        clockLoc  An optional 3X1 vector specifying the location of the
+%         clockLoc An optional 3X1 vector specifying the location of the
 %                  clock in WGS-84 ECEF Cartesian [x;y;z] coordinates with
 %                  units of meters. Due to relativistic effects, clocks
 %                  that are synchronized with respect to TAI are not

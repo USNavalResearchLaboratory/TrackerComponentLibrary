@@ -55,7 +55,7 @@ cosVals=cos(pi*(k-0.5)/N);
 x=0.5*(tauStart+tauEnd+cosVals*(tauEnd-tauStart));
 fVals=f(x);
 
-a=(1/N)*discCosTrans(fVals,'II');
+a=(1/N)*discSinCosTrans(fVals,'CIIe');
 a(1)=0.5*a(1);
 
 end

@@ -1,5 +1,5 @@
 classdef InverseGammaD
-%Functions to handle the inverse gamma distribution.
+%%INVERSEGAMMAD Functions to handle the inverse gamma distribution.
 %Implemented methods are: mean, var, PDF, CDF, rand
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

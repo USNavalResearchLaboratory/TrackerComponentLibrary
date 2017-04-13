@@ -4,21 +4,21 @@ function val=calcMOSPAError(xEst,x,w)
 %                correct, compute the mean optimal sub-pattern assignment 
 %                error of the estimate.
 %
-%INPUTS:    xEst     The xDim X numTar estimate of numTar targets (or
-%                    separate vector values).
-%           x        An xDim X numTar X numHyp hypermatrix that holds
-%                    numHyp hypotheses each consisting or numTar targets
-%                    (or generic vectors) with xDim dimensions per target
-%                    (per generic vector). One should not pass x values
-%                    that are a combination of position and velocity
-%                    components, because the OSPA error in that instance
-%                    has no meaning. In general, the components of each
-%                    target vector for each hypothesis will be position
-%                    only.
-%           w        A numHyp X 1 vector of the probabilities of each of
-%                    the numHyp hypotheses in x. The elements must all be
-%                    positive and sum to one.
-%OUTPUTS:   val      The scalar MOSPA error
+%INPUTS: xEst The xDim X numTar estimate of numTar targets (or separate
+%             vector values).
+%           x An xDim X numTar X numHyp hypermatrix that holds numHyp
+%             hypotheses each consisting or numTar targets (or generic
+%             vectors) with xDim dimensions per target (per generic
+%             vector). One should not pass x values that are a combination
+%             of position and velocity components, because the OSPA error
+%             in that instance has no meaning. In general, the components
+%             of each target vector for each hypothesis will be position
+%             only.
+%           w A numHyp X 1 vector of the probabilities of each of the
+%             numHyp hypotheses in x. The elements must all be positive and
+%             sum to one.
+%
+%OUTPUTS: val The scalar MOSPA error.
 %
 %The definition of the OSPA statistic used here assumes a known number of
 %targets, p=2 and the other measure being the square of the L2 norm. In

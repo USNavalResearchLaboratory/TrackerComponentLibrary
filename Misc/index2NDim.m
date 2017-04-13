@@ -55,7 +55,6 @@ for curIdx=numDim:-1:1
     indices(curIdx,:)=wholeVal+1;
     idx=idx-wholeVal*maxVals(curIdx);
 end
-
 end
 
 %LICENSE:

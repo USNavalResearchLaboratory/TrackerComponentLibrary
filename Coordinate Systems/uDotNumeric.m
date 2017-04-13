@@ -43,7 +43,7 @@ function uDot=uDotNumeric(u,x,t,vertFunc,epsVal)
 %October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    if(nargin<5)
+    if(nargin<5||isempty(epsVal))
         epsVal=max(1e-4*norm(x(1:3)),1e-10);
     end
 

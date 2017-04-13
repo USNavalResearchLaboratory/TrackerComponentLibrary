@@ -1,12 +1,12 @@
 classdef LogNormalNormalD
-%Functions to handle a hybrid normal and lognormal distribution. Given
-%jointly normal random variables with mean mu and covariance matrix Sigma,
-%a hybrid normal lognormal random variable y is one where
-%y(1:NLog)=exp(x(1:NLog) and the rest of the element of y are just the
-%corresponding normal elements of x. Such a joint normal-lognormal
-%distribution might be useful, for example, for range measurements that are
-%modeled as log-normal and Doppler measurments that are modeled as
-%log-normal.
+%%LOGNORMALNORMALD Functions to handle a hybrid normal and lognormal
+%   distribution. Given jointly normal random variables with mean mu and
+%   covariance matrix Sigma, a hybrid normal lognormal random variable y is
+%   one where y(1:NLog)=exp(x(1:NLog) and the rest of the element of y are
+%   just the corresponding normal elements of x. Such a joint normal-
+%   lognormal distribution might be useful, for example, for range
+%   measurements that are modeled as log-normal and Doppler measurments
+%   that are modeled as normal.
 %Implemented methods are: PDF, rand
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

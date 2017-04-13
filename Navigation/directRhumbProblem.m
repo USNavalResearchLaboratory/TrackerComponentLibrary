@@ -40,7 +40,7 @@ function latLonEnd=directRhumbProblem(latLonStart,azimuth,dist,height,a,f,numSte
 %The algorithm for zero-altitude is taken from [1]. However, a formula
 %using isometric latitudes, which are described in Chapter 3 of [2] to get
 %the azimuth angle was used, because it is simpler. The formula is
-%also explicitely mentioned in Equation 2 of [3]. However, the expression
+%also explicitly mentioned in Equation 2 of [3]. However, the expression
 %for computing the distance from [3] is only for a sphere, not for an
 %ellipsoid, which is why the Carlton-Wippern distance computation using an
 %incomplete elliptic integral of the second kind is preferred.
@@ -57,8 +57,7 @@ function latLonEnd=directRhumbProblem(latLonStart,azimuth,dist,height,a,f,numSte
 %    Navigation, vol. 45, no. 2, pp. 292-297, May 1992.
 %[2] J. P. Snyder, "Map projections- a working manual," U.S. Geological
 %    Survey, Tech. Rep. 1395, 1987.
-%[3] The formula is also explicitely mentioned in Equation 2 of J.
-%    Alexander, "Loxodromes: A rhumb way to go," Mathematics Magazine,
+%[3] J. Alexander, "Loxodromes: A rhumb way to go," Mathematics Magazine,
 %    vol. 77, no. 5, pp. 349-356, Dec. 2004.
 %[4] D. F. Crouse, "Simulating aerial targets in 3D accounting for the
 %    Earth's curvature," Journal of Advances in Information Fusion, vol.
@@ -67,7 +66,7 @@ function latLonEnd=directRhumbProblem(latLonStart,azimuth,dist,height,a,f,numSte
 %October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<7)
+if(nargin<7||isempty(numSteps4Circ))
 %This is the number of steps that would be taken to travel a distance of
 %2*pi*a (circumnavigate the globe the long way). This is a design parameter
 %that should be large enough to ensure that the results are accurate.
@@ -75,15 +74,15 @@ if(nargin<7)
     numSteps4Circ=2000;
 end
 
-if(nargin<6)
+if(nargin<6||isempty(f))
     f=Constants.WGS84Flattening;
 end
 
-if(nargin<5)
+if(nargin<5||isempty(f))
     a=Constants.WGS84SemiMajorAxis;
 end
 
-if(nargin<4)
+if(nargin<4||isempty(height))
    height=0; 
 end
 
@@ -197,9 +196,9 @@ else
     %When traveling along a rhumb-line, the local coordinate system is
     %known at all times: it is the local ENU coordinate system. The local
     %basis vectors are deterministially known at all places on the Earth.
-    uDet=@(x,t)getENUAxes(Cart2Ellipse(x(1:3)));
+    uDet=@(x,t)getENUAxes(Cart2Ellipse(x(1:3),[],a,f));
     xList=RungeKCurvedAtTimes(xInit,[],[0;1],aDyn,uDet,stepSize,4);
-    plhEnd=Cart2Ellipse(xList(1:3,end),a,f);
+    plhEnd=Cart2Ellipse(xList(1:3,end),[],a,f);
     latLonEnd=plhEnd(1:2);%The Cartesian location at the end of the trajectory.
 end
 end

@@ -1,5 +1,8 @@
 classdef BinomialD
-%Functions to handle the binomial distribution.
+%%BINOMIALD Functions to handle the binomial distribution. The binomial
+%           distribution is the distribution of the number of successes in
+%           a sequence of n independent trials, each with a probability of
+%           success p.
 %Implemented methods are: mean, var, PMF, CDF, rand
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -7,14 +10,23 @@ classdef BinomialD
 methods(Static)
 
 function val=mean(n,p)
-%%MEAN  Obtain the mean of the binomial distribution for the given number
-%       of trials and probability of success.
+%%MEAN Obtain the mean of the binomial distribution for the given number of
+%      trials and probability of success.
 %
-%INPUTS: n  The number of trials performed.
-%        p  The probability of success for the underlying Bernoulli trials.
-%           0<=p<=1.
+%INPUTS: n The number of trials performed.
+%        p The probability of success for the underlying Bernoulli trials.
+%          0<=p<=1.
 %
-%OUTPUTS: val  The mean number of successes for the binomial distribution.
+%OUTPUTS: val The mean number of successes for the binomial distribution.
+%
+%EXAMPLE:
+%We verify the computed mean by comparing it to the sample mean.
+% p=0.75;
+% n=61;
+% meanVal=BinomialD.mean(n,p)
+% numSamp=1e5;
+% sampMeanVal=mean(BinomialD.rand([1,numSamp],n,p))
+%One will find both values are about 45.75.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
@@ -22,15 +34,25 @@ function val=mean(n,p)
 end
 
 function val=var(n,p)
-%%VAR   Obtain the variance of the binomial distribution for the given
-%       number of trials and probability of success.
+%%VAR Obtain the variance of the binomial distribution for the given number
+%     of trials and probability of success.
 %
-%INPUTS: n  The number of trials performed.
-%        p  The probability of success for the underlying Bernoulli trials.
-%           0<=p<=1.
+%INPUTS: n The number of trials performed.
+%        p The probability of success for the underlying Bernoulli trials.
+%          0<=p<=1.
 %
-%OUTPUTS: val  The variance of the binomial distribution with the given
-%              parameters.
+%OUTPUTS: val The variance of the binomial distribution with the given
+%             parameters.
+%
+%EXAMPLE:
+%We verify that the computed variance by comparing it to the sample
+%variance.
+% p=0.75;
+% n=61;
+% varVal=BinomialD.var(n,p)
+% numSamp=1e5;
+% sampVarVal=var(BinomialD.rand([1,numSamp],n,p))
+%One will find both values are about 11.4375.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
@@ -38,57 +60,91 @@ function val=var(n,p)
 end
 
 function val=PMF(k,n,p)
-%%PMF         Evaluate the binomial probability mass function at a given
-%             point with a specified number of trials and success
-%             probability per trial.
+%%PMF Evaluate the binomial probability mass function at a given point with
+%     a specified number of trials and success probability per trial.
 %
-%INPUTS: k  The nonnegative integer point(s) at which the binomial PMF is
-%           to be evaluated (the number of successes in n trials). Note
-%           that 0<=k<=n.
-%        n  The number of trials of which k successes are observed.
-%        p  The probability of success for the underlying Bernoulli trials.
-%           0<=p<=1.
+%INPUTS: k The nonnegative integer point(s) at which the binomial PMF is to
+%          be evaluated (the number of successes in n trials). Note that
+%          0<=k<=n.
+%        n The number of trials of which k successes are observed.
+%        p The probability of success for the underlying Bernoulli trials.
+%          0<=p<=1.
 %
 %OUTPUT: val The value(s) of the binomial PMF with success probability p.
 %
 %The binomial PMF provides the probability of k successes from n trials,
 %each with a success probability of p.
 %
+%EXAMPLE:
+%Here, we validate the PMF by generating random samples and comparing the
+%PMF plot with a histogram of the random samples.
+% p=0.75;
+% n=61;
+% numSamples=1e5;
+% figure(1)
+% clf
+% histogram(BinomialD.rand([numSamples,1],n,p),'Normalization','pdf')
+% hold on
+% x=0:61;
+% vals=BinomialD.PMF(x,n,p);
+% stem(x,vals,'linewidth',2)
+% h1=xlabel('x');
+% h2=ylabel('PDF(x)');
+% set(gca,'FontSize',14,'FontWeight','bold','FontName','Times')
+% set(h1,'FontSize',14,'FontWeight','bold','FontName','Times')
+% set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
+%One will see that the histogram matches well with the plot.
+%
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
     numPoints=length(k);
     val=zeros(size(k));
     for curK=1:numPoints
-        val(curK)=binomial(n,k(curK))*p^k(curK)*(1-p)^(n-k(curK));
+        if(k(curK)>=0&&k(curK)<=n)
+            val(curK)=binomial(n,k(curK))*p^k(curK)*(1-p)^(n-k(curK));
+        end
     end
 end
 
 function val=CDF(k,n,p)
-%%CDF         Evaluate the cumulative distribution function of the
-%             binomial distribution at a desired point.
+%%CDF Evaluate the cumulative distribution function of the binomial
+%     distribution at a desired point.
 %
-%INPUTS: k  The nonnegative integer point(s) at which the binomial CDF is
-%           to be evaluated. Note that 0<=k<=n.
-%        n  The number of trials of which k or fewer successes are
-%           observed.
-%        p  The probability of success for the underlying Bernoulli trials.
-%           0<=p<=1.
+%INPUTS: k The nonnegative integer point(s) at which the binomial CDF is to
+%          be evaluated. Note that 0<=k<=n.
+%        n The number of trials of which k or fewer successes are observed.
+%        p The probability of success for the underlying Bernoulli trials.
+%          0<=p<=1.
 %
-%OUTPUTS: val  The CDF of the binomial distribution evaluated at the
-%              desired point(s).
+%OUTPUTS: val The CDF of the binomial distribution evaluated at the desired
+%             point(s).
 %
 %Rather than summing over the values of the PMF, the equivalency between
 %the binomial distribution and the regularized incomplete beta function,
 %described at [1] is used. Thus, the built-in function betainc can be used
 %for efficient evaluation of the CDF with large values.
 %
+%EXAMPLE:
+%We validate the CDF value by comparing it to a value computed from random
+%samples.
+% p=0.75;
+% n=61;
+% x=45;
+% numSamples=1e5;
+% prob=BinomialD.CDF(x,n,p)
+% probSamp=mean(BinomialD.rand([numSamples,1],n,p)<=x)
+%One will find the values ot both be about 0.460.
+%
 %REFERENCES:
 %[1] Weisstein, Eric W. "Binomial Distribution." From MathWorld--A Wolfram
 %    Web Resource. http://mathworld.wolfram.com/BinomialDistribution.html
 %
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
-
-    val=betainc(1-p,n-k,k+1);
+    
+    val=zeros(size(k));
+    sel=k>=0&k<=n;
+    
+    val(sel)=betainc(1-p,n-k(sel),k(sel)+1);
 end
     
 function vals=rand(N,n,p)

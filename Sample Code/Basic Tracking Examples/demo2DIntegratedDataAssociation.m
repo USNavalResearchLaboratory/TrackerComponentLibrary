@@ -3,7 +3,10 @@ function demo2DIntegratedDataAssociation()
 %                       Neighbor (GNN) Joint Integrated Probabilistic Data
 %                       Association Filter (JIPDAF) can be used to track
 %                       targets performing automatic track initiation and
-%                       termination.
+%                       termination. This is a simple scenario where no
+%                       gating/ clustering is performed, so approximate
+%                       data association probabilities must be used for the
+%                       problem to be computationally practicable.
 %
 %This is a simple two-dimensional (x,y) simulation scenario involving two
 %maneuvering aircraft that cross, come within close range of each other and
@@ -22,7 +25,7 @@ function demo2DIntegratedDataAssociation()
 %on where they are. To simplify the presentation here, all measurements are
 %taken to be at the same time.
 %
-%As approximate target-measuremnet association probabilities are used here,
+%As approximate target-measurement association probabilities are used here,
 %it was observed that the algorithm is sufficiently fast without performing
 %gating and then jointly processing groups of targets that gate with common
 %measurements together. That is, all targets are processed jointly in this
@@ -62,10 +65,10 @@ function demo2DIntegratedDataAssociation()
 %July 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-display('An example of simple Kalman filter with Gauss-Markov model, data association, and track initiation/ termination in 2D') 
+disp('An example of a simple Kalman filter with Gauss-Markov model, data association, and track initiation/ termination in 2D') 
 
 %%%SETUP THE MODEL
-display('Setting parameters and creating the simulated trajectories.') 
+disp('Setting parameters and creating the simulated trajectories.') 
 PD=0.8;%Detection probability --same for all targets.
 
 %Assumed clutter parameter in terms of false alarms per meter-radian
@@ -81,6 +84,7 @@ lambda=2e-5;
 %Use the GNN-JIPDAF with approximate association probabilities.
 algSel1=4;
 algSel2=0;
+param3=[];
 
 %Assumed standard deviations of the measurement noise components.
 sigmaR=10;
@@ -146,7 +150,7 @@ SQ=chol(Q,'lower');
 
 F=FGaussMarkov(T,zeros(xDim,1),tau,1);%State transition matrix
 
-display('Generating measurements.') 
+disp('Generating measurements.') 
 
 %Generate measurements and false alarms for each scan.
 zMeasCart=cell(numSamples,1);
@@ -193,7 +197,7 @@ for curScan=1:numSamples
         
         %We will now convert the measurements into Cartesian coordinates as
         %we are using a converted-measurement filter.
-        [zMeasCart{curScan},RMeasCart]=pol2CartCubature(zCur,SR,[],xi,w);
+        [zMeasCart{curScan},RMeasCart]=pol2CartCubature(zCur,SR,0,true,[],[],[],xi,w);
         
         %Take the lower-triangular square root of the covariance matrices.
         for curMeas=1:numMeas
@@ -204,7 +208,7 @@ for curScan=1:numSamples
 end
 
 %Now for the tracker with integrated track initiation/ termination.
-display('Running the integrated tracking algorithm.') 
+disp('Running the integrated tracking algorithm.') 
 
 %We will save the value of each track at each time. Thus, a cell array
 %holds the track states at each time. The first column in xStates is the
@@ -261,12 +265,12 @@ for curScan=1:numSamples
         
         %Brute-force hypothesis formation and likelihood matrix
         %computation. A is the likelihood matrix.
-        measJacob=@(z)calcPolarJacob(z,0);
+        measJacob=@(z)calcPolarConvJacob(z,0);
         %The inclusion of r takes into account the track existence
         %probabilities.
-        [A,xHyp,PHyp]=makeStandardCartLRMatHyps(x,S,H,zCur,SRCur,PD,lambda,r,zCurPolar,measJacob);
+        [A,xHyp,PHyp]=makeStandardCartOnlyLRMatHyps(x,S,zCur,SRCur,PD,lambda,r,[],zCurPolar,measJacob);
         
-        [xUpdate,PUpdate,rUpdate,probNonTargetMeas]=singleScanUpdateWithExistence(xHyp,PHyp,PD,r,A,algSel1,algSel2);
+        [xUpdate,PUpdate,rUpdate,probNonTargetMeas]=singleScanUpdateWithExistence(xHyp,PHyp,PD,r,A,algSel1,algSel2,param3);
         
         %Determine which tracks to drop because their existence
         %probabilities are below the termination probability.
@@ -295,14 +299,14 @@ for curScan=1:numSamples
         SStates{curScan}=cat(3,SNew,SUpdate);
         rStates{curScan}=[rNew;rUpdate];
     else
-    xStates{curScan,1}=xNew;
-    xStates{curScan,2}=xIDNew;
-    SStates{curScan}=SNew;
-    rStates{curScan}=rNew;
+        xStates{curScan,1}=xNew;
+        xStates{curScan,2}=xIDNew;
+        SStates{curScan}=SNew;
+        rStates{curScan}=rNew;
     end
 end
 
-display('Displaying contacts, true tracks, and tracks found.') 
+disp('Displaying contacts, true tracks, and tracks found.') 
 
 figure(1)
 clf
@@ -359,7 +363,7 @@ end
 
 h1=xlabel('x meters');
 h2=ylabel('y meters');
-h3=title('The True Trajectories');
+h3=title('True and Estimated Trajectories');
 set(gca,'FontSize',14,'FontWeight','bold','FontName','Times')
 set(h1,'FontSize',14,'FontWeight','bold','FontName','Times')
 set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')

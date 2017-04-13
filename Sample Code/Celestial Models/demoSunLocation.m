@@ -42,7 +42,7 @@ rSunLoc=rSunITRS-obsLoc;
 
 %A rotation matrix that rotates the z-axis to the direction of
 %the Sun.
-R=rotZAxis2Vec(rSunLoc/norm(rSunLoc));
+R=rotAxis2Vec(rSunLoc/norm(rSunLoc));
 
 %Rotate a set of unit vectors such that x-and y are in the
 %plane orthogonal to the vector going from the observer to the

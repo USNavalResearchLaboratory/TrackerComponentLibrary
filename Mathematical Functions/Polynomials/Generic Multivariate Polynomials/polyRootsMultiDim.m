@@ -77,7 +77,7 @@ function [rootVals,exitCode]=polyRootsMultiDim(polyCoeffMats,maxDegIncreases,use
 %nullspace havign the nice sparse structure as used in [1]. However,
 %Section 6.2.3 demonstrated that the choice of basis for the nullspace does
 %not change the final solution. Thus, the option to use the (possibly more
-%stable) null command (which uses singular vlaue decomposition) is offered,
+%stable) null command (which uses singular value decomposition) is offered,
 %though it does require keeping track of the entire Macaulay matrix.
 %
 %Though the Macaulay matrix has a sparse quasi-Toeplitz structure, the
@@ -346,7 +346,7 @@ function W=MotzkinRow(b,epsVal)
 n=length(b);
 W=zeros(n,n-1);
 
-%Explicitely zero values that are too small in magnitude.
+%Explicitly zero values that are too small in magnitude.
 b(abs(b)<epsVal)=0;
 
 %Step 1: Find the rightmost pivot. This is the rightmost nonzero value.
@@ -427,11 +427,11 @@ for i=1:s%Going through all the polynomials
 
     degree=d0-d(i);
     
-    %For each order, all possible monomials are given by all
-    %compositions of degree into n parts (as n is the number of
+    %For each value n, all possible monomials are given by all
+    %compositions of the degree into n parts (as n is the number of
     %variables). Of course, these compositions are defined such that 
     %the minimum value in each element is 1 and we want it to be zero,
-    %so we have to adjust for that
+    %so we have to adjust for that.
 
     numMonomials=binomial(degree+n-1,n-1);
     for j=0:(numMonomials-1)

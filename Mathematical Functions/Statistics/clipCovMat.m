@@ -1,0 +1,75 @@
+function P=clipCovMat(P,maxVals)
+%%CLIPCOVMAT Force the diagonal elements of a covariance matrix to be no
+%         larger than certain values while still keeping the matrix a valid
+%         covariance matrix. This function is useful if one wishes to set a
+%         maximum value on the uncertainty in certain components of a
+%         target state based on reasonable physical upper bounds. For
+%         example, if a target type cannot go over 100m/s, but the 99%
+%         confidence region of the target covers +/-10^8 meters per second,
+%         it can be reasonable to shrink the region.
+%
+%INPUTS:  P An NXNXnumMats set of numMats covariance matrices.
+%   maxVals A 1XN or NX1 vector that contains the maximum positive value
+%           allowed on each diagonal element of the matrices. If only a
+%           scalar is passed, then the same value is used for all N
+%           dimensions.
+%
+%OUTPUTS: P The NXNXnumMats set of matrices after scaling so the diagonal
+%           elements are no larger than the values in maxVals.
+%
+%The diagonal elements of a covariance matrix are related to the largest
+%rectangle that a certain uncertainty ellipsoid can be placed in. This is
+%derived in Appendix A of [1].
+%
+%We cannot just shrink the diagonal elements without adjusting the cross
+%terms or the matrix can fail to remain positive definite. It is well known
+%that multiplying a random variable v by a matrix S, S*v, changes the
+%covariance matrix of the random variable from P to S*P*S'. Thus, we choose
+%a diagonal matrix S such that the diagonal elements of P that are too
+%large are scaled to the appropriate size. One would hope that this type of
+%scaling would retain reasonable covariance cross terms for a target
+%tracking algorithm. 
+%
+%REFERENCES:
+%[1] A. B. Poore, "Complexity reduction in MHT/MFA tracking," in
+%    Proceedings of SPIE: Signal and Data Processing of Small Targets, vol.
+%    5913, San Diego, CA, 31 Jul. 2005.
+%
+%March 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+numDim=length(P);
+numMats=size(P,3);
+
+if(isscalar(maxVals))
+    maxVals=maxVals*ones(numDim,1);
+end
+
+for curMat=1:numMats
+    S=eye(numDim,numDim);
+    for curDim=1:numDim
+       if(P(curDim,curDim,curMat)>maxVals(curDim))
+           S(curDim,curDim)=sqrt(maxVals(curDim)/P(curDim,curDim,curMat));
+       end
+    end
+    P(:,:,curMat)=S*P(:,:,curMat)*S';
+end
+end
+
+%LICENSE:
+%
+%The source code is in the public domain and not licensed or under
+%copyright. The information and software may be used freely by the public.
+%As required by 17 U.S.C. 403, third parties producing copyrighted works
+%consisting predominantly of the material produced by U.S. government
+%agencies must provide notice with such work(s) identifying the U.S.
+%Government material incorporated and stating that such material is not
+%subject to copyright protection.
+%
+%Derived works shall not identify themselves in a manner that implies an
+%endorsement by or an affiliation with the Naval Research Laboratory.
+%
+%RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF THE
+%SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY THE NAVAL
+%RESEARCH LABORATORY FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE ACTIONS
+%OF RECIPIENT IN THE USE OF THE SOFTWARE.

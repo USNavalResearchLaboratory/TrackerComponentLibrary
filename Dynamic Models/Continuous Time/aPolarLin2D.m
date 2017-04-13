@@ -1,22 +1,22 @@
 function val=aPolarLin2D(x,t,T)
-%APOLARLIN2D  The drift function for a 2D continuous-time constant heading
-%             motion model where the target state is given in terms of
-%             position, direction of velocity in radians counterclockwise
-%             from the x-axis, and speed. Optionally, a speed derivative
-%             component can be given to model possible linear target
-%             acceleration.
+%APOLARLIN2D The drift function for a 2D continuous-time constant heading
+%            motion model where the target state is given in terms of
+%            position, direction of velocity in radians counterclockwise
+%            from the x-axis, and speed. Optionally, a speed derivative
+%            component can be given to model possible linear target
+%            acceleration.
 %
-%INPUTS:    x The 4XN set of target state vectors in 2D space in the order
-%             of [2D position;direction angle;speed] where the heading
-%             angle is measured in radians counterclockwise from the
-%             x-axis. Alternatively, a 5XN state vector of
-%             [2D position;direction angle;speed; speed derivative] can be
-%             used to cover a linearly accelerating target.
-%           t An unused time component so that aPolar2DCV can be used with
-%             Runge-Kutta methods that expect the function to take two
-%             parameters.
-%          T  The time-duration of the propagation interval in seconds.
-%             This is only needed when linear acceleration is included.
+%INPUTS: x The 4XN set of target state vectors in 2D space in the order of
+%          of [2D position;direction angle;speed] where the heading angle
+%          is measured in radians counterclockwise from the x-axis.
+%          Alternatively, a 5XN state vector of [2D position;direction
+%          angle;speed; speed derivative] can be used to cover a linearly
+%          accelerating target.
+%        t An unused time component so that aPolar2DCV can be used with
+%          Runge-Kutta methods that expect the function to take two
+%          parameters.
+%        T The time-duration of the propagation interval in seconds. This
+%          is only needed when linear acceleration is included.
 %
 %OUTPUTS: val The 4XN or 5XN set of time-derivatives of the state under the
 %             constant heading motion model.

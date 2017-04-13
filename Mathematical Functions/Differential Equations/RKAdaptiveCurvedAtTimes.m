@@ -8,74 +8,67 @@ function [xList,uList]=RKAdaptiveCurvedAtTimes(xInit,uInit,times,aDyn,uFunc,init
 %                     system. This Runge-Kutta method is used to integrate
 %                     flat-Earth models on a curved Earth.
 %
-%INPUTS:    xInit    The initial value of the state (scalar or vector) over
-%                    which integration is being performed. The first three
-%                    components of xInit must be the position in global
-%                    Cartesian coordinates. The next 3 components must be
-%                    the target velocity in local (flat) Cartesian
-%                    coordinates. The other components are arbitrary in the
-%                    local coordinate system.
-%           uInit    If the basis vectors evolve according to a
-%                    differential equation, as is the case when moving
-%                    along geodesics on the surface of the Earth, then this
-%                    is a 3X 3 matrix of vectors specifying the local
-%                    coordinate axes. uInit(:,i) coresponds to the ith
-%                    position component in xInite. That is xInit(i) for i
-%                    from 1 to 3. On the other hand, if the basis vectors
-%                    are deterministically known at all locations as a
-%                    function of x and t, then an
-%                    empty matrix should be passed for uInit.
-%           times    The times at which state estimates are desired.
-%                    times(1) is the time of xInit.
-%           aDyn     aDyn(xVal,curT) returns the derivative of the state
-%                    taken at time curT. If this parameter is omitted, then
-%                    aDyn=@(x,t)aPoly(x,t,3); will be used. This assumes
-%                    that the state is in 3D and a simple, position,
-%                    velocity, etc. motion model is used.
-%           uFunc    If uInit is not empty, then uFunc is a function handle
-%                    of the form uDyn(u,x,t) that returns the
-%                    derivatives of the basis vectors, where u is the
-%                    current set of basis vectors, as is the case when
-%                    traveling a geodesic curve. If uInit is an empty
-%                    matrix, then uFunc should be a function handle of the
-%                    form uBasis(x,t), where x is the state and t is the
-%                    time, that returns the local basis vectors in the
-%                    global coordinate system. If omitted, and uInit is not
-%                    empty, then it is assumed that one is traveling
-%                    geodesic-style trajectories on the WGS-84 reference
-%                    ellipsoid and the function uDotEllipsoid is used as
-%                    the derivative function. If omitted and uInit is
-%                    empty, then it is assumed that one is traveling
-%                    constant-heading trajectories (rhumb-lines) on the
-%                    WGS-84 reference ellipsoid and the function
-%                    @(x,t)getENUAxes(ellips2Cart(x(1:3))) is used.
-%    initStepSize   An optional initial step size (in t) to use for the
-%                   integration. If omitted or an empty matrix is passed,
-%                   an ad-hoc method is used to find an initial step size.
-%           order   The order of the Runge-Kutta method. If this parameter
-%                   is omitted, then the default order of 4 is used. Order
-%                   can range from 1 to 7.
-%   solutionChoice  When multiple formulae are implemented, this selects
-%                   which one to use. Otherwise, this parameter is not
-%                   used. Currently, only the order=4 method has multiple
-%                   solutions implemented in which case omitting this
-%                   parameter or setting it to zero used the Dormand and
-%                   Prince Algorithm, and setting it to 1 uses the Fehlberg
-%                   algorithm.
-%         RelTol    The maximum relative error tolerance allowed, a
-%                   positive scalar. If omitted or an empty matrix is
-%                   passed, the default value of 1e-3 is used.
-%         AbsTol    The absolute error tolerance allowed, a positive
-%                   scalar, of the same for all components of x, or a
-%                   positive NX1 vector. If omitted or an empty matrix is
-%                   passed, the default value of 1e-6 is used.
-%       maxSteps    The maximum allowable number of steps to perform the
-%                   integration. If omitted, the default of 1024 is used.
+%INPUTS: xInit The initial value of the state (scalar or vector) over which
+%              integration is being performed. The first three components
+%              of xInit must be the position in global Cartesian
+%              coordinates. The next 3 components must be the target
+%              velocity in local (flat) Cartesian coordinates. The other
+%              components are arbitrary in the local coordinate system.
+%        uInit If the basis vectors evolve according to a differential
+%              equation, as is the case when moving along geodesics on the
+%              surface of the Earth, then this is a 3X 3 matrix of vectors
+%              specifying the local coordinate axes. uInit(:,i) coresponds
+%              to the ith position component in xInite. That is xInit(i)
+%              for i from 1 to 3. On the other hand, if the basis vectors
+%              are deterministically known at all locations as a function
+%              of x and t, then an empty matrix should be passed for uInit.
+%        times The times at which state estimates are desired. times(1) is
+%              the time of xInit.
+%         aDyn aDyn(xVal,curT) returns the derivative of the state taken at
+%              time curT. If this parameter is omitted, then
+%              aDyn=@(x,t)aPoly(x,t,3); will be used. This assumes that the
+%              state is in 3D and a simple, position, velocity, etc. motion
+%              model is used.
+%        uFunc If uInit is not empty, then uFunc is a function handle of
+%              the form uDyn(u,x,t) that returns the derivatives of the
+%              basis vectors, where u is the current set of basis vectors,
+%              as is the case when traveling a geodesic curve. If uInit is
+%              an empty matrix, then uFunc should be a function handle of
+%              the form uBasis(x,t), where x is the state and t is the
+%              time, that returns the local basis vectors in the global
+%              coordinate system. If omitted, and uInit is not empty, then
+%              it is assumed that one is traveling geodesic-style
+%              trajectories on the WGS-84 reference ellipsoid and the
+%              function uDotEllipsoid is used as the derivative function.
+%              If omitted and uInit is empty, then it is assumed that one
+%              is traveling constant-heading trajectories (rhumb-lines) on
+%              the WGS-84 reference ellipsoid and the function
+%              @(x,t)getENUAxes(ellips2Cart(x(1:3))) is used.
+% initStepSize An optional initial step size (in t) to use for the
+%              integration. If omitted or an empty matrix is passed, an
+%              ad-hoc method is used to find an initial step size.
+%        order The order of the Runge-Kutta method. If this parameter is
+%              omitted, then the default order of 4 is used. Order can
+%              range from 1 to 7.
+% solutionChoice When multiple formulae are implemented, this selects which
+%              one to use. Otherwise, this parameter is not used.
+%              Currently, only the order=4 method has multiple solutions
+%              implemented in which case omitting this parameter or setting
+%              it to zero used the Dormand and Prince Algorithm, and
+%              setting it to 1 uses the Fehlberg algorithm.
+%       RelTol The maximum relative error tolerance allowed, a positive
+%              scalar. If omitted or an empty matrix is passed, the default
+%              value of 1e-3 is used.
+%       AbsTol The absolute error tolerance allowed, a positive scalar, of
+%              the same for all components of x, or a positive NX1 vector.
+%              If omitted or an empty matrix is passed, the default value
+%              of 1e-6 is used.
+%     maxSteps The maximum allowable number of steps to perform the
+%              integration. If omitted, the default of 1024 is used.
 %
-%OUTPUTS:   xList   The target state at the times given in times.
-%           uList   If uInit is not empty, (if the basis vectors are not
-%                   deterministic), then this is the  3*3*numTimes local
-%                   coordinate system axes at the times given in times.
+%OUTPUTS: xList The target state at the times given in times.
+%         uList This is the  3*3*numTimes local coordinate system axes at
+%               the times given in times.
 %
 %This function maps an arbitrary continuous-time, deterministic flat-Earth
 %dynamic model to curvature of the WGS-84 ellipsoid. The algorithm is
@@ -132,6 +125,13 @@ numTimes=length(times);
 if(isempty(uInit))
     aDynGlob=@(x,t)aDynFlat2CurvedUDet(x,t,aDyn,uFunc);
     xList=RKAdaptiveAtTimes(xInit,times,aDynGlob,initStepSize,order,solutionChoice,RelTol,AbsTol,maxSteps);
+
+    if(nargout>1)
+        uList=zeros(3,3,numTimes);
+        for curTime=1:numTimes
+            uList(:,:,curTime)=uFunc(xList(:,curTime),times(curTime));
+        end
+    end
 else
 %We have to perform integration over a stacked state and basis vector set.
     xStacked=[xInit;uInit(:)];

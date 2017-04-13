@@ -6,11 +6,11 @@ function val=harmonicMean(x,dim)
 %          the parameter dim.
 %      dim An optional parameter specifying over which dimension of x the
 %          harmonic mean is to be taken. If dim is omitted or an empty
-%          matrix is passsed, then if x is a vector, the harmionic mean is
+%          matrix is passsed, then if x is a vector, the harmonic mean is
 %          found over all elements of the vector. If x is a matrix, then
 %          the mean is found over the columns of the matrix (resulting in a
 %          row vector), and if x is an n-dimensional (n>2) matrix, then the
-%          geometric mean is found over the first non-singleton dimension
+%          harmonic mean is found over the first non-singleton dimension
 %          of the matrix.
 %
 %OUTPUT: val The harmonic mean of x taken over the appropriate dimension.

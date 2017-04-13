@@ -1,5 +1,5 @@
 classdef ParetoTypeID
-%Functions to handle type I of the Pareto distribution.
+%%PARETOTYPID Functions to handle type I of the Pareto distribution.
 %Implemented methods are: PDF, CDF, invCDF, mean, var, rand
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

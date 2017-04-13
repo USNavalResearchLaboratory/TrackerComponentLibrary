@@ -15,7 +15,7 @@ function cPoly=composePolys(a,b)
 %OUTPUTS: c Coefficients for the power series that represents the
 %           substitution of the polynomial b into a.
 %
-%The substitution is performed by explicitely evaluating power of b (via
+%The substitution is performed by explicitly evaluating power of b (via
 %repeated convolutions), multiplying the powers by the appropriate value in
 %a and summing the results.
 %

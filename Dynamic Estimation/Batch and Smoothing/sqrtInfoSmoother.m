@@ -88,7 +88,7 @@ function [ySqrtEst, PInvSqrtEst]=sqrtInfoSmoother(ySqrtPred,PInvSqrtPred,z,u,H,F
 %
 %REFERENCES:
 %[1] G. J. Bierman, "Factorization Methods for Discrete Sequential
-%Estimation. Academic Press, New York, 1977.
+%    Estimation. Academic Press, New York, 1977.
 %
 %March 2015, David Karnick, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

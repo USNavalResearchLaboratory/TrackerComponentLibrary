@@ -89,7 +89,7 @@ while(j<maxIter)
     Delta=CCur*DCur;
     f=f*Delta;
     
-    if(abs(Delta-1)<eps)
+    if(abs(Delta-1)<epsVal)
         break;
     end
     j=j+1;

@@ -99,7 +99,7 @@ for r=0:order
     F1(r+1,end)=(-tau)^(order-r)*(exp(-T/tau)-sum(((-T/tau).^iSpan)./factorial(iSpan)));
 end
 
-%Then repeat the matrix across multiple dimensions. THis is done using a
+%Then repeat the matrix across multiple dimensions. This is done using a
 %Kronecker product.
 F=kron(F1,eye(numDim));
 

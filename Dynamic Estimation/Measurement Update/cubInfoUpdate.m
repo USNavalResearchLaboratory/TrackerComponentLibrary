@@ -1,56 +1,53 @@
-function [yUpdate,PInvUpdate]=cubInfoUpdate(yPred,PInvPred,z,RInv,h,xi,w,innovTrans,measAvgFun,stateDiffTrans)
+function [yUpdate,PInvUpdate,innov]=cubInfoUpdate(yPred,PInvPred,z,RInv,h,xi,w,innovTrans,measAvgFun,stateDiffTrans)
 %%CUBINFOUPDATE Perform the measurement update step in the cubature
 %               information filter.
 %
-%INPUTS:    yPred   The xDimX1 predicted information state. The information
-%                   state is the inverse covariance matrix times the target
-%                   state.
-%        PInvPred   The xDimXxDim inverse of the predicted state covariance
-%                   matrix.
-%           z       The zDim X 1 vector measurement.
-%           RInv    The zDim X zDim inverse of the measurement covariance
-%                   matrix in the native coordinate system of the
-%                   measurement.
-%           h       A function handle for the measurement function that
-%                   takes the state as its argument.
-%           xi      An xDim X numCubPoints matrix of cubature points. If
-%                   this and the next parameter are omitted or empty
-%                   matrices are passed, then fifthOrderCubPoints(xDim) is
-%                   used for xDim>1 and quadraturePoints1D(3) for xDim=1.
-%                   It is suggested that xi and w be provided to avoid
-%                   needless recomputation of the cubature points.
-%           w       A numCubPoints X 1 vector of the weights associated
-%                   with the cubature points.
-%        innovTrans An optional function handle that transforms the value
-%                   of the difference between the observation and any
-%                   predicted points. This must be able to handle sets of
-%                   differences. For a zDim measurement, this must be able
-%                   to handle a zDimXN matrix of N differences. This only
-%                   needs to be supplied when a measurement difference must
-%                   be restricted to a certain range. For example, the
-%                   innovation between two angles will be 2*pi if one angle
-%                   is zero and the other 2*pi, even though they are the
-%                   same direction. In such an instance, a function
-%                   handle to the wrapRange function with the appropriate
-%                   parameters should be passed for innovTrans.
-%       measAvgFun  An optional function handle that, when given N 
-%                   measurement values with weights, produces the weighted
-%                   average. This function only has to be provided if the
-%                   domain of the measurement is not linear. For example,
-%                   when averaging angular values, then the function
-%                   meanAng should be used.
-%    stateDiffTrans An optional function handle that, like innovTrans does
-%                   for the measurements, takes an xDimXN matrix of N
-%                   differences between states and transforms them however
-%                   might be necessary. For example, a state containing
-%                   angular components will generally need to be
-%                   transformed so that the difference between the angles
-%                   is wrapped to -pi/pi.
+%INPUTS: yPred The xDimX1 predicted information state. The information
+%              state is the inverse covariance matrix times the target
+%              state.
+%     PInvPred The xDimXxDim inverse of the predicted state covariance
+%              matrix.
+%            z The zDim X 1 vector measurement.
+%         RInv The zDim X zDim inverse of the measurement covariance matrix
+%              in the native coordinate system of the measurement.
+%            h A function handle for the measurement function that takes
+%              the state as its argument.
+%           xi An xDim X numCubPoints matrix of cubature points. If this
+%              and the next parameter are omitted or empty matrices are
+%              passed, then fifthOrderCubPoints(xDim) is used. It is
+%              suggested that xi and w be provided to avoid needless
+%              recomputation of the cubature points.
+%            w A numCubPoints X 1 vector of the weights associated with the
+%              cubature points.
+%   innovTrans An optional function handle that transforms the value of the
+%              difference between the observation and any predicted points.
+%              This must be able to handle sets of differences. For a zDim
+%              measurement, this must be able to handle a zDimXN matrix of
+%              N differences. This only needs to be supplied when a
+%              measurement difference must be restricted to a certain
+%              range. For example, the innovation between two angles will
+%              be 2*pi if one angle is zero and the other 2*pi, even though
+%              they are the same direction. In such an instance, a function
+%              handle to the wrapRange function with the appropriate
+%              parameters should be passed for innovTrans.
+%   measAvgFun An optional function handle that, when given N measurement
+%              values with weights, produces the weighted average. This
+%              function only has to be provided if the domain of the
+%              measurement is not linear. For example, when averaging
+%              angular values, then the function meanAng should be used.
+% stateDiffTrans An optional function handle that, like innovTrans does for
+%              the measurements, takes an xDimXN matrix of N differences
+%              between states and transforms them however might be
+%              necessary. For example, a state containing angular
+%              components will generally need to be transformed so that the
+%              difference between the angles is wrapped to -pi/pi.
 %
-%OUTPUTS: yUpdate     The xDim X 1 updated (posterior) information state
-%                     vector.
-%         PInvUpdate  The updated xDim X xDim inverse state covariance
-%                     matrix.
+%OUTPUTS: yUpdate The xDim X 1 updated (posterior) information state
+%                 vector.
+%      PInvUpdate The updated xDim X xDim inverse state covariance matrix.
+%           innov The zDimX1 innovation. This is the difference between the
+%                 measurement and the predicted measurement. This is
+%                 sometimes used for gating measurements.
 %
 %If the function h needs additional parameters beyond the state, then the
 %parameters can be passed by using an anonymous function as the function
@@ -92,11 +89,7 @@ function [yUpdate,PInvUpdate]=cubInfoUpdate(yPred,PInvPred,z,RInv,h,xi,w,innovTr
 xDim=size(yPred,1);
 
 if(nargin<6||isempty(xi))
-    if(xDim>1)
-        [xi,w]=fifthOrderCubPoints(xDim);
-    else
-        [xi,w]=quadraturePoints1D(3);
-    end
+    [xi,w]=fifthOrderCubPoints(xDim);
 end
 
 if(nargin<8||isempty(innovTrans))
@@ -113,7 +106,6 @@ if(nargin<10||isempty(stateDiffTrans))
 end
 
 zDim=size(z,1);
-
 
 numCubPoints=size(xi,2);
 

@@ -8,7 +8,7 @@ function V=ellipsoidVolume(A,gammaVal,useAInv)
 %              what amount of probability is in the region. 
 %
 %INPUTS: A  A numDimXnumDimXN set of N positive definite matrices that
-%           specify the size and shape of the ellipse or ellipsoids, where
+%           specify the size and shape of the ellipses or ellipsoids, where
 %           a point zp is on the ith ellipse/ ellipsoid if
 %           (zp-z(:,i))'*A(:,:,i)*(zp-z(:,i))=gammaVal. Alternatively, if
 %           the input useAInv values are passed, it is assumed that this
@@ -18,7 +18,8 @@ function V=ellipsoidVolume(A,gammaVal,useAInv)
 %           gammaVal must be positive. To specify a probability region of
 %           probReg as is commonly used in tracking where A is a Gaussian
 %           covariance matrix, one can get gammaVal from
-%           ChiSquareD.invCDF(probReg,size(A,1))
+%           ChiSquareD.invCDF(probReg,size(A,1)) The default if this
+%           parameter is omitted or an empty matrix is passed is 1.
 %   useAInv This parameter indicates whether A should be inverted, as
 %           described above. The default if this parameter is omitted or an
 %           empty matrix is passed is false.
@@ -38,6 +39,10 @@ function V=ellipsoidVolume(A,gammaVal,useAInv)
 
 if(nargin<3||isempty(useAInv))
     useAInv=false;
+end
+
+if(nargin<2||isempty(gammaVal))
+   gammaVal=1; 
 end
 
 numOut=size(A,3);

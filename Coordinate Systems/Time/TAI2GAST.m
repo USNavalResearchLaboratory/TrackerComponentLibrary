@@ -8,7 +8,7 @@ function GMST=TAI2GAST(Jul1,Jul2,version,deltaT)
 %                  both terms. The date is broken into two parts to
 %                  provide more bits of precision. It does not matter how
 %                  the date is split.
-%        version   An optional integer specifying the theory to use for
+%          version An optional integer specifying the theory to use for
 %                  GMST. The theory chosen should be consistent with other
 %                  values used in astronomical routines. Possible values
 %                  are
@@ -19,11 +19,11 @@ function GMST=TAI2GAST(Jul1,Jul2,version,deltaT)
 %                  2006 (The default if omitted) Compute GMST in line with
 %                     IAU 2006 resolutions related to precession and
 %                     nutation.
-%        deltaT    An optional parameter specifying the offset between TT
+%           deltaT An optional parameter specifying the offset between TT
 %                  and UT1 in seconds. If this parameter is omitted, then
 %                  the value of the function getEOP will be used.
 %
-%OUTPUTS: GAST     The Greenwhich apparent sideral time in radians. 
+%OUTPUTS: GAST The Greenwhich apparent sideral time in radians. 
 %
 %The function just calls TAI2TT and then TT2GAST.
 %

@@ -18,10 +18,10 @@ function [xi,w]=fifthOrderExpCubPoints(numDim,algorithm)
 %                5 Formula E_3^r 5-2 in [1], pg. 334, 15 points, numDim=3.
 %                6 Formula E_4^r 5-1 in [1], pg. 335, 25 points, numDim=4.
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points (Each "point" is a vector).
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %REFERENCES:
 %[1] A.H. Stroud, Approximate Calculation of Multiple Integrals. Cliffs,

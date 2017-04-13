@@ -8,9 +8,9 @@
 *              should be transformed to the next code value. This
 *              is modified on return. It is a template, so different
 *              types can be passed.
-*        nCard The number of ones in code, implicitely passed. This value
+*        nCard The number of ones in code, implicitly passed. This value
 *              is modified on return (size_t&)
-*            j A value, implicitely passed, that will be updated to hold
+*            j A value, implicitly passed, that will be updated to hold
 *              the index of the entry in code that was modified.
 *
 *RETURN VALUE: The boolean return value is 1 if the final combination was

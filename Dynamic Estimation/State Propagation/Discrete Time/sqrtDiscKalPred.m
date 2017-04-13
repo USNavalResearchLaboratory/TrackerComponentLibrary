@@ -27,7 +27,7 @@ function [xPred, SPred]=sqrtDiscKalPred(xPrev,SPrev,F,SQ,u)
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    if(nargin<5)
+    if(nargin<5||isempty(u))
         u=0; 
     end
 

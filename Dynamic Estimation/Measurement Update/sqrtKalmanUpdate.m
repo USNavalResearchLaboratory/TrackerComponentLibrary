@@ -14,7 +14,7 @@ function [xUpdate, SUpdate,innov,Szz]=sqrtKalmanUpdate(xPred,SPred,z,SR,H)
 %                           measurement noise having covariance matrix
 %                           SR*SR'.
 %
-%OUTPUTS    xUpdate     The xDim X 1 updated state vector.
+%OUTPUTS:    xUpdate     The xDim X 1 updated state vector.
 %           SUpdate     The updated xDim X xDim lower-triangular square 
 %                       root state covariance matrix.
 %       innov, Szz      The zDimX1 innovation and the zDimXzDim square

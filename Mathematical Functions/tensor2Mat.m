@@ -1,7 +1,7 @@
 function Y=tensor2Mat(X,param2,C)
 %%TENSOR2MAT   Unfold a (real or complex) tensor into a matrix. This can
 %              either be done as an n-way matricization using a standard
-%              ordering of the modes, or one can explicitely specify the
+%              ordering of the modes, or one can explicitly specify the
 %              ordering of the modes. The tensor is just a hypermatrix. The
 %              unfolding produces a 2D matrix as the output. The
 %              transformation of tensors into matrices plays a role in

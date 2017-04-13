@@ -41,7 +41,7 @@ function demoMeasConvFunctions
 %May 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-display('Example 1: Polar Measurement Conversion')
+disp('Example 1: Polar Measurement Conversion')
 
 %We consider measurements at 45 degrees azimuth at ranges from 1 to 70km
 %from the sensor.
@@ -95,7 +95,7 @@ for curPoint=1:numPoints
         MSECur(4)=MSECur(4)+diff'*diff;
         NEESCur(4)=NEESCur(4)+diff'*inv(RCart)*diff;
         
-        [zCart,RCart]=pol2CartCubature(zMeas,SR,[],xi,w);
+        [zCart,RCart]=pol2CartCubature(zMeas,SR,[],[],[],[],[],xi,w);
         diff=zCartTrue-zCart;
         MSECur(5)=MSECur(5)+diff'*diff;
         NEESCur(5)=NEESCur(5)+diff'*inv(RCart)*diff;
@@ -148,7 +148,7 @@ set(h1,'FontSize',14,'FontWeight','bold','FontName','Times')
 set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
 legend('Standard Conversion','Additive','Multiplicative', 'Modified Multiplicative','Cubature','Location','NorthEast') 
 
-display('Example 2: Spherical Measurement Conversion')
+disp('Example 2: Spherical Measurement Conversion')
 
 %We consider measurements at 45 degrees azimuth, 15 degrees elevation at
 %ranges from 1 to 70km from the sensor.
@@ -195,7 +195,7 @@ for curPoint=1:numPoints
         MSECur(2)=MSECur(2)+diff'*diff;
         NEESCur(2)=NEESCur(2)+diff'*inv(RCart)*diff;
         
-        [zCart,RCart]=spher2CartCubature(zMeas,SR,xi,w,0,true);
+        [zCart,RCart]=spher2CartCubature(zMeas,SR,0,true,[],[],[],xi,w);
         diff=zCartTrue-zCart;
         MSECur(3)=MSECur(3)+diff'*diff;
         NEESCur(3)=NEESCur(3)+diff'*inv(RCart)*diff;
@@ -244,7 +244,7 @@ set(h1,'FontSize',14,'FontWeight','bold','FontName','Times')
 set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
 legend('Multiplicative', 'Modified Multiplicative','Cubature','Location','NorthEast') 
 
-display('Example 3: Monostatic r-u-v Measurement Conversion')
+disp('Example 3: Monostatic r-u-v Measurement Conversion')
 
 %We consider measurements at 45 degrees azimuth, 15 degrees elevation at
 %ranges from 1 to 70km from the sensor.
