@@ -26,10 +26,10 @@ function h=drawEllipse(z,A,gammaVal,varargin)
 %  varargin Sets of values that should be passed to the plot function to
 %           format the ellipses or that will be passed to the surf function
 %           to format the ellipsoids. For example, one could call the
-%           function as drawEllipse(z,A,gammaVal,'--r','linewidth',2) to plot
-%           ellipses as thick, red lines. Note that Matlab will not always
-%           properly render dashed lines due to the number of points used
-%           to plot the shape. Also, if the ellipsoid is in 3D, but is
+%           function as drawEllipse(z,A,gammaVal,'--r','linewidth',2) to 
+%           plot ellipses as thick, red lines. Note that Matlab will not
+%           always properly render dashed lines due to the number of points
+%           used to plot the shape. Also, if the ellipsoid is in 3D, but is
 %           actually just a 2D ellipse, then if this parameter is omitted,
 %           the fill3 command will be passed the option to color the
 %           ellipse black. Otherwise, if this parameter is given, the user
@@ -111,8 +111,9 @@ switch(numDim)
             %The centered, axis-aligned ellipse points.
             l=[x,fliplr(x);
                y,-fliplr(y)];
-            zp=bsxfun(@plus,V*l,z(:,curEllip));
-
+            zp=bsxfun(@plus,V*l,z(idx,curEllip));
+            zp=zp(idx,:);%Undo the reordering.
+            
             %Make sure that all of the ellipses are printed.
             if(curEllip~=1)
                 hold on
@@ -154,7 +155,18 @@ switch(numDim)
                 l=[zeros(1,2*numPoints);
                    x,fliplr(x);
                    y,-fliplr(y)];
-                zp=bsxfun(@plus,V*l,z(:,curEllip));
+                zp=bsxfun(@plus,V*l,z(idx,curEllip));
+                
+                %Get the inverse permutation.
+                nIdx=length(idx);
+                idxInv=zeros(nIdx,1);
+                for k=1:nIdx
+                   idxInv(idx(k))=k; 
+                end
+
+                %Undo the reordering.
+                zp=zp(idxInv);
+
                 %Make sure that all of the ellipses are printed.
                 if(curEllip~=1)
                     hold on
@@ -174,7 +186,7 @@ switch(numDim)
                 [V,D]=eig(A(:,:,curEllip));
                 zCur=z(:,curEllip);
 
-                [xp,yp,zp] = ellipsoid(0,0,0,sqrt(gammaVal/D(1,1)),sqrt(gammaVal/D(2,2)),sqrt(gammaVal/D(3,3)),numPoints);
+                [xp,yp,zp]=ellipsoid(0,0,0,sqrt(gammaVal/D(1,1)),sqrt(gammaVal/D(2,2)),sqrt(gammaVal/D(3,3)),numPoints);
 
                 %Rotate to the correct orientation
                 xyzPoints=V*[xp(:)';yp(:)';zp(:)'];
