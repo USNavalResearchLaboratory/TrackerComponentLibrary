@@ -297,7 +297,7 @@ for curScan=1:numSamples
         xStates{curScan,1}=[xNew,xUpdate];
         xStates{curScan,2}=[xIDNew;xID];
         SStates{curScan}=cat(3,SNew,SUpdate);
-        rStates{curScan}=[rNew;rUpdate];
+        rStates{curScan}=[rNew;rUpdate(:)];
     else
         xStates{curScan,1}=xNew;
         xStates{curScan,2}=xIDNew;
