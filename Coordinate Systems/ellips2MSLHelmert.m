@@ -1,4 +1,4 @@
-function [MSLPoints,coeffData]=ellips2MSLHelmert(points,useNGAApprox,coeffData)
+function [MSLPoints,coeffData]=ellips2MSLHelmert(points,useNGAApprox,modelType,coeffData)
 %%ELLIPS2MSLHELMERT  Given points in WGS-84 ellipsoidal coordinates,
 %                    convert the ellipsoidal height components of the
 %                    points into heights above mean-sea level (MSL)
@@ -8,26 +8,26 @@ function [MSLPoints,coeffData]=ellips2MSLHelmert(points,useNGAApprox,coeffData)
 %                    Pizzetti's projection method in that the curvature of
 %                    the plumb line is completely ignored.
 %
-%INPUTS: points     One or more points given in WGS-84 geodetic latitude
-%                   and longitude, in radians, and height, in meters for
-%                   which the corresponding MSL heights are desired.
-%                   To convert N points, points is a 3XN matrix with each
-%                   column having the format [latitude;longitude; height].
-%     useNGAApprox  If one wishes the intermediate tide-free geoid
-%                   computation to match the results of the National
-%                   Geospatial Intelligence Agency's code to three digits
-%                   after the decimal point, then this should be true.
-%                   Setting this to false might produce results that
-%                   are marginally more accurate. The default is false if
-%                   this parameter is omitted.
-%       coeffData  A set of pre-loaded coefficients that can speed up the
-%                  computation by eliminating the need to compute them on
-%                  the fly. coeffData is a structures with elements C, S,
-%                  CZeta and SZeta where C and S have been set by the
-%                  output of getEGMWGS84TCoeffs and CZeta and SZeta
-%                  have been set by the output of getEGMZeta2NCoeffs.
-%                  If this parameter is omitted, the coefficients are
-%                  computed during the execution of the function.
+%INPUTS: points One or more points given in WGS-84 geodetic latitude and
+%               longitude, in radians, and height, in meters for which the
+%               corresponding MSL heights are desired. To convert N points,
+%               points is a 3XN matrix with each column having the format
+%               [latitude;longitude; height].
+%  useNGAApprox If one wishes the intermediate tide-free geoid computation
+%               to match the results of the National Geospatial
+%               Intelligence Agency's code to three digits after the
+%               decimal point, then this should be true. Setting this to
+%               false might produce results that are marginally more
+%               accurate. The default is false if this parameter is
+%               omitted.
+%     modelType An optional parameter specifying coefficient model to
+%               load if coeffData is not provided. Possible values are
+%               0 (The default if omitted) Load the EGM2008 model.
+%               1 Load the EGM96 model.
+%     coeffData A set of pre-loaded coefficients that can speed up the
+%               computation by eliminating the need to compute them on the
+%               fly. coeffData is as defined for the coeffData return value
+%               of getEGMGeoidHeight.
 %
 %OUTPUTS: MSLPoints A 3XN array of the converted points, where each vector
 %                   contains [latitude;longitude;MSLHeight]; The latitude
@@ -40,7 +40,7 @@ function [MSLPoints,coeffData]=ellips2MSLHelmert(points,useNGAApprox,coeffData)
 %
 %As described in Chapter 5.5 of [1], the MSL height using Helmert's
 %projection is just the ellipsoidal height minus the geoid height. This
-%function calls getEGM2008GeoidHeight to get the geoidal height and
+%function calls getEGMGeoidHeight to get the geoidal height and
 %subtracts it off.
 %
 %Helmert's projection calculated the height using a line from the point to
@@ -51,6 +51,8 @@ function [MSLPoints,coeffData]=ellips2MSLHelmert(points,useNGAApprox,coeffData)
 %The MSL height obtained is also slightly different. However, the
 %difference is small and Pizzetti's projection is difficult to use, so
 %Helmert's projection is almost always used.
+%
+%The inverse of this function is MSL2EllipseHelmert.
 %
 %REFERENCES:
 %[1] B. Hofmann-Wellenhof and H. Moritz, Physical Geodesy, 2nd ed. 
@@ -63,10 +65,14 @@ if(nargin<2||isempty(useNGAApprox))
     useNGAApprox=false;
 end
 
-if(nargin>2)
-    [geoidHeight,coeffData]=getEGM2008GeoidHeight(points(1:2,:),1,useNGAApprox,coeffData);
+if(nargin<3||isempty(modelType))
+    modelType=0; 
+end
+
+if(nargin>3)
+    [geoidHeight,coeffData]=getEGMGeoidHeight(points(1:2,:),1,useNGAApprox,modelType,coeffData);
 else
-    [geoidHeight,coeffData]=getEGM2008GeoidHeight(points(1:2,:),1,useNGAApprox);
+    [geoidHeight,coeffData]=getEGMGeoidHeight(points(1:2,:),1,useNGAApprox,modelType);
 end
 
 MSLHeight=points(3,:)-geoidHeight';

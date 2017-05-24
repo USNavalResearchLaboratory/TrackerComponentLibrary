@@ -9,7 +9,7 @@ function [N,rho,T,P]=standardAtmosParam(dayOfYear,secondOfTheDay,latLonAlt,rhow)
 %INPUTS:      dayOfYear The integer day of the year in the Gregorian
 %                       calendar in universal coordinated time (UTC).
 %                       Counting starts at 1. the resolution of the model
-%                       is not sufficient for it to metter whether 365 or
+%                       is not sufficient for it to matter whether 365 or
 %                       366 is given at the day if it isn't/is a leap
 %                       year.
 %        secondOfTheDay The second of the day. This starts at zero. The
