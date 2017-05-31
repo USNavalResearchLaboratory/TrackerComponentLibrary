@@ -99,13 +99,15 @@ if(nargin<10||isempty(stateTrans))
    stateTrans=@(x)x; 
 end
 
-xDim=size(xPrev,1);
+xDim=size(xPred,1);
+zDim=size(z,1);
 
 %Generate the samples from the prediction.
 xSamples=bsxfun(@plus,xPred,cholSemiDef(PPred,'lower')*randn(xDim,numSamples));
+w=1/numSamples;%uniform weighting.
 
 %Predicted measurement points
-zPredPoints=zeros(zDim,numCubPoints);
+zPredPoints=zeros(zDim,numSamples);
 for curP=1:numSamples
     zPredPoints(:,curP)=h(xSamples(:,curP));
 end
@@ -121,10 +123,10 @@ innov=innovTrans(z-zPred);
 %in Equation 19.
 Pzz=R;
 Pxz=zeros(xDim,zDim);
-for curP=1:numCubPoints
+for curP=1:numSamples
     diff=innovTrans(zPredPoints(:,curP)-zPred);
-    Pzz=Pzz+w(curP)*(diff*diff');
-    Pxz=Pxz+w(curP)*stateDiffTrans(xSamples(:,curP)-xPred)*diff';
+    Pzz=Pzz+w*(diff*diff');
+    Pxz=Pxz+w*stateDiffTrans(xSamples(:,curP)-xPred)*diff';
 end
 
 %The filter gain

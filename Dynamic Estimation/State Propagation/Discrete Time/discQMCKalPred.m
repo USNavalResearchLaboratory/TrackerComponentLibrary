@@ -3,36 +3,34 @@ function [xPred,PPred]=discQMCKalPred(xPrev,PPrev,f,Q,numSamples,stateDiffTrans,
 %                the quasi-Monte Carlo Kalman filter with additive process
 %                noise.
 %
-%INPUTS:    xPrev   The xDim X 1 state estimate at the previous time-step.
-%           PPrev   The xDim X xDim state covariance matrix at the previous
-%                   time-step.
-%           f       A function handle for the state transition function
-%                   that takes the state as its parameter.
-%           Q       The xDimX xDim process noise covariance matrix.
-%       numSamples  The number of samples to use for the Monte Carlo
-%                   integration in the filter. If this parameter is omitted
-%                   or an empty matrix is passed, then a default of 100 is
-%                   used.
-% stateDiffTrans    An optional function handle that takes an xDimXN matrix
-%                   of N differences between states estimates and
-%                   transforms them however might be necessary. For
-%                   example, a state continaing angular components will
-%                   generally need differences between angular components
-%                   wrapped to the range +/-pi.
-%    stateAvgFun    An optional function that given an xDimXN matrix of N
-%                   state estimates and an NX1 vector of weights, provides
-%                   the weighted average of the state estimates. This is
-%                   necessary if, for example, states with angular
-%                   components are averaged.
-%     stateTrans    An optional function that takes a state estimate and
-%                   transforms it. This is useful if one wishes the
-%                   elements of the state to be bound to a certain domain.
-%                   For example, if an element of the state is an angle,
-%                   one should generally want to bind it to the region
-%                   +/-pi. This is not applied to the output of f.
+%INPUTS: xPrev The xDim X 1 state estimate at the previous time-step.
+%        PPrev The xDim X xDim state covariance matrix at the previous
+%              time-step.
+%            f A function handle for the state transition function
+%              that takes the state as its parameter.
+%            Q The xDimX xDim process noise covariance matrix.
+%   numSamples The number of samples to use for the Monte Carlo integration
+%              in the filter. If this parameter is omitted or an empty
+%              matrix is passed, then a default of 100 is used.
+% stateDiffTrans An optional function handle that takes an xDimXN matrix of
+%              N differences between states estimates and transforms them
+%              however might be necessary. For example, a state continaing
+%              angular components will generally need differences between
+%              angular components wrapped to the range +/-pi.
+%  stateAvgFun An optional function that given an xDimXN matrix of N state
+%              estimates and an NX1 vector of weights, provides the
+%              weighted average of the state estimates. This is necessary
+%              if, for example, states with angular components are
+%              averaged.
+%   stateTrans An optional function that takes a state estimate and
+%              transforms it. This is useful if one wishes the elements of
+%              the state to be bound to a certain domain. For example, if
+%              an element of the state is an angle, one should generally
+%              want to bind it to the region +/-pi. This is not applied to
+%              the output of f.
 %
-%OUTPUTS:   xPred   The xDimX1 predicted state estimate.
-%           PPred   The xDimXxDim predicted state covariance estimate.
+%OUTPUTS: xPred The xDimX1 predicted state estimate.
+%         PPred The xDimXxDim predicted state covariance estimate.
 %
 %This implements the prediction step in Section III of [1] (Algorithm 1).
 %This is essentially a Cubature Kalman filter that performs Monte Carlo
@@ -73,7 +71,7 @@ for curSamp=1:numSamples
 end
 
 %Equation 13, calculate the predicted state
-xPred=stateAvgFun(xPropPoints,repmat(1/numSamples,[numSamples,1]));
+xPred=stateAvgFun(xSamples,repmat(1/numSamples,[numSamples,1]));
 
 %Equation 14, calculate the predicted covariance matrix.
 xSamples=stateDiffTrans(bsxfun(@minus,xSamples,xPred));

@@ -17,10 +17,11 @@ function demoNonlinearMeasFilters()
 %
 %The use of angular measurements also demonstrates the need for the
 %innovation and measurement averaging transformations as described in [3],
-%which apply to the pure propagation filter and the square root cubature
-%Kalman filter. The same transformation also applies to variants of the
-%EKF, though it might take a few Monte Carlo runs to see how very large
-%errors can arise when not properly wrapping innovation values.
+%which apply to the pure propagation filter, the square root cubature
+%Kalman filter, and the quasi-Monte Carlo Kalman Filter. The same
+%transformation also applies to variants of the EKF, though it might take a
+%few Monte Carlo runs to see how very large errors can arise when not
+%properly wrapping innovation values.
 %
 %Running this displays the tracks from twelve filters for the scenario. In
 %this instance, all of the algorithms have comparable accuracy.
@@ -145,10 +146,10 @@ for k=1:numSteps
 end
 
 %Just use a simple random initialization.
-PInit=[1e5,    0,     0,   0;
-       0,   1e5   0,   0;
-       0,       0,         2    0;
-       0,       0,         0    2];
+PInit=[1e5,    0,    0,   0;
+       0,      1e5   0,   0;
+       0,      0,    2    0;
+       0,      0,    0    2];
 SInit=chol(PInit,'lower');
 xInit=xTarget(:,1)+SInit*randn(4,1);%Initial predicted value.
 
@@ -240,8 +241,14 @@ xEstDDF2=zeros(4,numSteps);
 xEstDDF2(:,1)=xInit;
 SDDF2=chol(PInit,'lower');
 
+%The quasi-Monte Carlo Kalman Filter 
+xEstQMC=zeros(4,numSteps);
+xEstQMC(:,1)=xInit;
+PQMC=PInit;
+numQMCSamples=500;
+
 for curStep=2:numSteps
-    %The measurement function for all three filters.
+    %The measurement function for all filters.
     h=@(xState)(measFunc(xState,xPlatform(:,curStep)));
     %The Jacobian for the EKF.
     HJacob=@(xState)(measFuncJacob(xState,xPlatform(:,curStep)));
@@ -308,6 +315,10 @@ for curStep=2:numSteps
     %Predict and update the second-order divided difference filter.
     [xPred,SPred]=sqrtDiscKalPred(xEstDDF2(:,curStep-1),SDDF2,F,SQ);
     [xEstDDF2(:,curStep),SDDF2]=sqrtDDFUpdate(xPred,SPred,z(curStep),SR,h,2,innovTrans);
+    
+    %Predict and update the quasi-Monte Carlo filter
+    [xPred, PQMC]=discKalPred(xEstQMC(:,curStep-1),PQMC,F,Q);
+    [xEstQMC(:,curStep),PQMC]=QMCKalUpdate(xPred,PQMC,z(curStep),R,h,numQMCSamples,innovTrans,measAvgFun);
 end
 
 figure(1)
@@ -328,6 +339,7 @@ plot(xEstCIF(1,:)/1e3,xEstCIF(2,:)/1e3,'-.m','linewidth',2)%The estimate from th
 plot(xEstEIF(1,:)/1e3,xEstEIF(2,:)/1e3,'-.y','linewidth',2)%The estimate from the extended information filter
 plot(xEstDDF1(1,:)/1e3,xEstDDF1(2,:)/1e3,'-.k','linewidth',2)%The estimate from the first order divided difference filter.
 plot(xEstDDF2(1,:)/1e3,xEstDDF2(2,:)/1e3,'-.r','linewidth',2)%The estimate from the second order divided difference filter.
+plot(xEstQMC(1,:)/1e3,xEstQMC(2,:)/1e3,'--g','linewidth',2)%The estimate from the quasi-Monte Carlo Kalman filter.
 
 h1=xlabel('x (km)');
 h2=ylabel('y (km)');
@@ -335,7 +347,7 @@ set(gca,'FontSize',14,'FontWeight','bold','FontName','Times')
 set(h1,'FontSize',14,'FontWeight','bold','FontName','Times')
 set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
 
-legend('Sensor Trajectory','Target Trajectory','Pure Propagation Filter', 'Square Root CKF','EKF','Square Root EKF', 'ESRIF','Ensemble KF','PGF','GPF','CIF','EIF','DDF1','DDF2','Location','SouthWest') 
+legend('Sensor Trajectory','Target Trajectory','Pure Propagation Filter', 'Square Root CKF','EKF','Square Root EKF', 'ESRIF','Ensemble KF','PGF','GPF','CIF','EIF','DDF1','DDF2','QMC','Location','SouthWest') 
 
 end
 
@@ -379,4 +391,20 @@ end
 
 end
 
-
+%LICENSE:
+%
+%The source code is in the public domain and not licensed or under
+%copyright. The information and software may be used freely by the public.
+%As required by 17 U.S.C. 403, third parties producing copyrighted works
+%consisting predominantly of the material produced by U.S. government
+%agencies must provide notice with such work(s) identifying the U.S.
+%Government material incorporated and stating that such material is not
+%subject to copyright protection.
+%
+%Derived works shall not identify themselves in a manner that implies an
+%endorsement by or an affiliation with the Naval Research Laboratory.
+%
+%RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF THE
+%SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY THE NAVAL
+%RESEARCH LABORATORY FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE ACTIONS
+%OF RECIPIENT IN THE USE OF THE SOFTWARE.
