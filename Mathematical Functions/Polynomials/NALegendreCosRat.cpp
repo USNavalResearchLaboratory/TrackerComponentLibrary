@@ -58,6 +58,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     size_t M, numPBarU,i;
     mxArray *CSRetVal;
     mxArray *clusterElsMATLAB,*clusterSizesMATLAB, *offsetArrayMATLAB;
+    mxArray *clusterEls1stDerivMATLAB;
     
     if(nrhs!=3){
         mexErrMsgTxt("Incorrect number of inputs.");
@@ -105,7 +106,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     plhs[0]=CSRetVal;
 
     if(nlhs>1) {//Compute the first derivatives, if they are desired.
-        mxArray *clusterEls1stDerivMATLAB=mxCreateDoubleMatrix(numPBarU,1,mxREAL);
+        clusterEls1stDerivMATLAB=mxCreateDoubleMatrix(numPBarU,1,mxREAL);
         
         dPBarUValsdTheta.numClust=M+1;
         dPBarUValsdTheta.totalNumEl=numPBarU;
@@ -122,7 +123,6 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         mxSetProperty(CSRetVal,0,"offsetArray",offsetArrayMATLAB);
 
         plhs[1]=CSRetVal;
-        mxDestroyArray(clusterEls1stDerivMATLAB);
     }
     
     if(nlhs>2) {//Compute the second derivatives if they are desired.
@@ -144,6 +144,9 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
 
         plhs[2]=CSRetVal;
         mxDestroyArray(clusterEls2ndDerivMATLAB);
+        mxDestroyArray(clusterEls1stDerivMATLAB);
+    } else if(nlhs>1) {
+        mxDestroyArray(clusterEls1stDerivMATLAB);
     }
     
     //Free the buffers. The mxSetProperty command copied the data.
