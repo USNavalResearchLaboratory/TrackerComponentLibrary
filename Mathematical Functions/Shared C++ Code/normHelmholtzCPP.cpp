@@ -114,7 +114,7 @@ void normHelmHoltzDeriv2CPP(ClusterSetCPP<double> &d2HBardu2,const ClusterSetCPP
     n=2;
     mf=0.0;
     nf=2.0;
-    k=sqrt((nf-mf)*(nf+mf+1));
+    k=sqrt((nf-mf)*(nf+mf+1)/2);
     kp=sqrt((nf-(mf+1))*(nf+(mf+1)+1));
     d2HBardu2[n][m]=k*kp*HBar[n][m+2];
 

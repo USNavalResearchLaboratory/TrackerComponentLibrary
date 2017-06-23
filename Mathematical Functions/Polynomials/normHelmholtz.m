@@ -12,20 +12,19 @@ function [HBar,dHBardu,d2HBardu2]=normHelmholtz(u,M,scalFactor)
 %               with high degrees and orders. The Helmholtz polynomials are
 %               used in Pine's method for spherical harmonic evalulation.
 %
-%INPUTS:    u   The value at which the fully normalized Helmholtz
-%               polynomials should be evaluated.
-%       maxDeg  The maximum degree and order of the output. This should be
-%               >=3.
-%    scalFactor A scale factor to help prevent overflow of the results. A
-%               value of 10^(-280) (for example) might be useful at high
-%               degrees.
+%INPUTS: u The value at which the fully normalized Helmholtz polynomials
+%          should be evaluated.
+%   maxDeg The maximum degree and order of the output. This should be >=3.
+% scalFactor A scale factor to help prevent overflow of the results. A
+%          value of 10^(-280) (for example) might be useful at high
+%          degrees.
 %
-%OUTPUTS: HBar   An instance of the ClusterSet class such that
-%                HBar(n+1,m+1)=scalFac*\bar{H}^m_n(u).
-%       dHBardu  An instance of the ClusterSet class such that
-%                dHBardu(n+1,m+1)=scalFac*D{\bar{H}^m_n(u)}.
-%     d2HBardu2  An instance of the ClusterSet class such that
-%                dHBardu(n+1,m+1)=scalFac*D{\bar{H}^m_n(u)}.
+%OUTPUTS: HBar An instance of the ClusterSet class such that
+%              HBar(n+1,m+1)=scalFac*\bar{H}^m_n(u).
+%      dHBardu An instance of the ClusterSet class such that
+%              dHBardu(n+1,m+1)=scalFac*D{\bar{H}^m_n(u)}.
+%    d2HBardu2 An instance of the ClusterSet class such that
+%              dHBardu(n+1,m+1)=scalFac*D{\bar{H}^m_n(u)}.
 %
 %The fully normalized derived Legendre functions (Helmholtz polynomials)
 %are described in [1] and the algorithm of that paper is implemented here
@@ -118,7 +117,7 @@ function [HBar,dHBardu,d2HBardu2]=normHelmholtz(u,M,scalFactor)
         %For n=2, m=0.
         m=0;
         n=2;
-        k=sqrt((n-m)*(n+m+1));
+        k=sqrt((n-m)*(n+m+1)/2);
         kp=sqrt((n-(m+1))*(n+(m+1)+1));
         d2HBardu2(n+1,m+1)=k*kp*HBar(n+1,m+2+1);
         
