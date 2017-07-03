@@ -1,7 +1,7 @@
 **Tracker Component Library Release 2.5, March 2017**
 https://github.com/USNavalResearchLaboratory/TrackerComponentLibrary
 
-A paper describing a number of features of the library is
+A paper describing a number of features of the library is<br>
 D. F. Crouse, "The Tracker Component Library: Free Routines for Rapid
 Prototyping," IEEE Aerospace and Electronic Systems Magazine, vol. 32, no.
 5, pp. 18-27, May. 2017.
