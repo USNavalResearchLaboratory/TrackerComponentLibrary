@@ -1,6 +1,11 @@
 **Tracker Component Library Release 2.5, March 2017**
 https://github.com/USNavalResearchLaboratory/TrackerComponentLibrary
 
+A paper describing a number of features of the library is
+D. F. Crouse, "The Tracker Component Library: Free Routines for Rapid
+Prototyping," IEEE Aerospace and Electronic Systems Magazine, vol. 32, no.
+5, pp. 18-27, May. 2017.
+
 These are the release notes for the version 2.5 of the Tracker Component
 Library. The Tracker Component Library is a collection of Matlab routines
 (some written in C/C++ requiring compilation compilation) for simulating
