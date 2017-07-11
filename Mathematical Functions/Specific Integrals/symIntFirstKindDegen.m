@@ -5,24 +5,15 @@ function intVal=symIntFirstKindDegen(x,y)
 %                      parameters can be complex (see below). Sometimes,
 %                      the integral is referred to as RC.
 %
-%INPUTS: x,y  The two parameters of the function. It is assumed that
-%             y is not zero and that if the values are complex, the
-%             magnitudes of their phases are less than pi.
+%INPUTS: x,y The two parameters of the function. It is assumed that y is
+%            not zero and that if the values are complex, the magnitudes of
+%            their phases are less than pi.
 %
 %OUTPUTS: intVal The value of the degenerate symmetric integral of the
 %                second kind given x and y.
 %
 %An algorthm for this function can be found in [1]. and is used for general
 %values.
-%
-%However, if real(x)>0 and (real(y)>=0||imag(y)~=0), then the integral can
-%be explicitly solved to get
-%intVal=acos(sqrt(x)/sqrt(y))/(sqrt(y)*sqrt(1-x/y));
-%Similarly, when x==0 and (imag(y)~=0||real(y)>=0) then
-%intVal=pi/(2*sqrt(y));
-%Thus, this simpler expressions are used when the necessary criteria are
-%fulfilled. Though, care must be taken, because the simplification does not
-%work when x=y.
 %
 %REFERENCES:
 %[1] B. C. Carlson, "Numerical computation of real or complex elliptic
@@ -31,15 +22,13 @@ function intVal=symIntFirstKindDegen(x,y)
 %September 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(real(x)>0&&(real(y)>=0||imag(y)~=0))
-    intVal=acos(sqrt(x)/sqrt(y))/(sqrt(y)*sqrt(1-x/y));
-    
-    %If it is not finite, then x is probably too close to y and the other
-    %algorithm should be used.
-    if(isfinite(intVal))
-        return;
-    end
-elseif(x==0&&(real(y)>=0||imag(y)~=0))
+%if(real(x)>0&&(real(y)>=0||imag(y)~=0)) then one could just use the
+%explicit solution intVal=acos(sqrt(x)/sqrt(y))/(sqrt(y)*sqrt(1-x/y));
+%However, it was noticed that the above solution is not as accurate near
+%certain points as the iterative solution in [1]. Problems arise when x is
+%close to y.
+
+if(x==0&&(real(y)>=0||imag(y)~=0))
     intVal=pi/(2*sqrt(y));
     return;
 end

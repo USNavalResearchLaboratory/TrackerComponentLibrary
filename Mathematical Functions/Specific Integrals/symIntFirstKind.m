@@ -7,10 +7,10 @@ function intVal=symIntFirstKind(x,y,z)
 %                 when numerically evaluating elliptic integrals.
 %                 Sometimes, the integral is referred to as RF.
 %
-%INPUTS: x,y,z    The three parameters of the function. It is assumed that
-%                 at most one is zero. When complex, the nonzero ones are
-%                 assumed to have complex phase angles less than pi in
-%                 magnitude.
+%INPUTS: x,y,z The three parameters of the function. It is assumed that at
+%              most one is zero. When complex, the nonzero ones are
+%              assumed to have complex phase angles less than pi in
+%              magnitude.
 %
 %OUTPUTS: intVal The value of the symmetric integral of the first kind
 %                given x, y, and z.
@@ -66,16 +66,16 @@ else
         %a single square root or else the function will give the wrong
         %answer when using complex variables.
         lambda=sqrt(x)*sqrt(y)+sqrt(x)*sqrt(z)+sqrt(y)*sqrt(z);
+        A=(A+lambda)/4;
         x=(x+lambda)/4;
         y=(y+lambda)/4;
         z=(z+lambda)/4;
-        A=(x+y+z)/3;
 
         %The termination condition.
         n=n+1;
         fourProd=fourProd*4;%This is 4^n
         
-        if(Q<abs(A)*fourProd&&n>7)
+        if(Q<abs(A)*fourProd)
            break;
         end
         if(n>500)

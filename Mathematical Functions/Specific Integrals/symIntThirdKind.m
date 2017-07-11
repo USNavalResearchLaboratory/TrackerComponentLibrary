@@ -30,6 +30,10 @@ function intVal=symIntThirdKind(x,y,z,p)
 %solution.
 r=eps;
 
+x0=x;
+y0=y;
+z0=z;
+
 A0=(x+y+z+2*p)/5;
 
 delta=(p-x)*(p-y)*(p-z);
@@ -40,38 +44,38 @@ n=0;
 
 fourProd1=1;
 fourProd3=1;
-sumVal=0;
+d=(sqrt(p)+sqrt(x))*(sqrt(p)+sqrt(y))*(sqrt(p)+sqrt(z));%d0
+e=delta/(fourProd3*d^2);
+sumVal=(6/(d*fourProd1))*symIntFirstKindDegen(1,1+e);
 
 while(1)
-    d=(sqrt(p)+sqrt(x))*(sqrt(p)+sqrt(y))*(sqrt(p)+sqrt(z));
-    e=delta/(fourProd3*d^2);
-    sumVal=sumVal+(1/(d*fourProd1))*symIntFirstKindDegen(1,1+e);
-
     lambda=sqrt(x)*sqrt(y)+sqrt(x)*sqrt(z)+sqrt(y)*sqrt(z);
-
+    A=(A+lambda)/4;
     x=(x+lambda)/4;
     y=(y+lambda)/4;
     z=(z+lambda)/4;
     p=(p+lambda)/4;
-    A=(A+lambda)/4;
-    
+
     n=n+1;
     fourProd1=fourProd1*4;%This is 4^n;
     fourProd3=fourProd3*4*4*4;%This is 4^(3*n);
-    
+
     if(Q<fourProd1*abs(A))
         break;
     end
-    
+
     if(n>500)
         warning('Convergence not achieved in 500 iterations.');
         break;
     end
+    d=(sqrt(p)+sqrt(x))*(sqrt(p)+sqrt(y))*(sqrt(p)+sqrt(z));
+    e=delta/(fourProd3*d^2);
+    sumVal=sumVal+(6/(d*fourProd1))*symIntFirstKindDegen(1,1+e);
 end
 
-X=(A0-x)/(fourProd1*A);
-Y=(A0-y)/(fourProd1*A);
-Z=(A0-z)/(fourProd1*A);
+X=(A0-x0)/(fourProd1*A);
+Y=(A0-y0)/(fourProd1*A);
+Z=(A0-z0)/(fourProd1*A);
 
 P=(-X-Y-Z)/2;
 
@@ -80,7 +84,7 @@ E3=X*Y*Z+2*E2*P+4*P^3;
 E4=(2*X*Y*Z+E2*P+3*P^3)*P;
 E5=X*Y*Z*P^2;
 
-intVal=A^(-3/2)*(1-(3/14)*E2+(1/6)*E3+(9/88)*E2^2-(3/22)*E4-(9/52)*E2*E3+(3/26)*E5)/fourProd1+6*sumVal;
+intVal=A^(-3/2)*(1-(3/14)*E2+(1/6)*E3+(9/88)*E2^2-(3/22)*E4-(9/52)*E2*E3+(3/26)*E5)/fourProd1+sumVal;
 
 end
 
