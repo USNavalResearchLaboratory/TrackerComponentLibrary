@@ -173,7 +173,7 @@ if(accelOptions==0||accelOptions==1)
             
             temp=5*r(3,:).^2./rMag.^2;
             %First-order oblateness correction.
-            aOblateness=bsxfun(@times,((3*GM*a.^2*J2./(2*rMag.^5))),[r(1,:).*(1-temp);
+            aOblateness=-bsxfun(@times,((3*GM*a.^2*J2./(2*rMag.^5))),[r(1,:).*(1-temp);
                                                                      r(2,:).*(1-temp);
                                                                      r(3,:).*(3-temp)]);     
 
