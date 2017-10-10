@@ -15,11 +15,11 @@
 **  the context of the SOFA software, and have no other official IAU
 **  status.  In addition, self consistency is not guaranteed.
 **
-**  This revision:   2013 August 27
+**  This revision:   2017 March 16
 **
-**  SOFA release 2016-05-03
+**  SOFA release 2017-04-20
 **
-**  Copyright (C) 2016 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
 */
 
 /* Star-independent astrometry parameters */
@@ -108,17 +108,17 @@ typedef struct {
 /* TT minus TAI (s) */
 #define TTMTAI (32.184)
 
-/* Astronomical unit (m) */
-#define DAU (149597870e3)
+/* Astronomical unit (m, IAU 2012) */
+#define DAU (149597870.7e3)
 
 /* Speed of light (m/s) */
 #define CMPS 299792458.0
 
 /* Light time for 1 au (s) */
-#define AULT 499.004782
+#define AULT (DAU/CMPS)
 
-/* Speed of light (AU per day) */
-#define DC (DAYSEC / AULT)
+/* Speed of light (au per day) */
+#define DC (DAYSEC/AULT)
 
 /* L_G = 1 - d(TT)/d(TCG) */
 #define ELG (6.969290134e-10)
@@ -155,7 +155,7 @@ typedef struct {
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2016
+**  Copyright (C) 2017
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

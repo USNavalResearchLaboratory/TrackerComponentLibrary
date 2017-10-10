@@ -1,52 +1,73 @@
-function points=spher2Ellipse(points,a,f)
-%%SPHER2CART  Convert points from spherical coordinates to ellipsoidal
-%             coordinates. The spherical coordinates can either be full
-%             coordinates [range;azimuth; elevation] or just pairs of 
-%             [azimuth; elevation] or just [elevation] in which case it is
-%             assumed that the points are on the surface of the reference
-%             ellipsoid and one just has to convert the elevation
-%             (spherical latitude) from geocentric to geodetic.
+function points=spher2Ellipse(points,systemType,a,f)
+%%SPHER2CART Convert points from spherical coordinates to ellipsoidal
+%            coordinates. The spherical coordinates can either be full
+%            coordinates [range;azimuth; elevation] or just pairs of 
+%            [azimuth; elevation] or just [elevation] in which case it is
+%            assumed that the points are on the surface of the reference
+%            ellipsoid and one just has to convert the elevation
+%            (spherical latitude) from geocentric to geodetic.
 %
-%INPUTS:  points  One or more points given in terms of range, azimuth and
-%                 elevation, with the angles in radians. To convert
-%                 N points, points is a 3XN matrix with each column
-%                 having the format [range;azimuth; elevation].
-%                 Alternatively, the points can be given just as [azimuth;
-%                 elevation] pairs or just as elevations (geocentric
-%                 latitudes). In such an instance, the elevations are
-%                 converted to geodetic (ellipsoidal) latitudes for points
-%                 located on the surface of the reference ellipsoid.
-%           a     The semi-major axis of the reference ellipsoid. If
-%                 this argument is omitted, the value in
-%                 Constants.WGS84SemiMajorAxis is used.
-%           f     The flattening factor of the reference ellipsoid. If
-%                 this argument is omitted, the value in
-%                 Constants.WGS84Flattening is used.
+%INPUTS: points One or more points given in terms of range, azimuth and
+%               elevation, with the angles in radians. To convert N points,
+%               points is a 3XN matrix with each column having the format
+%               [range;azimuth; elevation]. Alternatively, the points can
+%               be given just as [azimuth; elevation] pairs or just as
+%               elevations (geocentric latitudes) if systemType==0 or
+%               systemType==2. In such an instance, the elevations are
+%               converted to geodetic (ellipsoidal) latitudes for points
+%               located on the surface of the reference ellipsoid.
+%    systemType An optional parameter specifying the axis from which the
+%               angles are measured in radians. Possible values are
+%               0 (The default if omitted) Azimuth is measured 
+%                 counterclockwise from the x-axis in the x-y plane. 
+%                 Elevation is measured up from the x-y plane (towards the
+%                 z-axis). This is consistent with common spherical
+%                 coordinate systems for specifying longitude (azimuth) and
+%                 geocentric latitude (elevation).
+%               1 Azimuth is measured counterclockwise from the z-axis in
+%                 the z-x plane. Elevation is measured up from the z-x
+%                 plane (towards the y-axis). This is consistent with some
+%                 spherical coordinate systems that use the z-axis as the
+%                 boresight direction of the radar.
+%               2 This is the same as 0 except instead of being given
+%                 elevation, one is given the angle away from the z-axis,
+%                 which is (pi/2-elevation).
+%             a The semi-major axis of the reference ellipsoid. If this
+%               argument is omitted, the value in
+%               Constants.WGS84SemiMajorAxis is used.
+%             f The flattening factor of the reference ellipsoid. If this
+%               argument is omitted, the value in Constants.WGS84Flattening
+%               is used.
 %
-%OUTPUTS:   points  A matrix of the converted points. Each column of the
-%                   matrix has the format [latitude;longitude;altitude] or
-%                   [latitude;longitude] ot just latitude, respectively
-%                   depending on the dimensionality of the input. The
-%                   angles are given in radians.
+%OUTPUTS: points A matrix of the converted points. Each column of the
+%                matrix has the format [latitude;longitude;altitude] or
+%                [latitude;longitude] ot just latitude, respectively
+%                depending on the dimensionality of the input. The angles
+%                are given in radians.
 %
 %Azimuth is an angle measured from the x-axis in the x-y plane. Elevation
 %is the angle above the x-y plane. The formula for directly converting
 %between geocentric and geodetic latitudes is described in [1].
 %
 %REFERENCES:
-%[1] D. F. Crouse, "An overview of major terrestrial, celestial, and
-%    temporal coordinate systems for target tracking", Report, U. S. Naval
-%    Research Laboratory, to appear, 2016.
+%[1] D. F. Crouse, "An Overview of Major Terrestrial, Celestial, and
+%    Temporal Coordinate Systems for Target Tracking," Formal Report, Naval
+%    Research Laboratory, no. NRL/FR/5344--16-10,279, 10 Aug. 2016, 173
+%    pages.
 %
 %December 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<3||isempty(f))
+if(nargin<4||isempty(f))
     f=Constants.WGS84Flattening;
 end
 
-if(nargin<2||isempty(a))
+if(nargin<3||isempty(a))
     a=Constants.WGS84SemiMajorAxis;
+end
+
+if(nargin<2||isempty(systemType))
+   systemType=0; 
 end
 
 pDim=size(points,1);
@@ -54,13 +75,22 @@ pDim=size(points,1);
 %reference ellipsoid) are given and the latitude must be converted to
 %geodetic latitude.
 if(pDim<3)
-    e2=2*f-f^2;%Get the square of the eccentricity of the reference ellipse.
+    if(systemType~=0&&systemType~=2)
+       error('The spherical system type is unsupported for a conversion without range.')
+    end
+
+    e2=2*f-f^2;%Get the square of the eccentricity of the reference
+               %ellipse.
     if(pDim==2)
         geocenLat=points(2,:);
     else%Assume that the points are 1D
         geocenLat=points;
     end
     
+    if(systemType==2)
+        geocenLat=pi/2-geocenLat;
+    end
+
     geodetLat=asin(sign(geocenLat).*sqrt(2*sin(geocenLat).^2./(2-2*e2+e2^2+e2*(e2-2)*cos(2*geocenLat))));
     
     if(pDim==2)
@@ -70,7 +100,9 @@ if(pDim<3)
         points=geodetLat;
     end
 else
-    points=Cart2Ellipse(spher2Cart(points),[],a,f);
+    %Use algorithm 2, since it will not fail if points are too close to the
+    %center of the Earth.
+    points=Cart2Ellipse(spher2Cart(points,systemType),2,a,f);
 end
 end
 

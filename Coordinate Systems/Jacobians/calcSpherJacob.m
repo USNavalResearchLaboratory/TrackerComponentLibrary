@@ -1,7 +1,7 @@
 function J=calcSpherJacob(x,systemType,useHalfRange,lTx,lRx,M)
-%%CALCSPHERJACOB Calculate the Jacobian for a 3D Cartesian position with
-%          respect to a monostatic or bistatic spherical measurement
-%          ignoring atmospheric effects. 
+%%CALCSPHERJACOB Calculate the Jacobian for a monostatic or bistatic
+%           spherical measurement with respect to 3D Cartesian position.
+%           Atmospheric effects are ignored.
 %
 %INPUTS: x The 3X1 position of the target in Cartesian coordinates in the
 %          order [x;y;z].
@@ -18,13 +18,16 @@ function J=calcSpherJacob(x,systemType,useHalfRange,lTx,lRx,M)
 %            (towards the y-axis). This is consistent with some spherical
 %            coordinate systems that use the z axis as the boresight
 %            direction of the radar.
+%          2 This is the same as 0 except instead of being given
+%            elevation, one desires the angle away from the z-axis, which
+%            is (pi/2-elevation).
 % useHalfRange An optional boolean value specifying whether the bistatic
 %          (round-trip) range value has been divided by two. This normally
 %          comes up when operating in monostatic mode (the most common
 %          type of spherical coordinate system), so that the range
 %          reported is a one-way range (or just half a bistatic range).
 %          The default if this parameter is not provided is false if lTx
-%          and is provided and true if is is omitted (monostatic). 
+%          and is provided and true if it is omitted (monostatic). 
 %      lTx The 3X1 transmitter position in the global coordinate system
 %          with [x;y;z] components. If omitted or an empty matrix is
 %          passed, then a vector of zeros is used.

@@ -1,12 +1,22 @@
-function xpBarypBar=meanRotPoleLoc(TT1,TT2)
-%%MEANROTPOLELOC  Compute the location of the mean rotation pole according
-%                 to the model of the IERS 2010 Conventions.
+function xpBarypBar=meanRotPoleLoc(TT1,TT2,deltaTTUT1,clockLoc)
+%%MEANROTPOLELOC Compute the location of the mean rotation pole according
+%                to the model of the IERS 2010 Conventions.
 %
 %INPUTS: TT1,TT2 Two parts of a Julian date given in terrestrial time (TT). 
 %                The units of the date are days. The full date is the sum
 %                of both terms. The date is broken into two parts to
 %                provide more bits of precision. It does not matter how the
 %                date is split.
+%     deltaTTUT1 An optional parameter specifying the offset between TT and
+%                UT1 in seconds. If this parameter is omitted or an empty
+%                matrix is passed, then the value of the function getEOP
+%                will be used.
+%       clockLoc An optional 3X1 vector specifying the location of the
+%                clock in WGS-84 ECEF Cartesian [x;y;z] coordinates with
+%                units of meters. Due to relativistic effects, clocks that
+%                are synchronized with respect to TT are not synchronized
+%                with respect to TDB. If this parameter is omitted, then a
+%                clock at the center of the Earth is used.
 %
 %OUTPUTS: xpBarypBar xpBarypBar=[xpBar;ypBar] are the location of the mean
 %                    rotation pole as defined in Section 7.1.4 of the IERS
@@ -24,6 +34,14 @@ function xpBarypBar=meanRotPoleLoc(TT1,TT2)
 %March 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<3)
+    deltaTTUT1=[];
+end
+
+if(nargin<4)
+    clockLoc=[];
+end
+
 %These are the coefficients in Table 7.7 for computing the IERS 2010 mean
 %pole model.
 CoeffMat=[0, 55.974,    346.346,   23.513,  358.891;
@@ -34,7 +52,7 @@ CoeffMat=[0, 55.974,    346.346,   23.513,  358.891;
 T0=2000.0;
 
 %Get the Besselian epoch for the TT Julian date.
-T=TT2BessEpoch(TT1,TT2);
+T=TT2BesselEpoch(TT1,TT2,deltaTTUT1,clockLoc);
 tDiff=T-T0;
 
 numRows=size(CoeffMat,1);

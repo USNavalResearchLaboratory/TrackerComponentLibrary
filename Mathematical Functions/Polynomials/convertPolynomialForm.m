@@ -5,36 +5,35 @@ function [a,c]=convertPolynomialForm(formOrig,formDes,a,cIn,cNew)
 %                       cause problems when given coefficients over a large
 %                       range.
 %
-%INPUTS:  formOrig,  Strings specifying the original and desired forms of
-%         formDes    the polynomials. Possible values and the corresponding
-%                    power series in terms of coefficients a and possible
-%                    point or points c are
-%                    'PowerSeries' for
-%                           y(z)=a(end)+a(end-1)*z+a(end-2)*z^2+...
-%                           (The same as Matlab's polyval function uses).
-%                    'Taylor' 
-%                           y(z)=a(1)+a(2)*(z-c)+a(3)*(z-c)^2+...
-%                    'Newton'
-%                           y(z)=a(1)+a(2)*(z-c(1))+a(3)*(z-c(2))^2+...
-%               a    The nX1 original polynomial coefficient vector.
-%               cIn  If the input series is 'Taylor', then this is the
-%                    scalar point of the expansion. If the input series is
-%                    'Newton', then this is an (n-1)X1 vector of points. If
-%                    the input series is 'PowerSeries', then this parameter
-%                    is not required and an empty matrix can be passed.
-%              cNew  If the output is 'Newton' or 'Taylor', then this is
-%                    either the (n-1)X1 vector of coefficients or the
-%                    scalar point of expansion.
+%INPUTS: formOrig,formDes Strings specifying the original and desired forms
+%                 of the polynomials. Possible values and the corresponding
+%                 power series in terms of coefficients a and possible
+%                 point or points c are
+%                 'PowerSeries' for
+%                        y(z)=a(end)+a(end-1)*z+a(end-2)*z^2+...
+%                        (The same as Matlab's polyval function uses).
+%                 'Taylor' 
+%                        y(z)=a(1)+a(2)*(z-c)+a(3)*(z-c)^2+...
+%                 'Newton'
+%                        y(z)=a(1)+a(2)*(z-c(1))+a(3)*(z-c(2))^2+...
+%               a The nX1 original polynomial coefficient vector.
+%             cIn If the input series is 'Taylor', then this is the scalar
+%                 point of the expansion. If the input series is 'Newton',
+%                 then this is an (n-1)X1 vector of points. If the input
+%                 series is 'PowerSeries', then this parameter is not
+%                 required and an empty matrix can be passed.
+%            cNew If the output is 'Newton' or 'Taylor', then this is
+%                 either the (n-1)X1 vector of coefficients or the scalar
+%                 point of expansion.
 %
-%OUTPUTS:     a  The coefficients in the new format given by formDes.
-%             c  The points associated with the new format. If formDes is
-%                'PowerSeries', then c is the empty matrix, because no
-%                coefficients are associated with a power series. If
-%                formDes is 'Newton', then c is the set of points
-%                associated with the Newton form of the polynomial. If
-%                formDes is 'Taylor, then c is a vector of repeated values
-%                of cNew, because the Taylor form is the same as a Newton
-%                form where all of the points are the same.
+%OUTPUTS: a The coefficients in the new format given by formDes.
+%         c The points associated with the new format. If formDes is
+%           'PowerSeries', then c is the empty matrix, because no
+%           coefficients are associated with a power series. If formDes is
+%           'Newton', then c is the set of points associated with the
+%           Newton form of the polynomial. If formDes is 'Taylor, then c is
+%           a vector of repeated values of cNew, because the Taylor form is
+%           the same as a Newton form where all of the points are the same.
 %
 %The conversions come from Chapter 19 of [1].
 %

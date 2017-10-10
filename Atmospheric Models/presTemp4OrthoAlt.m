@@ -4,23 +4,23 @@ function [P,T,Hb,Pb,TMb,LMb]=presTemp4OrthoAlt(z,P0,T0)
 %               using the U.S. Standard Atmosphere 1976. The model is built
 %               into many altimeters.
 %
-%INPUTS: z  A vector or matrix of orthometric heights of the points (height
-%           above mean sea level) in meters to convert to pressures. The
-%           standard does not specify a reference geoid/ permanent tide
-%           system.
-%        P0 An optional parameter specifying the pressure at sea level at
-%           the location in question in Pascals. This pressure might have 
-%           to be interpolated down below terrain given a measurement on
-%           the terrain. If omitted, the value of
-%           Constants.standardAtmosphericPressure is used for the pressure.
-%           Except in certain instances, aircraft over 18,000ft altitude in
-%           the United States have to have their altimeter calibrated to
-%           the standard atmospheric pressure and not the true pressure on
-%           the ground/ at sea level.
-%        T0 An optional parameter specifying the temperature at sea level
-%           in degrees Kelvin. The standard atmosphere only specifies one
-%           value, which is in Constants.standardTemp and is the default
-%           value used if this parameter is omitted.
+%INPUTS: z A vector or matrix of orthometric heights of the points (height
+%          above mean sea level) in meters to convert to pressures. The
+%          standard does not specify a reference geoid/ permanent tide
+%          system.
+%       P0 An optional parameter specifying the pressure at sea level at
+%          the location in question in Pascals. This pressure might have 
+%          to be interpolated down below terrain given a measurement on
+%          the terrain. If omitted, the value of
+%          Constants.standardAtmosphericPressure is used for the pressure.
+%          Except in certain instances, aircraft over 18,000ft altitude in
+%          the United States have to have their altimeter calibrated to
+%          the standard atmospheric pressure and not the true pressure on
+%          the ground/ at sea level.
+%       T0 An optional parameter specifying the temperature at sea level in
+%          degrees Kelvin. The standard atmosphere only specifies one
+%          value, which is in Constants.standardTemp and is the default
+%          value used if this parameter is omitted.
 %
 %OUTPUTS: P The standard pressure of the atmosphere at the specified
 %           points, given in Pascals.

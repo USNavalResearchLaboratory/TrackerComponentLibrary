@@ -1,31 +1,28 @@
 function [MMOSPAEst,orderList]=MMOSPAApprox(x,w,numScans)
-%%MMOSPAAPPROX  Find the approximate minimum mean optimal sub-pattern
-%               assignment (MMOSPA) estimate from a set of weighted 
-%               discrete sets of target estimates using 2D assignment in a
-%               forward-backward algorithm.
+%%MMOSPAAPPROX Find the approximate minimum mean optimal sub-pattern
+%              assignment (MMOSPA) estimate from a set of weighted 
+%              discrete sets of target estimates using 2D assignment in a
+%              forward-backward algorithm.
 %
-%INPUTS:    x        An xDim X numTar X numHyp hypermatrix that holds
-%                    numHyp hypotheses each consisting or numTar targets
-%                    (or generic vectors) with xDim dimensions per target
-%                    (per generic vector). One should not pass x values
-%                    that are a combination of position and velocity
-%                    components, because the OSPA error in that instance
-%                    has no meaning. In general, the components of each
-%                    target vector for each hypothesis will be position
-%                    only.
-%           w        A numHyp X 1 vector of the probabilities of each of
-%                    the numHyp hypotheses in x. The elements must all be
-%                    positive and sum to one.
-%           numScans An optional parameter >=1 specifying how many forward
-%                    scans of the approximate algorithm to perform. Even 
-%                    though more scans can improve the estimate, global
-%                    convergence is not guaranteed. The default is 1 if
-%                    this parameter is not provided.
+%INPUTS: x An xDim X numTar X numHyp hypermatrix that holds numHyp
+%          hypotheses each consisting or numTar targets (or generic
+%          vectors) with xDim dimensions per target (per generic vector).
+%          One should not pass x values that are a combination of position
+%          and velocity components, because the OSPA error in that instance
+%          has no meaning. In general, the components of each target vector
+%          for each hypothesis will be position only.
+%        w A numHyp X 1 vector of the probabilities of each of the numHyp
+%          hypotheses in x. The elements must all be positive and sum to
+%          one.
+% numScans An optional parameter >=1 specifying how many forward scans of
+%          the approximate algorithm to perform. Even though more scans can
+%          improve the estimate, global convergence is not guaranteed. The
+%          default is 1 if this parameter is not provided.
 %
-%OUTPUTS:   MMOSPAEst The approximate xDim X numTar MMOSPA estimate.
-%           orderList A numTarXnumHyp matrix specifying the ordering of the
-%                     targets in each hypothesis that went into the
-%                     approximate MMOSPA estimate.
+%OUTPUTS: MMOSPAEst The approximate xDim X numTar MMOSPA estimate.
+%         orderList A numTarXnumHyp matrix specifying the ordering of the
+%                   targets in each hypothesis that went into the
+%                   approximate MMOSPA estimate.
 %
 %Given a set of numHyp hypotheses, the standard expected value minimizes
 %the mean squared error. The standard expected value is just
@@ -81,17 +78,16 @@ function [MMOSPAEst,orderList]=MMOSPAApprox(x,w,numScans)
 end
 
 function [MMOSPAEst,orderList]=MMOSPAApproxForward(x,w)
-%%MMOSPAAPPROXFORWARD  Perform a single forward step of the approximate
-%                      MMOSPA algorithm without having any previous
-%                      estimate.
+%%MMOSPAAPPROXFORWARD Perform a single forward step of the approximate
+%                     MMOSPA algorithm without having any previous
+%                     estimate.
 %
-%INPUTS:    x        An xDim X numTar X numHyp hypermatrix that holds
-%                    numHyp hypotheses each consisting or numTar targets
-%                    (or generic vectors) with xDim dimensions per target
-%                    (per generic vector).
-%           w        A numHyp X 1 vector of the probabilities of each of
-%                    the numHyp hypotheses in x. The elements must all be
-%                    positive and sum to one.
+%INPUTS: x An xDim X numTar X numHyp hypermatrix that holds numHyp
+%          hypotheses each consisting or numTar targets (or generic
+%          vectors) with xDim dimensions per target (per generic vector).
+%        w A numHyp X 1 vector of the probabilities of each of the numHyp
+%          hypotheses in x. The elements must all be positive and sum to
+%          one.
 %
 %OUTPUTS: MMOSPAEst The approximate xDim X numTar MMOSPA estimate.
 %         orderList A numTarXnumHyp matrix specifying the ordering of the
@@ -140,24 +136,24 @@ function [MMOSPAEst, orderList]=doUpdate4Col(varHyp, x, w, MMOSPAEst,orderList)
 %              reevaluate the ordering of the targets in hypothesis varHyp
 %              to see whether the MOSPA cost function can be reduced.
 %
-%INPUTS:    varHyp The index of the hypothesis in x where the target
-%                  ordering can be changed.
-%           x        An xDim X numTar X numHyp hypermatrix that holds
-%                    numHyp hypotheses each consisting or numTar targets
-%                    (or generic vectors) with xDim dimensions per target
-%                    (per generic vector).
-%           w        A numHyp X 1 vector of the probabilities of each of
-%                    the numHyp hypotheses in x. The elements must all be
-%                    positive and sum to one.
-%           MMOSPAEst The current approximation to the MMOSPA estimate that
-%                    was found using the state orderings in orderList.
-%           orderList A numTarXnumHyp matrix specifying the ordering of the
-%                     targets in each hypothesis that went into the
-%                     current approximate MMOSPA estimate.
+%INPUTS: varHyp The index of the hypothesis in x where the target ordering
+%               can be changed.
+%            x  An xDim X numTar X numHyp hypermatrix that holds numHyp
+%               hypotheses each consisting or numTar targets (or generic
+%               vectors) with xDim dimensions per target (per generic
+%               vector).
+%             w A numHyp X 1 vector of the probabilities of each of the
+%               numHyp hypotheses in x. The elements must all be positive
+%               and sum to one.
+%     MMOSPAEst The current approximation to the MMOSPA estimate that was
+%               found using the state orderings in orderList.
+%     orderList A numTarXnumHyp matrix specifying the ordering of the
+%               targets in each hypothesis that went into the current
+%               approximate MMOSPA estimate.
 %
-%OUTPUTS:   MMOSPAEst The updated approximate MMOSPA estimate.
-%           orderList The updated order list corresponding to the updated
-%                     approximate MMOSPA estimate
+%OUTPUTS: MMOSPAEst The updated approximate MMOSPA estimate.
+%         orderList The updated order list corresponding to the updated
+%                   approximate MMOSPA estimate
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 

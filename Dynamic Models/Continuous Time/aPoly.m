@@ -1,23 +1,25 @@
-function val=aPoly(x,t,numDim)
-%%APOLY     The drift function for a linear continuous-time motion model
-%           with a given order in a specified number of Cartesian
-%           dimensions. The order of the linear filter, that is the number
-%           of moments of position, does not ned to be explicitly
-%           specified.
+function [aDeriv,AJacob]=aPoly(x,t,numDim)
+%%APOLY The drift function for a linear continuous-time motion model with a
+%       given order in a specified number of Cartesian dimensions. The
+%       order of the linear filter, that is the number of moments of
+%       position, does not ned to be explicitly specified.
 %
-%INPUTS:    x The xDimXN state vector of N targets in the order of
-%             [position;velocity;acceleration;etc] for however many
-%             derivatives of position there are.
-%           t An unused time component so that aLinear can be used with
-%             Runge-Kutta methods that expect the function to take two
-%             parameters.
-%      numDim The number of dimensions of the simulation problem. If
-%             the numDim parameter is omitted, then numDim=3 (3D motion) is
-%             assumed. The dimensionality of the state must be an integer
-%             multiple of numDim.
+%INPUTS: x The xDimXN state vector of N targets in the order of
+%          [position;velocity;acceleration;etc] for however many
+%          derivatives of position there are.
+%        t An unused time component so that aPoly can be used with Runge-
+%          Kutta methods that expect the function to take two parameters.
+%   numDim The number of dimensions of the simulation problem. If the
+%          numDim parameter is omitted, then numDim=3 (3D motion) is
+%          assumed. The dimensionality of the state must be an integer
+%          multiple of numDim.
 %
-%OUTPUTS: val The time-derivative of the N state vectors under the linear
-%             motion model.
+%OUTPUTS: aDeriv The time-derivative of the N state vectors under the
+%                linear motion model.
+%         AJacob The Jacobian of aDeriv, which can be useful in extended
+%                Kalman filters. This is the derivative of each component
+%                of aDeriv (selected by row) with respect to the elements
+%                of the state [x,y,z,xDot,yDot,zDot] selected by column.
 %
 %The drift function corresponds to the state transition given in
 %discrete-time by the function FPolyKal.
@@ -31,7 +33,13 @@ function val=aPoly(x,t,numDim)
     
     numTar=size(x,2);
 
-    val=[x((numDim+1):end,:);zeros(numDim,numTar)];
+    aDeriv=[x((numDim+1):end,:);zeros(numDim,numTar)];
+    
+    if(nargout>1)
+        xDim=size(x,1);
+        
+        AJacob=[zeros(xDim,numDim),[eye(xDim-numDim,xDim-numDim);zeros(numDim,xDim-numDim)]];
+    end
 end
 
 %LICENSE:

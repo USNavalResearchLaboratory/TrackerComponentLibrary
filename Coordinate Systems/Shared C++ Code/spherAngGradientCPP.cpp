@@ -8,10 +8,11 @@
 #include "CoordFuncs.hpp"
 #include <math.h>
 
-void spherAngGradientGenCPP(double *retMat,const double *xG,const int systemType,const double *lRx, const double *M) {
+void spherAngGradientGenCPP(double *retMat,const double *xG,const size_t systemType,const double *lRx, const double *M) {
     double x,y,z;
     double temp[3];
     double J[6];
+    double multVal=1;
     //Transform from global coordinates to local coordinates.
     //xLocal=M*(xG(1:3)-lRx(1:3));
     temp[0]=xG[0]-lRx[0];
@@ -37,7 +38,23 @@ void spherAngGradientGenCPP(double *retMat,const double *xG,const int systemType
         //Derivatives with respect to z.
         J[4]=0;
         J[5]=sqrtVal/r2;
-    } else {
+    } else if(systemType==2) {
+        double r2=x*x+y*y+z*z;
+        double sqrVal=x*x+y*y;
+        double sqrtVal=sqrt(sqrVal);
+        double denom=r2*sqrtVal;
+        //Derivatives with respect to x.
+        J[0]=-y/sqrVal;
+        J[1]=x*z/denom;
+
+        //Derivatives with respect to y.
+        J[2]=x/sqrVal;
+        J[3]=y*z/denom;
+
+        //Derivatives with respect to z.
+        J[4]=0;
+        J[5]=-sqrtVal/r2;
+    } else{//Assume systemType==1
         double r2=x*x+y*y+z*z;
         double sqrVal=z*z+x*x;
         double sqrtVal=sqrt(sqrVal);

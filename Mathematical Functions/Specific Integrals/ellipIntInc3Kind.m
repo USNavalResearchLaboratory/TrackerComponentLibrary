@@ -4,18 +4,39 @@ function intVal=ellipIntInc3Kind(phi,m,n)
 %               (1-n*sin(theta)^2)^(-1)*(1-m*sin(theta)^2)^(-1/2) dtheta.
 %               The integral is sometimes referred to as PI.
 %
-%INPUTS: phi   A scalar or matrix of the real upper bounds of integration.
-%              These should be between -pi/2 and pi/2.
-%           m  A value between 0 and 1. The integral diverges at m=1 and
-%              phi=pi/2.
-%           n  An arbitrary real value. The function is divergent at
-%              phi=pi/2 and n=1. For n>2, the result is complex.
+%INPUTS: phi A scalar or matrix of the real upper bounds of integration.
+%          m A value between 0 and 1. The integral diverges at m=1 and
+%            phi=pi/2.
+%          n An arbitrary real value. The function is divergent at
+%            phi=pi/2 and n=1. For n>2, the result is complex.
 %
 %OUTPUTS: intVal The value of the incomplete elliptic integral of the
 %                third kind with the given parameters.
 %
-%The expression used to implement the function comes from [1], whereby
-%negative values are handled by switching the sign of the result.
+%The expression used to implement the function comes from [1], where
+%Equation 61 is the basic identity. However, the first symmetric integral
+%has been replaced using the identity in equation 59. A similar
+%transformation was applied to the second symmetric integral so that all
+%cosecant terms would be replaced by sines or cosines so as to avoid non-
+%finite numbers.
+%
+%However, the resulting formula is only valid for values of phi from 0 to
+%pi/2. However, the argument of the integral is just mirrored from pi/2 to
+%pi. From then on, the function repeats again from 0. Thus, first, we
+%determine how many intervals of pi/2 are present. We can easily evaluate
+%the integral from 0 to pi/2, so we subtract out those values, leaving a
+%residual to compute. The residual is  phi=phi-numMult*(pi/2), where
+%numNult is the integer number of pi/2 values in the original phi. The
+%residual phi is the fractional part of a pi/2-length section left. If
+%numMult is even, then we can directly use the formula. However, if numMult
+%is odd, it means that the residual part is on a mirror section. Thus, the
+%residual integral is from pi/2-phi to pi/2, which can be evaluated as the
+%integral from to to pi/2 minus the integral from 0 to pi/2-phi.
+%
+%However, the above method assumes that phi is positive. If phi is
+%negative, then we evaluate the integral using abs(phi) and then flip the
+%sign of it. This can be done due to the symmetry of the argument of the
+%integral about the origin.
 %
 %REFERENCES:
 %[1] B. C. Carlson, "Numerical computation of real or complex elliptic
@@ -27,22 +48,41 @@ function intVal=ellipIntInc3Kind(phi,m,n)
 numItems=length(phi(:));
 intVal=zeros(size(phi));
 
-%The definition of n above is the opposite that used in the paper. 
-n=-n;
-
 for curItem=1:numItems
     phiCur=phi(curItem);
 
     phiSign=sign(phiCur);
     phiCur=abs(phiCur);
     
-    %The test deals with precision limitations that would prevent the other
-    %integrals from converging.
-    if(phiCur<eps)
-        intVal(curItem)=0;
+    if(n==1)
+        %A limit value obtained from Mathematica...
+        intVal(curItem)=ellipIntInc1Kind(phi,m)+(ellipIntInc2Kind(phi,m)-tan(phi)*sqrt(1-m*sin(phi)^2))/(m-1);
     else
-        c=csc(phiCur)^2;
-        intVal(curItem)=phiSign*symIntFirstKind(c-1,c-m,c)-(n/3)*symIntThirdKind(c-1,c-m,c,c+n);
+        numMult=fix(phiCur/(pi/2));
+        if(numMult>0)
+            phiCur=phiCur-numMult*(pi/2);
+
+            completeVal=(symIntFirstKind(0,1-m,1)+(n/3)*symIntThirdKind(0,1-m,1,1-n));
+
+            intVal(curItem)=numMult*completeVal;
+            if(mod(numMult,2))
+               phiCur=pi/2-phiCur; 
+            end
+        end
+
+        c2=cos(phiCur)^2;
+        s=sin(phiCur);
+        s2=s*s;
+
+        %Equation 61, modified with Equation 59 and a similar modification for
+        %the second symmetric integral.
+        fracVal=(s*symIntFirstKind(c2,1-m*s2,1)+(n/3)*s*s2*symIntThirdKind(c2,1-m*s2,1,1-n*s2));
+
+        if(mod(numMult,2))
+            intVal(curItem)=phiSign*(intVal(curItem)+completeVal-fracVal);
+        else
+            intVal(curItem)=phiSign*(intVal(curItem)+fracVal);
+        end
     end
 end
 end

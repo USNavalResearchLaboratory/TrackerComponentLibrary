@@ -16,14 +16,14 @@ function [xi,w]=orthoPolyZerosFromRecur(n,a,b,c,mu0)
 %              can also be returned by this function if two outputs are
 %              requested.
 %
-%INPUTS: n     The order of the polynomial whose zeros are desired.
-%        a,b,c Function handles such that a(i), b(i) and c(i) give the
-%              appropriate values for the recursive formulation of the
-%              function values in
-%              p_i(x)=(a(i)*x+b(i))*p_{(i-1)}(x)-c(i)*p_{i-2}(x)
-%        mu0   This parameter is only needed if the second output of this
-%              function is desired. The quadrature weights must be scaled
-%              by mu0=integral_lowL^upL w(x) dx. This is that mu0.
+%INPUTS: n The order of the polynomial whose zeros are desired.
+%    a,b,c Function handles such that a(i), b(i) and c(i) give the
+%          appropriate values for the recursive formulation of the function
+%          values in
+%          p_i(x)=(a(i)*x+b(i))*p_{(i-1)}(x)-c(i)*p_{i-2}(x)
+%      mu0 This parameter is only needed if the second output of this
+%          function is desired. The quadrature weights must be scaled by
+%          mu0=integral_lowL^upL w(x) dx. This is that mu0.
 %
 %OUTPUTS: xi The 1Xn set of zeros of the given set of orthonormal
 %            polynomials.

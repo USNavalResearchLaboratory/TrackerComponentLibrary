@@ -6,13 +6,14 @@ function [deltaC,deltaS]=getGravCoeffOffset4Drift(TT1,TT2,model)
 %                   rebound of the tectonic plates after the glaciers
 %                   receded at the end of the last ice age.
 %
-%INPUTS:  TT1,TT2   Two parts of a Julian date given in terrestrial time
-%                   (TT). The units of the date are days. The full date is
+%INPUTS:  TT1,TT2 Two parts of a Julian date given in terrestrial time
+%                 (TT).
+%                    The units of the date are days. The full date is
 %                   the sum of both terms. The date is broken into two
 %                   parts to provide more bits of precision, though the
 %                   drift models are so low-firdelity that it does not
 %                   matter in this instance.
-%           model   An optional parameter indicating the gravitational
+%             model An optional parameter indicating the gravitational
 %                   model for which the drift terms should be computed. The
 %                   default if omitted is 0. Possible values are
 %                   0) The EGM2008 model is used, so the drift terms as
@@ -21,15 +22,16 @@ function [deltaC,deltaS]=getGravCoeffOffset4Drift(TT1,TT2,model)
 %                      terms given in the readme filte for that model are
 %                      returned.
 %
-%OUTPUTS: deltaC A ClusterSet class holding the offsets to the fully
-%               normalized coefficient terms that are multiplied by cosines
-%               in the harmonic expansion of the gravitational potential.
+%OUTPUTS: deltaC An array holding the offsets to the fully normalized
+%               coefficient terms that are multiplied by cosines in the
+%               spherical harmonic expansion of the gravitational
+%               potential. If passed to a CountingClusterSet class, then
 %               C(n+1,m+1) is the coefficient of degree n and order m. The
 %               offsets only go up to the degree and order of the terms in
 %               the gravitational model that would have to be modified.
-%        deltaS A ClusterSet class holding the coefficient terms that are
-%               multiplied by sines in the harmonic expansion. The
-%               format of S is the same as that of C.
+%        deltaS An array holding the coefficient terms that are multiplied
+%               by sines in the spherical harmonic expansion. The format of
+%               S is the same as that of C.
 %
 %Both of the drift models are given in terms of a rate per years after an
 %epoch date. The temporal coordinate system is not  very well defined, but
@@ -58,10 +60,8 @@ end
 
 M=4;%Coefficients up to order 4 can be modified.
 totalNumCoeffs=(M+1)*(M+2)/2;
-emptyData=zeros(totalNumCoeffs,1);
-clustSizes=1:(M+1);
-deltaC=ClusterSet(emptyData,clustSizes);
-deltaS=ClusterSet(emptyData,clustSizes);
+deltaC=zeros(totalNumCoeffs,1);
+deltaS=zeros(totalNumCoeffs,1);
 
 if(model==0)%If using the EGM2008 model.
     %The epoch Date is J2000.0
@@ -75,12 +75,12 @@ if(model==0)%If using the EGM2008 model.
     %Convert the time difference from Julian days to Julian years.
     deltaT=deltaT/365.25;
     
-    %J2 drift rate
-    deltaC(2+1,0+1)=Constants.EGM2008C20BarDot*deltaT;
-    %J3 drift rate
-    deltaC(3+1,0+1)=Constants.EGM2008C30BarDot*deltaT;
-    %J4 drift rate
-    deltaC(4+1,0+1)=Constants.EGM2008C40BarDot*deltaT;
+    %J2 drift rate, adjusts C(2+1,0+1)
+    deltaC(4)=Constants.EGM2008C20BarDot*deltaT;
+    %J3 drift rate, adjusts C(3+1,0+1)
+    deltaC(7)=Constants.EGM2008C30BarDot*deltaT;
+    %J4 drift rate, adjusts C(4+1,0+1)
+    deltaC(11)=Constants.EGM2008C40BarDot*deltaT;
 else
     %The epoch Date is 1986.0
     [TTEpoch1,TTEpoch2]=Cal2TT(1986,1,1,0,0,0);
@@ -93,12 +93,12 @@ else
     %Convert the time difference from Julian days to Julian years.
     deltaT=deltaT/365.25;
     
-    %J2 drift rate
-    deltaC(2+1,0+1)=Constants.EGM96C20BarDot*deltaT;
-    %C21 drift rate
-    deltaC(2+1,1+1)=Constants.EGM96C21BarDot*deltaT;
-    %S21 drift rate
-    deltaS(2+1,1+1)=Constants.EGM96S21BarDot*deltaT;
+    %J2 drift rate, adjusts C(2+1,0+1)
+    deltaC(4)=Constants.EGM96C20BarDot*deltaT;
+    %C21 drift rate, adjusts C(2+1,1+1)
+    deltaC(5)=Constants.EGM96C21BarDot*deltaT;
+    %S21 drift rate, adjusts S(2+1,1+1)
+    deltaS(5)=Constants.EGM96S21BarDot*deltaT;
 end
 
 end

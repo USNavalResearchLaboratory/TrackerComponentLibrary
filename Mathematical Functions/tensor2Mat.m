@@ -12,7 +12,7 @@ function Y=tensor2Mat(X,param2,C)
 %           have 2 or more modes. For example, a 4-mode hyper matrix would
 %           be addressable as X(i1,i2,i3,i4). The matrix can be real or
 %           complex.
-% param2,param3 If the algorithm is called with only two parameters, then
+% param2, C If the algorithm is called with only two parameters, then
 %           param2=n is the number n of the mode of the unfolding and an
 %           n-mode matricization is performed. The mode number ranges
 %           from 1 through N --the number of modes of the matrix X (the

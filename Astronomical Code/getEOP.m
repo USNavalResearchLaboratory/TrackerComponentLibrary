@@ -46,35 +46,30 @@ function [xpyp,dXdY,deltaUTCUT1,deltaTTUT1,LOD]=getEOP(JulUTC1,JulUTC2,refreshFr
 %                    occurs after the downloaded file is scanned, so if
 %                    scanning fails, then EOP.txt will remain unchanged.
 %
-%OUTPUTS: xpyp          A 2XN vector with each column being of the form 
-%                       xpyp=[xp;yp] for the corresponding row in JulUTC1,
-%                       JulUTC2. These are the polar motion coordinates in
-%                       radians including the effects of tides and
-%                       librations. For dates outside of the tabulated
-%                       values, xpyp=[0;0] will be used, since these values
-%                       can be difficult to predict forward.
-%         dXdY          Each column is dXdY=[dX;dY], the celestial pole
-%                       offsets with respect to the IAU 2006/2000A
-%                       precession/nutation model in radians, for each date
-%                       supplied. For dates outside of the tabulated
-%                       values, dXdY=[0;0] will be used, because these
-%                       values are difficult to predict and are generally
-%                       small.
-%         deltaUTCUT1   An NX1 vector holding the difference between
-%                       coordinated universal time (UTC) time and UT1 in
-%                       seconds for each date provided.
-%         deltaTTUT1    An NX1 vector holding the difference between
-%                       terrestrial time and UT1 in seconds for each date
-%                       provided. This uses the function cumLeapSec for
-%                       computing the leap seconds. Thus, the tables within
-%                       the SOFA library for leapseconds that is used by
-%                       cumLeapSec must be up to date.
-%         LOD           An NX1 vector holding the difference between the
-%                       length of the day using terrestrial time,
-%                       international atomic time, or UTC without leap
-%                       seconds and the length of the day in UT1. This is
-%                       an instantaneous parameter (a derivative). The
-%                       units are seconds.
+%OUTPUTS: xpyp A 2XN vector with each column being of the form xpyp=[xp;yp]
+%              for the corresponding row in JulUTC1, JulUTC2. These are the
+%              polar motion coordinates in radians including the effects of
+%              tides and librations. For dates outside of the tabulated
+%              values, xpyp=[0;0] will be used, since these values can be
+%              difficult to predict forward.
+%         dXdY Each column is dXdY=[dX;dY], the celestial pole offsets with
+%              respect to the IAU 2006/2000A precession/nutation model in
+%              radians, for each date supplied. For dates outside of the
+%              tabulated values, dXdY=[0;0] will be used, because these
+%              values are difficult to predict and are generally small.
+%  deltaUTCUT1 An NX1 vector holding the difference between coordinated
+%              universal time (UTC) time and UT1 in seconds for each date
+%              provided.
+%   deltaTTUT1 An NX1 vector holding the difference between terrestrial
+%              time and UT1 in seconds for each date provided. This uses
+%              the function cumLeapSec for computing the leap seconds.
+%              Thus, the tables within the SOFA library for leapseconds
+%              that is used by cumLeapSec must be up to date.
+%          LOD An NX1 vector holding the difference between the length of
+%              the day using terrestrial time, international atomic time,
+%              or UTC without leap seconds and the length of the day in
+%              UT1. This is an instantaneous parameter (a derivative). The
+%              units are seconds.
 %
 %Once loaded, the data stays in memory until this function is cleared.
 %
@@ -592,15 +587,15 @@ if(ischar(source))
 else
     switch(source)
         case 0
-            [rawText,status] =urlread('http://maia.usno.navy.mil/ser7/finals.daily');
+            [rawText,status]=urlread('http://maia.usno.navy.mil/ser7/finals.daily');
         case 1
-            [rawText,status] =urlread('https://datacenter.iers.org/eop/-/somos/5Rgv/latest/13');
+            [rawText,status]=urlread('https://datacenter.iers.org/eop/-/somos/5Rgv/latest/13');
         case 2
-            [rawText,status] =urlread('http://maia.usno.navy.mil/ser7/finals.data');
+            [rawText,status]=urlread('http://maia.usno.navy.mil/ser7/finals.data');
         case 3
-            [rawText,status] =urlread('https://datacenter.iers.org/eop/-/somos/5Rgv/latest/10');
+            [rawText,status]=urlread('https://datacenter.iers.org/eop/-/somos/5Rgv/latest/10');
         otherwise
-            error('Invalid data sourve given')
+            error('Invalid data source given')
     end
 
     if(status==0)

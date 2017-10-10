@@ -35,7 +35,7 @@ numIdx=length(idx);
 numDim=length(dims);
 
 %If the index is above the maximum number of items.
-if(idx>prod(dims))
+if(any(idx>prod(dims)))
    indices=[];
    return;
 end
@@ -49,11 +49,11 @@ dims=dims(:);%Make it a row vector
 %least significant. Thus, finding the indices is done in the same manner as
 %one would decompose a number into digits or bits.
 maxVals=[1;cumprod(dims(1:(end-1)))];
-for curIdx=numDim:-1:1
-    %The number of complete multiples of 
-    wholeVal=fix((idx-1)/maxVals(curIdx));%The number of complete
-    indices(curIdx,:)=wholeVal+1;
-    idx=idx-wholeVal*maxVals(curIdx);
+for curIndic=numDim:-1:1
+    %The number of complete multiples
+    wholeVal=floor((idx-1)/maxVals(curIndic));
+    indices(curIndic,:)=wholeVal+1;
+    idx=idx-wholeVal*maxVals(curIndic);
 end
 end
 

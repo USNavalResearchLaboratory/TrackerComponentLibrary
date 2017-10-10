@@ -4,28 +4,28 @@ function [intT,T]=ChebyshevPolyInt(tau,n,tauStart,tauEnd)
 %                    from order 0 to order n evaluated at the points given
 %                    in tau.
 %
-%INPUTS: tau     An NX1 or 1XN vector of values from tauStart to tauEnd, or
-%                from -1 to 1 if tauStart and tauEnd are omitted, where one
-%                wishes to evaluate the indefinite integrals
-%                (antiderivatives) of the Chebyshev polynomials.
-%        n       The non-negative integer maximum order of the Chebyshev
-%                polynomials evaluated.
-%tauStart,tauEnd The possible range of the inputs. If omitted, a  range of
-%               -1 to 1 is assumed --the normal range for Chebyshev
-%                polynomials. The option for mapping to a wider range is
-%                useful when using Chebyshev polynomials for interpolation.
-%                Note that the such polynomials are generally not useful
-%                for interpolating much outside of the valid range.
+%INPUTS: tau An NX1 or 1XN vector of values from tauStart to tauEnd, or
+%            from -1 to 1 if tauStart and tauEnd are omitted, where one
+%            wishes to evaluate the indefinite integrals (antiderivatives)
+%            of the Chebyshev polynomials.
+%          n The non-negative integer maximum order of the Chebyshev
+%            polynomials evaluated.
+% tauStart,tauEnd The possible range of the inputs. If omitted, a range of
+%            -1 to 1 is assumed --the normal range for Chebyshev
+%            polynomials. The option for mapping to a wider range is useful
+%            when using Chebyshev polynomials for interpolation. Note that
+%            such polynomials are generally not useful for interpolating
+%            far outside of the valid range.
 %
-%OUTPUTS: dT     An (n+1)XN matrix of the antiderivatives of the Chebyshev
-%                polynomials from order 0 to n evaluated at each of the
-%                values of tau. T(i,j) is the antiderivative of the (i-1)th
-%                order Chebyshev polynomial evaluated at tau(j), taking
-%                into account that the function has been mapped to the
-%                range tauStart,tauEnd, if necessary.
-%         T      Since the Chebyshev functions have to be computed to find
-%                the indefinite integrals, an (n+2)XN matrix of the
-%                Chebyshev functions can also be returned, if desired
+%OUTPUTS: dT An (n+1)XN matrix of the antiderivatives of the Chebyshev
+%            polynomials from order 0 to n evaluated at each of the values
+%            of tau. T(i,j) is the antiderivative of the (i-1)th order
+%            Chebyshev polynomial evaluated at tau(j), taking into account
+%            that the function has been mapped to the range
+%            (tauStart,tauEnd), if necessary.
+%          T Since the Chebyshev functions have to be computed to find the
+%            indefinite integrals, an (n+2)XN matrix of the Chebyshev
+%            functions can also be returned, if desired
 %
 %The recursion for finding the indefinite integral values can be obtained
 %by examining how the function ChebyshevPolyIntCoeffs modifies the
@@ -66,7 +66,6 @@ end
 if(nargin>2)
     intT=intT*((tauEnd-tauStart)/2);
 end
-
 end
 
 %LICENSE:

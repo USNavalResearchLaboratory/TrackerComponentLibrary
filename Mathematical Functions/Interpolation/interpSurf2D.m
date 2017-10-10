@@ -3,7 +3,9 @@ function [zInterp,gradInterp,gradDerivMatInterp]=interpSurf2D(xyPoints,xyPointsR
 %               xyPointsRef that define a surface, interpolate to the
 %               points given in xyPoints and evaluate the interpolated z-
 %               value, the gradient, and the partial derivatives of the
-%               interpolated gradeint at the points.
+%               interpolated gradient at the points. For large numbers of
+%               points, b-splines will be more efficient than this
+%               approach.
 %
 %INPUTS: xyPoints A 2XN set of N 2D (x,y) points at which interplation and
 %                 gradients are desired.
@@ -53,7 +55,7 @@ function [zInterp,gradInterp,gradDerivMatInterp]=interpSurf2D(xyPoints,xyPointsR
 %February 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<5)
+if(nargin<5||isempty(smoothTerm))
     smoothTerm=0;
 end
 

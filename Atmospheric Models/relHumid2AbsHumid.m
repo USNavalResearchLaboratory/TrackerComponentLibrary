@@ -4,7 +4,7 @@ function absHumid=relHumid2AbsHumid(relHumid,T,algChoice)
 %                   Dalton's Law of Partial Pressures.
 %
 %INPUTS: relHumid  The relative humidity as a fraction from 0 to 1.
-%        T         The temperature in degrees Kelvin.
+%                T The temperature in degrees Kelvin.
 %        algChoice An optional parameter specifying the algorithm used for
 %                  the dew point computation. The choices are
 %                  0 The corrected version of the Clausius-Clapeyron

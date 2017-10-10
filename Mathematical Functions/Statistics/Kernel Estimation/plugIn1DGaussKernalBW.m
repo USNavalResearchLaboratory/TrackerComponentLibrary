@@ -196,7 +196,7 @@ end
 function [hEst,dhEstdh]=hOpt(h,xi)
 %%HOPT This function find hOpt based on Equation 3.45 in Chapter 3.4.6 of
 %      [1] for a Gaussian kernel. The integral over the second derivative
-%      is approximated usign the second derivative of the scalar Gaussian
+%      is approximated using the second derivative of the scalar Gaussian
 %      kernel estimator itself for a given value of h.
 %
 %INPUTS: h The value of h going into the second derivative approximation

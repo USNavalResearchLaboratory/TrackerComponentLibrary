@@ -17,10 +17,10 @@
 %June 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-display('NOTE: The CompileCLibraries function should be run prior to')
-display('running this script or else the execution time will be unusably slow.')
+disp('NOTE: The CompileCLibraries function should be run prior to')
+disp('running this script or else the execution time will be unusably slow.')
 
-display('Computing the Earth2014 Terrain Plot (with Oceans)')
+disp('Computing the Earth2014 Terrain Plot (with Oceans)')
 
 %Geocentric (spherical) latitude (elevation) and longitude (azimuth) values
 %in radians.
@@ -68,7 +68,7 @@ camlight left
 set(gca,'visible','off')%Do not show the axes
 colormap(fliplr(hsv(256)))
 
-display('Computing the EGM2008 Elevation Plot (without Oceans)')
+disp('Computing the EGM2008 Elevation Plot (without Oceans)')
 
 %Geocentric (spherical) latitude (elevation) and longitude (azimuth) values
 %in radians.

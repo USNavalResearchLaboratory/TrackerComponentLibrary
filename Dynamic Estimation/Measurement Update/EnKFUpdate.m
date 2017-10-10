@@ -161,9 +161,6 @@ if(nargin<11||isempty(wSamp))
     wSamp=bsxfun(@minus,wSamp,wMean);
 end
 
-xPred=stateAvgFun(xEnsemb);%The mean state
-xPredCenPoints=stateDiffTrans(bsxfun(@minus,xEnsemb,xPred));%Center the samples.
-
 %Allocate space for the perturbed observations
 zPertPoints=zeros(zDim,numSamples);
 
@@ -201,6 +198,9 @@ zPertCenPoints=innovTrans(bsxfun(@minus,zPertPoints,zPred));
 
 %The innovation covariance
 Pzz=(1/(numSamples-1))*(zPertCenPoints*zPertCenPoints');
+
+xPred=stateAvgFun(xEnsemb);%The mean state
+xPredCenPoints=stateDiffTrans(bsxfun(@minus,xEnsemb,xPred));%Center the samples.
 
 %The cross covariance
 Pxz=(1/(numSamples-1))*(xPredCenPoints*zPertCenPoints');

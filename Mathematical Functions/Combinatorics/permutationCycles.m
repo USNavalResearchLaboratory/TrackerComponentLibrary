@@ -1,17 +1,17 @@
 function [NCycle,signVal,perm]=permutationCycles(perm,option)
 %%PERMUTATIONCYCLES Determine the number of cycles in a given permutation
-%                   and the sign of the permutation. The number of cycles
-%                   in a permutation is the minimum number of transposes
-%                   needed to perform the permutation. The sign of the
+%                   and the sign of the permutation. The sign of the
 %                   permutation is (-1)^(n-NCycle), where n is the
-%                   number of items being permutation (==length(perm). 
-%                   Also, if desired, return either the original
-%                   permutation, the inverse permutation, or the tagged
-%                   permutation. An inverse permutation permInv is such
-%                   that perm(permInv)=[1;2;3;...;n]. Tagged permutations
-%                   can be used for computing inverse permutations as well
-%                   as in algorithms for permuting matrix elements in
-%                   place.
+%                   number of items being permutation (==length(perm)). The
+%                   sign of a permutation is also equal to
+%                   (-1)^nInversions. An inversion is a pair of values
+%                   whose order is reverse. Also, if desired, return either
+%                   the original permutation, the inverse permutation, or
+%                   the tagged permutation. An inverse permutation permInv
+%                   is such that perm(permInv)=[1;2;3;...;n]. Tagged
+%                   permutations can be used for computing inverse
+%                   permutations as well as in algorithms for permuting
+%                   matrix elements in place.
 %
 %INPUTS: perm  A permutation of n elements. That is, an NX1 or 1NX vector
 %              of numbers from 1 to n.
@@ -22,7 +22,9 @@ function [NCycle,signVal,perm]=permutationCycles(perm,option)
 %             -1) permVal is the inverse permutation.
 %
 %OUTPUTS: NCycle  The number of cycles in the permutation perm.
-%         signVal The sign of the permutation perm.
+%         signVal The sign of the permutation perm. This is also known as
+%                 the signature or parity of the permutation. A value of +1
+%                 indicates an even parity and -1 indicates an odd parity.
 %         perm    The value given by the input option.
 %
 %The algorithm is CYCLES from Chapter 16 of [1].

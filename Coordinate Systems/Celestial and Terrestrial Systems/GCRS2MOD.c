@@ -37,9 +37,10 @@
  *REFERENCES:
  *[1] G. Petit and B. Luzum, IERS Conventions (2010), International Earth
  *    Rotation and Reference Systems Service Std. 36, 2010.
- *[2] D. F. Crouse, "An overview of major terrestrial, celestial, and
- *    temporal coordinate systems for target tracking", Report, U. S. Naval
- *    Research Laboratory, to appear, 2016.
+ *[2] D. F. Crouse, "An Overview of Major Terrestrial, Celestial, and
+ *    Temporal Coordinate Systems for Target Tracking," Formal Report,
+ *    Naval Research Laboratory, no. NRL/FR/5344--16-10,279, 10 Aug. 2016,
+ *    173 pages.
  *
  *March 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
  */

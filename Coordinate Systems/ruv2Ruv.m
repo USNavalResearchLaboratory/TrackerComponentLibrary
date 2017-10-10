@@ -14,51 +14,56 @@ function zNew=ruv2Ruv(z,useHalfRange,zTx1,zRx1,M1,zTx2,zRx2,M2,includeW)
 %         in front of the receiver, the third unit vector coordinate is not
 %         needed. However, r-u-v-w coordinates include the third component.
 %
-%INPUTS: z  A 3XN matrix of vectors with elements [r;u;v], where r is the
-%           bistatic range from the transmitter to the target to the
-%           receiver, and u and v are direction cosines. Each u,v pair
-%           should have a magnitude less than or equal to one. If the
-%           magnitude is greater than one, then the pair is normalized
-%           before conversion to avoid imaginary results. Alternatively,
-%           one can pass a 4XN matrix of [r;u;v;w] vectors where [u;v;w]
-%           form a full unit vector in the receiver's local 3D Cartesian
-%           coordinates.
-%useHalfRange A boolean value specifying whether the bistatic range value
-%           should be divided by two. This normally comes up when operating
-%           in monostatic mode, so that the range reported is a one-way
-%           range. The default if an empty matrix is provided is false.
-%      zTx1 The 3XN [x;y;z] location vectors of the transmitters
-%           originating the measurements z in global Cartesian coordinates.
-%           If only a single vector is passed, then the transmitter
-%           location is assumed the same for all of the target states being
-%           converted. zTx1 can have more than 3 rows; additional rows are
-%           ignored.
-%      zRx1 The 3XN [x;y;z] location vectors of the receivers in Cartesian
-%           coordinates that produced the measurements z . If only a single
-%           vector is passed, then the receiver location is assumed the
-%           same for all of the target states being converted. zRx1 can
-%           have more than 3 rows; additional rows are ignored.
-%       M1  A 3X3XN hypermatrix of the rotation matrices to go from the
-%           alignment of the global coordinate system to that at the
-%           receiver that produced the measurements z. The z-axis of the
-%           local coordinate system of the receiver is the pointing
-%           direction of the receiver. If omitted, then it is assumed that
-%           the local coordinate system is aligned with the global and
-%           M1=eye(3) --the identity matrix is used. If only a single 3X3
-%           matrix is passed, then is is assumed to be the same for all of
-%           the N conversions.
+%INPUTS: z A 3XN matrix of vectors with elements [r;u;v], where r is the
+%          bistatic range from the transmitter to the target to the
+%          receiver, and u and v are direction cosines. Each u,v pair
+%          should have a magnitude less than or equal to one. If the
+%          magnitude is greater than one, then the pair is normalized
+%          before conversion to avoid imaginary results. Alternatively,
+%          one can pass a 4XN matrix of [r;u;v;w] vectors where [u;v;w]
+%          form a full unit vector in the receiver's local 3D Cartesian
+%          coordinates.
+% useHalfRange A scalar boolean value or a 2X1 or 1X2 vector of boolean
+%          values specifying whether the bistatic range value should be
+%          divided by two. This normally comes up when operating in
+%          monostatic mode, so that the range reported is a one-way range.
+%          The default if an empty matrix is provided is false.
+%          useHalfRange(1) applies to the first (source) bistatic channel
+%          and useHalfRange(2) to the second (destination) bistatic
+%          channel. If a scalar is passed, then both values are taken to
+%          be the same.
+%     zTx1 The 3XN [x;y;z] location vectors of the transmitters
+%          originating the measurements z in global Cartesian coordinates.
+%          If only a single vector is passed, then the transmitter
+%          location is assumed the same for all of the target states being
+%          converted. zTx1 can have more than 3 rows; additional rows are
+%          ignored.
+%     zRx1 The 3XN [x;y;z] location vectors of the receivers in Cartesian
+%          coordinates that produced the measurements z . If only a single
+%          vector is passed, then the receiver location is assumed the
+%          same for all of the target states being converted. zRx1 can
+%          have more than 3 rows; additional rows are ignored.
+%       M1 A 3X3XN hypermatrix of the rotation matrices to go from the
+%          alignment of the global coordinate system to that at the
+%          receiver that produced the measurements z. The z-axis of the
+%          local coordinate system of the receiver is the pointing
+%          direction of the receiver. If omitted, then it is assumed that
+%          the local coordinate system is aligned with the global and
+%          M1=eye(3) --the identity matrix is used. If only a single 3X3
+%          matrix is passed, then it is assumed to be the same for all of
+%          the N conversions.
 % zTx2,zRx2,M2 These are the same as aTx1,zRx1, and M1, but for the
-%           coordinate system into which the bistatic r-u-v(-w)
-%           measurements should be converted.
-%  includeW An optional boolean value indicating whether a third direction
-%           cosine component should be included in the output (regardless
-%           of whether it was provided in the input). The u and v direction
-%           cosines are two parts of a 3D unit vector. Generally, one might
-%           assume that the target is in front of the sensor, so the third
-%           component would be positive and is not needed. However, the
-%           third component can be included if ambiguity exists. The
-%           default if this parameter is omitted or an empty matrix is
-%           passed is false if the input z is 3XN and true if z is 4XN.
+%          coordinate system into which the bistatic r-u-v(-w)
+%          measurements should be converted.
+% includeW An optional boolean value indicating whether a third direction
+%          cosine component should be included in the output (regardless of
+%          whether it was provided in the input). The u and v direction
+%          cosines are two parts of a 3D unit vector. Generally, one might
+%          assume that the target is in front of the sensor, so the third
+%          component would be positive and is not needed. However, the
+%          third component can be included if ambiguity exists. The
+%          default if this parameter is omitted or an empty matrix is
+%          passed is false if the input z is 3XN and true if z is 4XN.
 %
 %OUTPUTS: zNew The measurements converted into the other coordinate system.
 %              If z was 3XN, then this is 3XN. If z was 4XN, then this is
@@ -73,14 +78,18 @@ function zNew=ruv2Ruv(z,useHalfRange,zTx1,zRx1,M1,zTx2,zRx2,M2,includeW)
 
 numDim=size(z,1);
 
+if(isscalar(useHalfRange))
+    useHalfRange=[useHalfRange;useHalfRange];
+end
+
 if(nargin<9||isempty(includeW))
     %4D means r-u-v-w coordinates, so assume that the w coordinate should
     %be included.
     includeW=(numDim==4);
 end
 
-zC=ruv2Cart(z,useHalfRange,zTx1,zRx1,M1);
-zNew=Cart2Ruv(zC,useHalfRange,zTx2,zRx2,M2,includeW);
+zC=ruv2Cart(z,useHalfRange(1),zTx1,zRx1,M1);
+zNew=Cart2Ruv(zC,useHalfRange(2),zTx2,zRx2,M2,includeW);
 
 end
 

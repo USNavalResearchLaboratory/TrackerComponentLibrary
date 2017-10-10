@@ -6,7 +6,7 @@ function [pDer,p]=polyDerValNewton(z,a,c,numDer)
 %          should be evaluated.
 %        a A numDimXn matrix of polynomial coefficients for numDim
 %          polynomials, as described below.
-%        c A numDim X(n-1) matrix of the control points associated with
+%        c A numDimX(n-1) matrix of the control points associated with
 %          each of the numDim polynomial in Newton's form. When performing
 %          Hermite interpolation using a polynomial returned by the
 %          HermiteInterpPoly function, c can be a matrix holding the the

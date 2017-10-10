@@ -8,38 +8,38 @@ function [U,g]=ellipsParam2Grav(cartPoint,omega,a,f,GM)
 %                  gravitational potential is the potential energy per
 %                  unit mass.
 %
-%INPUTS: cartPoint  The 3XN matrix of N points at which the potential and
-%                   gravitational acceleration are desired given in ECEF
-%                   [x;y;z] coordinates. If this parameter is omitted, or
-%                   if an empty matrix is passed, then only the
-%                   gravitational potential on the surface of the ellipsoid
-%                   will be returned. That potential does not depend on the
-%                   location.
-%           omega   The average rotation rate of the planet. If this
-%                   argument is omitted, the value in
-%                   Constants.WGS84EarthRotationRate is used, having units
-%                   of radians per second.
-%           a       The semi-major axis of the reference ellipsoid. If
-%                   this argument is omitted, the value in
-%                   Constants.WGS84SemiMajorAxis is used, having units of
-%                   meters.
-%           f       The flattening factor of the reference ellipsoid. If
-%                   this argument is omitted, the value in
-%                   Constants.WGS84Flattening is used (and is unitless).
-%           GM      The universal gravitational constant times the mass of
-%                   the planet. If this parameter is omitted, then the
-%                   value in Constants.WGS84GMWithAtmosphere is used,
-%                   having units of m^3/s^2.
+%INPUTS: cartPoint The 3XN matrix of N points at which the potential and
+%                  gravitational acceleration are desired given in ECEF
+%                  [x;y;z] coordinates. If this parameter is omitted, or if
+%                  an empty matrix is passed, then only the gravitational
+%                  potential on the surface of the ellipsoid will be
+%                  returned. That potential does not depend on the
+%                  location.
+%            omega The average rotation rate of the planet. If this
+%                  argument is omitted, the value in
+%                  Constants.WGS84EarthRotationRate is used, having units
+%                  of radians per second.
+%                a The semi-major axis of the reference ellipsoid. If this
+%                  argument is omitted, the value in
+%                  Constants.WGS84SemiMajorAxis is used, having units of
+%                  meters.
+%                f The flattening factor of the reference ellipsoid. If
+%                  this argument is omitted, the value in
+%                  Constants.WGS84Flattening is used (and is unitless).
+%               GM The universal gravitational constant times the mass of
+%                  the planet. If this parameter is omitted, then the value
+%                  in Constants.WGS84GMWithAtmosphere is used, having units
+%                  of m^3/s^2.
 %
-%OUTPUTS:   U The NX1 vector of gravity potentials at the desired points or
-%             on the surface of the reference ellipsoid if no point is
-%             given. The gravity potential has units of m^2/s^2 and
-%             includes the effects of the rotation of the Earth. 
-%           g The 3XN matrix of acceleration vectors due to gravity at the
-%             desired points in Cartesian coordinates, including the
-%             acceleration due to the Earth's rotation. This is the
-%             gradient of U and points toward the Earth. This parameter
-%             cannot be returned if cartPoint is empty or omitted.
+%OUTPUTS: U The NX1 vector of gravity potentials at the desired points or
+%           on the surface of the reference ellipsoid if no point is given.
+%           The gravity potential has units of m^2/s^2 and includes the
+%           effects of the rotation of the Earth. 
+%         g The 3XN matrix of acceleration vectors due to gravity at the
+%           desired points in Cartesian coordinates, including the
+%           acceleration due to the Earth's rotation. This is the gradient
+%           of U and points toward the Earth. This parameter cannot be
+%           returned if cartPoint is empty or omitted.
 %
 %This function relates the defining parameters for a reference ellipsoid,
 %such as that in the DoD's WGS-84 standard, to a gravitational potential on

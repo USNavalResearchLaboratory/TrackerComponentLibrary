@@ -23,8 +23,8 @@ function [xPred, PPred]=discEKFPred(xPrev,PPrev,f,FJacob,Q,FHessian)
 %              components of x. The Hessian matrix is symmetric. If this
 %              parameter is omitted, a first-order EKF is used.
 %
-%OUTPUTS:   xPred The xDim X 1 predicted state estimate.
-%           PPred The xDim X xDim predicted state covariance matrix.
+%OUTPUTS: xPred The xDim X 1 predicted state estimate.
+%         PPred The xDim X xDim predicted state covariance matrix.
 %
 %The first-order EKF is summarized in Figure 10.3.3-1 in Chapter 10.3.3 of
 %[1]. The second-order EKF is described in Chapter 10.3.2 of the same text.

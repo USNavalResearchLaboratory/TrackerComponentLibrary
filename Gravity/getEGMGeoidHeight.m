@@ -8,52 +8,48 @@ function [geoidHeight,coeffData]=getEGMGeoidHeight(latLon,tideSys,useNGAApprox,m
 %                  height anomaly on the reference ellipsoid into a geoid
 %                  undulation.
 %
-%INPUTS: latLon    A 2XN matrix of N points of the form
-%                  [latitude;longitude] given with respect to the WGS-84
-%                  reference ellipsoid where the geoid height is to be
-%                  evaluated. If a batch of points on a grid is evaluated,
-%                  the algorithm is significantly faster if points having
-%                  the same latitudes are grouped together.
-%        tideSys   A number indicating the tide system in use. The values
-%                  are
-%                  0: Conventional tide free. (The default if this
-%                     parameter is omitted.)
-%                  1: Mean tide
-%                  2: Zero tide
-%    useNGAApprox  As opposed to computing the zeroth order term of the
-%                  disturbing potential T and the term -(W0-U0)/gamma
-%                  using the gamma (magnitude of the acceleration due to
-%                  gravity) that is appropriate for the point in question,
-%                  just use the constant factor of -41cm (EGM2008) or -53cm
-%                  (EGM96) that the NGA uses. Also, omit a correction for
-%                  differences in the value of GM and the Earth's
-%                  semi-major axis when computing the distrubing potential
-%                  T. Using this approximation makes the results match the
-%                  output of the National Geospatial Intelligence Agency's
-%                  (NGA's) code to three places after the decimal point
-%                  --the accuracy at which their Fortran prints the
-%                  output. If this parameter is omitted, the default is
-%                  false: the more precise method of computing the
-%                  zeroth-order term is used. However, one cannot assume
-%                  that the estimated results are more accurate, since the
-%                  NGA presumably dervied their correction terms
-%        modelType  An optional parameter specifying coefficient model to
-%                   load. Possible values are
-%                   0 (The default if omitted) Load the EGM2008 model.
-%                   1 Load the EGM96 model.
-%       coeffData  A set of pre-loaded coefficients that can speed up the
-%                  computation by eliminating the need to compute them on
-%                  the fly. coeffData is a structure with elements C, S,
-%                  CZeta and SZeta where C and S have been set by the
-%                  output of getEGMWGS84TCoeffs and CZeta and SZeta
-%                  have been set by the output of getEGMZeta2NCoeffs.
-%                  If this parameter is omitted, the coefficients are
-%                  computed during the execution of the function.
+%INPUTS: latLon A 2XN matrix of N points of the form [latitude;longitude]
+%               given with respect to the WGS-84 reference ellipsoid where
+%               the geoid height is to be evaluated. If a batch of points
+%               on a grid is evaluated, the algorithm is significantly
+%               faster if points having the same latitudes are grouped
+%               together.
+%       tideSys A number indicating the tide system in use. The values are
+%               0: Conventional tide free. (The default if this parameter
+%                  is omitted.)
+%               1: Mean tide
+%               2: Zero tide
+% useNGAApprox As opposed to computing the zeroth order term of the
+%              disturbing potential T and the term -(W0-U0)/gamma using the
+%              gamma (magnitude of the acceleration due to gravity) that is
+%              appropriate for the point in question, just use the constant
+%              factor of -41cm (EGM2008) or -53cm (EGM96) that the NGA
+%              uses. Also, omit a correction for differences in the value
+%              of GM and the Earth's semi-major axis when computing the
+%              disturbing potential T. Using this approximation makes the
+%              results match the output of the National Geospatial
+%              Intelligence Agency's (NGA's) code to three places after the
+%              decimal point --the accuracy at which their Fortran prints
+%              the output. If this parameter is omitted, the default is
+%              false: the more precise method of computing the zeroth-order
+%              term is used. However, one cannot assume that the estimated
+%              results are more accurate.
+%    modelType An optional parameter specifying coefficient model to load.
+%              Possible values are
+%              0 (The default if omitted) Load the EGM2008 model.
+%              1 Load the EGM96 model.
+%    coeffData A set of pre-loaded coefficients that can speed up the
+%              computation by eliminating the need to compute them on the
+%              fly. coeffData is a structure with elements C, S, CZeta and
+%              SZeta where C and S have been set by the output of
+%              getEGMWGS84TCoeffs and CZeta and SZeta have been set by the
+%              output of getEGMZeta2NCoeffs. If this parameter is omitted,
+%              the coefficients are computed during the execution of the
+%              function.
 %
 %OUTPUTS: geoidHeight The geoid height in meters.
-%         coeffData   The coeffData coefficients that can be passed to
-%                     another call of getEGMGeoidHeight to make it
-%                     faster.
+%           coeffData The coeffData coefficients that can be passed to
+%                     another call of getEGMGeoidHeight to make it faster.
 %
 %The geoid is a theoretical surface of constant gravitational potential.
 %The potential used for the geoid is that implied on 
@@ -247,9 +243,9 @@ if(useNGAApprox~=false)
         correctionTerm=-0.53;
     end
     
-    %The second term gets rid of the contribution of the (0,0) term in
+    %The second term gets rid of the contribution of the C_(0,0) term in
     %T/gamma.
-    zeta=T./gamma-coeffData.C(0+1,0+1)*GMPotential./(gamma.*r')+correctionTerm;
+    zeta=T./gamma-coeffData.C(1)*GMPotential./(gamma.*r')+correctionTerm;
 else
     %This W0 is the defining gravitational potential of the geoid. It is not
     %the same as U0, the gravitational potential of the reference ellipsoid.

@@ -2,7 +2,7 @@ function aVals=aSpiral(xPoints,t)
 %%ASPIRAL The drift function for a spiraling target motion model in 3
 %         dimensions. This formulation of the dynamic model is more
 %         difficult to use to make a target go in a desired direction than
-%         the function aSpiralSimp. A 
+%         the function aSpiralSimp.
 %
 %INPUTS: xPoints The 10X1 target state at time t. It consists of position,
 %                velocity, acceleration, and a scalar spiral rate. If x is

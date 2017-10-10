@@ -1,22 +1,21 @@
 function [col4rowBest, row4colBest, gainBest]=kBest2DAssign(C,k,maximize)
-%%KBEST2DASSIGN      Find the k lowest (or highest) cost 2D assignments for
-%                    the two-dimensional assignment problem with a
-%                    rectangular cost matrix C.
+%%KBEST2DASSIGN Find the k lowest (or highest) cost 2D assignments for the
+%               two-dimensional assignment problem with a rectangular cost
+%               matrix C.
 %
-%INPUTS: C           A numRowXnumCol cost matrix that does not contain
-%                    any NaNs and where the largest finite element minus
-%                    the smallest element is a finite quantity (does not
-%                    overflow) when performing minimization and where the
-%                    smallest finite element minus the largest element is
-%                    finite when performing maximization. Forbidden
-%                    assignments can be given costs of +Inf for
-%                    minimization and -Inf for maximization.
-%        k           The number >=1 of hypotheses to generate. If k is less
-%                    than the total number of unique hypotheses, then all
-%                    possible hypotheses will be returned.
-%        maximize    If true, the minimization problem is transformed into
-%                    a maximization problem. The default if this parameter
-%                    is omitted is false.
+%INPUTS: C A numRowXnumCol cost matrix that does not contain any NaNs and
+%          where the largest finite element minus the smallest element is a
+%          finite quantity (does not overflow) when performing minimization
+%          and where the smallest finite element minus the largest element
+%          is finite when performing maximization. Forbidden assignments
+%          can be given costs of +Inf for minimization and -Inf for
+%          maximization.
+%        k The number >=1 of hypotheses to generate. If k is less than the
+%          total number of unique hypotheses, then all possible hypotheses
+%          will be returned.
+% maximize If true, the minimization problem is transformed into a
+%          maximization problem. The default if this parameter is omitted
+%          is false.
 %
 %OUTPUTS: col4rowBest A numRowXk vector where the entry in each element
 %                     is an assignment of the element in that row to a
@@ -24,7 +23,7 @@ function [col4rowBest, row4colBest, gainBest]=kBest2DAssign(C,k,maximize)
 %         row4colbest A numColXk vector where the entry in each element
 %                     is an assignment of the element in that column to a
 %                     row. 0 entries signify unassigned columns.
-%         gainBest    A kX1 vector containing the sum of the values of the
+%            gainBest A kX1 vector containing the sum of the values of the
 %                     assigned elements in C for all of the hypotheses.
 %
 %DEPENDENCIES: BinaryHeap.m

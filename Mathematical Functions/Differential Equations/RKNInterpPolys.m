@@ -14,24 +14,24 @@ function [interpPolyA,interpPolyC]=RKNInterpPolys(x0,t0,x1,t1,df,probIsGeneral,o
 %               and t1 are scalar. x0 and x1 are xDimX1 column vectors,
 %               where xDim is a multiple of two (values and their
 %               derivatives).
-%        df      df(xVec,t) returns the second dervative of derivative of x
-%                with respect to time taken at time t. The output is half
-%                the dimensionality of x0.
-%  probIsGeneral Indicates whether the problem being solved is the general
-%                problem, where df depends on the frist derivatives, of the
-%                special problem, where df does not depend on the first
-%                derivatives. The default if omitted or am empty matrix is
-%                passed is true.
+%            df df(xVec,t) returns the second dervative of derivative of x
+%               with respect to time taken at time t. The output is half
+%               the dimensionality of x0.
+% probIsGeneral Indicates whether the problem being solved is the general
+%               problem, where df depends on the frist derivatives, of the
+%               special problem, where df does not depend on the first
+%               derivatives. The default if omitted or am empty matrix is
+%               passed is true.
 % order,solutionChoice  A pair of optional parameters that specify the
-%                highest order of the embedded Runge-Kutta-Nyström pair
-%                (special or general) to use as well as the specific
-%                algorithm that was used to get x1 and t1. Details are
-%                given in the comments to the RungeKNystroemGStep function,
-%                for the general problem, and in the RungeKNystroemSStep
-%                function for the special problem. If omitted or empty
-%                matrices are passed, the default order of 5 is used
-%                and the default solutionChoice of 0 is used.
-%            g  The values of the derivatives df evaluated at various
+%               highest order of the embedded Runge-Kutta-Nyström pair
+%               (special or general) to use as well as the specific
+%               algorithm that was used to get x1 and t1. Details are given
+%               in the comments to the RungeKNystroemGStep function, for
+%               the general problem, and in the RungeKNystroemSStep
+%               function for the special problem. If omitted or empty
+%               matrices are passed, the default order of 5 is used and the
+%               default solutionChoice of 0 is used.
+%             g The values of the derivatives df evaluated at various
 %               points as determined by the algorithm used for the
 %               RungeKNystroemGStep or the RungeKNystroemSStep function.
 %interpMainOrder An optional parameter indicating whether the interpolation

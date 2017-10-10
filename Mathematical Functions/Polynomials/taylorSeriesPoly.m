@@ -3,20 +3,18 @@ function polyMat=taylorSeriesPoly(a,multiVarDerivs,order)
 %               Taylor series expansion of a scalar function that takes a
 %               multivariate parameter.
 %
-%INPUTS:       a The nX1 vector about which the Taylor series 
-%                expansion is performed. For a Maclauren series, set this
-%                to zero.
+%INPUTS: a The nX1 vector about which the Taylor series expansion is
+%          performed. For a Maclauren series, set this to zero.
 % multiVarDerivs A function handle or multidimensional matrix providing the
-%                necessary derivatives for the Taylore series expansion.
-%                If this is a function, it takes a numDimX1 vector where
-%                each element corresponds to the number of derivatives
-%                taken for each element (from 0 to order). If this is a
-%                matrix, then multiVarDerivs(a1,a2,a3,..an) should
-%                correspond to a derivative with respect to
-%                x1^(a1-1)*x2^(a2-1)*x3^(a3-1)...xn^(an-1).
-%          order The order of the Taylor series aproximation. If this
-%                 parameter is omitted or an empty matrix is passed, a
-%                 default value of 2 is used.
+%          necessary derivatives for the Taylore series expansion. If this
+%          is a function, it takes a numDimX1 vector where each element
+%          corresponds to the number of derivatives taken for each element
+%          (from 0 to order). If this is a matrix, then
+%          multiVarDerivs(a1,a2,a3,..an) should correspond to a derivative
+%          with respect to x1^(a1-1)*x2^(a2-1)*x3^(a3-1)...xn^(an-1).
+%    order The order of the Taylor series aproximation. If this
+%          parameter is omitted or an empty matrix is passed, a default
+%          value of 2 is used.
 %
 %OUTPUTS: polyMat A hypermatrix of the coefficients for the multivariate
 %               polynomial representign the Taylor series expansion. These

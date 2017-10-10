@@ -11,16 +11,16 @@ function x=unifStaticWeapon2TarAssign(V,q,M)
 %            determines how many weapons should be assigned to each target,
 %            where x(j) is the number of weapons on target j.
 %
-%INPUTS: V   An NX1 vector of multiplicative values, as described above,
-%            where V(j) is the value for the jth target. These should be
-%            non-negative.
-%        q   An NX1 vector of values that are raised to the x values to be
-%            found. These should be between 0 and 1.
-%        M   The required total sum of the x values found in the
-%            optimization.
+%INPUTS: V An NX1 vector of multiplicative values, as described above,
+%          where V(j) is the value for the jth target. These should be
+%          non-negative.
+%        q An NX1 vector of values that are raised to the x values to be
+%          found. These should be between 0 and 1.
+%        M The required total sum of the x values found in the
+%          optimization.
 %
-%OUTPUTS: x  A NX1 vector indicating how many of the M weapons should be
-%            assigned to the targets. This is the optimal solution.
+%OUTPUTS: x An NX1 vector indicating how many of the M weapons should be
+%           assigned to the targets. This is the optimal solution.
 %
 %The algorithm is from [1], the global optimality of the algorithm is
 %proven. The algorithm is also described in Chapter 3 of [2].

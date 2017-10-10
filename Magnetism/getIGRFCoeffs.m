@@ -7,38 +7,37 @@ function [C,S,a,c]=getIGRFCoeffs(year,fullyNormalize)
 %               ionospheric currents) in order to hope to obtain something
 %               close to what a local measurement might provide.
 %
-%INPUTS: year        A decimal number indicating a year in the Gregorian
-%                    calendar as specified by universal coordinated time
-%                    (UTC). For example, halfway through the year 2010
-%                    would be represented as 2010.5. The precision of the
-%                    model is not sufficiently fine that leap seconds
-%                    matter. If this parameter is omitted or an empty
-%                    matrix is passed, then the reference year of the IGRF
-%                    model is used. In this instance, 2015.0. For
-%                    predicting the magnetic field into the future, it is
-%                    suggested that one use the World Magnetic Model (WMM)
-%                    not the IGRF.
-%    fullyNormalize  Geomagnetic models are normally given in terms of
-%                    Schmidt semi-normalized Legendre functions. If
-%                    fullyNormalize =true, then the coefficients are
-%                    converted for use with fully normalized associated
-%                    Legendre functions, as are commonly used with
-%                    spherical harmonic algorithms for gravitational
-%                    models. If this parameter is omitted, the default
-%                    value is true.
+%INPUTS: year A decimal number indicating a year in the Gregorian
+%             calendar as specified by universal coordinated time (UTC).
+%             For example, halfway through the year 2010 would be
+%             represented as 2010.5. The precision of the model is not
+%             sufficiently fine that leap seconds matter. If this parameter
+%             is omitted or an empty matrix is passed, then the reference
+%             year of the IGRF model is used. In this instance, 2015.0. For
+%             predicting the magnetic field into the future, it is
+%             suggested that one use the World Magnetic Model (WMM) not the
+%             IGRF.
+% fullyNormalize Geomagnetic models are normally given in terms of Schmidt
+%             semi-normalized Legendre functions. If fullyNormalize =true,
+%             then the coefficients are converted for use with fully
+%             normalized associated Legendre functions, as are commonly
+%             used with spherical harmonic algorithms for gravitational
+%             models. If this parameter is omitted, the default value is
+%             true.
 %
-%OUTPUTS: C     A ClusterSet class holding the coefficient terms that are
-%               multiplied by cosines in the harmonic expansion. C(n+1,m+1)
-%               is the coefficient of degree n and order m. The
-%               coefficients have units of Tesla. The coefficients are
-%               normalized according to the fullyNormalize term.
-%         S     A ClusterSet class holding the coefficient terms that are
-%               multiplied by sines in the harmonic expansion. The
-%               format of S is the same as that of C.
-%         a     The numerator in the (a/r)^n term in the spherical harmonic
-%               sum having units of meters.
-%         c     The constant value by which the spherical harmonic series
-%               is multiplied, having units of squared meters.
+%OUTPUTS: C An array holding the coefficient terms that are multiplied by
+%           cosines in the harmonic expansion. This can be given to a
+%           CountingClusterSet class so that C(n+1,m+1) is the coefficient
+%           of degree n and order m. The coefficients have units of Tesla.
+%           The coefficients are normalized according to the fullyNormalize
+%           term.
+%         S An array holding the coefficient terms that are multiplied by
+%           sines in the harmonic expansion. The format of S is the same as
+%           that of C.
+%         a The numerator in the (a/r)^n term in the spherical harmonic sum
+%           having units of meters.
+%         c The constant value by which the spherical harmonic series is
+%           multiplied, having units of squared meters.
 %
 %Details on the normalization of the coefficients is given in the comments
 %to the function spherHarmonicEval.
@@ -113,11 +112,10 @@ M=temp{1};
 %interpolation between the years can be performed, if necessary.
 totalNumCoeffs=(M+1)*(M+2)/2;
 emptyData=zeros(totalNumCoeffs,1);
-clustSizes=1:(M+1);
-C=ClusterSet(emptyData,clustSizes);
-S=ClusterSet(emptyData,clustSizes);
-C1=ClusterSet(emptyData,clustSizes);
-S1=ClusterSet(emptyData,clustSizes);
+C=CountingClusterSet(emptyData);
+S=CountingClusterSet(emptyData);
+C1=CountingClusterSet(emptyData);
+S1=CountingClusterSet(emptyData);
 
 %Next, the closest two years of coefficients for the data must be read in
 %so that one can linearly interpolate to the proper time. If the requested
@@ -212,6 +210,10 @@ if(fullyNormalize~=false)
         end
      end
 end
+
+%Return S and C as arrays, not as a CountingClusterSet classes.
+C=C.clusterEls;
+S=S.clusterEls;
 
 a=Constants.WMM2010SphereRad;%meters
 c=a^2;

@@ -29,10 +29,10 @@ function [phi2,phi3,dimsOrder,minCostVal,costGap]=assign3D(C,maximize,algorithm,
 %          when performing maximization.  Forbidden assignments can be
 %          given costs of +Inf for minimization and -Inf for maximization.
 %   maximize If true, the minimization problem is transformed into a
-%            maximization problem. The default if this parameter is omitted
-%            is false.
-%     algorithm An optional parameter specifying the algorithm to use to
-%            solve the 3D assignment problem. Possible values are
+%          maximization problem. The default if this parameter is omitted
+%          is false.
+%  algorithm An optional parameter specifying the algorithm to use to
+%          solve the 3D assignment problem. Possible values are
 %          0 Use the relaxation approximation of [1], which is a special
 %            case of [2]. Note that this method does not support the use of
 %            n2Limits or n3Limits that are not all ones. However, it is
@@ -46,31 +46,31 @@ function [phi2,phi3,dimsOrder,minCostVal,costGap]=assign3D(C,maximize,algorithm,
 %            matrix and n3Limits all ones, this is done in a manner that is
 %            O((n^3)*n!) complexity. This method does not support the use
 %            of n2Limits that are not all ones.
-%   n2Limits An optional n2X1 vector that provides the limits on the sums
-%            over the first and third indices for each item in the second
-%            index. All elements of n2Limits must be integers >=1. When
-%            using n2Limits, it is required that n1<=n2<=n3 or n3<=n2<=n1.
-%            That is, the final solution cannot permute n2 from its space.
-%            If this parameter is omitted or an empty matrix is passed, the
-%            limits are assumed to be all ones. 
-%   n3Limits An optional n3X1 vector that provides the limits on the sums
-%            over the first and second indices for each item in the third
-%            index. All elements of n3Limits must be integers >=1. When
-%            using n3Limits, it is required that n1<=n2<=n3 or n2<=n1<=n3.
-%            That is, the final solution cannot permute n3 from its space.
-%            If this parameter is omitted or an empty matrix is passed, the
-%            limits are assumed to be all ones.
-%    maxIter This parameter is only used if algorithm=0 or 1. It is the
-%            maximum number of iterations to perform. The default value if
-%            this parameter is omitted is 200.
-%     epsVal This parameter is only used if algorithm=0. This parameter is
-%            the threshold to use for determining convergence of the
-%            algorithm based on the relative duality gap. The relative
-%            duality gap is (f-q)/abs(q), where f is the smallest value of
-%            the primal function found and q is the largest value of the
-%            dual function found. If omitted, the default value is eps(1).
+% n2Limits An optional n2X1 vector that provides the limits on the sums
+%          over the first and third indices for each item in the second
+%          index. All elements of n2Limits must be integers >=1. When
+%          using n2Limits, it is required that n1<=n2<=n3 or n3<=n2<=n1.
+%          That is, the final solution cannot permute n2 from its space. If
+%          this parameter is omitted or an empty matrix is passed, the
+%          limits are assumed to be all ones. 
+% n3Limits An optional n3X1 vector that provides the limits on the sums
+%          over the first and second indices for each item in the third
+%          index. All elements of n3Limits must be integers >=1. When
+%          using n3Limits, it is required that n1<=n2<=n3 or n2<=n1<=n3.
+%          That is, the final solution cannot permute n3 from its space.
+%          If this parameter is omitted or an empty matrix is passed, the
+%          limits are assumed to be all ones.
+%  maxIter This parameter is only used if algorithm=0 or 1. It is the
+%          maximum number of iterations to perform. The default value if
+%          this parameter is omitted is 200.
+%   epsVal This parameter is only used if algorithm=0. This parameter is
+%          the threshold to use for determining convergence of the
+%          algorithm based on the relative duality gap. The relative
+%          duality gap is (f-q)/abs(q), where f is the smallest value of
+%          the primal function found and q is the largest value of the
+%          dual function found. If omitted, the default value is eps(1).
 %
-%OUTPUTS: phi2,phi3  If n1<=n2<=n3, then C(i,phi2(i),phi3(i)) is the cost
+%OUTPUTS: phi2, phi3 If n1<=n2<=n3, then C(i,phi2(i),phi3(i)) is the cost
 %                    for row i (row i is assigned to column phi2(i) and the
 %                    third index phi3(i)). On the other hand, if it was not
 %                    true that n1<=n2<=n3, then phi2 and phi3 are the same
@@ -285,9 +285,23 @@ switch(algorithm)
             %The H matrix is updated at the beginning of the next
             %iteration.
 
-            %This is the ad-hoc step adjustment in the paper.
-            %Update the dual variables as in 3.21
-            u=u+((fTildeStar-qStar)/norm(g)^2)*(n3/sum(mu))*(mu.*g);
+            %This is the ad-hoc step adjustment in the paper. It will fail
+            %if the dual variables (mu) are all zero. Thus, there is a test
+            %to see if any non-finite terms arise. if so, then the
+            %alternate step from Equation 3.15 is used.
+            %Update the dual variables as in Equation 3.21
+            uTest=u+((fTildeStar-qStar)/norm(g)^2)*(n3/sum(mu))*(mu.*g);
+            
+            if(any(~isfinite(uTest)))
+                %Equation 3.18 with b=1.35 and a=0.175. The equation in the
+                %paper is missing the a term, even though reference is made
+                %to it in the text.
+                qa=(1+0.175/beta^1.35)*qStar;
+                %Equation 3.15
+                u=u+((alpha+1)/alpha)*((qa-q)/norm(g)^2)*p;
+            else
+                u=uTest;
+            end
 
             %This is not in [1], because the paper incorrectly uses
             %equality conditions when inequality conditions must be used

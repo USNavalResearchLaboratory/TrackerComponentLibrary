@@ -1,39 +1,38 @@
 function lowerBound=assign3DLB(C,method)
-%%3DASSIGNLB  Obtain a lower bound for the cost value of an axial 3D
-%             assignment problem. Such problems are NP-hard and thus cannot
-%             be solved in polynomial time. The optimization problem being
-%             bounded is
-%             minimize
-%             \sum_{i=1}^{n1}\sum_{j=1}^{n2}\sum_{k=1}^{n3}C_{i,j,k}*\rho_{i,j,k}
-%             subject to
-%             \sum_{i=1}^{n1}\sum_{j=1}^{n2}\rho_{i,j,k}<=1 for all k
-%             \sum_{i=1}^{n1}\sum_{k=1}^{n3}\rho_{i,j,k}<=1 for all j
-%             \sum_{j=1}^{n2}\sum_{k=1}^{n3}\rho_{i,j,k} =1 for all i
-%             assuming that n1<=n2<=n3, and C is and n1Xn2Xn3 cost matrix.
-%             This is equivalent to the optimization problem
-%             minimize sum_{i} C(i,phi_2(i),phi_3(i))
-%             where phi_2 and phi_3 are length n1 arrangements of n2 and n3
-%             items over which the minimization is performed. The lower
-%             bound can usually be computed must faster than solving the
-%             actual optimization problem. Indeed, the lower bounds are
-%             often used in branch-and-bound algorithms to get an exact
-%             solution.
+%%3DASSIGNLB Obtain a lower bound for the cost value of an axial 3D
+%            assignment problem. Such problems are NP-hard and thus cannot
+%            be solved in polynomial time. The optimization problem being
+%            bounded is
+%            minimize
+%            \sum_{i=1}^{n1}\sum_{j=1}^{n2}\sum_{k=1}^{n3}C_{i,j,k}*\rho_{i,j,k}
+%            subject to
+%            \sum_{i=1}^{n1}\sum_{j=1}^{n2}\rho_{i,j,k}<=1 for all k
+%            \sum_{i=1}^{n1}\sum_{k=1}^{n3}\rho_{i,j,k}<=1 for all j
+%            \sum_{j=1}^{n2}\sum_{k=1}^{n3}\rho_{i,j,k} =1 for all i
+%            assuming that n1<=n2<=n3, and C is and n1Xn2Xn3 cost matrix.
+%            This is equivalent to the optimization problem
+%            minimize sum_{i} C(i,phi_2(i),phi_3(i))
+%            where phi_2 and phi_3 are length n1 arrangements of n2 and n3
+%            items over which the minimization is performed. The lower
+%            bound can usually be computed must faster than solving the
+%            actual optimization problem. Indeed, the lower bounds are
+%            often used in branch-and-bound algorithms to get an exact
+%            solution.
 %
-%INPUTS:      C An n1Xn2Xn3 cost hypermatrix. The costs are real numbers >
-%               -Inf. If it is not the case that n1<=n2<=n3, then the
-%               indices of C are permuted so that is true.
-%        method An optional parameter selecting the bound algorithm to use.
-%               Possible values are:
-%               0 (The default if omitted). Use the projection method
-%                 followed by the Hungarian algorithm as in [1]
-%                 (implemented using the Jonker-Volgenant algorrithm in
-%                 assign2D in place of the Hungarian algorithm). This
-%                 algorithm requires that n1=n2=n3, so if that is not the
-%                 case, the cost matrix is implicitly augmented so the
-%                 lower bound can still be used. The implicit augmentation
-%                 is discussed in the comments to the code.
-%               1 Use the simple (first) method of summing the minimum
-%                 values across each first index of i as in [2]. 
+%INPUTS: C An n1Xn2Xn3 cost hypermatrix. The costs are real numbers >-Inf.
+%          If it is not the case that n1<=n2<=n3, then the indices of C are
+%          permuted so that is true.
+%   method An optional parameter selecting the bound algorithm to use.
+%          Possible values are:
+%          0 (The default if omitted). Use the projection method followed
+%            by the Hungarian algorithm as in [1] (implemented using the
+%            Jonker-Volgenant algorithm in assign2D in place of the
+%            Hungarian algorithm). This algorithm requires that n1=n2=n3,
+%            so if that is not the case, the cost matrix is implicitly
+%            augmented so the lower bound can still be used. The implicit
+%            augmentation is discussed in the comments to the code.
+%          1 Use the simple (first) method of summing the minimum values
+%            across each first index of i as in [2]. 
 %
 %OUTPUTS: lowerBound A lower bound on the value of the axial 3D assignment
 %                    optimization problem.

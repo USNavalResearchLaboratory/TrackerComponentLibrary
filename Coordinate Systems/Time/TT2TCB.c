@@ -8,11 +8,11 @@
  *                  terms. The date is broken into two parts to provide
  *                  more bits of precision. It does not matter how the date
  *                  is split.
- *        deltaT    An optional parameter specifying the offset between TT
+ *           deltaT An optional parameter specifying the offset between TT
  *                  and UT1 in seconds. If this parameter is omitted or an
  *                  empty matrix is passed, then the value of the function
  *                  getEOP will be used.
- *        clockLoc  An optional 3X1 vector specifying the location of the
+ *         clockLoc An optional 3X1 vector specifying the location of the
  *                  clock in WGS-84 ECEF Cartesian [x;y;z] coordinates with
  *                  units of meters. Due to relativistic effects, clocks
  *                  that are synchronized with respect to TT are not
@@ -40,9 +40,10 @@
  *Many temporal coordinate systems standards are compared in [1].
  *
  *REFERENCES:
- *[1] D. F. Crouse, "An overview of major terrestrial, celestial, and
- *    temporal coordinate systems for target tracking", Report, U. S. Naval
- *    Research Laboratory, to appear, 2016.
+ *[1] D. F. Crouse, "An Overview of Major Terrestrial, Celestial, and
+ *    Temporal Coordinate Systems for Target Tracking," Formal Report,
+ *    Naval Research Laboratory, no. NRL/FR/5344--16-10,279, 10 Aug. 2016,
+ *    173 pages.
  *
  *March 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
  */

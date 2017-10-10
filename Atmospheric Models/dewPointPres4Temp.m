@@ -6,27 +6,21 @@ function p=dewPointPres4Temp(T,algChoice)
 %                   pressure, water would begin to come out of gaseous form
 %                   at this temperature to restore equilibrium.
 %
-%INPUTS:         T      A vector or matrix of temperatures in degrees
-%                       Kelvin.
-%        algChoice      An optional parameter specifying the algorithm to
-%                       use. The choices are
-%                       0 The corrected version of the Clausius-Clapeyron
-%                         equation for use over land or in the upper air.
-%                       1 The empirical Magnus-type equation for use over
-%                         water or in the upper air (-40C to 50C
-%                         temperature).
-%                       2 The empirical Magnus-type equation for use over
-%                         ice (-80C to 0C temperature)
-%                       If algChoice is omitted, then the default value of
-%                       0, the corrected Clausius-Clapeyron equation is
-%                       used. Formula is taken from the March 2012
-%                       Koutsoyiannis paper that is cited below.
-%                       Formulae 1 and 2, are taken from the Alduchov
-%                       and Eskridge paper that is cited below.
+%INPUTS: T A vector or matrix of temperatures in degrees Kelvin.
+% algChoice An optional parameter specifying the algorithm to use. The
+%          choices are
+%          0 The corrected version of the Clausius-Clapeyron equation for
+%            use over land or in the upper air.
+%          1 The empirical Magnus-type equation for use over water or in
+%            the upper air (-40C to 50C temperature).
+%          2 The empirical Magnus-type equation for use over ice (-80C to
+%            0C temperature)
+%          If algChoice is omitted, then the default value of 0, the
+%          corrected Clausius-Clapeyron equation of [1,2,3] is used.
+%          Choices 1 and 2 use the methods from [4].
 %
-%OUTPUTS:       p       The dew point pressure in units of Newtons per
-%                       square meter (Pascals) corresponding to each of the
-%                       temperatures in T.
+%OUTPUTS: p The dew point pressure in units of Newtons per square meter
+%           (Pascals) corresponding to each of the temperatures in T.
 %
 %Formulae 0 is from [1], where formula 1 is also mentioned.
 %Two minor comments were printed on that paper, specifically [2] and [3].

@@ -44,15 +44,15 @@ function c=speedOfSoundInAir(algorithm,T,input3,input4,CO2Frac)
 %                       molecules per cubic meter of air. If this parameter
 %                       is omitted, then a dry (H2OFrac=0) atmosphere is
 %                       used.
-%              CO2Frac  This input is only used by algorithm 2. The is the
-%                       The carbox dioxide mole fraction, which is the
-%                       fraction of CO2 molecules per cubic meter to total
-%                       molecules per cubic meter of air. If this parameter
-%                       is omitted, then a CO2-free atmosphere (CO2Frac=0)
-%                       is used.
+%             CO2Frac This input is only used by algorithm 2. This is 
+%                     the carbon dioxide mole fraction, which is the
+%                     fraction of CO2 molecules per cubic meter to total
+%                     molecules per cubic meter of air. If this parameter
+%                     is omitted, then a CO2-free atmosphere (CO2Frac=0) is
+%                     used.
 %
-%OUTPUTS: c  The speed of sound under the specified conditions in meters
-%            per second.
+%OUTPUTS: c The speed of sound under the specified conditions in meters per
+%           second.
 %
 %If no inputs are provided, then the value for the speed of sound is the
 %value taken at standard temperature and pressure (0 degrees Centrigrade,
@@ -157,7 +157,7 @@ function c=speedOfSoundInAir(algorithm,T,input3,input4,CO2Frac)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 %Use the value for STP from Smith and Harlow if nothing else is provided.
-if(nargin<1)
+if(nargin<1||isempty(c))
     c=331.45;
     return;
 end

@@ -5,11 +5,11 @@ function vals=Gudermannian(x)
 %               the isometric latitude, which plays a role in the
 %               transverse Mercator projection.
 %
-%INPUTS:  x     A vector or matrix of values at which the Gudermannian
-%               should be evaluated, which can span span the real line.
+%INPUTS: x A vector or matrix of values at which the Gudermannian should be
+%          evaluated, which can span span the real line.
 %
-%OUTPUTS: val   The Gudermannian evaluated at each point in x. The output
-%               can range from -pi/2 to pi/2.
+%OUTPUTS: val The Gudermannian evaluated at each point in x. The output can
+%             range from -pi/2 to pi/2.
 %
 %A noted in [1], the Gudermannian can be easily expressed in terms of
 %hyperbolic tangent and inverse tangent operations.

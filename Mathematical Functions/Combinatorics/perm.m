@@ -1,28 +1,24 @@
 function val=perm(A,boolRowsSkip,boolColsSkip)
-%%PERM  Calculate the matrix permanent allowing for rows and columns to be
-%       skipped if desired (operate on a submatrix). The permanent is
-%       equivalent to calculating the determininant in the standard
-%       summation manner taught in school, except all of the minus signs
-%       are replaced with plus signs. Permanents play a role in
-%       combinatorics and the ability to skip rows and columns can be
-%       useful when using permanents to compute target-measurement
-%       association probabilities.
+%%PERM Calculate the matrix permanent allowing for rows and columns to be
+%      skipped if desired (operate on a submatrix). The permanent is
+%      equivalent to calculating the determininant in the standard
+%      summation manner taught in school, except all of the minus signs are
+%      replaced with plus signs. Permanents play a role in combinatorics
+%      and the ability to skip rows and columns can be useful when using
+%      permanents to compute target-measurement association probabilities.
 %
-%INPUTS: A   An mXn matrix. If m<=n, then the standard matrix permanent is
-%            found. If m>n, then the permanent of A' is found to be
-%            consistent with the permanents of A and A' being equal in
-%            square matrices. Empty matrices have a permanent of one by
-%            definition.
-%   boolRowsSkip  An optional list of rows in A that should be skipped when
-%                 computing the matrix permanent. This is an mX1 or 1Xm
-%                 boolean vector where a 1 means that row should be
-%                 skipped. If omitted or an empty matrix is passed, no rows
-%                 are skipped.
-%   boolColsSkip  An optional list of columsn in A that should be skipped
-%                 when computing the matrix permanent. This is an nX1 or
-%                 1Xn boolean vector where a 1 means that column should be
-%                 skipped. If omitted or an empty matrix is passed, no
-%                 columns are skipped.
+%INPUTS: A An mXn matrix. If m<=n, then the standard matrix permanent is
+%         found. If m>n, then the permanent of A' is found to be consistent
+%         with the permanents of A and A' being equal in square matrices.
+%         Empty matrices have a permanent of one by definition.
+% boolRowsSkip An optional list of rows in A that should be skipped when
+%         computing the matrix permanent. This is an mX1 or 1Xm boolean
+%         vector where a 1 means that row should be skipped. If omitted or
+%         an empty matrix is passed, no rows are skipped.
+% boolColsSkip An optional list of columsn in A that should be skipped when
+%         computing the matrix permanent. This is an nX1 or 1Xn boolean
+%         vector where a 1 means that column should be skipped. If omitted
+%         or an empty matrix is passed, no columns are skipped.
 %
 %OUTPUTS: val The matrix permanent of A, omitting any rows or columns as
 %             necessary.

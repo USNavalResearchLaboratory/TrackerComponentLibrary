@@ -1,26 +1,26 @@
 function F=FPolyKal(T,x,order)
-%%FPOLYKAL  Get the state transition matrix for a linear dynamic model
-%           of the given polynomial order (number of derivatives of
-%           position included) and number of dimensions (generally 3 for 3D
-%           motion). order=1 means constant velocity; order=2 means
-%           constant acceleration, etc. The state is ordered in terms of
-%           position, velocity, acceleration, etc. This transition matrix
-%           is used with discretized continuous-time models as well as with
-%           direct discrete-time models.
+%%FPOLYKAL Get the state transition matrix for a linear dynamic model of
+%          the given polynomial order (number of derivatives of position
+%          included) and number of dimensions (generally 3 for 3D motion).
+%          order=1 means constant velocity; order=2 means constant
+%          acceleration, etc. The state is ordered in terms of position,
+%          velocity, acceleration, etc. This transition matrix is used with
+%          discretized continuous-time models as well as with direct
+%          discrete-time models.
 %
-%INPUTS: T      The time-duration of the propagation interval.
-%        x      The ((order+1)*numDim)X1 target state. This is just used to
-%               extract numDim and for functions that expect the first two
-%               parameters of a state transition function to be T and x.
-%        order  The order >=0 of the filter. If order=1, then it is 
-%               constant velocity, 2 means constant acceleration, 3 means
-%               constant jerk, etc.
+%INPUTS: T The time-duration of the propagation interval.
+%        x The ((order+1)*numDim)X1 target state. This is just used to
+%          extract numDim and for functions that expect the first two
+%          parameters of a state transition function to be T and x.
+%    order The order >=0 of the filter. If order=1, then it is constant
+%          velocity, 2 means constant acceleration, 3 means constant jerk,
+%          etc.
 %
-%OUTPUTS: F     The state transition matrix under a linear dynamic model of
-%               the given order with motion in numDim dimensions where the
-%               state is stacked [position;velocity;acceleration;etc] where
-%               the number of derivatives of position depends on the order
-%               given. Order=0 mean just position.
+%OUTPUTS: F The state transition matrix under a linear dynamic model of the
+%           given order with motion in numDim dimensions where the state is
+%           stacked [position;velocity;acceleration;etc] where the number
+%           of derivatives of position depends on the order given. Order=0
+%           means just position.
 %
 %An expression for obtaining the state transition matrix of a
 %polynomial-time Kalman filter is given in terms of a Taylor expansion of e

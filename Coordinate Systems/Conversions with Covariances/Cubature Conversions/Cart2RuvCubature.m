@@ -25,20 +25,30 @@ function [zRuv, RRuv]=Cart2RuvCubature(z,SR,useHalfRange,zTx,zRx,M,includeW,xi,w
 %          vector of the local coordinate system of the receiver is the
 %          pointing direction of the receiver. If this matrix is omitted,
 %          then the identity matrix is used.
-%  includeW An optional boolean value indicating whether a third direction
-%           cosine component should be included. The u and v direction
-%           cosines are two parts of a 3D unit vector. Generally, one might
-%           assume that the target is in front of the sensor, so the third
-%           component would be positive and is not needed. However, the
-%           third component can be included if ambiguity exists. The
-%           default if this parameter is omitted or an empty matrix is
-%           passed is false.
-%        xi A 3 X numCubaturePoints matrix of cubature points for the
-%           numeric integration. If this and the final parameter are
-%           omitted or empty matrices are passed, then fifthOrderCubPoints
-%           is used to generate cubature points.
-%         w A numCubaturePoints X 1 vector of the weights associated
-%           with the cubature points.
+% includeW A value indicating whether a third direction cosine component
+%          should be included in the output and how to perform the
+%          averaging. This helps for determining whether the converted
+%          measurement is located behind the receiving radar. The u and v
+%          direction cosines are two parts of a 3D unit vector. Generally,
+%          one might assume that the target is in front of the sensor, so
+%          the third component would be positive and is not needed.
+%          However, the third component can be included if ambiguity
+%          exists. Possible values are:
+%          0 (The default if omitted or an empty matrix is passed) Do not
+%            include the third direction component.
+%          1 Include the third direction component and perform the
+%            averaging over the directions as a mean direction. A linear
+%            covariance matrix is computed with respect to the mean
+%            direction values.
+%          2 Include the third component and just perform weighted linear
+%            averaging. The three directional components will no longer
+%            have unit magnitude.
+%       xi A 3 X numCubaturePoints matrix of cubature points for the
+%          numeric integration. If this and the final parameter are omitted
+%          or empty matrices are passed, then fifthOrderCubPoints is used
+%          to generate cubature points.
+%        w A numCubaturePoints X 1 vector of the weights associated
+%          with the cubature points.
 %
 %OUTPUTS: zRuv The approximate means of the PDF of the the measurements
 %              in bistatic [r;u;v] coordinates or [r;u;v;w] coordinates if
@@ -87,7 +97,7 @@ function [zRuv, RRuv]=Cart2RuvCubature(z,SR,useHalfRange,zTx,zRx,M,includeW,xi,w
 % includeW=true;
 % [zConv,RConv]=Cart2RuvCubature(zCart,SCart,useHalfRange,zTx,zRx,M,includeW);
 % calcNEES(ruvTrue,zConv(1:3,:),RConv(1:3,1:3,:))
-% %One will again find the NEES to be near 1.
+% %One find the NEES to be near 1, which indicates covariance consistency.
 %
 %REFERENCES:
 %[1] David F. Crouse , "Basic tracking using nonlinear 3D monostatic and
@@ -127,7 +137,9 @@ if(size(SR,3)==1)
     SR=repmat(SR,[1,1,numMeas]);
 end
 
-if(includeW)
+hasW=(includeW~=0);
+
+if(hasW)
     numDim=4;
 else
     numDim=3;
@@ -135,8 +147,8 @@ end
 
 zRuv=zeros(numDim,numMeas);
 RRuv=zeros(numDim,numDim,numMeas);
-if(includeW==false)
-    h=@(x)Cart2Ruv(x,useHalfRange,zTx,zRx,M,includeW);
+if(includeW==0||includeW==2)
+    h=@(x)Cart2Ruv(x,useHalfRange,zTx,zRx,M,hasW);
 
     for curMeas=1:numMeas
         [zRuv(:,curMeas), RRuv(:,:,curMeas)]=calcCubPointMoments(z(:,curMeas),SR(:,:,curMeas),h,xi,w);
@@ -147,7 +159,7 @@ else
         %Transform the cubature points to match the given Gaussian.
         cubPoints=transformCubPoints(xi,z(:,curMeas),SR(:,:,curMeas));
         %Convert all of the points.
-        cubPointsConv=Cart2Ruv(cubPoints,useHalfRange,zTx,zRx,M,includeW);
+        cubPointsConv=Cart2Ruv(cubPoints,useHalfRange,zTx,zRx,M,hasW);
 
         %Given r-u-v-w coordinates, the mean direction is just the linear
         %average projected onto the unit sphere.

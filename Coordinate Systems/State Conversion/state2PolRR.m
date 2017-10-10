@@ -9,13 +9,12 @@ function z=state2PolRR(xTar,systemType,useHalfRange,zTx,zRx,M,stateType)
 %             y-axis, which is more common in navigation.
 %
 %INPUTS: xTar A xDimXN matrix of N target states consisting of 2D
-%             position and, if a range rate measurement is desired,
-%             velocity components in the order xTar=[xPosition;xVelocity],
-%             if stateType=0, or in the format
-%             [xPosition;headingAngle;speed] is stateType=1. If
-%             stateType=-1, only position components need to be provided
-%             and range rate is not returned. Other components in the state
-%             are ignored.
+%          position and, if a range rate measurement is desired, velocity
+%          components in the order xTar=[xPosition;xVelocity], if
+%          stateType=0, or in the format [xPosition;headingAngle;speed] is
+%          stateType=1. If stateType=-1, only position components need to
+%          be provided and range rate is not returned. Other components in
+%          the state are ignored.
 % systemType An optional parameter specifying the axes from which the
 %          angles are measured. Possible values are
 %          0 (The default if omitted) The azimuth angle is counterclockwise

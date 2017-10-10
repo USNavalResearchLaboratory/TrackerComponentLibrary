@@ -1,15 +1,15 @@
 function J=calcPolarRRConvJacob(zPolarRR,systemType,useHalfRange,lTx,lRx,M)
-%%CALCPOLARRRCONVJACOB Calculate the Jacobian for a Cartesian position
-%            augmented with a range rate taken with respect to a monostatic
-%            or bistatic range and polar angle measurement in 2D with a
-%            monostatic or bistatic range rate, ignoring atmospheric
-%            effects. This type of Jacobian is useful when performing
-%            tracking using Cartesian-converted measurements where the
-%            clutter density is specified in the measurement coordinate
-%            system, not the converted measurement coordinate system. In
-%            this instance, the position measurement would have been
-%            converted to Cartesian, but the range rate cannot, because it
-%            does not specify a full velocity vector.
+%%CALCPOLARRRCONVJACOB Calculate the Jacobian for a bistatic range and
+%            polar angle measurement in 2D with a monostatic or bistatic
+%            range rate, ignoring atmospheric effects with respect to
+%            Cartesian position augmented with the range rate component.
+%            This type of Jacobian is useful when performing tracking using
+%            Cartesian-converted measurements where the clutter density is
+%            specified in the measurement coordinate system, not the
+%            converted measurement coordinate system. In this instance, the
+%            position measurement would have been converted to Cartesian,
+%            but the range rate cannot, because it does not specify a full
+%            velocity vector.
 %
 %INPUTS: zPolarRR A 3X1 point in polar coordinates in the format
 %          [range;azimuth;rangeRate], where the angle is given in radians

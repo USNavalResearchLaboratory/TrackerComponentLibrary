@@ -19,7 +19,7 @@ function zSpher=spherCD2SpherITRS(zCD,param1,param2,S11)
 %            is measured up from the x-y plane (towards the z-axis).
 %param1,param2,S11 These optional parameters specify the magnetic field
 %               parameters from which the direction of the CD pole is
-%               derived. These aprameters are impied set base don how the
+%               derived. These parameters are implied set based on how the
 %               function is called:
 %               1) spherCD2SpherITRS(zCD)
 %               If all of the other parameters are omitted, then the CD

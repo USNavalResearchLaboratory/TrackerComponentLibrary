@@ -1,5 +1,5 @@
 function isoLat=ellipsLat2IsoLat(ellipsLat,f)
-%ELLIPSLAT2ISOLAT  Convert an ellipsoidal (geodetic) latitude to an
+%ELLIPSLAT2ISOLAT Convert an ellipsoidal (geodetic) latitude to an
 %            isometric latitude. The isometric latitude is used in Mercator
 %            and transverse Mercator map projections. The isometry comes
 %            from the fact that at any point, equal displacements along
@@ -11,7 +11,7 @@ function isoLat=ellipsLat2IsoLat(ellipsLat,f)
 %
 %INPUTS: ellipsLat A vector or matrix of ellipsoidal (geodetic) latitudes
 %                  in radians. These range from -pi/2 to pi/2.
-%           f      The flattening factor of the reference ellipsoid. If
+%                f The flattening factor of the reference ellipsoid. If
 %                  this argument is omitted, the value in
 %                  Constants.WGS84Flattening is used.
 %

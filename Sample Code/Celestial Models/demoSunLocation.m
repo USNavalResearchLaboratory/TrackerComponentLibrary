@@ -12,8 +12,8 @@ function demoSunLocation()
 %October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-display('Simulating the location of the Sun with and without refraction for an')
-display('Observer in Hilo, Hawaii on 1 June 2013 at 15:42 UTC.')
+disp('Simulating the location of the Sun with and without refraction for an')
+disp('Observer in Hilo, Hawaii on 1 June 2013 at 15:42 UTC.')
 %The Latitude and Longitude of Hilo, Hawaii.
 lat=19.7056*(pi/180);
 lon=-155.0858*(pi/180);
@@ -24,8 +24,8 @@ obsLoc=ellips2Cart([lat;lon;0]);
 %Thus, we choose 15:42UTC, to be about halfway through the sunrise.
 [JulUTC1,JulUTC2]=Cal2UTC(2013,6,1,15,42,0);
 
-display(' ')%Add a line break.
-display('1) Determining the refraction-free outline of the Sun')
+disp(' ')%Add a line break.
+disp('1) Determining the refraction-free outline of the Sun')
 
 %To display an image of the outline of the Sun, the radius of the Sun is
 %needed. It is (in meters).
@@ -34,7 +34,7 @@ sunRad=696000e3;
 %Find the Cartesian location of the Sun in WGS-84 ECEF coordinates,
 %correcting for aberration and light-time, but not for atmospheric
 %refraction.
-[~,rSunITRS]=solarBodyVec(JulUTC1,JulUTC2,'UTC','SUN',0,[obsLoc;0;0;0],'ITRS');
+[~,rSunITRS]=solarBodyVec(JulUTC1,JulUTC2,'UTC',11,[obsLoc;0;0;0],'ITRS');
 rSunITRS=rSunITRS(1:3);%Only keep the position.
 
 %The location of the Sun with respect to the observer.
@@ -74,10 +74,10 @@ outlineSphere=Cart2Sphere(outlineLocs);
 azSun=outlineSphere(2,:);
 elSun=outlineSphere(3,:);
 
-display(' ')%Add a line break.
-display('2) Determining the refraction-corrupted outline of the Sun, assuming yellow light.')
-display('In simple refraction models, refraction only changes the elevation of the')
-display('Sun in the sky. This step is slow, because it uses ray tracing.')
+disp(' ')%Add a line break.
+disp('2) Determining the refraction-corrupted outline of the Sun, assuming yellow light.')
+disp('In simple refraction models, refraction only changes the elevation of the')
+disp('Sun in the sky. This step is slow, because it uses ray tracing.')
 %Add in the effects of standard refraction for yellow light using the
 %simple ray tracing algorithm. Say 20 degrees Centigrade, 293.15K, 70%
 %humidity and standard pressure.
@@ -85,9 +85,9 @@ zenithDist=pi/2-elSun;
 apparentZenithDist=addAstroRefrac(0,[lat;lon;0],zenithDist,0.7,Constants.standardAtmosphericPressure,293.15);
 apparentElSun=pi/2-apparentZenithDist;
 
-display(' ')%Add a line break.
-display('3) Plotting the outlines of the Sun. The refraction-corrupted image is')
-display('the higher one.')
+disp(' ')%Add a line break.
+disp('3) Plotting the outlines of the Sun. The refraction-corrupted image is')
+disp('the higher one.')
 
 %For determining good bounds for the plot, the azimuth and elevation of the
 %Sun in the local ENU coordinate system need to be found. 

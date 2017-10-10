@@ -3,7 +3,7 @@ function relHumid=specHumid2RelHumid(specHumid,T,mpVDryAir,defChoice,algChoice)
 %                    assuming the validity of the Ideal Gas Law.
 %
 %INPUTS: specHumid The specific humidity which is a nonnegative number.
-%        T         The temperature in degrees Kelvin.
+%                T The temperature in degrees Kelvin.
 %        mpVDryAir The mass density (mass in kilograms per unit volume in
 %                  cubic meters) of dry air (the air not counting the
 %                  water).
@@ -37,11 +37,11 @@ function relHumid=specHumid2RelHumid(specHumid,T,mpVDryAir,defChoice,algChoice)
 %March 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<4)
+if(nargin<4||isempty(defChoice))
     defChoice=0;
 end
 
-if(nargin<5)
+if(nargin<5||isempty(algChoice))
     algChoice=0;
 end
 

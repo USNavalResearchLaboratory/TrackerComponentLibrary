@@ -1,21 +1,19 @@
-/**ASSIGN2DALT            A C-code (for Matlab) implementation of the
- *                        shortest path assignment algorithm to solve the
- *                        two-dimensional assignment problem with a
- *                        rectangular cost matrix C. This implementation
- *                        scans the cost matrix by row rather than by
- *                        column.
+/**ASSIGN2DALT A C-code (for Matlab) implementation of the shortest path
+ *             assignment algorithm to solve the two-dimensional assignment
+ *             problem with a rectangular cost matrix C. This
+ *             implementation scans the cost matrix by row rather than by
+ *             column.
  *
- *INPUTS:   C           A numRowXnumCol cost matrix that does not contain
- *                      any NaNs and where the largest finite element minus
- *                      the smallest element is a finite quantity (does not
- *                      overflow) when performing minimization and where
- *                      the smallest finite element minus the largest
- *                      element is finite when performing maximization. 
- *                      Forbidden assignments can be given costs of +Inf
- *                      for minimization and -Inf for maximization.
- *          maximize    If true, the minimization problem is transformed
- *                      into a maximization problem. The default if this
- *                      parameter is omitted is false.
+ *INPUTS: C A numRowXnumCol cost matrix that does not contain any NaNs and
+ *          where the largest finite element minus the smallest element is
+ *          a finite quantity (does not overflow) when performing
+ *          minimization and where the smallest finite element minus the
+ *          largest element is finite when performing maximization. 
+ *          Forbidden assignments can be given costs of +Inf for
+ *          minimization and -Inf for maximization.
+ * maximize If true, the minimization problem is transformed into a
+ *          maximization problem. The default if this parameter is omitted
+ *          is false.
  *
  *OUTPUTS:  col4row     A numRowX1 Matlab vector where the entry in each
  *                      element is an assignment of the element in that row
@@ -264,7 +262,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     return;
 }
 
-double shortestPathCFast(double *C,ptrdiff_t *col4row,ptrdiff_t *row4col, double *u,double *v, size_t numRow, size_t numCol) {
+double shortestPathCFast(double *C, ptrdiff_t *col4row, ptrdiff_t *row4col, double *u, double *v, size_t numRow, size_t numCol) {
     double *shortestPathCost;
     size_t curRow,curCol,curUnassignedCol, *pred, *Row2Scan;
     bool *ScannedRows;//This holds 1's and 0's for which columns were scanned.

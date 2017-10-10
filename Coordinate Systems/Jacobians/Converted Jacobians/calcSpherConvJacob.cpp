@@ -1,12 +1,13 @@
-/*CALCSPHERCONVJACOB Calculate the Jacobian for a Cartesian position taken
-*            with respect to a monostatic or bistatic range and direction
-*            cosines measurement in 3D, ignoring atmospheric effects. This
+/*CALCSPHERCONVJACOB Calculate the Jacobian for a monostatic or bistatic
+*            range and a spherical direction measurement in 3D, ignoring
+*            atmospheric effects, with respect to Cartesian position. This
 *            type of Jacobian is useful when performing tracking using
 *            Cartesian-converted measurements where the clutter density is
 *            specified in the measurement coordinate system, not the
 *            converted measurement coordinate system.
-*INPUTS: zSpher A 3X1 point in range and azimuth and angle in the
-*           format [range;azimuth;angle], where the angle is given in
+*
+*INPUTS: zSpher A 3XN set of points in range and azimuth and angle in the
+*           format [range;azimuth;angle], where the angles are given in
 *           radians.
 * systemType An optional parameter specifying the axes from which the
 *           angles are measured in radians. Possible values are
@@ -21,6 +22,9 @@
 *             (towards the y-axis). This is consistent with some spherical
 *             coordinate systems that use the z axis as the boresight
 *             direction of the radar.
+*           2 This is the same as 0 except instead of being given
+*             elevation, one desires the angle away from the z-axis, which
+*             is (pi/2-elevation).
 * useHalfRange An optional boolean value specifying whether the bistatic
 *           (round-trip) range value has been divided by two. This normally
 *           comes up when operating in monostatic mode (the most common
@@ -44,9 +48,9 @@
 *           aligned with the global and M=eye(3) --the identity matrix is
 *           used. 
 *
-*OUTPUTS: J The 3X3 Jacobian matrix. Each row is a components of
-*           [range;azimuth;elevation] in that order with derivatives taken
-*           with respect to [x,y,z] by column.
+*OUTPUTS: J The 3X3XN set of Jacobian matrices, one for each point given.
+*           Each row is a components of [range;azimuth;elevation] in that
+*           order with derivatives taken with respect to [x,y,z] by column.
 *
 *The algorithm can be compiled for use in Matlab  using the 
 *CompileCLibraries function.
@@ -70,6 +74,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     double *zSpher,*lTx,*lRx,*M;
     double lTxLocal[3],lRxLocal[3],MLocal[9];//Only used if not provided.
     int systemType;
+    size_t N,i;
     bool useHalfRange;
     mxArray *retMat;
     
@@ -83,7 +88,9 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         return;
     }
     
-    if(mxGetM(prhs[0])!=3||mxGetN(prhs[0])!=1) {
+    N=mxGetN(prhs[0]);
+    
+    if(mxGetM(prhs[0])!=3||mxIsEmpty(prhs[0])) {
        mexErrMsgTxt("The point has the wrong dimensionality.");
        return;
     }
@@ -96,23 +103,21 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     } else {
         systemType=getIntFromMatlab(prhs[1]);
         
-        if(systemType!=0&&systemType!=1) {
+        if(systemType!=0&&systemType!=1&&systemType!=2) {
             mexErrMsgTxt("Invalid system type specified.");
             return;
         }
     }
     
-    if(nrhs<3||mxIsEmpty(prhs[2])) {
-        useHalfRange=false;
-    } else {
-        useHalfRange=getBoolFromMatlab(prhs[2]);
-    }
-    
-    if(nrhs<3||mxIsEmpty(prhs[3])) {
+    if(nrhs<4||mxIsEmpty(prhs[3])) {
         lTx=lTxLocal;
         lTx[0]=0;
         lTx[1]=0;
         lTx[2]=0;
+        
+        if(nrhs<3||mxIsEmpty(prhs[2])) {
+            useHalfRange=true;
+        }
     } else {
         if(mxGetM(prhs[3])!=3||mxGetN(prhs[3])!=1) {
             mexErrMsgTxt("The transmitter location has the wrong dimensionality.");
@@ -121,6 +126,14 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         checkRealDoubleArray(prhs[3]);
         
         lTx=reinterpret_cast<double*>(mxGetData(prhs[3]));
+        
+        if(nrhs<3||mxIsEmpty(prhs[2])) {
+            useHalfRange=false;
+        }
+    }
+    
+    if(!(nrhs<3||mxIsEmpty(prhs[2]))) {
+        useHalfRange=getBoolFromMatlab(prhs[2]);
     }
     
     if(nrhs<4||mxIsEmpty(prhs[4])) {
@@ -162,10 +175,21 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         M=reinterpret_cast<double*>(mxGetData(prhs[5]));
     }
     
-    retMat=mxCreateDoubleMatrix(3, 3,mxREAL);
-    retData=reinterpret_cast<double*>(mxGetData(retMat));
+    {
+        mwSize dims[3];
+        dims[0]=3;
+        dims[1]=3;
+        dims[2]=N;
         
-    calcSpherConvJacobGenCPP(retData,zSpher,systemType,useHalfRange,lTx,lRx,M);
+        retMat=mxCreateNumericArray(3,dims,mxDOUBLE_CLASS,mxREAL);
+    }
+    retData=reinterpret_cast<double*>(mxGetData(retMat));
+    
+    for(i=0;i<N;i++) {
+        calcSpherConvJacobGenCPP(retData,zSpher,systemType,useHalfRange,lTx,lRx,M);
+        zSpher+=3;
+        retData+=9;
+    }
     plhs[0]=retMat;
 }
 

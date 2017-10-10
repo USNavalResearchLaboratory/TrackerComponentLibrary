@@ -27,6 +27,9 @@ function [zCart,RCart]=spher2CartCubature(spherPoint,SR,systemType,useHalfRange,
 %             (towards the y-axis). This is consistent with some spherical
 %             coordinate systems that use the z axis as the boresight
 %             direction of the radar.
+%           2 This is the same as 0 except instead of being given
+%             elevation, one is given the angle away from the z-axis, which
+%             is (pi/2-elevation).
 % useHalfRange An optional boolean value specifying whether the bistatic
 %           (round-trip) range value has been divided by two. This normally
 %           comes up when operating in monostatic mode (the most common
@@ -54,7 +57,7 @@ function [zCart,RCart]=spher2CartCubature(spherPoint,SR,systemType,useHalfRange,
 %           receiver is the pointing direction of the receiver. If omitted,
 %           then it is assumed that the local coordinate system is aligned
 %           with the global and M=eye(3) --the identity matrix is used. If
-%           only a single 3X3 matrix is passed, then is is assumed to be
+%           only a single 3X3 matrix is passed, then it is assumed to be
 %           the same for all of the N conversions.
 %        xi A 3 X numCubaturePoints matrix of cubature points for the
 %           numeric integration. If this and the next parameter are

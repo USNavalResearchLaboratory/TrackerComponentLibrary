@@ -1,9 +1,9 @@
 /**COORDFUNCS A header file for C++ implementations of coordinate
- *            conversion functions and Jacobians related to coordinate
- *            conversions. See the files implementing each function for
- *            more details on their usage. Most of the documentation for
- *            the algorithms is with the corresponding Matlab
- *            implementations.
+ *            conversion functions as well as Jacobians and Hessians
+ *            related to coordinate conversions. See the files implementing
+ *            each function for more details on their usage. Most of the
+ *            documentation for the algorithms is with the corresponding
+ *            Matlab implementations.
  *
  *January 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
  **/
@@ -13,10 +13,10 @@
 #define COORDFUNCS
 #include <stddef.h>
 
-void spher2CartCPP(double *cartPoint,const double *point,const int systemType);
-void spher2CartGenCPP(double *retData,const double *point,const int systemType,const bool useHalfRange,const double *zTx,const double *zRx,const double *M);
-void Cart2SphereGenCPP(double *retData,const double *cartPoints,const int systemType,const bool useHalfRange,const double *zTx,const double *zRx,const double *M);
-void spher2CartNoRangeCPP(double *retData,const double *point,const int systemType,const double *M);
+void spher2CartCPP(double *cartPoint,const double *point,size_t systemType);
+void spher2CartGenCPP(double *retData,const double *point,size_t systemType,const bool useHalfRange,const double *zTx,const double *zRx,const double *M);
+void Cart2SphereGenCPP(double *retData,const double *cartPoints,const size_t systemType,const bool useHalfRange,const double *zTx,const double *zRx,const double *M);
+void spher2CartNoRangeCPP(double *retData,const double *point,const size_t systemType,const double *M);
 void getENUAxesCPP(double *u, double *c,const double *plhPoint,const bool justVertical,const double a,const double f);
 void getEllipsHarmAxesCPP(double *u, double *c,const double *pointHarmon,const double E);
 void Cart2EllipsHarmonCPP(double *pointsHarmon,const double *cartPoints, const size_t numPoints, const double E);
@@ -28,9 +28,20 @@ double getRangeRate2DCPP(const double *points,bool useHalfRange,const double *xT
 double getRangeRate3DCPP(const double *xTar,bool useHalfRange,const double *xTx,const double *xRx);
 
 void rangeGradientCPP(const size_t numRows,double *J,double *tempSpace,const double *point,const bool useHalfRange,const double *lTx,const double *lRx);
-void spherAngGradientGenCPP(double *retMat,const double *xG,const int systemType,const double *lRx, const double *M);
-void calcSpherConvJacobGenCPP(double *J,const double *zSpher,const int systemType,const bool useHalfRange,const double *lTx,const double *lRx,const double *M);
-void calcSpherConvJacobCPP(double *J, const double *point, const int systemType);
+void spherAngGradientGenCPP(double *retMat,const double *xG,const size_t systemType,const double *lRx, const double *M);
+void calcSpherConvJacobGenCPP(double *J,const double *zSpher,const size_t systemType,const bool useHalfRange,const double *lTx,const double *lRx,const double *M);
+void calcSpherConvJacobCPP(double *J, const double *point, const size_t systemType);
+void calcSpherInvJacobCPP(double *J,const double *z,const size_t systemType);
+
+void rangeHessianCPP(const size_t numDim,double *H,const double *x,const bool useHalfRange);
+void rangeHessianGenCPP(const size_t numDim,double *H,const double *x,const bool useHalfRange,const double *lTx,const double *lRx);
+void spherAngHessianCPP(double *HTotal,const double *xG,const size_t systemType);
+void spherAngHessianGenCPP(double *HTotal,const double *xG,const size_t systemType,const double *lRx,const double *M);
+void calcSpherInvHessianCPP(double *HTotal,const double *z,const size_t systemType);
+void spherAngHessianGenCPP(double *H,const double *x,const size_t systemType,const bool useHalfRange,const double *lTx,const double *lRx,const double *M);
+void calcSpherHessianCPP(double *H,const double *x,const size_t systemType,const bool useHalfRange,const double *lTx,const double *lRx,const double *M);
+void calcSpherConvHessianCPP(double *H, const double *point, const size_t systemType, const bool useHalfRange);
+void calcSpherConvHessianGenCPP(double *H,const double *zSpher,const size_t systemType,const bool useHalfRange,const double *lTx,const double *lRx,const double *M);
 
 #endif
 

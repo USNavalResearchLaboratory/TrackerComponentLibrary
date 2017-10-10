@@ -8,12 +8,12 @@ function val=fallingFactorial(x,n)
 %                  It is implemented using logarthmic functions to reduce
 %                  problems with overflows in intermediate results.
 %
-%INPUTS:   x  A scalar or matrix of first values in the product series of
-%             x*(x-1)*...*(x-(n-1)). x cannot be negative.
-%          n  The scalar or matrix n value in the product series of
-%             x*(x-1)*...*(x-(n-1)). If x is a matrix, n can be a scalar or
-%             a matrix of the same size. If x is a scalar, n can be a
-%             scalar or a matrix. n must be such that (x-(n-1))>0.
+%INPUTS: x A scalar or matrix of first values in the product series of
+%          x*(x-1)*...*(x-(n-1)). x cannot be negative.
+%        n The scalar or matrix n value in the product series of
+%          x*(x-1)*...*(x-(n-1)). If x is a matrix, n can be a scalar or a
+%          matrix of the same size. If x is a scalar, n can be a scalar or
+%          a matrix. n must be such that (x-(n-1))>0.
 %
 %OUTPUTS: val The falling factorial (x)_n for each x and the corresponding
 %             n/ for each n and a single x depending on what is a matrix

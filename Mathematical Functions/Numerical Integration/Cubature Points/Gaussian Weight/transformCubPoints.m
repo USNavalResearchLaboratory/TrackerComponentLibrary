@@ -3,21 +3,21 @@ function xi=transformCubPoints(xi,mu,S)
 %                    distribution to approximation a normal distribution
 %                    with mean mu and covariance matrix S*S'.
 %
-%INPUTS:    xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points for a normal(0,I) distribution. (Each
-%                   "point" is a vector). The weights associated with the
-%                   points do not need to be transformed when applying the
-%                   points to other Gaussian distributions
-%           mu      A numDim X 1 vector that is the desired mean of the
-%                   transformed points.
-%           S       A numDum X numDim lower-triangular square root of the
-%                   covariance matrix of the desired distribution. If P is 
-%                   the covariance matrix of the desired distribution, then
-%                   one can obtain S as S=chol(P,'lower');
+%INPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%           points for a normal(0,I) distribution. (Each "point" is a
+%           vector). The weights associated with the points do not need to
+%           be transformed when applying the points to other Gaussian
+%           distributions
+%        mu A numDim X 1 vector that is the desired mean of the transformed
+%           points.
+%         S A numDum X numDim lower-triangular square root of the
+%           covariance matrix of the desired distribution. If P is the
+%           covariance matrix of the desired distribution, then one can
+%           obtain S as S=chol(P,'lower');
 %
-%OUTPUTS:   xi      The cubature points transformed to be useful in
-%                   approximation integrals over a normal distribution with 
-%                   mean mu and covariance matrix S*S'.
+%OUTPUTS: xi The cubature points transformed to be useful in approximating
+%            integrals over a normal distribution with mean mu and
+%            covariance matrix S*S'.
 %
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

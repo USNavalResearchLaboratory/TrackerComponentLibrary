@@ -47,9 +47,10 @@
  *[2] G. H. Kaplan, "Celestial pole offsets: Conversion from (dx,dy) to
  *   (dpsi,deps)," U.S. Naval Observatory, Tech. Rep., May 2005. [Online].
  *   Available: http://aa.usno.navy.mil/publications/reports/dXdY_to_dpsideps.pdf
- *[3] D. F. Crouse, "An overview of major terrestrial, celestial, and
- *    temporal coordinate systems for target tracking", Report, U. S. Naval
- *    Research Laboratory, to appear, 2016.
+ *[3] D. F. Crouse, "An Overview of Major Terrestrial, Celestial, and
+ *    Temporal Coordinate Systems for Target Tracking," Formal Report,
+ *    Naval Research Laboratory, no. NRL/FR/5344--16-10,279, 10 Aug. 2016,
+ *    173 pages.
  *
  *March 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
  */

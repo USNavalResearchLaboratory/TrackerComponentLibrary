@@ -35,7 +35,7 @@ function points=Cart2Pol(z,systemType,useHalfRange,zTx,zRx,M)
 %          receiver. If omitted or an empty matrix is passed, then it is
 %          assumed that the local coordinate system is aligned with the
 %          global and M=eye(2) --the identity matrix is used. If only a
-%          single 2X2 matrix is passed, then is is assumed to be the same
+%          single 2X2 matrix is passed, then it is assumed to be the same
 %          for all of the N conversions.
 %
 %OUTPUTS: points A 2XN matrix of the converted points. Each column of the

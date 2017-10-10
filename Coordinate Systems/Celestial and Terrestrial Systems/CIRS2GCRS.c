@@ -6,24 +6,22 @@
  *           which have a period on the order of 14 months and are thus
  *           small.
  *
- *INPUTS:   x   The NXnumVec collection of vectors to convert. N can be 3,
- *              or 6. If the vectors are 3D, then they can be either
- *              position or velocity. 6D vectors are assumed to be position
- *              and velocity.
- *Jul1, Jul2    Two parts of a Julian date given in terrestrial time (TT).
- *              The units of the date are days. The full date is the sum of
- *              both terms. The date is broken into two parts to provide
- *              more bits of precision. It does not matter how the date is
- *              split.
- *dXdY          dXdY=[dX;dY] are the celestial pole offsets with respect to
- *              the IAU 2006/2000A precession/nutation model in radians If
- *              this parameter is omitted, the value from the function
- *              getEOP will be used.
+ *INPUTS: x The NXnumVec collection of vectors to convert. N can be 3, or
+ *          6. If the vectors are 3D, then they can be either position or
+ *          velocity. 6D vectors are assumed to be position and velocity.
+ * Jul1, Jul2 Two parts of a Julian date given in terrestrial time (TT).
+ *          The units of the date are days. The full date is the sum of
+ *          terms. The date is broken into two parts to provide more bits
+ *          of precision. It does not matter how the date is split.
+ *     dXdY dXdY=[dX;dY] are the celestial pole offsets with respect to
+ *          the IAU 2006/2000A precession/nutation model in radians If this
+ *          parameter is omitted, the value from the function getEOP will
+ *          be used.
  *
- *OUTPUTS: vec  A 3XN or 6XN matrix of vectors converted from CIRS
- *              coordinates to GCRS coordinates.
- *       rotMat The 3X3 rotation matrix used for the rotation of the
- *              positions and velocities.
+ *OUTPUTS: vec A 3XN or 6XN matrix of vectors converted from CIRS
+ *             coordinates to GCRS coordinates.
+ *      rotMat The 3X3 rotation matrix used for the rotation of the
+ *             positions and velocities.
  *
  *The conversion functions from the International Astronomical Union's
  *(IAU) Standard's of Fundamental Astronomy library are put together to get
@@ -40,9 +38,10 @@
  *Different celestial coordinate systems are compared in [1].
  *
  *REFERENCES:
- *[1] D. F. Crouse, "An overview of major terrestrial, celestial, and
- *    temporal coordinate systems for target tracking", Report, U. S. Naval
- *    Research Laboratory, to appear, 2016.
+ *[1] D. F. Crouse, "An Overview of Major Terrestrial, Celestial, and
+ *    Temporal Coordinate Systems for Target Tracking," Formal Report,
+ *    Naval Research Laboratory, no. NRL/FR/5344--16-10,279, 10 Aug. 2016,
+ *    173 pages.
  *
  *April 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
  */

@@ -4,32 +4,32 @@ function points=ellips2Sphere(points,a,f)
 %               then it is assumed that one is just converting latitudes on
 %               the surface of the reference ellipsoid.
 %
-%INPUTS:    points  One or more points given in geodetic latitude and
-%                   longitude, in radians, and height, in meters that are
-%                   to be converted to Cartesian coordinates. To convert
-%                   N points, points is a 3XN matrix with each column
-%                   having the format [latitude;longitude; height].
-%                   Alternately, one can just provide points as
-%                   [latitude;longitude], where height is implied as zero,
-%                   and the return values are 2D geocentric (latitude
-%                   longitude pairs). Also, one can just provide points as
-%                   latitudes, in which case spherical latitudes for points
-%                   on the surface of the reference ellipsoid are returned.
-%           a       The semi-major axis of the reference ellipsoid. If
-%                   this argument is omitted, the value in
-%                   Constants.WGS84SemiMajorAxis is used.
-%           f       The flattening factor of the reference ellipsoid. If
-%                   this argument is omitted, the value in
-%                   Constants.WGS84Flattening is used.
+%INPUTS: points One or more points given in geodetic latitude and
+%               longitude, in radians, and height, in meters that are to be
+%               converted to Cartesian coordinates. To convert N points,
+%               points is a 3XN matrix with each column having the format
+%               [latitude;longitude; height]. Alternately, one can just
+%               provide points as [latitude;longitude], where height is
+%               implied as zero, and the return values are 2D geocentric
+%               (latitude, longitude pairs). Also, one can just provide
+%               points as latitudes, in which case spherical latitudes for
+%               points on the surface of the reference ellipsoid are
+%               returned.
+%             a The semi-major axis of the reference ellipsoid. If this
+%               argument is omitted, the value in
+%               Constants.WGS84SemiMajorAxis is used.
+%             f The flattening factor of the reference ellipsoid. If this
+%               argument is omitted, the value in Constants.WGS84Flattening
+%               is used.
 %
-%OUTPUTS:   points  A matrix of the converted points. Each column of the
-%                   matrix has the format [r;azimuth;elevation],
-%                   with azimuth and elevation given in radians, unless the
-%                   input points were given as 2D [latitude;longitude]
-%                   points, in which case the output points are of the form
-%                   [azimuth;elevation], unless the input points were just
-%                   given as latitudes, in which case the output points are
-%                   just elevations (geocentric latitudes).
+%OUTPUTS: points A matrix of the converted points. Each column of the
+%               matrix has the format [r;azimuth;elevation], with azimuth
+%               and elevation given in radians, unless the input points
+%               were given as 2D [latitude;longitude] points, in which case
+%               the output points are of the form [azimuth;elevation],
+%               unless the input points were just given as latitudes, in
+%               which case the output points are just elevations
+%               (geocentric latitudes).
 %
 %Azimuth is an angle measured from the x-axis in the x-y plane. Elevation
 %is the angle above the x-y plane.
@@ -37,11 +37,11 @@ function points=ellips2Sphere(points,a,f)
 %December 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<3)
+if(nargin<3||isempty(f))
     f=Constants.WGS84Flattening;
 end
 
-if(nargin<2)
+if(nargin<2||isempty(a))
     a=Constants.WGS84SemiMajorAxis;
 end
 

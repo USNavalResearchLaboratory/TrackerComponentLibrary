@@ -2,8 +2,8 @@ function absHumid=numberDensH2O2AbsHumid(numberDensity)
 %%NUMBERDENSH2O2ABSHUMID Given number of water molecules per cubic meter of
 %                   air, determine the absolute humidity of the air.
 %
-%INPUT:   numberDensity The number of water moleculer per cubic meter of
-%                   air.
+%INPUT: numberDensity The number of water moleculer per cubic meter of
+%                     air.
 %
 %OUTPUTS: absHumid The absolute humidity with units of kilograms of
 %                  water per cubic meter.

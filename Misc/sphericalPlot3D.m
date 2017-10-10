@@ -26,6 +26,9 @@ function h=sphericalPlot3D(f,azRange,elRange,numPoints,systemType,varargin)
 %             (towards the y-axis). This is consistent with some spherical
 %             coordinate systems that use the z axis as the boresight
 %             direction of the radar.
+%           2 This is the same as 0 except instead of being given
+%             elevation, one desires the angle away from the z-axis, which
+%             is (pi/2-elevation).
 %  varargin Sets of values that should be passed to the plot function to
 %           format the ellipses or that will be passed to the surf function
 %           to format the surface. For example, one often wants to pass

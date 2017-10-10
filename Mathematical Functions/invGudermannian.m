@@ -5,12 +5,11 @@ function vals=invGudermannian(x)
 %               provides the isometric latitude, which plays a role in the
 %               transverse Mercator projection.
 %
-%INPUTS:  x     A vector or matrix of values at which the inverse
-%               Gudermannian should be evaluated. x can be between -pi/2
-%               and pi/2.
+%INPUTS: x A vector or matrix of values at which the inverse Gudermannian
+%          should be evaluated. x can be between -pi/2 and pi/2.
 %
-%OUTPUTS: val   The inverse Gudermannian evaluated at each point in x. It
-%               ranges from -Inf to Inf.
+%OUTPUTS: val The inverse Gudermannian evaluated at each point in x. It
+%             ranges from -Inf to Inf.
 %
 %A noted at [1], the Gudermannian can be easily expressed in terms of
 %hyperbolic and regular trigonometric functions. The inverse function comes

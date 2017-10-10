@@ -1,45 +1,41 @@
 function [C,S,a,c]=getEMMCoeffs(M,year,fullyNormalize)
-%%GETEMMCOEFFS Obtain spherical harmonic coefficients for the 2010 
-%                 version of the National Oceanic and Atmospheric
-%                 Administration's (NOAA's) Enchaned Magnetic Model (EMM)
-%                 at a particular time or at the reference epoch (2015).
-%                 (2015).The model is considered valid up to 10km
-%                 underground.
+%%GETEMMCOEFFS Obtain spherical harmonic coefficients for the 2017 
+%              version of the National Oceanic and Atmospheric
+%              Administration's (NOAA's) Enchaned Magnetic Model (EMM) at a
+%              particular time or at the reference epoch (2017). The model
+%              is considered valid down to 10km underground.
 %
-%INPUTS:     M       The integer maximum order of the spherical harmonic
-%                    coefficients obtained. This is a value between 1 and
-%                    740. If this parameter is omitted, the default value
-%                    is 740. If one wishes to load all coefficients, one
-%                    can also just pass Inf.
-%        year        A decimal number indicating a year in the Gregorian
-%                    calendar as specified by universal coordinated time
-%                    (UTC). For example, halfway through the year 2015
-%                    would be represented as 2015.5. The precision of the
-%                    model is not sufficiently fine that leap seconds
-%                    matter. If this parameter is omitted, then the
-%                    reference year of the EMM model is used. In this
-%                    instance, 2015.0.
-%    fullyNormalize  Geomagnetic models are normally given in terms of
-%                    Schmidt semi-normalized Legendre functions. If
-%                    fullyNormalize =true, then the coefficients are
-%                    converted for use with fully normalized associated
-%                    Legendre functions, as are commonly used with
-%                    spherical harmonic algorithms for gravitational
-%                    models. If this parameter is omitted, the default
-%                    value is true.
+%INPUTS: M The integer maximum order of the spherical harmonic coefficients
+%          obtained. This is a value between 1 and 740. If this parameter
+%          is omitted, the default value is 740. If one wishes to load all
+%          coefficients, one can also just pass Inf.
+%     year A decimal number indicating a year in the Gregorian calendar as
+%          specified by universal coordinated time (UTC). For example,
+%          halfway through the year 2017 would be represented as 2017.5.
+%          The precision of the model is not sufficiently fine that leap
+%          seconds matter. If this parameter is omitted, then the
+%          reference year of the EMM model is used. In this instance,
+%          2017.0.
+% fullyNormalize Geomagnetic models are normally given in terms of Schmidt
+%          semi-normalized Legendre functions. If fullyNormalize=true, then
+%          the coefficients are converted for use with fully normalized
+%          associated Legendre functions, as are commonly used with
+%          spherical harmonic algorithms for gravitational models. If this
+%          parameter is omitted, the default value is true.
 %
-%OUTPUTS: C     A ClusterSet class holding the coefficient terms that are
-%               multiplied by cosines in the harmonic expansion. C(n+1,m+1)
-%               is the coefficient of degree n and order m. The
-%               coefficients have units of Tesla. The coefficients are
-%               normalized according to the fullyNormalize term.
-%         S     A ClusterSet class holding the coefficient terms that are
-%               multiplied by sines in the harmonic expansion. The
-%               format of S is the same as that of C.
-%         a     The numerator in the (a/r)^n term in the spherical harmonic
-%               sum having units of meters.
-%         c     The constant value by which the spherical harmonic series
-%               is multiplied, having units of squared meters.
+%OUTPUTS: C An array holding the coefficient terms that are multiplied by
+%           cosines in the harmonic expansion. This can be given to a
+%           CountingClusterSet so that C(n+1,m+1) is the coefficient of
+%           degree n and order m. The coefficients have units of Tesla. The
+%           coefficients are normalized according to the fullyNormalize
+%           term.
+%         S An array holding the coefficient terms that are multiplied by
+%           sines in the harmonic expansion. The format of S is the same as
+%           that of C.
+%         a The numerator in the (a/r)^n term in the spherical harmonic sum
+%           having units of meters.
+%         c The constant value by which the spherical harmonic series is
+%           multiplied, having units of squared meters.
 %
 %Details on the normalization of the coefficients is given in the comments
 %to the function spherHarmonicEval.
@@ -112,8 +108,8 @@ end
 %We have to find the EMM model year that is equal to the integer part
 %of year. If there is none, then we have to find the closest year.
 yearIdx2Load=find(EMMYears==fix(year),1);
-if(isempty(yearIdx2Load))
-    [~,yearIdx2Load]=min(EMMYears-fix(year));
+if(isempty(yearIdx2Load)||yearIdx2Load~=year)
+    [~,yearIdx2Load]=min(abs(EMMYears-fix(year)));
 end
 yearRef=EMMYears(yearIdx2Load);
 
@@ -123,46 +119,25 @@ yearRef=EMMYears(yearIdx2Load);
 matFile=[ScriptFolder,'/data/EMM',int2str(yearRef),'.mat'];
 
 if(exist(matFile,'file'))
-    load(matFile,'CCoeffs','SCoeffs','C1Coeffs','S1Coeffs','clustSizesCS','clustSizesC1S1','offsetsCS','offsetsC1S1');
-    %Create the ClusterSet classes to hold the data.
-    C=ClusterSet();
-    S=ClusterSet();
-    
+    load(matFile,'CCoeffs','SCoeffs','C1Coeffs','S1Coeffs');
+
     %Keep only as many coefficients as the maximum order provided.
     totalNumCoeffs=(M+1)*(M+2)/2;
     if(length(CCoeffs)<totalNumCoeffs)
-        M=length(clustSizesCS)-1;
         totalNumCoeffs=length(CCoeffs);
     end
-    C.clusterEls=CCoeffs(1:totalNumCoeffs);
-    S.clusterEls=SCoeffs(1:totalNumCoeffs);
+    C=CountingClusterSet(CCoeffs(1:totalNumCoeffs));
+    S=CountingClusterSet(SCoeffs(1:totalNumCoeffs));
+    M=C.numClust-1;
 
-    C.clusterSizes=clustSizesCS(1:(M+1));
-    S.clusterSizes=C.clusterSizes;
-
-    C.offsetArray=offsetsCS(1:(M+1));
-    S.offsetArray=C.offsetArray;
-    
-    %Create the ClusterSet classes to hold the drift terms.
-    C1=ClusterSet();
-    S1=ClusterSet();
-    
     %If the drift coefficients need to be reduced in size.
     totalNumDriftCoeffs=min(length(C1Coeffs),totalNumCoeffs);
     if(length(C1Coeffs)<totalNumCoeffs)
-        MDrift=0.5*(-3+sqrt(1+8*totalNumDriftCoeffs));
-    else
-        MDrift=M;
+        totalNumDriftCoeffs=length(C1Coeffs);
     end
     
-    C1.clusterEls=C1Coeffs(1:totalNumDriftCoeffs);
-    S1.clusterEls=S1Coeffs(1:totalNumDriftCoeffs);
-
-    C1.clusterSizes=clustSizesC1S1(1:(MDrift+1));
-    S1.clusterSizes=C1.clusterSizes;
-
-    C1.offsetArray=offsetsC1S1(1:(MDrift+1));
-    S1.offsetArray=C1.offsetArray;
+    C1=CountingClusterSet(C1Coeffs(1:totalNumDriftCoeffs));
+    S1=CountingClusterSet(S1Coeffs(1:totalNumDriftCoeffs));
 else
     %Otherwise, just read the data from the text files.
     
@@ -177,7 +152,7 @@ else
     %that character
     startIdx=1;
     %char(10) is the newline character used in the file.
-    while(strcmp(coefficientFile(startIdx),char(10))~=1)
+    while(strcmp(coefficientFile(startIdx),newline)~=1)
         startIdx=startIdx+1;
     end
     startIdx=startIdx+1;
@@ -199,16 +174,14 @@ else
     
     %Allocate space for the coefficients.
     emptyData=zeros(totalNumCoeffs,1);
-    clustSizes=1:(M+1);
-    C=ClusterSet(emptyData,clustSizes);
-    S=ClusterSet(emptyData,clustSizes);
+    C=CountingClusterSet(emptyData);
+    S=CountingClusterSet(emptyData);
     %These will hold the time-varying terms.
     emptyData=zeros(totalNumDriftCoeffs,1);
-    clustSizes=1:(MDrift+1);
-    C1=ClusterSet(emptyData,clustSizes);
-    S1=ClusterSet(emptyData,clustSizes);
-        
-    %Put the data into the ClusterSet class instances. 
+    C1=CountingClusterSet(emptyData);
+    S1=CountingClusterSet(emptyData);
+    
+    %Put the data into the CountingClusterSet class instances. 
     for curRow=1:numCoeffEntries
         n=dataCoeffs(1,curRow);%The degree of the coefficient.
         m=dataCoeffs(2,curRow);%The order of the coefficient.
@@ -222,7 +195,7 @@ else
         C1(n+1,m+1)=driftCoeffs(3,curRow);
         S1(n+1,m+1)=driftCoeffs(4,curRow);
     end
-    
+
     %Change the units fron Nanotesla to Tesla.
     C(:)=10^(-9)*C(:);
     S(:)=10^(-9)*S(:);
@@ -234,15 +207,11 @@ else
     if(saveMatFile)
         CCoeffs=C.clusterEls;
         SCoeffs=S.clusterEls;
-        clustSizesCS=C.clusterSizes;
-        offsetsCS=C.offsetArray;
 
         C1Coeffs=C1.clusterEls;
         S1Coeffs=S1.clusterEls;
-        clustSizesC1S1=C1.clusterSizes;
-        offsetsC1S1=C1.offsetArray;
 
-        save(matFile,'CCoeffs','SCoeffs','C1Coeffs','S1Coeffs','clustSizesCS','clustSizesC1S1','offsetsCS','offsetsC1S1');
+        save(matFile,'CCoeffs','SCoeffs','C1Coeffs','S1Coeffs');
     end
 end
 
@@ -250,10 +219,9 @@ end
 if(year~=yearRef)
     yearDiff=year-yearRef;
     %Perform linear interpolation.
-    for curIdx=1:totalNumDriftCoeffs
-        C.clusterEls(curIdx)=C.clusterEls(curIdx)+yearDiff*C1.clusterEls(curIdx);
-        S.clusterEls(curIdx)=S.clusterEls(curIdx)+yearDiff*S1.clusterEls(curIdx);
-    end
+    idx=1:totalNumDriftCoeffs;
+    C.clusterEls(idx)=C.clusterEls(idx)+yearDiff*C1.clusterEls(idx);
+    S.clusterEls(idx)=S.clusterEls(idx)+yearDiff*S1.clusterEls(idx);
 end
 
 %If the coefficients should be fully normalized.
@@ -264,6 +232,10 @@ if(fullyNormalize~=false)
         S(n+1,:)=k*S(n+1,:);
      end
 end
+
+%Return S and C as arrays, not as a CountingClusterSet classes.
+C=C.clusterEls;
+S=S.clusterEls;
 
 %The EMM2015 model uses the same reference ellipse as the WMM2010.
 a=Constants.WMM2010SphereRad;%meters

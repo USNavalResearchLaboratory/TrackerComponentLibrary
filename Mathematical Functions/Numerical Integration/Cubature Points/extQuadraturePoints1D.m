@@ -96,7 +96,7 @@ function [xiG,wG,xiK,wK,bounds]=extQuadraturePoints1D(n,algorithm,c1)
 %      bounds The bounds over which the quadrature integrated. If
 %             algorithm=10, this is just an empty matrix.
 %
-%Note that Gauss-Kronrod extensions of the points do not always exist fro
+%Note that Gauss-Kronrod extensions of the points do not always exist for
 %all n. For example, for algorithm 0, they only appear to exist for n=1 and
 %n=2. If no extension exists, then an error is raised.
 %

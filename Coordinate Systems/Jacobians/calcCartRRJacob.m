@@ -1,8 +1,8 @@
 function J=calcCartRRJacob(components,xState,useHalfRange,lTx,lRx)
 %%CALCCARTRRJACOB Compute the Jacobian matrix for a Cartesian measurement
-%           possibly with a bistatic range rate component in 2D or 3D for a
-%           Cartesian target state. This function can be useful when using
-%           an extended Kalman filter (EKF) with Cartesian converted
+%           possibly with a bistatic range rate component in 1D, 2D or 3D
+%           for a Cartesian target state. This function can be useful when
+%           using an extended Kalman filter (EKF) with Cartesian-converted
 %           measurements and range rate. Without the range rate component,
 %           the result is just the measurement matrix, which, when
 %           multiplied by the target state, extracts the position
@@ -11,7 +11,8 @@ function J=calcCartRRJacob(components,xState,useHalfRange,lTx,lRx)
 %
 %INPUTS: components This specified whether the output should contain a
 %               range-rate component. Possible values are:
-%               0 The output contains position and range rate rows.
+%               0 The output contains position and range rate rows. This is
+%                 the default if an empty matrix is passed.
 %               1 The output just has position rows.
 %        xState The xDimX1 target state vector in the global coordinate
 %               system with [x;y;z;xDot;yDot;zDot] components in 3D or

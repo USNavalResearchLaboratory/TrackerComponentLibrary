@@ -1,11 +1,11 @@
 function J=calcPolarConvJacob(zPolar,systemType,useHalfRange,lTx,lRx,M)
-%%CALCPOLARCONVJACOB Calculate the Jacobian for a Cartesian position taken
-%            with respect to a monostatic or bistatic range and polar angle
-%            measurement in 2D, ignoring atmospheric effects. This type of
-%            Jacobian is useful when performing tracking using Cartesian-
-%            converted measurements where the clutter density is specified
-%            in the measurement coordinate system, not the converted
-%            measurement coordinate system.
+%%CALCPOLARCONVJACOB Calculate the Jacobian for a monostatic or bistatic
+%            range and polar angle measurement in 2D with respect to
+%            Cartesian position. At mospheric effects are ignored. This
+%            type of Jacobian is useful when performing tracking using
+%            Cartesian-converted measurements where the clutter density is
+%            specified in the measurement coordinate system, not the
+%            converted measurement coordinate system.
 %
 %INPUTS: zPolar A 2X1 point in polar coordinates in the format
 %          [range;azimuth], where the angle is given in radians and the

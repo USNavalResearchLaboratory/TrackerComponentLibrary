@@ -55,19 +55,19 @@ int iauEpv00(double date1, double date2,
 **  2) On return, the arrays pvh and pvb contain the following:
 **
 **        pvh[0][0]  x       }
-**        pvh[0][1]  y       } heliocentric position, AU
+**        pvh[0][1]  y       } heliocentric position, au
 **        pvh[0][2]  z       }
 **
 **        pvh[1][0]  xdot    }
-**        pvh[1][1]  ydot    } heliocentric velocity, AU/d
+**        pvh[1][1]  ydot    } heliocentric velocity, au/d
 **        pvh[1][2]  zdot    }
 **
 **        pvb[0][0]  x       }
-**        pvb[0][1]  y       } barycentric position, AU
+**        pvb[0][1]  y       } barycentric position, au
 **        pvb[0][2]  z       }
 **
 **        pvb[1][0]  xdot    }
-**        pvb[1][1]  ydot    } barycentric velocity, AU/d
+**        pvb[1][1]  ydot    } barycentric velocity, au/d
 **        pvb[1][2]  zdot    }
 **
 **     The vectors are with respect to the Barycentric Celestial
@@ -99,11 +99,11 @@ int iauEpv00(double date1, double date2,
 **  5) It is permissible to use the same array for pvh and pvb, which
 **     will receive the barycentric values.
 **
-**  This revision:  2013 June 18
+**  This revision:  2017 March 16
 **
-**  SOFA release 2016-05-03
+**  SOFA release 2017-04-20
 **
-**  Copyright (C) 2016 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
 */
 {
 /*
@@ -2543,7 +2543,7 @@ int iauEpv00(double date1, double date2,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2016
+**  Copyright (C) 2017
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

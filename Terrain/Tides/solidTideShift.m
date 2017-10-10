@@ -7,56 +7,53 @@ function DeltaR=solidTideShift(rStation,rSun,rMoon,Jul1,Jul2,addPermTide)
 %             the solid Earth tide offset, can also be quite significant,
 %             with the IERS Conventions 2010 listing it up to 10cm.
 %
-%INPUTS:    rStation  A vector from the geocenter to the (non-offset)
-%                     location of a station on the surface of the Earth in
-%                     WGS-84 Earth-centered Earth-fixed (ECEF) coordinates
-%                     in meters. This value is converted into spherical
-%                     coordinates by this function, and only the angles n
-%                     spherical coordinates, not the radius, are important
-%                     for this algorithm. However, since locations on the
-%                     ground are generally given in WGS-84 ellipsoidal
-%                     coordinates, the ellipsoidal height of the ground
-%                     plays a role in the conversion to spherical
-%                     coordinates. However, variations in the ellipsoidal
-%                     height provided on the order of 2km result in
-%                     differences in the output DeltaR on the order of
-%                     microns, so in practice, one could just set rStation
-%                     to the Cartesian position corresponding to a
-%                     particular ellipsoidal latitude and longitude with
-%                     zero ellipsoidal height. Ideally, however, rStation
-%                     is the Cartesian location of the land in a mean-tide
-%                     model (if addPermTide=false), or in a tide-free model
-%                     if addPermTide=true.
-%           rSun      A vector from the geocenter to the sun in ITRS
-%                     coordinates in meters. This can be found using the
-%                     function solarBodyVec.
-%           rMoon     A vector from the geocenter to the moon in ITRS
-%                     coordinates in meters. This can be found using the
-%                     function solarBodyVec.
-%        Jul1, Jul2   Two parts of a Julian date given in terrestrial time
-%                     (TT). The units of the date are days. The full date
-%                     is the sum of both terms. The date is broken into two
-%                     parts to provide more bits of precision. It does not
-%                     matter how the date is split. These parameters must
-%                     be given for the third-order tidal components to be
-%                     taken into account.
-%         addPermTide The deltaR values are for a conventional tide-free
-%                     model. If addPermTide is true, then a constant
-%                     (depending on latitude) permanent tide offset will be
-%                     added to put the point into a mean-tide model. If
-%                     this parameter is omitted, the default value is
-%                     "false".
+%INPUTS: rStation A vector from the geocenter to the (non-offset) location
+%                 of a station on the surface of the Earth in WGS-84 Earth-
+%                 centered Earth-fixed (ECEF) coordinates in meters. This
+%                 value is converted into spherical coordinates by this
+%                 function, and only the angles in spherical coordinates,
+%                 not the radius, are important for this algorithm.
+%                 However, since locations on the ground are generally
+%                 given in WGS-84 ellipsoidal coordinates, the ellipsoidal
+%                 height of the ground plays a role in the conversion to
+%                 spherical coordinates. However, variations in the
+%                 ellipsoidal height provided on the order of 2km result in
+%                 differences in the output DeltaR on the order of microns,
+%                 so in practice, one could just set rStation to the
+%                 Cartesian position corresponding to a particular
+%                 ellipsoidal latitude and longitude with zero ellipsoidal
+%                 height. Ideally, however, rStation is the Cartesian
+%                 location of the land in a mean-tide model (if
+%                 addPermTide=false), or in a tide-free model if
+%                 addPermTide=true.
+%            rSun A vector from the geocenter to the sun in ITRS
+%                 coordinates in meters. This can be obtained using the
+%                 readJPLEphem and GCRS2ITRS functions.
+%           rMoon A vector from the geocenter to the moon in ITRS
+%                 coordinates in meters. This can be obtained using the
+%                 readJPLEphem and GCRS2ITRS functions.
+%      Jul1, Jul2 Two parts of a Julian date given in terrestrial time
+%                 (TT). The units of the date are days. The full date is
+%                 the sum of both terms. The date is broken into two
+%                 parts to provide more bits of precision. It does not
+%                 matter how the date is split. These parameters must be
+%                 given for the third-order tidal components to be taken
+%                 into account.
+%     addPermTide The deltaR values are for a conventional tide-free model.
+%                 If addPermTide is true, then a constant (depending on
+%                 latitude) permanent tide offset will be added to put the
+%                 point into a mean-tide model. If this parameter is
+%                 omitted, the default value is "false".
 %
-%OUTPUTS:   DeltaR    The offset of a point on the surface of the Earth due
-%                     to solid Earth tides. rStation+DeltaR is the location
-%                     of the station (point on the ground) at the
-%                     terrestial time given by Jul1 and Jul2 taking into
-%                     account solid Earth tides. Note that the addPermTide
-%                     term must be consistent with the coordinate system of
-%                     rStation. If rStation already includes the permanent
-%                     tides (is in a mean-tide model), then addPermTide
-%                     should be false. Otherwise, addPermTide should be
-%                     true.
+%OUTPUTS: DeltaR The offset of a point on the surface of the Earth due to
+%                solid Earth tides. rStation+DeltaR is the location of the
+%                station (point on the ground) at the terrestial time given
+%                by Jul1 and Jul2 taking into account solid Earth tides.
+%                Note that the addPermTide term must be consistent with the
+%                coordinate system of rStation. If rStation already
+%                includes the permanent tides (is in a mean-tide model),
+%                then addPermTide should be false. Otherwise, addPermTide
+%                should be true.
 %
 %The Sun and Moon cause the crust of the Earth to warp and points on the
 %Earth in WGS-84 coordinates to move over time. The formulae for computing

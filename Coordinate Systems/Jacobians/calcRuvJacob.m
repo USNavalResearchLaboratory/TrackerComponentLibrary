@@ -1,7 +1,7 @@
 function J=calcRuvJacob(x,useHalfRange,lTx,lRx,M)
-%%CALCRUVJACOB Calculate the Jacobian for a 3D Cartesian position with
-%          respect to a monostatic or bistatic RUV measurement ignoring
-%          atmospheric effects. 
+%%CALCRUVJACOB Calculate the Jacobian for a monostatic or bistatic r-u-v
+%           measurement with respect to 3D Cartesian position. Atmospheric
+%           effects are ignored.
 %
 %INPUTS: x The 3X1 position of the target in Cartesian coordinates in the
 %          order [x;y;z].

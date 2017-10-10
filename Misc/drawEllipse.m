@@ -26,10 +26,10 @@ function h=drawEllipse(z,A,gammaVal,varargin)
 %  varargin Sets of values that should be passed to the plot function to
 %           format the ellipses or that will be passed to the surf function
 %           to format the ellipsoids. For example, one could call the
-%           function as drawEllipse(z,A,gammaVal,'--r','linewidth',2) to 
-%           plot ellipses as thick, red lines. Note that Matlab will not
-%           always properly render dashed lines due to the number of points
-%           used to plot the shape. Also, if the ellipsoid is in 3D, but is
+%           function as drawEllipse(z,A,gammaVal,'--r','linewidth',2) to plot
+%           ellipses as thick, red lines. Note that Matlab will not always
+%           properly render dashed lines due to the number of points used
+%           to plot the shape. Also, if the ellipsoid is in 3D, but is
 %           actually just a 2D ellipse, then if this parameter is omitted,
 %           the fill3 command will be passed the option to color the
 %           ellipse black. Otherwise, if this parameter is given, the user
@@ -156,14 +156,7 @@ switch(numDim)
                    x,fliplr(x);
                    y,-fliplr(y)];
                 zp=bsxfun(@plus,V*l,z(idx,curEllip));
-                
-                %Get the inverse permutation.
-                nIdx=length(idx);
-                idxInv=zeros(nIdx,1);
-                for k=1:nIdx
-                   idxInv(idx(k))=k; 
-                end
-
+                idxInv=inversePermutation(idx);
                 %Undo the reordering.
                 zp=zp(idxInv);
 

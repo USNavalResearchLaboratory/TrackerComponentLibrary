@@ -9,9 +9,9 @@ function [LATRad,equationOfTime,LAT1,LAT2]=TT2LAT(TT1,TT2,rObsITRS,deltaTTUT1,xp
 %        crust of the Earth. Since the polar motion makes the rotation axis
 %        wobble with respect to the crust, an observer at a constant
 %        location in the ITRS will move over time as seen in the TIRS. The
-%        DE430 ephemerides are used for determining the location of the Sun
-%        via the function solarBodyVec. The equation of time is also
-%        returned.
+%        location of the Sun is determined via the function readJPLEphem
+%        whereby TDB is approxmated using TT2TDB. The equation of time is
+%        also returned.
 %
 %INPUTS: TT1,TT2 Two parts of a Julian date given in TT. The units of the
 %                date are days. The full date is the sum of both terms. The
@@ -85,8 +85,12 @@ rOBSTIRS=ITRS2TIRS(rObsITRS,TT1,TT2,xpyp);
 rObsSpher=Cart2Sphere(rOBSTIRS);
 %Get the location of the Sun including light-time and aberration
 %corrections.
-[~,rSunITRS]=solarBodyVec(TT1,TT2,'TT','SUN',0,rObsITRS,'ITRS',deltaTTUT1,xpyp,dXdY);
-rSunTIRS=ITRS2TIRS(rSunITRS,TT1,TT2,xpyp);
+
+%Sun Position with respect to Earth.
+[TDB1,TDB2]=TT2TDB(TT1,TT2);
+SunGCRSPosVel=readJPLEphem(TDB1,TDB2,11,3);
+rSunTIRS=GCRS2TIRS(SunGCRSPosVel(1:3),TT1,TT2,deltaTTUT1,xpyp,dXdY);
+
 rSunSpher=Cart2Sphere(rSunTIRS);
 
 %The hour angle of the Sun.

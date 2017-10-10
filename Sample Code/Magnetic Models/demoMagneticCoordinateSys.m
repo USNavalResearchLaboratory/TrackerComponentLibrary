@@ -15,8 +15,8 @@
 %June 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-display('NOTE: The CompileCLibraries function should be run prior to')
-display('running this script or else the execution time will be far too slow.')
+disp('NOTE: The CompileCLibraries function should be run prior to')
+disp('running this script or else the execution time will be far too slow.')
 
 %A sparse grid is used so that the computations are not too slow.
 numPoints=20;
@@ -27,14 +27,14 @@ lon=linspace(-180,180,numPoints)*pi/180;
 latLonEllipse=[latGrid(:)';lonGrid(:)'];
 
 %Centered Dipole Coordinates
-display('Computing latitudes in centered-dipole coordinates')
+disp('Computing latitudes in centered-dipole coordinates')
 
 %Convert from ellipsoidal latitudes to spherical latitudes (This assumes
 %that the points are on the surface of the reference ellipsoid).
 lonLatSpher=ellips2Sphere(latLonEllipse);
 lonLatCD=spherITRS2SpherCD(lonLatSpher);
 
-display('Displaying centered-dipole latitude curves.')
+disp('Displaying centered-dipole latitude curves.')
 figure(1)
 clf
 contour(lonGrid*180/pi,latGrid*180/pi,reshape(lonLatCD(2,:)*(180/pi),[numPoints,numPoints]),50)
@@ -53,14 +53,14 @@ colormap([colors;colors(end:-1:1,:)])
 colorbar
 
 %Apex corodinates
-display('Computing latitudes in magnetic apex coordinates. This can be slow.')
+disp('Computing latitudes in magnetic apex coordinates. This can be slow.')
 
 %Convert the positions to Cartesian coordinates; assume that the points are
 %on the reference ellipsoid.
 zCart=ellips2Cart([latLonEllipse;zeros(1,totalGridPoints)]);
 [zApex,apexPoints,exitCode]=ITRS2MagneticApex(zCart);
 
-display('Displaying apex latitude curves.')
+disp('Displaying apex latitude curves.')
 figure(2)
 clf
 contour(lonGrid*180/pi,latGrid*180/pi,reshape(zApex(1,:)*(180/pi),[numPoints,numPoints]),50)
@@ -79,8 +79,8 @@ colormap([colors;colors(end:-1:1,:)])
 colorbar
 
 %Finally, we consider quasi-dipole coordinates.
-display('Computing latitudes in magnetic quasi-dipole coordinates. This can be slow.')
-display('Quasi-dipole coordinates are similar to apex coordinates.')
+disp('Computing latitudes in magnetic quasi-dipole coordinates. This can be slow.')
+disp('Quasi-dipole coordinates are similar to apex coordinates.')
 zCart=ellips2Cart([latLonEllipse;zeros(1,totalGridPoints)]);
 
 zQD=ITRS2QD(zCart);

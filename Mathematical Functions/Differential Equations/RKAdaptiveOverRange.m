@@ -1,75 +1,73 @@
 function [xVals,tVals,dxdtVals,exitCode,nextStepSize]=RKAdaptiveOverRange(xStart,tSpan,f,initStepSize,numRefinedSteps,order,solutionChoice,RelTol,AbsTol,maxSteps)
-%%RKADAPTIVEOVERRANGE  Perform explicit Runge-Kutta integration over a
-%                      given range of values using an adaptive step size.
-%                      Runge-Kutta methods are derivative-free techniques
-%                      for solving ordinary differential equations. That
-%                      is, integrating dx/dt=f(x,t) given initial
-%                      conditions (xStart,tSpan(1)). More information on
-%                      available algorithms for the steps is given in the
-%                      comments to the function RungeKStep.
+%%RKADAPTIVEOVERRANGE Perform explicit Runge-Kutta integration over a
+%                     given range of values using an adaptive step size.
+%                     Runge-Kutta methods are derivative-free techniques
+%                     for solving ordinary differential equations. That is,
+%                     integrating dx/dt=f(x,t) given initial conditions
+%                     (xStart,tSpan(1)). More information on available
+%                     algorithms for the steps is given in the comments to
+%                     the function RungeKStep.
 %
-%INPUTS:  xStart The NX1 state vector at time tSpan(1).
-%         tSpan  A 2X1 or 1X2 vector where tSpan(1) is the starting time
-%                and tSpan2 is the desired stopping time for the
-%                integration.
-%             f  The function handle for f(x,t)=dxdt over which integration
-%                is to be performed. The output is NX1-dimensional.
-%   initStepSize An optional initial step size (in t) to use for the
-%                integration. If omitted or an empty matrix is passed, an
-%                ad-hoc method described below is used to find an initial
-%                step size.
-%numRefinedSteps An optional parameter specifying the number of steps to
-%                interpolate between each normal step. With high-order
-%                formulas, the steps produced might not be very nice to
-%                use for plotting, so setting this to a value above 0 adds
-%                more intermediate values (using the polynomial returned by
-%                the RKInterpPolys function) so that plotted data can look
-%                nicer. If omitted or an empty matrix is passed, the
-%                default value of 0 (no extra/ interpolated steps) is used.
-%                Interpolation is done at the main order of the Runge-Kutta
-%                method.
+%INPUTS: xStart The NX1 state vector at time tSpan(1).
+%         tSpan A 2X1 or 1X2 vector where tSpan(1) is the starting time and
+%               tSpan2 is the desired stopping time for the integration.
+%             f The function handle for f(x,t)=dxdt over which integration
+%               is to be performed. The output is NX1-dimensional.
+%  initStepSize An optional initial step size (in t) to use for the
+%               integration. If omitted or an empty matrix is passed, an
+%               ad-hoc method described below is used to find an initial
+%               step size.
+% numRefinedSteps An optional parameter specifying the number of steps to
+%               interpolate between each normal step. With high-order
+%               formulas, the steps produced might not be very nice to
+%               use for plotting, so setting this to a value above 0 adds
+%               more intermediate values (using the polynomial returned by
+%               the RKInterpPolys function) so that plotted data can look
+%               nicer. If omitted or an empty matrix is passed, the default
+%               value of 0 (no extra/ interpolated steps) is used.
+%               Interpolation is done at the main order of the Runge-Kutta
+%               method.
 % order,solutionChoice  A pair of optional parameters that specify the
-%                highest order of the embedded Runge-Kutta pair to use as
-%                well as the specific algorithm to use. Details are given
-%                in the comments to the RungeKStep function. If omitted or
-%                empty matrices are passed, the default order of 5 is used
-%                and the default solutionChoice of 0 is used.
-%         RelTol The maximum relative error tolerance allowed, a
-%                positive scalar (its use is explained in more detail
-%                below). If omitted or an empty matrix is passed, the
-%                default value of 1e-3 is used.
-%         AbsTol The absolute error tolerance allowed, a positive scalar,
-%                of the same for all components of x, or a positive NX1
-%                vector. If omitted or an empty matrix is passed, the
-%                default value of 1e-6 is used.
-%       maxSteps The maximum allowable number of steps to perform the
-%                integration. If omitted, the default of 1024 is used.
+%               highest order of the embedded Runge-Kutta pair to use as
+%               well as the specific algorithm to use. Details are given in
+%               the comments to the RungeKStep function. If omitted or
+%               empty matrices are passed, the default order of 5 is used
+%               and the default solutionChoice of 0 is used.
+%        RelTol The maximum relative error tolerance allowed, a
+%               positive scalar (its use is explained in more detail
+%               below). If omitted or an empty matrix is passed, the
+%               default value of 1e-3 is used.
+%        AbsTol The absolute error tolerance allowed, a positive scalar, of
+%               the same for all components of x, or a positive NX1 vector.
+%               If omitted or an empty matrix is passed, the default value
+%               of 1e-6 is used.
+%      maxSteps The maximum allowable number of steps to perform the
+%               integration. If omitted, the default of 1024 is used.
 %
-%OUTPUTS:    xVals The NXnumSteps set of values of x along the path.
-%                  xVals(:,1) is xStart and xVals(:,end) is the value at
-%                  final time tSpan(2). If the Runge-Kutta integration
-%                  failed, e.g. due to encountering a NaN or being unable
-%                  to get a sufficient step size, an empty matrix is
-%                  returned.
-%            tVals A numStepsX1 vector of values of t corresponding to
-%                  the values of x in xVals. tVals(1) is equal to tSpan(1)
-%                  and tVals(end) is equal to tSpan(2). If integration
-%                  fails, an empty matrix is returned.
-%         dxdtVals A numStepsXN array containing derivatives of x evaluated
-%                  at the times in tVals. The derivatives are just the
-%                  result of evaluating f(x,t) at each point in
-%                  (xVals,tVals). This combined with xVals and tVals could
-%                  be used in functions to perform Hermite interpolation.
-%                  If integration fails, an empty matrix is returned.
-%         exitCode A code indicating how the algorithm terminated. Possible
-%                  values are
-%                  0: Integration was successful.
-%                  1: Unable to get a small enough step size.
-%                  2: Maximum number of steps reached without completion.
-%                  3: Non-finite number encountered.
-%     nextStepSize The step size (in t) that would be used for the next
-%                  integration step. If empty, then the integration ended
-%                  because the step size was too small.
+%OUTPUTS: xVals The NXnumSteps set of values of x along the path.
+%               xVals(:,1) is xStart and xVals(:,end) is the value at final
+%               time tSpan(2). If the Runge-Kutta integration failed, e.g.
+%               due to encountering a NaN or being unable to get a
+%               sufficient step size, an empty matrix is returned.
+%         tVals A numStepsX1 vector of values of t corresponding to the
+%               values of x in xVals. tVals(1) is equal to tSpan(1) and
+%               tVals(end) is equal to tSpan(2). If integration fails, an
+%               empty matrix is returned.
+%      dxdtVals A numStepsXN array containing derivatives of x evaluated at
+%               the times in tVals. The derivatives are just the result of
+%               evaluating f(x,t) at each point in (xVals,tVals). This
+%               combined with xVals and tVals could be used in functions to
+%               perform Hermite interpolation. If integration fails, an
+%               empty matrix is returned.
+%      exitCode A code indicating how the algorithm terminated. Possible
+%               values are
+%               0: Integration was successful.
+%               1: Unable to get a small enough step size.
+%               2: Maximum number of steps reached without completion.
+%               3: Non-finite number encountered.
+%  nextStepSize The step size (in t) that would be used for the next
+%               integration step. If empty, then the integration ended
+%               because the step size was too small.
 %
 %The basic idea behind adaptive stepsize control can be ascertained from
 %Chapter 5.2 of [3]. However, the implementation here has a number of

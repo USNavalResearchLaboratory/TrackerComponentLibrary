@@ -2,11 +2,11 @@ function M=randRotMat(numDim)
 %%RANDROTMAT  Generate a uniformely distributed rotation matrix in 2D or
 %             3D.
 %
-%INPUTS: numDim  The number of dimensions of the rotation. This can be
-%                either 2 or 3.
+%INPUTS: numDim The number of dimensions of the rotation. This can be
+%               either 2 or 3.
 %
-%OUTPUTS: M  A numDimXnumDim rotation matrix such that M*V rotates the
-%            vector v to a uniformely distributed position.
+%OUTPUTS: M A numDimXnumDim rotation matrix such that M*V rotates the
+%           vector v to a uniformely distributed position.
 %
 %In 2D, there is only one degree of freedom for rotations, so a single
 %rotation angle can be chosen uniformely from 0->2*pi. In 3D, there are 3

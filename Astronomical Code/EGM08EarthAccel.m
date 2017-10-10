@@ -14,9 +14,10 @@ function [accel,C,S]=EGM08EarthAccel(rVec,accelOptions,M,TT1,TT2,effectsToInclud
 %             output as specified by the parameter accelOptions. This is
 %             the set of N positions where the acceleration due to the
 %             Earth's gravity is desired. The velocity component is only
-%             required if accelOptions specified an Earth-fixed coordinate
-%             system. Specifically, if accelOptions is 0, 3, or 5. This
-%             cannot be all zeros.
+%             used if accelOptions specified an Earth-fixed coordinate
+%             system. Specifically, if accelOptions is 0, 3, or 5. If a 3XN
+%             vector is provided, but the velocity component is required,
+%             the extra three elements are taken to be all zeros.
 % accelOptions An optional parameter indicating the coordinate system and
 %             options for the acceleration. Possible values are
 %             0 (The default if omitted) The acceleration is found in a
@@ -47,12 +48,14 @@ function [accel,C,S]=EGM08EarthAccel(rVec,accelOptions,M,TT1,TT2,effectsToInclud
 %               because it is an accelerating coordinate system.
 %           M The number of terms in the EGM2008 model to include. If
 %             accelOptions=0 or accelOptions=1, then M chooses between
-%             Keplerian, J2, and J4 models. Otherwise, the number indicates
+%             Keplerian, or J2 models. Otherwise, the number indicates
 %             the highest order of the full EGM2008 model used. If omitted,
-%             or an empty matrix is passed, a default value of 2 is used.
-%             If Inf or another number larger than the highest coefficient
-%             order in the EGM2008 model is passed, then the total number
-%             of coefficients in the EGM2008 model is used.
+%             or an empty matrix is passed, a default value of 2 is used
+%             for accelOptions=0 or 1 and a default of 3 is used for
+%             accelOptions=2 or 3. If Inf or another number larger than the
+%             highest coefficient order in the EGM2008 model is passed,
+%             then the total number of coefficients in the EGM2008 model is
+%             used.
 %     TT1,TT2 Two parts of a Julian date given in terrestrial time (TT).
 %             The units of the date are days. The full date is the sum of
 %             both terms. The date is broken into two parts to provide more
@@ -121,9 +124,10 @@ function [accel,C,S]=EGM08EarthAccel(rVec,accelOptions,M,TT1,TT2,effectsToInclud
 %The various other effects are discussed in other sections.
 %
 %REFERENCES:
-%[1] D. F. Crouse, "An overview of major terrestrial, celestial, and
-%    temporal coordinate systems for target tracking", Report, U. S. Naval
-%    Research Laboratory, to appear, 2016.
+%[1] D. F. Crouse, "An Overview of Major Terrestrial, Celestial, and
+%    Temporal Coordinate Systems for Target Tracking," Formal Report, Naval
+%    Research Laboratory, no. NRL/FR/5344--16-10,279, 10 Aug. 2016, 173
+%    pages.
 %
 %March 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %incorporating elements from a Coriolis correction by David Karnick.
@@ -134,7 +138,11 @@ if(nargin<2||isempty(accelOptions))
 end
 
 if(nargin<3||isempty(M))
-    M=2;
+    if(accelOptions==0||accelOptions==1)
+        M=2;
+    else
+        M=3;
+    end
 end
 %If someone passes a number greater than the total number of coefficients,
 %then just limit it to the total number in the EGM2008 model.
@@ -149,18 +157,20 @@ a=Constants.EGM2008SemiMajorAxis;
 %The rotation rate of the Earth in radians per second.
 omega=Constants.EGM2008EarthRotationRate;
 
-%Check for the easy cases Keplerian, J2 or J4.
+%Check for the easy cases Keplerian or J2.
 if(accelOptions==0||accelOptions==1)
     r=rVec(1:3,:);%Positions
     if(size(rVec,1)>3)
         v=rVec(4:6,:);%Velocities.
+    else
+        v=zeros(3,size(rVec,2));
     end
     
     rMag=sqrt(sum(r.*r,1));
 
     %Newton's law for a point or sphere.
     aNewton=-bsxfun(@times,(GM./rMag.^2),bsxfun(@rdivide,r,rMag));
-    
+
     switch(M)
         case 1%Simple Keplerian dynamics.
             accel=aNewton;
@@ -185,12 +195,15 @@ if(accelOptions==0||accelOptions==1)
     %If Coriolis terms should be added due to the rotation of the
     %Earth.
     if(accelOptions==0)
-        %The rotation vector for the Earth
-        Omega=[0;0;1]*omega;
-
-        aCoriolis=-2*bsxfun(@cross,Omega,v);
-        aCentrifugal=-bsxfun(@cross,Omega,bsxfun(@cross,Omega,r));
-        accel=accel+aCoriolis+aCentrifugal;
+        %The rotation vector for the Earth is
+        %Omega=[0;0;1]*omega;
+        %and the Coriolis and centrifugal forces to add to accel are
+        %aCoriolis=-2*bsxfun(@cross,Omega,v);
+        %aCentrifugal=-bsxfun(@cross,Omega,bsxfun(@cross,Omega,r));
+        
+        %However, it is faster to add the components directly:
+        accel(1,:)=accel(1,:)+2*omega*v(2,:)+omega^2*r(1,:);
+        accel(2,:)=accel(2,:)-2*omega*v(1,:)+omega^2*r(2,:);
     end
     C=[];
     S=[];
@@ -205,6 +218,10 @@ if(nargin<8||isempty(C))
     [C,S]=getEGMGravCoeffs(M,isTideFree,modelType);
 end
 
+if(nargin<6||isempty(effectsToInclude))
+    effectsToInclude=[1;1;0;0;0];
+end
+
 if(nargin<7||isempty(EOP))
     [JulUTC1,JulUTC2]=TT2UTC(TT1,TT2);
     [xpyp,dXdY,~,deltaTTUT1,LOD]=getEOP(JulUTC1,JulUTC2);
@@ -213,10 +230,6 @@ else
     dXdY=EOP.dXdY;
     deltaTTUT1=EOP.deltaTTUT1;
     LOD=EOP.LOD;
-end
-
-if(nargin<6)
-    effectsToInclude=[1;1;0;0;0];
 end
 
 %The second one is added after all of the others.
@@ -233,10 +246,15 @@ end
 
 if(effectsToInclude(3)~=false)
     %Compute the offsets due to solid Earth tides.
-    [~,rSunITRS]=solarBodyVec(TT1,TT2,'TT','SUN',1,[0;0;0;0;0;0],'ITRS',deltaTTUT1,xpyp,dXdY);
-    rSunITRS=rSunITRS(1:3);%Only keep the position.
-    [~,rMoonITRS]=solarBodyVec(TT1,TT2,'TT','MOON',1,[0;0;0;0;0;0],'ITRS',deltaTTUT1,xpyp,dXdY);
-    rMoonITRS=rMoonITRS(1:3);%Only keep the position.
+    
+    [TDB1,TDB2]=TT2TDB(TT1,TT2);%Get approximate TDB.
+    %Sun Position with respect to Earth.
+    SunGCRSPosVel=readJPLEphem(TDB1,TDB2,11,3);
+    rSunITRS=GCRS2ITRS(SunGCRSPosVel(1:3),TT1,TT2,deltaTTUT1,xpyp,dXdY);
+
+    %Moon position with respect to Earth.
+    MoonGCRSPosVel=readJPLEphem(TDB1,TDB2,10,3);
+    rMoonITRS=GCRS2ITRS(MoonGCRSPosVel(1:3),TT1,TT2,deltaTTUT1,xpyp,dXdY);
 
     [deltaC{curDelta},deltaS{curDelta}]=gravSolidTideOffset(rMoonITRS,rSunITRS,TT1,TT2);
     curDelta=curDelta+1;
@@ -256,35 +274,35 @@ end
 %changed --this is the maximum number of elements in the deltas.
 numCoeffChanged=0;
 for curDelta=1:numDelta
-    curLength=length(deltaC{curDelta}.clusterEls);
+    curLength=length(deltaC{curDelta});
     if(curLength>numCoeffChanged)
         numCoeffChanged=curLength;
     end
 end
 
-if(length(C.clusterEls)<numCoeffChanged)
-    numCoeffChanged=length(C.clusterEls);
+if(length(C)<numCoeffChanged)
+    numCoeffChanged=length(C);
 end
 
 %Now, save the elements in C and S, so that they can be restored for the
 %return value when the function exits.
-CSaved=C.clusterEls(1:numCoeffChanged);
-SSaved=S.clusterEls(1:numCoeffChanged);
+CSaved=C(1:numCoeffChanged);
+SSaved=S(1:numCoeffChanged);
 
 %Now, add in all of the effects, except the effects of polar motion on the
 %coefficients.
 for curDelta=1:numDelta
-    numOffset=length(deltaC{curDelta}.clusterEls);
+    numOffset=length(deltaC{curDelta});
     num2Change=min(numOffset,numCoeffChanged);
     
-    C.clusterEls(1:num2Change)=C.clusterEls(1:num2Change)+deltaC{curDelta}.clusterEls(1:num2Change);
-    S.clusterEls(1:num2Change)=S.clusterEls(1:num2Change)+deltaS{curDelta}.clusterEls(1:num2Change);
+    C(1:num2Change)=C(1:num2Change)+deltaC{curDelta}(1:num2Change);
+    S(1:num2Change)=S(1:num2Change)+deltaS{curDelta}(1:num2Change);
 end
 
 %Add in the effects of polar motion. This just changes the C21 and S21
 %elements, which would otherwise be zero.
 if(effectsToInclude(2)~=false)
-    getAdjustedGravCoeffs4PolarMotion(C,S,TT1,TT2,true);
+    [~,~,C,S]=getAdjustedGravCoeffs4PolarMotion(C,S,TT1,TT2,true);
 end
 
 %Now, get the acceleration due to gravity in ITRS coordinates WITHOUT the
@@ -332,11 +350,11 @@ end
 
 %Finally, restore the adjusted elements of C and S in case they are to be
 %returned.
-C.clusterEls(1:numCoeffChanged)=CSaved;
-S.clusterEls(1:numCoeffChanged)=SSaved;
+C(1:numCoeffChanged)=CSaved;
+S(1:numCoeffChanged)=SSaved;
 %Undo any changes from the getAdjustedGravCoeffs4PolarMotion function.
-C(2+1,1+1)=0;
-S(2+1,1+1)=0;
+C(4)=0;
+S(4)=0;
 
 end
 

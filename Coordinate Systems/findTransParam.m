@@ -9,14 +9,14 @@ function [R,t,c]=findTransParam(A,B)
 %                is given. If only R and t are desired, it is assumed that
 %                c=1.
 %
-%INPUTS: A   An mXn matrix of n m-dimensional real vectors in the
-%            destination coordinate system.
-%        B   An mXn matrix of n m-dimensional real vectors in the source
-%            coordinate system.
+%INPUTS: A An mXn matrix of n m-dimensional real vectors in the destination
+%          coordinate system.
+%        B An mXn matrix of n m-dimensional real vectors in the source
+%          coordinate system.
 %
-%OUTPUTS: R  A rotation matrix for the transformation from B to A.
-%         t  A translation vector for the transformation from B to A.
-%         c  A scale factor for the transformation from B to A.
+%OUTPUTS: R A rotation matrix for the transformation from B to A.
+%         t A translation vector for the transformation from B to A.
+%         c A scale factor for the transformation from B to A.
 %
 %For both scenarios, when just R is desired and when more parameters are
 %desired, the algorithms of [1] are used. When only R is desired, the

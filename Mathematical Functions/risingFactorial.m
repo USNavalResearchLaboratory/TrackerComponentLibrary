@@ -7,20 +7,19 @@ function val=risingFactorial(x,n,algorithm)
 %                 offered here) when considering negative non-integer
 %                 values of n.
 %
-%OUTPUTS:   x A scalar or matrix of first values in the product series of
-%             x*(x+1)*...*(x+n-1). x must be real.
-%           n The scalar or matrix n value in the product series of
-%             x*(x+1)*...*(x+n-1). n must be real.
-%   algorithm Optionally, one can specify the algorithm to use. If this
-%             parameter is omitted, then algorithm 0 is used for positive
-%             integer values of n, then algorithm 1 if x>0 and x+n>0,
-%             otherwise algorithms 2 is used. The possible values are:
-%             0 Use the product identity that is given in [1].
-%             1 Use the expression in terms of gamma functions from [1],
-%               but use gammaln to reduce the effects of possible
-%               overflows.
-%             2 Use the expression in terms of gamma functions from [1]
-%               directly using the gamma function.
+%OUTPUTS: x A scalar or matrix of first values in the product series of
+%           x*(x+1)*...*(x+n-1). x must be real.
+%         n The scalar or matrix n value in the product series of
+%           x*(x+1)*...*(x+n-1). n must be real.
+% algorithm Optionally, one can specify the algorithm to use. If this
+%           parameter is omitted, then algorithm 0 is used for positive
+%           integer values of n, then algorithm 1 if x>0 and x+n>0,
+%           otherwise algorithms 2 is used. The possible values are:
+%           0 Use the product identity that is given in [1].
+%           1 Use the expression in terms of gamma functions from [1], but
+%             use gammaln to reduce the effects of possible overflows.
+%           2 Use the expression in terms of gamma functions from [1]
+%             directly using the gamma function.
 %
 %OUTPUTS: val The rising factorial <x>_n for each x and the corresponding
 %             n or for each n and a single x depending on what is a matrix

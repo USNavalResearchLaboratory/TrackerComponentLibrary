@@ -10,20 +10,21 @@ function [deltaC,deltaS]=gravPoleTideOffset(TT1,TT2,xpyp)
 %                of both terms. The date is broken into two parts to
 %                provide more bits of precision. It does not matter how the
 %                date is split.
-%xpyp            xpyp=[xp;yp] are the polar motion coordinates in radians
+%           xpyp xpyp=[xp;yp] are the polar motion coordinates in radians
 %                including the effects of tides and librations. If this
 %                parameter is omitted or if an empty matrix is passed, the
 %                value from the function getEOP will be used.
 %
-%OUTPUTS:deltaC A ClusterSet class holding the offsets to the fully
-%               normalized coefficient terms that are multiplied by cosines
-%               in the harmonic expansion of the gravitational potential.
+%OUTPUTS:deltaC An array holding the offsets to the fully normalized
+%               coefficient terms that are multiplied by cosines in the
+%               spherical harmonic expansion of the gravitational
+%               potential. If given to a CountingClusterSet class, then
 %               C(n+1,m+1) is the coefficient of degree n and order m. The
 %               offsets only go up to the degree and order of the FES2004
 %               coefficients.
-%        deltaS A ClusterSet class holding the coefficient terms that are
-%               multiplied by sines in the harmonic expansion. The
-%               format of S is the same as that of C.
+%        deltaS An array holding the coefficient terms that are multiplied
+%               by sines in the harmonic expansion. The format of S is the
+%               same as that of C.
 %
 %This implements the pole tide models that are described in Sections 6.4
 %and 6.5 of [1]. When implementing the oceanic pole tide model, only the
@@ -52,9 +53,8 @@ yp=xpyp(2);
 M=2;
 totalNumCoeffs=(M+1)*(M+2)/2;
 emptyData=zeros(totalNumCoeffs,1);
-clustSizes=1:(M+1);
-deltaC=ClusterSet(emptyData,clustSizes);
-deltaS=ClusterSet(emptyData,clustSizes);
+deltaC=emptyData;
+deltaS=emptyData;
 
 xpBarypBar=meanRotPoleLoc(TT1,TT2);
 xpBar=xpBarypBar(1);
@@ -69,12 +69,16 @@ m1=m1*rad2ArcSec;
 m2=m2*rad2ArcSec;
 
 %The solid Earth pole tide from Section 6.4
-deltaC(2+1,1+1)=-1.333e-9*(m1+0.115*m2);
-deltaS(2+1,1+1)=-1.333e-9*(m2-0.115*m1);
+%deltaC_{2,1}
+deltaC(4)=-1.333e-9*(m1+0.115*m2);
+%deltaS_{2,1}
+deltaS(4)=-1.333e-9*(m2-0.115*m1);
 
 %The main coefficients from the ocean pole tide in Section 6.5
-deltaC(2+1,1+1)=deltaC(2+1,1+1)+-2.1778e-10*(m1-0.01724*m2);
-deltaS(2+1,1+1)=deltaS(2+1,1+1)+-1.7232e-10*(m2-0.03365*m1);
+%deltaC_{2,1}
+deltaC(4)=deltaC(4)+-2.1778e-10*(m1-0.01724*m2);
+%deltaS_{2,1}
+deltaS(4)=deltaS(4)+-1.7232e-10*(m2-0.03365*m1);
 end
 
 %LICENSE:

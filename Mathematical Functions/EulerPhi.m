@@ -1,4 +1,4 @@
-function val=EulerPhi(n)
+function val=EulerPhi(n,method)
 %%EULERPHI Compute the Euler toitent function phi(n). This is the number of
 %          positive integers n that are relatively prime to n, where 1 is
 %          considered to be relatively prime to all numbers. Relatively
@@ -6,13 +6,59 @@ function val=EulerPhi(n)
 %          pulse Doppler radar.
 %
 %INPUTS: n A nonnegative integer or a matrix of nonnegative integers.
+%   method An optional parameter that specifies the algorithm to use.
+%          Both approaches will be slow for large value sof n. Possible
+%          values are:
+%          0 (The default if omitted or an empty matrix is passed) Use a
+%             brute-force apprinvolving the unique factors of a prime
+%             factorization of n as discussed in [2].
+%          1  Use the algorithm given in Chapter 8.1 of [1].
 %
 %OUTPUTS: val A matrix having the same dimensions as n where each entry if
 %             the value of the Euler toitent function for the corresponding
 %             n. For the special case of n=0, this is 0; for n=1, it is 1.
 %
+%REFERENCES:
+%[1] R. P. Grimaldi, Discrete and Combinatorial Mathematics: An Applied
+%    Introduction, 2nd ed. Reading, MA: Addison-Weslet, 1989.
+%[2] Weisstein, Eric W. "Totient Function." From MathWorld--A Wolfram Web
+%    Resource. http://mathworld.wolfram.com/TotientFunction.html
+%
+%January 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+if(nargin<2||isempty(method))
+   method=0; 
+end
+
+numN=numel(n);
+val=zeros(size(n));
+
+if(any(n(:)~=fix(n(:)))||any(n(:)<0)||any(~isfinite(n)))
+   error('n Must be composed of finite positive integers.') 
+end
+
+switch(method)
+    case 0
+        for curN=1:numN
+            val(curN)=EulerToitentBF(n(curN));
+        end
+    case 1
+        for curN=1:numN
+            val(curN)=EulerTotientGrimaldi(n(curN));
+        end
+    otherwise
+        error('Unknown method specified.')
+end
+end
+
+function phi=EulerToitentBF(n)
+%%EULERTOTIENTBF This is a brute-force implementation fo the Euler totient
+%%function.
+%
 %The function is implemented as a product involving the unique factors of a
-%prime factorization of n as discussed in [1].
+%prime factorization of n as discussed in [1]. This is essentially a
+%brute-force implementation.
 %
 %REFERENCES:
 %[1] Weisstein, Eric W. "Totient Function." From MathWorld--A Wolfram Web
@@ -21,22 +67,70 @@ function val=EulerPhi(n)
 %January 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-numN=numel(n);
-val=zeros(size(n));
+    if(n==0)
+        phi=0;
+    elseif(n==1)
+        phi=1;
+    else
+        nCur=n;
+        p=unique(factor(nCur));
 
-for curN=1:numN
-    nCur=n(curN);
-    p=unique(factor(nCur));
-
-    %The fix function deals with finite precision errors. The result should
-    %always be an integer.
-    val(curN)=fix(nCur*prod(1-1./p));
+        %The fix function deals with finite precision errors. The result should
+        %always be an integer.
+        phi=fix(nCur*prod(1-1./p));
+    end
 end
 
-%Deal with the special cases.
-val(n==1)=1;
-val(n==0)=0;
+function phi=EulerTotientGrimaldi(n)
+%%EULERTOTIENTGRIMALDI This is the implementation fo the Euler totient
+%                      function that is given in Chapter 8.1 of [1].
+%
+%REFERENCES:
+%[1] R. P. Grimaldi, Discrete and Combinatorial Mathematics: An Applied
+%    Introduction, 2nd ed. Reading, MA: Addison-Weslet, 1989.
+%
+%August 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(n==0)
+    phi=0;
+    return
+end
+
+phi=n;
+if(mod(n,2)==0)
+    phi=fix(phi/2);
+    while(mod(n,2)==0)
+       n=n/2; 
+    end
+end
+
+if(mod(n,3)==0)
+    phi=fix(2*phi/3);
+    while(mod(n,3)==0)
+        n=n/3; 
+    end
+end
+
+i=5;
+while(n>=5)
+    j=1;
+    while(1)
+        j=j+1;
+        k=mod(i,j);
+        if(k==0||j==fix(sqrt(i)))
+            break;
+        end
+    end
+    
+    if(k~=0&&mod(n,i)==0)
+        phi=fix(phi*(i-1)/i);
+        while(mod(n,i)==0)
+           n=n/i; 
+        end
+    end
+    i=i+2;
+end
 end
 
 %LICENSE:

@@ -5,12 +5,12 @@ function cPoly=composePolys(a,b)
 %              the output of the function is the set of coefficients of C
 %              (subject to finite precision limitations in the recursion).
 %
-%INPUTS: a  Coefficients for a power series of the form
-%           y(z)=a(end)+a(end-1)*z+a(end-2)*z^2+...
-%           into which the power series in b is to be substituted. The
-%           ordering of the coefficeints is the same as in Matlab's polyval
-%           function.
-%        b  Coefficients for the power series that is substitued into a.
+%INPUTS: a Coefficients for a power series of the form
+%          y(z)=a(end)+a(end-1)*z+a(end-2)*z^2+...
+%          into which the power series in b is to be substituted. The
+%          ordering of the coefficeints is the same as in Matlab's polyval
+%          function.
+%        b Coefficients for the power series that is substitued into a.
 %
 %OUTPUTS: c Coefficients for the power series that represents the
 %           substitution of the polynomial b into a.

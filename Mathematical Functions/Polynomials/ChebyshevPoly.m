@@ -1,35 +1,33 @@
 function T=ChebyshevPoly(tau,n,tauStart,tauEnd)
-%%CHEBYSHEVPOLY  Evaluate Chebyshev polynomials of the first kind from
-%                order 0 to n order at a given point tau. Note that when
-%                one wishes to evaluate an n-th degree expansion in
-%                Chebyshev polynomials, for example, for interpolation, it
-%                is more computationally efficient to pass the cofficients
-%                to the ChebyshevPolySynth function rather than using this
-%                function to evaluate the Chebyshev polynomials,
-%                multiplying the values by the coefficients and summing the
-%                result. Use the function ChebyshevPoly1 if one only wishes
-%                to evaluate a Chebyshev polynomial of a single given
-%                order.
+%%CHEBYSHEVPOLY Evaluate Chebyshev polynomials of the first kind from
+%               order 0 to n order at a given point tau. Note that when
+%               one wishes to evaluate an n-th degree expansion in
+%               Chebyshev polynomials, for example, for interpolation, it
+%               is more computationally efficient to pass the cofficients
+%               to the ChebyshevPolySynth function rather than using this
+%               function to evaluate the Chebyshev polynomials,
+%               multiplying the values by the coefficients and summing the
+%               result. Use the function ChebyshevPoly1 if one only wishes
+%               to evaluate a Chebyshev polynomial of a single given
+%               order.
 %
-%INPUTS: tau     An NX1 or 1XN vector of values from tauStart to tauEnd, or
-%                from -1 to 1 if tauStart and tauEnd are omitted, where one
-%                wishes to evaluate the Chebyshev polynomials.
-%        n       The non-negative integer maximum order of the Chebyshev
-%                polynomials evaluated.
-%tauStart,tauEnd The possible range of the inputs. Given this range, the
-%                actual input to the polynomials is scaled to
-%                tau=(tau-0.5*(tauStart+tauEnd))/(0.5*(tauEnd-tauStart));
-%                If omitted, a range of -1 to 1 is assumed --the normal
-%                range for Chebyshev polynomials. The option for mapping to
-%                a wider range is useful when using Chebyshev polynomials
-%                for interpolation. Note that the such polynomials are
-%                generally not useful for interpolating much outside of the
-%                valid range.
+%INPUTS: tau An NX1 or 1XN vector of values from tauStart to tauEnd, or
+%            from -1 to 1 if tauStart and tauEnd are omitted, where one
+%            wishes to evaluate the Chebyshev polynomials.
+%          n The non-negative integer maximum order of the Chebyshev
+%            polynomials evaluated.
+% tauStart,tauEnd The possible range of the inputs. Given this range, the
+%            actual input to the polynomials is scaled to
+%            tau=(tau-0.5*(tauStart+tauEnd))/(0.5*(tauEnd-tauStart));
+%            If omitted, a range of -1 to 1 is assumed --the normal range
+%            for Chebyshev polynomials. The option for mapping to a wider
+%            range is useful when using Chebyshev polynomials for
+%            interpolation. Note that such polynomials are generally not
+%            useful for interpolating far outside of the valid range.
 %
-%OUTPUTS: T      An (n+1)XN matrix of the Chebyshev polynomials from order
-%                0 to n evaluated at each of the values of tau. T(i,j) is
-%                the (i-1)th order Chebyshev polynomial evaluated at
-%                tau(j).
+%OUTPUTS: T An (n+1)XN matrix of the Chebyshev polynomials from order 0 to
+%           n evaluated at each of the values of tau. T(i,j) is the
+%           (i-1)th order Chebyshev polynomial evaluated at tau(j).
 %
 %Chebyshev polynomials are often used to express orbital ephemerides and
 %are described in [1] and in Chapter 3.3.3 of [2], which is whence the

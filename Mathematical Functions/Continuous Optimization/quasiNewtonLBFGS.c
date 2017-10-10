@@ -17,108 +17,94 @@
  *                  NewtonsMethod is more appropriate as this function
  *                  assumes the Hessian matrix is symmetric.
  *
- *INPUTS:            f A handle to the function (and its gradient) over
- *                     which the minimization is to be performed. The
- *                     function [fVal,gVal]=f(x) takes the NX1 x vector
- *                     returns the real scalar function value fVal and
- *                     gradient gVal at the point x. 
- *                  x0 The NX1-dimensional point from which the
- *                     minimization starts.
- *             numCorr The number of corrections to approximate the inverse
- *                     Hessian matrix. The default if omitted or an empty
- *                     matrix is passed is 6. The L-BFGS documentation
- *                     recommends not using fewer than 3.
- *             epsilon The parameter determining the accuracy of the
- *                     desired solution. The function terminates when
- *                     norm(g) < epsilon*max([1, norm(x)])
- *                     where g is the gradient. The default if omitted or
- *                     an empty matrix is passed is 1e-6.
- *       deltaTestDist The number of iterations back to use to compute the
- *                     decrease of the objective function if a delta-based
- *                     convergence test is performed. If zero, then no
- *                     delta-based convergence testing is done. The default
- *                     if omitted or an empty matrix is passed is zero.
- *              delta  The delta for the delta convergence test. This
- *                     determines the minimum rate of decrease of the
- *                     objective function. Convergence is determined if
- *                     (f'-f)/f<delta, where f' is the value of the
- *                     objective function f deltaTestDist iterations ago,
- *                     and f is the current objective function value. The
- *                     default if this parameter is omitted or an empty
- *                     matrix is passed is 0.
- *    lineSearchParams An optional structure whose members specify
- *                     tolerances for the line search. The parameters are
- *                     described as in the lineSearch function. Possible
- *                     members are algorithm, C, fTol, wolfeTol, xTol, 
- *                     minStep, maxStep, maxIter, l1NormRange. If this
- *                     parameter is omitted or an empty matrix is passed,
- *                     then the default values as described in the
- *                     lineSearch function are used. If any member of this
- *                     structure is omitted or is assigned an empty matrix,
- *                     then the default value will be used.
- *       maxIterations The maximum number of iterations to use for the
- *                     overall L-BFGS algorithm. The default if this
- *                     parameter is omitted or an empty matrix is past is
- *                     1000. If this parameter is set to zero, the
- *                     algorithm will continue either until convergence is
- *                     obtained or until an error occurs.
- *    progressCallback An optional Matlab function handle that is called
- *                     during each step of the algorithm with information
- *                     on the progress. This can be used to analyze how
- *                     well the optimization is working. The function takes
- *                     8 arguments and returns one argument. The format is
- *                     progressCallback(x,...%The state
- *                                   g,...%The gradient
- *                                   fx,...%The function value
- *                                   xnorm,...%The l2 norm of the state
- *                                   gnorm,...%The l2 norm of the gradient
- *                                   ...%The line-search step used for this
- *                                   ...%iteration
- *                                   step,...
- *                                   k,...%The iteration number.
- *                                   ...%The number of function evaluations
- *                                   ...%called for this iteration.
- *                                   ls);
- *                     If the return value is 0, then the optimization
- *                     process will continue. If the return value is
- *                     nonzero, then the optimization process will not
- *                     continue. The return value should be a real scalar
- *                     value. If this parameter is omitted or an empty
- *                     matrix is passed, then no callback is performed.
+ *INPUTS: f A handle to the function (and its gradient) over which the
+ *          minimization is to be performed. The function [fVal,gVal]=f(x)
+ *          takes the NX1 x vector returns the real scalar function value
+ *          fVal and gradient gVal at the point x. 
+ *       x0 The NX1-dimensional point from which the minimization starts.
+ *  numCorr The number of corrections to approximate the inverse Hessian
+ *          matrix. The default if omitted or an empty matrix is passed is
+ *          6. The L-BFGS documentation recommends not using fewer than 3.
+ *  epsilon The parameter determining the accuracy of the desired solution.
+ *          The function terminates when norm(g) < epsilon*max([1, norm(x)])
+ *          where g is the gradient. The default if omitted or an empty
+ *          matrix is passed is 1e-6.
+ * deltaTestDist The number of iterations back to use to compute the
+ *          decrease of the objective function if a delta-based convergence
+ *          test is performed. If zero, then no delta-based convergence
+ *          testing is done. The default if omitted or an empty matrix is
+ *          passed is zero.
+ *    delta The delta for the delta convergence test. This determines the
+ *          minimum rate of decrease of the objective function. Convergence
+ *          is determined if (f'-f)/f<delta, where f' is the value of the
+ *          objective function f deltaTestDist iterations ago, and f is the
+ *          current objective function value. The default if this parameter
+ *          is omitted or an empty matrix is passed is 0.
+ * lineSearchParams An optional structure whose members specify tolerances
+ *          for the line search. The parameters are described as in the
+ *          lineSearch function. Possible members are algorithm, C, fTol,
+ *          wolfeTol, xTol, minStep, maxStep, maxIter, l1NormRange. If this
+ *          parameter is omitted or an empty matrix is passed, then the
+ *          default values as described in the lineSearch function are
+ *          used. If any member of this structure is omitted or is assigned
+ *          an empty matrix, then the default value will be used.
+ * maxIterations The maximum number of iterations to use for the overall
+ *          L-BFGS algorithm. The default if this parameter is omitted or
+ *          an empty matrix is past is 1000. If this parameter is set to
+ *          zero, the algorithm will continue either until convergence is
+ *          obtained or until an error occurs.
+ * progressCallback An optional Matlab function handle that is called
+ *          during each step of the algorithm with information on the
+ *          progress. This can be used to analyze how well the optimization
+ *          is working. The function takes 8 arguments and returns one
+ *          argument. The format is
+ *          progressCallback(x,...%The state
+ *                           g,...%The gradient
+ *                           fx,...%The function value
+ *                           xnorm,...%The l2 norm of the state
+ *                           gnorm,...%The l2 norm of the gradient
+ *                                 ...%The line-search step used for this
+ *                                 ...%iteration
+ *                           step,...
+ *                           k,...%The iteration number.
+ *                             ...%The number of function evaluations
+ *                             ...%called for this iteration.
+ *                           ls);
+ *          If the return value is 0, then the optimization process will
+ *          continue. If the return value is nonzero, then the optimization
+ *          process will not continue. The return value should be a real
+ *          scalar value. If this parameter is omitted or an empty
+ *          matrix is passed, then no callback is performed.
  *
- *OUTPUTS: xMin     The value of x at the minimum point found. If exitCode
- *                  is negative, then this value might be invalid.
- *         fMin     The cost function value at the minimum point found. If
- *                  exitCode is negative, then this value might be invalid.
- *         exitCode A value indicating the termination condition of the
- *                  algorithm. Negative values indicate errors Possible
- *                  values are:
- *                      0 The algorithm terminated successfully.
- *                      1 Termination according to the delta stopping
- *                        criterion occurred.
- *                      2 The initial value already minimizes the objective
- *                        function.
- *                  -1023 A logical error in the code occurred.
- *                  -1022 Insufficient memory.
- *                  -1021 The optimization was cancelled by the user
- *                        callback progress function returning a nonzero
- *                        value.
- *                  -1001 A finite precision error occurred or no
- *                        line-search step satisfies the sufficient
- *                        decrease and curvature conditions.
- *                  -1000 The line-search step size became less than
- *                        minStep.
- *                   -999 The line-search step size became larger than
- *                        maxStep.
- *                   -998 The maximum number of line-search iterations was
- *                        reached.
- *                   -997 The maximum number of overall iterations was
- *                        reached.
- *                   -996 The relative width of the interval of uncertainty
- *                        is at most xTol
- *                   -995 A negative line-search step occurred.
- *                   -994 The current search direction increases the
- *                        objective function.
+ *OUTPUTS: xMin The value of x at the minimum point found. If exitCode is
+ *              negative, then this value might be invalid.
+ *         fMin The cost function value at the minimum point found. If
+ *              exitCode is negative, then this value might be invalid.
+ *     exitCode A value indicating the termination condition of the
+ *              algorithm. Negative values indicate errors Possible
+ *              values are:
+ *                  0 The algorithm terminated successfully.
+ *                  1 Termination according to the delta stopping
+ *                    criterion occurred.
+ *                  2 The initial value already minimizes the objective
+ *                    function.
+ *              -1023 A logical error in the code occurred.
+ *              -1022 Insufficient memory.
+ *              -1021 The optimization was cancelled by the user callback
+ *                    progress function returning a nonzero value.
+ *              -1001 A finite precision error occurred or no line-search
+ *                    step satisfies the sufficient decrease and curvature
+ *                    conditions.
+ *              -1000 The line-search step size became less than minStep.
+ *               -999 The line-search step size became larger than maxStep.
+ *               -998 The maximum number of line-search iterations was
+ *                    reached.
+ *               -997 The maximum number of overall iterations was reached.
+ *               -996 The relative width of the interval of uncertainty is
+ *                    at most xTol
+ *               -995 A negative line-search step occurred.
+ *               -994 The current search direction increases the objective
+ *                    function.
  *
  *This is a Matlab interface for the C implementation of the L-BFGS
  *algorithm of

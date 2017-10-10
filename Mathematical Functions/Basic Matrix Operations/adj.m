@@ -1,11 +1,11 @@
 function AAdj=adj(A)
-%%ADJ(A) Compute the adjugate of a matrix (also known as the "classical
-%        adjoint of a matrix, which is not to be confused with the use of
-%        "adjoint" to mean the conjugate transpose of a matrix). The
-%        adjugate of a matrix is defined in Ch. 4 of [1] as the transpose
-%        of the cofactor matrix C. The cofactor matrix of a matrix A is one
-%        such that C(i,j)=(-1)^(i+j)det(A_{i,j}), where A_{i,j} is the
-%        matrix A with row i and column j removed.
+%%ADJ Compute the adjugate of a matrix (also known as the "classical
+%     adjoint of a matrix, which is not to be confused with the use of
+%     "adjoint" to mean the conjugate transpose of a matrix). The
+%     adjugate of a matrix is defined in Ch. 4 of [1] as the transpose of
+%     the cofactor matrix C. The cofactor matrix of a matrix A is one such
+%     that C(i,j)=(-1)^(i+j)det(A_{i,j}), where A_{i,j} is the matrix A
+%     with row i and column j removed.
 %
 %INPUTS: A An nXn square matrix. The elements can be real or complex. The
 %          matrix can be singular.
@@ -30,7 +30,7 @@ function AAdj=adj(A)
 %
 %The matrix adjugate is also equal to adj(A)=det(A)*inv(A) if the matrix A
 %is invertible. This identity is not used here.
-
+%
 %REFERENCES:
 %[1] K. M. Abadir and J. R. Magnus, "Matrix algebra," New York, 2005.
 %[2] G. H. Golub and C. F. Van Loan, Matrix Computations, 4th ed.

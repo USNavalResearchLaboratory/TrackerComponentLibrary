@@ -4,11 +4,11 @@ function [xUpdate,innov]=fixedGainUpdate(W,xPred,z,H)
 %                asymptotic gain for a particular dynamic model can be
 %                found using the function findAsymptoticGain.
 %
-%INPUTS:    W           The gain in a constant gain filter.
-%       xPred           The xDim X 1 predicted target state.
-%           z           The zDim X 1 vector measurement.
-%           H           The zDim X xDim measurement matrix for a linear
-%                       measurement model. That is z=H*x.
+%INPUTS: W The gain in a constant gain filter.
+%    xPred The xDim X 1 predicted target state.
+%        z The zDim X 1 vector measurement.
+%        H The zDim X xDim measurement matrix for a linear measurement
+%          model. That is z=H*x.
 %
 %OUTPUTS: xUpdate The xDim X 1 updated state vector.
 %           innov The zDimX1 innovation of the filter. This is sometimes

@@ -27,30 +27,28 @@ function [xPredMain,xPredSubsid,k,orders]=RosenbrockStep(xCur,tCur,f,deltaT,fCur
 %        [xPred,xPredSubsid,dxdt,orders,isFSAL]=RosenbrockStep(xCur,curT,f,fCur,deltaT,Jacobian,dfdt,order)
 %        to actually do a full step and provide the orders. All of the
 %        inputs in the full step are:
-%           xCur    The value of the (scalar or vector) state over which
-%                   integration is being performed.
-%           tCur    The time at which xCur is taken.
-%           f       f(x,t) returns the derivative of x with respect to time
-%                   taken at time t.
-%           fCur    The value f(xCur,tCur). This is explicitly provided
-%                   rather than just using the function f, because when
-%                   performing multiple steps, sometimes the value is
-%                   computed while computing xPredSubsid and can thus be
-%                   reused on the next step. If an empty matrix is
-%                   provided, then this function will just compute fCur
-%                   from f.
-%           deltaT  The size of the single (time) step over which the 
-%                   integration is performed.
-%               J   The symmetric derivative matrix of f with respect to
-%                   the components of xCur. For example, the function
-%                   numjac could be used to numerically approximate the
-%                   Jacobian.
-%             dfdt  The derivative of f with respect to t.
-%            order  The main integration order of the Rosenbrock method.
-%                   If this parameter is omitted, then the default order of
-%                   2 is used. Orders can range from 2 to 3. Given order 2,
-%                   the Rosenbrock formula of [2] is used. Given order 3,
-%                   the Rosenbrock formula of [1] is used.
+%           xCur The value of the (scalar or vector) state over which
+%                integration is being performed.
+%           tCur The time at which xCur is taken.
+%              f f(x,t) returns the derivative of x with respect to time
+%                taken at time t.
+%           fCur The value f(xCur,tCur). This is explicitly provided rather
+%                than just using the function f, because when performing
+%                multiple steps, sometimes the value is computed while
+%                computing xPredSubsid and can thus be reused on the next
+%                step. If an empty matrix is provided, then this function
+%                will just compute fCur from f.
+%           deltaT The size of the single (time) step over which the 
+%                integration is performed.
+%              J The symmetric derivative matrix of f with respect to the
+%                components of xCur. For example, the function numjac could
+%                be used to numerically approximate the Jacobian.
+%           dfdt The derivative of f with respect to t.
+%           order The main integration order of the Rosenbrock method.
+%                If this parameter is omitted, then the default order of
+%                2 is used. Orders can range from 2 to 3. Given order 2,
+%                the Rosenbrock formula of [2] is used. Given order 3, the
+%                Rosenbrock formula of [1] is used.
 %
 %OUTPUTS: If the function is run with one input as
 %         [orders,isFSAL]=RosenbrockStep(order)

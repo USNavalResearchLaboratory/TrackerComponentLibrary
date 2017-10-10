@@ -1,10 +1,10 @@
 function cartPoints=spher2Cart(points,systemType,useHalfRange,zTx,zRx,M)
-%%SPHER2CART  Convert points from spherical coordinates to Cartesian
-%             coordinates. If no range is specified, then the angles are
-%             converted into Cartesian unit vectors. An option allows for
-%             the angles to be specified from different axes. Optionally, a
-%             bistatic range can be used when considering bistatic
-%             measurements in a local spherical coordinate system. 
+%%SPHER2CART Convert points from spherical coordinates to Cartesian
+%            coordinates. If no range is specified, then the angles are
+%            converted into Cartesian unit vectors. An option allows for
+%            the angles to be specified from different axes. Optionally, a
+%            bistatic range can be used when considering bistatic
+%            measurements in a local spherical coordinate system. 
 %
 %INPUTS: points One or more points given in terms of range, azimuth and
 %           elevation, with the angles in radians, or in terms of just
@@ -15,7 +15,7 @@ function cartPoints=spher2Cart(points,systemType,useHalfRange,zTx,zRx,M)
 %           unit vectors are desired. Note that many math texts use a polar
 %           angle (pi/2-elevation) in place of elevation. A polar angle is
 %           also known as a colatitude, an inclination angle, a zenith
-%           angle, and a normal angle.
+%           angle, and a normal angle. systemType=2 supports a polar angle.
 % systemType An optional parameter specifying the axis from which the
 %           angles are measured in radians. Possible values are
 %           0 (The default if omitted) Azimuth is measured 
@@ -27,16 +27,19 @@ function cartPoints=spher2Cart(points,systemType,useHalfRange,zTx,zRx,M)
 %           1 Azimuth is measured counterclockwise from the z-axis in the
 %             z-x plane. Elevation is measured up from the z-x plane
 %             (towards the y-axis). This is consistent with some spherical
-%             coordinate systems that use the z axis as the boresight
+%             coordinate systems that use the z-axis as the boresight
 %             direction of the radar.
+%           2 This is the same as 0 except instead of being given
+%             elevation, one is given the angle away from the z-axis, which
+%             is (pi/2-elevation).
 % useHalfRange An optional boolean value specifying whether the bistatic
 %           (round-trip) range value has been divided by two. This normally
 %           comes up when operating in monostatic mode (the most common
 %           type of spherical coordinate system), so that the range
 %           reported is a one-way range (or just half a bistatic range).
 %           The default if this parameter is not provided is false if zTx
-%           and is provided and true if it is is omitted (monostatic). If
-%           no range values are provided, an empty matrix can be passed.
+%           and is provided and true if itis omitted (monostatic). If no
+%           range values are provided, an empty matrix can be passed.
 %       zTx The 3XN [x;y;z] location vectors of the transmitters in global
 %           Cartesian coordinates. If this parameter is omitted, then the
 %           transmitters are assumed to be at the origin. If only a single
@@ -57,7 +60,7 @@ function cartPoints=spher2Cart(points,systemType,useHalfRange,zTx,zRx,M)
 %           receiver is the pointing direction of the receiver. If omitted,
 %           then it is assumed that the local coordinate system is aligned
 %           with the global and M=eye(3) --the identity matrix is used. If
-%           only a single 3X3 matrix is passed, then is is assumed to be
+%           only a single 3X3 matrix is passed, then it is assumed to be
 %           the same for all of the N conversions.
 %
 %OUTPUTS: cartPoints For N points, cartPoints is a 3XN matrix of the
@@ -113,6 +116,11 @@ if(hasRange)
 else
     azimuth=points(1,:);
     elevation=points(2,:);
+end
+
+if(systemType==2)
+    elevation=pi/2-elevation;
+    systemType=0;
 end
 
 %Get unit vectors pointing in the direction of the targets from the

@@ -25,9 +25,9 @@ void iauSxp(double s, double p[3], double sp[3])
 **
 **  This revision:  2013 June 18
 **
-**  SOFA release 2016-05-03
+**  SOFA release 2017-04-20
 **
-**  Copyright (C) 2016 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
 */
 {
    sp[0] = s * p[0];
@@ -38,7 +38,7 @@ void iauSxp(double s, double p[3], double sp[3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2016
+**  Copyright (C) 2017
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

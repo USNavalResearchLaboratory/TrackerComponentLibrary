@@ -1,27 +1,29 @@
-/**TDB2TT  Convert from  barycentric dynamical time (TDB) to terrestrial
- *         time (TT) to an accuracy of nanoseconds (if deltaT is accurate)
- *         using the routines from the International Astronomical Union's
- *         library that do not require external ephemeris data.
+/**TDB2TT Convert from  barycentric dynamical time (TDB) to terrestrial
+ *        time (TT) to an accuracy of nanoseconds (if deltaT is accurate)
+ *        using the routines from the International Astronomical Union's
+ *        library that do not require external ephemeris data.
  *
  *INPUTS: Jul1,Jul2 Two parts of a Julian date given in TT. The units of
  *                  the date are days. The full date is the sum of both
  *                  terms. The date is broken into two parts to provide
  *                  more bits of precision. It does not matter how the date
  *                  is split.
- *      deltaTTUT1  An optional parameter specifying the offset between TT
+ *       deltaTTUT1 An optional parameter specifying the offset between TT
  *                  and UT1 in seconds. If this parameter is omitted or an
  *                  empty matrix is passed, then the value of the function
  *                  getEOP will be used. Since getEOP takes UTC (which
  *                  comes from UT1) and we have only TDB (which is close),
  *                  a few iterations are performed to try to get the
  *                  correct result.
- *        clockLoc  An optional 3X1 vector specifying the location of the
- *                  clock in WGS-84 ECEF Cartesian [x;y;z] coordinates with
- *                  units of meters. Due to relativistic effects, clocks
- *                  that are synchronized with respect to TT are not
- *                  synchronized with respect to TDB. If this parameter is
- *                  omitted, then a clock at the center of the Earth is
- *                  used.
+ *         clockLoc An optional 3X1 vector specifying the location of the
+ *                  clock in the Terrestrial Intermediate Reference System
+ *                  (TIRS), though it would not make much of a difference
+ *                  if the International Terrestrial Reference System
+ *                  (ITRS) were used. The units are meters. Due to
+ *                  relativistic effects, clocks that are synchronized with
+ *                  respect to TT are not synchronized with respect to TDB.
+ *                  If this parameter is omitted, then a clock at the
+ *                  center of the Earth is used.
  *        
  *OUTPUTS:Jul1,Jul2 Two parts of a Julian date given in TDB.
  *
@@ -46,9 +48,10 @@
  *Many temporal coordinate systems standards are compared in [1].
  *
  *REFERENCES:
- *[1] D. F. Crouse, "An overview of major terrestrial, celestial, and
- *    temporal coordinate systems for target tracking", Report, U. S. Naval
- *    Research Laboratory, to appear, 2016.
+ *[1] D. F. Crouse, "An Overview of Major Terrestrial, Celestial, and
+ *    Temporal Coordinate Systems for Target Tracking," Formal Report,
+ *    Naval Research Laboratory, no. NRL/FR/5344--16-10,279, 10 Aug. 2016,
+ *    173 pages.
  *
  *April 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
  */
@@ -88,14 +91,14 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     TT2=TDB2;
     
     //If the deltaT parameter is given and is not just an empty matrix.
-    if(nrhs>2&&!(mxGetM(prhs[2])==0||mxGetN(prhs[2])==0)) {
+    if(nrhs>2&&!mxIsEmpty(prhs[2])) {
         iterateDeltaT=false;
         deltaTTUT1=getDoubleFromMatlab(prhs[2]);
     } else {
         iterateDeltaT=true;
     }
     
-    if(nrhs>3) {
+    if(nrhs>3&&!mxIsEmpty(prhs[3])) {
         double *xyzClock;
         
         if(mxGetM(prhs[3])!=3||mxGetN(prhs[3])!=1) {

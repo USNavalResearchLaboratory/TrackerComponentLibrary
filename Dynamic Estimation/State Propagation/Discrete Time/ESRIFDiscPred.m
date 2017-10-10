@@ -1,22 +1,22 @@
 function [ySqrtPred,PInvSqrtPred,RwPred,RwxPred]=ESRIFDiscPred(ySqrtPrev,PInvSqrtPrev,f,FJacob,SQ,u,Gamma)
-%%ESRIFDISCPRED    Perform the discrete-time prediction step that comes
-%                  with the extended square root information filter with
-%                  additive process noise.
+%%ESRIFDISCPRED Perform the discrete-time prediction step that comes with
+%               the extended square root information filter with additive
+%               process noise.
 %
-%INPUTS:ySqrtPrev  The xDimX1 square root information state that is to be
+%INPUTS: ySqrtPrev The xDimX1 square root information state that is to be
 %                  propagated. The previous information state is always
 %                  PInvSqrtPrev times the previous target state estimate.
-%  PInvSqrtPrev    The previous inverse square root information matrix.
+%     PInvSqrtPrev The previous inverse square root information matrix.
 %                  If P is the covariance matrix of a Gaussian state x,
 %                  then P=PSqrt*PSqrt' and PInvSqrtPrev=inv(PSqrt). This
 %                  can be either upper triangular or lower triangular.
-%             f    A function handle for the state transition function
+%                f A function handle for the state transition function
 %                  that takes the state as its parameter.
-%        FJacob    A function handle for calculating the xDim X xDim state
+%           FJacob A function handle for calculating the xDim X xDim state
 %                  transition matrix. If an empty matrix is passed, then
 %                  FJacob will be found using numerical differentiation 
 %                  via the numDiff function with default parameters.
-%            SQ    The lower-triangular square root of the process noise
+%               SQ The lower-triangular square root of the process noise
 %                  covariance matrix. In the standard linear dynamic
 %                  model, one has
 %                  x(k)=F(k-1)*x(k-1)+u(k-1)+noise where x is the state
@@ -28,10 +28,10 @@ function [ySqrtPred,PInvSqrtPred,RwPred,RwxPred]=ESRIFDiscPred(ySqrtPrev,PInvSqr
 %                  the untransformed noise is not singular. This SQ is the
 %                  lower triangular square root of the noise in the linear
 %                  dynamic equation.
-%             u    An optional xDim X1 vector that is the control input.
+%                u An optional xDim X1 vector that is the control input.
 %                  If omitted, a zero control input (no control input) is
 %                  used.
-%         Gamma    An optional matrix that transformes the process noise
+%            Gamma An optional matrix that transforms the process noise
 %                  to the state domain if the process noise covariance
 %                  matrix is singular, as disccused for the input SQ. If
 %                  this is omitted an identity matrix is used (i.e. there

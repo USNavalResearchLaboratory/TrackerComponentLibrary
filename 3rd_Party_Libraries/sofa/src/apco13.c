@@ -180,9 +180,9 @@ int iauApco13(double utc1, double utc2, double dut1,
 **
 **  This revision:   2013 December 5
 **
-**  SOFA release 2016-05-03
+**  SOFA release 2017-04-20
 **
-**  Copyright (C) 2016 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
 */
 {
    int j;
@@ -232,7 +232,7 @@ int iauApco13(double utc1, double utc2, double dut1,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2016
+**  Copyright (C) 2017
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

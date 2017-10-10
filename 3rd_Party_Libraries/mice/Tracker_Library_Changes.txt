@@ -1,5 +1,0 @@
-To allow this to be compiled under OS X, *NIX, and Windows, the makefiles for all three operating systems have been included. Normally, each distribution from NASA's web site only includes the make files for one operating system. Also, the makefiles specific to ./src/mice/ have been modified to make them work with Matlab 2016a. Functionality under older versions of Matlab is not guaranteed.
-
-The makefiles makeLINUX64_OnlyMatlab, makeOSX64_OnlyMatlab and make_OnlyMatlab.bat have been added as abridged versions of the full makefiles so that one need not built a lot of executables. Rather, only the Matlab interface is built.
-
-June 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.

@@ -1,36 +1,35 @@
-/**CAL2UTC  Convert dates in terms of the Gregorian calendar in years,
- *          months, days, hours, minutes and seconds with the time in
- *          universal coordinated time (UTC) to a two-part pseudo-Julian
- *          date in UTC.
+/**CAL2UTC Convert dates in terms of the Gregorian calendar in years,
+ *         months, days, hours, minutes and seconds with the time in
+ *         universal coordinated time (UTC) to a two-part pseudo-Julian
+ *         date in UTC.
  *
- *INPUTS:   year    A matrix of integer  years in the Gregorian
- *                  calendar under UTC time.
- *          month   A matrix of integer months in the Gregorian calendar
- *                  under UTC time. 1<=month<=12
- *          day     A matrix of integer days in the Gregorian calendar
- *                  under UTC time. Days count from 1.
- *          hour    A matrix of integer hours under the Gregorian calendar.
- *                  UTC time 0<=hour<=23
- *          minute  A matrix of integer minutes in the Gregorian calendar
- *                  under UTC time. 0<=minute<=59.
- *          second  A matrix of double floating point seconds in the
- *                  Gregorian calendar under UTC time. This is >=0 and
- *                  normally less than 60, but can be a value less than 61
- *                  or 59 at the right hour on a day with a leap second.
+ *INPUTS: year A matrix of integer  years in the Gregorian calendar under
+ *             UTC time.
+ *       month A matrix of integer months in the Gregorian calendar under
+ *             UTC time. 1<=month<=12
+ *         day A matrix of integer days in the Gregorian calendar under UTC
+ *             time. Days count from 1.
+ *        hour A matrix of integer hours under the Gregorian calendar. UTC
+ *             time 0<=hour<=23
+ *      minute A matrix of integer minutes in the Gregorian calendar under
+ *             UTC time. 0<=minute<=59.
+ *      second A matrix of double floating point seconds in the Gregorian
+ *             calendar under UTC time. This is >=0 and normally less than
+ *             60, but can be a value less than 61 or 59 at the right hour
+ *             on a day with a leap second.
  *
  *Since the default format of numbers in Matlab is double-precision
  *floating point numbers and one must go to lengths to use values that are
  *differently formatted, it is assumed that all inputs, including the
  *integer values, are double-precision floats.
  *
- *OUTPUTS:   Jul1, Jul2  Matrices of the time as pseudo-Julian dates in UTC
- *                       where each row/column corresponds to the values in
- *                       the same row/column of the input matrices. Jul1
- *                       corresponds to an integer number of days starting
- *                       at midnight, which means that it ends in 0.5,
- *                       since Julian days start at noon. Jul2 is the
- *                       fraction of a day (midnight-to-midnight) after
- *                       that.
+ *OUTPUTS: Jul1, Jul2 Matrices of the time as pseudo-Julian dates in UTC
+ *                    where each row/column corresponds to the values in
+ *                    the same row/column of the input matrices. Jul1
+ *                    corresponds to an integer number of days starting at
+ *                    midnight, which means that it ends in 0.5, since
+ *                    Julian days start at noon. Jul2 is the fraction of a
+ *                    day (midnight-to-midnight) after that.
  *
  *This is a mex wrapper for the function iauDtf2d in the International
  *Astronomical Union's (IAU) Standard's of Fundamental Astronomy library.

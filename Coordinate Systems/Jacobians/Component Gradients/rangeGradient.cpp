@@ -3,8 +3,8 @@
 *           velocity etc. are zero and are not provided).Atmospheric and
 *           other propagation effects are not taken into account.
 *
-*INPUTS: x A numPosDimX1 target position vector of the form [x;y] or
-*          [x;y;z].
+*INPUTS: x A numPosDimXN set of N target position vectors of the form
+*          [x;y] or [x;y;z].
 * useHalfRange A boolean value specifying whether the bistatic range value
 *          should be divided by two. This normally comes up when operating
 *          in monostatic mode, so that the range reported is
@@ -17,9 +17,9 @@
 *          If this parameter is omitted or an empty matrix is passed, then
 *          the receiver is assumed to be at the origin.
 *
-*OUTPUTS: J A 1XnumPosDim gradient of the bistatic range with derivatives
-*           taken with respect to components [x,y,z] in 3D or [x,y] in 2D
-*           in that order.
+*OUTPUTS: J A 1XnumPosDimXN set of gradients of the bistatic range with
+*           derivatives taken with respect to components [x,y,z] in 3D or
+*           [x,y] in 2D in that order for each point in x
 *
 *Gradients with respect to bistatic range are discussed in [1].
 *
@@ -45,7 +45,7 @@
 #include "MexValidation.h"
 
 void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray *prhs[]) {
-    size_t numRows;
+    size_t numRows,N,i;
     double *x;
     bool useHalfRange;
     double *lTxLocal=NULL;
@@ -66,8 +66,9 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     }
 
     numRows=mxGetM(prhs[0]);
+    N=mxGetN(prhs[0]);
     
-    if(numRows>4||mxGetN(prhs[0])!=1) {
+    if(numRows>4||mxIsEmpty(prhs[0])) {
        mexErrMsgTxt("The position has the wrong dimensionality.");
        return;
     }
@@ -107,10 +108,22 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         lRx=reinterpret_cast<double*>(mxGetData(prhs[3]));
     }
     
-    retMat=mxCreateDoubleMatrix(1,numRows,mxREAL);
+    {
+        mwSize dims[3];
+        dims[0]=1;
+        dims[1]=numRows;
+        dims[2]=N;
+        
+        retMat=mxCreateNumericArray(3,dims,mxDOUBLE_CLASS,mxREAL);
+    }
+    
     retData=reinterpret_cast<double*>(mxGetData(retMat));
 
-    rangeGradientCPP(numRows,retData,tempSpace,x,useHalfRange,lTx,lRx);
+    for(i=0;i<N;i++) {
+        rangeGradientCPP(numRows,retData,tempSpace,x,useHalfRange,lTx,lRx);
+        retData+=numRows;
+        x=x+numRows;
+    }
     
     plhs[0]=retMat;
     //Free temporary memory, used.

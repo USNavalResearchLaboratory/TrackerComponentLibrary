@@ -1,8 +1,8 @@
 function cartPoints=pol2Cart(z,systemType,useHalfRange,zTx,zRx,M)
-%%POL2CART  Convert points from bistatic polar coordinates to 2D Cartesian
-%           coordinates. The angle can measured either counterclockwise
-%           from the x-axis, which is standard in mathematics, or clockwise
-%           from the y axis, which is more common in navigation.
+%%POL2CART Convert points from bistatic polar coordinates to 2D Cartesian
+%          coordinates. The angle can measured either counterclockwise
+%          from the x-axis, which is standard in mathematics, or clockwise
+%          from the y axis, which is more common in navigation.
 %
 %INPUTS: z A 2XN matrix of points in polar coordinates. Each column of the
 %          matrix has the format [r;azimuth], with azimuth given in
@@ -36,7 +36,7 @@ function cartPoints=pol2Cart(z,systemType,useHalfRange,zTx,zRx,M)
 %           receiver. If omitted or an empty matrix is passed, then it is
 %           assumed that the local coordinate system is aligned with the
 %           global and M=eye(2) --the identity matrix is used. If only a
-%           single 2X2 matrix is passed, then is is assumed to be the same
+%           single 2X2 matrix is passed, then it is assumed to be the same
 %           for all of the N conversions.
 %
 %OUTPUTS: cartPoints A 2XN or matrix of the points transformed into

@@ -1,35 +1,36 @@
 function [PBarUVals,dPBarUValsdTheta,d2PBarUValsdTheta2]=NALegendreCosRat(theta,M,scalFactor)
 %NALEGENDRECOSRAT Evaluate \bar{P}_{nm}(cos(theta))/u^m for all n from
-%                     0 to M and for each n for all m from 0 to n.
-%                     Also evaluate D{\bar{P}_{nm}(cos(theta))}/u^m and 
-%                     D2{\bar{P}_{nm}(cos(theta))}/u^m where D{} is the
-%                     first derivative operator with respect to theta and
-%                     D2{} is the second derivative operator with respect
-%                     to theta. \bar{P}_{nm}(x) is the fully normalized
-%                     associated Legendre function of x of degree n and
-%                     order m. u=sin(theta). All of the values can be
-%                     scaled by a factor of scalFac, if desired, to help
-%                     prevent overflows with high degrees and orders.
+%                 0 to M and for each n for all m from 0 to n, where
+%                 u=abs(sin(theta)). \bar{P}_{nm}(x) is the fully
+%                 normalized associated Legendre function of x of degree n
+%                 and order m. Also evaluate
+%                 D{\bar{P}_{nm}(cos(theta))}/u^m and
+%                 D2{\bar{P}_{nm}(cos(theta))}/u^m where D{} is the first
+%                 derivative operator with respect to theta and D2{} is the
+%                 second derivative operator with respect to theta. All of
+%                 the values can be scaled by a factor of scalFac, if
+%                 desired, to help prevent overflows with high degrees and
+%                 orders.
 %
-%INPUTS: theta      An angle in radians.
-%        maxDeg     The maximum degree and order of the output. This should
-%                   be at least 2.
-%     scalFactor    A scale factor to help prevent overflow of the results.
-%                   In the Holmes and Featherstone paper, discussed below,
-%                   a value of 10^(-280) is used.
+%INPUTS: theta An angle in radians.
+%       maxDeg The maximum degree and order of the output. This must be
+%              >=0.
+%   scalFactor A scale factor to help prevent overflow of the results. In
+%              [1], discussed below, a value of 10^(-280) is used.
 %
-%OUTPUTS: PBarUVals An instance of the ClusterSet class such that
+%OUTPUTS: PBarUVals An instance of the CountingClusterSet class such that
 %                   PBarUVals(n+1,m+1)=scalFac*\bar{P}_{nm}(cos(theta))/u^m.
-%  dPBarUValsdTheta An instance of the ClusterSet class such that
+%  dPBarUValsdTheta An instance of the CountingClusterSet class such that
 %                   dPBarUValsdTheta(n+1,m+1)=scalFac*D{\bar{P}_{nm}(cos(theta))}/u^m
-%d2PBarUValsdTheta2 An instance of the ClusterSet class such that
-%                   dPBarUValsdTheta(n+1,m+1)=scalFac*D2{\bar{P}_{nm}(cos(theta))}/u^m
+% d2PBarUValsdTheta2 An instance of the CountingClusterSet class such that
+%                   d2PBarUValsdTheta2(n+1,m+1)=scalFac*D2{\bar{P}_{nm}(cos(theta))}/u^m
 %
 %The modified forward row (MFR) algorithm of [1] is used to compute
 %PBarUVals and dPBarUValsdTheta. For d2PBarUValsdTheta2, the algorithm of
 %[2] is used. However, the paper contains a typo. The first term of the
 %first unnumbered equation should be multiplied by an additional (1/u).
-%This function uses the correct formulation.
+%This function uses the correct formulation, which is also described in
+%Appendix F of [3].
 %
 %With the notation P^m_n(x) for an associated Legendre function of degree n
 %and order m evaluated at the point x, one generally means 
@@ -64,9 +65,17 @@ function [PBarUVals,dPBarUValsdTheta,d2PBarUValsdTheta2]=NALegendreCosRat(theta,
 %    high-degree synthesis methods to second latitude derivatives of
 %    geopotential," Journal of Geodesy, vol. 76, no. 8, pp. 447-450, Nov.
 %    2002.
+%[3] D. F. Crouse, "An overview of major terrestrial, celestial, and
+%    temporal coordinate systems for target tracking," Naval Research
+%    Laboratory, Washington, DC, Tech. Rep. NRL/FR/5344?16-10,279, 10 Aug.
+%    2016.
 %
 %December 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+    if(M<0)
+       error('M must be >=0.') 
+    end
 
     u=sin(theta);
     t=cos(theta);
@@ -77,111 +86,116 @@ function [PBarUVals,dPBarUValsdTheta,d2PBarUValsdTheta2]=NALegendreCosRat(theta,
     %(M+1)*(M+2)/2 elements are necessary.
     numPBarU=(M+1)*(M+2)/2;
     totalP=zeros(numPBarU,1);
-    clustSizes=1:(M+1);
-    PBarUVals=ClusterSet(totalP,clustSizes);
+    PBarUVals=CountingClusterSet(totalP);
     
     %The value of PBar_{0,0}(cos(theta)) is independent of theta and is
     %one. 
     PBarUVals(0+1,0+1)=1*scalFactor;
 
-    %Set the seed value for PBar_{1,1}(cos(theta))/u from which the other
-    %values will be computed.
-    PBarUVals(1+1,1+1)=sqrt(3)*scalFactor;
-
-    %Compute the values along the main diagonal, where m=n starting from
-    %m=n=2. This implements equation 28 in the first Holmes and
-    %Featherstone paper for the normalized associated Legendre function 
-    %ratio.
-    for m=2:M
-        PBarUVals(m+1,m+1)=sqrt((2*m+1)/(2*m))*PBarUVals(m-1+1,m-1+1);
-    end
-
-    %Recursively compute the values using Equation 27 from the first Holmes
-    %and Featherstone paper, taking into account the fact that the first
-    %element of the recursion only has one term.
-    jTerm=1/sqrt(2);
-    %First, deal with the case where n=1, m=0;
-    n=1;
-    m=0;
-    %g is given in Equation 18 of the first Holmes and Featherstone paper.
-    g=2*(m+1)/sqrt((n-m)*(n+m+1));
-    PBarUVals(n+1,m+1)=jTerm*g*t*PBarUVals(n+1,m+1+1);
-
-    %Next, evaluate the values for all other valid n and m.
-    for n=2:M
-        %Deal with the first element of the recursion,which is  where m=n-1.
-        m=n-1;
-        g=2*(m+1)/sqrt((n-m)*(n+m+1));
-        PBarUVals(n+1,m+1)=g*t*PBarUVals(n+1,m+1+1);
+    if(M>0)
+        %Set the seed value for PBar_{1,1}(cos(theta))/u from which the
+        %other values will be computed.
+        PBarUVals(1+1,1+1)=sqrt(3)*scalFactor;
         
-        %Recursively compute the values of the rest of the m terms.
-        for m=(n-2):-1:1
-            g=2*(m+1)/sqrt((n-m)*(n+m+1));
-            %h is given in Equation 19 of the first Holmes and Featherstone
-            %paper.
-            h=sqrt((n+m+2)*(n-m-1)/((n-m)*(n+m+1)));
-            PBarUVals(n+1,m+1)=g*t*PBarUVals(n+1,m+1+1)-h*u^2*PBarUVals(n+1,m+2+1);
+        jTerm=1/sqrt(2);
+        %First, deal with the case where n=1, m=0;
+        n=1;
+        m=0;
+        %g is given in Equation 18 of the first Holmes and Featherstone paper.
+        g=2*(m+1)/sqrt((n-m)*(n+m+1));
+        PBarUVals(n+1,m+1)=jTerm*g*t*PBarUVals(n+1,m+1+1);
+
+        %Compute the values along the main diagonal, where m=n
+        %starting from m=n=2. This implements equation 28 in the first
+        %Holmes and Featherstone paper for the normalized associated
+        %Legendre function ratio.
+        for m=2:M
+            PBarUVals(m+1,m+1)=sqrt((2*m+1)/(2*m))*PBarUVals(m-1+1,m-1+1);
         end
 
-        %Deal with the special m=0 case.
-        m=0;
-        g=2*(m+1)/sqrt((n-m)*(n+m+1));
-        h=sqrt((n+m+2)*(n-m-1)/((n-m)*(n+m+1)));
-        PBarUVals(n+1,m+1)=jTerm*(g*t*PBarUVals(n+1,m+1+1)-h*u^2*PBarUVals(n+1,m+2+1));
+        %Recursively compute the values using Equation 27 from the
+        %first Holmes and Featherstone paper, taking into account the
+        %fact that the first element of the recursion only has one term.
+
+        %Next, evaluate the values for all other valid n and m.
+        for n=2:M
+            %Deal with the first element of the recursion,which is
+            %where m=n-1.
+            m=n-1;
+            g=2*(m+1)/sqrt((n-m)*(n+m+1));
+            PBarUVals(n+1,m+1)=g*t*PBarUVals(n+1,m+1+1);
+
+            %Recursively compute the values of the rest of the m terms.
+            for m=(n-2):-1:1
+                g=2*(m+1)/sqrt((n-m)*(n+m+1));
+                %h is given in Equation 19 of the first Holmes and
+                %Featherstone paper.
+                h=sqrt((n+m+2)*(n-m-1)/((n-m)*(n+m+1)));
+                PBarUVals(n+1,m+1)=g*t*PBarUVals(n+1,m+1+1)-h*u^2*PBarUVals(n+1,m+2+1);
+            end
+
+            %Deal with the special m=0 case.
+            m=0;
+            g=2*(m+1)/sqrt((n-m)*(n+m+1));
+            h=sqrt((n+m+2)*(n-m-1)/((n-m)*(n+m+1)));
+            PBarUVals(n+1,m+1)=jTerm*(g*t*PBarUVals(n+1,m+1+1)-h*u^2*PBarUVals(n+1,m+2+1));
+        end
     end
     
     %If the first derivative is desired.
     if(nargout>1)
         %Allocate space.
-        dPBarUValsdTheta=ClusterSet(totalP,clustSizes);
+        dPBarUValsdTheta=CountingClusterSet(totalP);
         %The first derivative of PBar_{0,0}(cos(theta)) is just zero.
         dPBarUValsdTheta(1,1)=0;
-    
-        m=1;
-        n=1;
-        %From Equation 30 in the first Holmes and Featherstone paper. This
-        %is the seed value from which other values will be computed.
-        dPBarUValsdTheta(1+1,1+1)=m*(t/u)*PBarUVals(1+1,1+1);
-    
-        %Compute the values along the main diagonal, where m=n starting 
-        %from m=n=2. This implements Equation 30 in the frist Holmes and
-        %Featherstone paper for the ratio of the first derivative. 
-        for m=2:M
-            dPBarUValsdTheta(m+1,m+1)=m*(t/u)*PBarUVals(m+1,m+1);
-        end
         
-        n=1;
-        m=0;
-        %e is given in Equation 22 of the first Holmes and Featherstone
-        %paper.
-        e=sqrt((n+m+1)*(n-m)/2);
-        %This is Equation 30 of the first Holmes and Featherstone paper for
-        %m=0.
-        dPBarUValsdTheta(n+1,m+1)=-e*u*PBarUVals(n+1,m+1+1);
-    
-        %Next, evaluate the values for all other valid n and m.
-        for n=2:M
-            %Recursively compute the values of the m terms for m>0.
-            for m=(n-1):-1:1
-                e=sqrt((n+m+1)*(n-m));
-                dPBarUValsdTheta(n+1,m+1)=m*(t/u)*PBarUVals(n+1,m+1)-e*u*PBarUVals(n+1,m+1+1);
-            end
-            %Deal with the special m=0 case.
+        if(M>0)
+            m=1;
+            n=1;
+            %From Equation 30 in the first Holmes and Featherstone paper. This
+            %is the seed value from which other values will be computed.
+            dPBarUValsdTheta(1+1,1+1)=m*(t/u)*PBarUVals(1+1,1+1);
+
+            n=1;
             m=0;
+            %e is given in Equation 22 of the first Holmes and Featherstone
+            %paper.
             e=sqrt((n+m+1)*(n-m)/2);
+            %This is Equation 30 of the first Holmes and Featherstone paper for
+            %m=0.
             dPBarUValsdTheta(n+1,m+1)=-e*u*PBarUVals(n+1,m+1+1);
+
+            %Compute the values along the main diagonal, where m=n starting 
+            %from m=n=2. This implements Equation 30 in the frist Holmes and
+            %Featherstone paper for the ratio of the first derivative. 
+            for m=2:M
+                dPBarUValsdTheta(m+1,m+1)=m*(t/u)*PBarUVals(m+1,m+1);
+            end
+
+            %Next, evaluate the values for all other valid n and m.
+            for n=2:M
+                %Recursively compute the values of the m terms for m>0.
+                for m=(n-1):-1:1
+                    e=sqrt((n+m+1)*(n-m));
+                    dPBarUValsdTheta(n+1,m+1)=m*(t/u)*PBarUVals(n+1,m+1)-e*u*PBarUVals(n+1,m+1+1);
+                end
+                %Deal with the special m=0 case.
+                m=0;
+                e=sqrt((n+m+1)*(n-m)/2);
+                dPBarUValsdTheta(n+1,m+1)=-e*u*PBarUVals(n+1,m+1+1);
+            end
         end
     end
     
     %If the second derivative is desired
     if(nargout>2)
         %Allocate space
-        d2PBarUValsdTheta2=ClusterSet(totalP,clustSizes);
+        d2PBarUValsdTheta2=CountingClusterSet(totalP);
         
         for n=0:M
             for m=0:n
-                %From the first (un-numbered) equation in the second Holmes and
-                %Featherstone paper AFTER correction.
+                %From the first (un-numbered) equation in the second Holmes
+                %and Featherstone paper AFTER correction.
                 d2PBarUValsdTheta2(n+1,m+1)=(m^2/u^2-n*(n+1))*PBarUVals(n+1,m+1)-(t/u)*dPBarUValsdTheta(n+1,m+1);
             end
         end

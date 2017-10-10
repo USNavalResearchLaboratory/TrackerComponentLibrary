@@ -1,11 +1,10 @@
-%%DEMOMAGNETICCODE         This file demonstrates the code for spherical
-%                          harmonic synthesis for evaluating the magnetic
-%                          flux. Plots of the the deviation of true North
-%                          from magnetic North and of the inclination at
-%                          the reference epoch are computed and displayed.
-%                          The Tracker Component Library (that this
-%                          function is part of) must have been added to
-%                          Matlab's search path for this function to work.
+%%DEMOMAGNETICCODE This file demonstrates the code for spherical harmonic
+%                  synthesis for evaluating the magnetic flux. Plots of the
+%                  deviation of true North from magnetic North and of the
+%                  inclination at the reference epoch are computed and
+%                  displayed. The Tracker Component Library (that this
+%                  function is part of) must have been added to Matlab's
+%                  search path for this function to work.
 %
 %The computation of the magnetic flux on a 256X256 grid of points is
 %quite fast when the mex files have been compiled. When they have
@@ -16,8 +15,8 @@
 %October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-display('NOTE: The CompileCLibraries function should be run prior to')
-display('running this script or else the execution time will be far too slow.')
+disp('NOTE: The CompileCLibraries function should be run prior to')
+disp('running this script or else the execution time will be far too slow.')
 
 numPoints=256;
 totalGridPoints=numPoints*numPoints;
@@ -47,15 +46,15 @@ for curPoint=2:totalGridPoints
 end
 
 %Load the coefficients for the magnetic model.
-display('Loading the coefficients for the WMM model.')
+disp('Loading the coefficients for the WMM model.')
 [C,S,a,c]=getWMMCoeffs();
-display('Computing the magnetic flux vector on a grid of points.')
+disp('Computing the magnetic flux vector on a grid of points.')
 tic
 [~,gradV]=spherHarmonicEval(C,S,points,a,c);
 toc
 B=-gradV;
 
-display('Determining the deviation of a magnetic compass from true North and the magnetic inclination angle.')
+disp('Determining the deviation of a magnetic compass from true North and the magnetic inclination angle.')
 %We want to compute the deviation of the direction of B from Cartesian
 %North in terms of radians East of North.
 degEOfN=zeros(totalGridPoints,1);%Allocate space

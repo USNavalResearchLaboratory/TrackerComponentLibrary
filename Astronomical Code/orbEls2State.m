@@ -2,36 +2,32 @@ function stateVec=orbEls2State(orbEls,deltaT,elType,GM,epsVal)
 %%ORBELS2STATE Obtain a velocity and position from a set of orbital
 %              elements at a desired time in seconds since the epoch time.
 %
-%INPUTS: orbEls   A 6XnumVec vector of orbital numVec elements to convert.
-%                 The elements are either Gooding's universal orbital
-%                 elements or conic orbital elements, as specified
-%                 by the parameter elType. The components of the elements
-%                 depends on the type and are explained below.
-%       deltaT    The time in seconds forward that the trajectory should be
-%                 propagated from the epoch time of the orbital elements.
-%                 If this parameter is omitted, a value of 0 is used.
-%                 For example, if one wishes to propagate the state forward
-%                 an hour from the time associated with the elements, one
-%                 can use deltaT=60*60.
-%        elType   A value indicating the type of orbital elements. Possible
-%                 values are:
-%                 0 (The default if omitted) The elements are Gooding's
-%                   universal orbital elements.
-%                 1 The elements are the set of conic orbital elements that
-%                   NASA uses in its SPICE Toolkit.
-%                 2 The elements are direct equinoctial orbital elements.
-%                 3 The elements are retrograde equnoctial orbital
-%                   elements.
-%            GM   An optional value of the universal gravitational
-%                 constant times the mass of the Earth. If omitted, the
-%                 value Constants.WGS84GMWithAtmosphere is used. The
-%                 units are m^3/sec^2.
-%         epsVal  If universal orbital elements are chosen, this is a
-%                 precision bound used on the alpha term (GM divided by the
-%                 semi-major axis) for determining whether the trajectory
-%                 is parabolic. If omitted, a default value of eps is used.
-%                 This parameter is not used when using NASA's conic
-%                 orbital elements.
+%INPUTS: orbEls A 6XnumVec vector of orbital numVec elements to convert.
+%               The elements are either Gooding's universal orbital
+%               elements or equinoctial orbital elements, as specified by
+%               the parameter elType. The components of the elements
+%               depends on the type and are explained below.
+%        deltaT The time in seconds forward that the trajectory should be
+%               propagated from the epoch time of the orbital elements. If
+%               this parameter is omitted, a value of 0 is used. For
+%               example, if one wishes to propagate the state forward an
+%               hour from the time associated with the elements, one can
+%               use deltaT=60*60.
+%        elType A value indicating the type of orbital elements. Possible
+%               values are:
+%               0 (The default if omitted) The elements are Gooding's
+%                 universal orbital elements.
+%               1 The elements are direct equinoctial orbital elements.
+%               2 The elements are retrograde equnoctial orbital
+%                 elements.
+%            GM An optional value of the universal gravitational constant
+%               times the mass of the Earth. If omitted, the value
+%               Constants.WGS84GMWithAtmosphere is used. The units are
+%               m^3/sec^2.
+%        epsVal If universal orbital elements are chosen, this is a
+%               precision bound used on the alpha term (GM divided by the
+%               semi-major axis) for determining whether the trajectory is
+%               parabolic. If omitted, a default value of eps is used.
 %
 %OUTPUTS: stateVec A 6XnumVec matrix of numVec state vectors consisting of
 %                 position and velocity in a Cartesian inertial coordinate
@@ -47,14 +43,6 @@ function stateVec=orbEls2State(orbEls,deltaT,elType,GM,epsVal)
 %omega      argument of periapsis in radians
 %tau        the time at pericenter (seconds)
 %
-%The conic orbital elements used in NASA's SPICE Toolkit are
-%q      perifocal distance in meters
-%e      eccentricity of the orbit (unitless)
-%i      inclination in radians
-%Omega  longitude of the ascending node in radians
-%omega  argument of periapsis in radians
-%M0     mean anomaly in radians
-%
 %The equinoctial orbital elements (for both direct and retrograde elements)
 %are
 %a      semi-major axis in meters
@@ -67,12 +55,6 @@ function stateVec=orbEls2State(orbEls,deltaT,elType,GM,epsVal)
 %The algorithm using Gooding's universal orbital elements is very robust to
 %numerical errors. It is implemented using the algorithm of [1], where the
 %elements are also described.
-%
-%The conic orbital elements used in NASA's SPICE Toolkit are implemented
-%using the function cspice_conics function in NASA's SPICE Toolkit. THis
-%set of orbital elements cannot handle rectilinear trajectories. If such
-%trajectories are likely to occur, then Gooding's universal elements are
-%preferable.
 %
 %Equinoctial orbital elements are discussed in Section 2 of [2] and in [3].
 %The diffference between direct and retrograde elements is essentially a
@@ -122,13 +104,9 @@ switch(elType)
         end
     case 1
         for curVec=1:numVecs
-            stateVec(:,curVec)=cspice_conics([orbEls(:,curVec);0;GM],deltaT);
-        end
-    case 2
-        for curVec=1:numVecs
             stateVec(:,curVec)=orbEls2StateEquinoctial(orbEls(:,curVec),deltaT,1,GM);
         end
-    case 3
+    case 2
         for curVec=1:numVecs
             stateVec(:,curVec)=orbEls2StateEquinoctial(orbEls(:,curVec),deltaT,-1,GM);
         end
@@ -307,7 +285,7 @@ function x=solveCubicEqGoodin(a,b,c)
 %INPUTS: a,b,c The coefficients in the equation a*x^3+3*b*x-2*c=0 where
 %              a>=0 and b^3+a*c^2>=0.
 %
-%OUTPUTS: x    The one real solution to a*x^3+3*b*x-2*c=0.
+%OUTPUTS: x The one real solution to a*x^3+3*b*x-2*c=0.
 %
 %In the report
 %R. H. Gooding and A. W. Odell, "The hyperbolic Kepler's equation,

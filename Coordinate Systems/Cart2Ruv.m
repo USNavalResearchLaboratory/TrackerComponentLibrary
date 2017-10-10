@@ -38,7 +38,7 @@ function z=Cart2Ruv(zC,useHalfRange,zTx,zRx,M,includeW)
 %          or an empty matrix is passed, then it is assumed that the local
 %          coordinate system is aligned with the global and M=eye(3) --the
 %          identity matrix is used. If only a single 3X3 matrix is passed,
-%          then is is assumed to be the same for all of the N conversions.
+%          then it is assumed to be the same for all of the N conversions.
 % includeW An optional boolean value indicating whether a third direction
 %          cosine component should be included. The u and v direction
 %          cosines are two parts of a 3D unit vector. Generally, one might

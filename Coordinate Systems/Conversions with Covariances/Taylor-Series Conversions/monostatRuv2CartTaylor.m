@@ -7,42 +7,38 @@ function [zCart,RCart]=monostatRuv2CartTaylor(zMeas,R,zRx,M,algorithm)
 %                 performance when the measurement noise is high and it can
 %                 make use of cross terms in the covariance matrix.
 %
-%INPUTS:      z A 3XnumMeas matrix of numMeas vectors to convert. Each
-%               has elements [r;u;v], where r is the one-way monostatic
-%               range from the target to the receiver, and u and v are
-%               direction cosines.
-%             R The 3X3XnumMeas measurement covariance matrices for the
-%               measurements. If all of the matrices are the same, then
-%               this can just be a single 3X3 matrix.
-%           zRx The 3XN [x;y;z] location vector of the receivers in
-%               Cartesian coordinates.  If this parameter is omitted, then
-%               the receivers are assumed to be at the origin. If only a
-%               single vector is passed, then the receiver location is
-%               assumed the same for all of the target states being
-%               converted.
-%            M  A 3X3XN hypermatrix of the rotation matrices to go from the
-%               alignment of the global coordinate system to that at the
-%               receiver. The z-axis of the local coordinate system of the
-%               receiver is the pointing direction of the receiver. If 
-%               omitted, then it is assumed that the local coordinate 
-%               system is aligned with the global and M=eye(3) --the
-%               identity matrix is used. If only a single 3X3 matrix is
-%               passed, then is is assumed to be the same for all of the N
-%               conversions.
-%     algorithm An optional parameter specifying the algorithm to use.
-%               Possible values are
-%               0 The CM1 conversion from [1] (uses a first-order Taylor
-%                 series approximation).
-%               1 (The default if omitted or an empty matrix is passed) The
-%                 CM2 conversion from [1] (uses a second-order Taylor
-%                 series approximation).
+%INPUTS: z A 3XnumMeas matrix of numMeas vectors to convert. Each has
+%          elements [r;u;v], where r is the one-way monostatic range from
+%          the target to the receiver, and u and v are direction cosines.
+%        R The 3X3XnumMeas measurement covariance matrices for the
+%          measurements. If all of the matrices are the same, then this can
+%          just be a single 3X3 matrix.
+%      zRx The 3XN [x;y;z] location vector of the receivers in Cartesian
+%          coordinates. If this parameter is omitted, then the receivers
+%          are assumed to be at the origin. If only a single vector is
+%          passed, then the receiver location is assumed the same for all
+%          of the target states being converted.
+%        M A 3X3XN hypermatrix of the rotation matrices to go from the
+%          alignment of the global coordinate system to that at the
+%          receiver. The z-axis of the local coordinate system of the
+%          receiver is the pointing direction of the receiver. If omitted,
+%          then it is assumed that the local coordinate system is aligned
+%          with the global and M=eye(3) --the identity matrix is used. If
+%          only a single 3X3 matrix is passed, then is=t is assumed to be
+%          the same for all of the N conversions.
+% algorithm An optional parameter specifying the algorithm to use. Possible
+%          values are
+%          0 The CM1 conversion from [1] (uses a first-order Taylor series
+%            approximation).
+%          1 (The default if omitted or an empty matrix is passed) The CM2
+%            conversion from [1] (uses a second-order Taylor series
+%            approximation).
 %
-%OUTPUTS:   zCart   The approximate means of the PDF of the Cartesian
-%                   converted measurements in [x;y;z] Cartesian coordinates
-%                   for each measurement. This is a 3XnumMeas matrix.
-%           RCart   The approximate 3X3XnumMeas set of covariance
-%                   matrices of the PDFs of the Cartesian converted
-%                   measurements.
+%OUTPUTS: zCart The approximate means of the PDF of the Cartesian converted
+%               measurements in [x;y;z] Cartesian coordinates for each
+%               measurement. This is a 3XnumMeas matrix.
+%         RCart The approximate 3X3XnumMeas set of covariance matrices of
+%               the PDFs of the Cartesian converted measurements.
 %
 %REFERENCES:
 %[1] X. Tian and Y. Bar-Shalom, "Coordinate conversion and tracking

@@ -7,20 +7,20 @@ function [apexPoints,signVals,exitCode]=trace2EarthMagApex(zCart,modSelParam,a,f
 %           is used for determining apex coordinates and quasi-dipole
 %           coordinates, both of which play a role in ionospheric analyses.
 %
-%INPUTS: zCart  One or more points given in Cartesian coordinates in the
-%               ITRS with units of meters. zCart is a 3XN matrix with each
-%               column having the format [x;y;z]. One would generally 
-%               assume that points are not underground.
-%   modSelParam An optional parameter selecting or providing the magnetic
-%               field model to use. If omitted or an empty matrix is
-%               passed, the International Geomagnetic Reference Field
-%               (IGRF) at the latest epoch of the model is used via the
-%               function getIGRFCoeffs. Possible other values are
-%               1) year The parameters of the IGRF for the specified epoch 
+%INPUTS: zCart One or more points given in Cartesian coordinates in the
+%              ITRS with units of meters. zCart is a 3XN matrix with each
+%              column having the format [x;y;z]. One would generally 
+%              assume that points are not underground.
+%  modSelParam An optional parameter selecting or providing the magnetic
+%              field model to use. If omitted or an empty matrix is
+%              passed, the International Geomagnetic Reference Field
+%              (IGRF) at the latest epoch of the model is used via the
+%              function getIGRFCoeffs. Possible other values are
+%              1) year The parameters of the IGRF for the specified epoch 
 %               year are used. The year is in the Gregorian calendar and is
 %               specified as noted in the comments to the getIGRFCoeffs
 %               function.
-%               2) modSelParam is a structure where modSelParam.algorithm
+%              2) modSelParam is a structure where modSelParam.algorithm
 %               selects the algorithm to use Possible values for
 %               modSelParam.algorithm are 'IGRF', 'WMM' and 'preloaded'. If
 %               modSelParam.algorithm is 'IGRF or 'WMM', then the IGRF or
@@ -33,28 +33,28 @@ function [apexPoints,signVals,exitCode]=trace2EarthMagApex(zCart,modSelParam,a,f
 %               the fully normalized outputs of getIGRFCoeffs or
 %               getWMMCoeffs. See comments below for the use of custom
 %               coeffients.
-%       a       The semi-major axis of the reference ellipsoid. The apex is
-%               defined in terms of a maximum magnetic field line height
-%               above the reference ellipsoid. If this argument is omitted
-%               or an empty matrix is passed, the value in
-%               Constants.WGS84SemiMajorAxis is used.
-%       f       The flattening factor of the reference ellipsoid. If this
-%               argument is omitted or an empty matrix is passed, the value
-%               in Constants.WGS84Flattening is used.
-%        RelTol The maximum relative error tolerance allowed for the
-%               Runge-Kutta algorithm to trace the path towards the apex.
-%               If omitted or an empty matrix is passed, the default value
-%               of 1e-6 is used.
-%        AbsTol The absolute error tolerance allowed, a positive scalar.
-%               If omitted or an empty matrix is passed, the default value
-%               of 1e-9 is used. This is used in the Runge-Kutta algorithm
-%               to trace along the path towards the apex, and it is used
-%               for the fminbnd function to find the apex location once it
-%               has been bounded.
-%      maxSteps The maximum allowable number of steps to perform the
-%               adaptive Runge-Kutta integration along a magnetic field
-%               line to find the apex. If omitted or an empty matrix is
-%               passed, the default of 1024 is used.
+%            a The semi-major axis of the reference ellipsoid. The apex is
+%              defined in terms of a maximum magnetic field line height
+%              above the reference ellipsoid. If this argument is omitted
+%              or an empty matrix is passed, the value in
+%              Constants.WGS84SemiMajorAxis is used.
+%            f The flattening factor of the reference ellipsoid. If this
+%              argument is omitted or an empty matrix is passed, the value
+%              in Constants.WGS84Flattening is used.
+%       RelTol The maximum relative error tolerance allowed for the
+%              Runge-Kutta algorithm to trace the path towards the apex.
+%              If omitted or an empty matrix is passed, the default value
+%              of 1e-6 is used.
+%       AbsTol The absolute error tolerance allowed, a positive scalar.
+%              If omitted or an empty matrix is passed, the default value
+%              of 1e-9 is used. This is used in the Runge-Kutta algorithm
+%              to trace along the path towards the apex, and it is used
+%              for the fminbnd function to find the apex location once it
+%              has been bounded.
+%     maxSteps The maximum allowable number of steps to perform the
+%              adaptive Runge-Kutta integration along a magnetic field
+%              line to find the apex. If omitted or an empty matrix is
+%              passed, the default of 1024 is used.
 %
 %OUTPUS: apexPoints A 3XN matrix of the apex points corresponding to the 
 %               points in zCart. The apex points are obtained by tracing the

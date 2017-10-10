@@ -3,73 +3,74 @@ function xSim=WeakStochRungeKStep(method,xCur,curT,a,D,deltaT,W,V,dadt,dadx,dDdx
 %                     specified by the Langevin equation forward in time by
 %                     a step-size of deltaT using a weak Taylor scheme.
 %
-%INPUTS: method  An integer defining which weak Taylor method to use.
-%                1  The Euler-Maruyama method
-%                2  The explicit order 2.0 weak Taylor scheme with additive
-%                   noise. This requires the diffusion function to be
-%                   additive.
-%                3  The explicit order 2.0 weak Taylor scheme
-%                4  The simplified order 2.0 weak Taylor scheme. This
-%                   requires the diffusion function to be autonomous.
-%        xCur    The initial target state at time curT.
-%        curT    The time of the initial state xCur.
-%        a       The drift function in the continuous-time stochastic
-%                dynamic model. It takes the state and a time variable
-%                as its arguments, a(x,t).
-%        D       The diffusion function in the continuous-time stochastic
-%                dynamic model. It takes the state and a time variable as
-%                its arguments, D(x,t). If the process noise must be
-%                additive, D(x,t) should not depend on x. If the process
-%                noise must be autonomous, D(x,t) should not depend on t.
-%       deltaT   The size of the single step over which the strong
-%                stochastic Runge-Kutta integration is performed.
-%         W      A matrix of independent random variables which satisfies
-%                the moment conditions in Eq. 14.2.3 of Kloeden. If not
-%                supplied, Gaussian random variables are used.
-%         V      A matrix of independent two-point distributed random
-%                variables satisfying Eq. 14.2.8-10 in Kloeden. If not
-%                supplied, these are calculated.
-%     dadt       A xDimX1 matrix of the derivative of the drift function
-%                with respect to time at state xCur a   nd time curT. This can
-%                also be a function that takes the state and a time
-%                variable as its arguments, dadt(x,t).
-%     dDdt       A xDimXdColDim matrix of the derivative of the diffusion
-%                function with respect to time at state xCur and time curT.
-%                This can also be a function that takes the state and a
-%                time variable as its arguments, dDdt(x,t). If the process
-%                noise must be additive, dDdt(x,t) should not depend on x.
-%                If the process noise must be autonomous, dDdt(x,t) should
-%                not depend on t.
-%     dadx       A xDimXxDim matrix of the derivative of the drift function
-%                with respect to the state at state xCur and time curT.
-%                This can also be a function that takes the state and a
-%                time variable as its arguments, dadx(x,t).
-%     dDdx       A xDimXxDimXdColDim matrix of the derivative of the
-%                diffusion function with respect to state at state xCur and
-%                time curT. This can also be a function that takes the
-%                state and a time variable as its arguments, dDdx(x,t). If
-%                the process noise must be additive, dDdx(x,t) should not
-%                depend on x. If the process noise must be autonomous,
-%                dDdx(x,t) should not depend on t. If not provided, this is
-%                assumed to be zero.
-%    d2adx       A xDimXxDimXxDim matrix of the second derivative of the
-%                drift function with respect to the state at state xCur and
-%                time curT. The value at point (m,k,l) represents
-%                d2a(m)/dx(k)dx(l). This can also be a function that takes
-%                the state and a time variable as its arguments,
-%                d2adx(x,t). If not provided, this is assumed to be zero.
-%    d2Ddx       A xDimXxDimXxDimXdColDim matrix of the second derivative
-%                of the diffusion function with respect to state at state
-%                xCur and time curT. The value at point (m,k,l,j)
-%                represents d2D(m,j)/dx(k)dx(l). This can also be a
-%                function that takes the state and a time variable as its
-%                arguments, d2Ddx(x,t). If the process noise must be
-%                additive, d2Ddx(x,t) should not depend on x. If the
-%                process noise must be autonomous, d2Ddx(x,t) should not
-%                depend on t. If not provided, this is assumed to be zero.
-%OUTPUTS: xSim   The simulated target state at time curT+deltaT.
+%INPUTS: method An integer defining which weak Taylor method to use.
+%               1 The Euler-Maruyama method
+%               2 The explicit order 2.0 weak Taylor scheme with additive
+%                 noise. This requires the diffusion function to be
+%                 additive.
+%               3 The explicit order 2.0 weak Taylor scheme
+%               4 The simplified order 2.0 weak Taylor scheme. This
+%                 requires the diffusion function to be autonomous.
+%          xCur The initial target state at time curT.
+%          curT The time of the initial state xCur.
+%             a The drift function in the continuous-time stochastic
+%               dynamic model. It takes the state and a time variable as
+%               its arguments, a(x,t).
+%             D The diffusion function in the continuous-time stochastic
+%               dynamic model. It takes the state and a time variable as
+%               its arguments, D(x,t). If the process noise must be
+%               additive, D(x,t) should not depend on x. If the process
+%               noise must be autonomous, D(x,t) should not depend on t.
+%        deltaT The size of the single step over which the strong
+%               stochastic Runge-Kutta integration is performed.
+%             W A matrix of independent random variables which satisfies
+%               the moment conditions in Eq. 14.2.3 of Kloeden. If not
+%               supplied, Gaussian random variables are used.
+%             V A matrix of independent two-point distributed random
+%               variables satisfying Eq. 14.2.8-10 in Kloeden. If not
+%               supplied, these are calculated.
+%          dadt A xDimX1 matrix of the derivative of the drift function
+%               with respect to time at state xCur a   nd time curT. This can
+%               also be a function that takes the state and a time
+%               variable as its arguments, dadt(x,t).
+%          dDdt A xDimXdColDim matrix of the derivative of the diffusion
+%               function with respect to time at state xCur and time curT.
+%               This can also be a function that takes the state and a
+%               time variable as its arguments, dDdt(x,t). If the process
+%               noise must be additive, dDdt(x,t) should not depend on x.
+%               If the process noise must be autonomous, dDdt(x,t) should
+%               not depend on t.
+%          dadx A xDimXxDim matrix of the derivative of the drift function
+%               with respect to the state at state xCur and time curT.
+%               This can also be a function that takes the state and a
+%               time variable as its arguments, dadx(x,t).
+%          dDdx A xDimXxDimXdColDim matrix of the derivative of the
+%               diffusion function with respect to state at state xCur and
+%               time curT. This can also be a function that takes the
+%               state and a time variable as its arguments, dDdx(x,t). If
+%               the process noise must be additive, dDdx(x,t) should not
+%               depend on x. If the process noise must be autonomous,
+%               dDdx(x,t) should not depend on t. If not provided, this is
+%               assumed to be zero.
+%         d2adx A xDimXxDimXxDim matrix of the second derivative of the
+%               drift function with respect to the state at state xCur and
+%               time curT. The value at point (m,k,l) represents
+%               d2a(m)/dx(k)dx(l). This can also be a function that takes
+%               the state and a time variable as its arguments,
+%               d2adx(x,t). If not provided, this is assumed to be zero.
+%         d2Ddx A xDimXxDimXxDimXdColDim matrix of the second derivative of
+%               the diffusion function with respect to state at state xCur
+%               and time curT. The value at point (m,k,l,j) represents
+%               d2D(m,j)/dx(k)dx(l). This can also be a function that takes
+%               the state and a time variable as its arguments, d2Ddx(x,t).
+%               If the process noise must be additive, d2Ddx(x,t) should
+%               not depend on x. If the process noise must be autonomous,
+%               d2Ddx(x,t) should not depend on t. If not provided, this is
+%               assumed to be zero.
 %
-%The algorithm for the Euler-Marayama method is described in Chapter 10.2
+%OUTPUTS: xSim The simulated target state at time curT+deltaT.
+%
+%The algorithm for the Euler-Maruyama method is described in Chapter 10.2
 %of [1].
 %
 %The algorithms for both the additive and non-additive explicit order 2.0

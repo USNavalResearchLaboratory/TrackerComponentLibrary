@@ -1,4 +1,4 @@
-function J=polAngGradient(x,systemType,lRx,M)
+function JTotal=polAngGradient(xG,systemType,lRx,M)
 %%POLANGGRADIENT Determine the gradient of the angle of a 2D polar
 %           measurement with respect to position (gradient components for
 %           velocity etc. are zero and are not provided).Atmospheric and
@@ -6,7 +6,8 @@ function J=polAngGradient(x,systemType,lRx,M)
 %           measurement can be monostatic or bistatic, but the location of
 %           the transmitter does not matter.
 %
-%INPUTS: x A 2X1 Cartesian location in the format [x;y].
+%INPUTS: xG A 2XN set of Cartesian locations in the format [x;y] where the
+%          gradient is desired.
 % systemType An optional parameter specifying the axis from which the
 %          azimuth angle is measured. It is assumed that the azimuth
 %          angle is given in radians. Possible values are
@@ -22,18 +23,24 @@ function J=polAngGradient(x,systemType,lRx,M)
 %          coordinate system is aligned with the global and M=eye(2,2)
 %          --the identity matrix is used. 
 %
-%OUTPUTS: J A 1X2 gradient matrix of the polar angle taken with respect to
-%           the components [x,y] in 2D in that order.
+%OUTPUTS: JTotal A 1X2XN set of gradient matrices of the polar angle taken
+%           with respect to the components [x,y] in 2D in that order for
+%           each of the N points in xG.
 %
-%A derivation of the components of the Jacobian is given in [1]. 
+%The conversion utilizing bistatic polar measurements in 2D is similar to
+%that using bistatic r-u-v measurements in 3D, which is discussed in [1].
+%Basic differentiation was analytically performed to obtain the expressions
+%used in this file.
 %
 %REFERENCES:
-%[1] D. F. Crouse, "Basic tracking using nonlinear 3D monostatic and
-%    bistatic measurements," IEEE Aerospace and Electronic Systems
+%[1] David F. Crouse , "Basic tracking using nonlinear 3D monostatic and
+%    bistatic measurements," IEEE Aerospace and Electronic Systems 
 %    Magazine, vol. 29, no. 8, Part II, pp. 4-53, Aug. 2014.
 %
 %February 2017 David F.Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+N=size(xG,2);
 
 if(nargin<4||isempty(M))
    M=eye(2,2); 
@@ -47,34 +54,36 @@ if(nargin<2||isempty(systemType))
    systemType=0; 
 end
 
-%Convert the point into the local coordinate system of the receiver.
-xLocal=M*(x(1:2)-lRx(1:2));
+JTotal=zeros(1,2,N);
+for curPoint=1:N
+    %Convert the point into the local coordinate system of the receiver.
+    xLocal=M*(xG(1:2,curPoint)-lRx(1:2));
 
-xL=xLocal(1);
-yL=xLocal(2);
+    xL=xLocal(1);
+    yL=xLocal(2);
 
-J=zeros(1,2);
-switch(systemType)
-    case 0
-        %Derivative with respect to x.
-        J(1,1)=-yL/(xL^2+yL^2);
+    J=zeros(1,2);
+    switch(systemType)
+        case 0
+            %Derivative with respect to x.
+            J(1,1)=-yL/(xL^2+yL^2);
 
-        %Derivative with respect to y.
-        J(1,2)=xL/(xL^2+yL^2);
-    case 1
-        %Derivative with respect to x.
-        J(1,1)=yL/(xL^2+yL^2);
-        
-        %Derivative with respect to y.
-        J(1,2)=-xL/(xL^2+yL^2);
-    otherwise
-        error('Invalid system type specified.')
+            %Derivative with respect to y.
+            J(1,2)=xL/(xL^2+yL^2);
+        case 1
+            %Derivative with respect to x.
+            J(1,1)=yL/(xL^2+yL^2);
+
+            %Derivative with respect to y.
+            J(1,2)=-xL/(xL^2+yL^2);
+        otherwise
+            error('Invalid system type specified.')
+    end
+
+    %Undo the rotation to move the gradient into the global coordinate
+    %system.
+    JTotal(:,:,curPoint)=J*M;
 end
-
-%Undo the rotation to move the gradient into the global coordinate
-%system.
-J=J*M;
-
 end
 
 %LICENSE:

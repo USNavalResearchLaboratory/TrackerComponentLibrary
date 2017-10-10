@@ -174,8 +174,8 @@ function val=aWeave(x,t,A,alpha,theta0,uTurn)
 % deltaTMax=0.05;
 % [xList,uList]=RungeKCurvedAtTimes(xInit,uInit,times,aDyn,[],deltaTMax);
 % xList=xList(1:6,:);
-% %If one wanted to get the velocity information the global coordiantes, then
-% %the following line is necessary:
+% %If one wanted to get the velocity information the global coordinates,
+% %then the following line is necessary:
 % xList(4:6,:)=getGlobalVectors(xList(4:6,:),uList);
 % 
 % %Bounds for the axes on the map in case this trajectory is plotted.

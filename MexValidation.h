@@ -5,6 +5,8 @@
  *The following functions that can be used in both C and C++ programs:
  *checkRealDoubleArray      Gives an error if an array is not composed of
  *                          real doubles and has more than two indices.
+ *checkDoubleArray          Gives an error if an array is not composed of
+ *                          doubles and has more than two indices.
  *checkRealDoubleHypermatrix This is the same as checkRealDoubleArray
  *                          except it does not throw an error if the matrix
  *                          has more than two indices.
@@ -119,6 +121,14 @@
  *                          doubles using the static_cast function. The
  *                          use is the same as the type-specific functions
  *                          such as intMat2MatlabDoubles.
+ *getComplexDoubleFromMatlab Given a scalar numeric data types in Matlab,
+ *                          return a complex<double> with the real and
+ *                          imaginary parts of the input. If the input was
+ *                          purely imaginary or real, then the
+ *                          corresponding part of the return value will be
+ *                          zero. This function provides an error if the
+ *                          data type is not a type that can be converted
+ *                          to a double or is not scalar.
  *
  *DEPENDENCIES: matrix.h
  *              mex.h
@@ -142,6 +152,8 @@
 #include <cstring>
 //Defines the size_t and ptrdiff_t types
 #include <cstddef>
+//For functions to import comples values.
+#include <complex>
 #else
 //For memcpy
 #include <string.h>
@@ -203,6 +215,7 @@ double fMin(double a,double b) {
 #endif
 
 void checkRealDoubleArray(const mxArray * const val);
+void checkDoubleArray(const mxArray * const val);
 void checkRealDoubleHypermatrix(const mxArray * const val);
 void verifySizeReal(const size_t M, const size_t N, const mxArray * const val);
 mxArray *convert2DReal2DoubleMat(const mxArray * const val);
@@ -232,11 +245,22 @@ mxArray *unsignedCharMat2Matlab(const unsigned char * const arr, const size_t nu
 mxArray *signedSizeMat2Matlab(const ptrdiff_t * const arr, const size_t numRow, const size_t numCol);
 double getScalarMatlabClassConst(const char * const className, const char * const constName);
 
+#ifdef __cplusplus
+//One cannot use prototypes for template functions. The templace C++-only
+//functions are full implementations.
+std::complex <double> getComplexDoubleFromMatlab(const mxArray * const val);
+#endif
+
+
 void checkRealDoubleArray(const mxArray * const val){
     if(mxIsComplex(val)==true) {
         mexErrMsgTxt("A parameter that should be real matrix of doubles has complex components.");
     }
     
+    checkDoubleArray(val);
+}
+
+void checkDoubleArray(const mxArray * const val) {
     if(mxIsEmpty(val)) {
         mexErrMsgTxt("A parameter that should be real matrix of doubles is empty.");
     }
@@ -249,6 +273,7 @@ void checkRealDoubleArray(const mxArray * const val){
         mexErrMsgTxt("A parameter that should be a real double is of a different data type.");
     }
 }
+
 
 void checkRealDoubleHypermatrix(const mxArray * const val){
     if(mxIsComplex(val)==true) {
@@ -1798,7 +1823,7 @@ mxArray *ptr2Matlab(T thePointer) {
 }
 
 template<typename T>
-T Matlab2Ptr(const mxArray * const matlabPtr){
+T Matlab2Ptr(const mxArray * const matlabPtr) {
 /**MATLAB2PTR Convert a 1X1 Matlab matrix in which a pointer has been saved
  *            using ptr2Matlab back into a pointer for use in a mex file.
  */
@@ -1828,6 +1853,158 @@ mxArray *mat2MatlabDoubles(T *arr,const size_t numRow,const size_t numCol){
 
     return retMat;
 }
+
+std::complex <double> getComplexDoubleFromMatlab(const mxArray * const val) {
+    double realPart=0;
+    double imagPart=0;
+    void *realData;
+    void *imagData;
+
+    if(mxGetNumberOfElements(val)!=1) {
+        mexErrMsgTxt("A parameter that should be scalar is not.");
+    }
+    
+    realData=mxGetData(val);
+    imagData=mxGetImagData(val);
+    
+    switch(mxGetClassID(val)){
+        case mxCHAR_CLASS:
+            if(realData!=NULL) {
+                realPart=(double)*(mxChar*)realData;
+            }
+            
+            if(imagData!=NULL) {
+                imagPart=(double)*(mxChar*)imagData;
+            }
+            
+            break;
+        case mxLOGICAL_CLASS:
+            if(realData!=NULL) {
+                realPart=(double)*(mxLogical*)realData;
+            }
+            
+            if(imagData!=NULL) {
+                imagPart=(double)*(mxLogical*)imagData;
+            }
+
+            break;
+        case mxDOUBLE_CLASS:
+            if(realData!=NULL) {
+                realPart=(double)*(double*)realData;
+            }
+            
+            if(imagData!=NULL) {
+                imagPart=(double)*(double*)imagData;
+            }
+            
+            break;
+        case mxSINGLE_CLASS:
+            if(realData!=NULL) {
+                realPart=(double)*(float*)realData;
+            }
+            
+            if(imagData!=NULL) {
+                imagPart=(double)*(float*)imagData;
+            }
+
+            break;
+        case mxINT8_CLASS:
+            if(realData!=NULL) {
+                realPart=(double)*(int8_T*)realData;
+            }
+            
+            if(imagData!=NULL) {
+                imagPart=(double)*(int8_T*)imagData;
+            }
+
+            break;
+        case mxUINT8_CLASS:
+            if(realData!=NULL) {
+                realPart=(double)*(uint8_T*)realData;
+            }
+            
+            if(imagData!=NULL) {
+                imagPart=(double)*(uint8_T*)imagData;
+            }
+
+            break;
+        case mxINT16_CLASS:
+            if(realData!=NULL) {
+                realPart=(double)*(int16_T*)realData;
+            }
+            
+            if(imagData!=NULL) {
+                imagPart=(double)*(int16_T*)imagData;
+            }
+
+            break;
+        case mxUINT16_CLASS:
+            if(realData!=NULL) {
+                realPart=(double)*(uint16_T*)realData;
+            }
+            
+            if(imagData!=NULL) {
+                imagPart=(double)*(uint16_T*)imagData;
+            }
+
+            break;
+        case mxINT32_CLASS:
+            if(realData!=NULL) {
+                realPart=(double)*(int32_T*)realData;
+            }
+            
+            if(imagData!=NULL) {
+                imagPart=(double)*(int32_T*)imagData;
+            }
+
+            break;
+        case mxUINT32_CLASS:
+            if(realData!=NULL) {
+                realPart=(double)*(uint32_T*)realData;
+            }
+            
+            if(imagData!=NULL) {
+                imagPart=(double)*(uint32_T*)imagData;
+            }
+
+            break;
+        case mxINT64_CLASS:
+            if(realData!=NULL) {
+                realPart=(double)*(int64_T*)realData;
+            }
+            
+            if(imagData!=NULL) {
+                imagPart=(double)*(int64_T*)imagData;
+            }
+
+            break;
+        case mxUINT64_CLASS:
+            if(realData!=NULL) {
+                realPart=(double)*(uint64_T*)realData;
+            }
+            
+            if(imagData!=NULL) {
+                imagPart=(double)*(uint64_T*)imagData;
+            }
+
+            break;
+        case mxUNKNOWN_CLASS:
+        case mxCELL_CLASS:
+        case mxSTRUCT_CLASS:
+        case mxVOID_CLASS:
+        case mxFUNCTION_CLASS:
+        case mxOPAQUE_CLASS:
+        case mxOBJECT_CLASS:
+        default:
+            mexErrMsgTxt("A parameter is of a data type that can not be used.");
+    }
+    
+    std::complex <double> retVal(realPart,imagPart);
+    
+    return retVal;
+}
+
+
 
 #endif
 #endif

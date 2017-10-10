@@ -1,13 +1,15 @@
 function intVal=ellipIntInc1Kind(phi,m)
 %%ELLIPINTINC1KIND Evaluate Legendre's incomplete elliptical integral of
 %                  the first kind. This is the integral from 0 to phi of
-%                  (1-m*sin(theta)^2)^(-1/2) dtheta. This integral is
-%                  sometimes referred to as F.
+%                  (1-m*sin(theta)^2)^(-1/2) dtheta. Alternatively, this
+%                  can be written as the integral from 0 to x of
+%                  ((1-t^2)*(1-m*t^2))^(-1/2) dt where x=sin(phi). This
+%                  integral is sometimes referred to as F.
 %
-%INPUTS: phi   A scalar or matrix of the real upper bounds of integration.
-%              These can be positive, negative or zero.
-%           m  A value between 0 and 1. The integral diverges when m=1 and
-%              phi=pi/2.
+%INPUTS: phi A scalar or matrix of the real upper bounds of integration.
+%            These can be positive, negative or zero.
+%          m A value between 0 and 1. The integral diverges when m=1 and
+%            phi=pi/2.
 %
 %OUTPUTS: intVal The values of the incomplete elliptic integral of the
 %                first kind evaluated at each entry in phi.

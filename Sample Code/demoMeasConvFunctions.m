@@ -33,7 +33,7 @@ function demoMeasConvFunctions
 %REFERENCES:
 %[1] D. F. Crouse, "Basic tracking using nonlinear 3D monostatic and
 %    bistatic measurements," IEEE Aerospace and Electronic Systems
-%    Magazine, vol. 29, no. 8, Part II, pp. 4?53, Aug. 2014.
+%    Magazine, vol. 29, no. 8, Part II, pp. 4-53, Aug. 2014.
 %[2] Y. Bar-Shalom, X. R. Li, and T. Kiruabarajan, Estimation with
 %    Applications to Tracking and Navigation. New York: Wiley Interscience,
 %    2001
@@ -260,7 +260,7 @@ SR=diag([sigmaR,sigmaU,sigmaV]);
 R=SR*SR';%Measurement variance
 
 %We offset the target in two angles from the look direction, which is the
-%z-axis. This is not the same spherical cooridnate system as used in the
+%z-axis. This is not the same spherical coordinate system as used in the
 %previous example.
 az=10*(pi/180);
 el=10*(pi/180);

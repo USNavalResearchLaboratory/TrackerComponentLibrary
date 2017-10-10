@@ -9,85 +9,85 @@ function demoIntervalArithmetic()
 %November 2015 David Karnick, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-display('An example of how to use the Interval class for interval arithmetic') 
+disp('An example of how to use the Interval class for interval arithmetic') 
 
 %%Creating variables
-display('Intervals define an upper and lower bound of possible values, rather than a single point.')
+disp('Intervals define an upper and lower bound of possible values, rather than a single point.')
 %Define lower and upper bound
 a=Interval(-1,5); %Also notated as [-1,5]
 %Use a single input for zero-span Interval, e.g. [1,1]
 b=Interval(1);
 
 %% Simple arithmetic
-display('Intervals will calculate the maximum and minimum values possible.')
+disp('Intervals will calculate the maximum and minimum values possible.')
 %[-1,5]*[-1,5] = [-5,25]
-display('[-1,5]*[-1,5]')
+disp('[-1,5]*[-1,5]')
 a.*a
 
-display('Intervals calculate upper and lower bounds at floating-point level accuracy.')
-display('Width of [1,1]')
+disp('Intervals calculate upper and lower bounds at floating-point level accuracy.')
+disp('Width of [1,1]')
 wid(b)
-display('Width of ([1,1] + eps/2)')
+disp('Width of ([1,1] + eps/2)')
 wid(b+eps/2)
-display('Interval can also handle infinite bounds when necessary')
-display('1/[0,5]')
+disp('Interval can also handle infinite bounds when necessary')
+disp('1/[0,5]')
 1./Interval(0,5)
 
 %Special case when dividing by Interval which crosses 0
 %1/[-1,5] should give the bounds [-Inf,-1] and [.2,Inf]
 %If only one output is provided, then the entire range is returned
-display('1/[-1,5] with one output')
+disp('1/[-1,5] with one output')
 1./a
 %If two outputs are provided, then both Intervals are returned
-display('1/[-1 5] with two outputs')
+disp('1/[-1 5] with two outputs')
 [c,d]=1./a
 
 %% Other mathematical functions
-display('Power and trig functions')
+disp('Power and trig functions')
 %Power functions, not intended for values of a<0
 a=Interval(3,7); b=Interval(-2,2);
-display('[3,7]^2, [3,7]^[-2,2], [2^[-2,2]')
+disp('[3,7]^2, [3,7]^[-2,2], [2^[-2,2]')
 a.^2
 a.^b
 2.^b
 
 %Trigonometric functions
-display('sin([-pi,pi/4]), tan([-pi/4,pi/2])')
+disp('sin([-pi,pi/4]), tan([-pi/4,pi/2])')
 sin(Interval(-pi,pi/4))
 tan(Interval(-pi/4,pi/2))
 
 %% Interval arrays
-display('Intervals can also be arrayed and indexed like any other numeric array.')
+disp('Intervals can also be arrayed and indexed like any other numeric array.')
 %Intervals can also be arrays of values
 A=Interval(magic(4),2*magic(4));
 %Index
-display('A(2,:)')
+disp('A(2,:)')
 A(2,:)
 %Assign
-display('A(3,4)=-A(3,4)')
+disp('A(3,4)=-A(3,4)')
 A(3,4)=-A(3,4)
 %Concatenate
-display('[A,A]')
+disp('[A,A]')
 [A,A]
 %Transpose
-display('A.''')
+disp('A.''')
 A.'
 %Size
-display('size(A)')
+disp('size(A)')
 size(A)
 
-display('The only matrix math currently supported is multiplication.')
-display('A*A')
+disp('The only matrix math currently supported is multiplication.')
+disp('A*A')
 A*A
 
 %% Set function
-display('Intervals can also be treated like sets to determine intersections and hulls.')
-display('Intersection and hull of [-2,4] and [3,7]')
+disp('Intervals can also be treated like sets to determine intersections and hulls.')
+disp('Intersection and hull of [-2,4] and [3,7]')
 intersection(Interval(-2,4),a)
 hull(Interval(-2,4),a)
 
-display('If two Intervals do not intersect, an empty Interval is returned, represented by [NaN,NaN].')
-display('Intersection of [-2,2] and [3,7]')
+disp('If two Intervals do not intersect, an empty Interval is returned, represented by [NaN,NaN].')
+disp('Intersection of [-2,2] and [3,7]')
 intersection(a,b)
 end
 

@@ -20,7 +20,7 @@ function [xUpdate,PUpdate,rUpdate,probNonTargetMeas]=singleScanUpdateWithExisten
 %              missed detection hypothesis. The order of the measurement
 %              hypotheses is the same as the ordering of the likelihoods in
 %              the columns of the A matrix.
-%        PHyp  An xDimXxDimXnumTarXnumHyp set of covariance matrices for
+%         PHyp An xDimXxDimXnumTarXnumHyp set of covariance matrices for
 %              each of the track states for each of the targets updated
 %              conditioned on each of the numHyp measurements with the last
 %              one being for the missed detection hypothesis.
@@ -137,7 +137,7 @@ function [xUpdate,PUpdate,rUpdate,probNonTargetMeas]=singleScanUpdateWithExisten
 %probabilities is exactly the same as in any other single-Gaussian filter
 %except the existence probabilities rUpdate are typically multiplied by a
 %transition probability (to go from existence to non-existence) before the
-%next update. THis value is a design parameter.
+%next update. This value is a design parameter.
 %
 %Note that the type of integrated tracking filter described here
 %corresponds to one using Markov Chain 1 in [1]. The other option contains
@@ -154,7 +154,7 @@ function [xUpdate,PUpdate,rUpdate,probNonTargetMeas]=singleScanUpdateWithExisten
 %    MHT, JIPDA, and association-based MeMBer," IEEE Transactions on
 %    Aerospace and Electronic Systems, vol. 51, no. 3, pp. 1664-1687, Jul.
 %    2015.
-%[4] H. A. P. Blom, E. A. Bloem, and D. Mu?icki, "JIPDA*: Automatic target
+%[4] H. A. P. Blom, E. A. Bloem, and D. Musicki, "JIPDA*: Automatic target
 %    tracking avoiding track coalescence," IEEE Transactions on Aerospace
 %    and Electronic Systems, vol. 51, no. 2, pp. 962-974, Apr. 2015.
 %

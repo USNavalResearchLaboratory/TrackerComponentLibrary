@@ -83,14 +83,14 @@ void iauLdn(int n, iauLDBODY b[], double ob[3], double sc[3],
 **     iauPn        decompose p-vector into modulus and direction
 **     iauLd        light deflection by a solar-system body
 **
-**  This revision:   2013 October 9
+**  This revision:   2017 March 16
 **
-**  SOFA release 2016-05-03
+**  SOFA release 2017-04-20
 **
-**  Copyright (C) 2016 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
 */
 {
-/* Light time for 1 AU (days) */
+/* Light time for 1 au (days) */
    const double CR = AULT/DAYSEC;
 
    int i;
@@ -128,7 +128,7 @@ void iauLdn(int n, iauLDBODY b[], double ob[3], double sc[3],
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2016
+**  Copyright (C) 2017
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

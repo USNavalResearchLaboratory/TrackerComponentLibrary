@@ -7,88 +7,75 @@ function [xMin,fMin,exitCode]=NewtonsMethod(f,fHess,x0,epsilon,deltaTestDist,del
 %               Jacobian. While a real Hessian must be symmetric, this
 %               Jacobian need not be symmetric.
 %
-%INPUTS:            f A handle to the function and its gradient over which
-%                     the minimization is to be performed. The function
-%                     [fVal,grad,Hess]=f(x) takes the NX1 x vector returns
-%                     the real scalar function value fVal, and the gradient
-%                     grad, at the point x. If the Hessian is not given
-%                     separately by fHess, then it can be given as a third
-%                     output and fHess set to an empty matrix.
-%               fHess A handle to the Hessian of the function f. This is
-%                     only needed if f does not return the Hessian ass a
-%                     third output. This must be positive definite for the
-%                     algorithm to work. As shown in the example code
-%                     below, the "Hessian" can actually be a (non-
-%                     symmetric) Jacobian matrix when the optimization is
-%                     meant to zero a vector and not minimize a function.
-%                     If an empty matrix is passed, then it is assumed that
-%                     f returns the Hessian after the function value and
-%                     gradient.
-%                  x0 The NX1-dimensional point from which the
-%                     minimization starts.
-%             epsilon The parameter determining the accuracy of the
-%                     desired solution in terms of the gradient. The
-%                     function terminates when
-%                     norm(g) < epsilon*max([1, norm(x)])
-%                     where g is the gradient. The default if omitted or
-%                     an empty matrix is passed is 1e-6.
-%       deltaTestDist The number of iterations back to use to compute the
-%                     decrease of the objective function if a delta-based
-%                     convergence test is performed. If zero, then no
-%                     delta-based convergence testing is done. The default
-%                     if omitted or an empty matrix is passed is zero.
-%              delta  The delta for the delta convergence test. This
-%                     determines the minimum rate of decrease of the
-%                     objective function. Convergence is determined if
-%                     (f'-f)<=delta*f, where f' is the value of the
-%                     objective function f deltaTestDist iterations ago,
-%                     and f is the current objective function value. The
-%                     default if this parameter is omitted or an empty
-%                     matrix is passed is 0.
-%    lineSearchParams An optional structure whose members specify
-%                     tolerances for the line search. The parameters are
-%                     described as in the lineSearch function, except if -1
-%                     is passed instead of a parameter structure, then no
-%                     line search is performed. Possible members of the
-%                     structure are algorithm, fTol, wolfeTol, xTol, 
-%                     minStep, maxStep, maxIter. The C and l1NormRange
-%                     parameters are not used. If lineSearchParams is
-%                     omitted or an empty matrix is passed, then the
-%                     default values as described in the lineSearch
-%                     function are used. If any member of this structure is
-%                     omitted or is assigned an empty matrix, then the
-%                     default value will be used. The line search must
-%                     usually be disabled if one is interested in zeroing a
-%                     vector (the gradient term being the vector) rather
-%                     than actually minimizing a function.
-%          cholSemiVal A value indicating whether a method similar to that
-%                     suggested in Chapter 1.4 of [1] for using a modified
-%                     Cholesky decomposition of the Hessian matrix should 
-%                     be used so as to assure that one always obtains a
-%                     descent direction. If a positive value <1 of
-%                     cholSemiVal is given, then the Hessian matrix is
-%                     decomposed with cholSemiDef with diagMinFact of
-%                     cholSemiVal. If a negative value is provided, then no
-%                     decomposition is done and no effort is made to assure
-%                     that the direction traveled is a descent direction. 
-%                     The default if this parameter is omitted or an empty
-%                     matrix is passed is 1e-6, This parameter assumes the
-%                     "Hessian" matrix is symmetric. Thus, this option
-%                     should be set to -1 if this function is used to
-%                     zero a vector rather than minimize a function.
-%             maxIter The maximum number of iterations to use for the
-%                     algorithm. The default if this parameter is omitted
-%                     or an empty matrix is passed is 1000.
+%INPUTS: f A handle to the function and its gradient over which the
+%          minimization is to be performed. The function
+%          [fVal,grad,Hess]=f(x) takes the NX1 x vector returns the real
+%          scalar function value fVal, and the gradient grad, at the point
+%          x. If the Hessian is not given separately by fHess, then it can
+%          be given as a third output and fHess set to an empty matrix.
+%    fHess A handle to the Hessian of the function f. This is only needed
+%          if f does not return the Hessian as a third output. This must be
+%          positive definite for the algorithm to work. As shown in the
+%          example code below, the "Hessian" can actually be a (non-
+%          symmetric) Jacobian matrix when the optimization is meant to
+%          zero a vector and not minimize a function. If an empty matrix is
+%          passed, then it is assumed that f returns the Hessian after the
+%          function value and gradient.
+%       x0 The NX1-dimensional point from which the minimization starts.
+%  epsilon The parameter determining the accuracy of the desired solution
+%          in terms of the gradient. The function terminates when
+%          norm(g) < epsilon*max([1, norm(x)])
+%          where g is the gradient. The default if omitted or an empty
+%          matrix is passed is 1e-6.
+% deltaTestDist The number of iterations back to use to compute the
+%          decrease of the objective function if a delta-based convergence
+%          test is performed. If zero, then no delta-based convergence
+%          testing is done. The default if omitted or an empty matrix is
+%          passed is zero.
+%    delta The delta for the delta convergence test. This determines the
+%          minimum rate of decrease of the objective function. Convergence
+%          is determined if
+%          (f'-f)<=delta*f, where f' is the value of the
+%          objective function f deltaTestDist iterations ago, and f is the
+%          current objective function value. The default if this parameter
+%          is omitted or an empty matrix is passed is 0.
+% lineSearchParams An optional structure whose members specify tolerances
+%          for the line search. The parameters are described as in the
+%          lineSearch function, except if -1 is passed instead of a
+%          parameter structure, then no line search is performed. Possible
+%          members of the structure are algorithm, fTol, wolfeTol, xTol, 
+%          minStep, maxStep, maxIter. The C and l1NormRange parameters are
+%          not used. If lineSearchParams is omitted or an empty matrix is
+%          passed, then the default values as described in the lineSearch
+%          function are used. If any member of this structure is omitted or
+%          is assigned an empty matrix, then the default value will be
+%          used. The line search must usually be disabled if one is
+%          interested in zeroing a vector (the gradient term being the
+%          vector) rather than actually minimizing a function.
+% cholSemiVal A value indicating whether a method similar to that suggested
+%          in Chapter 1.4 of [1] for using a modified Cholesky
+%          decomposition of the Hessian matrix should be used so as to
+%          assure that one always obtains a descent direction. If a
+%          positive value <1 of cholSemiVal is given, then the Hessian
+%          matrix is decomposed with cholSemiDef with epsVal of
+%          cholSemiVal. If a negative value is provided, then no
+%          decomposition is done and no effort is made to assure that the
+%          direction traveled is a descent direction. The default if this
+%          parameter is omitted or an empty matrix is passed is 1e-6, This
+%          parameter assumes the "Hessian" matrix is symmetric. Thus, this
+%          option should be set to -1 if this function is used to zero a
+%          vector rather than minimize a function.
+%  maxIter The maximum number of iterations to use for the algorithm. The
+%          default if this parameter is omitted or an empty matrix is
+%          passed is 1000.
 %
-%OUTPUTS: xMin     The value of x at the minimum point found. If exitCode
-%                  is negative, then this might be an empty matrix.
-%         fMin     The cost function value at the minimum point found. If
-%                  exitCode is negative, then this might be an empty
-%                  matrix.
-%         exitCode A value indicating the termination condition of the
-%                  algorithm. Nonnegative values indicate success; negative
-%                  values indicate some type of failure. Possible values
-%                  are:
+%OUTPUTS: xMin The value of x at the minimum point found. If exitCode is
+%              negative, then this might be an empty matrix.
+%         fMin The cost function value at the minimum point found. If
+%              exitCode is negative, then this might be an empty matrix.
+%     exitCode A value indicating the termination condition of the
+%              algorithm. Nonnegative values indicate success; negative
+%              values indicate some type of failure. Possible values are:
 %                  0 The algorithm termiated successfully based on the
 %                    gradient criterion.
 %                  1 The algorithm terminated successfully based on the
@@ -257,7 +244,7 @@ function [xMin,fMin,exitCode]=NewtonsMethod(f,fHess,x0,epsilon,deltaTestDist,del
 
     for cutIter=1:maxIter
         if(cholSemiVal>0)
-            L=cholSemiDef(fHessVal,'lower',cholSemiVal);
+            L=cholSemiDef(fHessVal,'lower',0,cholSemiVal);
             
             if(any(~isfinite(L(:))))
                 exitCode=-2;

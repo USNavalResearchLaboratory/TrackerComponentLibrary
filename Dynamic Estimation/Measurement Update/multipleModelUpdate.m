@@ -49,9 +49,9 @@ function [xPostSet,PPostSet,muPost,xMerged,PMerged]=multipleModelUpdate(AlgSel,x
 %               dimensions are filled with zeros. For the GBP2 estimator,
 %               this is xDimMaxXxDimMaxXnumModelsXnumModels for all
 %               possible combinations of model switches.
-%          z    A zDimX1 measurement that will be used to update all of the
+%             z A zDimX1 measurement that will be used to update all of the
 %               models.
-%          R    A zDimXzDim measurement covariance matrix that will be used
+%             R A zDimXzDim measurement covariance matrix that will be used
 %               when updating all of the models.
 %measUpdateFuns A function handle used for updating all of the models or a
 %               numModelsX1 cell array of numModels function handles for
@@ -64,8 +64,8 @@ function [xPostSet,PPostSet,muPost,xMerged,PMerged]=multipleModelUpdate(AlgSel,x
 %               matrix. The innovation and innovation covariance matrix are
 %               necessary for the computation of the likelihoods in the
 %               IMM.
-%       muPrev  The numModelsX1 set of prior mixing probabilities. 
-%       Lambda  When using the GPB1, IMM, and GPB2 algorithms, this is the
+%        muPrev The numModelsX1 set of prior mixing probabilities. 
+%        Lambda When using the GPB1, IMM, and GPB2 algorithms, this is the
 %               numModelsXnumModels matrix of model transition
 %               probabilities. For example, one could use the function call
 %               Lambda=getMarkovPTransProbMat(A,T) to get such a transition
@@ -79,7 +79,7 @@ function [xPostSet,PPostSet,muPost,xMerged,PMerged]=multipleModelUpdate(AlgSel,x
 %               parameter should be omitted when using the GPB1 algorithm,
 %               as all dynamic models should have the same dimensionality
 %               and mixing should be over all elements of the state.
-%   numMixDims  An optional numModelsX1 vector that lists the number of
+%    numMixDims An optional numModelsX1 vector that lists the number of
 %               dimensions in each state that are involved in mixing. For
 %               example, when designing a model set including a model with
 %               a turn rate and a model without a turn rate, usually the
@@ -103,12 +103,12 @@ function [xPostSet,PPostSet,muPost,xMerged,PMerged]=multipleModelUpdate(AlgSel,x
 %                 of target states. This is xDimMaxXxDimMaxXnumModels in
 %                 size, except when using the GPB1, in which case it is
 %                 just xDimMaxXxDimMax in size.
-%        muPost   The numModelsX1 set of updated model probabilities.
-%        xMerged  The state estimate obtained by merging all of the models
+%          muPost The numModelsX1 set of updated model probabilities.
+%         xMerged The state estimate obtained by merging all of the models
 %                 according to the method used in the selected algorithm.
 %                 This is generally what should be used for display to an
 %                 operator. The dimensionality is min(numMixDims)X1
-%        PMerged  The covariance matrix associated with xMerged. 
+%         PMerged The covariance matrix associated with xMerged. 
 %
 %Multiple model routines for target tracking are discussed in general in
 %Chapter 11.6 of [3]. The IMM tends to be the most widely used multiple

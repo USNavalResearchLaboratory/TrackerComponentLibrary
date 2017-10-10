@@ -69,7 +69,7 @@ end
 %correct size.
 totalNewEls=prod(newDimSizeList);
 coeffsRet=zeros(totalNewEls,1);
-coeffsRet=reshapeVec(coeffsRet,newDimSizeList);
+coeffsRet=reshape(coeffsRet,newDimSizeList(:)');
 %Now, we must copy all of the elements in coeffs that are being kept into
 %the proper positions in coeffsRet.
 

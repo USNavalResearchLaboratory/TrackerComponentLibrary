@@ -10,13 +10,13 @@ function [F,Q,u]=linDynMod2Disc(T,A,D,alpha)
 %                where v is zero-mean Gaussian noise with covariance matrix
 %                Q.
 %
-%INPUTS: T  The duration of the prediction interval over which the
-%           continuous-time system should be discretized.
-%        A  The xDimXxDim constant drift matrix, which cannot be singular
-%           if a control input u is provided.
-%        D  The xDimXwDim constant diffusion matrix.
-%    alpha  The constant continuous-time xDimX1 (control) input. If
-%           omitted, it is assumed there is no control input.
+%INPUTS: T The duration of the prediction interval over which the
+%          continuous-time system should be discretized.
+%        A The xDimXxDim constant drift matrix, which cannot be singular if
+%          a control input u is provided.
+%        D The xDimXwDim constant diffusion matrix.
+%    alpha The constant continuous-time xDimX1 (control) input. If omitted,
+%          it is assumed there is no control input.
 %
 %OUTPUTS: F The xDimXxDim state transition matrix of the discretized
 %           system.

@@ -6,21 +6,20 @@ function f=ChebyshevPolySynth(tau,a,tauStart,tauEnd)
 %                    ChebyshevPoly to evaluate each of the Chebyshev
 %                    polynomials individually.
 %
-%INPUTS: tau     An NX1 or 1XN vector of values from tauStart to tauEnd, or
-%                from -1 to 1 if tauStart and tauEnd are omitted, where one
-%                wishes to evaluate the weighted Chebyshev polynomial
-%                series.
-%        a       An (n+1)X1 or 1X(n+1) vector of the coefficients for the
-%                Chebyshev polynomials from degree 0 to degree n.
-%tauStart,tauEnd The possible range of the inputs. If omitted, a  range of
-%               -1 to 1 is assumed --the normal range for Chebyshev
-%                polynomials. The option for mapping to a wider range is
-%                useful when using Chebyshev polynomials for interpolation.
-%                Note that the such polynomials are generally not useful
-%                for interpolating much outside of the valid range.
+%INPUTS: tau An NX1 or 1XN vector of values from tauStart to tauEnd, or
+%            from -1 to 1 if tauStart and tauEnd are omitted, where one
+%            wishes to evaluate the weighted Chebyshev polynomial series.
+%          a An (n+1)X1 or 1X(n+1) vector of the coefficients for the
+%            Chebyshev polynomials from degree 0 to degree n.
+% tauStart,tauEnd The possible range of the inputs. If omitted, a  range of
+%            -1 to 1 is assumed --the normal range for Chebyshev
+%            polynomials. The option for mapping to a wider range is useful
+%            when using Chebyshev polynomials for interpolation. Note that
+%            the such polynomials are generally not useful for
+%            interpolating much outside of the valid range.
 %
-%OUTPUTS: f      An NX1 vector of the Chebyshev polynomial series weighted
-%                by a evaluated at all of the points in tau.
+%OUTPUTS: f An NX1 vector of the weighted Chebyshev polynomial series sum
+%           evaluated at all of the points in tau.
 %
 %The algorithm used is the Clenshaw method, which is described in Chapter
 %3.3.3 of [1].

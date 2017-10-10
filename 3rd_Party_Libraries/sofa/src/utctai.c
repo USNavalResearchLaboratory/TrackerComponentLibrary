@@ -65,9 +65,9 @@ int iauUtctai(double utc1, double utc2, double *tai1, double *tai2)
 **
 **  This revision:  2013 July 26
 **
-**  SOFA release 2016-05-03
+**  SOFA release 2017-04-20
 **
-**  Copyright (C) 2016 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
 **
 */
 {
@@ -132,7 +132,7 @@ int iauUtctai(double utc1, double utc2, double *tai1, double *tai2)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2016
+**  Copyright (C) 2017
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

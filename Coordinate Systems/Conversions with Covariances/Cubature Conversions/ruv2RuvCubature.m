@@ -27,10 +27,15 @@ function [zConv,RConv]=ruv2RuvCubature(z,SR,useHalfRange,zTx1,zRx1,M1,zTx2,zRx2,
 %       SR  The 3X3XN lower-triangular square root of the measurement
 %           covariance matrices for the measurements. If all of the
 %           matrices are the same, then this can just be a single matrix.
-%useHalfRange A boolean value specifying whether the bistatic range value
-%           should be divided by two. This normally comes up when operating
-%           in monostatic mode, so that the range reported is a one-way
-%           range. The default if an empty matrix is provided is false.
+% useHalfRange A scalar boolean value or a 2X1 or 1X2 vector of boolean
+%           values specifying whether the bistatic range value should be
+%           divided by two. This normally comes up when operating in
+%           monostatic mode, so that the range reported is a one-way range.
+%           The default if an empty matrix is provided is false.
+%           useHalfRange(1) applies to the first (source) bistatic channel
+%           and useHalfRange(2) to the second (destination) bistatic
+%           channel. If a scalar is passed, then both values are taken to
+%           be the same.
 %      zTx1 The 3X1 [x;y;z] location vector of the transmitter originating
 %           the measurements z in global Cartesian coordinates. zTx1 can
 %           have more than 3 rows; additional rows are ignored.
@@ -44,16 +49,24 @@ function [zConv,RConv]=ruv2RuvCubature(z,SR,useHalfRange,zTx1,zRx1,M1,zTx2,zRx2,
 % zTx2,zRx2,M2 These are the same as zTx1,zRx1, and M1, but for the
 %           coordinate system into which the bistatic r-u-v(-w)
 %           measurements should be converted.
-%  includeW An optional boolean value indicating whether a third direction
-%           cosine component should be included in the output. This helps
-%           for determining whether the converted measurement is located
-%           behind the receiving radar. The u and v direction cosines are
-%           two parts of a 3D unit vector. Generally, one might assume that
-%           the target is in front of the sensor, so the third component
-%           would be positive and is not needed. However, the third
-%           component can be included if ambiguity exists. The default if
-%           this parameter is omitted or an empty matrix is passed is
-%           false.
+%  includeW A value indicating whether a third direction cosine component
+%           should be included in the output and how to perform the
+%           averaging. This helps for determining whether the converted
+%           measurement is located behind the receiving radar. The u and v
+%           direction cosines are two parts of a 3D unit vector. Generally,
+%           one might assume that the target is in front of the sensor, so
+%           the third component would be positive and is not needed.
+%           However, the third component can be included if ambiguity
+%           exists. Possible values are:
+%           0 (The default if omitted or an empty matrix is passed) Do not
+%              include the third direction component.
+%           1 Include the third direction component and perform the
+%             averaging over the directions as a mean direction. A linear
+%             covariance matrix is computed with respect to the mean
+%             direction values.
+%           2 Include the third component and just perform weighted linear
+%             averaging. The three directional components will no longer
+%             have unit magnitude.
 %        xi A 3 X numCubaturePoints (or 4X numCubaturePoints for r-u-v-w)
 %           matrix of cubature points for the numeric integration. If this
 %           and the final parameter are omitted or empty matrices are
@@ -124,7 +137,7 @@ function [zConv,RConv]=ruv2RuvCubature(z,SR,useHalfRange,zTx1,zRx1,M1,zTx2,zRx2,
 % %One will see that the NEES is near 1 indicating that the conversion is
 % %consistent.
 % %If we include the w component in the output, then we have to discard the
-% %redundancy to assess the NEES, because tge covariance matrix is
+% %redundancy to assess the NEES, because the covariance matrix is
 % %otherwise singular.
 % includeW=true;
 % [zConv,RConv]=ruv2RuvCubature(zRuv1,SRuv1,useHalfRange,xTx1,xRx1,M1,xTx2,xRx2,M2,includeW);
@@ -148,6 +161,10 @@ else
     numDim=3;
 end
 
+if(isscalar(useHalfRange))
+    useHalfRange=[useHalfRange;useHalfRange];
+end
+
 if(nargin<11||isempty(xi))
     [xi,w]=fifthOrderCubPoints(3);
 end
@@ -162,48 +179,51 @@ end
 
 zConv=zeros(numDim,numMeas);
 RConv=zeros(numDim,numDim,numMeas);
-if(includeW==false)
-    h=@(x)ruv2Ruv(x,useHalfRange,zTx1,zRx1,M1,zTx2,zRx2,M2,includeW);
-    for curMeas=1:numMeas
-        [zConv(:,curMeas), RConv(:,:,curMeas)]=calcCubPointMoments(z(:,curMeas),SR(:,:,curMeas),h,xi,w);
-    end
-else
-    numCub=length(w);
-    for curMeas=1:numMeas
-        %Transform the cubature points to match the given Gaussian.
-        cubPoints=transformCubPoints(xi,z(:,curMeas),SR(:,:,curMeas));
+if(includeW==0||includeW==2)
+        h=@(x)ruv2Ruv(x,useHalfRange,zTx1,zRx1,M1,zTx2,zRx2,M2,includeW);
+        for curMeas=1:numMeas
+            [zConv(:,curMeas), RConv(:,:,curMeas)]=calcCubPointMoments(z(:,curMeas),SR(:,:,curMeas),h,xi,w);
+        end
+elseif(includeW==1)
+        numCub=length(w);
+        for curMeas=1:numMeas
+            %Transform the cubature points to match the given Gaussian.
+            cubPoints=transformCubPoints(xi,z(:,curMeas),SR(:,:,curMeas));
 
-        %Convert all of the points.
-        cubPointsConv=ruv2Ruv(cubPoints,useHalfRange,zTx1,zRx1,M1,zTx2,zRx2,M2,includeW);
-        
-        %Given r-u-v-w coordinates, the mean direction is just the linear
-        %average projected onto the unit sphere.
-        
-        %Deal with any cubature points that might have had zero magnitude.
-        sel=any(~isfinite(cubPointsConv(2:end,:)),1);
-        cubPointsConv(2,sel)=1;
-        cubPointsConv(3,sel)=0;
-        cubPointsConv(4,sel)=0;
-        
-        zMean=sum(bsxfun(@times,cubPointsConv,w'),2);
-        %Normalize the result
-        zMean(2:end)=zMean(2:end)/norm(zMean(2:end));
-        %Deal with the case where the points are so spread out that the
-        %linear mean is zero.
-        if(any(~isfinite(zMean(2:end))))
-            zMean(2:end)=[1;0;0];
+            %Convert all of the points.
+            cubPointsConv=ruv2Ruv(cubPoints,useHalfRange,zTx1,zRx1,M1,zTx2,zRx2,M2,includeW);
+
+            %Given r-u-v-w coordinates, the mean direction is just the
+            %linear average projected onto the unit sphere.
+
+            %Deal with any cubature points that might have had zero
+            %magnitude.
+            sel=any(~isfinite(cubPointsConv(2:end,:)),1);
+            cubPointsConv(2,sel)=1;
+            cubPointsConv(3,sel)=0;
+            cubPointsConv(4,sel)=0;
+
+            zMean=sum(bsxfun(@times,cubPointsConv,w'),2);
+            %Normalize the result
+            zMean(2:end)=zMean(2:end)/norm(zMean(2:end));
+            %Deal with the case where the points are so spread out that the
+            %linear mean is zero.
+            if(any(~isfinite(zMean(2:end))))
+                zMean(2:end)=[1;0;0];
+            end
+
+            zConv(:,curMeas)=zMean;
+            %Now, just compute a standard 3D linear covariance matrix.
+            RCov=zeros(4,4);
+            for curCub=1:numCub
+                diff=cubPointsConv(:,curCub)-zMean(:);
+
+                RCov=RCov+w(curCub)*(diff*diff');
+            end
+            RConv(:,:,curMeas)=RCov;
         end
-        
-        zConv(:,curMeas)=zMean;
-        %Now, just compute a standard 3D linear covariance matrix.
-        RCov=zeros(4,4);
-        for curCub=1:numCub
-            diff=cubPointsConv(:,curCub)-zMean(:);
-            
-            RCov=RCov+w(curCub)*(diff*diff');
-        end
-        RConv(:,:,curMeas)=RCov;
-    end
+else
+    error('Unknown value of includeW provided.')
 end
 end
 

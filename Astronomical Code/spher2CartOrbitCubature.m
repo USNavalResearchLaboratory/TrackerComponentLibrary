@@ -36,6 +36,9 @@ function [xEst,PEst]=spher2CartOrbitCubature(z,SR,systemType,useHalfRange,deltaT
 %          1 Azimuth is measured counterclockwise from the z-axis in the
 %            z-x plane. Elevation is measured up from the z-x plane
 %            (towards the y-axis).
+%          2 This is the same as 0 except instead of being given elevation,
+%            one desires the angle away from the z-axis, which is
+%            (pi/2-elevation).
 % useHalfRange An optional boolean value specifying whether the bistatic
 %           (round-trip) range value has been divided by two. This normally
 %           comes up when operating in monostatic mode (the most common
@@ -52,13 +55,13 @@ function [xEst,PEst]=spher2CartOrbitCubature(z,SR,systemType,useHalfRange,deltaT
 %           coordinates for each measurement.  If only a single 3X1 vector
 %           is passed, then the receiver locations are assumed the same for
 %           both measurements.
-%        M  A 3X3X2 hypermatrix of the rotation matrices to go from the
+%         M A 3X3X2 hypermatrix of the rotation matrices to go from the
 %           alignment of the global coordinate system to that at the
 %           receiver. The z-axis of the local coordinate system of the
 %           receiver is the pointing direction of the receiver. If omitted,
 %           then it is assumed that the local coordinate system is aligned
 %           with the global and M=eye(3) --the identity matrix is used. If
-%           only a single 3X3 matrix is passed, then is is assumed to be
+%           only a single 3X3 matrix is passed, then it is assumed to be
 %           the same for both measurements.
 %    isECEF An optional boolean value indicating whether the r1Val and
 %           everything are given in a generic ECEF coordinate system and

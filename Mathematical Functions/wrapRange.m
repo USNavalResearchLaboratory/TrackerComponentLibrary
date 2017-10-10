@@ -1,30 +1,30 @@
 function wrapVals=wrapRange(vals,minBound,maxBound,mirrorWrap)
-%%WRAPRANGE  Bound values to a specific range, wrapping around if the value
-%            is outside the range. The parameter mirrorWrap determines how
-%            the wrapping is performed. For example, if mirrorWrap=false,
-%            minBound=-pi and maxBound=pi, then a value that is some eps
-%            above pi will be wrapped to a value some eps above -pi.
-%            Similarly, a value some eps below -pi is wrapped to a value
-%            some eps below pi. On the other hand, if mirrorWrap==true,
-%            then leaving the region of [minBound,maxBound] goes the other
-%            way. For example, if mirrorWrap=true, minBound=-pi/2, and
-%            maxBound=pi/2, then a value that is some eps above pi/2 will
-%            be mapped to a point some eps below pi/2 and a value some eps
-%            below -pi/2 will be mapped to a point some eps above -pi/2.
+%%WRAPRANGE Bound values to a specific range, wrapping around if the value
+%           is outside the range. The parameter mirrorWrap determines how
+%           the wrapping is performed. For example, if mirrorWrap=false,
+%           minBound=-pi and maxBound=pi, then a value that is some eps
+%           above pi will be wrapped to a value some eps above -pi.
+%           Similarly, a value some eps below -pi is wrapped to a value
+%           some eps below pi. On the other hand, if mirrorWrap==true, then
+%           leaving the region of [minBound,maxBound] goes the other way.
+%           For example, if mirrorWrap=true, minBound=-pi/2, and
+%           maxBound=pi/2, then a value that is some eps above pi/2 will be
+%           mapped to a point some eps below pi/2 and a value some eps
+%           below -pi/2 will be mapped to a point some eps above -pi/2.
 %
-%INPUTS: vals  A vector or matrix of real values that should be wrapped
-%              to the range minBound->maxBound.
-%     minBound The lower scalar bound of the output parameters.
-%     maxBound A value > minBound that is the upper bound to the allowable
-%              range of output values.
-%   mirrorWrap A value that determines whether a values outside the bounds
-%              maps back into the valid region offset to the bound that it
-%              passed or offset to the other boundary. If this parameter is
-%              omitted, then mirrorWrap=false is assumed and the function
-%              behaves similar to a shifted modulo function.
+%INPUTS: vals A vector or matrix of real values that should be wrapped
+%             to the range minBound->maxBound.
+%    minBound The lower scalar bound of the output parameters.
+%    maxBound A value > minBound that is the upper bound to the allowable
+%             range of output values.
+%  mirrorWrap A value that determines whether a values outside the bounds
+%             maps back into the valid region offset to the bound that it
+%             passed or offset to the other boundary. If this parameter is
+%             omitted, then mirrorWrap=false is assumed and the function
+%             behaves similar to a shifted modulo function.
 %
-%OUTPUTS: wrapVals  The set of vals wrapped such that
-%                   minBound<=wrapVals<maxBound.
+%OUTPUTS: wrapVals The set of vals wrapped such that
+%                  minBound<=wrapVals<maxBound.
 %
 %If mirrowWrap=false, then the values are shifted to correspond to a region
 %from zero to maxBound-minBound and the mod function is used to wrap vals

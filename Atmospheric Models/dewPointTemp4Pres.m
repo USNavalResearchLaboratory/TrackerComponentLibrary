@@ -1,25 +1,22 @@
+function T=dewPointTemp4Pres(p,algChoice)
 %%DEWPOINTTEMP4PRES For a given partial vapor pressure of water, find the
 %                   dew point temperature. that is the temperature at which
 %                   the air would be saturated with water, in equilibrium.
 %
-%INPUTS:    p   The (partial) pressure of the water vapor for which the dew
-%               point temperature is desired in units of Newtons per square
-%               meter (Pascals).
-%        algChoice      An optional parameter specifying the algorithm to
-%                       use. The choices are
-%                       0 The corrected version of the Clausius-Clapeyron
-%                         equation for use over land or in the upper air.
-%                       1 The empirical Magnus-type equation for use over
-%                         water or in the upper air (-40C to 50C
-%                         temperature).
-%                       2 The empirical Magnus-type equation for use over
-%                         ice (-80C to 0C temperature)
-%                       If algChoice is omitted, then the default value of
-%                       0, the corrected Clausius-Clapeyron equation is
-%                       used. Formula is taken from the March 2012
-%                       Koutsoyiannis paper that is cited below.
-%                       Formulae 1 and 2, are taken from the Alduchov
-%                       and Eskridge paper that is cited below.
+%INPUTS: p The (partial) pressure of the water vapor for which the dew
+%          point temperature is desired in units of Newtons per square
+%          meter (Pascals).
+% algChoice An optional parameter specifying the algorithm to use. The
+%          choices are
+%          0 The corrected version of the Clausius-Clapeyron equation for
+%            use over land or in the upper air.
+%          1 The empirical Magnus-type equation for use over water or in
+%            the upper air (-40C to 50C temperature).
+%          2 The empirical Magnus-type equation for use over ice (-80C to
+%            0C temperature)
+%          If algChoice is omitted, then the default value of 0, the
+%          corrected Clausius-Clapeyron equation is used. Choice 0 is taken
+%          from [1]. Choices 1 and 2, are taken from [2].
 %
 %As is the case in the function dewPointPres4Temp, which is the inverse of
 %this function, formulae 0 is from [1], where the numerical inversion
@@ -42,9 +39,7 @@
 %February 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-function T=dewPointTemp4Pres(p,algChoice)
-
-if(nargin<2)
+if(nargin<2||isempty(algChoice))
     algChoice=0;
 end
 

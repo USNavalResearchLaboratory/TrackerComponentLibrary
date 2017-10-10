@@ -7,35 +7,34 @@ function latLonEnd=directRhumbProblem(latLonStart,azimuth,dist,height,a,f,numSte
 %                        trajectory is a rhumb line (loxodrome) and is
 %                        usually not the shortest path between two points.
 %
-%INPUTS: latLonStart  A 2X1 vector of the starting ellipsoidal latitude
-%                     (North) and longitude (East) in radians.
-%            azimuth  The constant heading that is to be traveled in
-%                     radians East of North.
-%               dist  The distance that is to be traveled on a constant
-%                     heading course.
-%              height The heights above the reference ellipsoid at which
-%                     the trajectoriey should be determined. If this
-%                     parameter is omitted, then the default value of 0 is
-%                     used.
-%                a    The semi-major axis of the reference ellipsoid. If
-%                     this argument is omitted, the value in
-%                     Constants.WGS84SemiMajorAxis is used.
-%                f    The flattening factor of the reference ellipsoid. If
-%                     this argument is omitted, the value in
-%                     Constants.WGS84Flattening is used.
-%     numSteps4Circ   If height!=0, then an algorithm propagating a state
-%                     in ECEF coordinates around the curved Earth is used.
-%                     This parameter determines the number of steps that
-%                     would be needed for a target that circumnavigates the
-%                     globe around the equator. The default value if this
-%                     parameter is not provided is 2000. A value of 6000
-%                     appears to be about the best number for overall
-%                     precision. Reducing the number of steps will speed up
-%                     the function. This parameter is not used if height=0.
+%INPUTS: latLonStart A 2X1 vector of the starting ellipsoidal latitude
+%                    (North) and longitude (East) in radians.
+%            azimuth The constant heading that is to be traveled in
+%                    radians East of North.
+%               dist The distance that is to be traveled on a constant
+%                    heading course.
+%             height The heights above the reference ellipsoid at which the
+%                    trajectoriey should be determined. If this parameter
+%                    is omitted, then the default value of 0 is used.
+%                  a The semi-major axis of the reference ellipsoid. If
+%                    this argument is omitted, the value in
+%                    Constants.WGS84SemiMajorAxis is used.
+%                  f The flattening factor of the reference ellipsoid. If
+%                    this argument is omitted, the value in
+%                    Constants.WGS84Flattening is used.
+%      numSteps4Circ If height!=0, then an algorithm propagating a state in
+%                    ECEF coordinates around the curved Earth is used. This
+%                    parameter determines the number of steps that would be
+%                    needed for a target that circumnavigates the globe
+%                    around the equator. The default value if this
+%                    parameter is not provided is 2000. A value of 6000
+%                    appears to be about the best number for overall
+%                    precision. Reducing the number of steps will speed up
+%                    the function. This parameter is not used if height=0.
 %
-%OUTPUTS: latLonEnd  The ellipsoidal latitude and longitude that one will
-%                    be after starting at latLonStart and traveling a
-%                    distance of dist at a constant heading on azimuth.
+%OUTPUTS: latLonEnd The ellipsoidal latitude and longitude that one will be
+%                    after starting at latLonStart and traveling a distance
+%                    of dist at a constant heading on azimuth.
 %
 %The algorithm for zero-altitude is taken from [1]. However, a formula
 %using isometric latitudes, which are described in Chapter 3 of [2] to get
@@ -199,7 +198,8 @@ else
     uDet=@(x,t)getENUAxes(Cart2Ellipse(x(1:3),[],a,f));
     xList=RungeKCurvedAtTimes(xInit,[],[0;1],aDyn,uDet,stepSize,4);
     plhEnd=Cart2Ellipse(xList(1:3,end),[],a,f);
-    latLonEnd=plhEnd(1:2);%The Cartesian location at the end of the trajectory.
+    latLonEnd=plhEnd(1:2);%The Cartesian location at the end of the
+                          %trajectory.
 end
 end
 

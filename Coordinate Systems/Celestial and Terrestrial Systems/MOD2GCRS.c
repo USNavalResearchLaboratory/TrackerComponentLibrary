@@ -4,19 +4,18 @@
  *          (GCRS) using the IAU 2006/2000A model. The transformation is
  *          performed by removing the precession and frame bias.
  *
- *INPUTS:  xVec    The 3XN matrix of N 3X1 Cartesian vectors that are to
- *                  be rotated from the MOD coordinate system into the GCRS
- *                  coordinate system.
- *         TT1, TT2 Jul1,Jul2 Two parts of a Julian date given in TT. The
- *                  units of the date are days. The full date is the sum of
- *                  both terms. The date is broken into two parts to
- *                  provide more bits of precision. It does not matter how
- *                  the date is split.
+ *INPUTS: xVec The 3XN matrix of N 3X1 Cartesian vectors that are to be
+ *             rotated from the MOD coordinate system into the GCRS
+ *             coordinate system.
+ *    TT1, TT2 Jul1,Jul2 Two parts of a Julian date given in TT. The units
+ *             of the date are days. The full date is the sum of both
+ *             terms. The date is broken into two parts to provide more
+ *             bits of precision. It does not matter how the date is split.
  *
- *OUTPUTS: xRot     The 3XN matrix of the N 3X1 input vector rotated into
- *                  the GCRS coordinate system.
- *         rotMat   The 3X3 rotation matrix such that
- *                  xRot(:,i)=rotMat*xVec(:,i).
+ *OUTPUTS: xRot The 3XN matrix of the N 3X1 input vector rotated into the
+ *               GCRS coordinate system.
+ *        rotMat The 3X3 rotation matrix such that
+ *               xRot(:,i)=rotMat*xVec(:,i).
  *
  *This uses functions in the the International Astronomical Union's (IAU)
  *Standard's of Fundamental Astronomy (SOFA) library to obtain the product
@@ -37,9 +36,10 @@
  *Different celestial coordinate systems are compared in [1].
  *
  *REFERENCES:
- *[1] D. F. Crouse, "An overview of major terrestrial, celestial, and
- *    temporal coordinate systems for target tracking", Report, U. S. Naval
- *    Research Laboratory, to appear, 2016.
+ *[1] D. F. Crouse, "An Overview of Major Terrestrial, Celestial, and
+ *    Temporal Coordinate Systems for Target Tracking," Formal Report,
+ *    Naval Research Laboratory, no. NRL/FR/5344--16-10,279, 10 Aug. 2016,
+ *    173 pages.
  *
  *March 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
  */

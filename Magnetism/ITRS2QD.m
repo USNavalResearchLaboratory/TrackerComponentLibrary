@@ -5,20 +5,20 @@ function [zQD,apexPoints,exitCode]=ITRS2QD(zCart,modSelParam,a,f,RelTol,AbsTol,m
 %           coordinates. These coordinate systems relate to the Earth's
 %           magnetic field and are useful when considering the ionosphere.
 %
-%INPUTS: zCart  One or more points given in Cartesian coordinates in the
-%               ITRS with units of meters. zCart is a 3XN matrix with each
-%               column having the format [x;y;z]. One would generally 
-%               assume that points are not underground.
-%   modSelParam An optional parameter selecting or providing the magnetic
-%               field model to use. If omitted or an empty matrix is
-%               passed, the International Geomagnetic Reference Field
-%               (IGRF) at the latest epoch of the model is used via the
-%               function getIGRFCoeffs. Possible other values are
-%               1) year The parameters of the IGRF for the specified epoch 
+%INPUTS: zCart One or more points given in Cartesian coordinates in the
+%              ITRS with units of meters. zCart is a 3XN matrix with each
+%              column having the format [x;y;z]. One would generally 
+%              assume that points are not underground.
+%  modSelParam An optional parameter selecting or providing the magnetic
+%              field model to use. If omitted or an empty matrix is passed,
+%              the International Geomagnetic Reference Field (IGRF) at the
+%              latest epoch of the model is used via the function
+%              getIGRFCoeffs. Possible other values are
+%              1) year The parameters of the IGRF for the specified epoch 
 %               year are used. The year is in the Gregorian calendar and is
 %               specified as noted in the comments to the getIGRFCoeffs
 %               function.
-%               2) modSelParam is a structure where modSelParam.algorithm
+%              2) modSelParam is a structure where modSelParam.algorithm
 %               selects the algorithm to use Possible values for
 %               modSelParam.algorithm are 'IGRF', 'WMM' and 'preloaded'. If
 %               modSelParam.algorithm is 'IGRF or 'WMM', then the IGRF or
@@ -31,56 +31,54 @@ function [zQD,apexPoints,exitCode]=ITRS2QD(zCart,modSelParam,a,f,RelTol,AbsTol,m
 %               the fully normalized outputs of getIGRFCoeffs or
 %               getWMMCoeffs. See comments below for the use of custom
 %               coeffients.
-%       a       The semi-major axis of the reference ellipsoid. The
-%               determination of the apex of a magentic field line is
-%               necessary to convert into QD coordinates and this is done
-%               with respect to the maximum magnetic field line height
-%               above the reference ellipsoid. If this argument is omitted
-%               or an empty matrix is passed, the value in
-%               Constants.WGS84SemiMajorAxis is used.
-%       f       The flattening factor of the reference ellipsoid. If this
-%               argument is omitted or an empty matrix is passed, the value
-%               in Constants.WGS84Flattening is used.
-%        RelTol The maximum relative error tolerance allowed for the
-%               Runge-Kutta algorithm to trace the path towards the apex.
-%               If omitted or an empty matrix is passed, the default value
-%               of 1e-6 is used.
-%        AbsTol The absolute error tolerance allowed, a positive scalar.
-%               If omitted or an empty matrix is passed, the default value
-%               of 1e-9 is used. This is used in the Runge-Kutta algorithm
-%               to trace along the path towards the apex, and it is used
-%               for the fminbnd function to find the apex location once it
-%               has been bounded.
-%      maxSteps The maximum allowable number of steps to perform the
-%               adaptive Runge-Kutta integration along a magnetic field
-%               line to find the apex. If omitted, the default of 1024 is
-%               used.
+%            a The semi-major axis of the reference ellipsoid. The
+%              determination of the apex of a magentic field line is
+%              necessary to convert into QD coordinates and this is done
+%              with respect to the maximum magnetic field line height
+%              above the reference ellipsoid. If this argument is omitted
+%              or an empty matrix is passed, the value in
+%              Constants.WGS84SemiMajorAxis is used.
+%            f The flattening factor of the reference ellipsoid. If this
+%              argument is omitted or an empty matrix is passed, the value
+%              in Constants.WGS84Flattening is used.
+%       RelTol The maximum relative error tolerance allowed for the
+%              Runge-Kutta algorithm to trace the path towards the apex. If
+%              omitted or an empty matrix is passed, the default value of
+%              1e-6 is used.
+%       AbsTol The absolute error tolerance allowed, a positive scalar. If
+%              omitted or an empty matrix is passed, the default value of
+%              1e-9 is used. This is used in the Runge-Kutta algorithm to
+%              trace along the path towards the apex, and it is used for
+%              the fminbnd function to find the apex location once it has
+%              been bounded.
+%     maxSteps The maximum allowable number of steps to perform the
+%              adaptive Runge-Kutta integration along a magnetic field line
+%              to find the apex. If omitted, the default of 1024 is used.
 %
-%OUTPUTS: zQD A 3XN matrix of the points in zCart converted into
-%               QD coordinates. This consists of [lambdaQD;phi;h] as in
-%               [1], where phi is the centered-dipole longitude (radians),
-%               lambda is the quasi-dipole latitude (radians), which arises
-%               by tracing magnetic field lines, and h is the height of the
-%               given point above the reference ellipsoid (meters). When
-%               very close to the geomagnetic poles,
-%               lambdaQD is reduced to its asymptotic value (because the
-%               apex height goes to Inf) and phi is undefined as the actual
-%               apex location can no longer be clearly determined, so a
-%               NaN will be returned for phi. If exitCode~=0 for any point,
-%               an empty matrix is returned.
-%    apexPoints A 3XN matrix of the apex points corresponding to the points
-%               in zCart. The apex points are obtained by tracing the
-%               magnetic field line starting from zCart until reaching the
-%               point farthest from the reference ellipsoid. If
-%               exitCode~=0, for any point, an empty matrix is returned.
-%      exitCode A NX1 vector of codes indicating whether an error occurred.
-%               If an error occurs, then the algorithm is halted at the
-%               point causing the error.
-%               0: Integration was successful.
-%               1: Unable to get a small enough step size.
-%               2: Apex not found within the maximum number of iterations.
-%               3: Non-finite number encountered.
-%               4: Problems performing a line search to the peak point.
+%OUTPUTS: zQD A 3XN matrix of the points in zCart converted into QD
+%             coordinates. This consists of [lambdaQD;phi;h] as in [1],
+%             where phi is the centered-dipole longitude (radians), lambda
+%             is the quasi-dipole latitude (radians), which arises by
+%             tracing magnetic field lines, and h is the height of the
+%             given point above the reference ellipsoid (meters). When very
+%             close to the geomagnetic poles, lambdaQD is reduced to its
+%             asymptotic value (because the apex height goes to Inf) and
+%             phi is undefined as the actual apex location can no longer be
+%             clearly determined, so a NaN will be returned for phi. If
+%             exitCode~=0 for any point, an empty matrix is returned.
+%  apexPoints A 3XN matrix of the apex points corresponding to the points
+%             in zCart. The apex points are obtained by tracing the
+%             magnetic field line starting from zCart until reaching the
+%             point farthest from the reference ellipsoid. If exitCode~=0,
+%             for any point, an empty matrix is returned.
+%    exitCode A NX1 vector of codes indicating whether an error occurred.
+%             If an error occurs, then the algorithm is halted at the
+%             point causing the error.
+%             0: Integration was successful.
+%             1: Unable to get a small enough step size.
+%             2: Apex not found within the maximum number of iterations.
+%             3: Non-finite number encountered.
+%             4: Problems performing a line search to the peak point.
 %
 %The quasi-dipole coordinate system is defined in [1]. It is similar to the
 %apex coordinate system. The centered dipole longitude coordinate of QD
@@ -183,7 +181,8 @@ for curPoint=1:numPoints
         ellipsApex=Cart2Ellipse(apexPoint,[],a,f);
         hA=ellipsApex(3);%The ellipsoidal height of the apex point.
         %The longitude is the centered dipole longitude of the apex location;
-        ApexCDSpher=Cart2Sphere(ITRS2CartCD(apexPoint,C(1+1,1+0),C(1+1,1+1),S(1+1,1+1)));
+        %The C inputs are C_{1,0}, C_{1,1}, and S_{1,1}
+        ApexCDSpher=Cart2Sphere(ITRS2CartCD(apexPoint,C(2),C(3),S(3)));
         phi=ApexCDSpher(2);%The centered dipole longitude (azimuth).
     end
     

@@ -1,6 +1,6 @@
 function [ySqrtUpdate,PInvSqrtUpdate]=ESRIFUpdate(ySqrtPred,PInvSqrtPred,z,SR,h,HJacob,innovTrans)
-%%ESRIFUPDATE      Perform the measurement update step in a first-order
-%                  extened square-root information filter.
+%%ESRIFUPDATE Perform the measurement update step in a first-order extened
+%             square-root information filter.
 %
 %INPUTS: ySqrtPred The xDimX1 predicted square root information state. The
 %                  predicted information state is always PInvSqrtPred times
@@ -15,25 +15,25 @@ function [ySqrtUpdate,PInvSqrtUpdate]=ESRIFUpdate(ySqrtPred,PInvSqrtPred,z,SR,h,
 %                  invertible.
 %                h A function handle for the measurement function that
 %                  takes the state as its argument.
-%           HJacob A function handle for the measurement Jacobian
-%                  matrix that takes the target state as a
-%                  parameter.If an empty matrix is passed, then HJacob 
-%                  will be found using numerical differentiation via the
-%                  numDiff function with default parameters.
+%           HJacob A function handle for the measurement Jacobian matrix
+%                  that takes the target state as a parameter.If an empty
+%                  matrix is passed, then HJacob will be found using
+%                  numerical differentiation via the numDiff function with
+%                  default parameters.
 %       innovTrans An optional function handle that transforms the value of
 %                  the difference between the observation and any predicted
 %                  points. This only needs to be supplied when a
-%                  measurement difference must be restricted to a
-%                  certain range. For example, the innovation between two
-%                  angles will be 2*pi if one angle is zero and the other
-%                  2*pi, even though they are the same direction. In such
-%                  an instance, a function handle to the wrapRange function
+%                  measurement difference must be restricted to a certain
+%                  range. For example, the innovation between two angles
+%                  will be 2*pi if one angle is zero and the other 2*pi,
+%                  even though they are the same direction. In such an
+%                  instance, a function handle to the wrapRange function
 %                  with the appropriate parameters should be passed for
 %                  innovTrans.
 %
-%OUTPUTS:ySqrtUpdate The xDimX1 updated information state vector.
-%     PInvSqrtUpdate The xDimXxDim upper-triangular updated inverse square
-%                    root information matrix.
+%OUTPUTS: ySqrtUpdate The xDimX1 updated information state vector.
+%      PInvSqrtUpdate The xDimXxDim upper-triangular updated inverse square
+%                     root information matrix.
 %
 %The algorithm is that of the extended square root information filter that
 %is described in the paper [1], which implements an extended version of the

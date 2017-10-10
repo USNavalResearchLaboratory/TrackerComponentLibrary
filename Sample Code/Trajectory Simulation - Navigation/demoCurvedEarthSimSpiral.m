@@ -1,13 +1,13 @@
 function demoCurvedEarthSimSpiral()
 %%DEMOCURVEDEARTHSIMSPIRAL Demonstrate the simulation of a spiraling target
 %                 on a curved Earth. The target spirals along a nominal
-%                 geodescic curve. For more examples of methods of
+%                 geodesic curve. For more examples of methods of
 %                 determining geodesic and rhumb line (constant heading)
 %                 trajectories, see the example demoCurvedEarthSimLevel.
 %
-%The spiraling dynamic model chosen is one wuch that it is easy to
-%determine which direction the overall flightpath will take when designing
-%a trajectory.
+%The spiraling dynamic model chosen is one where it is easy to determine
+%which direction the overall flightpath will take when designing a
+%trajectory.
 %
 %October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

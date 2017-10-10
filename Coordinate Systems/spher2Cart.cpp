@@ -14,7 +14,7 @@
 *           unit vectors are desired. Note that many math texts use a polar
 *           angle (pi/2-elevation) in place of elevation. A polar angle is
 *           also known as a colatitude, an inclination angle, a zenith
-*           angle, and a normal angle.
+*           angle, and a normal angle. systemType=2 supports a polar angle.
 * systemType An optional parameter specifying the axis from which the
 *           angles are measured in radians. Possible values are
 *           0 (The default if omitted) Azimuth is measured 
@@ -28,6 +28,9 @@
 *             (towards the y-axis). This is consistent with some spherical
 *             coordinate systems that use the z axis as the boresight
 *             direction of the radar.
+*           2 This is the same as 0 except instead of being given
+*             elevation, one is given the angle away from the z-axis, which
+*             is (pi/2-elevation).
 * useHalfRange An optional boolean value specifying whether the bistatic
 *           (round-trip) range value has been divided by two. This normally
 *           comes up when operating in monostatic mode (the most common
@@ -144,7 +147,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     } else {
         systemType=getIntFromMatlab(prhs[1]);
         
-        if(systemType!=0&&systemType!=1) {
+        if(systemType!=0&&systemType!=1&&systemType!=2) {
             mexErrMsgTxt("Invalid system type specified.");
             return;
         }

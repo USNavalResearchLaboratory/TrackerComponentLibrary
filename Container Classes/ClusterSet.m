@@ -11,7 +11,7 @@ classdef ClusterSet < handle
 %columns. The data for all of the rows is stored in memory as one
 %contiguous chunk, but is accessed in the same manner A(r,c) for element c
 %in cluster r if A is an instance of the ClusterSet class. The insertion
-%and deletion of data are not supported.
+%and deletion of data are not supported. However, one can overwrite values.
 %
 %The ClusterSet class is used, for example, to store coefficients of
 %varying degrees and order for spherical harmonic synthesis. As the degree
@@ -106,46 +106,58 @@ classdef ClusterSet < handle
             if(strcmp(S.type,'()')==true)
                 switch(length(S.subs))
                     case 1
-                        if(strcmp(S.subs{1},':')==true)
-                            val=CSObj.clusterEls;
-                            return
-                        elseif(isnumeric(S.subs{1}))
-                            if(isscalar(S.subs{1}))%Return all of the elements in the selected cluster.
-                                
-                                idx=CSObj.offsetArray(S.subs{1})+(1:CSObj.clusterSizes(S.subs{1}));
-                                val=CSObj.clusterEls(idx);
-                                return
-                            else%Return elements from multiple clusters.
-                                elementCount=sum(CSObj.clusterSizes(S.subs{1}));
-                                numClust=length(S.subs{1});
-                                
-                                val=zeros(elementCount,1);
-                                valStartIdx=1;
-                                for clustIdx=1:numClust
-                                    curClust=S.subs{1}(clustIdx);
-                                    clustStart=1+CSObj.offsetArray(curClust);
-                                    clustEnd=clustStart+CSObj.clusterSizes(curClust)-1;
-                                    
-                                    valEndIdx=valStartIdx+CSObj.clusterSizes(curClust)-1;
-                                    val(valStartIdx:valEndIdx)=CSObj.clusterEls(clustStart:clustEnd);
-                                    valStartIdx=valEndIdx+1;
-                                end
-                                return
+                        if(islogical(S.subs{1}))
+                            if(length(S.subs{1})~=length(CSObj.clusterEls))
+                                error('Invalid Indexation Given')
                             end
+                    
+                            val=CSObj.clusterEls(S.subs{1});
                         else
-                            error('Invalid Indexation Given')
+                            if(strcmp(S.subs{1},':')==true)
+                                val=CSObj.clusterEls;
+                                return
+                            elseif(isnumeric(S.subs{1}))
+                                if(isscalar(S.subs{1}))%Return all of the elements in the selected cluster.
+
+                                    idx=CSObj.offsetArray(S.subs{1})+(1:CSObj.clusterSizes(S.subs{1}));
+                                    val=CSObj.clusterEls(idx);
+                                    return
+                                else%Return elements from multiple clusters.
+                                    elementCount=sum(CSObj.clusterSizes(S.subs{1}));
+                                    numClust=length(S.subs{1});
+
+                                    val=zeros(elementCount,1);
+                                    valStartIdx=1;
+                                    for clustIdx=1:numClust
+                                        curClust=S.subs{1}(clustIdx);
+                                        clustStart=1+CSObj.offsetArray(curClust);
+                                        clustEnd=clustStart+CSObj.clusterSizes(curClust)-1;
+
+                                        valEndIdx=valStartIdx+CSObj.clusterSizes(curClust)-1;
+                                        val(valStartIdx:valEndIdx)=CSObj.clusterEls(clustStart:clustEnd);
+                                        valStartIdx=valEndIdx+1;
+                                    end
+                                    return
+                                end
+                            else
+                                error('Invalid Indexation Given')
+                            end
                         end
                     case 2%Two indices are given
                         if(~isnumeric(S.subs{1})||~isscalar(S.subs{1}))
                             error('Invalid Indexation Given')
                         end
-                        
+
                         if(isnumeric(S.subs{2}))
                             if(S.subs{2}>CSObj.clusterSizes(S.subs{1}))
                                 error('Attempt to read past the end of a cluster.')
                             end
-
-                            idx=CSObj.offsetArray(S.subs{1})+S.subs{2};
+                            
+                            %The double conversions are necessary to avoid
+                            %errors if, for example, a subscript vector
+                            %passed is doubles but the offsets are an
+                            %integer type.
+                            idx=double(CSObj.offsetArray(S.subs{1}))+double(S.subs{2});
                             val=CSObj.clusterEls(idx);
                         else
                             if(strcmp(S.subs{2},':')==true)%Return all of the elements in the selected cluster.
@@ -181,7 +193,14 @@ classdef ClusterSet < handle
             if(strcmp(S.type,'()')==true)
                 switch(length(S.subs))
                     case 1
-                        if(strcmp(S.subs{1},':')==true)
+                        if(islogical(S.subs{1}))
+                            if(length(S.subs{1})~=length(CSObj.clusterEls))
+                                error('Invalid Indexation Given')
+                            end
+                    
+                            CSObj.clusterEls(S.subs{1})=x;
+                            return
+                        elseif(strcmp(S.subs{1},':')==true)
                             CSObj.clusterEls(:)=x;
                             return
                         elseif(isnumeric(S.subs{1}))
@@ -199,8 +218,12 @@ classdef ClusterSet < handle
                             if(S.subs{2}>CSObj.clusterSizes(S.subs{1}))
                                 error('Attempt to read past the end of a cluster.')
                             end
-
-                            idx=CSObj.offsetArray(S.subs{1})+S.subs{2};
+                            
+                            %The double conversions are necessary to avoid
+                            %errors if, for example, a subscript vector
+                            %passed is doubles but the offsets are an
+                            %integer type.
+                            idx=double(CSObj.offsetArray(S.subs{1}))+double(S.subs{2});
                             CSObj.clusterEls(idx)=x;
                         else
                             if(strcmp(S.subs{2},':')==true)%Set all of the elements in the selected cluster.
@@ -220,7 +243,7 @@ classdef ClusterSet < handle
         end
         
         function val=numClusters(CSObj)
-        %NUMCLUSTERS    Determine the number of clusters present.
+        %NUMCLUSTERS Determine the number of clusters present.
             val=length(CSObj.clusterSizes);
         end
         
@@ -239,6 +262,7 @@ classdef ClusterSet < handle
         %CLUSTSIZE Determine the size of the cluster of index clustIdx. If
         %          no index is specified, then all of the cluster sizes are
         %          returned.
+        
             if(nargin==1)
                 val=CSObj.clusterSizes;
             else

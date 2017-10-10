@@ -1,29 +1,29 @@
 /*NALEGENDRECOSRAT A C++ implementation to evaluate
- *                 \bar{P}_{nm}(cos(theta))/u^m for all n from 0 to M and
- *                  for each n for all m from 0 to n. Also evaluate
- *                  D{\bar{P}_{nm}(cos(theta))}/u^m and
- *                  D2{\bar{P}_{nm}(cos(theta))}/u^m where D{} is the first
- *                  derivative operator with respect to theta and D2{} is
- *                  the second derivative operator with respect to theta.
- *                  \bar{P}_{nm}(x) is the fully normalized associated
- *                  Legendre function of x of degree n and order m.
- *                  u=sin(theta). All of the values can be scaled by a
- *                  factor of scalFac, if desired, to help prevent
- *                  overflows with high degrees and orders.
+ *                \bar{P}_{nm}(cos(theta))/u^m for all n from 0 to M and
+ *                for each n for all m from 0 to n, where
+ *                u=abs(sin(theta)). \bar{P}_{nm}(x) is the fully
+ *                normalized associated Legendre function of x of degree n
+ *                and order m. Also evaluate
+ *                D{\bar{P}_{nm}(cos(theta))}/u^m and
+ *                D2{\bar{P}_{nm}(cos(theta))}/u^m where D{} is the first
+ *                derivative operator with respect to theta and D2{} is the
+ *                second derivative operator with respect to theta. All of
+ *                the values can be scaled by a factor of scalFac, if
+ *                desired, to help prevent overflows with high degrees and
+ *                orders.
  *
- *INPUTS: theta     An angle in radians.
- *       maxDeg     The maximum degree and order of the output. This should
- *                  be at least 2.
- *     scalFactor   A scale factor to help prevent overflow of the results.
- *                  In the Holmes and Featherstone paper, discussed below,
- *                  a value of 10^(-280) is used.
+ *INPUTS: theta An angle in radians.
+ *      maxDeg The maximum degree and order of the output. This must be
+ *             >=0.
+ *  scalFactor A scale factor to help prevent overflow of the results. In
+ *             [1], discussed below, a value of 10^(-280) is used.
  *
- *OUTPUTS: PBarUVals An instance of the ClusterSet class such that
- *                   PBarUVals(n+1,m+1)=scalFac*\bar{P}_{nm}(cos(theta))/u^m.
- *  dPBarUValsdTheta An instance of the ClusterSet class such that
- *                   dPBarUValsdTheta(n+1,m+1)=scalFac*D{\bar{P}_{nm}(cos(theta))}/u^m
- *d2PBarUValsdTheta2 An instance of the ClusterSet class such that
- *                   dPBarUValsdTheta(n+1,m+1)=scalFac*D2{\bar{P}_{nm}(cos(theta))}/u^m
+ *OUTPUTS: PBarUVals An instance of the CountingClusterSet class such that
+ *                  PBarUVals(n+1,m+1)=scalFac*\bar{P}_{nm}(cos(theta))/u^m.
+ * dPBarUValsdTheta An instance of the CountingClusterSet class such that
+ *                  dPBarUValsdTheta(n+1,m+1)=scalFac*D{\bar{P}_{nm}(cos(theta))}/u^m
+ * d2PBarUValsdTheta2 An instance of the CountingClusterSet class such that
+ *                  d2PBarUValsdTheta2(n+1,m+1)=scalFac*D2{\bar{P}_{nm}(cos(theta))}/u^m
  *
  *Comments are given in the Matlab implementation. This
  *implementation tends to be approximately 11,000 times faster than the
@@ -34,7 +34,7 @@
  *be passed. Thus, more than double the normal amount of space is required
  *for the return values.
  *
- **The algorithm can be compiled for use in Matlab using the 
+ *The algorithm can be compiled for use in Matlab using the 
  *CompileCLibraries function.
  *
  *The algorithm is run in Matlab using the command format
@@ -52,56 +52,48 @@
 
 void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray *prhs[]) {
     double theta, scalFactor;
-    ClusterSetCPP<double> PBarUVals;
-    ClusterSetCPP<double> dPBarUValsdTheta;//The first derivatives
-    ClusterSetCPP<double> d2PBarUValsdTheta2;//The second derivatives
+    CountingClusterSetCPP<double> PBarUVals;
+    CountingClusterSetCPP<double> dPBarUValsdTheta;//The first derivatives
+    CountingClusterSetCPP<double> d2PBarUValsdTheta2;//The second derivatives
     size_t M, numPBarU,i;
     mxArray *CSRetVal;
-    mxArray *clusterElsMATLAB,*clusterSizesMATLAB, *offsetArrayMATLAB;
-    mxArray *clusterEls1stDerivMATLAB;
+    mxArray *clusterElsMATLAB;
+    mxArray *clusterEls1stDerivMATLAB, *numClustMATLAB;
     
     if(nrhs!=3){
         mexErrMsgTxt("Incorrect number of inputs.");
         return;
     }
+    
+    if(nlhs>3) {
+        mexErrMsgTxt("Incorrect number of outputs.");
+        return; 
+    }
 
     theta=getDoubleFromMatlab(prhs[0]);
+    //M>=0. This command will throw an error if the value is negative.
     M=getSizeTFromMatlab(prhs[1]);
     scalFactor=getDoubleFromMatlab(prhs[2]);
-    
-    if(M<2) {
-       mexErrMsgTxt("The maximum order should be at least 2.");
-       return; 
-    }
     
     numPBarU=(M+1)*(M+2)/2;
     
     //Allocate space for the results.
     clusterElsMATLAB=mxCreateDoubleMatrix(numPBarU,1,mxREAL);
-    clusterSizesMATLAB=allocUnsignedSizeMatInMatlab(M+1,1);
-    offsetArrayMATLAB=allocUnsignedSizeMatInMatlab(M+1,1);
-    
+    {
+        double temp=static_cast<double>(M+1);
+        numClustMATLAB=doubleMat2Matlab(&temp,1,1);
+    }
+
     PBarUVals.numClust=M+1;
     PBarUVals.totalNumEl=numPBarU;
     PBarUVals.clusterEls=reinterpret_cast<double*>(mxGetData(clusterElsMATLAB));
-    PBarUVals.offsetArray=reinterpret_cast<size_t*>(mxGetData(offsetArrayMATLAB));
-    PBarUVals.clusterSizes=reinterpret_cast<size_t*>(mxGetData(clusterSizesMATLAB));
-    
-    //Initialize the offset array and cluster sizes.
-    PBarUVals.offsetArray[0]=0;
-    PBarUVals.clusterSizes[0]=1;
-    for(i=1;i<=M;i++){
-        PBarUVals.clusterSizes[i]=i+1;
-        PBarUVals.offsetArray[i]=PBarUVals.offsetArray[i-1]+PBarUVals.clusterSizes[i-1];
-    }
-    
-    NALegendreCosRatCPP(PBarUVals, theta,scalFactor);
+
+    NALegendreCosRatCPP(PBarUVals,theta,scalFactor);
     
     //Set the first return value
-    mexCallMATLAB(1,&CSRetVal,0, 0, "ClusterSet");
+    mexCallMATLAB(1,&CSRetVal,0, 0, "CountingClusterSet");
     mxSetProperty(CSRetVal,0,"clusterEls",clusterElsMATLAB);
-    mxSetProperty(CSRetVal,0,"clusterSizes",clusterSizesMATLAB);
-    mxSetProperty(CSRetVal,0,"offsetArray",offsetArrayMATLAB);
+    mxSetProperty(CSRetVal,0,"numClust",numClustMATLAB);
     
     plhs[0]=CSRetVal;
 
@@ -111,16 +103,13 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         dPBarUValsdTheta.numClust=M+1;
         dPBarUValsdTheta.totalNumEl=numPBarU;
         dPBarUValsdTheta.clusterEls=reinterpret_cast<double*>(mxGetData(clusterEls1stDerivMATLAB));
-        dPBarUValsdTheta.offsetArray=reinterpret_cast<size_t*>(mxGetData(offsetArrayMATLAB));
-        dPBarUValsdTheta.clusterSizes=reinterpret_cast<size_t*>(mxGetData(clusterSizesMATLAB));
 
         NALegendreCosRatDerivCPP(dPBarUValsdTheta, PBarUVals, theta);
         
         //Set the second return value
-        mexCallMATLAB(1,&CSRetVal,0, 0, "ClusterSet");
+        mexCallMATLAB(1,&CSRetVal,0, 0, "CountingClusterSet");
         mxSetProperty(CSRetVal,0,"clusterEls",clusterEls1stDerivMATLAB);
-        mxSetProperty(CSRetVal,0,"clusterSizes",clusterSizesMATLAB);
-        mxSetProperty(CSRetVal,0,"offsetArray",offsetArrayMATLAB);
+        mxSetProperty(CSRetVal,0,"numClust",numClustMATLAB);
 
         plhs[1]=CSRetVal;
     }
@@ -131,16 +120,13 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         d2PBarUValsdTheta2.numClust=M+1;
         d2PBarUValsdTheta2.totalNumEl=numPBarU;
         d2PBarUValsdTheta2.clusterEls=reinterpret_cast<double*>(mxGetData(clusterEls2ndDerivMATLAB));
-        d2PBarUValsdTheta2.offsetArray=reinterpret_cast<size_t*>(mxGetData(offsetArrayMATLAB));
-        d2PBarUValsdTheta2.clusterSizes=reinterpret_cast<size_t*>(mxGetData(clusterSizesMATLAB));
         
         NALegendreCosRatDeriv2CPP(d2PBarUValsdTheta2, dPBarUValsdTheta, PBarUVals,theta);
         
         //Set the third return value
-        mexCallMATLAB(1,&CSRetVal,0, 0, "ClusterSet");
+        mexCallMATLAB(1,&CSRetVal,0, 0, "CountingClusterSet");
         mxSetProperty(CSRetVal,0,"clusterEls",clusterEls2ndDerivMATLAB);
-        mxSetProperty(CSRetVal,0,"clusterSizes",clusterSizesMATLAB);
-        mxSetProperty(CSRetVal,0,"offsetArray",offsetArrayMATLAB);
+        mxSetProperty(CSRetVal,0,"numClust",numClustMATLAB);
 
         plhs[2]=CSRetVal;
         mxDestroyArray(clusterEls2ndDerivMATLAB);
@@ -151,8 +137,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     
     //Free the buffers. The mxSetProperty command copied the data.
     mxDestroyArray(clusterElsMATLAB);
-    mxDestroyArray(clusterSizesMATLAB);
-    mxDestroyArray(offsetArrayMATLAB);
+    mxDestroyArray(numClustMATLAB);
 }
 
 /*LICENSE:

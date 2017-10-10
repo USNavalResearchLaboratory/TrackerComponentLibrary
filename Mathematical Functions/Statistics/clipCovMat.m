@@ -1,21 +1,30 @@
-function P=clipCovMat(P,maxVals)
+function P=clipCovMat(P,minVals,maxVals)
 %%CLIPCOVMAT Force the diagonal elements of a covariance matrix to be no
-%         larger than certain values while still keeping the matrix a valid
-%         covariance matrix. This function is useful if one wishes to set a
-%         maximum value on the uncertainty in certain components of a
-%         target state based on reasonable physical upper bounds. For
-%         example, if a target type cannot go over 100m/s, but the 99%
-%         confidence region of the target covers +/-10^8 meters per second,
-%         it can be reasonable to shrink the region.
+%         smaller than and nor larger than certain values while still
+%         keeping the matrix a valid covariance matrix. This function is
+%         useful if one wishes to set a maximum value on the uncertainty in
+%         certain components of a target state based on reasonable physical
+%         lower and upper bounds. For example, if a target type cannot go
+%         over 100m/s, but the 99% confidence region of the target covers
+%         +/-10^8 meters per second, it is reasonable to shrink the region.
 %
-%INPUTS:  P An NXNXnumMats set of numMats covariance matrices.
-%   maxVals A 1XN or NX1 vector that contains the maximum positive value
-%           allowed on each diagonal element of the matrices. If only a
-%           scalar is passed, then the same value is used for all N
-%           dimensions.
+%INPUTS: P An NXNXnumMats set of numMats covariance matrices. If minVals is
+%          passed, it is assumed that none of the diagonal elements
+%          equals zero.
+%  minVals A 1XN or NX1 vector that contains the minimum positive value
+%          allowed on each diagonal element of the matrices. If only a
+%          scalar is passed, then the same value is used for all N
+%          dimensions. If no lower bounds are set, then an empty matrix can
+%          be passed.
+%  maxVals A 1XN or NX1 vector that contains the maximum positive value
+%          allowed on each diagonal element of the matrices. If only a
+%          scalar is passed, then the same value is used for all N
+%          dimensions. If no upper bounds are set, then an empty matrix can
+%          be passed. it is assumed that maxVals(i)>minVals(i).
 %
 %OUTPUTS: P The NXNXnumMats set of matrices after scaling so the diagonal
-%           elements are no larger than the values in maxVals.
+%           elements are no larger than the values in maxVals and no
+%           smaller than the values in minVals.
 %
 %The diagonal elements of a covariance matrix are related to the largest
 %rectangle that a certain uncertainty ellipsoid can be placed in. This is
@@ -28,7 +37,8 @@ function P=clipCovMat(P,maxVals)
 %a diagonal matrix S such that the diagonal elements of P that are too
 %large are scaled to the appropriate size. One would hope that this type of
 %scaling would retain reasonable covariance cross terms for a target
-%tracking algorithm. 
+%tracking algorithm. Due to the scaling, this function cannot handle zero
+%diagonal elements that are too small.
 %
 %REFERENCES:
 %[1] A. B. Poore, "Complexity reduction in MHT/MFA tracking," in
@@ -41,16 +51,37 @@ function P=clipCovMat(P,maxVals)
 numDim=length(P);
 numMats=size(P,3);
 
+if(nargin<3)
+   maxVals=[];%isscalar will be false. 
+end
+
+if(isscalar(minVals))
+    minVals=minVals*ones(numDim,1);
+end
+
 if(isscalar(maxVals))
     maxVals=maxVals*ones(numDim,1);
 end
 
+if(isempty(maxVals)&&isempty(minVals))
+    return; 
+end
+
 for curMat=1:numMats
     S=eye(numDim,numDim);
-    for curDim=1:numDim
-       if(P(curDim,curDim,curMat)>maxVals(curDim))
-           S(curDim,curDim)=sqrt(maxVals(curDim)/P(curDim,curDim,curMat));
-       end
+    if(~isempty(maxVals))
+        for curDim=1:numDim
+           if(P(curDim,curDim,curMat)>maxVals(curDim))
+               S(curDim,curDim)=sqrt(maxVals(curDim)/P(curDim,curDim,curMat));
+           end
+        end
+    end
+    if(~isempty(minVals))
+        for curDim=1:numDim
+           if(P(curDim,curDim,curMat)<minVals(curDim))
+               S(curDim,curDim)=sqrt(minVals(curDim)/P(curDim,curDim,curMat));
+           end
+        end
     end
     P(:,:,curMat)=S*P(:,:,curMat)*S';
 end

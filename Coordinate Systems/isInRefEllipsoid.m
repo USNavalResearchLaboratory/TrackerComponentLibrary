@@ -6,16 +6,15 @@ function val=isInRefEllipsoid(z,a,f)
 %                   underground when terrain data are not available. The
 %                   WGS-84 reference ellipsoid is a logical choice.
 %
-%INPUTS:    z       A point in [x;y;z] Cartesian coordinates.
-%           a       The semi-major axis of the reference ellipsoid. If
-%                   this argument is omitted, the value in
-%                   Constants.WGS84SemiMajorAxis is used.
-%           f       The flattening factor of the reference ellipsoid. If
-%                   this argument is omitted, the value in
-%                   Constants.WGS84Flattening is used.
+%INPUTS: z A point in [x;y;z] Cartesian coordinates.
+%        a The semi-major axis of the reference ellipsoid. If this argument
+%          is omitted, the value in Constants.WGS84SemiMajorAxis is used.
+%        f The flattening factor of the reference ellipsoid. If this
+%          argument is omitted, the value in Constants.WGS84Flattening is
+%          used.
 %
-%OUTPUTS: val       True if the point z is within the ellipsoid and false
-%                   if the point is not within the reference ellipsoid.
+%OUTPUTS: val True if the point z is within the ellipsoid and false if the
+%             point is not within the reference ellipsoid.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

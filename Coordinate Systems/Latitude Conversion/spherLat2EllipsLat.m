@@ -5,15 +5,15 @@ function ellipsLat=spherLat2EllipsLat(spherLat,f)
 %                     a point on the surface of the reference ellipsoid.
 %
 %INPUTS: spherLat A vector or matrix of spherical (geocentric) latitudes
-%                  in radians. These range from -pi/2 to pi/2, and are
-%                  measured up from the x-y plane.
-%           f      The flattening factor of the reference ellipsoid. If
-%                  this argument is omitted, the value in
-%                  Constants.WGS84Flattening is used.
+%                 in radians. These range from -pi/2 to pi/2, and are
+%                 measured up from the x-y plane.
+%               f The flattening factor of the reference ellipsoid. If
+%                 this argument is omitted, the value in
+%                 Constants.WGS84Flattening is used.
 %
-%OUTPUTS:ellipsLat The ellipsoidal (geodetic) latitudes corresponding to
-%                  the spherical latitudes in spherLat. This ranges from
-%                  -pi/2 to pi/2.
+%OUTPUTS: ellipsLat The ellipsoidal (geodetic) latitudes corresponding to
+%                   the spherical latitudes in spherLat. This ranges from
+%                   -pi/2 to pi/2.
 %
 %The formula for converting between spherical and ellipsoidal latitudes is
 %in Section 3.4 of [1].

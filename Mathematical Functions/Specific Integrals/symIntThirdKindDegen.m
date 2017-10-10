@@ -6,10 +6,10 @@ function intVal=symIntThirdKindDegen(x,y,z)
 %                      elliptic integrals. Sometimes, the integral is
 %                      referred to as RD.
 %
-%INPUTS: x,y,z   The three parameters of the function. z cannot be zero and
-%                at most one of x and y can be zero. When complex, the
-%                values are assumed to have complex phase angles less than
-%                pi in magnitude.
+%INPUTS: x,y,z The three parameters of the function. z cannot be zero and
+%              at most one of x and y can be zero. When complex, the values
+%              are assumed to have complex phase angles less than pi
+%              in magnitude.
 %
 %OUTPUTS: intVal The value of the degenerate symmetric integral of the
 %                third kind given x, y, and z.

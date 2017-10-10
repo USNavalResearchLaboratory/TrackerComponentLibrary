@@ -5,29 +5,24 @@ function xList=RungeKAtTimes(xInit,theTimes,f,deltaTMax,order,solutionChoice)
 %               allowed in the Runge-Kutta method might not line up with
 %               the times at which the state is desired.
 %
-%INPUTS:    xInit    The initial value of the state (scalar or vector) over
-%                    which integration is being performed.
-%        theTimes    The times at which state estimates are desired.
-%                    theTimes(1) is the time of xInit.
-%           f        f(xVal,curT) returns the derivative of xVal taken at
-%                    time curT.
-%          deltaTMax The maximum allowable step size in the Runge-Kutta
-%                    integration between times in theTimes. If this
-%                    parameter is omitted, it is just set to Inf, meaning
-%                    that the steps will be at the actual times.
-%           order   The order of the Runge-Kutta method. If this parameter
-%                   is omitted, then the default order of 4 is used. Order
-%                   can range from 1 to 7.
-%   solutionChoice  When multiple formulae are implemented, this selects
-%                   which one to use. Otherwise, this parameter is not
-%                   used. Currently, only the order=4 method has multiple
-%                   solutions implemented in which case omitting this
-%                   parameter or setting it to zero used the Dormand and
-%                   Prince Algorithm, and setting it to 1 uses the Fehlberg
-%                   algorithm.
+%INPUTS: xInit The initial value of the state (scalar or vector) over which
+%              integration is being performed.
+%     theTimes The times at which state estimates are desired. theTimes(1)
+%              is the time of xInit.
+%            f f(xVal,curT) returns the derivative of xVal taken at time
+%              curT.
+%    deltaTMax The maximum allowable step size in the Runge-Kutta
+%              integration between times in theTimes. If this parameter is
+%              omitted, it is just set to Inf, meaning that the steps will
+%              be at the actual times.
+%        order The order of the Runge-Kutta method. If this parameter is
+%              omitted, then the default order of 4 is used. Order can
+%              range from 1 to 7.
+% solutionChoice When multiple formulae are implemented, this selects which
+%              one to use. Otherwise, this parameter is not used.
 %
-%OUTPUTS:   xList   The state at the times given in times xList(:,1) is the
-%                   same as xInit.
+%OUTPUTS: xList The state at the times given in times xList(:,1) is the
+%               same as xInit.
 %
 %This technique tries to propagate the state to the desired times taking
 %the largest uniform stepsize between samples possible that does not exceed

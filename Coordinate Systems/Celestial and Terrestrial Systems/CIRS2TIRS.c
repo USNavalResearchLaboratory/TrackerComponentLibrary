@@ -2,18 +2,18 @@
  *           Celestial Intermediate Reference System (CIRS) to the 
  *           Terrestrial Intermediate Reference System (TIRS).
  *
- *INPUTS:   x   The NXnumVec collection of vectors to convert. N can be 3,
+ *INPUTS:     x The NXnumVec collection of vectors to convert. N can be 3,
  *              or 6. If the vectors are 3D, then they can be either
  *              position or velocity. 6D vectors are assumed to be position
  *              and velocity, whereby the angular velocity of the Earth's
  *              rotation is taken into account using a non-relativistic
  *              formula.
- *Jul1, Jul2    Two parts of a Julian date given in terrestrial time (TT).
+ *   Jul1, Jul2 Two parts of a Julian date given in terrestrial time (TT).
  *              The units of the date are days. The full date is the sum of
  *              both terms. The date is broken into two parts to provide
  *              more bits of precision. It does not matter how the date is
  *              split.
- *deltaTTUT1    An optional parameter specifying the difference between TT
+ *   deltaTTUT1 An optional parameter specifying the difference between TT
  *              and UT1 in seconds. This information can be obtained from
  *http://www.iers.org/nn_11474/IERS/EN/DataProducts/EarthOrientationData/eop.html?__nnn=true
  *              or 
@@ -21,17 +21,17 @@
  *              If this parameter is omitted or if an empty matrix is
  *              passed, then the value provided by the function getEOP
  *              will be used instead.
- *LOD           The difference between the length of the day using
+ *          LOD The difference between the length of the day using
  *              terrestrial time, international atomic time, or UTC without
  *              leap seconds and the length of the day in UT1. This is an
  *              instantaneous parameter (in seconds) proportional to the
  *              rotation rate of the Earth. This is only needed if more
  *              than just position components are being converted.
  *
- *OUTPUTS: vec  A 3XN or 6XN matrix of vectors converted from CIRS
- *              coordinates to TIRS coordinates.
- *       rotMat The 3X3 rotation matrix used for the conversion of the
- *              positions.
+ *OUTPUTS: vec A 3XN or 6XN matrix of vectors converted from CIRS
+ *             coordinates to TIRS coordinates.
+ *      rotMat The 3X3 rotation matrix used for the conversion of the
+ *             positions.
  *
  *The conversion functions from the International Astronomical Union's
  *(IAU) Standard's of Fundamental Astronomy library are put together to get
@@ -60,9 +60,10 @@
  *Different celestial coordinate systems are compared in [1].
  *
  *REFERENCES:
- *[1] D. F. Crouse, "An overview of major terrestrial, celestial, and
- *    temporal coordinate systems for target tracking", Report, U. S. Naval
- *    Research Laboratory, to appear, 2016.
+ *[1] D. F. Crouse, "An Overview of Major Terrestrial, Celestial, and
+ *    Temporal Coordinate Systems for Target Tracking," Formal Report,
+ *    Naval Research Laboratory, no. NRL/FR/5344--16-10,279, 10 Aug. 2016,
+ *    173 pages.
  *
  *April 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
  */

@@ -15,128 +15,115 @@ function [xVals,exitCodes]=homotopySolver(x0,f,FJacob,c,systemType,startForward,
 %                Runge-Kutta pair of too low an order is given and the
 %                stepsize must be reduced too far.
 %
-%INPUTS:         x0 An xDimX1 initial estimate to the homotopy problem
-%                   f(x)=x or f(x)=c. The initial estimate can often be 
-%                   fairely bad.
-%                 f A function handle that takes x as a parameter and
-%                   returns a value having the same dimensionality as x.
-%            FJacob A function handle that provides the Jacobian matrix of 
-%                   F. This is the matrix of partial derivatives such that
-%                   FJacob(i,j) hold the derivative of the ith component of
-%                   f with respect to the jth component of x. If omitted,
-%                   the default value using the function.
-%                 c The value c to use when solving the problem f(x)=c. If
-%                   one wishes to solve the problem f(x)=x, then this
-%                   parameter is ignored. If omitted, a default value of
-%                   zero is used.
-%        systemType Specified the homotopy that is being solved. Possible
-%                   values are:
-%                   0) (The default if omitted). The problem being solved
-%                      is f(x)=x. The corresponding homotopy is:
-%                      0=lambda*(x-f(x))+(1-lambda)*(x-a)
-%                   1) The problem being solved is f(x)=c. The
-%                      corresponding homotopy is:
-%                      0=lambda*(c-f(x))+(1-lambda)*(a-f(x))
-%                      which is equivalent to
-%                      0=a+lambda*(c-a)-f(x)
-%                   2) The problem being solved is f(x)=c. The
-%                      corresponding homotopy is:
-%                      0=lambda*(c-f(x))+(1-lambda)*(x-a)
-%                      This homotopy generally seems to not work as well as
-%                      homotopy 1.
-%                   3) The problem being solved is f(x)=x. The
-%                      corresponding homotopy is:
-%                      0=lambda*(x-f(x))+(1-lambda)*(a-f(x))
-%                      which is equivalent to 
-%                      0=a+lambda*(x-a)-f(x)
-%                      This homotopy seems to not work as well as homotopy
-%                      0.
-%                   4) The problem being solved is f(x)=0. The
-%                      corresponding homotopy is
-%                      0=lambda*f(x)+(1-lambda)*((x-a)+(f(x)-f(a)))
-%                      which is equivalent to
-%                      0=lambda*((f(a)+a)-x)+x+f(x)-(f(a)+a)
-%                      or if the f(a)-a terms are lumped together, is
-%                      equivalent to
-%                      0=lambda*(a-x)+x+f(x)-a
-%       startForward An optional parameter indicating whether the homotopy
-%                    solver should start going forward (in the direction of
-%                    increasing lambda) or backward (in the direction of
-%                    decreasing lambda). The default if omitted or an empty
-%                    matrix is passed is true. One should generally only
-%                    consider starting backwards if multiple solutions
-%                    might exist.
-%             maxSol Specify the maximum number of solutions that will be
-%                    attempted to be found. After one solution is found,
-%                    the function tries to continue on the path in the same
-%                    direction to find another time when the homotopy
-%                    parameter lambda=1. Note that finite precision errors
-%                    can cause it to visit multiple solutions that are
-%                    essentially equal, or the homotopy path can loop
-%                    around so that it does revisit past solutions. Also,
-%                    when it interpolates between steps to find one
-%                    solution, it does not check whether the interpolating
-%                    polynomial crosses lambda=1 multiple times, so
-%                    closely-spaced solutions can also be missed. The
-%                    default if this parameter is omitted or an empty
-%                    matrix is passed is 1.
-%       initStepSize An optional value specifying the initial step size
-%                    for the adaptive Runge-Kutta method. If omitted or an
-%                    empty matrix is passed, an initial step size of 0.1 is
-%                    used. Depending on the scale of the problem and the
-%                    inaccuracy of the initial estimate, that might be too
-%                    small. However, in general, it usually works fairely
-%                    well.
+%INPUTS: x0 An xDimX1 initial estimate to the homotopy problem f(x)=x or
+%           f(x)=c. The initial estimate can often be  fairely bad.
+%         f A function handle that takes x as a parameter and returns a
+%           value having the same dimensionality as x.
+%    FJacob A function handle that provides the Jacobian matrix of F. This
+%           is the matrix of partial derivatives such that FJacob(i,j) hold
+%           the derivative of the ith component of f with respect to the
+%           jth component of x. If omitted, the default value using the
+%           function.
+%         c The value c to use when solving the problem f(x)=c. If one
+%           wishes to solve the problem f(x)=x, then this parameter is
+%           ignored. If omitted, a default value of zero is used.
+% systemType Specified the homotopy that is being solved. Possible values
+%           are:
+%           0) (The default if omitted). The problem being solved is
+%              f(x)=x. The corresponding homotopy is:
+%              0=lambda*(x-f(x))+(1-lambda)*(x-a)
+%           1) The problem being solved is f(x)=c. The corresponding
+%              homotopy is:
+%              0=lambda*(c-f(x))+(1-lambda)*(a-f(x))
+%              which is equivalent to
+%              0=a+lambda*(c-a)-f(x)
+%           2) The problem being solved is f(x)=c. The corresponding
+%              homotopy is:
+%              0=lambda*(c-f(x))+(1-lambda)*(x-a)
+%              This homotopy generally seems to not work as well as
+%              homotopy 1.
+%           3) The problem being solved is f(x)=x. The corresponding
+%              homotopy is:
+%              0=lambda*(x-f(x))+(1-lambda)*(a-f(x))
+%              which is equivalent to 
+%              0=a+lambda*(x-a)-f(x)
+%              This homotopy seems to not work as well as homotopy 0.
+%           4) The problem being solved is f(x)=0. The corresponding
+%              homotopy is
+%              0=lambda*f(x)+(1-lambda)*((x-a)+(f(x)-f(a)))
+%              which is equivalent to
+%              0=lambda*((f(a)+a)-x)+x+f(x)-(f(a)+a)
+%              or if the f(a)-a terms are lumped together, is equivalent to
+%              0=lambda*(a-x)+x+f(x)-a
+% startForward An optional parameter indicating whether the homotopy
+%           solver should start going forward (in the direction of
+%           increasing lambda) or backward (in the direction of decreasing
+%           lambda). The default if omitted or an empty matrix is passed is
+%           true. One should generally only consider starting backwards if
+%           multiple solutions might exist.
+%    maxSol Specify the maximum number of solutions that will be attempted
+%           to be found. After one solution is found, the function tries to
+%           continue on the path in the same direction to find another time
+%           when the homotopy parameter lambda=1. Note that finite
+%           precision errors can cause it to visit multiple solutions that
+%           are essentially equal, or the homotopy path can loop around so
+%           that it does revisit past solutions. Also, when it interpolates
+%           between steps to find one solution, it does not check whether
+%           the interpolating polynomial crosses lambda=1 multiple times,
+%           so closely-spaced solutions can also be missed. The default if
+%           this parameter is omitted or an empty matrix is passed is 1.
+% initStepSize An optional value specifying the initial step size for the
+%           adaptive Runge-Kutta method. If omitted or an empty matrix is
+%           passed, an initial step size of 0.1 is used. Depending on the
+%           scale of the problem and the inaccuracy of the initial
+%           estimate, that might be too small. However, in general, it
+%           usually works fairely well.
 % order,solutionChoice  A pair of optional parameters that specify the
-%                highest order of the embedded Runge-Kutta pair  or
-%                Rosenbrock method to use as well as the specific algorithm
-%                to use. Details are given in the comments to the
-%                RungeKStep function for Runge Kutta methods. To use a
-%                Rosenbrock method, set solutionChoice=-1 and set the
-%                appropriate order for the method. If omitted or empty
-%                matrices are passed, the default order of 5 is used
-%                and the default solutionChoice of 0 is used (A Runge-Kutta
-%                method).
-%         RelTol The maximum relative error tolerance allowed, a
-%                positive scalar (its use is explained in more detail
-%                below). If omitted or an empty matrix is passed, the
-%                default value of 1e-8 is used.
-%         AbsTol The absolute error tolerance allowed, a positive scalar,
-%                of the same for all components of x, or a positive NX1
-%                vector. If omitted or an empty matrix is passed, the
-%                default value of 1e-10 is used.
-%       maxSteps The maximum allowable number of steps to perform the
-%                integration. If omitted or an empty matrix is passed, the
-%                default of 512 is used.
-%      lambdaTol The tolerance for declaring the homotopy parameter 1. If
-%                omitted, the default value of 1e-8 is used.
+%           highest order of the embedded Runge-Kutta pair or Rosenbrock
+%           method to use as well as the specific algorithm to use. Details
+%           are given in the comments to the RungeKStep function for Runge
+%           Kutta methods. To use a Rosenbrock method, set
+%           solutionChoice=-1 and set the appropriate order for the method.
+%           If omitted or empty matrices are passed, the default order of 5
+%           is used and the default solutionChoice of 0 is used (A Runge-
+%           Kutta method).
+%    RelTol The maximum relative error tolerance allowed, a positive scalar
+%           (its use is explained in more detail below). If omitted or an
+%           empty matrix is passed, the default value of 1e-8 is used.
+%    AbsTol The absolute error tolerance allowed, a positive scalar, of the
+%           same for all components of x, or a positive NX1 vector. If
+%           omitted or an empty matrix is passed, the default value of
+%           1e-10 is used.
+%  maxSteps The maximum allowable number of steps to perform the
+%           integration. If omitted or an empty matrix is passed, the
+%           default of 512 is used.
+% lambdaTol The tolerance for declaring the homotopy parameter 1. If
+%           omitted, the default value of 1e-8 is used.
 %numStepsBeforeRestart As the function goes along the path, finite
-%                precision errors will case the homotopy condition to be
-%                less and less satisfied. THis parameter specified how many
-%                iterations should go by before the homotopy is reset. The
-%                default if omitted is 25. To reset the homotopy every
-%                iteration, set it to 0.
+%           precision errors will case the homotopy condition to be less
+%           and less satisfied. THis parameter specified how many
+%           iterations should go by before the homotopy is reset. The
+%           default if omitted is 25. To reset the homotopy every
+%           iteration, set it to 0.
 %
-%OUTPUTS: xVals     The xDimXnumSol solutions to the chosen homotopy
-%                   problem, or an empty matrix if no solution can be
-%                   found. Note that this function only provides at most
-%                   maxSol solution. Depending on f(x), there might be
-%                   multiple solutions or zero solutions.
-%         exitCodes A value indicating the exit status of the solver. When
-%                   asking for multiple solutions, this can be one longer
-%                   than xVal to indicate why the final solution method
-%                   failed.
-%                   Possible values are
-%                  0: No error.
-%                  1: The step size decreased below the minimum allowed
-%                     level while trying to reach the desired tolerances.
-%                  2: Maximum number of steps reached without completion.
-%                  3: Non-finite number encountered.
-%                  4: An error occurred interpolating the final solution.
-%                  5: A dependent function threw an exception. This
-%                     generally means that a NaN was encountered in the
-%                     null function when trying to solve for a descent
-%                     direction.
+%OUTPUTS: xVals The xDimXnumSol solutions to the chosen homotopy problem,
+%               or an empty matrix if no solution can be found. Note that
+%               this function only provides at most maxSol solution.
+%               Depending on f(x), there might be multiple solutions or
+%               zero solutions.
+%     exitCodes A value indicating the exit status of the solver. When
+%               asking for multiple solutions, this can be one longer than
+%               xVal to indicate why the final solution method failed.
+%               Possible values are
+%               0: No error.
+%               1: The step size decreased below the minimum allowed level
+%                  while trying to reach the desired tolerances.
+%               2: Maximum number of steps reached without completion.
+%               3: Non-finite number encountered.
+%               4: An error occurred interpolating the final solution.
+%               5: A dependent function threw an exception. This generally
+%                  means that a NaN was encountered in the null function
+%                  when trying to solve for a descent direction.
 %
 %The algorithm is implemented as discussed in [1]. The algorithm is based
 %on the probability 1 homotopy theory, which transforms the problem of
@@ -253,11 +240,11 @@ function [xVals,exitCodes]=homotopySolver(x0,f,FJacob,c,systemType,startForward,
        startForward=true; 
     end
     
-    if(nargin<5)
+    if(nargin<5||isempty(systemType))
         systemType=0;
     end
     
-    if(nargin<4)
+    if(nargin<4||isempty(c))
         c=zeros(xDim,1);
     end
     

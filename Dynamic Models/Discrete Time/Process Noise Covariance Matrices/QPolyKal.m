@@ -1,36 +1,35 @@
 function Q=QPolyKal(T,x,order,q0)
-%%QPOLYKAL  Get the process noise covariance matrix for a discretized
-%           continuous-time linear dynamic model of the given polynomial
-%           order (number of derivatives of position included) and number
-%           of dimensions (generally 3 for 3D motion). order=1 means
-%           constant velocity(the discretized continuous white noise
-%           acceleration [DCWNA] model); order=2 means constant
-%           acceleration (the discretized continuous Wiener process
-%           acceleration model [DCWPA]), etc. The state is ordered in terms
-%           of position, velocity, acceleration, etc. The equivalent
-%           continuous-time process noise model just adds the noise to the
-%           highest order derivative of position.
+%%QPOLYKAL Get the process noise covariance matrix for a discretized
+%          continuous-time linear dynamic model of the given polynomial
+%          order (number of derivatives of position included) and number of
+%          dimensions (generally 3 for 3D motion). order=1 means constant
+%          velocity(the discretized continuous white noise acceleration
+%          [DCWNA] model); order=2 means constant acceleration (the
+%          discretized continuous Wiener process acceleration model
+%          [DCWPA]), etc. The state is ordered in terms of position,
+%          velocity, acceleration, etc. The equivalent continuous-time
+%          process noise model just adds the noise to the highest order
+%          derivative of position.
 %
-%INPUTS: T      The time-duration of the propagation interval.
-%        x      The (numDim*(order+1))X1 target state. This is just used to
-%               extract numDim and for functions that expect the first two
-%               parameters of a process noise  covariance matrix function
-%               to be T and x.
-%        order  The order >=0 of the filter. If order=1, then it is 
-%               constant velocity, 2 means constant acceleration, 3 means
-%               constant jerk, etc.
-%        q0     The power spectral density of the noise. If a scalar is
-%               passed, it is assumed to be the same for all dimensions.
-%               Otherwise, a numDimX1 or 1XnumDim vector should be passed
-%               specifying the power spectral density for each dimension.
-%               The units are length^2/time^(2*order+1).
+%INPUTS: T The time-duration of the propagation interval.
+%        x The (numDim*(order+1))X1 target state. This is just used to
+%          extract numDim and for functions that expect the first two
+%          parameters of a process noise  covariance matrix function to be
+%          T and x.
+%    order The order >=0 of the filter. If order=1, then it is constant
+%          velocity, 2 means constant acceleration, 3 means constant jerk,
+%          etc.
+%       q0 The power spectral density of the noise. If a scalar is passed,
+%          it is assumed to be the same for all dimensions. Otherwise, a
+%          numDimX1 or 1XnumDim vector should be passed specifying the
+%          power spectral density for each dimension. The units are
+%          length^2/time^(2*order+1).
 %
-%OUTPUTS: Q     The process noise covariance matrix under a linear dynamic
-%               model of the given order with motion in numDim dimensions
-%               where the state is stacked
-%               [position;velocity;acceleration;etc] where the number of
-%               derivatives of position depends on the order given. Order=0
-%               means just position.
+%OUTPUTS: Q The process noise covariance matrix under a linear dynamic
+%           model of the given order with motion in numDim dimensions
+%           where the state is stacked [position;velocity;acceleration;etc]
+%           where the number of derivatives of position depends on the
+%           order given. Order=0 means just position.
 %
 %Chapter 6.2.2 of [1] describes how the covariance matrix for a linear
 %dynamic model is found. This function just generalized the procedure to an

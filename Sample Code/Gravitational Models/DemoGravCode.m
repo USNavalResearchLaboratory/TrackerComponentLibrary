@@ -142,6 +142,8 @@ end
 %The gravity is the acceleration due to gravity plus the centripetal
 %acceleration of the Earth.
 omega=Constants.WGS84EarthRotationRate;
+%We approximate the rotation axis of the Earth as the z-axis. Earth
+%orientation parameters could be used to get a more accurate approximation.
 g=gradV+omega^2*[cartPoints(1,:);cartPoints(2,:);zeros(1,numGridPoints)];
 
 %The gravity anomaly is the difference in magnitude between the gravity and

@@ -5,17 +5,17 @@ function intVal=symIntThirdKind(x,y,z,p)
 %                 zero and the components can be complex (see below).
 %                 Sometimes, the integral is referred to as RJ.
 %
-%INPUTS: x,y,z,p  The parameters of the integral. x,y, and z should have a
-%                 nonegative real part with at most one of them zero and
-%                 real(p)>0. Otherwise, let the magnitude of the complex
-%                 phase of p be less than pi and p~=0, x,y, and z can be
-%                 real and non-negative with at most one zero, or let two
-%                 of the variables x,y,z be nonzero and conjugate complex
-%                 with phases less in magnitude than pi and the third
-%                 variable be real and nonnegative.
+%INPUTS: x,y,z,p The parameters of the integral. x,y, and z should have a
+%                nonegative real part with at most one of them zero and
+%                real(p)>0. Otherwise, let the magnitude of the complex
+%                phase of p be less than pi and p~=0, x,y, and z can be
+%                real and non-negative with at most one zero, or let two
+%                of the variables x,y,z be nonzero and conjugate complex
+%                with phases less in magnitude than pi and the third
+%                variable be real and nonnegative.
 %
-%OUTPUTS: intVal  The value of the symmetric integral of the third kind
-%                 given x, y, z, and p.
+%OUTPUTS: intVal The value of the symmetric integral of the third kind
+%                given x, y, z, and p.
 %
 %The algorithm is taken from [1].
 %

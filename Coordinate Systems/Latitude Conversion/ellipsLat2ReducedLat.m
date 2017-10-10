@@ -12,7 +12,7 @@ function reducedLat=ellipsLat2ReducedLat(ellipsLat,f)
 %
 %INPUTS: ellipsLat A vector or matrix of ellipsoidal (geodetic) latitudes
 %                  in radians. These typically range from -pi/2 to pi/2.
-%           f      The flattening factor of the reference ellipsoid. If
+%                f The flattening factor of the reference ellipsoid. If
 %                  this argument is omitted, the value in
 %                  Constants.WGS84Flattening is used.
 %

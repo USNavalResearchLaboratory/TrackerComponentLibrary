@@ -241,7 +241,7 @@ function [xi,w,Hm,algParams]=KorobovLatticeRules(numDim,method,params,periodizeA
 % params=1;
 % %First we get the tabulated values.
 % [xi1,w1,Hm1,algParams1]=KorobovLatticeRules(numDim,method,params);
-% %Now, we try to optimize over the parameters, rather than usign the
+% %Now, we try to optimize over the parameters, rather than using the
 % %tabulated version.
 % params=[];
 % params.p=algParams1.p;

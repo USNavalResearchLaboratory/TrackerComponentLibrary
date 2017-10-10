@@ -77,7 +77,7 @@ dimSumSizeList=max([dim2SizeList,zeros(1,numDims1-numDims2)],[dim1SizeList,zeros
 numEls1=prod(dim1SizeList);
 numEls2=prod(dim2SizeList);
 numElsSum=prod(dimSumSizeList);
-sumCoeffs=reshapeVec(zeros(numElsSum,1),dimSumSizeList);%Allocate space
+sumCoeffs=reshape(zeros(numElsSum,1),dimSumSizeList(:)');%Allocate space
 
 %Go through all of the elements and find the sum. The simplest way is just
 %to add all of coeffs1 to sumCoeffs and then add all of coeffs2 to

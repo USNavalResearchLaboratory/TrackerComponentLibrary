@@ -6,18 +6,17 @@
  *            were added back then. The results are only valid from the
  *            start of UTC, which was on 1960 January 1.0.
  *
- *INPUTS: year    A matrix of integer years in the Gregorian calendar
- *                under UTC time.
- *       month    A matrix of integer months in the Gregorian calendar
- *                under UTC time. 1<=month<=12
- *        day     A matrix of integer days in the Gregorian calendar under
- *                UTC time. Days count from 1.   
- *      dayFrac   A parameter that is only neded for years prior to 1972,
- *                because of the unusual manner in which time corrections
- *                were applied back then. The fraction of a day must be
- *                between 0 and 1 for each element in the matrix. If this
- *                parameter is omitted, then a value of zero is used for
- *                all dates.
+ *INPUTS: year A matrix of integer years in the Gregorian calendar under
+ *             UTC time.
+ *       month A matrix of integer months in the Gregorian calendar under
+ *             UTC time. 1<=month<=12
+ *         day A matrix of integer days in the Gregorian calendar under
+ *             UTC time. Days count from 1.   
+ *     dayFrac A parameter that is only neded for years prior to 1972,
+ *             because of the unusual manner in which time corrections were
+ *             applied back then. The fraction of a day must be between 0
+ *             and 1 for each element in the matrix. If this parameter is
+ *             omitted, then a value of zero is used for all dates.
  *
  *This function is just a wrapper for the function iaudat in the
  *International Astronomical Union's (IAU) Standard's of Fundamental

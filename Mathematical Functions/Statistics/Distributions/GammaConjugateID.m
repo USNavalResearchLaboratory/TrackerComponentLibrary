@@ -114,7 +114,7 @@ function val=normConst(mu,delta,varargin)
 %
 %As there is no analytic method for computing the normalization constant,
 %numerical integration over the PDF, which is given in [1], is performed
-%usign Matlab's integral function.
+%using Matlab's integral function.
 %
 %REFERENCES:
 %[1] E. Damsleth, "Conjugate classes for gamma distributions," Scandinavian

@@ -15,42 +15,42 @@
 
 %The number of samples to use for the estimation problems.
 numSamp=5000;
-display('DISTRIBUTION I: GAMMA')
-display('Estimating the scale parameter of a central gamma distribution having known shape parameter.')
-display('The conjugate prior distribution is an inverse gamma distribution.')
+disp('DISTRIBUTION I: GAMMA')
+disp('Estimating the scale parameter of a central gamma distribution having known shape parameter.')
+disp('The conjugate prior distribution is an inverse gamma distribution.')
 
 kMeas=5;%The shape parameter of the gamma distribution.
 thetaMeas=10;%The scale parameter of the gamma distribution.
 
-display('Generating random samples; the shape parameter is k=5, the scale parameter to be estimated is theta=10.')
+disp('Generating random samples; the shape parameter is k=5, the scale parameter to be estimated is theta=10.')
 %Generate the random samples.
 xMeas=GammaD.rand([numSamp,1],kMeas,thetaMeas);
 
-display('An uninformative conjugate prior is used; it has k=0 and beta=0.')
+disp('An uninformative conjugate prior is used; it has k=0 and beta=0.')
 %The prior should be uninformative. In this case, that means k=0 and
 %beta=0.
 kEst=0;
 betaEst=0;
-display('Updating the uninformative conjugate prior using the measurements.')
+disp('Updating the uninformative conjugate prior using the measurements.')
 [kEst,betaEst]=gammaScaleLikeInvGammaConjUpdate(xMeas,kMeas,kEst,betaEst);
 
-display('The mean of the estimated scale parameter is')
+disp('The mean of the estimated scale parameter is')
 thetaEst=InverseGammaD.mean(kEst,betaEst)
-display('The variance of the estimate is')
+disp('The variance of the estimate is')
 thetaVar=InverseGammaD.var(kEst,betaEst)
 
-display('Estimating the shape parameter of a central gamma distribution having known scale parameter.')
-display('The conjugate prior distribution is a gamma conjugate type I distribution.')
+disp('Estimating the shape parameter of a central gamma distribution having known scale parameter.')
+disp('The conjugate prior distribution is a gamma conjugate type I distribution.')
 
-display('An uninformative conjugate prior is used; it has delta=0 and mu=1.')
+disp('An uninformative conjugate prior is used; it has delta=0 and mu=1.')
 deltaEst=0;
 muEst=1;
 
-display('Evaluating the mean of the gamma conjugate type I distribution with a lot of samples')
-display('is problematic due to finite precision problems. However, since the estimates')
-display('obtained using disjoint sets of samples are independent, we can compute')
-display('independent estimates from small groups of samples and then average them, lessening the')
-display('precision issues.')
+disp('Evaluating the mean of the gamma conjugate type I distribution with a lot of samples')
+disp('is problematic due to finite precision problems. However, since the estimates')
+disp('obtained using disjoint sets of samples are independent, we can compute')
+disp('independent estimates from small groups of samples and then average them, lessening the')
+disp('precision issues.')
 kEst=0;
 
 %We are using 40 groups, so for 5000 samples, these are 125 measurements
@@ -68,32 +68,32 @@ for curMeas=1:numGroups
     kEst=kEst+GammaConjugateID.mean(muCur,deltaCur,[],'RelTol',1e-12,'AbsTol',1e-15);
     minIdx=minIdx+numMeasPerGroup;
 end
-display('The mean of the estimated shape parameter is')
+disp('The mean of the estimated shape parameter is')
 kEst=kEst/numGroups
 
-display('DISTRIBUTION II: POISSON')
-display('Estimating the rate parameter of a Poisson distribution.')
-display('The conjugate prior distribution is a gamma distribution.')
+disp('DISTRIBUTION II: POISSON')
+disp('Estimating the rate parameter of a Poisson distribution.')
+disp('The conjugate prior distribution is a gamma distribution.')
 
 lambdaMeas=50;
 xMeas=PoissonD.rand([numSamp,1],lambdaMeas);
 
-display('An uninformative conjugate prior is used; it has k=0 and theta=Inf.')
+disp('An uninformative conjugate prior is used; it has k=0 and theta=Inf.')
 %The prior should be uninformative. In this instance, this means that k=0
 %and theta=Inf.
 kEst=0;
 thetaEst=Inf;
 
-display('Updating the uninformative conjugate prior using the measurements.')
+disp('Updating the uninformative conjugate prior using the measurements.')
 [kEst,thetaEst]=PoissonRateLikeGammaConjUpdate(xMeas,kEst,thetaEst);
 %Obtain the mean and variance of the estimate
-display('The mean of the estimated rate parameter is')
+disp('The mean of the estimated rate parameter is')
 lambdaEst=GammaD.mean(kEst,thetaEst)
-display('The variance of the estimated rate parameter is')
+disp('The variance of the estimated rate parameter is')
 lambdaVar=GammaD.var(kEst,thetaEst)
 
 
-display('DISTRIBUTION III: BINOMIAL')
+disp('DISTRIBUTION III: BINOMIAL')
 
 nMeas=30;
 pMeas=0.3;
@@ -107,7 +107,7 @@ bEst=0;
 pEst=BetaD.mean(aEst,bEst)
 pEstVar=BetaD.var(aEst,bEst)
 
-display('DISTRIBUTION IV: EXPONENTIAL')
+disp('DISTRIBUTION IV: EXPONENTIAL')
 
 lambdaMeas=10;
 xMeas=ExponentialD.rand([numSamp,1],lambdaMeas);
@@ -122,7 +122,7 @@ thetaEst=Inf;
 lambdaEst=GammaD.mean(kEst,thetaEst)
 lambdaVar=GammaD.var(kEst,thetaEst)
 
-display('DISTRIBUTION V: PARETO TYPE I')
+disp('DISTRIBUTION V: PARETO TYPE I')
 
 xMinMeas=5;
 aMeas=4;
@@ -139,7 +139,7 @@ thetaEst=Inf;
 xMinMeasEst=GammaD.mean(kEst,thetaEst)
 xMinMeasVar=GammaD.var(kEst,thetaEst)
 
-display('DISTRIBUTION VI: SCALAR UNIFORM')
+disp('DISTRIBUTION VI: SCALAR UNIFORM')
 
 UBMeas=12;
 xMeas=UniformD.rand(numSamp,[0;UBMeas]);
@@ -153,7 +153,7 @@ aEst=0;
 UBEst=ParetoTypeID.mean(xMinEst,aEst)
 UBVar=ParetoTypeID.var(xMinEst,aEst)
 
-display('DISTRIBUTION VII: MULTIVARIATE GAUSSIAN')
+disp('DISTRIBUTION VII: MULTIVARIATE GAUSSIAN')
 
 muMeas=[1;2;3;4];
 SigmaMeas=[62, 7,  12,  17;

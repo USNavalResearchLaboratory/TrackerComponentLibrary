@@ -12,24 +12,24 @@ function [latLonEnd,azEnd]=directGeodeticProbGen(latLonStart,azStart,dist,height
 %INPUTS:latLonStart A 2XN matrix of N starting points given in geodetic 
 %                   latitude and longitude in radians. that is, each column
 %                   is [latitude;longitude]; 
-%         azStart   An NX1 or 1XN vector of the forward azimuth (initial
+%           azStart An NX1 or 1XN vector of the forward azimuth (initial
 %                   headings) at the starting point in radians East of true
 %                   North on the reference ellipsoid.
-%           dist    An NX1 or 1XN vector of the distances in meters 
+%              dist An NX1 or 1XN vector of the distances in meters 
 %                   that will be traveled on the geodesic curve starting at
 %                   latLonStart with initial heading azStart where
 %                   solutions are desired.
-%         height    An NX1 or 1XN vector of the heights above the reference
+%            height An NX1 or 1XN vector of the heights above the reference
 %                   ellipsoid at which the trajectories should be
 %                   determined. If this parameter is omitted, then the
 %                   default value of 0 is used for all of the trajectories.
-%           a       The semi-major axis of the reference ellipsoid (in
+%                 a The semi-major axis of the reference ellipsoid (in
 %                   meters). If this argument is omitted, the value in
 %                   Constants.WGS84SemiMajorAxis is used.
-%           f       The flattening factor of the reference ellipsoid. If
+%                 f The flattening factor of the reference ellipsoid. If
 %                   this argument is omitted, the value in
 %                   Constants.WGS84Flattening is used.
-%   numSteps4Circ   If height!=0, then an algorithm propagating a state
+%     numSteps4Circ If height!=0, then an algorithm propagating a state
 %                   in ECEF coordinates around the curved Earth is used.
 %                   This parameter determines the number of steps that
 %                   would be needed for a target that circumnavigates the
@@ -39,12 +39,12 @@ function [latLonEnd,azEnd]=directGeodeticProbGen(latLonStart,azStart,dist,height
 %                   precision. Reducing the number of steps will speed up
 %                   the function. This parameter is not used if height=0.
 %
-%OUTPUTS:latLonEnd  A2XN matrix of geodetic latitude and longitudes of the
-%                   final points of the geodesic trajectory given in
-%                   radians as [latitude;longitude].
-%        azEnd      An NX1 vector of rhe forward azimuth (bearing) at the
-%                   ending points in radians East of true North on the
-%                   reference ellipsoid.
+%OUTPUTS:latLonEnd A 2XN matrix of geodetic latitude and longitudes of the
+%                  final points of the geodesic trajectory given in radians
+%                  as [latitude;longitude].
+%            azEnd An NX1 vector of rhe forward azimuth (bearing) at the
+%                  ending points in radians East of true North on the
+%                  reference ellipsoid.
 %
 %If height=0, then the algorithm solves the direct geodetic problem on
 %the surface of the reference ellipsoid using the function

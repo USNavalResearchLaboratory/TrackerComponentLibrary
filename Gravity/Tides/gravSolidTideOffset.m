@@ -7,29 +7,30 @@ function [deltaC,deltaS]=gravSolidTideOffset(rMoon,rSun,TT1,TT2)
 %                     These offsets are for fully normalized spherical
 %                     harmonic tide-free models, not zero-tide models.
 %
-%rMoon   A vector from the center of the Earth in the International
-%        Terrestrial Reference System (the WGS-84 coordinate system), an
-%        Earth-centered, Earth-fixed coordinate system, to the
-%        moon. This can be obtained using the solarBodyVec function without
-%        light-time or aberration corrections.
-%rSun    A vector from the center of the Earth in the International
-%        Terrestrial Reference System (the WGS-84 coordinate system), an
-%        Earth-centered, Earth-fixed coordinate system, to the
-%        Sun. This can be obtained using the solarBodyVec function without
-%        light-time or aberration corrections.
-%TT1,TT2 Two parts of a Julian date given in terrestrial time (TT). The
-%        units of the date are days. The full date is the sum of both
-%        terms. The date is broken into two parts to provide more bits of
-%        precision. It does not matter how the date is split.
+%INPTUS: rMoon A vector from the center of the Earth in the International
+%          Terrestrial Reference System (the WGS-84 coordinate system), an
+%          Earth-centered, Earth-fixed coordinate system, to the
+%          moon. This can be obtained using the readJPLEphem and GCRS2ITRS
+%          functions.
+%     rSun A vector from the center of the Earth in the International
+%          Terrestrial Reference System (the WGS-84 coordinate system), an
+%          Earth-centered, Earth-fixed coordinate system, to the
+%          Sun. This can be obtained using the readJPLEphem and GCRS2ITRS
+%          functions.
+%  TT1,TT2 Two parts of a Julian date given in terrestrial time (TT). The
+%          units of the date are days. The full date is the sum of both
+%          terms. The date is broken into two parts to provide more bits of
+%          precision. It does not matter how the date is split.
 %
-%OUTPUTS:deltaC A ClusterSet class holding the offsets to the fully
-%               normalized coefficient terms that are multiplied by cosines
-%               in the harmonic expansion of the gravitational potential.
-%               C(n+1,m+1) is the coefficient of degree n and order m. The
-%               offsets only go up to degree and order 4.
-%        deltaS A ClusterSet class holding the coefficient terms that are
-%               multiplied by sines in the harmonic expansion. The
-%               format of S is the same as that of C.
+%OUTPUTS: deltaC An array holding the offsets to the fully normalized
+%                coefficient terms that are multiplied by cosines in the
+%                spherical harmonic expansion of the gravitational
+%                potential. if given to a CountingClusterSet class, then
+%                C(n+1,m+1) is the coefficient of degree n and order m. The
+%                offsets only go up to degree and order 4.
+%         deltaS An array holding the coefficient terms that are multiplied
+%                by sines in the spherical harmonic expansion. The format
+%                of S is the same as that of C.
 %
 %The algorithm is the one described in Chapter 5 of [1], except values for
 %k_{2m}^{(+)} taken from the 2010 IERS conventions in [2] for an elastic
@@ -76,9 +77,8 @@ GMRat(2)=Constants.SunEarthMassRatio;
 M=4;
 totalNumCoeffs=(M+1)*(M+2)/2;
 emptyData=zeros(totalNumCoeffs,1);
-clustSizes=1:(M+1);
-deltaC=ClusterSet(emptyData,clustSizes);
-deltaS=ClusterSet(emptyData,clustSizes);
+deltaC=CountingClusterSet(emptyData);
+deltaS=CountingClusterSet(emptyData);
 
 %Obtain the spherical coordinates of the moon.
 pointSpherMoon=Cart2Sphere(rMoon);
@@ -196,6 +196,9 @@ for curThetaS=1:size(m2TideParam,1)
 end
 deltaC(n+1,m+1)=deltaC(n+1,m+1)+real(sumVal);
 deltaS(n+1,m+1)=deltaS(n+1,m+1)-imag(sumVal);
+
+deltaC=deltaC.clusterEls;
+deltaS=deltaS.clusterEls;
 end
 
 %LICENSE:

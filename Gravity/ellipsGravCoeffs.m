@@ -4,49 +4,47 @@ function [CBar,SBar,a,c]=ellipsGravCoeffs(maxOrder,isNormalized,omega,a,f,GM)
 %                   implied by an ellipsoidal approximation to the geoid
 %                   with a given rotation rate.
 %
-%INPUTS:  maxOrder  The order of the coefficients. The full ellipsoidal
-%                   gravity potential as expressed with spherical harmonic
-%                   coefficients is an infinite series. If this parameter
-%                   is omitted, then a default of maxOrder=2 is used.
-%      isNormalized If true, then fully normalized coefficients are
-%                   returned (those for use with fully normalized
-%                   associated Legendre polynomials). Otherwise,
-%                   unnormalized coefficients are returned (those for use
-%                   with associated Legendre polynomials). If this
-%                   parameter is omitted, then normalized coefficients will
-%                   be returned.
-%           omega   The average rotation rate of the planet. If this
-%                   argument is omitted, the value in
-%                   Constants.WGS84EarthRotationRate is used, having units
-%                   of radians per second.
-%           a       The semi-major axis of the reference ellipsoid. If
-%                   this argument is omitted, the value in
-%                   Constants.WGS84SemiMajorAxis is used, having units of
-%                   meters.
-%           f       The flattening factor of the reference ellipsoid. If
-%                   this argument is omitted, the value in
-%                   Constants.WGS84Flattening is used (and is unitless).
-%           GM      The universal gravitational constant times the mass of
-%                   the planet. If this parameter is omitted, then the
-%                   value in Constants.WGS84GMWithAtmosphere is used,
-%                   having units of m^3/s^2.
+%INPUTS: maxOrder The order of the coefficients. The full ellipsoidal
+%                 gravity potential as expressed with spherical harmonic
+%                 coefficients is an infinite series. If this parameter is
+%                 omitted, then a default of maxOrder=2 is used.
+%    isNormalized If true, then fully normalized coefficients are returned
+%                 (those for use with fully normalized associated Legendre
+%                 polynomials). Otherwise, unnormalized coefficients are
+%                 returned (those for use with associated Legendre
+%                 polynomials). If this parameter is omitted, then
+%                 normalized coefficients will be returned.
+%           omega The average rotation rate of the planet. If this argument
+%                 is omitted, the value in Constants.WGS84EarthRotationRate
+%                 is used, having units of radians per second.
+%               a The semi-major axis of the reference ellipsoid. If this
+%                 argument is omitted, the value in
+%                 Constants.WGS84SemiMajorAxis is used, having units of
+%                 meters.
+%               f The flattening factor of the reference ellipsoid. If this
+%                 argument is omitted, the value in
+%                 Constants.WGS84Flattening is used (and is unitless).
+%              GM The universal gravitational constant times the mass of
+%                 the planet. If this parameter is omitted, then the value
+%                 in Constants.WGS84GMWithAtmosphere is used, having units
+%                 of m^3/s^2.
 %
-%OUTPUTS:  CBar     A ClusterSet class instance where CBar(n+1,m+1) is the
-%                   unitless coefficient of the cosine term  of order m in
-%                   a spherical harmonic expression for the gravitational
-%                   field that uses the associated Legendre functions
-%                   that are fully normalized if isNormalized=true.
-%          SBar     A ClusterSet class instance where SBar(n+1,m+1) is the
-%                   unitless coefficient of the sine term  of order m in a
-%                   spherical harmonic expression for the gravitational
-%                   field that uses the associated Legendre functions
-%                   that are fully normalized if isNormalized=true. All
-%                   elements of SBar are zero due to the symmetry of the
-%                   ellipsoidal approximation.
-%           a       The numerator in the (a/r)^n term in the spherical
-%                   harmonic sum, having units of meters.
-%           c       The constant value by which the spherical harmonic
-%                   series is multiplied, having units of m^3/s^2.
+%OUTPUTS:  CBar An array such that if passed to the CountingClusterSet
+%               class, CBar(n+1,m+1) is the unitless coefficient of the
+%               cosine term of order m in a spherical harmonic expression
+%               for the gravitational field that uses the associated
+%               Legendre functions that are fully normalized if
+%               isNormalized=true.
+%          SBar An array holding the the unitless coefficients of the sine
+%               terms in a spherical harmonic expression for the
+%               gravitational field that uses the associated Legendre
+%               functions that are fully normalized if isNormalized=true.
+%               All elements of SBar are zero due to the symmetry of the
+%               ellipsoidal approximation.
+%             a The numerator in the (a/r)^n term in the spherical harmonic
+%               sum, having units of meters.
+%           c   The constant value by which the spherical harmonic series
+%               is multiplied, having units of m^3/s^2.
 %
 %This function implements a number of equations from Chapters 2.5, 2.7,
 %2.8, and 2.9 of [1]. The equation numbers are cited in the code below.
@@ -101,10 +99,9 @@ end
 %for the coefficients.
 numPBarU=(maxOrder+1)*(maxOrder+2)/2;
 totalP=zeros(numPBarU,1);
-clustSizes=1:(maxOrder+1);
-CBar=ClusterSet(totalP,clustSizes);
+CBar=CountingClusterSet(totalP);
 if(nargout>1)
-    SBar=ClusterSet(totalP,clustSizes); 
+    SBar=totalP; 
 end
 
 %In the ellipsoidal Earth approximation, the S coefficients are all zero
@@ -136,6 +133,8 @@ end
 
 %The second constant to return for the sum. 
 c=GM;
+
+CBar=CBar.clusterEls;
 
 end
 

@@ -21,7 +21,7 @@ function xList=RungeKSteps(xInit,t0,f,deltaT,numSteps,order,solutionChoice)
 %              setting it to 1 uses the Fehlberg algorithm.
 %
 %OUTPUTS: xList The first column of xList is xInit. The subsequent columns
-%              are the state propagated forward at intervals of deltaT.
+%               are the state propagated forward at intervals of deltaT.
 %
 %This function calls the RungeKStep function to propagate forward the
 %target state each step of duration deltaT. See the comments in RungeKStep

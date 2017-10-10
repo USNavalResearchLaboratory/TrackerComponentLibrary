@@ -11,7 +11,7 @@ function [UT11,UT12]=UTC2UT1(UTC1,UTC2,deltaUTCUT1)
 %                  both terms. The date is broken into two parts to
 %                  provide more bits of precision. It does not matter how
 %                  the date is split.
-%     deltaUTCUT1  An optional parameter specifying the offset between UTC
+%      deltaUTCUT1 An optional parameter specifying the offset between UTC
 %                  and UT1 in seconds. If this parameter is omitted, then
 %                  the value of the function getEOP will be used.
 %
@@ -32,9 +32,10 @@ function [UT11,UT12]=UTC2UT1(UTC1,UTC2,deltaUTCUT1)
 %Many temporal coordinate systems standards are compared in [1].
 %
 %REFERENCES:
-%[1] D. F. Crouse, "An overview of major terrestrial, celestial, and
-%    temporal coordinate systems for target tracking", Report, U. S. Naval
-%    Research Laboratory, to appear, 2016.
+%[1] D. F. Crouse, "An Overview of Major Terrestrial, Celestial, and
+%    Temporal Coordinate Systems for Target Tracking," Formal Report, Naval
+%    Research Laboratory, no. NRL/FR/5344--16-10,279, 10 Aug. 2016, 173
+%    pages.
 %
 %April 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

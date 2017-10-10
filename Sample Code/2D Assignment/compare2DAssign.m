@@ -1,15 +1,15 @@
-%%COMPARE2DASSIGN  Compile the C and C++ implementations of the assignment
-%                  algorithms and run the various 2D assignment algorithms
-%                  on random cost  matrices of differing sizes to compare
-%                  the execution times. This function demonstrates how fast
-%                  2D assignment can be, but also how the speed is
-%                  influenced by some programmatic options such as whether
-%                  one uses a direct Matlab implementation or a compiled C
-%                  or C++ implementation. Additionally, whether one scans
-%                  by row or by column makes a difference, because Matlab
-%                  stores data by column, so scanning across columns
-%                  increases the likelihood of a cache miss, slowing things
-%                  down.
+%%COMPARE2DASSIGN Compile the C and C++ implementations of the assignment
+%                 algorithms and run the various 2D assignment algorithms
+%                 on random cost  matrices of differing sizes to compare
+%                 the execution times. This function demonstrates how fast
+%                 2D assignment can be, but also how the speed is
+%                 influenced by some programmatic options such as whether
+%                 one uses a direct Matlab implementation or a compiled C
+%                 or C++ implementation. Additionally, whether one scans
+%                 by row or by column makes a difference, because Matlab
+%                 stores data by column, so scanning across columns
+%                 increases the likelihood of a cache miss, slowing things
+%                 down.
 %
 %This function requires that the CompileCLibraries function has been run so
 %that the necessary functions have been compiled. This function comes with
@@ -41,7 +41,7 @@
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 %Change this value to 1000 to redo the simulations used in the paper.
-numRuns=12;
+numRuns=2;
 fprintf('%i Monte Carlo runs shall be used used\n',numRuns)
 
 %The search path and current working directories will be modified. Thus,
@@ -62,7 +62,7 @@ cd(ScriptFolder)
 compiledCodeFolder=[fileparts(fileparts(ScriptFolder)),'/0_Compiled_Code'];
 rmpath(compiledCodeFolder)
 
-display('Running the Monte Carlo runs for the 2D assignment code in Matlab')
+disp('Running the Monte Carlo runs for the 2D assignment code in Matlab')
 MatlabByRow100=zeros(numRuns,1);
 MatlabByRow200=zeros(numRuns,1);
 MatlabByRow500=zeros(numRuns,1);
@@ -74,7 +74,8 @@ MatlabByCol200=zeros(numRuns,1);
 MatlabByCol500=zeros(numRuns,1);
 MatlabByCol500b1000=zeros(numRuns,1);
 MatlabByCol3000=zeros(numRuns,1);
-parfor curRun=1:numRuns
+for curRun=1:numRuns
+    curRun
     %100X100 Matrix
     C=rand(100,100);
     %Matlab Implementation, where the inner loop scans by row.
@@ -124,7 +125,7 @@ parfor curRun=1:numRuns
 end
 
 %%Test the Matlab implementation of the k-best 2D assignment code
-display('Running the Monte Carlo runs for the k-best 2D assignment code in Matlab')
+disp('Running the Monte Carlo runs for the k-best 2D assignment code in Matlab')
 MatlabkB10b20h2=zeros(numRuns,1);
 MatlabkB10b20h25=zeros(numRuns,1);
 MatlabkB10b20h50=zeros(numRuns,1);
@@ -189,7 +190,7 @@ end
 %versions of the algorithms will no longer be used
 addpath(compiledCodeFolder)
 
-display('Running the Monte Carlo runs for the 2D assignment code in C and C++')
+disp('Running the Monte Carlo runs for the 2D assignment code in C and C++')
 CPPByRow100=zeros(numRuns,1);
 CPPByRow200=zeros(numRuns,1);
 CPPByRow500=zeros(numRuns,1);
@@ -274,7 +275,7 @@ parfor curRun=1:numRuns
 end
 
 %%Test the C++ implementation of the k-best 2D assignment code
-display('Running the Monte Carlo runs for the k-best 2D assignment code in C++')
+disp('Running the Monte Carlo runs for the k-best 2D assignment code in C++')
 CPPkB10b20h2=zeros(numRuns,1);
 CPPkB10b20h25=zeros(numRuns,1);
 CPPkB10b20h50=zeros(numRuns,1);
@@ -287,6 +288,7 @@ CPPkB100b100h2=zeros(numRuns,1);
 CPPkB100b100h25=zeros(numRuns,1);
 CPPkB100b100h50=zeros(numRuns,1);
 for curRun=1:numRuns
+    curRun
     %10X20 Matrix
     C=rand(10,20);
     k=2;

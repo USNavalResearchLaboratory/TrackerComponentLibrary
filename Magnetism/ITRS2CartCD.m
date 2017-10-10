@@ -2,7 +2,7 @@ function [zCartCD,rotMat]=ITRS2CartCD(zCart,param1,param2,S11)
 %%ITRS2CARTCD  Convert points given in the International Terrestrial
 %              Reference System (ITRS), a standard Earth-Cenetred-Earth-
 %              fixed (ECEF) coordinate system, in 3D Cartesian coordinates
-%              into centered dipole (CD) coordinates, a type of cooridnate
+%              into centered dipole (CD) coordinates, a type of coordinate
 %              system where the z-axis is aligned with the magnetic dipole
 %              of the Earth. This coordinate system is useful when studying
 %              the ionosphere. Note that the inputs and outputs of this

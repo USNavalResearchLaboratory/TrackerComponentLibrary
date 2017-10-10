@@ -1,21 +1,17 @@
 function procNoiseParam=processNoiseSuggest(algorithm,maxVal,T,sigmaw2,manDur)
-%%PROCESSNOISESUGGEST      Use one of a number methods for choosing the
-%                          scaling parameter for the process noise
-%                          covariance in a number of continuous-time
-%                          and discrete-time dynamic models. This only
-%                          provides the scaling parameter for one dimension
-%                          of motion. In a multidimensional system, if the
-%                          measurement noise variance varies between
-%                          dimensions (such as tracking in range and angle
-%                          with a range-angle state), then one might
-%                          different valies in different dimensions. The
-%                          method only considers scalar measurements in the
-%                          respective dimensions and is thus only good for
-%                          a roguh approximation.
+%%PROCESSNOISESUGGEST Use one of a number methods for choosing the scaling
+%             parameter for the process noise covariance in a number of
+%             continuous-time and discrete-time dynamic models. This only
+%             provides the scaling parameter for one dimension of motion.
+%             In a multidimensional system, if the measurement noise
+%             variance varies between dimensions (such as tracking in range
+%             and angle with a range-angle state), then one might use
+%             different values in different dimensions. The method only
+%             considers scalar measurements in the respective dimensions
+%             and is thus only good for a rough approximation.
 %
 %INPUTS: algorithm A string specifying the algorithm and model used to
-%                  estimate a good process noise parameter. Possible values
-%                  are
+%           estimate a good process noise parameter. Possible values are:
 %                  'PolyKal-ROT' Use a rule-of-thumb method for determining
 %                                the q0 term for the QPolyKal function, for
 %                                discrete-time models, and the DPoly
@@ -29,13 +25,13 @@ function procNoiseParam=processNoiseSuggest(algorithm,maxVal,T,sigmaw2,manDur)
 %                                discretized continuous Wiener process
 %                                acceleration (DCWPA) model (order=2),
 %                                among others.
-%        'PolyKalDirectDisc-ROT' Use a rule-of-thumb method for determining
-%                                the sigmaV2 parameter for the
+%           'PolyKalDirectDisc-ROT' Use a rule-of-thumb method for
+%                                determining the sigmaV2 parameter for the
 %                                QPolyKalDirectDisc function. This covers
 %                                the discrete white noise acceleration
 %                                (DWNA) model (order=1), among others.
-%         'PolyKalDirectAlt-ROT' Use a rule-of-thumb method for determining
-%                                the sigmaV2 parameter for the
+%           'PolyKalDirectAlt-ROT' Use a rule-of-thumb method for
+%                                determining the sigmaV2 parameter for the
 %                                QPolyKalDirectAlt function. This covers
 %                                the discrete Wiener process acceleration
 %                                (DWPA) model (order=2), among others.
@@ -48,7 +44,7 @@ function procNoiseParam=processNoiseSuggest(algorithm,maxVal,T,sigmaw2,manDur)
 %                                the asymptotically optimal value of
 %                                sigmaV2 for the DWNA model for a maneuver
 %                                having a fixed maximum acceleration.
-%              'CWNA-ConstMeas'  Use the method of Blair for determining
+%               'CWNA-ConstMeas' Use the method of Blair for determining
 %                                the asymptotically optimal value of q0
 %                                for the CWNA and DCWNA models such that
 %                                the MSE of a Kalman filter under a maximum
@@ -60,31 +56,31 @@ function procNoiseParam=processNoiseSuggest(algorithm,maxVal,T,sigmaw2,manDur)
 %                                the MSE of a Kalman filter under a maximum
 %                                acceleration maneuver is not worse than
 %                                the measurement accuracy.
-%    maxVal  All of the methods require a maximum bound related to how the
-%            target can maneuver. For algorithms CWNA-OptMMSE,
-%            DWNA-OptMMSE, CWNA-ConstMeas, and DWNA-ConstMeas, maxVal is
-%            the maximum acceleration of the target. For PolyKal-ROT and
-%            PolyKalDirectDisc-ROT, and PolyKalDirectAlt-ROT maxVal is the
-%            maximum value of a moment one order higher than the maximum
-%            order of the dynamic model. For example, if order=1, then
-%            maxVal is a maximum acceleration.  If order=2, then maxVal is
-%            a maximum jerk.
-%         T  For all of the algorithms except PolyKalDirectDisc-ROT, this
-%            parameter is required and is  the typical time between
-%            measurements of the target.
+%    maxVal All of the methods require a maximum bound related to how the
+%           target can maneuver. For algorithms CWNA-OptMMSE,
+%           DWNA-OptMMSE, CWNA-ConstMeas, and DWNA-ConstMeas, maxVal is
+%           the maximum acceleration of the target. For PolyKal-ROT and
+%           PolyKalDirectDisc-ROT, and PolyKalDirectAlt-ROT maxVal is the
+%           maximum value of a moment one order higher than the maximum
+%           order of the dynamic model. For example, if order=1, then
+%           maxVal is a maximum acceleration.  If order=2, then maxVal is
+%           a maximum jerk.
+%         T For all of the algorithms except PolyKalDirectDisc-ROT, this
+%           parameter is required and is  the typical time between
+%           measurements of the target.
 %   sigmaw2 For algorithms CWNA-OptMMSE, DWNA-OptMMSE, CWNA-ConstMeas, and
 %           DWNA-ConstMeas, this parameter is required and is the variance
 %           of the 1D measurement, which should be the lowest order moment
 %           of the state. In other words, position.
-%   manDur  For algorithms CWNA-OptMMSE, DWNA-OptMMSE, CWNA-ConstMeas, and
+%    manDur For algorithms CWNA-OptMMSE, DWNA-OptMMSE, CWNA-ConstMeas, and
 %           DWNA-ConstMeas, this parameter is required and is the
 %           maximum number of samples of duration T that a maximum
 %           acceleration maneuver is expected to take. This can take
 %           values, 3, 4, 5, 6 and infinity.
 %
-%OUTPUTS: procNoiseParam  The value of q0 or sigmaV2 for the specified
-%                         dynamic model, chosen according to the selected
-%                         ad-hoc parameter.
+%OUTPUTS: procNoiseParam The value of q0 or sigmaV2 for the specified
+%                        dynamic model, chosen according to the selected
+%                        ad-hoc parameter.
 %
 %All of the rule-of-thumb methods for choosing the process noise values are
 %from Chapter 6.2 and 6.3 of [1] and modified slightly, as descibed in the
@@ -142,7 +138,7 @@ switch(algorithm)
         return;
     case 'PolyKalDirectDisc-ROT'
         %The rule-of-thumb is generalized from that given in Chapter 6.3.2
-        %of Bar-SmanDurhalom's book. In the book, it is suggested that
+        %of Bar-Shalom's book. In the book, it is suggested that
         %0.5*aMax<=sigmaV<=aMax for the DWNA model (order=1). This function
         %generalizes it to any order and chooses the point midway in that
         %specified range.

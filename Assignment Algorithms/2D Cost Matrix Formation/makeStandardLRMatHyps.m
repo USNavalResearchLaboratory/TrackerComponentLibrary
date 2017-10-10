@@ -10,7 +10,7 @@ function [A,xHyp,PHyp,GateMat]=makeStandardLRMatHyps(xPred,SPred,measUpdateFuns,
 %               hypotheses and performs simultaneous brute-force gating.
 %               It is assumed that the false alarms occur due to a Poisson
 %               point process with a constant density that is either in the
-%               coordinate system of the states or in the coordiante system
+%               coordinate system of the states or in the coordinate system
 %               of a converted measurement when appropriate parameters are
 %               passed. This implements the unitless ratio of [1], except
 %               detection probabilities are just multiplied by the target

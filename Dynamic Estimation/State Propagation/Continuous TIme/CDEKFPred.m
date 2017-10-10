@@ -1,67 +1,69 @@
-function [xPred,PPred,exitCode]=CDEKFPred(xPrev,PPrev,a,D,AJacob,tPrev,tPred,RKOptions)
-%%CDEKFPRED     Predict forward a Gaussian state estimate through time when
-%               the evolution of the state is described by a
-%               continuous-time stochastic diferential equation using a
-%               continuous-discrete extended Kalman filter. This uses
-%               a Gaussian approximation throughout the entire prediction,
-%               allowing for a solution based on deterministic differential
-%               equations. The differential equations are integrated
-%               forward using either the RKAdaptiveOverRange function, an
-%               explicit Runge-Kutta method, which can take a number of
-%               options, or using a fixed number of Runge-Kutta steps via
-%               the RungeKAtTimes function.
+function [xPred,PPred,exitCode]=CDEKFPred(xPrev,PPrev,a,D,includesJacob,tPrev,tPred,RKOptions)
+%%CDEKFPRED Predict forward a Gaussian state estimate through time when the
+%           evolution of the state is described by a continuous-time
+%           stochastic diferential equation using a continuous-discrete
+%           extended Kalman filter. This uses a Gaussian approximation
+%           throughout the entire prediction, allowing for a solution based
+%           on deterministic differential equations. The differential
+%           equations are integrated forward using either the
+%           RKAdaptiveOverRange function, an explicit Runge-Kutta method,
+%           which can take a number of options, or using a fixed number of
+%           Runge-Kutta steps via the RungeKAtTimes function.
 %
-%INPUTS: xPrev   The xDim X 1 state estimate at time tPrior.
-%        PPrev   The xDim X xDim state covariance matrix at time tPrior.
-%        a       The drift function in the continuous-time stochastic
-%                dynamic model. It takes the state and a time variable
-%                as its arguments.
-%        D       The diffusion function in the continuous-time stochastic
-%                dynamic model. It takes the state and a time variable
-%                as its arguments.
-%       AJacob   The derivative wrt x of the drift function in the
-%                continuous-time stochastic dynamic model. It takes the
-%                state and a time variable as its arguments. If an empty
-%                matrix is passed, then AJacob will be found using
-%                numerical differentiation via the numDiff function with
-%                default parameters.
-%        tPrev   The time of xPrev and SPrev.
-%        tPred   The time to which xPrev and SPrev should be predicted.
-%     RKOptions  An optional structure whose components have the same name
-%                and meaning as the corresponding components in the
-%                RKAdaptiveOverRange function with the exception of the
-%                fixedStepNum option, in which case a Runge-Kutta method
-%                using a fixed step size is used in place of the adaptive
-%                method. The possible components of the RKOptions function
-%                (with default values if omitted) are
-%                RKOptions.initStepSize: (tPred-tPrev)/RKOptions.maxSteps
-%                RKOptions.order:           5
-%                RKOptions.solutionChoice:  0
-%                RKOptions.RelTol:          1e-3.
-%                RKOptions.AbsTol:          1e-6
-%                RKOptions.maxSteps:        1024
-%                RKOptions.fixedNumSteps:  (none) If this parameter is
-%                                          present, then that number of
-%                                          steps of a fixed length (non-
-%                                          adaptive) will be taken and the
-%                                          RelTol, AbsTol, maxSteps, and
-%                                          initStepSize options are
-%                                          ignored.
-%                If an empty matrix is passed in place of RKOptions, then
-%                only the default values will be used.
+%INPUTS: xPrev The xDim X 1 state estimate at time tPrior.
+%        PPrev The xDim X xDim state covariance matrix at time tPrior.
+%            a The drift function in the continuous-time stochastic
+%              dynamic model. It takes the state and a time variable as its
+%              arguments. To avoid the need for numerical differentiation,
+%              it is desirable if the second output of the function is the
+%              The derivative with respect to x of the drift function.
+%              Whether or not the function returns this can be indicated
+%              using the includesJacob input.
+%            D The diffusion function in the continuous-time stochastic
+%              dynamic model. It takes the state and a time variable as its
+%              arguments.
+% includesJacob A boolean value indicating whether the drift function a
+%              also returns a Jacobian matrix. If this value is false or an
+%              empty matrix is passed, it is assumed that a does not return
+%              a Jacobian matrix and one will be found using numerical
+%              differentiation via the numDiff function with default
+%              parameters.
+%        tPrev The time of xPrev and SPrev.
+%        tPred The time to which xPrev and SPrev should be predicted.
+%    RKOptions An optional structure whose components have the same name
+%              and meaning as the corresponding components in the
+%              RKAdaptiveOverRange function with the exception of the
+%              fixedStepNum option, in which case a Runge-Kutta method
+%              using a fixed step size is used in place of the adaptive
+%              method. The possible components of the RKOptions function
+%              (with default values if omitted) are
+%              RKOptions.initStepSize: (tPred-tPrev)/RKOptions.maxSteps
+%              RKOptions.order:           5
+%              RKOptions.solutionChoice:  0
+%              RKOptions.RelTol:          1e-3.
+%              RKOptions.AbsTol:          1e-6
+%              RKOptions.maxSteps:        1024
+%              RKOptions.fixedNumSteps:  (none) If this parameter is
+%                                        present, then that number of steps
+%                                        of a fixed length (non-adaptive)
+%                                        will be taken and the RelTol, 
+%                                        AbsTol, maxSteps, and initStepSize
+%                                        options are ignored.
+%              If an empty matrix is passed in place of RKOptions, then
+%              only the default values will be used.
 %
-%OUTPUTS: xPred   The xDim X 1 predicted state estimate. If the
-%                 RKAdaptiveOverRange function failed, which might occur,
-%                 for example, if the maximum number of allowed steps is
-%                 too small, then an empty matrix is returned.
-%         SPred   The xDim X xDim predicted state covariance matrix, or an
-%                 empty matrix if the RKAdaptiveOverRange failed.
-%        exitCode The exit code from the RKAdaptiveOverRange function. This
-%                 is zero if the integration was a success. Otherwise, the
-%                 value identifies what the problem was. If the
-%                 RKOptions.fixedStepNum option was specified, then this
-%                 will always be zero. See the RKAdaptiveOverRange function
-%                 for more details when using an adaptive method.
+%OUTPUTS: xPred The xDim X 1 predicted state estimate. If the
+%               RKAdaptiveOverRange function failed, which might occur, for
+%               example, if the maximum number of allowed steps is too
+%               small, then an empty matrix is returned.
+%         SPred The xDim X xDim predicted state covariance matrix, or an
+%               empty matrix if the RKAdaptiveOverRange failed.
+%      exitCode The exit code from the RKAdaptiveOverRange function. This
+%               is zero if the integration was a success. Otherwise, the
+%               value identifies what the problem was. If the
+%               RKOptions.fixedStepNum option was specified, then this will
+%               always be zero. See the RKAdaptiveOverRange function for
+%               more details when using an adaptive method.
 %
 %The algorithm is the mean-covariance Runge-Kutta (MC-RK4) method described
 %in [1]. Other methods in this paper are criticized in Section III of [2].
@@ -82,8 +84,10 @@ function [xPred,PPred,exitCode]=CDEKFPred(xPrev,PPrev,a,D,AJacob,tPrev,tPred,RKO
     if(nargin<8)
         RKOptions=[];
     end
-    if(isempty(AJacob))
-        AJacob=@(x,t)numDiff(x,@(y) a(y,t),xDim);
+    if(isempty(includesJacob)||includesJacob==false)
+        aValJacob=@(x,t)deal(a(x,t),numDiff(x,@(y)a(y,t),xDim));
+    else
+        aValJacob=a;
     end
     
     %This is only set if a non-adaptive Runge-Kutta algorithm is to be
@@ -160,10 +164,9 @@ function [xPred,PPred,exitCode]=CDEKFPred(xPrev,PPrev,a,D,AJacob,tPrev,tPred,RKO
         PCur=x((xDim+1):end);
         PCur=reshape(PCur,xDim,xDim);
         
-        dx=a(xCur,t);
+        [dx,F]=aValJacob(xCur,t);
         
         dPoints=D(xCur,t);
-        F=AJacob(xCur,t);
         dP=PCur*F'+F*PCur'+dPoints*dPoints';
         
         dVal=[dx;dP(:)];

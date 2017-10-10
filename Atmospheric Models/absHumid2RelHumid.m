@@ -3,19 +3,19 @@ function relHumid=absHumid2RelHumid(absHumid,T,algChoice)
 %                   the assumption of the validity of the Ideal Gas Law and
 %                   Dalton's Law of Partial Pressures.
 %
-%INPUTS:  absHumid The absolute humidity with SI units of kilograms of water
-%                  per cubic meter.
-%        T         The temperature in degrees Kelvin.
-%        algChoice An optional parameter specifying the algorithm used for
-%                  the dew point computation. The choices are
-%                  0 The corrected version of the Clausius-Clapeyron
-%                    equation for use over land or in the upper air.
-%                  1 The empirical Magnus-type equation for use over water
-%                    or in the upper air (-40C to 50C temperature).
-%                  2 The empirical Magnus-type equation for use over ice
+%INPUTS: absHumid The absolute humidity with SI units of kilograms of water
+%                 per cubic meter.
+%               T The temperature in degrees Kelvin.
+%       algChoice An optional parameter specifying the algorithm used for
+%                 the dew point computation. The choices are
+%                 0 The corrected version of the Clausius-Clapeyron
+%                   equation for use over land or in the upper air.
+%                 1 The empirical Magnus-type equation for use over water
+%                   or in the upper air (-40C to 50C temperature).
+%                 2 The empirical Magnus-type equation for use over ice
 %                   (-80C to 0C temperature)
-%                  If algChoice is omitted, then the default value of 0,
-%                  the corrected Clausius-Clapeyron equation is used.
+%                 If algChoice is omitted, then the default value of 0,
+%                 the corrected Clausius-Clapeyron equation is used.
 %
 %OUTPUTS: relHumid  The relative humidity as a fraction from 0 to 1.
 %

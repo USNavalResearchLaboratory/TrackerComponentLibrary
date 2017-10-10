@@ -9,16 +9,16 @@
 *                    simpAstroRefrac, which uses these constants, uses a
 *                    modified formula that is more robust.
 *
-*INPUTS:R  The relative humidity at the observer (between 0 and 1). If
+*INPUTS: R The relative humidity at the observer (between 0 and 1). If
 *          this parameter is omitted or an empty matrix is passed, then
 *          Constants.standardRelHumid is used.
-*P         The atmospheric pressure at the observer in Pascals (N/m^2). If
+*        P The atmospheric pressure at the observer in Pascals (N/m^2). If
 *          this parameter is omitted or an empty matrix is passed, then
 *          Constants.standardAtmosphericPressure is used.
-*T         The air temperature at the observer in degrees Kelvin. If this
+*        T The air temperature at the observer in degrees Kelvin. If this
 *          parameter is omitted or an empty matrix is passed, then
 *          Constants.standardTemp is used.
-*wl        The wavelength at which the observation is made in units of
+*       wl The wavelength at which the observation is made in units of
 *          meters. If this parameter is omitted or an empty matrix is
 *          passed, then a wavelength of 0.574 micrometers is used, which
 *          is in the visible spectrum (a rather yellow color).

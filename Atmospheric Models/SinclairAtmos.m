@@ -71,23 +71,23 @@ function [n,dndr,T,P]=SinclairAtmos(h,phl0,Rh,P0,T0,wl,ht)
 %April 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    if(nargin<7)
+    if(nargin<7||isempty(ht))
        ht=11000;%Assumed top of the troposphere in meters.
     end
 
-    if(nargin<6)
+    if(nargin<6||isempty(wl))
        wl=0.574e-6; 
     end
 
-    if(nargin<5)
+    if(nargin<5||isempty(T0))
        T0=Constants.standardTemp; 
     end
     
-    if(nargin<4)
+    if(nargin<4||isempty(P0))
         P0=Constants.standardAtmosphericPressure;
     end
     
-    if(nargin<3)
+    if(nargin<3||isempty(Rh))
         Rh=Constants.standardRelHumid;
     end
 

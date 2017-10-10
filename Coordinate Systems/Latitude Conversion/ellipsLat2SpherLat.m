@@ -1,23 +1,23 @@
 function spherLat=ellipsLat2SpherLat(ellipsLat,f)
-%%ELLIPSLAT2SPHERLAT  Convert an ellipsoidal (geodetic) latitude of a
-%                     point on the surface of a reference ellipsoid into a
-%                     latitude in terms of a sphere (geocentric latitude)
-%                     whose radius is equal to the distance from the origin
-%                     to the point. This can be useful, for example, when
-%                     one wants the terrain height at a particular geodetic
-%                     latitude, but has to use spherical harmonics to find
-%                     the terrain height, which require geocentric
-%                     latitudes.
+%%ELLIPSLAT2SPHERLAT Convert an ellipsoidal (geodetic) latitude of a
+%                    point on the surface of a reference ellipsoid into a
+%                    latitude in terms of a sphere (geocentric latitude)
+%                    whose radius is equal to the distance from the origin
+%                    to the point. This can be useful, for example, when
+%                    one wants the terrain height at a particular geodetic
+%                    latitude, but has to use spherical harmonics to find
+%                    the terrain height, which require geocentric
+%                    latitudes.
 %
 %INPUTS: ellipsLat A vector or matrix of ellipsoidal (geodetic) latitudes
 %                  in radians. These range from -pi/2 to pi/2.
-%           f      The flattening factor of the reference ellipsoid. If
+%                f The flattening factor of the reference ellipsoid. If
 %                  this argument is omitted, the value in
 %                  Constants.WGS84Flattening is used.
 %
-%OUTPUTS:spherLat The spherical latitudes (elevation) corresponding to the
-%                 ellipsoidal latitudes in ellipsLat. This ranges from
-%                 -pi/2 to pi/2. It is measured up from the x-y plane.
+%OUTPUTS: spherLat The spherical latitudes (elevation) corresponding to the
+%                  ellipsoidal latitudes in ellipsLat. This ranges from
+%                  -pi/2 to pi/2. It is measured up from the x-y plane.
 %
 %The formula for converting between spherical and ellipsoidal latitudes is
 %in Section 3.4 of [1].

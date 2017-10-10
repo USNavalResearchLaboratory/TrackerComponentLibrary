@@ -4,20 +4,16 @@ function v=polyValNewton(z,a,c)
 %                 of Hermite interpolating polynomials for interpolating a
 %                 vector.
 %
-%INPUTS  z        A numPointsX1 or 1XnumPoints vector of scalar points
-%                 where the values of the numDim polynomials are desired.
-%        a        A numDimXn matrix of polynomial coefficients for numDim
-%                 polynomials, as described below.
-%        c        A numDim X(n-1) matrix of the control points
-%                 associated with each of the numDim polynomial in Newton's
-%                 form. When performing Hermite interpolation using a
-%                 polynomial returned by the HermiteInterpPoly function, c
-%                 can be a matrix holding the the values where the
-%                 interpolating polynomial matches the data for numDim
-%                 calls to the HermiteInterpPoly function.
+%INPUTS  z A numPointsX1 or 1XnumPoints vector of scalar points where the
+%          values of the numDim polynomials are desired.
+%        a A numDimXn matrix of polynomial coefficients for numDim
+%          polynomials, as described below.
+%        c A numDim X(n-1) matrix of the control points associated with
+%          each of the numDim polynomial in Newton's form, which might be
+%          the control points used in the HermiteInterpPoly function.
 %
-%OUTPUTS: v       The numDimXnumPoints matrix of values of the polynomials
-%                 evaluated at the points in z.
+%OUTPUTS: v The numDimXnumPoints matrix of values of the polynomials
+%           evaluated at the points in z.
 %
 %A polynomial function in Newton's form evaluated at point z has the form
 %y(z)=a(1)+sum_{k=1}^{n-1}a(k+1)(z-c(1))*(z-c(2))*...*(z-c(k))
@@ -51,9 +47,12 @@ end
 end
 
 function v=polyValNewtonScalar(z,a,c)
-%Below is VALUE from Chapter 19 of 
+%Below is VALUE from Chapter 19 of [1]
+%
+%REFERENCES:
 %A. Nijenhuis and H. S. Wilf, Combinatorial Algorithms for Computers
 %and Calculators, 2nd ed. New York: Academic press, 1978.
+
 n=length(a);
 
 v=ones(size(z))*a(n);

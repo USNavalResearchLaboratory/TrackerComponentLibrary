@@ -259,7 +259,7 @@ h0=vech(HInit);
 %HessInvInit will not be a true inverse of it.)
 HessInit=UCVHessian(HInit,xi);
 numVechEls=size(HessInit,1);
-L=cholSemiDef(HessInit,'lower',1e-6);
+L=cholSemiDef(HessInit,'lower',0,1e-6);
 optsLT.LT=true;
 optsLT.UT=false;
 optsUT.UT=true;

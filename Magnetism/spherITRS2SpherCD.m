@@ -102,9 +102,9 @@ if(nargin==1||nargin==2||nargin==3)
         end
     end
  
-    g10=C(1+1,1+0);
-    g11=C(1+1,1+1);
-    h11=S(1+1,1+1);
+    g10=C(2);
+    g11=C(3);
+    h11=S(3);
 elseif(nargin==4)
     %If the required coefficients are directly provided.
     g10=param1;

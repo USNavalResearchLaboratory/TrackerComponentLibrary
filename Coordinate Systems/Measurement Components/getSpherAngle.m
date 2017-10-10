@@ -18,6 +18,9 @@ function azEl=getSpherAngle(zC,systemType,zRx,M)
 %            (towards the y-axis). This is consistent with some spherical
 %            coordinate systems that use the z axis as the boresight
 %            direction of the radar.
+%          2 This is the same as 0 except instead of being given
+%            elevation, one desires the angle away from the z-axis, which
+%            is (pi/2-elevation).
 %      zRx The 3XN [x;y;z] location vectors of the receivers in Cartesian
 %          coordinates.  If this parameter is omitted or an empty matrix is
 %          passed, then the receivers are assumed to be at the origin. If
@@ -30,7 +33,7 @@ function azEl=getSpherAngle(zC,systemType,zRx,M)
 %          or an empty matrix is passed, then it is assumed that the local
 %          coordinate system is aligned with the global and M=eye(3) --the
 %          identity matrix is used. If only a single 3X3 matrix is passed,
-%          then is is assumed to be the same for all of the N conversions.
+%          then is=t is assumed to be the same for all of the N conversions.
 %
 %OUTPUT: azEl The 2XN matrix of azimuth and elevation angles in radians in
 %             the form [u;v] or [iu;v;w].
@@ -83,6 +86,9 @@ for curPoint=1:N
         case 1
             azimuth=atan2(x,z);
             elevation=asin(y./r1);
+        case 2
+            azimuth=atan2(y,x);
+            elevation=pi/2-asin(z./r1);
         otherwise
             error('Invalid system type specified')
     end

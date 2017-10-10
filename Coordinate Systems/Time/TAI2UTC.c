@@ -1,14 +1,14 @@
-/**TAI2UTC  Convert from international atomic time (TAI) to given as a
- *          two-part Julian date to universal coordinated time (UTC),
- *          represented as a two-part pseudo-Julian date.
+/**TAI2UTC Convert from international atomic time (TAI) to given as a
+ *         two-part Julian date to universal coordinated time (UTC),
+ *         represented as a two-part pseudo-Julian date.
  *
- *INPUTS:    Jul1, Jul2  Two parts of a Julian date given in TAI.
- *                       The units of the date are days. The full date is
- *                       the sum of both terms. The date is broken into two
- *                       parts to provide more bits of precision. It does
- *                       not matter how the date is split.
+ *INPUTS: Jul1, Jul2 Two parts of a Julian date given in TAI. The units of
+ *                   the date are days. The full date is the sum of both
+ *                   terms. The date is broken into two parts to provide
+ *                   more bits of precision. It does not matter how the
+ *                   date is split.
  *
- *OUTPUTS:   Jul1, Jul2  The time as a pseudo-Julian date in UTC.
+ *OUTPUTS: Jul1, Jul2 The time as a pseudo-Julian date in UTC.
  *
  *This is a mex wrapper for the function iauTaiutc in the International
  *Astronomical Union's (IAU) Standard's of Fundamental Astronomy library.
@@ -30,9 +30,10 @@
  *Many temporal coordinate systems standards are compared in [1].
  *
  *REFERENCES:
- *[1] D. F. Crouse, "An overview of major terrestrial, celestial, and
- *    temporal coordinate systems for target tracking", Report, U. S. Naval
- *    Research Laboratory, to appear, 2016.
+ *[1] D. F. Crouse, "An Overview of Major Terrestrial, Celestial, and
+ *    Temporal Coordinate Systems for Target Tracking," Formal Report,
+ *    Naval Research Laboratory, no. NRL/FR/5344--16-10,279, 10 Aug. 2016,
+ *    173 pages.
  *
  * October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
  */

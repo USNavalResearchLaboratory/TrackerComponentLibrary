@@ -4,48 +4,49 @@ function xSim=StrongStochRungeKStep(method,xCur,curT,a,D,deltaT,w,z,dadt,dDdt,da
 %                       in time by a step-size of deltaT using a strong
 %                       Taylor scheme.
 %
-%INPUTS: method  An integer defining which weak Taylor method to use.
-%                1  The explicit order 1.5 strong Taylor scheme with
-%                   additive noise. This requires the diffusion function to
-%                   be additive.
-%                2  The order 1.5 strong Taylor scheme with additive noise.
-%                   This requires the diffusion function to be additive.
-%        xCur    The initial target state at time curT.
-%        curT    The time of the initial state xCur.
-%        a       The drift function in the continuous-time stochastic
-%                dynamic model. It takes the state and a time variable
-%                as its arguments, a(x,t).
-%        D       The diffusion function in the continuous-time stochastic
-%                dynamic model. It takes the state and a time variable as
-%                its arguments, D(x,t). If the process noise must be
-%                additive, D(x,t) should not depend on x.
-%       deltaT   The size of the single step over which the strong
-%                stochastic Runge-Kutta integration is performed.
-%      w,z       A pair of correlated normally distributed random variables
-%                whose relationship is defined in section 10.4 of Kloeden.
-%                If not provided or an empty matrix is passed, these values
-%                are calculated. Either both or neither of these variables
-%                must be supplied.
-%     dadt       A xDimX1 matrix of the derivative of the drift function
-%                with respect to time at state xCur a   nd time curT. This can
-%                also be a function that takes the state and a time
-%                variable as its arguments, dadt(x,t).
-%     dDdt       A xDimXdColDim matrix of the derivative of the diffusion
-%                function with respect to time at state xCur and time curT.
-%                This can also be a function that takes the state and a
-%                time variable as its arguments, dDdt(x,t). If the process
-%                noise must be additive, dDdt(x,t) should not depend on x.
-%     dadx       A xDimXxDim matrix of the derivative of the drift function
-%                with respect to the state at state xCur and time curT.
-%                This can also be a function that takes the state and a
-%                time variable as its arguments, dadx(x,t).
-%    d2adx       A xDimXxDimXxDim matrix of the second derivative of the
-%                drift function with respect to the state at state xCur and
-%                time curT. The value at point (m,k,l) represents
-%                d2a(m)/dx(k)dx(l). This can also be a function that takes
-%                the state and a time variable as its arguments,
-%                d2adx(x,t). If not provided, this is assumed to be zero.
-%OUTPUTS: xSim   The simulated target state at time curT+deltaT.
+%INPUTS: method An integer defining which weak Taylor method to use.
+%               1 The explicit order 1.5 strong Taylor scheme with additive
+%                 noise. This requires the diffusion function to be
+%                 additive.
+%               2 The order 1.5 strong Taylor scheme with additive noise.
+%                 This requires the diffusion function to be additive.
+%          xCur The initial target state at time curT.
+%          curT The time of the initial state xCur.
+%             a The drift function in the continuous-time stochastic
+%               dynamic model. It takes the state and a time variable as
+%               its arguments, a(x,t).
+%             D The diffusion function in the continuous-time stochastic
+%               dynamic model. It takes the state and a time variable as
+%               its arguments, D(x,t). If the process noise must be
+%               additive, D(x,t) should not depend on x.
+%        deltaT The size of the single step over which the strong
+%               stochastic Runge-Kutta integration is performed.
+%           w,z A pair of correlated normally distributed random variables
+%               whose relationship is defined in section 10.4 of Kloeden.
+%               If not provided or an empty matrix is passed, these values
+%               are calculated. Either both or neither of these variables
+%               must be supplied.
+%          dadt A xDimX1 matrix of the derivative of the drift function
+%               with respect to time at state xCur a   nd time curT. This
+%               can also be a function that takes the state and a time
+%               variable as its arguments, dadt(x,t).
+%          dDdt A xDimXdColDim matrix of the derivative of the diffusion
+%               function with respect to time at state xCur and time curT.
+%               This can also be a function that takes the state and a
+%               time variable as its arguments, dDdt(x,t). If the process
+%               noise must be additive, dDdt(x,t) should not depend on x.
+%          dadx A xDimXxDim matrix of the derivative of the drift function
+%               with respect to the state at state xCur and time curT.
+%               This can also be a function that takes the state and a
+%               time variable as its arguments, dadx(x,t).
+%         d2adx A xDimXxDimXxDim matrix of the second derivative of the
+%               drift function with respect to the state at state xCur and
+%               time curT. The value at point (m,k,l) represents
+%               d2a(m)/dx(k)dx(l). This can also be a function that takes
+%               the state and a time variable as its arguments,
+%               d2adx(x,t). If not provided, this is assumed to be zero.
+%
+%OUTPUTS: xSim The simulated target state at time curT+deltaT.
 %
 %The algorithm for the explicit order 1.5 Taylor scheme is described in
 %Eq. 2.19, Chapter 11.2 of [1]. The vector form of the equations used here

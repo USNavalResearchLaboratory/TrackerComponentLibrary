@@ -187,7 +187,7 @@ for curStep=3:numSamples
     end
     
     %Display the measurements
-    scatter(zCart(1,:),zCart(2,:))
+    scatter(zCart(1,:),zCart(2,:),'ob')
     
     %%PREDICT TARGETS FORWARD
     for curTar=1:numTargets

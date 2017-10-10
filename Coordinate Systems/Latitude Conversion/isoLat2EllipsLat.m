@@ -10,11 +10,11 @@ function ellipsLat=isoLat2EllipsLat(isoLat,f)
 %                 warping distances. The isometric latitude is sometimes
 %                 referred to as Psi.
 %
-%INPUTS: isoLat    A vector or matrix of real isometric latitudes. These
-%                  range in value from -Inf to Inf.
-%           f      The flattening factor of the reference ellipsoid. If
-%                  this argument is omitted, the value in
-%                  Constants.WGS84Flattening is used.
+%INPUTS: isoLat A vector or matrix of real isometric latitudes. These range
+%               in value from -Inf to Inf.
+%             f The flattening factor of the reference ellipsoid. If this
+%               argument is omitted, the value in Constants.WGS84Flattening
+%               is used.
 %
 %OUTPUTS: ellipsLat The ellipsoidal latitudes in radians corresponding to
 %                   the isometric latitudes in isoLat. These range from

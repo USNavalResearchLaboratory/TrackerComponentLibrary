@@ -1,12 +1,12 @@
 function J=calcRuvRRConvJacob(zRUVRR,useHalfRange,lTx,lRx,M)
-%%CALCRUVRRCONVJACOB Calculate the Jacobian for a Cartesian position
-%            augmented with a range rate taken with respect to a monostatic
-%            or bistatic range and direction cosines measurement in 3D,
-%            ignoring atmospheric effects. This type of Jacobian is useful
-%            when performing tracking using Cartesian-converted
-%            measurements where the clutter density is specified in the
-%            measurement coordinate system, not the converted measurement
-%            coordinate system.
+%%CALCRUVRRCONVJACOB Calculate the Jacobian for a monostatic or bistatic
+%            range direction cosines measurement in 3D with range rate,
+%            ignoring atmospheric effects, with respect to Cartesian
+%            position augmented with a range rate component. This type of
+%            Jacobian is useful when performing tracking using Cartesian-
+%            converted measurements where the clutter density is specified
+%            in the measurement coordinate system, not the converted
+%            measurement coordinate system.
 %
 %INPUTS: zRUVRR A 4X1 point in bistatic range, u and v, and range rate
 %           coordinates in the format [bistatic range;u;v; range rate]. It

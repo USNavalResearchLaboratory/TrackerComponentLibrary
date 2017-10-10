@@ -5,22 +5,21 @@ function b=ChebyshevPolyIntCoeffs(a,tauStart,tauEnd)
 %                   ChebyshevPolySynth function, compute the coefficients
 %                   for the indefinite integral of the function.
 %
-%INPUTS: a   A 1X(n+1) or (n+1)X1 vector of coefficients for a weighted sum
-%            of Chebyshev polynomials of order 0 to n.
+%INPUTS: a A 1X(n+1) or (n+1)X1 vector of coefficients for a weighted sum
+%          of Chebyshev polynomials of order 0 to n.
 %tauStart,tauEnd The possible range of the inputs to the Chebyshev
-%                functions. This is used if the functions are transformed
-%                to map to a range larger than their standard -1 to 1. If
-%                omitted, a  range of -1 to 1 is assumed --the normal range
-%                for Chebyshev polynomials. The option for mapping to a
-%                wider range is useful when using Chebyshev polynomials for
-%                interpolation. Note that the such polynomials are
-%                generally not useful for interpolating much outside of the
-%                valid range.
+%          unctions. This is used if the functions are transformed to map
+%          to a range larger than their standard -1 to 1. If omitted, a
+%          range of -1 to 1 is assumed --the normal range for Chebyshev
+%          polynomials. The option for mapping to a wider range is useful
+%          when using Chebyshev polynomials for interpolation. Note that
+%          such polynomials are generally not useful for interpolating far
+%          outside of the valid range.
 %
-%INPUTS: b   An (n+2)X1 vector of coefficients for a weighted sum
-%            of Chebyshev polynomials of order 0 to n+1 that can be used in
-%            the ChebyshevPolySynth function to find the indefinte integral
-%            of the function given by a (with 0 additive constant).
+%INPUTS: b An (n+2)X1 vector of coefficients for a weighted sum of
+%          Chebyshev polynomials of order 0 to n+1 that can be used in the
+%          ChebyshevPolySynth function to find the indefinte integral of
+%          the function given by a (with 0 additive constant).
 %
 %The derivative of a weighted Chebyshev polynomial series is another
 %weighted Chebyshev polynomial series, as given in [1] and is derived by

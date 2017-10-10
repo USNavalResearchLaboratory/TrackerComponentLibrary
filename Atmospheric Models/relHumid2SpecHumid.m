@@ -9,29 +9,29 @@ function specHumid=relHumid2SpecHumid(relHumid,T,mpVDryAir,defChoice,algChoice)
 %                    to the total mass density of the air including the
 %                    water.
 %
-%INPUTS: relHumid  The relative humidity as a fraction from 0 to 1.
-%        T         The temperature in degrees Kelvin.
-%        mpVDryAir The mass density (mass in kilograms per unit volume in
-%                  cubic meters) of dry air (the air not counting the
-%                  water).
-%        defChoice An optimal parameter specifying the definition of
-%                  specific humidity to use. The choices are
-%                  0 Define specific humidity as the mass density of water
-%                    over the mass density of dry air.
-%                  1 Define specific humidity as the mass density of water
-%                    over the total mass density of the air.
-%                  If defChoice is omitted, then the default value of 0 is
-%                  used.
-%        algChoice An optional parameter specifying the algorithm used for
-%                  the dew point computation. The choices are
-%                  0 The corrected version of the Clausius-Clapeyron
-%                    equation for use over land or in the upper air.
-%                  1 The empirical Magnus-type equation for use over water
-%                    or in the upper air (-40C to 50C temperature).
-%                  2 The empirical Magnus-type equation for use over ice
-%                   (-80C to 0C temperature)
-%                  If algChoice is omitted, then the default value of 0,
-%                  the corrected Clausius-Clapeyron equation is used.
+%INPUTS: relHumid The relative humidity as a fraction from 0 to 1.
+%               T The temperature in degrees Kelvin.
+%       mpVDryAir The mass density (mass in kilograms per unit volume in
+%                 cubic meters) of dry air (the air not counting the
+%                 water).
+%       defChoice An optimal parameter specifying the definition of
+%                 specific humidity to use. The choices are
+%                 0 Define specific humidity as the mass density of water
+%                   over the mass density of dry air.
+%                 1 Define specific humidity as the mass density of water
+%                   over the total mass density of the air.
+%                 If defChoice is omitted, then the default value of 0 is
+%                 used.
+%       algChoice An optional parameter specifying the algorithm used for
+%                 the dew point computation. The choices are
+%                 0 The corrected version of the Clausius-Clapeyron
+%                   equation for use over land or in the upper air.
+%                 1 The empirical Magnus-type equation for use over water
+%                   or in the upper air (-40C to 50C temperature).
+%                 2 The empirical Magnus-type equation for use over ice
+%                  (-80C to 0C temperature)
+%                 If algChoice is omitted, then the default value of 0,
+%                 the corrected Clausius-Clapeyron equation is used.
 %
 %OUTPUTS: specHumid The specific humidity using the given definition. The
 %                   specific humidity is unitless.

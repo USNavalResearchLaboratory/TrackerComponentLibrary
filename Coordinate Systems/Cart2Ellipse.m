@@ -20,9 +20,9 @@ function points=Cart2Ellipse(cartPoints,algorithm,a,f)
 %                   this argument is omitted, the value in
 %                   Constants.WGS84Flattening is used.
 %
-%OUTPUTS:   points  A matrix of the converted points. Each column of the
-%                   matrix has the format [latitude;longitude;altitude],
-%                   with latitude and longitude given in radians.
+%OUTPUTS: points A matrix of the converted points. Each column of the
+%                matrix has the format [latitude;longitude;altitude], with
+%                latitude and longitude given in radians.
 %
 %The algorithm of Olson in [1] appears to be the most precise non-iterative
 %method available. The method of Sofair in [2] and [3] is also a
@@ -33,8 +33,8 @@ function points=Cart2Ellipse(cartPoints,algorithm,a,f)
 %
 %REFERENCES:
 %[1] D. K. Olson, "Converting Earth-centered, Earth-fixed coordinates to
-%   geodetic coordinates," IEEE Transactions on Aerospace and Electronic
-%   Systems, vol. 32, no. 1, pp. 473-476, Jan. 1996.
+%    geodetic coordinates," IEEE Transactions on Aerospace and Electronic
+%    Systems, vol. 32, no. 1, pp. 473-476, Jan. 1996.
 %[2] I. Sofair "Improved method for calculating exact geodetic latitude and
 %    altitude revisited," Journal of Guidance, Control, and Dynamics, vol.
 %    23, no. 2, p. 369, Mar. 2000.
@@ -63,6 +63,11 @@ end
 switch(algorithm)
     case 0%Olson's algorithm
         [lambda,phi,h]=OlsonAlg(cartPoints,a,f);
+        
+        if(any(imag(lambda)~=0)||any(imag(phi)~=0)||any(imag(phi)~=0))
+            error('The point given is too close to the center of the Earth for the algorithm of Olson.')
+        end
+        
     case 1%Sofair's algorithm
         [lambda,phi,h]=SofairAlg(cartPoints,a,f);
     case 2%Fukushima's algorithm

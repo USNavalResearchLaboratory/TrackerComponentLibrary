@@ -7,7 +7,7 @@
  *                  both terms. The date is broken into two parts to
  *                  provide more bits of precision. It does not matter how
  *                  the date is split.
- *        version   An optional integer specifying the theory to use for
+ *          version An optional integer specifying the theory to use for
  *                  GAST. The theory chosen should be consistent with other
  *                  values used in astronomical routines. Possible values
  *                  are
@@ -18,11 +18,11 @@
  *                  2006 (The default if omitted) Compute GAST in line with
  *                     IAU 2006 resolutions related to precession and
  *                     nutation.
- *        deltaT    An optional parameter specifying the offset between TT
+ *           deltaT An optional parameter specifying the offset between TT
  *                  and UT1 in seconds. If this parameter is omitted, then
  *                  the value of the function getEOP will be used.
  *
- *OUTPUTS: GAST     The Greenwhich apparent sideral time in radians. 
+ *OUTPUTS: GAST The Greenwhich apparent sideral time in radians. 
  *
  *GAST is defined in Section 5.5.7 of [1].
  *
@@ -72,11 +72,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     TT1=getDoubleFromMatlab(prhs[0]);
     TT2=getDoubleFromMatlab(prhs[1]);
     
-    if(nrhs>2) {
+    if(nrhs>2&&!mxIsEmpty(prhs[2])) {
         algToUse=getIntFromMatlab(prhs[2]);
     }
     
-    if(nrhs>3) {
+    if(nrhs>3&&!mxIsEmpty(prhs[3])) {
         deltaT=getDoubleFromMatlab(prhs[3]);
     } else {
         mxArray *retVals[4];

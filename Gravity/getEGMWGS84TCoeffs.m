@@ -1,49 +1,46 @@
 function [C,S,a,c]=getEGMWGS84TCoeffs(M,useNGAApprox,modelType)
-%%GETEGMWGS84TCOEFFS     Obtain spherical harmonic coefficients for
-%                        computing the disturbing potential T at a point
-%                        when using the Earth Gravitational Model 2008
-%                        (EGM2008) or Earth Gravitational Model 1996
-%                        (EGM96) with the WGS-84 reference ellipsoid. These
-%                        coefficients can be used, with other information,
-%                        to determine geoid heights above the WGS-84
-%                        ellipsoid.
+%%GETEGMWGS84TCOEFFS Obtain spherical harmonic coefficients for computing
+%            the disturbing potential T at a point when using the Earth
+%            Gravitational Model 2008 (EGM2008) or Earth Gravitational
+%            Model 1996 (EGM96) with the WGS-84 reference ellipsoid. These
+%            coefficients can be used, with other information, to determine
+%            geoid heights above the WGS-84 ellipsoid.
 %
-%INPUTS:    M       The integer maximum order of the spherical harmonic
-%                   coefficients obtained. This is a value between 2 and
-%                   2190 for the EGM2008 model and betwen 2 and 360 for the
-%                   EGM96 model. If this parameter is omitted or an empty
-%                   matrix is passed, the default value being the total
-%                   number of coefficients in the model is used.
-%     useNGAApprox  If true, use the same approximation as the National
-%                   Geospatial Intelligence Agency (NGA) in their
-%                   public code for geoid undulations, which omits certain
-%                   terms. If this parameter is omitted, then the default
-%                   value of true is used.
-%        modelType  An optional parameter specifying coefficient model to
-%                   use. Possible values are
-%                   0 (the default if omitted) Use the EGM2008 model.
-%                   1 Use the EGM96 model.
+%INPUTS: M The integer maximum order of the spherical harmonic coefficients
+%          obtained. This is a value between 2 and 2190 for the EGM2008
+%          model and betwen 2 and 360 for the EGM96 model. If this
+%          parameter is omitted or an empty matrix is passed, the default
+%          value being the total number of coefficients in the model is
+%          used.
+% useNGAApprox If true, use the same approximation as the National
+%          Geospatial Intelligence Agency (NGA) in their public code for
+%          geoid undulations, which omits certain terms. If this parameter
+%          is omitted, then the default value of true is used.
+% modelType An optional parameter specifying coefficient model to use.
+%          Possible values are
+%          0 (The default if omitted) Use the EGM2008 model.
+%          1 Use the EGM96 model.
 %
-%OUTPUTS: C    A ClusterSet class holding the coefficient terms that are
-%               multiplied by cosines in the harmonic expansion. C(n+1,m+1)
-%               is the coefficient of degree n and order m. When a maximum
-%               degree of M is used, all C have values for all n from 0 to
-%               M and for all m from 0 to n for each n. The coefficients
-%               are unitless.
-%           S   A ClusterSet class holding the coefficient terms that are
-%               multiplied by sines in the harmonic expansion. The
-%               format of S is the same as that of C.
-%           a   The numerator in the (a/r)^n term in the spherical harmonic
-%               sum, having units of meters.
-%           c   The constant value by which the spherical harmonic series
-%               is multiplied, having units of m^3/s^2.
+%OUTPUTS: C An array holding the coefficient terms that are multiplied by
+%           cosines in the harmonic expansion. This can be given to a
+%           CountingClusterSet class such that C(n+1,m+1) is the
+%           coefficient of degree n and order m. When a maximum degree of
+%           M is used, all C have values for all n from 0 to M and for all
+%           m from 0 to n for each n. The coefficients are unitless.
+%         S An array holding the coefficient terms that are multiplied by
+%           sines in the harmonic expansion. The format of S is the same as
+%           that of C.
+%         a The numerator in the (a/r)^n term in the spherical harmonic
+%           sum, having units of meters.
+%         c The constant value by which the spherical harmonic series is
+%           multiplied, having units of m^3/s^2.
 %
 %The coefficients are meant for use in the function
 %getEGMGeoidHeight(); However, they can be used in general for
 %computing the disturbing potential when using the function
 %spherHarmonicEval. Note that corrections for the values of the universal
 %gravitational constant times the mass of the Earth and the semi-major axis
-%of the Earth are included when useNGAApprox=false. WHen useNGAApprox=true,
+%of the Earth are included when useNGAApprox=false. When useNGAApprox=true,
 %the inclusion occurs when using the EGM2008 model, but not when using the
 %EGM96 model as the reference code 
 %
@@ -104,12 +101,15 @@ function [C,S,a,c]=getEGMWGS84TCoeffs(M,useNGAApprox,modelType)
         CEllips=ellipsGravCoeffs(M,true,omegaEllipse,aEllipse,fEllipse,GMEllipse);
     end
     
+    C=CountingClusterSet(C);
+    CEllips=CountingClusterSet(CEllips);
     aRecur=1;
     for n=0:M
         C(n+1,:)=C(n+1,:)-GMRat*aRecur*CEllips(n+1,:);
         aRecur=aRecur*aRat;
     end
     clear CEllips;
+    C=C.clusterEls;
 end
 
 %LICENSE:

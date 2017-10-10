@@ -9,26 +9,24 @@ function [W,PPostAsymp]=findAsymptoticGain(H,F,R,Q)
 %                     higher-order parameters, if desired. This gain can be
 %                     used in the function fixedGainUpdate.
 %
-%INPUTS:    H   The zDim X xDim  measurement matrix such that H*x+w is the
-%               measurement, where x is the state and w is zero-mean
-%               Gaussian noise with covariance matrix R.
-%           F   The xDim X xDim state transition matrix. The state at
-%               discrete-time k+1 is modeled as F times the state at time k
-%               plus zero-mean Gaussian process noise with covariance
-%               matrix Q
-%           R   The zDim X zDim measurement covariance matrix.
-%           Q   The xDim X xDim process noise covariance matrix.
+%INPUTS: H The zDim X xDim  measurement matrix such that H*x+w is the
+%          measurement, where x is the state and w is zero-mean Gaussian
+%          noise with covariance matrix R.
+%        F The xDim X xDim state transition matrix. The state at discrete-
+%          time k+1 is modeled as F times the state at time k plus zero-
+%          mean Gaussian process noise with covariance matrix Q
+%        R The zDim X zDim measurement covariance matrix.
+%        Q The xDim X xDim process noise covariance matrix.
 %
-%OUTPUTS:   W   The gain in a constant gain filter. That is, if xk is the
-%               state estimate at time k, then the state estimate at time
-%               k+1 is F*xk+W*(z-H*F*xk) where z is the observation at time
-%               k+1.
-%   PPostAsymp  The asymptotic posterior (after a measurement update) 
-%               covariance of the state estimate when using a fixed-gain
-%               filter. This is just the solution to the Riccatti equation.
-%               If the asymptotic prior (after prediction, before a
-%               measurement update) covariance matrix is desired, then that
-%               is just F*PPostAsymp*F'+Q.
+%OUTPUTS: W The gain in a constant gain filter. That is, if xk is the state
+%           estimate at time k, then the state estimate at time k+1 is
+%           F*xk+W*(z-H*F*xk) where z is the observation at time k+1.
+% PPostAsymp The asymptotic posterior (after a measurement update) 
+%           covariance of the state estimate when using a fixed-gain
+%           filter. This is just the solution to the Riccatti equation. If
+%           the asymptotic prior (after prediction, before a measurement
+%           update) covariance matrix is desired, then that is just
+%           F*PPostAsymp*F'+Q.
 %
 %This assumes that the sampling rate is of a fixed duration T so that F and
 %Q are constants. If one uses a 1D motion model, then the coefficients from

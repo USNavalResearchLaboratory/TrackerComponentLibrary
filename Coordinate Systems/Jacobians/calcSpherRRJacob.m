@@ -20,13 +20,16 @@ function J=calcSpherRRJacob(x,systemType,useHalfRange,lTx,lRx,M)
 %            (towards the y-axis). This is consistent with some spherical
 %            coordinate systems that use the z axis as the boresight
 %            direction of the radar.
+%          2 This is the same as 0 except instead of being given elevation,
+%            one desires the angle away from the z-axis, which is
+%            (pi/2-elevation).
 % useHalfRange An optional boolean value specifying whether the bistatic
 %          (round-trip) range value has been divided by two. This normally
 %          comes up when operating in monostatic mode (the most common
 %          type of spherical coordinate system), so that the range
 %          reported is a one-way range (or just half a bistatic range).
 %          The default if this parameter is not provided is false if lTx
-%          and is provided and true if is is omitted (monostatic). 
+%          and is provided and true if it is omitted (monostatic). 
 %      lTx The 6X1 position and velocity vector of the transmitter.
 %      lRx The 6X1 position and velocity vector of the receiver.
 %        M A 3X3 rotation matrices to go from the alignment of the global

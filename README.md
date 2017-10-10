@@ -1,4 +1,4 @@
-**Tracker Component Library Release 2.5, March 2017**
+**Tracker Component Library Release 3.0, September 2017**
 https://github.com/USNavalResearchLaboratory/TrackerComponentLibrary
 
 A paper describing a number of features of the library is<br>
@@ -6,12 +6,25 @@ D. F. Crouse, "The Tracker Component Library: Free Routines for Rapid
 Prototyping," IEEE Aerospace and Electronic Systems Magazine, vol. 32, no.
 5, pp. 18-27, May. 2017.
 
-These are the release notes for the version 2.5 of the Tracker Component
+These are the release notes for the version 3.0 of the Tracker Component
 Library. The Tracker Component Library is a collection of Matlab routines
 (some written in C/C++ requiring compilation compilation) for simulating
 and tracking targets in various scenarios. Due to the complexity of the
 target tracking problem, a great many routines can find use in other areas
 including combinatorics, astronomy, and statistics.
+
+As of version 3.0, the library has been split into two parts. This is the
+publicly available part. A small number of functions have been placed
+into a supplement that is only available to the U.S. DoD and DoD and U.S.
+DoD contractors (Distribution Statement D), though certain parts may be
+available to other U.S. Government Agencies (DIstributions Statement C)
+upon request. Many future additions to the library will be placed in the
+the limited distribution supplement. Instructions for obtaining the limited
+distribution potion of the library will be posted in this readme after the
+supplement has been made available.
+
+Those looking for magnetic field sythesis code might want to look at
+./Sample Code/Magnetic Models/ .
 
 Those looking to get a quick idea of a very simple end-to-end tracking
 algorithm (track initiation, data association, maintenance, and
@@ -25,16 +38,35 @@ scenarios is as simple as changing the proper components. A lot of other
 sample code is also provided to demonstrate the use of other parts of the
 library.
 
-Due to GitHub's limit that files not exceed 100MB, the ephemeris data file
-for the astronomical code has been omitted. To use any of the files
-requiring planetary ephemerides, such as solarBodyVec.m, please download
-the file de430.bsp from
-http://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/ and place it
-in the folder "Astronomical Code/data".
+NOTABLE CHANGES SINCE VERSION 2.5
+
+- Many new functions have been added.
+- Many corrections have been made and a number of functions in different
+  areas have been added or made more versatile/ stable.
+- A number of routines related to signal processing have been added to the
+  library in the Mathematical Functions/Signal Processing folder.
+- Less reliance on third-party libraries and compiled code. NASA's SPICE
+  library has been removed and the function readJPLEphem can be used to
+  read in NASA JPL's ephemerides without compiling anything. Additionally,
+  the directGeodeticProb function has been rewritten in Matlab and does not
+  use GeographicLib, though the GeographicLib library is still used to
+  solve the indirect geodetic problem.
+- Spherical harmonic synthesis has been simplified and now works with
+  vector coefficients and complex coefficients. Additionally, in addition
+  to obtaining a potential and a gradient, one can obtain a Hessian matrix,
+  opening the door to simulation of gravity gradiometer measurements.
+  Fitting of low to moderate order spherical harmonic coefficients to
+  measured data is now possible with the fitSpherHarmonics function.
+- Arbitrary-order multivariate B-spline fitting, evaluation,
+  differentiation, and integration has been added. 
+- Linear dynamic models expressed in non-Cartesian coordinate systems have
+  been added along with conversions of states between coordinate systems.
+  See /Dynamic Models/Continuous Time/Non-Cartesian Position/ and
+  /Coordinate Systems/State Coordinate System Conversion/
 
 COMPILED CODE:
 
-The compilation of the library has been tested under Matlab2016b for Mac OS
+The compilation of the library has been tested under Matlab2017a for Mac OS
 X 10.11 using clang-800.0.42.1. However, the code should work under other
 versions of Matlab, compilers, and operating systems.  To use the full
 library, add the library and all of its subfolders to your active path in
@@ -47,7 +79,7 @@ supported by Matlab must be installed. Additionally, to decode AIS data,
 the compiler must support C++11. As the commands for the compilation of the
 AIS data are at the end of the CompileCLibraries function, if a compiler
 without C++11 support is used, the rest of the library should be
-successfully compiled before an error ocurs while compiling the AIS code.
+successfully compiled before an error occurs while compiling the AIS code.
 
 EXTERNAL SOLVERS:
 
@@ -102,7 +134,7 @@ The file Coeff_Height_and_Depth_to2190_DTM2006.0 should be placed into
 will be significantly slower than subsequent calls, assuming the full model
 is loaded the first time.
 
-3) The EMM2015 magnetic field coefficients:
+3) The EMM2017 magnetic field coefficients:
 https://www.ngdc.noaa.gov/geomag/EMM/
 The coefficients are included with the software that is provided. The files
 having names like EMM2015.COF and EMM2000.COF should all be zipped into an
@@ -146,29 +178,25 @@ downloaded, ungzipped and placed in ./Gravity/data .
 http://earth-info.nga.mil/GandG/wgs84/gravitymod/egm96/egm96.html
 The file corrcoef.z should be decompressed and placed in ./Gravity/data .
 
-10) NASA JPL's GL0900C gravitational model of the Moon
+10) NASA JPL's DE430t planetary/solar/lunar ephemerides
+ftp://ssd.jpl.nasa.gov/pub/eph/planets/Linux/de430t
+The file linux_p1550p2650.430t should be downloaded and placed in 
+./Astronomical Code/data
+for use by the readJPLEphem function. The readJPLEphem function can read
+other NASA ephemerides, but the DE430t set are the default.
+
+11) NASA JPL's GL0900C gravitational model of the Moon
 http://pds-geosciences.wustl.edu/missions/grail/default.htm
 Download the file jggrx_0900c_sha.tab and place it in ./Gravity/data .
 
-11) The FES2004 tide model of the effects of ocean Earth tides.
+12) The FES2004 tide model of the effects of ocean Earth tides.
 http://maia.usno.navy.mil/conv2010/convupdt/convupdt_c6.html
 The file fes2004_Cnm-Snm.dat should be downloaded and placed in
 ./Gravity/Tides/data .
-
-12) The DE430 planetary/solar ephemerides
-http://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/
-Place the file de430.bsp in ./Astronomical Code/data .
-
-13) The DE 421 Lunar ephemerides
-http://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/
-The file file moon_pa_de421_1900-2050.bpc should be downloaded and placed
-in ./Astronomical Code/data .
-
-14) The definitions of the lunar coordinate systems in the DE 421 
-http://naif.jpl.nasa.gov/pub/naif/generic_kernels/fk/satellites/
-The file moon_080317.tf should be downloaded and placed in
-./Astronomical Code/data .
  
-15) The Hipparcos 2 Star Catalog
+14) The Hipparcos 2 Star Catalog
 http://cdsarc.u-strasbg.fr/viz-bin/Cat?I/311
 Place the file hip2.dat in ./Astronomical Code/data .
+
+September 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
+(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

@@ -31,7 +31,7 @@ function [coeffs,termMat]=polyFitMultiDim(varVals,funVals,degree)
 %c*x1^(a1)*x2^(a2)*x3^(a3)...xn^(an)
 %Here, the variables x are known as are the values z of the polynomial
 %evaluated at those points. Thus, the unknowns are the c terms, the
-%coefficients of the monomials. Thhis function evaluates the monomial terms
+%coefficients of the monomials. This function evaluates the monomial terms
 %and build a matrix with all of the monomial term values for all of the
 %equations. The solution to the coefficient values is thus the solution to
 %a linear system of equations. The 

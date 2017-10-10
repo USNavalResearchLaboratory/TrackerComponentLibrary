@@ -48,24 +48,24 @@ g=gradV+omega^2*[CartPoint(1);CartPoint(2);0];
 %Earth approximation.
 [U0,g0]=ellipsParam2Grav(CartPoint);
 
-display('The geodetic latitude and longitude of the point on the surface of')
-display('the WGS-84 reference ellipsoid where the values are computed are (in degrees)')
+disp('The geodetic latitude and longitude of the point on the surface of')
+disp('the WGS-84 reference ellipsoid where the values are computed are (in degrees)')
 latitude=theta*(180/pi)
 longitude=lambda*(180/pi)
 
-display('The gravity potential from the spherical harmonic solution is (in m^2/s^2)')
+disp('The gravity potential from the spherical harmonic solution is (in m^2/s^2)')
 U
 
-display('The gravitational acceleration vector (with centripetal acceleration)')
-display('from the spherical harmonic solution is (in m/s^2)')
+disp('The gravitational acceleration vector (with centripetal acceleration)')
+disp('from the spherical harmonic solution is (in m/s^2)')
 g
 
-display('The percent error in the potential from the spherical harmonic')
-display('approximation and from the explicit solution is')
+disp('The percent error in the potential from the spherical harmonic')
+disp('approximation and from the explicit solution is')
 percentErrorPotential=100*(U-U0)/U0
 
-display('The percent error in the gravitational acceleration magnitude from')
-display('the spherical harmonic approximation and from the explicit solution is')
+disp('The percent error in the gravitational acceleration magnitude from')
+disp('the spherical harmonic approximation and from the explicit solution is')
 percentErrorGravAccel=100*(norm(g)-norm(g0))/norm(g0)
 
 %LICENSE:

@@ -3,21 +3,21 @@ function [xPred, SPred]=sqrtDiscEKFPred(xPrev,SPrev,f,FJacob,SQ)
 %                the square-root implementation of the first-order Extended
 %                Kalman Filter (EKF).
 %
-%INPUTS:    xPrev   The xDim X 1 state estimate at the previous time-step.
-%           SPrev   The xDim X xDim lower-triangular square root of the 
-%                   state covariance matrix at the previous time-step.
-%           f       A function handle for the state transition function
-%                   that takes the state as its parameter.
-%           FJacob  A function handle for calculating the xDim X xDim state
-%                   transition matrix. If an empty matrix is passed, then
-%                   FJacob will be found using numerical differentiation 
-%                   via the numDiff function with default parameters.
-%           SQ      The xDimX xDim lower-triangular square root of the 
-%                   process noise covariance matrix.
+%INPUTS: xPrev The xDim X 1 state estimate at the previous time-step.
+%        SPrev The xDim X xDim lower-triangular square root of the  state
+%              covariance matrix at the previous time-step.
+%            f A function handle for the state transition function that
+%              takes the state as its parameter.
+%       FJacob A function handle for calculating the xDim X xDim state
+%              transition matrix. If an empty matrix is passed, then FJacob
+%              will be found using numerical differentiation  via the
+%              numDiff function with default parameters.
+%           SQ The xDimX xDim lower-triangular square root of the  process
+%              noise covariance matrix.
 %
-%OUTPUTS:   xPred   The xDim X 1 predicted state estimate.
-%           SPred   The xDim X xDim lower-triangular square root of the 
-%                   predicted state covariance estimate.
+%OUTPUTS: xPred The xDim X 1 predicted state estimate.
+%         SPred The xDim X xDim lower-triangular square root of the
+%               predicted state covariance estimate.
 %
 %The first-order EKF is summarized in Figure 10.3.3-1 in Chapter 10.3.3 of
 %[1].

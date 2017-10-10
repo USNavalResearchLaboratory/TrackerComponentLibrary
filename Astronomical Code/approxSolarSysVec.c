@@ -1,4 +1,4 @@
-/**APPROXSOLARSYSVEC  Get the approximate position and velocity vector of
+/**APPROXSOLARSYSVEC Get the approximate position and velocity vector of
  *                 the Earth or of the planets in coordinates aligned with
  *                 the International Celestial Reference System (ICRS).
  *                 The position for everything is heliocentric, and for the
@@ -6,7 +6,7 @@
  *                 Celestial Reference System [BCRS], except TDB is used
  *                 and not TCB) vector is returned. Use the function
  *                 solarBodyVec if higher-precision with respect to
- *                 observers near the Earth are desired.
+ *                 observers near the Earth is desired.
  *
  *INPUTS: Jul1,Jul2 Two parts of a Julian date given in Barycentric
  *                  dynamical time (TDB). However, terrestrial time (TT)
@@ -21,7 +21,8 @@
  *                  valid range of dates is from 1900AD-2100AD for the 
  *                  Earth (solarBody=0) and 1000AD- 3000AD for everything
  *                  else.
- *        solarBody A parameter specifying the solar body. Possible values are
+ *        solarBody A parameter specifying the solar body. Possible values
+ * %                are:
  *                  0 (The default if omitted) The Earth.
  *                  1 Mercury
  *                  2 Venus

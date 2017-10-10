@@ -53,7 +53,7 @@
 
 
 
-                               Release 12
+                               Release 13
 
                               2016 April 1
 
@@ -3176,12 +3176,12 @@ void iauAtci13(double rc, double dc,
 **
 **  3) The TDB date date1+date2 is a Julian Date, apportioned in any
 **     convenient way between the two arguments.  For example,
-**     JD(TDB)=2450123.8g could be expressed in any of these ways, among
+**     JD(TDB)=2450123.7 could be expressed in any of these ways, among
 **     others:
 **
 **            date1          date2
 **
-**         2450123.8g           0.0       (JD method)
+**         2450123.7           0.0       (JD method)
 **         2451545.0       -1421.3       (J2000 method)
 **         2400000.5       50123.2       (MJD method)
 **         2450123.5           0.2       (date & time method)
@@ -6134,9 +6134,9 @@ int iauDat(int iy, int im, int id, double fd, double *deltat )
 **     so early that JD could not be computed.
 **
 **  2) If the specified date is for a day which ends with a leap second,
-**     the UTC-TAI value returned is for the period leading up to the
+**     the TAI-UTC value returned is for the period leading up to the
 **     leap second.  If the date is for a day which begins as a leap
-**     second ends, the UTC-TAI returned is for the period following the
+**     second ends, the TAI-UTC returned is for the period following the
 **     leap second.
 **
 **  3) The day number must be in the normal calendar range, for example
@@ -7287,19 +7287,19 @@ int iauEpv00(double date1, double date2,
 **  2) On return, the arrays pvh and pvb contain the following:
 **
 **        pvh[0][0]  x       }
-**        pvh[0][1]  y       } heliocentric position, AU
+**        pvh[0][1]  y       } heliocentric position, au
 **        pvh[0][2]  z       }
 **
 **        pvh[1][0]  xdot    }
-**        pvh[1][1]  ydot    } heliocentric velocity, AU/d
+**        pvh[1][1]  ydot    } heliocentric velocity, au/d
 **        pvh[1][2]  zdot    }
 **
 **        pvb[0][0]  x       }
-**        pvb[0][1]  y       } barycentric position, AU
+**        pvb[0][1]  y       } barycentric position, au
 **        pvb[0][2]  z       }
 **
 **        pvb[1][0]  xdot    }
-**        pvb[1][1]  ydot    } barycentric velocity, AU/d
+**        pvb[1][1]  ydot    } barycentric velocity, au/d
 **        pvb[1][2]  zdot    }
 **
 **     The vectors are with respect to the Barycentric Celestial
@@ -9597,7 +9597,7 @@ int iauJd2cal(double dj1, double dj2,
 **  Returned (function value):
 **               int      status:
 **                           0 = OK
-**                          -1 = unacceptable date (Note 3)
+**                          -1 = unacceptable date (Note 1)
 **
 **  Notes:
 **
@@ -11566,7 +11566,7 @@ int iauPlan94(double date1, double date2, int np, double pv[2][3])
 **                             5=Jupiter, 6=Saturn, 7=Uranus, 8=Neptune)
 **
 **  Returned (argument):
-**     pv     double[2][3] planet p,v (heliocentric, J2000.0, AU,AU/d)
+**     pv     double[2][3] planet p,v (heliocentric, J2000.0, au,au/d)
 **
 **  Returned (function value):
 **            int          status: -1 = illegal NP (outside 1-8)
@@ -11607,11 +11607,11 @@ int iauPlan94(double date1, double date2, int np, double pv[2][3])
 **  4) On successful return, the array pv contains the following:
 **
 **        pv[0][0]   x      }
-**        pv[0][1]   y      } heliocentric position, AU
+**        pv[0][1]   y      } heliocentric position, au
 **        pv[0][2]   z      }
 **
 **        pv[1][0]   xdot   }
-**        pv[1][1]   ydot   } heliocentric velocity, AU/d
+**        pv[1][1]   ydot   } heliocentric velocity, au/d
 **        pv[1][2]   zdot   }
 **
 **     The reference frame is equatorial and is with respect to the
@@ -13385,7 +13385,7 @@ int iauPvstar(double pv[2][3], double *ra, double *dec,
 **  Status:  support function.
 **
 **  Given (Note 1):
-**     pv     double[2][3]   pv-vector (AU, AU/day)
+**     pv     double[2][3]   pv-vector (au, au/day)
 **
 **  Returned (Note 2):
 **     ra     double         right ascension (radians)
@@ -13440,7 +13440,7 @@ int iauPvstar(double pv[2][3], double *ra, double *dec,
 **  3) Care is needed with units.  The star coordinates are in radians
 **     and the proper motions in radians per Julian year, but the
 **     parallax is in arcseconds; the radial velocity is in km/s, but
-**     the pv-vector result is in AU and AU/day.
+**     the pv-vector result is in au and au/day.
 **
 **  4) The proper motions are the rate of change of the right ascension
 **     and declination at the catalog epoch and are in radians per Julian
@@ -14887,7 +14887,7 @@ int iauStarpv(double ra, double dec,
 **     rv     double        radial velocity (km/s, positive = receding)
 **
 **  Returned (Note 2):
-**     pv     double[2][3]  pv-vector (AU, AU/day)
+**     pv     double[2][3]  pv-vector (au, au/day)
 **
 **  Returned (function value):
 **            int           status:
@@ -14921,7 +14921,7 @@ int iauStarpv(double ra, double dec,
 **     direction", where the object was located at the catalog epoch, be
 **     required, it may be obtained by calculating the magnitude of the
 **     position vector pv[0][0-2] dividing by the speed of light in
-**     AU/day to give the light-time, and then multiplying the space
+**     au/day to give the light-time, and then multiplying the space
 **     velocity pv[1][0-2] by this light-time and adding the result to
 **     pv[0][0-2].
 **
@@ -14940,7 +14940,7 @@ int iauStarpv(double ra, double dec,
 **  3) Care is needed with units.  The star coordinates are in radians
 **     and the proper motions in radians per Julian year, but the
 **     parallax is in arcseconds; the radial velocity is in km/s, but
-**     the pv-vector result is in AU and AU/day.
+**     the pv-vector result is in au and au/day.
 **
 **  4) The RA proper motion is in terms of coordinate angle, not true
 **     angle.  If the catalog uses arcseconds for both RA and Dec proper
@@ -16411,7 +16411,7 @@ void iauZr(double r[3][3])
 **
 */
 
-copyr.lis                                                 2015 January 5
+copyr.lis                                                  2017 March 20
 
 
 COPYRIGHT NOTICE
@@ -16423,7 +16423,7 @@ and C versions.)
 
 *+----------------------------------------------------------------------
 *
-*  Copyright (C) 2016
+*  Copyright (C) 2017
 *  Standards Of Fundamental Astronomy Board
 *  of the International Astronomical Union.
 *
@@ -16587,9 +16587,9 @@ file sofam.h.
 **
 **  This revision:   2016 March 10
 **
-**  SOFA release 2016-05-03
+**  SOFA release 2017-04-20
 **
-**  Copyright (C) 2016 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
 */
 
 #include "sofam.h"
@@ -17034,7 +17034,7 @@ void iauSxpv(double s, double pv[2][3], double spv[2][3]);
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2016
+**  Copyright (C) 2017
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
@@ -17145,11 +17145,11 @@ void iauSxpv(double s, double pv[2][3], double spv[2][3]);
 **  the context of the SOFA software, and have no other official IAU
 **  status.  In addition, self consistency is not guaranteed.
 **
-**  This revision:   2013 August 27
+**  This revision:   2017 March 16
 **
-**  SOFA release 2016-05-03
+**  SOFA release 2017-04-20
 **
-**  Copyright (C) 2016 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
 */
 
 /* Star-independent astrometry parameters */
@@ -17238,17 +17238,17 @@ typedef struct {
 /* TT minus TAI (s) */
 #define TTMTAI (32.184)
 
-/* Astronomical unit (m) */
-#define DAU (149597870e3)
+/* Astronomical unit (m, IAU 2012) */
+#define DAU (149597870.7e3)
 
 /* Speed of light (m/s) */
 #define CMPS 299792458.0
 
 /* Light time for 1 au (s) */
-#define AULT 499.004782
+#define AULT (DAU/CMPS)
 
-/* Speed of light (AU per day) */
-#define DC (DAYSEC / AULT)
+/* Speed of light (au per day) */
+#define DC (DAYSEC/AULT)
 
 /* L_G = 1 - d(TT)/d(TCG) */
 #define ELG (6.969290134e-10)
@@ -17285,7 +17285,7 @@ typedef struct {
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2016
+**  Copyright (C) 2017
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

@@ -26,23 +26,23 @@ function [xPredMain,xPredSubsid,k,orders,isFSAL]=RungeKStep(xVal,curT,f,deltaT,f
 %        [xPredMain,xPredSubsid,k,orders,isFSAL]=RungeKStep(xVal,curT,f,deltaT,fCur,order,solutionChoice)
 %        to actually do a full step and provide the orders. All of the
 %        inputs in the full step are:
-%           xVal    The value of the (scalar or vector) state over which
+%              xVal The value of the (scalar or vector) state over which
 %                   integration is being performed.
-%           curT    The time at which xVal is taken.
-%           f       f(x,t) returns the derivative of x with respect to time
+%              curT The time at which xVal is taken.
+%                 f f(x,t) returns the derivative of x with respect to time
 %                   taken at time t.
-%           deltaT  The size of the single (time) step over which the 
+%            deltaT The size of the single (time) step over which the 
 %                   Runge-Kutta integration is performed.
-%           fCur    The value f(xVal,curT). This is requested so that
+%              fCur The value f(xVal,curT). This is requested so that
 %                   methods that are FSAL can pass k(:,end) on subsequent
 %                   steps instead of having to perform a redundant
 %                   evaluation of f. If omitted or an empty matrix is
 %                   passed, the function f(xVal,curT) is evaluated to get
 %                   fCur.
-%            order  The main integration order of the Runge-Kutta method.
+%             order The main integration order of the Runge-Kutta method.
 %                   If this parameter is omitted, then the default order of
 %                   5 is used. Order can range from 1 to 8.
-%   solutionChoice  Different Runge-Kutta formulae exist for each order. If
+%    solutionChoice Different Runge-Kutta formulae exist for each order. If
 %                   this parameter is provided, then the selected formula
 %                   for the given order is used. Otherwise the default
 %                   (solutionChoice=0) formula is used. The algorithms
@@ -89,28 +89,27 @@ function [xPredMain,xPredSubsid,k,orders,isFSAL]=RungeKStep(xVal,curT,f,deltaT,f
 %         Then there are just two outputs, orders and isFSAL, described
 %         below.
 %         Otherwise, all of the outputs are
-%         xPredMain The state propagated forward an interval of deltaT
-%                     at the order of precision given by the input order.
-%                     This is the main integration order.
+%         xPredMain The state propagated forward an interval of deltaT at
+%                   the order of precision given by the input order. This
+%                   is the main integration order.
 %         xPredSubsid The subsidiary estimate. This is a different order
-%                     than the main integration order can can be used in
-%                     algorithms that adaptively adjust the stepsize.
-%                   k The values of the derivatives f evaluated at various
-%                     points as determined by the selected algorithm. These
-%                     can sometimes be reused in interpolation routines to
-%                     reduce the number of computations required. In all of
-%                     the methods, k(:,1) is equal to f(xVal,curT). In
-%                     FSAL methods, k(:,end) is
-%                     f(xPredMain,curT+deltaT)
-%              orders A 2X1 vector whereby order(1)=order, the input
-%                     parameter, and orders(2) is the order of xPredSubsid.
-%                     The value of orders(2) depends on the algorithm
-%                     chosen by the combination of the order and
-%                     solutionChoice inputs.
-%              isFSAL Indicates whether the first evaluation of the f of
-%                     the next step is equal to k(:,end). If so, this can
-%                     be passed to the function on the next step rather
-%                     than having to make an additional evaluation of f.
+%                   than the main integration order can can be used in
+%                   algorithms that adaptively adjust the stepsize.
+%                 k The values of the derivatives f evaluated at various
+%                   points as determined by the selected algorithm. These
+%                   can sometimes be reused in interpolation routines to
+%                   reduce the number of computations required. In all of
+%                   the methods, k(:,1) is equal to f(xVal,curT). In FSAL
+%                   methods, k(:,end) is f(xPredMain,curT+deltaT)
+%            orders A 2X1 vector whereby order(1)=order, the input
+%                   parameter, and orders(2) is the order of xPredSubsid.
+%                   The value of orders(2) depends on the algorithm chosen
+%                   by the combination of the order and solutionChoice
+%                   inputs.
+%            isFSAL Indicates whether the first evaluation of the f of the
+%                   next step is equal to k(:,end). If so, this can be
+%                   passed to the function on the next step rather than
+%                   having to make an additional evaluation of f.
 %
 %The formulae are given in this file in the form of the components of their
 %Butcher table. The Butcher table, which was introduced in [1], is a way of

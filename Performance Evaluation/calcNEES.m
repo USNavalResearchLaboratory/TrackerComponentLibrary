@@ -8,8 +8,8 @@ function NEES=calcNEES(xTrue,xEst,PEst)
 %              the estimate, then this is an xDimX1 vector. Otherwise, this
 %              is an xDimXN matrix where N is the number of samples in the
 %              batch.
-%         xEst An xDim X N set of estimates.
-%         PEst An xDim X xDim XN set of covariance matrices associated
+%         xEst An xDimXN set of estimates.
+%         PEst An xDimXxDimXN set of covariance matrices associated
 %              with the estimates. If the covariance matrix is supposed to
 %              be the same for all estimates, then PEst is just xDimXxDim.
 %              These should not be singular.

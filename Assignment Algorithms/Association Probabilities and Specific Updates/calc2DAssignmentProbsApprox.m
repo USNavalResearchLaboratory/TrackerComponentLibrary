@@ -217,15 +217,15 @@ function beta=sumProdAssocProbApprox(A,diagAugment,delta)
 %                sum-product algorithm. This function approximates the
 %                function calc2DAssignmentProbs but is usually much faster.
 %
-%INPUTS:    A  A matrix of positive likelihoods or likelihood ratios (NOT
-%              log-likelihood ratios). If diagAugment=true, then A is a
-%              numTar X  (numMeas+numTar) matrix of all-positive
-%              likelihoods or likelihood ratios for assigning the target
-%              specified by the row to the measurement specified by the
-%              column. Columns > numMeas hold missed-detection likelihoods/
-%              likelihood ratios. Thus, off-diagonal terms for columns >
-%              numMeas should be set to 0 and the diagonal terms set to the
-%              costs of a missed detection for each given target.
+%INPUTS:A  A matrix of positive likelihoods or likelihood ratios (NOT
+%          log-likelihood ratios). If diagAugment=true, then A is a
+%          numTar X  (numMeas+numTar) matrix of all-positive likelihoods or
+%          likelihood ratios for assigning the target specified by the row
+%          to the measurement specified by the column. Columns > numMeas
+%          hold missed-detection likelihoods/ likelihood ratios. Thus, off-
+%          diagonal terms for columns > numMeas should be set to 0 and the
+%          diagonal terms set to the costs of a missed detection for each
+%          given target.
 %  diagAugment A boolean variable indicating whether the probabilties
 %              should be found for a general assignment problem or assuming
 %              A ends with a diagonal submatrix of missed detection
@@ -338,6 +338,10 @@ if(diagAugment)
 
                 s=1+sum(prodTerms);
                 mu(i,:)=Psi(i,:)./(s-prodTerms);
+                
+                %Deal with some finite precision issues
+                sel=~isfinite(mu(i,:));
+                mu(i,sel)=0;
             end
 
             %If it is the last iteration where a convergence check must be

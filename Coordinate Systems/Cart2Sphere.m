@@ -22,6 +22,9 @@ function points=Cart2Sphere(cartPoints,systemType,useHalfRange,zTx,zRx,M)
 %             (towards the y-axis). This is consistent with some spherical
 %             coordinate systems that use the z axis as the boresight
 %             direction of the radar.
+%           2 This is the same as 0 except instead of being given
+%             elevation, one desires the angle away from the z-axis, which
+%             is (pi/2-elevation).
 % useHalfRange An optional boolean value specifying whether the bistatic
 %           (round-trip) range value has been divided by two. This normally
 %           comes up when operating in monostatic mode (the most common
@@ -41,13 +44,13 @@ function points=Cart2Sphere(cartPoints,systemType,useHalfRange,zTx,zRx,M)
 %           vector is passed, then the receiver location is assumed the
 %           same for all of the target states being converted. zRx can have
 %           more than 3 rows; additional rows are ignored.
-%        M  A 3X3XN hypermatrix of the rotation matrices to go from the
+%         M A 3X3XN hypermatrix of the rotation matrices to go from the
 %           alignment of the global coordinate system to that at the
 %           receiver. The z-axis of the local coordinate system of the
 %           receiver is the pointing direction of the receiver. If omitted,
 %           then it is assumed that the local coordinate system is aligned
 %           with the global and M=eye(3) --the identity matrix is used. If
-%           only a single 3X3 matrix is passed, then is is assumed to be
+%           only a single 3X3 matrix is passed, then it is assumed to be
 %           the same for all of the N conversions.
 %
 %OUTPUTS: points A matrix of the converted points. Each column of the
@@ -86,8 +89,11 @@ if(nargin<3)
         case 1
             azimuth=atan2(x,z);
             elevation=asin(y./r);
+        case 2
+            azimuth=atan2(y,x);
+            elevation=pi/2-asin(z./r);
         otherwise
-            error('Invalid system type specified')
+            error('Invalid system type specified.')
     end
     points=[r;azimuth;elevation];
     return;
@@ -152,6 +158,9 @@ for curPoint=1:N
         case 1
             azimuth=atan2(x,z);
             elevation=asin(y./r1);
+        case 2
+            azimuth=atan2(y,x);
+            elevation=pi/2-asin(z./r1);
         otherwise
             error('Invalid system type specified')
     end
@@ -162,7 +171,6 @@ end
 if(useHalfRange)
     points(1,:)=points(1,:)/2;
 end
-
 end
 
 %LICENSE:

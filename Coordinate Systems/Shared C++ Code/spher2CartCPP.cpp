@@ -1,6 +1,7 @@
-/*These function perform conversions from spherical coordinates into
- *Cartesian coordinates in different ways. See the Matlab implementation of
- *spher2Cart for more insight on the algorithms.
+/**SPHER2CARTCPP These function perform conversions from spherical
+ *   coordinates into Cartesian coordinates in different ways. See the
+ *   Matlab implementation of spher2Cart for more insight on the
+ *   algorithms.
  *
  *February 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
  **/
@@ -10,7 +11,7 @@
 //For sin and cos
 #include <math.h>
 
-void spher2CartCPP(double *cartPoint,const double *point, const int systemType) {
+void spher2CartCPP(double *cartPoint,const double *point, size_t systemType) {
 /*SPHER2CARTCPP A C++ function to convert a point from unrotated monostatic
  *           spherical coordinates with the sensor at the origin measing a
  *           one-way range to Cartesian coordinates
@@ -32,6 +33,9 @@ void spher2CartCPP(double *cartPoint,const double *point, const int systemType) 
  *                     z-x plane (towards the y-axis). This is consistent
  *                     with some spherical coordinate systems that use the
  *                     z-axis as the boresight direction of the radar.
+ *                   2 This is the same as 0 except instead of being given
+ *                     elevation, one is given the angle away from the
+ *                     z-axis, which is (pi/2-elevation).
  *
  *OUTPUTS: None. The results are placed in cartPoint.
  *
@@ -44,8 +48,14 @@ void spher2CartCPP(double *cartPoint,const double *point, const int systemType) 
     azimuth=point[1];
     elevation=point[2];
     
+    if(systemType==2) {
+        double pi=acos(-1.0);
+        elevation=pi/2.0-elevation;
+        systemType=0;
+    }
+    
     cosEl=cos(elevation);
-
+    
     if(systemType==0) {
         cartPoint[0]=r*cos(azimuth)*cosEl;
         cartPoint[1]=r*sin(azimuth)*cosEl;
@@ -57,7 +67,7 @@ void spher2CartCPP(double *cartPoint,const double *point, const int systemType) 
     }
 }
 
-void spher2CartGenCPP(double *retData,const double *point,const int systemType,const bool useHalfRange,const double *zTx,const double *zRx,const double *M) {
+void spher2CartGenCPP(double *retData,const double *point,size_t systemType,const bool useHalfRange,const double *zTx,const double *zRx,const double *M) {
 /*SPHER2CARTGENCPP A C++ function to convert a point in range, azimuth and
  *            elevation from bistatic spherical coordinates to Cartesian
  *            coordinates.
@@ -79,6 +89,9 @@ void spher2CartGenCPP(double *retData,const double *point,const int systemType,c
  *                  plane (towards the y-axis). This is consistent with
  *                  some spherical coordinate systems that use the z-axis
  *                  as the boresight direction of the radar.
+ *                2 This is the same as 0 except instead of being given
+ *                  elevation, one is given the angle away from the z-axis,
+ *                  which is (pi/2-elevation).
  *   useHalfRange A boolean value specifying whether the bistatic (round-
  *                trip) range value has been divided by two. 
  *            zTx The 3X1 [x;y;z] location vector of the transmitter in
@@ -111,6 +124,12 @@ void spher2CartGenCPP(double *retData,const double *point,const int systemType,c
     }
     azimuth=point[1];
     elevation=point[2];
+    
+    if(systemType==2) {
+        double pi=acos(-1.0);
+        elevation=pi/2.0-elevation;
+        systemType=0;
+    }
     
     cosEl=cos(elevation);
 
@@ -157,7 +176,7 @@ void spher2CartGenCPP(double *retData,const double *point,const int systemType,c
     retData[2]=M[6]*zL[0]+M[7]*zL[1]+M[8]*zL[2]+zRx[2];
 }
 
-void spher2CartNoRangeCPP(double *retData,const double *point,const int systemType,const double *M) {
+void spher2CartNoRangeCPP(double *retData,const double *point,size_t systemType,const double *M) {
 /*SPHER2CARTNORANGECPP A C++ function to convert a direction in azimuth and
  *            angle from spherical coordinates to Cartesian coordinates.
  *
@@ -178,6 +197,9 @@ void spher2CartNoRangeCPP(double *retData,const double *point,const int systemTy
  *                  plane (towards the y-axis). This is consistent with
  *                  some spherical coordinate systems that use the z-axis
  *                  as the boresight direction of the radar.
+ *                2 This is the same as 0 except instead of being given
+ *                  elevation, one is given the angle away from the z-axis,
+ *                  which is (pi/2-elevation).
  *              M A 3X3  rotation matrices to go from the alignment of the
  *                global coordinate system to that at the receiver. It is
  *                stored one columns after the other, consistent with how
@@ -196,6 +218,12 @@ void spher2CartNoRangeCPP(double *retData,const double *point,const int systemTy
     
     azimuth=point[0];
     elevation=point[1];
+    
+    if(systemType==2) {
+        double pi=acos(-1.0);
+        elevation=pi/2.0-elevation;
+        systemType=0;
+    }
     
     cosEl=cos(elevation);
 

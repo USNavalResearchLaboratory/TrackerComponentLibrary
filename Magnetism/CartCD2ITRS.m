@@ -1,6 +1,6 @@
 function [zITRS,rotMat]=CartCD2ITRS(zCartCD,param1,param2,S11)
 %%CARTCD2ITRS Convert a point fien in centered dipole (CD) coordinates, 
-%             a type of cooridnate system where the z-axis is aligned with
+%             a type of coordinate system where the z-axis is aligned with
 %             the magnetic dipole of the Earth, in Cartesian form into the 
 %             the International Terrestrial Reference System (ITRS), a
 %             standard Earth-Cenetred-Earth-fixed (ECEF) coordinate system,

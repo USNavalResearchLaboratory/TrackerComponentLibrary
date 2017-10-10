@@ -1,5 +1,5 @@
-function [C21,S21]=getAdjustedGravCoeffs4PolarMotion(C,S,TT1,TT2,updateCAndS)
-%%ADJUSTGRAVCOEFFS4POLARMOTION Get the adjusted spherical harmonic
+function [C21,S21,C,S]=getAdjustedGravCoeffs4PolarMotion(C,S,TT1,TT2,updateCAndS,deltaTTUT1,clockLoc)
+%%GETADJUSTEDGRAVCOEFFS4POLARMOTION Get the adjusted spherical harmonic
 %                   gravitational coefficients C21 and S21 to account for
 %                   polar motion as per the IERS 2010 conventions. Polar
 %                   motion is the motion of the motion of the rotation axis
@@ -14,15 +14,15 @@ function [C21,S21]=getAdjustedGravCoeffs4PolarMotion(C,S,TT1,TT2,updateCAndS)
 %                   appears to be the appropriate one to use. The polar
 %                   motion should be added before other tides.
 %
-%INPUTS: C, S Fully normalized spherical harmonic coefficients (in
-%             ClusterSet classes) for a gravitational potential model, like
-%             those obtained using the getEGMGravCoeffs function. Only
-%             coefficients up to order 2 are needed. The coefficients are
-%             with respect to a coordinate system fixed on the Earth's
-%             crust --the International Terrestrial Reference System
-%             (ITRS), which can be used interchangably with the WGS-84
-%             coordinate system. The update uses the C20 parameter, and
-%             thus depends on the permanent tide model chosen.
+%INPUTS: C, S Arrays of fully normalized spherical harmonic coefficients
+%             for a gravitational potential model like those obtained using
+%             the getEGMGravCoeffs function. Only coefficients up to order
+%             2 are needed. The coefficients are with respect to a
+%             coordinate system fixed on the Earth's crust --the
+%             International Terrestrial Reference System (ITRS), which can
+%             be used interchangably with the WGS-84 coordinate system. The
+%             update uses the C20 parameter, and thus depends on the
+%             permanent tide model chosen.
 %     TT1,TT2 Two parts of a Julian date given in terrestrial time (TT).
 %             The units of the date are days. The full date is the sum of
 %             both terms. The date is broken into two parts to provide
@@ -37,15 +37,37 @@ function [C21,S21]=getAdjustedGravCoeffs4PolarMotion(C,S,TT1,TT2,updateCAndS)
 %             on the current values of those parameters, so this function
 %             can be called multiple times to update C and S as time
 %             progresses.
+%  deltaTTUT1 An optional parameter specifying the offset between TT and
+%             UT1 in seconds. If this parameter is omitted or an empty
+%             matrix is passed, then the value of the function getEOP will
+%             be used.
+%    clockLoc An optional 3X1 vector specifying the location of the clock
+%             in WGS-84 ECEF Cartesian [x;y;z] coordinates with units of
+%             meters. Due to relativistic effects, clocks that are
+%             synchronized with respect to TT are not synchronized with
+%             respect to TDB. If this parameter is omitted, then a clock at
+%             the center of the Earth is used.
+%    clockLoc An optional 3X1 vector specifying the location of the clock
+%             in WGS-84 ECEF Cartesian [x;y;z] coordinates with units of
+%             meters. Due to relativistic effects, clocks that are
+%             synchronized with respect to TT are not synchronized with
+%             respect to TDB. If this parameter is omitted, then a clock at
+%             the center of the Earth is used. The fidelity of the model
+%             probably is not high enough for this parameter ot matter.
 %
 %OUTPUTS: C21, S21 The values that would replace C(2+1,1+1) and S(2+1,1+1)
-%             when accounting for polar motion.
+%             when accounting for polar motion if C and S were placed in a
+%             CountingClusterSet class to simplify accessing elements.
+%        C, S The values of C and S modified with the adjustments.
 %
 %The effects of polar motion on gravitational coefficients is decribed on
 %pages 80-81  (Chapter 6.1) of [1]. The model does not include Earth-
 %orientation parameters for the offset of the pole from the mean model,
 %which suggests that the model is not sufficiently high fidelity for that
 %to matter.
+%
+%This function uses the meanRotPoleLoc, which has to call TT2BessEpoch. The
+%conversion to a besselian epoch depends on the location of the 
 %
 %REFERENCES:
 %[1] G. Petit and B. Luzum, IERS Conventions (2010), International Earth
@@ -54,25 +76,33 @@ function [C21,S21]=getAdjustedGravCoeffs4PolarMotion(C,S,TT1,TT2,updateCAndS)
 %March 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<5)
+if(nargin<7)
+    clockLoc=[];
+end
+
+if(nargin<6)
+    deltaTTUT1=[];
+end
+
+if(nargin<5||isempty(updateCAndS))
     updateCAndS=false;
 end
 
-xpBarypBar=meanRotPoleLoc(TT1,TT2);
+xpBarypBar=meanRotPoleLoc(TT1,TT2,deltaTTUT1,clockLoc);
 xpBar=xpBarypBar(1);
 ypBar=xpBarypBar(2);
 
-C20=C(2+1,0+1);
-C22=C(2+1,2+1);
-S22=S(2+1,2+1);
+C20=C(4);
+C22=C(6);
+S22=S(6);
 
 %This is Equation 6.5 in the IERS 2010 conventions.
 C21= sqrt(3)*xpBar*C20-xpBar*C22+ypBar*S22;
 S21=-sqrt(3)*ypBar*C20-ypBar*C22-xpBar*S22;
 
 if(updateCAndS)
-    C(2+1,1+1)=C21;
-    S(2+1,1+1)=S21;
+    C(5)=C21;
+    S(5)=S21;
 end
 
 end

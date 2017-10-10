@@ -36,7 +36,7 @@ function [zTrue,deltaZ]=removeAstroRefrac(algorithm,plhObs,z0,Rh,P,T,wl)
 %                  algorithm, the fact that geoid undulations are ignored
 %                  probably does not matter.For algorithms 1 and 2, an
 %                  empty matrix can be passed.
-%              z0  A vector or matrix of observed positive zenith
+%               z0 A vector or matrix of observed positive zenith
 %                  "distances" (in radians) of the refraction-corrupted
 %                  celestial object being observed. A zenith distance is
 %                  the observed angle of an object down from the
@@ -48,23 +48,25 @@ function [zTrue,deltaZ]=removeAstroRefrac(algorithm,plhObs,z0,Rh,P,T,wl)
 %                  by the WGS-84 reference ellipsoid could probably be
 %                  substituted for an angle with respect to the true
 %                  gravitational vertical.
-%Rh        The relative humidity at the observer (between 0 and 1). If
-%          this parameter is omitted or an empty matrix is passed, then
-%          Constants.standardRelHumid is used.
-%P         The atmospheric pressure at the observer in Pascals (N/m^2). If
-%          this parameter is omitted or an empty matrix is passed, then
-%          Constants.standardAtmosphericPressure is used.
-%T         The air temperature at the observer in degrees Kelvin. If this
-%          parameter is omitted or an empty matrix is passed, then
-%          Constants.standardTemp is used.
-%wl        The wavelength at which the observation is made in units of
-%          meters. If this parameter is omitted or an empty matrix is
-%          passed, then a wavelength of 0.574 micrometers is used, which
-%          is in the visible spectrum (a rather yellow color).
+%               Rh The relative humidity at the observer (between 0 and 1).
+%                  If this parameter is omitted or an empty matrix is
+%                  passed, then Constants.standardRelHumid is used.
+%                P The atmospheric pressure at the observer in Pascals
+%                  (N/m^2). If this parameter is omitted or an empty matrix
+%                  is passed, then Constants.standardAtmosphericPressure is
+%                  used.
+%                T The air temperature at the observer in degrees Kelvin.
+%                  If this parameter is omitted or an empty matrix is
+%                  passed, then Constants.standardTemp is used.
+%               wl The wavelength at which the observation is made in units
+%                  of meters. If this parameter is omitted or an empty
+%                  matrix is passed, then a wavelength of 0.574 micrometers
+%                  is used, which is in the visible spectrum (a rather
+%                  yellow color).
 %
 %OUTPUTS: zTrue An NX1 vector of the z0 values in radians with atmospheric
-%              refraction removed.
-%      deltaZ The refraction correction that was applied. zTrue=z0+deltaZ.
+%               refraction removed.
+%        deltaZ The refraction correction that was applied. zTrue=z0+deltaZ.
 %
 %The references for Algorithm 0 are [1] and [2]. Unlike the method given in
 %those references, the distance from the center of the Earth to the
@@ -114,19 +116,19 @@ function [zTrue,deltaZ]=removeAstroRefrac(algorithm,plhObs,z0,Rh,P,T,wl)
 %April 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    if(nargin<7)
+    if(nargin<7||isempty(wl))
        wl=0.574e-6; 
     end
 
-    if(nargin<6)
+    if(nargin<6||isempty(T))
        T=Constants.standardTemp; 
     end
     
-    if(nargin<5)
+    if(nargin<5||isempty(P))
         P=Constants.standardAtmosphericPressure;
     end
     
-    if(nargin<4)
+    if(nargin<4||isempty(Rh))
         Rh=Constants.standardRelHumid;
     end
     

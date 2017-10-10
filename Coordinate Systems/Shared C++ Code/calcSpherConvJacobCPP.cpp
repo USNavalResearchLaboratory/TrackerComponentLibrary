@@ -1,16 +1,15 @@
-/*These are C++-only implementations of functions for computing gradients
- *with respect to certain parameters. See the Matlab equivalents for
- *more comments.
+/**CALCSPHERCONVJACOBCPP These are C++-only implementations of functions
+ *for computing gradients with respect to certain parameters. See the
+ *Matlab equivalents for more comments.
  *
 *February 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 **/
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
+
 #include "CoordFuncs.hpp"
 #include <math.h>
 
-#include "mex.h"
-
-void calcSpherConvJacobGenCPP(double *J,const double *zSpher,const int systemType,const bool useHalfRange,const double *lTx,const double *lRx,const double *M) {
+void calcSpherConvJacobGenCPP(double *J,const double *zSpher,const size_t systemType,const bool useHalfRange,const double *lTx,const double *lRx,const double *M) {
 double JRange[3];
 double tempSpace[3];
 double JAngle[6];
@@ -33,7 +32,7 @@ J[7]=JAngle[4];
 J[8]=JAngle[5];
 }
 
-void calcSpherConvJacobCPP(double *J, const double *point, const int systemType) {
+void calcSpherConvJacobCPP(double *J, const double *point, const size_t systemType) {
     double CartPoint[3],x,y,z,r,r2;
     
     spher2CartCPP(CartPoint,point,systemType);
@@ -63,7 +62,26 @@ void calcSpherConvJacobCPP(double *J, const double *point, const int systemType)
         J[6]=z/r;
         J[7]=0;
         J[8]=xyDist/r2;
-    } else {
+    } else if(systemType==2) { 
+        double x2y2Sum,xyDist;
+        x2y2Sum=x*x+y*y;
+        xyDist=sqrt(x2y2Sum);
+        
+        //Derivatives with respect to x.
+        J[0]=x/r;
+        J[1]=-y/x2y2Sum;
+        J[2]=x*z/(r2*xyDist);
+
+        //Derivatives with respect to y.
+        J[3]=y/r;
+        J[4]=x/x2y2Sum;
+        J[5]=y*z/(r2*xyDist);
+
+        //Derivatives with respect to z.
+        J[6]=z/r;
+        J[7]=0;
+        J[8]=-xyDist/r2;
+    } else {//Assume systemType==1
         double z2x2Sum,zxDist;
         z2x2Sum=z*z+x*x;
         zxDist=sqrt(z2x2Sum);

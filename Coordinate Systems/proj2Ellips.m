@@ -1,18 +1,26 @@
-function zGround=proj2Ellips(z,a,f)
-%%PROJ2ELLIPS   Given a point in three-dimensional space, find the point on
-%               a reference ellipsoid that is closest. This approximately
-%               finds the point on the ground (ignoring terrain) that is
-%               closest to a given arbitrary point.
+function zGround=proj2Ellips(z,a,f,algorithm)
+%%PROJ2ELLIPS Given a point in three-dimensional space, find the point on a
+%             reference ellipsoid that is closest. This approximately finds
+%             the point on the ground (ignoring terrain) that is closest to
+%             a given arbitrary point.
 %
-%INPUTS:    z       A point in [x;y;z] Cartesian coordinates.
-%           a       The semi-major axis of the reference ellipsoid. If
-%                   this argument is omitted, the value in
-%                   Constants.WGS84SemiMajorAxis is used.
-%           f       The flattening factor of the reference ellipsoid. If
-%                   this argument is omitted, the value in
-%                   Constants.WGS84Flattening is used.
-%OUTPUTS:  zGround  The point on the surface of the reference ellipsoid
-%                   that is closest to the ground.
+%INPUTS: z A 3XN set of point to project where each column is in [x;y;z]
+%          Cartesian coordinates.
+%        a The semi-major axis of the reference ellipsoid. If this argument
+%          is omitted, the value in Constants.WGS84SemiMajorAxis is used.
+%        f The flattening factor of the reference ellipsoid. If this
+%          argument is omitted, the value in Constants.WGS84Flattening is
+%          used.
+% algorithm Optionally, this selects the algorithm to use in the
+%           Cart2Ellipse function. If this parameter is omitted or an empty
+%           matrix is passed, then the default of 2 is used, which unlike
+%           the other, potentially faster methods, should not fail for
+%           points that are close to the center of the Earth. See the
+%           function Cart2Ellipse for other options.
+%
+%OUTPUTS: zGround The 3XN set of points in Cartesian coordinates on the
+%                 surface of the reference ellipsoid that are closest to
+%                 z.
 %
 %This just transforms the given point into latitude, longitude and
 %altitude, sets the altitude to zero and converts back to Cartesian
@@ -23,6 +31,10 @@ function zGround=proj2Ellips(z,a,f)
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<4||isempty(algorithm))
+   algorithm=2; 
+end
+
 if(nargin<3||isempty(f))
     f=Constants.WGS84Flattening;
 end
@@ -31,8 +43,8 @@ if(nargin<2||isempty(a))
     a=Constants.WGS84SemiMajorAxis;
 end
 
-zEllipse=Cart2Ellipse(z,[],a,f);
-zEllipse(3)=0;
+zEllipse=Cart2Ellipse(z,algorithm,a,f);
+zEllipse(3,:)=0;
 zGround=ellips2Cart(zEllipse,a,f);
 end
 

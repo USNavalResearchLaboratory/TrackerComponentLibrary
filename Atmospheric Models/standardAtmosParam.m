@@ -6,39 +6,36 @@ function [N,rho,T,P]=standardAtmosParam(dayOfYear,secondOfTheDay,latLonAlt,rhow)
 %                     oxygen parameter of the NRLMSISE-00 model is not
 %                     used by this function.
 %
-%INPUTS:      dayOfYear The integer day of the year in the Gregorian
-%                       calendar in universal coordinated time (UTC).
-%                       Counting starts at 1. the resolution of the model
-%                       is not sufficient for it to matter whether 365 or
-%                       366 is given at the day if it isn't/is a leap
-%                       year.
-%        secondOfTheDay The second of the day. This starts at zero. The
-%                       resolution of the model is not high enough for
-%                       leap seconds to matter, so values above 86400.0
-%                       are just clipped to 86400.0.
-%             latLonAlt The location under consideration given in WGS-84
-%                       ellipsoidal coordinates of latitude and longitude
-%                       in radians and ellipsoidal height in meters.
-%                  rhow An optional parameter specifying the mass density
-%                       of water vapor at the point in question in units of
-%                       kilograms per cubic meter. If omitted, the air is
-%                       assumed to be dry (rhow=0). The total density of
-%                       the air is assumed to be the sum of the dry air
-%                       density and rhow.
+%INPUTS: dayOfYear The integer day of the year in the Gregorian calendar in
+%                  universal coordinated time (UTC). Counting starts at 1.
+%                  The resolution of the model is not sufficient for it to
+%                  matter whether 365 or 366 is given as the day if it
+%                  isn't/is a leap year.
+%   secondOfTheDay The second of the day. This starts at zero. The
+%                  resolution of the model is not high enough for leap
+%                  seconds to matter, so values above 86400.0 are just
+%                  clipped to 86400.0.
+%        latLonAlt The location under consideration given in WGS-84
+%                  ellipsoidal coordinates of latitude and longitude in
+%                  radians and ellipsoidal height in meters.
+%             rhow An optional parameter specifying the mass density of
+%                  water vapor at the point in question in units of
+%                  kilograms per cubic meter. If omitted, the air is
+%                  assumed to be dry (rhow=0). The total density of the air
+%                  is assumed to be the sum of the dry air density and
+%                  rhow.
 %
-%OUTPUTS:   N           The refractivity of the atmosphere. In this model,
-%                       N is always real. N=10^6*(n-1) where n is the index
-%                       of refraction. This is generally valid for
-%                       frequencies from L-band (1GHz) to 10 GHz (the
-%                       middle of X-band).
-%           rho         The atmospheric density at the point in question in
-%                       units of kilograms per cubic meter. 
-%           T           The temperature at the point in question with units
-%                       of degrees Kelvin.
-%           P           The atmospheric pressure at the point in question
-%                       in units of Newtons per square meter (Pascals). It
-%                       assumes that the gasses can be treated as ideal
-%                       gasses.
+%OUTPUTS: N The refractivity of the atmosphere. In this model, N is always
+%           real. N=10^6*(n-1) where n is the index of refraction. This is
+%           generally valid for frequencies from L-band (1GHz) to 10 GHz
+%           (the middle of X-band).
+%       rho The atmospheric density at the point in question in units of
+%           kilograms per cubic meter. 
+%         T The temperature at the point in question with units of degrees
+%           Kelvin.
+%         P The atmospheric pressure at the point in question in units of
+%           Newtons per square meter (Pascals). It assumes that the gasses
+%           can be treated as ideal gasses.
 %
 %The dry air density and temperature is obtained from the NRLMSISE-00
 %atmospheric model using the default parameters for magnetic and solar

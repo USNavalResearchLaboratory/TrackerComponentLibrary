@@ -9,15 +9,16 @@ function cartPoints=ellipsHarmon2Cart(pointsHarmon,E)
 %                   a semi-major axis in meters that are to be converted to
 %                   Cartesian coordinates. To convert N points,
 %                   pointsHarmon is a 3XN matrix with each column
-%                   having the format [reduced latitude;longitude; semi-major axis].
-%        E          The linear eccentricity defining the ellipsoidal
+%                   having the format
+%                   [reduced latitude;longitude; semi-major axis].
+%                 E The linear eccentricity defining the ellipsoidal
 %                   harmonic coordinate system. If this parameter is
 %                   omitted, then the linear eccentricity of the WGS84
 %                   reference ellipsoid is used.
 %
-%OUTPUTS:   cartPoints For N points, cartPoints is a 3XN matrix of the
-%                      converted points with each column having the format
-%                      [x;y;z].
+%OUTPUTS: cartPoints For N points, cartPoints is a 3XN matrix of the
+%                    converted points with each column having the format
+%                    [x;y;z].
 %
 %Equation 1-150 in Chapter 1.15 of [1] is used for the conversion, where
 %the complement of the reduced latitude has been replaced by the reduced

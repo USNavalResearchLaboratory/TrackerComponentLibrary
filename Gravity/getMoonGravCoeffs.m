@@ -7,31 +7,29 @@ function [C,S,a,c,CStdDev,SStdDev]=getMoonGravCoeffs(M,isTideFree)
 %                   body fixed coordinate system consistent with NASA's
 %                   DE430 ephemerides.
 %
-%INPUTS: M   The integer maximum order of the spherical harmonic
-%            coefficients obtained. This is a value between 2 and 900. If
-%            this parameter is omitted or an empty matrix is passed, the
-%            default value being the total number of coefficients in the
-%            model is used.
+%INPUTS: M The integer maximum order of the spherical harmonic coefficients
+%          obtained. This is a value between 2 and 900. If this parameter
+%          is omitted or an empty matrix is passed, the default value being
+%          the total number of coefficients in the model is used.
 % isTideFree A boolean value indicating whether the coefficients should be
-%            for a theoretical tide-free Earth or for a zero-tide model.
-%            If this parameter is omitted, the default value is
-%            isTideFree=true;
+%          for a theoretical tide-free Earth or for a zero-tide model. If
+%          this parameter is omitted, the default value is isTideFree=true;
 %
-%OUTPUTS:   C   A ClusterSet class holding the coefficient terms that are
-%               multiplied by cosines in the harmonic expansion. C(n+1,m+1)
-%               is the coefficient of degree n and order m. When a maximum
-%               degree of M is used, all C have values for all n from 0 to
-%               M and for all m from 0 to n for each n. The coefficients
-%               are unitless.
-%           S   A ClusterSet class holding the coefficient terms that are
-%               multiplied by sines in the harmonic expansion. The
-%               format of S is the same as that of C.
-%           a   The numerator in the (a/r)^n term in the spherical harmonic
-%               sum, having units of meters.
-%           c   The constant value by which the spherical harmonic series
-%               is multiplied, having units of m^3/s^2.
-%       CStdDev The standard deviation of each C coefficient.
-%       SStdDev The standard deviation of each S coefficient.
+%OUTPUTS: C An array holding the coefficient terms that are multiplied by
+%           cosines in the spherical harmonic expansion. This can be given
+%           to a CountingClusterSet so that C(n+1,m+1) is the coefficient
+%           of degree n and order m. When a maximum degree of M is used,
+%           all C have values for all n from 0 to M and for all m from 0 to
+%           n for each n. The coefficients are unitless.
+%         S A ClusterSet class holding the coefficient terms that are
+%           multiplied by sines in the harmonic expansion. The format of S
+%           is the same as that of C.
+%         a The numerator in the (a/r)^n term in the spherical harmonic
+%           sum, having units of meters.
+%         c The constant value by which the spherical harmonic series is
+%           multiplied, having units of m^3/s^2.
+%   CStdDev An array holding the standard deviation of each C coefficient.
+%   SStdDev An array holding the standard deviation of each S coefficient.
 %
 %The lunar gravitational coefficients are available on the site
 %http://pds-geosciences.wustl.edu/missions/grail/default.htm
@@ -100,27 +98,13 @@ c=Constants.GL0900CGMMoon;
 %First, see if a .mat file with all of the data exists. If so, then use
 %that and ignore everything else.
 if(exist([ScriptFolder,fileName,'.mat'],'file'))
-    load([ScriptFolder,fileName,'.mat'],'CCoeffs','SCoeffs','CCoeffsStdDev','SCoeffsStdDev','clustSizes','offsets');
+    load([ScriptFolder,fileName,'.mat'],'C','S','CStdDev','SStdDev');
     %Create the ClusterSet classes to hold the data.
-    C=ClusterSet();
-    S=ClusterSet();
-    CStdDev=ClusterSet();
-    SStdDev=ClusterSet();
+    C=C(1:totalNumCoeffs);
+    S=S(1:totalNumCoeffs);
     
-    C.clusterEls=CCoeffs(1:totalNumCoeffs);
-    S.clusterEls=SCoeffs(1:totalNumCoeffs);
-    CStdDev.clusterEls=CCoeffsStdDev(1:totalNumCoeffs);
-    SStdDev.clusterEls=SCoeffsStdDev(1:totalNumCoeffs);
-    
-    C.clusterSizes=clustSizes(1:(M+1));
-    S.clusterSizes=C.clusterSizes;
-    CStdDev.clusterSizes=C.clusterSizes;
-    SStdDev.clusterSizes=C.clusterSizes;
-    
-    C.offsetArray=offsets(1:(M+1));
-    S.offsetArray=C.offsetArray;
-    CStdDev.offsetArray=C.offsetArray;
-    SStdDev.offsetArray=C.offsetArray;
+    CStdDev=CStdDev(1:totalNumCoeffs);
+    SStdDev=SStdDev(1:totalNumCoeffs);
 else
     %Read in the data, which, after the first row, is just a table.
     coeffs=dlmread([ScriptFolder,fileName],',',1,0);
@@ -129,31 +113,23 @@ else
     coeffs=coeffs(1:(totalNumCoeffs-1),:);
 
     emptyData=zeros(totalNumCoeffs,1);
-    clustSizes=1:(M+1);
-    C=ClusterSet(emptyData,clustSizes);
-    S=ClusterSet(emptyData,clustSizes);
-    CStdDev=ClusterSet(emptyData,clustSizes);
-    SStdDev=ClusterSet(emptyData,clustSizes);
+    C=emptyData;
+    S=emptyData;
+    CStdDev=emptyData;
+    SStdDev=emptyData;
     
-    C.clusterEls(2:end)=coeffs(:,3);
-    S.clusterEls(2:end)=coeffs(:,4);
-    CStdDev.clusterEls(2:end)=coeffs(:,5);
-    SStdDev.clusterEls(2:end)=coeffs(:,6);
+    C(2:end)=coeffs(:,3);
+    S(2:end)=coeffs(:,4);
+    CStdDev(2:end)=coeffs(:,5);
+    SStdDev(2:end)=coeffs(:,6);
     
     %The model omits the C_{0,0} value. It is explicitly added here.
-    C(0+1,0+1)=1;
+    C(1)=1;
     
     %If all of the coefficients were read in, then save the result into a
     %.mat file so that it can be read faster next time.
     if(M==900)
-        CCoeffs=C.clusterEls;
-        SCoeffs=S.clusterEls;
-        CCoeffsStdDev=CStdDev.clusterEls;
-        SCoeffsStdDev=SStdDev.clusterEls;
-        clustSizes=C.clusterSizes;
-        offsets=C.offsetArray;
-
-        save([ScriptFolder,fileName,'.mat'],'CCoeffs','SCoeffs','CCoeffsStdDev','SCoeffsStdDev','clustSizes','offsets');
+        save([ScriptFolder,fileName,'.mat'],'C','S','CStdDev','SStdDev');
     end
 end
     
@@ -170,8 +146,10 @@ if(isTideFree==false)
     %We will assume the difference between the zero-tide and the tide free
     %models is approxiamtely the same for the GL0660B model and the GL0900C
     %model and will thus add in the same offset.
-    C(2+1,0+1)=C(2+1,0+1)+(C20ZeroTide660B-C20TideFree660B);
-    C(2+1,2+1)=C(2+1,2+1)+(C22ZeroTide660B-C22TideFree660B);
+    %Adjust C_{2,0}
+    C(4)=C(4)+(C20ZeroTide660B-C20TideFree660B);
+    %Adjust C_{2,2}
+    C(6)=C(6)+(C22ZeroTide660B-C22TideFree660B);
 end
 end
 

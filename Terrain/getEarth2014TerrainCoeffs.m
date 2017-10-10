@@ -5,31 +5,31 @@ function [C,S]=getEarth2014TerrainCoeffs(M,coeffType)
 %                   ellipsoid in meters under various parts of the degree 
 %                   2160 Earth2014 model.
 %
-%INPUTS:  M The integer maximum order of the spherical harmonic
-%           coefficients obtained. This is a value between 0 and 2160. If
-%           this parameter is omitted, the default value is 2160.
+%INPUTS: M The integer maximum order of the spherical harmonic
+%          coefficients obtained. This is a value between 0 and 2160. If
+%          this parameter is omitted, the default value is 2160.
 % coeffType An optional parameter selecting the type of coefficients to
-%           load. There are five variants of this model. Possible values
-%           are
-%           0 (The default if omitted or an empty matrix is passed) The
-%             Earth's surface including water in lakes and major ice
-%             sheets. oceans are placed on the GRS80 ellipsoid surface.
-%           1 The Earth's bedrock.
-%           2 The Earth's toporgraphy, bedrock plus major ice sheets.
-%           3 The rock-equivalent topography of the Earth (ice and water
-%             masses are condensed to layers of rock)
-%           4 Major ice sheets. Everything else is set to the surface of
-%             the GRS80 ellipsoid.
+%          load. There are five variants of this model. Possible values
+%          are
+%          0 (The default if omitted or an empty matrix is passed) The
+%            Earth's surface including water in lakes and major ice
+%            sheets. oceans are placed on the GRS80 ellipsoid surface.
+%          1 The Earth's bedrock.
+%          2 The Earth's toporgraphy, bedrock plus major ice sheets.
+%          3 The rock-equivalent topography of the Earth (ice and water
+%            masses are condensed to layers of rock)
+%          4 Major ice sheets. Everything else is set to the surface of the
+%            GRS80 ellipsoid.
 %
-%OUTPUTS:   C   A ClusterSet class holding the coefficient terms that are
-%               multiplied by cosines in the harmonic expansion. C(n+1,m+1)
-%               is the coefficient of degree n and order m. When a maximum
-%               degree of M is used, all C have values for all n from 0 to
-%               M and for all m from 0 to n for each n. The coefficients
-%               are unitless.
-%           S   A ClusterSet class holding the coefficient terms that are
-%               multiplied by sines in the harmonic expansion. The
-%               format of S is the same as that of C.
+%OUTPUTS: C An array holding the coefficient terms that are multiplied by
+%           cosines in the spherical harmonic expansion. If given to a
+%           CountingClusterSet class, C(n+1,m+1) is the coefficient of
+%           degree n and order m. When a maximum degree of M is used, all C
+%           have values for all n from 0 to M and for all m from 0 to n for
+%           each n. The coefficients are unitless.
+%         S An array holding the coefficient terms that are multiplied by
+%           sines in the spherical harmonic expansion. The format of S is
+%           the same as that of C.
 %
 %The model is described in [1]. This function is only for values up to
 %degree and order 2160 as the spherical harmonic synthesis routine in the
@@ -116,16 +116,10 @@ end
 
 totalNumCoeffs=(M+1)*(M+2)/2;
 
-%Allocate space for the coefficients.
-emptyData=zeros(totalNumCoeffs,1);
-clustSizes=1:(M+1);
-C=ClusterSet(emptyData,clustSizes);
-S=ClusterSet(emptyData,clustSizes);
-
 %Extract the data. The additive 2 skips the first two entries, which
 %indicate the lowest and highest coefficient degrees.
-C.clusterEls=data((2+1):(2+totalNumCoeffs));
-S.clusterEls=data((2+maxNumCoeffs+1):(2+maxNumCoeffs+totalNumCoeffs));
+C=data((2+1):(2+totalNumCoeffs));
+S=data((2+maxNumCoeffs+1):(2+maxNumCoeffs+totalNumCoeffs));
 end
 
 %LICENSE:

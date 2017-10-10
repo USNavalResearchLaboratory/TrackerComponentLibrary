@@ -120,7 +120,7 @@ posRx=[51.86310; -177.98669]*(pi/180);
 rRx=ellips2Cart([posRx;0]);
 
 %The continuous-time dynamic model.
-rDot=@(rState,t)[rState(4:6,:);EGM08EarthAccel(rState)];
+rDot=@(rState,t)aJ2Gravity(rState);
 
 %Get the local coordinate axes of the receiver.
 uENU=getENUAxes(posRx);

@@ -9,20 +9,19 @@ function [C,S]=getEGM2008TerrainCoeffs(M)
 %                   elevation and an MSL altitude. The coefficients are
 %                   derived from the Digital Topographic Model 2006.0.
 %
-%INPUTS:    M       The integer maximum order of the spherical harmonic
-%                   coefficientsobtained. This is a value between 2 and
-%                   2190. If this parameter is omitted, the default value
-%                   is 2190.
+%INPUTS: M The integer maximum order of the spherical harmonic coefficients
+%          obtained. This is a value between 2 and 2190. If this parameter
+%          is omitted, the default value is 2190.
 %
-%OUTPUTS:   C   A ClusterSet class holding the coefficient terms that are
-%               multiplied by cosines in the harmonic expansion. C(n+1,m+1)
-%               is the coefficient of degree n and order m. When a maximum
-%               degree of M is used, all C have values for all n from 0 to
-%               M and for all m from 0 to n for each n. The coefficients
-%               are unitless.
-%           S   A ClusterSet class holding the coefficient terms that are
-%               multiplied by sines in the harmonic expansion. The
-%               format of S is the as that of C.
+%OUTPUTS: C An array holding the coefficient terms that are multiplied by
+%           cosines in the spherical harmonic expansion. If given to a
+%           CountingClusterSet class, then C(n+1,m+1) is the coefficient of
+%           degree n and order m. When a maximum degree of M is used, all C
+%           have values for all n from 0 to M and for all m from 0 to n for
+%           each n. The coefficients are unitless.
+%         S An array holding the coefficient terms that are multiplied by
+%           sines in the harmonic expansion. The format of S is the same as
+%           that of C.
 %
 %The EGM2008 model is documented in [1] and [2].
 %
@@ -96,19 +95,10 @@ ScriptFolder = fileparts(ScriptPath);
 %First, see if a .mat file with all of the data exists. If so, then use
 %that and ignore everything else.
 if(exist([ScriptFolder,'/data/Coeff_Height_and_Depth_to2190_DTM2006.0.mat'],'file'))
-    load([ScriptFolder,'/data/Coeff_Height_and_Depth_to2190_DTM2006.0.mat'],'CCoeffs','SCoeffs','clustSizes','offsets');
-    %Create the ClusterSet classes to hold the data.
-    C=ClusterSet();
-    S=ClusterSet();
-    
-    C.clusterEls=CCoeffs(1:totalNumCoeffs);
-    S.clusterEls=SCoeffs(1:totalNumCoeffs);
-    
-    C.clusterSizes=clustSizes(1:(M+1));
-    S.clusterSizes=C.clusterSizes;
-    
-    C.offsetArray=offsets(1:(M+1));
-    S.offsetArray=C.offsetArray;
+    load([ScriptFolder,'/data/Coeff_Height_and_Depth_to2190_DTM2006.0.mat'],'C','S');
+
+    C=C(1:totalNumCoeffs);
+    S=S(1:totalNumCoeffs);
     return 
 end
 
@@ -117,9 +107,8 @@ end
 
 %Allocate space for the coefficients.
 emptyData=zeros(totalNumCoeffs,1);
-clustSizes=1:(M+1);
-C=ClusterSet(emptyData,clustSizes);
-S=ClusterSet(emptyData,clustSizes);
+C=CountingClusterSet(emptyData);
+S=CountingClusterSet(emptyData);
 
 %Read in the data up to the specified order.
 fileID=fopen([ScriptFolder,'/data/Coeff_Height_and_Depth_to2190_DTM2006.0']);
@@ -135,14 +124,13 @@ for curRow=1:numRows
     S(n+1,m+1)=data{4}(curRow);
 end
 
+C=C.clusterEls;
+S=S.clusterEls;
+
 %Save the coefficients into a .mat file so that they can be read more
 %quickly next time.
 if(M==2190)
-    CCoeffs=C.clusterEls;
-    SCoeffs=S.clusterEls;
-    clustSizes=C.clusterSizes;
-    offsets=C.offsetArray;
-    save([ScriptFolder,'/data/Coeff_Height_and_Depth_to2190_DTM2006.0.mat'],'CCoeffs','SCoeffs','clustSizes','offsets')
+    save([ScriptFolder,'/data/Coeff_Height_and_Depth_to2190_DTM2006.0.mat'],'C','S')
 end
 end
 

@@ -3,18 +3,18 @@ function [xPred, SPred]=sqrtDiscKalPred(xPrev,SPrev,F,SQ,u)
 %                the square root implementation of the standard linear
 %                Kalman filter with additive process noise.
 %
-%INPUTS:    xPrev   The xDim X 1 state estimate at the previous time-step.
-%           SPrev   The xDim X xDim lower-triangular square root of the 
-%                   state covariance matrix at the previous time-step.
-%           F       An xDim X xDim state transition matrix.
-%           SQ      The xDimX xDim lower-triangular square root of the 
-%                   process noise covariance matrix.
-%           u       An optional xDim X1 vector that is the control input.
-%                   If omitted, no control input is used.
+%INPUTS: xPrev The xDim X 1 state estimate at the previous time-step.
+%        SPrev The xDim X xDim lower-triangular square root of the state
+%              covariance matrix at the previous time-step.
+%            F An xDim X xDim state transition matrix.
+%           SQ The xDimX xDim lower-triangular square root of the process
+%              noise covariance matrix.
+%            u An optional xDim X1 vector that is the control input. If
+%              omitted, no control input is used.
 %
-%OUTPUTS:   xPred   The xDim X 1 predicted state estimate.
-%           SPred   The xDim X xDim lower-triangular square root of the
-%                   predicted state covariance estimate.
+%OUTPUTS: xPred The xDim X 1 predicted state estimate.
+%         SPred The xDim X xDim lower-triangular square root of the
+%               predicted state covariance estimate.
 %
 %The mathematics behind the specific square root implementation used here
 %are described in [1], with a flow chart given in Appendix G.

@@ -133,9 +133,10 @@ function [V1Comp,V2Comp,alpha]=orbVelDet2Pt(r1Val,r2Val,deltaT,angParam,isECEF,l
 %    Space Flight Center, Greenbelt, MD, Tech. Rep. TN D-5368, Sep. 1969.
 %[4] D. A. Vallado and W. D. McClain, Fundamentals of Astrodynamics
 %    and Applications, 4th ed. Hawthorne, CA: Microcosm press, 2013.
-%[5] D. F. Crouse, "An overview of major terrestrial, celestial, and
-%    temporal coordinate systems for target tracking", Report, U. S. Naval
-%    Research Laboratory, to appear, 2016.
+%[5] D. F. Crouse, "An Overview of Major Terrestrial, Celestial, and
+%    Temporal Coordinate Systems for Target Tracking," Formal Report, Naval
+%    Research Laboratory, no. NRL/FR/5344--16-10,279, 10 Aug. 2016, 173
+%    pages.
 %
 %March 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

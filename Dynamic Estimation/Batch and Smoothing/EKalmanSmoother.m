@@ -4,6 +4,7 @@ function [xSmooth,PSmooth,xUpd,PUpd]=EKalmanSmoother(xInit,PInit,z,h,HJacob,f,FJ
 %                 measurements. The smoothed result at one time step or
 %                 along the entire batch are available. The initial
 %                 predicted states can not be uninformative.
+%
 %INPUTS: xInit  The predicted state at the time of the initial measurement
 %               in z.
 %        PInit  The covariance matrix associated with the predicted state

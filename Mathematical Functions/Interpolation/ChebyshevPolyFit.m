@@ -9,20 +9,20 @@ function a=ChebyshevPolyFit(f,n,tauStart,tauEnd)
 %                   desired, and then truncates the resulting coefficient
 %                   set.
 %
-%INPUTS: f  A function handle to a scalar function that can be passed
-%           vectors of points at which it is to be evaluated for
-%           interpolation. The function will not be evaluated at the
-%           endpoints.
-%        n  The maximum order of the polynoimals to generate. There will be
-%           n+1 returned coefficients, because there is a 0 order
-%           polynomial.
-%tauStart,tauEnd The range of the f over which fiting for interpolation is
-%                to be taken. If omitted, a  range of -1 to 1 is assumed
-%                --the normal range for Chebyshev polynomials.
+%INPUTS: f A function handle to a scalar function that can be passed
+%          vectors of points at which it is to be evaluated for
+%          interpolation. The function will not be evaluated at the
+%          endpoints.
+%        n The maximum order of the polynoimals to generate. There will be
+%          n+1 returned coefficients, because there is a 0 order
+%          polynomial.
+% tauStart,tauEnd The range of the f over which fiting for interpolation is
+%          to be taken. If omitted, a range of -1 to 1 is assumed. This is
+%          the normal range for Chebyshev polynomials.
 %
-%OUTPUTS: a    An (n+1)X1 or 1X(n+1) vector of the coefficients for the
-%              Chebyshev polynomials from degree 0 to degree n. This can be
-%              used with the function ChebyshevPolySynth for interpolation.
+%OUTPUTS: a An (n+1)X1 or 1X(n+1) vector of the coefficients for the
+%           Chebyshev polynomials from degree 0 to degree n. This can be
+%           used with the function ChebyshevPolySynth for interpolation.
 %
 %The coefficients are deterministically found by evaluating the function f
 %at a predictable set of points based on the Chebyshev Approximation
@@ -41,7 +41,7 @@ function a=ChebyshevPolyFit(f,n,tauStart,tauEnd)
 %September 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<3)
+if(nargin<3||isempty(tauStart))
     tauStart=-1;
     tauEnd=1;
 end

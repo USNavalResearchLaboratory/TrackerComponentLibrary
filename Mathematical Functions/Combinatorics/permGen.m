@@ -13,8 +13,8 @@ function permVal=permGen(A,p)
 %
 %INPUTS: A An nXm matrix with m>=n.
 %        p A mX1 vector of positive integer values such that each p(i)>=1
-%          and sum(p)=n. This is a lit of the number of things to take from
-%          each row for the generalized permanent.
+%          and sum(p)=n. This is a list of the number of things to take
+%          from each row for the generalized permanent.
 %
 %OUTPUTS: permVal The value of the generalized matrix permanent.
 %

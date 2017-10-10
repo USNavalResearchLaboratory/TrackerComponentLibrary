@@ -1,30 +1,33 @@
 /**NORMHELMHOLTZ A C++ implementation of a function that computes the fully
 *              normalized derived Legendre functions (also known as fully
-*              normalized Helmholtz polynomials) of degree n=0 to M and
+*              normalized Helmholtz  polynomials) of degree n=0 to M and
 *              for each n from order m=0 to n evaluated at the point u.
-*              That is, \bar{H}^m_n(u). This also finds the first and
-*              second derivatives of the normalized Helmholtz polynomials
-*              with respect to the parameter u, D{\bar{H}^m_n(u)} and
-*              D2{\bar{H}^m_n(u)}, where D{} and D2{} are respectively the
-*              first and second derivative operators. All of the values
-*              can be scaled by a factor of scalFac, if desired, to help
-*              prevent overflows with high degrees and orders. The
-*              Helmholtz polynomials are used in Pine's method for
-*              spherical harmonic evalulation.
+*              That is, \bar{H}^m_n(u). This also finds the first, second,
+*              and third derivatives of the normalized Helmholtz
+*              polynomials with respect to the parameter u,
+*              D{\bar{H}^m_n(u)}, D2{\bar{H}^m_n(u)}, and
+*              D3{\bar{H}^m_n(u)} where D{}, D2{}, and D3{} are
+*              respectively the first, second, and third derivative
+*              operators. All of the values can be scaled by a factor of
+*              scalFac, if desired, to help prevent overflows with high
+*              degrees and orders. The Helmholtz polynomials are used in
+*              Pine's method for spherical harmonic evalulation.
 *
 *INPUTS: u The value at which the fully normalized Helmholtz polynomials
 *          should be evaluated.
-*   maxDeg The maximum degree and order of the output. This should be >=3.
+*   maxDeg The maximum degree and order of the output. This must be >=0.
 * scalFactor A scale factor to help prevent overflow of the results. A
 *          value of 10^(-280) (for example) might be useful at high
 *          degrees.
 *
-*OUTPUTS: HBar An instance of the ClusterSet class such that
+*OUTPUTS: HBar An instance of the CountingClusterSet class such that
 *              HBar(n+1,m+1)=scalFac*\bar{H}^m_n(u).
-*      dHBardu An instance of the ClusterSet class such that
+*      dHBardu An instance of the CountingClusterSet class such that
 *              dHBardu(n+1,m+1)=scalFac*D{\bar{H}^m_n(u)}.
-*   d2HBardu2  An instance of the ClusterSet class such that
-*              dHBardu(n+1,m+1)=scalFac*D{\bar{H}^m_n(u)}.
+*    d2HBardu2 An instance of the CountingClusterSet class such that
+*              dHBardu(n+1,m+1)=scalFac*D2{\bar{H}^m_n(u)}.
+*    d2HBardu3 An instance of the CountingClusterSet class such that
+*              dHBardu(n+1,m+1)=scalFac*D3{\bar{H}^m_n(u)}.
 *
 *The fully normalized derived Legendre functions (Helmholtz polynomials)
 *are described in [1] and the algorithm of that paper is implemented here
@@ -51,7 +54,7 @@
 *CompileCLibraries function.
 *
 *The algorithm is run in Matlab using the command format
-*[HBar,dHBardu,d2HBardu2]=normHelmholtz(u,M,scalFactor);
+*[HBar,dHBardu,d2HBardu2,d2HBardu3]=normHelmholtz(u,M,scalFactor);
 *
 *REFERENCES:
 *[1] E. Fantino and S. Casotto, "Methods of harmonic synthesis for global
@@ -71,56 +74,52 @@
 #include "mathFuncs.hpp"
 
 void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray *prhs[]) {
-    double u, scalFactor;
-    ClusterSetCPP<double> HBar;
-    ClusterSetCPP<double> dHBardu;//The first derivatives
-    ClusterSetCPP<double> d2HBardu2;//The second derivatives
+    double u, scalFactor=1.0;
+    CountingClusterSetCPP<double> HBar;
+    CountingClusterSetCPP<double> dHBardu;//The first derivatives
+    CountingClusterSetCPP<double> d2HBardu2;//The second derivatives
+    CountingClusterSetCPP<double> d3HBardu3;//The third derivatives
     size_t M, numH, i;
     mxArray *CSRetVal;
-    mxArray *clusterElsMATLAB,*clusterSizesMATLAB, *offsetArrayMATLAB;
+    mxArray *clusterElsMATLAB, *numClustMATLAB;
     
-    if(nrhs!=3){
+    if(nrhs<2||nrhs>3){
         mexErrMsgTxt("Incorrect number of inputs.");
         return;
     }
 
-    u=getDoubleFromMatlab(prhs[0]);
-    M=getSizeTFromMatlab(prhs[1]);
-    scalFactor=getDoubleFromMatlab(prhs[2]);
+    if(nlhs>4) {
+        mexErrMsgTxt("Incorrect number of outputs.");
+        return;
+    }
     
-    if(M<3) {
-       mexErrMsgTxt("The maximum order should be at least 3.");
-       return; 
+    u=getDoubleFromMatlab(prhs[0]);
+    //M must be >=0. The getSizeTFromMatlab will have an error if a
+    //negative value is given.
+    M=getSizeTFromMatlab(prhs[1]);
+    if(nrhs>2&&!mxIsEmpty(prhs[2])) {
+        scalFactor=getDoubleFromMatlab(prhs[2]);
     }
     
     numH=(M+1)*(M+2)/2;
     
     //Allocate space for the results.
     clusterElsMATLAB=mxCreateDoubleMatrix(numH,1,mxREAL);
-    clusterSizesMATLAB=allocUnsignedSizeMatInMatlab(M+1,1);
-    offsetArrayMATLAB=allocUnsignedSizeMatInMatlab(M+1,1);
-    
+    {
+        double temp=static_cast<double>(M+1);
+        numClustMATLAB=doubleMat2Matlab(&temp,1,1);
+    }
+
     HBar.numClust=M+1;
     HBar.totalNumEl=numH;
     HBar.clusterEls=reinterpret_cast<double*>(mxGetData(clusterElsMATLAB));
-    HBar.offsetArray=reinterpret_cast<size_t*>(mxGetData(offsetArrayMATLAB));
-    HBar.clusterSizes=reinterpret_cast<size_t*>(mxGetData(clusterSizesMATLAB));
-    
-    //Initialize the offset array and cluster sizes.
-    HBar.offsetArray[0]=0;
-    HBar.clusterSizes[0]=1;
-    for(i=1;i<=M;i++){
-        HBar.clusterSizes[i]=i+1;
-        HBar.offsetArray[i]=HBar.offsetArray[i-1]+HBar.clusterSizes[i-1];
-    }
-    
+
     normHelmHoltzCPP(HBar,u,scalFactor);
     
     //Set the first return value
-    mexCallMATLAB(1,&CSRetVal,0, 0, "ClusterSet");
+    mexCallMATLAB(1,&CSRetVal,0, 0, "CountingClusterSet");
     mxSetProperty(CSRetVal,0,"clusterEls",clusterElsMATLAB);
-    mxSetProperty(CSRetVal,0,"clusterSizes",clusterSizesMATLAB);
-    mxSetProperty(CSRetVal,0,"offsetArray",offsetArrayMATLAB);
+    mxSetProperty(CSRetVal,0,"numClust",numClustMATLAB);
     
     plhs[0]=CSRetVal;
     
@@ -130,16 +129,13 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         dHBardu.numClust=M+1;
         dHBardu.totalNumEl=numH;
         dHBardu.clusterEls=reinterpret_cast<double*>(mxGetData(clusterEls1stDerivMATLAB));
-        dHBardu.offsetArray=reinterpret_cast<size_t*>(mxGetData(offsetArrayMATLAB));
-        dHBardu.clusterSizes=reinterpret_cast<size_t*>(mxGetData(clusterSizesMATLAB));
         
         normHelmHoltzDerivCPP(dHBardu,HBar);
         //Set the second return value
-        mexCallMATLAB(1,&CSRetVal,0, 0, "ClusterSet");
+        mexCallMATLAB(1,&CSRetVal,0, 0, "CountingClusterSet");
         mxSetProperty(CSRetVal,0,"clusterEls",clusterEls1stDerivMATLAB);
-        mxSetProperty(CSRetVal,0,"clusterSizes",clusterSizesMATLAB);
-        mxSetProperty(CSRetVal,0,"offsetArray",offsetArrayMATLAB);
-
+        mxSetProperty(CSRetVal,0,"numClust",numClustMATLAB);
+        
         plhs[1]=CSRetVal;
         mxDestroyArray(clusterEls1stDerivMATLAB);
     }
@@ -150,25 +146,39 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         d2HBardu2.numClust=M+1;
         d2HBardu2.totalNumEl=numH;
         d2HBardu2.clusterEls=reinterpret_cast<double*>(mxGetData(clusterEls2ndDerivMATLAB));
-        d2HBardu2.offsetArray=reinterpret_cast<size_t*>(mxGetData(offsetArrayMATLAB));
-        d2HBardu2.clusterSizes=reinterpret_cast<size_t*>(mxGetData(clusterSizesMATLAB));
         
         normHelmHoltzDeriv2CPP(d2HBardu2,HBar);
         
         //Set the third return value
-        mexCallMATLAB(1,&CSRetVal,0, 0, "ClusterSet");
+        mexCallMATLAB(1,&CSRetVal,0, 0, "CountingClusterSet");
         mxSetProperty(CSRetVal,0,"clusterEls",clusterEls2ndDerivMATLAB);
-        mxSetProperty(CSRetVal,0,"clusterSizes",clusterSizesMATLAB);
-        mxSetProperty(CSRetVal,0,"offsetArray",offsetArrayMATLAB);
+        mxSetProperty(CSRetVal,0,"numClust",numClustMATLAB);
 
         plhs[2]=CSRetVal;
         mxDestroyArray(clusterEls2ndDerivMATLAB);
     }
     
+    if(nlhs>3) {//Compute the third derivatives if they are desired.
+        mxArray *clusterEls3rdDerivMATLAB=mxCreateDoubleMatrix(numH,1,mxREAL);
+        
+        d3HBardu3.numClust=M+1;
+        d3HBardu3.totalNumEl=numH;
+        d3HBardu3.clusterEls=reinterpret_cast<double*>(mxGetData(clusterEls3rdDerivMATLAB));
+        
+        normHelmHoltzDeriv3CPP(d3HBardu3,HBar);
+        
+        //Set the third return value
+        mexCallMATLAB(1,&CSRetVal,0, 0, "CountingClusterSet");
+        mxSetProperty(CSRetVal,0,"clusterEls",clusterEls3rdDerivMATLAB);
+        mxSetProperty(CSRetVal,0,"numClust",numClustMATLAB);
+
+        plhs[3]=CSRetVal;
+        mxDestroyArray(clusterEls3rdDerivMATLAB);
+    }
+    
     //Free the buffers. The mxSetProperty command copied the data.
     mxDestroyArray(clusterElsMATLAB);
-    mxDestroyArray(clusterSizesMATLAB);
-    mxDestroyArray(offsetArrayMATLAB);
+    mxDestroyArray(numClustMATLAB);
 }
 
 /*LICENSE:

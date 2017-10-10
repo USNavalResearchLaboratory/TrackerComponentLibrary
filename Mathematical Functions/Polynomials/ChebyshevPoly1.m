@@ -6,27 +6,27 @@ function T=ChebyshevPoly1(tau,n,tauStart,tauEnd)
 %                also evaluate a generalized Chebyshev polynomial in which
 %                case tau is not mapped to the region [-1,1].
 %
-%INPUTS: tau     An NX1 or 1XN vector of values from tauStart to tauEnd, or
-%                from -1 to 1 if tauStart and tauEnd are omitted, where one
-%                wishes to evaluate the Chebyshev polynomials.
-%        n       The non-negative integer order of the Chebyshev polynomial
-%                evaluated.
-%tauStart,tauEnd The possible range of the inputs. Unless the input is
-%                unbounded as described below, given this range, the
-%                actual input to the polynomials is scaled to
-%                tau=(tau-0.5*(tauStart+tauEnd))/(0.5*(tauEnd-tauStart));
-%                If omitted, a  range of -1 to 1 is assumed --the normal
-%                range for Chebyshev polynomials. The option for mapping to
-%                a wider range is useful when using Chebyshev polynomials
-%                for interpolation. Note that the such polynomials are
-%                generally not useful for interpolating much outside of the
-%                valid range. If one wishes to use generalized Chebyshev
-%                polynomials that are also defined outside of the range of
-%                [-1,1], then use tauStart=-Inf,tauEnd=Inf. The generalized
-%                polynomials are described below.
+%INPUTS: tau An NX1 or 1XN vector of values from tauStart to tauEnd, or
+%            from -1 to 1 if tauStart and tauEnd are omitted, where one
+%            wishes to evaluate the Chebyshev polynomials.
+%          n The non-negative integer order of the Chebyshev polynomial
+%            evaluated.
+% tauStart,tauEnd The possible range of the inputs. Unless the input is
+%            unbounded as described below, given this range, the actual
+%            input to the polynomials is scaled to
+%            tau=(tau-0.5*(tauStart+tauEnd))/(0.5*(tauEnd-tauStart));
+%            If omitted, a  range of -1 to 1 is assumed --the normal range
+%            for Chebyshev polynomials. The option for mapping to a wider
+%            range is useful when using Chebyshev polynomials for
+%            interpolation. Note that such polynomials are generally not
+%            useful for interpolating far outside of the valid range. If
+%            one wishes to use generalized Chebyshev polynomials that are
+%            also defined outside of the range of [-1,1], then use
+%            tauStart=-Inf,tauEnd=Inf. The generalized polynomials are
+%            described below.
 %
-%OUTPUTS: T      An NX1 or 1XN vector of the Chebyshev polynomial of order
-%                n evaluated at the given point(s).
+%OUTPUTS: T An NX1 or 1XN vector of the Chebyshev polynomial of order n
+%           evaluated at the given point(s).
 %
 %Where as the function ChebyshevPoly uses a recursion to evaluate the
 %Chebyshev polynomials of order 0 to n at the points, that is not efficient

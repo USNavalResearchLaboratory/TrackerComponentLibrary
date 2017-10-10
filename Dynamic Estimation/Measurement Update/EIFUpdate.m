@@ -2,35 +2,32 @@ function [yUpdate,PInvUpdate,innov]=EIFUpdate(yPred,PInvPred,z,RInv,h,HJacob,inn
 %%EIFUPDATE Perform the measurement update step in the first-order Extended
 %           Information Filter (EIF).
 %
-%INPUTS:     yPred The xDimX1 predicted information state. The information
-%                  state is the inverse covariance matrix times the target
-%                  state.
-%         PInvPred The xDimXxDim inverse of the predicted state covariance
-%                  matrix.
-%                z The zDim X 1 vector measurement.
-%             RInv The zDim X zDim inverse of the measurement covariance
-%                  matrix in the native coordinate system of the
-%                  measurement.
-%                h A function handle for the measurement function that
-%                  takes the state as its argument.
-%           HJacob A function handle for the measurement Jacobian matrix
-%                  that takes the target state as a parameter or the
-%                  zDim X xDim measurement Jacobian matrix itself. Each
-%                  column is the derivative vector of h with respect to the
-%                  corresponding element of x. If not supplied or an empty
-%                  matrix is passed, then HJacob will be found using
-%                  numerical differentiation via the numDiff function with
-%                  default parameters.
-%       innovTrans An optional function handle that transforms the value of
-%                  the difference between the observation and any predicted
-%                  points. This only needs to be supplied when a
-%                  measurement difference must be restricted to a certain
-%                  range. For example, the innovation between two angles
-%                  will be 2*pi if one angle is zero and the other 2*pi,
-%                  even though they are the same direction. In such an
-%                  instance, a function handle to the wrapRange function
-%                  with the appropriate parameters should be passed for
-%                  innovTrans.
+%INPUTS: yPred The xDimX1 predicted information state. The information
+%              state is the inverse covariance matrix times the target
+%              state.
+%     PInvPred The xDimXxDim inverse of the predicted state covariance
+%              matrix.
+%            z The zDim X 1 vector measurement.
+%         RInv The zDim X zDim inverse of the measurement covariance matrix
+%              in the native coordinate system of the measurement.
+%            h A function handle for the measurement function that takes
+%              the state as its argument.
+%       HJacob A function handle for the measurement Jacobian matrix that
+%              takes the target state as a parameter or the zDim X xDim
+%              measurement Jacobian matrix itself. Each column is the
+%              derivative vector of h with respect to the corresponding
+%              element of x. If not supplied or an empty matrix is passed,
+%              then HJacob will be found using numerical differentiation
+%              via the numDiff function with default parameters.
+%   innovTrans An optional function handle that transforms the value of the
+%              difference between the observation and any predicted points
+%              This only needs to be supplied when a measurement difference
+%              must be restricted to a certain range. For example, the
+%              innovation between two angles will be 2*pi if one angle is
+%              zero and the other 2*pi, even though they are the same
+%              direction. In such an instance, a function handle to the
+%              wrapRange function with the appropriate parameters should be
+%              passed for innovTrans.
 %
 %OUTPUTS: yUpdate The xDim X 1 updated (posterior) information state
 %                 vector.

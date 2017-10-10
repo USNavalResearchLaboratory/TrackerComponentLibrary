@@ -12,37 +12,35 @@ function [deltaTNew,xNew,tNew,k,dxdtCur,exitCode]=performOneAdaptiveRKStep(xCur,
 %                   subroutine, none of the inputs provide default
 %                   parameters if omitted.
 %
-%INPUTS:   xCur The NX1 state vector at time tCur.
-%          tCur The scalar current time of integration.
-%             f The function handle for f(x,t)=dxdt over which integration
-%               is to be performed. The output is NX1-dimensional.
-%        deltaT The current stepsize to be taken in t. This can be positive
-%               or negative.
-%  deltaTMinMag The minimum allowable magnitude of the step size.
-%  deltaTMaxMag The maximum allowable magnitude of the step size.
-%      dxdtCur  The value f(xCur,tCur). This is requested so that
-%               methods that are FSAL (See comments to the function
-%               RungeKStep) can avoid additional computations.
+%INPUTS: xCur The NX1 state vector at time tCur.
+%        tCur The scalar current time of integration.
+%           f The function handle for f(x,t)=dxdt over which integration is
+%             to be performed. The output is NX1-dimensional.
+%      deltaT The current stepsize to be taken in t. This can be positive
+%             or negative.
+% deltaTMinMag The minimum allowable magnitude of the step size.
+% deltaTMaxMag The maximum allowable magnitude of the step size.
+%      dxdtCur The value f(xCur,tCur). This is requested so that methods
+%             that are FSAL (See comments to the function RungeKStep) can
+%             avoid additional computations.
 % order,solutionChoice  A pair of optional parameters that specify the
-%                highest order of the embedded Runge-Kutta pair to use as
-%                well as the specific algorithm to use. Details are given
-%                in the comments to the RungeKStep function. If omitted or
-%                empty matrices are passed, the default order of 5 is used
-%                and the default solutionChoice of 0 is used.
-%         RelTol The maximum relative error tolerance allowed, a
-%                positive scalar (its use is explained in more detail
-%                below).
-%         AbsTol The absolute error tolerance allowed, a positive scalar,
-%                of the same for all components of x, or a positive NX1
-%                vector.
+%              highest order of the embedded Runge-Kutta pair to use as
+%              well as the specific algorithm to use. Details are given in
+%              the comments to the RungeKStep function. If omitted or empty
+%              matrices are passed, the default order of 5 is used and the
+%              default solutionChoice of 0 is used.
+%       RelTol The maximum relative error tolerance allowed, a positive
+%              scalar (its use is explained in more detail below).
+%       AbsTol The absolute error tolerance allowed, a positive scalar, of
+%              the same for all components of x, or a positive NX1 vector.
 %
 %OUTPUTS: deltaTNew The value of deltaT that can be used for the next
 %               adaptive step (i.e. pass it to this function). If the
 %               function fails (exitCode~=0), then this will be set to the
 %               last step size used.
-%         xNew  The updated NX1 state vector.
-%         tNew  The time of the updated state vector.
-%            k  The values of the derivatives f evaluated at various
+%          xNew The updated NX1 state vector.
+%          tNew The time of the updated state vector.
+%             k The values of the derivatives f evaluated at various
 %               points as determined by the algorithm used for the
 %               step. This can be passed to functions like RKInterpPolys to
 %               perform interpolation.

@@ -46,7 +46,7 @@ tauStart=tauList(1);
 tauEnd=tauList(end);
 
 %If no derivative information is provided.
-if(nargin<4)
+if(nargin<4||isempty(dfList))
     %Each row of T is a different point. Each column of T is a different
     %order.
     T=ChebyshevPoly(tauList,n,tauStart,tauEnd)';
@@ -66,7 +66,7 @@ if(nargin<4)
     aLambda=C1\C2*fList(:);
     a=aLambda(1:(n+1));
 else
-    if(nargin<5)
+    if(nargin<5||isempty(w))
         w=[1;1];
     end
     

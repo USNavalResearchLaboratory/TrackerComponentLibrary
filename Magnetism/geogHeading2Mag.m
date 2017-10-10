@@ -8,41 +8,41 @@ function PEastOfNorth=geogHeading2Mag(points,geoEastOfNorth,coeffType,year,a,f)
 %                directly towards the reference ellipsoid, the geographic
 %                heading will be undefined and a NaN will be returned.
 %
-%INPUTS: points  One or more points given in geodetic latitude and
-%                longitude, in radians, and height, in meters where the
-%                geographic headings apply. To convert N headings, points
-%                is a 3XN matrix with each column having the format
-%                [latitude;longitude; height]. All points should be
-%                associated with the same time. At the geographic poles,
-%                the longitude value determines the orientation of the
-%                local coordinate system axes. Thus, geographic headings
-%                ARE defined at the poles.
-%geoEastOfNorth  An NX1 array of N geographic headings in radians
-%                clockwise from North that should be turned into magnetic
-%                headings.
-%      coeffType This specifies the coefficient model for the coefficients.
-%                If one wishes to explcitely pass a model, then this is a
-%                structure with members C, S, aH, and cH, which are defined
-%                in the same manner as the return values from the function
-%                getWMMCoeffs. Otherwise, a string can be passed. Possible
-%                values are:
-%                'WMM' (The default if omitted or an empty matrix is
-%                      passed). Use the World Magnetic Model via the
-%                      function getWMMCoeffs.
-%                'IGRF' Use the International Geomagnetic Reference Field
-%                      model via the function getIGRFCoeffs.
-%    year        A decimal number indicating a year in the Gregorian
-%                calendar as specified by UTC. For example, halfway through
-%                the year 2012 would be represented as 2012.5. The
-%                precision of the model is not sufficiently fine that leap
-%                seconds matter. If this parameter is omitted, then the
-%                last reference epoch of the geomagnetic model is used.
-%           a    The semi-major axis of the reference ellipsoid. If
-%                this argument is omitted, the value in
-%                Constants.WGS84SemiMajorAxis is used.
-%           f    The flattening factor of the reference ellipsoid. If
-%                this argument is omitted, the value in
-%                Constants.WGS84Flattening is used.
+%INPUTS: points One or more points given in geodetic latitude and
+%               longitude, in radians, and height, in meters where the
+%               geographic headings apply. To convert N headings, points is
+%               a 3XN matrix with each column having the format
+%               [latitude;longitude; height]. All points should be
+%               associated with the same time. At the geographic poles, the
+%               longitude value determines the orientation of the local
+%               coordinate system axes. Thus, geographic headings ARE
+%               defined at the poles.
+% geoEastOfNorth An NX1 array of N geographic headings in radians
+%               clockwise from North that should be turned into magnetic
+%               headings.
+%     coeffType This specifies the coefficient model for the coefficients.
+%               If one wishes to explcitely pass a model, then this is a
+%               structure with members C, S, aH, and cH, which are defined
+%               in the same manner as the return values from the function
+%               getWMMCoeffs. Otherwise, a string can be passed. Possible
+%               values are:
+%               'WMM' (The default if omitted or an empty matrix is
+%                     passed). Use the World Magnetic Model via the
+%                     function getWMMCoeffs.
+%               'IGRF' Use the International Geomagnetic Reference Field
+%                     model via the function getIGRFCoeffs.
+%          year A decimal number indicating a year in the Gregorian
+%               calendar as specified by UTC. For example, halfway through
+%               the year 2012 would be represented as 2012.5. The
+%               precision of the model is not sufficiently fine that leap
+%               seconds matter. If this parameter is omitted, then the
+%               last reference epoch of the geomagnetic model is used.
+%             a The semi-major axis of the reference ellipsoid. If this
+%               argument is omitted, the value in
+%               Constants.WGS84SemiMajorAxis is used.
+%             f The flattening factor of the reference ellipsoid. If this
+%               argument is omitted, the value in
+%               Constants.WGS84Flattening is used.
 %
 %OUTPUT: GeoEastOfNorth The headings converted to radians clockwise of
 %                       magnetic North on the reference ellipse.

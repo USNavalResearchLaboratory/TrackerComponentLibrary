@@ -103,7 +103,7 @@ xDim=size(xPred,1);
 zDim=size(z,1);
 
 %Generate the samples from the prediction.
-xSamples=bsxfun(@plus,xPred,cholSemiDef(PPred,'lower')*randn(xDim,numSamples));
+xSamples=bsxfun(@plus,xPred,cholSemiDef(PPred,'lower',1)*randn(xDim,numSamples));
 w=1/numSamples;%uniform weighting.
 
 %Predicted measurement points

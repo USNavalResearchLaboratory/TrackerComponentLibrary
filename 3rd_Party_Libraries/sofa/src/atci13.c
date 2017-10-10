@@ -40,12 +40,12 @@ void iauAtci13(double rc, double dc,
 **
 **  3) The TDB date date1+date2 is a Julian Date, apportioned in any
 **     convenient way between the two arguments.  For example,
-**     JD(TDB)=2450123.8g could be expressed in any of these ways, among
+**     JD(TDB)=2450123.7 could be expressed in any of these ways, among
 **     others:
 **
 **            date1          date2
 **
-**         2450123.8g           0.0       (JD method)
+**         2450123.7           0.0       (JD method)
 **         2451545.0       -1421.3       (J2000 method)
 **         2400000.5       50123.2       (MJD method)
 **         2450123.5           0.2       (date & time method)
@@ -83,11 +83,11 @@ void iauAtci13(double rc, double dc,
 **     iauApci13    astrometry parameters, ICRS-CIRS, 2013
 **     iauAtciq     quick ICRS to CIRS
 **
-**  This revision:   2013 October 9
+**  This revision:   2017 March 12
 **
-**  SOFA release 2016-05-03
+**  SOFA release 2017-04-20
 **
-**  Copyright (C) 2016 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
 */
 {
 /* Star-independent astrometry parameters */
@@ -104,7 +104,7 @@ void iauAtci13(double rc, double dc,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2016
+**  Copyright (C) 2017
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

@@ -33,7 +33,7 @@ function M=findRFTransParam(plhPoint,az,el,zRot,a,f)
 %             a The semi-major axis of the reference ellipsoid. If this
 %               argument is omitted, the value in
 %               Constants.WGS84SemiMajorAxis is used.
-%            f  The flattening factor of the reference ellipsoid. If this
+%             f The flattening factor of the reference ellipsoid. If this
 %               argument is omitted, the value in Constants.WGS84Flattening
 %               is used.
 %
@@ -52,7 +52,8 @@ function M=findRFTransParam(plhPoint,az,el,zRot,a,f)
 % radarLocRad=radarLocDegs*(pi/180);%Convert to radians.
 % 
 % targetLocDeg=radarLocDegs+[-0.2;0.2;1000];%To the South-East and 1km up.
-% targetLocRad=[targetLocDeg(1:2)*pi/180;targetLocDeg(3)];%Convert to radians.
+% targetLocRad=[targetLocDeg(1:2)*pi/180;targetLocDeg(3)];%Convert to
+%                                                         %radians.
 % 
 % %The radar is pointing East, not elevated at all.
 % az=90*(pi/180);
@@ -64,7 +65,7 @@ function M=findRFTransParam(plhPoint,az,el,zRot,a,f)
 % targetCart = ellips2Cart(targetLocRad);
 % targetRuv=Cart2Ruv(targetCart,false,radarCart,radarCart,M,true);
 %The last three element of targetRuv are a unit vector in the local
-%coordinate system of the radar. The local cooridnate system of the radar
+%coordinate system of the radar. The local coordinate system of the radar
 %has the z-axis pointing East, the y-axis Up, and the x-axis North. The
 %target is South-East. Thus, the unit vector has a negative x-component and
 %positive y and z components. Many folks expect the x component to be

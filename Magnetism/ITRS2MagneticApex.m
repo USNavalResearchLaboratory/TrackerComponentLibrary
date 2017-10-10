@@ -6,24 +6,24 @@ function [zApex,apexPoints,exitCode]=ITRS2MagneticApex(zCart,hR,modSelParam,a,f,
 %           systems relate to the Earth's magnetic field and are useful
 %           when consdiering the ionosphere.
 %
-%INPUTS: zCart  One or more points given in Cartesian coordinates in the
-%               ITRS with units of meters. zCart is a 3XN matrix with each
-%               column having the format [x;y;z]. One would generally 
-%               assume that points are not underground.
-%           hR  An optional reference height parameter for modified Apex
-%               coordinates. If omitted or an empty matrix is passed, hR=0
-%               is used, meaning that standard (nor modified) Apex
-%               coordinates are computed.
-%   modSelParam An optional parameter selecting or providing the magnetic
-%               field model to use. If omitted or an empty matrix is
-%               passed, the International Geomagnetic Reference Field
-%               (IGRF) at the latest epoch of the model is used via the
-%               function getIGRFCoeffs. Possible other values are
-%               1) year The parameters of the IGRF for the specified epoch 
+%INPUTS: zCart One or more points given in Cartesian coordinates in the
+%              ITRS with units of meters. zCart is a 3XN matrix with each
+%              column having the format [x;y;z]. One would generally 
+%              assume that points are not underground.
+%           hR An optional reference height parameter for modified Apex
+%              coordinates. If omitted or an empty matrix is passed, hR=0
+%              is used, meaning that standard (nor modified) Apex
+%              coordinates are computed.
+%  modSelParam An optional parameter selecting or providing the magnetic
+%              field model to use. If omitted or an empty matrix is passed,
+%              the International Geomagnetic Reference Field (IGRF) at the
+%              latest epoch of the model is used via the function
+%              getIGRFCoeffs. Possible other values are:
+%              1) year The parameters of the IGRF for the specified epoch 
 %               year are used. The year is in the Gregorian calendar and is
 %               specified as noted in the comments to the getIGRFCoeffs
 %               function.
-%               2) modSelParam is a structure where modSelParam.algorithm
+%              2) modSelParam is a structure where modSelParam.algorithm
 %               selects the algorithm to use Possible values for
 %               modSelParam.algorithm are 'IGRF', 'WMM' and 'preloaded'. If
 %               modSelParam.algorithm is 'IGRF or 'WMM', then the IGRF or
@@ -36,28 +36,28 @@ function [zApex,apexPoints,exitCode]=ITRS2MagneticApex(zCart,hR,modSelParam,a,f,
 %               the fully normalized outputs of getIGRFCoeffs or
 %               getWMMCoeffs. See comments below for the use of custom
 %               coeffients.
-%       a       The semi-major axis of the reference ellipsoid. The apex is
-%               defined in terms of a maximum magnetic field line height
-%               above the reference ellipsoid. If this argument is omitted
-%               or an empty matrix is passed, the value in
-%               Constants.WGS84SemiMajorAxis is used.
-%       f       The flattening factor of the reference ellipsoid. If this
-%               argument is omitted or an empty matrix is passed, the value
-%               in Constants.WGS84Flattening is used.
-%        RelTol The maximum relative error tolerance allowed for the
-%               Runge-Kutta algorithm to trace the path towards the apex.
-%               If omitted or an empty matrix is passed, the default value
-%               of 1e-6 is used.
-%        AbsTol The absolute error tolerance allowed, a positive scalar.
-%               If omitted or an empty matrix is passed, the default value
-%               of 1e-9 is used. This is used in the Runge-Kutta algorithm
-%               to trace along the path towards the apex, and it is used
-%               for the fminbnd function to find the apex location once it
-%               has been bounded.
-%      maxSteps The maximum allowable number of steps to perform the
-%               adaptive Runge-Kutta integration along a magnetic field
-%               line to find the apex. If omitted or an empty matrix is
-%               passed, the default of 1024 is used.
+%            a The semi-major axis of the reference ellipsoid. The apex is
+%              defined in terms of a maximum magnetic field line height
+%              above the reference ellipsoid. If this argument is omitted
+%              or an empty matrix is passed, the value in
+%              Constants.WGS84SemiMajorAxis is used.
+%            f The flattening factor of the reference ellipsoid. If this
+%              argument is omitted or an empty matrix is passed, the value
+%              in Constants.WGS84Flattening is used.
+%       RelTol The maximum relative error tolerance allowed for the
+%              Runge-Kutta algorithm to trace the path towards the apex.
+%              If omitted or an empty matrix is passed, the default value
+%              of 1e-6 is used.
+%       AbsTol The absolute error tolerance allowed, a positive scalar.
+%              If omitted or an empty matrix is passed, the default value
+%              of 1e-9 is used. This is used in the Runge-Kutta algorithm
+%              to trace along the path towards the apex, and it is used for
+%              the fminbnd function to find the apex location once it has
+%              been bounded.
+%     maxSteps The maximum allowable number of steps to perform the
+%              adaptive Runge-Kutta integration along a magnetic field line
+%              to find the apex. If omitted or an empty matrix is passed,
+%              the default of 1024 is used.
 %
 %OUTPUTS: zApex A 3XN matrix of the points in zCart converted into apex
 %               coordinates. This consists of [lambdaA;phi;VVal] as in [2],
@@ -207,7 +207,8 @@ for curPoint=1:numPoints
         hA=ellipsApex(3);%The ellipsoidal height of the apex point.
         %The apex longitude is the centered dipole longitude of
         %the apex location;
-        ApexCDSpher=Cart2Sphere(ITRS2CartCD(apexPoint,C(1+1,1+0),C(1+1,1+1),S(1+1,1+1)));
+        %The C inputs are C_{1,0}, C_{1,1}, and S_{1,1}
+        ApexCDSpher=Cart2Sphere(ITRS2CartCD(apexPoint,C(2),C(3),S(3)));
         phi=ApexCDSpher(2);%The centered dipole longitude (azimuth).
     end
     %The apex latitude (hR=0)/ modified apex latitude. The sign is determined

@@ -2,22 +2,21 @@
  *              (UTC) given as a two-part pseudo-Julian to a date in terms
  *              of the year, day number and second in the day.
  *
- *INPUTS:    Jul1, Jul2  Vectors or matrices of the two parts of Julian
- *                       dates given in UTC. The units of the date are
- *                       days. The full date is the sum of both terms. The
- *                       date is broken into two parts to provide more bits
- *                       of precision. It does not matter how the date is
- *                       split.
+ *INPUTS: Jul1, Jul2 Vectors or matrices of the two parts of Julian dates
+ *                   given in UTC. The units of the date are days. The full
+ *                   date is the sum of both terms. The date is broken into
+ *                   two parts to provide more bits of precision. It does
+ *                   not matter how the date is split.
  *
- *OUTPUTS:  year    A matrix of integer years (as Matlab doubles) in the
- *                  Gregorian calendar under UTC corresponding to the input
- *                  dates.
- *         dayCount A matrix integer days of the year (as Matlab doubles),
- *                  accounting for leap years, corresponding to the input
- *                  dates. Values in dayCount are integers >=1.
- *         second   A matrix of the (possibly fractional) seconds of the
- *                  day, accounting for leap seconds, corresponding to the
- *                  input dates. Values in second are >=0.
+ *OUTPUTS: year A matrix of integer years (as Matlab doubles) in the
+ *              Gregorian calendar under UTC corresponding to the input
+ *              dates.
+ *     dayCount A matrix integer days of the year (as Matlab doubles),
+ *              accounting for leap years, corresponding to the input
+ *              dates. Values in dayCount are integers >=1.
+ *       second A matrix of the (possibly fractional) seconds of the day,
+ *              accounting for leap seconds, corresponding to the input
+ *              dates. Values in second are >=0.
  *
  *This makes use of the function iauJd2cal in the International
  *Astronomical Union's (IAU) Standard's of Fundamental Astronomy library

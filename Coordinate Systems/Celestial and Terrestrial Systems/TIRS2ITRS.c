@@ -1,6 +1,6 @@
 /**TIRS2ITRS Rotate vectors from the Terrestrial Intermediate Reference
 *            System (TIRS) to the International Terrestrial Reference
-*            System (ITRS). The ITRS is essentially the WGS-84 cooridnate
+*            System (ITRS). The ITRS is essentially the WGS-84 coordinate
 *            system: it defines locations with respect to the crust of a
 *            non-rotating Earth, where the z axis passes through a fixed
 *            point on the surface. On the other hand, the TIRS is nearly
@@ -9,7 +9,7 @@
 *            conversion does not include the (small) centrifugal effect of
 *            polar motion.
 *
-*INPUTS: x  The NXnumVec collection of vectors in TIRS coordinates to
+*INPUTS:  x The NXnumVec collection of vectors in TIRS coordinates to
 *           convert (units do not matter). N can be 3, or 6. If the vectors
 *           are 3D, then they are position. 6D
 *           vectors are assumed to be position and velocity. Since the TIRS
@@ -47,9 +47,10 @@
 *Different celestial coordinate systems are compared in [1].
 *
 *REFERENCES:
-*[1] D. F. Crouse, "An overview of major terrestrial, celestial, and
-*    temporal coordinate systems for target tracking", Report, U. S. Naval
-*    Research Laboratory, to appear, 2016.
+*[1] D. F. Crouse, "An Overview of Major Terrestrial, Celestial, and
+*    Temporal Coordinate Systems for Target Tracking," Formal Report,
+*    Naval Research Laboratory, no. NRL/FR/5344--16-10,279, 10 Aug. 2016,
+*    173 pages.
 *
 *March 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 */

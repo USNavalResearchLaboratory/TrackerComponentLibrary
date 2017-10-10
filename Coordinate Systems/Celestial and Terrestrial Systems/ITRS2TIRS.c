@@ -1,6 +1,6 @@
 /**ITRS2TIRS Rotate vectors from the International terrestrial Reference
 *            System (ITRS) into the  Terrestrial Intermediate Reference
-*            System (TIRS). The ITRS is essentially the WGS-84 cooridnate
+*            System (TIRS). The ITRS is essentially the WGS-84 coordinate
 *            system: it defines locations with respect to the crust of a
 *            non-rotating Earth, where the z axis passes through a fixed
 *            point on the surface. On the other hand, the TIRS is nearly
@@ -9,23 +9,22 @@
 *            conversion does not include the (small) centrifugal effect of
 *            polar motion.
 *
-*INPUTS: x  The NXnumVec collection of vectors in TIRS coordinates to
-*           convert (units do not matter). N can be 3, or 6. If the vectors
-*           are 3D, then they are position. 6D
-*           vectors are assumed to be position and velocity. Since the TIRS
-*           and ITRS co-rotate, there is no Coriolis effect to add. Also,
-*           the accelerations due to the wobble of the rotation axis over
-*           time are not considered. These accelerations are very small.
-*           Thus, the function just rotates both halves of the vector.
-*  TT1, TT2 Two parts of a Julian date given in terrestrial time (TT).
-*           The units of the date are days. The full date is the sum of
-*           both terms. The date is broken into two parts to provide
-*           more bits of precision. It does not matter how the date is
-*           split.
-*      xpyp xpyp=[xp;yp] are the polar motion coordinates in radians
-*           including the effects of tides and librations. If this
-*           parameter is omitted or if an empty matrix is passed, the
-*           value from the function getEOP will be used.
+*INPUTS: x The NXnumVec collection of vectors in TIRS coordinates to
+*          convert (units do not matter). N can be 3, or 6. If the vectors
+*          are 3D, then they are position. 6D
+*          vectors are assumed to be position and velocity. Since the TIRS
+*          and ITRS co-rotate, there is no Coriolis effect to add. Also,
+*          the accelerations due to the wobble of the rotation axis over
+*          time are not considered. These accelerations are very small.
+*          Thus, the function just rotates both halves of the vector.
+* TT1, TT2 Two parts of a Julian date given in terrestrial time (TT).
+*          The units of the date are days. The full date is the sum of
+*          both terms. The date is broken into two parts to provide more
+*          bits of precision. It does not matter how the date is split.
+*     xpyp xpyp=[xp;yp] are the polar motion coordinates in radians
+*          including the effects of tides and librations. If this
+*          parameter is omitted or if an empty matrix is passed, the value
+*          from the function getEOP will be used.
 *
 *OUTPUTS: vITRS The NXnumVec vector of values of x rotated from the ITRS
 *               into the TIRS.
@@ -47,9 +46,10 @@
 *Different celestial coordinate systems are compared in [1].
 *
 *REFERENCES:
-*[1] D. F. Crouse, "An overview of major terrestrial, celestial, and
-*    temporal coordinate systems for target tracking", Report, U. S. Naval
-*    Research Laboratory, to appear, 2016.
+*[1] D. F. Crouse, "An Overview of Major Terrestrial, Celestial, and
+*    Temporal Coordinate Systems for Target Tracking," Formal Report,
+*    Naval Research Laboratory, no. NRL/FR/5344--16-10,279, 10 Aug. 2016,
+*    173 pages.
 *
 *March 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 */

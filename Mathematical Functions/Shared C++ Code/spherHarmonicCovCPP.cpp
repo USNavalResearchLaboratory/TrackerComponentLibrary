@@ -35,7 +35,7 @@ template<typename T> bool isFinite(T arg)
            arg != -std::numeric_limits<T>::infinity();
 }
 
-bool spherHarmonicCovCPP(double *sigma2, double *Sigma, const ClusterSetCPP<double> &CStdDev,const ClusterSetCPP<double> &SStdDev, const double *point, const size_t numPoints, const double a, const double c, const double scalFactor) {
+bool spherHarmonicCovCPP(double *sigma2, double *Sigma, const CountingClusterSetCPP<double> &CStdDev,const CountingClusterSetCPP<double> &SStdDev, const double *point, const size_t numPoints, const double a, const double c, const double scalFactor) {
     //If a NULL pointer is passed for gradV, then it is assumed that the
     //gradient is not desired. Otherwise, a pointer to a buffer for 3
     //doubles should be passed. The return value indicates whether any
@@ -45,8 +45,8 @@ bool spherHarmonicCovCPP(double *sigma2, double *Sigma, const ClusterSetCPP<doub
     size_t n,m,curPoint;
     double nf,mf;
     double rPrevVal,thetaPrev;
-    ClusterSetCPP<double> FuncVals;
-    ClusterSetCPP<double> FuncDerivs;
+    CountingClusterSetCPP<double> FuncVals;
+    CountingClusterSetCPP<double> FuncDerivs;
     double *rm,*im;
     //A big chunk of memory will be allocated into a single buffer and
     //split between the variables that need it. That is faster than
@@ -59,12 +59,8 @@ bool spherHarmonicCovCPP(double *sigma2, double *Sigma, const ClusterSetCPP<doub
     //for the elements will be allocated shortly.
     FuncVals.numClust=CStdDev.numClust;
     FuncVals.totalNumEl=CStdDev.totalNumEl;
-    FuncVals.offsetArray=CStdDev.offsetArray;
-    FuncVals.clusterSizes=CStdDev.clusterSizes;
     FuncDerivs.numClust=CStdDev.numClust;
     FuncDerivs.totalNumEl=CStdDev.totalNumEl;
-    FuncDerivs.offsetArray=CStdDev.offsetArray;
-    FuncDerivs.clusterSizes=CStdDev.clusterSizes;
 
     //Allocate the buffer and partition it between variables.
     if(Sigma==NULL){

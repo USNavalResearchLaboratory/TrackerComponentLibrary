@@ -162,10 +162,10 @@ function val=invCDF(prob,nu)
 %        of the central chi squared distribution. This is only implemented
 %        for the central chi-squared distribution.
 %
-%INPUTS:prob The probability or probabilities (0<=prob<=1) at which the 
-%            argument of the CDF is desired.
-%         nu The number of degrees of freedom of the chi-squared
-%            distribution. Note that nu>0.
+%INPUTS: prob The probability or probabilities (0<=prob<=1) at which the 
+%             argument of the CDF is desired.
+%          nu The number of degrees of freedom of the chi-squared
+%             distribution. Note that nu>0.
 %
 %OUTPUTS: val The argument(s) of the CDF that would give the probability or
 %             probabilities in prob.

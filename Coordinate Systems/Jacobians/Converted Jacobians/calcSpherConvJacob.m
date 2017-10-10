@@ -1,13 +1,13 @@
 function J=calcSpherConvJacob(zSpher,systemType,useHalfRange,lTx,lRx,M)
-%%CALCSPHERCONVJACOB Calculate the Jacobian for a Cartesian position taken
-%            with respect to a monostatic or bistatic range and a spherical
-%            direction measurement in 3D, ignoring atmospheric effects.
-%            This type of Jacobian is useful when performing tracking using
+%%CALCSPHERCONVJACOB Calculate the Jacobian for a monostatic or bistatic
+%            range and a spherical direction measurement in 3D, ignoring
+%            atmospheric effects, with respect to Cartesian position. This
+%            type of Jacobian is useful when performing tracking using
 %            Cartesian-converted measurements where the clutter density is
 %            specified in the measurement coordinate system, not the
 %            converted measurement coordinate system.
 %
-%INPUTS: zSpher A 3X1 point in range and azimuth and angle in the
+%INPUTS: zSpher A 3XN set of points in range and azimuth and angle in the
 %           format [range;azimuth;angle], where the angles are given in
 %           radians.
 % systemType An optional parameter specifying the axes from which the
@@ -23,6 +23,9 @@ function J=calcSpherConvJacob(zSpher,systemType,useHalfRange,lTx,lRx,M)
 %             (towards the y-axis). This is consistent with some spherical
 %             coordinate systems that use the z axis as the boresight
 %             direction of the radar.
+%           2 This is the same as 0 except instead of being given
+%             elevation, one desires the angle away from the z-axis, which
+%             is (pi/2-elevation).
 % useHalfRange An optional boolean value specifying whether the bistatic
 %           (round-trip) range value has been divided by two. This normally
 %           comes up when operating in monostatic mode (the most common
@@ -46,9 +49,9 @@ function J=calcSpherConvJacob(zSpher,systemType,useHalfRange,lTx,lRx,M)
 %           aligned with the global and M=eye(3) --the identity matrix is
 %           used. 
 %
-%OUTPUTS: J The 3X3 Jacobian matrix. Each row is a components of
-%           [range;azimuth;elevation] in that order with derivatives taken
-%           with respect to [x,y,z] by column.
+%OUTPUTS: J The 3X3XN set of Jacobian matrices, one for each point given.
+%           Each row is a components of [range;azimuth;elevation] in that
+%           order with derivatives taken with respect to [x,y,z] by column.
 %
 %This function converts the measurement into Cartesian coordinates and then
 %calls rangeGradient and spherAngGradient. Note that singularities exist at
@@ -79,11 +82,13 @@ if(nargin<2||isempty(systemType))
     systemType=0;
 end
 
+N=size(zSpher,2);
+
 x=spher2Cart(zSpher,systemType,useHalfRange,lTx,lRx,M);
 
-J=zeros(3,3);
-J(1,:)=rangeGradient(x,useHalfRange,lTx,lRx);
-J(2:3,:)=spherAngGradient(x,systemType,lRx,M);
+J=zeros(3,3,N);
+J(1,:,:)=rangeGradient(x,useHalfRange,lTx,lRx);
+J(2:3,:,:)=spherAngGradient(x,systemType,lRx,M);
 
 end
 

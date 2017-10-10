@@ -1,37 +1,36 @@
 function [col4row,row4col,gain,u,v]=assign2D(C,maximize)
-%%ASSIGN2D          Solve the two-dimensional assignment problem with a
-%                   rectangular cost matrix C, scanning row-wise. The
-%                   problem being solved can be formulated as
-%                   minimize (or maximize)
-%                   \sum_{i=1}^{numRow}\sum_{j=1}^{numCol}C_{i,j}*x_{i,j}
-%                   subject to
-%                   \sum_{j=1}^{numCol}x_{i,j} =1 for all i
-%                   \sum_{i=1}^{numRow}x_{i,j}<=1 for all j
-%                   x_{i,j}=0 or 1.
-%                   Assuming that numCol>=numRow.
+%%ASSIGN2D Solve the two-dimensional assignment problem with a rectangular
+%          cost matrix C, scanning row-wise. The problem being solved can
+%          be formulated as minimize (or maximize)
+%          \sum_{i=1}^{numRow}\sum_{j=1}^{numCol}C_{i,j}*x_{i,j}
+%          subject to
+%          \sum_{j=1}^{numCol}x_{i,j} =1 for all i
+%          \sum_{i=1}^{numRow}x_{i,j}<=1 for all j
+%          x_{i,j}=0 or 1.
+%          Assuming that numCol>=numRow.
 %
-%INPUTS:    C           A numRowXnumCol cost matrix that does not contain
-%                       any NaNs and where the largest finite element minus
-%                       the smallest element is a finite quantity (does not
-%                       overflow) when performing minimization and where
-%                       the smallest finite element minus the largest
-%                       element is finite when performing maximization. 
-%                       Forbidden assignments can be given costs of +Inf
-%                       for minimization and -Inf for maximization.
-%           maximize    If true, the minimization problem is transformed
-%                       into a maximization problem. The default if this
-%                       parameter is omitted is false.
+%INPUTS: C A numRowXnumCol cost matrix that does not contain any NaNs and
+%          where the largest finite element minus the smallest element is a
+%          finite quantity (does not overflow) when performing minimization
+%          and where the smallest finite element minus the largest
+%          element is finite when performing maximization. Forbidden
+%          assignments can be given costs of +Inf for minimization and -Inf
+%          for maximization.
+% maximize If true, the minimization problem is transformed into a
+%          maximization problem. The default if this parameter is omitted
+%          is false.
 %
-%OUTPUTS:   col4row     A numRowX1 vector where the entry in each element
-%                       is an assignment of the element in that row to a
-%                       column. 0 entries signify unassigned rows.
-%           row4col     A numColX1 vector where the entry in each element
-%                       is an assignment of the element in that column to a
-%                       row. 0 entries signify unassigned columns.
-%           gain        The sum of the values of the assigned elements in
-%                       C.
-%           u           The dual variable for the columns.
-%           v           The dual variable for the rows.
+%OUTPUTS: col4row A numRowX1 vector where the entry in each element is an
+%                 assignment of the element in that row to a column. 0
+%                 entries signify unassigned rows.
+%         row4col A numColX1 vector where the entry in each element is an
+%                 assignment of the element in that column to a row. 0
+%                 entries signify unassigned columns.
+%            gain The sum of the values of the assigned elements in C.
+%               u The dual variable for the columns. Note that this is on a
+%                 transformed version of C.
+%               v The dual variable for the rows. Note that this is on a
+%                 transformed version of C.
 %
 %DEPENDENCIES: None
 %

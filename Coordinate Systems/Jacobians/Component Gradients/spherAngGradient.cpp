@@ -3,7 +3,7 @@
 *          gradient terms are not provided and are zero. Relativity and
 *          atmospheric effects are not taken into account.
 *
-*INPUTS: x The 3X1 target position vector in the global coordinate system
+*INPUTS: xG The 3XN position vectors in the global coordinate system, each
 *          with [x;y;z] components.
 * systemType An optional parameter specifying the axes from which the
 *          angles are measured in radians. Possible vaues are
@@ -17,11 +17,16 @@
 *            (towards the y-axis). This is consistent with some spherical
 *            coordinate systems that use the z axis as the boresight
 *            direction of the radar.
-*      lRx The 3X1  position vector of the receiver. If omitted, the
-*          receiver is placed at the origin.
+*          2 This is the same as 0 except instead of being given
+*            elevation, one desires the angle away from the z-axis, which
+*            is (pi/2-elevation).
+*      lRx The 3X1 position vector of the receiver. If omitted, the
+*          receiver is placed at the origin. All vectors in x are assumed
+*          to be from the same receiver.
 *        M A 3X3 rotation matrix from the global Coordinate system to the
 *          orientation of the coordinate system at the receiver. If
-*          omitted, it is assumed to be the identity matrix.
+*          omitted, it is assumed to be the identity matrix. All vectors in
+*          x are assumed to have the same rotation matrix.
 *
 *OUTPUTS: J A 2X3 Jacobian matrix where the rows are [azimuth;elevation] in
 *           that order and the columns take the derivative of the rows
@@ -57,6 +62,7 @@
 void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray *prhs[]) {
     double *xG, *lRx, *M;
     double lRxLocal[3], MLocal[9];
+    size_t N,i;
     int systemType;
     mxArray *retMat;
     double *retData;
@@ -71,7 +77,8 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         return;
     }
     
-    if(mxGetM(prhs[0])!=3||mxGetN(prhs[0])!=1) {
+    N=mxGetN(prhs[0]);
+    if(mxGetM(prhs[0])!=3||mxIsEmpty(prhs[0])) {
        mexErrMsgTxt("The position has the wrong dimensionality.");
        return;
     }
@@ -83,6 +90,10 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         systemType=0;
     } else {
         systemType=getIntFromMatlab(prhs[1]);
+        
+        if(systemType!=0&&systemType!=1&&systemType!=2) {
+            mexErrMsgTxt("Invalid systemType specified.");
+        }
     }
     
     if(nrhs<3||mxIsEmpty(prhs[2])) {
@@ -121,11 +132,22 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         M=reinterpret_cast<double*>(mxGetData(prhs[3]));
     }
     
-    retMat=mxCreateDoubleMatrix(2,3,mxREAL);
+    {
+        mwSize dims[3];
+        dims[0]=2;
+        dims[1]=3;
+        dims[2]=N;
+        
+        retMat=mxCreateNumericArray(3,dims,mxDOUBLE_CLASS,mxREAL);
+    }
     retData=reinterpret_cast<double*>(mxGetData(retMat));
     
-    spherAngGradientGenCPP(retData,xG,systemType,lRx, M);
-    
+    for(i=0;i<N;i++) {
+        spherAngGradientGenCPP(retData,xG,systemType,lRx, M);
+        xG+=3;
+        retData+=6;
+    }
+
     plhs[0]=retMat;
 }
 

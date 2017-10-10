@@ -1,18 +1,21 @@
 function vLocal=getLocalVectors(vGlobal,uList)
-%%GETGLOBALVECTORS Change a collection of local vectors into global
-%                  vectors using the local coordinate axes. This multiplies
-%                  the components of the vectors by the corresponding
-%                  coordinate axis vectors.
+%%GETLOCALVECTORS Change a collection of global vectors into local
+%                 vectors using the global coordinate axes. This multiplies
+%                 the components of the vectors by the corresponding
+%                 coordinate axis vectors. Given the global coordinate axes
+%                 as orthonormal unit vectors, the inverse basis vectors
+%                 are obtained as the transposes of each 3X3 matrix in
+%                 uList.
 %
-%INPUTS:  vGlobal  A 3XN matrix of N global vectors that are to be
-%                  converted.              
-%           uList  A 3X3XN matrix of orthonormal unit coordinate axes that
-%                  are associated with the local coordinate system in which
-%                  the vectors are expressed. If all N vectors use the same
-%                  local coordinate system, then a 3x3x1 matrix may be
-%                  passed instead.
+%INPUTS: vGlobal A numDimsXN matrix of N global vectors that are to be
+%                converted.              
+%          uList A numDimsXnumDimsXN matrix of orthonormal unit coordinate
+%                axes that are associated with the local coordinate system
+%                in which the vectors are expressed. If all N vectors use
+%                the same local coordinate system, then a numDimsxnumDimsx1
+%                matrix can be passed instead.
 %
-%OUTPUTS:   vLocal The vectors in the local coordinate system.
+%OUTPUTS: vLocal The vectors in the local coordinate system.
 %
 %January 2015 David Karnick, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -23,10 +26,13 @@ function vLocal=getLocalVectors(vGlobal,uList)
         uList=repmat(uList,[1,1,numVel]);
     end
     
-    vLocal=zeros(3,numVel);
+    numDims=size(vGlobal,1);
+    vLocal=zeros(numDims,numVel);
     for curVel=1:numVel
         uTemp=uList(:,:,curVel).';
-        vLocal(:,curVel)=vGlobal(1,curVel)*uTemp(:,1)+vGlobal(2,curVel)*uTemp(:,2)+vGlobal(3,curVel)*uTemp(:,3);
+        for curDim=1:numDims
+            vLocal(:,curVel)=vLocal(:,curVel)+vGlobal(curDim,curVel)*uTemp(:,curDim);
+        end
     end
 end
 

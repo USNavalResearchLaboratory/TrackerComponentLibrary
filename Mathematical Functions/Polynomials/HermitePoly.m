@@ -4,29 +4,28 @@ function val=HermitePoly(x,orders,V, type)
 %             polynomials more common the statistics (probabilists) is used
 %             rather than the definition that is more common in 
 %
-%INPUTS: x  The xDimXnumPoints matrix of numPoints points at which the
-%           multivariate Hermite polynomials should be evaluated.
-%    orders A numDimX1 or 1XnumDim vector of the order of the Hermite
-%           polynomial, as applied to each dimension. The elements should
-%           be integers >=0.
-%         V An xDimXxDim symmetric positive definite matrix (a covariance
-%           matrix) with respect to which the multivariate Hermite
-%           polynomial is taken. If this parameter is omitted or an empty
-%           matrix is passed, the identity matrix will be used.
-%      type An optional value indicating the type of Hermite polynomials
-%           used (there are two different definitions). Possible values
-%           are:
-%           0 (The default if omitted or an empty matrix is passed) Use the
-%             definition of Hermite polynomials that is common in the
-%             statistics literature. This definition is in terms of
-%             derivatives of the multivariate normal PDF divided by the
-%             normal PDF. Such Hermite polynomials are often denoted by
-%             He_n in the literature.
-%           1 Use the definition that is common in the physics literature.
-%             This is similar to the definition in statistics, except the
-%             division by 2 in the exponent within the normal PDF is
-%             omitted. Such Hermite polynomials are often denoted by H_n in
-%             the literature.
+%INPUTS: x The xDimXnumPoints matrix of numPoints points at which the
+%          multivariate Hermite polynomials should be evaluated.
+%   orders A numDimX1 or 1XnumDim vector of the order of the Hermite
+%          polynomial, as applied to each dimension. The elements should
+%          be integers >=0.
+%        V An xDimXxDim symmetric positive definite matrix (a covariance
+%          matrix) with respect to which the multivariate Hermite
+%          polynomial is taken. If this parameter is omitted or an empty
+%          matrix is passed, the identity matrix will be used.
+%     type An optional value indicating the type of Hermite polynomials
+%          used (there are two different definitions). Possible values are:
+%          0 (The default if omitted or an empty matrix is passed) Use the
+%            definition of Hermite polynomials that is common in the
+%            statistics literature. This definition is in terms of
+%            derivatives of the multivariate normal PDF divided by the
+%            normal PDF. Such Hermite polynomials are often denoted by He_n
+%            in the literature.
+%          1 Use the definition that is common in the physics literature.
+%            This is similar to the definition in statistics, except the
+%            division by 2 in the exponent within the normal PDF is
+%            omitted. Such Hermite polynomials are often denoted by H_n in
+%            the literature.
 %
 %OUTPUTS: val A 1XnumPoints vector of the Hermite polynomial values for
 %             each of the points.

@@ -9,16 +9,16 @@ function idx=nDim2Index(dims,indices)
 %            of dimensions needed in a hypermatrix is not known a priori, 
 %            such as when handling multivariate polynomials.
 %
-%INPUTS:   dims A 1XnumDim or numDimX1 vector holding the size of each of
-%               the nDim dimensions. The values are >=1. Alternatively, a
-%               scalar value can be passed if all of the dimensions have
-%               the same size.
-%       indices A numDim1XnumIdx matrix of indices where each of the
-%               corresponding numIdx linear indices is desired. The
-%               indexation is Matlab-style, starting from 1, not 0.
-%               Normally, numDim1=numDim. However, if numDim1<numDim, then
-%               it is assumed that the omitted indices are all ones. This
-%               helps deal with singleton dimensions in some instances.
+%INPUTS: dims A 1XnumDim or numDimX1 vector holding the size of each of the
+%             nDim dimensions. The values are >=1. Alternatively, a scalar
+%             value can be passed if all of the dimensions have the same
+%             size.
+%     indices A numDim1XnumIdx matrix of indices where each of the
+%             corresponding numIdx linear indices is desired. The
+%             indexation is Matlab-style, starting from 1, not 0. Normally,
+%             numDim1=numDim. However, if numDim1<numDim, then it is
+%             assumed that the omitted indices are all ones. This helps
+%             deal with singleton dimensions in some instances.
 %
 %OUTPUTS: idx A numIdxX1 vector of linear indices corresponding to each of
 %             the multidimensional index sets given in indices.
@@ -35,19 +35,19 @@ function idx=nDim2Index(dims,indices)
 %August 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    numDim=length(indices);
+    numDim1=length(indices);
     
     %If all of the dimensions have the same value.
-    if(length(dims)==1)
-       dims=repmat(dims,[numDim,1]);
+    if(isscalar(dims))
+       dims=repmat(dims,[numDim1,1]);
     end
+    numDim=numel(dims);
     
     dims=dims(:);%Make it a row vector
     multIdx=[1;cumprod(dims(1:(end-1)))];
     numIdx=size(indices,2);
     
     %Assume omitted trailing indices are 1.
-    numDim1=size(indices,1);
     if(numDim1<numDim)
        indices=[indices;ones(numDim-numDim1,numIdx)];
     end

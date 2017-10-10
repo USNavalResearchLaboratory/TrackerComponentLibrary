@@ -4,11 +4,12 @@ function intVal=ellipIntInc2Kind(phi,m)
 %               second kind is the integral from 0 to phi of
 %               sqrt(1-m*sin(theta)) dtheta. This integral arises when
 %               computing arclengths on ellipsoids. The integral is
-%               sometimes referred to as E.
+%               sometimes referred to as E. The complete integral is the
+%               incomplete integral with phi=pi/2.
 %
-%INPUTS:  phi  A scalar or matrix of the real upper bounds of integration.
-%              These can be positive, negative or zero.
-%           m  A value between 0 and 1.
+%INPUTS:  phi A scalar or matrix of the real upper bounds of integration.
+%             These can be positive, negative or zero.
+%           m A value between 0 and 1.
 %
 %OUTPUTS: intVal The values of the incomplete elliptic integral of the
 %                second kind evaluated at each entry in phi.

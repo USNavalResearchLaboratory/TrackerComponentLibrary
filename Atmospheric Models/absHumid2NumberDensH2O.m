@@ -4,11 +4,11 @@ function numberDensity=absHumid2NumberDensH2O(absHumid)
 %                   number density of the water in the air. This is the
 %                   number of water molecules per cubic meter of air.
 %
-%INPUT:   absHumid The absolute humidity with SI units of kilograms of
-%                  water per cubic meter of air.
+%INPUT: absHumid The absolute humidity with SI units of kilograms of water
+%                per cubic meter of air.
 %
 %OUTPUTS: numberDensity The number of water moleculer per cubic meter of
-%                   air.
+%                       air.
 %
 %Dividing by the value of the atomic mass unit (AMU) gives the number of
 %AMU per cubic meter. Dividing by the atomic mass of water gives the number

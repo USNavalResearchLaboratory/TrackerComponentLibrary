@@ -23,6 +23,9 @@ function z=state2SpherRR(xTar,systemType,useHalfRange,xTx,xRx,M)
 %               (towards the y-axis). This is consistent with some
 %               spherical coordinate systems that use the z axis as
 %               the boresight direction of the radar.
+%             2 This is the same as 0 except instead of being given
+%               elevation, one desires the angle away from the z-axis,
+%               which is (pi/2-elevation).
 % useHalfRange An optional boolean value specifying whether the bistatic
 %             (round-trip) range value has been divided by two. This
 %             normally comes up when operating in monostatic mode (the most
@@ -64,7 +67,7 @@ function z=state2SpherRR(xTar,systemType,useHalfRange,xTx,xRx,M)
 %REFERENCES:
 %[1] D. F. Crouse, "Basic tracking using nonlinear 3D monostatic and
 %    bistatic measurements," IEEE Aerospace and Electronic Systems
-%    Magazine, vol. 29, no. 8, Part II, pp. 4?53, Aug. 2014.
+%    Magazine, vol. 29, no. 8, Part II, pp. 4-53, Aug. 2014.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

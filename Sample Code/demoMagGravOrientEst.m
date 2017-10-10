@@ -17,8 +17,8 @@ function demoMagGravOrientEst()
 %October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-display('Orientation Estimation Using Magnetic and Gravitational Measurements') 
-display('The observer is located in Hilo, Hawaii with zero ellipsoidal height.')
+disp('Orientation Estimation Using Magnetic and Gravitational Measurements') 
+disp('The observer is located in Hilo, Hawaii with zero ellipsoidal height.')
 
 %The latitude and longitude of the Mauna Kea Observatory in Hilo, Hawaii.
 phi=19.823*pi/180;%North latitude in radians.
@@ -26,8 +26,8 @@ lambda=-155.470*pi/180;%East longitude in radians.
 height=0;
 obsLoc=[phi;lambda;height];
 
-display('The true orientation of the observer is a rotation of 60 degrees')
-display('about the local ENU East (x)-axes 15 degrees about the rotated z axis.')
+disp('The true orientation of the observer is a rotation of 60 degrees')
+disp('about the local ENU East (x)-axes 15 degrees about the rotated z axis.')
 %We need to build up the true rotation matrix. First, we need to figure out
 %the relationship between the local ENU axes and the global coordinate
 %system.
@@ -50,9 +50,9 @@ ENU2LocRotMat=R2*R1;
 %Thus, the rotation matrix from global coordinates to local coordinates is
 ECEF2LocRotMat=ENU2LocRotMat*ECEF2ENURotMat;
 
-display(' ')%Add a line break.
-display('1) Determining the gravitational acceleration and magnetic field at')
-display('the observer')
+disp(' ')%Add a line break.
+disp('1) Determining the gravitational acceleration and magnetic field at')
+disp('the observer')
 %The following vectors are determined in ECEF coordinates.
 
 %Magnetic field coefficients for the EMM model.
@@ -73,22 +73,22 @@ BLocal=ECEF2LocRotMat*B;
 gLocal=ECEF2LocRotMat*g;
 
 angDiffDeg=angBetweenVecs(B,g)*(180/pi);
-display(['The magnetic and gravitational acceleration vectors are ',num2str(angDiffDeg)])
-display('degrees apart.')
+disp(['The magnetic and gravitational acceleration vectors are ',num2str(angDiffDeg)])
+disp('degrees apart.')
 
-display(' ')%Add a line break.
-display('2) Using the findTransparam function to determine orientation with')
-display('error-free measurements and NON-NORMALIZED vectors')
+disp(' ')%Add a line break.
+disp('2) Using the findTransparam function to determine orientation with')
+disp('error-free measurements and NON-NORMALIZED vectors')
 ECEF2LocRotMatEst=findTransParam([gLocal,BLocal],[g,B]);
 
 xAxisEst=ECEF2LocRotMatEst*[0;0;1];
 xAxisTrue=ECEF2LocRotMat*[0;0;1];
-display('The difference in the 3D rotation of the estimated and actual global')
-display(['x axes (due to numerical precision limitations) is ',num2str(angBetweenVecs(xAxisEst,xAxisTrue)*(180/pi)*60*60),' arcseconds'])
+disp('The difference in the 3D rotation of the estimated and actual global')
+disp(['x axes (due to numerical precision limitations) is ',num2str(angBetweenVecs(xAxisEst,xAxisTrue)*(180/pi)*60*60),' arcseconds'])
 
-display(' ')%Add a line break.
-display('3) Using the findTransparam function to determine orientation with')
-display('error-free measurements and NORMALIZED vectors')
+disp(' ')%Add a line break.
+disp('3) Using the findTransparam function to determine orientation with')
+disp('error-free measurements and NORMALIZED vectors')
 
 gLocal=gLocal/norm(gLocal);
 BLocal=BLocal/norm(BLocal);
@@ -99,11 +99,11 @@ ECEF2LocRotMatEst=findTransParam([gLocal,BLocal],[g,B]);
 
 xAxisEst=ECEF2LocRotMatEst*[0;0;1];
 xAxisTrue=ECEF2LocRotMat*[0;0;1];
-display('The difference in the 3D rotation of the estimated and actual global')
-display(['x axes (due to numerical precision limitations) is ',num2str(angBetweenVecs(xAxisEst,xAxisTrue)*(180/pi)*60*60),' arcseconds'])
+disp('The difference in the 3D rotation of the estimated and actual global')
+disp(['x axes (due to numerical precision limitations) is ',num2str(angBetweenVecs(xAxisEst,xAxisTrue)*(180/pi)*60*60),' arcseconds'])
 
-display('It can be seen that normalization of the vectors improves numeric')
-display('stability of deterministic orientation estimation')
+disp('It can be seen that normalization of the vectors improves numeric')
+disp('stability of deterministic orientation estimation')
 
 end
 

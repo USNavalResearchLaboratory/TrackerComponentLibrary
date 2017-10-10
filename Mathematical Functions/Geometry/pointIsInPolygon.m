@@ -153,9 +153,7 @@ for curPoint=1:numPoints
         omegas(curPoint)=omega;
         isInPolygon(curPoint)=(isEdgeOrVertex==true||(mod(omega,2)~=0));
     end
-
 end
-
 end
 
 %LICENSE:

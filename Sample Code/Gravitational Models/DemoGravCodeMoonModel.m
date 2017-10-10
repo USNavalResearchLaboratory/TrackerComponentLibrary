@@ -43,7 +43,7 @@ isTideFree=true;
 
 %Compute the normal gravity 2km (2e3m) above the reference ellipsoid at all
 %of the given ellipsoidal latitudes and longitudes. The JPL parameters for
-%a cooridnate system on the Moon are used.
+%a coordinate system on the Moon are used.
 aMoon=Constants.JPLMoonSemiMajorAxis;
 fMoon=Constants.JPLMoonFlattening;
 

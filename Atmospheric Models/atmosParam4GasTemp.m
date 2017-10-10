@@ -6,35 +6,32 @@ function [N,rho,P]=atmosParam4GasTemp(gasTable,T,rhow)
 %                     altitudes below 90km as ionozed parameters, such as
 %                     anomolous oxygen, are not used.
 %
-%INPUTS:       gasTable An NX2 cell array where gasTable{i,1} is a
-%                       string describing the ith constituent atmospheric
-%                       element and gasTable{i,2} is the number density of
-%                       the element in particles per cubic meter. For a
-%                       list of constituent elements that can be handled,
-%                       see the documentation for the Constants.gasProp
-%                       method. Unknown constituent elements that are
-%                       passed will be ignored.
-%                     T The temperature in degrees Kelvin.
-%                  rhow An optional parameter specifying the mass density
-%                       of water vapor at the point in question in units of
-%                       kilograms per cubic meter. If omitted, the air is
-%                       assumed to be dry (rhow=0). The total density of
-%                       the air is assumed to be the sum of the dry air
-%                       density and rhow. Alternatively, this parameter can
-%                       be omitted and 'H2O' can be given as one of the
-%                       constituent elements in gasTable.
+%INPUTS: gasTable An NX2 cell array where gasTable{i,1} is a string
+%                 describing the ith constituent atmospheric element and
+%                 gasTable{i,2} is the number density of the element in
+%                 particles per cubic meter. For a list of constituent
+%                 elements that can be handled, see the documentation for
+%                 the Constants.gasProp method. Unknown constituent
+%                 elements that are passed will be ignored.
+%               T The temperature in degrees Kelvin.
+%            rhow An optional parameter specifying the mass density of
+%                 water vapor at the point in question in units of
+%                 kilograms per cubic meter. If omitted, the air is assumed
+%                 to be dry (rhow=0). The total density of the air is
+%                 assumed to be the sum of the dry air density and rhow.
+%                 Alternatively, this parameter can be omitted and 'H2O'
+%                 can be given as one of the constituent elements in
+%                 gasTable.
 %
-%OUTPUTS:   N           The refractivity of the atmosphere. In this model,
-%                       N is always real. N=10^6*(n-1) where n is the index
-%                       of refraction. This is generally valid for
-%                       frequencies from L-band (1GHz) to 10 GHz (the
-%                       middle of X-band).
-%           rho         The atmospheric density at the point in question in
-%                       units of kilograms per cubic meter. 
-%           P           The atmospheric pressure at the point in question
-%                       in units of Newtons per square meter (Pascals). It
-%                       assumes that the gasses can be treated as ideal
-%                       gasses.
+%OUTPUTS: N The refractivity of the atmosphere. In this model, N is always
+%           real. N=10^6*(n-1) where n is the index of refraction. This is
+%           generally valid for frequencies from L-band (1GHz) to 10 GHz
+%           (the middle of X-band).
+%       rho The atmospheric density at the point in question in units of
+%           kilograms per cubic meter. 
+%         P The atmospheric pressure at the point in question in units of
+%           Newtons per square meter (Pascals). It assumes that the gasses
+%           can be treated as ideal gasses.
 %
 %The refractive index is then found using the dry and wet air densities
 %using the formula of [1], which should be valid for frequencies between

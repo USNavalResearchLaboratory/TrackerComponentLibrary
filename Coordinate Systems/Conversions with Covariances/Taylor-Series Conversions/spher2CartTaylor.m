@@ -16,36 +16,36 @@ function [zCart,RCart]=spher2CartTaylor(zMeas,R,zRx,M,algorithm)
 %             elevation, with the angles in radians To convert N points,
 %             zMeas is a 3XN matrix with each column having the format
 %             [range;azimuth; elevation].
-%        R  The 3X3XN covariance matrices associated with polPoint. If all
-%           of the matrices are the same, then this can just be a single
-%           3X3 matrix.
-%       zRx The 3XN [x;y;z] location vectors of the receivers in Cartesian
-%           coordinates.  If this parameter is omitted, then the
-%           receivers are assumed to be at the origin. If only a single
-%           vector is passed, then the receiver location is assumed the
-%           same for all of the target states being converted. zRx can have
-%           more than 3 rows; additional rows are ignored. If monostatic or
-%           no range values are provided, an empty matrix can be passed.
-%        M  A 3X3XN hypermatrix of the rotation matrices to go from the
-%           alignment of the global coordinate system to that at the
-%           receiver. The z-axis of the local coordinate system of the
-%           receiver is the pointing direction of the receiver. If omitted,
-%           then it is assumed that the local coordinate system is aligned
-%           with the global and M=eye(3) --the identity matrix is used. If
-%           only a single 3X3 matrix is passed, then is is assumed to be
-%           the same for all of the N conversions.
-%     algorithm An optional parameter specifying the algorithm to use.
-%               Possible values are
-%               0 The multiplicative unbiased conversion from [1].
-%               1 (The default if omitted or an empty matrix is passed) The
-%                 modified multiplicative unbiased conversion from [2].
+%          R  The 3X3XN covariance matrices associated with polPoint. If
+%             all of the matrices are the same, then this can just be a
+%             single 3X3 matrix.
+%         zRx The 3XN [x;y;z] location vectors of the receivers in
+%             Cartesian coordinates. If this parameter is omitted, then the
+%             receivers are assumed to be at the origin. If only a single
+%             vector is passed, then the receiver location is assumed the
+%             same for all of the target states being converted. zRx can
+%             have more than 3 rows; additional rows are ignored. If
+%             monostatic or no range values are provided, an empty matrix
+%             can be passed.
+%           M A 3X3XN hypermatrix of the rotation matrices to go from the
+%             alignment of the global coordinate system to that at the
+%             receiver. The z-axis of the local coordinate system of the
+%             receiver is the pointing direction of the receiver. If
+%             omitted, then it is assumed that the local coordinate system
+%             is aligned with the global and M=eye(3) --the identity matrix
+%             is used. If only a single 3X3 matrix is passed, then it is
+%             assumed to be the same for all of the N conversions.
+%   algorithm An optional parameter specifying the algorithm to use.
+%             Possible values are
+%             0 The multiplicative unbiased conversion from [1].
+%             1 (The default if omitted or an empty matrix is passed) The
+%               modified multiplicative unbiased conversion from [2].
 %
-%OUTPUTS:   zCart   The approximate means of the PDF of the Cartesian
-%                   converted measurements in [x;y;z] Cartesian coordinates
-%                   for each measurement. This is a 3XN matrix.
-%           RCart   The approximate 3X3XN set of covariance
-%                   matrices of the PDFs of the Cartesian converted
-%                   measurements.
+%OUTPUTS: zCart The approximate means of the PDF of the Cartesian converted
+%               measurements in [x;y;z] Cartesian coordinates for each
+%               measurement. This is a 3XN matrix.
+%         RCart The approximate 3X3XN set of covariance matrices of the
+%               PDFs of the Cartesian converted measurements.
 %
 %REFERENCES:
 %[1] M. Longbin, S. Xiaoquan, Z. Yiyu, S. Z. Kang, and Y. Bar-Shalom,

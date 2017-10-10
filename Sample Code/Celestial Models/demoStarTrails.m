@@ -38,7 +38,7 @@ R1=axisAng2RotMat([1;0;0],60*pi/180);
 R2=axisAng2RotMat([0;0;1],15*pi/180);
 ENU2LocRotMat=R2*R1;
 
-display('Loading the star catalog.')
+disp('Loading the star catalog.')
 %Load stars with a magnitude of at most 6 (the visible region). The stars
 %are formatted such that the data file can be directly passed to the
 %changeEpoch function, which allows the data to be used at different times.
@@ -56,8 +56,8 @@ day=1;
 hour=0;
 second=0;
 
-display('Plotting the stars at different times in the local coordinate')
-display('system and field of view of the observer')
+disp('Plotting the stars at different times in the local coordinate')
+disp('system and field of view of the observer')
 figure(1)
 hold on
 for minute=0:5:20

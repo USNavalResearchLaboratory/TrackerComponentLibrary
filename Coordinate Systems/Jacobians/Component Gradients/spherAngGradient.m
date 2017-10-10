@@ -1,10 +1,9 @@
 function J=spherAngGradient(xG,systemType,lRx,M)
 %%SPHERANGGRADIENT Determine the gradient of a 3D spherical azimuth and
-%          elevation measurement with respect to 3D position. Higher order
-%          gradient terms are not provided and are zero. Relativity and
-%          atmospheric effects are not taken into account.
+%          elevation measurement with respect to 3D position. Relativity
+%          and atmospheric effects are not taken into account.
 %
-%INPUTS: x The 3X1 target position vector in the global coordinate system
+%INPUTS: xG The 3XN position vectors in the global coordinate system, each
 %          with [x;y;z] components.
 % systemType An optional parameter specifying the axes from which the
 %          angles are measured in radians. Possible vaues are
@@ -18,22 +17,40 @@ function J=spherAngGradient(xG,systemType,lRx,M)
 %            (towards the y-axis). This is consistent with some spherical
 %            coordinate systems that use the z axis as the boresight
 %            direction of the radar.
-%      lRx The 3X1  position vector of the receiver. If omitted, the
-%          receiver is placed at the origin.
+%          2 This is the same as 0 except instead of being given
+%            elevation, one desires the angle away from the z-axis, which
+%            is (pi/2-elevation).
+%      lRx The 3X1 position vector of the receiver. If omitted, the
+%          receiver is placed at the origin. All vectors in x are assumed
+%          to be from the same receiver.
 %        M A 3X3 rotation matrix from the global Coordinate system to the
 %          orientation of the coordinate system at the receiver. If
-%          omitted, it is assumed to be the identity matrix.
+%          omitted, it is assumed to be the identity matrix. All vectors in
+%          x are assumed to have the same rotation matrix.
 %
-%OUTPUTS: J A 2X3 Jacobian matrix where the rows are [azimuth;elevation] in
-%           that order and the columns take the derivative of the row
-%           components with respect to [x,y,z] in that order.
+%OUTPUTS: J A 2X3XN set of N Jacobian matrices where the rows are
+%           [azimuth;elevation] in that order and the columns take the
+%           derivative of the row components with respect to [x,y,z] in
+%           that order.
 %
 %The derivatives can be computed in a straightforward manner from
 %the basic relation between spherical and Cartesian coordinates, which is
-%given in Chapter 14.4.4.1 of [1], among other sources.
+%given in Chapter 14.4.4.1 of [1], among other sources, for systemType=0.
 %
 %Note that singularities exist at the poles; that is when the elevation is
 %+/-(pi/2).
+%
+%EXAMPLE:
+%The results can be verified by comparing the value from numerical
+%differentiation to the value returned by this function.
+% x=[100;10;-80];
+% systemType=0;
+% f=@(x)getSpherAngle(x,systemType);
+% fDim=2;
+% numDiffVal=numDiff(x,f,fDim)
+% funcVal=spherAngGradient(x,systemType)
+%One will see that within freasonable finite precision, the two values are
+%equal.
 %
 %REFERENCES:
 %[1] R. L. Duncombe, "Computational techniques," in Explanatory Supplement
@@ -55,48 +72,64 @@ if(nargin<2||isempty(systemType))
    systemType=0; 
 end
 
+N=size(xG,2);
+
 %Transform from global coordinates to local coordinates.
-xLocal=M*(xG(1:3)-lRx(1:3));
+xLocal=M*bsxfun(@minus,xG(1:3,:),lRx(1:3));
 
-x=xLocal(1);
-y=xLocal(2);
-z=xLocal(3);
+JTotal=zeros(2,3,N);
+for curPoint=1:N
+    x=xLocal(1,curPoint);
+    y=xLocal(2,curPoint);
+    z=xLocal(3,curPoint);
 
-r=norm(xLocal);
+    r=norm(xLocal(:,curPoint));
+    J=zeros(2,3);
+    switch(systemType)
+        case 0
+            %Derivatives with respect to x.
+            J(1,1)=-y/(x^2+y^2);
+            J(2,1)=-x*z/(r^2*sqrt(x^2+y^2));
 
-J=zeros(2,3);
-switch(systemType)
-    case 0
-        %Derivatives with respect to x.
-        J(1,1)=-y/(x^2+y^2);
-        J(2,1)=-x*z/(r^2*sqrt(x^2+y^2));
+            %Derivatives with respect to y.
+            J(1,2)=x/(x^2+y^2);
+            J(2,2)=-y*z/(r^2*sqrt(x^2+y^2));
 
-        %Derivatives with respect to y.
-        J(1,2)=x/(x^2+y^2);
-        J(2,2)=-y*z/(r^2*sqrt(x^2+y^2));
+            %Derivatives with respect to z.
+            J(1,3)=0;
+            J(2,3)=sqrt(x^2+y^2)/r^2;
+        case 1
+            %Derivatives with respect to x.
+            J(1,1)=z/(z^2+x^2);
+            J(2,1)=-x*y/(r^2*sqrt(z^2+x^2));
 
-        %Derivatives with respect to z.
-        J(1,3)=0;
-        J(2,3)=sqrt(x^2+y^2)/r^2;
-    case 1
-        %Derivatives with respect to x.
-        J(1,1)=z/(z^2+x^2);
-        J(2,1)=-x*y/(r^2*sqrt(z^2+x^2));
-        
-        %Derivatives with respect to y.
-        J(1,2)=0;
-        J(2,2)=sqrt(z^2+x^2)/r^2;
-        
-        %Derivatives with respect to z.
-        J(1,3)=-x/(z^2+x^2);
-        J(2,3)=-z*y/(r^2*sqrt(z^2+x^2));
-    otherwise
-        error('Invalid system type specified.')
+            %Derivatives with respect to y.
+            J(1,2)=0;
+            J(2,2)=sqrt(z^2+x^2)/r^2;
+
+            %Derivatives with respect to z.
+            J(1,3)=-x/(z^2+x^2);
+            J(2,3)=-z*y/(r^2*sqrt(z^2+x^2));
+        case 2
+            %Derivatives with respect to x.
+            J(1,1)=-y/(x^2+y^2);
+            J(2,1)=x*z/(r^2*sqrt(x^2+y^2));
+
+            %Derivatives with respect to y.
+            J(1,2)=x/(x^2+y^2);
+            J(2,2)=y*z/(r^2*sqrt(x^2+y^2));
+
+            %Derivatives with respect to z.
+            J(1,3)=0;
+            J(2,3)=-sqrt(x^2+y^2)/r^2;
+        otherwise
+            error('Invalid system type specified.')
+    end
+
+    %Rotate from local back to global coordinates.
+    JTotal(:,:,curPoint)=J*M;
 end
-
-%Rotate from local back to global coordinates.
-J=J*M;
-
+J=JTotal;
 end
 
 %LICENSE:

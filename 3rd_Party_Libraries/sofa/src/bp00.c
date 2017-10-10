@@ -77,9 +77,9 @@ void iauBp00(double date1, double date2,
 **
 **  This revision:  2013 August 21
 **
-**  SOFA release 2016-05-03
+**  SOFA release 2017-04-20
 **
-**  Copyright (C) 2016 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
 */
 {
 /* J2000.0 obliquity (Lieske et al. 1977) */
@@ -126,7 +126,7 @@ void iauBp00(double date1, double date2,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2016
+**  Copyright (C) 2017
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

@@ -1,54 +1,53 @@
 function [rho,P,T,Te]=jacchiaAtmosParam(Jul1,Jul2,point,F10,F10b,Kp)
-%%JACCHIAATMOSPARAM   Get basic parameters for atmospheric density,
-%                     pressure and temperature from the Jacchia 1971
-%                     atmospheric model. The model is best suited for
-%                     altitudes above 90km.
+%%JACCHIAATMOSPARAM Get basic parameters for atmospheric density,
+%                   pressure and temperature from the Jacchia 1971
+%                   atmospheric model. The model is best suited for
+%                   altitudes above 90km.
 %
-%INPUTS:  Jul1, Jul2  Two parts of a pseudo-Julian date given in UTC. The
-%                     units of the date are days. The full date is the sum
-%                     of both terms. The date is broken into two parts to
-%                     provide more bits of precision. It does not matter
-%                     how the date is split.
-%              point  The [lat;lon;alt] geodetic location under
-%                     consideration with latitude and longitude in radians
-%                     and altitude in meters.
-%                F10  The actual solar flux at 10.7cm wavelength, with
-%                     units of 10^-22 W/(m^2*Hz). This is taken to be the
-%                     average over the day before the date under
-%                     consideration.
-%               F10b  The average solar flux at 10.7cm wavelength, with
-%                     units of 10^-22 W/(m^2*Hz). This is the average over
-%                     three solar rotations of 27 days.
-%                 Kp  The three-hourly planetary geomagnetic index for a
-%                     time 6.7 hours earlier than the time under
-%                     consideration.
+%INPUTS: Jul1, Jul2 Two parts of a pseudo-Julian date given in UTC. The
+%                   units of the date are days. The full date is the sum of
+%                   both terms. The date is broken into two parts to
+%                   provide more bits of precision. It does not matter how
+%                   the date is split.
+%             point The [lat;lon;alt] geodetic location under
+%                   consideration with latitude and longitude in radians
+%                   and altitude in meters.
+%               F10 The actual solar flux at 10.7cm wavelength, with units
+%                   of 10^-22 W/(m^2*Hz). This is taken to be the average
+%                   over the day before the date under consideration.
+%              F10b The average solar flux at 10.7cm wavelength, with units
+%                   of 10^-22 W/(m^2*Hz). This is the average over three
+%                   solar rotations of 27 days.
+%                Kp The three-hourly planetary geomagnetic index for a time
+%                   6.7 hours earlier than the time under consideration.
 %
-%OUTPUTS:     rho     The atmospheric density at the point in question in
-%                     units of kilograms per cubic meter.
-%               P     The atmospheric pressure at the point in question in
-%                     units of Newtons per square meter (Pascals). It
-%                     assumes that the gasses can be treated as ideal
-%                     gasses.
-%               T     The temperature at the point in question with units
-%                     of degrees Kelvin.
-%              Te     The exospheric temperature at the location in
-%                     question with units of degrees Kelvin.
+%OUTPUTS: rho The atmospheric density at the point in question in units of
+%             kilograms per cubic meter.
+%           P The atmospheric pressure at the point in question in units of
+%             Newtons per square meter (Pascals). It assumes that the
+%             gasses can be treated as ideal gasses.
+%           T The temperature at the point in question with units of
+%             degrees Kelvin.
+%          Te The exospheric temperature at the location in question with
+%             units of degrees Kelvin.
 %
 %The 1971 Jacchia atmospheric model computes atmospheric densities in two
 %major steps. First, the exospheric temperature is computed based on solar
 %and geomagnetic data. Then, the the density is calculated using a
 %bi-polynomial fit. The algorithms in this function are taken primarily
-%from Section 3.5.3 of [1].
-%
-%with guidance and some substitutions from the original paper [2]. This
-%function does not take into account the seasonal variations in helium
-%or hydrogen concentrations.
+%from Section 3.5.3 of [1] with guidance and some substitutions from the
+%original paper [2]. This function does not take into account the seasonal
+%variations in helium or hydrogen concentrations.
 %
 %The atmospheric pressure is obtained using the Ideal Gas Law as described
 %in THE NRLMSISE-00 AND HWM-93 USERS GUIDE: Version 1.50, November 2003 by
 %Douglas P. Drob.
 %
 %The anomalous oxygen parameter in the NRLMSISE-00 model is not used.
+%
+%The position of the Sun is obtained using the readJPLEphem and GCRS2ITRS
+%functions. Default values from getEOP are used for all conversions
+%requiring them.
 %
 %REFERENCES:
 %[1] O. Montenbruck and E. Gill, "Satellite orbits: models, methods and
@@ -82,12 +81,17 @@ Tc=379.0 + 3.24*F10b + 1.3*(F10-F10b);
 %where F10 is actual solar flux at 10.7cm and F10b is average solar flux at
 %the same wavelength.
 
+[TT1,TT2]=UTC2TT(Jul1,Jul2);
+[TDB1,TDB2]=TT2TDB(TT1,TT2);
+
 %Calculate position of sun
-[~,rITRS]=solarBodyVec(Jul1,Jul2,'UTC','SUN');
+%Sun position with respect to Earth.
+SunGCRSPosVel=readJPLEphem(TDB1,TDB2,11,3);
+rITRS=GCRS2ITRS(SunGCRSPosVel(1:3),TT1,TT2,deltaTTUT1,xpyp,dXdY);
 rSun=Cart2Ellipse(rITRS);
 dec=rSun(1);%declination
 rObs=ellips2Cart(point);
-[TT1,TT2]=UTC2TT(Jul1,Jul2);
+
 LAT=TT2LAT(TT1,TT2,rObs);
 lha=LAT-pi;%local hour angle
 

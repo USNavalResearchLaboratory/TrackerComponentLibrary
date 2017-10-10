@@ -26,7 +26,7 @@ function absHumid=specHumid2AbsHumid(specHumid,mpVDryAir,defChoice)
 %March 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<3)
+if(nargin<3||isempty(defChoice))
     defChoice=0;
 end
 

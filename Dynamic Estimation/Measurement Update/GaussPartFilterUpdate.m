@@ -10,32 +10,31 @@ function [xUpdate,PUpdate,xiPart,wPart]=GaussPartFilterUpdate(xPred,PPred,zLike,
 %              a very large number of points can be viewed as the best that
 %              one can get with a Gaussian filter.
 %
-%INPUTS: xPred  The xDim X 1 predicted target state.
-%        SPred  The xDim X xDim predicted state covariance
-%               matrix.
-%        zLike  A function handle such that zLike(x) returns the
-%               conditional likelikoods of the measurement given a matrix
-%               of N target states. That is, an xDimXN matrix. The
-%               likelihoods can be returned as a 1XN vector or an NX1
-%               vector. It does not matter if they are all off by a
-%               constant multiplicative factor from their true values.
-%  numParticles The (optional) number of particles to use in the Gaussian
-%               particle filter. If this parameter is omitted or an empty
-%               matrix is passed, the default of 1e4 particles is used.
-%     importPDF The (optional) function handle for the PDF used for
-%               importance sampling.  Specifically, importPDF(x,xPred,
-%               PPred) is the importance  PDF evaluated at N target states 
-%               in x (x is an xDimXN  matrix). The parameters xPred,PPred 
-%               are passed in case the importance sampling function uses
-%               them. The importance  sampling PDF is ideally as close to 
-%               the true posterior PDF as possible. However, in practice,
-%               one will typically just  use the prior (Gaussian) PDF for 
-%               importance sampling, which is what is done if this
-%               parameter is omitted or an empty matrix is passed.
+%INPUTS: xPred The xDim X 1 predicted target state.
+%        SPred The xDim X xDim predicted state covariance matrix.
+%        zLike A function handle such that zLike(x) returns the conditional
+%              likelikoods of the measurement given a matrix of of N target
+%              states. That is, an xDimXN matrix. The likelihoods can be
+%              returned as a 1XN vector or an NX1 vector. It does not
+%              matter if they are all off by a constant multiplicative
+%              factor from their true values.
+% numParticles The (optional) number of particles to use in the Gaussian
+%              particle filter. If this parameter is omitted or an empty
+%              matrix is passed, the default of 1e4 particles is used.
+%    importPDF The (optional) function handle for the PDF used for
+%              importance sampling.  Specifically, importPDF(x,xPred,PPred)
+%              is the importance  PDF evaluated at N target states in x (x
+%              is an xDimXN  matrix). The parameters xPred,PPred are passed
+%              in case the importance sampling function uses them. The
+%              importance sampling PDF is ideally as close to the true
+%              posterior PDF as possible. However, in practice, one will
+%              typically just  use the prior (Gaussian) PDF for  importance
+%              sampling, which is what is done if this parameter is omitted
+%              or an empty matrix is passed.
 % importSampFun If importPDF is provided (and is not an empty matrix), then
-%               importSampFun is required. This is a function handle such
-%               that importSampFun(numParticles,xPred,PPred) draws
-%               numParticles samples of the importance sampling PDF.             
+%              importSampFun is required. This is a function handle such
+%              that importSampFun(numParticles,xPred,PPred) draws
+%              numParticles samples of the importance sampling PDF.             
 %
 %OUTPUTS: xUpdate The xDim X 1 updated state vector. If zLike returned all
 %                 when evaluating the particles then an empty matrix will

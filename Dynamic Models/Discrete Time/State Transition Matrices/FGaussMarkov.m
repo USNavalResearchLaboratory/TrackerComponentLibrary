@@ -9,28 +9,28 @@ function F=FGaussMarkov(T,x,tau,order)
 %             a-priori mean of the highest-order moment is zero. This state
 %             transition matrix is an exact discretization.
 %
-%INPUTS: T    The time-duration of the propagation interval in seconds.
-%        x    The numDim*(order+1)X1 dimensional target state. For the
-%             given order, numDim is the dimensionality of the motion. For
-%             example, 2D, 3D. The elements of the state are in the order
-%             of position, velocity, acceleration, etc. The state itself is
-%             not used; this vector is just used to determine numDim. The
-%             ability to pass x is for functions that expect the first two
-%             parameters of a state transition function to be T and x.
-%       tau The time constant of the autocorrelation or the moment of the
-%           given order. For example, if order=2, then tau is the
-%           time constant of the decorrelation time of the acceleration in
-%           seconds. The decorrelation time is approximately 2*tau.
-%           As tau increases, the highest moment of the process process
-%           remains correlated longer. A reasonable range for tau when
-%           order=2 (Singer' model) is between 5 and 20 seconds. The time
-%           constant is assumed the same for all dimensions of motion, so
-%           this parameter is scalar. If this parameter is omitted, the
-%           default value of 20 is used.
-%     order The order of the Gauss-Markov process. This is the number of
-%           derivatives of position in the model. Thus, 0=position-only,
-%           1=position and velocity, etc. If this parameter is omitted, the
-%           default value of 2 (Singer's model) is used.
+%INPUTS: T The time-duration of the propagation interval in seconds.
+%        x The numDim*(order+1)X1 dimensional target state. For the given
+%          order, numDim is the dimensionality of the motion. For example,
+%          2D, 3D. The elements of the state are in the order of position,
+%          velocity, acceleration, etc. The state itself is not used; this
+%          vector is just used to determine numDim. The ability to pass x
+%          is for functions that expect the first two parameters of a state
+%          transition function to be T and x.
+%      tau The time constant of the autocorrelation or the moment of the
+%          given order. For example, if order=2, then tau is the time
+%          constant of the decorrelation time of the acceleration in
+%          seconds. The decorrelation time is approximately 2*tau. As tau
+%          increases, the highest moment of the process process remains
+%          correlated longer. A reasonable range for tau when order=2
+%          (Singer's model) is between 5 and 20 seconds. The time constant
+%          is assumed the same for all dimensions of motion, so this
+%          parameter is scalar. If this parameter is omitted, the default
+%          value of 20 is used.
+%    order The order of the Gauss-Markov process. This is the number of
+%          derivatives of position in the model. Thus, 0=position-only,
+%          1=position and velocity, etc. If this parameter is omitted, the
+%          default value of 2 (Singer's model) is used.
 %
 %OUTPUTS: F The state transition matrix under a Gauss-Markov dynamic model
 %           of the given order in numDim dimensions where the state is

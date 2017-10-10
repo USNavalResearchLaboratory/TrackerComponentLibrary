@@ -11,15 +11,16 @@ function [deltaC,deltaS]=gravOceanTideOffset(TT1,TT2)
 %                provide more bits of precision. It does not matter how the
 %                date is split.
 %
-%OUTPUTS:deltaC A ClusterSet class holding the offsets to the fully
-%               normalized coefficient terms that are multiplied by cosines
-%               in the harmonic expansion of the gravitational potential.
+%OUTPUTS:deltaC An array class holding the offsets to the fully normalized
+%               coefficient terms that are multiplied by cosines in the
+%               spherical harmonic expansion of the gravitational
+%               potential. If given to a CountingClusterSet class, then
 %               C(n+1,m+1) is the coefficient of degree n and order m. The
 %               offsets only go up to the degree and order of the FES2004
 %               coefficients.
-%        deltaS A ClusterSet class holding the coefficient terms that are
-%               multiplied by sines in the harmonic expansion. The
-%               format of S is the same as that of C.
+%        deltaS An array holding the coefficient terms that are multiplied
+%               by sines in the spherical harmonic expansion. The format of
+%               of S is the same as that of C.
 %
 %This implements the FES2004 tide model that is described in [1]. The
 %FES2004 coefficients are loaded from the file fes2004 Cnm-Snm.dat that
@@ -89,9 +90,8 @@ dataMat(:,9:12)=dataMat(:,9:12)*10^(-12);
 M=max(dataMat(:,7));
 totalNumCoeffs=(M+1)*(M+2)/2;
 emptyData=zeros(totalNumCoeffs,1);
-clustSizes=1:(M+1);
-deltaC=ClusterSet(emptyData,clustSizes);
-deltaS=ClusterSet(emptyData,clustSizes);
+deltaC=CountingClusterSet(emptyData);
+deltaS=CountingClusterSet(emptyData);
 
 %The next few things before the loop are needed to compute the thetaF
 %values.
@@ -139,6 +139,9 @@ for curData=1:numRows
     deltaC(n+1,m+1)=deltaC(n+1,m+1)+real(sumVal);
     deltaS(n+1,m+1)=deltaS(n+1,m+1)-imag(sumVal);
 end
+
+deltaC=deltaC.clusterEls;
+deltaS=deltaS.clusterEls;
 
 end
 

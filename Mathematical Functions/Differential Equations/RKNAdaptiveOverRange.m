@@ -16,10 +16,10 @@ function [xVecVals,tVals,d2xdt2Vals,exitCode,numRejections]=RKNAdaptiveOverRange
 %INPUTS:xVecStart The (2N)X1 state vector (consisting of N components and
 %                their N derivatives with respect to t) at time tSpan(1)
 %                (xVecStart=[x;dxdt]).
-%         tSpan  A 2X1 or 1X2 vector where tSpan(1) is the starting time
+%          tSpan A 2X1 or 1X2 vector where tSpan(1) is the starting time
 %                and tSpan2 is the desired stopping time for the
 %                integration.
-%        df      The function df returns the second derivatuve d2xdt2. If 
+%             df The function df returns the second derivatuve d2xdt2. If 
 %                the general problem is being solved, then
 %                probIsGeneral=true and df is called as df(xVec,t) where
 %                the full vector of N values and their N first derivatives
@@ -65,7 +65,7 @@ function [xVecVals,tVals,d2xdt2Vals,exitCode,numRejections]=RKNAdaptiveOverRange
 %       maxSteps The maximum allowable number of steps to perform the
 %                integration. If omitted, the default of 1024 is used.
 %
-%OUTPUTS:    xVecVals The NXnumSteps set of values of x along the path.
+%OUTPUTS: xVecVals The NXnumSteps set of values of x along the path.
 %                  xVecVals(:,1) is xVecStart and xVecVals(:,end) is the
 %                  value at the final time tSpan(2). If the Runge-Kutta-
 %                  Nyström integration fails, e.g. due to encountering a

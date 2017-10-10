@@ -59,9 +59,9 @@ void iauNum00b(double date1, double date2, double rmatn[3][3])
 **
 **  This revision:  2013 June 18
 **
-**  SOFA release 2016-05-03
+**  SOFA release 2017-04-20
 **
-**  Copyright (C) 2016 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
 */
 {
    double dpsi, deps, epsa, rb[3][3], rp[3][3], rbp[3][3], rbpn[3][3];
@@ -75,7 +75,7 @@ void iauNum00b(double date1, double date2, double rmatn[3][3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2016
+**  Copyright (C) 2017
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

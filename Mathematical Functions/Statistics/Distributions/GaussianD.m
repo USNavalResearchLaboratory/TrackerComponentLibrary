@@ -17,7 +17,7 @@ classdef GaussianD
 methods(Static)
 
 function val=mean(mu)
-%%MEAN  Obtain the mean of the Gaussian distribution.
+%%MEAN Obtain the mean of the Gaussian distribution.
 %
 %INPUTS:    mu  The mean of the PDF. If the PDF is multivariate, then this
 %               is a column vector.
@@ -33,8 +33,8 @@ function val=mean(mu)
 end
 
 function val=cov(Sigma)
-%%COV   Obtain the covariance matrix of the Gaussian distribution (the
-%       variance if scalar).
+%%COV Obtain the covariance matrix of the Gaussian distribution (the
+%     variance if scalar).
 %
 %INPUTS: Sigma The variance (if scalar) or covariance matrix (if
 %               multidimensional) of the PDF. The variance cannot be zero
@@ -52,27 +52,26 @@ function val=cov(Sigma)
 end
 
 function vals=PDF(z,mu,Sigma)
-%%PDF         Evaluate a scalar or multivariate Gaussian (normal) PDF at a
-%             certain point given the mean and the covariance matrix.
+%%PDF Evaluate a scalar or multivariate Gaussian (normal) PDF at a certain
+%     point given the mean and the covariance matrix.
 %
-%INPUTS:    z   The points at which the PDF should be evaluated. If the PDF
-%               is multivariate, then this is a column vector. If
-%               evaluation at multiple points are desired, then this is a
-%               numDimXN matrix with each column being the a point (a
-%               vector).
-%           mu  The mean of the PDF. If the PDF is multivariate, then this
-%               is a numDImX1 column vector. If omitted or an empty matrix
-%               is passed, a zero mean is used.
-%         Sigma The variance (if scalar) or numDimXnumDim covariance matrix
-%               (if multidimensional) of the PDF. The variance cannot be
-%               zero and the covariance matrix cannot be singular. If
-%               omitted or an empty matrix is passed, the identity matrix
-%               is used as the covariance matrix.
+%INPUTS: z The points at which the PDF should be evaluated. If the PDF is
+%          multivariate, then this is a column vector. If evaluation at
+%          multiple points are desired, then this is a numDimXN matrix with
+%          each column being the a point (a vector).
+%       mu The mean of the PDF. If the PDF is multivariate, then this is a
+%          numDimX1 column vector. If omitted or an empty matrix is passed,
+%          a zero mean is used.
+%    Sigma The variance (if scalar) or numDimXnumDim covariance matrix
+%          (if multidimensional) of the PDF. The variance cannot be zero
+%          and the covariance matrix cannot be singular. If omitted or an
+%          empty matrix is passed, the identity matrix is used as the
+%          covariance matrix.
 %
-%OUTPUTS: vals  The scalar values of the normal PDF with mean mu and
-%               covariance matrix Sigma evaluated at the points in z. If
-%               multiple points are passed (z is a matrix), then val is a
-%               row vector.
+%OUTPUTS: vals The scalar values of the normal PDF with mean mu and
+%              covariance matrix Sigma evaluated at the points in z. If
+%              multiple points are passed (z is a matrix), then val is a
+%              row vector.
 %
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
     
@@ -192,7 +191,7 @@ for i=1:numIdx
     %exponent in the multivariate normal PDF.
     
     %Allocate space for the polynomial and make it have the correct shape.
-    basePoly=reshapeVec(zeros(2^numIdx,1),2*ones(numIdx,1));
+    basePoly=reshape(zeros(2^numIdx,1),2*ones(1,numIdx));
     
     %The additive term
     basePoly(1)=SigmaInv(i,:)*mu;
@@ -669,7 +668,7 @@ for i=1:numIdx
     %exponent in the multivariate normal moment generating function
     
     %Allocate space for the polynomial and make it have the correct shape.
-    basePoly=reshapeVec(zeros(2^numIdx,1),2*ones(numIdx,1));
+    basePoly=reshape(zeros(2^numIdx,1),2*ones(1,numIdx));
     
     %The additive term is the component of the mean that was multiplied by 
     basePoly(1)=mu(i);

@@ -1,39 +1,36 @@
 function orbEls=state2OrbEls(stateVec,elType,GM,epsVal)
 %%STATE2ORBELS Convert a state vector consisting of at least position and
-%              velocity into a set of Keplerian (conic) orbital elements.
-%              Such elements are for a simple two-body problem where the
-%              satellite (object) in motion has negligible mass. The
-%              elements can be found with respect to a given epoch time.
+%              velocity into a set of orbital elements. Such elements are
+%              for a simple two-body problem where the satellite (object)
+%              in motion has negligible mass. The elements can be found
+%              with respect to a given epoch time.
 %
 %INPUTS: stateVec A 6XnumVec matrix of numVec state vectors consisting of
 %                 position and velocity in a Cartesian (quasi)-inertial
 %                 coordinate system where the gravitating body is at the
 %                 origin. Extra state elements are ignored. The units are
 %                 assumed to be meters and meters per second.
-%        elType   A value indicating the type of orbital elements. Possible
+%          elType A value indicating the type of orbital elements. Possible
 %                 values are:
 %                 0 (The default if omitted) The elements are Gooding's
 %                   universal orbital elements.
-%                 1 The elements are the set of conic orbital elements that
-%                   NASA uses in its SPICE Toolkit.
 %                 2 The elements are direct equinoctial orbital elements.
 %                 3 The elements are retrograde equnoctial orbital
 %                   elements.
-%           GM    Optionally, the universal gravitation constant times the
+%              GM Optionally, the universal gravitation constant times the
 %                 mass of the body about which the object with the given
 %                 state vector is orbiting. If this parameter is omitted,
 %                 the value in Constants.WGS84GMWithAtmosphere is used. The
 %                 units are m^3/sec^2.
-%         epsVal  If universal orbital elements are chosen, this is a
+%          epsVal If universal orbital elements are chosen, this is a
 %                 precision bound used for equality comparisons when
 %                 determining whether a trajectory is rectilinear,
 %                 parabolic or circular. If omitted, a default value of
-%                 eps is used. This parameter is not used when using NASA's
-%                 conic orbital elements.
+%                 eps is used.
 %
-%OUTPUTS: orbEls  An 6XnumVec set of vectors of orbital elements, the
-%                 format of which depends on the elType parameter. The
-%                 format of the elements is discussed below.
+%OUTPUTS: orbEls An 6XnumVec set of vectors of orbital elements, the format
+%                of which depends on the elType parameter. The format of
+%                the elements is discussed below.
 %
 %Gooding's universal orbital elements are consist of (in order)
 %alpha=GM/a where a is the semi-major axis in meters
@@ -43,14 +40,6 @@ function orbEls=state2OrbEls(stateVec,elType,GM,epsVal)
 %Omega      longitude (right ascension) of the ascending node in radians
 %omega      argument of periapsis/perigee in radians
 %tau        the time at pericenter (seconds)
-%
-%The conic orbital elements used in NASA's SPICE Toolkit are
-%q      perifocal distance in meters
-%e      eccentricity of the orbit (unitless)
-%i      inclination in radians
-%Omega  longitude of the ascending node in radians
-%omega  argument of periapsis in radians
-%M0     mean anomaly in radians
 %
 %The equinoctial orbital elements (for both direct and retrograde elements)
 %are
@@ -64,12 +53,6 @@ function orbEls=state2OrbEls(stateVec,elType,GM,epsVal)
 %The algorithm using Gooding's universal orbital elements is very robust to
 %numerical errors. It is implemented using the algorithm of [1], where the
 %elements are also described.
-%
-%The conic orbital elements used in NASA's SPICE Toolkit are implemented
-%using the function cspice_conics function in NASA's SPICE Toolkit. This
-%set of orbital elements cannot handle rectilinear trajectories. If such
-%trajectories are likely to occur, then Gooding's universal elements are
-%preferable.
 %
 %Equinoctial orbital elements are discussed in Section 2 of [2]. and in
 %[3]. The diffference between direct and retrograde elements is essentially
@@ -120,15 +103,9 @@ switch(elType)
         end
     case 1
         for curVec=1:numVec
-            curEls=cspice_oscelt(stateVec(1:6,curVec),0,GM);
-            %Get rid of the time and GM components
-            orbEls(:,curVec)=curEls(1:6);
-        end
-    case 2
-        for curVec=1:numVec
             orbEls(:,curVec)=state2OrbElsEquinoctial(stateVec(1:6,curVec),1,GM);
         end
-    case 3
+    case 2
         for curVec=1:numVec
             orbEls(:,curVec)=state2OrbElsEquinoctial(stateVec(1:6,curVec),-1,GM);
         end

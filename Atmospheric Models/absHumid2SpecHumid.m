@@ -9,19 +9,19 @@ function specHumid=absHumid2SpecHumid(absHumid,mpVDryAir,defChoice)
 %                    of the water in the air to the total mass density of
 %                    the air including the water.
 %
-%INPUTS:  absHumid The absolute humidity with SI units of kilograms of 
-%                  water per cubic meter.
-%        mpVDryAir The mass density (mass in kilograms per unit volume in
-%                  cubic meters) of dry air (the air not counting the
-%                  water).
-%        defChoice An optimal parameter specifying the definition of
-%                  specific humidity to use. The choices are
-%                  0 Define specific humidity as the mass density of water
-%                    over the mass density of dry air.
-%                  1 Define specific humidity as the mass density of water
-%                    over the total mass density of the air.
-%                  If defChoice is omitted, then the default value of 0 is
-%                  used.
+%INPUTS: absHumid The absolute humidity with SI units of kilograms of water
+%                 per cubic meter.
+%       mpVDryAir The mass density (mass in kilograms per unit volume in
+%                 cubic meters) of dry air (the air not counting the
+%                 water).
+%       defChoice An optimal parameter specifying the definition of
+%                 specific humidity to use. The choices are
+%                 0 Define specific humidity as the mass density of water
+%                   over the mass density of dry air.
+%                 1 Define specific humidity as the mass density of water
+%                   over the total mass density of the air.
+%                 If defChoice is omitted, then the default value of 0 is
+%                 used.
 %
 %OUTPUTS: specHumid The specific humidity using the given definition. The
 %                   specific humidity is unitless.

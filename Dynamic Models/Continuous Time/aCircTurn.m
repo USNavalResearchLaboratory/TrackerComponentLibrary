@@ -1,4 +1,4 @@
-function val=aCircTurn(x,t,uTurn)
+function [aDeriv,AJacob]=aCircTurn(x,t,uTurn)
 %%ACIRCTURN The drift function for a constant-speed circular turning model
 %           about an arbitrary axis.
 %
@@ -13,7 +13,11 @@ function val=aCircTurn(x,t,uTurn)
 %          matrix is passed, then uTurn=[0;0;1] is used, which means that
 %          the turn takes place in the x-y plane.
 %
-%OUTPUTS: val The flat-Earth time-derivative of the state.
+%OUTPUTS: aDeriv The flat-Earth time-derivative of the state.
+%         AJacob The Jacobian of aDeriv, which can be useful in extended
+%                Kalman filters. This is the derivative of each component
+%                of aDeriv (selected by row) with respect to the elements
+%                of the state [x,y,z,xDot,yDot,zDot] selected by column.
 %
 %A derivation of the continuous-time flat-Earth circular turn model is
 %given in [1] along with a description of how to use the model on a curved
@@ -32,7 +36,35 @@ function val=aCircTurn(x,t,uTurn)
     end
 
     Omega=x(7)*uTurn;
-    val=[x(4:6);cross(Omega,x(4:6));0];
+    %We are evaluating
+    % aDeriv=[x(4:6);cross(Omega,x(4:6));0];
+    %But it is faster to do the cross product out element by element:
+    aDeriv=[x(4:6);Omega(2)*x(6)-Omega(3)*x(5);Omega(3)*x(4)-Omega(1)*x(6);Omega(1)*x(5)-Omega(2)*x(4);0];
+    
+    if(nargout>1)
+        dxdvx=0;
+        dxdvy=-uTurn(3)*x(7);
+        dxdvz=uTurn(2)*x(7);
+        dxdx7=-uTurn(3)*x(5)+uTurn(2)*x(6);
+        
+        dydvx=uTurn(3)*x(7);
+        dydvy=0;
+        dydvz=-uTurn(1)*x(7);
+        dydx7=uTurn(3)*x(4)-uTurn(1)*x(6);
+        
+        dzdvx=-uTurn(2)*x(7);
+        dzdvy=uTurn(1)*x(7);
+        dzdvz=0;
+        dzdx7=-uTurn(2)*x(4)+uTurn(1)*x(5);
+
+        AJacob=[0,  0,    0,  1,        0,      0,      0;
+                0,  0,    0,  0,        1,      0,      0;
+                0,  0,    0,  0,        0,      1,      0;
+                0,  0,    0,  dxdvx,    dxdvy,  dxdvz,  dxdx7;
+                0,  0,    0,  dydvx,    dydvy,  dydvz,  dydx7;
+                0,  0,    0,  dzdvx,    dzdvy,  dzdvz,  dzdx7;
+                0,  0,    0,  0,        0,      0,      0];
+    end
 end
 
 %LICENSE:
