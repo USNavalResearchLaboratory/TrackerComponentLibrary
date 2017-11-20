@@ -22,14 +22,14 @@ function [rDisambig,sourceInfo]=disambiguateClust1D(rMeas,ampMeas,deltaR,rMax,cl
 %              amplitudes associated with the detections in each interval.
 %              These are used to perform a weighted average to determine
 %              the true target location.
-%       deltaR The numIntX1 or 1XnumInt vector of the unambioguous range in
+%       deltaR The numIntX1 or 1XnumInt vector of the unambiguous range in
 %              each interval. These values must be relatively prime
 %              integers (times a common possibly non-integer scale factor)
 %              for the algorithm to work.
 %         rMax The maximum unambiguous range to consider for the
 %              completely unaliased measurements (all dealiased values
 %              are less than this. If this value is omitted or an empty
-%              matrix is passed, then the default of prod(delatR) is used,
+%              matrix is passed, then the default of prod(deltaR) is used,
 %              which is the maximum from the Chinese remainder theorem.
 %              However, as demonstrated below, the presence of multiple
 %              targets can cause extra distant "ghost" detections to appear

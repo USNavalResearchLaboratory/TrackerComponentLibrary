@@ -123,7 +123,7 @@ hi=bsxfun(@rdivide,hi,hiNorm);
 rDotB=rr+sum(h.*vRx,1)'+sum(hi.*vTx,1)';
 Hv=bsxfun(@plus,h',hi');
 
-vEst=pinv(Hv)*rDotB;
+vEst=lsqminnorm(Hv,rDotB);
 
 end
 

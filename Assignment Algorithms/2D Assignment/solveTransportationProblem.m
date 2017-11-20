@@ -51,7 +51,7 @@ function [X,gain,exitCode]=solveTransportationProblem(C,s,d,maximize,maxIter)
 %uses the function minCostFlow to solve the problem.
 %
 %The transportation problem gets its name from the types of supply problems
-%that often take its form. Consider the example from Chapter 5 of [1]:
+%that often take its form. Consider the example from Chapter 5 of [2]:
 %EXAMPLE 1: A balanced model
 % C=[80, 215;
 %    100,108;
@@ -69,7 +69,7 @@ function [X,gain,exitCode]=solveTransportationProblem(C,s,d,maximize,maxIter)
 %   0, 1200];
 %
 %EXAMPLE 2:
-%The first example was balanced. This example, also from [1], is a case
+%The first example was balanced. This example, also from [2], is a case
 %where there is more demand than supply.
 % C=[80, 215;
 %    100,108;
@@ -160,11 +160,11 @@ function [X,gain,exitCode]=solveTransportationProblem(C,s,d,maximize,maxIter)
 %     0   1200];
 %
 %REFERENCES:
-%[1] H. A. Taha, Operations Research: An Introduction, 9th ed. Boston:
-%    Prentice Hall, 2011.
-%[2] C. H. Papadimitriou and K. Steiglitz, Combinatorial Optimization:
+%[1] C. H. Papadimitriou and K. Steiglitz, Combinatorial Optimization:
 %    Algorithms and Complexity. Englewood Cliffs, NJ: Prentice-Hall Inc.,
 %    1982.
+%[2] H. A. Taha, Operations Research: An Introduction, 9th ed. Boston:
+%    Prentice Hall, 2011.
 %
 %July 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -189,7 +189,6 @@ else
 end
 
 totalSupplyUsed=min(sum(d),sum(s));
-
 
 %Next, the problem will be reformulated as a minimum cost flow problem and
 %solved using the minCostFlow function.

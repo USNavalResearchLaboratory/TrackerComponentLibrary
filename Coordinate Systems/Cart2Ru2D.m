@@ -1,5 +1,5 @@
 function z=Cart2Ru2D(zC,useHalfRange,zTx,zRx,M,includeV)
-%CART@RU2D Convert points in 2D Cartesian coordinates into local bistatic
+%CART2RU2D Convert points in 2D Cartesian coordinates into local bistatic
 %         r-u coordinates of the receiver. r-u coordinates consist of a
 %         bistatic range and a single direction cosine. The "direction
 %         cosine" u is just the x coordinate of a unit vector from the

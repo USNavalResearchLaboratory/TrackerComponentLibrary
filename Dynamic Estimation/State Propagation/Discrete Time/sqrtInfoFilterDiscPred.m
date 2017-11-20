@@ -3,15 +3,15 @@ function [ySqrtPred, PInvSqrtPred,RwPred,RwxPred]=sqrtInfoFilterDiscPred(ySqrtPr
 %                   comes with the standard linear square root information
 %                   filter with additive process noise.
 %
-%INPUTS:ySqrtPrev The xDimX1 square root information state that is to be
+%INPUTS: ySqrtPrev The xDimX1 square root information state that is to be
 %                  propagated. The previous information state is always
 %                  PInvSqrtPrev times the previous target state estimate.
 %     PInvSqrtPrev The previous inverse square root information matrix.
 %                  If P is the covariance matrix of a Gaussian state x,
 %                  then P=PSqrt*PSqrt' and PInvSqrtPrev=inv(PSqrt). This
 %                  can be either upper triangular or lower triangular.
-%        F         An invertible xDim X xDim state transition matrix.
-%        SQ        The lower-triangular square root of the process noise
+%                F An invertible xDim X xDim state transition matrix.
+%               SQ The lower-triangular square root of the process noise
 %                  covariance matrix. In the standard linear dynamic
 %                  model, one has
 %                  x(k)=F(k-1)*x(k-1)+u(k-1)+noise where x is the state
@@ -23,24 +23,24 @@ function [ySqrtPred, PInvSqrtPred,RwPred,RwxPred]=sqrtInfoFilterDiscPred(ySqrtPr
 %                  the untransformed noise is not singular. This SQ is the
 %                  lower triangular square root of the noise in the linear
 %                  dynamic equation.
-%        u         An optional SQDim X1 vector that is the control input.
+%                u An optional SQDim X1 vector that is the control input.
 %                  If omitted or an empty matrix is passed, a zero control
 %                  input (no control input) is used. Note that this control
 %                  input differs from formulations in other filters in that
 %                  it is affected by the matrix Gamma, if present, which
 %                  also transforms the process noise.
-%        Gamma     An optional matrix that transformes the process noise
+%            Gamma An optional matrix that transformes the process noise
 %                  and the control input to the state domain if the process
 %                  noise covariance matrix is singular, as discussed for
 %                  the input SQ. If this is omitted or an empty matrix is
 %                  passed, then an identity matrix is used (i.e. there is
 %                  no Gamma).
 %
-%OUTPUTS:ySqrtPred  The xDim X 1 predicted square root information state
+%OUTPUTS: ySqrtPred The xDim X 1 predicted square root information state
 %                   vector.
-%     PInvSqrtPred  The predicted xDim X xDim inverse square root state
+%      PInvSqrtPred The predicted xDim X xDim inverse square root state
 %                   covariance matrix, which is upper-triangular.
-%   RwPred,RwxPred  Noise matrices which can be saved for use in smoothing
+%    RwPred,RwxPred Noise matrices which can be saved for use in smoothing
 %
 %Given a Gaussian predicted state with mean x and covariance matrix P, the
 %information state is

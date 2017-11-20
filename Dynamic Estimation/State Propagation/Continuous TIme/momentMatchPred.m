@@ -200,7 +200,7 @@ function [xPred,SPred,exitCode]=momentMatchPred(xPrev,SPrev,a,D,dColDim,tPrev,tP
            return;
         end
         
-        SCurInv = pinv(SCur);
+        SCurInv=pinv(SCur);
         dS=SCur*triLower(SCurInv*dP*SCurInv');
         dVal=[dx;dS(lowerTriEls)];
     end

@@ -2,38 +2,33 @@ function JPred=PCRLBPredAdd(JPrior,xPrior,PPrior,Q,param5,xi,w)
 %PCRLBPREDADD Update the Fisher information matrix (FIM) due to propagation
 %             over a discrete time step with additive process noise.
 %
-%INPUTS:    JPrev       The Fisher information matrix at the previous time-
-%                       step. At time k=0, this should normally be the zero
-%                       matrix, since no information is available to the
-%                       tracking algorithm. However, there is no point in
-%                       propagating forward an all zero FIM; it will remain
-%                       all zero until a measurement arrives.
-%           xPrior      The (column vector) mean of the distribution of the
-%                       true (but unknown to the tracker) possible target
-%                       location at the previous time. It is assumed that
-%                       the distribution of the target location is
-%                       Gaussian.
-%           PPrior      The covariance of the distribution of the true (but
-%                       unknown to the tracker) possible target location at
-%                       the previous time. If the target motion is
-%                       deterministic but unknown to the tracker, then
-%                       PPrior is a matrix of zeros.
-%           Q           The covariance matrix of the additive process
-%                       noise.
-%           param5      Either the fixed xDimXxDim state transition matrix
-%                       F, or a function handle FJacob to get the state
-%                       transition Jacobian such that FJacob(x)*x is
-%                       a linear approximation to the transition of the
-%                       state x at the given time. The function must take 
-%                       the state as its parameter.
-%           xi, w       If a function handle is passed for param5 and
-%                       PPrior is not a zero matrix, then cubature points
-%                       for evaluating expected values are needed. xi and
-%                       w are the cubature points and weights. The cubature
-%                       points must be the dimensionality of the state.
+%INPUTS: JPrev The Fisher information matrix at the previous time-step. At
+%              time k=0, this should normally be the zero matrix, since no
+%              information is available to the tracking algorithm. However,
+%              there is no point in propagating forward an all zero FIM; it
+%              will remain all zero until a measurement arrives.
+%       xPrior The (column vector) mean of the distribution of the true
+%              (but unknown to the tracker) possible target location at the
+%              previous time. It is assumed that the distribution of the
+%              target location is Gaussian.
+%       PPrior The covariance of the distribution of the true (but unknown
+%              to the tracker) possible target location at the previous
+%              time. If the target motion is deterministic but unknown to
+%              the tracker, then PPrior is a matrix of zeros.
+%            Q The covariance matrix of the additive process noise.
+%       param5 Either the fixed xDimXxDim state transition matrix F, or a
+%              function handle FJacob to get the state transition Jacobian
+%              such that FJacob(x)*x is a linear approximation to the
+%              transition of the state x at the given time. The function
+%              must take the state as its parameter.
+%        xi, w If a function handle is passed for param5 and PPrior is not
+%              a zero matrix, then cubature points for evaluating expected
+%              values are needed. xi and w are the cubature points and
+%              weights. The cubature points must be the dimensionality of
+%              the state.
 %
-%OUTPUT:    JPred   The Fisher information matrix propagated forward in
-%                   time without a measurement.
+%OUTPUT: JPred The Fisher information matrix propagated forward in time
+%              without a measurement.
 %
 %A basic description of using cubature integration for evaluating the PCRLB
 %is given in [1], where it is also described how to use a prior

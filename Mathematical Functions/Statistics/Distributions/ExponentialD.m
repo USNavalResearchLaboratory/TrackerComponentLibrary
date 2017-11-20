@@ -5,7 +5,7 @@ classdef ExponentialD
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-methods(Static)
+methods(Static) 
 function val=mean(lambda)
 %%MEAN Obtain the mean of the exponential distribution for a given rate
 %      parameter.
@@ -104,10 +104,10 @@ function val=PDF(x,lambda)
 end
 
 function val=CDF(x,lambda)
-%%CDF Evaluate the CDF of the Nakagami-m probability distribution function
+%%CDF Evaluate the CDF of the exponential probability distribution function
 %     at one or more desired points.
 %
-%INPUTS: x The point(s) at which the Nakagami-m CDF is to be evaluated.
+%INPUTS: x The point(s) at which the exponential CDF is to be evaluated.
 %          Note that x>=0.
 %   lambda The rate parameter of the distribution. lambda>0.
 %

@@ -10,25 +10,25 @@ function uDot=uDotNumeric(u,x,t,vertFunc,epsVal)
 %             preferred as the solution is available without numeric
 %             integration.
 %
-%INPUTS: u    The orthonormal basis vectors for the local coordinate
-%             system. u(:,3) is the local vertical.
-%        x    An nX1 vector whose first three elements are Cartesian
-%             position in the global coordinate system and whose next three
-%             elements are velocity in the local coordinate system. Other
-%             elements of x do not matter.
-%        t    An time component that is passed to vertFunc, in case the
-%             local vertical is somehow time-dependent.
-%  downFunc   A function handle of the format vertFunc(r,t), where r is a
-%             location in global coordinates and t is the above time
-%             parameter. The function handle returns a vector pointing in
-%             the direction of the local "down" direction. The vector does
-%             not need to be unit magnitude. For example, an acceleration
-%             due to gravity could be passed.
-%    epsVal   An optional parameter specifying the step size taken in each
-%             dimension for numerical differentiation. If this parameter is
-%             omitted, then a step size of max(1e-4*norm(x(1:3)),1e-10) is
-%             used, which is reasonable if x has a position on the
-%             reference ellipsoid.
+%INPUTS: u The orthonormal basis vectors for the local coordinate system.
+%          u(:,3) is the local vertical.
+%        x An nX1 vector whose first three elements are Cartesian position
+%          in the global coordinate system and whose next three elements
+%          are velocity in the local coordinate system. Other elements of x
+%          do not matter.
+%        t A time component that is passed to vertFunc, in case the local
+%          vertical is somehow time-dependent.
+% downFunc A function handle of the format vertFunc(r,t), where r is a
+%          location in global coordinates and t is the above time
+%          parameter. The function handle returns a vector pointing in the
+%          direction of the local "down" direction. The vector does not
+%          need to be unit magnitude. For example, an acceleration due to
+%          gravity could be passed.
+%   epsVal An optional parameter specifying the step size taken in each
+%          dimension for numerical differentiation. If this parameter is
+%          omitted, then a step size of max(1e-4*norm(x(1:3)),1e-10) is
+%          used, which is reasonable if x has a position on the reference
+%          ellipsoid.
 %
 %OUTPUTS: uDot The derivative of the basis vector u with respect to time.
 %
@@ -66,7 +66,7 @@ function uDot=uDotNumeric(u,x,t,vertFunc,epsVal)
     
     A=[-u(:,2),u(:,1)];
     
-    c=pinv(A)*(-gDot/normG+(g/normG^3)*dot(gDot,g));
+    c=lsqminnorm(A,(-gDot/normG+(g/normG^3)*dot(gDot,g)));
     Omega=c(1)*u(:,1)+c(2)*u(:,2);
     
     uDot(:,1)=cross(Omega,u(:,1));

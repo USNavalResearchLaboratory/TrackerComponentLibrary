@@ -5,60 +5,60 @@ function [ySqrtEst, PInvSqrtEst]=sqrtInfoSmoother(ySqrtPred,PInvSqrtPred,z,u,H,F
 %                  along the entire batch are available. The initial
 %                  predicted states can not be uninformative.
 %
-%INPUTS:ySqrtPred  The xDimX1 predicted square root information state at
-%                  the time of the initial measurement in z. The predicted
-%                  information state is always PInvSqrtPred times the
-%                  predicted target state estimate.
-%    PInvSqrtPred  The inverse square root information matrix associated
-%                  with the predicted information state at the time of the
-%                  initial measurement in z. If P is the covariance matrix
-%                  of a Gaussian state x, then P=PSqrt*PSqrt' and
-%                  PInvSqrtPred=inv(PSqrt). This can be either upper
-%                  triangular or lower triangular.
-%              z   The zDim X N matrix of measurements for the whole batch.
-%              u   The xDim X(N-1) matrix of control inputs for the whole
-%                  batch. If there are no control inputs, then set u=[];
-%              H   The zDim X xDim X N hypermatrix of measurement matrices
-%                  such that H(:,:,k)*x+w is the measurement at time k, 
-%                  where x is the state and w is zero-mean Gaussian noise 
-%                  with covariance matrix R (:,:,k). Alternatively, if all
-%                  of the measurement matrices are the same, one can just
-%                  pass a single zDim X xDim matrix.
-%              F   The xDim X xDim X (N-1) hypermatrix of state transition
-%                  matrices. The state at discrete-time k+1 is modeled as
-%                  F(:,:,k) times the state at time k plus zero-mean
-%                  Gaussian process noise with covariance matrix Q(:,:,k).
-%                  Alternatively, if all of the state transition matrices
-%                  are the same, one can just pass a single xDim X xDim
-%                  matrix.
-%             SR   The zDim X zDim X N hypermatrix of lower-triangular
-%                  square-root of the measurement covariance matrices. The
-%                  matrices must be invertible. Alternatively, if all of 
-%                  the measurement covariance matrices are the same, one
-%                  can just pass a single zDim X zDim matrix.
-%             SQ   The xDim X xDim X (N-1) hypermatrix of lower-triangular
-%                  square-root of the process noise covariance matrices.
-%                  The matrices must be invertible. Alternatively, if all
-%                  of the measurement covariance matrices are the same, one
-%                  can just pass a single xDim X xDim matrix.
-%          Gamma   An optional xDim X xDim X (N-1) hypermatrix of matrices
-%                  that transform the process noise to the state domain if
-%                  the process noise covariance matrix is singular.
-%                  Alternatively, if all of the transform matrices are the
-%                  same, one can just pass a single xDim X xDim matrix. If
-%                  this is omitted entirely, an identity matrix is used
-%                  (i.e. there is no Gamma).
-%              kD  The discrete time-step at which the smoothed state
-%                  estimate is desired, where z(:,1) is at discrete
-%                  time-step 1 (not 0). If kD is omitted ot an empty matrix
-%                  is passed, then results along the entire batch are
-%                  obtained.
+%INPUTS:ySqrtPred The xDimX1 predicted square root information state at the
+%                 time of the initial measurement in z. The predicted
+%                 information state is always PInvSqrtPred times the
+%                 predicted target state estimate.
+%    PInvSqrtPred The inverse square root information matrix associated
+%                 with the predicted information state at the time of the
+%                 initial measurement in z. If P is the covariance matrix
+%                 of a Gaussian state x, then P=PSqrt*PSqrt' and
+%                 PInvSqrtPred=inv(PSqrt). This can be either upper
+%                 triangular or lower triangular.
+%               z The zDim X N matrix of measurements for the whole batch.
+%               u The xDim X(N-1) matrix of control inputs for the whole
+%                 batch. If there are no control inputs, then set u=[];
+%               H The zDim X xDim X N hypermatrix of measurement matrices
+%                 such that H(:,:,k)*x+w is the measurement at time k, 
+%                 where x is the state and w is zero-mean Gaussian noise 
+%                 with covariance matrix R (:,:,k). Alternatively, if all
+%                 of the measurement matrices are the same, one can just
+%                 pass a single zDim X xDim matrix.
+%               F The xDim X xDim X (N-1) hypermatrix of state transition
+%                 matrices. The state at discrete-time k+1 is modeled as
+%                 F(:,:,k) times the state at time k plus zero-mean
+%                 Gaussian process noise with covariance matrix Q(:,:,k).
+%                 Alternatively, if all of the state transition matrices
+%                 are the same, one can just pass a single xDim X xDim
+%                 matrix.
+%              SR The zDim X zDim X N hypermatrix of lower-triangular
+%                 square-root of the measurement covariance matrices. The
+%                 matrices must be invertible. Alternatively, if all of the
+%                 measurement covariance matrices are the same, one can
+%                 just pass a single zDim X zDim matrix.
+%              SQ The xDim X xDim X (N-1) hypermatrix of lower-triangular
+%                 square-root of the process noise covariance matrices.
+%                 The matrices must be invertible. Alternatively, if all of
+%                 the measurement covariance matrices are the same, one can
+%                 just pass a single xDim X xDim matrix.
+%           Gamma An optional xDim X xDim X (N-1) hypermatrix of matrices
+%                 that transform the process noise to the state domain if
+%                 the process noise covariance matrix is singular.
+%                 Alternatively, if all of the transform matrices are the
+%                 same, one can just pass a single xDim X xDim matrix. If
+%                 this is omitted entirely, an identity matrix is used
+%                 (i.e. there is no Gamma).
+%              kD The discrete time-step at which the smoothed state
+%                 estimate is desired, where z(:,1) is at discrete
+%                 time-step 1 (not 0). If kD is omitted ot an empty matrix
+%                 is passed, then results along the entire batch are
+%                 obtained.
 %
-%OUTPUTS:ySqrtEst  The xDimXN smoothed square root information state
+%OUTPUTS: ySqrtEst The xDimXN smoothed square root information state
 %                  estimates at all steps if kD is not provided or the
 %                  xDimX1 smoothed information state estimate at step kD if
 %                  kD is provided.
-%     PSqrtInvEst  The inverse square root covariance matrices associated
+%      PSqrtInvEst The inverse square root covariance matrices associated
 %                  with the smoothed information state estimates. This is
 %                  xDimXxDimXN for the whole batch if kD is not provided
 %                  and is xDimXxDim if kD is provided.

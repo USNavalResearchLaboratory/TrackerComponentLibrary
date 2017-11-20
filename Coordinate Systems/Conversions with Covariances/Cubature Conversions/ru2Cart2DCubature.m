@@ -1,28 +1,33 @@
-function [zCart,RCart]=pol2CartCubature(z,SR,systemType,useHalfRange,zTx,zRx,M,xi,w)
-%%POL2CARTCUBATURE Use cubature integration to approximate the moments of a
-%          noise-corrupted bistatic polar location converted into 2D
-%          Cartesian coordinates. This function ignores all propagation
-%          effects, such as atmospheric refraction. The angle can measured
-%          either counterclockwise from the x-axis, which is standard in
-%          mathematics, or clockwise from the y axis, which is more common
-%          in navigation.
+function [zCart,RCart]=ru2Cart2DCubature(z,SR,useHalfRange,zTx,zRx,M,xi,w)
+%%RU2CART2DCUBATURE Use cubature integration to approximate the moments of
+%         a  noise-corrupted bistatic r-u (or r-u-w) location into 2D
+%         Cartesian coordinates. If r-u coordinates are used, the target
+%         is assumed to be in front of the receiver (local y coordinate is
+%         positive). r-u coordinates consist of a bistatic range and a
+%         direction cosine at the receiver. The "direction cosine" u is
+%         just the x coordinate of a unit vector from the receiver to the
+%         target in the coordinate system at the receiver. This basically
+%         assumes that the boresight direction of the receiver is the y
+%         axis. Assuming the target is in front of the receiver, the second
+%         unit vector coordinate is not needed. However, r-u-w coordinates
+%         include the third component. For monostatic coordinate conversion
+%         where the range is a one-way range, set useHalfRange=true and zTx
+%         and zRx to the same value.
 %
-%INPUTS: z A 2XN set of N polar points of the form [range;azimuth] that are
-%          to be converted into Cartesian coordinates. The azimuth is in
-%          radians.
+%INPUTS: z A 2XN matrix of vectors with elements [r;u], where r is the
+%          bistatic range from the transmitter to the target to the
+%          receiver, and u is the direction cosine, which should have a
+%          magnitude less than or equal to one. If the magnitude is greater
+%          than one, then it is normalized before conversion to avoid
+%          imaginary results.
 %       SR The 2X2XN lower-triangular square roots of the covariance
-%          matrices associated with z. If all of the matrices are the same,
-%          then this can just be a single 2X2 matrix.
-% systemType An optional parameter specifying the axis from which the
-%          angles are measured. Possible values are
-%          0 (The default if omitted or an empty matrix is passed) The
-%            azimuth angle is counterclockwise from the x axis.
-%          1 The azimuth angle is measured clockwise from the y axis.
+%          matrices associated with z. If all of the matrices are
+%          the same, then this can just be a single 2X2 matrix.
 % useHalfRange A boolean value specifying whether the bistatic range value
 %          should be divided by two. This normally comes up when operating
 %          in monostatic mode, so that the range reported is a one-way
 %          range. The default if this parameter is not provided, or an
-%          empty matrix is passed, is true.
+%          empty matrix is passed, is false.
 %      zTx The 2X1 [x;y] location vector of the transmitter in global
 %          Cartesian coordinates. If this parameter is omitted or an empty
 %          matrix is passed, then the transmitter is assumed to be at the
@@ -57,33 +62,29 @@ function [zCart,RCart]=pol2CartCubature(z,SR,systemType,useHalfRange,zTx,zRx,M,x
 %    bistatic measurements," IEEE Aerospace and Electronic Systems 
 %    Magazine, vol. 29, no. 8, Part II, pp. 4-53, Aug. 2014.
 %
-%May 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%September 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
     numPoints=size(z,2);
     
-    if(nargin<8||isempty(xi))
+    if(nargin<7||isempty(xi))
         [xi,w]=fifthOrderCubPoints(2);
     end
 
-    if(nargin<7||isempty(M))
+    if(nargin<6||isempty(M))
         M=eye(2);
     end
 
-    if(nargin<6||isempty(zRx))
+    if(nargin<5||isempty(zRx))
         zRx=zeros(2,1);
     end
 
-    if(nargin<5||isempty(zTx))
+    if(nargin<4||isempty(zTx))
         zTx=zeros(2,1);
     end
 
-    if(nargin<4||isempty(useHalfRange))
-        useHalfRange=true;
-    end
-
-    if(nargin<3||isempty(systemType))
-        systemType=0; 
+    if(nargin<3||isempty(useHalfRange))
+        useHalfRange=false;
     end
     
     numMeas=size(z,2);
@@ -92,7 +93,7 @@ function [zCart,RCart]=pol2CartCubature(z,SR,systemType,useHalfRange,zTx,zRx,M,x
         SR=repmat(SR,[1,1,numMeas]);
     end
     
-    h=@(z)pol2Cart(z,systemType,useHalfRange,zTx(1:2,:),zRx(1:2,:),M);
+    h=@(z)ru2Cart2D(z,useHalfRange,zTx(1:2,:),zRx(1:2,:),M);
     
     zCart=zeros(2,numPoints);
     RCart=zeros(2,2,numPoints);

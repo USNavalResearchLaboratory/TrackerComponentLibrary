@@ -87,7 +87,7 @@ end
 if(useTLS)
     a=totalLeastSquares(F,f);
 else
-    a=pinv(F)*f;
+    a=lsqminnorm(F,f);
 end
 
 

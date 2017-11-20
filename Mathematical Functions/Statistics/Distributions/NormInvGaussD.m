@@ -19,7 +19,7 @@ methods(Static)
     %INPUTS:   mu The numDimX1 additive constant in the distribution.
     %       Gamma A positive semidefinite symmetric numDimXnumDim matrix
     %             such that det(Gamma)=1.
-    %       beta  A numDimX1 vector affecting the mean of the conditional
+    %        beta A numDimX1 vector affecting the mean of the conditional
     %             Gaussian term.
     %       alpha A positive scalar parameter affecting the scale of the
     %             inverse Gaussian term. It is required that
@@ -50,7 +50,7 @@ methods(Static)
     %
     %INPUTS:Gamma A positive semidefinite symmetric numDimXnumDim matrix
     %             such that det(Gamma)=1.
-    %       beta  A numDimX1 vector affecting the mean of the conditional
+    %        beta A numDimX1 vector affecting the mean of the conditional
     %             Gaussian term.
     %       alpha A positive scalar parameter affecting the scale of the
     %             inverse Gaussian term. It is required that
@@ -78,21 +78,21 @@ methods(Static)
     %%PDF Evaluate the probability distribution function (PDF) of the
     %     normal inverse Gassuain distribution.
     %
-    %INPUTS:   x  The numDimXnumPoints set of points at which the PDF
-    %             should be evaluated.
-    %          mu The numDimX1 additive constant in the distribution.
-    %       Gamma A positive semidefinite symmetric numDimXnumDim matrix
-    %             such that det(Gamma)=1.
-    %       beta  A numDimX1 vector affecting the mean of the conditional
-    %             Gaussian term.
-    %       alpha A positive scalar parameter affecting the scale of the
-    %             inverse Gaussian term. It is required that
-    %             alpha^2>beta'*Gamma*beta
-    %       delta A positive scalar parameter affecting the mean of the
-    %             inverse Gaussian term.
+    %INPUTS: x The numDimXnumPoints set of points at which the PDF should
+    %          be evaluated.
+    %       mu The numDimX1 additive constant in the distribution.
+    %    Gamma A positive semidefinite symmetric numDimXnumDim matrix such
+    %          that det(Gamma)=1.
+    %     beta A numDimX1 vector affecting the mean of the conditional
+    %          Gaussian term.
+    %    alpha A positive scalar parameter affecting the scale of the
+    %          inverse Gaussian term. It is required that
+    %          alpha^2>beta'*Gamma*beta
+    %    delta A positive scalar parameter affecting the mean of the
+    %          inverse Gaussian term.
     %
-    %OUTPUTS: vals The scalar values of the PDF. If multiple points are passed
-    %              (x is a matrix), then vals is a row vector.
+    %OUTPUTS: vals The scalar values of the PDF. If multiple points are
+    %              passed (x is a matrix), then vals is a row vector.
     %
     %The PDF is given in Equation 1 in [1].
     %   
@@ -121,20 +121,20 @@ methods(Static)
     function X=rand(N,mu,Gamma,beta,alpha,delta)
     %%RAND Generate normal inverse Gaussian random vectors.
     %
-    %INPUTS:   N  The number of random variables to generate.
-    %          mu The numDimX1 additive constant in the distribution.
-    %       Gamma A positive semidefinite symmetric numDimXnumDim matrix
-    %             such that det(Gamma)=1.
-    %       beta  A numDimX1 vector affecting the mean of the conditional
-    %             Gaussian term.
-    %       alpha A positive scalar parameter affecting the scale of the
-    %             inverse Gaussian term. It is required that
-    %             alpha^2>beta'*Gamma*beta
-    %       delta A positive scalar parameter affecting the mean of the
-    %             inverse Gaussian term.
+    %INPUTS: N The number of random variables to generate.
+    %       mu The numDimX1 additive constant in the distribution.
+    %    Gamma A positive semidefinite symmetric numDimXnumDim matrix such
+    %          that det(Gamma)=1.
+    %     beta A numDimX1 vector affecting the mean of the conditional
+    %          Gaussian term.
+    %    alpha A positive scalar parameter affecting the scale of the
+    %          inverse Gaussian term. It is required that
+    %          alpha^2>beta'*Gamma*beta
+    %    delta A positive scalar parameter affecting the mean of the
+    %          inverse Gaussian term.
     %
-    %OUTPUT: X   An xDimXN matrix of random instances of the normal inverse
-    %            Gaussian distribution.
+    %OUTPUT: X An xDimXN matrix of random instances of the normal inverse
+    %          Gaussian distribution.
     %
     %As in [1], a normal inverse Gaussian random variable is expressed as
     %X=mu+Z*Gamma*beta+sqrt(Z)*cholSemiDef(Gamma,'lower')*Y

@@ -1,7 +1,7 @@
-function [phi2,phi3,dimsOrder,minCostVal,costGap]=assign3D(C,maximize,algorithm,n2Limits,n3Limits,maxIter,epsVal)
-%ASSIGN3D Solve the axial 3D assignment problem. Such problems are NP-hard
-%         and thus cannot be solved in polynomial time, so both exact (non-
-%         polynomial) and approximate algorithms are given. The
+function [tuples,minCostVal,costGap,relGap]=assign3D(C,maximize,algorithm,n2Limits,n3Limits,maxIter,epsVal)
+%ASSIGN3D Solve the axial 3D assignment problem. Such problems are NP-
+%         complete and thus cannot be solved in polynomial time, so both
+%         exact (non-polynomial) and approximate algorithms are given. The
 %         optimization problem being solved is
 %         minimize (or maximize)
 %         \sum_{i=1}^{n1}\sum_{j=1}^{n2}\sum_{k=1}^{n3}C_{i,j,k}*\rho_{i,j,k}
@@ -10,33 +10,43 @@ function [phi2,phi3,dimsOrder,minCostVal,costGap]=assign3D(C,maximize,algorithm,
 %         \sum_{i=1}^{n1}\sum_{k=1}^{n3}\rho_{i,j,k}<=n2Limits(j) for all j
 %         \sum_{j=1}^{n2}\sum_{k=1}^{n3}\rho_{i,j,k} =1 for all i
 %         \rho_{i,j,k} = 0 or 1
-%         assuming that n1<=n2<=n3, and C is and n1Xn2Xn3 cost matrix. In
-%         most instances, one assumes n2Limits and n3Limits are all ones.
-%         This is equivalent to the optimization problem
-%         minimize sum_{i} C(i,phi_2(i),phi_3(i))
+%         assuming that C is an n1Xn2Xn3 cost matrix with n1<=n2<=n3. In
+%         most instances, one assumes n2Limits and n3Limits are all ones,
+%         in which case this is equivalent to the optimization problem
+%         min (or max) sum_{i} C(i,phi_2(i),phi_3(i))
 %         where phi_2 and phi_3 are length n1 arrangements of n2 and n3
-%         items over which the minimization is performed. The solution is
-%         given in terms of the phi vectors.
+%         items over which the minimization is performed. If n2Limits and
+%         n3Limits are omitted or all one, then it is not required that C
+%         be presented ordered as n1<=n2<=n3 and the equality constraint is
+%         on the dimension with the fewest elements. Because this function
+%         does not always require that the dimensions of C be already
+%         ordered in order of an increasing number of elements, the
+%         solution is given as tuples solving the problem
+%         min (or max) sum_{i} C(tuple(1,i),tuple(2,i),tuple(3,i))
+%         where the tuples satisfy all of the above constraints.
 %
-%INPUTS: C An n1Xn2Xn3 cost hypermatrix. If it is not the case that
-%          n1<=n2<=n3, then the indices of C are permuted so that is
-%          true. The permutation of the indices is returned in the
-%          dimsOrder vector so that the meaning of the phi2 and phi3 values
-%          returned is clear. C cannot contain any NaNs and the largest
-%          finite element minus the smallest element is a finite quantity
-%          (does not overflow) when performing minimization and where
-%          the smallest finite element minus the largest element is finite
-%          when performing maximization.  Forbidden assignments can be
-%          given costs of +Inf for minimization and -Inf for maximization.
-%   maximize If true, the minimization problem is transformed into a
+%INPUTS: C An n1Xn2Xn3 cost hypermatrix. C cannot contain any NaNs and the
+%          largest finite element minus the smallest element is a finite
+%          quantity (does not overflow) when performing minimization and
+%          where the smallest finite element minus the largest element is
+%          finite when performing maximization.  Forbidden assignments can
+%          be given costs of +Inf for minimization and -Inf for
+%          maximization. During minimization, there should be no elements
+%          with -Inf cost and no elements with +Inf cost during
+%          maximization.
+% maximize If true, the minimization problem is transformed into a
 %          maximization problem. The default if this parameter is omitted
 %          is false.
-%  algorithm An optional parameter specifying the algorithm to use to
+% algorithm An optional parameter specifying the algorithm to use to
 %          solve the 3D assignment problem. Possible values are
-%          0 Use the relaxation approximation of [1], which is a special
-%            case of [2]. Note that this method does not support the use of
-%            n2Limits or n3Limits that are not all ones. However, it is
-%            usually better than algorithm 1 on relevant problems.
+%          0 Use the relaxation approximation of [1], which is a similar to
+%            [2], but with constraints of 1 on each element. Note that this
+%            method does not support the use of n2Limits or n3Limits that
+%            are not all ones. However, it is usually better than algorithm
+%            1 on relevant problems. This version uses the alternate dual
+%            update step of Equation 3.21 unless the dual variables
+%            returned by the 2D assignment algorithm are all zero, in which
+%            case Equation 3.15 is used.
 %          1 (The default if omitted or an empty matrix is passed) Use the
 %            relaxation approximation of [3] applied to the problem at
 %            hand.
@@ -66,27 +76,31 @@ function [phi2,phi3,dimsOrder,minCostVal,costGap]=assign3D(C,maximize,algorithm,
 %   epsVal This parameter is only used if algorithm=0. This parameter is
 %          the threshold to use for determining convergence of the
 %          algorithm based on the relative duality gap. The relative
-%          duality gap is (f-q)/abs(q), where f is the smallest value of
+%          duality gap is (f-q)/abs(f), where f is the smallest value of
 %          the primal function found and q is the largest value of the
-%          dual function found. If omitted, the default value is eps(1).
+%          dual function found. If omitted, the default value is 0.05.
 %
-%OUTPUTS: phi2, phi3 If n1<=n2<=n3, then C(i,phi2(i),phi3(i)) is the cost
-%                    for row i (row i is assigned to column phi2(i) and the
-%                    third index phi3(i)). On the other hand, if it was not
-%                    true that n1<=n2<=n3, then phi2 and phi3 are the same
-%                    for the matrix with indices permutated such that
-%                    n1<=n2<=n3.
-%          dimsOrder The ordering of the dimensions of C for the assignment
-%                    problem. If n1<=n2<=n3, then this is just [1,2,3].
-%                    However, if the dimensions had to be permuted, then
-%                    this is the permutation of them so that one knows what
-%                    phi2 and phi3 refer to.
-%         minCostVal The cost value of the optimal assignment found.
-%            costGap If algorithm=2, then costGap=0 as minCostVal is
-%                    optimal. On the other hand, if algorithm~=2, then
-%                    costGap is an upper bound for the difference between
-%                    minCostVal and the true global minimum (the duality
-%                    gap).
+%OUTPUTS: tuples A 3Xmin([n1,n2,n3]) matrix where tuples(:,i) is the ith
+%                assigned tuple in C as described above.
+%           gain The cost value of the optimal assignment found. This is
+%                the sum of the values of the assigned elements in C.
+%        costGap An upper bound for the difference between minCostVal and
+%                the true global minimum (the duality gap). Note that
+%                finite precision errors can push this to be negative when
+%                at or very close to the optimum value.
+%         relGap The relative duality gap that is used as the convergence
+%                criterion with epsVal. Whereas costGap is the value of the
+%                dual cost, relGap is (minCostVal-dualCost)/dualCost .
+%                Note that finite precision errors can push this to be
+%                negative when at or very close to the optimum value.
+%
+%The algorithm of [1] (algorithm 0) is written for an optimization problem
+%with an extra index in each dimension to which multiple things can be
+%assigned. That index with an allowable multiassignment is omitted here.
+%The equations for algorithm 0 have been slightly modified so that the
+%Karush-Kuhn-Tucker optimality conditions for inequality constraints are as
+%they are commonly given in textbooks. This means that the dual variables
+%for inequality constrained terms are >=0.
 %
 %The brute-force enumeration algorithm (number 2) goes through all
 %permutations of assignments of the second dimension. Conditioned on those
@@ -127,14 +141,14 @@ if(nargin<6||isempty(maxIter))
 end
 
 if(nargin<7||isempty(epsVal))
-    epsVal=eps(1);
+    epsVal=0.05;
 end
 
-if(maximize==true)
+if(maximize)
     C=-C;
 end
 
-%The algorthms were implemented assuming that n1<=n2<=n3 for the
+%The algorithms were implemented assuming that n1<=n2<=n3 for the
 %dimensionality of C. If a matrix having a different arrangement of indices
 %is passed, we will permute the indices to make the assumptions below hold.
 %We have to indicate the order of the permutation for return so that the
@@ -143,6 +157,13 @@ end
 %not permuted from its original position. Similarly, to impose more general
 %constraints on n2, we must make sure that n2 is not permuted.
 nVals=size(C);
+%Deal with trailing singleton dimensions.
+if(length(nVals)==2)
+    nVals=[nVals,1];
+elseif(length(nVals)==1)
+    nVals=[nVals,1,1];
+end
+
 [nVals,dimsOrder]=sort(nVals,'ascend');
 
 if(nargin<4||isempty(n2Limits)||all(n2Limits==1))
@@ -176,13 +197,19 @@ switch(algorithm)
         if(~isempty(n2Limits)||~isempty(n3Limits))
            error('The selected algorithm does not support custom n2Limits nor custom n3Limits.')
         end
+        
+        if((n1==n2)&&(n2==n3))
+            unconstU=true;
+        else
+            unconstU=false;
+        end
           
         alpha=2;
         %Initial value for the beta parameter.
         beta=1;
         
         u=zeros(n3,1);%Allocate and initialize the dual variables.
-        H=eye(n3,n3);%The H matrix is initialized .
+        H=eye(n3,n3);%The H matrix is initialized.
         
         %qStar is the best (maximum) dual cost encountered thus far.
         qStar=-Inf;
@@ -193,7 +220,7 @@ switch(algorithm)
             %The H matrix is initialized on the first iteration and reset
             %to the identity matrix every n3 iterations.
             if(mod(curIter,n3)==1)
-               H=eye(n3,n3);
+                H=eye(n3,n3);
             else
                 %If the H matrix is not reinitialized, then update it using 
                 %Eq. 3.17 with the value of p and g that were computed on
@@ -203,15 +230,15 @@ switch(algorithm)
 
             %The minimum values are Eq. 3.8; the minimum indices are needed
             %for Eq. 3.14b
-            CDiff=bsxfun(@minus,C,reshape(u,[1,1,n3]));
+            CDiff=bsxfun(@plus,C,reshape(u,[1,1,n3]));
             [d,minIdx]=min(CDiff,[],3);
 
             %Perform the minimization in (3.7) for a fixed u. As opposed to
             %directly returning omega, the columns for rows (nonzero
             %elements) are returned.
             [dim2ForDim1Cur, ~, minVal]=assign2D(d,false);
-            q=minVal+sum(u);%The q(u) cost in (3.7).
-            
+            q=minVal-sum(u);%The q(u) cost in (3.7).
+
             %Keeping track of the maximum value of q and updating beta as
             %described in the section after Eq 3.18.
             if(q>qStar)
@@ -221,20 +248,20 @@ switch(algorithm)
                 beta=max(beta-1,1);
             end
             
-            %Next, get a feasible solution from. This solves the
+            %Next, get a feasible solution. This solves the
             %minimization problem of Eqs. 3.19-3.20.
             CFeas=zeros(n1,n3);
             for i=1:n1
                 CFeas(i,:)=reshape(C(i,dim2ForDim1Cur(i),:),[1,n3]);
             end
-            
+
             %Instead of the auction algorithm, assign2D, a shortest
             %augmenting path algorithm, is used.
             [dim3ForDim1Cur, ~,fTilde,mu]=assign2D(CFeas,false);
             %As noted in the comments in assign2D, the function modifies
-            %the cost matrix, meaning the dual variables change. Here, we
-            %put the dual variables back to where they should be.
-            mu=mu+min(min(CFeas));%Add back in the minimum costs
+            %the cost matrix, meaning the dual variables change. However,
+            %that should not notably affect the heuristic price update.
+
             if(fTilde<fTildeStar)
                 fTildeStar=fTilde;
 
@@ -252,26 +279,28 @@ switch(algorithm)
             %minimum, there might still be a duality gap. The relative
             %duality gap is used as the convergence criterion.
             costGap=fTildeStar-qStar;
-            relGap=costGap/abs(qStar);
+            relGap=costGap/abs(fTildeStar);
             %The isfinite condition is added because if costGap==0 and
             %qStar==0, then the relative ratio will be a NaN and an
             %if-statement would have an error.
-            if(costGap<=eps(fTildeStar)||(~isfinite(relGap)&&(relGap<epsVal)))
+            if(costGap<=eps(fTildeStar)||(isfinite(relGap)&&(relGap<epsVal)))
                break; 
             end
             
-            %Get the rho terms. Though we have a feasible solution from
-            %which we could get the rho terms, we shall use the rho terms
-            %from the dual solution in Eq. 3.14b as the results are better
-            %and that is how the algorithm was derived.
-            rho=zeros(n1,n2,n3);
+            %Get the rho terms from the dual solution in Eq. 3.14b. Though
+            %we could explicitly do the following
+%             rho=zeros(n1,n2,n3);
+%             for i1=1:n1
+%                 rho(i1,dim2ForDim1Cur(i1),minIdx(i1,dim2ForDim1Cur(i1)))=1;
+%             end
+%             %Get the g vector in Eq. 3.14a.
+%             g=reshape(-1+sum(sum(rho,1),2),[n3,1]);
+            %It is more efficient to compute g as follows:
+            g=-1*ones(n3,1);
             for i1=1:n1
-                rho(i1,dim2ForDim1Cur(i1),minIdx(i1,dim2ForDim1Cur(i1)))=1;
+                g(minIdx(i1,dim2ForDim1Cur(i1)))=g(minIdx(i1,dim2ForDim1Cur(i1)))+1;
             end
-            
-            %Get the g vector in Eq. 3.14a.
-            g=reshape(1-sum(sum(rho,1),2),[n3,1]);
-            
+    
             %If g is all zero, then no constraints were violated and the
             %algorithm should have converged to the globally optimal
             %solution. At any rate, it cannot continue due to the division
@@ -291,12 +320,14 @@ switch(algorithm)
             %alternate step from Equation 3.15 is used.
             %Update the dual variables as in Equation 3.21
             uTest=u+((fTildeStar-qStar)/norm(g)^2)*(n3/sum(mu))*(mu.*g);
-            
+           
             if(any(~isfinite(uTest)))
                 %Equation 3.18 with b=1.35 and a=0.175. The equation in the
                 %paper is missing the a term, even though reference is made
                 %to it in the text.
-                qa=(1+0.175/beta^1.35)*qStar;
+                a=0.175;
+                b=1.35;
+                qa=(1+a/beta^b)*qStar;
                 %Equation 3.15
                 u=u+((alpha+1)/alpha)*((qa-q)/norm(g)^2)*p;
             else
@@ -311,8 +342,8 @@ switch(algorithm)
             %thing) when inequality constraints are used. This enforces the
             %constraints. If this were not present, we could end up with a
             %negative (invalid) duality gap.
-            if(n2~=n1)
-                u(u>0)=0;
+            if(unconstU==false)
+                u(u<0)=0;
             end
         end
     case 1%The relaxation approximation of [2]. Equation numbers refer to
@@ -464,16 +495,23 @@ switch(algorithm)
         
         %The globally optimal solution has no cost gap.
         costGap=0;
+        relGap=0;
     otherwise
         error('Invalid algorithm specified')
 end
 
 %Adjust the gains for the case where the initial cost matrix is transformed
 %so that maximization can be performed.
-if(maximize==true)
+if(maximize)
     minCostVal=-minCostVal;
     costGap=-costGap;
 end
+
+%Take the phi values and make the set of tuples that have been accepted.
+tuples=[1:n1;phi2.';phi3.'];
+%Reorder the tuples to undo the original reordering.
+dimsOrder=inversePermutation(dimsOrder);
+tuples=tuples(dimsOrder,:);
 
 end
 

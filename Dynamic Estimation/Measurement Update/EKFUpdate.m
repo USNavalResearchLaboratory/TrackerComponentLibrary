@@ -187,7 +187,7 @@ for curIter=1:numIter
     zPred=measPredTrans(h(xUpdate)+zPredHessTerm);
     
     %Update the x estimate
-    xUpdate=stateTrans(xUpdate+PUpdate*H'*pinv(R)*innovTrans(z-zPred)-PUpdate*pinv(PPred)*stateDiffTrans(xUpdate-xPred));
+    xUpdate=stateTrans(xUpdate+PUpdate*H'*lsqminnorm(R,innovTrans(z-zPred))-PUpdate*lsqminnorm(PPred,stateDiffTrans(xUpdate-xPred)));
 end
 
 end

@@ -8,43 +8,40 @@ function [yPred,PInvPred]=discCubInfoPred(yPrev,PInvPrev,f,Q,xi,w,stateDiffTrans
 %                 is using an information state because of how the
 %                 measurement update in an information filter is performed.
 %
-%INPUTS: yPrev      The xDimX1 information state at the previous time-step.
-%                   The information state is the inverse covariance matrix
-%                   times the target state.
-%        PInvPrev   The xDimXxDim inverse of the state covariance matrix at
-%                   the previous time-step.
-%           f       A function handle for the state transition function
-%                   that takes the state as its parameter.
-%           Q       The xDimX xDim process noise covariance matrix.
-%           xi      A (xDim+cDim) X numCubPoints matrix of cubature points.
-%                   If this and the next parameter are omitted or empty
-%                   matrices are passed, then
-%                   fifthOrderCubPoints(xDim+cDim) is used. It is suggested
-%                   that xi and w be provided to avoid needless
-%                   recomputation of the cubature points.     
-%           w       A numCubPoints X 1 vector of the weights associated
-%                   with the cubature points.
-% stateDiffTrans    An optional function handle that takes an xDimXN matrix
-%                   of N differences between states estimates and
-%                   transforms them however might be necessary. For
-%                   example, a state continaing angular components will
-%                   generally need differences between angular components
-%                   wrapped to the range +/-pi.
-%    stateAvgFun    An optional function that given an xDimXN matrix of N
-%                   state estimates and an NX1 vector of weights, provides
-%                   the weighted average of the state estimates. This is
-%                   necessary if, for example, states with angular
-%                   components are averaged.
-%     stateTrans    An optional function that takes a state estimate and
-%                   transforms it. This is useful if one wishes the
-%                   elements of the state to be bound to a certain domain.
-%                   For example, if an element of the state is an angle,
-%                   one should generally want to bind it to the region
-%                   +/-pi. This is not applied to the output of f.
+%INPUTS: yPrev The xDimX1 information state at the previous time-step. The
+%              information state is the inverse covariance matrix times the
+%              target state.
+%     PInvPrev The xDimXxDim inverse of the state covariance matrix at the
+%              previous time-step.
+%            f A function handle for the state transition function that
+%              takes the state as its parameter.
+%            Q The xDimX xDim process noise covariance matrix.
+%           xi A (xDim+cDim) X numCubPoints matrix of cubature points. If
+%              this and the next parameter are omitted or empty matrices
+%              are passed, then fifthOrderCubPoints(xDim+cDim) is used. It
+%              is suggested that xi and w be provided to avoid needless
+%              recomputation of the cubature points.     
+%            w A numCubPoints X 1 vector of the weights associated with the
+%              cubature points.
+% stateDiffTrans An optional function handle that takes an xDimXN matrix of
+%                N differences between states estimates and transforms them
+%               however might be necessary. For example, a state continaing
+%               angular components will generally need differences between
+%               angular components wrapped to the range +/-pi.
+%   stateAvgFun An optional function that given an xDimXN matrix of N state
+%               estimates and an NX1 vector of weights, provides the
+%               weighted average of the state estimates. This is necessary
+%               if, for example, states with angular components are
+%               averaged.
+%    stateTrans An optional function that takes a state estimate and
+%               transforms it. This is useful if one wishes the elements of
+%               the state to be bound to a certain domain. For example, if
+%               an element of the state is an angle, one should generally
+%               want to bind it to the region +/-pi. This is not applied to
+%               the output of f.
 %
-%OUTPUTS:   yPred    The xDim X 1 predicted information state vector.
-%           PInvPred The predicted xDim X xDim inverse state covariance
-%                    matrix.
+%OUTPUTS: yPred  The xDim X 1 predicted information state vector.
+%       PInvPred The predicted xDim X xDim inverse state covariance matrix.
 %
 %The idea of a cubature information filter is given in Algorithm 1 in [1],
 %but the prediction step just converts back to a non-information state and

@@ -6,51 +6,49 @@ function [xSmooth,PSmooth]=KalmanSmoother(xInit,PInit,z,u,H,F,R,Q,kD,useFP)
 %                 predicted states can not be uninformative. To run the
 %                 smoother without prior predicted values, use the function
 %                 FPInfoSmoother.
-%INPUTS: xInit  The predicted state at the time of the initial measurement
-%               in z. If no prior information is available, then just pass
-%               an empty matrix.
-%        PInit  The covariance matrix associated with the predicted state
-%               at the time of the initial measurement in z. If no prior
-%               information is avaiable, then just pass an empty matrix.
-%           z   The zDim X N matrix of measurements for the whole batch.
-%           u   The xDim X(N-1) matrix of control inputs for the whole
-%               batch. If there are no control inputs, then set u=[];
-%           H   The zDim X xDim X N hypermatrix of measurement matrices
-%               such that H(:,:,k)*x+w is the measurement at time k, where
-%               x is the state and w is zero-mean Gaussian noise with
-%               covariance matrix R (:,:,k). Alternatively, if all of the
-%               measurement matrices are the same, one can just pass a
-%               single zDim X xDim matrix.
-%           F   The xDim X xDim X (N-1) hypermatrix of state transition
-%               matrices. The state at discrete-time k+1 is modeled as
-%               F(:,:,k) times the state at time k plus zero-mean
-%               Gaussian process noise with covariance matrix Q(:,:,k).
-%               Alternatively, if all of the state transition matrices are
-%               the same, one can just pass a
-%               single xDim X xDim matrix.
-%           R   The zDim X zDim X N hypermatrix of measurement covariance
-%               matrices. Alternatively, if all of the measurement
-%               covariance matrices are the same, one can just pass a
-%               single zDim X zDim matrix.
-%           Q   The xDim X xDim X (N-1) hypermatrix of process noise
-%               covariance matrices. Alternatively, if all of the process
-%               noise covariance matrices are the same, one can just pass a
-%               single xDim X xDim matrix.
-%           kD  The discrete time-step at which the smoothed state estimate
-%               is desired, where z(:,1) is at discrete time-step 1 (not
-%               0). If kD is omitted or an empty matrix is passed, then
-%               results along the entire batch are obtained.
-%        useFP  Optional boolean to specify whether to use Fraser-Potter
-%               information smoother. If not, standard linear Kalman
-%               smoother is used. Default value is true.
+%INPUTS: xInit The predicted state at the time of the initial measurement
+%              in z. If no prior information is available, then just pass
+%              an empty matrix.
+%        PInit The covariance matrix associated with the predicted state
+%              at the time of the initial measurement in z. If no prior
+%              information is avaiable, then just pass an empty matrix.
+%            z The zDim X N matrix of measurements for the whole batch.
+%            u The xDim X(N-1) matrix of control inputs for the whole
+%              batch. If there are no control inputs, then set u=[];
+%            H The zDim X xDim X N hypermatrix of measurement matrices
+%              such that H(:,:,k)*x+w is the measurement at time k, where x
+%              is the state and w is zero-mean Gaussian noise with
+%              covariance matrix R (:,:,k). Alternatively, if all of the
+%              measurement matrices are the same, one can just pass a
+%              single zDim X xDim matrix.
+%            F The xDim X xDim X (N-1) hypermatrix of state transition
+%              matrices. The state at discrete-time k+1 is modeled as
+%              F(:,:,k) times the state at time k plus zero-mean
+%              Gaussian process noise with covariance matrix Q(:,:,k).
+%              Alternatively, if all of the state transition matrices are
+%              the same, one can just pass a single xDim X xDim matrix.
+%            R The zDim X zDim X N hypermatrix of measurement covariance
+%              matrices. Alternatively, if all of the measurement
+%              covariance matrices are the same, one can just pass a single
+%              zDim X zDim matrix.
+%            Q The xDim X xDim X (N-1) hypermatrix of process noise
+%              covariance matrices. Alternatively, if all of the process
+%              noise covariance matrices are the same, one can just pass a
+%              single xDim X xDim matrix.
+%           kD The discrete time-step at which the smoothed state estimate
+%              is desired, where z(:,1) is at discrete time-step 1 (not 0).
+%              If kD is omitted or an empty matrix is passed, then results
+%              along the entire batch are obtained.
+%        useFP Optional boolean to specify whether to use Fraser-Potter
+%              information smoother. If not, standard linear Kalman
+%              smoother is used. Default value is true.
 %
-%OUTPUTS: xEst     The xDimXN smoothed state estimates at all steps if kD
-%                  is not provided or the xDimX1 smoothed information state
-%                  estimate at step kD if kD is provided.
-%         PEst     The covariance matrices associated with the smoothed
-%                  state estimates. This is xDimXxDimXN for the whole batch
-%                  if kD is not provided and is xDimXxDim if kD is
-%                  provided.
+%OUTPUTS: xEst The xDimXN smoothed state estimates at all steps if kD is
+%              not provided or the xDimX1 smoothed information state
+%              estimate at step kD if kD is provided.
+%         PEst The covariance matrices associated with the smoothed state
+%              estimates. This is xDimXxDimXN for the whole batch if kD is
+%              not provided and is xDimXxDim if kD is provided.
 %
 %This function defaults to a wrapper for the function FPInfoSmoother, which
 %uses information state and an inverse covariance matrix. This function

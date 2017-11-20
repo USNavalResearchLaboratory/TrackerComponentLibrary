@@ -16,7 +16,7 @@ function [xPred,PPred,exitCode]=CDEKFPred(xPrev,PPrev,a,D,includesJacob,tPrev,tP
 %              dynamic model. It takes the state and a time variable as its
 %              arguments. To avoid the need for numerical differentiation,
 %              it is desirable if the second output of the function is the
-%              The derivative with respect to x of the drift function.
+%              derivative with respect to x of the drift function.
 %              Whether or not the function returns this can be indicated
 %              using the includesJacob input.
 %            D The diffusion function in the continuous-time stochastic

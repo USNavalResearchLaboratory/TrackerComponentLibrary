@@ -4,36 +4,35 @@ function [xEst,PEst]=batchLSNonlinMeasNonlinDyn(xInit,z,h,R,HJacob,numIter)
 %                      linear dynamic model without process noise. The
 %                      iterative nonlinear least squares algorithm is used.
 %
-%INPUTS: xInit  The initial estimate of the target state at the time of
-%               the kDth measurement that is to be refined through
-%               iteration.
-%          z    The zDim X N matrix of measurements for the whole batch. It
-%               is assumed that the measurements have the same
-%               dimensionality over the batch.
-%          h    A NX1 cell array of function handles for the measurement
-%               function that transform the state into the measurement
-%               domain at each step. If the same measurement function is
-%               used for all steps in the batch, then h can just be the
-%               single function handle used.
-%          R    The zDim X zDim X N hypermatrix of measurement covariance
-%               matrices. Alternatively, if all of the measurement
-%               covariance matrices are the same, one can just pass a
-%               single zDim X zDim matrix.
-%     HJacob    A NX1 cell array of function handles for the measurement
-%               Jacobian matrix that each takes the target state as a
-%               parameter. If a single measurement Jacobian matrix is used
-%               for all steps of the batch, then HJacob can just be the
-%               single function handle used. If an empty matrix is passed
-%               or HJacob is not provided, then HJacob will be found using
-%               numerical differentiation via the numDiff function with
-%               default parameters.
-%       numIter The numer of iterations to perform in the nonlinear least
-%               squares algorithm. If this parameter is omitted, the
-%               default is 10.
+%INPUTS: xInit The initial estimate of the target state at the time of the
+%              kDth measurement that is to be refined through iteration.
+%            z The zDim X N matrix of measurements for the whole batch. It
+%              is assumed that the measurements have the same
+%              dimensionality over the batch.
+%            h A NX1 cell array of function handles for the measurement
+%              function that transform the state into the measurement
+%              domain at each step. If the same measurement function is
+%              used for all steps in the batch, then h can just be the
+%              single function handle used.
+%            R The zDim X zDim X N hypermatrix of measurement covariance
+%              matrices. Alternatively, if all of the measurement
+%              covariance matrices are the same, one can just pass a
+%              single zDim X zDim matrix.
+%       HJacob A NX1 cell array of function handles for the measurement
+%              Jacobian matrix that each takes the target state as a
+%              parameter. If a single measurement Jacobian matrix is used
+%              for all steps of the batch, then HJacob can just be the
+%              single function handle used. If an empty matrix is passed or
+%              HJacob is not provided, then HJacob will be found using
+%              numerical differentiation via the numDiff function with
+%              default parameters.
+%      numIter The numer of iterations to perform in the nonlinear least
+%              squares algorithm. If this parameter is omitted, the
+%              default is 10.
 %
-%OUTPUTS: xEst      The refined batch state estimate at step kD.
-%         PEst      A covariance matrix estimate that goes with the state
-%                   estimate.
+%OUTPUTS: xEst The refined batch state estimate at step kD.
+%         PEst A covariance matrix estimate that goes with the state
+%              estimate.
 %
 %The algorithm is an implementation of the nonlinear iterative least
 %squares algorithm of Chapter 3.4 of [1]. The covariance provided is the
@@ -105,7 +104,7 @@ for curIter=1:numIter
         minIdx=maxIdx+1;
     end
     
-    xEst=xEst+pinv(J'*RStackedInv*J)*J'*RStackedInv*(z(:)-zPredStacked);
+    xEst=xEst+lsqminnorm(J'*RStackedInv*J,J'*RStackedInv*(z(:)-zPredStacked));
 end
 
 %If a covariance matrix estimate is desired.

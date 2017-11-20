@@ -194,7 +194,7 @@ for curIter=1:maxIter
     gradH=HFunGrad(x,s,mu,A,blockIndices);
     [HGradSqrt,didFail]=chol(gradH,'lower');
     if(didFail)%Using pinv for stability if poorly conditioned.
-        deltaZ=pinv(gradH)*(rho*zBar-H);
+        deltaZ=lsqminnorm(gradH,(rho*zBar-H));
     else%Otherwise, solve using forward and backward substitution.
         opts.LT=true;
         opts.UT=false;

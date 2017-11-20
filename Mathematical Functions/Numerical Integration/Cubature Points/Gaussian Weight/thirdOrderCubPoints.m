@@ -85,12 +85,12 @@ function [xi, w]=thirdOrderCubPoints(numDim,algorithm,w0)
             %The weights of integration from Equation 11 in [1]
             w=zeros(numPoints,1);
             w(:)=1/numPoints;
-            %The cubature points from Equation 11 in [1], done for unit covariance,
-            %zero mean.
+            %The cubature points from Equation 11 in [1], done for unit
+            %covariance, zero mean.
             xi=zeros(numDim,numPoints);
             xi(:,1:numDim)=sqrt(numDim)*eye(numDim,numDim);
             xi(:,(numDim+1):numPoints)=-sqrt(numDim)*eye(numDim,numDim);
-        case 2%The extended symmetric set from Section IVA of [1]..
+        case 2%The extended symmetric set from Section IVA of [1].
             numPoints=2*numDim+1;
 
             %The weights of integration from Equation 12 in [1]

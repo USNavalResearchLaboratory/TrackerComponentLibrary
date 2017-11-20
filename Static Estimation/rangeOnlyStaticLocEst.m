@@ -6,31 +6,31 @@ function [xEst,PTaylor,PCRLB]=rangeOnlyStaticLocEst(rBi,zLoc1,zLoc2,RCov)
 %                        estimate are also available. A minimum of 3
 %                        receivers (or transmitters) is necessary.
 %                        
-%INPUTS:    rBi  A numMeas X 1 vector of bistatic range measurements where
-%                numMeas>3 to ensure observability.
-%           zLoc1  A 3 X numMeas vector of transmitter location vectors, if
-%                  one receiver and multiple transmitters are used. If one
-%                  transmitter and multiple receivers are used, then zLoc1
-%                  should be a 3 X numMeas vector of receiver locations.
-%           zLoc2  A 3X1 vector of the receiver locations, if multiple
-%                  transmitters are used, or a 3X1 vector of the
-%                  transmitter location if multiple receivers are used.
-%           RCov If a covariance matrix for the estimate is desired on the
-%                output, then RCov, a measurement covariance matrix must be
-%                provided. Otherwise, RCov can be omitted as the algorithm
-%                implicitly assumes that all of the measurements have the
-%                same accuracy.
+%INPUTS: rBi A numMeas X 1 vector of bistatic range measurements where
+%            numMeas>3 to ensure observability.
+%      zLoc1 A 3 X numMeas vector of transmitter location vectors, if one
+%            receiver and multiple transmitters are used. If one
+%            transmitter and multiple receivers are used, then zLoc1
+%            should be a 3 X numMeas vector of receiver locations.
+%      zLoc2 A 3X1 vector of the receiver locations, if multiple
+%            transmitters are used, or a 3X1 vector of the transmitter
+%            location if multiple receivers are used.
+%       RCov If a covariance matrix for the estimate is desired on the
+%            output, then RCov, a measurement covariance matrix must be
+%            provided. Otherwise, RCov can be omitted as the algorithm
+%            implicitly assumes that all of the measurements have the same
+%            accuracy.
 %
-%OUTPUTS:   xEst    The Cartesian target location estimate. If onlt the
-%                   minimum number of receivers/ transmitters is provided
-%                   (3), then there are two columns, each corresponding to
-%                   one of the two solutions.
-%           PTaylor A covariance matrix for the estimate based on a Taylor
-%                   series expansion. then this is a 3D matrix, with the
-%                   extra dimension selecting the solution for which the
-%                   covairance matrix is valid.
-%           PCRLB   A covariance matrix (or matrices for two solutions) for
-%                   the estimates) based on the Cramér-Rao lower bound.
+%OUTPUTS: xEst The Cartesian target location estimate. If onlt the minimum
+%              number of receivers/ transmitters is provided (3), then
+%              there are two columns, each corresponding to one of the two
+%              solutions.
+%      PTaylor A covariance matrix for the estimate based on a Taylor
+%              series expansion. then this is a 3D matrix, with the extra
+%              dimension selecting the solution for which the covariance
+%              matrix is valid.
+%        PCRLB A covariance matrix (or matrices for two solutions) for the
+%              estimates) based on the Cramér-Rao lower bound.
 %
 %The target localization algorithm is based on the spherical intersection
 %method of [1], where the Taylor series expansion covariance matrix for the
@@ -101,7 +101,7 @@ if(nargout>1)
     Delta=S-rBi*xEst1'/norm(xEst1);
     Gamma=diag(rBi);
 
-    dxdr=pinv(Delta)*(eye(measDim)*Rt1-Gamma);
+    dxdr=lsqminnorm(Delta,(eye(measDim)*Rt1-Gamma));
     PTaylor(:,:,1)=dxdr*RCov*dxdr';
     PCRLB(:,:,1)=pinv(dxdr*pinv(RCov)*dxdr');
     
@@ -110,7 +110,7 @@ if(nargout>1)
         Delta=S-rBi*xEst2'/norm(xEst2);
         Gamma=diag(rBi);
 
-        dxdr=pinv(Delta)*(eye(measDim)*Rt2-Gamma);
+        dxdr=lsqminnorm(Delta,(eye(measDim)*Rt2-Gamma));
         PTaylor(:,:,2)=dxdr*RCov*dxdr';
         PCRLB(:,:,2)=pinv(dxdr*pinv(RCov)*dxdr');
     end

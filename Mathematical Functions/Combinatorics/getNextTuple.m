@@ -1,4 +1,4 @@
-function tuple=getNextTuple(param1,maxVals)
+function tuple=getNextTuple(param1,maxVals,firstIsMostSig)
 %%GETNEXTTUPLE This function produces the next tuple in a counting series.
 %           This can be used as a method of implementing nested loops. Each
 %           index of the tuple counts from 0 to the value in maxVals and
@@ -6,18 +6,24 @@ function tuple=getNextTuple(param1,maxVals)
 %           different bases for each digit.
 %
 %INPUTS: param1, maxVals If the first tuple in the series is desired, then
-%                        param1 is the total number of digits in the tuple.
-%                        Otherwise, param1 is the previous tuple and
+%                        param1 is the total number of digits (N) in the
+%                        tuple. Otherwise, param1 is the previous tuple and
 %                        maxVals is a vector whose elements correspond to
 %                        the maximum value that each digit of the tuple can
 %                        take (>=0). The elements of maxVals correspond to
 %                        the base of each digit -1.
+%         firstIsMostSig This is a boolean variable indicating whether
+%                        tuple(1) is the most significant digit (or whether
+%                        tuple(N) is the most significant). This affects
+%                        the ordering of the tuples. The default if this
+%                        parameter is omitted or an empty matrix is passed
+%                        is true.
 %
-%OUTPUTS: tuple The first tuple in the series (all zeros) if only param1 is
-%               provided as the number of digits in the tuple. Otherwise,
-%               the next tuple in the series is returned. If one is past
-%               the final tuple in the sequence, then an empty matrix is
-%               returned.
+%OUTPUTS: tuple The first NX1 tuple in the series (all zeros) if only
+%               param1 is provided as the number of digits in the tuple.
+%               Otherwise, the next tuple in the series is returned. If one
+%               is past the final tuple in the sequence, then an empty
+%               matrix is returned.
 %
 %This function just implements the rules of integer counting with different
 %bases for different digits.
@@ -41,31 +47,62 @@ if(nargin==1)
    return;
 end
 
+if(nargin<3||isempty(firstIsMostSig))
+    firstIsMostSig=true; 
+end
+
 numDim=length(param1);
 tuple=param1;%The previous tuple.
 
-curLevel=numDim;
-isAscending=true;
-while(curLevel>=1)
-    if(curLevel>numDim)
-        %If we have gotten a complete new tuple.
-        return;
-    elseif(isAscending)
-        %Try incrementing the order at this level...
-        tuple(curLevel)=tuple(curLevel)+1;
-        if(tuple(curLevel)<=maxVals(curLevel))
-            isAscending=false;
-            curLevel=curLevel+1;
-            continue;
-        else
-            %If the value is invalid, then just keep ascending.
+if(firstIsMostSig==false)
+    curLevel=1;
+    isAscending=true;
+    while(curLevel<=numDim)
+        if(curLevel<1)
+            %If we have gotten a complete new tuple.
+            return;
+        elseif(isAscending)
+            %Try incrementing the order at this level...
+            tuple(curLevel)=tuple(curLevel)+1;
+            if(tuple(curLevel)<=maxVals(curLevel))
+                isAscending=false;
+                curLevel=curLevel-1;
+                continue;
+            else
+                %If the value is invalid, then just keep ascending.
+                curLevel=curLevel+1;
+                continue;
+            end
+        else%We are descending in the sums here.
+            tuple(curLevel)=0;
             curLevel=curLevel-1;
-            continue;
         end
-    else%We are descending in the sums here.
-        tuple(curLevel)=0;
-        curLevel=curLevel+1;
     end
+else
+    curLevel=numDim;
+    isAscending=true;
+    while(curLevel>=1)
+        if(curLevel>numDim)
+            %If we have gotten a complete new tuple.
+            return;
+        elseif(isAscending)
+            %Try incrementing the order at this level...
+            tuple(curLevel)=tuple(curLevel)+1;
+            if(tuple(curLevel)<=maxVals(curLevel))
+                isAscending=false;
+                curLevel=curLevel+1;
+                continue;
+            else
+                %If the value is invalid, then just keep ascending.
+                curLevel=curLevel-1;
+                continue;
+            end
+        else%We are descending in the sums here.
+            tuple(curLevel)=0;
+            curLevel=curLevel+1;
+        end
+    end
+
 end
 
 %If we get here, then we have gone past the final tuple.

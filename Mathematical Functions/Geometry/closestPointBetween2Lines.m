@@ -40,8 +40,8 @@ for i=1:N
     A=[a1(:,i),-a2(:,i)];
     c=b1(:,i)-b2(:,i);
 
-    %pinv(A)=(A'*A)\A'
-    TMin=-pinv(A)*c;
+    %pinv(A)=(A'*A)\A', we are doing pinv(A)*c using lsqminnorm.
+    TMin=-lsqminnorm(A,c);
 
     r1Min=a1*TMin(1)+b1;
     r2Min=a2*TMin(2)+b2;

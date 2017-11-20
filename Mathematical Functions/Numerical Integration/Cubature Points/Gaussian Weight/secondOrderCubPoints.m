@@ -1,7 +1,11 @@
-function [xi, w]=secondOrderCubPoints(numDim,w0)
+function [xi, w]=secondOrderCubPoints(numDim,w0,alpha)
 %SECONDDORDERCUBPOINTS Generate second order cubature points for 
 %           integration involving a multidimensional Gaussian probability
-%           density function (PDF).
+%           density function (PDF). The algorithm implemented is the scaled
+%           unscented transformation of [2], which is just a minor
+%           generalization of the spherical sigma points given in Appendix
+%           III of [1]. If alpha=1, then one has the spherical sigma
+%           points.
 %
 %INPUTS: numDim An integer specifying the dimensionality of the points to
 %               be generated.
@@ -9,28 +13,43 @@ function [xi, w]=secondOrderCubPoints(numDim,w0)
 %               coefficient associated with a cubature point placed at the
 %               origin. It is required that 1>w0>0. If omitted or an empty
 %               matrix is passed, a default value of 1/3 is used.
+%         alpha An optional input parameter. This is a positive scale
+%               factor, which affects how far the cubature points that are
+%               not placed at the origin spread out from the origin. If
+%               this parameter is omitted or an empty matrix is passed,
+%               then the default of 1 is used.
 %
 %OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
 %            points. (Each "point" is a vector)
 %          w A numCubaturePoints X 1 vector of the weights associated with
 %            the cubature points.
 %
-%The algorithm implemented is for the spherical simplex sigma points from
-%Appendix III of [1]. It is modified because all of the quadrature points,
-%as described in the paper, need to be multiplied by
+%The algorithm implemented is for the scaled unscented transform of [2],
+%which is just a modified form of the  spherical simplex sigma points from
+%Appendix III of [1]. The algorithm of [1] is modified because all of the
+%cubature points, as described in the paper, need to be multiplied by
 %(1/sqrt((1/w0-1)/(numDim+1))) to assure that the sample covariance matrix
-%of the points has a unit diagonal.
+%of the points has a unit diagonal. In [2], the formula for the scaled
+%weights in Equation 24 is incorrect. The correct form is given in Equation
+%15 of [2].
 %
 %REFERENCES:
 %[1] S. J. Julier and J. K. Uhlmann, "Unscented filtering and nonlinear
 %    estimation," Proceedings of the IEEE, vol. 92, no. 3, pp. 401-422,
 %    Mar. 2004.
+%[2] S. J. Julier, "The scaled unscented transformation," in Proceedings of
+%    the American Control Conference, Anchorage, AK, 8-10 May 2002, pp.
+%    4555-4559.
 %
 %August 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
     if(nargin<2||isempty(w0))
        w0=1/3; 
+    end
+    
+    if(nargin<3||isempty(alpha))
+        alpha=1; 
     end
 
     numPoints=numDim+2;
@@ -56,6 +75,15 @@ function [xi, w]=secondOrderCubPoints(numDim,w0)
     end
 
     xi=xi/sqrt((1/w0-1)/(numDim+1));
+
+    %Deal with any scaling of the points. The points x(:,1) is always the
+    %origin, so there is no need to perform the subtraction given in the
+    %paper.
+    xi=alpha*xi;
+    %Corrected typo in Equation 24 in [2]. The correct form is in Equation
+    %15 of [2].
+    w(1)=w(1)/alpha^2+(1-1/alpha^2);
+    w(2:end)=w(2:end)/alpha^2;
 end
 
 %LICENSE:

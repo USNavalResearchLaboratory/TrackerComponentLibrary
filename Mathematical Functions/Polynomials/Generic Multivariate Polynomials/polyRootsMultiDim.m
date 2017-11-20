@@ -293,7 +293,7 @@ Sg=constructSg(n,degOfGap,numBeforeDeg);
 %The generalized eigenvalue problem to solve is S1*W11*V11*D=Sg*W11*V11
 %However, eig cannot solve that as it is a rectangular problem. We use the
 %method of Section 6.2.2 to transform it into a square eigenvalue problem.
-[V11,~]=eig(pinv(S1*W11)*Sg*W11);
+[V11,~]=eig(lsqminnorm(S1*W11,Sg*W11));
 
 %Using Corollary 6.11 to extract the actual solutions.
 Ka1=W11*V11;

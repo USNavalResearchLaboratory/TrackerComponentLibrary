@@ -8,11 +8,12 @@ function y=expSlope1(x)
 %
 %OUTPUTS: y The value(s) of the function (exp(x)-1)/x at the point(s) in x.
 %
-%The function is implemented as in Chapter 1.14.1 of [2], which only 
+%For values of x below 0.1, a Taylor series expansion about x=0 is used.
+%For values of x above 0.1, the function is implemented as in Chapter
+%1.14.1 of [2]. Though the method in [2] can go to lower values of x, it
+%still has a singularity at x=0. The Taylor series does not.
 %
 %This is one of the slope function in Table 10.6 of Section 10.6.2 of [1].
-%This file implements the function for non-intervals. See the Interval
-%class for an implementation for Interval arithmetic.
 %
 %REFERENCES:
 %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
@@ -23,13 +24,40 @@ function y=expSlope1(x)
 %November 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-%Allocate space
-y=exp(x);
-sel=(y==1);
+y=zeros(size(x));
 
-y(sel)=1;
-y(~sel)=(y-1)/log(y);
+selSmall=x<0.1;
+xSmall=x(selSmall);
+xLarge=x(~selSmall);
 
+if(~isempty(xSmall))
+    %Use a Taylor-series approximation about x=0. THis avoud the
+    %singularity. 
+    expanOrder=20;
+    ySmall=ones(size(xSmall));
+
+    xPow=xSmall;
+    kFactorial=1;
+    for k=1:expanOrder
+       kFactorial=kFactorial*k;
+
+       ySmall=ySmall+xPow/((k+1)*kFactorial);
+
+       xPow=xPow.*xSmall;
+    end
+else
+    ySmall=[];
+end
+
+if(~isempty(xLarge))
+    yLarge=exp(xLarge);
+    yLarge=(yLarge-1)/log(yLarge);
+else
+    yLarge=[];
+end
+
+y(selSmall)=ySmall;
+y(~selSmall)=yLarge;
 end
 
 %LICENSE:

@@ -1,30 +1,36 @@
-/**ASSIGN2DALT A C-code (for Matlab) implementation of the shortest path
+/**ASSIGN2D  A C-code (for Matlab) implementation of the shortest path
  *             assignment algorithm to solve the two-dimensional assignment
  *             problem with a rectangular cost matrix C. This
  *             implementation scans the cost matrix by row rather than by
- *             column.
+ *             column. See the comments to the Matlab implementation for
+ *             more details.
  *
  *INPUTS: C A numRowXnumCol cost matrix that does not contain any NaNs and
- *          where the largest finite element minus the smallest element is
- *          a finite quantity (does not overflow) when performing
- *          minimization and where the smallest finite element minus the
- *          largest element is finite when performing maximization. 
- *          Forbidden assignments can be given costs of +Inf for
- *          minimization and -Inf for maximization.
+ *         where the largest finite element minus the smallest element is a
+ *         finite quantity (does not overflow) when performing minimization
+ *         and where the smallest finite element minus the largest
+ *         element is finite when performing maximization. Forbidden
+ *         assignments can be given costs of +Inf for minimization and -Inf
+ *         for maximization.
  * maximize If true, the minimization problem is transformed into a
  *          maximization problem. The default if this parameter is omitted
  *          is false.
  *
- *OUTPUTS:  col4row     A numRowX1 Matlab vector where the entry in each
- *                      element is an assignment of the element in that row
- *                      to a column. 0 entries signify unassigned rows.
- *          row4col     A numColX1 vector where the entry in each element
- *                      is an assignment of the element in that column to a
- *                      row. 0 entries signify unassigned columns.
- *          gain        The sum of the values of the assigned elements in
- *                      C.
- *          u           The dual variable for the columns.
- *          v           The dual variable for the rows.
+ *OUTPUTS: col4row A numRowX1 vector where the entry in each element is an
+ *                assignment of the element in that row to a column. 0
+ *                entries signify unassigned rows. If the problem is
+ *                infeasible, this is an empty matrix.
+ *        row4col A numColX1 vector where the entry in each element is an
+ *                assignment of the element in that column to a row. 0
+ *                entries signify unassigned columns. If the problem is
+ *                infeasible, this is an empty matrix.
+ *           gain The sum of the values of the assigned elements in C. If
+ *                the problem is infeasible, this is -1.
+ *            u,v The dual variable for the columns and for the rows. Note
+ *                that if C contains any negative entries for minimization
+ *                or positive entries for maximization, then these are from
+ *                version of C transformed to be all positive
+ *                (minimization) or negative (maximization).
  *
  *DEPENDENCIES: string.h
  *              math.h
@@ -85,14 +91,14 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         mexErrMsgTxt("Not enough inputs.");
     }
     
-    if(nrhs==2){
-        maximize=getBoolFromMatlab(prhs[1]);
-    }
-    
     if(nrhs>2) {
         mexErrMsgTxt("Too many inputs.");
     }
     
+    if(nrhs==2&&~mxIsEmpty(prhs[1])){
+        maximize=getBoolFromMatlab(prhs[1]);
+    }
+
     if(nlhs>5) {
         mexErrMsgTxt("Too many outputs.");
     }
@@ -103,8 +109,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     /* Get the dimensions of the input data and the pointer to the matrix.
      * It is assumed that the matrix is not so large in M or N as to cause
      * an overflow when using a SIGNED integer data type.*/
-    numRow = mxGetM(prhs[0]);
-    numCol = mxGetN(prhs[0]);
+    numRow=mxGetM(prhs[0]);
+    numCol=mxGetN(prhs[0]);
     
     /* Transpose the matrix, if necessary, so that the number of rows is
      * >= the number of columns.*/
@@ -121,8 +127,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         mexCallMATLAB(1, &CMat, 1, (mxArray **)&prhs[0], "transpose");
         didFlip=true;
     }
-    
-    C = (double*)mxGetData(CMat);
+
+    C=(double*)mxGetData(CMat);
     
     /* The cost matrix must have all non-negative elements for the
      * assignment algorithm to work. This forces all of the elements to be
@@ -135,6 +141,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
                 CDelta=C[i];
         }
 
+        //If C is all positive, do not shift.
+        if(CDelta>0) {
+            CDelta=0;
+        }
+        
         for(i=0;i<numRow*numCol;i++) {
             C[i]=C[i]-CDelta;
         }
@@ -143,6 +154,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         for(i=0;i<numRow*numCol;i++) {
             if(C[i]>CDelta)
                 CDelta=C[i];
+        }
+        
+        //If C is all negative, do not shift.
+        if(CDelta<0) {
+            CDelta=0;
         }
 
         for(i=0;i<numRow*numCol;i++) {
@@ -215,12 +231,23 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         }
         return;
     } else {
-        
         /* Adjust for shifting that was done to make everything positive.*/
         if(maximize==false) {
             gain=gain+CDelta;
-
         } else {
+            double *u;
+            double *v;
+            
+            u=(double*)mxGetData(uMATLAB);
+            for(i=0;i<numCol;i++){
+                u[i]=-u[i];
+            }
+
+            v=(double*)mxGetData(vMATLAB);
+            for(i=0;i<numRow;i++){
+                v[i]=-v[i];
+            }
+
             gain=-gain+CDelta;
         }
         
@@ -258,11 +285,12 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     if(nlhs<5){
         mxDestroyArray(vMATLAB);   
     }
-    
     return;
 }
 
 double shortestPathCFast(double *C, ptrdiff_t *col4row, ptrdiff_t *row4col, double *u, double *v, size_t numRow, size_t numCol) {
+    //Note that u and v should be initialized to 0 prior to calling this
+    //function.
     double *shortestPathCost;
     size_t curRow,curCol,curUnassignedCol, *pred, *Row2Scan;
     bool *ScannedRows;//This holds 1's and 0's for which columns were scanned.
@@ -285,7 +313,7 @@ double shortestPathCFast(double *C, ptrdiff_t *col4row, ptrdiff_t *row4col, doub
     Row2Scan=(size_t*)mxMalloc(numRow*sizeof(size_t));
     shortestPathCost=(double*)mxMalloc(numRow*sizeof(double));
     pred=(size_t*)mxMalloc(numRow*sizeof(size_t));
-    
+
     for(curUnassignedCol=0;curUnassignedCol<numCol;curUnassignedCol++){
         size_t numRow2Scan,numColsScanned;
         ptrdiff_t sink;

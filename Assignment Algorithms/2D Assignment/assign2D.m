@@ -7,7 +7,8 @@ function [col4row,row4col,gain,u,v]=assign2D(C,maximize)
 %          \sum_{j=1}^{numCol}x_{i,j} =1 for all i
 %          \sum_{i=1}^{numRow}x_{i,j}<=1 for all j
 %          x_{i,j}=0 or 1.
-%          Assuming that numCol>=numRow.
+%          Assuming that numCol>=numRow. A modified Jonker-Volgenant
+%          algorithm is used.
 %
 %INPUTS: C A numRowXnumCol cost matrix that does not contain any NaNs and
 %          where the largest finite element minus the smallest element is a
@@ -18,19 +19,26 @@ function [col4row,row4col,gain,u,v]=assign2D(C,maximize)
 %          for maximization.
 % maximize If true, the minimization problem is transformed into a
 %          maximization problem. The default if this parameter is omitted
-%          is false.
+%          or an empty matrix is passed is false.
 %
 %OUTPUTS: col4row A numRowX1 vector where the entry in each element is an
 %                 assignment of the element in that row to a column. 0
-%                 entries signify unassigned rows.
+%                 entries signify unassigned rows. If the problem is
+%                 infeasible, this is an empty matrix.
 %         row4col A numColX1 vector where the entry in each element is an
 %                 assignment of the element in that column to a row. 0
-%                 entries signify unassigned columns.
-%            gain The sum of the values of the assigned elements in C.
-%               u The dual variable for the columns. Note that this is on a
-%                 transformed version of C.
-%               v The dual variable for the rows. Note that this is on a
-%                 transformed version of C.
+%                 entries signify unassigned columns. If the problem is
+%                 infeasible, this is an empty matrix.
+%            gain The sum of the values of the assigned elements in C. If
+%                 the problem is infeasible, this is -1.
+%             u,v The dual variable for the columns and for the rows. Note
+%                 that if C contains any negative entries for minimization
+%                 or positive entries for maximization, then these are from
+%                 version of C transformed to be all positive
+%                 (minimization) or negative (maximization). See the
+%                 example below demonstrating how they relate to
+%                 complementary slackness when the problem must be
+%                 transformed.
 %
 %DEPENDENCIES: None
 %
@@ -59,6 +67,57 @@ function [col4row,row4col,gain,u,v]=assign2D(C,maximize)
 %
 %The algorithm is described in detail in [1] and [2].
 %
+%EXAMPLE 1:
+% C=[Inf,  2,   Inf,Inf,3;
+%      7,  Inf, 23, Inf,Inf;
+%     17,  24,  Inf,Inf,Inf;
+%    Inf,  6,   13, 20, Inf];
+% maximize=false;
+% [col4row,row4col,gain,u,v]=assign2D(C,maximize)
+%One will get an optimal assignment having a gain of 47.
+%
+%EXAMPLE 2:
+%Here we demonstrate that if one is performing minimization and all of the
+%elements of C are positive, then the returned dual variables satisfy the
+%complementary slackness condition, described, for example in [1]. If
+%performing maximization with an all-positive matrix, however, then the
+%complementary slcakness condition applies to a transformed matrix, as
+%demonstrated.
+% numRows=50;
+% numCols=80;
+% C=rand(numRows,numCols);
+% maximize=false;
+% [col4row,~,gain,u,v]=assign2D(C,maximize);
+% slackVal=0;
+% for curRow=1:numRows
+%     slackVal=slackVal+abs(C(curRow,col4row(curRow))*(C(curRow,col4row(curRow))-v(curRow)-u(col4row(curRow))));
+% end
+% slackVal
+% %One will see that slackVal is zero, which is what the complementary
+% %slackness condition says.
+% %Switching to maximization with the same matrix:
+% maximize=true;
+% [col4row,~,gain,u,v]=assign2D(C,maximize);
+% slackVal=0;
+% maxC=max(C(:));
+% for curRow=1:numRows
+%     slackVal=slackVal+abs((C(curRow,col4row(curRow))-maxC)*(C(curRow,col4row(curRow))-maxC-v(curRow)-u(col4row(curRow))));
+% end
+% slackVal
+% %Again slackVal is zero, but this time, we had to offset the values of C by
+% %maxC for the condition to hold, because the returned dual variables are
+% %for a transformed problem.
+% %Finally, we do maximization using an all-negative matrix and the
+% %complementary slackness condition hold without a transformation.
+% C=-C;
+% [col4row,~,gain,u,v]=assign2D(C,maximize);
+% slackVal=0;
+% for curRow=1:numRows
+%     slackVal=slackVal+abs(C(curRow,col4row(curRow))*(C(curRow,col4row(curRow))-v(curRow)-u(col4row(curRow))));
+% end
+% slackVal
+% %slackVal is again zero.
+%
 %REFERENCES:
 %[1] D. F. Crouse, "On Implementing 2D Rectangular Assignment Algorithms,"
 %    IEEE Transactions on Aerospace and Electronic Systems, vol. 52, no. 4,
@@ -70,7 +129,7 @@ function [col4row,row4col,gain,u,v]=assign2D(C,maximize)
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    if(nargin<2)
+    if(nargin<2||isempty(maximize))
         maximize=false;
     end
     
@@ -91,9 +150,21 @@ function [col4row,row4col,gain,u,v]=assign2D(C,maximize)
 %delta is added back in when computing the gain in the end.
     if(maximize==true)
         CDelta=max(max(C));
+        
+        %If C is all negative, do not shift.
+        if(CDelta<0)
+            CDelta=0;
+        end
+        
         C=-C+CDelta;
     else
         CDelta=min(min(C));
+        
+        %If C is all positive, do not shift.
+        if(CDelta>0)
+            CDelta=0;
+        end
+        
         C=C-CDelta;
     end
 
@@ -140,8 +211,10 @@ function [col4row,row4col,gain,u,v]=assign2D(C,maximize)
         end
         
         %Adjust the gain for the initial offset of the cost matrix.
-        if(maximize==true)
+        if(maximize)
             gain=-gain+CDelta*numCol;
+            u=-u;
+            v=-v;
         else
             gain=gain+CDelta*numCol;
         end
@@ -170,20 +243,20 @@ function [sink, pred, u, v]=ShortestPath(curUnassCol,u,v,C,col4row,row4col)
     
     %This will store a 1 in every row that has been scanned.
     ScannedRow=zeros(numRow,1);
-    Row2Scan=1:numRow;%Columns left to scan.
+    Row2Scan=1:numRow;
     numRow2Scan=numRow;
     
     sink=0;
     delta=0;
     curCol=curUnassCol;
-    shortestPathCost=ones(numRow,1)*inf;
+    shortestPathCost=ones(numRow,1)*Inf;
     
     while(sink==0)        
         %Mark the current row as having been visited.
         ScannedCols(curCol)=1;
         
-        %Scan all of the columns that have not already been scanned.
-        minVal=inf;
+        %Scan all of the rows that have not already been scanned.
+        minVal=Inf;
         for curRowScan=1:numRow2Scan
             curRow=Row2Scan(curRowScan);
             
@@ -193,8 +266,7 @@ function [sink, pred, u, v]=ShortestPath(curUnassCol,u,v,C,col4row,row4col)
                 shortestPathCost(curRow)=reducedCost;
             end
             
-            %Find the minimum unassigned column that was
-            %scanned.
+            %Find the minimum unassigned row that was scanned.
             if(shortestPathCost(curRow)<minVal)
                 minVal=shortestPathCost(curRow);
                 closestRowScan=curRowScan;
@@ -202,7 +274,7 @@ function [sink, pred, u, v]=ShortestPath(curUnassCol,u,v,C,col4row,row4col)
         end
                 
         if(~isfinite(minVal))
-           %If the minimum cost column is not finite, then the problem is
+           %If the minimum cost row is not finite, then the problem is
            %not feasible.
            sink=0;
            return;

@@ -20,19 +20,20 @@ function lowerBound=assign3DLB(C,method)
 %            solution.
 %
 %INPUTS: C An n1Xn2Xn3 cost hypermatrix. The costs are real numbers >-Inf.
-%          If it is not the case that n1<=n2<=n3, then the indices of C are
-%          permuted so that is true.
 %   method An optional parameter selecting the bound algorithm to use.
 %          Possible values are:
-%          0 (The default if omitted). Use the projection method followed
-%            by the Hungarian algorithm as in [1] (implemented using the
-%            Jonker-Volgenant algorithm in assign2D in place of the
-%            Hungarian algorithm). This algorithm requires that n1=n2=n3,
-%            so if that is not the case, the cost matrix is implicitly
-%            augmented so the lower bound can still be used. The implicit
-%            augmentation is discussed in the comments to the code.
+%          0 (The default if omitted or an empty matrix is passed) Use the
+%            projection method followed by the Hungarian algorithm as in
+%            [1] (implemented using the Jonker-Volgenant algorithm in
+%            assign2D in place of the Hungarian algorithm). This algorithm
+%            requires that n1=n2=n3, so if that is not the case, the cost
+%            matrix is implicitly augmented so the lower bound can still be
+%            used. The implicit augmentation is discussed in the comments
+%            to the code.
 %          1 Use the simple (first) method of summing the minimum values
-%            across each first index of i as in [2]. 
+%            across each first index of C as in [2]. Note that permuting
+%            the indices of C can change the tightness of the bound and the
+%            speed of this approach.
 %
 %OUTPUTS: lowerBound A lower bound on the value of the axial 3D assignment
 %                    optimization problem.
@@ -76,19 +77,28 @@ function lowerBound=assign3DLB(C,method)
 %We have to indicate the order of the permutation for return so that the
 %user knows what dims1 and dims2 refer to.
 nVals=size(C);
-[nVals,dimsOrder]=sort(nVals,'ascend');
-C=permute(C,dimsOrder);
+numNVals=numel(nVals);
+%Add back singleton dimensions, if necessary.
+if(numNVals==2)
+    nVals=[nVals,1];
+elseif(numNVals==1)
+    nVals=[nVals,1,1];
+end
 
-n1=nVals(1);
-n2=nVals(2);
-n3=nVals(3);
-
-if(nargin<2)
+if(nargin<2||isempty(method))
     method=0;
 end
 
 switch(method)
     case 0%The projection-Hungarian algorithm of [1].
+        %The indices must be permuted so that n1<=n2<=n3.
+        [nVals,dimsOrder]=sort(nVals,'ascend');
+        C=permute(C,dimsOrder);
+
+        n1=nVals(1);
+        n2=nVals(2);
+        n3=nVals(3);
+
         lowerBound=0;
         
         for curIdx=1:3
@@ -194,6 +204,10 @@ switch(method)
         %And from Pierskala, we have a simple lower bound that will work
         %with a more general C.
         
+        n1=nVals(1);
+        n2=nVals(2);
+        n3=nVals(3);
+
         lowerBound=0;
         for i=1:n1
             lowerBound=lowerBound+min(reshape(C(i,:,:),[n2*n3,1]));
@@ -201,7 +215,6 @@ switch(method)
     otherwise
         error('Invalid method chosen');
 end
-
 end
 
 %LICENSE:

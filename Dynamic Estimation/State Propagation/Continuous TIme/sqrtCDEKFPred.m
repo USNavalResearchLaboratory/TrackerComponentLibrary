@@ -10,48 +10,48 @@ function [xPred,SPred,exitCode]=sqrtCDEKFPred(xPrev,SPrev,a,D,AJacob,tPrev,tPred
 %               an explicit Runge-Kutta method, which can take a number of
 %               options.
 %
-%INPUTS: xPrev   The xDim X 1 state estimate at time tPrior.
-%        SPrev   The xDim X xDim square root state covariance matrix at
-%                time tPrior.
-%        a       The drift function in the continuous-time stochastic
-%                dynamic model. It takes the state and a time variable
-%                as its arguments.
-%        D       The diffusion function in the continuous-time stochastic
-%                dynamic model. It takes the state and a time variable
-%                as its arguments.
-%       AJacob   The derivative wrt x of the drift function in the
-%                continuous-time stochastic dynamic model. It takes the
-%                state and a time variable as its arguments. If an empty
-%                matrix is passed, then AJacob will be found using
-%                numerical differentiation via the numDiff function with
-%                default parameters.
-%        tPrev   The time of xPrev and SPrev.
-%        tPred   The time to which xPrev and SPrev should be predicted.
-%     RKOptions  An optional structure whose components have the same name
-%                and meaning as the corresponding components in the
-%                RKAdaptiveOverRange function. The possible compnents of
-%                the RKOptions function (with default values if omitted)
-%                are
-%                RKOptions.initStepSize: (tPred-tPrev)/RKOptions.maxSteps
-%                RKOptions.order:           5
-%                RKOptions.solutionChoice:  0
-%                RKOptions.RelTol:          1e-3.
-%                RKOptions.AbsTol:          1e-6
-%                RKOptions.maxSteps:        1024
-%                If an empty matrix is passed in place of RKOptions, then
-%                only the default values will be used.
+%INPUTS: xPrev The xDim X 1 state estimate at time tPrior.
+%        SPrev The xDim X xDim square root state covariance matrix at time
+%              tPrior.
+%            a The drift function in the continuous-time stochastic
+%              dynamic model. It takes the state and a time variable as its
+%              arguments.
+%            D The diffusion function in the continuous-time stochastic
+%              dynamic model. It takes the state and a time variable as its
+%              arguments.
+%       AJacob The derivative wrt x of the drift function in the
+%              continuous-time stochastic dynamic model. It takes the
+%              state and a time variable as its arguments. If an empty
+%              matrix is passed, then AJacob will be found using
+%              numerical differentiation via the numDiff function with
+%              default parameters.
+%        tPrev The time of xPrev and SPrev.
+%        tPred The time to which xPrev and SPrev should be predicted.
+%    RKOptions An optional structure whose components have the same name
+%              and meaning as the corresponding components in the
+%              RKAdaptiveOverRange function. The possible compnents of
+%              the RKOptions function (with default values if omitted)
+%              are
+%              RKOptions.initStepSize: (tPred-tPrev)/RKOptions.maxSteps
+%              RKOptions.order:           5
+%              RKOptions.solutionChoice:  0
+%              RKOptions.RelTol:          1e-3.
+%              RKOptions.AbsTol:          1e-6
+%              RKOptions.maxSteps:        1024
+%              If an empty matrix is passed in place of RKOptions, then
+%              only the default values will be used.
 %
-%OUTPUTS: xPred   The xDim X 1 predicted state estimate. If the
-%                 RKAdaptiveOverRange function failed, which might occur,
-%                 for example, if the maximum number of allowed steps is
-%                 too small, then an empty matrix is returned.
-%         SPred   The xDim X xDim predicted square root state covariance
-%                 matrix, or an empty matrix if the RKAdaptiveOverRange
-%                 failed.
-%        exitCode The exit code from the RKAdaptiveOverRange function. This
-%                 is zero if the integration was a success. Otherwise, the
-%                 value identifies what the problem was. See the
-%                 RKAdaptiveOverRange function for more details.
+%OUTPUTS: xPred The xDim X 1 predicted state estimate. If the
+%               RKAdaptiveOverRange function failed, which might occur,
+%               for example, if the maximum number of allowed steps is
+%               too small, then an empty matrix is returned.
+%         SPred The xDim X xDim predicted square root state covariance
+%               matrix, or an empty matrix if the RKAdaptiveOverRange
+%               failed.
+%      exitCode The exit code from the RKAdaptiveOverRange function. This
+%               is zero if the integration was a success. Otherwise, the
+%               value identifies what the problem was. See the
+%               RKAdaptiveOverRange function for more details.
 %
 %The algorithm is modified from the mean-covariance Runge-Kutta (MC-RK4)
 %method described in [1]. Other methods in this paper are criticized in

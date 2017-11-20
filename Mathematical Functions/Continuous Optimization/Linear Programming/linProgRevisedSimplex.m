@@ -91,8 +91,8 @@ function [optCost,xOpt,exitFlag]=linProgRevisedSimplex(A,b,ALeq,bLeq,c,maximize,
 %using using a general linear programming solver, because it has been
 %proven that the 0-1 constraint of assignments can be replaced with a
 %non-negaitvity constraint without changing the optimal point.
-%For example:
 %
+%EXAMPLE:
 % C=[Inf,  2,   Inf,Inf,3;
 %      7,  Inf, 23, Inf,Inf;
 %     17,  24,  Inf,Inf,Inf;
@@ -246,7 +246,8 @@ basisIdx=sort(basisIdx,'ascend');
 %Mark which basis vectors were not assigned.
 sel=zeros(n+m,1);
 sel(basisIdx)=1;
-unassignedBases=find(~sel(1:n));%This has the indices of unassigned basis vectors.
+%This has the indices of unassigned basis vectors.
+unassignedBases=find(~sel(1:n));
 
 curIdx=m;
 %While we are considering one of the extra vectors in the basis.
@@ -367,10 +368,10 @@ function [x,basisIdx,exitFlag,foundSol]=solveSimplexGivenBasis(A,b,c,x,basisIdx,
             end
         end
 
-        %Steps 5 and 6: Every 30th iteration, the matrix BInv is rebuilt from
-        %the bases and the corresponding values of x are directly recomputed.
-        %Otherwise, use the method in the book for iteratively updating BInv
-        %and x.
+        %Steps 5 and 6: Every 30th iteration, the matrix BInv is rebuilt
+        %from the bases and the corresponding values of x are directly
+        %recomputed. Otherwise, use the method in the book for iteratively
+        %updating BInv and x.
         if(mod(curIter,30)==0)
             basisIdx(minIdx)=negRedCostIdx;
             %We will examine whether duplicate elements exist in basisIdx. if
@@ -384,21 +385,21 @@ function [x,basisIdx,exitFlag,foundSol]=solveSimplexGivenBasis(A,b,c,x,basisIdx,
             x=zeros(n,1);
             x(basisIdx)=BInv*b;
         else
-            %Step 5. Update the feasible basic solution. Also, we will update
-            %the basis index.
+            %Step 5. Update the feasible basic solution. Also, we will
+            %update the basis index.
             x(basisIdx)=x(basisIdx)-theta*u;
             x(negRedCostIdx)=theta;
             basisIdx(minIdx)=negRedCostIdx;
 
-            %Step 6. Update the BInv matrix. We have to perform parallel row
-            %operations on Binv and u until u becomes a unit vector with a 1 in
-            %the position of minIdx.
+            %Step 6. Update the BInv matrix. We have to perform parallel
+            %row operations on Binv and u until u becomes a unit vector
+            %with a 1 in the position of minIdx.
 
-            %First, we will perform the operation that would turn the minIdx
-            %element of u to 1.
+            %First, we will perform the operation that would turn the
+            %minIdx element of u to 1.
             BInv(minIdx,:)=BInv(minIdx,:)/u(minIdx);
-            %Next, we will perform the operations that would zero out all of
-            %the other rows of u.
+            %Next, we will perform the operations that would zero out all
+            %of the other rows of u.
             for curRow=1:m
                 if(curRow==minIdx) 
                     continue;
@@ -414,7 +415,6 @@ function [x,basisIdx,exitFlag,foundSol]=solveSimplexGivenBasis(A,b,c,x,basisIdx,
        exitFlag=3;
        return 
     end
-
 end
 
 %LICENSE:

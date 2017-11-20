@@ -117,10 +117,11 @@ function [V,gradV,HessianV]=spherHarmonicEval(C,S,point,a,c,systemType,spherDeri
 %            (r,Az,El).
 %
 %This function implements Legendre's algorithm from [2], but evaluates the
-%sums using Horner's method and the Legendre function ratios as described
-%in [1]. This function also implements Pines' algorithm is from [2]. Note
-%that [2] contains a number of errors, many of which are corrected in [4].
-%A discussion on the uses of spherical harmonics is given in [3].
+%sums using Horner's method as in and the Legendre function ratios as
+%described in [1] and [6]. This function also implements Pines' algorithm
+%is from [2]. Note that [2] contains a number of errors, many of which are
+%corrected in [4]. A discussion on the uses of spherical harmonics is given
+%in [3].
 %
 %When non-normalized coefficients are used, the spherical harmonic series
 %for the potential is assumed to be of the form
@@ -191,7 +192,7 @@ function [V,gradV,HessianV]=spherHarmonicEval(C,S,point,a,c,systemType,spherDeri
 %aR*cos(m*lambda)-aI*sin(m*lambda)+1j*(aI*cos(m*lambda)+aR*sin(m*lambda))
 %Where one can see that it is not possible to independently set the real
 %and the imaginary terms. However, note that the formulation of the inner
-%sum used for complex values starts at -m and not at 0. Expand the the
+%sum used for complex values starts at -n and not at 0. Expand the the
 %coefficient A(n,-m)=aR1+1j*aI1. Again, expanding the term,
 %A(n,-m)*exp(-1j*m*lambda), one gets
 %aR1*cos(m*lambda)+aI1*sin(m*lambda)+1j*(aI1*cos(m*lambda)-aR1*sin(m*lambda))
@@ -370,6 +371,10 @@ function [V,gradV,HessianV]=spherHarmonicEval(C,S,point,a,c,systemType,spherDeri
 %    Nov. 2015.
 %[5] B. Hofmann-Wellenhof and H. Moritz, Physical Geodesy, 2nd ed. 
 %    SpringerWienNewYork, 2006.
+%[6] S. A. Holmes and W. E. Featherstone, "Short note: Extending simplified
+%    high-degree synthesis methods to second latitude derivatives of
+%    geopotential," Journal of Geodesy, vol. 76, no. 8, pp. 447-450, Nov.
+%    2002.
 %
 %December 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

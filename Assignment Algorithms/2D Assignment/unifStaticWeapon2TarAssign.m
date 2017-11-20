@@ -26,7 +26,7 @@ function x=unifStaticWeapon2TarAssign(V,q,M)
 %proven. The algorithm is also described in Chapter 3 of [2].
 %
 %REFERENCES:
-%[1] G. G. denBroeder Jr., R. E. Ellison, and L. Emerling, "On optimum
+%[1] G. G. den Broeder Jr., R. E. Ellison, and L. Emerling, "On optimum
 %    target assignments," Operations Research, vol. 7, no. 3, pp. 322-326,
 %    May - Jun. 1959.
 %[2] P. M. Pardalos and L. Pitsoulis, Nonlinear Assignment Problems.

@@ -11,7 +11,9 @@ function y=expSlope2(x)
 %
 %For values of x having magnitude over 1e-2 or for complex values, the
 %function is evaluated as written. For smaller values, a Taylor series
-%expansion is used to avoid the singularity near the origin.
+%expansion is used to avoid the singularity near the origin. The Taylor
+%series expansion is simple, because the value of the nth derivative at 0
+%is just 1/(n+1).
 %
 %This is one of the slope function in Table 10.6 of Section 10.6.2 of [1].
 %This file implements the function for non-intervals. See the Interval

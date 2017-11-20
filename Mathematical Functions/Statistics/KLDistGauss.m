@@ -30,7 +30,7 @@ function KLDis=KLDistGauss(mu,P)
     P1=P(:,:,1);
     P2=P(:,:,2);
     
-    KLDis=0.5*(trace(pinv(P2)*(P1-P2+(mu1-mu2)*(mu1-mu2)'))+log(det(P2)/det(P1)));
+    KLDis=0.5*(trace(lsqminnorm(P2,(P1-P2+(mu1-mu2)*(mu1-mu2)')))+log(det(P2)/det(P1)));
 end
 
 %LICENSE:

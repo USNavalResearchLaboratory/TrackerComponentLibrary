@@ -70,7 +70,7 @@ if(nargin<7||isempty(innovTrans))
 end
 
 %Extract the state
-xPred=pinv(PInvPred)*yPred;
+xPred=lsqminnorm(PInvPred,yPred);
 
 if(isa(HJacob,'function_handle'))
     H=HJacob(xPred);

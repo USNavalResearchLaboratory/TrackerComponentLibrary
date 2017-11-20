@@ -4,22 +4,22 @@ function h=plotMapOnEllipsoid(path2Map,a,f)
 %                    Earth with a black background. This can be useful for
 %                    plotting target trajectories on a 3D Earth.
 %
-%INPUTS: path2Map  A string with the path to the mapfile to load. This
-%                  should be an image file format that the imread command
-%                  can read, such as .png or .jpg. It should also be an
-%                  equirectangular projection. That is, each pixel has a
-%                  constant width in latitude and longitude. If this
-%                  parameter is omitted or an empty matrix is passed, then
-%                  the file ./data/NASABlueMarble.jpg is used, where .
-%                  refers to the directory of this file.
-%           a      The semi-major axis of the reference ellipsoid. If
-%                  this argument is omitted, the value in
-%                  Constants.WGS84SemiMajorAxis is used.
-%           f      The flattening factor of the reference ellipsoid. If
-%                  this argument is omitted, the value in
-%                  Constants.WGS84Flattening is used.
+%INPUTS: path2Map A string with the path to the mapfile to load. This
+%                 should be an image file format that the imread command
+%                 can read, such as .png or .jpg. It should also be an
+%                 equirectangular projection. That is, each pixel has a
+%                 constant width in latitude and longitude. If this
+%                 parameter is omitted or an empty matrix is passed, then
+%                 the file ./data/NASABlueMarble.jpg is used, where .
+%                 refers to the directory of this file.
+%               a The semi-major axis of the reference ellipsoid. If
+%                 this argument is omitted, the value in
+%                 Constants.WGS84SemiMajorAxis is used.
+%               f The flattening factor of the reference ellipsoid. If
+%                 this argument is omitted, the value in
+%                 Constants.WGS84Flattening is used.
 %
-%OUTPUTS:  h      The handle to the surfaceplot object created.
+%OUTPUTS: h The handle to the surfaceplot object created.
 %
 %This function turns the axes off when plotting and sets the scaling to
 %'equal'.

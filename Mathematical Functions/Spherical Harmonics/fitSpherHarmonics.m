@@ -187,7 +187,7 @@ end
 
 %If one were to use linsolve(Y,vals(:)), many systems would complain about
 %Y having poor conditioning.
-coeffs=pinv(Y)*vals;
+coeffs=lsqminnorm(Y,vals);
 
 C=coeffs(1:numPBar,:);
 

@@ -1,4 +1,4 @@
-**Tracker Component Library Release 3.0, September 2017**
+**Tracker Component Library Release 3.01, October 2017**
 https://github.com/USNavalResearchLaboratory/TrackerComponentLibrary
 
 A paper describing a number of features of the library is<br>
@@ -6,7 +6,7 @@ D. F. Crouse, "The Tracker Component Library: Free Routines for Rapid
 Prototyping," IEEE Aerospace and Electronic Systems Magazine, vol. 32, no.
 5, pp. 18-27, May. 2017.
 
-These are the release notes for the version 3.0 of the Tracker Component
+These are the release notes for the version 3.01 of the Tracker Component
 Library. The Tracker Component Library is a collection of Matlab routines
 (some written in C/C++ requiring compilation compilation) for simulating
 and tracking targets in various scenarios. Due to the complexity of the
@@ -17,7 +17,7 @@ As of version 3.0, the library has been split into two parts. This is the
 publicly available part. A small number of functions have been placed
 into a supplement that is only available to the U.S. DoD and DoD and U.S.
 DoD contractors (Distribution Statement D), though certain parts may be
-available to other U.S. Government Agencies (DIstributions Statement C)
+available to other U.S. Government Agencies (Distributions Statement C)
 upon request. Many future additions to the library will be placed in the
 the limited distribution supplement. Instructions for obtaining the limited
 distribution potion of the library will be posted in this readme after the
@@ -37,6 +37,13 @@ components of the library and adapting the tracker to 3D and other
 scenarios is as simple as changing the proper components. A lot of other
 sample code is also provided to demonstrate the use of other parts of the
 library.
+
+NOTABLE CHANGES SINCE VERSION 3.0
+
+- Minor corrections.
+- Minor modifications to files to make support the final release of the
+  limited distirbution supplement to the library.
+- New 2D and 3D assignment algorithms, among other additions.
 
 NOTABLE CHANGES SINCE VERSION 2.5
 
@@ -193,10 +200,16 @@ Download the file jggrx_0900c_sha.tab and place it in ./Gravity/data .
 http://maia.usno.navy.mil/conv2010/convupdt/convupdt_c6.html
 The file fes2004_Cnm-Snm.dat should be downloaded and placed in
 ./Gravity/Tides/data .
- 
+
 14) The Hipparcos 2 Star Catalog
 http://cdsarc.u-strasbg.fr/viz-bin/Cat?I/311
 Place the file hip2.dat in ./Astronomical Code/data .
 
-September 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
+15) A low-resolution image of the "Blue Marble" Earth from NASA with land,
+    ocean color, sea ice and clouds.
+https://visibleearth.nasa.gov/view.php?id=57735
+Place the file in Misc/data . This is used as the default map to show on
+the Earth given by the plotMapOnEllipsoid function.
+
+October 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 (UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

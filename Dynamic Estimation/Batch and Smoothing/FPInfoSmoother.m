@@ -5,51 +5,50 @@ function [yEst,PInvEst,xEst,PEst]=FPInfoSmoother(yPred,PInvPred,z,u,H,F,R,Q,kD)
 %                 uninformative. The smoothed result at one time step or
 %                 along the entire batch are available.
 %
-%INPUTS:    yPred The predicted information state at the time of the
-%                 initial measurement in z. If no prior information is
-%                 available, then just pass an empty matrix.
-%           PInvPred The inverse covariance matrix associated with the
-%                    predicted information state at the time of the initial
-%                    measurement in z. If not prior information is 
-%                    avaiable, then just pass an empty matrix.
-%           z   The zDim X N matrix of measurements for the whole batch.
-%           u   The xDim X(N-1) matrix of control inputs for the whole
-%               batch. If there are no control inputs, then set u=[];
-%           H   The zDim X xDim X N hypermatrix of measurement matrices
-%               such that H(:,:,k)*x+w is the measurement at time k, where
-%               x is the state and w is zero-mean Gaussian noise with
-%               covariance matrix R (:,:,k). Alternatively, if all of the
-%               measurement matrices are the same, one can just pass a
-%               single zDim X xDim matrix.
-%           F   The xDim X xDim X (N-1) hypermatrix of state transition
-%               matrices. The state at discrete-time k+1 is modeled as
-%               F(:,:,k) times the state at time k plus zero-mean
-%               Gaussian process noise with covariance matrix Q(:,:,k).
-%               Alternatively, if all of the state transition matrices are
-%               the same, one can just pass a
-%               single xDim X xDim matrix.
-%           R   The zDim X zDim X N hypermatrix of measurement covariance
-%               matrices. Alternatively, if all of the measurement
-%               covariance matrices are the same, one can just pass a
-%               single zDim X zDim matrix.
-%           Q   The xDim X xDim X (N-1) hypermatrix of process noise
-%               covariance matrices. Alternatively, if all of the process
-%               noise covariance matrices are the same, one can just pass a
-%               single xDim X xDim matrix.
-%           kD  The discrete time-step at which the smoothed state estimate
-%               is desired, where z(:,1) is at discrete time-step 1 (not
-%               0). If kD is omitted ot an empty matrix is passed, then
-%               results along the entire batch are obtained.
+%INPUTS: yPred The predicted information state at the time of the initial
+%              measurement in z. If no prior information is available, then
+%              just pass an empty matrix.
+%     PInvPred The inverse covariance matrix associated with the predicted
+%              information state at the time of the initial measurement in
+%              z. If not prior information is  avaiable, then just pass an
+%              empty matrix.
+%            z The zDim X N matrix of measurements for the whole batch.
+%            u The xDim X(N-1) matrix of control inputs for the whole
+%              batch. If there are no control inputs, then set u=[];
+%            H The zDim X xDim X N hypermatrix of measurement matrices
+%              such that H(:,:,k)*x+w is the measurement at time k, where
+%              x is the state and w is zero-mean Gaussian noise with
+%              covariance matrix R (:,:,k). Alternatively, if all of the
+%              measurement matrices are the same, one can just pass a
+%              single zDim X xDim matrix.
+%            F The xDim X xDim X (N-1) hypermatrix of state transition
+%              matrices. The state at discrete-time k+1 is modeled as
+%              F(:,:,k) times the state at time k plus zero-mean
+%              Gaussian process noise with covariance matrix Q(:,:,k).
+%              Alternatively, if all of the state transition matrices are
+%              the same, one can just pass a single xDim X xDim matrix.
+%            R The zDim X zDim X N hypermatrix of measurement covariance
+%              matrices. Alternatively, if all of the measurement
+%              covariance matrices are the same, one can just pass a
+%              single zDim X zDim matrix.
+%            Q The xDim X xDim X (N-1) hypermatrix of process noise
+%              covariance matrices. Alternatively, if all of the process
+%              noise covariance matrices are the same, one can just pass a
+%              single xDim X xDim matrix.
+%           kD The discrete time-step at which the smoothed state estimate
+%              is desired, where z(:,1) is at discrete time-step 1 (not 0).
+%              If kD is omitted ot an empty matrix is passed, then results
+%              along the entire batch are obtained.
 %
-%OUTPUTS: yEst     The xDimXN smoothed information state estimates at all
-%                  steps if kD is not provided or the xDimX1 smoothed
-%                  information state estimate at step kD if kD is provided.
-%         PInvEst  The inverse covariance matrices associated with the
-%                  smoothed information state estimates. This is
-%                  xDimXxDimXN for the whole batch if kD is not provided
-%                  and is xDimXxDim if kD is provided.
-%         xEst     The state estimates corresponding to yEst.
-%         PEst     The covariance estimates corresponding to PInvEst.
+%OUTPUTS: yEst The xDimXN smoothed information state estimates at all steps
+%              if kD is not provided or the xDimX1 smoothed information
+%              state estimate at step kD if kD is provided.
+%      PInvEst The inverse covariance matrices associated with the smoothed
+%              information state estimates. This is xDimXxDimXN for the
+%              whole batch if kD is not provided and is xDimXxDim if kD is
+%              provided.
+%         xEst The state estimates corresponding to yEst.
+%         PEst The covariance estimates corresponding to PInvEst.
 %
 %The Kalman smoothing technique utilizing forward and backwards filters is
 %described in [1].

@@ -1,16 +1,16 @@
 function [optCost,xOpt,exitFlag]=linProgInteriorPoint(A,b,ALeq,bLeq,c,maximize,maxIter,epsilon,alpha)
-%%LINPROGINTERIORPOINT   Use the primal-dual interior point algorithm to
-%                        solve a linear programming problem involving
-%                        equality and/or inequality constraints. This
-%                        solves the problem:
+%%LINPROGINTERIORPOINT Use the primal-dual interior point algorithm to
+%                      solve a linear programming problem involving
+%                      equality and/or inequality constraints. This solves
+%                      the problem:
 %                        minimize (maximize) c'*x
 %                        given     A*x=b
 %                              ALeq*x<=bLeq
 %                                   x>=0
-%                        The worst-case runtime of the interior point
-%                        method is polynomial, though the algorithm is
-%                        often slower than the simplex method, which has an
-%                        exponential worst-case runtime.
+%                      The worst-case runtime of the interior point method
+%                      is polynomial, though the algorithm is often slower
+%                      than the simplex method, which has an exponential
+%                      worst-case runtime.
 %
 %INPUTS: A An mXn matrix of equality constraints. If there are no equality
 %          constraints, then use an empty matrix.
@@ -205,6 +205,7 @@ didConverge=false;
 %parameter. As noted in Chapter 9.5, rho is generally only changed if the
 %algorithm gets stuck.
 sDotxOld=Inf;
+
 for curIter=1:maxIter
     %Step 2 (Optimality Test)
     %Check for convergence
@@ -226,25 +227,40 @@ for curIter=1:maxIter
     
     %The barrier parameter
     mu=rho*sDotx/n;
+    e=ones(n,1);
     X=diag(x);
     S=diag(s);
     
     %Solving Equations 9.28-9.30 using the infeasible solution method on
-    %page 436.
+    %page 436 of [1]. This means that the system of equations  cannot be
+    %easily decomposed as in the unnumbered equations after 9.30.
+    %The left-hand side of the equation.
     LH=[A,          zeros(m,m), zeros(m,n);
-     zeros(n,n),    A',         eye(n,n);
-     S,             zeros(n,m), X];%left-hand side
+        zeros(n,n), A',         eye(n,n);
+        S,          zeros(n,m), X];
+    %The right-hand side of the equation.
     RH=-[A*x-b;
          A'*p+s-c;
-         X*S*ones(n,1)-mu*ones(n,1)];%Right-hand side
-     
-    %Must use a pseudoinverse, because LH can be singular.
-    dVec=pinv(LH)*RH;
-    
+         x.*s-mu*e];%X*S*e-mu*e
+
+    %QR decomposition.
+    [Q,R]=qr(LH);
+    opts.LT=false;
+    opts.UT=true;
+    %Solve using backward substitution.
+    dVec=linsolve(R,Q.'*RH,opts);
+
     %The three Newton directions
     dx=dVec(1:n);
     dp=dVec((n+1):(n+m));
     ds=dVec((n+m+1):end);
+    %One might be tempted to try to solve Equations 9.28-9.30 using a
+    %variant of the more efficient formulation of 
+%     d=A*inv(S)*(X*(c-s-A'*p+S*e)-mu*e)-A*x+b;
+%     dp=inv(A*inv(S)*X*A')*d;
+%     ds=c-s-A'*p-A'*dp;
+%     dx=inv(S)*(-X*S*e+mu*e-X*ds);
+    %However, this formulation suffers from a faster loss of precision.
 
     %Step 4(Find step lengths)
 
@@ -265,8 +281,7 @@ for curIter=1:maxIter
             end
         end
     end
-   
-    
+
     %Reduce the scaling parameter if progress cannot be made, because all
     %of the ds and dx values are positive.
     if(~isfinite(minxRat)||~isfinite(minsRat))
@@ -281,7 +296,6 @@ for curIter=1:maxIter
     p=p+betaD*dp;
     s=max(0,s+betaD*ds);
 end
-
 
 %Compute the optimal cost, accounting for whether the sign of c was flipped
 %in the beginning.

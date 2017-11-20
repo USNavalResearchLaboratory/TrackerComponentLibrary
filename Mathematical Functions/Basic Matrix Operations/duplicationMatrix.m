@@ -2,7 +2,7 @@ function D=duplicationMatrix(n)
 %%DUPLICATIONMATRIX Return a duplication matrix of a particular
 %                   dimensionality. A duplication matrix D for the nXn
 %                   symmetric matrix A is such that D*vech(A)=A(:). That
-%                   is, the Duplication matrix takes a vector of the
+%                   is, the duplication matrix takes a vector of the
 %                   diagonal and lower-triangular elements of A and returns
 %                   A(:), essentially filling in the upper triangular part.
 %

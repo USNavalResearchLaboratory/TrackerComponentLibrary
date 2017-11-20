@@ -66,7 +66,7 @@ end
 
 if(nargin<3||isempty(GM))
    %Universal gravitational constant times the mass of the Earth
-    GM=Constants.EGM2008GM; 
+    GM=Constants.EGM2008GM;
 end
 
 if(nargin<4||isempty(J2))
