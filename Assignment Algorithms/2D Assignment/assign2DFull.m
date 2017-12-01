@@ -19,8 +19,9 @@ function [tuplesTotal,gain,u,v]=assign2DFull(C,maximize)
 %          assigned if it does not worsen the cost function (given above).
 %          The matrix cannot contain any NaNs and if maximizing, cannot
 %          containing any Inf values and if minimizing cannot contain any
-%          -Inf values. The unconstrained column cannot contain non-finite
-%          values, except for C(1,1).
+%          -Inf values. It is not allowed that both C(2:end,1) and
+%          C(1,2:end) contain non-finite terms. However, either one
+%          individually can contain non-finite terms.
 % maximize If true, the minimization problem is transformed into a
 %          maximization problem. The default if this parameter is omitted
 %          or an empty matrix is passed is false.
@@ -53,7 +54,9 @@ function [tuplesTotal,gain,u,v]=assign2DFull(C,maximize)
 %cost matrix will not be all-positive, so a constant value is added to it
 %to make all of the elements positive. The hypothesis C(1,1) (from the
 %unmodified matrix) is only added in if it does not worsen the cost
-%function.
+%function. If the unconstrained column contains non-finite terms, then the
+%matrix is transoposed and the transposed problem is solved, then the
+%results are flipped back.
 %
 %EXAMPLE 1:
 %Here, we verify that the solution equals the solution obtained through
@@ -133,6 +136,14 @@ if(nargin<2||isempty(maximize))
 end
 
 numRow=size(C,1);
+if(numRow>1&&any(~isfinite(C(2:numRow,1))))
+    C=C';
+    didTranspose=true;
+else
+    didTranspose=false;
+end
+
+numRow=size(C,1);
 numConstRow=numRow-1;
 numCol=size(C,2);
 numConstCol=numCol-1;
@@ -170,7 +181,7 @@ end
 COrig=C;
 
 %Subtract the costs of the unconstrained row from all of the constrained
-%row. The cost of assigning a column to the unconstrained row thus
+%rows. The cost of assigning a column to the unconstrained row thus
 %becomes 0 (even though we do not update it), and we can then solve the
 %problem using the assign2DMissedDetect algorithm.
 C(2:numRow,2:numCol)=bsxfun(@minus,C(2:numRow,2:numCol),C(2:numRow,1));
@@ -261,6 +272,13 @@ for curTuple=1:numTuples
         slack=COrig(tuplesTotal(1,curTuple),tuplesTotal(2,curTuple))-v(tuplesTotal(1,curTuple)-1)-u(tuplesTotal(2,curTuple)-1);
         v(tuplesTotal(1,curTuple)-1)=v(tuplesTotal(1,curTuple)-1)+slack;
     end
+end
+
+if(didTranspose)
+    tuplesTotal=flipud(tuplesTotal);
+    temp=v;
+    v=u;
+    u=temp;
 end
 end
 
