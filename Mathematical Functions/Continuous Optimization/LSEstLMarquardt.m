@@ -373,9 +373,9 @@ else
         end
 
         %If we are here, then p~=0 and we will have to increase mu to make
-        %the matrix nonsingular. the scaling factor of 10 is suggested in
+        %the matrix nonsingular. The scaling factor of 10 is suggested in
         %[1].
-        mu=max(10*mu,eps*mA);
+        mu=max(10*mu,eps()*maxA);
     end
 
     %If the above loop did not converge in a reasonable number of
