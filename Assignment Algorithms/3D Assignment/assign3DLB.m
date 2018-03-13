@@ -21,7 +21,7 @@ function lowerBound=assign3DLB(C,method)
 %            solution.
 %
 %INPUTS: C An n1Xn2Xn3 cost hypermatrix. The costs are real numbers >-Inf.
-%          n1>=n2>=n3;
+%          n1<=n2<=n3;
 %   method An optional parameter selecting the bound algorithm to use.
 %          Possible values are:
 %          0 (The default if omitted or an empty matrix is passed) Use the
@@ -95,8 +95,8 @@ n1=nVals(1);
 n2=nVals(2);
 n3=nVals(3);
 
-if(~(n1>=n2&&n2>=n3))
-    error('It is required that n1>=n2>=n3')
+if(~(n1<=n2&&n2<=n3))
+    error('It is required that n1<=n2<=n3')
 end
 
 
