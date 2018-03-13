@@ -11,8 +11,8 @@ function [xi,w]=seventhOrderCubPoints(numDim,algorithm)
 %     algorithm An optional parameter specifying the algorithm to be used
 %               to generate the points. Possible values are
 %               0 (The default if omitted or an empty matrix is passed and
-%                 numDim~=2 and numDim~=1) Use  algorithm E_n^{r^2} 7-1 on
-%                 page 318 of [1], requiring 2^numDim+2*numDim^2+1 points.
+%                 numDim~=2 and numDim~=1) Use  algorithm E_n^{r^2} 7-3 on
+%                 page 319 of [1], requiring 2*(2^numDim+2*numDim^2) points.
 %                 Note, however, that the formula in the book contains a
 %                 typo. Using [2] and [3], one can get the correct
 %                 formulae, which are summarized in [4].
