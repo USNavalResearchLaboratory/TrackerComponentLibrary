@@ -9,7 +9,8 @@ function lowerBound=assign3DLB(C,method)
 %            \sum_{i=1}^{n1}\sum_{j=1}^{n2}\rho_{i,j,k}<=1 for all k
 %            \sum_{i=1}^{n1}\sum_{k=1}^{n3}\rho_{i,j,k}<=1 for all j
 %            \sum_{j=1}^{n2}\sum_{k=1}^{n3}\rho_{i,j,k} =1 for all i
-%            assuming that n1<=n2<=n3, and C is and n1Xn2Xn3 cost matrix.
+%            \rho_{i,j,k} = 0 or 1
+%            assuming that n1<=n2<=n3, and C is an n1Xn2Xn3 cost matrix.
 %            This is equivalent to the optimization problem
 %            minimize sum_{i} C(i,phi_2(i),phi_3(i))
 %            where phi_2 and phi_3 are length n1 arrangements of n2 and n3
@@ -20,6 +21,7 @@ function lowerBound=assign3DLB(C,method)
 %            solution.
 %
 %INPUTS: C An n1Xn2Xn3 cost hypermatrix. The costs are real numbers >-Inf.
+%          n1>=n2>=n3;
 %   method An optional parameter selecting the bound algorithm to use.
 %          Possible values are:
 %          0 (The default if omitted or an empty matrix is passed) Use the
@@ -38,6 +40,7 @@ function lowerBound=assign3DLB(C,method)
 %OUTPUTS: lowerBound A lower bound on the value of the axial 3D assignment
 %                    optimization problem.
 %
+%EXAMPLE:
 %An example is that given in [1], which is implemented as
 % C=zeros(4,4,4);
 % C(:,:,1)=[92, 51, 36, 81;
@@ -78,27 +81,27 @@ function lowerBound=assign3DLB(C,method)
 %user knows what dims1 and dims2 refer to.
 nVals=size(C);
 numNVals=numel(nVals);
-%Add back singleton dimensions, if necessary.
+%Add back singleton dimensions, if necessary. In Matlab, it will never be
+%less than 2D.
 if(numNVals==2)
     nVals=[nVals,1];
-elseif(numNVals==1)
-    nVals=[nVals,1,1];
 end
 
 if(nargin<2||isempty(method))
     method=0;
 end
 
+n1=nVals(1);
+n2=nVals(2);
+n3=nVals(3);
+
+if(~(n1>=n2&&n2>=n3))
+    error('It is required that n1>=n2>=n3')
+end
+
+
 switch(method)
     case 0%The projection-Hungarian algorithm of [1].
-        %The indices must be permuted so that n1<=n2<=n3.
-        [nVals,dimsOrder]=sort(nVals,'ascend');
-        C=permute(C,dimsOrder);
-
-        n1=nVals(1);
-        n2=nVals(2);
-        n3=nVals(3);
-
         lowerBound=0;
         
         for curIdx=1:3
@@ -110,7 +113,7 @@ switch(method)
             %entries to the matrix if the matrix is rectangular to make it
             %n3Xn3Xn3. Thus, if n1<=n2<=n3, this means that that all of the
             %extra i values assigned have zero cost for all entries of the
-            %matrix, and all of the extra j values added have  infinite
+            %matrix, and all of the extra j values added have infinite
             %cost for all of the existing i1 values so that they are never
             %assigned. However, it is not necessary to add all of those
             %values to the full matrix. By adding extra i values to
@@ -167,7 +170,14 @@ switch(method)
             %obtained using the traditional Hungarian method ([1] suggested
             %using the Hungarian method) but it should be suitable to serve
             %the same purpose for reducing the C matrix.
-            [~, ~, gain, u, v]=assign2D(M,false);
+            [col4row, ~, gain, u, v]=assign2D(M,false);
+            
+            %If the assignment problem is infeasible, return Inf cost.
+            if(isempty(col4row))
+                lowerBound=Inf;
+                return;
+            end
+            
             lowerBound=lowerBound+gain;
 
             if(curIdx~=3)
@@ -178,7 +188,8 @@ switch(method)
                 %with C matrices with negative entries. Adding the minimum
                 %element of M to the u dual variables gets rid of this
                 %offset.
-                u=u+min(min(M));
+                minM=min(0,min(M(:)));
+                u=u+minM;
 
                 %Create the reduced cost matrix of M using u and v.
                 for curRow=1:numRow
