@@ -1,7 +1,4 @@
 function Q=QCoordTurn2D(T,x,sigmaV2,sigmaTurn2,sigmaLin2)
-%CHANGED FROM PAPER!!!!!! ADDED T terms to the angle/ drift coordinates..
-
-
 %%QCOORDTURN2D Get the discrete-time process noise covariance matrix for a
 %              two-dimensional coordinated turn model with a Cartesian
 %              state. The turn rate can be specified in terms of a turn
@@ -9,36 +6,35 @@ function Q=QCoordTurn2D(T,x,sigmaV2,sigmaTurn2,sigmaLin2)
 %              acceleration. Additionally, a linear acceleration can be
 %              given.
 %
-%INPUTS: T   The time-duration of the propagation interval in seconds.
-%        x   The target state for 2D motion. If there is no linear
-%            acceleration (acceleration along the direction of motion),
-%            then x can either be x=[x;y;xdot;ydot;omega], where omega is
-%            the turn rate estimate in radians per second
-%            counterclockwise from the x-axis or x=[x;y;xdot;ydot;at] where
-%            at is the the transversal acceleration, which is orthogonal to
-%            the velocity and is defined such that positive values of at
-%            map to positive values of omega. If there is a linear
-%            acceleration, then the target state is either
-%            x=[x;y;xdot;ydot;omega;al] where omega is the turn rate and al
-%            is the linear acceleration or the target state is
-%            x=[x;y;xdot;ydot;at;al] if the turn is expressed in terms of a
-%            transversal acceleration. The dimensionality of the state is
-%            used to determine whether a linear acceleration component is
-%            present. The linear acceleration component changes the speed.
-%            That means that it acts in the direction of the velocity
-%            vector.
-%   sigmaV2  The variance driving the process noise affecting the velocity
-%            components. This has units of m^2/s^4 and is assumed to be the
-%            same in both the x and y dimensions.
+%INPUTS: T The time-duration of the propagation interval in seconds.
+%        x The target state for 2D motion. If there is no linear
+%          acceleration (acceleration along the direction of motion), then
+%          x can either be x=[x;y;xdot;ydot;omega], where omega is the turn
+%          rate estimate in radians per second counterclockwise from the
+%          x-axis or x=[x;y;xdot;ydot;at] where at is the the transversal
+%          acceleration, which is orthogonal to the velocity and is defined
+%          such that positive values of at map to positive values of omega.
+%          If there is a linear acceleration, then the target state is
+%          either x=[x;y;xdot;ydot;omega;al] where omega is the turn rate
+%          and al is the linear acceleration or the target state is
+%          x=[x;y;xdot;ydot;at;al] if the turn is expressed in terms of a
+%          transversal acceleration. The dimensionality of the state is
+%          used to determine whether a linear acceleration component is
+%          present. The linear acceleration component changes the speed.
+%          That means that it acts in the direction of the velocity
+%          vector.
+%  sigmaV2 The variance driving the process noise affecting the velocity
+%          components. This has units of m^2/s^4 and is assumed to be the
+%          same in both the x and y dimensions.
 % sigmaTurn2 If the turn is specified in terms of a turn rate in radians
-%            per second, then this is the variance driving the process
-%            noise of the turn rate having units of radians squared per
-%            second squared. If the turn is expressed in terms of a
-%            transverse acceleration, then this is the variance of the
-%            transverse acceleration noise, having units of m^2/s^4.
-% sigmaLin2  This parameter is only needed if a linear acceleration is
-%            present. It is the variance of the linear acceleration noise
-%            having units of m^2/s^4.
+%          per second, then this is the variance driving the process noise
+%          of the turn rate having units of radians squared per second
+%          squared. If the turn is expressed in terms of a transverse
+%          acceleration, then this is the variance of the transverse
+%          acceleration noise, having units of m^2/s^4.
+% sigmaLin2 This parameter is only needed if a linear acceleration is
+%          present. It is the variance of the linear acceleration noise
+%          having units of m^2/s^4.
 %
 %OUTPUTS: Q The process noise covariance matrix under a direct discrete-
 %           time coordinated turn model where the velocity is specified in
