@@ -1,7 +1,7 @@
 function [z0,deltaZ]=addAstroRefrac(algorithm,plhObs,zTrue,Rh,P,T,wl)
 %%ADDASTROREFRAC  Add the effects of refraction to the true zenith angle of
 %                 an object outside the atmosphere using low-precision
-%                 atmospheric models for an observer neat the surface of
+%                 atmospheric models for an observer near the surface of
 %                 the Earth viewing an object using a narrowband sensor.
 %
 %INPUTS: algorithm This specified the algorithm used. The possible values
