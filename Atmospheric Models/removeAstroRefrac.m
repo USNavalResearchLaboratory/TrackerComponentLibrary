@@ -27,7 +27,7 @@ function [zTrue,deltaZ]=removeAstroRefrac(algorithm,plhObs,z0,Rh,P,T,wl)
 %                     produce results for all positive zenith distances,
 %                     though the results might not be very good for large
 %                     values.
-%           plhObs The WGS-84 ellipsoidal latitude, longitude and latitude
+%           plhObs The WGS-84 ellipsoidal latitude, longitude and height
 %                  of the observer in meters. Only algorithm 0 uses this
 %                  parameter, and only the latitude and height above the
 %                  reference ellipsoid are used (the latitude does not
@@ -110,7 +110,7 @@ function [zTrue,deltaZ]=removeAstroRefrac(algorithm,plhObs,z0,Rh,P,T,wl)
 %    Hydrographic Office, HM Nautical Almanac, Tech. Rep. 63, Apr. 1985.
 %    http://astro.ukho.gov.uk/data/tn/naotn63.pdf
 %[3] J. Saastamoinen, "Introduction to the practical computation of
-%    astronomical refraction," Bulletin Géodésique, vol. 106, no. 1,
+%    astronomical refraction," Bulletin GÃ©odÃ©sique, vol. 106, no. 1,
 %    pp. 383-397, Dec. 1972.
 %
 %April 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
