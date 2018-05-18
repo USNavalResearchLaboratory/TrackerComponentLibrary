@@ -26,7 +26,7 @@ function [z0,deltaZ]=addAstroRefrac(algorithm,plhObs,zTrue,Rh,P,T,wl)
 %                     produce results for all positive zenith distances,
 %                     though the results might not be very good for large
 %                     values.
-%           plhObs The WGS-84 ellipsoidal latitude, longitude and latitude
+%           plhObs The WGS-84 ellipsoidal latitude, longitude and height
 %                  of the observer in meters. Only algorithm 0 uses this
 %                  parameter, and only the latitude and height above the
 %                  reference ellipsoid are used (the latitude does not
