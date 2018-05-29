@@ -2,14 +2,14 @@ function [zTrue,deltaZ]=removeAstroRefrac(algorithm,plhObs,z0,Rh,P,T,wl)
 %%REMOVEASTROREFRAC   Remove the effects of refraction in an observed
 %                     zenith angle of an object outside the atmosphere
 %                     using low-precision atmospheric models for an
-%                     observer neat the surface of the Earth viewing an
+%                     observer near the surface of the Earth viewing an
 %                     object using a narrowband sensor.
 %
 %INPUTS: algorithm This specified the algorithm used. The possible values
 %                  are:
 %                  0: Use a numerical integration method from Chapter 7.2
 %                     of [1] and from [2]. This algorithm uses the inputs
-%                     plhObs,z0, Rh, P, T, and wl and makes use of the
+%                     plhObs, z0, Rh, P, T, and wl and makes use of the
 %                     Sinclair atmospheric model. This algoirthm is the
 %                     most precise of all of the methods. The acceptable
 %                     zenith distances are capped at 100 degrees, which
@@ -110,7 +110,7 @@ function [zTrue,deltaZ]=removeAstroRefrac(algorithm,plhObs,z0,Rh,P,T,wl)
 %    Hydrographic Office, HM Nautical Almanac, Tech. Rep. 63, Apr. 1985.
 %    http://astro.ukho.gov.uk/data/tn/naotn63.pdf
 %[3] J. Saastamoinen, "Introduction to the practical computation of
-%    astronomical refraction," Bulletin Géodésique, vol. 106, no. 1,
+%    astronomical refraction," Bulletin GÃ©odÃ©sique, vol. 106, no. 1,
 %    pp. 383-397, Dec. 1972.
 %
 %April 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
