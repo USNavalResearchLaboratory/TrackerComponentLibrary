@@ -1,14 +1,14 @@
 function [z0,deltaZ]=addAstroRefrac(algorithm,plhObs,zTrue,Rh,P,T,wl)
 %%ADDASTROREFRAC  Add the effects of refraction to the true zenith angle of
 %                 an object outside the atmosphere using low-precision
-%                 atmospheric models for an observer neat the surface of
+%                 atmospheric models for an observer near the surface of
 %                 the Earth viewing an object using a narrowband sensor.
 %
 %INPUTS: algorithm This specified the algorithm used. The possible values
 %                  are:
 %                  0: Use a numerical integration method from Chapter 7.2
 %                     of [1] and from [2]. This algorithm uses the inputs
-%                     plhObs,z0, Rh, P, T, and wl and makes use of the
+%                     plhObs, z0, Rh, P, T, and wl and makes use of the
 %                     Sinclair atmospheric model. This algoirthm is the
 %                     most precise of all of the methods. The acceptable
 %                     zenith distances are capped at 100 degrees, which
