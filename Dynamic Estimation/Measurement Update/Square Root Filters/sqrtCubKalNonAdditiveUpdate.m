@@ -120,8 +120,8 @@ function [xUpdate, SUpdate,innov,Szz]=sqrtCubKalNonAdditiveUpdate(xPred,SPred,z,
     end
     
     %Predicted cubature state points
-    S=[SPred,               zeros(xDim,noiseDim);
-       zeros(noiseDim,xDim),SR];
+    S=[SPred,               zeros(xDim,zDim);
+       zeros(zDim,xDim),SR];
     xPredStackedPoints=transformCubPoints(xi,[xPred;zeros(zDim,1)],S);
     xPredStackedPoints(1:xDim,:)=stateTrans(xPredStackedPoints(1:xDim,:));
     
