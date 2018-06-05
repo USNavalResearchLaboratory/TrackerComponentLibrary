@@ -1,4 +1,4 @@
-function [xUpdate,SUpdate,innov,Szz]=sqrtDDFNonAdditiveUpdate(xPred,SPred,z,SR,h,algorithm,innovTrans)
+function [xUpdate,SUpdate,innov,Szz,W]=sqrtDDFNonAdditiveUpdate(xPred,SPred,z,SR,h,algorithm,innovTrans)
 %%SQRTDDFNONADDITIVEUPDATE Perform the measurement update step in the
 %               square-root version of the central difference filter (CDF),
 %               or the first or second order divided difference filter
@@ -44,6 +44,8 @@ function [xUpdate,SUpdate,innov,Szz]=sqrtDDFNonAdditiveUpdate(xPred,SPred,z,SR,h
 %                 innovation covariance matrix are returned in case one
 %                 wishes to analyze the consistency of the estimator or use
 %                 those values in gating or likelihood evaluation.
+%               W The gain used in the the update. This can be useful when
+%                 gating and using the function calcMissedGateCov.
 %
 %The divided difference filters are implemented as described in [1] and
 %[2], where they are only derived for non-additive noise and the square
@@ -118,12 +120,14 @@ Sxx=SPred;
 %recomputed.
 gValsPlusX=zeros(zDim,xDim);
 gValsMinusX=zeros(zDim,xDim);
-gValsPlusV=zeros(zDim,xDim);
-gValsMinusV=zeros(zDim,xDim);
+gValsPlusV=zeros(zDim,zDim);
+gValsMinusV=zeros(zDim,zDim);
 for curDim=1:xDim
     gValsPlusX(:,curDim)=hSplit(xPred+deltaH*Sxx(:,curDim),zeros(xDim,1));
     gValsMinusX(:,curDim)=hSplit(xPred-deltaH*Sxx(:,curDim),zeros(xDim,1));
-    
+end
+
+for curDim=1:zDim
     gValsPlusV(:,curDim)=hSplit(xPred,deltaH*SR(:,curDim));
     gValsMinusV(:,curDim)=hSplit(xPred,-deltaH*SR(:,curDim));
 end
@@ -167,20 +171,20 @@ end
 Pxz=SPred*Szx';
 
 %Equation 64 in [1] (Equation 103 in [2])
-K=(Pxz/Szz')/Szz;
+W=(Pxz/Szz')/Szz;
 
 %The innovation
 innov=innovTrans(z-g0);
 
 %Equation 65 in [1] (Equation 104 in [2]).
-xUpdate=xPred+K*innov;
+xUpdate=xPred+W*innov;
 
 if(algorithm==2)%Second order DDF
     %Equation 115 in [2].
-    SUpdate=tria([SPred-K*Szx,K*Szw,K*Szx2,K*Szw2]);
+    SUpdate=tria([SPred-W*Szx,W*Szw,W*Szx2,W*Szw2]);
 else
     %Equation 106 in [2]
-    SUpdate=tria([SPred-K*Szx,K*Szw]);
+    SUpdate=tria([SPred-W*Szx,W*Szw]);
 end
 end
 
