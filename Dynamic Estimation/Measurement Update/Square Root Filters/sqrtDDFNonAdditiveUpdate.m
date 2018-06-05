@@ -152,11 +152,15 @@ if(algorithm==2)%Second order DDF
     %The loop fills in Szx2 and Szw2 according to the Equation in Section
     %4.3 of [1] (Section 4.3 of [2]).
     Szx2=zeros(zDim,xDim);
-    Szw2=zeros(zDim,xDim);
     for curDim=1:xDim
         Szx2(:,curDim)=gValsPlusX(:,curDim)+gValsMinusX(:,curDim)-2*g0;
+    end
+    
+    Szw2=zeros(zDim,zDim);
+    for curDim=1:zDim
         Szw2(:,curDim)=gValsPlusV(:,curDim)+gValsMinusV(:,curDim)-2*g0;
     end
+    
     Szx2=(sqrt(deltaH^2-1)/(2*deltaH^2))*Szx2;
     Szw2=(sqrt(deltaH^2-1)/(2*deltaH^2))*Szw2;
     
