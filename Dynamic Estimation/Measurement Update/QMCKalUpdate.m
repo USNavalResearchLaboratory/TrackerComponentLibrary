@@ -1,7 +1,9 @@
-function [xUpdate,PUpdate,innov,Pzz]=QMCKalUpdate(xPred,PPred,z,R,h,numSamples,innovTrans,measAvgFun,stateDiffTrans,stateTrans)
+function [xUpdate,PUpdate,innov,Pzz,W]=QMCKalUpdate(xPred,PPred,z,R,h,numSamples,innovTrans,measAvgFun,stateDiffTrans,stateTrans)
 %%QMCKALUPDATE Perform the measurement update step in the quasi-Monte Carlo
-%              Kalman filter with additive measurement noise. Note that the
-%              non-quadratic form of the covariance update does not 100%
+%              Kalman filter with additive measurement noise, as described
+%              in Section III of [1], except random samples are used
+%              instead of a quasi-random sequence. Note that the non-
+%              quadratic form of the covariance update does not 100%
 %              guarantee that the resulting covariance matrix will be
 %              positive (semi-)definite. This filter is essentially the
 %              cubature Kalman filter update using random cubature points.
@@ -50,9 +52,12 @@ function [xUpdate,PUpdate,innov,Pzz]=QMCKalUpdate(xPred,PPred,z,R,h,numSamples,i
 %                 covariance matrix are returned in case one wishes to
 %                 analyze the consistency of the estimator or use those
 %                 values in gating or likelihood evaluation.
+%               W The gain used in the the update. This can be useful when
+%                 gating  and using the function calcMissedGateCov.
 %
 %This implements the measurement update step in Section III of [1]
-%(Algorithm 1). This is essentially a Cubature Kalman filter that performs
+%(Algorithm 1), but here we use random numbers instead of a quasi-random
+%sequence. This is essentially a Cubature Kalman filter that performs
 %Monte Carlo integration rather than cubature integration.
 %
 %The optional parameters innovTrans and measAvgFun are not described in
@@ -68,7 +73,7 @@ function [xUpdate,PUpdate,innov,Pzz]=QMCKalUpdate(xPred,PPred,z,R,h,numSamples,i
 %measurements.
 %
 %REFERENCES:
-%[1] D. Guo and X. Wang, "Quasi-Momte-Carlo filtering in nonlinear
+%[1] D. Guo and X. Wang, "Quasi-Monte-Carlo filtering in nonlinear
 %    dynamical systems," IEEE Transactions on Signal Processing, vol. 54,
 %    no. 6, pp. 2087-2098, Jun. 2006.
 %[2] D. F. Crouse, "Cubature/ unscented/ sigma point Kalman filtering with
