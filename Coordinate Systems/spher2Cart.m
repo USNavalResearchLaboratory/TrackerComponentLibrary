@@ -38,7 +38,7 @@ function cartPoints=spher2Cart(points,systemType,useHalfRange,zTx,zRx,M)
 %           type of spherical coordinate system), so that the range
 %           reported is a one-way range (or just half a bistatic range).
 %           The default if this parameter is not provided is false if zTx
-%           and is provided and true if itis omitted (monostatic). If no
+%           is provided and true if itis omitted (monostatic). If no
 %           range values are provided, an empty matrix can be passed.
 %       zTx The 3XN [x;y;z] location vectors of the transmitters in global
 %           Cartesian coordinates. If this parameter is omitted, then the
@@ -56,12 +56,10 @@ function cartPoints=spher2Cart(points,systemType,useHalfRange,zTx,zRx,M)
 %           no range values are provided, an empty matrix can be passed.
 %         M A 3X3XN hypermatrix of the rotation matrices to go from the
 %           alignment of the global coordinate system to that at the
-%           receiver. The z-axis of the local coordinate system of the
-%           receiver is the pointing direction of the receiver. If omitted,
-%           then it is assumed that the local coordinate system is aligned
-%           with the global and M=eye(3) --the identity matrix is used. If
-%           only a single 3X3 matrix is passed, then it is assumed to be
-%           the same for all of the N conversions.
+%           receiver. If omitted, then it is assumed that the local
+%           coordinate system is aligned with the global and M=eye(3) --the
+%           identity matrix is used. If only a single 3X3 matrix is passed,
+%           then it is assumed to be the same for all of the N conversions.
 %
 %OUTPUTS: cartPoints For N points, cartPoints is a 3XN matrix of the
 %                    converted points with each column having the format

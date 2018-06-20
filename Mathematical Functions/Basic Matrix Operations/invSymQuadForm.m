@@ -10,19 +10,18 @@ function dist=invSymQuadForm(x,M,matType)
 %                this can be viewed as a numerically robust method of
 %                computing Mahalanobis distances.
 %
-%INPUTS: x       An mXN matrix of N vectors whose quadratic forms with the
-%                inverse of R are desired.
-%        M       The mXm real, symmetric, positive definite matrix R, or
-%                the square root of R, as specified by the following
-%                parameter.
-%        matType This optional parameter specified the type of matrix that
-%                M is. Possible values are
-%                0 (the default if omitted) M is the matrix R in the form
-%                  x'*inv(R)*x.
-%                1 M is the lower-triangular square root of the matrix R.
+%INPUTS: x An mXN matrix of N vectors whose quadratic forms with the
+%          inverse of R are desired.
+%        M The mXm real, symmetric, positive definite matrix R, or the
+%          square root of R, as specified by the following parameter.
+%  matType This optional parameter specified the type of matrix that M is.
+%          Possible values are
+%          0 (The default if omitted or an empty matrix is passed) M is the
+%            matrix R in the form x'*inv(R)*x.
+%          1 M is the lower-triangular square root of the matrix R.
 %
-%OUTPUTS: dist   A 1XN vector of the values of x*inv(R)*x for every vector
-%                in the matrix x.
+%OUTPUTS: dist A 1XN vector of the values of x*inv(R)*x for every vector in
+%              the matrix x.
 %
 %As one can find in many textbooks, solving A*x=b using matrix inversion is
 %generally a bad idea. This relates to the problem at hand, because one can
@@ -45,7 +44,7 @@ function dist=invSymQuadForm(x,M,matType)
 %August 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    if(nargin<3)
+    if(nargin<3||isempty(matType))
         matType=0;
     end
     

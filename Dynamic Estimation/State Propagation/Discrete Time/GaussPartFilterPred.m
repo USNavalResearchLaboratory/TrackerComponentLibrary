@@ -49,7 +49,7 @@ function [xPred,PPred]=GaussPartFilterPred(xPrev,PPrev,transPDFSampFun,param4,wP
 %4) If u<=f(y)/(c*g(y)) then accept y as the sample. otherwise, go to 2.
 %
 %REFERENCES:
-%[1] J. H. Kotecha and P. M. Djuri?, "Gaussian particle filtering,"
+%[1] J. H. Kotecha and P. M. Djuric, "Gaussian particle filtering,"
 %    IEEE Transactions on Signal Processing, vol. 51, no. 10, pp.
 %    2592-2601, Oct. 2003.
 %[2] S. M. Ross, Simulation, 4th ed. Amsterdam: Academic Press, 2006.

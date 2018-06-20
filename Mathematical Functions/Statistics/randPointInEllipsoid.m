@@ -3,7 +3,7 @@ function vals=randPointInEllipsoid(N,invS,z0,algorithm,gamma)
 %              an ellipse or ellipsoid such that (z-z0)'*invS*(z-z0)<=gamma
 %
 %INPUTS: N The number of random points in the ellipse to generate.
-%        S A numDimXnumDim positive definite matrix that specifies the
+%     invS A numDimXnumDim positive definite matrix that specifies the
 %          size and shape of the ellipse or ellipsoid, where
 %          a point z is in the ellipse if (z-z0)'*invS*(z-z0)<=gamma.
 %       z0 The optional numDimX1 vector defining the center of the ellipse.

@@ -23,7 +23,7 @@
  *             omitted, then mirrorWrap=false is assumed and the function
  *             behaves similar to a shifted modulo function.
  *
- *OUTPUTS: wrapVals  The set of vals wrapped such that
+ *OUTPUTS: wrapVals The set of vals wrapped such that
  *                  minBound<=wrapVals<maxBound.
  *
  *Additional comments on the function are given in the Matlab version
@@ -40,12 +40,12 @@
 #include <cmath>
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
-    size_t i, numRows,numCols, numEls;
+    size_t i, numDims, numEls;
     double minBound, maxBound, *vals, *wrapVals;
     mxArray *retMat;
+    const mwSize *dims;
     bool mirrorWrap=false;
-    
-    
+
     if(nrhs<3){
         mexErrMsgTxt("Not enough inputs.");
         return;
@@ -61,18 +61,19 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         return;
     }
     
-    checkRealDoubleArray(prhs[0]);
-    numRows=mxGetM(prhs[0]);
-    numCols=mxGetN(prhs[0]);
-    numEls=numRows*numCols;
+    checkRealDoubleHypermatrix(prhs[0]);
+    numDims=mxGetNumberOfDimensions(prhs[0]);
+    dims=mxGetDimensions(prhs[0]);
+
+    numEls=mxGetNumberOfElements(prhs[0]);
     
     //If given an empty matrix, return an empty matrix.
     if(numEls==0) {
         plhs[0]=mxCreateDoubleMatrix(0,0,mxREAL);
         return;
     }
-    
-    vals=reinterpret_cast<double*>(mxGetData(prhs[0]));
+
+    vals=mxGetPr(prhs[0]);
     
     minBound=getDoubleFromMatlab(prhs[1]);
     maxBound=getDoubleFromMatlab(prhs[2]);
@@ -86,7 +87,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     }
     
     //Allocate space for the return values.
-    retMat=mxCreateDoubleMatrix(numRows,numCols,mxREAL);
+    retMat=mxCreateNumericArray(numDims,dims,mxDOUBLE_CLASS,mxREAL);
     wrapVals=reinterpret_cast<double*>(mxGetData(retMat));
     
     if(mirrorWrap) {

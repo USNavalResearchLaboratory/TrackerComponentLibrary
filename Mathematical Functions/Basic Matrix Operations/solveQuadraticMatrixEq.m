@@ -31,7 +31,7 @@ G=[eye(n,n),    zeros(n,n);
    zeros(n,n),  A];
 
 %The QZ decomposition is the generalized Schur decomposition.
-[~,~,~,Z] =qz(F,G,'complex');
+[~,~,~,Z]=qz(F,G,'complex');
 
 Z11=Z(1:n,1:n);
 Z21=Z((n+1):(2*n),1:n);

@@ -29,7 +29,7 @@
  *    Naval Research Laboratory, no. NRL/FR/5344--16-10,279, 10 Aug. 2016,
  *    173 pages.
  *
- * October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
+ *October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
          

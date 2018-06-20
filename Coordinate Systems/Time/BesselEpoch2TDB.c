@@ -12,13 +12,10 @@
 *                    matrices match the corresponding entries in bessEpoch.
 *
 *The relationship between Julian dates in TDB and Besselian epochs is given
-*in
-*[1] J. H. Lieske, "Precession matrix based on IAU (1976) system of
-*astronomical constants," Astronomy and Astrophysics, vol. 73, no. 3, pp.
-*282-284, Mar. 1979.
-*A Besselian epoch is a factional year number denominated in terms of a
-*tropical year. For example, 1900.5 is a time near the middle of the year
-*1900. A Besselian year is not the same duration as a Julian year in TT.
+*in [1]. A Besselian epoch is a factional year number denominated in terms
+*of a tropical year. For example, 1900.5 is a time near the middle of the
+*year 1900. A Besselian year is not the same duration as a Julian year in
+*TT.
 *
 *This is a mex wrapper for the function iauEpb2jd in the International
 *Astronomical Union's (IAU) Standard's of Fundamental Astronomy library.
@@ -31,6 +28,11 @@
 *
 *The algorithm is run in Matlab using the command format
 *[Jul1, Jul2]=BesselEpoch2TDB(bessEpoch);
+*
+*REFERENCES:
+*[1] J. H. Lieske, "Precession matrix based on IAU (1976) system of
+*    astronomical constants," Astronomy and Astrophysics, vol. 73, no. 3,
+*    pp. 282-284, Mar. 1979.
 *
 *March 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 */

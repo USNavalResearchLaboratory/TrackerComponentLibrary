@@ -43,14 +43,12 @@
 *           vector is passed, then the receiver location is assumed the
 *           same for all of the target states being converted. zRx can have
 *           more than 3 rows; additional rows are ignored.
-*        M  A 3X3XN hypermatrix of the rotation matrices to go from the
+*         M A 3X3XN hypermatrix of the rotation matrices to go from the
 *           alignment of the global coordinate system to that at the
-*           receiver. The z-axis of the local coordinate system of the
-*           receiver is the pointing direction of the receiver. If omitted,
-*           then it is assumed that the local coordinate system is aligned
-*           with the global and M=eye(3) --the identity matrix is used. If
-*           only a single 3X3 matrix is passed, then is is assumed to be
-*           the same for all of the N conversions.
+*           receiver. If omitted, then it is assumed that the local
+*           coordinate system is aligned with the global and M=eye(3) --the
+*           identity matrix is used. If only a single 3X3 matrix is passed,
+*           then it is assumed to be the same for all of the N conversions.
 *
 *OUTPUTS: points A matrix of the converted points. Each column of the
 *                matrix has the format [r;azimuth;elevation], with azimuth

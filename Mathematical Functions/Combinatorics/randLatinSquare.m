@@ -1,9 +1,9 @@
 function LatinSquare=randLatinSquare(n,method,numProperMoves)
-%%RANDLATINSQUARE Generate a random latin square.  alatin square is a
+%%RANDLATINSQUARE Generate a random Latin square. A Latin square is a
 %          square where each row and each column contains the number 1:n
 %          and no number is repeated in any row or column.
 %
-%INPUTS: n The size of the latin square.
+%INPUTS: n The size of the Latin square.
 %   method An optional parameter specifying the approach for generating
 %          random Latin squares. Possible values are:
 %          0 (The default if omitted or an empty matrix is passed) Use the
@@ -15,21 +15,20 @@ function LatinSquare=randLatinSquare(n,method,numProperMoves)
 %          1 This is a simple heuristic approach that produces random Latin
 %            squares within a fixed isotopy class. The heuristic is
 %            Permute the symbols 1:n, place them into a circulant matrix
-%            via circulantMatrix (circulant matrices are latin squares),
+%            via circulantMatrix (circulant matrices are Latin squares),
 %            permute the rows, then permute the columns of the matrix.
-%            For n=2,3 this will produce uniformly distributed random latin
+%            For n=2,3 this will produce uniformly distributed random Latin
 %            squares. However, for n=4 and higher, there exists more than
 %            one isotopy class, so this will exclude an increasingly large
-%            portion of the possible latin squares. This type of random
+%            portion of the possible Latin squares. This type of random
 %            generation is very fast and can be sufficient for certain
 %            applications where true randomness is not needed.
-%
-% numProperMoves This value is only used if method 1 is chosen. This is the
+% numProperMoves This value is only used if method 0 is chosen. This is the
 %            number of proper moves to go down the Markov chain before
 %            declaring the result sufficiently random. The default if
 %            omitted or an empty matrix is passed is n^3.
 %
-%OUTPUTS: LatinSquare An nXn random latin square.
+%OUTPUTS: LatinSquare An nXn random Latin square.
 %
 %REFERENCES:
 %[1] M. T. Jacobson and P. Matthews, "Generating uniformly distributed

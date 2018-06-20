@@ -34,7 +34,7 @@ function [h,exitCode]=plugIn1DGaussKernalBW(xi,method,hInit,RelTol,AbsTol,maxIte
 %
 %OUTPUT: h The estimate of h or an empty matrix is a non-finite number or a
 %          negative value of h arose during any of the iterations.
-% exitCode A value indicating how the function termianted. Possible values
+% exitCode A value indicating how the function terminated. Possible values
 %          are
 %          0 The relative or absolute error tolerances were achieved.
 %          1 A non-finite number arose during an iteration.

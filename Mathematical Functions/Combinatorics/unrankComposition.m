@@ -7,21 +7,21 @@ function p=unrankComposition(theRank,t,n,firstElMostSig)
 %                   where the first element is the least significant unless
 %                   otherwise specified.
 %
-%INPUTS:  theRank   The theRank (position in an ordered sequence) of the
-%                   desired composition starting from zero. There is a
-%                   total of binomial(n-1,t-1) compositions.
-%            t      The number of slots that can hold items, >=1.
-%            n      The number of items that are composed into slots, >=1.
-%    firstElMostSig An optional parameter specifying whether the first
-%                   element is the most or least significant. The default
-%                   if omitted or an empty matrix is passed is false (the
-%                   first element is the least significant).
+%INPUTS: theRank The theRank (position in an ordered sequence) of the
+%                desired composition starting from zero. There is a total
+%                of binomial(n-1,t-1) compositions.
+%              t The number of slots that can hold items, >=1.
+%              n The number of items that are composed into slots, >=1.
+% firstElMostSig An optional parameter specifying whether the first
+%                element is the most or least significant. The default if
+%                omitted or an empty matrix is passed is false (the first
+%                element is the least significant).
 %
-%OUTPUTS:    p      An mX1 vector holding the current composition, whose
-%                   elements sum to n. Each element is the number of
-%                   "balls" in that slot. If theRank is larger than the
-%                   maximum number of compositions, an empty matrix is
-%                   returned. The values of q can range from 0 to n.
+%OUTPUTS: p An mX1 vector holding the current composition, whose elements
+%           sum to n. Each element is the number of "balls" in that slot.
+%           If theRank is larger than the maximum number of compositions,
+%           an empty matrix is returned. The values of q can range from 0
+%           to n.
 %
 %This is an implementation of the relation described in Chapter 7.2.1.3 of
 %[1] for mapping combinations to compositions. theRank is used to obtain a

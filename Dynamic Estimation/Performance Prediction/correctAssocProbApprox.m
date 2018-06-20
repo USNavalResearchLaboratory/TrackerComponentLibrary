@@ -4,8 +4,8 @@ function Pc=correctAssocProbApprox(zDim,beta,detSPred)
 %           innovation covariance matrix of the targets, get the
 %           approximate probability of any particular track being assigned
 %           to the correct measurement assuming 100% detection probability
-%           and no false alarms.This can help assess the difficult of a
-%           scenario. 
+%           and no false alarms. This can help assess the difficult of a
+%           scenario.
 %
 %INPUTS: zDim The dimensionality of the measurements.
 %        beta The number of targets per unit volume in the coordinate
@@ -18,7 +18,7 @@ function Pc=correctAssocProbApprox(zDim,beta,detSPred)
 %
 %OUTPUTS: Pc The approximate probability that target i is assigned to the
 %            correct measurement in an ideal tracking algorithm. This
-%            propbability ois the same for all targets since this function
+%            propbability is the same for all targets since this function
 %            is considering an "average" scenario.
 %
 %This function implements the approximation given in Equation 2 of [1].

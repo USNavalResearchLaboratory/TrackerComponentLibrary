@@ -17,7 +17,7 @@ function [x,exitCode]=LSEstLMarquardt(fun,x0,hasJacobian,TolG,TolX,delta,deltaAb
 %            component of f with respect to the jth component of x.
 %         x0 The initial estimate of the optimal value of x. This is an NX1
 %            vector.
-%hasJacobian An optional boolean value indicating whether the function fun
+% hasJacobian An optional boolean value indicating whether the function fun
 %            returns a Jacobian. If omitted or an empty matrix is passed, a
 %            default value of false is used indicating that no Jacobian is
 %            present.
@@ -63,7 +63,7 @@ function [x,exitCode]=LSEstLMarquardt(fun,x0,hasJacobian,TolG,TolX,delta,deltaAb
 %method for least squares optimization. Unlike the Gauss-Newton methods, it
 %does not use a line search to determine the stepsize. The original
 %Levenberg-Marquardt algoirthm is described in [1]. The implementation here
-%follows that of Algorithm 3.16 in [2]. When the jacobian is not provided,
+%follows that of Algorithm 3.16 in [2]. When the Jacobian is not provided,
 %the secand version of the algorithm, partially summarized as Algorithm
 %3.34 in [2], is used. Algorithm 3.34 in 2 omits a number of steps.
 %However, the missing steps coincide with those of Algorithm 3.31, so it is
@@ -336,9 +336,9 @@ function [h,mu]=solveForH(A,g,mu,maxTries)
 %the equation, because it is possible that mu is so small that (A+mu*I) is
 %nearly singular. Thus, this tries to 
 
-%HOW h is determined depends on 
-maxA = max(max(abs(A)));
-if(maxA == 0)%If A is a zero matrix.
+%How h is determined depends on A.
+maxA=max(abs(A(:)));
+if(maxA==0)%If A is a zero matrix.
     %This is the approximation for large values of mu as given on page 25.
     h=-g/mu;
     
@@ -357,7 +357,7 @@ else
         %Perform a Cholesky decompoostion without generating an error if
         %the matrix in question is singular. If the matrix is singular,
         %very close to singular, or contains NaNs, then p will be nonzero.
-        [R,p] = chol(A+mu*eye(N),'upper');
+        [R,p]=chol(A+mu*eye(N),'upper');
         
         %If p is zero, make sure that the matrix is not nearly singular.
         %The "nearly singular" designation is based on the inverse
@@ -375,7 +375,7 @@ else
         %If we are here, then p~=0 and we will have to increase mu to make
         %the matrix nonsingular. The scaling factor of 10 is suggested in
         %[1].
-        mu=max(10*mu,eps()*maxA);
+        mu=max(10*mu,eps*maxA);
     end
 
     %If the above loop did not converge in a reasonable number of

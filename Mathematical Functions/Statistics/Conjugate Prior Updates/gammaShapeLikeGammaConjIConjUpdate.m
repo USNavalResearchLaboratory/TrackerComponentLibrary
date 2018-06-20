@@ -4,7 +4,7 @@ function [muEst,deltaEst]=gammaShapeLikeGammaConjIConjUpdate(xMeas,thetaMeas,muE
 %               conjugate prior distribution is known as the gamma
 %               conjugate type I distribution. Given the scale parameter of
 %               the measurement distribution and the two parameters of the
-%               prior distirbution, this function updates the parameters of
+%               prior distribution, this function updates the parameters of
 %               the prior distribution conditioned on the measurements. The
 %               result is the parameters of the posterior distribution,
 %               which is also a gamma conjugate type I distribution.

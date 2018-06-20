@@ -7,13 +7,12 @@ function [q,nc]=randSetPartition(n,sortEntries)
 %                  partitions themselves is not important. See the function
 %                  getNextSetPartition for partition generation.
 %
-%INPUTS: n         The number of items that should be randomly partitioned.
-%     sortEntries  An optional parameter specifying whether the partition
-%                  numbers should come in order of occurrence. For example,
-%                  q=[2;1;2] and q=[1;2;1] are the same partition of n=3.
-%                  If sortEntries is true, then only q=[1;2;1] would be
-%                  retruned out of the two. The default if this parameter
-%                  is omitted is false.
+%INPUTS: n The number of items that should be randomly partitioned.
+% sortEntries An optional parameter specifying whether the partition
+%          numbers should come in order of occurrence. For example,
+%          q=[2;1;2] and q=[1;2;1] are the same partition of n=3. If
+%          sortEntries is true, then only q=[1;2;1] would be returned out
+%          of the two. The default if this parameter is omitted is false.
 %
 %OUTPUTS: q  A random set partition of n. This is a length n vector with
 %            values that can range from 1 to n.

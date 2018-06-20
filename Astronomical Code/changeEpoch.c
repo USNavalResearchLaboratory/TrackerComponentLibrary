@@ -29,8 +29,8 @@
  *          omitted, then a terrestrial time of Jul1=2451545.0; Jul2=0;
  *          will be used, corresponding to the J2000.0 epoch.
  *
- *OUTPUTS:  catData The same as the input catData, except the epoch has
- *                  been changed.
+ *OUTPUTS: catData The same as the input catData, except the epoch has
+ *                 been changed.
  *
  *This function is pretty much a wrapper for the iauPmsafe that is part of
  *the International Astronomical Union's Standards of Fundamental Astronomy

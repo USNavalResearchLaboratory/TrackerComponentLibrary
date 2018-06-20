@@ -2,17 +2,15 @@
  *             System (ICRS) to the J2000.0 dynamical frame. This involves
  *             removing a frame bias rotation.
  *
- *INPUTS:    vec         The 3XN matrix of N vectors that are to be rotated
- *                       from the ICRS to the J2000.0 dynamical frame.
- *           TT1, TT2    Two parts of a Julian date given in terrestrial
- *                       time (TT). The units of the date are days. The
- *                       full date is the sum of both terms. The date is
- *                       broken into two parts to provide more bits of
- *                       precision. It does not matter how the date is
- *                       split.
+ *INPUTS: vec The 3XN matrix of N vectors that are to be rotated rom the
+ *            ICRS to the J2000.0 dynamical frame.
+ *   TT1, TT2 Two parts of a Julian date given in terrestrial time (TT).
+ *            The units of the date are days. The full date is the sum of
+ *            both terms. The date is broken into two parts to provide more
+ *            bits of precision. It does not matter how the date is split.
  *
- *OUTPUTS: retVec       The 3XN set of vectors rotated into the J2000.0
- *                      dynamical frame.
+ *OUTPUTS: retVec The 3XN set of vectors rotated into the J2000.0 dynamical
+ *                frame.
  *
  *As described in [1], the ICRS is ofset from the J2000 dynamical frame by
  *a bias rotation.

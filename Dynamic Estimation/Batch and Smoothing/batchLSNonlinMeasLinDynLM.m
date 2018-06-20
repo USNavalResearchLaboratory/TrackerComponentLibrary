@@ -6,69 +6,68 @@ function [xEst,PEst,xBatchEst,exitCode]=batchLSNonlinMeasLinDynLM(xInit,z,h,F,R,
 %           squares optimization is performed using the Levenburg-Marquart
 %           algorithm with a numerically estimated Jacobian.
 %
-%INPUTS:  xInit The xDimX1 initial estimate of the target state at the time
-%               of the kDth measurement or, if process noise is present,
-%               one can optionally provide an xDimXN matrix of initial
-%               state estimate vectors over an entire batch of measurements. 
-%          z    The zDim X N matrix of measurements for the whole batch. It
-%               is assumed that the measurements have the same
-%               dimensionality over the batch.
-%          h    A NX1 cell array of function handles for the measurement
-%               function that transform the state into the measurement
-%               domain at each step. If the same measurement function is
-%               used for all steps in the batch, then h can just be the
-%               single function handle used.
-%          F  	An xDim X xDim X (N-1) hypermatrix of  matrices. The state
-%               at discrete-time k+1 is modeled as F(:,:,k) times the state
-%               at time k plus zero-mean Gaussian process noise with
-%               covariance matrix Q(:,:,k). Alternatively, if all of the
-%               state transition matrices are the same, one can just pass a
-%               single xDim X xDim matrix. Note that all of the F matrices
-%               must be invertible if kD is not equal to one.
-%          R    The zDim X zDim X N hypermatrix of measurement covariance
-%               matrices. Alternatively, if all of the measurement
-%               covariance matrices are the same, one can just pass a
-%               single zDim X zDim matrix.
-%          kD   The discrete time-step at which the smoothed state estimate
-%               is desired, where z(:,1) is at discrete time-step 1 (not
-%               0).
-%          Q    The xDim X xDim X (N-1) hypermatrix of process noise
-%               covariance matrices. Alternatively, if all of the process
-%               noise covariance matrices are the same, one can just pass a
-%               single xDim X xDim matrix. Note that all of the Q matrices
-%               must be invertible except that zero matrices can be passed
-%               (no process noise). If Q is omitted or an empty matrix is
-%               passed, then the estimation is performed assuming there is
-%               no process noise.
-%     HJacob    If a covariance matrix is desired on the output, then
-%               HJacob can be provided. HJacob is a zDimX1 cell array of 
-%               function handles for the measurement Jacobian matrix that
-%               each takes the target state as a parameter. If a single
-%               measurement Jacobian matrix is used for all steps of the
-%               batch, then HJacob can just be the single function handle
-%               used. If an empty matrix is passed or the parameter is
-%               omitted, then HJacob will be found using numerical
-%               differentiation via the numDiff function with default
-%               parameters.
-%   optimParam  An optional structure whose members are arguments to the
-%               function LSEstLMarquardt if one does not wish to use the
-%               default values for that function. For example, to set
-%               the maximum number of iterations to 1000, then use
-%               optimParam.maxIter=1000; Possible members of the structure
-%               are TolG,TolX,delta,deltaAbs,maxIter, and maxTries, which
-%               are all described in the comments to the function
-%               LSEstLMarquardt.
+%INPUTS: xInit The xDimX1 initial estimate of the target state at the time
+%              of the kDth measurement or, if process noise is present,
+%              one can optionally provide an xDimXN matrix of initial
+%              state estimate vectors over an entire batch of measurements. 
+%            z The zDim X N matrix of measurements for the whole batch. It
+%              is assumed that the measurements have the same
+%              dimensionality over the batch.
+%            h A NX1 cell array of function handles for the measurement
+%              function that transform the state into the measurement
+%              domain at each step. If the same measurement function is
+%              used for all steps in the batch, then h can just be the
+%              single function handle used.
+%            F An xDim X xDim X (N-1) hypermatrix of  matrices. The state
+%              at discrete-time k+1 is modeled as F(:,:,k) times the state
+%              at time k plus zero-mean Gaussian process noise with
+%              covariance matrix Q(:,:,k). Alternatively, if all of the
+%              state transition matrices are the same, one can just pass a
+%              single xDim X xDim matrix. Note that all of the F matrices
+%              must be invertible if kD is not equal to one.
+%            R The zDim X zDim X N hypermatrix of measurement covariance
+%              matrices. Alternatively, if all of the measurement
+%              covariance matrices are the same, one can just pass a
+%              single zDim X zDim matrix.
+%           kD The discrete time-step at which the smoothed state estimate
+%              is desired, where z(:,1) is at discrete time-step 1 (not 0).
+%            Q The xDim X xDim X (N-1) hypermatrix of process noise
+%              covariance matrices. Alternatively, if all of the process
+%              noise covariance matrices are the same, one can just pass a
+%              single xDim X xDim matrix. Note that all of the Q matrices
+%              must be invertible except that zero matrices can be passed
+%              (no process noise). If Q is omitted or an empty matrix is
+%              passed, then the estimation is performed assuming there is
+%              no process noise.
+%       HJacob If a covariance matrix is desired on the output, then
+%              HJacob can be provided. HJacob is a zDimX1 cell array of 
+%              function handles for the measurement Jacobian matrix that
+%              each takes the target state as a parameter. If a single
+%              measurement Jacobian matrix is used for all steps of the
+%              batch, then HJacob can just be the single function handle
+%              used. If an empty matrix is passed or the parameter is
+%              omitted, then HJacob will be found using numerical
+%              differentiation via the numDiff function with default
+%              parameters.
+%   optimParam An optional structure whose members are arguments to the
+%              function LSEstLMarquardt if one does not wish to use the
+%              default values for that function. For example, to set
+%              the maximum number of iterations to 1000, then use
+%              optimParam.maxIter=1000; Possible members of the structure
+%              are TolG,TolX,delta,deltaAbs,maxIter, and maxTries, which
+%              are all described in the comments to the function
+%              LSEstLMarquardt.
 %
-%OUTPUTS: xEst      The refined batch state estimate at step kD. If the
-%                   optimization failed, then an empty matrix is returned.
-%         PEst      A covariance matrix estimate that goes with the state
-%                   estimate. The covariance matrix estimate is obtained
-%                   using the function batchLSLinMeasLinDyn. If the
-%                   optimization failed, then an empty matrix is returned.
-%         xBatchEst The batch state estimates at all time-steps.
-%         exitCode  The exit status of the Levenburg-Marquart algorithm.
-%                   The values of this output are described in the comments
-%                   to the function LSEstLMarquardt.
+%OUTPUTS: xEst The refined batch state estimate at step kD. If the
+%              optimization failed, then an empty matrix is returned.
+%         PEst A covariance matrix estimate that goes with the state
+%              estimate. The covariance matrix estimate is obtained using
+%              the function batchLSLinMeasLinDyn. If the optimization
+%              failed, then an empty matrix is returned.
+%    xBatchEst The batch state estimates at all time-steps.
+%     exitCode The exit status of the Levenburg-Marquart algorithm. The
+%              values of this output are described in the comments to the
+%              function LSEstLMarquardt.
 %
 %The algorithm is an implementation of the nonlinear ML technique discussed
 %in  [1]. The aforementioned paper does not explicitly say how to perform

@@ -9,7 +9,7 @@ function [xStateUpdate,PUpdate,innov,S]=BLUESpherMeasUpdateApprox(xStatePred,PPr
 %                   followed by velocity components:
 %                   xStatePred=[x;y;z;xDot;yDot;zDot].
 %             PPred The 6X6 covariance matrix associated with the predicted
-%                   target state esitmate.
+%                   target state estimate.
 %                 z A 3X1 monostatic spherical measurement (no refraction)
 %                   with components ordered [range;azimuth;elevation] with
 %                   azimuth and elevation angles in radians. Azimuth is 

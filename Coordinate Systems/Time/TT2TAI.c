@@ -1,6 +1,6 @@
-/**TT2TAI  Convert from terrestrial time (TT) given as a two-part
- *         Julian date to international atomic time (TAI), represented as a
- *         two-part Julian date.
+/**TT2TAI Convert from terrestrial time (TT) given as a two-part Julian
+ *        date to international atomic time (TAI), represented as a two-
+ *        part Julian date.
  *
  *INPUTS: Jul1, Jul2 Two parts of a Julian date given in TT. The units of
  *                   the date are days. The full date is the sum of both

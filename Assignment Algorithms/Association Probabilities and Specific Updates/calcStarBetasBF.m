@@ -1,23 +1,22 @@
 function beta=calcStarBetasBF(A)
-%%CALCSTARBETASBF  Calculate target-measurement association probabilities,
-%                  as in the JPDAF* given an association matrix using a
-%                  brute-force method.                
+%%CALCSTARBETASBF Calculate target-measurement association probabilities,
+%                 as in the JPDAF* given an association matrix using a
+%                 brute-force method.                
 %
-%INPUTS:    A  A matrix of positive likelihoods or likelihood ratios (NOT
-%              log-likelihood ratios). A is a numTar X (numMeas+numTar)
-%              matrix of all-positive likelihoods or likelihood ratios for
-%              assigning the target specified by the row to the measurement
-%              specified by the column. Columns > numMeas hold
-%              missed-detection likelihoods. Thus, off-diagonal terms for
-%              columns > numMeas should be set to 0 and the diagonal terms
-%              set to the costs of a missed detection for each given
-%              target. NOTE: The missed detection hypotheses cannot have
-%              zero likelihood.
+%INPUTS: A A matrix of positive likelihoods or likelihood ratios (NOT log-
+%          likelihood ratios). A is a numTar X (numMeas+numTar) matrix of
+%          all-positive likelihoods or likelihood ratios for assigning the
+%          target specified by the row to the measurement specified by the
+%          column. Columns > numMeas hold missed-detection likelihoods.
+%          Thus, off-diagonal terms for columns > numMeas should be set to
+%          0 and the diagonal terms set to the costs of a missed detection
+%          for each given target. NOTE: The missed detection hypotheses
+%          cannot have zero likelihood.
 %
-%OUTPUTS:  beta A numTar X (numMeas+1) matrix of probabilities of assigning
-%               the target given by the row to the measurement given by the
-%               column. The final column is a set of missed detection
-%               probabilities.
+%OUTPUTS: beta A numTar X (numMeas+1) matrix of probabilities of assigning
+%              the target given by the row to the measurement given by the
+%              column. The final column is a set of missed detection
+%              probabilities.
 %
 %The JPDAF* is the same as the JPDAF except certain joint association
 %events are thrown out. The JPDAF* is originally from [1].

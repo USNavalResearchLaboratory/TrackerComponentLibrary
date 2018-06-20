@@ -1,15 +1,15 @@
 function [xpyp,dXdY,deltaUTCUT1,deltaTTUT1,LOD]=getEOP(JulUTC1,JulUTC2,refreshFromSource,replaceEOPtxt)
-%%GETEOP  Get Earth orientation parameters from a table for a
-%         particular date, using interpolation for points between or
-%         outside of the range of tabulated values. The data can be read
-%         from ./data/EOP.txt or downloaded from the internet. Once the
-%         data has been loaded, it does not have to be reloaded for future
-%         function calls. The Earth orientation parameters are necessary
-%         for high-precision astronomical coordinate conversions. When the
-%         date provided is outside of the range of tabulated values, then
-%         linear interpolation is provided over deltaUTCUT1 and deltaTTUT1, 
-%         and piecewise cubic Hermite interpolation is provided over LOD,
-%         but xpyp and dXdY are just set to zero.
+%%GETEOP Get Earth orientation parameters from a table for a particular
+%        date, using interpolation for points between or outside of the
+%        range of tabulated values. The data can be read from
+%        ./data/EOP.txt or downloaded from the internet. Once the data have
+%        been loaded, they do not have to be reloaded for future function
+%        calls. The Earth orientation parameters are necessary for
+%        high-precision astronomical coordinate conversions. When the date
+%        provided is outside of the range of tabulated values, then linear
+%        interpolation is provided over deltaUTCUT1 and deltaTTUT1, and
+%        piecewise cubic Hermite interpolation is provided over LOD, but
+%        xpyp and dXdY are just set to zero.
 %
 %INPUTS: JulUTC1,JulUTC2 NX1 or 1XN vectors of two-part pseudo-Julian dates
 %                       given in UTC. The units of the date are days. The
@@ -39,7 +39,7 @@ function [xpyp,dXdY,deltaUTCUT1,deltaTTUT1,LOD]=getEOP(JulUTC1,JulUTC2,refreshFr
 %                          and predictions for the next year.
 %                       3) Get the finals.data file from the IERS data
 %                          center.
-%     replaceEOPtxt  An optional boolean argument. If this parameter is
+%      replaceEOPtxt An optional boolean argument. If this parameter is
 %                    true, then the file ./EOP.txt will be replaced with
 %                    the downloaded data file when the refreshFromSource
 %                    parameter is provided and is not -1. replacement only

@@ -17,11 +17,11 @@ static int verbose = 0;
 **
 **  All messages go to stdout.
 **
-**  This revision:  2017 March 15
+**  This revision:  2017 October 21
 **
-**  SOFA release 2017-04-20
+**  SOFA release 2018-01-30
 **
-**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 */
 
 static void viv(int ival, int ivalok,
@@ -193,6 +193,36 @@ static void t_ab(int *status)
    vvd(ppr[0], -0.7631631094219556269, 1e-12, "iauAb", "1", status);
    vvd(ppr[1], -0.6087553082505590832, 1e-12, "iauAb", "2", status);
    vvd(ppr[2], -0.2167926269368471279, 1e-12, "iauAb", "3", status);
+
+}
+
+static void t_ae2hd(int *status)
+/*
+**  - - - - - - - -
+**   t _ a e 2 h d
+**  - - - - - - - -
+**
+**  Test iauAe2hd function.
+**
+**  Returned:
+**     status    int         FALSE = success, TRUE = fail
+**
+**  Called:  iauAe2hd and vvd
+**
+**  This revision:  2017 October 21
+*/
+{
+   double a, e, p, h, d;
+
+
+   a = 5.5;
+   e = 1.1;
+   p = 0.7;
+
+   iauAe2hd(a, e, p, &h, &d);
+
+   vvd(h, 0.5933291115507309663, 1e-14, "iauAe2hd", "h", status);
+   vvd(d, 0.9613934761647817620, 1e-14, "iauAe2hd", "d", status);
 
 }
 
@@ -4477,6 +4507,65 @@ static void t_h2fk5(int *status)
        "iauH2fk5", "px", status);
    vvd(rv5, -7.6000001309071126, 1e-11,
        "iauH2fk5", "rv", status);
+
+}
+
+static void t_hd2ae(int *status)
+/*
+**  - - - - - - - -
+**   t _ h d 2 a e
+**  - - - - - - - -
+**
+**  Test iauHd2ae function.
+**
+**  Returned:
+**     status    int         FALSE = success, TRUE = fail
+**
+**  Called:  iauHd2ae and vvd
+**
+**  This revision:  2017 October 21
+*/
+{
+   double h, d, p, a, e;
+
+
+   h = 1.1;
+   d = 1.2;
+   p = 0.3;
+
+   iauHd2ae(h, d, p, &a, &e);
+
+   vvd(a, 5.916889243730066194, 1e-13, "iauHd2ae", "a", status);
+   vvd(e, 0.4472186304990486228, 1e-14, "iauHd2ae", "e", status);
+
+}
+
+static void t_hd2pa(int *status)
+/*
+**  - - - - - - - -
+**   t _ h d 2 p a
+**  - - - - - - - -
+**
+**  Test iauHd2pa function.
+**
+**  Returned:
+**     status    int         FALSE = success, TRUE = fail
+**
+**  Called:  iauHd2pa and vvd
+**
+**  This revision:  2017 October 21
+*/
+{
+   double h, d, p, q;
+
+
+   h = 1.1;
+   d = 1.2;
+   p = 0.3;
+
+   q = iauHd2pa(h, d, p);
+
+   vvd(q, 1.906227428001995580, 1e-13, "iauHd2pa", "q", status);
 
 }
 
@@ -8802,6 +8891,223 @@ static void t_tf2d(int *status)
 
 }
 
+static void t_tpors(int *status)
+/*
+**  - - - - - - - -
+**   t _ t p o r s
+**  - - - - - - - -
+**
+**  Test iauTpors function.
+**
+**  Returned:
+**     status    int         FALSE = success, TRUE = fail
+**
+**  Called:  iauTpors, vvd, viv
+**
+**  This revision:  2017 October 21
+*/
+{
+   double xi, eta, ra, dec, az1, bz1, az2, bz2;
+   int n;
+
+
+   xi = -0.03;
+   eta = 0.07;
+   ra = 1.3;
+   dec = 1.5;
+
+   n = iauTpors(xi, eta, ra, dec, &az1, &bz1, &az2, &bz2);
+
+   vvd(az1, 1.736621577783208748, 1e-13, "iauTpors", "az1", status);
+   vvd(bz1, 1.436736561844090323, 1e-13, "iauTpors", "bz1", status);
+
+   vvd(az2, 4.004971075806584490, 1e-13, "iauTpors", "az2", status);
+   vvd(bz2, 1.565084088476417917, 1e-13, "iauTpors", "bz2", status);
+
+   viv(n, 2, "iauTpors", "n", status);
+
+}
+
+static void t_tporv(int *status)
+/*
+**  - - - - - - - -
+**   t _ t p o r v
+**  - - - - - - - -
+**
+**  Test iauTporv function.
+**
+**  Returned:
+**     status    int         FALSE = success, TRUE = fail
+**
+**  Called:  iauTporv, iauS2c, vvd, viv
+**
+**  This revision:  2017 October 21
+*/
+{
+   double xi, eta, ra, dec, v[3], vz1[3], vz2[3];
+   int n;
+
+
+   xi = -0.03;
+   eta = 0.07;
+   ra = 1.3;
+   dec = 1.5;
+   iauS2c(ra, dec, v);
+
+   n = iauTporv(xi, eta, v, vz1, vz2);
+
+   vvd(vz1[0], -0.02206252822366888610, 1e-15,
+       "iauTporv", "x1", status);
+   vvd(vz1[1], 0.1318251060359645016, 1e-14,
+       "iauTporv", "y1", status);
+   vvd(vz1[2], 0.9910274397144543895, 1e-14,
+       "iauTporv", "z1", status);
+
+   vvd(vz2[0], -0.003712211763801968173, 1e-16,
+       "iauTporv", "x2", status);
+   vvd(vz2[1], -0.004341519956299836813, 1e-16,
+       "iauTporv", "y2", status);
+   vvd(vz2[2], 0.9999836852110587012, 1e-14,
+       "iauTporv", "z2", status);
+
+   viv(n, 2, "iauTporv", "n", status);
+
+}
+
+static void t_tpsts(int *status)
+/*
+**  - - - - - - - -
+**   t _ t p s t s
+**  - - - - - - - -
+**
+**  Test iauTpsts function.
+**
+**  Returned:
+**     status    int         FALSE = success, TRUE = fail
+**
+**  Called:  iauTpsts, vvd
+**
+**  This revision:  2017 October 21
+*/
+{
+   double xi, eta, raz, decz, ra, dec;
+
+
+   xi = -0.03;
+   eta = 0.07;
+   raz = 2.3;
+   decz = 1.5;
+
+   iauTpsts(xi, eta, raz, decz, &ra, &dec);
+
+   vvd(ra, 0.7596127167359629775, 1e-14, "iauTpsts", "ra", status);
+   vvd(dec, 1.540864645109263028, 1e-13, "iauTpsts", "dec", status);
+
+}
+
+static void t_tpstv(int *status)
+/*
+**  - - - - - - - -
+**   t _ t p s t v
+**  - - - - - - - -
+**
+**  Test iauTpstv function.
+**
+**  Returned:
+**     status    int         FALSE = success, TRUE = fail
+**
+**  Called:  iauTpstv, iauS2c, vvd
+**
+**  This revision:  2017 October 21
+*/
+{
+   double xi, eta, raz, decz, vz[3], v[3];
+
+
+   xi = -0.03;
+   eta = 0.07;
+   raz = 2.3;
+   decz = 1.5;
+   iauS2c(raz, decz, vz);
+
+   iauTpstv(xi, eta, vz, v);
+
+   vvd(v[0], 0.02170030454907376677, 1e-15, "iauTpstv", "x", status);
+   vvd(v[1], 0.02060909590535367447, 1e-15, "iauTpstv", "y", status);
+   vvd(v[2], 0.9995520806583523804, 1e-14, "iauTpstv", "z", status);
+
+}
+
+static void t_tpxes(int *status)
+/*
+**  - - - - - - - -
+**   t _ t p x e s
+**  - - - - - - - -
+**
+**  Test iauTpxes function.
+**
+**  Returned:
+**     status    int         FALSE = success, TRUE = fail
+**
+**  Called:  iauTpxes, vvd, viv
+**
+**  This revision:  2017 October 21
+*/
+{
+   double ra, dec, raz, decz, xi, eta;
+   int j;
+
+
+   ra = 1.3;
+   dec = 1.55;
+   raz = 2.3;
+   decz = 1.5;
+
+   j = iauTpxes(ra, dec, raz, decz, &xi, &eta);
+
+   vvd(xi, -0.01753200983236980595, 1e-15, "iauTpxes", "xi", status);
+   vvd(eta, 0.05962940005778712891, 1e-15, "iauTpxes", "eta", status);
+
+   viv(j, 0, "iauTpxes", "j", status);
+
+}
+
+static void t_tpxev(int *status)
+/*
+**  - - - - - - - -
+**   t _ t p x e v
+**  - - - - - - - -
+**
+**  Test iauTpxev function.
+**
+**  Returned:
+**     status    int         FALSE = success, TRUE = fail
+**
+**  Called:  iauTpxev, iauS2c, vvd
+**
+**  This revision:  2017 October 21
+*/
+{
+   double ra, dec, raz, decz, v[3], vz[3], xi, eta;
+   int j;
+
+
+   ra = 1.3;
+   dec = 1.55;
+   raz = 2.3;
+   decz = 1.5;
+   iauS2c(ra, dec, v);
+   iauS2c(raz, decz, vz);
+
+   j = iauTpxev(v, vz, &xi, &eta);
+
+   vvd(xi, -0.01753200983236980595, 1e-15, "iauTpxev", "xi", status);
+   vvd(eta, 0.05962940005778712891, 1e-15, "iauTpxev", "eta", status);
+
+   viv(j, 0, "iauTpxev", "j", status);
+
+}
+
 static void t_tr(int *status)
 /*
 **  - - - - -
@@ -9425,7 +9731,7 @@ int main(int argc, char *argv[])
 **   m a i n
 **  - - - - -
 **
-**  This revision:  2016 March 12
+**  This revision:  2017 October 21
 */
 {
    int status;
@@ -9444,6 +9750,7 @@ int main(int argc, char *argv[])
    t_a2af(&status);
    t_a2tf(&status);
    t_ab(&status);
+   t_ae2hd(&status);
    t_af2a(&status);
    t_anp(&status);
    t_anpm(&status);
@@ -9550,6 +9857,8 @@ int main(int argc, char *argv[])
    t_gst06a(&status);
    t_gst94(&status);
    t_h2fk5(&status);
+   t_hd2ae(&status);
+   t_hd2pa(&status);
    t_hfk5z(&status);
    t_icrs2g(&status);
    t_ir(&status);
@@ -9653,6 +9962,12 @@ int main(int argc, char *argv[])
    t_tdbtt(&status);
    t_tf2a(&status);
    t_tf2d(&status);
+   t_tpors(&status);
+   t_tporv(&status);
+   t_tpsts(&status);
+   t_tpstv(&status);
+   t_tpxes(&status);
+   t_tpxev(&status);
    t_tr(&status);
    t_trxp(&status);
    t_trxpv(&status);
@@ -9683,7 +9998,7 @@ int main(int argc, char *argv[])
 }
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2017
+**  Copyright (C) 2018
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

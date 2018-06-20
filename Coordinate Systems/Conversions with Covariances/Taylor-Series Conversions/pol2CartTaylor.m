@@ -1,12 +1,12 @@
-function [zCart,RCart]=pol2CartTaylor(polPoint,R,zRx,algorithm)
-%%POL2CARTTAYLOR  Approximate the Cartesian moments of a Gaussian noise-
-%                 corrupted measurement in polar coordinates. The polar
-%                 angle (azimuth) is measured from the x-axis
-%                 counterclockwise. This function approaches the conversion
-%                 using traditional methods that use Taylor series
-%                 expansions. The function pol2CartCubature can have better
-%                 performance when the measurement noise is high and it can
-%                 make use of cross terms in the covariance matrix.
+function [zCart,RCart]=pol2CartTaylor(polPoint,R,zRx,M,algorithm)
+%%POL2CARTTAYLOR Approximate the first and second Cartesian moments of an
+%                additive Gaussian noise-corrupted measurement in polar
+%                coordinates. The polar angle (azimuth) is measured from
+%                the x-axis counterclockwise. This function approaches the
+%                conversion using traditional methods that use Taylor
+%                series expansions. The function pol2CartCubature can have
+%                better performance when the measurement noise is high and
+%                it can make use of cross terms in the covariance matrix.
 %
 %INPUTS: polPoint A 2XN set of N polar points of the form [range;azimuth]
 %               that are to be converted into Cartesian coordinates. The
@@ -15,11 +15,14 @@ function [zCart,RCart]=pol2CartTaylor(polPoint,R,zRx,algorithm)
 %               all of the matrices are the same, then this can just be a
 %               single 2X2 matrix. Note that all of the algorithms ignore
 %               cross terms in the covariance matrices.
-%           zRx The optional 2XN [x;y] location vectors of the receiver in
-%               Cartesian coordinates. If only a single 2X1 vector is
-%               passed, then all measurements are assumed to be from that
-%               location. If omitted or an empty matrix is passed, the
-%               receiver is placed at the origin.
+%           zRx The optional 2X1 [x;y] location vector of the receiver in
+%               global Cartesian coordinates. If omitted or an empty matrix
+%               is passed, the receiver is placed at the origin.
+%             M A 2X2 rotation matrix to go from the alignment of the
+%               global coordinate system to that at the receiver. If
+%               omitted or an empty matrix is passed, then it is assumed
+%               that the local coordinate system is aligned with the global
+%               and M=eye(2) --the identity matrix is used.
 %     algorithm An optional parameter specifying the algorithm to use.
 %               Possible values are
 %               0 The "standard conversion" from Ch. 10.4.3 of [1].
@@ -65,7 +68,11 @@ if(nargin<3||isempty(zRx))
     zRx=zeros(2,1);
 end
 
-if(nargin<4||isempty(algorithm))
+if(nargin<4||isempty(M))
+   M=eye(2,2); 
+end
+
+if(nargin<5||isempty(algorithm))
     algorithm=2;
 end
 
@@ -73,9 +80,11 @@ if(size(zRx,2)==1)
     zRx=repmat(zRx,[1,numPoints]);
 end
 
+%For the inverse rotation (local to global).
+M=M';
+
 zCart=zeros(2,numPoints);
 RCart=zeros(2,2,numPoints);
-
 switch(algorithm)
     case 0%The "standard conversion" from Ch. 10.4.3 of [1].
         for curPoint=1:numPoints
@@ -90,7 +99,7 @@ switch(algorithm)
             %Equation 10.4.3-3
             x=r*cT;
             y=r*sT;
-            zCart(:,curPoint)=[x;y]+zRx(:,curPoint);
+            zCart(:,curPoint)=M*[x;y]+zRx(:,curPoint);
             
             %Equation 10.4.3-4
             RCart(1,1,curPoint)=r^2*sigmaTheta2*sT^2+sigmaR2*cT^2;
@@ -99,6 +108,8 @@ switch(algorithm)
             RCart(2,1,curPoint)=RCart(1,2);
             %Equation 10.4.3-5
             RCart(2,2,curPoint)=r^2*sigmaTheta2*cT^2+sigmaR2*sT^2;
+            
+            RCart(:,:,curPoint)=M*RCart(:,:,curPoint)*M';
         end
     case 1%The additively debiased conversion from [2].
         for curPoint=1:numPoints
@@ -117,7 +128,7 @@ switch(algorithm)
             %Equation 12 and 14
             x=r*cT-r*cT*(expTerm-expTermd2);
             y=r*sT-r*sT*(expTerm-expTermd2);
-            zCart(:,curPoint)=[x;y]+zRx(:,curPoint);
+            zCart(:,curPoint)=M*[x;y]+zRx(:,curPoint);
 
             deltaCosh=cosh(2*sigmaTheta2)-cosh(sigmaTheta2);
             deltaCosh2=2*cosh(2*sigmaTheta2)-cosh(sigmaTheta2);
@@ -131,6 +142,8 @@ switch(algorithm)
             RCart(2,1,curPoint)=RCart(1,2);
             %Equation 13b
             RCart(2,2,curPoint)=r^2*expTerm2*(sT^2*deltaCosh+cT^2*deltaSinh)+sigmaR2*expTerm2*(sT^2*deltaCosh2+cT^2*deltaSinh2);
+            
+            RCart(:,:,curPoint)=M*RCart(:,:,curPoint)*M';
         end
     case 2%The multiplicative unbiased conversion from [3]; it is also in
           %[1]. 
@@ -153,7 +166,7 @@ switch(algorithm)
             %Equation 5 in [2].
             x=b1Inv*r*cT;
             y=b1Inv*r*sT;
-            zCart(:,curPoint)=[x;y]+zRx(:,curPoint);
+            zCart(:,curPoint)=M*[x;y]+zRx(:,curPoint);
 
             %Equation 7a in [2].
             RCart(1,1,curPoint)=(b1Inv^2-2)*r^2*cT^2+(1/2)*(r^2+sigmaR2)*(1+b2*c2T);
@@ -162,6 +175,8 @@ switch(algorithm)
             RCart(2,1,curPoint)=RCart(1,2);
             %Equation 7b in [2].
             RCart(2,2,curPoint)=(b1Inv^2-2)*r^2*sT^2+(1/2)*(r^2+sigmaR2)*(1-b2*c2T);
+            
+            RCart(:,:,curPoint)=M*RCart(:,:,curPoint)*M';
         end
     case 3%The modified multiplicative unbiased conversion from [4]. We use
         %the equations given in [5], which are a bit clearer as they
@@ -187,7 +202,7 @@ switch(algorithm)
             x=expTermd2*r*cT;
             %Equation 15
             y=expTermd2*r*sT;
-            zCart(:,curPoint)=[x;y]+zRx(:,curPoint);
+            zCart(:,curPoint)=M*[x;y]+zRx(:,curPoint);
 
             %Equation 16
             RCart(1,1,curPoint)=(1/2)*(r^2+sigmaR2)*(1+c2T*expTerm2)-expTerm*r^2*cT^2;
@@ -196,6 +211,8 @@ switch(algorithm)
             RCart(2,1,curPoint)=RCart(1,2);
             %Equation 17
             RCart(2,2,curPoint)=(1/2)*(r^2+sigmaR2)*(1-c2T*expTerm2)-expTerm*r^2*sT^2;
+            
+            RCart(:,:,curPoint)=M*RCart(:,:,curPoint)*M';
         end
     otherwise
         error('Unknown algorithm specified')     

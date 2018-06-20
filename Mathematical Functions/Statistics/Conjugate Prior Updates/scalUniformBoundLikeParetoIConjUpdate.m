@@ -1,11 +1,11 @@
 function [xMinEst,aEst]=scalUniformBoundLikeParetoIConjUpdate(xMeas,xMinEst,aEst)
 %%SCALUNIFORMBOUNDLIKEPARETOICONJUPDATE When estimating the upper bound of
-%               a scalar uniform distirbution, assuming that the lower
+%               a scalar uniform distribution, assuming that the lower
 %               bound is known to be zero, the conjugate prior distribution
 %               is a Pareto type I distribution. Given the prior scale and
 %               shape parameters of the Pareto distribution, this function
 %               updates those parameters conditioned on the measurements.
-%               The result is the parameters of the posterior distirbution,
+%               The result is the parameters of the posterior distribution,
 %               which is also a Pareto distribution.
 %
 %INPUTS: xMeas An NX1 or 1XN set of N independent measurements of the

@@ -8,31 +8,29 @@
 *                 step. This function can be used to get all subsets of an
 *                 n-set.
 *
-*INPUTS:    code   An nX1 or 1Xn vector consisting of zeros and ones
-*                  representing the current gray code value. The first code
-*                  in the sequence is all zeros. If getNexGrayCode is
-*                  called with an empty matrix for code and nCard=n, then
-*                  the returned code will be the first in the sequence.
-*           nCard  If code is empty, then this is the dimensionality of the
-*                  code sequence desired. Otherwise, this is the number of
-*                  ones in code. When getting a next code, nCard can speed
-*                  things up, but if omitted, it is just found as
-*                  sum(code).
+*INPUTS: code An nX1 or 1Xn vector consisting of zeros and ones
+*             representing the current gray code value. The first code in
+*             the sequence is all zeros. If getNexGrayCode is called with
+*             an empty matrix for code and nCard=n, then the returned code
+*             will be the first in the sequence.
+*       nCard If code is empty, then this is the dimensionality of the code
+*             sequence desired. Otherwise, this is the number of ones in
+*             code. When getting a next code, nCard can speed things up,
+*             but if omitted, it is just found as sum(code).
 *
-*OUTPUTS:   code   The next length codeLen gray code value in the sequence.
-*                  If the final gray code in the sequence was passed, then
-*                  an empty matrix is returned.
-*           nCard  The number of ones in the returned code, or n if the
-*                  last code was passed.
-*           isLast True if the returned code is the last in the series and
-*                  passing it to getNexGrayCode would return an empty
-*                  matrix.
-*                j The index of the entry in code that was changed by this
-*                  function call. If this is the first function call and
-*                  code was just created, then j is an empty matrix.
+*OUTPUTS: code The next length codeLen gray code value in the sequence. If
+*              the final gray code in the sequence was passed, then an
+*              empty matrix is returned.
+*        nCard The number of ones in the returned code, or n if the last
+*              code was passed.
+*       isLast True if the returned code is the last in the series and
+*              passing it to getNexGrayCode would return an empty matrix.
+*            j The index of the entry in code that was changed by this
+*              function call. If this is the first function call and code
+*              was just created, then j is an empty matrix.
 *
-*The algorithm is NEXSUB taken from Chapter 1 of [1]. Gray codes are also
-*discussed in Chapter 7.2.1.1 of [2].
+*The algorithm is based on NEXSUB in Chapter 1 of [1]. Gray codes are
+*also discussed in Chapter 7.2.1.1 of [2].
 *
 *The function called checks against the length of code so that if an
 *invalid value of nCard is passed, it will not read/ write past the end of

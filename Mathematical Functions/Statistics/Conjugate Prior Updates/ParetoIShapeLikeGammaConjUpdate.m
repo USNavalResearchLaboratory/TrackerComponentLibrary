@@ -7,7 +7,7 @@ function [kEst,thetaEst]=ParetoIShapeLikeGammaConjUpdate(xMeas,xMinMeas,kEst,the
 %                  the measurement (Pareto) distribution, this function
 %                  updates the parameters of the prior distribution
 %                  conditioned on the measurements. The result is the
-%                  parameters of the posterior distirbution,
+%                  parameters of the posterior distribution,
 %                  which is also a gamma distribution.
 %
 %INPUTS:xMeas An NX1 or 1XN set of N independent measurements of the
@@ -35,7 +35,7 @@ function [kEst,thetaEst]=ParetoIShapeLikeGammaConjUpdate(xMeas,xMinMeas,kEst,the
 %REFERENCES:
 %[1] B. C. Arnold and S. J. Press, "Bayesian estimation and prediction for
 %    Pareto data," Journal of the American Statistical Association, vol.
-%    84, no. 408, pp. 1079?1084, Dec. 1989.
+%    84, no. 408, pp. 1079-1084, Dec. 1989.
 %
 %October 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

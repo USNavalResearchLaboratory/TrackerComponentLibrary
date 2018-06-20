@@ -1,4 +1,4 @@
-function [xUpdate, SUpdate,innov,Szz]=sqrtCubKalNonAdditiveUpdate(xPred,SPred,z,SR,h,xi,w,innovTrans,measAvgFun,stateDiffTrans,stateTrans)
+function [xUpdate, SUpdate,innov,Szz,W]=sqrtCubKalNonAdditiveUpdate(xPred,SPred,z,SR,h,xi,w,innovTrans,measAvgFun,stateDiffTrans,stateTrans)
 %%SQRTCUBKALNONADDITIVEUPDATE Perform the measurement update step in the   
 %                      square root cubature Kalman filter with non-additive
 %                      measurement noise.
@@ -57,6 +57,8 @@ function [xUpdate, SUpdate,innov,Szz]=sqrtCubKalNonAdditiveUpdate(xPred,SPred,z,
 %                 innovation covariance matrix are returned in case one
 %                 wishes to analyze the consistency of the estimator or use
 %                 those values in gating or likelihood evaluation.
+%               W The gain used in the the update. This can be useful when
+%                 gating and using the function calcMissedGateCov.
 %
 %%The mathematics behind the function sqrtCubKalNonAdditiveUpdate are
 %described in more detail in Section IX of [1]

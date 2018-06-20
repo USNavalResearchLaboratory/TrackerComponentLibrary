@@ -2,11 +2,10 @@ function [boolVal,qNew]=ellipsoidAndPlaneIntersect(z,Q,n,q)
 %%ELLIPSOIDANDPLANEINTERSECT Given an ellipsoid and the parameters for a
 %                   plane, determine whether the ellipsoid and the plane
 %                   intersect and if they intersect, return a point on the
-%                   plane inside of the ellipse. If they do not intersect,
-%                   a 
+%                   plane inside of the ellipse.
 %
 %INPUTS: z The numDimX1 center of the ellipsoid. This is a real vector.
-%        A A numDimXnumDim real,symmetric, positive definite matrix that
+%        Q A numDimXnumDim real,symmetric, positive definite matrix that
 %          specifies the size and shape of the ellipsoid, where a point zp
 %          is inside of the ellipsoid if
 %          (zp-z)'*A*(zp-z)<=1.
@@ -19,21 +18,24 @@ function [boolVal,qNew]=ellipsoidAndPlaneIntersect(z,Q,n,q)
 %                 (qNew-z)'*A*(qNew-z) such that qNew=q+x'*null(n'), which
 %                 is the equation for a point on the plane. Thus, if
 %                 boolVal is true, then qNew is a point inside of the
-%                 ellipsoid that is on the plane.
+%                 ellipsoid that is on the plane. If they do not intersect,
+%                 then qNew is the smallest value of (zp-z)'*A*(zp-z) that
+%                 intersects the plane.
 %
 %It is clear that if we can find any point zp on the plane such that
-%(zp-z)'*A*(zp-z)<=1, then the plane and the ellipsoid intersect. To find
-%such a point, we minimize (zp-z)'*A*(zp-z) subject to the constraint that
+%(zp-z)'*Q*(zp-z)<=1, then the plane and the ellipsoid intersect. To find
+%such a point, we minimize (zp-z)'*Q*(zp-z) subject to the constraint that
 %the desired point z is on the plane. Here, we derive the solution in 2D.
 %The extension to more dimensions is straightforward.
 %
-%For 2D, first we subtract z from the position and from q. Here, we assume
-%that the subtraction has already been performed.Thus, the optimization
+%For 3D, first we subtract z from the position and from q. Here, we assume
+%that the subtraction has already been performed. Thus, the optimization
 %problem can be written
 %minimize x'*Q*x
 %such that x=q+t*r+u*s
-%where [r,s]=null(n') are two vectors in the plane (orthogonal to n) and t
-%and u are two scalar values. The minimization is thus
+%where [T]=null(n'), r=T(:,1) and s=T(:,2) are two vectors in the plane
+%(orthogonal to n) and t and u are two scalar values. The minimization is
+%thus
 %minimize (q+t*r+u*s)'*Q*(q+t*r+u*s)
 %over t and u
 %We do out the multiplication to get

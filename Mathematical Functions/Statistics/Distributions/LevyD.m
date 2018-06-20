@@ -1,9 +1,9 @@
 classdef LevyD
 %%LEVYD Functions to handle the Lévy distribution. This is a one-sided
-%       distirbution with a very long tail. It arises when considering the
+%       distribution with a very long tail. It arises when considering the
 %       amount of time it takes a Brownian motion drift to hit a
 %       particular point.
-%Implemented methods are: PDF, CDF, invCDF, rand
+%Implemented methods are: PDF, CDF, invCDF, rand, entropy
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
@@ -47,7 +47,7 @@ function val=PDF(x,mu,c)
 %One will see that the histogram matches well with the plot.
 %
 %REFERENCES:
-%[1] W. A. Woycz?ski, "Lévy Processes in the Physical Sciences," in Levy
+%[1] W. A. Woyczynski, "Lévy Processes in the Physical Sciences," in Levy
 %    Processes: Theory and Applications, O. E. Barndorff-Nielson, T. 
 %    Mikosch, and S. I. Resnick, Eds. Boston: Birkhäuser, 2001.
 %
@@ -85,7 +85,7 @@ function prob=CDF(x,mu,c)
 %One will see that both values are about 0.7518.
 %
 %REFERENCES:
-%[1] W. A. Woycz?ski, "Lévy Processes in the Physical Sciences," in Levy
+%[1] W. A. Woyczynski, "Lévy Processes in the Physical Sciences," in Levy
 %    Processes: Theory and Applications, O. E. Barndorff-Nielson, T. 
 %    Mikosch, and S. I. Resnick, Eds. Boston: Birkhäuser, 2001.
 %
@@ -123,7 +123,7 @@ function x=invCDF(prob,mu,c)
 %One will see that xBack is the same as x.
 %
 %REFERENCES:
-%[1] W. A. Woycz?ski, "Lévy Processes in the Physical Sciences," in Levy
+%[1] W. A. Woyczynski, "Lévy Processes in the Physical Sciences," in Levy
 %    Processes: Theory and Applications, O. E. Barndorff-Nielson, T. 
 %    Mikosch, and S. I. Resnick, Eds. Boston: Birkhäuser, 2001.
 %
@@ -160,6 +160,31 @@ function x=rand(N,mu,c)
     
     U=rand(dims);
     x=LevyD.invCDF(U,mu,c);
+end
+
+function entropyVal=entropy(c)
+%%ENTROPY Obtain the differential entropy of the Lévy distribution given in
+%         nats. The differential entropy of a continuous distribution is
+%         entropy=-int_x p(x)*log(p(x)) dx where the integral is over all
+%         values of x. Units of nats mean that the natural logarithm is
+%         used in the definition. Unlike the Shannon entropy for discrete
+%         variables, the differential entropy of continuous variables can
+%         be both positive and negative.
+%
+%INPUTS: c The scale parameter of the distribution.
+%
+%OUTPUTS: entropyVal The value of the differential entropy in nats.
+%
+%Differential entropy is defined in Chapter 8 of [1].
+%
+%REFERENCES:
+%[1] T. M. Cover and J. A. Thomas, Elements of Information Theory, 2nd ed.
+%    Hoboken, NJ: Wiley-Interscience, 2006.
+%
+%April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    gammaVal=-psi(1);
+    entropyVal=(1+3*gammaVal+log(16*pi*c^2))/2;
 end
 end
 end

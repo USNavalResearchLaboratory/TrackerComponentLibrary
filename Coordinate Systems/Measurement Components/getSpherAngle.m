@@ -69,7 +69,7 @@ end
 
 azEl=zeros(2,N);
 for curPoint=1:N
- %The target location in the receiver's coordinate system.
+%The target location in the receiver's coordinate system.
     zCL=M(:,:,curPoint)*(zC(:,curPoint)-zRx(:,curPoint));
 
 %Perform the conversion.

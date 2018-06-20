@@ -1,5 +1,5 @@
 function Q=QPolyKalDirectDisc(T,x,order,sigmaV2)
-%%QPOLYKALDIRECTDISC  Get the process noise covariance matrix for a direct
+%%QPOLYKALDIRECTDISC Get the process noise covariance matrix for a direct
 %           discrete linear dynamic model of the given polynomial
 %           order (number of derivatives of position included) and number
 %           of dimensions (generally 3 for 3D motion). order=1 means
@@ -16,28 +16,27 @@ function Q=QPolyKalDirectDisc(T,x,order,sigmaV2)
 %           QPolyKalDirectAlt where the process noise is at the highest
 %           order of the state.
 %
-%INPUTS: T      The time-duration of the propagation interval.
-%        x      The (numDim*(order+1))X1 target state. This is just used to
-%               extract numDim and for functions that expect the first two
-%               parameters of a process noise  covariance matrix function
-%               to be T and x.
-%        order  The order >=0 of the filter. If order=1, then it is 
-%               constant velocity, 2 means constant acceleration, 3 means
-%               constant jerk, etc.
-%      sigmaV2  The variance driving the process noise. This has units of
-%               distance^2/time^(2*(order+1)). sqrt(sigmaV2)*T is
-%               proportional to the maximum change in the highest-order
-%               moment of the system. If a scalar is passed, it is assumed
-%               to be the same for all dimensions. Otherwise, a numDimX1 or
-%               1XnumDim vector should be passed specifying the value for
-%               each dimension.
+%INPUTS: T The time-duration of the propagation interval.
+%        x The (numDim*(order+1))X1 target state. This is just used to
+%          extract numDim and for functions that expect the first two
+%          parameters of a process noise  covariance matrix function to be
+%          T and x.
+%    order The order >=0 of the filter. If order=1, then it is constant
+%          velocity, 2 means constant acceleration, 3 means constant jerk,
+%          etc.
+%  sigmaV2 The variance driving the process noise. This has units of
+%          distance^2/time^(2*(order+1)). sqrt(sigmaV2)*T is proportional
+%          to the maximum change in the highest-order moment of the system.
+%          If a scalar is passed, it is assumed to be the same for all
+%          dimensions. Otherwise, a numDimX1 or 1XnumDim vector should be
+%          passed specifying the value for each dimension.
 %
-%OUTPUTS: Q     The process noise covariance matrix under the direct
-%               discrete linear dynamic model of the given order with
-%               motion in numDim dimensions where the state is stacked
-%               [position;velocity;acceleration;etc] where the number of
-%               derivatives of position depends on the order given. Order=0
-%               means just position.
+%OUTPUTS: Q The process noise covariance matrix under the direct discrete
+%           linear dynamic model of the given order with motion in numDim
+%           dimensions where the state is stacked
+%           [position;velocity;acceleration;etc] where the number of
+%           derivatives of position depends on the order given. order=0
+%           means just position.
 %
 %Chapters 1.5.5 and 1.5.6 of [1] presents the discrete white noise
 %acceleration and jerk models, for orders one and two. The logic behind the

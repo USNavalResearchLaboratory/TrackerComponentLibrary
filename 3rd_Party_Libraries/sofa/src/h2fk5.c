@@ -58,13 +58,13 @@ void iauH2fk5(double rh, double dh,
 **
 **  Reference:
 **
-**     F.Mignard & M.Froeschle, Astron. Astrophys. 354, 732-739 (2000).
+**     F.Mignard & M.Froeschle, Astron.Astrophys., 354, 732-739 (2000).
 **
-**  This revision:  2013 June 18
+**  This revision:  2017 October 12
 **
-**  SOFA release 2017-04-20
+**  SOFA release 2018-01-30
 **
-**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 */
 {
    int i;
@@ -102,7 +102,7 @@ void iauH2fk5(double rh, double dh,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2017
+**  Copyright (C) 2018
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

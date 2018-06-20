@@ -4,24 +4,21 @@
  *          celestial reference system (GCRS). The transformation is
  *          performed by removing the precession, nutation, and frame bias.
  *
- *INPUTS:  xVec     The 3XN matrix of N 3X1 Cartesian vectors that are to
- *                  be rotated from the TOD into the GCRS coordinate
- *                  system.
- *         TT1, TT2 Jul1,Jul2 Two parts of a Julian date given in TT. The
- *                  units of the date are days. The full date is the sum of
- *                  both terms. The date is broken into two parts to
- *                  provide more bits of precision. It does not matter how
- *                  the date is split.
- *         dXdY     dXdY=[dX;dY] are the celestial pole offsets with
- *                  respect to the IAU 2006/2000A precession/nutation model
- *                  in radians If this parameter is omitted or an empty
- *                  matrix is passed, the value from the function getEOP
- *                  will be used.
+ *INPUTS:  xVec The 3XN matrix of N 3X1 Cartesian vectors that are to be
+ *              rotated from the TOD into the GCRS coordinate system.
+ * TT1, TT2 Jul1,Jul2 Two parts of a Julian date given in TT. The units of
+ *              the date are days. The full date is the sum of both terms.
+ *              The date is broken into two parts to provide more bits of
+ *              precision. It does not matter how the date is split.
+ *         dXdY dXdY=[dX;dY] are the celestial pole offsets with respect to
+ *              the IAU 2006/2000A precession/nutation model in radians If
+ *              this parameter is omitted or an empty matrix is passed, the
+ *              value from the function getEOP will be used.
  *
- *OUTPUTS: xRot     The 3XN matrix of the N 3X1 input vector rotated into
- *                  the GCRS coordinate system.
- *         rotMat   The 3X3 rotation matrix such that
- *                  xRot(:,i)=rotMat*xVec(:,i).
+ *OUTPUTS: xRot The 3XN matrix of the N 3X1 input vector rotated into the
+ *              GCRS coordinate system.
+ *       rotMat The 3X3 rotation matrix such that
+ *              xRot(:,i)=rotMat*xVec(:,i).
  *
  *This uses functions in the the International Astronomical Union's (IAU)
  *Standard's of Fundamental Astronomy (SOFA) library to obtain the product

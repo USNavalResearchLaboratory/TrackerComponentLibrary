@@ -13,53 +13,55 @@ function [xEst,PEst,logLikes]=singleScanUpdate(xHyp,PHyp,A,algSel1,algSel2,param
 %                  can be assigned to at most one target, and each target
 %                  can be assigned to at most one measurement.
 %
-%INPUTS: xHyp  An xDimXnumTarXnumHyp set of track states updated with each
-%              of the (numHyp-1) measurements for each of the numTar
-%              targets, with the last hypothesis being the update for the
-%              missed detection hypothesis. The order of the measurement
-%              hypotheses is the same as the ordering of the likelihoods in
-%              the columns of the A matrix.
-%        PHyp  An xDimXxDimXnumTarXnumHyp set of covariance matrices for
-%              each of the track states for each of the targets updated
-%              conditioned on each of the numHyp measurements with the last
-%              one being for the missed detection hypothesis.
-%           A  A matrix of positive likelihoods or likelihood ratios (NOT
-%              log-likelihood ratios). A is a numTar X (numMeas+numTar)
-%              matrix of all-positive likelihoods or likelihood ratios for
-%              assigning the target specified by the row to the measurement
-%              specified by the column. Columns > numMeas hold
-%              missed-detection likelihoods. Thus, off-diagonal terms for
-%              columns > numMeas should be set to 0 and the diagonal terms
-%              set to the costs of a missed detection for each given
-%              target. 
-%      algSel1 An optional parameter that selects the assignment algorithm
-%              to use. Approximate variants of the algorithms also use
-%              algSel2. If this parameter and the next parameter are both
-%              omitted, then the algorithm is chosen as described below.
-%              Possible values are
-%              0) GNN-JPDA
-%              1) JPDA
-%              2) GNN
-%              3) Parallel single-target PDAs
-%              4) Naïve nearest neighbor
-%              5) JPDA*
-%              6) Approximate GNN-JPDA
-%              7) Approximate JPDA 
-%              8) Set JPDA
-%      algSel2 An optional parameter that further specifies the algorithm
-%              used when algSel1=6-7. If omitted but algSel1 is specified,
-%              a default value of 0 is used. If both algSel1 and algSel2
-%              are omitted, the algorithm is chosen as described below.
-%              algSel2 chooses the approximation for the beta terms in the
-%              function calc2DAssignmentProbsApprox (the approxType input)
-%              when using algSel1=6,7; the comments to that function
-%              describe the values it can take. If algSel1=8 (Set JPDAF),
-%              this is the number of position components in the state (the
-%              posDim input in the calcSetJPDAUpdate function).
-%       param3 For the case where algSel1=6,7 and algSel2=0, this is the
-%              optional delta input to the function
-%              calc2DAssignmentProbsApprox. If omitted or an empty matrix
-%              is passed, the default value for that function is used.
+%INPUTS: xHyp An xDimXnumTarXnumHyp set of track states updated with each
+%             of the (numHyp-1) measurements for each of the numTar
+%             targets, with the last hypothesis being the update for the
+%             missed detection hypothesis. The order of the measurement
+%             hypotheses is the same as the ordering of the likelihoods in
+%             the columns of the A matrix.
+%        PHyp An xDimXxDimXnumTarXnumHyp set of covariance matrices for
+%             each of the track states for each of the targets updated
+%             conditioned on each of the numHyp measurements with the last
+%             one being for the missed detection hypothesis.
+%           A A matrix of positive likelihoods or likelihood ratios (NOT
+%             log-likelihood ratios). A is a numTar X (numMeas+numTar)
+%             matrix of all-positive likelihoods or likelihood ratios for
+%             assigning the target specified by the row to the measurement
+%             specified by the column. Columns > numMeas hold
+%             missed-detection likelihoods. Thus, off-diagonal terms for
+%             columns > numMeas should be set to 0 and the diagonal terms
+%             set to the costs of a missed detection for each given
+%             target. 
+%     algSel1 An optional parameter that selects the assignment algorithm
+%             to use. Approximate variants of the algorithms also use
+%             algSel2. If this parameter and the next parameter are both
+%             omitted, then the algorithm is chosen as described below.
+%             Possible values are
+%             0) GNN-JPDA
+%             1) JPDA
+%             2) GNN
+%             3) Parallel single-target PDAs
+%             4) Naïve nearest neighbor
+%             5) JPDA*
+%             6) Approximate GNN-JPDA
+%             7) Approximate JPDA 
+%             8) Set JPDA
+%             9) Naïve nearest neighbor JPDA
+%             10) Approximate naïve nearest neighbor JPDA
+%     algSel2 An optional parameter that further specifies the algorithm
+%             used when algSel1=6-7. If omitted but algSel1 is specified, a
+%             default value of 0 is used. If both algSel1 and algSel2
+%             are omitted, the algorithm is chosen as described below.
+%             algSel2 chooses the approximation for the beta terms in the
+%             function calc2DAssignmentProbsApprox (the approxType input)
+%             when using algSel1=6,7; the comments to that function
+%             describe the values it can take. If algSel1=8 (Set JPDAF),
+%             this is the number of position components in the state (the
+%             posDim input in the calcSetJPDAUpdate function).
+%      param3 For the case where algSel1=6,7 and algSel2=0, this is the
+%             optional delta input to the function
+%             calc2DAssignmentProbsApprox. If omitted or an empty matrix
+%             is passed, the default value for that function is used.
 %
 %OUTPUTS: xEst An xDimXnumTar matrix of updated target states.
 %         PEst An xDimXxDimXnumtar matrix of updated covariance matrices
@@ -114,7 +116,7 @@ function [xEst,PEst,logLikes]=singleScanUpdate(xHyp,PHyp,A,algSel1,algSel2,param
 %    Aerospace and Electronic Systems, vol. 43, no. 1, pp. 392-400, Jan.
 %    2007.
 %
-%March 2015 David Crouse, generalizing the basic JPDAF code of David
+%March 2015 David F. Crouse, generalizing the basic JPDAF code of David
 %Karnick to many more algorithms, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
@@ -304,11 +306,63 @@ function [xEst,PEst,logLikes]=singleScanUpdate(xHyp,PHyp,A,algSel1,algSel2,param
         case 8%Set JPDAF
             %This is the same as the JPDA, except the method for computing
             %the betas is different.
-            %Compute the Set JPDAF probabilities.
             [xEst,PEst]=calcSetJPDAUpdate(xHyp,PHyp,A,AlgSel2);
 
             if(nargout>2)
                 logLikes=[];
+            end
+        case 9%Naïve nearest neighbor-JPDA
+            %The assignment for each target
+            logLikes=zeros(numTar,1);
+            for curTar=1:numTar
+                [maxVal,maxIdx]=max(A(curTar,:));
+                
+                %If the missed detection hypothesis is the most likely.
+                if(maxIdx>numMeas)
+                    maxIdx=numMeas+1;
+                end
+                
+                xEst(:,curTar)=xHyp(:,curTar,maxIdx);
+                logLikes(curTar)=log(maxVal);
+            end
+
+            %Compute the JPDAF probabilities.
+            beta=calc2DAssignmentProbs(A,true);
+            
+            %Compute the covariance matrix in the manner of the JPDAF, but
+            %about the ML estimate, so the result is a MSE matrix estimate.
+            for curTar=1:numTar
+                x=reshape(xHyp(:,curTar,:),[xDim,numHyp,1]);
+                P=reshape(PHyp(:,:,curTar,:),[xDim,xDim,numHyp]);
+                [~,PEst(:,:,curTar)]=calcMixtureMoments(x,beta(curTar,:),P,xEst(:,curTar));
+            end
+        case 10%Approxmate naïve nearest neighbor-JPDA
+            %This is the same as the naïve nearest neighbor-JPDA, except
+            %the method for computing the betas is different.
+            
+            %The assignment for each target
+            logLikes=zeros(numTar,1);
+            for curTar=1:numTar
+                [maxVal,maxIdx]=max(A(curTar,:));
+                
+                %If the missed detection hypothesis is the most likely.
+                if(maxIdx>numMeas)
+                    maxIdx=numMeas+1;
+                end
+                
+                xEst(:,curTar)=xHyp(:,curTar,maxIdx);
+                logLikes(curTar)=log(maxVal);
+            end
+
+            %Compute the approximate JPDAF probabilities.
+            beta=calc2DAssignmentProbsApprox(A,algSel2,true,param3);
+
+            %Compute the covariance matrix in the manner of the JPDAF, but
+            %about the ML estimate, so the result is a MSE matrix estimate.
+            for curTar=1:numTar
+                x=reshape(xHyp(:,curTar,:),[xDim,numHyp,1]);
+                P=reshape(PHyp(:,:,curTar,:),[xDim,xDim,numHyp]);
+                [~,PEst(:,:,curTar)]=calcMixtureMoments(x,beta(curTar,:),P,xEst(:,curTar));
             end
         otherwise
             error('Unknown algorithm selected.')

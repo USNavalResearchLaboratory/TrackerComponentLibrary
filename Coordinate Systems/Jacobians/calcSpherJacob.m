@@ -27,17 +27,17 @@ function J=calcSpherJacob(x,systemType,useHalfRange,lTx,lRx,M)
 %          type of spherical coordinate system), so that the range
 %          reported is a one-way range (or just half a bistatic range).
 %          The default if this parameter is not provided is false if lTx
-%          and is provided and true if it is omitted (monostatic). 
+%          is provided and true if it is omitted (monostatic). 
 %      lTx The 3X1 transmitter position in the global coordinate system
 %          with [x;y;z] components. If omitted or an empty matrix is
 %          passed, then a vector of zeros is used.
 %      lRx The 3X1 receiver position in the global coordinate system
 %          with [x;y;z] components. If omitted or an empty matrix is
 %          passed, then a vector of zeros is used.
-%        M A rotation matrix from the global Coordinate system to the
-%          orientation of the coordinate system at the receiver. This is
-%          only necessary if UV direction components are desired. If
-%          omitted, it is assumed to be the identity matrix.
+%        M A 3X3 rotation matrices to go from the alignment of the global
+%          coordinate system to that at the receiver. If omitted, then it
+%          is assumed that the local coordinate system is aligned with the
+%          global and M=eye(3) --the identity matrix is used.
 %
 %OUTPUTS: J A 3X3 Jacobian matrix where the rows are
 %          [bistatic range;azimuth;elevation] in that order and the columns
@@ -50,7 +50,7 @@ function J=calcSpherJacob(x,systemType,useHalfRange,lTx,lRx,M)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 if(nargin<6||isempty(M))
-   M=eye(3,3); 
+    M=eye(3,3); 
 end
 
 if((nargin<4||isempty(lTx))&&(nargin<3||isempty(useHalfRange)))

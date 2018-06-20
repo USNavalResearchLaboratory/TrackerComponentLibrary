@@ -25,7 +25,7 @@ function [minPoint,minValue,exitCode]=goldenSectionSearch(g,xSpan,XTol,maxIter)
 %         minValue The value g(minVal).
 %         exitCode A value indicating how the function terminated. Possible
 %                  values are:
-%                  0 The tolerance XTol  in the argument of g was achieved.
+%                  0 The tolerance XTol in the argument of g was achieved.
 %                  1 The maximum number of iterations was reached.
 %
 %The golden section search algorithm is implemented as described in
@@ -144,9 +144,9 @@ for curIter=1:maxIter
         gbBar=g(bBar);
     end
     
-    %If the 
+    %If the accuracy bound has been achieved.
     if(alphaBar-alpha<XTol)
-        exitCode=1;
+        exitCode=0;
         break;
     end
 end

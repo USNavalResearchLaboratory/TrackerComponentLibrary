@@ -61,7 +61,7 @@ function [C,S,a,c]=getIGRFCoeffs(year,fullyNormalize)
 %    1216-1230, Dec. 2010.
 %[2] D. E. Winch, D. J. Ivers, J. P. R. Turner, and R. J. Stening,
 %    "Geomagnetism and Schmidt quasi-normalization," Geophysical Journal
-%    International, vol. 160, no. 2, pp. 487?504, Feb. 2005.
+%    International, vol. 160, no. 2, pp. 487-504, Feb. 2005.
 %
 %January 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

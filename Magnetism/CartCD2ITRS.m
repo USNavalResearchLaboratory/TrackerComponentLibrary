@@ -11,7 +11,7 @@ function [zITRS,rotMat]=CartCD2ITRS(zCartCD,param1,param2,S11)
 %INPUTS: zCartCD One or more points given in Cartesian coordinates in CD
 %               coordinates. zCartCD is a 3XN matrix with each column
 %               having the format [x;y;z].
-%param1,param2,S11 These optional parameters specify the magnetic field
+% param1,param2,S11 These optional parameters specify the magnetic field
 %               parameters from which the direction of the CD pole is
 %               derived. These aprameters are impied set base don how the
 %               function is called:

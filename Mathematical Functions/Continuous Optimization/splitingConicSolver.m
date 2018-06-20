@@ -287,14 +287,14 @@ end
 
 %Change the default behaviour to non-verbose.
 if(~isfield(params,'verbose'))
-   params.verbose=0;
+   params.verbose=0.0;
 elseif(params.verbose)
     %Make sure that it is a double as the compiled scs_indirect function
     %expects.
     params.verbose=1.0;
 end
 
-%This is for when the matlab version is used.
+%This is for when the Matlab version is used.
 params.extra_verbose=params.verbose;
 
 %The function expects doubles.

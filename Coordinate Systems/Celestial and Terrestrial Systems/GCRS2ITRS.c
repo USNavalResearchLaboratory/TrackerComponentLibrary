@@ -1,18 +1,18 @@
-/**GCRS2ITRS  Convert vectors of position and possibly velocity from the
- *            Geocentric Celestrial Reference System (GCRS), a type of
- *            Earth-Centered Inertial (ECI) coordinate system, to the
- *            International Terrestrial Reference System (ITRS), a type of
- *            Earth-Centered Earth-Fixed (ECEF) coordinate system. Note
- *            that the velocity correction includes the centrifugal effects
- *            of the conversion from the terrestrial intermediate reference
- *            system (TIRS) into the ITRS, but omits the effects of the
- *            conversion from the GCRS into the celestial intermediate
- *            reference system (CIRS). The period of the Celestial
- *            Intermediate Pole (CIP) motion in the GCRS is on the order
- *            of 14 months and thus is significantly smaller than the
- *            rotation effects of the Earth in the TIRS. The velocity
- *            conversion also does not include the (small) centrifugal
- *            effect of polar motion.
+/**GCRS2ITRS Convert vectors of position and possibly velocity from the
+ *           Geocentric Celestrial Reference System (GCRS), a type of
+ *           Earth-Centered Inertial (ECI) coordinate system, to the
+ *           International Terrestrial Reference System (ITRS), a type of
+ *           Earth-Centered Earth-Fixed (ECEF) coordinate system. Note
+ *           that the velocity correction includes the centrifugal effects
+ *           of the conversion from the terrestrial intermediate reference
+ *           system (TIRS) into the ITRS, but omits the effects of the
+ *           conversion from the GCRS into the celestial intermediate
+ *           reference system (CIRS). The period of the Celestial
+ *           Intermediate Pole (CIP) motion in the GCRS is on the order
+ *           of 14 months and thus is significantly smaller than the
+ *           rotation effects of the Earth in the TIRS. The velocity
+ *           conversion also does not include the (small) centrifugal
+ *           effect of polar motion.
  *
  *INPUTS: x The NXnumVec collection of vectors to convert. N can be 3, or
  *          6. If the vectors are 3D, then they are position. 6D vectors

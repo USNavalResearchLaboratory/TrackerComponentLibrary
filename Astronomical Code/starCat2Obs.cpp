@@ -1,10 +1,10 @@
-/**STARCAT2OBS  Convert data for the location of stars as typically
- *              supplied by a star catalog, such as the Hipparcos catalog,
- *              to local ENU observed coordinates at the receiver,
- *              including corrections for parallax, aberation,
- *              gravitational deflection by the sun and a low-fidelity
- *              refraction model. The catalog data is assumed to be at the
- *              J2000 epoch.
+/**STARCAT2OBS Convert data for the location of stars as typically
+ *             supplied by a star catalog, such as the Hipparcos catalog,
+ *             to local ENU observed coordinates at the receiver,
+ *             including corrections for parallax, aberation,
+ *             gravitational deflection by the sun and a low-fidelity
+ *             refraction model. The catalog data is assumed to be at the
+ *             J2000 epoch.
  *
  *catData   catData is a matrix of stars (one per row) that are to be
  *          converted, where each row has the following format:
@@ -17,30 +17,30 @@
  *catData(:,6) vRad     Radial velocity of the star in meters per second
  *                      with a positive sign meaning that a star is
  *                      receding (going away from) Earth.
- *Jul1,Jul2 Two parts of a pseudo-Julian date given in UTC for when the
+ * Jul1,Jul2 Two parts of a pseudo-Julian date given in UTC for when the
  *          observation is made. The units of the date are days. The full
  *          date is the sum of both terms. The date is broken into two
  *          parts to provide more bits of precision. It does not matter how
  *          the date is split.
- *zObs      zObs=[lat;lon;h], the longitude, geodetic latitude and height
+ *     zObs zObs=[lat;lon;h], the longitude, geodetic latitude and height
  *          above the reference ellipsoid of the observer using the WGS-84
  *          reference ellipsoid. The units of lat and lon are radians and
  *          the height is in meters. East and North are the positive
  *          directions.
- *R         The relative humidity at the observer (between 0 and 1). If
+ *        R The relative humidity at the observer (between 0 and 1). If
  *          this parameter is omitted or an empty matrix is passed, then
  *          Constants.standardRelHumid is used.
- *P         The atmospheric pressure at the observer in Pascals (N/m^2). If
+ *        P The atmospheric pressure at the observer in Pascals (N/m^2). If
  *          this parameter is omitted or an empty matrix is passed, then
  *          Constants.standardAtmosphericPressure is used.
- *T         The air temperature at the observer in degrees Kelvin. If this
+ *        T The air temperature at the observer in degrees Kelvin. If this
  *          parameter is omitted or an empty matrix is passed, then
  *          Constants.standardTemp is used.
- *wl        The wavelength at which the observation is made in units of
+ *       wl The wavelength at which the observation is made in units of
  *          meters. If this parameter is omitted or an empty matrix is
  *          passed, then a wavelength of 0.574 micrometers is used, which
  *          is in the visible spectrum (a rather yellow color).
- *deltaT    The difference between UTC and UT1 in seconds. This
+ *   deltaT The difference between UTC and UT1 in seconds. This
  *          information can be obtained from
  *          http://www.iers.org/nn_11474/IERS/EN/DataProducts/EarthOrientationData/eop.html?__nnn=true
  *          or 
@@ -48,7 +48,7 @@
  *          If this parameter is omitted or if an empty matrix is passed,
  *          then the value provided by the function getEOP will be used
  *          instead.
- *xpyp      xpyp=[xp,yp], the polar motion coordinates of the respect
+ *     xpyp xpyp=[xp,yp], the polar motion coordinates of the respect
  *          to the International Terrestrial Reference System. As
  *          described in Section 5.1 of the IERS Conventions 2010,
  *          values are published by the IERS and should have been
@@ -61,7 +61,7 @@
  *                taken with respect to a local East-North-Up coordinate
  *                system defined on the WGS-84 ellipsoid. Azimuth is
  *                measured in radians North of East.
- *         uObs   For N stars, this is a 3XN matrix of unit vectors in
+ *           uObs For N stars, this is a 3XN matrix of unit vectors in
  *                WGS-84 ENU coordinates pointing toward the stars. 
  *
  *This is a mex wrapper for the function iauAtco13 in the International

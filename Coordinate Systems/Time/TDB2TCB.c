@@ -1,6 +1,6 @@
-/**TDB2TCB  Convert from barycentric dynamic time (TDB)  to barycentric
- *          coordinate time (TCB), both represented as two-part Julian
- *          dates.
+/**TDB2TCB Convert from barycentric dynamic time (TDB)  to barycentric
+ *         coordinate time (TCB), both represented as two-part Julian
+ *         dates.
  *
  *INPUTS: Jul1, Jul2 Two parts of a Julian date given in TDB. The units of
  *                   the date are days. The full date is the sum of both

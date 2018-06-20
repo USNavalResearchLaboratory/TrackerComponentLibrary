@@ -4,7 +4,7 @@ classdef FD
 %    freedom and y is a central chi squared random variable with n degrees
 %    of freedom, then as noted in Chapter 6-3 of [1], the ratio (x/m)/(y/n)
 %    is given by the F distribution with (m,n) degrees of freedom. This is
-%    also known as the Fisher?Snedecor distribution and as Fisher's
+%    also known as the Fisher-Snedecor distribution and as Fisher's
 %    z-distribution.
 %Implemented methods are: mean, var, PDF, CDF, invCDF, rand, kthMoment
 %

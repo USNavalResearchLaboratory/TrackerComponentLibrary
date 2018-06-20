@@ -6,7 +6,7 @@ int iauDat(int iy, int im, int id, double fd, double *deltat )
 **   i a u D a t
 **  - - - - - - -
 **
-**  For a given UTC date, calculate delta(AT) = TAI-UTC.
+**  For a given UTC date, calculate Delta(AT) = TAI-UTC.
 **
 **     :------------------------------------------:
 **     :                                          :
@@ -43,7 +43,7 @@ int iauDat(int iy, int im, int id, double fd, double *deltat )
 **  This function is part of the International Astronomical Union's
 **  SOFA (Standards Of Fundamental Astronomy) software collection.
 **
-**  Status:  support function.
+**  Status:  user-replaceable support function.
 **
 **  Given:
 **     iy     int      UTC:  year (Notes 1 and 2)
@@ -120,15 +120,15 @@ int iauDat(int iy, int im, int id, double fd, double *deltat )
 **  Called:
 **     iauCal2jd    Gregorian calendar to JD
 **
-**  This revision:  2017 April 18
+**  This revision:  2017 October 7
 **
-**  SOFA release 2017-04-20
+**  SOFA release 2018-01-30
 **
-**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 */
 {
 /* Release year for this version of iauDat */
-   enum { IYV = 2016};
+   enum { IYV = 2017};
 
 /* Reference dates (MJD) and drift rates (s/day), pre leap seconds */
    static const double drift[][2] = {
@@ -251,7 +251,7 @@ int iauDat(int iy, int im, int id, double fd, double *deltat )
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2017
+**  Copyright (C) 2018
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
@@ -288,9 +288,13 @@ int iauDat(int iy, int im, int id, double fd, double *deltat )
 **        of how the derived work is based upon, contains and/or differs
 **        from the original SOFA software.
 **
-**     c) The names of all routines in your derived work shall not
-**        include the prefix "iau" or "sofa" or trivial modifications
-**        thereof such as changes of case.
+**     c) UNLIKE OTHER SOFA SOFTWARE, WHICH IS STRICTLY "READ ONLY",
+**        USERS ARE PERMITTED TO REPLACE THIS FUNCTION WITH ONE USING
+**        THE SAME NAME BUT DIFFERENT CODE.  This is to allow use of
+**        locally supported mechanisms for keeping track of leap
+**        seconds, perhaps file or network based.  It avoids the need
+**        for applications to be relinked periodically in order to pick
+**        up SOFA updates.
 **
 **     d) The origin of the SOFA components of your derived work must
 **        not be misrepresented;  you must not claim that you wrote the
@@ -344,4 +348,5 @@ int iauDat(int iy, int im, int id, double fd, double *deltat )
 **                 United Kingdom
 **
 **--------------------------------------------------------------------*/
+
 }

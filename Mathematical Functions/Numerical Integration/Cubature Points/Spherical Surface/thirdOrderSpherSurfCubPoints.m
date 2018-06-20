@@ -9,7 +9,7 @@ function [xi,w]=thirdOrderSpherSurfCubPoints(numDim,algorithm)
 %                used to generate the points. Possible values are
 %                0 (The default if omitted or an empty matrix is passed)
 %                  Use algorithm Un 3-1 on page 294 of [1]. This requires
-%                  2*numDIm points.
+%                  2*numDim points.
 %                1 Use algorithm Un 3-2 on page 294 of [1]. This requires
 %                  2^numDim points.
 %                2 Use the degree 3 algorithm of [2] requiring 2*(numDim+1)

@@ -5,15 +5,15 @@ function I=getNextCombo(I,n)
 %              The first element in the combination is the least
 %              significant element for defining the lexicographic order.
 %
-%INPUTS:    I  The current combination of r elements. The next combination
-%              in lexicographic order is desired. The first element is the
-%              least significant and one begins with I=[0;1;2;...;r].
-%           n  The number of items from which r items are chosen for
-%              combinations. The elements of I can range from 0 to n-1.
+%INPUTS: I The current combination of r elements. The next combination in
+%          lexicographic order is desired. The first element is the least
+%          significant and one begins with I=[0;1;2;...;r].
+%        n The number of items from which r items are chosen for
+%          combinations. The elements of I can range from 0 to n-1.
 %
-%OUTPUTS:   I  The next combination in the lexicographic sequence, or an
-%              empty matrix if the final combination in the lexicographic
-%              ordering is provided.
+%OUTPUTS: I The next combination in the lexicographic sequence, or an empty
+%           matrix if the final combination in the lexicographic ordering
+%           is provided.
 %
 %This function can be useful for generating combinations when used in a
 %loop. It is more computationally efficient than sequentially unranking the

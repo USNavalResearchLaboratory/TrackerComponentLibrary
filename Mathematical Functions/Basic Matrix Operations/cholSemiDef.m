@@ -88,6 +88,7 @@ if(method==0||method==1)
     %decomposition. The tria function turns it into a valid Cholesky
     %decomposition.
     dAbs=abs(diag(D));
+
     diagVal=diag(sqrt(max(diag(D),epsVal*max(dAbs))));
 
     sqrtA=L*diagVal;

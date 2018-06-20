@@ -1,89 +1,88 @@
-/*DIVRECTOPT The dividing rectangles optimization algorithm. This is a
+/**DIVRECTOPT The dividing rectangles optimization algorithm. This is a
  *           derivative-free global optimization algorithm where the
  *           multidimensional search space can be bounded. This algorrithm
  *           tries to minimize a given function of a vector parameter.
  *
- *INPUTS:    f A handle to the function over which the minimization is to
- *             be performed. The function [fVal,violatesConstraints]=f(x)
- *             takes the NX1 x vector and returns the real scalar function
- *             value fVal. The parameter violatesConstraints is used to
- *             mark forbidden areas, for example, where the function might
- *             not be defined. violatesConstraints=false if the re are not
- *             constraint violations and it is true if there is a
- *             constraint violation.
- * lowerBounds,upperBounds NX1 vectors of lower bounds defining
- *             lower and upper bounds on the components of x at the optimal
- *             points. This defines the search space. The elements must be
- *             finite and cannot be NaNs.
- *     options A structure where all elements are optional. The elements
- *             set options that affect the algorithm and its convergence.
- *             Default values are used if a field is missing. Possible
- *             fields in the structure are
- *           algorithm (default 0) This selects which of the two direct
- *                     optimization algorithms should be posed. Possible
- *                     values are
- *                     0: Use the algorithm of [1], which is probably
- *                        better for functions with many local minima.
- *                     1: Use the algorithm of [2], which favors local
- *                        search and thus might be better for functions
- *                        with few local minima.
- *              maxDiv (default 5000) The maximum number of divisions of
- *                     the hyperrectangles allowed. This must be >0.
- *             maxIter (default 100) The maximum number of iterations.
- *            maxFEval (default 500) The maximum number of function
- *                      evaluations.
- *             epsilon (default 1e-4) The Jones' factor. It is the epsilon
- *                     term in Definitions 3.1 and 4.1 in [1]. It affects
- *                     the convergence rate of the algorithm by avoiding
- *                     oversampling near points with low function values
- *                     and biasing the sampling towards a global search.
- *                     If a positive value of epsilon is specified, then
- *                     the same value is used for all iterations. In [1],
- *                     it is suggested that epsilon be set to the desired
- *                     solution accuracy (in f) for good convergence,
- *                     though other convergence conditions are discussed in
- *                     [2]. If a negative value is specified, then epsilon
- *                     is adaptively changed using the formula
- *                     epsilon = max(1.D-4*abs(fMin),abs(epsilon)).
- *                     The magnitude of epislon must be between 0 and 1,
- *                     not inclusive of 1, though 0 tends to work. 
- *          epsilonAbs (default 0) Definitions 3.1 and 4.1 in [1] involve
- *                     comparisons to fMin-epsilon*abs(fMin), where fMin is
- *                     the current minimum function value found. If
- *                     epsilonAbs is nonzero, then the comparison is
- *                     actually taken with respect to
- *                     min(fMin-epsilon*abs(fMin),epsilonAbs)
- *                     epsilonAbs must be positive.
- *        volumeRelTol (default 1e-10) Convergence is declared if the
- *                     volume of the search region is this fraction of the
- *                     original volume (must be between 0 and 1)
- *         sigmaRelTol (default 0) Convergence is declared if the hypercube
- *                     measure is smaller than this value. The notion of
- *                     the hypercube measure sigma(S) is discussed in [2].
- *             fGlobal If the actual minimum value of f is known, even
- *                     though the value of x providing that minimum is
- *                     unknown, then it can be specified. Otherwise, this
- *                     parameter is not used.
- *       fGlobalRelTol (default 1e-12 if fGlobal is provided) This is only
- *                     used if fGlobal is provided. Convergence is declared
- *                     if
- *                     (fMin - fGlobal)/max(1,abs(fGlobal)) < fGlobalRelTol
+ *INPUTS: f A handle to the function over which the minimization is to be
+ *          performed. The function [fVal,violatesConstraints]=f(x) takes
+ *          the NX1 x vector and returns the real scalar function value
+ *          fVal. The parameter violatesConstraints is used to mark
+ *          forbidden areas, for example, where the function might not be
+ *          defined. violatesConstraints=false if there are not constraint
+ *          violations and it is true if there is a constraint violation.
+ * lowerBounds,upperBounds NX1 vectors of lower bounds defining lower and
+ *          upper bounds on the components of x at the optimal points. This
+ *          defines the search space. The elements must be finite and
+ *          cannot be NaNs.
+ *  options A structure where all elements are optional. The elements set
+ *          options that affect the algorithm and its convergence. Default
+ *          values are used if a field is missing. Possible fields in the
+ *          structure are:
+ *          algorithm (default 0) This selects which of the two direct
+ *                    optimization algorithms should be posed. Possible
+ *                    values are
+ *                    0: Use the algorithm of [1], which is probably
+ *                       better for functions with many local minima.
+ *                    1: Use the algorithm of [2], which favors local
+ *                       search and thus might be better for functions
+ *                       with few local minima.
+ *             maxDiv (default 5000) The maximum number of divisions of
+ *                    the hyperrectangles allowed. This must be >0.
+ *            maxIter (default 100) The maximum number of iterations.
+ *           maxFEval (default 500) The maximum number of function
+ *                     evaluations.
+ *            epsilon (default 1e-4) The Jones' factor. It is the epsilon
+ *                    term in Definitions 3.1 and 4.1 in [1]. It affects
+ *                    the convergence rate of the algorithm by avoiding
+ *                    oversampling near points with low function values
+ *                    and biasing the sampling towards a global search.
+ *                    If a positive value of epsilon is specified, then
+ *                    the same value is used for all iterations. In [1],
+ *                    it is suggested that epsilon be set to the desired
+ *                    solution accuracy (in f) for good convergence,
+ *                    though other convergence conditions are discussed in
+ *                    [2]. If a negative value is specified, then epsilon
+ *                    is adaptively changed using the formula
+ *                    epsilon = max(1.D-4*abs(fMin),abs(epsilon)).
+ *                    The magnitude of epislon must be between 0 and 1,
+ *                    not inclusive of 1, though 0 tends to work. 
+ *         epsilonAbs (default 0) Definitions 3.1 and 4.1 in [1] involve
+ *                    comparisons to fMin-epsilon*abs(fMin), where fMin is
+ *                    the current minimum function value found. If
+ *                    epsilonAbs is nonzero, then the comparison is
+ *                    actually taken with respect to
+ *                    min(fMin-epsilon*abs(fMin),epsilonAbs)
+ *                    epsilonAbs must be positive.
+ *       volumeRelTol (default 1e-10) Convergence is declared if the
+ *                    volume of the search region is this fraction of the
+ *                    original volume (must be between 0 and 1)
+ *        sigmaRelTol (default 0) Convergence is declared if the hypercube
+ *                    measure is smaller than this value. The notion of
+ *                    the hypercube measure sigma(S) is discussed in [2].
+ *            fGlobal If the actual minimum value of f is known, even
+ *                    though the value of x providing that minimum is
+ *                    unknown, then it can be specified. Otherwise, this
+ *                    parameter is not used.
+ *      fGlobalRelTol (default 1e-12 if fGlobal is provided) This is only
+ *                    used if fGlobal is provided. Convergence is declared
+ *                    if
+ *                    (fMin - fGlobal)/max(1,abs(fGlobal)) < fGlobalRelTol
  *
- *OUTPUTS:    x The NX1 optimal point found.
- *         fVal The value of the function at the optimal point found.
- *     exitCode A return value indicating the status of the algorithm on
- *              termination. Possible values are:
- *                1   Function terminated, because  the number of function
- *                    evaluations done is larger than maxFEval.
- *                2   Function terminated, because the number of iterations
- *                    equals maxIter.
- *                3   The function value found is within fGlobalRelTol of
- *                    the global optimum given in fGlobal.
- *                4   The volume of the hyperrectangle with fVal at its
- *                    center is less than volumeRelTol times the volume of
- *                    the original hyperrectangle.
- *                5   The measure of the hyperrectangle with fVal at its
- *                    center is less than sigmaRelTol.
+ *OUTPUTS: x The NX1 optimal point found.
+ *      fVal The value of the function at the optimal point found.
+ *  exitCode A return value indicating the status of the algorithm on
+ *          termination. Possible values are:
+ *          1 Function terminated, because  the number of function
+ *            evaluations done is larger than maxFEval.
+ *          2 Function terminated, because the number of iterations equals
+ *            maxIter.
+ *          3 The function value found is within fGlobalRelTol of the
+ *            global optimum given in fGlobal.
+ *          4 The volume of the hyperrectangle with fVal at its center is
+ *            less than volumeRelTol times the volume of the original
+ *            hyperrectangle.
+ *          5 The measure of the hyperrectangle with fVal at its center is
+ *            less than sigmaRelTol.
  *
  *Global optimization algorithms such as this are very good at handling
  *functions with many local minima. Often, one might want to use a global

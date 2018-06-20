@@ -3,14 +3,14 @@
  *                  Julian epoch in the same scale. The timescale
  *                  should be uniform (i.e. not UTC).
  *
- *INPUTS:  Jul1, Jul2  Matrices of two parts of a Julian date given in the 
- *                     same timescale as the epoch The units of the date are
- *                     days. The full date is the sum of both terms. The
- *                     entries in the matrices correspond to different
- *                     dates to be converted.
+ *INPUTS: Jul1, Jul2  Matrices of two parts of a Julian date given in the 
+ *                    same timescale as the epoch The units of the date are
+ *                    days. The full date is the sum of both terms. The
+ *                    entries in the matrices correspond to different
+ *                    dates to be converted.
  *
- *OUTPUTS: epochJ      A matrix of Julian epochs as fractional years in the
- *                     same timescale as the input.
+ *OUTPUTS: epochJ A matrix of Julian epochs as fractional years in the same
+ *                timescale as the input.
  *
  *A Julian epoch is a factional year number denominated in terms of a
  *year of exactly 365.25 days in TT. For example 2000.5 is a Julian epoch

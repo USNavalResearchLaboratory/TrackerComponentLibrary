@@ -14,92 +14,61 @@ function [xMin,fMin,exitCode]=quasiNetwonBFGS(f,x0,D0,epsilon,deltaTestDist,delt
 %                 then NewtonsMethod is more appropriate as this function
 %                 assumes the Hessian matrix is symmetric.
 %
-%INPUTS:            f A handle to the function (and its gradient) over
-%                     which the minimization is to be performed. The
-%                     function [fVal,gVal]=f(x) takes the NX1 x vector
-%                     returns the real scalar function value fVal and
-%                     gradient gVal at the point x.
-%                  x0 The NX1-dimensional point from which the
-%                     minimization starts.
-%                  D0 An estimate of the inverse Hessian matrix at x0. If
-%                     omitted or an empty matrix is passed, then the
-%                     identity matrix is used.
-%             epsilon The parameter determining the accuracy of the
-%                     desired solution in terms of the gradient. The
-%                     function terminates when
-%                     norm(g) < epsilon*max([1, norm(x)])
-%                     where g is the gradient. The default if omitted or
-%                     an empty matrix is passed is 1e-6.
-%       deltaTestDist The number of iterations back to use to compute the
-%                     decrease of the objective function if a delta-based
-%                     convergence test is performed. If zero, then no
-%                     delta-based convergence testing is done. The default
-%                     if omitted or an empty matrix is passed is zero.
-%              delta  The delta for the delta convergence test. This
-%                     determines the minimum rate of decrease of the
-%                     objective function. Convergence is determined if
-%                     (f'-f)<=delta*f, where f' is the value of the
-%                     objective function f deltaTestDist iterations ago,
-%                     and f is the current objective function value. The
-%                     default if this parameter is omitted or an empty
-%                     matrix is passed is 0.
-%    lineSearchParams An optional structure whose members specify
-%                     tolerances for the line search. The parameters are
-%                     described as in the lineSearch function. Possible
-%                     members are algorithm, fTol, wolfeTol, xTol, 
-%                     minStep, maxStep, maxIter. The C and l1NormRange
-%                     parameters are not used. If lineSearchParams is
-%                     omitted or an empty matrix is passed, then the
-%                     default values as described in the lineSearch
-%                     function are used. If any member of this structure is
-%                     omitted or is assigned an empty matrix, then the
-%                     default value will be used.
-%              scaleD A boolean parameter indicating whether the inverse
-%                     Hessian estiamte should be scaled as in Equation
-%                     1.201 of Section 1.7 of [1]. The default if omitted
-%                     or an empty matrix is passed is false.
-%             maxIter The maximum number of iterations to use for the
-%                     overall BFGS algorithm. The default if this
-%                     parameter is omitted or an empty matrix is past is
-%                     1000.
+%INPUTS: f A handle to the function (and its gradient) over which the
+%          minimization is to be performed. The function [fVal,gVal]=f(x)
+%          takes the NX1 x vector and returns the real scalar function
+%          value fVal and gradient gVal at the point x.
+%       x0 The NX1-dimensional point from which the minimization starts.
+%       D0 An estimate of the inverse Hessian matrix at x0. If omitted or
+%          an empty matrix is passed, then the identity matrix is used.
+%  epsilon The parameter determining the accuracy of the desired solution
+%          in terms of the gradient. The function terminates when
+%          norm(g) < epsilon*max([1, norm(x)])
+%          where g is the gradient. The default if omitted or an empty
+%          matrix is passed is 1e-6.
+% deltaTestDist The number of iterations back to use to compute the
+%          decrease of the objective function if a delta-based convergence
+%          test is performed. If zero, then no delta-based convergence
+%          testing is done. The default if omitted or an empty matrix is
+%          passed is zero.
+%    delta The delta for the delta convergence test. This determines the
+%          minimum rate of decrease of the objective function. Convergence
+%          is determined if (f'-f)<=delta*f, where f' is the value of the
+%          objective function f deltaTestDist iterations ago,and f is the
+%          current objective function value. The default if this parameter
+%          is omitted or an empty matrix is passed is 0.
+% lineSearchParams An optional structure whose members specify tolerances
+%          for the line search. The parameters are described as in the
+%          lineSearch function.
+%   scaleD A boolean parameter indicating whether the inverse Hessian
+%          estimate should be scaled as in Equation 1.201 of Section 1.7 of
+%          [1]. The default if omitted or an empty matrix is passed is
+%          false.
+%  maxIter The maximum number of iterations to use for the overall BFGS
+%          algorithm. The default if this parameter is omitted or an empty
+%          matrix is passed is 1000.
 %
-%OUTPUTS: xMin     The value of x at the minimum point found. If exitCode
-%                  is negative, then this might be an empty matrix.
-%         fMin     The cost function value at the minimum point found. If
-%                  exitCode is negative, then this might be an empty
-%                  matrix.
-%         exitCode A value indicating the termination condition of the
-%                  algorithm. Nonnegative values indicate success; negative
-%                  values indicate some type of failure. Possible values
-%                  are:
+%OUTPUTS: xMin The value of x at the minimum point found. If exitCode is
+%              negative, then this might be an empty matrix.
+%         fMin The cost function value at the minimum point found. If
+%              exitCode is negative, then this might be an empty
+%              matrix.
+%     exitCode A value indicating the termination condition of the
+%              algorithm. Nonnegative values indicate success; negative
+%              values indicate some type of failure. Possible values are:
 %                  0 The algorithm termiated successfully based on the
 %                    gradient criterion.
 %                  1 The algorithm terminated successfully based on the
 %                    accuracy criterion.
 %                 -1 The maximum number of overall iterations was reached.
-%              -1023 A logical error in the line search code occurred.
-%              -1001 A finite precision error occurred or no line-search
-%                    step satisfies the sufficient decrease and curvature
-%                    conditions.
-%              -1000 The line-search step size became less than minStep.
-%               -999 The line-search step size became larger than maxStep.
-%               -998 The maximum number of line search iterations was
-%                    reached.
-%               -996 The relative width of the interval of uncertainty in
-%                    the line search algorithm is at most xTol.
-%               -995 A negative line-search step occurred.
-%               -994 The current search direction increases the objective
-%                    function.
+%              Other negative values correspond to a failure in lineSearch
+%              and correspond to the exitCode returned by the lineSearch
+%              function. 
 %
 %The algorithm is implemented based on the description in Chapter 1.7 of
-%[1]. However, the line search methods are performed using the lineSearch
-%function, which is a wrapper for the line search algorithms withing the
-%L-BFGS library of
-%https://github.com/chokkan/liblbfgs
-%which is based on the Fortran L-BFGS algorithm of
-%http://www.ece.northwestern.edu/~nocedal/lbfgs.html
+%[1] with the function lineSearch used to perform the line search.
 %
-%Examples:
+%EXAMPLE 1:
 %The first example is that used in the lineSearch file. 
 % f=@(x)deal((x(1)+x(2)-3)*(x(1)+x(2))^3*(x(1)+x(2)-6)^4,... %The function
 %            [(-6+x(1)+x(2))^3*(x(1)+x(2))^2*(54+8*x(1)^2+x(2)*(-45+8*x(2))+x(1)*(-45+16*x(2)));
@@ -110,8 +79,10 @@ function [xMin,fMin,exitCode]=quasiNetwonBFGS(f,x0,D0,epsilon,deltaTestDist,delt
 % [xMin,fMin,exitCode]=quasiNetwonBFGS(f,x0)
 %The optimum point found is such that sum(xMin) is approximately
 %1.73539450 with a minimum function value of approximately -2.1860756.
-%The second example requires that the cost function be placed in a
-%separate file. The cost function is
+%
+%EXAMPLE 2:
+%The second example requires that the cost function be placed in a separate
+%file. The cost function is
 % function [fx,g]=objFun(x)
 %    n=length(x);
 %    fx=0;
@@ -139,6 +110,7 @@ function [xMin,fMin,exitCode]=quasiNetwonBFGS(f,x0,D0,epsilon,deltaTestDist,delt
 %    x0(i+1)=-1.2;
 %    x0(i+1+1)=1;
 % end
+% f=@(x)objFun(x);
 % [xMin,fMin,exitCode]=quasiNetwonBFGS(f,x0)
 %whereby the optimal solution is all ones with a minimum function value of
 %zero. This second example is the same as that provided with the L-BFGS
@@ -170,50 +142,8 @@ if(nargin<6||isempty(delta))
     delta=0;
 end
 
-%The default line search parameter options
-algorithm=[];
-C=[];
-stepSizeInit=[];
-fTol=[];
-wolfeTol=[];
-xTol=[];
-minStep=[];
-maxStep=[];
-maxIterLS=[];
-
-%Take any line search parameters given
-if(nargin>=7&&~isempty(lineSearchParams))
-    if(isfield(lineSearchParams,'algorithm'))
-        algorithm=lineSearchParams.algorithm;
-    end
-    
-    if(isfield(lineSearchParams,'stepSizeInit'))
-        stepSizeInit=lineSearchParams.stepSizeInit;
-    end
-    
-    if(isfield(lineSearchParams,'fTol'))
-        fTol=lineSearchParams.fTol;
-    end
-    
-    if(isfield(lineSearchParams,'wolfeTol'))
-        wolfeTol=lineSearchParams.wolfeTol;
-    end
-    
-    if(isfield(lineSearchParams,'xTol'))
-        xTol=lineSearchParams.xTol;
-    end
-    
-    if(isfield(lineSearchParams,'minStep'))
-        minStep=lineSearchParams.minStep;
-    end
-    
-    if(isfield(lineSearchParams,'maxStep'))
-        maxStep=lineSearchParams.maxStep;
-    end
-    
-    if(isfield(lineSearchParams,'maxIter'))
-        maxIterLS=lineSearchParams.maxIter;
-    end
+if(nargin<7)
+    lineSearchParams=[];
 end
 
 if(nargin<8||isempty(scaleD))
@@ -236,8 +166,8 @@ for cutIter=1:maxIter
     d=-D*gradFPrev;
     
     %Perform a line search in the given descent direction.
-    [xCur,fValCur,gradFCur,~,exitCode]=lineSearch(f,xPrev,d,algorithm,C,stepSizeInit,fTol,wolfeTol,xTol,minStep,maxStep,maxIterLS);
-    if(exitCode<0)
+    [xCur,fValCur,gradFCur,~,~,exitCode]=lineSearch(f,xPrev,d,[],[],lineSearchParams);
+    if(isempty(xCur))
         xMin=[];
         fMin=[];
         return;

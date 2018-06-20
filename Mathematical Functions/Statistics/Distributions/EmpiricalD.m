@@ -355,20 +355,19 @@ end
 function [vals,empData,w]=rand(N,empData,w,isSortedNoRepeats)
 %%RAND Generate empirically distributed random variables.
 %
-%INPUTS:    N If N is a scalar, then rand returns an NXN matrix of random
-%             variables. If N=[M,N1] is a two-element row vector, then
-%             rand returns an MXN1 matrix of  random variables.
-%     empData An NX1 or 1XN vector of N scalar samples that make up the
-%             empirical distribution. Values can be repeated.
-%           w An optional NX1 or 1XN vector of weights associated with the
-%             samples. These should sum to 1. If omitted or an empty matrix
-%             is passed, the samples are assumed to be uniformly weighted.
+%INPUTS: N If N is a scalar, then rand returns an NXN matrix of random
+%          variables. If N=[M,N1] is a two-element row vector, then rand
+%          returns an MXN1 matrix of  random variables.
+%  empData An NX1 or 1XN vector of N scalar samples that make up the
+%          empirical distribution. Values can be repeated.
+%        w An optional NX1 or 1XN vector of weights associated with the
+%          samples. These should sum to 1. If omitted or an empty matrix is
+%          passed, the samples are assumed to be uniformly weighted.
 % isSortedNoRepeats If the points in empData are sorted in ascending order
-%             and no points are repeated, then the algorithm is faster.
-%             This indicates whether the values in empData are sorted in
-%             ascending order without repeats. If this parameter is omitted
-%             or an empty matrix is passed, a default value of false is
-%             used.
+%          and no points are repeated, then the algorithm is faster. This
+%          indicates whether the values in empData are sorted in ascending
+%          order without repeats. If this parameter is omitted or an empty
+%          matrix is passed, a default value of false is used.
 %
 %OUTPUTS: vals A matrix whose dimensions are determined by N of the
 %              generated empirical random variables.

@@ -1,8 +1,8 @@
 function [minCostTuples,gain]=assign3DBB(C,maximize,boundType,initMethod,maxIter,epsVal)
-%%ASSIGN3DBB Solve the axial 3D assignment problem using a branch-and bound
-%         algorithm. Such problems are NP-complete and thus cannot be
-%         solved in polynomial time, so this function can only solve
-%         problems of a moderate size. The optimization problem being
+%%ASSIGN3DBB Solve the data fusion axial 3D assignment problem using a
+%         branch-and-bound algorithm. Such problems are NP-hard and thus
+%         cannot be solved in polynomial time, so this function can only
+%         solve problems of a moderate size. The optimization problem being
 %         solved is minimize (or maximize)
 %         \sum_{i=1}^{n1}\sum_{j=1}^{n2}\sum_{k=1}^{n3}C_{i,j,k}*\rho_{i,j,k}
 %         subject to
@@ -14,7 +14,7 @@ function [minCostTuples,gain]=assign3DBB(C,maximize,boundType,initMethod,maxIter
 %         This is equivalent to the optimization problem
 %         min (or max) sum_{i} C(i,phi_2(i),phi_3(i))
 %         where phi_2 and phi_3 are length n1 arrangements of n2 and n3
-%         items over which the minimization is performed. In general, it si
+%         items over which the minimization is performed. In general, it is
 %         not required that n1<=n2<=n3 (for any other ordering, the
 %         equality constraint is on the dimension with the fewest
 %         elements), so the solution is given as tuples solving the problem
@@ -36,7 +36,7 @@ function [minCostTuples,gain]=assign3DBB(C,maximize,boundType,initMethod,maxIter
 % boundType This selects the bound to use for the branch and bound method.
 %          These correspond to the method input of the assign3DLB function.
 %          The default if this parameter is omitted or an empty matrix is
-%          passed is 1 (a relatively fast bound).
+%          passed is 2.
 % initMethod A parameter indicating how the branch-and-bound algorithm
 %          should be initialized. Possible values are:
 %          0 (The default if omitted or an empty matrix is passed) Do not
@@ -53,8 +53,8 @@ function [minCostTuples,gain]=assign3DBB(C,maximize,boundType,initMethod,maxIter
 %          ignored. The default if omitted or an empty matrix is passed is
 %          eps(1).
 %
-%OUTPUTS: tuples A 3Xmin([n1,n2,n3]) matrix where tuples(:,i) is the ith
-%                assigned tuple in C as described above.
+%OUTPUTS: tuples A 3Xn1 matrix where tuples(:,i) is the ith assigned tuple
+%                in C as described above.
 %           gain The cost value of the optimal assignment found. This is
 %                the sum of the values of the assigned elements in C.
 %
@@ -96,7 +96,7 @@ if(nargin<4||isempty(initMethod))
 end
 
 if(nargin<3||isempty(boundType))
-    boundType=1; 
+    boundType=2; 
 end
 
 if(nargin<2||isempty(maximize))
@@ -126,9 +126,10 @@ elseif(length(nVals)==1)
     nVals=[nVals,1,1];
 end
 
-[nVals,dimsOrder]=sort(nVals,'ascend');
+if(length(nVals)<3||~(nVals(1)<=nVals(2)&&nVals(2)<=nVals(3)))
+    error('It is required that size(C,1)<=size(C,2)<=size(C,3)')
+end
 
-C=permute(C,dimsOrder);
 n1=nVals(1);
 n2=nVals(2);
 n3=nVals(3);
@@ -136,17 +137,18 @@ n3=nVals(3);
 %Get an initial estimate.
 switch(initMethod)
     case 0%Do not use an initial estimate.
-        relGap=Inf;
+        q=-Inf;
         gain=Inf;
+        minCostTuples=[];
     case 1
         initAlgorithm=0;
-        [minCostTuples,gain,~,relGap]=assign3D(C,false,initAlgorithm,[],[],maxIter,epsVal);
+        [minCostTuples,gain,q]=assign3D(C,false,initAlgorithm,[],[],maxIter,epsVal);
     otherwise
         error('Invalid initMethod specified.');
 end
 
 %If the initial approximation returned a suboptimal solution.
-if(abs(relGap)>epsVal)
+if(abs(gain-q)>=epsVal*gain)
     numLevels=n1;%The number of things to assign.
 
     %There are n1*n2*n3 total tuples. However, we define a level by the
@@ -221,8 +223,8 @@ if(abs(relGap)>epsVal)
     %Allocate space for the bounded total costs for assigning something at
     %each level. Each level is given by the value in the first index that
     %is assigned. For each first index, there are n2*n3 values. There are
-    %no bounds for the top level, because the cost matrix can be directly
-    %used.
+    %no bounds for the deepest level, because the cost matrix can be
+    %directly used.
     boundVals=zeros(maxTuplesPerLevel,numLevels-1);
 
     %This holds what was the minimum cost value before going to a higher
@@ -268,7 +270,8 @@ if(abs(relGap)>epsVal)
                 gain=minVal;
 
                 assignedTupleOrigIdx(curLevel)=freeTupleOrigIdx(minIdx,curLevel);
-
+                
+                minCostTuples=zeros(3,numLevels);
                 for i=1:numLevels
                     minCostTuples(:,i)=[i;origFreeTuples(:,assignedTupleOrigIdx(i))];
                 end
@@ -323,7 +326,10 @@ if(abs(relGap)>epsVal)
                 end
             end
 
-            %If all possible tuples at this level have been eliminated.
+            %If there are not enough tuples left to make a full assignment.
+            %The assumption here is that numLevels>1, so if we are here,
+            %there must be one tuple left to assign after assigning the one
+            %in this level.
             if(numFreeTuples(curLevel)==0)
                 increasingLevelNumber=false;
                 curLevel=curLevel-1;
@@ -356,7 +362,7 @@ if(abs(relGap)>epsVal)
             %the tuple by one.
             CostMatCur(i,j,k,curLevel)=Inf;
             numFreeTuples(curLevel)=numFreeTuples(curLevel)-1;
-
+            
             %If the last tuple visited leaves too few tuples left for a
             %full assignment, then go up another level.
             if(numFreeTuples(curLevel)==0)
@@ -391,6 +397,7 @@ if(abs(relGap)>epsVal)
                     sel1=1:(numFreeTuples(curLevel)-idx+1);
                     sel2=idx:numFreeTuples(curLevel);
                     numFreeTuples(curLevel)=numFreeTuples(curLevel)-idx+1;
+
                     boundVals(sel1,curLevel)=boundVals(sel2,curLevel);
 
                     %Set the entries in the cost matrix associated with the
@@ -465,11 +472,6 @@ if(abs(relGap)>epsVal)
         curLevel=curLevel+1;
     end
 end
-
-%Change the ordering of the tuples to be consistent with the original
-%problem.
-dimsOrder=inversePermutation(dimsOrder);
-minCostTuples=minCostTuples(dimsOrder,:);
 
 %Adjust the gain for the initial offset of the cost matrix.
 if(maximize==true)

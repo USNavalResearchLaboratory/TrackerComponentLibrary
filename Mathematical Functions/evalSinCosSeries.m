@@ -3,7 +3,7 @@ function y=evalSinCosSeries(c,cosX,sinX)
 %                  y=sum_{i=1}^Nc(i)*cos((i-1)*x)
 %                  or the sine series
 %                  y=sum_{i=1}^(N+1)c(i)*sin(i*x)
-%                  efficiently using CLenshaw summation.
+%                  efficiently using Clenshaw summation.
 %
 %INPUTS: c An NX1 or a 1XN vector of the coefficients in the sum.
 %     cosX The value cos(x). This value is always required. To evaluate
@@ -31,8 +31,8 @@ function y=evalSinCosSeries(c,cosX,sinX)
 %    ySum=ySum+c(k)*cos((k-1)*x); 
 % end
 % relativeError=max(max(abs(ySum-yF)./yF))
-% %This will typically be on the order of 1e-12 or less, due simply to finite
-% %precision differences.
+% %This will typically be on the order of 1e-12 or less, due simply to
+% %finite precision differences.
 % %Similarly, if we wanted the sine series.
 % sinX=sin(x);
 % yF=evalSinCosSeries(c,cosX,sinX);

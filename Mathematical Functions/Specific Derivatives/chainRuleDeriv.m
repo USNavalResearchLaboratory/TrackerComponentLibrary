@@ -25,13 +25,14 @@ function [derivVal,derivStructure]=chainRuleDeriv(desDeriv,derivF,derivX,n1,deri
 %                 multiple derivatives in paralllel. Its output
 %                 dimensionality must match that of derivX or be scalar.
 %          derivX This can be a multidimensional or a function handle. As a
-%                 fucntion handle, this returns values of the partial
+%                 function handle, this returns values of the partial
 %                 derivatives of the x values with respect to y variables.
 %                 derivX(yListAug) returns the derivative of the x variable
 %                 numbered from zero in yListAug(n2+1). The order of the
 %                 derivative of each with respect to the ith y value is
-%                 given by yListAug(i). When a matrix is passed, then it is
-%                 a matrix such that
+%                 given by yListAug(i) and yListAug(n2=1) specified which
+%                 of the n1 x values is selected. When a matrix is passed,
+%                 then it is a matrix such that
 %                 derivX(yListAug(1)+1,yListAug(2)+1,...,yListAug(n2)+1,yListAug(n2+1)+1)
 %                 returns the appropriate derivative as the function would.
 %                 This can return multidimensional outputs if one wishes to
@@ -96,10 +97,10 @@ function [derivVal,derivStructure]=chainRuleDeriv(desDeriv,derivF,derivX,n1,deri
 % %We would like to evaluate some third-order derivatives. For the
 % %derivatives of x, we choose to build tables to pass to the chainRuleDeriv
 % %function. the tables have to be include all partial derivatives that are
-% %needed. We will build 4X4 tables. Such tables could be used to cpmpute all
-% %derivatives with sum(desDeriv)<=3 and some values with sum(desDeriv)>3.
-% %Note that there is no need to fill entries of the table higher than the
-% %maximum desired derivative level.
+% %needed. We will build 4X4 tables. Such tables could be used to compute
+% %all derivatives with sum(desDeriv)<=3 and some values with
+% %sum(desDeriv)>3. Note that there is no need to fill entries of the table
+% %higher than the maximum desired derivative level.
 % n1=3;
 % maxEls=3;
 % %derivX has n2+1 columns.
@@ -175,7 +176,7 @@ end
 numTermsList=maxNumTotalDerivTerms(k,n1);
 n2=length(desDeriv);
 
-%If the derivative structure was not proovided, them compute it.
+%If the derivative structure was not provided, them compute it.
 if(isempty(derivStructure))
     %Allocate space for the tuples of varying orders. We allocate twice as much
     %space as needed so that we can store tuples for the next derivative
@@ -330,6 +331,7 @@ for order=1:k
             xArg=curXTuples{order}(:,curX,curMonomial);
             if(~isempty(nDimsX))
                 idx=nDim2Index(nDimsX,xArg+1);
+
                 termVal=derivX(idx);
             else
                 termVal=derivX(xArg);

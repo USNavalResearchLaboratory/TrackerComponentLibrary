@@ -1,6 +1,6 @@
-/**TCG2TT  Convert from geocentric coordinate time (TCG) given as a
- *         two-part Julian date to terrestrial time (TT) represented as
- *         a two-part Julian date.
+/**TCG2TT Convert from geocentric coordinate time (TCG) given as a two-part
+ *        Julian date to terrestrial time (TT) represented as a two-part
+ *        Julian date.
  *
  *INPUTS: Jul1, Jul2 Two parts of a Julian date given in TCG. The units of
  *                   the date are days. The full date is the sum of both

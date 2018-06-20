@@ -9,23 +9,23 @@
 *            conversion does not include the (small) centrifugal effect of
 *            polar motion.
 *
-*INPUTS:  x The NXnumVec collection of vectors in TIRS coordinates to
-*           convert (units do not matter). N can be 3, or 6. If the vectors
-*           are 3D, then they are position. 6D
-*           vectors are assumed to be position and velocity. Since the TIRS
-*           and ITRS co-rotate, there is no Coriolis effect to add. Also,
-*           the accelerations due to the wobble of the rotation axis over
-*           time are not considered. These accelerations are very small.
-*           Thus, the function just rotates both halves of the vector.
-*  TT1, TT2 Two parts of a Julian date given in terrestrial time (TT).
-*           The units of the date are days. The full date is the sum of
-*           both terms. The date is broken into two parts to provide
-*           more bits of precision. It does not matter how the date is
-*           split.
-*      xpyp xpyp=[xp;yp] are the polar motion coordinates in radians
-*           including the effects of tides and librations. If this
-*           parameter is omitted or if an empty matrix is passed, the
-*           value from the function getEOP will be used.
+*INPUTS: x The NXnumVec collection of vectors in TIRS coordinates to
+*          convert (units do not matter). N can be 3, or 6. If the vectors
+*          are 3D, then they are position. 6D
+*          vectors are assumed to be position and velocity. Since the TIRS
+*          and ITRS co-rotate, there is no Coriolis effect to add. Also,
+*          the accelerations due to the wobble of the rotation axis over
+*          time are not considered. These accelerations are very small.
+*          Thus, the function just rotates both halves of the vector.
+* TT1, TT2 Two parts of a Julian date given in terrestrial time (TT).
+*          The units of the date are days. The full date is the sum of
+*          both terms. The date is broken into two parts to provide
+*          more bits of precision. It does not matter how the date is
+*          split.
+*     xpyp xpyp=[xp;yp] are the polar motion coordinates in radians
+*          including the effects of tides and librations. If this
+*          parameter is omitted or if an empty matrix is passed, the
+*          value from the function getEOP will be used.
 *
 *OUTPUTS: vITRS The NXnumVec vector of values of x rotated from the TIRS
 *               into the ITRS.

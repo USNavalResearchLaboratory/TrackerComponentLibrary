@@ -228,7 +228,7 @@ function [col4row, row4col, gain, u, v]=ShortestPathUpdate(C,activeRow,forbidden
 %REFERENCES:
 %M. L. Miller, H. S. Stone, and J. Cox, Ingemar, "Optimizing Murty's ranked
 %assignment method," IEEE Transactions on Aerospace and Electronic Systems,
-%vol. 33, no. 3, pp. 851?862, Jul. 1997.
+%vol. 33, no. 3, pp. 851-862, Jul. 1997.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
             

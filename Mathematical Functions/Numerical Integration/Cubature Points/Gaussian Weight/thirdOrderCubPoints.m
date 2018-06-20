@@ -1,4 +1,4 @@
-function [xi, w]=thirdOrderCubPoints(numDim,algorithm,w0)
+function [xi, w]=thirdOrderCubPoints(numDim,algorithm,w0,randomize)
 %THIRDORDERCUBPOINTS Generate third order cubature points for integration
 %           involving a multidimensional Gaussian probability density
 %           function (PDF).
@@ -8,9 +8,9 @@ function [xi, w]=thirdOrderCubPoints(numDim,algorithm,w0)
 %     algorithm An optional parameter specifying the algorithm to be used
 %               to generate the points. Possible values are
 %               0 (The default if omitted or an empty matrix is passed and
-%                 numDim~=1) Use
-%                 the algorithm of [1] (The "cubature Kalman filter") set
-%                 of points.
+%                 numDim~=1) Use the algorithm of [1] (The "cubature
+%                 Kalman filter") set of points. This is the same as the
+%                 third-order set that is derived in [4].
 %               1 Use the "basic points" for the unscented Kalman filter
 %                 given in Section IIIA of [2].
 %               2 Use the "extended symmetric set" from Section IVA of [2].
@@ -23,11 +23,19 @@ function [xi, w]=thirdOrderCubPoints(numDim,algorithm,w0)
 %               with a cubature point placed at the origin. It is required
 %               that w(0)>0. Making w0 larger than 1 will lead to having
 %               mostly negative weights. If omitted or an empty matrix is
-%               passed, a default value of 1/3 is used. 
+%               passed, a default value of 1/3 is used.
+%     randomize If this parameter is true, then the points will be
+%               multiplied by a random orthonormal rotation matrix. This
+%               does not change the moments up to the order of the points.
+%               This randomization is done in [5] and [6] to lessen various
+%               effects that arise when using points in the same
+%               orientation repeatedly in tracking. The default if this
+%               parameter is omitted or an empty matrix is passed is false.
+%               This parameter is ignored if numDim==1.
 %
 %OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
 %            points (Each "point" is a vector).
-%         w  A numCubaturePoints X 1 vector of the weights associated with
+%          w A numCubaturePoints X 1 vector of the weights associated with
 %            the cubature points.
 %
 %Algorithms 1-2 are not normally identified as being "third-order".
@@ -46,6 +54,16 @@ function [xi, w]=thirdOrderCubPoints(numDim,algorithm,w0)
 %    Mar. 2004.
 %[3] A.H. Stroud, Approximate Calculation of Multiple Integrals. Cliffs,
 %    NJ: Prentice-Hall, Inc., 1971.
+%[4] B. Jia, M. Xin, and Y. Cheng, "High-degree cubature Kalman filter,"
+%    Automatica, vol. 49, no. 2, pp. 510-518, Feb. 2013.
+%[5] O. Straka, D. Duník, and M. Simandl, "Randomized unscented Kalman
+%    filter in tracking," in Proceedings of the 15th International
+%    Conference on Information Fusion, Singapore, 9-12 Jul. 2012, pp.
+%    503-510.
+%[6] J. Duník, O. Straka, and M. Simandl, "The development of a randomised
+%    unscented Kalman filter," in Proceedings of the 18th World Congress,
+%    The International Federation of Automatic Control, Milan, Italy, 28
+%    Aug. - 2 Sep. 2011, pp. 8-13.
 %
 %August 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -62,6 +80,10 @@ function [xi, w]=thirdOrderCubPoints(numDim,algorithm,w0)
        w0=1/3; 
     end
 
+    if(nargin<4||isempty(randomize))
+        randomize=false;
+    end
+    
     switch(algorithm)
         case 0%The "cubature Kalman filter" points from [1].
             xi=zeros(numDim,2*numDim);
@@ -123,6 +145,15 @@ function [xi, w]=thirdOrderCubPoints(numDim,algorithm,w0)
             [xi,w]=quadraturePoints1D(2);
         otherwise
             error('Unknown algorithm specified')
+    end
+    
+    if(numDim>1&&randomize)
+        R=randOrthoMat(numDim);
+        
+        numPoints=length(w);
+        for curPoint=1:numPoints
+            xi(:,curPoint)=R*xi(:,curPoint);
+        end
     end
 end
 

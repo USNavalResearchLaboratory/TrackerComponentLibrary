@@ -1,6 +1,6 @@
 function [xi,w]=secondOrderCubPointsBingham(A,lambda)
 %%SECONDORDERCUBPOINTSBINGHAM Generate second-order cubature points for
-%                   numeric integrals involving the Bingham distirbution,
+%                   numeric integrals involving the Bingham distribution,
 %                   which is defined on a unit (hyper-)sphere. The Bingham
 %                   distribution is a central version of the Fisher-Bingham
 %                   distribution. The PDF is
@@ -13,10 +13,10 @@ function [xi,w]=secondOrderCubPointsBingham(A,lambda)
 %   lambda An optional parameter that affects how much weights is assigned
 %          to a point placed at the pole. This must be between 0 and 1.
 %
-%OUTPUTS:   xi   A numDim X numCubaturePoints matrix containing the
-%                cubature points. (Each "point" is a vector)
-%           w    A numCubaturePoints X 1 vector of the weights
-%                 associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %The algorithm implementes is essentially that given in Section III of [1],
 %but corrected. An assumption in the algorithm of the paper is that the 

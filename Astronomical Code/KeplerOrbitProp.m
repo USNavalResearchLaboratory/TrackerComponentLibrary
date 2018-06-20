@@ -11,7 +11,7 @@ function statePred=KeplerOrbitProp(stateOrig,deltaT,GM,epsVal)
 %           deltaT The time duration in seconds by which the state should
 %                  be predicted. Positive for forward, negative for
 %                  backward.
-%             GM   An optional value of the universal gravitational
+%               GM An optional value of the universal gravitational
 %                  constant times the mass of the Earth. If omitted, the
 %                  value Constants.WGS84GMWithAtmosphere is used. The
 %                  units are m^3/sec^2.

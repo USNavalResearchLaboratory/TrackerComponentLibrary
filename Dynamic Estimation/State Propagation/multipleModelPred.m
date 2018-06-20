@@ -93,11 +93,11 @@ function [xPredSet,PPredSet]=multipleModelPred(AlgSel,xSet,PSet,transFuns,numSta
 %REFERENCES:
 %[1] J. D. Glass, W. D. Blair, and Y. Bar-Shalom, "IMM estimators with
 %    unbiased mixing for tracking targets performing coordinated turns," in
-%    Proceedings of the IEEE Aerospace Conference, Big Sky, MT, 2?9 Mar.
+%    Proceedings of the IEEE Aerospace Conference, Big Sky, MT, 2-9 Mar.
 %    2013.
 %[2] T. Yuan, Y. Bar-Shalom, P. Willett, E. Mozeson, S. Pollak, and D.
 %    Hardiman, "A multiple IMM estimation approach with unbiased mixing for
-%    thrusting projectiles,? IEEE Transactions on Aerospace and Electronic
+%    thrusting projectiles," IEEE Transactions on Aerospace and Electronic
 %    Systems, no. 4, pp. 3250-3267, Oct. 2012.
 %[3] Y. Bar-Shalom, X. R. Li, and T. Kiruabarajan, Estimation with
 %    Applications to Tracking and Navigation. New York: Wiley Interscience,

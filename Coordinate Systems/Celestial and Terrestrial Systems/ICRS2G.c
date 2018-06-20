@@ -5,15 +5,15 @@
  *        angles (azimuth and elevation) without range. The ICRS is aligned
  *        with the GCRS and BCRS.
  *
- *INPUTS:   x   The NXnumVec collection of vectors to convert. N can be 2,
- *              or 3. If the vectors are 2D, then they are assumed to be
- *              azimuth and elevation in radians. 3D vectors are assumed to
- *              be Cartesian position.
+ *INPUTS: x The NXnumVec collection of vectors to convert. N can be 2, or
+ *          3. If the vectors are 2D, then they are assumed to be azimuth
+ *          and elevation in radians. 3D vectors are assumed to be
+ *          Cartesian position.
  *
- *OUTPUTS: xG    The vectors rotated into the galactic coordinate system.
- *               If the input was 2D azimuth and elevation, the output will
- *               be the same. If the input was Cartesian, then the output
- *               will be Cartesian.
+ *OUTPUTS: xG The vectors rotated into the galactic coordinate system. If
+ *            the input was 2D azimuth and elevation, the output will be
+ *            the same. If the input was Cartesian, then the output will be
+ *            Cartesian.
  *
  *This is mostly a wrapper for the function iauIcrs2g in the International
  *Astronomical Union's (IAU) Standard's of Fundamental Astronomy library.

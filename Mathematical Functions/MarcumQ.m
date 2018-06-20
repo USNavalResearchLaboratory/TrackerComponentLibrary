@@ -332,7 +332,7 @@ end
 %backward recursions:
 poikf=expFunc(del,k);
 poikb=poikf;
-%?xtermf? is an initialization to compute the second term in (4.3)
+%"xtermf" is an initialization to compute the second term in (4.3)
 %recursively:
 xtermf=expFunc(x,a-1);
 %"xtermb" is an initialization to compute the second term in (4.4)

@@ -1,13 +1,12 @@
 function [A,xHyp,PHyp,GateMat]=makeStandardCartOnlyLRMatHyps(xPred,SPred,zCart,SRCart,PD,lambda,rPred,gammaVal,zNative,measJacob)
-%%MAKESTANDARDCARTONLYLRMATHYPS Create the likelihood ratio matrix used for 2D
-%               assignment under standard Gaussian approximations in the
+%%MAKESTANDARDCARTONLYLRMATHYPS Create the likelihood ratio matrix used for
+%               2D assignment under standard Gaussian approximations in the
 %               coordinate system of the target states using Gaussian-
-%               approximated Cartesian position-only or Cartesian position
-%               and bistatic range-rate-only measurements and provide all
-%               updated state estimates using the Cartesian measurements.
-%               This function can also perform simultaneous brute-force
-%               gating, returning a matrix indicating whether each
-%               measurement gates with each target.  This function is
+%               approximated Cartesian position-only measurements and
+%               provide all updated state estimates using the Cartesian
+%               measurements. This function can also perform simultaneous
+%               brute-force gating, returning a matrix indicating whether
+%               each measurement gates with each target. This function is
 %               appropriate for use in Cartesian-converted measurement
 %               tracking without range rate information. This assumes that
 %               the false alarms occur due to a Poisson point process with
@@ -26,12 +25,16 @@ function [A,xHyp,PHyp,GateMat]=makeStandardCartOnlyLRMatHyps(xPred,SPred,zCart,S
 %              state covariance matrices.
 %        zCart The zDimXnumMeas set of measurements in Cartesian
 %              coordinates.
-%       SRCart A zDimXzDimXnumTar set of lower-triangular square-root
-%              measurement covariance matrices.
+%       SRCart A zDimXzDimXnumMeas set of lower-triangular square-root
+%              measurement covariance matrices. If all of the covariance
+%              matrices are the same, then SRCart can be a single zDimXzDim
+%              lower triangular matrix.
 %           PD The target detection probabilities. This can either be a
 %              numTarX1 vector if the targets have different probabilities,
 %              or this can be a scalar value if all of the target detection
-%              probabilities are the same.
+%              probabilities are the same. This value does not include the
+%              effects of gating (set by gammaVal) eliminating measurements
+%              from consideration.
 %       lambda The false alarm density. When given in Cartesian
 %              coordinates, this has units of # false alarm/volume, for
 %              example, false alarms/m^3. When given in the coordinate

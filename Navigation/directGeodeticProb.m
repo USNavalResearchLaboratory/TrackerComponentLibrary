@@ -1,4 +1,4 @@
-function [latLonEnd,azEnd]=directGeodeticProb(latLonStart,azStart,distVal,a,f,method)
+function [latLonEnd,azEnd]=directGeodeticProb(latLonStart,azStart,distVal,a,f)
 %%DIRECTGEODETICPROB Solve the direct geodetic problem. That is, given
 %                     an initial point and an initial bearing an
 %                     ellipsoidal Earth, find the end point and final
@@ -24,16 +24,6 @@ function [latLonEnd,azEnd]=directGeodeticProb(latLonStart,azStart,distVal,a,f,me
 %                 f The flattening factor of the reference ellipsoid. If
 %                   this argument is omitted, the value in
 %                   Constants.WGS84Flattening is used.
-%            method This optional parameter selects the algorithm that will
-%                   be used.  Possible values are:
-%                   0 (The default if omitted or an empty matrix is passed)
-%                     Use The algorithm of [1]. This should be numerically
-%                     stable everywhere.
-%                   1 Use the algroithm of [2]. When very close to the
-%                     poles, the longitude returned by this algorithm can
-%                     be inaccurate as the difference of two elliptic
-%                     integrals of the third kind that are approaching a
-%                     singularity becomes inaccurate.
 %
 %OUTPUTS: latLonEnd A2XN matrix of geodetic latitude and longitudes of the
 %                   final points of the geodesic trajectory given in
@@ -42,9 +32,9 @@ function [latLonEnd,azEnd]=directGeodeticProb(latLonStart,azStart,distVal,a,f,me
 %                   ending points in radians East of true North on the
 %                   reference ellipsoid.
 %
-%In [1], series terms up to order 6 are given for a number of terms. In
-%this implementation, values to the tenth order are given. Note that values
-%to the 30th order have been posted online at
+%The algorithm of [1] is used. In [1], series terms up to order 6 are given
+%for a number of terms. In this implementation, values to the tenth order
+%are given. Note that values to the 30th order have been posted online at
 %https://geographiclib.sourceforge.io/html/geodseries30.html
 %However, there is generally no point in using higher orders unless one
 %uses higher than double-precision floating point arithmetic. The series
@@ -54,16 +44,12 @@ function [latLonEnd,azEnd]=directGeodeticProb(latLonStart,azStart,distVal,a,f,me
 %
 %REFERENCES:
 %[1] C. F. F. Karney, "Algorithms for geodesics," Journal of Geodesy, vol.
-%    87, no. 1, pp. 43?55, Jan. 2013.
+%    87, no. 1, pp. 43-55, Jan. 2013.
 %[2] C. M. Rolling, "An integral for geodesic length," Survey Review, vol.
 %    42, no. 315, pp. 20-26, Jan. 2010.
 %
 %July 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
-
-if(nargin<6||isempty(method))
-    method=0; 
-end
 
 if(nargin<5||isempty(f))
     f=Constants.WGS84Flattening;
@@ -73,197 +59,8 @@ if(nargin<4||isempty(a))
     a=Constants.WGS84SemiMajorAxis;
 end
 
-switch(method)
-    case 0%Karney's algorithm
-        [latLonEnd,azEnd]=directGeodeticKarney(latLonStart,azStart,distVal,a,f);
-    case 1%The NGA algorithm
-        [latLonEnd,azEnd]=directGeodeticNGA(latLonStart,azStart,distVal,a,f);
-    otherwise
-        error('Unknown method specified.')
-end
-end
+[latLonEnd,azEnd]=directGeodeticKarney(latLonStart,azStart,distVal,a,f);
 
-function [latLonEnd,azEnd]=directGeodeticNGA(latLonStart,azStart,distVal,a,f)
-%%DIRECTGEODETICNGA This function implements the algorithm to solve the
-%                   direct geodetic problem as given in [1]. When very
-%                   close to the poles, finite precision problems in the
-%                   computation of the longitude will arise.
-%
-%REFERENCES:
-%[1] C. M. Rolling, "An integral for geodesic length," Survey Review, vol.
-%    42, no. 315, pp. 20-26, Jan. 2010.
-%
-%July 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
-%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
-
-epsValC0=eps();
-epsValC1=eps();
-epsPhi=eps();
-epsGrad=1e-9;
-
-N=size(latLonStart,2);
-latLonEnd=zeros(2,N);
-azEnd=zeros(N,1);
-
-eps2=f*(2-f);
-
-for curPoint=1:N
-    phi=latLonStart(1,curPoint);
-    lambda=latLonStart(2,curPoint);
-
-    if(distVal(curPoint)==0)
-        latLonEnd(:,curPoint)=latLonStart(:,curPoint);
-        azEnd(curPoint)=wrapRange(azStart(curPoint)+pi,-pi,pi);
-        continue;
-    end
-
-    %Wrap the initial forward azimuth between -pi and pi so that the test for
-    %the sign convention of k in the paper works.
-    alphaStart=wrapRange(azStart(curPoint),-pi,pi);
-
-    %Equation 3
-    c=sin(alphaStart)*cos(phi)/sqrt(1-eps2*sin(phi)^2);
-
-    %Equation 4 (squared).
-    k2=(1-c^2)/(1-c^2*eps2);
-
-    %Get k with the sign convention described in the paper.
-    if(alphaStart>=0)
-        k=sqrt(k2);
-    else
-        k=-sqrt(k2);
-    end
-
-    %Protect against finite precision errors making the asin value complex.
-    aSinArg=sin(phi)/k;
-    if(abs(aSinArg)>1)
-        aSinArg=sign(aSinArg);
-    end
-    theta1=asin(aSinArg);
-
-    c2=c^2;
-
-    theta2Init=theta1+2*pi;
-    if(abs(abs(c)-1)>epsValC1)
-        origVal=eq6(theta1,a,eps2,c2,k2);
-        f=@(theta2)costFunc(theta2,distVal(curPoint),origVal,a,eps2,c2,k2);
-
-        theta2=NewtonsMethod(f,[],theta2Init,epsGrad,[],[],-1);
-
-        aSinArg=k*sin(theta2);
-        %Protect against finite precision errors making the asin value complex.
-        if(abs(aSinArg)>1)
-            aSinArg=sign(aSinArg);
-        end
-        phi2=asin(aSinArg);
-
-        %Equation 5 for the change in longitude
-        if(abs(c)>epsValC0)
-            %The elliptic integrals here are unrealible when theta1 approaches
-            %pi/2 and k2=1.
-            deltaLambda=c*(1-eps2)/sqrt(1-c2*eps2)*(-ellipIntInc3Kind(theta1,eps2*k2,k2)+ellipIntInc3Kind(theta2,eps2*k2,k2));
-        else
-            %For the special case of c=0, determine whether one has crossed
-            %over the poles and thus should flip the sign of lambda by pi.
-            numMult=fix(abs(theta2)/(pi/2));
-
-            %There is an additional special case if one is located at either of
-            %the poles. This makes the direction leaving consistent as the
-            %azimuthal value is varied.
-            if(abs(abs(phi)-pi/2)<epsPhi)
-                if(phi>0)
-                    lambda=lambda+(pi-azStart(curPoint));
-                else
-                    lambda=lambda+azStart(curPoint);
-                end
-                if(phi>0)
-                    numMult=numMult-2;
-                end
-            end
-
-            if(numMult>0)
-                modVal=mod(numMult-1,4);
-
-                if(modVal==0||modVal==1)
-                    deltaLambda=pi;
-                else
-                    deltaLambda=0;
-                end
-            else
-                deltaLambda=0;
-            end
-        end
-    else
-        %Use the special case listed in [1] for abs(c)=1.
-        phi2=phi;
-        deltaLambda=distVal(curPoint)/(a*c);
-    end
-
-    lambda2=wrapRange(lambda+deltaLambda,-pi,pi);
-
-    %Equation 3, solved for alpha.
-    sinAlphaEnd=c*sqrt(1-eps2*sin(phi2)^2)/cos(phi2);
-    %Protect against finite precision errors making the asin value complex.
-    if(abs(sinAlphaEnd)>1)
-        sinAlphaEnd=sign(sinAlphaEnd);
-    end
-    alphaEnd=asin(sinAlphaEnd);
-
-    latLonEnd(:,curPoint)=[phi2;lambda2];
-    azEnd(curPoint)=alphaEnd;
-end
-
-end
-
-function [fVal,grad,Hess]=costFunc(theta2,distVal,origVal,a,eps2,c2,k2)
-%COSTFUNC This is the cost function for Newton's method in [1].
-%
-%REFERENCES:
-%[1] C. M. Rolling, "An integral for geodesic length," Survey Review, vol.
-%    42, no. 315, pp. 20-26, Jan. 2010.
-%
-%July 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
-%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
-
-[eq6Val,eq6Deriv1,eq6Deriv2]=eq6(theta2,a,eps2,c2,k2);
-
-innerTerm=distVal-(eq6Val-origVal);
-
-fVal=innerTerm^2;
-grad=-2*innerTerm*eq6Deriv1;
-Hess=2*eq6Deriv1^2-2*innerTerm*eq6Deriv2;
-end
-
-function [fVal,fDeriv1,fDeriv2]=eq6(theta2,a,eps2,c2,k2)
-%%EQ6 This is equation 6 in [1] evaluated with 0 as the lower bound of
-%     integration. This also returns the first and second derivatives.
-%
-%REFERENCES:
-%[1] C. M. Rolling, "An integral for geodesic length," Survey Review, vol.
-%    42, no. 315, pp. 20-26, Jan. 2010.
-%
-%July 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
-%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
-    
-cDenom=k2*eps2;
-
-%The integral equation 6, solved via Mathematica:
-intVal=(2*ellipIntInc2Kind(theta2-pi*fix(theta2/pi),cDenom)+2*(ellipIntInc2Kind(pi/2,cDenom)+sqrt(1-cDenom)*ellipIntInc2Kind(pi/2,cDenom/(-1+cDenom)))*fix(theta2/pi)-(sqrt(2)*cDenom*sin(2*theta2))/sqrt(2-cDenom+cDenom*cos(2*theta2)))/(2-2*cDenom);
-
-constVal=(a*(1-eps2)/sqrt(1-c2*eps2));
-
-%Equation 6
-fVal=constVal*intVal;
-
-%The derivative of Equation 6 is just the constant times its argument
-%evaluated at the upper bound.
-if(nargout>1)
-    sinTheta=sin(theta2);
-    fDeriv1=constVal*(1-cDenom*sinTheta^2);
-    if(nargout>2)
-        fDeriv2=constVal*(3*cDenom*cos(theta2)*sinTheta)/(1-cDenom*sinTheta^2)^(5/2);
-    end
-end
 end
 
 function [latLonEnd,azEnd]=directGeodeticKarney(latLonStart,azStart,distVal,a,f)
@@ -274,7 +71,7 @@ function [latLonEnd,azEnd]=directGeodeticKarney(latLonStart,azStart,distVal,a,f)
 %
 %REFERENCES:
 %[1] C. F. F. Karney, "Algorithms for geodesics," Journal of Geodesy, vol.
-%    87, no. 1, pp. 43?55, Jan. 2013.
+%    87, no. 1, pp. 43-55, Jan. 2013.
 %
 %July 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -420,7 +217,12 @@ for curPoint=1:N
     phi2=atan(tan(beta2)/(1-f));
 
     latLonEnd(:,curPoint)=[phi2;wrapRange(latLonStart(2)+lambda12,-pi,pi)];
-    azEnd(curPoint)=alpha2;
+    
+    if(wrapRange(lambda12,-pi,pi)<0)
+        azEnd(curPoint)=wrapRange(alpha2+pi,-pi,pi);
+    else
+        azEnd(curPoint)=alpha2;
+    end
 end
 
 end
@@ -431,7 +233,7 @@ function [A1,C1]=computeA1C1(e)
 %
 %REFERENCES:
 %[1] C. F. F. Karney, "Algorithms for geodesics," Journal of Geodesy, vol.
-%    87, no. 1, pp. 43?55, Jan. 2013.
+%    87, no. 1, pp. 43-55, Jan. 2013.
 %
 %July 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -483,7 +285,7 @@ function C1p=computeC1p(e)
 %
 %REFERENCES:
 %[1] C. F. F. Karney, "Algorithms for geodesics," Journal of Geodesy, vol.
-%    87, no. 1, pp. 43?55, Jan. 2013.
+%    87, no. 1, pp. 43-55, Jan. 2013.
 %
 %July 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -527,7 +329,7 @@ function [A3Coeffs,C3Coeffs]=computeA3C3Coeffs(n)
 %
 %REFERENCES:
 %[1] C. F. F. Karney, "Algorithms for geodesics," Journal of Geodesy, vol.
-%    87, no. 1, pp. 43?55, Jan. 2013.
+%    87, no. 1, pp. 43-55, Jan. 2013.
 %
 %July 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -656,7 +458,7 @@ function [A3,C3]=computeA3C3(A3Coeffs,C3Coeffs,e)
 %
 %REFERENCES:
 %[1] C. F. F. Karney, "Algorithms for geodesics," Journal of Geodesy, vol.
-%    87, no. 1, pp. 43?55, Jan. 2013.
+%    87, no. 1, pp. 43-55, Jan. 2013.
 %
 %July 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

@@ -1,9 +1,9 @@
 function s=doublyCompSum(x)
 %%DOUBLYCOMPSUM Sum a vector of numbers using doubly-compensated summation.
 %           Compared to using the sum command, this function is less
-%           susceptible to finite precision errors when suming many numbers
-%           of varying magnitudes. Note that this functions does NOT use
-%           extended precision arithmetic to improve the accuracy.
+%           susceptible to finite precision errors when summing many
+%           numbers of varying magnitudes. Note that this functions does
+%           NOT use extended precision arithmetic to improve the accuracy.
 %
 %INPUTS: x A 1XN or NX1 vectors of N values to sum.
 %

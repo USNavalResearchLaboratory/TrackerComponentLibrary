@@ -85,7 +85,7 @@ function Y=tensor2Mat(X,param2,C)
 %    Sandia National Laboratories, Tech. Rep. SAND2006-2081, Apr. 2006.
 %    [Online]. Available: http://www.sandia.gov/?tgkolda/pubs/pubfiles/SAND2006-2081.pdf
 %[4] R. G. Kolda and B. W. Bader, "Tensor decompositions and applications,"
-%    SIAM Review, vol. 51, no. 3, pp. 455?500, 2009.
+%    SIAM Review, vol. 51, no. 3, pp. 455-500, 2009.
 %
 %June 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

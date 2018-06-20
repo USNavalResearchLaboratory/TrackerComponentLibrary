@@ -4,7 +4,8 @@ classdef ChiSquareD
 %            squares of independent normal random variables. The result is
 %            central if the mean of the normal random variables was zero.
 %Implemented methods are: mean, var, PDF, CDF, invCDF (only for the central
-%                         chi squared distribution), rand
+%                         chi squared distribution), rand, (only for the
+%                         central chi squared distribution) entropy
 %
 %DEPENDENCIES: GammaD.m
 %
@@ -234,6 +235,31 @@ function vals=rand(N,nu,lambda)
         U=rand(dims);
         vals=ChiSquareD.invCDF(U,nu-1)+(sqrt(lambda)+randn(N)).^2;
     end
+end
+
+function entropyVal=entropy(nu)
+%%ENTROPY Obtain the differential entropy of the central chi squared
+%         distribution given in nats. The differential entropy of a
+%         continuous distribution is entropy=-int_x p(x)*log(p(x)) dx where
+%         the integral is over all values of x. Units of nats mean that the
+%         natural logarithm is used in the definition. Unlike the Shannon
+%         entropy for discrete variables, the differential entropy of
+%         continuous variables can be both positive and negative.
+%
+%INPUTS: nu The number of degrees of freedom of the chi-squared
+%           distribution. Note that nu>0 
+%
+%OUTPUTS: entropyVal The value of the differential entropy in nats.
+%
+%Differential entropy is defined in Chapter 8 of [1].
+%
+%REFERENCES:
+%[1] T. M. Cover and J. A. Thomas, Elements of Information Theory, 2nd ed.
+%    Hoboken, NJ: Wiley-Interscience, 2006.
+%
+%April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+    
+    entropyVal=nu/2+log(2)+gammaln(nu/2)+(1-nu/2)*psi(nu/2);
 end
 
 end

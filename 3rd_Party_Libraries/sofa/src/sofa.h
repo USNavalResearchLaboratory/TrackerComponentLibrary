@@ -11,11 +11,11 @@
 **  This file is part of the International Astronomical Union's
 **  SOFA (Standards Of Fundamental Astronomy) software collection.
 **
-**  This revision:   2016 March 10
+**  This revision:   2017 October 7
 **
-**  SOFA release 2017-04-20
+**  SOFA release 2018-01-30
 **
-**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 */
 
 #include "sofam.h"
@@ -373,6 +373,25 @@ int iauUtctai(double utc1, double utc2, double *tai1, double *tai2);
 int iauUtcut1(double utc1, double utc2, double dut1,
               double *ut11, double *ut12);
 
+/* Astronomy/HorizonEquatorial */
+void iauAe2hd(double az, double el, double phi,
+              double *ha, double *dec);
+void iauHd2ae(double ha, double dec, double phi,
+              double *az, double *el);
+double iauHd2pa(double ha, double dec, double phi);
+
+/* Astronomy/Gnomonic */
+int iauTpors(double xi, double eta, double a, double b,
+             double *a01, double *b01, double *a02, double *b02);
+int iauTporv(double xi, double eta, double v[3],
+             double v01[3], double v02[3]);
+void iauTpsts(double xi, double eta, double a0, double b0,
+              double *a, double *b);
+void iauTpstv(double xi, double eta, double v0[3], double v[3]);
+int iauTpxes(double a, double b, double a0, double b0,
+             double *xi, double *eta);
+int iauTpxev(double v[3], double v0[3], double *xi, double *eta);
+
 /* VectorMatrix/AngleOps */
 void iauA2af(int ndp, double angle, char *sign, int idmsf[4]);
 void iauA2tf(int ndp, double angle, char *sign, int ihmsf[4]);
@@ -460,7 +479,7 @@ void iauSxpv(double s, double pv[2][3], double spv[2][3]);
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2017
+**  Copyright (C) 2018
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

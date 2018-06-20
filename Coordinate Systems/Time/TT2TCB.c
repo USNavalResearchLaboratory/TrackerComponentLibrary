@@ -1,7 +1,7 @@
-/**TT2TCB  Convert from terrestrial time (TT) to barycentric coordinate
- *         time (TCB) to an accuracy of nanoseconds (if deltaT is accurate)
- *         using the routines from the International Astronomical Union's
- *         library that do not require external ephemeris data.
+/**TT2TCB Convert from terrestrial time (TT) to barycentric coordinate
+ *        time (TCB) to an accuracy of nanoseconds (if deltaT is accurate)
+ *        using the routines from the International Astronomical Union's
+ *        library that do not require external ephemeris data.
  *
  *INPUTS: Jul1,Jul2 Two parts of a Julian date given in TT. The units of
  *                  the date are days. The full date is the sum of both

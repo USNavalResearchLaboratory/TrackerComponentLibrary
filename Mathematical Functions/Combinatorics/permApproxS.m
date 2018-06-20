@@ -30,7 +30,7 @@ function retVal=permApproxS(A,numIter)
         retVal=1;
         return; 
     elseif(numel(A)==1) 
-       val=A; 
+       retVal=A; 
        return; 
     end 
 

@@ -53,11 +53,11 @@
 
 
 
-                               Release 13
+                               Release 14
 
-                              2016 April 1
+                             2018 January 1
 
-contents.lis                                              2008 October 8
+contents.lis                                             2018 January 26
 
 
                              --------
@@ -83,7 +83,7 @@ contents.lis                                              2008 October 8
 
                  A3   SOFA Board membership
 
-intro.lis                                                  2016 March 14
+intro.lis                                                 2017 October 7
 
 
                   -------------------------------
@@ -94,7 +94,7 @@ intro.lis                                                  2016 March 14
   SOFA stands for "Standards Of Fundamental Astronomy".  The SOFA
   software libraries are a collection of subprograms, in source-
   code form, which implement official IAU algorithms for fundamental-
-  astronomy computations.   The subprograms at present comprise 176
+  astronomy computations.   The subprograms at present comprise 185
   "astronomy" routines supported by 55 "vector/matrix" routines,
   available in both Fortran77 and C implementations.
 
@@ -159,11 +159,12 @@ SCOPE
 The routines currently available are listed in the next two chapters of
 this document.
 
-The "astronomy" library comprises 176 routines (plus one obsolete
+The "astronomy" library comprises 185 routines (plus one obsolete
 Fortran routine that now appears under a revised name).  The areas
 addressed include calendars, astrometry, time scales, Earth rotation,
 ephemerides, precession-nutation, star catalog transformations,
-and geodetic/geocentric transformations.
+gnomonic projection, horizon/equatorial transformations and
+geodetic/geocentric transformations.
 
 The "vector-matrix" library, comprising 55 routines, contains a
 collection of simple tools for manipulating the vectors, matrices and
@@ -298,7 +299,7 @@ Resources for operating the SOFA Center are provided by Her Majesty's
 Nautical Almanac Office, operated by the United Kingdom Hydrographic
 Office.
 
-sofa_lib.lis                                               2016 March 10
+sofa_lib.lis                                              2017 October 7
 
                      ----------------------
                      SOFA Astronomy Library
@@ -578,6 +579,21 @@ ROUTINES
      GD2GC     geodetic to geocentric for a nominated ellipsoid
      GD2GCE    geodetic to geocentric given ellipsoid a,f
 
+  Gnomonic projection
+
+     TPORS     solve for tangent point, spherical
+     TPORV     solve for tangent point, vector
+     TPSTS     deproject tangent plane to celestial, spherical
+     TPSTV     deproject tangent plane to celestial, vector
+     TPXES     project celestial to tangent plane, spherical
+     TPXEV     project celestial to tangent plane, vector
+
+  Horizon/equatorial
+
+     AE2HD     (azimuth, altitude) to (hour angle, declination)
+     HD2AE     (hour angle, declination) to (azimuth, altitude)
+     HD2PA     parallactic angle
+
   Obsolete
 
      C2TCEO    former name of C2TCIO
@@ -586,6 +602,7 @@ ROUTINES
 CALLS: FORTRAN VERSION
 
    CALL iau_AB     ( PNAT, V, S, BM1, PPR )
+   CALL iau_AE2HD  ( AZ, EL, PHI, HA, DEC )
    CALL iau_APCG   ( DATE1, DATE2, EB, EH, ASTROM )
    CALL iau_APCG13 ( DATE1, DATE2, ASTROM )
    CALL iau_APCI   ( DATE1, DATE2, EB, EH, X, Y, S, ASTROM )
@@ -699,6 +716,8 @@ CALLS: FORTRAN VERSION
    D =  iau_GST94  ( UTA, UTB )
    CALL iau_H2FK5  ( RH, DH, DRH, DDH, PXH, RVH,
   :                  R5, D5, DR5, DD5, PX5, RV5 )
+   CALL iau_HD2AE  ( HA, DEC, PHI, AZ, EL )
+   D =  iau_HD2PA  ( HA, DEC, PHI )
    CALL iau_HFK5Z  ( RH, DH, DATE1, DATE2, R5, D5, DR5, DD5 )
    CALL iau_ICRS2G ( DR, DD, DL, DB  )
    CALL iau_JD2CAL ( DJ1, DJ2, IY, IM, ID, FD, J )
@@ -774,6 +793,12 @@ CALLS: FORTRAN VERSION
    CALL iau_TCGTT  ( TCG1, TCG2, TT1, TT2, J )
    CALL iau_TDBTCB ( TDB1, TDB2, TCB1, TCB2, J )
    CALL iau_TDBTT  ( TDB1, TDB2, DTR, TT1, TT2, J )
+   CALL iau_TPORS  ( XI, ETA, A, B, A01, B01, A02, B02, N )
+   CALL iau_TPORV  ( XI, ETA, V, V01, V02, N )
+   CALL iau_TPSTS  ( XI, ETA, A0, B0, A, B )
+   CALL iau_TPSTV  ( XI, ETA, V0, V )
+   CALL iau_TPXES  ( A, B, A0, B0, XI, ETA, J )
+   CALL iau_TPXEV  ( V, V0, XI, ETA, J )
    CALL iau_TTTAI  ( TT1, TT2, TAI1, TAI2, J )
    CALL iau_TTTCG  ( TT1, TT2, TCG1, TCG2, J )
    CALL iau_TTTDB  ( TT1, TT2, DTR, TDB1, TDB2, J )
@@ -792,6 +817,7 @@ CALLS: FORTRAN VERSION
 CALLS: C VERSION
 
        iauAb     ( pnat, v, s, bm1, ppr );
+       iauAe2hd  ( az, el, phi, &ha, &dec );
        iauApcg   ( date1, date2, eb, eh, &astrom );
        iauApcg13 ( date1, date2, &astrom );
        iauApci   ( date1, date2, eb, eh, x, y, s, &astrom );
@@ -904,6 +930,8 @@ CALLS: C VERSION
    d = iauGst94  ( uta, utb );
        iauH2fk5  ( rh, dh, drh, ddh, pxh, rvh,
                    &r5, &d5, &dr5, &dd5, &px5, &rv5 );
+       iauHd2ae  ( ha, dec, phi, &az, &el );
+   d = iauHd2pa  ( ha, dec, phi );
        iauHfk5z  ( rh, dh, date1, date2,
                    &r5, &d5, &dr5, &dd5 );
        iauIcrs2g ( dr, dd, &dl, &db );
@@ -981,6 +1009,12 @@ CALLS: C VERSION
    i = iauTcgtt  ( tcg1, tcg2, &tt1, &tt2 );
    i = iauTdbtcb ( tdb1, tdb2, &tcb1, &tcb2 );
    i = iauTdbtt  ( tdb1, tdb2, dtr, &tt1, &tt2 );
+   i = iauTpors  ( xi, eta, a, b, &a01, &b01, &a02, &b02 );
+   i = iauTporv  ( xi, eta, v, v01, v02 );
+       iauTpsts  ( xi, eta, a0, b0, &a, &b );
+       iauTpstv  ( xi, eta, v0, v );
+   i = iauTpxes  ( a, b, a0, b0, &xi, &eta );
+   i = iauTpxev  ( v, v0, &xi, &eta );
    i = iauTttai  ( tt1, tt2, &tai1, &tai2 );
    i = iauTttcg  ( tt1, tt2, &tcg1, &tcg2 );
    i = iauTttdb  ( tt1, tt2, dtr, &tdb1, &tdb2 );
@@ -994,6 +1028,11 @@ CALLS: C VERSION
        iauXys00a ( date1, date2, &x, &y, &s );
        iauXys00b ( date1, date2, &x, &y, &s );
        iauXys06a ( date1, date2, &x, &y, &s );
+
+
+
+
+
 
 sofa_vml.lis                                              2013 October 8
 
@@ -1479,6 +1518,193 @@ void iauAb(double pnat[3], double v[3], double s, double bm1,
 **     iauPdp       scalar product of two p-vectors
 **
 */
+
+
+
+void iauAe2hd (double az, double el, double phi,
+               double *ha, double *dec)
+/*
+**  - - - - - - - - -
+**   i a u A e 2 h d
+**  - - - - - - - - -
+**
+**  Horizon to equatorial coordinates:  transform azimuth and altitude
+**  to hour angle and declination.
+**
+**  Given:
+**     az       double       azimuth
+**     el       double       altitude (informally, elevation)
+**     phi      double       site latitude
+**
+**  Returned:
+**     ha       double       hour angle (local)
+**     dec      double       declination
+**
+**  Notes:
+**
+**  1)  All the arguments are angles in radians.
+**
+**  2)  The sign convention for azimuth is north zero, east +pi/2.
+**
+**  3)  HA is returned in the range +/-pi.  Declination is returned in
+**      the range +/-pi/2.
+**
+**  4)  The latitude phi is pi/2 minus the angle between the Earth's
+**      rotation axis and the adopted zenith.  In many applications it
+**      will be sufficient to use the published geodetic latitude of the
+**      site.  In very precise (sub-arcsecond) applications, phi can be
+**      corrected for polar motion.
+**
+**  5)  The azimuth az must be with respect to the rotational north pole,
+**      as opposed to the ITRS pole, and an azimuth with respect to north
+**      on a map of the Earth's surface will need to be adjusted for
+**      polar motion if sub-arcsecond accuracy is required.
+**
+**  6)  Should the user wish to work with respect to the astronomical
+**      zenith rather than the geodetic zenith, phi will need to be
+**      adjusted for deflection of the vertical (often tens of
+**      arcseconds), and the zero point of ha will also be affected.
+**
+**  7)  The transformation is the same as Ve = Ry(phi-pi/2)*Rz(pi)*Vh,
+**      where Ve and Vh are lefthanded unit vectors in the (ha,dec) and
+**      (az,el) systems respectively and Rz and Ry are rotations about
+**      first the z-axis and then the y-axis.  (n.b. Rz(pi) simply
+**      reverses the signs of the x and y components.)  For efficiency,
+**      the algorithm is written out rather than calling other utility
+**      functions.  For applications that require even greater
+**      efficiency, additional savings are possible if constant terms
+**      such as functions of latitude are computed once and for all.
+**
+**  8)  Again for efficiency, no range checking of arguments is carried
+**      out.
+**
+**  Last revision:   2017 September 12
+**
+**  SOFA release 2018-01-30
+**
+**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+*/
+{
+   double sa, ca, se, ce, sp, cp, x, y, z, r;
+
+
+/* Useful trig functions. */
+   sa = sin(az);
+   ca = cos(az);
+   se = sin(el);
+   ce = cos(el);
+   sp = sin(phi);
+   cp = cos(phi);
+
+/* HA,Dec unit vector. */
+   x = - ca*ce*sp + se*cp;
+   y = - sa*ce;
+   z = ca*ce*cp + se*sp;
+
+/* To spherical. */
+   r = sqrt(x*x + y*y);
+   *ha = (r != 0.0) ? atan2(y,x) : 0.0;
+   *dec = atan2(z,r);
+
+/* Finished. */
+
+/*----------------------------------------------------------------------
+**
+**  Copyright (C) 2018
+**  Standards Of Fundamental Astronomy Board
+**  of the International Astronomical Union.
+**
+**  =====================
+**  SOFA Software License
+**  =====================
+**
+**  NOTICE TO USER:
+**
+**  BY USING THIS SOFTWARE YOU ACCEPT THE FOLLOWING SIX TERMS AND
+**  CONDITIONS WHICH APPLY TO ITS USE.
+**
+**  1. The Software is owned by the IAU SOFA Board ("SOFA").
+**
+**  2. Permission is granted to anyone to use the SOFA software for any
+**     purpose, including commercial applications, free of charge and
+**     without payment of royalties, subject to the conditions and
+**     restrictions listed below.
+**
+**  3. You (the user) may copy and distribute SOFA source code to others,
+**     and use and adapt its code and algorithms in your own software,
+**     on a world-wide, royalty-free basis.  That portion of your
+**     distribution that does not consist of intact and unchanged copies
+**     of SOFA source code files is a "derived work" that must comply
+**     with the following requirements:
+**
+**     a) Your work shall be marked or carry a statement that it
+**        (i) uses routines and computations derived by you from
+**        software provided by SOFA under license to you; and
+**        (ii) does not itself constitute software provided by and/or
+**        endorsed by SOFA.
+**
+**     b) The source code of your derived work must contain descriptions
+**        of how the derived work is based upon, contains and/or differs
+**        from the original SOFA software.
+**
+**     c) The names of all routines in your derived work shall not
+**        include the prefix "iau" or "sofa" or trivial modifications
+**        thereof such as changes of case.
+**
+**     d) The origin of the SOFA components of your derived work must
+**        not be misrepresented;  you must not claim that you wrote the
+**        original software, nor file a patent application for SOFA
+**        software or algorithms embedded in the SOFA software.
+**
+**     e) These requirements must be reproduced intact in any source
+**        distribution and shall apply to anyone to whom you have
+**        granted a further right to modify the source code of your
+**        derived work.
+**
+**     Note that, as originally distributed, the SOFA software is
+**     intended to be a definitive implementation of the IAU standards,
+**     and consequently third-party modifications are discouraged.  All
+**     variations, no matter how minor, must be explicitly marked as
+**     such, as explained above.
+**
+**  4. You shall not cause the SOFA software to be brought into
+**     disrepute, either by misuse, or use for inappropriate tasks, or
+**     by inappropriate modification.
+**
+**  5. The SOFA software is provided "as is" and SOFA makes no warranty
+**     as to its use or performance.   SOFA does not and cannot warrant
+**     the performance or results which the user may obtain by using the
+**     SOFA software.  SOFA makes no warranties, express or implied, as
+**     to non-infringement of third party rights, merchantability, or
+**     fitness for any particular purpose.  In no event will SOFA be
+**     liable to the user for any consequential, incidental, or special
+**     damages, including any lost profits or lost savings, even if a
+**     SOFA representative has been advised of such damages, or for any
+**     claim by any third party.
+**
+**  6. The provision of any version of the SOFA software under the terms
+**     and conditions specified herein does not imply that future
+**     versions will also be made available under the same terms and
+**     conditions.
+*
+**  In any published work or commercial product which uses the SOFA
+**  software directly, acknowledgement (see www.iausofa.org) is
+**  appreciated.
+**
+**  Correspondence concerning SOFA software should be addressed as
+**  follows:
+**
+**      By email:  sofa@ukho.gov.uk
+**      By post:   IAU SOFA Center
+**                 HM Nautical Almanac Office
+**                 UK Hydrographic Office
+**                 Admiralty Way, Taunton
+**                 Somerset, TA1 2DN
+**                 United Kingdom
+**
+**--------------------------------------------------------------------*/
+
+}
 
 
 
@@ -6058,7 +6284,7 @@ int iauDat(int iy, int im, int id, double fd, double *deltat )
 **   i a u D a t
 **  - - - - - - -
 **
-**  For a given UTC date, calculate delta(AT) = TAI-UTC.
+**  For a given UTC date, calculate Delta(AT) = TAI-UTC.
 **
 **     :------------------------------------------:
 **     :                                          :
@@ -6095,7 +6321,7 @@ int iauDat(int iy, int im, int id, double fd, double *deltat )
 **  This function is part of the International Astronomical Union's
 **  SOFA (Standards Of Fundamental Astronomy) software collection.
 **
-**  Status:  support function.
+**  Status:  user-replaceable support function.
 **
 **  Given:
 **     iy     int      UTC:  year (Notes 1 and 2)
@@ -6219,7 +6445,7 @@ double iauDtdb(double date1, double date2,
 **  This function is part of the International Astronomical Union's
 **  SOFA (Standards Of Fundamental Astronomy) software collection.
 **
-**  Status:  support routine.
+**  Status:  support function.
 **
 **  Given:
 **     date1,date2   double  date, TDB (Notes 1-3)
@@ -6907,12 +7133,12 @@ double iauEect00(double date1, double date2)
 **
 **  References:
 **
-**     Capitaine, N. & Gontier, A.-M., Astron. Astrophys., 275,
+**     Capitaine, N. & Gontier, A.-M., Astron.Astrophys., 275,
 **     645-650 (1993)
 **
 **     Capitaine, N., Wallace, P.T. and McCarthy, D.D., "Expressions to
-**     implement the IAU 2000 definition of UT1", Astronomy &
-**     Astrophysics, 406, 1135-1149 (2003)
+**     implement the IAU 2000 definition of UT1", Astron.Astrophys., 406,
+**     1135-1149 (2003)
 **
 **     IAU Resolution C7, Recommendation 3 (1994)
 **
@@ -7451,7 +7677,7 @@ double iauEqeq94(double date1, double date2)
 **
 **     IAU Resolution C7, Recommendation 3 (1994).
 **
-**     Capitaine, N. & Gontier, A.-M., 1993, Astron. Astrophys., 275,
+**     Capitaine, N. & Gontier, A.-M., 1993, Astron.Astrophys., 275,
 **     645-650.
 **
 */
@@ -8160,7 +8386,7 @@ void iauFk52h(double r5, double d5,
 **
 **  Reference:
 **
-**     F.Mignard & M.Froeschle, Astron. Astrophys. 354, 732-739 (2000).
+**     F.Mignard & M.Froeschle, Astron.Astrophys., 354, 732-739 (2000).
 **
 */
 
@@ -8205,7 +8431,7 @@ void iauFk5hip(double r5h[3][3], double s5h[3])
 **
 **  Reference:
 **
-**     F.Mignard & M.Froeschle, Astron. Astrophys. 354, 732-739 (2000).
+**     F.Mignard & M.Froeschle, Astron.Astrophys., 354, 732-739 (2000).
 **
 */
 
@@ -8433,7 +8659,7 @@ void iauG2icrs ( double dl, double db, double *dr, double *dd )
 **  This function is part of the International Astronomical Union's
 **  SOFA (Standards of Fundamental Astronomy) software collection.
 **
-**  Status:  support routine.
+**  Status:  support function.
 **
 **  Given:
 **     dl     double      galactic longitude (radians)
@@ -8951,7 +9177,7 @@ double iauGmst82(double dj1, double dj2)
 **     Transactions of the International Astronomical Union,
 **     XVIII B, 67 (1983).
 **
-**     Aoki et al., Astron. Astrophys. 105, 359-361 (1982).
+**     Aoki et al., Astron.Astrophys., 105, 359-361 (1982).
 **
 */
 
@@ -9392,9 +9618,367 @@ void iauH2fk5(double rh, double dh,
 **
 **  Reference:
 **
-**     F.Mignard & M.Froeschle, Astron. Astrophys. 354, 732-739 (2000).
+**     F.Mignard & M.Froeschle, Astron.Astrophys., 354, 732-739 (2000).
 **
 */
+
+
+
+void iauHd2ae (double ha, double dec, double phi,
+               double *az, double *el)
+/*
+**  - - - - - - - - -
+**   i a u H d 2 a e
+**  - - - - - - - - -
+**
+**  Equatorial to horizon coordinates:  transform hour angle and
+**  declination to azimuth and altitude.
+**
+**  This function is part of the International Astronomical Union's
+**  SOFA (Standards of Fundamental Astronomy) software collection.
+**
+**  Status:  support function.
+**
+**  Given:
+**     ha       double       hour angle (local)
+**     dec      double       declination
+**     phi      double       site latitude
+**
+**  Returned:
+**     *az      double       azimuth
+**     *el      double       altitude (informally, elevation)
+**
+**  Notes:
+**
+**  1)  All the arguments are angles in radians.
+**
+**  2)  Azimuth is returned in the range 0-2pi;  north is zero, and east
+**      is +pi/2.  Altitude is returned in the range +/- pi/2.
+**
+**  3)  The latitude phi is pi/2 minus the angle between the Earth's
+**      rotation axis and the adopted zenith.  In many applications it
+**      will be sufficient to use the published geodetic latitude of the
+**      site.  In very precise (sub-arcsecond) applications, phi can be
+**      corrected for polar motion.
+**
+**  4)  The returned azimuth az is with respect to the rotational north
+**      pole, as opposed to the ITRS pole, and for sub-arcsecond
+**      accuracy will need to be adjusted for polar motion if it is to
+**      be with respect to north on a map of the Earth's surface.
+**
+**  5)  Should the user wish to work with respect to the astronomical
+**      zenith rather than the geodetic zenith, phi will need to be
+**      adjusted for deflection of the vertical (often tens of
+**      arcseconds), and the zero point of the hour angle ha will also
+**      be affected.
+**
+**  6)  The transformation is the same as Vh = Rz(pi)*Ry(pi/2-phi)*Ve,
+**      where Vh and Ve are lefthanded unit vectors in the (az,el) and
+**      (ha,dec) systems respectively and Ry and Rz are rotations about
+**      first the y-axis and then the z-axis.  (n.b. Rz(pi) simply
+**      reverses the signs of the x and y components.)  For efficiency,
+**      the algorithm is written out rather than calling other utility
+**      functions.  For applications that require even greater
+**      efficiency, additional savings are possible if constant terms
+**      such as functions of latitude are computed once and for all.
+**
+**  7)  Again for efficiency, no range checking of arguments is carried
+**      out.
+**
+**  Last revision:   2017 September 12
+**
+**  SOFA release 2018-01-30
+**
+**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+*/
+{
+   double sh, ch, sd, cd, sp, cp, x, y, z, r, a;
+
+
+/* Useful trig functions. */
+   sh = sin(ha);
+   ch = cos(ha);
+   sd = sin(dec);
+   cd = cos(dec);
+   sp = sin(phi);
+   cp = cos(phi);
+
+/* Az,Alt unit vector. */
+   x = - ch*cd*sp + sd*cp;
+   y = - sh*cd;
+   z = ch*cd*cp + sd*sp;
+
+/* To spherical. */
+   r = sqrt(x*x + y*y);
+   a = (r != 0.0) ? atan2(y,x) : 0.0;
+   *az = (a < 0.0) ? a+D2PI : a;
+   *el = atan2(z,r);
+
+/* Finished. */
+
+/*----------------------------------------------------------------------
+**
+**  Copyright (C) 2018
+**  Standards Of Fundamental Astronomy Board
+**  of the International Astronomical Union.
+**
+**  =====================
+**  SOFA Software License
+**  =====================
+**
+**  NOTICE TO USER:
+**
+**  BY USING THIS SOFTWARE YOU ACCEPT THE FOLLOWING SIX TERMS AND
+**  CONDITIONS WHICH APPLY TO ITS USE.
+**
+**  1. The Software is owned by the IAU SOFA Board ("SOFA").
+**
+**  2. Permission is granted to anyone to use the SOFA software for any
+**     purpose, including commercial applications, free of charge and
+**     without payment of royalties, subject to the conditions and
+**     restrictions listed below.
+**
+**  3. You (the user) may copy and distribute SOFA source code to others,
+**     and use and adapt its code and algorithms in your own software,
+**     on a world-wide, royalty-free basis.  That portion of your
+**     distribution that does not consist of intact and unchanged copies
+**     of SOFA source code files is a "derived work" that must comply
+**     with the following requirements:
+**
+**     a) Your work shall be marked or carry a statement that it
+**        (i) uses routines and computations derived by you from
+**        software provided by SOFA under license to you; and
+**        (ii) does not itself constitute software provided by and/or
+**        endorsed by SOFA.
+**
+**     b) The source code of your derived work must contain descriptions
+**        of how the derived work is based upon, contains and/or differs
+**        from the original SOFA software.
+**
+**     c) The names of all routines in your derived work shall not
+**        include the prefix "iau" or "sofa" or trivial modifications
+**        thereof such as changes of case.
+**
+**     d) The origin of the SOFA components of your derived work must
+**        not be misrepresented;  you must not claim that you wrote the
+**        original software, nor file a patent application for SOFA
+**        software or algorithms embedded in the SOFA software.
+**
+**     e) These requirements must be reproduced intact in any source
+**        distribution and shall apply to anyone to whom you have
+**        granted a further right to modify the source code of your
+**        derived work.
+**
+**     Note that, as originally distributed, the SOFA software is
+**     intended to be a definitive implementation of the IAU standards,
+**     and consequently third-party modifications are discouraged.  All
+**     variations, no matter how minor, must be explicitly marked as
+**     such, as explained above.
+**
+**  4. You shall not cause the SOFA software to be brought into
+**     disrepute, either by misuse, or use for inappropriate tasks, or
+**     by inappropriate modification.
+**
+**  5. The SOFA software is provided "as is" and SOFA makes no warranty
+**     as to its use or performance.   SOFA does not and cannot warrant
+**     the performance or results which the user may obtain by using the
+**     SOFA software.  SOFA makes no warranties, express or implied, as
+**     to non-infringement of third party rights, merchantability, or
+**     fitness for any particular purpose.  In no event will SOFA be
+**     liable to the user for any consequential, incidental, or special
+**     damages, including any lost profits or lost savings, even if a
+**     SOFA representative has been advised of such damages, or for any
+**     claim by any third party.
+**
+**  6. The provision of any version of the SOFA software under the terms
+**     and conditions specified herein does not imply that future
+**     versions will also be made available under the same terms and
+**     conditions.
+*
+**  In any published work or commercial product which uses the SOFA
+**  software directly, acknowledgement (see www.iausofa.org) is
+**  appreciated.
+**
+**  Correspondence concerning SOFA software should be addressed as
+**  follows:
+**
+**      By email:  sofa@ukho.gov.uk
+**      By post:   IAU SOFA Center
+**                 HM Nautical Almanac Office
+**                 UK Hydrographic Office
+**                 Admiralty Way, Taunton
+**                 Somerset, TA1 2DN
+**                 United Kingdom
+**
+**--------------------------------------------------------------------*/
+
+}
+
+
+
+double iauHd2pa (double ha, double dec, double phi)
+/*
+**  - - - - - - - - -
+**   i a u H d 2 p a
+**  - - - - - - - - -
+**
+**  Parallactic angle for a given hour angle and declination.
+**
+**  This function is part of the International Astronomical Union's
+**  SOFA (Standards of Fundamental Astronomy) software collection.
+**
+**  Status:  support function.
+**
+**  Given:
+**     ha     double     hour angle
+**     dec    double     declination
+**     phi    double     site latitude
+**
+**  Returned (function value):
+**            double     parallactic angle
+**
+**  Notes:
+**
+**  1)  All the arguments are angles in radians.
+**
+**  2)  The parallactic angle at a point in the sky is the position
+**      angle of the vertical, i.e. the angle between the directions to
+**      the north celestial pole and to the zenith respectively.
+**
+**  3)  The result is returned in the range -pi to +pi.
+**
+**  4)  At the pole itself a zero result is returned.
+**
+**  5)  The latitude phi is pi/2 minus the angle between the Earth's
+**      rotation axis and the adopted zenith.  In many applications it
+**      will be sufficient to use the published geodetic latitude of the
+**      site.  In very precise (sub-arcsecond) applications, phi can be
+**      corrected for polar motion.
+**
+**  6)  Should the user wish to work with respect to the astronomical
+**      zenith rather than the geodetic zenith, phi will need to be
+**      adjusted for deflection of the vertical (often tens of
+**      arcseconds), and the zero point of the hour angle ha will also
+**      be affected.
+**
+**  Reference:
+**     Smart, W.M., "Spherical Astronomy", Cambridge University Press,
+**     6th edition (Green, 1977), p49.
+**
+**  Last revision:   2017 September 12
+**
+**  SOFA release 2018-01-30
+**
+**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+*/
+{
+   double cp, cqsz, sqsz;
+
+
+   cp = cos(phi);
+   sqsz = cp*sin(ha);
+   cqsz = sin(phi)*cos(dec) - cp*sin(dec)*cos(ha);
+   return ( ( sqsz != 0.0 || cqsz != 0.0 ) ? atan2(sqsz,cqsz) : 0.0 );
+
+/* Finished. */
+
+/*----------------------------------------------------------------------
+**
+**  Copyright (C) 2018
+**  Standards Of Fundamental Astronomy Board
+**  of the International Astronomical Union.
+**
+**  =====================
+**  SOFA Software License
+**  =====================
+**
+**  NOTICE TO USER:
+**
+**  BY USING THIS SOFTWARE YOU ACCEPT THE FOLLOWING SIX TERMS AND
+**  CONDITIONS WHICH APPLY TO ITS USE.
+**
+**  1. The Software is owned by the IAU SOFA Board ("SOFA").
+**
+**  2. Permission is granted to anyone to use the SOFA software for any
+**     purpose, including commercial applications, free of charge and
+**     without payment of royalties, subject to the conditions and
+**     restrictions listed below.
+**
+**  3. You (the user) may copy and distribute SOFA source code to others,
+**     and use and adapt its code and algorithms in your own software,
+**     on a world-wide, royalty-free basis.  That portion of your
+**     distribution that does not consist of intact and unchanged copies
+**     of SOFA source code files is a "derived work" that must comply
+**     with the following requirements:
+**
+**     a) Your work shall be marked or carry a statement that it
+**        (i) uses routines and computations derived by you from
+**        software provided by SOFA under license to you; and
+**        (ii) does not itself constitute software provided by and/or
+**        endorsed by SOFA.
+**
+**     b) The source code of your derived work must contain descriptions
+**        of how the derived work is based upon, contains and/or differs
+**        from the original SOFA software.
+**
+**     c) The names of all routines in your derived work shall not
+**        include the prefix "iau" or "sofa" or trivial modifications
+**        thereof such as changes of case.
+**
+**     d) The origin of the SOFA components of your derived work must
+**        not be misrepresented;  you must not claim that you wrote the
+**        original software, nor file a patent application for SOFA
+**        software or algorithms embedded in the SOFA software.
+**
+**     e) These requirements must be reproduced intact in any source
+**        distribution and shall apply to anyone to whom you have
+**        granted a further right to modify the source code of your
+**        derived work.
+**
+**     Note that, as originally distributed, the SOFA software is
+**     intended to be a definitive implementation of the IAU standards,
+**     and consequently third-party modifications are discouraged.  All
+**     variations, no matter how minor, must be explicitly marked as
+**     such, as explained above.
+**
+**  4. You shall not cause the SOFA software to be brought into
+**     disrepute, either by misuse, or use for inappropriate tasks, or
+**     by inappropriate modification.
+**
+**  5. The SOFA software is provided "as is" and SOFA makes no warranty
+**     as to its use or performance.   SOFA does not and cannot warrant
+**     the performance or results which the user may obtain by using the
+**     SOFA software.  SOFA makes no warranties, express or implied, as
+**     to non-infringement of third party rights, merchantability, or
+**     fitness for any particular purpose.  In no event will SOFA be
+**     liable to the user for any consequential, incidental, or special
+**     damages, including any lost profits or lost savings, even if a
+**     SOFA representative has been advised of such damages, or for any
+**     claim by any third party.
+**
+**  6. The provision of any version of the SOFA software under the terms
+**     and conditions specified herein does not imply that future
+**     versions will also be made available under the same terms and
+**     conditions.
+*
+**  In any published work or commercial product which uses the SOFA
+**  software directly, acknowledgement (see www.iausofa.org) is
+**  appreciated.
+**
+**  Correspondence concerning SOFA software should be addressed as
+**  follows:
+**
+**      By email:  sofa@ukho.gov.uk
+**      By post:   IAU SOFA Center
+**                 HM Nautical Almanac Office
+**                 UK Hydrographic Office
+**                 Admiralty Way, Taunton
+**                 Somerset, TA1 2DN
+**                 United Kingdom
+**
+**--------------------------------------------------------------------*/
+
+}
 
 
 
@@ -9492,7 +10076,7 @@ void iauIcrs2g ( double dr, double dd, double *dl, double *db )
 **  This function is part of the International Astronomical Union's
 **  SOFA (Standards of Fundamental Astronomy) software collection.
 **
-**  Status:  support routine.
+**  Status:  support function.
 **
 **  Given:
 **     dr     double      ICRS right ascension (radians)
@@ -11704,7 +12288,7 @@ int iauPlan94(double date1, double date2, int np, double pv[2][3])
 **
 **  Reference:  Simon, J.L, Bretagnon, P., Chapront, J.,
 **              Chapront-Touze, M., Francou, G., and Laskar, J.,
-**              Astron. Astrophys. 282, 663 (1994).
+**              Astron.Astrophys., 282, 663 (1994).
 **
 */
 
@@ -15484,6 +16068,449 @@ int iauTf2d(char s, int ihour, int imin, double sec, double *days)
 
 
 
+int iauTpors(double xi, double eta, double a, double b,
+             double *a01, double *b01, double *a02, double *b02)
+/*
+**  - - - - - - - - -
+**   i a u T p o r s
+**  - - - - - - - - -
+**
+**  In the tangent plane projection, given the rectangular coordinates
+**  of a star and its spherical coordinates, determine the spherical
+**  coordinates of the tangent point.
+**
+**  This function is part of the International Astronomical Union's
+**  SOFA (Standards of Fundamental Astronomy) software collection.
+**
+**  Status:  support function.
+**
+**  Given:
+**     xi,eta     double  rectangular coordinates of star image (Note 2)
+**     a,b        double  star's spherical coordinates (Note 3)
+**
+**  Returned:
+**     *a01,*b01  double  tangent point's spherical coordinates, Soln. 1
+**     *a02,*b02  double  tangent point's spherical coordinates, Soln. 2
+**
+**  Returned (function value):
+**                int     number of solutions:
+**                        0 = no solutions returned (Note 5)
+**                        1 = only the first solution is useful (Note 6)
+**                        2 = both solutions are useful (Note 6)
+**
+**  Notes:
+**
+**  1) The tangent plane projection is also called the "gnomonic
+**     projection" and the "central projection".
+**
+**  2) The eta axis points due north in the adopted coordinate system.
+**     If the spherical coordinates are observed (RA,Dec), the tangent
+**     plane coordinates (xi,eta) are conventionally called the
+**     "standard coordinates".  If the spherical coordinates are with
+**     respect to a right-handed triad, (xi,eta) are also right-handed.
+**     The units of (xi,eta) are, effectively, radians at the tangent
+**     point.
+**
+**  3) All angular arguments are in radians.
+**
+**  4) The angles a01 and a02 are returned in the range 0-2pi.  The
+**     angles b01 and b02 are returned in the range +/-pi, but in the
+**     usual, non-pole-crossing, case, the range is +/-pi/2.
+**
+**  5) Cases where there is no solution can arise only near the poles.
+**     For example, it is clearly impossible for a star at the pole
+**     itself to have a non-zero xi value, and hence it is meaningless
+**     to ask where the tangent point would have to be to bring about
+**     this combination of xi and dec.
+**
+**  6) Also near the poles, cases can arise where there are two useful
+**     solutions.  The return value indicates whether the second of the
+**     two solutions returned is useful;  1 indicates only one useful
+**     solution, the usual case.
+**
+**  7) The basis of the algorithm is to solve the spherical triangle PSC,
+**     where P is the north celestial pole, S is the star and C is the
+**     tangent point.  The spherical coordinates of the tangent point are
+**     [a0,b0];  writing rho^2 = (xi^2+eta^2) and r^2 = (1+rho^2), side c
+**     is then (pi/2-b), side p is sqrt(xi^2+eta^2) and side s (to be
+**     found) is (pi/2-b0).  Angle C is given by sin(C) = xi/rho and
+**     cos(C) = eta/rho.  Angle P (to be found) is the longitude
+**     difference between star and tangent point (a-a0).
+**
+**  8) This function is a member of the following set:
+**
+**         spherical      vector         solve for
+**
+**         iauTpxes      iauTpxev         xi,eta
+**         iauTpsts      iauTpstv          star
+**       > iauTpors <    iauTporv         origin
+**
+**  Called:
+**     iauAnp       normalize angle into range 0 to 2pi
+**
+**  References:
+**
+**     Calabretta M.R. & Greisen, E.W., 2002, "Representations of
+**     celestial coordinates in FITS", Astron.Astrophys. 395, 1077
+**
+**     Green, R.M., "Spherical Astronomy", Cambridge University Press,
+**     1987, Chapter 13.
+**
+*/
+
+
+
+int iauTporv(double xi, double eta, double v[3],
+             double v01[3], double v02[3])
+/*
+**  - - - - - - - - -
+**   i a u T p o r v
+**  - - - - - - - - -
+**
+**  In the tangent plane projection, given the rectangular coordinates
+**  of a star and its direction cosines, determine the direction
+**  cosines of the tangent point.
+**
+**  This function is part of the International Astronomical Union's
+**  SOFA (Standards of Fundamental Astronomy) software collection.
+**
+**  Status:  support function.
+**
+**  Given:
+**     xi,eta   double    rectangular coordinates of star image (Note 2)
+**     v        double[3] star's direction cosines (Note 3)
+**
+**  Returned:
+**     v01      double[3] tangent point's direction cosines, Solution 1
+**     v02      double[3] tangent point's direction cosines, Solution 2
+**
+**  Returned (function value):
+**                int     number of solutions:
+**                        0 = no solutions returned (Note 4)
+**                        1 = only the first solution is useful (Note 5)
+**                        2 = both solutions are useful (Note 5)
+**
+**  Notes:
+**
+**  1) The tangent plane projection is also called the "gnomonic
+**     projection" and the "central projection".
+**
+**  2) The eta axis points due north in the adopted coordinate system.
+**     If the direction cosines represent observed (RA,Dec), the tangent
+**     plane coordinates (xi,eta) are conventionally called the
+**     "standard coordinates".  If the direction cosines are with
+**     respect to a right-handed triad, (xi,eta) are also right-handed.
+**     The units of (xi,eta) are, effectively, radians at the tangent
+**     point.
+**
+**  3) The vector v must be of unit length or the result will be wrong.
+**
+**  4) Cases where there is no solution can arise only near the poles.
+**     For example, it is clearly impossible for a star at the pole
+**     itself to have a non-zero xi value, and hence it is meaningless
+**     to ask where the tangent point would have to be.
+**
+**  5) Also near the poles, cases can arise where there are two useful
+**     solutions.  The return value indicates whether the second of the
+**     two solutions returned is useful;  1 indicates only one useful
+**     solution, the usual case.
+**
+**  6) The basis of the algorithm is to solve the spherical triangle
+**     PSC, where P is the north celestial pole, S is the star and C is
+**     the tangent point.  Calling the celestial spherical coordinates
+**     of the star and tangent point (a,b) and (a0,b0) respectively, and
+**     writing rho^2 = (xi^2+eta^2) and r^2 = (1+rho^2), and
+**     transforming the vector v into (a,b) in the normal way, side c is
+**     then (pi/2-b), side p is sqrt(xi^2+eta^2) and side s (to be
+**     found) is (pi/2-b0), while angle C is given by sin(C) = xi/rho
+**     and cos(C) = eta/rho;  angle P (to be found) is (a-a0).  After
+**     solving the spherical triangle, the result (a0,b0) can be
+**     expressed in vector form as v0.
+**
+**  7) This function is a member of the following set:
+**
+**         spherical      vector         solve for
+**
+**         iauTpxes      iauTpxev         xi,eta
+**         iauTpsts      iauTpstv          star
+**         iauTpors    > iauTporv <       origin
+**
+**  References:
+**
+**     Calabretta M.R. & Greisen, E.W., 2002, "Representations of
+**     celestial coordinates in FITS", Astron.Astrophys. 395, 1077
+**
+**     Green, R.M., "Spherical Astronomy", Cambridge University Press,
+**     1987, Chapter 13.
+**
+*/
+
+
+
+void iauTpsts(double xi, double eta, double a0, double b0,
+              double *a, double *b)
+/*
+**  - - - - - - - - -
+**   i a u T p s t s
+**  - - - - - - - - -
+**
+**  In the tangent plane projection, given the star's rectangular
+**  coordinates and the spherical coordinates of the tangent point,
+**  solve for the spherical coordinates of the star.
+**
+**  This function is part of the International Astronomical Union's
+**  SOFA (Standards of Fundamental Astronomy) software collection.
+**
+**  Status:  support function.
+**
+**  Given:
+**     xi,eta    double  rectangular coordinates of star image (Note 2)
+**     a0,b0     double  tangent point's spherical coordinates
+**
+**  Returned:
+**     *a,*b     double  star's spherical coordinates
+**
+**  1) The tangent plane projection is also called the "gnomonic
+**     projection" and the "central projection".
+**
+**  2) The eta axis points due north in the adopted coordinate system.
+**     If the spherical coordinates are observed (RA,Dec), the tangent
+**     plane coordinates (xi,eta) are conventionally called the
+**     "standard coordinates".  If the spherical coordinates are with
+**     respect to a right-handed triad, (xi,eta) are also right-handed.
+**     The units of (xi,eta) are, effectively, radians at the tangent
+**     point.
+**
+**  3) All angular arguments are in radians.
+**
+**  4) This function is a member of the following set:
+**
+**         spherical      vector         solve for
+**
+**         iauTpxes      iauTpxev         xi,eta
+**       > iauTpsts <    iauTpstv          star
+**         iauTpors      iauTporv         origin
+**
+**  Called:
+**     iauAnp       normalize angle into range 0 to 2pi
+**
+**  References:
+**
+**     Calabretta M.R. & Greisen, E.W., 2002, "Representations of
+**     celestial coordinates in FITS", Astron.Astrophys. 395, 1077
+**
+**     Green, R.M., "Spherical Astronomy", Cambridge University Press,
+**     1987, Chapter 13.
+**
+*/
+
+
+
+void iauTpstv(double xi, double eta, double v0[3], double v[3])
+/*
+**  - - - - - - - - -
+**   i a u T p s t v
+**  - - - - - - - - -
+**
+**  In the tangent plane projection, given the star's rectangular
+**  coordinates and the direction cosines of the tangent point, solve
+**  for the direction cosines of the star.
+**
+**  This function is part of the International Astronomical Union's
+**  SOFA (Standards of Fundamental Astronomy) software collection.
+**
+**  Status:  support function.
+**
+**  Given:
+**     xi,eta  double     rectangular coordinates of star image (Note 2)
+**     v0      double[3]  tangent point's direction cosines
+**
+**  Returned:
+**     v       double[3]  star's direction cosines
+**
+**  1) The tangent plane projection is also called the "gnomonic
+**     projection" and the "central projection".
+**
+**  2) The eta axis points due north in the adopted coordinate system.
+**     If the direction cosines represent observed (RA,Dec), the tangent
+**     plane coordinates (xi,eta) are conventionally called the
+**     "standard coordinates".  If the direction cosines are with
+**     respect to a right-handed triad, (xi,eta) are also right-handed.
+**     The units of (xi,eta) are, effectively, radians at the tangent
+**     point.
+**
+**  3) The method used is to complete the star vector in the (xi,eta)
+**     based triad and normalize it, then rotate the triad to put the
+**     tangent point at the pole with the x-axis aligned to zero
+**     longitude.  Writing (a0,b0) for the celestial spherical
+**     coordinates of the tangent point, the sequence of rotations is
+**     (b-pi/2) around the x-axis followed by (-a-pi/2) around the
+**     z-axis.
+**
+**  4) If vector v0 is not of unit length, the returned vector v will
+**     be wrong.
+**
+**  5) If vector v0 points at a pole, the returned vector v will be
+**     based on the arbitrary assumption that the longitude coordinate
+**     of the tangent point is zero.
+**
+**  6) This function is a member of the following set:
+**
+**         spherical      vector         solve for
+**
+**         iauTpxes      iauTpxev         xi,eta
+**         iauTpsts    > iauTpstv <        star
+**         iauTpors      iauTporv         origin
+**
+**  References:
+**
+**     Calabretta M.R. & Greisen, E.W., 2002, "Representations of
+**     celestial coordinates in FITS", Astron.Astrophys. 395, 1077
+**
+**     Green, R.M., "Spherical Astronomy", Cambridge University Press,
+**     1987, Chapter 13.
+**
+*/
+
+
+
+int iauTpxes(double a, double b, double a0, double b0,
+             double *xi, double *eta)
+/*
+**  - - - - - - - - -
+**   i a u T p x e s
+**  - - - - - - - - -
+**
+**  In the tangent plane projection, given celestial spherical
+**  coordinates for a star and the tangent point, solve for the star's
+**  rectangular coordinates in the tangent plane.
+**
+**  This function is part of the International Astronomical Union's
+**  SOFA (Standards of Fundamental Astronomy) software collection.
+**
+**  Status:  support function.
+**
+**  Given:
+**     a,b       double  star's spherical coordinates
+**     a0,b0     double  tangent point's spherical coordinates
+**
+**  Returned:
+**     *xi,*eta  double  rectangular coordinates of star image (Note 2)
+**
+**  Returned (function value):
+**               int     status:  0 = OK
+**                                1 = star too far from axis
+**                                2 = antistar on tangent plane
+**                                3 = antistar too far from axis
+**
+**  Notes:
+**
+**  1) The tangent plane projection is also called the "gnomonic
+**     projection" and the "central projection".
+**
+**  2) The eta axis points due north in the adopted coordinate system.
+**     If the spherical coordinates are observed (RA,Dec), the tangent
+**     plane coordinates (xi,eta) are conventionally called the
+**     "standard coordinates".  For right-handed spherical coordinates,
+**     (xi,eta) are also right-handed.  The units of (xi,eta) are,
+**     effectively, radians at the tangent point.
+**
+**  3) All angular arguments are in radians.
+**
+**  4) This function is a member of the following set:
+**
+**         spherical      vector         solve for
+**
+**       > iauTpxes <    iauTpxev         xi,eta
+**         iauTpsts      iauTpstv          star
+**         iauTpors      iauTporv         origin
+**
+**  References:
+**
+**     Calabretta M.R. & Greisen, E.W., 2002, "Representations of
+**     celestial coordinates in FITS", Astron.Astrophys. 395, 1077
+**
+**     Green, R.M., "Spherical Astronomy", Cambridge University Press,
+**     1987, Chapter 13.
+**
+*/
+
+
+
+int iauTpxev(double v[3], double v0[3], double *xi, double *eta)
+/*
+**  - - - - - - - - -
+**   i a u T p x e v
+**  - - - - - - - - -
+**
+**  In the tangent plane projection, given celestial direction cosines
+**  for a star and the tangent point, solve for the star's rectangular
+**  coordinates in the tangent plane.
+**
+**  This function is part of the International Astronomical Union's
+**  SOFA (Standards of Fundamental Astronomy) software collection.
+**
+**  Status:  support function.
+**
+**  Given:
+**     v         double[3]  direction cosines of star (Note 4)
+**     v0        double[3]  direction cosines of tangent point (Note 4)
+**
+**  Returned:
+**     *xi,*eta  double     tangent plane coordinates of star
+**
+**  Returned (function value):
+**               int        status: 0 = OK
+**                                  1 = star too far from axis
+**                                  2 = antistar on tangent plane
+**                                  3 = antistar too far from axis
+**
+**  Notes:
+**
+**  1) The tangent plane projection is also called the "gnomonic
+**     projection" and the "central projection".
+**
+**  2) The eta axis points due north in the adopted coordinate system.
+**     If the direction cosines represent observed (RA,Dec), the tangent
+**     plane coordinates (xi,eta) are conventionally called the
+**     "standard coordinates".  If the direction cosines are with
+**     respect to a right-handed triad, (xi,eta) are also right-handed.
+**     The units of (xi,eta) are, effectively, radians at the tangent
+**     point.
+**
+**  3) The method used is to extend the star vector to the tangent
+**     plane and then rotate the triad so that (x,y) becomes (xi,eta).
+**     Writing (a,b) for the celestial spherical coordinates of the
+**     star, the sequence of rotations is (a+pi/2) around the z-axis
+**     followed by (pi/2-b) around the x-axis.
+**
+**  4) If vector v0 is not of unit length, or if vector v is of zero
+**     length, the results will be wrong.
+**
+**  5) If v0 points at a pole, the returned (xi,eta) will be based on
+**     the arbitrary assumption that the longitude coordinate of the
+**     tangent point is zero.
+**
+**  6) This function is a member of the following set:
+**
+**         spherical      vector         solve for
+**
+**         iauTpxes    > iauTpxev <       xi,eta
+**         iauTpsts      iauTpstv          star
+**         iauTpors      iauTporv         origin
+**
+**  References:
+**
+**     Calabretta M.R. & Greisen, E.W., 2002, "Representations of
+**     celestial coordinates in FITS", Astron.Astrophys. 395, 1077
+**
+**     Green, R.M., "Spherical Astronomy", Cambridge University Press,
+**     1987, Chapter 13.
+**
+*/
+
+
+
 void iauTr(double r[3][3], double rt[3][3])
 /*
 **  - - - - - -
@@ -16411,19 +17438,25 @@ void iauZr(double r[3][3])
 **
 */
 
-copyr.lis                                                  2017 March 20
+copyr.lis                                                2018 January 26
 
 
 COPYRIGHT NOTICE
 
+Text equivalent to that below appears at the end of every SOFA routine
+(with one exception).  There are small formatting differences between
+the Fortran and C versions.
 
-Text equivalent to the following appears at the end of every SOFA
-routine.  (There are small formatting differences between the Fortran
-and C versions.)
+The one exception is the "leap second" routine DAT.  This uniquely is
+classified as "user replaceable", and has a mitigated license statement
+that permits the distribution of local variants under the same name.
+This measure allows other SOFA routines to call the local variant, which
+may be file or network based, or otherwise equipped to pick up IERS leap
+second updates with no need to download new SOFA code.
 
 *+----------------------------------------------------------------------
 *
-*  Copyright (C) 2017
+*  Copyright (C) 2018
 *  Standards Of Fundamental Astronomy Board
 *  of the International Astronomical Union.
 *
@@ -16585,11 +17618,11 @@ file sofam.h.
 **  This file is part of the International Astronomical Union's
 **  SOFA (Standards Of Fundamental Astronomy) software collection.
 **
-**  This revision:   2016 March 10
+**  This revision:   2017 October 7
 **
-**  SOFA release 2017-04-20
+**  SOFA release 2018-01-30
 **
-**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 */
 
 #include "sofam.h"
@@ -16947,6 +17980,25 @@ int iauUtctai(double utc1, double utc2, double *tai1, double *tai2);
 int iauUtcut1(double utc1, double utc2, double dut1,
               double *ut11, double *ut12);
 
+/* Astronomy/HorizonEquatorial */
+void iauAe2hd(double az, double el, double phi,
+              double *ha, double *dec);
+void iauHd2ae(double ha, double dec, double phi,
+              double *az, double *el);
+double iauHd2pa(double ha, double dec, double phi);
+
+/* Astronomy/Gnomonic */
+int iauTpors(double xi, double eta, double a, double b,
+             double *a01, double *b01, double *a02, double *b02);
+int iauTporv(double xi, double eta, double v[3],
+             double v01[3], double v02[3]);
+void iauTpsts(double xi, double eta, double a0, double b0,
+              double *a, double *b);
+void iauTpstv(double xi, double eta, double v0[3], double v[3]);
+int iauTpxes(double a, double b, double a0, double b0,
+             double *xi, double *eta);
+int iauTpxev(double v[3], double v0[3], double *xi, double *eta);
+
 /* VectorMatrix/AngleOps */
 void iauA2af(int ndp, double angle, char *sign, int idmsf[4]);
 void iauA2tf(int ndp, double angle, char *sign, int ihmsf[4]);
@@ -17034,7 +18086,7 @@ void iauSxpv(double s, double pv[2][3], double spv[2][3]);
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2017
+**  Copyright (C) 2018
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
@@ -17147,9 +18199,9 @@ void iauSxpv(double s, double pv[2][3], double spv[2][3]);
 **
 **  This revision:   2017 March 16
 **
-**  SOFA release 2017-04-20
+**  SOFA release 2018-01-30
 **
-**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 */
 
 /* Star-independent astrometry parameters */
@@ -17285,7 +18337,7 @@ typedef struct {
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2017
+**  Copyright (C) 2018
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
@@ -17379,7 +18431,7 @@ typedef struct {
 **
 **--------------------------------------------------------------------*/
 
-board.lis                                                2015 December 6
+board.lis                                                 2017 October 7
 
 
 
@@ -17389,11 +18441,11 @@ IAU STANDARDS OF FUNDAMENTAL ASTRONOMY BOARD
 Current Membership
 
    John Bangert - United States Naval Observatory, retired
-   Steven Bell - Her Majesty's Nautical Almanac Office
+   Steven Bell - Her Majesty's Nautical Almanac Office (HMNAO)
    Nicole Capitaine - Paris Observatory
    William Folkner - Jet Propulsion Laboratory
    Mickaël Gastineau - Paris Observatory, IMCCE
-   Catherine Hohenkerk - Her Majesty's Nautical Almanac Office (Chair)
+   Catherine Hohenkerk - HMNAO (Chair, retired)
    Li Jinling - Shanghai Astronomical Observatory
    Brian Luzum - United States Naval Observatory (IERS)
    Zinovy Malkin - Pulkovo Observatory, St Petersburg
@@ -17412,7 +18464,7 @@ Past Members
    George Kaplan          United States Naval Observatory
    Dennis McCarthy        United States Naval Observatory
    Skip Newhall           Jet Propulsion Laboratory
-   Jin Wen-Jing           Shanghai Observatory
+   Jin Wen-Jing           Shanghai Astronomical Observatory
 
 
 The e-mail for the Board chair is Catherine.Hohenkerk@ukho.gov.uk

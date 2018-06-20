@@ -1,90 +1,97 @@
-function [xSmooth,SSmooth]=sqrtCubKalSmoother(xInit,SInit,z,h,f,SR,SQ,xi,w,kD,innovTrans,measAvgFun,stateDiffTrans,stateTrans,stateAvgFun)
+function [xSmooth,SSmooth,xUpd,SUpd]=sqrtCubKalSmoother(xInit,SInit,z,h,f,SR,SQ,xi,w,kD,innovTrans,measAvgFun,stateDiffTrans,stateTrans,stateAvgFun)
 %%SQRTCUBKALSMOOTHER  Run the forward-backward square root cubature Kalman
 %                 smoother on a batch of measurements. The smoothed result
 %                 at one time step or along the entire batch are available.
 %                 The initial predicted states can not be uninformative.
-%INPUTS: xInit  The predicted state at the time of the initial measurement
-%               in z.
-%        SInit  The square root covariance matrix associated with the
-%               predicted state at the time of the initial measurement in
-%               z.
-%           z   The zDim X N matrix of measurements for the whole batch.
-%           h   A NX1 cell array of function handles for the measurement
-%               function that transform the state into the measurement
-%               domain at each step. If the same measurement function is
-%               used for all steps in the batch, then h can just be the
-%               single function handle used.
-%           f   A NX1 cell array of function handles for the state
-%               transition function that transform the state into the
-%               measurement domain at each step. If the same measurement
-%               function is used for all steps in the batch, then h can
-%               just be the single function handle used.
-%          SR   The zDim X zDim X N hypermatrix of square root measurement
-%               covariance matrices. Alternatively, if all of the
-%               measurement covariance matrices are the same, one can just
-%               pass a single zDim X zDim matrix.
-%          SQ   The xDim X xDim X (N-1) hypermatrix of square root process
-%               noise covariance matrices. Alternatively, if all of the
-%               process noise covariance matrices are the same, one can
-%               just pass a single xDim X xDim matrix.
-%          xi   An xDim X numCubPoints matrix of cubature points.        
-%           w   A numCubPoints X 1 vector of the weights associated with
-%               the cubature points.
-%          kD   The discrete time-step at which the smoothed state estimate
-%               is desired, where z(:,1) is at discrete time-step 1 (not
-%               0). If kD is omitted or an empty matrix is passed, then
-%               results along the entire batch are obtained.
-%  innovTrans   An optional function handle that transforms the value of
-%               the difference between the observation and any predicted
-%               points. This must be able to handle sets of differences.
-%               For a zDim measurement, this must be able to handle a
-%               zDimXN matrix of N differences. This only needs to be
-%               supplied when a measurement difference must to be
-%               restricted to a certain range. For example, the innovation
-%               between two angles will be 2*pi if one angle is zero and
-%               the other 2*pi, even though they are the same direction. In
-%               such an instance, a function handle to the wrapRange
-%               function with the appropriate parameters should be passed
-%               for innovTrans.
-%  measAvgFun   An optional function handle that, when given N measurement
-%               values with weights, produces the weighted average. This
-%               function only has to be provided if the domain of the
-%               measurement is not linear. For example, when averaging
-%               angular values, then the function meanAng should be used.
-%stateDiffTrans  An optional function handle that, like innovTrans does for
-%               the measurements, takes an xDimXN matrix of N differences
-%               between states and transforms them however might be
-%               necessary. For example, a state continaing angular
-%               components will generally need to be transformed so that
-%               the difference between the angles is wrapped to -pi/pi.
-%  stateTrans   An optional function that takes a state estimate and
-%               transforms it. This is useful if one wishes the elements of
-%               the state to be bound to a certain domain. For example, if
-%               an element of the state is an angle, one should generally
-%               want to bind it to the region +/-pi.
-% stateAvgFun   An optional function that given an xDimXN matrix of N state
-%               estimates and an NX1 vector of weights, provides the
-%               weighted average of the state estimates. This is necessary
-%               if, for example, states with angular components are
-%               averaged.
 %
-%OUTPUTS:xSmooth The xDimXN smoothed state estimates at all steps if kD is
+%INPUTS: xInit The predicted state at the time of the initial measurement
+%              in z.
+%        SInit The square root covariance matrix associated with the
+%              predicted state at the time of the initial measurement in z.
+%            z The zDim X N matrix of measurements for the whole batch.
+%            h A NX1 cell array of function handles for the measurement
+%              function that transform the state into the measurement
+%              domain at each step. If the same measurement function is
+%              used for all steps in the batch, then h can just be the
+%              single function handle used.
+%            f A NX1 cell array of function handles for the state
+%              transition function that transform the state into the
+%              measurement domain at each step. If the same measurement
+%              function is used for all steps in the batch, then h can
+%              just be the single function handle used.
+%           SR The zDim X zDim X N hypermatrix of square root measurement
+%              covariance matrices. Alternatively, if all of the
+%              measurement covariance matrices are the same, one can just
+%              pass a single zDim X zDim matrix.
+%           SQ The xDim X xDim X (N-1) hypermatrix of square root process
+%              noise covariance matrices. Alternatively, if all of the
+%              process noise covariance matrices are the same, one can
+%              just pass a single xDim X xDim matrix.
+%           xi An xDim X numCubPoints matrix of cubature points.        
+%            w A numCubPoints X 1 vector of the weights associated with
+%              the cubature points.
+%           kD The discrete time-step at which the smoothed state estimate
+%              is desired, where z(:,1) is at discrete time-step 1 (not 0).
+%              If kD is omitted or an empty matrix is passed, then results
+%              along the entire batch are obtained.
+%   innovTrans An optional function handle that transforms the value of
+%              the difference between the observation and any predicted
+%              points. This must be able to handle sets of differences.
+%              For a zDim measurement, this must be able to handle a
+%              zDimXN matrix of N differences. This only needs to be
+%              supplied when a measurement difference must to be
+%              restricted to a certain range. For example, the innovation
+%              between two angles will be 2*pi if one angle is zero and
+%              the other 2*pi, even though they are the same direction. In
+%              such an instance, a function handle to the wrapRange
+%              function with the appropriate parameters should be passed
+%              for innovTrans.
+%   measAvgFun An optional function handle that, when given N measurement
+%              values with weights, produces the weighted average. This
+%              function only has to be provided if the domain of the
+%              measurement is not linear. For example, when averaging
+%              angular values, then the function meanAng should be used.
+% stateDiffTrans An optional function handle that, like innovTrans does for
+%              the measurements, takes an xDimXN matrix of N differences
+%              between states and transforms them however might be
+%              necessary. For example, a state continaing angular
+%              components will generally need to be transformed so that
+%              the difference between the angles is wrapped to -pi/pi.
+%   stateTrans An optional function that takes a state estimate and
+%              transforms it. This is useful if one wishes the elements of
+%              the state to be bound to a certain domain. For example, if
+%              an element of the state is an angle, one should generally
+%              want to bind it to the region +/-pi.
+%  stateAvgFun An optional function that given an xDimXN matrix of N state
+%              estimates and an NX1 vector of weights, provides the
+%              weighted average of the state estimates. This is necessary
+%              if, for example, states with angular components are
+%              averaged.
+%
+%OUTPUTS: xSmooth The xDimXN smoothed state estimates at all steps if kD is
 %                not provided or the xDimX1 smoothed information state
 %                estimate at step kD if kD is provided.
 %        SSmooth The lower-triangular square root covariance matrices
 %                associated with the smoothed state estimates. This is
 %                xDimXxDimXN for the whole batch if kD is not provided and
 %                is xDimXxDim if kD is provided.
+%           xUpd The xDimXN state estimates of the forward filter (not
+%                smoothed) at all times.
+%           SUpd The xDimXxDimXN lower triangular square root covariance
+%                matrices of the forward filter (not smoothed) at all
+%                times.
 %
 %The mathematics behind the state prediction and update functions are
-%described in more detail in Section IX of "Basic Tracking Using Nonlinear
-%3D Monostatic and Bistatic Measurements" by David F. Crouse.
+%described in more detail in Section IX of [1].
 %
-%The smoothing algorithm is taken from [1], but can use any type of
-%cubature points, not just the third-order points used in [1].
+%The smoothing algorithm is taken from [2], but can use any type of
+%cubature points, not just the third-order points used in [2].
 %
 %REFERENCES:
-%[1] I. Arasaratnam and S. Haykin, Cubature Kalman smoothers, Automatica,
+%[1] D. F. Crouse, "Basic tracking using nonlinear 3D monostatic and
+%    bistatic measurements," IEEE Aerospace and Electronic Systems
+%    Magazine, vol. 29, no. 8, Part II, pp. 4-53, Aug. 2014.
+%[2] I. Arasaratnam and S. Haykin, Cubature Kalman smoothers, Automatica,
 %    vol. 47, no. 10, pp. 2245-2250, Oct. 2011.
 %
 %March 2015 David Karnick, Naval Research Laboratory, Washington D.C.
@@ -177,7 +184,7 @@ for curStep=(N-1):-1:1
     SSmooth(:,:,curStep)=tria([stateDiffTrans(xFwdCenPoints-G*xPropCenPoints(:,:,curStep+1)),G*SQ(:,:,curStep+1),G*SSmooth(:,:,curStep+1)]);
 end
 
-if ~isempty(kD)
+if(~isempty(kD))
     xSmooth=xSmooth(:,kD);
     SSmooth=SSmooth(:,:,kD);
 end

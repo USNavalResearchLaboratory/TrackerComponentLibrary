@@ -8,8 +8,9 @@ classdef StudentTD
 %    of y. In terms of tracking, the distribution can be of interest,
 %    because, as noted in [1], angular measurements in the presence of
 %    glint have been fit to Cauchy distributions in some instances.
-%Implemented methods are: mean, cov, PDF, rand (only for scalar, central,
-%                                               non-scaled distributions).
+%Implemented methods are: mean, cov, PDF
+%   Methods only for scalar, central, non-scaled distributions: rand,
+%                                                               entropy
 %
 %REFERENCES:
 %[1] U. Nickel, "Angular superresolution with phased array radar: A review
@@ -121,7 +122,7 @@ function vals=rand(N,nu)
 %
 %REFERENCES:
 %[1] A. J. Kinderman, J. F. Monahan, and J. G. Ramage, "Computer methods
-%    for sampling from student?s t distribution," Mathematics of
+%    for sampling from student's t distribution," Mathematics of
 %    Computation, vol. 31, no. 140, pp. 1009-1018, Oct. 1977.
 %
 %August 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
@@ -220,6 +221,32 @@ for curVal=1:numVals
         end
     end
 end
+end
+
+function entropyVal=entropy(nu)
+%%ENTROPY Obtain the differential entropy in nats of the scalar Student-t
+%         distribution with unit scale factor and a given number of degrees
+%         of freedom.  The differential entropy of a continuous
+%         distribution is entropy=-int_x p(x)*log(p(x)) dx where the
+%         integral is over all values of x. Units of nats mean that the
+%         natural logarithm is used in the definition. Unlike the Shannon
+%         entropy for discrete variables, the differential entropy of
+%         continuous variables can be both positive and negative.
+%
+%INPUTS: nu The scalar number of degrees of freedom of the Student-t
+%           distribution. nu>=0.
+%
+%OUTPUTS: entropyVal The value of the differential entropy in nats.
+%
+%Differential entropy is defined in Chapter 8 of [1].
+%
+%REFERENCES:
+%[1] T. M. Cover and J. A. Thomas, Elements of Information Theory, 2nd ed.
+%    Hoboken, NJ: Wiley-Interscience, 2006.
+%
+%April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    entropyVal=((nu+1)/2)*(psi((nu+1)/2)-psi(nu/2))+(1/2)*log(nu)+betaln(nu/2,1/2);
 end
 end
 end

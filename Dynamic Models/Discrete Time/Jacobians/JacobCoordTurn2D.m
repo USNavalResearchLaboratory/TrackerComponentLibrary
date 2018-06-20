@@ -12,58 +12,56 @@ function J=JacobCoordTurn2D(T,x,turnType,discPoint,tauTurn,tauLinAccel)
 %              non-accelerating, straight-line motion. This Jacobian is
 %              associated with the continuous-time model fTransCoordTurn2D.
 %
-%INPUTS: T   The time-duration of the propagation interval in seconds.
-%        x   The target state for 2D motion. If there is no linear
-%            acceleration (acceleration along the direction of motion),
-%            then x can either be x=[x;y;xdot;ydot;omega], where omega is
-%            the turn rate estimate in radians per second counterclockwise
-%            from the x-axis or x=[x;y;xdot;ydot;at] where at is the the
-%            transversal acceleration, which is orthogonal to the velocity
-%            and is defined such that positive values of at map to positive
-%            values of omega. If there is a linear acceleration, then the
-%            target state is either x=[x;y;xdot;ydot;omega;al] where omega
-%            is the turn rate and al is the linear acceleration or the
-%            target state is x=[x;y;xdot;ydot;at;al] if the turn is
-%            expressed in terms of a transversal acceleration. The
-%            dimensionality of the state is used to determine whether a
-%            linear acceleration component is present. The linear
-%            acceleration component changes the speed. That means that it
-%            acts in the direction of the velocity vector.
-%  turnType  A string specifying whether the turn is given in terms of a
-%            turn rate in radians per second or a transversal acceleration
-%            in m/s^2. Possible values are
-%            'TurnRate'   The turn is specified in terms of a turn rate
-%                         (The default if this parameter is omitted).
-%            'TransAccel' The turn is specified in terms of a transversal
-%                         acceleration. This model will produce NaNs when
-%                         the velocity is very close to zero.
-% discPoint  This optional parameter specified what value of the turn rate
-%            is used for the discretized state prediction. The three
-%            possible values were suggested in Li's paper cited
-%            below. Possible values are
-%            0 (The default if omitted) use omega=x(5), or the equivalent
-%              value when specifying the turn rate using a transverse
-%              acceleration, from the non-predicted target state for
-%              building the state transition matrix. \omega_k
-%            1 Use the average value of the predicted omega (or the average
-%              value of the transverse acceleration) over the interval T
-%              for building the state transition matrix. \bar{\omega}
-%            2 Use the approximate average value of the predicted omega
-%              over the interval T for building the state transition
-%              matrix. \bar{\omega} This is the suggestion of using half
-%              the prior and prediction, as was given in Li's paper. When
-%              given a transverse acceleration instead of a turn rate, half
-%              of the prior and predicted accelerations is used.
-%            3 Use the forward-predicted omega (or transverse acceleration)
-%              for building the state transition matrix. \omega_{k+1}
-%   tauTurn  The correlation time constant for the turn rate in seconds.
-%            tau must be positive but does not have to be finite. If this
-%            parameter is omitted, then tauTurn is set to infinity.
-%tauLinAccel The correlation time constant for the linear acceleration (if
-%            present) in seconds. This parameter is not needed if there is
-%            no linear acceleration. If a linear acceleration is present
-%            and this parameter is omitted, then tauLinAccel is set to
-%            infinity.
+%INPUTS: T The time-duration of the propagation interval in seconds.
+%        x The target state for 2D motion. If there is no linear
+%          acceleration (acceleration along the direction of motion), then
+%          x can either be x=[x;y;xdot;ydot;omega], where omega is the turn
+%          rate estimate in radians per second counterclockwise from the
+%          x-axis or x=[x;y;xdot;ydot;at] where at is the the transversal
+%          acceleration, which is orthogonal to the velocity and is defined
+%          such that positive values of at map to positive values of omega.
+%          If there is a linear acceleration, then the target state is
+%          either x=[x;y;xdot;ydot;omega;al] where omega is the turn rate
+%          and al is the linear acceleration or the target state is
+%          x=[x;y;xdot;ydot;at;al] if the turn is expressed in terms of a
+%          transversal acceleration. The dimensionality of the state is
+%          used to determine whether a linear acceleration component is
+%          present. The linear acceleration component changes the speed.
+%          That means that it acts in the direction of the velocity vector.
+% turnType A string specifying whether the turn is given in terms of a
+%          turn rate in radians per second or a transversal acceleration in
+%          m/s^2. Possible values are
+%          'TurnRate'   The turn is specified in terms of a turn rate (The
+%                       default if this parameter is omitted).
+%          'TransAccel' The turn is specified in terms of a transversal
+%                       acceleration. This model will produce NaNs when the
+%                       velocity is very close to zero.
+% discPoint This optional parameter specified what value of the turn rate
+%          is used for the discretized state prediction. The three
+%          possible values were suggested in Li's paper cited
+%          below. Possible values are
+%          0 (The default if omitted) use omega=x(5), or the equivalent
+%            value when specifying the turn rate using a transverse
+%            acceleration, from the non-predicted target state for building
+%            the state transition matrix. \omega_k
+%          1 Use the average value of the predicted omega (or the average
+%            value of the transverse acceleration) over the interval T for
+%            building the state transition matrix. \bar{\omega}
+%          2 Use the approximate average value of the predicted omega
+%            over the interval T for building the state transition matrix.
+%            \bar{\omega} This is the suggestion of using half the prior
+%            and prediction, as was given in Li's paper. When given a
+%            transverse acceleration instead of a turn rate, half of the
+%            prior and predicted accelerations is used.
+%          3 Use the forward-predicted omega (or transverse acceleration)
+%            for building the state transition matrix. \omega_{k+1}
+%  tauTurn The correlation time constant for the turn rate in seconds.
+%          tau must be positive but does not have to be finite. If this
+%          parameter is omitted, then tauTurn is set to infinity.
+% tauLinAccel The correlation time constant for the linear acceleration (if
+%          present) in seconds. This parameter is not needed if there is
+%          no linear acceleration. If a linear acceleration is present and
+%          this parameter is omitted, then tauLinAccel is set to infinity.
 %
 %OUTPUTS: J The 5X5 or 6X6 Jacobian matrix of the function
 %           fTransCoordTurn2D, where the partial derivatives are ordered
@@ -75,7 +73,7 @@ function J=JacobCoordTurn2D(T,x,turnType,discPoint,tauTurn,tauLinAccel)
 %comments to the function fTransCoordTurn2D.
 %
 %April 2015 David Karnick, Naval Research Laboratory, Washington D.C. and
-%June 2015 David Crouse, Naval Research Laboratory, Washington D.C.
+%June 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(Adjusted to get rid of occurrences of NaNs with small turn rates.)
 %%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 

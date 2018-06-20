@@ -1,4 +1,4 @@
-/*NRLMSISE00ALT4PRES Given the pressure at a particular latitude and
+/**NRLMSISE00ALT4PRES Given the pressure at a particular latitude and
  *                   longitude and time, obtain the approximate ellipsoidal
  *                   height using the NRLMSISE-00 atmospheric model. This
  *                   function also returns a standard temperature and the

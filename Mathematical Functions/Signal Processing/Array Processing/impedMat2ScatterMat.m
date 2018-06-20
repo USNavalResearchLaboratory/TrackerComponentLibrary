@@ -50,9 +50,9 @@ function S=impedMat2ScatterMat(Z,zPortImped)
 %    194-202, Mar. 1965.
 %[2] R. B. Marks and D. F. Williams, "A general waveguide circuit theory,"
 %    Journal of the National Institute of Standards and Technology, vol.
-%    97, no. 5, pp. 533?562, Sep.-Oct. 1992.
+%    97, no. 5, pp. 533-562, Sep.-Oct. 1992.
 %[3] R. A. Speciale, "Derivation of the generalized scattering parameter
-%    renormalization transformation,? in Proceedings of the IEEE
+%    renormalization transformation," in Proceedings of the IEEE
 %    International Symposium on Circuits and Systems, vol. 1, Houston, TX,
 %    28-30 Apr. 1980, pp. 166-169.
 %

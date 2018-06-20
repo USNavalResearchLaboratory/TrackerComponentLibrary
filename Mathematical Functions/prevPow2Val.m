@@ -1,6 +1,6 @@
 function vals=prevPow2Val(n)
 %%PREVPOW2VAL Given a value n, return the value that is the closest power
-%          of 2 that is <=abs(n).
+%             of 2 that is <=abs(n).
 %
 %INPUTS: n A matrix or scalar. This can be any numeric type.
 %

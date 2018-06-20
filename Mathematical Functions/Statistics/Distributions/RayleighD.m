@@ -1,6 +1,7 @@
 classdef RayleighD
 %%RAYLEIGHD Functions to handle the Rayleigh distribution.
-%Implemented methods are: mean, var, PDF, CDF, invCDF, rand, momentGenFun
+%Implemented methods are: mean, var, PDF, CDF, invCDF, rand, momentGenFun,
+%                         entropy
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
@@ -319,6 +320,31 @@ function momentVal=momentGenFun(sigma,numDerivs,t)
     %If here, all of the derivatives have been taken and the function can
     %be evaluated.
     momentVal=polyval(poly0,t)+polyval(polyExpErf,t)*exp(sigma^2*t^2/2)*erf(sigma*t/sqrt(2))+polyval(polyExp,t)*exp(sigma^2*t^2/2);
+end
+
+function entropyVal=entropy(sigma)
+%%ENTROPY Obtain the differential entropy of the Rayleigh distribution
+%         given in nats. The differential entropy of a continuous
+%         distribution is entropy=-int_x p(x)*log(p(x)) dx where the
+%         integral is over all values of x. Units of nats mean that the
+%         natural logarithm is used in the definition. Unlike the Shannon
+%         entropy for discrete variables, the differential entropy of
+%         continuous variables can be both positive and negative.
+%
+%INPUTS: sigma The parameter of the Rayleigh distribution.
+%
+%OUTPUTS: entropyVal The value of the differential entropy in nats.
+%
+%Differential entropy is defined in Chapter 8 of [1].
+%
+%REFERENCES:
+%[1] T. M. Cover and J. A. Thomas, Elements of Information Theory, 2nd ed.
+%    Hoboken, NJ: Wiley-Interscience, 2006.
+%
+%April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    gammaVal=-psi(1);
+    entropyVal=1+log(sigma/sqrt(2))+gammaVal/2;
 end
 end
 end

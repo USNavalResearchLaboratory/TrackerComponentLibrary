@@ -8,6 +8,9 @@
 
 #include "AISFuncs.hpp"
 
+#include <limits>
+#include <stdexcept>
+
 void separateMessageAndTimestamp(const std::string &fullMessage,std::string &messagePart,std::string &endPart) {
 /**SEPARATEMESSAGEANDTIMESTAMP Given an NMEA string as a string data type,
  *              which might have additional receiver data appended to the

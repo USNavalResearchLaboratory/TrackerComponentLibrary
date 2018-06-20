@@ -1,7 +1,7 @@
 classdef UniformDiscreteD
 %%UNIFORMDISCRETED Functions to handle the scalar and multivariate (hyper-
 %     rectangularly bounded) discrete uniform distributions.
-%Implemented methods are: mean, cov, PMF, CDF (scalar only), rand
+%Implemented methods are: mean, cov, PMF, CDF (scalar only), rand, entropy
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
     
@@ -71,7 +71,7 @@ function vals=PMF(z,bounds)
 end
 
 function val=CDF(z,bounds)
-%%CDF Evaluate a scalar discrete uniform cumulative distirbution function
+%%CDF Evaluate a scalar discrete uniform cumulative distribution function
 %     (CDF) at a certain point given the bounds of the distribution.
 %
 %INPUTS: z The scalar point(s) at which the CDF should be evaluated.
@@ -109,6 +109,31 @@ function x=rand(N,bounds)
     %number below the valid range. Thus, the minimum of the ceil function
     %is 1.
     x=ceil((bounds(2,:)-bounds(1,:))'.*max(rand(xDim,N),eps(0)))+bounds(1,:)'-1;
+end
+
+function entropyVal=entropy(bounds)
+%%ENTROPY Obtain the Shannon entropy of the discrete uniform distribution
+%         given in nats. The Shannon entropy of a discrete distribution is
+%         entropy=-sum_x Pr(x)*log(Pr(x)) where the sum is over all
+%         discrete values of x. Units of nats mean that the natural
+%         logarithm is used in the definition.
+%
+%INPUTS: bounds A 2XnumDim matrix of the integer minimum and maximum bounds
+%               of each of the numDim dimensions of the discrete uniform
+%               distribution. bounds(1,:) is the set of minimum bounds and
+%               bounds(2,:) is the set of maximum bounds.
+%
+%OUTPUTS: entropyVal The value of the Shannon entropy in nats.
+%
+%Shannon entropy is defined in Chapter 2 of [1].
+%
+%REFERENCES:
+%[1] T. M. Cover and J. A. Thomas, Elements of Information Theory, 2nd ed.
+%    Hoboken, NJ: Wiley-Interscience, 2006.
+%
+%April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    entropyVal=log(prod(bounds(2,:)-bounds(1,:)+1));
 end
 end
 end

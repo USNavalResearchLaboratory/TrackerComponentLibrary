@@ -40,7 +40,7 @@ function [x,P]=onePointCartInit(zCart,SRCart,higherDerivStdDev)
 %[2] Y. Bar-Shalom, P. K. Willett, and X. Tian, Tracking and Data Fusion.
 %    Storrs, CT: YBS Publishing, 2011.
 %
-%November 2016 David Crouse, Naval Research Laboratory, Washington D.C.
+%November 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 zDim=size(zCart,1);

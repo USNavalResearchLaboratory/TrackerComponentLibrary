@@ -1,19 +1,19 @@
 classdef InverseGammaD
 %%INVERSEGAMMAD Functions to handle the inverse gamma distribution.
-%Implemented methods are: mean, var, PDF, CDF, rand
+%Implemented methods are: mean, var, PDF, CDF, rand, entropy
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 methods(Static)
 
 function val=mean(k, beta)
-%%MEAN  Obtain the mean of the inverse gamma distribution for given shape
-%       and scale parameters.
+%%MEAN Obtain the mean of the inverse gamma distribution for given shape
+%      and scale parameters.
 %
-%INPUTS:    k       The shape parameter of the distribution; k>0.
-%           beta    The scale parameter of the distribution; beta>0.
+%INPUTS: k The shape parameter of the distribution; k>0.
+%     beta The scale parameter of the distribution; beta>0.
 %
-%OUTPUTS: val  The mean of the inverse gamma distribution.
+%OUTPUTS: val The mean of the inverse gamma distribution.
 %
 %If k<1, then the distribution has no mean and a NaN is returned.
 %
@@ -34,11 +34,11 @@ function val=mean(k, beta)
 end
 
 function val=var(k,beta)
-%%VAR   Obtain the variance of the inverse gamma distribution for given
-%       shape and scale parameters.
+%%VAR Obtain the variance of the inverse gamma distribution for given shape
+%     and scale parameters.
 %
-%INPUTS:    k       The shape parameter of the distribution; k>0.
-%           beta    The scale parameter of the distribution; beta>0.
+%INPUTS: k The shape parameter of the distribution; k>0.
+%     beta The scale parameter of the distribution; beta>0.
 %
 %OUTPUTS: val  The variance of the inverse gamma distribution.
 %
@@ -61,16 +61,16 @@ function val=var(k,beta)
 end    
     
 function val=PDF(x,k,beta)
-%%PDF   Evaluate the probability density function (PDF) of the inverse
-%       gamma distribution at the desired points.
+%%PDF Evaluate the probability density function (PDF) of the inverse gamma
+%     distribution at the desired points.
 %
-%INPUTS:    x       The point(s) at which the inverse gamma PDF is to be 
-%                   evaluated. Note that x>=0.
-%           k       The shape parameter of the distribution; k>0.
-%           beta    The scale parameter of the distribution; beta>0.
+%INPUTS: x The point(s) at which the inverse gamma PDF is to be evaluated.
+%          Note that x>=0.
+%        k The shape parameter of the distribution; k>0.
+%     beta The scale parameter of the distribution; beta>0.
 %
-%OUTPUTS:   val  The value(s) of the PDF of the inverse gamma distribution
-%                with parameters k and beta evaluated at x.
+%OUTPUTS: val The value(s) of the PDF of the inverse gamma distribution
+%             with parameters k and beta evaluated at x.
 %
 %The inverse gamma distribution is the distribution of the inverse of a
 %gamma random variable. Thus, with a little bit of algebra, it can be
@@ -92,13 +92,13 @@ function val=CDF(x,k,beta)
 %%CDF Evaluate the cumulative distribution function (CDF) of the inverse
 %     gamma distribution at desired points.
 %
-%INPUTS:    x       The point(s) at which the inverse gamma CDF is to be 
-%                   evaluated. Note that x>=0.
-%           k       The shape parameter of the distribution; k>0.
-%           beta    The scale parameter of the distribution; beta>0.
+%INPUTS: x The point(s) at which the inverse gamma CDF is to be  evaluated.
+%          Note that x>=0.
+%        k The shape parameter of the distribution; k>0.
+%     beta The scale parameter of the distribution; beta>0.
 %
-%OUTPUTS:   prob The value(s) of the CDF of the inverse gamma distribution
-%                with parameters k and beta evaluated at x.
+%OUTPUTS: prob The value(s) of the CDF of the inverse gamma distribution
+%              with parameters k and beta evaluated at x.
 %
 %The inverse gamma distribution is the distribution of the inverse of a
 %gamma random variable. Thus, with a little bit of algebra, it can be
@@ -117,24 +117,48 @@ function val=CDF(x,k,beta)
 end
 
 function vals=rand(N,k,beta)
-%%RAND       Generate inverse gamma distributed random variables with the
-%            given parameters.
+%%RAND Generate inverse gamma distributed random variables with the given
+%      parameters.
 %
-%INPUTS:    N      If N is a scalar, then rand returns an NXN matrix
-%                  of random variables. If N=[M,N1] is a two-element row 
-%                  vector, then rand returns an MXN1 matrix of random
-%                  variables.
-%           k      The shape parameter of the distribution; k>0.
-%           beta  The scale parameter of the distribution; beta>0.
+%INPUTS: N If N is a scalar, then rand returns an NXN matrix of random
+%          variables. If N=[M,N1] is a two-element row  vector, then rand
+%          returns an MXN1 matrix of random variables.
+%        k The shape parameter of the distribution; k>0.
+%     beta The scale parameter of the distribution; beta>0.
 %
-%OUTPUTS:   vals   A matrix whose dimensions are determined by N of the
-%                  generated inverse gamma random variables.
+%OUTPUTS: vals A matrix whose dimensions are determined by N of the
+%              generated inverse gamma random variables.
 %
 %This just takes the inverse of gamma distributed random variables.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
     vals=1./randGamma(N,k,1/beta);
+end
+
+function entropyVal=entropy(k,beta)
+%%ENTROPY Obtain the differential entropy of the inverse gamma
+%         distribution given in nats. The differential entropy of a
+%         continuous distribution is entropy=-int_x p(x)*log(p(x)) dx where
+%         the integral is over all values of x. Units of nats mean that the
+%         natural logarithm is used in the definition. Unlike the Shannon
+%         entropy for discrete variables, the differential entropy of
+%         continuous variables can be both positive and negative.
+%
+%INPUTS: k The shape parameter of the distribution; k>0.
+%     beta The scale parameter of the distribution; beta>0.
+%
+%OUTPUTS: entropyVal The value of the differential entropy in nats.
+%
+%Differential entropy is defined in Chapter 8 of [1].
+%
+%REFERENCES:
+%[1] T. M. Cover and J. A. Thomas, Elements of Information Theory, 2nd ed.
+%    Hoboken, NJ: Wiley-Interscience, 2006.
+%
+%April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    entropyVal=k+log(beta)+gammaln(k)-(1+k)*psi(k);
 end
 
 end

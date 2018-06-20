@@ -25,7 +25,7 @@ function [snVals,cnVals,dnVals]=JacobiEllipticFuncVals(xVals,m)
 %
 %REFERENCES:
 %[1] R. Burlisch, "Numerical calculation of elliptic integrals and elliptic
-%    functions," Numerische Mathematik, vol. 7, no. 1, pp. 78?90, 1965.
+%    functions," Numerische Mathematik, vol. 7, no. 1, pp. 78-90, 1965.
 %[2] Weisstein, Eric W. "Jacobi Elliptic Functions." From MathWorld--A
 %    Wolfram Web Resource.
 %    http://mathworld.wolfram.com/JacobiEllipticFunctions.html

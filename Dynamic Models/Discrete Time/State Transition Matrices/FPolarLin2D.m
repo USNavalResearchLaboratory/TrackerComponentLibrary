@@ -56,7 +56,7 @@ function F=FPolarLin2D(T,x,qTheta)
 %    Sons, Inc, 2001.
 %[4] D. Laneuville, "Polar versus Cartesian velocity models for maneuvering
 %    target tracking with IMM," in Proceedings of the IEEE Aerospace
-%    Conference, Big Sky, MT, 2?9 Mar. 2013.
+%    Conference, Big Sky, MT, 2-9 Mar. 2013.
 %
 %July 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

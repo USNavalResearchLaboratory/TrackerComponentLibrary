@@ -120,9 +120,9 @@ void iauApio(double sp, double theta,
 **
 **  This revision:   2013 October 9
 **
-**  SOFA release 2017-04-20
+**  SOFA release 2018-01-30
 **
-**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 */
 {
    double sl, cl, pv[2][3];
@@ -158,7 +158,7 @@ void iauApio(double sp, double theta,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2017
+**  Copyright (C) 2018
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

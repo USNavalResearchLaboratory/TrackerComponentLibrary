@@ -1,4 +1,4 @@
-function P=RiccatiPostNoClutter(H,F,R,Q,PD,RelTol,AbsTol,maxIter)
+function [P,exitCode]=RiccatiPostNoClutter(H,F,R,Q,PD,RelTol,AbsTol,maxIter)
 %%RICCATIPOSTNOCLUTTER Solve the posterior Riccati equation that has been
 %                      modified for a probability of detection less
 %                      than or equal to 1. This provides the average 
@@ -6,32 +6,33 @@ function P=RiccatiPostNoClutter(H,F,R,Q,PD,RelTol,AbsTol,maxIter)
 %                      linear measurements just after a (possible with
 %                      probability PD) measurement update.
 %
-%INPUTS:    H   The zDim X xDim measurement matrix such that H*x+w is the
-%               measurement, where x is the state and w is zero-mean 
-%               Gaussian noise with covariance matrix R.
-%           F   The xDim X xDim state transition matrix The state at
-%               discrete-time k+1 is modeled as F times the state at time k
-%               plus zero-mean Gaussian process noise with covariance
-%               matrix Q.
-%           R   The zDim X zDim measurement covariance matrix.
-%           Q   The xDim X xDim process noise covariance matrix. This can
-%               not be a singular matrix.
-%           PD  The optional detection probability of the target at each
-%               scan. If omitted, PD is assumed to be one.
-%        RelTol The maximum relative error tolerance allowed, a positive
-%               scalar. This tolerance applies to all elements in the
-%               matrix and is only needed if PD<1. If omitted or an empty
-%               matrix is passed, the default value of 1e-13 is used.
-%        AbsTol The absolute error tolerance allowed, a positive scalar.
-%               This tolerance applies to all elements in the matrix and
-%               is only needed if PD<1. If omitted or an empty
-%               matrix is passed, the default value of 1e-10 is used.
-%       maxIter An optional integer specifying the maximum number of
-%               iterations. By default, if omitted, this is 5000.
+%INPUTS: H The zDim X xDim measurement matrix such that H*x+w is the
+%          measurement, where x is the state and w is zero-mean Gaussian
+%          noise with covariance matrix R.
+%        F The xDim X xDim state transition matrix The state at discrete-
+%          time k+1 is modeled as F times the state at time k plus zero-
+%          mean Gaussian process noise with covariance matrix Q.
+%        R The zDim X zDim measurement covariance matrix.
+%        Q The xDim X xDim process noise covariance matrix. This can not be
+%          a singular matrix.
+%       PD The optional detection probability of the target at each scan.
+%          If omitted, PD is assumed to be one.
+%   RelTol The maximum relative error tolerance allowed, a positive scalar.
+%          This tolerance applies to all elements in the matrix and is only
+%          needed if PD<1. If omitted or an empty matrix is passed, the
+%          default value of 1e-13 is used.
+%   AbsTol The absolute error tolerance allowed, a positive scalar. This
+%          tolerance applies to all elements in the matrix and is only
+%          needed if PD<1. If omitted or an empty matrix is passed, the
+%          default value of 1e-10 is used.
+%  maxIter An optional integer specifying the maximum number of iterations.
+%          If omitted or an empty matrix is passed, the default is 5000.
 %
-%OUTPUTS:   P The average asymptotic error covariance matrix of the
-%             linear Kalman filter with a probability of detection of PD
-%             after a (possible) measurement update.
+%OUTPUTS: P The average asymptotic error covariance matrix of the linear
+%           Kalman filter with a probability of detection of PD after a
+%           (possible) measurement update.
+%  exitCode This is zero if convergence is achieved and 1 if it is not
+%           achieved.
 %
 %The notion of a Riccati equation with a detection probability less than
 %one is discussed in [1]. However, they do not explicitly write out the
@@ -88,7 +89,7 @@ SD=Q*H';
 RD=H*Q*H'+R;
 QD=Q;
 PPrev=RiccatiSolveD(AD,BD,QD,RD,SD);
-
+exitCode=0;
 if(PD~=1)
     %Now, iterate the Riccati equation with PD<1 until convergence of the
     %Frobenis norm or until a maximum number of iterations has occurred.
@@ -104,8 +105,9 @@ if(PD~=1)
         PPrev=P;
         curIter=curIter+1;
     end
-    warning('Max Iterations Reached without Convergence.')
+    exitCode=1;%Convergence not achieved.
 else
+    
     P=PPrev;
 end
 

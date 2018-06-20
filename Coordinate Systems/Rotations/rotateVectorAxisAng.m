@@ -4,22 +4,21 @@ function vRot=rotateVectorAxisAng(v,u,theta,handed)
 %                      counterclockwise (right-handed) or clockwise
 %                      (left-handed) about the vector (axis) u.
 %
-%INPUTS:        v   The 3XN set of N vectors that are to be rotated.
-%               u   A unit vector representing the axis about which v is
-%                   to be rotated.
-%             theta The angle in radians by which v is to be rotated
-%                   about u. When right-handed, the rotation angle is
-%                   clockwise when one is looking in the same direction
-%                   that the rotation axis points. A left-handed rotation
-%                   is the opposite.
-%           handed  The handedness of the rotation angle. If omitted, it
-%                   is assumed that the rotation is right-handed
-%                   (the standard). Possible values are
-%            'right' The default if omitted. The rotation is right-handed.
-%            'left'  The rotation is left-handed.
+%INPUTS: v The 3XN set of N vectors that are to be rotated.
+%        u A unit vector representing the axis about which v is to be
+%          rotated.
+%    theta The angle in radians by which v is to be rotated about u. When
+%          right-handed, the rotation angle is clockwise when one is
+%          looking in the same direction that the rotation axis points. A
+%          left-handed rotation is the opposite.
+%   handed The handedness of the rotation angle. If omitted, it is assumed
+%          that the rotation is right-handed (the standard). Possible
+%          values are
+%  'right' The default if omitted. The rotation is right-handed.
+%   'left' The rotation is left-handed.
 %
-%OUTPUTS:       vRot The 3XN set of vectors v rotated an angle of theta
-%                    about the axis u according to the given handedness.
+%OUTPUTS: vRot The 3XN set of vectors v rotated an angle of theta about the
+%              axis u according to the given handedness.
 %
 %This simply implements the Rodrigues' rotation formula. The formula is
 %given in equations (96) and (97) in [1], where changes to allow for both

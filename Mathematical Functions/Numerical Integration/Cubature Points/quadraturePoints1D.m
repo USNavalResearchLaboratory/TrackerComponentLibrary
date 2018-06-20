@@ -1,4 +1,4 @@
-function [xi,w]=quadraturePoints1D(n,algorithm,c1)
+function [xi,w]=quadraturePoints1D(n,algorithm,c1,c2)
 %%QUADRATUREPOINTS1D Obtain quadrature points and weights to efficiently
 %           numerically evaluate 1D integrals involving various weighting
 %           functions. The quadrature points and weights are based off
@@ -86,6 +86,9 @@ function [xi,w]=quadraturePoints1D(n,algorithm,c1)
 %    Graphs, and Mathematical Tables, 9th printing. New York: Dover, 1972.
 %[2] G. H. Golub and J. H. Welsh, "Calculation of Gauss quadrature rules,"
 %    Mathematics of Computation, vol. 23, pp. 221-230, 1969.
+%[3] D.B. Hunter, H.V. Smith, A quadrature formula of Clenshaw-Curtis type
+%    for the Gegenbauer weight-function, Journal of Computational and
+%    Applied Mathematics 177 (2005) 389-400.
 %
 %August 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

@@ -79,8 +79,6 @@ function PV=readJPLEphem(TDB1,TDB2,objectNumber,centerNumber,units,ephemerisPath
 %was created by the California Institute of Technology (CIT) under a U.S.
 %government contract with NASA and is available for download in the folder
 %ftp://ssd.jpl.nasa.gov/pub/eph/planets/
-%Though much of the function differs, the subroutine INTCHB is taken almost
-%directly from testeph1.f, but translated into Matlab.
 %
 %EXAMPLE:
 %Find the position and velocity of the Earth with respect to the Sun with
@@ -100,7 +98,7 @@ function PV=readJPLEphem(TDB1,TDB2,objectNumber,centerNumber,units,ephemerisPath
 % units=1;
 % posVel=readJPLEphem(TDB1,TDB2,objectNumber,centerNumber,units)
 %
-%August 2017 David Crouse, Naval Research Laboratory, Washington D.C.
+%August 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 %If no ephemeris is given, assume that the DE430t is in a folder named data
@@ -196,6 +194,28 @@ TF2=TDB1-TF1;
 TF=(TF1-data(1))/recordLengthDays;
 TF=TF+((TF2+TDB2)/recordLengthDays);
 
+%If we are very close to the end of an interval, so that it got pushed to
+%the next interval. An example of where this type of problem occurs is when
+%using the linux_p1550p2650.430t ephemerides and setting the time to
+%TDB1=2440400+32; TDB2=0.5-1000*eps(32.5);
+if(TF<0)
+    if(recordIdx==3)
+        error('The input time is before the earliest time in the ephemerides.')
+    else
+        %We should be at the end of the previous record.
+        recordIdx=recordIdx-1;
+        fid=fopen(ephemerisPath,'r');
+        fseek(fid,4*kSize*(recordIdx-1),'bof');
+        data=fread(fid,numCoeffs,'double');
+        fclose(fid);
+
+        TF1=double(fix(TDB1));
+        TF2=TDB1-TF1;
+        TF=(TF1-data(1))/recordLengthDays;
+        TF=TF+((TF2+TDB2)/recordLengthDays);
+    end
+end
+
 %%%%
 %%Consider lookups for nutations, librations, or TDB-TT, which do not
 %%use the centerNumber input. 
@@ -286,7 +306,7 @@ if(objectNumber==17)
         numData=NCF*NCM*NSC;
         dataCur=reshape(data(ipt(1,15):(ipt(1,15)+numData-1)),[NCF,NCM,NSC]);
         PV=INTCHB(dataCur,TF,secondSpan);
-        
+
         if(units)
             %Convert seconds/second to seconds/day
             PV(2)=secondsPerDay*PV(2);
@@ -324,8 +344,8 @@ if(objectNumber==3&&centerNumber==10)
     NSC=ipt(3,10);
     numData=NCF*NCM*NSC;
     dataCur=reshape(data(ipt(1,10):(ipt(1,10)+numData-1)),[NCF,NCM,NSC]);
-    
     PV=INTCHB(dataCur,TF,secondSpan);
+    
     PV(1:3)=-PV(1:3)*xScale;
     PV(4:6)=-PV(4:6)*vScale;
     return
@@ -443,126 +463,60 @@ PV(4:6)=PV(4:6)*vScale;
 end
 
 function PV=INTCHB(BUF,T,LINT)
-%%INTCHB This is the INTCHB function taken from testeph1.f and translated
-%        into Matlab. The REQ input has been removed as the function has
-%        been modified to always return a derivative value.
-%        The comments provided atthe beginning of testeph1.f are reproduced
-%        below verbatim, with the part regarding the REQ input removed.
+%%INTCHB This is the INTCHB function which takes the buffer of Chebyshev
+%        coefficients for the ephemeris data and a time and returns the
+%        interpolated position and velocity. This is analogous to the
+%        INTCHB function in testeph1.f. However, to make the function more
+%        understandable, the functions ChebyshevPolySynth and
+%        ChebyshevPolyDerivCoeffs are used to manipulate the Chebyshev
+%        polynomials rather than directly synthesizing them in here. The
+%        function always returns a derivative value (e.g. position and
+%        velocity).
 %
-%-----------------------------------------------------------------------
-%  INTCHB (INTerpolate CHeByshev polynomial) computes the components of
-%  position by interpolating Chebyshev polynomials, and if requested, it
-%  also computes the components of velocity by differentiating the
-%  Chebyshev polynomials and then interpolating.
+%INPUTS: BUF The NCF X NCM X NSC set of Chebychev coefficients. NCF is the
+%            number of coefficients per component. NCM is the number of
+%            components per set of components (for synthesizing position
+%            and velocity, this is the dimensionality of space, e.g. 3D).
+%            NSC is the number of sets of coefficients within the
+%            interpolation interval.
+%          T The fractional time within the interval where interpolation
+%            should be performed 0<=T<=1.
+%       LINT The length of the interval in time units (e.g. seconds). This
+%            is needed for compouting the velocity.
 %
-%  Inputs:
+%OUTPUTS: PV A (2*NCM)X1 vector of the NCMX1 desired value and its NCMX1
+%            derivative.
 %
-%   BUF(1..NCF, 1..NCM, 1..NSC)  Chebyshev coefficients
-%   T     Fractional time within the interval covered by the
-%         coefficients at which the interpolation is required.
-%         T must satisfy 0 .LE. T .LE. 1
-%   LINT  Length of the interval in input time units
-%   NCF   Number of coefficients per component
-%   NCM   Number of components per set of coefficients
-%   NSC   Number of sets of coefficients within interval
-%
-%  Output:
-%
-%   PV(i)    Computed position and velocity components:
-%            1 to NCM are position components.
-%            NCM+1 to 2*NCM  are velocity components.
-%-----------------------------------------------------------------------
-%
-%$ Disclaimer
-%
-%     THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
-%     CALIFORNIA INSTITUTE OF TECHNOLOGY (CALTECH) UNDER A U.S.
-%     GOVERNMENT CONTRACT WITH THE NATIONAL AERONAUTICS AND SPACE
-%     ADMINISTRATION (NASA). THE SOFTWARE IS TECHNOLOGY AND SOFTWARE
-%     PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS PROVIDED "AS-IS"
-%     TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING ANY
-%     WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A
-%     PARTICULAR USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC
-%     SECTIONS 2312-2313) OR FOR ANY PURPOSE WHATSOEVER, FOR THE
-%     SOFTWARE AND RELATED MATERIALS, HOWEVER USED.
-%
-%     IN NO EVENT SHALL CALTECH, ITS JET PROPULSION LABORATORY, OR NASA
-%     BE LIABLE FOR ANY DAMAGES AND/OR COSTS, INCLUDING, BUT NOT
-%     LIMITED TO, INCIDENTAL OR CONSEQUENTIAL DAMAGES OF ANY KIND,
-%     INCLUDING ECONOMIC DAMAGE OR INJURY TO PROPERTY AND LOST PROFITS,
-%     REGARDLESS OF WHETHER CALTECH, JPL, OR NASA BE ADVISED, HAVE
-%     REASON TO KNOW, OR, IN FACT, SHALL KNOW OF THE POSSIBILITY.
-%
-%     RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF
-%     THE SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY
-%     CALTECH AND NASA FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE
-%     ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
-%
+%May 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
-    NCF=size(BUF,1);
+    %NCM is the number of components per set of coefficients.
     NCM=size(BUF,2);
+    %NSC is the number of sets of coefficients within the interval.
     NSC=size(BUF,3);
        
     %Allocate space
     PV=zeros(2*NCM,1);
+    
+    %Compute set number within interval (L), and scaled Chebyshev time
+    %within that set (TC).
+    NS=NSC;
+    TEMP=T*NS;
+    TC=2*(TEMP-fix(TEMP))-1;
+    L=fix(TEMP)+1;
 
-    PC=zeros(18,1);
-    PC(1)=1;
-    VC=zeros(18,1);
-    VC(2)=1;
-
-%     Compute set number within interval (L), and scaled Chebyshev time
-%     within that set (TC).
-
-    NS   = NSC;
-    TEMP = T * double(NS);
-    TC   = 2*( TEMP-fix(TEMP) ) - 1;
-    L    = fix(TEMP) + 1;
     if(L>NS) 
-        L  = L - 1;
-        TC = TC + 2;
+        L=L-1;
+        TC=TC+2;
     end
 
-%-- If the Chebyshev time has changed, compute new polynomial values.
-
-    NP = 3;
-    NV = 4;
-    PC(2) = TC;
-    TTC   = TC + TC;
-    VC(3) = TTC + TTC;
-
-%-- Compute position polynomial values.
-
-    NC = NCF;
-    for NP = NP:NC
-        PC(NP) = TTC*PC(NP-1) - PC(NP-2);
-    end
-
-%-- Compute position components.
-
-    for I = 1:NCM
-        TEMP = 0;
-        for  J = NC:-1:1
-            TEMP= TEMP + PC(J)*BUF(J,I,L);
-        end
-        PV(I) = TEMP;
-    end
-
-%-- Compute velocity polynomial values.
-
-    for NV = NV:NC
-        VC(NV)= TTC*VC(NV-1) + PC(NV-1) + PC(NV-1) - VC(NV-2);
-    end
-
-%-- Compute velocity components.
-
-    BMA = double( 2*NS ) / LINT;
-    for I = 1:NCM
-        TEMP= 0;
-        for  J = NC:-1:2
-            TEMP= TEMP + VC(J)*BUF(J,I,L);
-        end
-        PV(I+NCM) = TEMP*BMA;
+    BMA=2*NS/LINT;
+    for i = 1:NCM
+        %The value (often position).
+        PV(i)=ChebyshevPolySynth(TC,BUF(:,i,L));
+        
+        a=ChebyshevPolyDerivCoeffs(BUF(:,i,L));
+        %The derivative of the value (often velocity).
+        PV(i+NCM)=BMA*ChebyshevPolySynth(TC,a);
     end
 end
 

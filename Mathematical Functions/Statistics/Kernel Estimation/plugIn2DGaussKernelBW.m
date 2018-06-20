@@ -1,4 +1,4 @@
-function [H,AMISE,exitCode]=plugIn2DGaussKernelBW(xi,numStages,preProcAlg,HInit,epsilon,deltaTestDist,delta,lineSearchParams,maxIter)
+function [H,AMISE,exitCode]=plugIn2DGaussKernelBW(xi,numStages,preProcAlg,HInit,epsilon,deltaTestDist,delta,lineSearchParams,cholSemiVal,maxIter)
 %%PLUGIN2DGAUSSKERNELBW Estimating the optimal bandwidth when approximating
 %             a PDF given sampled 2D points using a Gaussian kernel
 %             estimator. A kernel estimator puts some type of a kernel
@@ -49,12 +49,26 @@ function [H,AMISE,exitCode]=plugIn2DGaussKernelBW(xi,numStages,preProcAlg,HInit,
 %             lineSearch function, except if -1 is passed instead of a
 %             parameter structure, then no line search is performed. The
 %             default if omitted or an empty matrix is passed is -1.
+% cholSemiVal A value indicating whether a method similar to that suggested
+%             in Chapter 1.4 of [1] for using a modified Cholesky
+%             decomposition of the Hessian matrix should be used so as to
+%             assure that one always obtains a descent direction. If a
+%             positive value <1 of cholSemiVal is given, then the Hessian
+%             matrix is decomposed with cholSemiDef with epsVal of
+%             cholSemiVal. If a negative value is provided, then no
+%             decomposition is done and no effort is made to assure that
+%             the direction traveled is a descent direction. The default if
+%             this parameter is omitted or an empty matrix is passed is
+%             1e-6, This parameter assumes the "Hessian" matrix is
+%             symmetric. Thus, this option should be set to -1 if this
+%             function is used to zero a vector rather than minimize a
+%             function.
 %     maxIter The maximum number of iterations to perform. If omitted or an
 %             empty matrix is passed, the default value of 50 is used.
 %
 %OUTPUTS: H The 2X2 lower-triangular estimate of the kernel bandwidth.
 %     AMISE The estimated AMISE of the given bandwidth.
-%  exitCode A value indicating how the function termianted. Possible values
+%  exitCode A value indicating how the function terminated. Possible values
 %           are those returned by the NewtonsMethod function. A 0 or
 %           positive number means a successful termination.
 %
@@ -168,7 +182,13 @@ if(nargin<8||isempty(lineSearchParams))
     lineSearchParams=-1;%No line search.
 end
 
-if(nargin<9||isempty(maxIter))
+if(nargin<9||isempty(cholSemiVal))
+    cholSemiVal=1e-6;
+elseif(cholSemiVal>1)
+    error('cholSemiVal should be less than 1.')
+end
+
+if(nargin<10||isempty(maxIter))
     maxIter=50; 
 end
 
@@ -251,7 +271,7 @@ Psi4Val=Psi4(psiMat);
 f=@(h)calcAMISE(vech2Mat(h),n,Psi4Val);
 fHess=[];
 h0=vech(HInit);
-[h,AMISE,exitCode]=NewtonsMethod(f,fHess,h0,epsilon,deltaTestDist,delta,lineSearchParams,maxIter);
+[h,AMISE,exitCode]=NewtonsMethod(f,fHess,h0,epsilon,deltaTestDist,delta,lineSearchParams,cholSemiVal,maxIter);
 H=vech2Mat(h);
 
 %Finally undo the prescale/sphering step.

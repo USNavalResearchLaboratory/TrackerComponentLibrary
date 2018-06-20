@@ -11,29 +11,29 @@ function h=drawEllipse(z,A,gammaVal,varargin)
 %            respectively ChiSquareD.invCDF(0.9997,2) and
 %            ChiSquareD.invCDF(0.9997,3)).
 %
-%INPUTS: z  A 2XN or 3XN vector corresponding to the centers of the N
-%           ellipses or ellipsoids that should be drawn.
-%        A  A 2X2XN or 3X3XN set of N positive definite matrices that
-%           specify the size and shape of the ellipse or ellipsoids, where
-%           a point zp is on the ith ellipse/ ellipsoid if
-%           (zp-z(:,i))'*A(:,:,i)*(zp-z(:,i))=gammaVal.
-%           In three dimensions, A can have one zero eigenvalue, in which
-%           case the fill3 command is used to draw an ellipse in 3D.
-%  gammaVal An optional parameter specifying the size of the ellipse/
-%           ellipsoid. If omitted or an empty matrix is passed, then
-%           gammaVal=16.2235 in 2D or gammaVal=18.8049 in 3D is used.
-%           gammaVal must be positive.
-%  varargin Sets of values that should be passed to the plot function to
-%           format the ellipses or that will be passed to the surf function
-%           to format the ellipsoids. For example, one could call the
-%           function as drawEllipse(z,A,gammaVal,'--r','linewidth',2) to plot
-%           ellipses as thick, red lines. Note that Matlab will not always
-%           properly render dashed lines due to the number of points used
-%           to plot the shape. Also, if the ellipsoid is in 3D, but is
-%           actually just a 2D ellipse, then if this parameter is omitted,
-%           the fill3 command will be passed the option to color the
-%           ellipse black. Otherwise, if this parameter is given, the user
-%           must specify the ellipse color as it is not done here.
+%INPUTS: z A 2XN or 3XN vector corresponding to the centers of the N
+%          ellipses or ellipsoids that should be drawn.
+%        A A 2X2XN or 3X3XN set of N positive definite matrices that
+%          specify the size and shape of the ellipse or ellipsoids, where
+%          a point zp is on the ith ellipse/ ellipsoid if
+%          (zp-z(:,i))'*A(:,:,i)*(zp-z(:,i))=gammaVal.
+%          In three dimensions, A can have one zero eigenvalue, in which
+%          case the fill3 command is used to draw an ellipse in 3D.
+% gammaVal An optional parameter specifying the size of the ellipse/
+%          ellipsoid. If omitted or an empty matrix is passed, then
+%          gammaVal=16.2235 in 2D or gammaVal=18.8049 in 3D is used.
+%          gammaVal must be positive.
+% varargin Sets of values that should be passed to the plot function to
+%          format the ellipses or that will be passed to the surf function
+%          to format the ellipsoids. For example, one could call the
+%          function as drawEllipse(z,A,gammaVal,'--r','linewidth',2) to plot
+%          ellipses as thick, red lines. Note that Matlab will not always
+%          properly render dashed lines due to the number of points used
+%          to plot the shape. Also, if the ellipsoid is in 3D, but is
+%          actually just a 2D ellipse, then if this parameter is omitted,
+%          the fill3 command will be passed the option to color the
+%          ellipse black. Otherwise, if this parameter is given, the user
+%          must specify the ellipse color as it is not done here.
 %
 %OUTPUTS: h A NX1 cell array containing the plot objects for each of the
 %           ellipses. This can be useful if, for example, one wishes to

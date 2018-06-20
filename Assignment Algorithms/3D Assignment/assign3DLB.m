@@ -21,12 +21,12 @@ function lowerBound=assign3DLB(C,method)
 %            solution.
 %
 %INPUTS: C An n1Xn2Xn3 cost hypermatrix. The costs are real numbers >-Inf.
-%          n1<=n2<=n3;
+%          n1<=n2<=n3; If an empty matrix is passed, then lowerBound=0 is
+%          returned.
 %   method An optional parameter selecting the bound algorithm to use.
 %          Possible values are:
-%          0 (The default if omitted or an empty matrix is passed) Use the
-%            projection method followed by the Hungarian algorithm as in
-%            [1] (implemented using the Jonker-Volgenant algorithm in
+%          0 Use the projection method followed by the Hungarian algorithm
+%            as in [1] (implemented using the Jonker-Volgenant algorithm in
 %            assign2D in place of the Hungarian algorithm). This algorithm
 %            requires that n1=n2=n3, so if that is not the case, the cost
 %            matrix is implicitly augmented so the lower bound can still be
@@ -36,6 +36,10 @@ function lowerBound=assign3DLB(C,method)
 %            across each first index of C as in [2]. Note that permuting
 %            the indices of C can change the tightness of the bound and the
 %            speed of this approach.
+%          2 (The default if omitted or an empty matrix is passed) Use the
+%            lower bound from the dual cost of the Lagrangian relaxation
+%            down to 2D assignment, computed setting the dual variables all
+%            to zero.
 %
 %OUTPUTS: lowerBound A lower bound on the value of the axial 3D assignment
 %                    optimization problem.
@@ -74,6 +78,12 @@ function lowerBound=assign3DLB(C,method)
 %June 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+%Empty matrix special case.
+if(isempty(C))
+    lowerBound=0;
+    return;
+end
+
 %The algorthms were implemented assuming that n1<=n2<=n3 for the
 %dimensionality of C. If a matrix having a different arrangement of indices
 %is passed, we will permute the indices to make the assumptions below hold.
@@ -81,6 +91,7 @@ function lowerBound=assign3DLB(C,method)
 %user knows what dims1 and dims2 refer to.
 nVals=size(C);
 numNVals=numel(nVals);
+
 %Add back singleton dimensions, if necessary. In Matlab, it will never be
 %less than 2D.
 if(numNVals==2)
@@ -98,7 +109,6 @@ n3=nVals(3);
 if(~(n1<=n2&&n2<=n3))
     error('It is required that n1<=n2<=n3')
 end
-
 
 switch(method)
     case 0%The projection-Hungarian algorithm of [1].
@@ -159,9 +169,6 @@ switch(method)
                 numCol=n2;
                 M=zeros(numRow,numCol);
                 M(1:numRow,:)=reshape(min(C,[],curIdx),[numRow,numCol]);
-                for k=1:n3
-                    C(:,:,k)=C(:,:,k)-M(1:numRow,:);
-                end
             end
     
             %Step 2: Find the minimum assignment and compute the reduced M
@@ -171,7 +178,7 @@ switch(method)
             %using the Hungarian method) but it should be suitable to serve
             %the same purpose for reducing the C matrix.
             [col4row, ~, gain, u, v]=assign2D(M,false);
-            
+
             %If the assignment problem is infeasible, return Inf cost.
             if(isempty(col4row))
                 lowerBound=Inf;
@@ -207,7 +214,6 @@ switch(method)
                     for j=1:n2
                         C(:,j,:)=C(:,j,:)+reshape(M(1:numRow,:),[numRow,1,numCol]);
                     end
-
                 end
             end
         end
@@ -223,8 +229,31 @@ switch(method)
         for i=1:n1
             lowerBound=lowerBound+min(reshape(C(i,:,:),[n2*n3,1]));
         end
+    case 2%The dual cost with zero dual variables.
+        %Deal with the special case of C being scalar.
+        if(isscalar(C))
+            lowerBound=C;
+            return;
+        end
+        
+        %%%%%%
+        %DUAL COST WITH 0 DUAL VARIABLES.
+        %%%%%%
+        %Note that d3=C;
+        d2=min(C,[],3);
+
+        %gamma1 is the columns for rows (nonzero elements in omega).
+        [gamma1, ~, minVal]=assign2D(d2,false);
+
+        %If the subproblem is infeasible; the bound is infinite.
+        if(isempty(gamma1))
+            lowerBound=Inf;
+            return
+        end
+
+        lowerBound=minVal;%The dual cost.
     otherwise
-        error('Invalid method chosen');
+        error('Invalid method chosen.');
 end
 end
 

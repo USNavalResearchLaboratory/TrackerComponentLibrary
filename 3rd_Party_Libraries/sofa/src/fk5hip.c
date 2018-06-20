@@ -39,13 +39,13 @@ void iauFk5hip(double r5h[3][3], double s5h[3])
 **
 **  Reference:
 **
-**     F.Mignard & M.Froeschle, Astron. Astrophys. 354, 732-739 (2000).
+**     F.Mignard & M.Froeschle, Astron.Astrophys., 354, 732-739 (2000).
 **
-**  This revision:  2013 June 18
+**  This revision:  2017 October 12
 **
-**  SOFA release 2017-04-20
+**  SOFA release 2018-01-30
 **
-**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 */
 {
    double v[3];
@@ -80,7 +80,7 @@ void iauFk5hip(double r5h[3][3], double s5h[3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2017
+**  Copyright (C) 2018
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

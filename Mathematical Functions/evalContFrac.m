@@ -1,9 +1,9 @@
-function f=evalContFrac(bFunc,aFunc,epsVal,maxIter)
-%%EVALCONTFRAC  Evaluate a continued fraction of the form
-%               f=b(1)+a(1)/(b(2)+a(2)/(b(3)+a(3)/(b(4)+a(4)/...
-%               Given either matrices for a finite number of a and b terms
-%               of function for the a and b values such that the required
-%               number of terms can be requested.
+function f=evalContFrac(bFunc,aFunc,tinyVal,maxIter)
+%%EVALCONTFRAC Evaluate a continued fraction of the form
+%              f=b(1)+a(1)/(b(2)+a(2)/(b(3)+a(3)/(b(4)+a(4)/...
+%              Given either matrices for a finite number of a and b terms
+%              of function for the a and b values such that the required
+%              number of terms can be requested.
 %
 %INPUTS:  bFunc This can either be a function such that bFunc(i) provides
 %               b(i) in the continued fraction, or this can be a maxNX1 or
@@ -13,9 +13,10 @@ function f=evalContFrac(bFunc,aFunc,epsVal,maxIter)
 %               then it is 1X(maxN-1) or (maxN-1)X1 as it takes one fewer
 %               call to the a terms than the b terms to evaluate the
 %               continued fraction.
-%        epsVal An optional parameter that is less than typical values of
+%       tinyVal An optional parameter that is less than typical values of
 %               eps(b), but is not zero. This parameter is used to mitigate
-%               divide-by zero errors.
+%               divide-by zero errors. The default if this parameter is
+%               omitted or an empty matrix is passed if 2e-100.
 %       maxIter An optional parameter considering the maximum number of
 %               terms to evaluate in the continued fraction. The default
 %               value if omitted is 1000. This parameter is only used if
@@ -41,7 +42,7 @@ function f=evalContFrac(bFunc,aFunc,epsVal,maxIter)
 %
 %REFERENCES:
 %[1] C.-Y. Shih, "An investigation of a stable algorithm for the evaluation
-%    of fractional order Bessel functions," Master?s thesis, Emporia
+%    of fractional order Bessel functions," Master's thesis, Emporia
 %    State University, Emporia, KS, Nov. 1993. [Online]. Available:
 %    https://esirc.emporia.edu/bitstream/handle/123456789/1773/Shih%201993.pdf
 %[2] W. J. Lentz, "Generating Bessel functions in Mie scattering
@@ -51,8 +52,11 @@ function f=evalContFrac(bFunc,aFunc,epsVal,maxIter)
 %October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+%The floating point precision.
+epsVal=eps();
+
 if(nargin<3)
-    epsVal=2^(-100);
+    tinyVal=2^(-100);
 end
 
 if(isa(bFunc,'double'))
@@ -76,14 +80,13 @@ while(j<maxIter)
     bj=bFunc(j+1);
     aj=aFunc(j);
     
-    DCur=1/(bj+aj*DPrev);
-    if(~isfinite(DCur))
-        DCur=1/epsVal;
-    end
+    DCur=bj+aj*DPrev;
+    DCur=max(tinyVal,DCur);
+    DCur=1/DCur;
     DPrev=DCur;
     
     CCur=bj+aj/CPrev;
-    CCur=max(epsVal,CCur);
+    CCur=max(tinyVal,CCur);
     CPrev=CCur;
     
     Delta=CCur*DCur;

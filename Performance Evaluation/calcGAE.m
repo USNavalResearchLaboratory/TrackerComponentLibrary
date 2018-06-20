@@ -1,5 +1,5 @@
 function val=calcGAE(xTrue,xEst)
-%%CALCAEE Compute the scalar geometric average error (GAE). Unlike the
+%%CALCGAE Compute the scalar geometric average error (GAE). Unlike the
 %         RMSE, it is not dominated by large individual terms.
 %
 %INPUTS: xTrue The truth data. If the truth is the same for all samples of

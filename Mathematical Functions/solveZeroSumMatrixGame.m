@@ -1,4 +1,4 @@
-function [optVal,x,y,exitFlags]=solveZeroSumMatrixGame(A,linProgOpts)
+function [optVal,x,y,exitCodes]=solveZeroSumMatrixGame(A,linProgOpts)
 %%SOLVEZEROSUMMATRIXGAME Determine the optimal strategies of two players in
 %               a zero-sum matrix game. This is a problem where player 1
 %               needs to choose a y vector to minimize y'*A*x and player 2
@@ -13,20 +13,20 @@ function [optVal,x,y,exitFlags]=solveZeroSumMatrixGame(A,linProgOpts)
 %               type of game is often taught in introductory game theory
 %               classes and can be solved using linear programming.
 %
-%INPUTS: A    A numRowsXnumCols matrix of the payoffs. player 1 (row
-%             choice) wants to minimize the payoff, player 2 (column
-%             choice) wants to maximize the payoff. Payoffs can be negative.
+%INPUTS: A A numRowsXnumCols matrix of the payoffs. player 1 (row choice)
+%          wants to minimize the payoff, player 2 (column choice) wants to
+%          maximize the payoff. Payoffs can be negative.
 % linProgOpts Linear programming is used to solve the problem. Thus, this
-%             is an optional structure that passes parameters to the linear
-%             programming algorithm. members of the structure can be
-%             algorithm This is either 0 or 1. 0 means use
-%                       linProgRevisedSimplex to solve the problem; 1 means
-%                       use linProgInteriorPoint. The default is 0.
-%             maxIter, epsilon, alpha These three parameters are the same
-%                       as the inputs in the aforementioned linear
-%                       programming algorithms. See the algorithms for
-%                       details. The defaults if omitted are the defaults
-%                       of the respective linear programming algorithms.
+%          is an optional structure that passes parameters to the linear
+%          programming algorithm. members of the structure can be:
+%          algorithm This is either 0 or 1. 0 means use
+%                    linProgRevisedSimplex to solve the problem; 1 means
+%                    use linProgInteriorPoint. The default is 0.
+%          maxIter, epsilon, alpha These three parameters are the same
+%                    as the inputs in the aforementioned linear
+%                    programming algorithms. See the algorithms for
+%                    details. The defaults if omitted are the defaults of
+%                    the respective linear programming algorithms.
 %
 %OUTPUTS: optVal The value of y'*A*x obtained solving the zero-sum matrix
 %           game.
@@ -37,7 +37,7 @@ function [optVal,x,y,exitFlags]=solveZeroSumMatrixGame(A,linProgOpts)
 %         y A numRowsX1 vector solving min_y max_x y'*A*x , which happens
 %           to equal max_x min_y y'*A*x under the same constraints as
 %           given for x above.
-%  exitFlag A 2X1 vector of the values of the exitFlag parameter from the
+%  exitCode A 2X1 vector of the values of the exitCode parameter from the
 %           chosen linear programming algorithm. See the comments for the
 %           chosen algorithm for more details. The algorithm is run twice
 %           on different problems (once to solve for x, another time to
@@ -57,7 +57,7 @@ function [optVal,x,y,exitFlags]=solveZeroSumMatrixGame(A,linProgOpts)
 % A=[0, 1, -1;
 %   -1, 0,  1;
 %    1, -1, 0];
-% [optVal,x,y,exitFlags]=solveZeroSumMatrixGame(A)
+% [optVal,x,y,exitCodes]=solveZeroSumMatrixGame(A)
 %In this instance, the optimal strategy for both is x,y=[1/3;1/3;1/3],
 %which means to just choose uniformly among rock, paper and scissors.
 %optVal is also 0. 
@@ -70,7 +70,7 @@ function [optVal,x,y,exitFlags]=solveZeroSumMatrixGame(A,linProgOpts)
 %   -1, 0, 1,-1;
 %    1,-1, 0, 1;
 %   -1, 1,-1, 0];
-% [optVal,x,y,exitFlags]=solveZeroSumMatrixGame(A)
+% [optVal,x,y,exitCodes]=solveZeroSumMatrixGame(A)
 %Here, the optimal strategy for both players is [0;1/3;1/3;1/3].
 %
 %Example 3
@@ -85,7 +85,7 @@ function [optVal,x,y,exitFlags]=solveZeroSumMatrixGame(A,linProgOpts)
 %   -1/6,  1/6,    1/6,   1/2;
 %    0,    1/2,   -1/3,   1/6;
 %    0,    1/3,   -1/6,   1/6];
-% [optVal,x,y,exitFlags]=solveZeroSumMatrixGame(A)
+% [optVal,x,y,exitCodes]=solveZeroSumMatrixGame(A)
 %Here, one might get x=[1/3;1/3;1/3;0]; and y=[2/3;0;1/3;0;0;0;0;0]; These
 %are not the same as the solution in [1], though optVal=1/18 is the same
 %for both solutions.
@@ -98,9 +98,9 @@ function [optVal,x,y,exitFlags]=solveZeroSumMatrixGame(A,linProgOpts)
 % A=[4, 1, -1;
 %    3, 2, 5;
 %    0, 1, 6];
-% tic;[optVal,x,y,exitFlags]=solveZeroSumMatrixGame(A);toc
+% tic;[optVal,x,y,exitCodes]=solveZeroSumMatrixGame(A);toc
 % linProgOpts.algorithm=1;
-% tic;[optValI,xI,yI,exitFlagsI]=solveZeroSumMatrixGame(A,linProgOpts);toc
+% tic;[optValI,xI,yI,exitCodesI]=solveZeroSumMatrixGame(A,linProgOpts);toc
 %Here, one find the optimal value to be about 30/1375.
 %
 %REFERENCES:
@@ -152,13 +152,13 @@ AEq=[ones(1,numCols),  0];
 bEq=1;
 maximize=true;
 
-exitFlags=zeros(2,1);
+exitCodes=zeros(2,1);
 
 switch(algorithm)
     case 0
-        [optVal,x,exitFlags(1)]=linProgRevisedSimplex(AEq,bEq,ALeq,bLeq,c,maximize,maxIter,epsilon);
+        [optVal,x,exitCodes(1)]=linProgRevisedSimplex(AEq,bEq,ALeq,bLeq,c,maximize,maxIter,epsilon);
     case 1
-        [optVal,x,exitFlags(1)]=linProgInteriorPoint(AEq,bEq,ALeq,bLeq,c,maximize,maxIter,epsilon,alpha);
+        [optVal,x,exitCodes(1)]=linProgInteriorPoint(AEq,bEq,ALeq,bLeq,c,maximize,maxIter,epsilon,alpha);
     otherwise
         error('Unknown algorithm specified')
 end
@@ -175,9 +175,9 @@ if(nargout>2)
     maximize=false;
     switch(algorithm)
         case 0
-            [optVal,y,exitFlags(2)]=linProgRevisedSimplex(AEq,bEq,ALeq,bLeq,c,maximize,maxIter,epsilon);
+            [optVal,y,exitCodes(2)]=linProgRevisedSimplex(AEq,bEq,ALeq,bLeq,c,maximize,maxIter,epsilon);
         case 1
-            [optVal,y,exitFlags(2)]=linProgInteriorPoint(AEq,bEq,ALeq,bLeq,c,maximize,maxIter,epsilon,alpha);
+            [optVal,y,exitCodes(2)]=linProgInteriorPoint(AEq,bEq,ALeq,bLeq,c,maximize,maxIter,epsilon,alpha);
         otherwise
             error('Unknown algorithm specified')
     end

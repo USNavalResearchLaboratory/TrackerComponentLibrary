@@ -45,7 +45,7 @@ function [xUpdate,PUpdate,rUpdate,probNonTargetMeas]=singleScanUpdateWithExisten
 %              probability must be multiplied by the probability that the
 %              target exists (the appropriate entry in rHyp). For example,
 %              a typical missed detection likelihood ratio for the ith
-%              target might be 1-Pd*rHyp(i). where Pd is the detection
+%              target might be 1-Pd*rHyp(i). where PD is the detection
 %              probability. The function makeStandardCartOnlyLRMatHyps can
 %              be used to make such likelihood ratio matrices in certain
 %              Gaussian/Cartesian problems.
@@ -58,7 +58,9 @@ function [xUpdate,PUpdate,rUpdate,probNonTargetMeas]=singleScanUpdateWithExisten
 %              1) JIPDA
 %              2) JIPDA*
 %              3) Approximate GNN-JIPDA
-%              4) Approximate JIPDA 
+%              4) Approximate JIPDA
+%              5) Naïve nearest neighbor JIPDA.
+%              6) Approximate naïve nearest neighbor JIPDA.
 %      algSel2 An optional parameter that further specifies the algorithm
 %              used when algSel1=3,4. If omitted but algSel1 is specified,
 %              a default value of 0 is used. If both algSel1 and algSel2
@@ -77,7 +79,7 @@ function [xUpdate,PUpdate,rUpdate,probNonTargetMeas]=singleScanUpdateWithExisten
 %                 for the targets.
 %         rUpdate A numTarX1 set of updated probabilities of target
 %                 existence.
-%probNonTargetMeas A numMeasX1 set of posterior probabilities that the
+% probNonTargetMeas A numMeasX1 set of posterior probabilities that the
 %                 measurements do not come from any of the known targets.
 %                 These probabilities play a role in track initiation.
 %
@@ -196,11 +198,15 @@ switch(algSel1)
         betas=calc2DAssignmentProbs(A,true);
     case 1%JPDAF
         betas=calc2DAssignmentProbs(A,true);
-    case 2%JIPDAF* probabilities.
+    case 2%JIPDAF*
         betas=calcStarBetasBF(A);
     case 3%Approximate GNN-JIPDAF
         betas=calc2DAssignmentProbsApprox(A,algSel2,true,param3);
     case 4%Approximate JIPDAF
+        betas=calc2DAssignmentProbsApprox(A,algSel2,true,param3);
+    case 5%Naïve nearest neighbor JIPDA
+        betas=calc2DAssignmentProbs(A,true);
+    case 6%Approximate naïve nearest neighbor JIPDA
         betas=calc2DAssignmentProbsApprox(A,algSel2,true,param3);
     otherwise
         error('Unknown algorithm selected')
@@ -218,7 +224,6 @@ probNonTargetMeas=1-sum(betas(:,1:(end-1)),1)';
 %Allocate space for the return variables.
 xUpdate=zeros(xDim,numTar);
 PUpdate=zeros(xDim,xDim,numTar);
-
 if(algSel1==1||algSel1==3)%If a GNN estimate is used in place of the mean
     %Perform 2D assignment
     ALog=log(A);
@@ -238,6 +243,29 @@ if(algSel1==1||algSel1==3)%If a GNN estimate is used in place of the mean
         xUpdate(:,curTar)=xHyp(:,curTar,maxIdx);
     end
     
+    %Compute the covariance matrix in the manner of the JPDAF, but
+    %about the ML estimate, so the result is a MSE matrix estimate.
+    for curTar=1:numTar
+        x=reshape(xHyp(:,curTar,:),[xDim,numHyp,1]);
+        P=reshape(PHyp(:,:,curTar,:),[xDim,xDim,numHyp]);
+        [~,PUpdate(:,:,curTar)]=calcMixtureMoments(x,betas(curTar,:),P,xUpdate(:,curTar));
+    end
+elseif(algSel1==5||algSel1==6)%If a naïve nearest neighbor estimate is used
+                   %in place of the mean.
+    %The assignment for each target
+    logLikes=zeros(numTar,1);
+    for curTar=1:numTar
+        [maxVal,maxIdx]=max(A(curTar,:));
+
+        %If the missed detection hypothesis is the most likely.
+        if(maxIdx>numMeas)
+            maxIdx=numMeas+1;
+        end
+
+        xUpdate(:,curTar)=xHyp(:,curTar,maxIdx);
+        logLikes(curTar)=log(maxVal);
+    end
+
     %Compute the covariance matrix in the manner of the JPDAF, but
     %about the ML estimate, so the result is a MSE matrix estimate.
     for curTar=1:numTar

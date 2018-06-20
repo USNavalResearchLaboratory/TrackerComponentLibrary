@@ -42,16 +42,10 @@ function [xMin,fMin,exitCode]=NewtonsMethod(f,fHess,x0,epsilon,deltaTestDist,del
 % lineSearchParams An optional structure whose members specify tolerances
 %          for the line search. The parameters are described as in the
 %          lineSearch function, except if -1 is passed instead of a
-%          parameter structure, then no line search is performed. Possible
-%          members of the structure are algorithm, fTol, wolfeTol, xTol, 
-%          minStep, maxStep, maxIter. The C and l1NormRange parameters are
-%          not used. If lineSearchParams is omitted or an empty matrix is
-%          passed, then the default values as described in the lineSearch
-%          function are used. If any member of this structure is omitted or
-%          is assigned an empty matrix, then the default value will be
-%          used. The line search must usually be disabled if one is
-%          interested in zeroing a vector (the gradient term being the
-%          vector) rather than actually minimizing a function.
+%          parameter structure, then no line search is performed. The line
+%          search must often be disabled if one is interested in zeroing
+%          a vector (the gradient term being the vector) rather than
+%          actually minimizing a function.
 % cholSemiVal A value indicating whether a method similar to that suggested
 %          in Chapter 1.4 of [1] for using a modified Cholesky
 %          decomposition of the Hessian matrix should be used so as to
@@ -67,7 +61,7 @@ function [xMin,fMin,exitCode]=NewtonsMethod(f,fHess,x0,epsilon,deltaTestDist,del
 %          vector rather than minimize a function.
 %  maxIter The maximum number of iterations to use for the algorithm. The
 %          default if this parameter is omitted or an empty matrix is
-%          passed is 1000.
+%          passed is 100.
 %
 %OUTPUTS: xMin The value of x at the minimum point found. If exitCode is
 %              negative, then this might be an empty matrix.
@@ -158,58 +152,17 @@ function [xMin,fMin,exitCode]=NewtonsMethod(f,fHess,x0,epsilon,deltaTestDist,del
         delta=0;
     end
 
-    %The default line search parameter options
-    algorithm=[];
-    C=[];
-    stepSizeInit=[];
-    fTol=[];
-    wolfeTol=[];
-    xTol=[];
-    minStep=[];
-    maxStep=[];
-    maxIterLS=[];
-
     %Take any line search parameters given.
     useLineSearch=true;
     if(nargin>=7&&~isempty(lineSearchParams))
-        if(isa(lineSearchParams,'struct'))
-            if(isfield(lineSearchParams,'algorithm'))
-                algorithm=lineSearchParams.algorithm;
-            end
-
-            if(isfield(lineSearchParams,'stepSizeInit'))
-                stepSizeInit=lineSearchParams.stepSizeInit;
-            end
-
-            if(isfield(lineSearchParams,'fTol'))
-                fTol=lineSearchParams.fTol;
-            end
-
-            if(isfield(lineSearchParams,'wolfeTol'))
-                wolfeTol=lineSearchParams.wolfeTol;
-            end
-
-            if(isfield(lineSearchParams,'xTol'))
-                xTol=lineSearchParams.xTol;
-            end
-
-            if(isfield(lineSearchParams,'minStep'))
-                minStep=lineSearchParams.minStep;
-            end
-
-            if(isfield(lineSearchParams,'maxStep'))
-                maxStep=lineSearchParams.maxStep;
-            end
-
-            if(isfield(lineSearchParams,'maxIter'))
-                maxIterLS=lineSearchParams.maxIter;
-            end
-        elseif(isnumeric(lineSearchParams)&&lineSearchParams==-1)
+        if(isnumeric(lineSearchParams)&&lineSearchParams==-1)
             %If one just wishes to blindly take steps.
             useLineSearch=false;
-        else
+        elseif(~isstruct(lineSearchParams)||(isnumeric(lineSearchParams)&&lineSearchParams~=-1))
             error('Unknown lineSearchParams value given')
         end
+    else
+        lineSearchParams=[];
     end
     
     if(nargin<8||isempty(cholSemiVal))
@@ -219,7 +172,7 @@ function [xMin,fMin,exitCode]=NewtonsMethod(f,fHess,x0,epsilon,deltaTestDist,del
     end
     
     if(nargin<9||isempty(maxIter))
-        maxIter=1000; 
+        maxIter=100; 
     end
     
     xPrev=x0;
@@ -236,7 +189,7 @@ function [xMin,fMin,exitCode]=NewtonsMethod(f,fHess,x0,epsilon,deltaTestDist,del
     end
     
     %Options for upper and lower triangular matrices for use in the
-    %linsolve function if useCholNewton>0.
+    %linsolve function if cholSemiVal>0.
     optsLT.LT=true;
     optsLT.UT=false;
     optsUT.UT=true;
@@ -265,8 +218,9 @@ function [xMin,fMin,exitCode]=NewtonsMethod(f,fHess,x0,epsilon,deltaTestDist,del
 
         if(useLineSearch)
             %Perform a line search in the given descent direction.
-            [xCur,fValCur,gradFCur,~,exitCode]=lineSearch(f,xPrev,D,algorithm,C,stepSizeInit,fTol,wolfeTol,xTol,minStep,maxStep,maxIterLS);
-            if(exitCode<0)
+            [xCur,fValCur,gradFCur,~,~,exitCode]=lineSearch(f,xPrev,D,[],[],lineSearchParams);
+
+            if(isempty(xCur))
                 xMin=[];
                 fMin=[];
                 return;

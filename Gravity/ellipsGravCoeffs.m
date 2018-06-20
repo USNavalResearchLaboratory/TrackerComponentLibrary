@@ -1,8 +1,8 @@
 function [CBar,SBar,a,c]=ellipsGravCoeffs(maxOrder,isNormalized,omega,a,f,GM)
-%%ELLIPSGRAVCOEFFS  Obtain the unnormalized or fully normalized spherical
-%                   harmonic coefficients for the gravitational potential
-%                   implied by an ellipsoidal approximation to the geoid
-%                   with a given rotation rate.
+%%ELLIPSGRAVCOEFFS Obtain the unnormalized or fully normalized spherical
+%                  harmonic coefficients for the gravitational potential
+%                  implied by an ellipsoidal approximation to the geoid
+%                  with a given rotation rate.
 %
 %INPUTS: maxOrder The order of the coefficients. The full ellipsoidal
 %                 gravity potential as expressed with spherical harmonic

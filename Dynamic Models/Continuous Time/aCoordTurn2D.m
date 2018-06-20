@@ -88,7 +88,7 @@ function val= aCoordTurn2D(x,t,turnType,tauTurn,tauLinAccel)
 %
 %The corresponding diffusion matrix is given by the function DCoordTurn2D.
 %The corresponding discrete-time functions are FCoordTurn2D and
-%QCoordTurn2D. However, note that the discrete-time functions are
+%QCoordTurn. However, note that the discrete-time functions are
 %direct-discrete models and not discretizations of the continuous-time
 %models as the propagated PDF does not remain Gaussian over time.
 %

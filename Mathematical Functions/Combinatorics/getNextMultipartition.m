@@ -1,6 +1,6 @@
 function [vOut,data]=getNextMultipartition(data)
 %%GETNEXTMULTIPARTITION Get the next multipartition of a set of elements
-%           with possible repreats, or get the first multipartition in the
+%           with possible repeats, or get the first multipartition in the
 %           sequence. The multipartitions are given in decreasing
 %           lexicographic order.
 %

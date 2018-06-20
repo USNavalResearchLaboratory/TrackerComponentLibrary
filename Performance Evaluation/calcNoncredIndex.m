@@ -92,7 +92,7 @@ function NCI=calcNoncredIndex(xTrue,xEst,PEst,type,Sigma)
 %REFERENCES:
 %[1] X. R. Li, Z. Zhao, and V. P. Jilkov, "Estimator's credibility and its
 %    measures," in Proceedings of the 15th Triennial Word Congress of the
-%    International Federation of Automatic Control, Barcelona, Spain, 21?
+%    International Federation of Automatic Control, Barcelona, Spain, 21-
 %    26 Jul. 2002, pp. 1-6.
 %[2] X. R. Li and Z. Zhao, "Measuring estimator's credibility:
 %    Noncredibility index," in Proceedings of the 9th International

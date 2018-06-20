@@ -49,7 +49,7 @@ function [zInterp,gradInterp,gradDerivMatInterp]=interpSurf2D(xyPoints,xyPointsR
 %[2] S. E. Stead, "Estimation of gradients from scattered data," Journal of
 %    Mathematics, vol. 14, no. 1, pp. 265-279, Winter 1984.
 %[3] R. E. Barnhill, "A survey of representation and design of surfaces,"
-%    IEEE Computer Graphics and Applications, vol. 3, no. 7, pp. 9?16, Oct.
+%    IEEE Computer Graphics and Applications, vol. 3, no. 7, pp. 9-16, Oct.
 %    1984.
 %
 %February 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.

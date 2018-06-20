@@ -3,18 +3,18 @@ function [thePartition,k,mult]=randPartition(n)
 %                set of other integers that sum to n. The partitions all
 %                have equal probability.
 %
-%INPUTS:     n  A positive integer of which one desires a random partition.
+%INPUTS: n A positive integer of which one desires a random partition.
 %
 %OUTPUTS: thePartition The random partition. This is a vector of integers
 %                      that sum to n.
-%           k          The number of unique digits in the partition.
-%           mult       An nX1 vector where mult(i) is the number of times
+%                    k The number of unique digits in the partition.
+%                 mult An nX1 vector where mult(i) is the number of times
 %                      the digit i appears in the partition. Note that k
 %                      and mult together uniquely specify the partition.
 %
-%The algorithm is the RANPAR function described in Chapter 10 of [1]. The
-%algorithm has been modified to call the numberOfPartitions rather than
-%using its own recursion to find the number of partitions from 1 to n.
+%The algorithm is based on the RANPAR function described in Chapter 10 of
+%[1]. The algorithm has been modified to call the numberOfPartitions rather
+%than using its own recursion to find the number of partitions from 1 to n.
 %
 %REFERENCES:
 %[1] A. Nijenhuis and H. S. Wilf, Combinatorial Algorithms for Computers

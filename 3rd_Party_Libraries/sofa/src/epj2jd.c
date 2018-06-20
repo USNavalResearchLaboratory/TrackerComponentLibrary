@@ -33,9 +33,9 @@ void iauEpj2jd(double epj, double *djm0, double *djm)
 **
 **  This revision:  2013 August 7
 **
-**  SOFA release 2017-04-20
+**  SOFA release 2018-01-30
 **
-**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 */
 {
    *djm0 = DJM0;
@@ -45,7 +45,7 @@ void iauEpj2jd(double epj, double *djm0, double *djm)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2017
+**  Copyright (C) 2018
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

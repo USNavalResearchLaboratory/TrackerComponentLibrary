@@ -2,7 +2,8 @@ classdef LaplaceD
 %%LAPLACED Functions to handle the multivariate Laplace distribution. In
 %       one dimension, it reduces to the traditional Laplace distribution.
 %Implemented methods are: mean, cov, PDF, CDF (for scalar distributions),
-%                         momentGenFun, cumGenFun, rand
+%                         momentGenFun, cumGenFun, rand, entropy (for
+%                         scalar distributions)
 %
 %The multivariate (and univariate) Laplce distributions are described in
 %detail in [1]. They arise from certain transformations of Gaussian random
@@ -34,7 +35,7 @@ function val=mean(mu)
 %
 %OUTPUTS: val  The mean of the multivariate Laplace distribution.
 %  
-%The mean is given by Equation 10 of [1]. The distirbution is aprameterized
+%The mean is given by Equation 10 of [1]. The distribution is aprameterized
 %by its mean, so this function just returns the mean it is given.
 %
 %REFERENCES:  
@@ -53,10 +54,10 @@ function val=cov(lambda,Gamma)
 %
 %INPUTS: lambda A scale parameter for the distribution. Note that with
 %               respect to the traditional parameterization of a scalar
-%               distribution, sqrt(2/lambda)=1/b, wher b is the traditional
-%               scale parameter. Here, lambda stems from the rate parameter
-%               of an exponential distribution when deriving the
-%               multivariate Laplace.
+%               distribution, sqrt(2/lambda)=1/b, where b is the
+%               traditional scale parameter. Here, lambda stems from the
+%               rate parameter of an exponential distribution when deriving
+%               the multivariate Laplace.
 %         Gamma The scale matrix of the PDF. This must be symmetric and
 %               positive definite with determinant det(Gamma)=1. When
 %               dealing with scalar distributions, this is just 1.
@@ -78,27 +79,26 @@ end
 
 
 function vals=PDF(x,lambda,mu,Gamma)
-%%PDF         Evaluate a scalar or multivariate Laplace PDF.
+%%PDF Evaluate a scalar or multivariate Laplace PDF.
 %
-%INPUTS:    x   The points at which the PDF should be evaluated. If the PDF
-%               is multivariate, then this is a column vector. If
-%               evaluation at multiple points are desired, then this is a
-%               matrix with each column being the a point (a vector).
-%        lambda A scale parameter for the distribution. Note that with
-%               respect to the traditional parameterization of a scalar
-%               distribution, sqrt(2/lambda)=1/b, wher b is the traditional
-%               scale parameter. Here, lambda stems from the rate parameter
-%               of an exponential distribution when deriving the
-%               multivariate Laplace.
-%           mu  The location parameter of the PDF. If the PDF is
-%               multivariate, then this is a column vector.
-%         Gamma The scale matrix of the PDF. This must be symmetric and
-%               positive definite with determinant det(Gamma)=1. When
-%               dealing with scalar distributions, this is just 1.
+%INPUTS: x The points at which the PDF should be evaluated. If the PDF is
+%          multivariate, then this is a column vector. If evaluation at
+%          multiple points are desired, then this is a matrix with each
+%          column being the a point (a vector).
+%   lambda A scale parameter for the distribution. Note that with respect
+%          to the traditional parameterization of a scalar distribution,
+%          sqrt(2/lambda)=1/b, where b is the traditional scale parameter.
+%          Here, lambda stems from the rate parameter of an exponential
+%          distribution when deriving the multivariate Laplace.
+%       mu The location parameter of the PDF. If the PDF is multivariate,
+%          then this is a column vector.
+%    Gamma The scale matrix of the PDF. This must be symmetric and positive
+%          definite with determinant det(Gamma)=1. When dealing with scalar
+%          distributions, this is just 1.
 %
-%OUTPUTS: vals  The scalar value of the multivariate Laplace PDF. If
-%               multiple points are passed (z is a matrix), then val is a
-%               row vector.
+%OUTPUTS: vals The scalar value of the multivariate Laplace PDF. If
+%              multiple points are passed (z is a matrix), then val is a
+%              row vector.
 %
 %The multivariate Laplace PDF is given in Equation 9 of [1].
 %
@@ -124,7 +124,7 @@ function vals=PDF(x,lambda,mu,Gamma)
     end
 
     %If any of the values are not finite, then the value is probably very
-    %close to the mean, which means that the ratio involving the bessel
+    %close to the mean, which means that the ratio involving the Bessel
     %function is Inf/Inf. For d=1, this ratio has a finite asymptotic
     %value and the asymptotic result can be substituted. For higher
     %dimensions, this ratio is just Inf, so no substitution will be made.
@@ -137,19 +137,18 @@ end
 function vals=CDF(x,lambda,mu,Gamma)
 %%CDF Evaluate a scalar Laplace CDF at given points.
 %
-%INPUTS:    z   The points at which the PDF should be evaluated. THis can
-%               be a column vector, a row vector, or a matrix.
-%        lambda A scale parameter for the distribution. Note that with
-%               respect to the traditional parameterization of a scalar
-%               distribution, sqrt(2/lambda)=1/b, wher b is the traditional
-%               scale parameter. Here, lambda stems from the rate parameter
-%               of an exponential distribution when deriving the
-%               multivariate Laplace.
-%           mu  The location parameter of the PDF. If the PDF is
-%               multivariate, then this is a column vector.
-%         Gamma The scale matrix of the PDF. This must be symmetric and
-%               positive definite with determinant det(Gamma)=1. When
-%               dealing with scalar distributions, this is just 1.
+%INPUTS: z The points at which the PDF should be evaluated. This can be a
+%          column vector, a row vector, or a matrix.
+%   lambda A scale parameter for the distribution. Note that with respect
+%          to the traditional parameterization of a scalar distribution,
+%          sqrt(2/lambda)=1/b, where b is the traditional scale parameter.
+%          Here, lambda stems from the rate parameter of an exponential
+%          distribution when deriving the multivariate Laplace.
+%       mu The location parameter of the PDF. If the PDF is multivariate,
+%          then this is a column vector.
+%    Gamma The scale matrix of the PDF. This must be symmetric and positive
+%          definite with determinant det(Gamma)=1. When dealing with scalar
+%          distributions, this is just 1.
 %
 %OUTPUTS: vals The CDF of the laplace distribution evaluated at the
 %              specified points.
@@ -192,23 +191,24 @@ function momentVal=momentGenFun(lambda,mu,Gamma,numDerivs,t)
 %
 %INPUTS: lambda A scale parameter for the distribution. Note that with
 %               respect to the traditional parameterization of a scalar
-%               distribution, sqrt(2/lambda)=1/b, wher b is the traditional
-%               scale parameter. Here, lambda stems from the rate parameter
-%               of an exponential distribution when deriving the
-%               multivariate Laplace.
-%           mu  The location parameter of the PDF. If the PDF is
+%               distribution, sqrt(2/lambda)=1/b, where b is the
+%               traditional scale parameter. Here, lambda stems from the
+%               rate parameter of an exponential distribution when deriving
+%               the multivariate Laplace.
+%            mu The location parameter of the PDF. If the PDF is
 %               multivariate, then this is a column vector.
 %         Gamma The scale matrix of the PDF. This must be symmetric and
 %               positive definite with determinant det(Gamma)=1. When
 %               dealing with scalar distributions, this is just 1.
-%  numDerivs A numDimX1 or 1XnumDim vector indicating the number of
-%            derivatives to take with respect to each of the components of
-%            the argument of the moment generating function. numDerivs>=0.
-%          t The numDimXnumPoints argument of the moment generating
-%            function at which the derivatives of the moment generating
-%            function should be evaluated. If this parameter is omitted or
-%            an empty matrix is passed, then a default of
-%            t=zeros(numDim,1) is used.
+%     numDerivs A numDimX1 or 1XnumDim vector indicating the number of
+%               derivatives to take with respect to each of the components
+%               of the argument of the moment generating function.
+%               numDerivs>=0.
+%             t The numDimXnumPoints argument of the moment generating
+%               function at which the derivatives of the moment generating
+%               function should be evaluated. If this parameter is omitted
+%               or an empty matrix is passed, then a default of
+%               t=zeros(numDim,1) is used.
 %
 %OUTPUTS: momentVal A numPointsX1 vector of the values of the derivatives
 %                   of the moment generating function given at the points
@@ -402,23 +402,24 @@ function cumVal=cumGenFun(lambda,mu,Gamma,numDerivs,t)
 %
 %INPUTS: lambda A scale parameter for the distribution. Note that with
 %               respect to the traditional parameterization of a scalar
-%               distribution, sqrt(2/lambda)=1/b, wher b is the traditional
-%               scale parameter. Here, lambda stems from the rate parameter
-%               of an exponential distribution when deriving the
-%               multivariate Laplace.
-%           mu  The location parameter of the PDF. If the PDF is
+%               distribution, sqrt(2/lambda)=1/b, where b is the
+%               traditional scale parameter. Here, lambda stems from the
+%               rate parameter of an exponential distribution when deriving
+%               the multivariate Laplace.
+%            mu The location parameter of the PDF. If the PDF is
 %               multivariate, then this is a column vector.
 %         Gamma The scale matrix of the PDF. This must be symmetric and
 %               positive definite with determinant det(Gamma)=1. When
 %               dealing with scalar distributions, this is just 1.
-%  numDerivs A numDimX1 or 1XnumDim vector indicating the number of
-%            derivatives to take with respect to each of the components of
-%            the argument of the moment generating function. numDerivs>=0.
-%          t The numDimXnumPoints argument of the moment generating
-%            function at which the derivatives of the moment generating
-%            function should be evaluated. If this parameter is omitted or
-%            an empty matrix is passed, then a default of
-%            t=zeros(numDim,1) is used.
+%     numDerivs A numDimX1 or 1XnumDim vector indicating the number of
+%               derivatives to take with respect to each of the components
+%               of the argument of the moment generating function.
+%               numDerivs>=0.
+%             t The numDimXnumPoints argument of the moment generating
+%               function at which the derivatives of the moment generating
+%               function should be evaluated. If this parameter is omitted
+%               or an empty matrix is passed, then a default of
+%               t=zeros(numDim,1) is used.
 %
 %OUTPUTS: cumVal A numPointsX1 vector of the values of the derivatives
 %                of the cumulant generating function given at the points
@@ -637,25 +638,24 @@ end
 end
 
 function vals=rand(N,lambda,mu,Gamma)
-%%RAND   Generate multivariate Laplace random variables.
+%%RAND Generate multivariate Laplace random variables.
 %
-%INPUTS:      N The number of random variables to generate.   
-%        lambda A scale parameter for the distribution. Note that with
-%               respect to the traditional parameterization of a scalar
-%               distribution, sqrt(2/lambda)=1/b, wher b is the traditional
-%               scale parameter. Here, lambda stems from the rate parameter
-%               of an exponential distribution when deriving the
-%               multivariate Laplace.
-%           mu  The location parameter of the PDF. If the PDF is
-%               multivariate, then this is a column vector.
-%         Gamma The scale matrix of the PDF. This must be symmetric and
-%               positive definite with determinant det(Gamma)=1. When
-%               dealing with scalar distributions, this is just 1.
+%INPUTS: N The number of random variables to generate.   
+%   lambda A scale parameter for the distribution. Note that with respect
+%          to the traditional parameterization of a scalar distribution,
+%          sqrt(2/lambda)=1/b, where b is the traditional scale parameter.
+%          Here, lambda stems from the rate parameter of an exponential
+%          distribution when deriving the multivariate Laplace.
+%      mu  The location parameter of the PDF. If the PDF is multivariate,
+%          then this is a column vector.
+%    Gamma The scale matrix of the PDF. This must be symmetric and positive
+%          definite with determinant det(Gamma)=1. When dealing with scalar
+%          distributions, this is just 1.
 %
-%OUTPUTS: vals  An numDimXN matrix of random instances of the multivariate
-%               Laplace distribution. The dimensionality (numDim) is
-%               inferred from the dimensionality fo the location parameter
-%               mu.
+%OUTPUTS: vals An numDimXN matrix of random instances of the multivariate
+%              Laplace distribution. The dimensionality (numDim) is
+%              inferred from the dimensionality fo the location parameter
+%              mu.
 %
 %The generation of random variables follows from the definition of the
 %multivariate Laplace distribution in Section II of [1].
@@ -674,6 +674,34 @@ function vals=rand(N,lambda,mu,Gamma)
     vals=bsxfun(@plus,mu,bsxfun(@times,sqrt(Z),SGamma*randn(numDim,N)));
 end
 
+function entropyVal=entropy(lambda)
+%%ENTROPY Obtain the differential entropy of the scalar Laplace
+%         distribution given in nats. The differential entropy of a
+%         continuous distribution is entropy=-int_x p(x)*log(p(x)) dx where
+%         the integral is over all values of x. Units of nats mean that the
+%         natural logarithm is used in the definition. Unlike the Shannon
+%         entropy for discrete variables, the differential entropy of
+%         continuous variables can be both positive and negative.
+%
+%INPUTS: lambda A scale parameter for the distribution. Note that with
+%               respect to the traditional parameterization of a scalar
+%               distribution, sqrt(2/lambda)=1/b, where b is the
+%               traditional scale parameter.
+%
+%OUTPUTS: entropyVal The value of the differential entropy in nats.
+%
+%Differential entropy is defined in Chapter 8 of [1].
+%
+%REFERENCES:
+%[1] T. M. Cover and J. A. Thomas, Elements of Information Theory, 2nd ed.
+%    Hoboken, NJ: Wiley-Interscience, 2006.
+%
+%April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+    
+    b=1/sqrt(2/lambda);
+
+    entropyVal=log(2*b*exp(1));
+end
 end
 end
 

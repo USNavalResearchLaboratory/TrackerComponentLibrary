@@ -1,17 +1,16 @@
-/**UTC2TAI  Convert from universal coordinated time (UTC) given as a
- *          two-part pseudo-Julian date to international atomic time (TAI),
- *          represented as a two-part pseudo-Julian date.
+/**UTC2TAI Convert from universal coordinated time (UTC) given as a two-
+ *         part pseudo-Julian date to international atomic time (TAI),
+ *         represented as a two-part pseudo-Julian date.
  *
- *INPUTS:    Jul1, Jul2 Matrices of two parts of a pseudo-Julian date given
-%                       in UTC. The units of the date are days. The full
-%                       date is the sum of both terms. The date is broken
-%                       into two parts to provide more bits of precision.
-%                       It does not matter how the date is split.
-%                       Corresponding elements in each matrix are times
-%                       that are converted.
+ *INPUTS: Jul1, Jul2 Matrices of two parts of a pseudo-Julian date given in
+ *                   UTC. The units of the date are days. The full date is
+ *                   the sum of both terms. The date is broken into two
+ *                   parts to provide more bits of precision. It does not
+ *                   matter how the date is split. Corresponding elements
+ *                  in each matrix are times that are converted.
  *
- *OUTPUTS:   Jul1, Jul2  The time as a Julian date in TAI with the same
- *                       dimensionalities as the input sets of dates.
+ *OUTPUTS: Jul1, Jul2 The time as a Julian date in TAI with the same
+ *                     dimensionalities as the input sets of dates.
  *   
  *This is a mex wrapper for the function iauUtctai in the International
  *Astronomical Union's (IAU) Standard's of Fundamental Astronomy library.

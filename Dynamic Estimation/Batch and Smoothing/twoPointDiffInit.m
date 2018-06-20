@@ -6,31 +6,30 @@ function [x,P]=twoPointDiffInit(T,z,R,q)
 %                 of only position and velocity components in 2D or 3D.
 %                 Optionally, process noise can be taken into account.
 %
-%INPUTS:    T   The time delta between the measurements, in seconds. The
-%               transition matrix is assumed to have the form of a matrix
-%               with position and velocity components as in FPolyKal.
-%           z   The zDimX2XN matrix of Cartesian position measurements.
-%               zDim can be 2 or 3. The second measurement is assumed to
-%               arrive at time T after the first. The N dimensions allows
-%               for multiple simultaneous conversions.
-%           R   The zDimXzDimX2XN hypermatrix of measurement covariance
-%               matrices. If just a zDimXzDim matrix is passed, then it is
-%               assumed that both measurements have the same measurement
-%               matrix for all N conversions. If just a zDimXzDimX2 matrix
-%               is passed, then it is assumed that the same set of R
-%               matrices is used in each of the N conversions.
-%           q   The optional process noise parameter. If this parameter is
-%               omitted or an empty matrix is passed, then it is assumed
-%               there is no process noise. A discretized dynamic model
-%               is used, so q has units of length^2/time^3 and is the
-%               power spectral density parameters as in the function
-%               QPolyKal.
+%INPUTS: T The time delta between the measurements, in seconds. The
+%          transition matrix is assumed to have the form of a matrix with
+%          position and velocity components as in FPolyKal.
+%        z The zDimX2XN matrix of Cartesian position measurements. zDim can
+%          be 2 or 3. The second measurement is assumed to arrive at time T
+%          after the first. The N dimensions allows for multiple
+%          simultaneous conversions.
+%        R The zDimXzDimX2XN hypermatrix of measurement covariance
+%          matrices. If just a zDimXzDim matrix is passed, then it is
+%          assumed that both measurements have the same measurement matrix
+%          for all N conversions. If just a zDimXzDimX2 matrix is passed,
+%          then it is assumed that the same set of R matrices is used in
+%          each of the N conversions.
+%        q The optional process noise parameter. If this parameter is
+%          omitted or an empty matrix is passed, then it is assumed there
+%          is no process noise. A discretized dynamic model is used, so q
+%          has units of length^2/time^3 and is the power spectral density
+%          parameters as in the function QPolyKal.
 %
-%OUTPUTS:   x   The (2*zDim)XN initialized state vectors consisting of
-%               of position and velocity with all position components 
-%               coming before any of the velocity components.
-%           P   The (2*zDim)X(2*zDim)XN covariance matrixces, one for each
-%               of the N initiations.
+%OUTPUTS: x The (2*zDim)XN initialized state vectors consisting of position
+%           and velocity with all position components coming before any of
+%           the velocity components.
+%         P The (2*zDim)X(2*zDim)XN covariance matrixces, one for each of
+%           the N initiations.
 %
 %Two point differencing assuming a linear dynamic model without process
 %noise is given in Equations 39 and 40 in [1]. The inclusion of process
@@ -42,7 +41,7 @@ function [x,P]=twoPointDiffInit(T,z,R,q)
 %    Acta Automatica Sinica, 2008.
 %
 %March 2016 AJ Rivera, Naval Rearch Laboratory, Washington D.C.
-%Process noise added May 2016 by David Crouse, Naval Rearch Laboratory,
+%Process noise added May 2016 by David F. Crouse, Naval Rearch Laboratory,
 %Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 

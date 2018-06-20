@@ -6,7 +6,7 @@ classdef CauchyD
 %         related to directional measurements in the presence of glint. The
 %         Cauchy distribution is stable, which means that the sum of two
 %         Cauchy random variables is also a Cauchy random variable.
-%Implemented methods are: PDF, CDF, invCDF, rand
+%Implemented methods are: PDF, CDF, invCDF, rand, entropy
 %
 %REFERENCES:
 %[1] U. Nickel, "Angular superresolution with phased array radar: A review
@@ -161,6 +161,31 @@ function x=rand(N,mu,alphaVal)
     U=rand(dims);
     x=CauchyD.invCDF(U,mu,alphaVal);
 end
+
+function entropyVal=entropy(alphaVal)
+%%ENTROPY Obtain the differential entropy of the Cauchy distribution given
+%         in nats. The differential entropy of a continuous distribution is
+%         entropy=-int_x p(x)*log(p(x))  dx where the integral is over all
+%         values of x. Units of nats mean that the natural logarithm is
+%         used in the definition. Unlike the Shannon entropy for discrete
+%         variables, the differential entropy of continuous variables can
+%         be both positive and negative.
+%
+%INPUTS: alphaVal The scale parameter of the distribution.
+%
+%OUTPUTS: entropyVal The value of the differential entropy in nats.
+%
+%Differential entropy is defined in Chapter 8 of [1].
+%
+%REFERENCES:
+%[1] T. M. Cover and J. A. Thomas, Elements of Information Theory, 2nd ed.
+%    Hoboken, NJ: Wiley-Interscience, 2006.
+%
+%April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+    
+    entropyVal=log(4*pi*alphaVal);
+end
+
 end
 end
 

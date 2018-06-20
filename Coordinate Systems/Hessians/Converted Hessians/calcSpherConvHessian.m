@@ -32,8 +32,8 @@ function H=calcSpherConvHessian(zSpher,systemType,useHalfRange,lTx,lRx,M)
 %           type of spherical coordinate system), so that the range
 %           reported is a one-way range (or just half a bistatic range).
 %           The default if this parameter is not provided is false if lTx
-%           and is provided and true if it is are omitted (monostatic).
-%           If no range values are provided, an empty matrix can be passed.
+%           is provided and true if it is are omitted (monostatic). If no
+%           range values are provided, an empty matrix can be passed.
 %       lTx The 3X1 [x;y;z] location vector of the transmitter in global
 %           Cartesian coordinates. If this parameter is omitted or an
 %           empty matrix is passed, then the transmitter is assumed to be

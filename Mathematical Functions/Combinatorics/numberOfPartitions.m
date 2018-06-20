@@ -25,10 +25,10 @@ function numPart=numberOfPartitions(n,returnAll)
 %7.2.1.4 of [1]. The recursion is also mentioned in [2]. However, as n gets
 %larger, the recursion suffers from a loss of precision that can lead to
 %significant inaccuracy at higher values of n. For example, at n=2000, the
-%result is about 265 times too large. Thus, for n>250, the algorithm given
-%in the first half of the RANPAR algorithm of Chapter 10 of [3] is used.
-%That algorithm is slower, when implemented in Matlab, but is much more
-%robust to finite precision errors at large values.
+%result is about 265 times too large. Thus, for n>250, an algorithm based
+%on that given in the first half of the RANPAR algorithm of Chapter 10 of
+%[3] is used. That algorithm is slower, when implemented in Matlab, but is
+%much more robust to finite precision errors at large values.
 %
 %The amount of memory used for the computation scales linearly with n,
 %because all past values of p have to be found during the recursion. For
@@ -91,7 +91,7 @@ else
     p(1)=1;
     m=1;
     if(n~=1)
-        for i=m:n;
+        for i=m:n
             iSum=0;
             for d=1:i
                 is=0;

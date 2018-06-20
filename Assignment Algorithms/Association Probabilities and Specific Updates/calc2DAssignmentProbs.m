@@ -14,36 +14,35 @@ function beta=calc2DAssignmentProbs(A,diagAugment)
 %                columns correspond to measurements and the final numRow
 %                columns have missed detection hypotheses.
 %
-%INPUTS:    A  A matrix of positive likelihoods or likelihood ratios (NOT
-%              log-likelihood ratios). If diagAugment=true, then A is a
-%              numTar X  (numMeas+numTar) matrix of all-positive
-%              likelihoods or likelihood ratios for assigning the target
-%              specified by the row to the measurement specified by the
-%              column. Columns > numMeas hold missed-detection likelihoods/
-%              likelihood ratios. Thus, off-diagonal terms for columns >
-%              numMeas should be set to 0 and the diagonal terms set to the
-%              costs of a missed detection for each given target.
-%  diagAugment A boolean variable indicating whether the probabilties
-%              should be found for a general assignment problem or assuming
-%              A ends with a diagonal submatrix of missed detection
-%              probabilities. The default if omitted is false (the general
-%              problem). Setting diagAugment to true changes the shape of
-%              the output. The default if omitted is false. See the
-%              description of the output beta for how this affects the
-%              output.
+%INPUTS: A A matrix of positive likelihoods or likelihood ratios (NOT log-
+%          likelihood ratios). If diagAugment=true, then A is a
+%          numTarX(numMeas+numTar) matrix of all-positive likelihoods or
+%          likelihood ratios for assigning the target specified by the row
+%          to the measurement specified by the column. Columns > numMeas
+%          hold missed-detection likelihoods/ likelihood ratios. Thus, off-
+%          diagonal terms for columns > numMeas should be set to 0 and the
+%          diagonal terms set to the costs of a missed detection for each
+%          given target.
+% diagAugment A boolean variable indicating whether the probabilties
+%          should be found for a general assignment problem or assuming A
+%          ends with a diagonal submatrix of missed detection
+%          probabilities. The default if omitted is false (the general
+%          problem). Setting diagAugment to true changes the shape of the
+%          output. The default if omitted is false. See the description of
+%          the output beta for how this affects the output.
 %
-%OUTPUTS:  beta If diagAugment is omitted or false, then beta has the same
-%               dimensionality as A and hold the probability of assigning
-%               each row to each column in the traditional 2D assignment
-%               problem (Each row must be assigned to at least one column,
-%               each column can be assigned to at most one row, or vice
-%               versa if there are more rows than columns. If diagAugment
-%               is true, then beta is a numTar X (numMeas+1) matrix of
-%               probabilities of assigning the target given by the row to
-%               the measurement given by the column. The final column is a
-%               set of missed detection probabilities. Thus, in this case,
-%               beta has fewer columns than A, because the final numRow
-%               columns are collapsed into one column on return.
+%OUTPUTS: beta If diagAugment is omitted or false, then beta has the same
+%              dimensionality as A and hold the probability of assigning
+%              each row to each column in the traditional 2D assignment
+%              problem (Each row must be assigned to at least one column,
+%              each column can be assigned to at most one row, or vice
+%              versa if there are more rows than columns. If diagAugment
+%              is true, then beta is a numTar X (numMeas+1) matrix of
+%              probabilities of assigning the target given by the row to
+%              the measurement given by the column. The final column is a
+%              set of missed detection probabilities. Thus, in this case,
+%              beta has fewer columns than A, because the final numRow
+%              columns are collapsed into one column on return.
 %
 %The notion of using matrix permanents for evaluating 2D assignment
 %probabilities, with a focus on target-measurement association

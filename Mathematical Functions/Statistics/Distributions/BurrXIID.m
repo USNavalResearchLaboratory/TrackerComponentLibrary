@@ -1,13 +1,13 @@
 classdef BurrXIID
 %%BURRXIID Function to handle scalar Burr type XII distributions. These are
-%       continuous distirbutions for values >=0 that can support wide
+%       continuous distributions for values >=0 that can support wide
 %       ranges of skew and kurtosis values. It has found use in various
 %       econometric applications. The distribution is discussed in [1].
 %Implemented methods are: mean, var, PDF, CDF, invCDF, rand, kthMoment
 %
 %REFERENCES:
 %[1] R. N. Rodriguez, "A guide to the Burr type XII distributions,"
-%    Biometrica, vol. 64, no. 1, pp. 129?134, Apr. 1977.
+%    Biometrica, vol. 64, no. 1, pp. 129-134, Apr. 1977.
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
@@ -43,7 +43,7 @@ function val=mean(c,k,lambda)
 %
 %REFERENCES:
 %[1] R. N. Rodriguez, "A guide to the Burr type XII distributions,"
-%    Biometrica, vol. 64, no. 1, pp. 129?134, Apr. 1977.
+%    Biometrica, vol. 64, no. 1, pp. 129-134, Apr. 1977.
 %
 %March 2017 David F. Crouse, Naval Research Laboratory, Washington D.C. 
     
@@ -84,7 +84,7 @@ function val=var(c,k,lambda)
 %
 %REFERENCES:
 %[1] R. N. Rodriguez, "A guide to the Burr type XII distributions,"
-%    Biometrica, vol. 64, no. 1, pp. 129?134, Apr. 1977.
+%    Biometrica, vol. 64, no. 1, pp. 129-134, Apr. 1977.
 %
 %March 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
@@ -140,7 +140,7 @@ function val=PDF(x,c,k,lambda)
 %
 %REFERENCES:
 %[1] R. N. Rodriguez, "A guide to the Burr type XII distributions,"
-%    Biometrica, vol. 64, no. 1, pp. 129?134, Apr. 1977.
+%    Biometrica, vol. 64, no. 1, pp. 129-134, Apr. 1977.
 %
 %March 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.   
 
@@ -187,7 +187,7 @@ function prob=CDF(x,c,k,lambda)
 %
 %REFERENCES:
 %[1] R. N. Rodriguez, "A guide to the Burr type XII distributions,"
-%    Biometrica, vol. 64, no. 1, pp. 129?134, Apr. 1977.
+%    Biometrica, vol. 64, no. 1, pp. 129-134, Apr. 1977.
 %
 %March 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.   
 
@@ -232,7 +232,7 @@ function x=invCDF(prob,c,k,lambda)
 %
 %REFERENCES:
 %[1] R. N. Rodriguez, "A guide to the Burr type XII distributions,"
-%    Biometrica, vol. 64, no. 1, pp. 129?134, Apr. 1977.
+%    Biometrica, vol. 64, no. 1, pp. 129-134, Apr. 1977.
 %
 %March 2017 David F. Crouse, Naval Research Laboratory, Washington D.C. 
     
@@ -303,7 +303,7 @@ function val=kthMoment(r,c,k,lambda)
 %
 %REFERENCES:
 %[1] R. N. Rodriguez, "A guide to the Burr type XII distributions,"
-%    Biometrica, vol. 64, no. 1, pp. 129?134, Apr. 1977.
+%    Biometrica, vol. 64, no. 1, pp. 129-134, Apr. 1977.
 %
 %March 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.  
     

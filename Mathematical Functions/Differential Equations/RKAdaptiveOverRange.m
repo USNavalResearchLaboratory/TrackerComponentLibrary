@@ -105,7 +105,7 @@ function [xVals,tVals,dxdtVals,exitCode,nextStepSize]=RKAdaptiveOverRange(xStart
 %deal with issues when the true value is close to zero.
 %
 %The requirements for absolute and relative tolerances can be combined such
-%that the asolute tolerance only comes into play when the numbers are
+%that the absolute tolerance only comes into play when the numbers are
 %sufficiently small that the relative tolerance becomes problematic. The
 %two lines
 % normFactor=max(max(abs(xPred),abs(xHatPred)),AbsTol/RelTol);

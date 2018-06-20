@@ -37,7 +37,7 @@ function numSquares=numLatinSquares(n,isReduced)
 %example, but is not used by this function.
 %
 %For n>11, the upper and low bounds given in Ch. 17 of [3] are used. Note
-%that the upper bound is based on van der Waerden?s conjecture, which is
+%that the upper bound is based on van der Waerden's conjecture, which is
 %proven in [4].
 %
 %The values of this function will quickly overflow. For double-precision
@@ -53,7 +53,7 @@ function numSquares=numLatinSquares(n,isReduced)
 %    Discrete Mathematics, vol. 110, no. 1-3, pp. 293-296, 11 Dec. 1992.
 %[3] J. H. van Lint and R. M. Wilson, A Course in Combinatorics. York:
 %    Cambridge University Press, 1992.
-%[4] B. Gyires, "Elementary proof for a van der Waerden?s conjecture and
+%[4] B. Gyires, "Elementary proof for a van der Waerden's conjecture and
 %    related theorems," Computational Mathematics with Applications, vol.
 %    31, no. 10, pp. 7-21, May 1996.
 %

@@ -69,8 +69,8 @@ function [xPredMain,xPredSubsid,k,orders,isFSAL]=RungeKStep(xVal,curT,f,deltaT,f
 %                   (5,2) RK5(4)7FEq1 from Higham and Hall in [9].
 %                   (5,3) RK5(4)7FEq2 from Higham and Hall in [9].
 %                   (5,4) The Cash-Karp RK5(4)6 algorithm of [10].
-%                   (5,5) RK5(4)7FC from Dorman and Prince [7].
-%                   (5,6) RK5(4)7FS from Dorman and Prince [5].
+%                   (5,5) RK5(4)7FC from Dormand and Prince [7].
+%                   (5,6) RK5(4)7FS from Dormand and Prince [5].
 %                   (5,7) RK5(4)6M from Dormand and Prince [5].
 %                   (5,8) Verner's RK5(6)8 procedure of Table 5 in [4].
 %                   (5,9) Fehlberg's RK5(6)8 formula of Table II of [2].
@@ -160,7 +160,7 @@ function [xPredMain,xPredSubsid,k,orders,isFSAL]=RungeKStep(xVal,curT,f,deltaT,f
 %    Runge-Kutta formulae," Journal of Computational and Applied
 %    Mathematics, vol. 15, no. 2, pp. 203-211, Jun. 1986.
 %[8] P. Bogacki and L. F. Shampine, "A 3(2) pair of Runge-Kutta formulas,"
-%    Applied Mathematics Letters, vol. 2, no. 4, pp. 321?325, 1989.
+%    Applied Mathematics Letters, vol. 2, no. 4, pp. 321-325, 1989.
 %[9] D. J. Higham and G. Hall, "Embedded Runge-Kutta formulae with stable
 %    equilibrium states," Journal of Computational and Applied Mathematics,
 %    vol. 29, no. 1, pp. 25-33, Jan. 1990.

@@ -6,7 +6,7 @@
  *                  both terms. The date is broken into two parts to
  *                  provide more bits of precision. It does not matter how
  *                  the date is split.
- *        deltaT    An optional parameter specifying the offset between TT
+ *           deltaT An optional parameter specifying the offset between TT
  *                  and UT1 in seconds. If this parameter is omitted, then
  *                  the value of the function getEOP will be used.
  *

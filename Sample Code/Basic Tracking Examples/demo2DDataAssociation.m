@@ -82,9 +82,6 @@ q0=processNoiseSuggest('PolyKal-ROT',maxJerk,T);
 Q=QGaussMarkov(T,zeros(xDimEst,1),q0,tau,2);
 SQ=chol(Q,'lower');
 F=FGaussMarkov(T,zeros(xDimEst,1),tau,2);%State transition matrix
-%Matrix to extract the Cartesian position components of the state.
-H=[1,0,0,0,0,0;
-   0,1,0,0,0,0];
 
 %The viewing region range. This is important for dealing with the clutter
 %model. The clutter is generated in the coordinate system of the polar

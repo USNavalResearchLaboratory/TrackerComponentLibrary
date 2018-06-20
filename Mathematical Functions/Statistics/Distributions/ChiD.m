@@ -3,19 +3,19 @@ classdef ChiD
 %These distributions arise when taking the square root of the sum of the
 %squares of independent normal random variables.
 %Implemented methods are: mean, var, moments, PDF, CDF, (supports
-%                         noncentral distirbutions) rand
+%                         noncentral distributions) rand, entropy
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 methods(Static)
 
 function val=mean(nu)
-%%MEAN  Obtain the mean of central chi probability distribution.
+%%MEAN Obtain the mean of central chi probability distribution.
 %
-%INPUTS: nu    The number of degrees of freedom of the central chi
-%              distribution. Note that nu>0.
+%INPUTS: nu The number of degrees of freedom of the central chi
+%           distribution. Note that nu>0.
 %
-%OUTPUTS: val  The mean of the central chi distribution.
+%OUTPUTS: val The mean of the central chi distribution.
 %
 %The mean of the central chi distribution is given in [1].
 %
@@ -29,10 +29,10 @@ function val=mean(nu)
 end
 
 function val=var(nu)
-%%VAR   Obtain the variance of the central chi probability distribution.
+%%VAR Obtain the variance of the central chi probability distribution.
 %
-%INPUTS: nu    The number of degrees of freedom of the chi distribution.
-%              Note that nu>0.
+%INPUTS: nu The number of degrees of freedom of the chi distribution. Note
+%           that nu>0.
 %
 %OUTPUTS: val  The variance of the central chi distribution.
 %
@@ -50,10 +50,9 @@ end
 function val=moments(m,nu)
 %%MOMENTS Obtain noncentral moments of the chi distribution.
 %
-%INPUTS:     m The order of the moment m>=0. The zeroth order moment is
-%              just 1.
-%           nu The number of degrees of freedom of the chi distribution.
-%              Note that nu>0.
+%INPUTS: m The order of the moment m>=0. The zeroth order moment is just 1.
+%       nu The number of degrees of freedom of the chi distribution. Note
+%          that nu>0.
 %
 %OUTPUTS: val  The mth-degree noncentral moments of the chi distribution.
 %
@@ -69,16 +68,15 @@ function val=moments(m,nu)
 end
 
 function val=PDF(x,nu)
-%%PDF          Evaluate the central chi probability distribution function
-%              (PDF).
+%%PDF Evaluate the central chi probability distribution function (PDF).
 %
-%INPUTS:   x   The point(s) at which the central chi PDF is to be
-%              evaluated. Note that x>=0 for a nonzero probability.
-%          nu  The number of degrees of freedom of the chi distribution.
-%              Note that nu>0. Numerical precision problems can arise for
-%              very large values of nu.
+%INPUTS: x The point(s) at which the central chi PDF is to be evaluated.
+%          Note that x>=0 for a nonzero probability.
+%       nu The number of degrees of freedom of the chi distribution. Note
+%          that nu>0. Numerical precision problems can arise for very large
+%          values of nu.
 %
-%OUTPUTS:   val The value(s) of the central chi PDF evaluated at x.
+%OUTPUTS: val The value(s) of the central chi PDF evaluated at x.
 %
 %The PDF is given in [1].
 %
@@ -96,15 +94,15 @@ function val=PDF(x,nu)
 end
 
 function prob=CDF(x,nu)
-%%CDF          Evaluate the cumulative distribution function (CDF) of the
-%              central chi distribution at desired points.
+%%CDF Evaluate the cumulative distribution function (CDF) of the central
+%     chi distribution at desired points.
 %
-%INPUTS:    x   The point(s) at which the chi CDF is to be evaluated.
-%           nu  The number of degrees of freedom of the chi-square
-%               distribution. Note that nu>0.
+%INPUTS: x The point(s) at which the chi CDF is to be evaluated.
+%       nu The number of degrees of freedom of the chi-square
+%          distribution. Note that nu>0.
 %
-%OUTPUTS:   prob The value(s) of the CDF of the chi distribution
-%                with nu degrees of freedom evaluated at x.
+%OUTPUTS: prob The value(s) of the CDF of the chi distribution with nu
+%              degrees of freedom evaluated at x.
 %
 %The CDF of the central chi distribution is given in [1]. 
 %
@@ -120,20 +118,17 @@ end
 function vals=rand(N,nu,lambda)
 %%RAND Generate chi distributed random variables with the given parameters.
 %
-%INPUTS:    N      If N is a scalar, then rand returns an NXN matrix of
-%                  random variables. If N=[M,N1] is a two-element  row
-%                  vector, then rand returns an MXN1 matrix of random
-%                  variables.
-%           nu     The number of degrees of freedom of the chi
-%                  distribution. Note that nu>0. If lambda is not zero,
-%                  nu >=1.
-%       lambda     The non-centrality parameter of the distribution. In the
-%                  central chi distribution, this is zero. If this
-%                  parameter is omitted or an empty matrix is passed, then
-%                  0 is used.
+%INPUTS: N If N is a scalar, then rand returns an NXN matrix of random
+%          variables. If N=[M,N1] is a two-element row vector, then rand
+%          returns an MXN1 matrix of random variables.
+%       nu The number of degrees of freedom of the chi distribution. Note
+%          that nu>0. If lambda is not zero, nu >=1.
+%   lambda The non-centrality parameter of the distribution. In the central
+%          chi distribution, this is zero. If this parameter is omitted or
+%          an empty matrix is passed, then 0 is used.
 %
-%OUTPUTS:   vals   A matrix whose dimensions are determined by N of the
-%                  generated chi-squared random variables.
+%OUTPUTS: vals A matrix whose dimensions are determined by N of the
+%              generated chi-squared random variables.
 %
 %A chi distributed random variable is just the square root of a chi-squared
 %random variable. Thus, this function takes the square root of
@@ -169,6 +164,31 @@ function vals=rand(N,nu,lambda)
     end
 
     vals=sqrt(ChiSquareD.rand(dims,nu,lambda));
+end
+
+function entropyVal=entropy(nu)
+%%ENTROPY Obtain the differential entropy of the central chi distribution
+%         given in nats. The differential entropy of a continuous
+%         distribution is entropy=-int_x p(x)*log(p(x))  dx where the
+%         integral is over all values of x. Units of nats mean that the
+%         natural logarithm is used in the definition. Unlike the Shannon
+%         entropy for discrete variables, the differential entropy of
+%         continuous variables can be both positive and negative.
+%
+%INPUTS: nu The number of degrees of freedom of the chi distribution. Note
+%           that nu>0. 
+%
+%OUTPUTS: entropyVal The value of the differential entropy in nats.
+%
+%Differential entropy is defined in Chapter 8 of [1].
+%
+%REFERENCES:
+%[1] T. M. Cover and J. A. Thomas, Elements of Information Theory, 2nd ed.
+%    Hoboken, NJ: Wiley-Interscience, 2006.
+%
+%April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+    
+    entropyVal=gammaln(nu/2)+(1/2)*(nu-log(2)-(nu-1)*psi(nu/2)); 
 end
 end
 end

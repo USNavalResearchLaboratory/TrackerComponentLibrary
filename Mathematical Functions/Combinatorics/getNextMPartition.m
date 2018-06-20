@@ -20,15 +20,15 @@ function a=getNextMPartition(param1,m)
 %            first partition in the series must be a(1)=n-m+1; a(2:m)=1;
 %            Note that n>=m>=2 if a is passed, because a size 1 partition
 %            only has one value (the initial value).
-%         m  This parameter is not passed if the next m-partition in the
+%          m This parameter is not passed if the next m-partition in the
 %            sequence is desired. However, if one wishes to obtain the
 %            first value in the sequence, then m is the positive integer
 %            number of parts into which the integer n is split, n>=m;
 %
-%OUTPUTS: a  The next partition in the series or the empty matrix if the
-%            parition given was the last partition in the series. If the
-%            function was called getNextMPartition(n,m), then a is the
-%            first parition.
+%OUTPUTS: a The next partition in the series or the empty matrix if the
+%           parition given was the last partition in the series. If the
+%           function was called getNextMPartition(n,m), then a is the first
+%           parition.
 %
 %The algorithm is Algorithm H in Chapter 7.2.1.4 of [1].
 %

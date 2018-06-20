@@ -17,7 +17,7 @@ function [xiG,wG,xiK,wK,bounds]=extQuadraturePoints1D(n,algorithm,c1)
 %           particular degree. For high-order polynomials and other
 %           functions, quadrature integration is just an approximation.
 %
-%%INPUTS: n A positive integer such that 2n-1 is the highest degree to
+%%INPUTS: n A positive integer such that 2*n-1 is the highest degree to
 %           which the lower-order quadrature points are accurate. The
 %           lower-order quadrature points consist of n points, the higher-
 %           order ones consists of 2*n+1 points with a polynomial accuracy
@@ -81,6 +81,7 @@ function [xiG,wG,xiK,wK,bounds]=extQuadraturePoints1D(n,algorithm,c1)
 %              appropriate values for the recursive formulation of the
 %              function values in
 %              p_i(x)=(a(i)*x+b(i))*p_{(i-1)}(x)-c(i)*p_{i-2}(x)
+%              where indexation starts at 1 and c(1) is not used.
 %          mu0 The quadrature weights must be scaled by
 %              mu0=integral_lowL^upL w(x) dx. This is that mu0.
 %
@@ -296,7 +297,7 @@ xiG=xiG';
 end
 
 function [a,b]=getKonrodCoeffs(aInit,bInit,n)
-%%GETKRONRODCOEFFS This implements the algorithm fo [1] for a Gauss-Kronrod
+%%GETKRONRODCOEFFS This implements the algorithm of [1] for a Gauss-Kronrod
 %          extension based on the pseudocode given in the paper.
 
 %REFERENCES:

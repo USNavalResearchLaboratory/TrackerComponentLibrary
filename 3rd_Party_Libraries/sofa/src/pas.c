@@ -33,9 +33,9 @@ double iauPas(double al, double ap, double bl, double bp)
 **
 **  This revision:  2013 June 18
 **
-**  SOFA release 2017-04-20
+**  SOFA release 2018-01-30
 **
-**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 */
 {
    double dl, x, y, pa;
@@ -50,7 +50,7 @@ double iauPas(double al, double ap, double bl, double bp)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2017
+**  Copyright (C) 2018
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

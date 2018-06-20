@@ -344,7 +344,6 @@ function [x,y,gain,p,pf]=FRAuction(A,epsilon)
 %October 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    %David Crouse 2012.
     %This is the basic forward-reverse auction algorithm. It is assumed
     %that A is an nXn matrix of positive, real numbers. The returned values
     %are the row assignments, the column assignments, and the gain.

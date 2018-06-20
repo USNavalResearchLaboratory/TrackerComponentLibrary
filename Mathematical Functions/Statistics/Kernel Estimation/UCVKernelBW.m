@@ -44,14 +44,7 @@ function [H,costVal,exitCode]=UCVKernelBW(xi,preProcAlg,HInit,epsilon,deltaTestD
 %             matrix is passed is  as given in quasiNetwonBFGS.
 %lineSearchParams An optional structure whose members specify
 %             tolerances for the line search. The parameters are described
-%             as in the lineSearch function. Possible members of the
-%             structure are algorithm, fTol, wolfeTol, xTol, minStep,
-%             maxStep, maxIter. The C and l1NormRange parameters are not
-%             used. If lineSearchParams is omitted or an empty matrix is
-%             passed, then the default values as described in the
-%             lineSearch function are used. If any member of this structure
-%             is omitted or is assigned an empty matrix, then the default 
-%             value will be used.
+%             as in the lineSearch function.
 %      scaleD A boolean parameter indicating whether the inverse Hessian
 %             estimate used in the quasi-Newton method should be scaled as
 %             in Equation 1.201 of Section 1.7 of [3]. The default if
@@ -72,17 +65,8 @@ function [H,costVal,exitCode]=UCVKernelBW(xi,preProcAlg,HInit,epsilon,deltaTestD
 %           1 The algorithm terminated successfully based on the accuracy
 %             criterion.
 %          -1 The maximum number of overall iterations was reached.
-%       -1023 A logical error in the line search code occurred.
-%       -1001 A finite precision error occurred or no line-search step
-%             satisfies the sufficient decrease and curvature conditions.
-%       -1000 The line-search step size became less than minStep.
-%        -999 The line-search step size became larger than maxStep.
-%        -998 The maximum number of line search iterations was reached.
-%        -996 The relative width of the interval of uncertainty in the line
-%             search algorithm is at most xTol.
-%        -995 A negative line-search step occurred.
-%        -994 The current search direction increases the objective
-%             function.
+%           Other negative values correspond to a failure in lineSearch and
+%           correspond to the exitCode returned by the lineSearch function.
 %
 %This function implements the multivariate unbiased cross validation
 %algorithm of [1] using a quasi-Newton method.

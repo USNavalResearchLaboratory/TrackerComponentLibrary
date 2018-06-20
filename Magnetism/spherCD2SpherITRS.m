@@ -17,7 +17,7 @@ function zSpher=spherCD2SpherITRS(zCD,param1,param2,S11)
 %            format [azimuth; elevation]. Azimuth is measured
 %            counterclockwise from the x-axis in the x-y plane. Elevation
 %            is measured up from the x-y plane (towards the z-axis).
-%param1,param2,S11 These optional parameters specify the magnetic field
+% param1,param2,S11 These optional parameters specify the magnetic field
 %               parameters from which the direction of the CD pole is
 %               derived. These parameters are implied set based on how the
 %               function is called:

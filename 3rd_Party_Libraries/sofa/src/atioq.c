@@ -102,9 +102,9 @@ void iauAtioq(double ri, double di, iauASTROM *astrom,
 **
 **  This revision:   2016 March 9
 **
-**  SOFA release 2017-04-20
+**  SOFA release 2018-01-30
 **
-**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 */
 {
 /* Minimum cos(alt) and sin(alt) for refraction purposes */
@@ -188,7 +188,7 @@ void iauAtioq(double ri, double di, iauASTROM *astrom,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2017
+**  Copyright (C) 2018
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

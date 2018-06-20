@@ -1,7 +1,7 @@
 function [xList,uList]=RKAdaptiveCurvedAtTimes(xInit,uInit,times,aDyn,uFunc,initStepSize,order,solutionChoice,RelTol,AbsTol,maxSteps)
 %%RKADAPTIVECURVEDATTIMES Perform multiple steps of Runge-Kutta propagation
 %                     using an adaptive step size given that the axes of
-%                     the local coordinate system change at the target
+%                     the local coordinate system change as the target
 %                     moves. The position components of the state are kept
 %                     in the global coordinate system whereas the rest of
 %                     the components are kept in the local coordinate
@@ -18,7 +18,7 @@ function [xList,uList]=RKAdaptiveCurvedAtTimes(xInit,uInit,times,aDyn,uFunc,init
 %              equation, as is the case when moving along geodesics on the
 %              surface of the Earth, then this is a 3X 3 matrix of vectors
 %              specifying the local coordinate axes. uInit(:,i) coresponds
-%              to the ith position component in xInite. That is xInit(i)
+%              to the ith position component in xInit. That is xInit(i)
 %              for i from 1 to 3. On the other hand, if the basis vectors
 %              are deterministically known at all locations as a function
 %              of x and t, then an empty matrix should be passed for uInit.

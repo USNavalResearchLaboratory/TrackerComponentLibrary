@@ -46,8 +46,8 @@ classdef SwerlingISqLawD
 % A=sqrt(Rp);%Equation 9.4-8, the amplitude of the signal
 % sample=sum(abs(ComplexGaussianD.rand(N,A,2)).^2);
 %One will often see the Swerling I model referred to as a Rayleigh model.
-%This is because the square root fo the exponential distirbution is the
-%Rayleigh distirbution. In such an instance, folks are considering the
+%This is because the square root fo the exponential distribution is the
+%Rayleigh distribution. In such an instance, folks are considering the
 %amplitude value and not the SNR power.
 %
 %REFERENCES:

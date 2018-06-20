@@ -49,7 +49,7 @@ function [rootVals,exitCode]=polyRootsMultiDim(polyCoeffMats,maxDegIncreases,use
 %OUTPUTS: rootVals An nXnumSol matrix of the numSol zeros of the polynomial
 %                  system found, or an empty matrix if exitCode does not
 %                  equal zero.
-%         exitCode A parameter indicating how the algorithm termianted.
+%         exitCode A parameter indicating how the algorithm terminated.
 %                  Possible values:
 %                  0 The algorithm was a success; the roots were found.
 %                  1 The maximum number of degree increases elapsed.

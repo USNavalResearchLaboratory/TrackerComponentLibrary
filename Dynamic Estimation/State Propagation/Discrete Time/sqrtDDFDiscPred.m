@@ -4,27 +4,26 @@ function [xPred,SPred]=sqrtDDFDiscPred(xPrev,SPrev,f,SQ,algorithm)
 %               first or second order divided difference filter (DDF) with
 %               additive process noise.
 %
-%INPUTS:    xPrev   The xDim X 1 state estimate at the previous time-step.
-%           SPrev   The xDim X xDim lower-triangular square root of the 
-%                   state covariance matrix at the previous time-step.
-%           f       A function handle for the state transition function
-%                   that takes the state as its parameter.
-%           SQ      The xDimX xDim lower-triangular square root of the 
-%                   process noise covariance matrix.
-%         algorithm An optional parameter specifying which algorithm should
-%                   be used for the prediction. Possible values are:
-%                   0 Use the CDF of [3]. This is actually the same as a
-%                     first-order DDF of [1] and [2], but with a different
-%                     step size for the finite differences.
-%                   1 (the default if omitted or an empty matrix is passed)
-%                     Use the first-order divided difference filter of [1]
-%                     and [2].
-%                   2 Use the second-order divided difference filter of [1]
-%                     and [2].
+%INPUTS: xPrev The xDim X 1 state estimate at the previous time-step.
+%        SPrev The xDim X xDim lower-triangular square root of the state
+%              covariance matrix at the previous time-step.
+%            f A function handle for the state transition function that
+%              takes the state as its parameter.
+%           SQ The xDimX xDim lower-triangular square root of the process
+%              noise covariance matrix.
+%    algorithm An optional parameter specifying which algorithm should be
+%              used for the prediction. Possible values are:
+%              0 Use the CDF of [3]. This is actually the same as a first-
+%                order DDF of [1] and [2], but with a different step size
+%                for the finite differences.
+%             1 (The default if omitted or an empty matrix is passed) Use
+%               the first-order divided difference filter of [1] and [2].
+%             2 Use the second-order divided difference filter of [1] and
+%               [2].
 %
-%OUTPUTS:   xPred   The xDim X 1 predicted state estimate.
-%           SPred   The xDim X xDim lower-triangular square root of the
-%                   predicted state covariance estimate.
+%OUTPUTS: xPred The xDim X 1 predicted state estimate.
+%         SPred The xDim X xDim lower-triangular square root of the
+%               predicted state covariance estimate.
 %
 %The divided difference filters are implemented as described in [1] and
 %[2], where they are only derived for non-additive noise and the square

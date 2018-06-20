@@ -32,13 +32,12 @@ function [xk,objfunvals,xkk] = solveLASSOProblem(A,b,alpha,varargin)
 %               'init'             vector         n x 1 vector for warm
 %                                                 start.
 %
-%OUTPUTS:         xk The nX1 vector solution to the optimization problem.
-%         objfunvals If verbose mode is activated, then this will hold the
-%                    value of the objective function at every iteration. in
-%                    a numIterX1 vector. Otherwise, this is an empty
-%                    matrix.
-%                xkk An nXnumIter matrix holding the value of the estimate
-%                    at each step.
+%OUTPUTS: xk The nX1 vector solution to the optimization problem.
+% objfunvals If verbose mode is activated, then this will hold the value of
+%            the objective function at every iteration. in a numIterX1
+%            vector. Otherwise, this is an empty matrix.
+%        xkk An nXnumIter matrix holding the value of the estimate at each
+%            step.
 %
 %The algorithm implemented is that of [1]. The algorithm typically needs a
 %very large number of iterations to converge. However, the number of
@@ -46,7 +45,7 @@ function [xk,objfunvals,xkk] = solveLASSOProblem(A,b,alpha,varargin)
 %making the solver good for large problems.
 %
 %EXAMPLE:
-%Trivial example is
+%A trivial example is
 % A=[10,  4,   -3, 6;
 %     0,  -18, 24, -10;
 %     5,  7,   3,  12];
@@ -144,7 +143,7 @@ function [xk,objfunvals,xkk] = solveLASSOProblem(A,b,alpha,varargin)
     end  
     
     %Setup reporting functions if quiet mode is disabled
-    if opts.verbose
+    if(opts.verbose)
         fprintf('\n*******************************************\n');
         fprintf('* FISTA: SPARSE VECTOR RECONSTRUCTION \n');
         if(is_complex)
@@ -223,7 +222,7 @@ function [xk,objfunvals,xkk] = solveLASSOProblem(A,b,alpha,varargin)
             waitbar(nn/opts.maxiter,h,['Current precision: ',num2str(prec)]);
         end
     end
-    if ~has_converged
+    if(~has_converged)
         warning('MATLAB:no_convergence','method failed to converge within given time steps');
     end
     
@@ -268,7 +267,6 @@ function z = shrink(x,mu)
     z = sign(x).*max(abs(x)-mu,0);
 end
 
-
 % Experimental stopping criteria particlarly for proximal gradient methods.
 % It is not clear if this can help issues do non-strict convexivity of the
 % data fidelity term
@@ -305,7 +303,6 @@ end
 % returns the objective function value of the unconstrained l2-l1 problem
 function val = ObjFunc(x,A,b,alpha)
    val = .5*norm(A*x - b).^2 + alpha*norm(x,1);
-
 end
 
 % A straight-forward line search method for first order methods

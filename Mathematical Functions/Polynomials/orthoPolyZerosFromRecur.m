@@ -6,21 +6,30 @@ function [xi,w]=orthoPolyZerosFromRecur(n,a,b,c,mu0)
 %              zero otherwise. All such polynomials can be written in
 %              recursive form as
 %              p_i(x)=(a(i)*x+b(i))*p_{(i-1)}(x)-c(i)*p_{i-2}(x)
-%              This function finds the zeros of the nth polynomial given
-%              expressions for the recursion of the polynomials. Parameters
-%              for common orthogonal polynomials are given below. The zeros
-%              of such orthonomal polynomials can be used as quadrature
-%              points for 1D integration from lowL to upL of all
-%              polynomials up to order 2*n-1 times the weighting function
-%              w(x). The associated quadrature weights for such integrals 
-%              can also be returned by this function if two outputs are
-%              requested.
+%              starting with p_{-1}(x)=0 and p_0(x)=1. This function finds
+%              the zeros of the nth polynomial given expressions for the
+%              recursion of the polynomials. Parameters for common
+%              orthogonal polynomials are given below. The zeros of such
+%              orthonomal polynomials can be used as quadrature points for
+%              1D integration from lowL to upL of all polynomials up to
+%              order 2*n-1 times the weighting function w(x). The
+%              associated quadrature weights for such integrals can also be
+%              returned by this function if two outputs are requested.
 %
 %INPUTS: n The order of the polynomial whose zeros are desired.
-%    a,b,c Function handles such that a(i), b(i) and c(i) give the
-%          appropriate values for the recursive formulation of the function
-%          values in
+%    a,b,c There are two formulations for the input. In the first one,
+%          a,b, and c are vectors or function handles such that a(i), b(i),
+%          and c(i) give the appropriate values for the recursive
+%          formulation of the function values in
 %          p_i(x)=(a(i)*x+b(i))*p_{(i-1)}(x)-c(i)*p_{i-2}(x)
+%          where the values of i used in a and b go from 1 to n, and
+%          indices used in  c(i) go from 2 to n. c(1) is not used.
+%          Alternatively, if c is omitted or an empty matris is passed,
+%          then a and b are assumed to be coefficients in the three-term
+%          expansion of the form
+%          b(i)*p_i(x)=(x-a(i))*p_{(i-1)}(x)-b(i-1)*p_{i-2}(x)
+%          and can be vectors or function handles. Indices of a run from 1
+%          to n and b run from 1 to (n-1).
 %      mu0 This parameter is only needed if the second output of this
 %          function is desired. The quadrature weights must be scaled by
 %          mu0=integral_lowL^upL w(x) dx. This is that mu0.
@@ -102,28 +111,38 @@ function [xi,w]=orthoPolyZerosFromRecur(n,a,b,c,mu0)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 J=zeros(n,n);
-%The first row
-%Rows 1 through n-1
-for i=1:(n-1)
+if(nargin<4||isempty(c))
+    %If alpha and beta are directly given as a and b.
+    for i=1:(n-1)
+        J(i,i)=a(i);
+        J(i,i+1)=b(i);
+        J(i+1,i)=b(i);
+    end
+    J(n,n)=a(n);
+else
+    %The first row
+    %Rows 1 through n-1
+    for i=1:(n-1)
+        bi=b(i);
+        ai=a(i);
+        aiNext=a(i+1);
+        ciNext=c(i+1);
+
+        %From Equation 2.2 in [1].
+        alpha=-bi/ai;
+        beta=sqrt(ciNext/(ai*aiNext));
+
+        J(i,i)=alpha;
+        J(i,i+1)=beta;
+        J(i+1,i)=beta;
+    end
+    %The final row
+    i=n;
     bi=b(i);
     ai=a(i);
-    aiNext=a(i+1);
-    ciNext=c(i+1);
-    
-    %From Equation 2.2
     alpha=-bi/ai;
-    beta=sqrt(ciNext/(ai*aiNext));
-    
     J(i,i)=alpha;
-    J(i,i+1)=beta;
-    J(i+1,i)=beta;
 end
-%The final row
-i=n;
-bi=b(i);
-ai=a(i);
-alpha=-bi/ai;
-J(i,i)=alpha;
 
 [V,D]=eig(J);
 

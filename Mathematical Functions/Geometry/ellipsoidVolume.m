@@ -7,25 +7,25 @@ function V=ellipsoidVolume(A,gammaVal,useAInv)
 %              ellipsoid is a probability region, where gammaVal determines
 %              what amount of probability is in the region. 
 %
-%INPUTS: A  A numDimXnumDimXN set of N positive definite matrices that
-%           specify the size and shape of the ellipses or ellipsoids, where
-%           a point zp is on the ith ellipse/ ellipsoid if
-%           (zp-z(:,i))'*A(:,:,i)*(zp-z(:,i))=gammaVal. Alternatively, if
-%           the input useAInv values are passed, it is assumed that this
-%           parameter is actually the inverse of the desired matrix, so the
-%           region is (zp-z(:,i))'*inv(A(:,:,i))*(zp-z(:,i))=gammaVal
-%  gammaVal A parameter specifying the size of the ellipse/ ellipsoid.
-%           gammaVal must be positive. To specify a probability region of
-%           probReg as is commonly used in tracking where A is a Gaussian
-%           covariance matrix, one can get gammaVal from
-%           ChiSquareD.invCDF(probReg,size(A,1)) The default if this
-%           parameter is omitted or an empty matrix is passed is 1.
-%   useAInv This parameter indicates whether A should be inverted, as
-%           described above. The default if this parameter is omitted or an
-%           empty matrix is passed is false.
+%INPUTS: A A numDimXnumDimXN set of N positive definite matrices that
+%          specify the size and shape of the ellipses or ellipsoids, where
+%          a point zp is on the ith ellipse/ ellipsoid if
+%          (zp-z(:,i))'*A(:,:,i)*(zp-z(:,i))=gammaVal. Alternatively, if
+%          the input useAInv values are passed, it is assumed that this
+%          parameter is actually the inverse of the desired matrix, so the
+%          region is (zp-z(:,i))'*inv(A(:,:,i))*(zp-z(:,i))=gammaVal
+% gammaVal A parameter specifying the size of the ellipse/ ellipsoid.
+%          gammaVal must be positive. To specify a probability region of
+%          probReg as is commonly used in tracking where A is a Gaussian
+%          covariance matrix, one can get gammaVal from
+%          ChiSquareD.invCDF(probReg,size(A,1)) The default if this
+%          parameter is omitted or an empty matrix is passed is 1.
+%  useAInv This parameter indicates whether A should be inverted, as
+%          described above. The default if this parameter is omitted or an
+%          empty matrix is passed is false.
 %
-%OUTPUTS:    V The NX1 set of scalar volumes of the gating regions
-%              specified by the  A and gammaVal values.
+%OUTPUTS: V The NX1 set of scalar volumes of the gating regions specified
+%           by the A and gammaVal values.
 %
 %The formula for the volume of an ellipsoidal gating region is from Chapter
 %2.3.2 of [1].
@@ -42,22 +42,22 @@ if(nargin<3||isempty(useAInv))
 end
 
 if(nargin<2||isempty(gammaVal))
-   gammaVal=1; 
+    gammaVal=1; 
 end
 
 numOut=size(A,3);
 
 n=size(A,1);
+cn=(pi^(n/2)/gamma(n/2+1));
 
 V=zeros(numOut,1);
-
 if(useAInv==false)
     for curPoint=1:numOut
-        V(curPoint)=(pi^(n/2)/gamma(n/2+1))*sqrt(1/det(1/gammaVal*A(:,:,curPoint)));
+        V(curPoint)=cn*sqrt(1/det(1/gammaVal*A(:,:,curPoint)));
     end
 else
     for curPoint=1:numOut
-        V(curPoint)=(pi^(n/2)/gamma(n/2+1))*sqrt(det(gammaVal*A(:,:,curPoint)));
+        V(curPoint)=cn*sqrt(det(gammaVal*A(:,:,curPoint)));
     end
 end
 

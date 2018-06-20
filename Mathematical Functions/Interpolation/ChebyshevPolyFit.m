@@ -1,13 +1,13 @@
 function a=ChebyshevPolyFit(f,n,tauStart,tauEnd)
-%%CHEBYSHEVPOLYFIT  Get weights to fit a series of Chebyshev polynomials of
-%                   the first kind to a function f over the range of values
-%                   tauStart,tauEnd. The coefficients can be used with the
-%                   function ChebyshevPolySynth to interpolate the
-%                   function. Fitted Chebyshev polynomials are a good
-%                   approximation to a minimax polynomial fit. In such an
-%                   instance, one generally chooses n notably larger than
-%                   desired, and then truncates the resulting coefficient
-%                   set.
+%%CHEBYSHEVPOLYFIT Get weights to fit a series of Chebyshev polynomials of
+%                  the first kind to a function f over the range of values
+%                  tauStart,tauEnd. The coefficients can be used with the
+%                  function ChebyshevPolySynth to interpolate the
+%                  function. Fitted Chebyshev polynomials are a good
+%                  approximation to a minimax polynomial fit. In such an
+%                  instance, one generally chooses n notably larger than
+%                  desired, and then truncates the resulting coefficient
+%                  set.
 %
 %INPUTS: f A function handle to a scalar function that can be passed
 %          vectors of points at which it is to be evaluated for

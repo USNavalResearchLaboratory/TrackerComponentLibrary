@@ -3,20 +3,20 @@ function [yPred, PInvPred]=infoFilterDiscPredRev(yPrev,PInvPrev,F,Q,u)
 %                      with the linear information filter running backwards
 %                      in time with additive process noise.
 %
-%INPUTS: yPrev      The information state at the next time-step. The
-%                   information state is the inverse covariance matrix
-%                   times the target state.
-%        PInvPrev   The inverse of the state covariance matrix at the
-%                   next time-step.
-%        F          An invertible xDim X xDim state transition matrix.
-%        Q          The xDimX xDim process noise covariance matrix.
-%        u          An optional xDim X1 vector that is the control input.
-%                   If omitted, no control input is used.
+%INPUTS: yPrev The information state at the next time-step. The information
+%              state is the inverse covariance matrix times the target
+%              state.
+%     PInvPrev The inverse of the state covariance matrix at the next time-
+%              step.
+%            F An invertible xDim X xDim state transition matrix.
+%            Q The xDimX xDim process noise covariance matrix.
+%            u An optional xDim X1 vector that is the control input. If
+%              omitted, no control input is used.
 %
-%OUTPUTS:   yPred    The xDim X 1 predicted information state vector when
-%                    filtering backwards in time.
-%           PInvPred The predicted xDim X xDim inverse state covariance
-%                    matrix when filtering backwards in time.
+%OUTPUTS: yPred The xDim X 1 predicted information state vector when
+%               filtering backwards in time.
+%      PInvPred The predicted xDim X xDim inverse state covariance matrix
+%               when filtering backwards in time.
 %
 %The implementation of the reverse-time prediction step given here is from
 %the flow chart given in [1]. The matrix G in the paper is omitted, since

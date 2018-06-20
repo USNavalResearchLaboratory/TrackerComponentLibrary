@@ -3,26 +3,20 @@
 *                 changes from 0 to 1 or back each step. This function can
 *                 be used to get all subsets of an n-set.
 *
-*INPUTS:  n    The length of the code (const size_t).
-*         code A pointer to a length-n array holding the previous code that
-*              should be transformed to the next code value. This
-*              is modified on return. It is a template, so different
-*              types can be passed.
-*        nCard The number of ones in code, implicitly passed. This value
-*              is modified on return (size_t&)
-*            j A value, implicitly passed, that will be updated to hold
-*              the index of the entry in code that was modified.
+*INPUTS: n The length of the code (const size_t).
+*     code A pointer to a length-n array holding the previous code that
+*          should be transformed to the next code value. This is modified
+*          on return. It is a template, so different types can be passed.
+*    nCard The number of ones in code, implicitly passed. This value is
+*          modified on return (size_t&)
+*        j A value, implicitly passed, that will be updated to hold the
+*          index of the entry in code that was modified.
 *
 *RETURN VALUE: The boolean return value is 1 if the final combination was
 *              returned and 0 otherwise.
 *
-*The algorithm is NEXSUB taken from Chapter 1 of
-*A. Nijenhuis and H. S. Wilf, Combinatorial Algorithms for Computers
-*and Calculators, 2nd ed. New York: Academic press, 1978.
-*Gray codes are also discussed in Chapter 7.2.1.1 of
-*D. E. Knuth, The Art of Computer Programming. Vol. 4, Fascicle 2:
-*Generating all Tuples and Permutations, Upper Saddle River, NJ:
-*Addison-Wesley, 2009.
+*The algorithm is based on NEXSUB in Chapter 1 of [1]. Gray codes are
+*also discussed in Chapter 7.2.1.1 of [2].
 *
 *The function checks against n so that if an invalid value of nCard is
 *passed, it will not read/ write past the end of the array, even though it
@@ -30,6 +24,13 @@
 *
 *Because this is a template function, the entire function has to be
 *defined in the header file.
+*
+*REFERENCES:
+*[1] A. Nijenhuis and H. S. Wilf, Combinatorial Algorithms for Computers
+*    and Calculators, 2nd ed. New York: Academic press, 1978.
+*[2] D. E. Knuth, The Art of Computer Programming. Vol. 4, Fascicle 2:
+*    Generating all Tuples and Permutations, Upper Saddle River, NJ:
+*    Addison-Wesley, 2009.
 *
 *October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 */

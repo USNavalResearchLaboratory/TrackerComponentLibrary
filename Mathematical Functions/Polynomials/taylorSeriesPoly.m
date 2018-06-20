@@ -31,7 +31,7 @@ function polyMat=taylorSeriesPoly(a,multiVarDerivs,order)
 %A (truncated) Taylor series is an approximation to a continuous,
 %differentiable function in the neighborhood of the point a based on the
 %derivatives of the function. Expressions for multivariate Taylor series
-%expansions above order 2 are seldom given explicitely. However, one can
+%expansions above order 2 are seldom given explicitly. However, one can
 %find expressions for general multivariate Taylor series expansions in
 %Chapter 2.4 of [1].
 %

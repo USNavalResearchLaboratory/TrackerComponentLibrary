@@ -224,6 +224,8 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+//For count
+#include <algorithm>
 
 //Multiple a value in degrees by deg2Rad to get its value in radians.
 const double deg2Rad=0.0174532925199432957692369076849;

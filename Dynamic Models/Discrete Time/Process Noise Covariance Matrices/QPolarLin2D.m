@@ -8,33 +8,33 @@ function Q=QPolarLin2D(T,x,qTheta,param4,type)
 %             be obtained from a linearization or from a second-order weak
 %             Itô-Taylor expansion.
 %
-%INPUTS: T  The time-duration of the propagation interval in seconds.
-%        x  The 4X1 or 5X1 target state vector in 2D space in the order of
-%           [2D position;direction angle;speed; speed derivative] where the
-%           heading angle is measured in radians counterclockwise from the
-%           x axis and the speed derivative is akin to an acceleration. If
-%           a speed derivative is not given (is assumed zero), then x is
-%           4X1.
-%    qTheta The power spectral density of the process noise corrupting the
-%           angular component of the state, having units of radians^2/s.
-%    param4 Depending on the dimensionality of x, this is either the power
-%           spectral density of the process noise corrupting the speed
-%           (when x is 4X1), having units of m^2/s^3, or this is the power
-%           spectral density of the linear acceleration, having units of
-%           m^2/s^3.
-%     type  An optional parameter specifying the type of linearization used
-%           to obtain the process noise covariance matrix. This can be
-%           either
-%           'Discretized' (The default if omitted), treat the nonlinear
-%                        terms in the drift matrix as constant and solve
-%                        for the state transition equation. Note that Q is
-%                        always singular when using the discretized model.
-%           'ItoTaylorO2Weak' Use an order 2.0 weak Itô Taylor expansion.
-%                        This provides better results than the simple
-%                        linear expansion. Note that Q is singular when
-%                        using the weak Ito-Taylor expansion with linear
-%                        acceleration in the model. Q is (generally) not
-%                        singular when a linear acceleration is not used.
+%INPUTS: T The time-duration of the propagation interval in seconds.
+%        x The 4X1 or 5X1 target state vector in 2D space in the order of
+%          [2D position;direction angle;speed; speed derivative] where the
+%          heading angle is measured in radians counterclockwise from the
+%          x axis and the speed derivative is akin to an acceleration. If
+%          a speed derivative is not given (is assumed zero), then x is
+%          4X1.
+%   qTheta The power spectral density of the process noise corrupting the
+%          angular component of the state, having units of radians^2/s.
+%   param4 Depending on the dimensionality of x, this is either the power
+%          spectral density of the process noise corrupting the speed
+%          (when x is 4X1), having units of m^2/s^3, or this is the power
+%          spectral density of the linear acceleration, having units of
+%          m^2/s^3.
+%     type An optional parameter specifying the type of linearization used
+%          to obtain the process noise covariance matrix. This can be
+%          either
+%          'Discretized' (The default if omitted), treat the nonlinear
+%                       terms in the drift matrix as constant and solve
+%                       for the state transition equation. Note that Q is
+%                       always singular when using the discretized model.
+%          'ItoTaylorO2Weak' Use an order 2.0 weak Itô Taylor expansion.
+%                       This provides better results than the simple
+%                       linear expansion. Note that Q is singular when
+%                       using the weak Ito-Taylor expansion with linear
+%                       acceleration in the model. Q is (generally) not
+%                       singular when a linear acceleration is not used.
 %
 %OUTPUT: Q The process noise covariance matrix under a linear dynamic
 %          model, possibly with linear acceleration.
@@ -56,7 +56,7 @@ function Q=QPolarLin2D(T,x,qTheta,param4,type)
 %REFERENCES:
 %[1] D. Laneuville, "Polar versus Cartesian velocity models for maneuvering
 %    target tracking with IMM," in Proceedings of the IEEE Aerospace
-%    Conference, Big Sky, MT, 2?9 Mar. 2013.
+%    Conference, Big Sky, MT, 2-9 Mar. 2013.
 %[2] J. L. Gertz, "Multisensor surveillance for improved aircraft
 %    tracking," The Lincoln Laboratory Journal, vol. 2, no. 3, pp. 381-396,
 %    1989.

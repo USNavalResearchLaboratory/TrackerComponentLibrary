@@ -9,14 +9,14 @@ function [azimuth, dist]=indirectRhumbProblem(latLonStart,latLonEnd,height,useHe
 %
 %INPUTS:latLonStart A 2X1 vector of the starting ellipsoidal latitude
 %                   (North) and longitude (East) in radians.
-%        latLonEnd  A 2X1 vector of the ending ellipsoidal latitude
+%         latLonEnd A 2X1 vector of the ending ellipsoidal latitude
 %                   (North) and longitude (East) in radians.
-%         height    The height above the reference ellipsoid at which the
+%            height The height above the reference ellipsoid at which the
 %                   trajectory should be determined. This changes the
 %                   distance traveled, but not the azimuthal angle of
 %                   departure. If this parameter is omitted, then the
 %                   default value of 0 is used.
-%  useHeightApprox  If true, and the height is not zero, then an
+%   useHeightApprox If true, and the height is not zero, then an
 %                   approximation is made for how dist scales with
 %                   altitude. Specifically, an equiatorial trajectory will
 %                   scale as (a+height)/a. Thus, this scaling factor is
@@ -26,13 +26,13 @@ function [azimuth, dist]=indirectRhumbProblem(latLonStart,latLonEnd,height,useHe
 %                   true. The difference made when useHeightApprox=false is
 %                   can generally be assumed to be less than 80m. This
 %                   parameter is ignored if height=0.
-%         a         The semi-major axis of the reference ellipsoid. If
+%                 a The semi-major axis of the reference ellipsoid. If
 %                   this argument is omitted, the value in
 %                   Constants.WGS84SemiMajorAxis is used.
-%         f         The flattening factor of the reference ellipsoid. If
+%                 f The flattening factor of the reference ellipsoid. If
 %                   this argument is omitted, the value in
 %                   Constants.WGS84Flattening is used.
-%   numSteps4Circ   If height!=0 then an algorithm propagating a state
+%     numSteps4Circ If height!=0 then an algorithm propagating a state
 %                   in ECEF coordinates around the curved Earth is used to
 %                   solve the direct geodetic problem as a step in solving
 %                   the indirect geodetic problem. This parameter
@@ -45,12 +45,12 @@ function [azimuth, dist]=indirectRhumbProblem(latLonStart,latLonEnd,height,useHe
 %                   steps will speed up the function. This parameter is not
 %                   used if height=0.
 %
-%OUTPUTS: azimuth  The constant heading in radians East of North that one
-%                  must travel to go on a constant-heading course from
-%                  latLonStart to latLonEnd. The azimuth value will not be
-%                  accurate if latLonStart is at a geographic pole.
-%         dist     The distance that one must travel on a constant-heading
-%                  course to go from latLonStart to latLonEnd.
+%OUTPUTS: azimuth The constant heading in radians East of North that one
+%                 must travel to go on a constant-heading course from
+%                 latLonStart to latLonEnd. The azimuth value will not be
+%                 accurate if latLonStart is at a geographic pole.
+%            dist The distance that one must travel on a constant-heading
+%                 course to go from latLonStart to latLonEnd.
 %
 %If height=0, the algorithm is mostly taken from [1]. However, a formula
 %using isometric latitudes, which are described in Chapter 3 of [2] to get

@@ -2,7 +2,7 @@ function [xList,uList]=RungeKCurvedAtTimes(xInit,uInit,times,aDyn,uFunc,deltaTMa
 %%RUNGEKCURVEDATTIMES Perform multiple steps of Runge-Kutta propagation
 %                     with a possibly variable time-interval between steps
 %                     given that the axes of the local coordinate system
-%                     change at the target moves. The position components
+%                     change as the target moves. The position components
 %                     of the state are kept in the global coordinate system
 %                     whereas the rest of the components are kept in the
 %                     local coordinate system. This Runge-Kutta method is

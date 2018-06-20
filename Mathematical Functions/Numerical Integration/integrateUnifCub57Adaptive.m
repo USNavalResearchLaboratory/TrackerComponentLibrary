@@ -5,41 +5,37 @@ function [intEst,totalErr,exitCode]=integrateUnifCub57Adaptive(f,lowerBounds,upp
 %                    matrix. This integration does not use a weighting
 %                    function.
 %
-%INPUTS: f       The handle to the function. f(x) takes a single numDimX1
-%                vector, where numDim>=2, and returns a scalar, vector or
-%                matrix output.
+%INPUTS: f The handle to the function. f(x) takes a single numDimX1 vector,
+%          where numDim>=2, and returns a scalar, vector or matrix output.
 % lowerBounds,upperBounds The lower and upper bounds of integration as
-%                numDimX1 vectors. It is assumed that all elements of
-%                lowerBounds are <= those of upperBounds and that all
-%                bounds are finite.
-%   maxSearchReg The algorithm works by splitting space into increasingly
-%                small regions. This optional parameter is the maximum
-%                number of regions allowed. If omitted or an empty matrix
-%                is passed, the default value of 500 is used. The number of
-%                function evaluations to split each region is a constant
-%                that depends on the dimensionality of the problem.
-%         AbsTol The absolute error tolerance allowed,a positive scalar or
-%                a vector/ matrix if the output is multidimensional and
-%                different tolerances apply to different dimensions. If
-%                omitted or an empty matrix is passed, the default value of
-%                1e-12 is used.
-%         RelTol The maximum relative error tolerance allowed, a
-%                positive scalar or a vector/ matrix if the output is
-%                multidimensional and different tolerances apply to
-%                different dimensions. If omitted or an empty matrix is
-%                passed, the default value of 1e-9 is used.
+%          numDimX1 vectors. It is assumed that all elements of lowerBounds
+%          are <= those of upperBounds and that all bounds are finite.
+% maxSearchReg The algorithm works by splitting space into increasingly
+%          small regions. This optional parameter is the maximum number of
+%          regions allowed. If omitted or an empty matrix is passed, the
+%          default value of 500 is used. The number of function evaluations
+%          to split each region is a constant that depends on the
+%          dimensionality of the problem.
+%   AbsTol The absolute error tolerance allowed,a positive scalar or a
+%          vector/ matrix if the output is multidimensional and different
+%          tolerances apply to different dimensions. If omitted or an empty
+%          matrix is passed, the default value of 1e-12 is used.
+%   RelTol The maximum relative error tolerance allowed, a positive scalar
+%          or a vector/ matrix if the output is multidimensional and
+%          different tolerances apply to different dimensions. If omitted
+%          or an empty matrix is passed, the default value of 1e-9 is used.
 %
-%OUTPUTS:   intEst The estimated value of the integral. The dimensionality
-%                  of this is the dimensionality of the output of f.
-%         totalErr The estimated error. This has the same dimensionality as
-%                  intEst, representing the error in each dimension of the
-%                  output.
-%         exitCode A value indicating the status of the algorithm on
-%                  termination. Possible values are
-%                  0 Termination occurred due to the absolute or relative
-%                    error tolerances being fulfilled.
-%                  1 Termination occurred due to the search region having
-%                    been split into the maximum number of subregions.
+%OUTPUTS: intEst The estimated value of the integral. The dimensionality of
+%                this is the dimensionality of the output of f.
+%       totalErr The estimated error. This has the same dimensionality as
+%                intEst, representing the error in each dimension of the
+%                output.
+%       exitCode A value indicating the status of the algorithm on
+%                termination. Possible values are
+%                0 Termination occurred due to the absolute or relative
+%                  error tolerances being fulfilled.
+%                1 Termination occurred due to the search region having
+%                  been split into the maximum number of subregions.
 %
 %The algorithm used is a slightly modified version of that of [1]. In [1],
 %only functions with scalar outputs can be used. however, here, we allow

@@ -1,0 +1,3 @@
+[submodule "scs"]
+	path = scs
+	url = https://github.com/cvxgrp/scs.git

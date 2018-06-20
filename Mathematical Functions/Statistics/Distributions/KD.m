@@ -1,5 +1,5 @@
 classdef KD
-%%KD Functions to handle the scalar K-distribution. The K-distirbution is
+%%KD Functions to handle the scalar K-distribution. The K-distribution is
 %    often used to model the observed radar cross section (RCS) of radar
 %    returns due to clutter, as mentioned in [1]. Multiple definitions of
 %    _the_ K distribution exist depending on how many parameters there are.
@@ -51,7 +51,7 @@ function val=var(mu,alpha,beta)
 %              distributions that make up the K distribution. The K
 %              distribution is obtained from the integral 
 %       int_0^inf GammaD.PDF(x,beta,y/beta)*GammaD.PDF(y,alpha,mu/alpha) dy
-%              These are the parameters of the teo Gamma distirbutions. mu
+%              These are the parameters of the teo Gamma distributions. mu
 %              is the mean of the innermost one and alpha is the number of
 %              degrees of freedom.
 %
@@ -79,7 +79,7 @@ function val=PDF(x,mu,alpha,beta)
 %              distributions that make up the K distribution. The K
 %              distribution is obtained from the integral 
 %       int_0^inf GammaD.PDF(x,beta,y/beta)*GammaD.PDF(y,alpha,mu/alpha) dy
-%              These are the parameters of the teo Gamma distirbutions. mu
+%              These are the parameters of the teo Gamma distributions. mu
 %              is the mean of the innermost one and alpha is the number of
 %              degrees of freedom.
 %
@@ -125,7 +125,7 @@ function val=moments(m,mu,alpha,beta)
 %              distributions that make up the K distribution. The K
 %              distribution is obtained from the integral 
 %       int_0^inf GammaD.PDF(x,beta,y/beta)*GammaD.PDF(y,alpha,mu/alpha) dy
-%              These are the parameters of the teo Gamma distirbutions. mu
+%              These are the parameters of the teo Gamma distributions. mu
 %              is the mean of the innermost one and alpha is the number of
 %              degrees of freedom.
 %
@@ -155,7 +155,7 @@ function vals=rand(N,mu,alpha,beta)
 %              distributions that make up the K distribution. The K
 %              distribution is obtained from the integral 
 %       int_0^inf GammaD.PDF(x,beta,y/beta)*GammaD.PDF(y,alpha,mu/alpha) dy
-%              These are the parameters of the teo Gamma distirbutions. mu
+%              These are the parameters of the teo Gamma distributions. mu
 %              is the mean of the innermost one and alpha is the number of
 %              degrees of freedom.
 %

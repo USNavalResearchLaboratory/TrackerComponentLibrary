@@ -48,6 +48,7 @@ if(isempty(A))
     sigma=[];
     B=[];
     C=[];
+    return;
 end
 
 if(size(A,1)~=m1*m2||size(A,2)~=n1*n2)
@@ -61,7 +62,7 @@ end
 RA=makeRA(A,m1,n1,m2,n2);
 
 %The SVD as in Equation 12.3.17
-[U,Sigma,V] = svd(RA);
+[U,Sigma,V]=svd(RA);
 sigma=diag(Sigma);
 
 %The maximum possible Kronecker product rank
@@ -84,7 +85,7 @@ function RA = makeRA(A,m1,n1,m2,n2)
 RA =zeros(m1*n1,m2*n2);
 curRow=1;
 for j=1:n1
-    for i=1:m1;
+    for i=1:m1
         Aij = A(1+(i-1)*m2:i*m2,1+(j-1)*n2:j*n2);
         RA(curRow,:)= Aij(:).';
         curRow=curRow+1;

@@ -13,7 +13,7 @@ function [xi,w]=arbOrderSpherSurfCubPoints(numDim,n)
 %          w A numCubaturePoints X 1 vector of the weights associated with
 %            the cubature points.
 %
-%The algorithm of theorem 2.7-3 in Chapter 2.7 of [1] is used to generate
+%The algorithm of Theorem 2.7-3 in Chapter 2.7 of [1] is used to generate
 %the points.
 %
 %REFERENCES:

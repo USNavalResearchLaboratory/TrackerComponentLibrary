@@ -160,6 +160,8 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+//For count
+#include <algorithm>
 
 static const size_t numReportTypes=28;
 

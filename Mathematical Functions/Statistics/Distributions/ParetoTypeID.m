@@ -1,6 +1,6 @@
 classdef ParetoTypeID
 %%PARETOTYPID Functions to handle type I of the Pareto distribution.
-%Implemented methods are: PDF, CDF, invCDF, mean, var, rand
+%Implemented methods are: PDF, CDF, invCDF, mean, var, rand, entropy
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
@@ -118,6 +118,7 @@ function val=var(xMin,a)
 %    Web Resource. http://mathworld.wolfram.com/ParetoDistribution.html
 %
 %October 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
     if(a<=2)
        val=Inf; 
     else
@@ -129,15 +130,15 @@ function vals=rand(N,xMin,a)
 %%RAND Generate Pareto type-I distributed random variables with the given
 %      parameters.
 %
-%INPUTS:    N If N is a scalar, then rand returns an NXN matrix of random
-%             variables. If N=[M,N1] is a two-element row vector, then rand
-%             returns an MXN1 matrix of random variables.
-%        xMin The scale parameter of the distribution. This marks the
-%             lowest point having nonzero likelihood.
-%           a The shape parameter of the distribution. a>0.
+%INPUTS: N If N is a scalar, then rand returns an NXN matrix of random
+%          variables. If N=[M,N1] is a two-element row vector, then rand
+%          returns an MXN1 matrix of random variables.
+%     xMin The scale parameter of the distribution. This marks the
+%          lowest point having nonzero likelihood.
+%        a The shape parameter of the distribution. a>0.
 %
-%OUTPUTS:   vals   A matrix whose dimensions are determined by N of the
-%                  generated Pareto type I random variables.
+%OUTPUTS: vals A matrix whose dimensions are determined by N of the
+%              generated Pareto type I random variables.
 %
 %The algorithm is an implementation of the inverse transform algorithm of
 %Chapter 5.1 of [1]. When the noncentral distribution is used, the random
@@ -159,6 +160,31 @@ function vals=rand(N,xMin,a)
     vals=ParetoTypeID.invCDF(U,xMin,a);
 end
     
+function entropyVal=entropy(xMin,a)
+%%ENTROPY Obtain the differential entropy of the Pareto type I distribution
+%         given in nats. The differential entropy of a continuous
+%         distribution is entropy=-int_x p(x)*log(p(x)) dx where the
+%         integral is over all values of x. Units of nats mean that the
+%         natural logarithm is used in the definition. Unlike the Shannon
+%         entropy for discrete variables, the differential entropy of
+%         continuous variables can be both positive and negative.
+%
+%INPUTS: xMin The scale parameter of the distribution. This marks the
+%             lowest point having nonzero likelihood.
+%           a The shape parameter of the distribution. a>0.
+%
+%OUTPUTS: entropyVal The value of the differential entropy in nats.
+%
+%Differential entropy is defined in Chapter 8 of [1].
+%
+%REFERENCES:
+%[1] T. M. Cover and J. A. Thomas, Elements of Information Theory, 2nd ed.
+%    Hoboken, NJ: Wiley-Interscience, 2006.
+%
+%April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    entropyVal=log(xMin/a)+1+1/a;
+end
 end  
 end
 

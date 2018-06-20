@@ -10,7 +10,8 @@ classdef GaussianD
 %                         normConvDist (for scalar distributions),
 %                         momentGenFun (multivariate, including
 %                         derivatives), cumGenFun (multivariate, including
-%                         derivatives), rand, randS, integralOverRegion
+%                         derivatives), rand, randS, integralOverRegion,
+%                         entropy
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
@@ -484,7 +485,7 @@ function val=invCDF(prob,mu,var)
 %%CDF Evaluate the inverse CDF of a scalar Gaussian (normal) distribution
 %     at a given point given the mean and the variance, or for a
 %     normal(0,1) distribution if the mean and variance are omitted. When
-%     considering a normal(0,1) distirbution, this is also known as the
+%     considering a normal(0,1) distribution, this is also known as the
 %     probit function.
 %
 %INPUTS:    prob The probability or probabilities (0<=prob<=1) at which the 
@@ -638,7 +639,7 @@ function [momentVal,coeffPolyPart]=momentGenFun(mu,Sigma,numDerivs,t)
 %        2, 9,18];
 % numDerivs=[1;1;1];
 % momentVal=GaussianD.momentGenFun(mu,Sigma,numDerivs)
-%One will find the value of the noncentral moment to be 28, whcih is
+%One will find the value of the noncentral moment to be 28, which is
 %correct.
 %
 %August 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
@@ -733,19 +734,19 @@ function cumVal=cumGenFun(mu,Sigma,numDerivs,t)
 %           function is the natural logarithm of the moment generating
 %           function.
 %
-%INPUTS: mu  The mean of the PDF. If the PDF is multivariate, then this
-%            is a numDimX1 column vector.
-%      Sigma The variance (if scalar) or numDimXnumDim covariance matrix 
-%            (if multidimensional) of the PDF.
-%  numDerivs A numDimX1 or 1XnumDim vector indicating the number of
-%            derivatives to take with respect to each of the components of
-%            the argument of the cumulant generating function.
-%            numDerivs>=0.
-%          t The numDimXnumPoints argument of the cumulant generating
-%            function at which the derivatives of the cumulant generating
-%            function should be evaluated. If this parameter is omitted or
-%            an empty matrix is passed, then a default of
-%            t=zeros(numDim,1) is used.
+%INPUTS: mu The mean of the PDF. If the PDF is multivariate, then this
+%           is a numDimX1 column vector.
+%     Sigma The variance (if scalar) or numDimXnumDim covariance matrix 
+%           (if multidimensional) of the PDF.
+% numDerivs A numDimX1 or 1XnumDim vector indicating the number of
+%           derivatives to take with respect to each of the components of
+%           the argument of the cumulant generating function.
+%           numDerivs>=0.
+%         t The numDimXnumPoints argument of the cumulant generating
+%           function at which the derivatives of the cumulant generating
+%           function should be evaluated. If this parameter is omitted or
+%           an empty matrix is passed, then a default of
+%           t=zeros(numDim,1) is used.
 %
 %OUTPUTS: cumVal A numPointsX1 vector of the values of the derivatives
 %                of the cumulant generating function given at the points
@@ -801,7 +802,7 @@ function x=rand(N,mu,P)
 %
 %INPUTS: N The number of random variables to generate.
 %       mu The xDim X1 mean of the multivariate Gaussian to generate.
-%       P  The xDim X xDim positive definite covariance matrix of the
+%        P The xDim X xDim positive definite covariance matrix of the
 %          multivariate Gaussian to generate. If this parameter is omitted
 %          or an empty matrix is passed, then the identity matrix will be
 %          used.
@@ -824,10 +825,10 @@ function x=randS(N,mu,S)
 %%RANDS   Generate multivariate Gaussian random variable with a given
 %         mean vector and lower-triangular square root covariance matrix.
 %
-%INPUTS:  N  The number of random variables to generate.
-%        mu  The xDim X1 mean of the multivariate Gaussian to generate.
-%         S  The xDim X xDim lower triangular square root covariance matrix
-%            of the multivariate Gaussian to generate.
+%INPUTS: N The number of random variables to generate.
+%       mu The xDim X1 mean of the multivariate Gaussian to generate.
+%        S The xDim X xDim lower triangular square root covariance matrix
+%          of the multivariate Gaussian to generate.
 %
 %OUTPUT: x   An xDimXN matrix of random instances of the multivariate
 %            Gaussian distribution.
@@ -839,7 +840,7 @@ function x=randS(N,mu,S)
 end
 
 function [P,error,curIter]=integralOverRegion(mu, Sigma,minVals,maxVals,epsVal,alpha,maxIter)
-%%INTEGRALOPVERREGION  Compute the probability of a Gaussian probability
+%%INTEGRALOPVERREGION Compute the probability of a Gaussian probability
 %                  density function (PDF) within a (hyper-)rectangular
 %                  region. The probability is computed using a transformed
 %                  Monte Carlo method designed for this specific integral
@@ -957,6 +958,31 @@ function [P,error,curIter]=integralOverRegion(mu, Sigma,minVals,maxVals,epsVal,a
     
     %The probability estimate.
     P=intSum;
+end
+
+function entropyVal=entropy(Sigma)
+%%ENTROPY Obtain the differential entropy of the multivariate Gaussian
+%         distribution given in nats. The differential entropy of a
+%         continuous distribution is entropy=-int_x p(x)*log(p(x)) dx where
+%         the integral is over all values of x. Units of nats mean that the
+%         natural logarithm is used in the definition. Unlike the Shannon
+%         entropy for discrete variables, the differential entropy of
+%         continuous variables can be both positive and negative.
+%
+%INPUTS: Sigma The NXN positive definite covariance matrix of the
+%              distribution.
+%
+%OUTPUTS: entropyVal The value of the differential entropy in nats.
+%
+%Differential entropy is defined in Chapter 8 of [1].
+%
+%REFERENCES:
+%[1] T. M. Cover and J. A. Thomas, Elements of Information Theory, 2nd ed.
+%    Hoboken, NJ: Wiley-Interscience, 2006.
+%
+%April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    entropyVal=(1/2)*log(det(2*pi*exp(1)*Sigma));
 end
 
 end

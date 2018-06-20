@@ -1,9 +1,9 @@
-/**EXACTSIGNOFSUM  Compute the exact sign of the sum of a number of finite
- *                 numbers. The sign computation occurs exactly, regardless
- *                 of whether the actual sum value would have overflowed or
- *                 suffered an accumulation of finite precision errors
- *                 whereby just adding them would have given the wrong
- *                 result.
+/**EXACTSIGNOFSUM Compute the exact sign of the sum of a number of finite
+ *                numbers. The sign computation occurs exactly, regardless
+ *                of whether the actual sum value would have overflowed or
+ *                suffered an accumulation of finite precision errors
+ *                whereby just adding them would have given the wrong
+ *                result.
  *
  *INPUTS: S An NX1 or 1XN vector whereby one desires the sign of the sum of
  *          the elements.
@@ -27,7 +27,7 @@
  *
  *REFERENCES:
  *[1] H. Ratschek and J. Rokne, "Exact computation of the sign of a finite
- *    sum," Applied Mathematics and Computation, vol. 99, no. 2?3, pp. 99-
+ *    sum," Applied Mathematics and Computation, vol. 99, no. 2-3, pp. 99-
  *    127, 15 Mar. 1999.
  *
  *December 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.

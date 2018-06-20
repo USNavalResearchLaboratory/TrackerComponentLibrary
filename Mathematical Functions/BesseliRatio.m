@@ -2,18 +2,17 @@ function x= BesseliRatio(nu,kappa,maxIter)
 %%BESSELIRATIO Evaluate the ratio of modified Bessel functions of the first
 %              kind of the form x=I_{nu}(kappa)/I_{nu-1}(kappa). 
 %
-%INPUTS:   nu The positive integer (upper) order of the modified Bessel
-%             function of the first kind in the ratio.
-%       kappa The real argument of the modified Bessel function of the
-%             first kind.
-%     maxIter An optional parameter specifying the maximum number of
-%             iterations to use for computing the ratio using an iterative
-%             method. If this parameter is omitted or an empty matrix is
-%             passed, the default value of 2000 is used. Convergence
-%             usually occurs long before the maximum number of iterations
-%             is reached.
+%INPUTS: nu The positive integer (upper) order of the modified Bessel
+%           function of the first kind in the ratio; nu>=1.
+%     kappa The real argument of the modified Bessel function of the first
+%           kind; kappa>=0.
+%   maxIter An optional parameter specifying the maximum number of
+%           iterations to use for computing the ratio using an iterative
+%           method. If this parameter is omitted or an empty matrix is
+%           passed, the default value of 2000 is used. Convergence usually
+%           occurs long before the maximum number of iterations is reached.
 %
-%OUTPUTS: x The value of the raio I_nu(kappa)/I_{nu-1}(kappa).
+%OUTPUTS: x The value of the ratio I_{nu}(kappa)/I_{nu-1}(kappa).
 %
 %Numerical precision limitations can make the evaluation of Bessel function
 %radios difficult if one tries to explicitly evaluate the functions. Here,

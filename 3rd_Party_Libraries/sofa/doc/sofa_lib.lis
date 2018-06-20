@@ -1,4 +1,4 @@
-sofa_lib.lis                                               2016 March 10
+sofa_lib.lis                                              2017 October 7
 
                      ----------------------
                      SOFA Astronomy Library
@@ -278,6 +278,21 @@ ROUTINES
      GD2GC     geodetic to geocentric for a nominated ellipsoid
      GD2GCE    geodetic to geocentric given ellipsoid a,f
 
+  Gnomonic projection
+
+     TPORS     solve for tangent point, spherical
+     TPORV     solve for tangent point, vector
+     TPSTS     deproject tangent plane to celestial, spherical
+     TPSTV     deproject tangent plane to celestial, vector
+     TPXES     project celestial to tangent plane, spherical
+     TPXEV     project celestial to tangent plane, vector
+
+  Horizon/equatorial
+
+     AE2HD     (azimuth, altitude) to (hour angle, declination)
+     HD2AE     (hour angle, declination) to (azimuth, altitude)
+     HD2PA     parallactic angle
+
   Obsolete
 
      C2TCEO    former name of C2TCIO
@@ -286,6 +301,7 @@ ROUTINES
 CALLS: FORTRAN VERSION
 
    CALL iau_AB     ( PNAT, V, S, BM1, PPR )
+   CALL iau_AE2HD  ( AZ, EL, PHI, HA, DEC )
    CALL iau_APCG   ( DATE1, DATE2, EB, EH, ASTROM )
    CALL iau_APCG13 ( DATE1, DATE2, ASTROM )
    CALL iau_APCI   ( DATE1, DATE2, EB, EH, X, Y, S, ASTROM )
@@ -399,6 +415,8 @@ CALLS: FORTRAN VERSION
    D =  iau_GST94  ( UTA, UTB )
    CALL iau_H2FK5  ( RH, DH, DRH, DDH, PXH, RVH,
   :                  R5, D5, DR5, DD5, PX5, RV5 )
+   CALL iau_HD2AE  ( HA, DEC, PHI, AZ, EL )
+   D =  iau_HD2PA  ( HA, DEC, PHI )
    CALL iau_HFK5Z  ( RH, DH, DATE1, DATE2, R5, D5, DR5, DD5 )
    CALL iau_ICRS2G ( DR, DD, DL, DB  )
    CALL iau_JD2CAL ( DJ1, DJ2, IY, IM, ID, FD, J )
@@ -474,6 +492,12 @@ CALLS: FORTRAN VERSION
    CALL iau_TCGTT  ( TCG1, TCG2, TT1, TT2, J )
    CALL iau_TDBTCB ( TDB1, TDB2, TCB1, TCB2, J )
    CALL iau_TDBTT  ( TDB1, TDB2, DTR, TT1, TT2, J )
+   CALL iau_TPORS  ( XI, ETA, A, B, A01, B01, A02, B02, N )
+   CALL iau_TPORV  ( XI, ETA, V, V01, V02, N )
+   CALL iau_TPSTS  ( XI, ETA, A0, B0, A, B )
+   CALL iau_TPSTV  ( XI, ETA, V0, V )
+   CALL iau_TPXES  ( A, B, A0, B0, XI, ETA, J )
+   CALL iau_TPXEV  ( V, V0, XI, ETA, J )
    CALL iau_TTTAI  ( TT1, TT2, TAI1, TAI2, J )
    CALL iau_TTTCG  ( TT1, TT2, TCG1, TCG2, J )
    CALL iau_TTTDB  ( TT1, TT2, DTR, TDB1, TDB2, J )
@@ -492,6 +516,7 @@ CALLS: FORTRAN VERSION
 CALLS: C VERSION
 
        iauAb     ( pnat, v, s, bm1, ppr );
+       iauAe2hd  ( az, el, phi, &ha, &dec );
        iauApcg   ( date1, date2, eb, eh, &astrom );
        iauApcg13 ( date1, date2, &astrom );
        iauApci   ( date1, date2, eb, eh, x, y, s, &astrom );
@@ -604,6 +629,8 @@ CALLS: C VERSION
    d = iauGst94  ( uta, utb );
        iauH2fk5  ( rh, dh, drh, ddh, pxh, rvh,
                    &r5, &d5, &dr5, &dd5, &px5, &rv5 );
+       iauHd2ae  ( ha, dec, phi, &az, &el );
+   d = iauHd2pa  ( ha, dec, phi );
        iauHfk5z  ( rh, dh, date1, date2,
                    &r5, &d5, &dr5, &dd5 );
        iauIcrs2g ( dr, dd, &dl, &db );
@@ -681,6 +708,12 @@ CALLS: C VERSION
    i = iauTcgtt  ( tcg1, tcg2, &tt1, &tt2 );
    i = iauTdbtcb ( tdb1, tdb2, &tcb1, &tcb2 );
    i = iauTdbtt  ( tdb1, tdb2, dtr, &tt1, &tt2 );
+   i = iauTpors  ( xi, eta, a, b, &a01, &b01, &a02, &b02 );
+   i = iauTporv  ( xi, eta, v, v01, v02 );
+       iauTpsts  ( xi, eta, a0, b0, &a, &b );
+       iauTpstv  ( xi, eta, v0, v );
+   i = iauTpxes  ( a, b, a0, b0, &xi, &eta );
+   i = iauTpxev  ( v, v0, &xi, &eta );
    i = iauTttai  ( tt1, tt2, &tai1, &tai2 );
    i = iauTttcg  ( tt1, tt2, &tcg1, &tcg2 );
    i = iauTttdb  ( tt1, tt2, dtr, &tdb1, &tdb2 );
@@ -694,3 +727,8 @@ CALLS: C VERSION
        iauXys00a ( date1, date2, &x, &y, &s );
        iauXys00b ( date1, date2, &x, &y, &s );
        iauXys06a ( date1, date2, &x, &y, &s );
+
+
+
+
+

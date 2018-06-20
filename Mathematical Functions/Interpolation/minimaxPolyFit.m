@@ -1,34 +1,33 @@
 function [c,E,exitVal]=minimaxPolyFit(f,xSpan,n,RelTol,maxIter)
-%MINIMAXPOLYFIT  Find an interpolating polynomial of order n to minimize
-%                the maximum error approximating a scalar function f in
-%                the range [xSpan(1);xSpan(2)]. The Remez algorithm is
-%                used.
+%MINIMAXPOLYFIT Find an interpolating polynomial of order n to minimize
+%               the maximum error approximating a scalar function f in the
+%               range [xSpan(1);xSpan(2)]. The Remez algorithm is used.
 %                
-%INPUTS: f  A handle to the function that is to be approximated. The use
-%           y=f(x) take a scalar x and returns a value y.
-%     xSpan The range of inputs of x over which a minimax interpolating
-%           polynomial is desired. The format is [xMin;xMax]. If this is
-%           omitted or an empty matrix is passed, the values [-1;1] are
-%           used.
-%       n   The degree of the polynomial approximation desired. If this is
-%           omitted or an empty matrix is passed, the default value of n=5
-%           is used. If too small a value is used and the function
-%           oscillates a lot, the output polynomial will not be a true
-%           minimax polynomial, because the algorithm assumes that there is
-%           one maxima between regions chosen for selecting points. Also,
-%           if f is an mth order polynomial, but is symmetric, then n
-%           should be m+1 due to assumptions in the algorithm (the
-%           resulting output will have the extra coefficient zero).
-%    RelTol The relative tolerance of the maximum error used for
-%           determining convergence. Iterations adjust the maximum error
-%           observed with respect to points at which the function is
-%           evaluated. When the maximum error stops changing across
-%           iterations, convergence is assumed. The relative maximum error
-%           is abs(E-EPrev)/abs(E); where E is the error and EPRev is the
-%           error form the previous iteration. If this parameter is omitted
-%           or an empty matrix is passed, a value of 1e-12 is used.
-%   maxIter The maximum number of iterations for convergence. If omitted, a
-%           value of 50 is used.
+%INPUTS: f A handle to the function that is to be approximated. The use
+%          y=f(x) take a scalar x and returns a value y.
+%    xSpan The range of inputs of x over which a minimax interpolating
+%          polynomial is desired. The format is [xMin;xMax]. If this is
+%          omitted or an empty matrix is passed, the values [-1;1] are
+%          used.
+%        n The degree of the polynomial approximation desired. If this is
+%          omitted or an empty matrix is passed, the default value of n=5
+%          is used. If too small a value is used and the function
+%          oscillates a lot, the output polynomial will not be a true
+%          minimax polynomial, because the algorithm assumes that there is
+%          one maxima between regions chosen for selecting points. Also,
+%          if f is an mth order polynomial, but is symmetric, then n
+%          should be m+1 due to assumptions in the algorithm (the
+%          resulting output will have the extra coefficient zero).
+%   RelTol The relative tolerance of the maximum error used for
+%          determining convergence. Iterations adjust the maximum error
+%          observed with respect to points at which the function is
+%          evaluated. When the maximum error stops changing across
+%          iterations, convergence is assumed. The relative maximum error
+%          is abs(E-EPrev)/abs(E); where E is the error and EPRev is the
+%          error from the previous iteration. If this parameter is omitted
+%          or an empty matrix is passed, a value of 1e-12 is used.
+%  maxIter The maximum number of iterations for convergence. If omitted, a
+%          value of 50 is used.
 %
 %OUTPUTS: c An interpolating polynomial such that polyval(c,xRel) gives the
 %           interpolated value of f where xRel is the fractional distance

@@ -1,49 +1,47 @@
 function D=DCoordTurn2D(x,t,q0,qTurn,qLin)
-%DCOORDTURN2D  The continuous-time diffusion matrix function for a 2D
-%              coordinated turn model with a Cartesian state. The turn rate
-%              can be specified in terms of a turn rate in radians per
-%              second, or in terms of a transversal acceleration.
-%              Additionally, a linear acceleration can be given. This
-%              diffusion matrix goes with the drift function aCoordTurn2D.
+%DCOORDTURN2D The continuous-time diffusion matrix function for a 2D
+%             coordinated turn model with a Cartesian state. The turn rate
+%             can be specified in terms of a turn rate in radians per
+%             second, or in terms of a transversal acceleration.
+%             Additionally, a linear acceleration can be given. This
+%             diffusion matrix goes with the drift function aCoordTurn2D.
 %
-%INPUTS: x   The target state for 2D motion. If there is no linear
-%            acceleration (acceleration along the direction of motion),
-%            then x can either be x=[x;y;xdot;ydot;omega], where omega is
-%            the turn rate estimate in radians per second
-%            counterclockwise from the x-axis or x=[x;y;xdot;ydot;at] where
-%            at is the the transversal acceleration, which is orthogonal to
-%            the velocity and is defined such that positive values of at
-%            map to positive values of omega. If there is a linear
-%            acceleration, then the target state is either
-%            x=[x;y;xdot;ydot;omega;al] where omega is the turn rate and al
-%            is the linear acceleration or the target state is
-%            x=[x;y;xdot;ydot;at;al] if the turn is expressed in terms of a
-%            transversal acceleration. The dimensionality of the state is
-%            used to determine whether a linear acceleration component is
-%            present. The linear acceleration component changes the speed.
-%            That means that it acts in the direction of the velocity
-%            vector. The number of columns in x determine how many copies
-%            of D are returned.
-%          t An unused time component so that DCoordTurn2D can be used with
-%            Runge-Kutta methods that expect the function to take two
-%            parameters.
-%        q0  The power spectral density of the process noise of the
-%            velocity components. It is assumed to be the same in both
-%            dimensions. It covers perturbations from an ideal
-%            coordinated turn trajectory and has units of m^2/s^3. If no
-%            process noise is desired for the velocity (i.e. all
-%            perturbations should be covered by noise on the turn component
-%            and on the linear acceleration), then a value of zero should
-%            be passed.
-%     qTurn  If the turn is specified in terms of a turn rate in radians
-%            per second, then this is the power spectral density of the
-%            turn rate noise having units of radians squared per seconds
-%            cubed. If the turn is expressed in terms of a transverse
-%            acceleration, then this is the power spectral density of the
-%            transverse acceleration noise, having units of m^2/s^5.
-%      qLin  This parameter is only needed if a linear acceleration is
-%            present. It is the power spectral density of the linear
-%            acceleration noise having units of m^2/s^5.
+%INPUTS: x The target state for 2D motion. If there is no linear
+%          acceleration (acceleration along the direction of motion), then
+%          x can either be x=[x;y;xdot;ydot;omega], where omega is the turn
+%          rate estimate in radians per second counterclockwise from the
+%          x-axis or x=[x;y;xdot;ydot;at] where at is the the transversal
+%          acceleration, which is orthogonal to the velocity and is defined
+%          such that positive values of at map to positive values of omega.
+%          If there is a linear acceleration, then the target state is
+%          either x=[x;y;xdot;ydot;omega;al] where omega is the turn rate
+%          and al is the linear acceleration or the target state is
+%          x=[x;y;xdot;ydot;at;al] if the turn is expressed in terms of a
+%          transversal acceleration. The dimensionality of the state is
+%          used to determine whether a linear acceleration component is
+%          present. The linear acceleration component changes the speed.
+%          That means that it acts in the direction of the velocity vector.
+%          The number of columns in x determine how many copies of D are
+%          returned.
+%        t An unused time component so that DCoordTurn2D can be used with
+%          Runge-Kutta methods that expect the function to take two
+%          parameters.
+%       q0 The power spectral density of the process noise of the velocity
+%          components. It is assumed to be the same in both dimensions. It
+%          covers perturbations from an ideal coordinated turn trajectory
+%          and has units of m^2/s^3. If no process noise is desired for the
+%          velocity (i.e. all perturbations should be covered by noise on
+%          the turn component and on the linear acceleration), then a value
+%          of zero should be passed.
+%    qTurn If the turn is specified in terms of a turn rate in radians per
+%          second, then this is the power spectral density of the turn rate
+%          noise having units of radians squared per seconds cubed. If the
+%          turn is expressed in terms of a transverse acceleration, then
+%          this is the power spectral density of the transverse
+%          acceleration noise, having units of m^2/s^5.
+%     qLin This parameter is only needed if a linear acceleration is
+%          present. It is the power spectral density of the linear
+%          acceleration noise having units of m^2/s^5.
 %
 %OUTPUTS: D The diffusion matrix of a 2D continuous-time turning model
 %           where the velocity is given as a Cartesian vector. If x has
@@ -80,7 +78,7 @@ function D=DCoordTurn2D(x,t,q0,qTurn,qLin)
 %
 %The corresponding drift function is given by the function aCoordTurn2D.
 %The corresponding discrete-time functions are FCoordTurn2D and
-%QCoordTurn2D. However, note that the discrete-time functions with
+%QCoordTurn. However, note that the discrete-time functions with
 %unknown noise is a direct-discrete model and not a discretization of the
 %continuous-time model.
 %

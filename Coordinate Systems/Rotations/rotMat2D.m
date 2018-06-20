@@ -16,7 +16,6 @@ function M=rotMat2D(theta,isClockwise)
 %[1] Weisstein, Eric W. "Rotation Matrix." From MathWorld--A Wolfram Web
 %   Resource. http://mathworld.wolfram.com/RotationMatrix.html
 %
-%
 %August 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 

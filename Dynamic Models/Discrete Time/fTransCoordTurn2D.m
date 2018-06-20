@@ -109,7 +109,7 @@ function xPred=fTransCoordTurn2D(T,x,turnType,discPoint,tauTurn,tauLinAccel)
 %zero.
 %
 %This state prediction function goes with the process noise covariance
-%matrix given by QCoordTurn2D.The corresponding continuous-time drift
+%matrix given by QCoordTurn.The corresponding continuous-time drift
 %function for is aCoordTurn2D with its diffusion matrix DCoordTurn2D. Note
 %that this model is a direct-discrete-time model and is not just a
 %discretization of the continuous-time model.

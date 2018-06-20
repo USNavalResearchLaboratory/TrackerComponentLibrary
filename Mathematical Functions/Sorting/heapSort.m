@@ -1,15 +1,17 @@
 function [A,idxList]=heapSort(A,byCol,gtCompareFunc)
-%%HEAPSORT  Sort an array, a matrix, or a cell array in ascending order
-%           using a heap sort algorithm. A custom comparison function can
-%           be used so that one can, for example, sort strings or other
-%           things. Changing the direction of the comparison function (from
-%           greater than to less than) changes the sorting order from
-%           ascending to descending. Heap sort has a lower worst-case
-%           performance bound O(n*log(n)) than quicksort O(n^2), but a
-%           worse average case performance due to a multiplicative
-%           constant. The best case complexity is also O(n*log(n)) Note
-%           that heapSort is not a stable sorting algorithm, meaning that
-%           the order of items having the same value might change.
+%%HEAPSORT Sort an array, a matrix, or a cell array in ascending order
+%          using a heap sort algorithm. A custom comparison function can
+%          be used so that one can, for example, sort strings or other
+%          things. Changing the direction of the comparison function (from
+%          greater than to less than) changes the sorting order from
+%          ascending to descending. Heap sort has a lower worst-case
+%          performance bound O(n*log(n)) than quicksort O(n^2), but a
+%          worse average case performance due to a multiplicative
+%          constant. The best case complexity is also O(n*log(n)) Note
+%          that heapSort is not a stable sorting algorithm, meaning that
+%          the order of items having the same value might change. When only
+%          sorting a vector of scalar values, consider the heapSortVec
+%          function.
 %
 %INPUTS: A  An array, 2D matrix, or linear cell array that is to be sorted.
 %           When given a matrix, the comparison function gtCompareFunc must
@@ -25,17 +27,17 @@ function [A,idxList]=heapSort(A,byCol,gtCompareFunc)
 %           (an empty matrix can be passed for this) as only linear cell
 %           arrays are supported, so no ambiguity between 1D and 2D inputs
 %           would exist.
-%gtCompareFunc  A function handle that performs a greather-than comparison
-%               of two entries in A. This lets one define custom comparison
-%               operations. Providing a less-than comparison for this will
-%               cause the list to be sorted in descending order rather than
-%               ascending order. When sorting an array or matrix, the
-%               the function handle takes inputs of the form
-%               gtCompareFunc(A(:,i),A(:,j)) if byCol=true and with
-%               reversed row and column indices if byCol=false. When
-%               comparing cell arrays, it must handle inputs of the form
-%               gtCompareFunc(A{i},A{j}). The default if this parameter is
-%               omitted is @(x1,x2)(x1>x2);
+% gtCompareFunc A function handle that performs a greater-than comparison
+%           of two entries in A. This lets one define custom comparison
+%           operations. Providing a less-than comparison for this will
+%           cause the list to be sorted in descending order rather than
+%           ascending order. When sorting an array or matrix, the
+%           function handle takes inputs of the form
+%           gtCompareFunc(A(:,i),A(:,j)) if byCol=true and with reversed
+%           row and column indices if byCol=false. When comparing cell
+%           arrays, it must handle inputs of the form
+%           gtCompareFunc(A{i},A{j}). The default if this parameter is
+%           omitted is @(x1,x2)(x1>x2);
 %
 %OUTPUTS: A The sorted array/ matrix/ cell array. If gtCompareFunc
 %           performs a greater-than comparison, then it is in increasing
@@ -45,8 +47,9 @@ function [A,idxList]=heapSort(A,byCol,gtCompareFunc)
 %           A(idxList) on the input A will give the sorted output A.
 %
 %The algorithm for creating and updating the heap is generally based on the
-%class implementation described in Chapter 6.4 of [1]. The implementation
-%using such a heap for sorting is described in Chapter 5.2.3 of [2].
+%class implementation described in Chapter 6.4 of [1], though classes are
+%not used here. The implementation using such a heap for sorting is
+%described in Chapter 5.2.3 of [2].
 %
 %Note that sorting large matrices can be slow as each element (so an entire
 %row/ column) is copied during the search. Thus, if one is just sorting
@@ -82,7 +85,7 @@ function [A,idxList]=heapSort(A,byCol,gtCompareFunc)
     end
 
     if(nargin<3||isempty(gtCompareFunc))
-       gtCompareFunc=@(x1,x2)(x1>x2);
+        gtCompareFunc=@(x1,x2)(x1>x2);
     end
     
     isACellArray=isa(A,'cell');
@@ -177,7 +180,7 @@ function [A,idxList]=percolateDown(A,idxList,idx,gtCompareFunc,numInHeap)
         child=2*idx;
 
         if(child~=numInHeap&&gtCompareFunc(A(:,child+1),A(:,child)))
-           child = child+1; 
+            child=child+1; 
         end
 
         if(gtCompareFunc(A(:,child),temp))
@@ -201,7 +204,7 @@ function [A,idxList]=percolateDownCell(A,idxList,idx,gtCompareFunc,numInHeap)
         child=2*idx;
 
         if(child~=numInHeap&&gtCompareFunc(A{child+1},A{child}))
-           child = child+1; 
+            child=child+1; 
         end
 
         if(gtCompareFunc(A{child},temp))

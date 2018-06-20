@@ -4,7 +4,8 @@ classdef GammaD
 %Methods implemented for both central and noncentral distributions are:
 %PDF, CDF
 %Methods only implemented for the central distribution are: mean, var,
-%                                                           invCDF, rand
+%                                                           invCDF, rand,
+%                                                           entropy
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
@@ -34,7 +35,7 @@ end
 if(lambda == 0)
     val=k*theta;
 else
-    error('This function is not currently supported for noncentral gamma distribution');
+    error('This function is not currently supported for noncentral gamma distributions.');
 end
 end
 
@@ -62,7 +63,7 @@ end
 if(lambda == 0)
     val=k*theta^2;
 else
-    error('This function is not currently supported for noncentral gamma distribution');
+    error('This function is not currently supported for noncentral gamma distributions.');
 end
 end    
     
@@ -296,7 +297,7 @@ end
 if(lambda == 0)
     val=theta*gammaincinv(prob,k);
 else
-    error('This function is not currently supported for noncentral gamma distribution');
+    error('This function is not currently supported for noncentral gamma distributions.');
 end
 end
 
@@ -343,9 +344,46 @@ if(lambda == 0)
     
     vals=GammaD.invCDF(U,k,theta);
 else
-    error('This function is not currently supported for noncentral gamma distribution');
+    error('This function is not currently supported for noncentral gamma distributions.');
 end
 end
+
+function entropyVal=entropy(k,theta,lambda)
+%%ENTROPY Obtain the differential entropy of the central gamma distribution
+%         given in nats. The differential entropy of a continuous
+%         distribution is entropy=-int_x p(x)*log(p(x)) dx where the
+%         integral is over all values of x. Units of nats mean that the
+%         natural logarithm is used in the definition. Unlike the Shannon
+%         entropy for discrete variables, the differential entropy of
+%         continuous variables can be both positive and negative.
+%
+%INPUTS: k The shape parameter of the distribution; k>0.
+%    theta The scale parameter of the distribution; theta>0.
+%   lambda The noncentrality parameter of the distribution. If this
+%          parameter is omitted or an empty matrix is passed, a value of 0,
+%          indicating the central gamma distribution, is used. This
+%          function is currently only implemented for lambda=0.
+%
+%OUTPUTS: entropyVal The value of the differential entropy in nats.
+%
+%Differential entropy is defined in Chapter 8 of [1].
+%
+%REFERENCES:
+%[1] T. M. Cover and J. A. Thomas, Elements of Information Theory, 2nd ed.
+%    Hoboken, NJ: Wiley-Interscience, 2006.
+%
+%April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    if(nargin<3||isempty(lambda))
+       lambda=0; 
+    end
+    if(lambda~=0)
+        error('This function is not currently supported for noncentral gamma distributions.') 
+    end
+    
+    entropyVal=k+log(theta)+gammaln(k)+(1-k)*psi(k);
+end
+
 end
 end
 

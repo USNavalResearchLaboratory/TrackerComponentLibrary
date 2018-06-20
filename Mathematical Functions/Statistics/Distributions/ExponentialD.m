@@ -1,7 +1,7 @@
 classdef ExponentialD
 %%EXPONENTIALD Functions to handle the exponential distribution.
 %Implemented methods are: mean, var, PDF, CDF, invCDF, momentGenFun,
-%                         cumGenFun, rand
+%                         cumGenFun, rand, entropy
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
@@ -280,6 +280,29 @@ function vals=rand(N,lambda)
     vals=ExponentialD.invCDF(U,lambda);
 end
     
+function entropyVal=entropy(lambda)
+%%ENTROPY Obtain the differential entropy of the exponential distribution
+%         given in nats. The differential entropy of a continuous
+%         distribution is entropy=-int_x p(x)*log(p(x)) dx where the
+%         integral is over all values of x. Units of nats mean that the
+%         natural logarithm is used in the definition. Unlike the Shannon
+%         entropy for discrete variables, the differential entropy of
+%         continuous variables can be both positive and negative.
+%
+%INPUTS: lambda The rate parameter of the distribution. lambda>0.
+%
+%OUTPUTS: entropyVal The value of the differential entropy in nats.
+%
+%Differential entropy is defined in Chapter 8 of [1].
+%
+%REFERENCES:
+%[1] T. M. Cover and J. A. Thomas, Elements of Information Theory, 2nd ed.
+%    Hoboken, NJ: Wiley-Interscience, 2006.
+%
+%April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+    
+    entropyVal=1-log(lambda);
+end
 end
 end
 

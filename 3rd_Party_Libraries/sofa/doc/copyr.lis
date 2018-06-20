@@ -1,16 +1,22 @@
-copyr.lis                                                  2017 March 20
+copyr.lis                                                2018 January 26
 
 
 COPYRIGHT NOTICE
 
+Text equivalent to that below appears at the end of every SOFA routine
+(with one exception).  There are small formatting differences between
+the Fortran and C versions.
 
-Text equivalent to the following appears at the end of every SOFA
-routine.  (There are small formatting differences between the Fortran
-and C versions.)
+The one exception is the "leap second" routine DAT.  This uniquely is
+classified as "user replaceable", and has a mitigated license statement
+that permits the distribution of local variants under the same name.
+This measure allows other SOFA routines to call the local variant, which
+may be file or network based, or otherwise equipped to pick up IERS leap
+second updates with no need to download new SOFA code.
 
 *+----------------------------------------------------------------------
 *
-*  Copyright (C) 2017
+*  Copyright (C) 2018
 *  Standards Of Fundamental Astronomy Board
 *  of the International Astronomical Union.
 *

@@ -9,31 +9,30 @@ function Q=QVanKeuk(T,x,tau,sigma)
 %           akin to a direct discrete-time version of the Singer's
 %           dynamic model.
 %
-%INPUTS:T     The time-duration of the propagation interval in seconds.
-%        x    The (numDim*(order+1))X1 target state. This is just used to
-%             extract numDim and for functions that expect the first two
-%             parameters of a process noise  covariance matrix function
-%             to be T and x.
-%       tau   The maneuver autocorrelation time in seconds. Presumably,
-%             this parameter can be chosen according to the same criteria
-%             as in Singer's dynamic model. That is, a reasonable range for
-%             tau is between 5 and 20 seconds. This parameter can be a
-%             scalar if the same parameter is used for all dimensions or a
-%             numDimX1 or 1XnumDim vector if different values are used
-%             across the dimensions.
-%     sigma   The acceleration bandwidth. van Keuk shows that the RMS
-%             acceleration at a given time is sigma*sqrt(2*T/theta) where
-%             T is the discrete-time sampling interval. Thus, the parameter
-%             sigma can be determined based on the expected average
-%             acceleration magnitude.
-%    numDim   The number of dimensions of the simulation problem. If the
-%             numDim parameter is omitted, then numDim=3 (3D motion) is
-%             assumed.
+%INPUTS: T The time-duration of the propagation interval in seconds.
+%        x The (numDim*(order+1))X1 target state. This is just used to
+%          extract numDim and for functions that expect the first two
+%          parameters of a process noise  covariance matrix function to be
+%          T and x.
+%      tau The maneuver autocorrelation time in seconds. Presumably,
+%          this parameter can be chosen according to the same criteria as
+%          in Singer's dynamic model. That is, a reasonable range for tau
+%          is between 5 and 20 seconds. This parameter can be a scalar if
+%          the same parameter is used for all dimensions or a numDimX1 or
+%          1XnumDim vector if different values are used across the
+%          dimensions.
+%    sigma The acceleration bandwidth. van Keuk shows that the RMS
+%          acceleration at a given time is sigma*sqrt(2*T/theta) where T is
+%          the discrete-time sampling interval. Thus, the parameter sigma
+%          can be determined based on the expected average acceleration
+%          magnitude.
+%   numDim The number of dimensions of the simulation problem. If the
+%          numDim parameter is omitted, then numDim=3 (3D motion) is
+%          assumed.
 %
-%OUTPUTS: Q     The process noise covariance matrix under a van Keuk
-%               dynamic model with motion in numDim dimensions where the
-%               state is stacked
-%               [position;velocity;acceleration].
+%OUTPUTS: Q The process noise covariance matrix under a van Keuk dynamic
+%           model with motion in numDim dimensions where the state is
+%           stacked [position;velocity;acceleration].
 %
 %Van Keuk's dynamic model is described in Chapter 2.2.1 of  and is
 %described in slightly more detail in [2]. The model is essentially a

@@ -15,7 +15,7 @@ function zp=nearestPointOnQuadricSurface(y,A,bIn,c,epsVal)
 %
 %The solution in 3D is given in Chapter 10.5.1 of [1]. However, this
 %function is not limited to 3D solutions. For other dimensionalities, the
-%polynomial in terms of t is found and explicitely solved.
+%polynomial in terms of t is found and explicitly solved.
 %
 %EXAMPLE 1:
 % A=[82,  7, 12, 17;

@@ -6,53 +6,53 @@ function [xEst,PEst,exitCode]=batchLSNonlinMeasNonlinDynLM(xInit,z,h,R,kD,HJacob
 %           performed using the Levenburg-Marquart algorithm with a 
 %           numerically estimated Jacobian.
 %
-%INPUTS:  xInit The xDimX1 initial estimate of the target state at the time
-%               of the kDth measurement.
-%          z    The zDim X N matrix of measurements for the whole batch. It
-%               is assumed that the measurements have the same
-%               dimensionality over the batch.
-%          h    A NX1 cell array of function handles for the measurement
-%               function that transform the state into the measurement
-%               domain at each step. If the same measurement function is
-%               used for all steps in the batch, then h can just be the
-%               single function handle used. It is assumed that any 
-%               required state propagation forward and backward from time-
-%               step kd is included.
-%          R    The zDim X zDim X N hypermatrix of measurement covariance
-%               matrices. Alternatively, if all of the measurement
-%               covariance matrices are the same, one can just pass a
-%               single zDim X zDim matrix.
-%          kD   The discrete time-step at which the smoothed state estimate
-%               is desired, where z(:,1) is at discrete time-step 1 (not
-%               0). If kD is omitted or an empty matrix is passed, a value
-%               of 1 is assumed.
-%     HJacob    If a covariance matrix is desired on the output, then
-%               HJacob can be provided. HJacob is a zDimX1 cell array of
-%               function handles for the measurement Jacobian matrix that
-%               each takes the target state as a parameter. If a single
-%               measurement Jacobian matrix is used for all steps of the
-%               batch, then HJacob can just be the single function handle
-%               used. If an empty matrix is passed or the parameter is
-%               omitted, then HJacob will be found using numerical
-%               differentiation via the numDiff function with default
-%               parameters.
-%   optimParam  An optional structure whose members are arguments to the
-%               function LSEstLMarquardt if one does not wish to use the
-%               default values for that function. For example, to set
-%               the maximum number of iterations to 1000, then use
-%               optimParam.maxIter=1000; Possible members of the structure
-%               are TolG,TolX,delta,deltaAbs,maxIter, and maxTries, which
-%               are all described in the comments to the function
-%               LSEstLMarquardt.
+%INPUTS: xInit The xDimX1 initial estimate of the target state at the time
+%              of the kDth measurement.
+%            z The zDim X N matrix of measurements for the whole batch. It
+%              is assumed that the measurements have the same
+%              dimensionality over the batch.
+%            h A NX1 cell array of function handles for the measurement
+%              function that transform the state into the measurement
+%              domain at each step. If the same measurement function is
+%              used for all steps in the batch, then h can just be the
+%              single function handle used. It is assumed that any 
+%              required state propagation forward and backward from time-
+%              step kd is included.
+%            R The zDim X zDim X N hypermatrix of measurement covariance
+%              matrices. Alternatively, if all of the measurement
+%              covariance matrices are the same, one can just pass a
+%              single zDim X zDim matrix.
+%           kD The discrete time-step at which the smoothed state estimate
+%              is desired, where z(:,1) is at discrete time-step 1 (not
+%              0). If kD is omitted or an empty matrix is passed, a value
+%              of 1 is assumed.
+%       HJacob If a covariance matrix is desired on the output, then
+%              HJacob can be provided. HJacob is a zDimX1 cell array of
+%              function handles for the measurement Jacobian matrix that
+%              each takes the target state as a parameter. If a single
+%              measurement Jacobian matrix is used for all steps of the
+%              batch, then HJacob can just be the single function handle
+%              used. If an empty matrix is passed or the parameter is
+%              omitted, then HJacob will be found using numerical
+%              differentiation via the numDiff function with default
+%              parameters.
+%   optimParam An optional structure whose members are arguments to the
+%              function LSEstLMarquardt if one does not wish to use the
+%              default values for that function. For example, to set
+%              the maximum number of iterations to 1000, then use
+%              optimParam.maxIter=1000; Possible members of the structure
+%              are TolG,TolX,delta,deltaAbs,maxIter, and maxTries, which
+%              are all described in the comments to the function
+%              LSEstLMarquardt.
 %
-%OUTPUTS: xEst      The refined batch state estimate at step kD. If the
-%                   optimization failed, then an empty matrix is returned.
-%         PEst      A covariance matrix estimate that goes with the state
-%                   estimate. If the optimization failed, then an empty
-%                   matrix is returned.
-%         exitCode  The exit status of the Levenburg-Marquart algorithm.
-%                   The values of this output are described in the comments
-%                   to the function LSEstLMarquardt.
+%OUTPUTS: xEst The refined batch state estimate at step kD. If the
+%              optimization failed, then an empty matrix is returned.
+%         PEst A covariance matrix estimate that goes with the state
+%              estimate. If the optimization failed, then an empty matrix
+%              is returned.
+%     exitCode The exit status of the Levenburg-Marquart algorithm. The
+%              values of this output are described in the comments to the
+%              function LSEstLMarquardt.
 %
 %The algorithm is an implementation of the nonlinear ML technique discussed
 %in [1]. The aforementioned paper does not explicitly say how to perform

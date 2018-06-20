@@ -1,8 +1,9 @@
-function [tuples,gain,u,v]=assign2DMissedDetect(C,maximize,missedDetectByCol)
+function [tuples,gain,u,v]=assign2DMissedDetect(C,maximize,missedDetectByRow)
 %%ASSIGN2DMISSEDDETECT Solve the two-dimensional assignment problem common
 %          to target tracking, where, in a tracking context, one row (or
 %          column) represents missed detection costs. The problem being
-%          solved can be formulated as minimize (or maximize)
+%          solved can be formulated (if missedDetectByRow=true) as
+%          minimize (or maximize)
 %          \sum_{i=1}^{numMeas+1}\sum_{j=1}^{numTar}C_{i,j}*x_{i,j}
 %          subject to
 %          \sum_{i=1}^{numMeas+1}x_{i,j}=1 for all j
@@ -13,9 +14,9 @@ function [tuples,gain,u,v]=assign2DMissedDetect(C,maximize,missedDetectByCol)
 %          missed detection hypothesis. Measurements are indexed starting
 %          at 2.
 %
-%INPUTS: C A (numMeas+1)XnumTar (or if targetByCol=true, a
-%          numTarX(numMeas+1) cost matrix where the first row (or column if
-%          targetByCol=true) is the cost of a missed detection for each
+%INPUTS: C A (numMeas+1)XnumTar (or if targetByRow=false, a
+%          numTarX(numMeas+1) cost matrix) where the first row (or column
+%          if targetByRow=false) is the cost of a missed detection for each
 %          target and the subsequent rows (columns) are the costs of
 %          assigning a measurement to a target. The matrix cannot contain
 %          any NaNs and if maximizing, cannot containing any Inf values and
@@ -23,20 +24,23 @@ function [tuples,gain,u,v]=assign2DMissedDetect(C,maximize,missedDetectByCol)
 % maximize If true, the minimization problem is transformed into a
 %          maximization problem. The default if this parameter is omitted
 %          or an empty matrix is passed is false.
-% missedDetectByCol If this is true, the first column of C is the set of missed
-%          detection costs. Otherwise, the first row of C is the set of
-%          missed detection costs. The default if this parameter is omitted
-%          or an empty matrix is passed is true.
+% missedDetectByRow If this is true, the first row of C is the set of
+%          missed detection costs. Otherwise, the first column of C is the
+%          set of missed detection costs. The default if this parameter is
+%          omitted or an empty matrix is passed is true.
 %
 %OUTPUTS: tuples A 2XnumTar set of assignment values. If
-%               targetsByCol=false (or is omitted), then this is ordered
+%               targetsByRow=false (or is omitted), then this is ordered
 %               [Measurement Index;Target Index]; Otherwise, the ordering
-%               is [Target Index; Measurement Index].
+%               is [Target Index; Measurement Index]. If the problem is
+%               infeasible, this is an empty matrix.
 %          gain This is the value of the cost. This is the sum of the
-%               values in C corresponding to the tuples.
+%               values in C corresponding to the tuples. If the problem is
+%               infeasible, this is -1.
 %           u,v These are the dual variables for the constrained columns
 %               and for constrained rows of C. These will satisfy the
-%               complementary slackness condition.
+%               complementary slackness condition of a transformed
+%               problem.
 %
 %This function implements a modified Jonker-Volgenant algorithm as
 %described in [1] and [2]. However, unlike the assign2D function, which
@@ -53,28 +57,35 @@ function [tuples,gain,u,v]=assign2DMissedDetect(C,maximize,missedDetectByCol)
 %Here we compare how one can represent a set of measurement assignment
 %costs and missed detection values compared to using the assign2D function,
 %which requires that one augment the assignment matrix. We also verify that
-%the complementary slackness condition of the dual for optimality
-%(mentioned in [1]) is satisfied.
+%the complementary slackness condition of the dual for optimality. The
+%complementary slackness condition could be forced to hold on C by
+%adding minC=min(0,min(C(:))) (during minimization) or
+%maxC=max(0,max(C(:))) (during maximization) to v. As it is, the
+%complementary slackness condition holds on C-minC for minimization and
+%C-maxC for maximization (mentioned in [1]) is satisfied.
 % numTar=10;
 % numMeas=20;
 % maximize=false;
 % C=2*rand(numMeas,numTar)-1;
 % missedDetect=2*rand(1,numTar)-1;
 % C1=[missedDetect;C];
-% missedDetectByCol=true;
-% [tuples,gain,u,v]=assign2DMissedDetect(C1,maximize,missedDetectByCol);
+% minC1=min(0,min(C1(:)));
+% missedDetectByRow=true;
+% [tuples,gain,u,v]=assign2DMissedDetect(C1,maximize,missedDetectByRow);
 % 
 % %We verify the correctness of the complementary slackness condition.
 % slackVal=0;
 % for k=1:numTar
 %     %If assigned to a constrained value
-%     if(tuples(1,k)~=1)
-%         slackVal=slackVal+abs(C1(tuples(1,k),tuples(2,k))*(C1(tuples(1,k),tuples(2,k))-v(tuples(1,k)-1)-u(tuples(2,k))));
+%     if(tuples(1,k)~=1&&tuples(2,k)~=1)
+%         slackVal=slackVal+abs((C1(tuples(1,k),tuples(2,k))-minC1)*(C1(tuples(1,k),tuples(2,k))-minC1-v(tuples(1,k)-1)-u(tuples(2,k))));
 %     end
 % end
 % slackVal
 % %One will see that the slack value is zero, indicating that the
-% %complementary slackness condition is satisfied.
+% %complementary slackness condition is satisfied. Note that this is on the
+% %problem transformed, subtracting minC1. If maximization were performed,
+% %one would have to subtract the maximum entry in C1.
 % 
 % CD=Inf(numTar,numTar);
 % CD(diagElIdx(numTar))=missedDetect;
@@ -103,29 +114,27 @@ function [tuples,gain,u,v]=assign2DMissedDetect(C,maximize,missedDetectByCol)
 %    targets," in Proceedings of SPIE: Signal Processing, Sensor Fusion,
 %    and Target Recognition XXII, vol. 8745, Baltimore, MD, Apr. 2013.
 %
-%October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%October 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
     if(nargin<2||isempty(maximize))
         maximize=false;
     end
     
-    if(nargin<3||isempty(missedDetectByCol))
-       missedDetectByCol=true; 
+    if(nargin<3||isempty(missedDetectByRow))
+        missedDetectByRow=true; 
     end
     
     numRow=size(C,1);
     numCol=size(C,2);
     
-    didFlip=false;
-    if(missedDetectByCol==false)
+    if(missedDetectByRow==false)
         C=C';
         temp=numRow;
         numRow=numCol;
         numCol=temp;
-        didFlip=true;
     end
-    numRowsTrue=numRow-1;
+    numRowsTrue=numRow;
     %The number of rows of the virtually augmented matrix.
     numRow=numRow+numCol-1;
 
@@ -185,14 +194,14 @@ function [tuples,gain,u,v]=assign2DMissedDetect(C,maximize,missedDetectByCol)
             end
         end
     end
-    
+
     %Calculate the gain that should be returned.
     if(nargout>1)
         gain=0;
         for curCol=1:numCol
             theRow=row4col(curCol);
             
-            if(theRow>numRowsTrue)
+            if(theRow>numRowsTrue-1)
                 gain=gain+C(1,curCol);
             else
                 gain=gain+C(theRow+1,curCol);
@@ -210,19 +219,15 @@ function [tuples,gain,u,v]=assign2DMissedDetect(C,maximize,missedDetectByCol)
     end
     
     %Mark the columns that have been assigned to missed detections
-    sel=row4col>numRowsTrue;
+    sel=row4col>numRowsTrue-1;
     row4col(sel)=1;%Missed detections
     row4col(~sel)=row4col(~sel)+1;%Targets
 
     %Get rid of the dual variables related to the "unconstrained" column.
-    v=v(1:numRowsTrue);
-    
-    %Make the complementary slackness condition holds for the
-    %non-transformed problem.
-    v=v+CDelta;
+    v=v(1:(numRowsTrue-1));
 
     tuples=zeros(2,numCol);
-    if(didFlip==true)
+    if(missedDetectByRow==false)
         for curCol=1:numCol
            tuples(:,curCol)=[curCol;row4col(curCol)]; 
         end
@@ -237,15 +242,19 @@ function [tuples,gain,u,v]=assign2DMissedDetect(C,maximize,missedDetectByCol)
 end
 
 function [sink, pred, u, v]=ShortestPath(curUnassCol,u,v,C,col4row,row4col)
+%%SHORTESTPATH This implementation of the shortest path algorithm for the
+%           Jonker-Volgenant algorithm has been modified to handle an
+%           unconstrained row by acting on a virtually augmented matrix.
+
     %This assumes that unassigned columns go from 1:numUnassigned
-    numRowTrue=size(C,1);
+    numRowsTrue=size(C,1);
     numCol=size(C,2);
     pred=zeros(numCol,1);
     
     %The first row is the row containing missed detection costs for all of
     %the columns and thus is not counted. We then add numCol virtual rows
     %to the end that are the missed detection costs.
-    numRow=numRowTrue-1+numCol;
+    numRow=numRowsTrue-1+numCol;
     
     %Initially, none of the rows and columns have been scanned.
     %This will store a 1 in every column that has been scanned.
@@ -261,7 +270,7 @@ function [sink, pred, u, v]=ShortestPath(curUnassCol,u,v,C,col4row,row4col)
     curCol=curUnassCol;
     shortestPathCost=ones(numRow,1)*Inf;
     
-    while(sink==0)        
+    while(sink==0)
         %Mark the current column as having been visited.
         ScannedCols(curCol)=1;
         
@@ -270,22 +279,24 @@ function [sink, pred, u, v]=ShortestPath(curUnassCol,u,v,C,col4row,row4col)
         for curRowScan=1:numRow2Scan
             curRow=Row2Scan(curRowScan);
             
-            if(curRow>numRowTrue-1)
+            if(curRow>numRowsTrue-1)
                 %If scanning a missed detection cost.
-                if(curRow==numRowTrue-1+curCol)
+                if(curRow==numRowsTrue-1+curCol)
                     reducedCost=delta+C(1,curCol)-u(curCol)-v(curRow);
                     if(reducedCost<shortestPathCost(curRow))
                         pred(curRow)=curCol;
                         shortestPathCost(curRow)=reducedCost;
                     end
+                else
+                    reducedCost=Inf;
                 end
             else
                 reducedCost=delta+C(curRow+1,curCol)-u(curCol)-v(curRow);
-                
-                if(reducedCost<shortestPathCost(curRow))
-                    pred(curRow)=curCol;
-                    shortestPathCost(curRow)=reducedCost;
-                end
+            end
+
+            if(reducedCost<shortestPathCost(curRow))
+                pred(curRow)=curCol;
+                shortestPathCost(curRow)=reducedCost;
             end
 
             %Find the minimum unassigned column that was
@@ -305,8 +316,8 @@ function [sink, pred, u, v]=ShortestPath(curUnassCol,u,v,C,col4row,row4col)
         
         closestRow=Row2Scan(closestRowScan);
         
-        %Add the column to the list of scanned columns and delete it from
-        %the list of columns to scan.
+        %Add the row to the list of scanned rows and delete it from the
+        %list of rows to scan.
         ScannedRow(closestRow)=1;
         numRow2Scan=numRow2Scan-1;
         Row2Scan(closestRowScan)=[];
@@ -330,8 +341,8 @@ function [sink, pred, u, v]=ShortestPath(curUnassCol,u,v,C,col4row,row4col)
     sel(curUnassCol)=0;
     u(sel)=u(sel)+delta-shortestPathCost(row4col(sel));
     
-    %Update the scanned columns in the augmenting path.
-    sel=ScannedRow~=0;
+    %Update the scanned rows in the augmenting path.
+    sel=(ScannedRow~=0);
     v(sel)=v(sel)-delta+shortestPathCost(sel);
 end
 

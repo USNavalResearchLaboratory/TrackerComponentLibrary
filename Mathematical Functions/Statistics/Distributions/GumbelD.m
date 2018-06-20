@@ -1,8 +1,8 @@
 classdef GumbelD
-%%GUMBELD Functions to handle the exponential distribution. This is also
-%         known as the generalized extreme value distribution type-I, and
-%         the log-Weibull distribution.
-%Implemented methods are: mean, var, PDF, CDF, invCDF, rand
+%%GUMBELD Functions to handle the Gumbel distribution. This is also known
+%         as the generalized extreme value distribution type-I, and the
+%         log-Weibull distribution.
+%Implemented methods are: mean, var, PDF, CDF, invCDF, rand, entropy
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.    
     
@@ -32,7 +32,7 @@ function val=mean(mu,betaVal)
 %
 %April 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
     
-    gammaVal=-psi(1);%The Euler?Mascheroni constant.
+    gammaVal=-psi(1);%The Euler-Mascheroni constant.
     val=mu+betaVal*gammaVal;
 end
 
@@ -108,7 +108,7 @@ end
 
 function prob=CDF(x,mu,betaVal)
 %%CDF Evaluate the cumulative distribution function (CDF) of the gumbel
-%     distirbution at one or more desired points.
+%     distribution at one or more desired points.
 %
 %INPUTS: x The point(s) at which the Gumbel CDF is to be evaluated.
 %       mu The real location parameter of the distribution 
@@ -200,6 +200,31 @@ function x=rand(N,mu,betaVal)
     U=rand(dims);
 
     x=GumbelD.invCDF(U,mu,betaVal);
+end
+
+function entropyVal=entropy(betaVal)
+%%ENTROPY Obtain the differential entropy of the Gumbel distribution given
+%         in nats. The differential entropy of a continuous distribution is
+%         entropy=-int_x p(x)*log(p(x)) dx where the integral is over all
+%         values of x. Units of nats mean that the natural logarithm is
+%         used in the definition. Unlike the Shannon entropy for discrete
+%         variables, the differential entropy of continuous variables can
+%         be both positive and negative.
+%
+%INPUTS: betaVal The scale parameter of the distribution. betaVal>0.
+%
+%OUTPUTS: entropyVal The value of the differential entropy in nats.
+%
+%Differential entropy is defined in Chapter 8 of [1].
+%
+%REFERENCES:
+%[1] T. M. Cover and J. A. Thomas, Elements of Information Theory, 2nd ed.
+%    Hoboken, NJ: Wiley-Interscience, 2006.
+%
+%April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    gammaVal=-psi(1);%The Euler-Mascheroni constant.
+    entropyVal=log(betaVal)+gammaVal+1;
 end
 end
 end

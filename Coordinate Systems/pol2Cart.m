@@ -12,7 +12,7 @@ function cartPoints=pol2Cart(z,systemType,useHalfRange,zTx,zRx,M)
 %          0 (The default if omitted or an empty matrix is passed) The
 %            azimuth angle is counterclockwise from the x axis.
 %          1 The azimuth angle is measured clockwise from the y axis.
-%useHalfRange A boolean value specifying whether the bistatic range value
+% useHalfRange A boolean value specifying whether the bistatic range value
 %           should be divided by two. This normally comes up when operating
 %           in monostatic mode, so that the range reported is a one-way
 %           range. The default if this parameter is not provided, or an

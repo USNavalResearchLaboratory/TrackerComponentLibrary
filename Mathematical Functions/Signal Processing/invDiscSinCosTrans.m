@@ -60,12 +60,6 @@ function x=invDiscSinCosTrans(C,type)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 N=length(C);
-if(size(C,1)==N)
-    colVec=true;
-else
-    colVec=false;
-end
-
 if(nargin<2)
     type='CIIe';
 end
@@ -120,10 +114,6 @@ if(isreal(C))
 	x=real(x);
 elseif(isImag(C))
     x=1j*imag(x);
-end
-
-if(colVec==false)
-    x=x.';
 end
 end
 

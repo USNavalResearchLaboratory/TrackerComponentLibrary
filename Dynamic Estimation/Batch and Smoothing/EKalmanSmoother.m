@@ -5,60 +5,63 @@ function [xSmooth,PSmooth,xUpd,PUpd]=EKalmanSmoother(xInit,PInit,z,h,HJacob,f,FJ
 %                 along the entire batch are available. The initial
 %                 predicted states can not be uninformative.
 %
-%INPUTS: xInit  The predicted state at the time of the initial measurement
-%               in z.
-%        PInit  The covariance matrix associated with the predicted state
-%               at the time of the initial measurement in z.
-%           z   The zDim X N matrix of measurements for the whole batch.
-%           h   A NX1 cell array of function handles for the measurement
-%               function that transform the state into the measurement
-%               domain at each step. If the same measurement function is
-%               used for all steps in the batch, then h can just be the
-%               single function handle used.
-%      HJacob   A NX1 cell array of function handles for the measurement
-%               Jacobian matrix that each takes the target state as a
-%               parameter. If a single measurement Jacobian matrix is used
-%               for all steps of the batch, then HJacob can just be the
-%               single function handle used. If an empty matrix is passed
-%               or the parameter is omitted, then HJacob will be found
-%               using numerical differentiation via the numDiff function
-%               with default parameters.
-%           f   A NX1 cell array of function handles for the state
-%               transition function that transform the state into the
-%               measurement domain at each step. If the same measurement
-%               function is used for all steps in the batch, then h can
-%               just be the single function handle used.
-%       FJacob  A NX1 cell array of function handles for the state
-%               transition Jacobian matrix that each takes the target state
-%               as a parameter. If a single measurement Jacobian matrix is
-%               used for all steps of the batch, then HJacob can just be
-%               the single function handle used. If an empty matrix is
-%               passed or the parameter is omitted, then HJacob will be
-%               found using numerical differentiation via the numDiff
-%               function with default parameters.
-%           R   The zDim X zDim X N hypermatrix of measurement covariance
-%               matrices. Alternatively, if all of the measurement
-%               covariance matrices are the same, one can just pass a
-%               single zDim X zDim matrix.
-%           Q   The xDim X xDim X (N-1) hypermatrix of process noise
-%               covariance matrices. Alternatively, if all of the process
-%               noise covariance matrices are the same, one can just pass a
-%               single xDim X xDim matrix.
-%           kD  The discrete time-step at which the smoothed state estimate
-%               is desired, where z(:,1) is at discrete time-step 1 (not
-%               0). If kD is omitted or an empty matrix is passed, then
-%               results along the entire batch are obtained.
-%      numIter  The number of iterations to perform if an iterated EKF is
-%               desired. The default is zero. That is, just use the
-%               standard update without any additional iterations.
+%INPUTS: xInit The predicted state at the time of the initial measurement
+%              in z.
+%        PInit The covariance matrix associated with the predicted state at
+%              the time of the initial measurement in z.
+%            z The zDim X N matrix of measurements for the whole batch.
+%            h A NX1 cell array of function handles for the measurement
+%              function that transform the state into the measurement
+%              domain at each step. If the same measurement function is
+%              used for all steps in the batch, then h can just be the
+%              single function handle used.
+%       HJacob A NX1 cell array of function handles for the measurement
+%              Jacobian matrix that each takes the target state as a
+%              parameter. If a single measurement Jacobian matrix is used
+%              for all steps of the batch, then HJacob can just be the
+%              single function handle used. If an empty matrix is passed or
+%              the parameter is omitted, then HJacob will be found using
+%              numerical differentiation via the numDiff function with
+%              default parameters.
+%            f A NX1 cell array of function handles for the state
+%              transition function that transform the state into the
+%              measurement domain at each step. If the same measurement
+%              function is used for all steps in the batch, then h can just
+%              be the single function handle used.
+%       FJacob A NX1 cell array of function handles for the state
+%              transition Jacobian matrix that each takes the target state
+%              as a parameter. If a single measurement Jacobian matrix is
+%              used for all steps of the batch, then HJacob can just be the
+%              single function handle used. If an empty matrix is passed or
+%              the parameter is omitted, then HJacob will be found using
+%              numerical differentiation via the numDiff function with
+%              default parameters.
+%            R The zDim X zDim X N hypermatrix of measurement covariance
+%              matrices. Alternatively, if all of the measurement
+%              covariance matrices are the same, one can just pass a single
+%              zDim X zDim matrix.
+%            Q The xDim X xDim X (N-1) hypermatrix of process noise
+%              covariance matrices. Alternatively, if all of the process
+%              noise covariance matrices are the same, one can just pass a
+%              single xDim X xDim matrix.
+%           kD The discrete time-step at which the smoothed state estimate
+%              is desired, where z(:,1) is at discrete time-step 1 (not 0).
+%              If kD is omitted or an empty matrix is passed, then
+%              results along the entire batch are obtained.
+%      numIter The number of iterations to perform if an iterated EKF is
+%              desired. The default is zero. That is, just use the
+%              standard update without any additional iterations.
 %
-%OUTPUTS: xEst     The xDimXN smoothed state estimates at all steps if kD
-%                  is not provided or the xDimX1 smoothed information state
-%                  estimate at step kD if kD is provided.
-%         PEst     The covariance matrices associated with the smoothed
-%                  state estimates. This is xDimXxDimXN for the whole batch
-%                  if kD is not provided and is xDimXxDim if kD is
-%                  provided.
+%OUTPUTS: xEst The xDimXN smoothed state estimates at all steps if kD is
+%              not provided or the xDimX1 smoothed state estimate at step
+%              kD if kD is provided.
+%         PEst The covariance matrices associated with the smoothed
+%              state estimates. This is xDimXxDimXN for the whole batch
+%              if kD is not provided and is xDimXxDim if kD is provided.
+%         xUpd The xDimXN state estimates of the forward filter (not
+%              smoothed) at all times.
+%         PUpd The xDimXxDimXN covariance matrices of the forward filter
+%              (not smoothed) at all times.
 %
 %This function implements an extended Kalman smoother modified from Chapter
 %8.6 of [1].
@@ -155,7 +158,7 @@ for curStep=(N-1):-1:1
     end
 end
 
-if ~isempty(kD)
+if(~isempty(kD))
     xSmooth=xSmooth(:,kD);
     PSmooth=PSmooth(:,:,kD);
 end

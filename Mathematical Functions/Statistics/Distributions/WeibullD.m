@@ -1,13 +1,13 @@
 classdef WeibullD
 %%WEIBULLD Functions to handle the Weibull distribution.
-%Implemented methods are: mean, var, PDF, CDF, invCDF, rand
+%Implemented methods are: mean, var, PDF, CDF, invCDF, rand, entropy
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 methods(Static)
     
 function val=mean(lambda,k)
-%%MEAN Obtain the mean of the Weibull distirbution for given scale and
+%%MEAN Obtain the mean of the Weibull distribution for given scale and
 %      shape parameters.
 %
 %INPUTS: lambda The scale parameter of the distribution. lambda>0.
@@ -37,7 +37,7 @@ function val=mean(lambda,k)
 end
 
 function val=var(lambda,k)
-%%VAR Obtain the variance of the Weibull distirbution for given scale and
+%%VAR Obtain the variance of the Weibull distribution for given scale and
 %     shape parameters/
 %
 %INPUTS: lambda The scale parameter of the distribution. lambda>0.
@@ -113,7 +113,7 @@ end
 
 function val=CDF(x,lambda,k)
 %%CDF Evaluate the cumulative distribution function (CDF) of the Weibull
-%     distirbution at one or more desired points.
+%     distribution at one or more desired points.
 %
 %INPUTS: x The point(s) at which the Weibull CDF is to be evaluated.
 %   lambda The scale parameter of the distribution. lambda>0.
@@ -213,6 +213,31 @@ function vals=rand(N,lambda,k)
     vals=WeibullD.invCDF(U,lambda,k);
 end
 
+function entropyVal=entropy(lambda,k)
+%%ENTROPY Obtain the differential entropy of the Weibull distribution
+%         given in nats. The differential entropy of a continuous
+%         distribution is entropy=-int_x p(x)*log(p(x)) dx where the
+%         integral is over all values of x. Units of nats mean that the
+%         natural logarithm is used in the definition. Unlike the Shannon
+%         entropy for discrete variables, the differential entropy of
+%         continuous variables can be both positive and negative.
+%
+%INPUTS: lambda The scale parameter of the distribution. lambda>0.
+%        k The shape parameter of the distribution. k>0.
+%
+%OUTPUTS: entropyVal The value of the differential entropy in nats.
+%
+%Differential entropy is defined in Chapter 8 of [1].
+%
+%REFERENCES:
+%[1] T. M. Cover and J. A. Thomas, Elements of Information Theory, 2nd ed.
+%    Hoboken, NJ: Wiley-Interscience, 2006.
+%
+%April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    gammaVal=-psi(1);
+    entropyVal=gammaVal*(1-1/k)+log(lambda/k)+1;
+end
 end
 end
 

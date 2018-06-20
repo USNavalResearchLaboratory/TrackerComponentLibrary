@@ -4,8 +4,8 @@ function [x,info]=minimaxL2NormLinear(F,g,algorithm,params)
 %
 %INPUTS: F An mXnXp set of p real mXn matrices.
 %        g An mXp set of p real vectors.
-%algorithm An optional parameter specifying which algorithm to use to solve
-%          the problem. The problem is solved as a second order cone
+% algorithm An optional parameter specifying which algorithm to use to
+%          solve the problem. The problem is solved as a second order cone
 %          problem. Possible values are:
 %          0 (The default if omitted or an empty matrix is passed) Use the
 %            function splitingConicSolver.

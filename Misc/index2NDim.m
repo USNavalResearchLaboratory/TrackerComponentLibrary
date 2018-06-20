@@ -11,7 +11,7 @@ function indices=index2NDim(dims,idx)
 %
 %INPUTS: dims A 1XnumDim or numDimX1 vector holding the size of each of
 %             the nDim dimensions. The values are >=1.
-%        idx  A numIdxX1 or 1XnumIdx vector of linear indices (starting
+%         idx A numIdxX1 or 1XnumIdx vector of linear indices (starting
 %             from 1, not 0).
 %
 %OUTPUTS: indices A numDimXnumIdx matrix of sets of indices corresponding

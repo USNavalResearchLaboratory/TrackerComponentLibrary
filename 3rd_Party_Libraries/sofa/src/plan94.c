@@ -160,13 +160,13 @@ int iauPlan94(double date1, double date2, int np, double pv[2][3])
 **
 **  Reference:  Simon, J.L, Bretagnon, P., Chapront, J.,
 **              Chapront-Touze, M., Francou, G., and Laskar, J.,
-**              Astron. Astrophys. 282, 663 (1994).
+**              Astron.Astrophys., 282, 663 (1994).
 **
-**  This revision:  2017 March 16
+**  This revision:  2017 October 12
 **
-**  SOFA release 2017-04-20
+**  SOFA release 2018-01-30
 **
-**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 */
 {
 /* Gaussian constant */
@@ -468,7 +468,7 @@ int iauPlan94(double date1, double date2, int np, double pv[2][3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2017
+**  Copyright (C) 2018
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

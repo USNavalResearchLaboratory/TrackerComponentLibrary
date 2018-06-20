@@ -15,7 +15,7 @@ function [v,beta]=HouseholderVec(x)
 %      beta The real scalar beta as mentioned with v. beta= 2/(v'*v). If a
 %           scalar input is given, then beta=0 is returned.
 %
-%For real vectors x, the Householder Vector algorithm of Section 5.1.3 of
+%For real vectors x, the Householder vector algorithm of Section 5.1.3 of
 %[1] is used. For complex vectors, the Householder algorithm of Section
 %5.1.13 is used.
 %
@@ -51,9 +51,9 @@ if(isreal(x))%The real case from Chapter 5.1.3
         return;
     else
         mu=sqrt(x(1).*x(1)+sigma);
-        %The book has <=; we are using < as it does not change things and for
-        %some data types, such as Intervals, it is easier to overload < than
-        %<=.
+        %The book has <=; we are using < as it does not change things and
+        %for some data types, such as Intervals, it is easier to overload <
+        %than <=.
         if(x(1)<0)
             v(1)=x(1)-mu;
         else

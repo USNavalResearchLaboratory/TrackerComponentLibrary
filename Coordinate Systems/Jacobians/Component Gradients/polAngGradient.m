@@ -18,10 +18,9 @@ function JTotal=polAngGradient(xG,systemType,lRx,M)
 %          coordinates. If this parameter is omitted or an empty matrix is
 %          passed, then the receiver is assumed to be at the origin.
 %        M A 2X2 rotation matrices to go from the alignment of the global
-%          coordinate system to that at the receiver. If omitted or an
-%          empty matrix is passed, then it is assumed that the local
-%          coordinate system is aligned with the global and M=eye(2,2)
-%          --the identity matrix is used. 
+%          coordinate system to that at the receiver. As noted below, this
+%          can be omitted or an empty matrix passed, because  M does not
+%          actually matter.
 %
 %OUTPUTS: JTotal A 1X2XN set of gradient matrices of the polar angle taken
 %           with respect to the components [x,y] in 2D in that order for
@@ -31,6 +30,42 @@ function JTotal=polAngGradient(xG,systemType,lRx,M)
 %that using bistatic r-u-v measurements in 3D, which is discussed in [1].
 %Basic differentiation was analytically performed to obtain the expressions
 %used in this file.
+%
+%Note that normally we would convert the point to the local coordinate
+%system as
+%xLocal=M*(xG(1:2,curPoint)-lRx(1:2))
+%then compute the gradient J, and then undo the effects of the rotation
+%matrix M in the end to the the global coordinates as JTotal=J*M.
+%However, that is not necessary with polar angles, due to cancellations.
+%Say that M=[m11,m12;m21,m22] is a rotation matrix. Then, the partial
+%derivative with respect to x is explicitly: 
+%((m12*m21-m11*m22)*y)/((m11^2+m21^2)*x^2+2*(m11*m12+m21*m22)*x*y+(m12^2+m22^2)*y^2)
+%However, one will see that because M is a roation matrix and M*M'=eye(2)
+%then m12*m21-m11*m22=-1, m11^2+m21^2=m12^2+m22^2=1, and m11*m12+m21*m22=0,
+%which is the same as if no rotation matrix were present. Basically, all M
+%does is add a constant to the direction angle; it does not change any of
+%the derivatives. Thus, M does not matter for the Jacobian. We just include
+%it as an input so that one is aware that the function will work with
+%rotated measurement systems.
+%
+%EXAMPLE:
+%Here, we verify that a numerically differentiated Jacobian is consistent
+%with the analytic one produced by this function.
+% x=[100;-1000];
+% lRx=[500;20];
+% epsVal=1e-5;
+% systemType=0;
+% M=randRotMat(2);
+% J=polAngGradient(x,systemType,lRx,M);
+% 
+% theta=getPolAngle(x,systemType,lRx,M);
+% thetadX=getPolAngle(x+[epsVal;0],systemType,lRx,M);
+% thetadY=getPolAngle(x+[0;epsVal],systemType,lRx,M);
+% 
+% JNumDiff=[(thetadX-theta)/epsVal;(thetadY-theta)/epsVal];
+% max(abs((J(:)-JNumDiff(:))./J(:)))
+%The relative error will be on the order of 1e-8, indicating good agreement
+%between the numerical Jacobian vector and the actual Jacobian vector.
 %
 %REFERENCES:
 %[1] David F. Crouse , "Basic tracking using nonlinear 3D monostatic and
@@ -42,23 +77,21 @@ function JTotal=polAngGradient(xG,systemType,lRx,M)
 
 N=size(xG,2);
 
-if(nargin<4||isempty(M))
-   M=eye(2,2); 
-end
+%M does not matter, so we do not need to check whether it is given.
 
 if(nargin<3||isempty(lRx))
-   lRx=zeros(2,1);
+    lRx=zeros(2,1);
 end
 
 if(nargin<2||isempty(systemType))
-   systemType=0; 
+    systemType=0; 
 end
 
 JTotal=zeros(1,2,N);
 for curPoint=1:N
     %Convert the point into the local coordinate system of the receiver.
-    xLocal=M*(xG(1:2,curPoint)-lRx(1:2));
-
+    xLocal=xG(1:2,curPoint)-lRx(1:2);
+    
     xL=xLocal(1);
     yL=xLocal(2);
 
@@ -82,7 +115,7 @@ for curPoint=1:N
 
     %Undo the rotation to move the gradient into the global coordinate
     %system.
-    JTotal(:,:,curPoint)=J*M;
+    JTotal(:,:,curPoint)=J;
 end
 end
 

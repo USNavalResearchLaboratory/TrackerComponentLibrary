@@ -1,10 +1,10 @@
 Every file in the SOFA Library is marked with a license statement. The statement is reproduced below for convenience.
 
-June 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
+March 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2016
+**  Copyright (C) 2018
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

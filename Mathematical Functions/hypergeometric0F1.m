@@ -15,7 +15,7 @@ function S=hypergeometric0F1(a,z)
 %solutions are finite.
 %
 %REFERENCES:
-%[1] J. Pearson, "Computation of hypergeometric functions," Master?s
+%[1] J. Pearson, "Computation of hypergeometric functions," Master's
 %    thesis, University of Oxford, Worcester College, 4 Sep. 2009.
 %
 %July 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.

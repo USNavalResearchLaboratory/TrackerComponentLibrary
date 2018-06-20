@@ -1,7 +1,7 @@
 function [intEst,totalError,exitCode]=integral1DAdaptive(f,bounds,n,algorithm,c1,RelTol,AbsTol,maxSearchReg)
 %%INTEGRAL1DADAPTIVE Perform adaptive numerical integration over a function
 %                 that takes a scalar input and returns a scalar value. The
-%                 inegration is based on the use of embedded cubature
+%                 integration is based on the use of embedded cubature
 %                 points, which can use weighting functions, if necessary.
 %                 The integral function built into Matlab does not support
 %                 the use of high-order embedded cubature points nor does
@@ -44,34 +44,34 @@ function [intEst,totalError,exitCode]=integral1DAdaptive(f,bounds,n,algorithm,c1
 %               The first n points are those for an order 2*n-1 rule using
 %               weights wG and the next n+1 points are different. This with
 %               the weights wK have a polynomial accuracy of 2*n+1.
-%            wG The weights of xiK. These are all different from the weights
-%               in wG.
+%            wG The weights of xiK. These are all different from the
+%               weights in wG.
 %           bounds The 2X1 or 1X2 vector of bounds for the integration
 %               using the points in xiK
-%    RelTol The maximum relative error tolerance allowed. If omitted or an
-%           empty matrix is passed, the default value of 1e-9 is used.
+%   RelTol The maximum relative error tolerance allowed. If omitted or an
+%          empty matrix is passed, the default value of 1e-8 is used.
 %    AbsTol The absolute error tolerance allowed. If omitted or an empty
-%           matrix is passed, the default value of 1e-12 is used.
-%   maxSearchReg The algorithm works by splitting space into increasingly
-%           small regions. This optional parameter is the maximum
-%           number of regions allowed. If omitted or an empty matrix
+%          matrix is passed, the default value of 1e-11 is used.
+% maxSearchReg The algorithm works by splitting space into increasingly
+%          small regions. This optional parameter is the maximum
+%          number of regions allowed. If omitted or an empty matrix
 %          is passed, the default value of 1000 is used.
 %
-%OUTPUTS:    intEst The estimate of the integral.
-%        totalError The estimate of the error of the integral. This is
-%                   usually an underestimate. It was used to determine
-%                   convergence.
-%          exitCode A value indicating the status of the algorithm on
-%                  termination. Possible values are
-%                  0 Termination occurred due to the absolute or relative
-%                    error tolerances being fulfilled.
-%                  1 Termination occurred due to the search region having
-%                    been split into the maximum number of subregions.
-%                  2 A singularity of a NaN was encountered during a step;
-%                    the returned values of intEst and totalError are from
-%                    the previous step and do not meet the error criterion.
-%                  3 A singularity or NaN was encountered. The values of
-%                    intEst and totalError are most likely invalid.
+%OUTPUTS: intEst The estimate of the integral.
+%     totalError The estimate of the error of the integral. This is
+%                usually an underestimate. It was used to determine
+%                convergence.
+%       exitCode A value indicating the status of the algorithm on
+%                termination. Possible values are
+%                0 Termination occurred due to the absolute or relative
+%                  error tolerances being fulfilled.
+%                1 Termination occurred due to the search region having
+%                  been split into the maximum number of subregions.
+%                2 A singularity of a NaN was encountered during a step;
+%                  the returned values of intEst and totalError are from
+%                  the previous step and do not meet the error criterion.
+%                3 A singularity or NaN was encountered. The values of
+%                  intEst and totalError are most likely invalid.
 %
 %Note that singularities at the ends of the interval are often not a
 %problem as the ends of the interval are typically not evaluated unless
@@ -115,7 +115,7 @@ function [intEst,totalError,exitCode]=integral1DAdaptive(f,bounds,n,algorithm,c1
 %double the estimated accuracy. This is a very difficult integral. If one
 %were to use the integral function built into Matlab (as of Matlab2016b):
 % intEst=integral(f,0,1,'AbsTol',AbsTol,'RelTol',RelTol)
-%one would simply get a NaN as the retruned value.
+%one would simply get a NaN as the returned value.
 %
 %November 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -133,15 +133,15 @@ if(nargin<4||isempty(algorithm))
 end
 
 if(nargin<5||isempty(c1))
-   c1=[]; 
+    c1=[]; 
 end
 
 if(nargin<6||isempty(RelTol))
-   RelTol=1e-9; 
+    RelTol=1e-8; 
 end
 
 if(nargin<7||isempty(AbsTol))
-   AbsTol=1e-12;
+    AbsTol=1e-11;
 end
 
 if(nargin<8||isempty(maxSearchReg))
@@ -176,7 +176,7 @@ boundsDesired=[bounds(1);center];
 [val,err]=integrate1DWithBounds(f,boundsDesired,boundsOrig,wG,xiK,wK);
 if(~isfinite(val)||~isfinite(err))
     totalError=Inf;
-    intEst=Inf;
+    intEst=val;
     exitCode=2;%Encountered a singularity or a NaN.
     return;
 end
@@ -191,7 +191,7 @@ boundsDesired=[center;bounds(2)];
 [val,err]=integrate1DWithBounds(f,boundsDesired,boundsOrig,wG,xiK,wK);
 if(~isfinite(val)||~isfinite(err))
     totalError=Inf;
-    intEst=Inf;
+    intEst=val;
     exitCode=2;%Encountered a singularity or a NaN.
     return;
 end
@@ -286,6 +286,8 @@ function [valHigh,err]=integrate1DWithBounds(f,boundsDesired,boundsOrig,wG,xiK,w
 %               points were desired are given in boundsOrig. This function
 %               is simply implemented using a change of variables
 %               substitution.
+%
+%November 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
 %Extract upper and lower desired integration bounds as well as the bounds
 %given by the points xiG and xiK, the original integration bounds.

@@ -9,10 +9,10 @@ function sols=solveQuadBivarEq(coeffsA,coeffsB,AbsTol)
 %               coefficient of an x1^(a1-1)*x2^(a2-1) term in the first
 %               polynomial. Entries corresponding to degrees higher than
 %               two are ignored. For example coeffsA(2+1,2+1) is ignored.
-%        AbsTol A tolernace value for determining whether the sum of the
+%        AbsTol A tolerance value for determining whether the sum of the
 %               magnitudes of the two equations is zero. If omitted or an
-%               empty matrix is passed, the default of 1e-7 is used. This
-%               there is a loss of precision when repeated roots arise.
+%               empty matrix is passed, the default of 1e-7 is used. There
+%               is a loss of precision when repeated roots arise.
 %
 %OUTPUTS: sols A 2XnumSol set of the solutions. sols(1,:) are the x solutions;
 %              sols(2,:) are the corresponding y solutions. There can be up

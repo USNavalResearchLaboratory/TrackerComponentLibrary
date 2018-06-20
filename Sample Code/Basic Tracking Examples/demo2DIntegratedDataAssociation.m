@@ -82,7 +82,7 @@ lambda=2e-5;
 
 %The AlgSel parameters are inputs to the singleScanUpdate function.
 %Use the GNN-JIPDAF with approximate association probabilities.
-algSel1=4;
+algSel1=3;
 algSel2=0;
 param3=[];
 
@@ -238,7 +238,7 @@ for curScan=1:numSamples
     rNew=PIsRealInit*ones(numMeas,1);
     
     %Generate a UUID for each potential track so that we can associate
-    %tracks over time to draw lines for display.The UUIDs are 36 character
+    %tracks over time to draw lines for display. The UUIDs are 36-character
     %strings. For simplicity, we are just using the hash values of the
     %UUIDs so that they can be easily compared with >,=,< for sorting.
     xIDNew=zeros(numMeas,1);

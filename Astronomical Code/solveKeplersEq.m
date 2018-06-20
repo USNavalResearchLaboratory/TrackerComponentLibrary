@@ -205,7 +205,7 @@ function x=GoodingSinDiffFun(e,EE)
 %
 %The algorithm is the EMKPL algorithm taken from Appendix C of
 %A. W. Odell and R. H. Gooding, "Procedure for solving Kepler's
-%equation," Celestial Mechanics, vol. 38, no. 4, pp. 307?334, Apr. 1986.
+%equation," Celestial Mechanics, vol. 38, no. 4, pp. 307-334, Apr. 1986.
 %modified to solve EE-(1-e)*sin(EE) instead of EE-e*sin(EE).
 %
 %October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.

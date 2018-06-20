@@ -4,11 +4,12 @@ function [col4row,row4col,gain,u,v]=assign2D(C,maximize)
 %          be formulated as minimize (or maximize)
 %          \sum_{i=1}^{numRow}\sum_{j=1}^{numCol}C_{i,j}*x_{i,j}
 %          subject to
-%          \sum_{j=1}^{numCol}x_{i,j} =1 for all i
-%          \sum_{i=1}^{numRow}x_{i,j}<=1 for all j
+%          \sum_{j=1}^{numCol}x_{i,j}<=1 for all i
+%          \sum_{i=1}^{numRow}x_{i,j}=1 for all j
 %          x_{i,j}=0 or 1.
-%          Assuming that numCol>=numRow. A modified Jonker-Volgenant
-%          algorithm is used.
+%          Assuming that numCol<=numRow. If numCol>numRow, then the
+%          inequality and inequality conditions are switched. A modified
+%          Jonker-Volgenant algorithm is used.
 %
 %INPUTS: C A numRowXnumCol cost matrix that does not contain any NaNs and
 %          where the largest finite element minus the smallest element is a
@@ -31,14 +32,10 @@ function [col4row,row4col,gain,u,v]=assign2D(C,maximize)
 %                 infeasible, this is an empty matrix.
 %            gain The sum of the values of the assigned elements in C. If
 %                 the problem is infeasible, this is -1.
-%             u,v The dual variable for the columns and for the rows. Note
-%                 that if C contains any negative entries for minimization
-%                 or positive entries for maximization, then these are from
-%                 version of C transformed to be all positive
-%                 (minimization) or negative (maximization). See the
-%                 example below demonstrating how they relate to
-%                 complementary slackness when the problem must be
-%                 transformed.
+%             u,v The dual variable for the columns and for the rows. See
+%                 the example below demonstrating how they relate to
+%                 complementary slackness of a transformed problem for
+%                 minimization or maximization.
 %
 %DEPENDENCIES: None
 %
@@ -77,46 +74,75 @@ function [col4row,row4col,gain,u,v]=assign2D(C,maximize)
 %One will get an optimal assignment having a gain of 47.
 %
 %EXAMPLE 2:
-%Here we demonstrate that if one is performing minimization and all of the
-%elements of C are positive, then the returned dual variables satisfy the
-%complementary slackness condition, described, for example in [1]. If
-%performing maximization with an all-positive matrix, however, then the
-%complementary slcakness condition applies to a transformed matrix, as
-%demonstrated.
+%Here we demonstrate that the dual variables satisfy the complementary
+%slackness condition for transformed versions of C. If minimization is
+%performed, one subtracts minC=min(0,min(C(:))) from C to get the
+%transformed problem for complementary slackness; when performing
+%maximization, subtract maxC=max(0,max(C(:))). The complementary slackness
+%condition could be forced to hold on C by adding minC or maxC to v. The
+%complementary slackness condition is described, for example, in [1].
 % numRows=50;
 % numCols=80;
-% C=rand(numRows,numCols);
+% C=1000*randn(numRows,numCols);
 % maximize=false;
 % [col4row,~,gain,u,v]=assign2D(C,maximize);
+% minC=min(0,min(C(:)));
 % slackVal=0;
 % for curRow=1:numRows
-%     slackVal=slackVal+abs(C(curRow,col4row(curRow))*(C(curRow,col4row(curRow))-v(curRow)-u(col4row(curRow))));
+%     %Note that we are using C(curRow,col4row(curRow))-minC during
+%     %minimization instead of C(curRow,col4row(curRow)).
+%     slackVal=slackVal+abs((C(curRow,col4row(curRow))-minC)*(C(curRow,col4row(curRow))-minC-v(curRow)-u(col4row(curRow))));
 % end
 % slackVal
-% %One will see that slackVal is zero, which is what the complementary
-% %slackness condition says.
+% %One will see that slackVal is zero (within finite precision limits),
+% %which is what the complementary slackness condition says.
 % %Switching to maximization with the same matrix:
 % maximize=true;
 % [col4row,~,gain,u,v]=assign2D(C,maximize);
 % slackVal=0;
-% maxC=max(C(:));
+% maxC=max(0,max(C(:)));
 % for curRow=1:numRows
+%     %Note that we are using C(curRow,col4row(curRow))+maxC during
+%     %minimization instead of C(curRow,col4row(curRow)).
 %     slackVal=slackVal+abs((C(curRow,col4row(curRow))-maxC)*(C(curRow,col4row(curRow))-maxC-v(curRow)-u(col4row(curRow))));
 % end
 % slackVal
-% %Again slackVal is zero, but this time, we had to offset the values of C by
-% %maxC for the condition to hold, because the returned dual variables are
-% %for a transformed problem.
-% %Finally, we do maximization using an all-negative matrix and the
-% %complementary slackness condition hold without a transformation.
-% C=-C;
-% [col4row,~,gain,u,v]=assign2D(C,maximize);
-% slackVal=0;
-% for curRow=1:numRows
-%     slackVal=slackVal+abs(C(curRow,col4row(curRow))*(C(curRow,col4row(curRow))-v(curRow)-u(col4row(curRow))));
+% %slackVal is again zero, within finite precision limits.
+%
+%EXAMPLE 3:
+%This is the example used in [3]. Here, we demonstrate how to form
+%assignment tuples from col4row.
+% C=[7,   51,  52,  87,  38,  60,  74,  66,   0,   20;
+%    50,  12,   0,  64,   8,  53,   0,  46,  76,  42;
+%    27,  77,   0,  18,  22,  48,  44,  13,   0,  57;
+%    62,   0,   3,   8,   5,   6,  14,   0,  26,  39;
+%     0,  97,   0,   5,  13,   0,  41,  31,  62,  48;
+%    79,  68,   0,   0,  15,  12,  17,  47,  35,  43;
+%    76,  99,  48,  27,  34,   0,   0,   0,  28,   0;
+%     0,  20,   9,  27,  46,  15,  84,  19,   3,  24;
+%    56,  10,  45,  39,   0,  93,  67,  79,  19,  38;
+%    27,   0,  39,  53,  46,  24,  69,  46,  23,   1];
+% [col4row, row4col, gain]=assign2D(C);
+% N=size(C,1);%It is a square matrix.
+% tuples=zeros(2,N);
+% for curRow=1:N
+%     tuples(1,curRow)=curRow;
+%     tuples(2,curRow)=col4row(curRow);
 % end
-% slackVal
-% %slackVal is again zero.
+% 
+% gain1=0;
+% gain2=0;
+% gain3=0;
+% for k=1:N
+%     gain1=gain1+C(k,col4row(k));
+%     gain2=gain2+C(row4col(k),k);
+%     gain3=gain3+C(tuples(1,k),tuples(2,k));
+% end
+% [gain,gain1,gain2,gain3]
+% tuples
+%One will see that all of the gains are the same (0) and the assigned 
+%tuples match what is in [3]. However, the assigned tuples is NOT obtained
+%by attaching col4row to row4col.
 %
 %REFERENCES:
 %[1] D. F. Crouse, "On Implementing 2D Rectangular Assignment Algorithms,"
@@ -125,6 +151,9 @@ function [col4row,row4col,gain,u,v]=assign2D(C,maximize)
 %[2] D. F. Crouse, "Advances in displaying uncertain estimates of multiple
 %    targets," in Proceedings of SPIE: Signal Processing, Sensor Fusion,
 %    and Target Recognition XXII, vol. 8745, Baltimore, MD, Apr. 2013.
+%[3] Murty, K. G. "An algorithm for ranking all the assignments in order of
+%    increasing cost," Operations Research, vol. 16, no. 3, pp. 682-687,
+%    May-Jun. 1968.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -149,7 +178,7 @@ function [col4row,row4col,gain,u,v]=assign2D(C,maximize)
 %algorithm to work. This forces all of the elements to be positive. The
 %delta is added back in when computing the gain in the end.
     if(maximize==true)
-        CDelta=max(max(C));
+        CDelta=max(C(:));
         
         %If C is all negative, do not shift.
         if(CDelta<0)
@@ -158,7 +187,7 @@ function [col4row,row4col,gain,u,v]=assign2D(C,maximize)
         
         C=-C+CDelta;
     else
-        CDelta=min(min(C));
+        CDelta=min(C(:));
         
         %If C is all positive, do not shift.
         if(CDelta>0)
@@ -179,7 +208,7 @@ function [col4row,row4col,gain,u,v]=assign2D(C,maximize)
         %This finds the shortest augmenting path starting at k and returns
         %the last node in the path.
         [sink,pred,u,v]=ShortestPath(curUnassCol,u,v,C,col4row,row4col);
-        
+
         %If the problem is infeasible, mark it as such and return.
         if(sink==0)
             col4row=[];
@@ -252,7 +281,7 @@ function [sink, pred, u, v]=ShortestPath(curUnassCol,u,v,C,col4row,row4col)
     shortestPathCost=ones(numRow,1)*Inf;
     
     while(sink==0)        
-        %Mark the current row as having been visited.
+        %Mark the current column as having been visited.
         ScannedCols(curCol)=1;
         
         %Scan all of the rows that have not already been scanned.
@@ -272,7 +301,7 @@ function [sink, pred, u, v]=ShortestPath(curUnassCol,u,v,C,col4row,row4col)
                 closestRowScan=curRowScan;
             end
         end
-                
+
         if(~isfinite(minVal))
            %If the minimum cost row is not finite, then the problem is
            %not feasible.
@@ -282,32 +311,33 @@ function [sink, pred, u, v]=ShortestPath(curUnassCol,u,v,C,col4row,row4col)
         
         closestRow=Row2Scan(closestRowScan);
         
-        %Add the column to the list of scanned columns and delete it from
-        %the list of columns to scan.
+        %Add the row to the list of scanned rows and delete it from
+        %the list of rows to scan.
         ScannedRow(closestRow)=1;
         numRow2Scan=numRow2Scan-1;
         Row2Scan(closestRowScan)=[];
         
         delta=shortestPathCost(closestRow);
         
-        %If we have reached an unassigned row.
+        %If we have reached an unassigned column.
         if(col4row(closestRow)==0)
             sink=closestRow;
         else
             curCol=col4row(closestRow);
         end
+        
     end
     
     %Dual Update Step
     
-    %Update the first row in the augmenting path.
+    %Update the first column in the augmenting path.
     u(curUnassCol)=u(curUnassCol)+delta;
-    %Update the rest of the rows in the agumenting path.
+    %Update the rest of the columns in the augmenting path.
     sel=(ScannedCols~=0);
     sel(curUnassCol)=0;
     u(sel)=u(sel)+delta-shortestPathCost(row4col(sel));
     
-    %Update the scanned columns in the augmenting path.
+    %Update the scanned rows in the augmenting path.
     sel=ScannedRow~=0;
     v(sel)=v(sel)-delta+shortestPathCost(sel);
 end

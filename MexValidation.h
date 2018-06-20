@@ -46,6 +46,10 @@
  *                          an error if the Matlab data is of a type that
  *                          can not be transformed into an size_t value or
  *                          if it is negative or complex.
+ *getPtrDiffTFromMatlab     Turns a passed Matlab data type into a real
+ *                          ptrdiff_t integer value. Provides
+ *                          an error if the Matlab data is of a type that
+ *                          can not be transformed into an ptrdiff_t value.
  *copySizeTArrayFromMatlab  Returns a copy of an array from Matlab as an
  *                          array of size_t values and indicates the length
  *                          of the array by modifying an input parameter.
@@ -74,8 +78,16 @@
  *                          data format in Matlab).
  *intMat2MatlabDoubles      Convert an array or matrix of integers into
  *                          a matrix to be returned to Matlab as double
- *                          floating point number (the default data format
+ *                          floating point numbers (the default data format
  *                          in Matlab).
+ *sizeTMat2MatlabDoubles    Convert an array or matrix of size_t values
+ *                          into a matrix to be returned to Matlab as
+ *                          double floating point numbers (the default data
+ *                          format in Matlab).
+ *ptrDiffTMat2MatlabDoubles Convert an array or matrix of ptrdiff_t values
+ *                          into a matrix to be returned to Matlab as
+ *                          double floating point numbers (the default data
+ *                          format in Matlab).
  *boolMat2Matlab            Convert an array or matrix of doubles into
  *                          a matrix to be returned to Matlab (as type
  *                          mxLogical).
@@ -179,6 +191,7 @@
 #define false 0
 #define true 1
 #define bool int
+#define _bool_T
 #endif
 
 //These functions are defined in the C standard, but do not seem to be
@@ -226,6 +239,7 @@ mxArray *convert2DReal2UnsignedSizeMat(const mxArray * const val);
 
 int getIntFromMatlab(const mxArray * const val);
 size_t getSizeTFromMatlab(const mxArray * const val);
+ptrdiff_t getPtrDiffTFromMatlab(const mxArray * const val);
 size_t *copySizeTArrayFromMatlab(const mxArray * const val, size_t *arrayLen);
 bool *copyBoolArrayFromMatlab(const mxArray * const val, size_t *arrayLen);
 double getDoubleFromMatlab(const mxArray * const val);
@@ -234,6 +248,8 @@ bool getBoolFromMatlab(const mxArray * const val);
 mxArray *doubleMat2Matlab(const double * const arr,const size_t numRow, const size_t numCol);
 mxArray *floatMat2MatlabDoubles(const float * const arr,const size_t numRow, const size_t numCol);
 mxArray *intMat2MatlabDoubles(const int * const arr,const size_t numRow, const size_t numCol);
+mxArray *sizeTMat2MatlabDoubles(const size_t * const arr,const size_t numRow, const size_t numCol);
+mxArray *ptrDiffTMat2MatlabDoubles(const ptrdiff_t * const arr,const size_t numRow, const size_t numCol);
 mxArray *boolMat2Matlab(const bool * const arr,const size_t numRow, const size_t numCol);
 mxArray *allocUnsignedSizeMatInMatlab(const size_t numRow, const size_t numCol);
 mxArray *allocSignedSizeMatInMatlab(const size_t numRow, const size_t numCol);
@@ -244,13 +260,13 @@ mxArray *unsignedSizeMat2Matlab(const size_t * const arr, const size_t numRow, c
 mxArray *unsignedCharMat2Matlab(const unsigned char * const arr, const size_t numRow, const size_t numCol);
 mxArray *signedSizeMat2Matlab(const ptrdiff_t * const arr, const size_t numRow, const size_t numCol);
 double getScalarMatlabClassConst(const char * const className, const char * const constName);
+bool pointerIsAligned(const void *pointer, const size_t byteCount);
 
 #ifdef __cplusplus
 //One cannot use prototypes for template functions. The templace C++-only
 //functions are full implementations.
 std::complex <double> getComplexDoubleFromMatlab(const mxArray * const val);
 #endif
-
 
 void checkRealDoubleArray(const mxArray * const val){
     if(mxIsComplex(val)==true) {
@@ -273,7 +289,6 @@ void checkDoubleArray(const mxArray * const val) {
         mexErrMsgTxt("A parameter that should be a real double is of a different data type.");
     }
 }
-
 
 void checkRealDoubleHypermatrix(const mxArray * const val){
     if(mxIsComplex(val)==true) {
@@ -1137,6 +1152,102 @@ size_t getSizeTFromMatlab(const mxArray * const val) {
     return retVal;
 }
 
+ptrdiff_t getPtrDiffTFromMatlab(const mxArray * const val) {
+    ptrdiff_t retVal=0;
+    if(mxIsComplex(val)==true) {
+        mexErrMsgTxt("A parameter that should be real has complex components.");
+    }
+    
+    if(mxGetNumberOfElements(val)!=1) {
+        mexErrMsgTxt("A parameter that should be scalar is not.");
+    }
+    
+    switch(mxGetClassID(val)){
+        case mxCHAR_CLASS:
+            retVal=(ptrdiff_t)*(mxChar*)mxGetData(val);
+            break;
+        case mxLOGICAL_CLASS:
+            retVal=(ptrdiff_t)*(mxLogical*)mxGetData(val);
+            break;
+        case mxDOUBLE_CLASS:
+        {
+            double temp=*(double*)mxGetData(val);
+            if(temp<0) {
+                mexErrMsgTxt("A parameter that should be positive is not.");
+            }
+            retVal=(ptrdiff_t)temp;
+            break;
+        }
+        case mxSINGLE_CLASS:
+        {
+            float temp=*(float*)mxGetData(val);
+            if(temp<0) {
+                mexErrMsgTxt("A parameter that should be positive is not.");
+            }
+            retVal=(ptrdiff_t)temp;
+            break;
+        }
+        case mxINT8_CLASS:
+        {
+            int8_T temp=*(int8_T*)mxGetData(val);
+            if(temp<0) {
+                mexErrMsgTxt("A parameter that should be positive is not.");
+            }
+            retVal=(ptrdiff_t)temp;
+            break;
+        }
+        case mxUINT8_CLASS:
+            retVal=(ptrdiff_t)*(uint8_T*)mxGetData(val);
+            break;
+        case mxINT16_CLASS:
+        {
+            int16_T temp=*(int16_T*)mxGetData(val);
+            if(temp<0) {
+                mexErrMsgTxt("A parameter that should be positive is not.");
+            }
+            retVal=(ptrdiff_t)temp;
+            break;
+        }
+        case mxUINT16_CLASS:
+            retVal=(ptrdiff_t)*(uint16_T*)mxGetData(val);
+            break;
+        case mxINT32_CLASS:
+        {
+            int32_T temp=*(int32_T*)mxGetData(val);
+            if(temp<0) {
+                mexErrMsgTxt("A parameter that should be positive is not.");
+            }
+            retVal=(ptrdiff_t)temp;
+            break;
+        }
+        case mxUINT32_CLASS:
+            retVal=(ptrdiff_t)*(uint32_T*)mxGetData(val);
+            break;
+        case mxINT64_CLASS:
+        {
+            int64_T temp=*(int64_T*)mxGetData(val);
+            if(temp<0) {
+                mexErrMsgTxt("A parameter that should be positive is not.");
+            }
+            retVal=(ptrdiff_t)temp;
+            break;
+        }
+        case mxUINT64_CLASS:
+            retVal=(ptrdiff_t)*(uint64_T*)mxGetData(val);
+            break;
+        case mxUNKNOWN_CLASS:
+        case mxCELL_CLASS:
+        case mxSTRUCT_CLASS:
+        case mxVOID_CLASS:
+        case mxFUNCTION_CLASS:
+        case mxOPAQUE_CLASS:
+        case mxOBJECT_CLASS:
+        default:
+            mexErrMsgTxt("A parameter is of a data type that can not be used.");
+    }
+    return retVal;
+}
+
 size_t *copySizeTArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
 //The length of the returned array is placed into the arrayLen variable.
     size_t M,N,i;
@@ -1646,6 +1757,38 @@ mxArray *intMat2MatlabDoubles(const int * const arr,const size_t numRow, const s
     return retMat;
 }
 
+mxArray *sizeTMat2MatlabDoubles(const size_t * const arr,const size_t numRow, const size_t numCol) {
+    mxArray *retMat;
+    double *dataPtr;
+    const size_t totalNumEl=numRow*numCol;
+    size_t i;
+    
+    retMat=mxCreateDoubleMatrix(numRow,numCol,mxREAL);
+    dataPtr=(double*)mxGetData(retMat);
+    
+    for(i=0;i<totalNumEl;i++) {
+        dataPtr[i]=(double)arr[i];
+    }
+
+    return retMat;
+}
+
+mxArray *ptrDiffTMat2MatlabDoubles(const ptrdiff_t * const arr,const size_t numRow, const size_t numCol) {
+    mxArray *retMat;
+    double *dataPtr;
+    const size_t totalNumEl=numRow*numCol;
+    size_t i;
+    
+    retMat=mxCreateDoubleMatrix(numRow,numCol,mxREAL);
+    dataPtr=(double*)mxGetData(retMat);
+    
+    for(i=0;i<totalNumEl;i++) {
+        dataPtr[i]=(double)arr[i];
+    }
+
+    return retMat;
+}
+
 mxArray *boolMat2Matlab(const bool * const arr,const size_t numRow, const size_t numCol) {
     mxArray *retMat;
     mxLogical *dataPtr;
@@ -1834,7 +1977,7 @@ T Matlab2Ptr(const mxArray * const matlabPtr) {
 
 
 template<typename T>
-mxArray *mat2MatlabDoubles(T *arr,const size_t numRow,const size_t numCol){
+mxArray *mat2MatlabDoubles(T *arr,const size_t numRow,const size_t numCol) {
 /**MAT2MATLABDOUBLES Convert a matrix of some template format into a matrix
  *                   of doubles to be returned to Matlab by copying each
  *                   element into the Matlab matrix.

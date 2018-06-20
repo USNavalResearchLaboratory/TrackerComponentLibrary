@@ -3,7 +3,7 @@ classdef ComplexGaussianD
 %                  symmetric complex Gaussian distributions.
 %Implemented methods are: mean,cov, PDF, PDFI, PDFS, rand, randS
 %
-%When dealing with circularly-symmetric complex normal distirbutions, one
+%When dealing with circularly-symmetric complex normal distributions, one
 %must pay attention to factors of 2 and sqrt(2) that appear here and then
 %and are not in real Gaussian distributions. For example, if z is a
 %zero-mean scalar circularly-symmetric complex normally distributed random

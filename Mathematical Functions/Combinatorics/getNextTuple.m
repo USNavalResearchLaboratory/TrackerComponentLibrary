@@ -62,7 +62,7 @@ if(firstIsMostSig==false)
             %If we have gotten a complete new tuple.
             return;
         elseif(isAscending)
-            %Try incrementing the order at this level...
+            %Try incrementing the order at this level.
             tuple(curLevel)=tuple(curLevel)+1;
             if(tuple(curLevel)<=maxVals(curLevel))
                 isAscending=false;
@@ -86,7 +86,7 @@ else
             %If we have gotten a complete new tuple.
             return;
         elseif(isAscending)
-            %Try incrementing the order at this level...
+            %Try incrementing the order at this level.
             tuple(curLevel)=tuple(curLevel)+1;
             if(tuple(curLevel)<=maxVals(curLevel))
                 isAscending=false;

@@ -43,8 +43,8 @@ function [col4Row,row4Col]=assign2DStable(rowPrefs,colPrefs,prefType)
 %                there are more things in set2 than set1.
 %
 %This problem is typically referred to the "stable marriage problem" as it
-%is often posed where set1 consists of bachelors and set2 consists of singe
-%women who want to get married. The algorithm then produces a stable
+%is often posed where set1 consists of bachelors and set2 consists of
+%single women who want to get married. The algorithm then produces a stable
 %assignment of bachelors to women that is optimal for the bachelors, unless
 %there are more bachelors than women.
 %
@@ -199,9 +199,9 @@ freeRowList=1:numRows;
 
 %No rows have been assigned.
 num2Assign=numRows;
-%While rows are left un assigned.
+%While rows are left unassigned.
 while(num2Assign>0)
-    %Find a free row. it can be any one.
+    %Find a free row. It can be any one.
     freeRow=freeRowList(num2Assign);
     %freeRow now holds the index of the current free row.
     

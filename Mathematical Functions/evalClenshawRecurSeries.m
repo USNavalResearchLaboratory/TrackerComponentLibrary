@@ -4,7 +4,7 @@ function y=evalClenshawRecurSeries(c,alphaVal,betaVal,F0,F1,method)
 %           is a function that is subject to the recurrence relation
 %           F(k+1)=alpha(k)*F(k)+beta(k)*F(k-1)
 %           Clenshaw's method is numerically stabler than directly using
-%           the above recursion and explicitely evaluating the sum.
+%           the above recursion and explicitly evaluating the sum.
 %           Examples of functions satifying this type of relation are sine,
 %           cosine, Legendre polynomials, and Bessel functions, among
 %           others. This function is more efficient if alpha and beta are
@@ -46,7 +46,7 @@ function y=evalClenshawRecurSeries(c,alphaVal,betaVal,F0,F1,method)
 %Suppose we want to evaluate the sum
 %sum_{k=0}^N c(k+1)*cos(k*theta)
 %This example evaluates the sum for a random set of c and theta using both
-%methods 0 and 1 and then compares to explicitely doing out the sum.
+%methods 0 and 1 and then compares to explicitly doing out the sum.
 %Parameters defining the sum
 % N=11;
 % c=randn(N+1,1);
@@ -77,7 +77,7 @@ function y=evalClenshawRecurSeries(c,alphaVal,betaVal,F0,F1,method)
 %Suppose we want to evaluate the sum
 %sum_{k=0}^N c(k+1)*besselj(k,x)
 %This example evaluates the sum for a random set of c and theta using both
-%methods 0 and 1 and then compares to explicitely doing out the sum.
+%methods 0 and 1 and then compares to explicitly doing out the sum.
 %Parameters defining the sum
 % N=11;
 % c=randn(N+1,1);

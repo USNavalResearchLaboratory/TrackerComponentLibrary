@@ -7,23 +7,22 @@
  *           of the CIP motion, which have a period on the order of 14
  *           months and are thus small.
  *
- *INPUTS:   x   The NXnumVec collection of vectors to convert. N can be 3,
- *              or 6. If the vectors are 3D, then are position.
- *              6D vectors are assumed to be position and velocity.
- *Jul1, Jul2    Two parts of a Julian date given in terrestrial time (TT).
- *              The units of the date are days. The full date is the sum of
- *              both terms. The date is broken into two parts to provide
- *              more bits of precision. It does not matter how the date is
- *              split.
- *dXdY          dXdY=[dX;dY] are the celestial pole offsets with respect to
- *              the IAU 2006/2000A precession/nutation model in radians If
- *              this parameter is omitted, the value from the function
- *              getEOP will be used.
+ *INPUTS: x The NXnumVec collection of vectors to convert. N can be 3, or
+ *          6. If the vectors are 3D, then are position. 6D vectors are
+ *          assumed to be position and velocity.
+ * Jul1, Jul2 Two parts of a Julian date given in terrestrial time (TT).
+ *          The units of the date are days. The full date is the sum of
+ *          both terms. The date is broken into two parts to provide more
+ *          bits of precision. It does not matter how the date is split.
+ *     dXdY dXdY=[dX;dY] are the celestial pole offsets with respect to
+ *          the IAU 2006/2000A precession/nutation model in radians If this
+ *          parameter is omitted, the value from the function getEOP will
+ *          be used.
  *
- *OUTPUTS: vec  A 3XN or 6XN matrix of vectors converted from GCRS
- *              coordinates to CIRS coordinates.
- *       rotMat The 3X3 rotation matrix used for the rotation of the
- *              positions and velocities.
+ *OUTPUTS: vec A 3XN or 6XN matrix of vectors converted from GCRS
+ *             coordinates to CIRS coordinates.
+ *      rotMat The 3X3 rotation matrix used for the rotation of the
+ *             positions and velocities.
  *
  *The conversion functions from the International Astronomical Union's
  *(IAU) Standard's of Fundamental Astronomy library are put together to get

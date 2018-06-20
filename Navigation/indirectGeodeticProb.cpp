@@ -1,8 +1,8 @@
-/**INDIRECTGEODETICPROB  Solve the indirect geodetic problem. That is, given
- *                       two points on an ellipsoidal Earth, find the
- *                       initial bearing and distance one must travel to
- *                       take the shortest (geodesic) path between the
- *                       points.
+/**INDIRECTGEODETICPROB Solve the indirect geodetic problem. That is, given
+ *                      two points on an ellipsoidal Earth, find the
+ *                      initial bearing and distance one must travel to
+ *                      take the shortest (geodesic) path between the
+ *                      points.
  *
  *INPUTS:latLonStart A 2XN matrix of the N initial points given in geodetic
  *                  latitude and longitude in radians of the format
@@ -19,15 +19,15 @@
  *                  this argument is omitted, the value in
  *                  Constants.WGS84Flattening is used.
  *
- *OUTPUTS: azStart  The NX1 forward azimuth at the starting points in 
- *                  radians East of true North on the reference ellipsoid.
- *                  This is the initial heading one would travel to go
- *                  between latLonStart and latLonEnd for each of the point
- *                  pairs
- *             dist The NX1 vector of geodetic distances between the
- *                  starting and stopping points in meters.
- *            azEnd The forward azimuth at the ending point in radians
- *                  East of true North on the reference ellipsoid.
+ *OUTPUTS: azStart The NX1 forward azimuth at the starting points in
+ *                 radians East of true North on the reference ellipsoid.
+ *                 This is the initial heading one would travel to go
+ *                 between latLonStart and latLonEnd for each of the point
+ *                 pairs
+ *            dist The NX1 vector of geodetic distances between the
+ *                 starting and stopping points in meters.
+ *           azEnd The forward azimuth at the ending point in radians East
+ *                 of true North on the reference ellipsoid.
  *
  *The function is essentially a Matlab interface for the implementation in
  *GeographicLib, which is documented in [1], [2], and [3]. GeographicLib

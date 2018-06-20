@@ -33,7 +33,7 @@
 #      make distclean     delete all generated binaries
 #      make realclean     same as distclean
 #
-# Last revision:   2016 March 9
+# Last revision:   2018 January 26
 #
 # Copyright International Astronomical Union.  All rights reserved.
 #
@@ -95,6 +95,7 @@ SOFA_INC = $(SOFA_INC_DIR)sofa.h $(SOFA_INC_DIR)sofam.h
 SOFA_OBS = iauA2af.o \
            iauA2tf.o \
            iauAb.o \
+           iauAe2hd.o \
            iauAf2a.o \
            iauAnp.o \
            iauAnpm.o \
@@ -152,7 +153,6 @@ SOFA_OBS = iauA2af.o \
            iauDtf2d.o \
            iauEceq06.o \
            iauEcm06.o \
-           iauEqec06.o \
            iauEe00.o \
            iauEe00a.o \
            iauEe00b.o \
@@ -166,6 +166,7 @@ SOFA_OBS = iauA2af.o \
            iauEpj.o \
            iauEpj2jd.o \
            iauEpv00.o \
+           iauEqec06.o \
            iauEqeq94.o \
            iauEra00.o \
            iauFad03.o \
@@ -201,6 +202,8 @@ SOFA_OBS = iauA2af.o \
            iauGst06a.o \
            iauGst94.o \
            iauH2fk5.o \
+           iauHd2ae.o \
+           iauHd2pa.o \
            iauHfk5z.o \
            iauIcrs2g.o \
            iauIr.o \
@@ -304,6 +307,12 @@ SOFA_OBS = iauA2af.o \
            iauTdbtt.o \
            iauTf2a.o \
            iauTf2d.o \
+           iauTpors.o \
+           iauTporv.o \
+           iauTpsts.o \
+           iauTpstv.o \
+           iauTpxes.o \
+           iauTpxev.o \
            iauTr.o \
            iauTrxp.o \
            iauTrxpv.o \
@@ -387,6 +396,8 @@ iauA2tf.o   : a2tf.c   sofa.h sofam.h
 	$(CCOMPC) $(CFLAGF) -o $@ a2tf.c
 iauAb.o     : ab.c     sofa.h sofam.h
 	$(CCOMPC) $(CFLAGF) -o $@ ab.c
+iauAe2hd.o  : ae2hd.c  sofa.h sofam.h
+	$(CCOMPC) $(CFLAGF) -o $@ ae2hd.c
 iauAf2a.o   : af2a.c   sofa.h sofam.h
 	$(CCOMPC) $(CFLAGF) -o $@ af2a.c
 iauAnp.o    : anp.c    sofa.h sofam.h
@@ -501,8 +512,6 @@ iauEceq06.o : eceq06.c sofa.h sofam.h
 	$(CCOMPC) $(CFLAGF) -o $@ eceq06.c
 iauEcm06.o : ecm06.c   sofa.h sofam.h
 	$(CCOMPC) $(CFLAGF) -o $@ ecm06.c
-iauEqec06.o : eqec06.c sofa.h sofam.h
-	$(CCOMPC) $(CFLAGF) -o $@ eqec06.c
 iauEe00.o   : ee00.c   sofa.h sofam.h
 	$(CCOMPC) $(CFLAGF) -o $@ ee00.c
 iauEe00a.o  : ee00a.c  sofa.h sofam.h
@@ -529,6 +538,8 @@ iauEpj2jd.o : epj2jd.c sofa.h sofam.h
 	$(CCOMPC) $(CFLAGF) -o $@ epj2jd.c
 iauEpv00.o  : epv00.c  sofa.h sofam.h
 	$(CCOMPC) $(CFLAGF) -o $@ epv00.c
+iauEqec06.o : eqec06.c sofa.h sofam.h
+	$(CCOMPC) $(CFLAGF) -o $@ eqec06.c
 iauEqeq94.o : eqeq94.c sofa.h sofam.h
 	$(CCOMPC) $(CFLAGF) -o $@ eqeq94.c
 iauEra00.o  : era00.c  sofa.h sofam.h
@@ -599,6 +610,10 @@ iauGst94.o  : gst94.c  sofa.h sofam.h
 	$(CCOMPC) $(CFLAGF) -o $@ gst94.c
 iauH2fk5.o  : h2fk5.c  sofa.h sofam.h
 	$(CCOMPC) $(CFLAGF) -o $@ h2fk5.c
+iauHd2ae.o  : hd2ae.c  sofa.h sofam.h
+	$(CCOMPC) $(CFLAGF) -o $@  hd2ae.c
+iauHd2pa.o  : hd2pa.c  sofa.h sofam.h
+	$(CCOMPC) $(CFLAGF) -o $@ hd2pa.c
 iauHfk5z.o  : hfk5z.c  sofa.h sofam.h
 	$(CCOMPC) $(CFLAGF) -o $@ hfk5z.c
 iauIcrs2g.o : icrs2g.c sofa.h sofam.h
@@ -805,6 +820,18 @@ iauTf2a.o   : tf2a.c   sofa.h sofam.h
 	$(CCOMPC) $(CFLAGF) -o $@ tf2a.c
 iauTf2d.o   : tf2d.c   sofa.h sofam.h
 	$(CCOMPC) $(CFLAGF) -o $@ tf2d.c
+iauTpors.o  : tpors.c  sofa.h sofam.h
+	$(CCOMPC) $(CFLAGF) -o $@ tpors.c
+iauTporv.o  : tporv.c  sofa.h sofam.h
+	$(CCOMPC) $(CFLAGF) -o $@ tporv.c
+iauTpsts.o  : tpsts.c  sofa.h sofam.h
+	$(CCOMPC) $(CFLAGF) -o $@ tpsts.c
+iauTpstv.o  : tpstv.c  sofa.h sofam.h
+	$(CCOMPC) $(CFLAGF) -o $@ tpstv.c
+iauTpxes.o  : tpxes.c  sofa.h sofam.h
+	$(CCOMPC) $(CFLAGF) -o $@ tpxes.c
+iauTpxev.o  : tpxev.c  sofa.h sofam.h
+	$(CCOMPC) $(CFLAGF) -o $@ tpxev.c
 iauTr.o     : tr.c     sofa.h sofam.h
 	$(CCOMPC) $(CFLAGF) -o $@ tr.c
 iauTrxp.o   : trxp.c   sofa.h sofam.h

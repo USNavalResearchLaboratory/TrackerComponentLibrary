@@ -64,7 +64,7 @@ function [s,t]=LFMChirp(T,fStart,fEnd,tSamp,phi)
 %    McGraw Hill, 2001.
 %[2] R. J. Fitzgerald, "Effects of range-Doppler coupling on chirp radar
 %    tracking accuracy," IEEE Transactions on Aerospace and Electronic
-%    Systems, vol. 10, no. 4, pp. 528?532, Jul. 1974.
+%    Systems, vol. 10, no. 4, pp. 528-532, Jul. 1974.
 %
 %November 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

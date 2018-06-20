@@ -36,7 +36,7 @@ function rphiList=Cart2Hypersphere(x)
 %[2] H. Sun and M. Farooq, "Note on the generation of random points
 %    uniformly distributed in hyper-ellipsoids," in Proceedings of the
 %    Fifth International Conference on Information Fusion, Annapolis, MD,
-%    8-11 Jul. 2002, pp. 489?496.
+%    8-11 Jul. 2002, pp. 489-496.
 %
 %October 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

@@ -25,9 +25,10 @@ function T=ChebyshevPoly(tau,n,tauStart,tauEnd)
 %            interpolation. Note that such polynomials are generally not
 %            useful for interpolating far outside of the valid range.
 %
-%OUTPUTS: T An (n+1)XN matrix of the Chebyshev polynomials from order 0 to
-%           n evaluated at each of the values of tau. T(i,j) is the
-%           (i-1)th order Chebyshev polynomial evaluated at tau(j).
+%OUTPUTS: T An (n+1)XN matrix of the Chebyshev polynomials of the first
+%           kind from order 0 to n evaluated at each of the values of tau.
+%           T(i,j) is the (i-1)th order Chebyshev polynomial evaluated at
+%           tau(j).
 %
 %Chebyshev polynomials are often used to express orbital ephemerides and
 %are described in [1] and in Chapter 3.3.3 of [2], which is whence the
@@ -49,8 +50,16 @@ N=length(tau);
 %Force tau to be a row vector.
 tau=tau(:)';
 
+if(nargin<3||isempty(tauStart))
+    tauStart=-1;
+end
+   
+if(nargin<4||isempty(tauEnd))
+    tauEnd=1;
+end
+
 %Map the tau values to the -1 to 1 range, if necessary.
-if(nargin>2)
+if(~(tauStart==-1&&tauEnd==1))
     tau=(tau-0.5*(tauStart+tauEnd))/(0.5*(tauEnd-tauStart));
 end
 

@@ -8,7 +8,7 @@ classdef NormInvGaussD
 %[1] T. A. Øigård, A. Hanssen, and R. E. Hansen, "The multivariate normal
 %    inverse Gaussian distribution: EM-estimation and analysis of synthetic
 %    aperture sonar data," in Proceedings of the 12th European Signal
-%    Processing Conference, Vienna, Austria, 6?10 Sep. 2004, pp. 1433-1436.
+%    Processing Conference, Vienna, Austria, 6-10 Sep. 2004, pp. 1433-1436.
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
@@ -193,7 +193,7 @@ methods(Static)
     %[1] T. A. Øigård, A. Hanssen, and R. E. Hansen, "The multivariate
     %    normal inverse Gaussian distribution: EM-estimation and analysis
     %    of synthetic aperture sonar data," in Proceedings of the XII.
-    %    European Signal Processing Conference, Vienna, Austria, 6?10 Sep.
+    %    European Signal Processing Conference, Vienna, Austria, 6-10 Sep.
     %    2004, pp. 1433-1436.
     %
     %June 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.

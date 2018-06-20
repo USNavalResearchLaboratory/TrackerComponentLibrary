@@ -3,7 +3,7 @@ function [xCum,PCum,measOrigProb]=calcSetJPDAUpdate(xEst,PEst,A,posDim)
 %              set joint probabilistic data association filter (Set 
 %              JPDAF), which is described in [1]. The implementation here
 %              is taken from [2], which used sequential 2D assignment to
-%              solve a problem that appears to otherwise be NP-complete.
+%              solve a problem that appears to otherwise be NP-hard.
 %              Unlike other variants of the JPDAF, one cannot extract
 %              simple target-measurement association probabilities.
 %

@@ -2,15 +2,15 @@ classdef LogisticD
 %%LOGISTICD Functions to handle the logistic distribution. The logistic
 %    distribution is similar to the scalar normal distribution, but has
 %    heavier tails.
-%Implemented methods are: mean, var, PDF, CDF, invCDF, rand
+%Implemented methods are: mean, var, PDF, CDF, invCDF, rand, entropy
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 methods(Static)
     
 function val=mean(mu)
-%%MEAN  Obtain the mean of the scalar logistic probability distribution for
-%       the given mean parameter.
+%%MEAN Obtain the mean of the scalar logistic probability distribution for
+%      the given mean parameter.
 %
 %INPUTS: mu The mean (location parameter) of the distribution.
 %
@@ -29,13 +29,13 @@ function val=mean(mu)
 end
 
 function val=var(s)
-%%VAR   Obtain the variance of the scalar logistic probability distribution
-%       for the given scale parameter.
+%%VAR Obtain the variance of the scalar logistic probability distribution
+%     for the given scale parameter.
 %
 %INPUTS: s The scale parameter of the distribution s>=0.
 %
-%OUTPUTS: val  The variance of the logistic distribution under
-%              consideration.
+%OUTPUTS: val The variance of the logistic distribution under
+%             consideration.
 %
 %The logistic distribution is described in Chapter 22 of [1]. Note that the
 %definition of the scale parameter used here is the more standard
@@ -53,8 +53,8 @@ end
 
 
 function val=PDF(x,mu,s)
-%%PDF    Evaluate the scalar logistic probability distribution function
-%        (PDF) at one or more desired points.
+%%PDF Evaluate the scalar logistic probability distribution function (PDF)
+%     at one or more desired points.
 %
 %INPUTS: x The point(s) at which the logistic PDF is to be evaluated.
 %       mu The mean (location parameter) of the distribution.
@@ -78,15 +78,15 @@ end
 
 
 function prob=CDF(x,mu,s)
-%%CDF          Evaluate the cumulative distribution function (CDF) of the
-%              scalar logistic distribution at desired points.
+%%CDF Evaluate the cumulative distribution function (CDF) of the scalar
+%     logistic distribution at desired points.
 %
 %INPUTS: x The point(s) at which the logistic PDF is to be  evaluated.
 %       mu The mean (location parameter) of the distribution.
 %        s The scale parameter of the distribution s>=0.
 %
-%OUTPUTS:   prob The value(s) of the CDF of the logistic distribution
-%                evaluated at x.
+%OUTPUTS: prob The value(s) of the CDF of the logistic distribution
+%              evaluated at x.
 %
 %The logistic distribution is described in Chapter 22 of [1]. Note that the
 %definition of the scale parameter used here is the more standard
@@ -111,8 +111,8 @@ function val=invCDF(prob,mu,s)
 %          mu The mean (location parameter) of the distribution.
 %           s The scale parameter of the distribution s>=0.
 %
-%OUTPUTS:   val  The argument(s) of the CDF that would give the probability
-%                or probabilities in prob.
+%OUTPUTS: val The argument(s) of the CDF that would give the probability or
+%             probabilities in prob.
 %
 %The logistic distribution is described in Chapter 22 of [1]. Note that the
 %definition of the scale parameter used here is the more standard
@@ -132,8 +132,8 @@ function val=invCDF(prob,mu,s)
 end
 
 function vals=rand(N,mu,s)
-%%RAND  Generate logistic distributed random variables with the given
-%       parameters.
+%%RAND Generate logistic distributed random variables with the given
+%      parameters.
 %
 %INPUTS: N If N is a scalar, then rand returns an NXN matrix of random
 %          variables. If N=[M,N1] is a two-element  row vector, then rand
@@ -161,6 +161,31 @@ function vals=rand(N,mu,s)
     U=rand(dims);
     vals=LogisticD.invCDF(U,mu,s);
 end
+
+function entropyVal=entropy(s)
+%%ENTROPY Obtain the differential entropy of the scalar logistic
+%         distribution given in nats. The differential entropy of a
+%         continuous distribution is entropy=-int_x p(x)*log(p(x)) dx where
+%         the integral is over all values of x. Units of nats mean that the
+%         natural logarithm is used in the definition. Unlike the Shannon
+%         entropy for discrete variables, the differential entropy of
+%         continuous variables can be both positive and negative.
+%
+%INPUTS: s The scale parameter of the distribution s>=0.
+%
+%OUTPUTS: entropyVal The value of the differential entropy in nats.
+%
+%Differential entropy is defined in Chapter 8 of [1].
+%
+%REFERENCES:
+%[1] T. M. Cover and J. A. Thomas, Elements of Information Theory, 2nd ed.
+%    Hoboken, NJ: Wiley-Interscience, 2006.
+%
+%April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    entropyVal=log(s)+2;
+end
+
 end
 end
 

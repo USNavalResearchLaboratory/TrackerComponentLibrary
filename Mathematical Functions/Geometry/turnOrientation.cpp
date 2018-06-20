@@ -10,24 +10,28 @@
  *                   v1-v2-v3 is going counterclockwise (left) or clockwise
  *                   (right) for each set of vertices.
  *
- *OUTPUTS: turnDir  An NX1 vector where the ith element is is 1 if the ith
- *                  set of vertices form a counterclockwise angle, -1 if
- *                  they are going clockwise and 0 if they are collinear or
- *                  if two of them coincide.
+ *OUTPUTS: turnDir An NX1 vector where the ith element is is 1 if the ith
+ *                 set of vertices form a counterclockwise angle, -1 if
+ *                 they are going clockwise and 0 if they are collinear or
+ *                 if two of them coincide.
  * 
  *The implementation uses the long double datatype to provide a result with
  *lower finite precision errors in intermediate results then if everything
  *were done using doubles, since most compiler implement the long double as
- *an IEEE-754 double extended precision datatype. Additionally, the
- *function exactSignOfSumCPP is used to provide the sign of an error-free
- *sum. Unfortunately, since the IEEE-754 double extended precision datatype
- *only provides a 64-bit mantissa, which is not much of an extension over
- *the 54-bit mantissa of a standard double precision floating point number,
- *and is not enough to assure no finite precision rounding in the products
- *that go into the sum, cannot guarantee zero finite precision errors in
- *this function. On the other hand, if the inputs are single-precision
- *(promoted to doubles, since the function does not take singles) floating
- *point numbers, the result is exact.
+ *an IEEE-754 double extended precision datatype. A notable exception is
+ *Microsoft's Visual Studio (as of 2017), which maps long doubles to
+ *doubles (64 bits rather than the 80-bit size of Intel/ AMD floating point
+ *registers) as noted in 
+ *https://docs.microsoft.com/en-us/cpp/c-language/type-long-double
+ *Additionally, the function exactSignOfSumCPP is used to provide the sign
+ *of an error-free sum. Unfortunately, since the IEEE-754 double extended
+ *precision datatype only provides a 64-bit mantissa, which is not much of
+ *an extension over the 54-bit mantissa of a standard double precision
+ *floating point number, and is not enough to assure no finite precision
+ *rounding in the products that go into the sum, one cannot guarantee zero
+ *finite precision errors in this function. On the other hand, if the
+ *inputs are single-precision (promoted to doubles, since the function does
+ *not take singles) floating point numbers, the result is exact.
  *
  *The cross product rule for 3D vectors a and b says that
  *norm(cross(a,b))=norm(a)*norm(b)*sin(theta)

@@ -39,7 +39,7 @@ function pInterp=spherLinInterp(u,p1,p2,normalize)
 %REFERENCES:
 %[1] K. Shoemake, "Animating rotations with quaternion curves," in
 %    Proceedings of the 12th Annual Conference on Computer graphics and
-%    Interactive Techniques (SIGGRAPH ?85), vol. 19, no. 3, San Francisco,
+%    Interactive Techniques (SIGGRAPH '85), vol. 19, no. 3, San Francisco,
 %    CA, 22-26 1985, pp. 245-254.
 %
 %August 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.

@@ -2,17 +2,19 @@ function [QFactForm,R,Q]=HouseholderQR(A)
 %%HOUSEHOLDERQR Perform a QR decomposition on A using a Householder
 %           transformation. That is, find Q and R such that A=Q*R, where Q
 %           is an orthogonal matrix and R is an upper-triangular matrix.
-%           Unlike Matlab's standard QR function, this returns Q, though
-%           the standard Q can also be obtained.
+%           Unlike Matlab's standard QR function, this returns Q in a
+%           factored form, though the standard Q can also be obtained.
 %
 %INPUTS: A The mXn matrix whose QR decomposition is desired. A can be real
 %          or complex.
 %
-%OUTPUTS: QFactForm The Q matrix of the decomposition in factorial form.
+%OUTPUTS: QFactForm The Q matrix of the decomposition in factored form.
 %           This is an mXn matrix. To evaluate Q*C, where C is a matrix,
 %           one can use QRFactFormMult(QFactForm,C). Performing
 %           multiplication this way rather than using Q (which is derived
-%           from the matrix) is more efficient.
+%           from the matrix) is more efficient. The comments to the
+%           function factFormMat2Explicit describe the factored form in
+%           more detail.
 %         R The R matrix in the decomposition. If m>=n, then R is nXn. If
 %           m<n, then R is mXn. For m>=n, the R matrix is essentially the
 %           same as the "compact" QR decomposition of Matlab's QR function.
@@ -24,7 +26,7 @@ function [QFactForm,R,Q]=HouseholderQR(A)
 %Algorithm 5.2.1 of Chapter 5.2.2 of [1] is used. The function
 %HouseholderVec also supports the complex Householder transformation,
 %making this function valid for complex matrices A. To recover the actual Q
-%matrix from the Q matrix in factorial form, Equation 5.1.5 of Chapter
+%matrix from the Q matrix in factored form, Equation 5.1.5 of Chapter
 %5.1.6 is used. The algorithms have been slightly modified so that they can
 %be used with matrices where m<n (more columns than rows).
 %
@@ -57,23 +59,11 @@ if(m>=n)
 else
     R=triu(A(1:m,1:n));
 end
-QFactForm = tril(A,-1);
+QFactForm=tril(A,-1);
 
-%Equation 5.1.5. If the non-factorial form of Q is desired. This has been
-%modified from that of the paper to deal with the m<n case, in which case Q
-%is not square.
+%If the non-factored form of Q is desired.
 if(nargout>2)
-    if(m>=n)
-        Q=eye(m,n);
-    else
-        Q=eye(m,m);
-    end
-
-    for j=min(n,m-1):-1:1
-        v(j:m)=[1;QFactForm((j+1):m,j)];
-        beta=2/(1+QFactForm((j+1):m,j)'*QFactForm((j+1):m,j));
-        Q(j:m,j:end)=Q(j:m,j:end)-(beta*v(j:m))*(v(j:m)'*Q(j:m,j:end));
-    end
+    Q=factFormMat2Explicit(QFactForm);
 end
 end
 

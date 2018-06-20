@@ -26,7 +26,7 @@ function [xUpdate,LUpdate,PUpdate]=separatedCovUpdate(xPred,LPred,TPred,z,R,H,c)
 %
 %OUTPUTS: xUpdate The xDimX1 updated state vector.
 %         LUpdate The xDimXzDim updated delay vector.
-%         PUpdate The xDimXxDim covariance matrix of the state estiamte.
+%         PUpdate The xDimXxDim covariance matrix of the state estimate.
 %                 This is a combination of LUpdate and PUpdate
 %
 %The equations for the algorithm are given in Table 1 of [1]. The algorithm

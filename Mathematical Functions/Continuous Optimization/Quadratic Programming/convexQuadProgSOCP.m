@@ -1,5 +1,5 @@
 function [x,f,info]=convexQuadProgSOCP(G,a,C,b,numEqConst,params)
-%%CONVEXQUADPROG Perform quadratic programming on a convex problem.
+%%CONVEXQUADPROGSOCP Perform quadratic programming on a convex problem.
 %                Specifically, this algorithm solves the optimization
 %                problem 
 %                minimize_x a'*x+(1/2)*x'*G*x
@@ -78,7 +78,7 @@ if(nargin<5||isempty(numEqConst))
    numEqConst=0; 
 end
 
-if(nargin<6||isempty(params))
+if(nargin<6)
    params=[]; 
 end
 
@@ -128,7 +128,8 @@ curRow=curRow+1;
 
 sel=curRow:(curRow+numDim-1);
 F(sel,1:numDim)=-P0Root;
-g(sel)=P0Root\q0;
+%g(sel)=P0Root\q0;
+g(sel)=pinv(P0Root)*q0;
 cone.q=numDim+1;
 
 [x,~,~,info]=splitingConicSolver(F,g,c,cone,params);

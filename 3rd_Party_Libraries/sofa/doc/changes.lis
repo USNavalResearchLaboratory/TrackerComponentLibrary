@@ -1,74 +1,115 @@
 
-             Updates for SOFA Release 13 : 2017 April 20
-             - - - - - - - - - - - - - - - - - - - - - -
+            Updates for SOFA Release 14 : 2017 December 4
+            - - - - - - - - - - - - - - - - - - - - - - -
 
 Summary of Changes
 ------------------
 The changes fall into the following categories:
 
-1. Implementation of the IAU 2012 definition of the astronomical 
-   unit (au).  Not only has this constant been updated, but also 
-   (a) all derived quantities are evaluated via the appropriate 
-       formulas, and
-   (b) all documentation now uses the appropriate symbols for the 
-       unit, for example, 1 au and 2.3 au/day.
+1. Change in the copyright status of the DAT routine.
 
-2. Update to PVSTAR to make it consistent with the version of STARPV 
-   that was updated in the previous release.
-   
-3. Other minor typographical corrections to various routines.
+2. Implementation of two new categories of routines, viz:
 
-+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+   a) There are three routines for the horizon/equatorial plane
+       coordinates.
+
+   b) There are six routines dealing with gnomonic (tangent plane)
+       projections.
+
+3. Due to introducing these new routines, The Astrometry Tools
+   Cookbook, the test program and other supporting files have also
+   been updated.
+
+4. Other minor documentation/typographical corrections to various
+   files.
+
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 
 FORTRAN Library
 ----------------
 
-1. iau_APCS      The IAU 2012 value of the astronomical unit (au) is 
-   iau_LDN       now implemented in these six routines.
-   iau_PMPX
-   iau_PVSTAR
-   iau_STARPM
-   iau_STARPV
+1    iau_DAT.for    Code now classified as "user-replaceable support
+                    routine".  Thus the terms & conditions at the end
+                    are also modified.
+     sofa_ts_f.pdf  Updated Cookbook to include information about the
+                    change in status.
 
-2. iau_PVSTAR    An expression (sqrt(1-x)-1), where x is usually tiny,
-                 has been replaced with (-x/(sqrt(1-x)+1) to improve
-                 numerical precision. 
+2a   iau_AE2HD      (azimuth, altitude) to (hour angle, declination)
+     iau_HD2AE      (hour angle, declination) to (azimuth, altitude)
+     iau_HD2PA      parallactic angle
 
-3. t_sofa_f      Check values in this validation program updated due 
-                 to the change in the astronomical unit.
+2b   iau_TPORS      solve for tangent point, spherical
+     iau_TPORV      solve for tangent point, vector
+     iau_TPSTS      project tangent plane to celestial, spherical
+     iau_TPSTV      project tangent plane to celestial, vector
+     iau_TPXES      project celestial to tangent plane, spherical
+     iau_TPXEV      project celestial to tangent plane, vector
 
-4. sofa_ast_f    The SOFA Astrometry Tools cookbook.  
-                 (a) In the table on page 22 there is a change of 
-                     +1 x 10^-7 seconds in RA for three results when 
-                     compared to using the previous value for the au.  
-                     These cases are repeated on the next 2 pages.
-                 (b) The listing of the relativistic version of the
-                     routine iau_PMPX in the Appendix has been updated 
-                     on page 77 with the required changes for the au. 
+3    t_sofa_f.for   Validation program.
+     sofa_ast_f.pdf Astrometry Tools Cookbook, with added information
+                    on the new routines
+     board.lis
+     copyr.lis
+     intro.lis
+     sofa_lib.lis
+     title.lis
+
+4.  The following routines/files have had very minor documentation
+    changes, mostly typographical
+     iau_ATIOQ
+     iau_EECT00
+     iau_EQEQ94
+     iau_FK52H
+     iau_FK5HIP
+     iau_GMST82
+     iau_H2FK5
+     iau_PLAN94
+     sofa_pn_f.pdf
 
 + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 
 ANSI C Library
 --------------
 
-1. sofam.h       The astronomical unit (au) has been updated in this  
-                 include file and all constants that are derived from  
-                 the au have been replaced by the appropriate formulas.
+1    iauDat.c        Code now classified as "user-replaceable support
+                     routine".  Thus the terms & conditions at the end
+                     are also modified.
+     sofa_ts_c.pdf   Updated Cookbook to include information about the
+                     change in status.
 
-2. iauPvstar     An expression (sqrt(1-x)-1), where x is usually tiny,
-                 has been replaced with (-x/(sqrt(1-x)+1) to improve
-                 numerical precision.  
+2a   iauAe2hd        (azimuth, altitude) to (hour angle, declination)
+     iauHd2ae        (hour angle, declination) to (azimuth, altitude)
+     iauHd2pa        parallactic angle
 
-3. t_sofa_c      Check values in this validation program updated due 
-                 to the change in the astronomical unit.
+2b   iauTpors        solve for tangent point, spherical
+     iauTporv        solve for tangent point, vector
+     iauTpsts        project tangent plane to celestial, spherical
+     iauTpstv        project tangent plane to celestial, vector
+     iauTpxes        project celestial to tangent plane, spherical
+     iauTpxev        project celestial to tangent plane, vector
 
-4. sofa_ast_c    The SOFA Astrometry Tools cookbook.  In the table on 
-                 page 20 there is a change of +1 x 10^-7 seconds in RA 
-                 for three results when compared to using the previous 
-                 value for the au.  These cases are repeated on the  
-                 next three pages. 
+3    sofa.h          The include file updated with the new routines
+     sofa_ast_c.pdf  Astrometry Tools Cookbook, with added information
+                     on the new routines
+     t_sofa_c.c      Validation program.
+     board.lis
+     copyr.lis
+     intro.lis
+     sofa_lib.lis
+     title.lis
 
-+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
-End of Updates
-2017 March 22
-+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+4. The following routines/files have had minor documentation changes,
+   mostly typographical
+   iauEect00
+   iauEqeq94
+   iauFk52h
+   iauFk5hip
+   iauGmst82
+   iauH2fk5
+   iauPlan94
+   sofa_pn_c.pdf
+
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
++ End of Updates
++ 2017 December 4
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + 

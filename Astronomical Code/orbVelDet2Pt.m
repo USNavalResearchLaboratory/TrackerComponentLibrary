@@ -307,8 +307,8 @@ function [V1Vec,V2Vec,alpha]=VALAMB(GM,r1,r2,theta,deltaT,epsVal)
 %The name VALAMB, with the extra A reflects the fact that this function has
 %been modified to also return the value A,which is required when this is
 %used as a subroutine in the algorithm 
-%R. H. Gooding, ?A new procedure for orbit determination based on three
-%lines of sight (angles only),? Royal Aerospace Executive, Procurement
+%R. H. Gooding, "A new procedure for orbit determination based on three
+%lines of sight (angles only)," Royal Aerospace Executive, Procurement
 %Executive, Ministry of Defence, Farnborough, Hants, United Kingdom,
 %Tech. Rep. 93004, Apr. 1993.
 %

@@ -1,6 +1,6 @@
-/**TT2TCG  Convert from terrestrial time (TT) given as a two-part
- *         Julian date to geocentric coordinate time (TCG), represented as
- *         a two-part Julian date.
+/**TT2TCG Convert from terrestrial time (TT) given as a two-part Julian
+ *        date to geocentric coordinate time (TCG), represented as a two-
+ *        part Julian date.
  *
  *INPUTS: Jul1, Jul2 Two parts of a Julian date given in TT. The units of
  *                   the date are days. The full date is the sum of both
@@ -27,7 +27,7 @@
  *    Naval Research Laboratory, no. NRL/FR/5344--16-10,279, 10 Aug. 2016,
  *    173 pages.
  *
- * October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
+ *October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 

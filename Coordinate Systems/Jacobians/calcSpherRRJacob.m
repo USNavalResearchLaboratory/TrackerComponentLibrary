@@ -29,14 +29,13 @@ function J=calcSpherRRJacob(x,systemType,useHalfRange,lTx,lRx,M)
 %          type of spherical coordinate system), so that the range
 %          reported is a one-way range (or just half a bistatic range).
 %          The default if this parameter is not provided is false if lTx
-%          and is provided and true if it is omitted (monostatic). 
+%          is provided and true if it is omitted (monostatic). 
 %      lTx The 6X1 position and velocity vector of the transmitter.
 %      lRx The 6X1 position and velocity vector of the receiver.
 %        M A 3X3 rotation matrices to go from the alignment of the global
-%          coordinate system to that at the receiver. If omitted or an
-%          empty matrix is passed, then it is assumed that the local
-%          coordinate system is aligned with the global and M=eye(2) --the
-%          identity matrix is used.
+%          coordinate system to that at the receiver. If omitted, then it
+%          is assumed that the local coordinate system is aligned with the
+%          global and M=eye(3) --the identity matrix is used.
 %
 %OUTPUTS: J A 4X6 Jacobian matrix where the rows are
 %          [bistatic range;azimuth;elevation; range rate] in that order and

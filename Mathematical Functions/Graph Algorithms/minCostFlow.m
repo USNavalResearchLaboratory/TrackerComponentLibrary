@@ -8,11 +8,11 @@ function [F,totalCost,exitCode]=minCostFlow(AMat,CMat,b,maxIter)
 %             AMat(i,j) is the cost of an edge going from vertex i to
 %             vertex j. If no vertex goes from node i to node j, then a
 %             cost of 0 should be inserted.
-%       CMat  An NXN matrix of capacities of the edges in the graph.
+%        CMat An NXN matrix of capacities of the edges in the graph.
 %             CMat(i,j) is the capacity of an edge from node i to node j.
 %             If no edge exists, then a capacity of zero should be used. It
 %             is assumed that all capacities are finite.
-%          b  An NX1 vector of the supply provided by each node. It is
+%           b An NX1 vector of the supply provided by each node. It is
 %             required that sum(b)=0.
 %     maxIter An optional parameter specifying the maximum number of
 %             iterations that should be performed by the algorithm. If
@@ -32,6 +32,8 @@ function [F,totalCost,exitCode]=minCostFlow(AMat,CMat,b,maxIter)
 %           0 The algorithm was successful.
 %           1 No feasible solution could be found.
 %           2 The maximum number of iterations was reached.
+%           3 Inputs are invalid. This means that either C contains NaN
+%             values, sum(b)~=0 or AMat contains nonfinite values.
 %
 %The minimum cost flow problems seeks to find a flow F to minimize
 %sum(sum(AMat.*F)) subject to the constraints:
@@ -94,6 +96,13 @@ numVertex=length(b);
 
 if(nargin<5||isempty(maxIter))
     maxIter=100+10*numVertex;
+end
+
+if(any(isnan(CMat(:)))||sum(b)~=0||any(~isfinite(AMat(:))))
+    exitCode=3;%The problem is infeasible. 
+    F=[];
+    totalCost=[];
+    return;
 end
 
 %Step 1: Find a feasible flow.
@@ -179,7 +188,7 @@ for curIter=1:maxIter
         totalCost=sum(sum(FP.*AMatOrig));
         return;
     end
-
+    
     %Step 3: The minimum mean cycle is negative. We must cancel the minimum
     %        mean cycle. That is, we augment the graph along the negative
     %        cycle. We adjust the flow around the cycle by as much

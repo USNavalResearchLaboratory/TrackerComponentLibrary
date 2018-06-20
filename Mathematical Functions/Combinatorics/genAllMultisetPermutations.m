@@ -29,7 +29,7 @@ function thePerms=genAllMultisetPermutations(a,algorithm)
 %    Addison-Wesley, 2009.
 %[2] A. Williams, "Loopless generation of multiset permutations by prefix
 %    shifts," in Proceedings of the Twentieth Annual ACM-SIAM Symposium
-%    on Discrete Algorithms, New York, NY, 4?6 Jan. 2009, pp. 987-996.
+%    on Discrete Algorithms, New York, NY, 4-6 Jan. 2009, pp. 987-996.
 %
 %January 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -69,7 +69,7 @@ function thePerms=multisetPermsMinOrder(E)
 %REFERENCES:
 %[1] A. Williams, "Loopless generation of multiset permutations by prefix
 %    shifts," in Proceedings of the Twentieth Annual ACM-SIAM Symposium
-%    on Discrete Algorithms, New York, NY, 4?6 Jan. 2009, pp. 987-996.
+%    on Discrete Algorithms, New York, NY, 4-6 Jan. 2009, pp. 987-996.
 %
 %September 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

@@ -1,4 +1,4 @@
-function [optCost,xOpt,exitFlag]=linProgRevisedSimplex(A,b,ALeq,bLeq,c,maximize,maxIter,epsilon)
+function [optCost,xOpt,exitCode]=linProgRevisedSimplex(A,b,ALeq,bLeq,c,maximize,maxIter,epsilon)
 %%LINPROGREVISEDSIMPLEX  Use the revised simplex algorithm to solve a
 %                        linear programming problem involving equality
 %                        and/or inequality constraints. This solves the
@@ -47,7 +47,7 @@ function [optCost,xOpt,exitFlag]=linProgRevisedSimplex(A,b,ALeq,bLeq,c,maximize,
 %            xOpt The optimal vector x associated with the optimal cost. If
 %                 the problem is unbounded or the algorithm did not
 %                 terminate successfully, then an empty matrix is returned.
-%        exitFlag A flag indicating the status upon termination. It can be
+%        exitCode A flag indicating the status upon termination. It can be
 %                 0 Successful termination.
 %                 1 The cost is unbounded.
 %                 2 Maximum number of iterations reached.
@@ -109,7 +109,7 @@ function [optCost,xOpt,exitFlag]=linProgRevisedSimplex(A,b,ALeq,bLeq,c,maximize,
 % A=kron(ones(1,5),eye(4));
 % b=ones(4,1);
 % %The problem is solved using
-% [optCost,xOpt,exitFlag]=linProgRevisedSimplex(A,b,ALeq,bLeq,c)
+% [optCost,xOpt,exitCode]=linProgRevisedSimplex(A,b,ALeq,bLeq,c)
 % %To make the solution clearer, one can reshape the xOpt vector
 % x=reshape(xOpt,4,5)
 % %And the one's will be in the corresponding positions of the assigned
@@ -170,7 +170,7 @@ end
 %or those assignments are forbidden, in which case we can eliminate those
 %elements from the problem and solve a reduced problem.
 if(any(c==-Inf))%If the problem is unbounded.
-    exitFlag=1;
+    exitCode=1;
     optCost=(-1)^(maximize)*(-Inf);
     xOpt=[];
     return;
@@ -219,11 +219,11 @@ AInit=[A,   eye(m)];
 cInit=[zeros(n,1);ones(m,1)];
 xInit=[zeros(n,1);b];
 basisIdx=(n+1):(n+m);
-[xInit,basisIdx,exitFlag,foundSol]=solveSimplexGivenBasis(AInit,b,cInit,xInit,basisIdx,epsilon,maxIter);
-if(exitFlag~=0||foundSol==false)
+[xInit,basisIdx,exitCode,foundSol]=solveSimplexGivenBasis(AInit,b,cInit,xInit,basisIdx,epsilon,maxIter);
+if(exitCode~=0||foundSol==false)
     optCost=[];
     xOpt=[];
-    exitFlag=5;%Could not get an initial feasible basis.
+    exitCode=5;%Could not get an initial feasible basis.
     return;
 end
 
@@ -234,7 +234,7 @@ if(any(abs(xInit((n+1):end))>epsilon))
     xOpt=[];
     %The problem is infeasible, because nonzero y values ended up in the
     %basis.
-    exitFlag=4;
+    exitCode=4;
     return;
 end
 
@@ -263,8 +263,8 @@ end
 %We now have a feasible set of bases for the problem.
 x=xInit(1:n);
 
-[x,~,exitFlag,foundSol]=solveSimplexGivenBasis(A,b,c,x,basisIdx,epsilon,maxIter);
-switch(exitFlag)
+[x,~,exitCode,foundSol]=solveSimplexGivenBasis(A,b,c,x,basisIdx,epsilon,maxIter);
+switch(exitCode)
     case 1
         optCost=(-1)^(maximize)*(-Inf);
         xOpt=[];
@@ -303,20 +303,20 @@ end
 xOpt=xOpt(1:(nTotal-numIneq));
 
 if(foundSol==false)
-    exitFlag=2;
+    exitCode=2;
 else
-    exitFlag=0;
+    exitCode=0;
 end
 
 end
 
-function [x,basisIdx,exitFlag,foundSol]=solveSimplexGivenBasis(A,b,c,x,basisIdx,epsilon,maxIter)
+function [x,basisIdx,exitCode,foundSol]=solveSimplexGivenBasis(A,b,c,x,basisIdx,epsilon,maxIter)
     n=length(x);
     m=size(A,1);
     
     BInv=inv(A(:,basisIdx));
     
-    exitFlag=0;
+    exitCode=0;
     foundSol=false;
     for curIter=1:maxIter
         %Step 2 in the book.
@@ -349,7 +349,7 @@ function [x,basisIdx,exitFlag,foundSol]=solveSimplexGivenBasis(A,b,c,x,basisIdx,
         %precision bounds). 
         u=BInv*A(:,negRedCostIdx);
         if(all(u<epsilon))
-            exitFlag=1;
+            exitCode=1;
             return;
         end
 
@@ -378,7 +378,7 @@ function [x,basisIdx,exitFlag,foundSol]=solveSimplexGivenBasis(A,b,c,x,basisIdx,
             %so, then a numerical error has occurred and the algorithm should
             %terminate.
             if(length(unique(basisIdx))~=m)
-               exitFlag=3;
+               exitCode=3;
                return 
             end
             BInv=inv(A(:,basisIdx));
@@ -412,7 +412,7 @@ function [x,basisIdx,exitFlag,foundSol]=solveSimplexGivenBasis(A,b,c,x,basisIdx,
 
     %Examine whether duplicate elements exist in basisIdx.
     if(length(unique(basisIdx))~=m)
-       exitFlag=3;
+       exitCode=3;
        return 
     end
 end

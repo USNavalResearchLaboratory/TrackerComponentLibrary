@@ -1,4 +1,4 @@
-function [mu, P]=calcCubPointMoments(z,S,h,xi,w)
+function [mu,P]=calcCubPointMoments(z,S,h,xi,w)
 %%CALCCUBPOINTMOMENTS  Using cubature integration with specified cubature
 %                      points and weights, determine the first two moments
 %                      of a transformation of a value x that is corrupted
@@ -9,28 +9,31 @@ function [mu, P]=calcCubPointMoments(z,S,h,xi,w)
 %                      provided. Cubature integration using the provided
 %                      cubature points and weights.
 %
-%INPUTS: z  The numDimX1 value added to the zero-mean Gaussian noise with
-%           covariance R that is driving the system.
-%        S  The numDimXnumDim lower-triangular square rootcovariance matrix
-%           of the zero-mean Gaussian noise driving the system. If R is the
-%           covariance matrix of the noise, then S=cholSemiDef(R,'lower');
-%        h  A function handle for how the vector z is transformed. The
-%           return values are the mean and covariance matrix of h(x),
-%           where x is Gaussian noise with covariance matrix S*S' and mean
-%           z.
-%       xi  An optional numDim X numPoints matrix of cubature points for
-%           normal 0-I distribution. If this and w are omitted, then a
-%           default (probably inefficient) set of cubature points and
-%           weights is generated using fifthOrderCubPoints.
-%       w   A numPoints X 1 vector of the weights associated with each of
-%           the cubature points in xi. Note that all w>=0 and normally
-%           sum(w)=1. If this and xi are omitted, then a default (probably
-%           inefficient) set of cubature points and weights is generated
-%           using fifthOrderCubPoints.
+%INPUTS: z The numDimX1 value added to the zero-mean Gaussian noise with
+%          covariance R that is driving the system.
+%        S The numDimXnumDim lower-triangular square rootcovariance matrix
+%          of the zero-mean Gaussian noise driving the system. If R is the
+%          covariance matrix of the noise, then S=cholSemiDef(R,'lower');
+%        h A function handle for how the vector z is transformed. This
+%          function must be able to take a numDimXnumPoints matrix of
+%          transformed z values and return a numDimOutXnumPoints matrix of
+%          the transformed vectors. The return values of the
+%          calcCubPointMoments function are the mean and covariance matrix
+%          of h(x), where x is Gaussian noise with covariance matrix S*S'
+%          and mean z.
+%       xi An optional numDim X numPoints matrix of cubature points for
+%          normal 0-I distribution. If this and w are omitted, then a
+%          default (probably inefficient) set of cubature points and
+%          weights is generated using fifthOrderCubPoints.
+%        w A numPoints X 1 vector of the weights associated with each of
+%          the cubature points in xi. Note that all w>=0 and normally
+%          sum(w)=1. If this and xi are omitted, then a default (probably
+%          inefficient) set of cubature points and weights is generated
+%          using fifthOrderCubPoints.
 %
-%OUTPUTS: mu  The mean of h(x) found using cubature integration.
-%         P   The covariance matrix of h(x) found using cubature
-%             integration.
+%OUTPUTS: mu The mean of h(x) found using cubature integration.
+%          P The covariance matrix of h(x) found using cubature
+%            integration.
 %
 %This function is only appropriate when the domain of the transformed
 %points is linear. For example, if the the transformation results in an

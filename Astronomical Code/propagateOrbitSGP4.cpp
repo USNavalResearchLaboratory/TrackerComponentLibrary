@@ -104,7 +104,7 @@
  *
  *Note that this is NOT the official SGP4 orbital propagator used by the
  *U.S. Air Force and cannot be assumed to be as reliable or produce
- *%identical results to the official propagator. Information on obtaining
+ *identical results to the official propagator. Information on obtaining
  *the U.S. Air Force's official propagator is given at
  *http://www.afspc.af.mil/units/ASDA/
  *

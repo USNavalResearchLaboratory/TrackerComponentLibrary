@@ -7,31 +7,28 @@ function [xHat, P]=DiscPriorPModel(k,xInit,param3,param4,mode)
 %                  dimensions are provided, or parameters for an arbitrary
 %                  model can be specified.
 %
-%INPUTS:    k       The discrete-time-step at which the prior distribution
-%                   is desired.
-%           xInit   The target state at time k=0. The PDF at this time is
-%                   modeled as a delta function. If the mode argument of
-%                   this function is omitted or is set to 0 then the
-%                   dimensionality of xInit xInit determines the order of
-%                   the model used. A 3X1 vector means a stationary target
-%                   model; a 6X1 vector means a nearly constant velocity
-%                   model (the discretized continuous white noise
-%                   acceleration model) and a 9X1 vector means a nearly
-%                   constant acceleration model (the discretized continuous
-%                   white noise jerk model).
-%           param3  If mode=0, then param3 is T, the time interval between
-%                   discrete time steps. Otherwise, it is F, the state
-%                   transition matrix under a linear, discrete-time model.
-%           param4  if mode=0, then param 4 is q0, the power spectral
-%                   density of the process noise. Otherwise, it is Q, the
-%                   process noise covariance matrix under a linear,
-%                   discrete-time model.
-%           mode    If mode=0 or the mode parameter is omitted, then a
-%                   polynomial linear motion based on the dimensionality of
-%                   xInit is used. Otherwise, for mode=1, the given
-%                   transition matrix and state covariance matrix in param3
-%                   and param4 for an arbitrary discrete-time model are
-%                   used.
+%INPUTS: k The discrete-time-step at which the prior distribution is
+%          desired.
+%    xInit The target state at time k=0. The PDF at this time is modeled as
+%          a delta function. If the mode argument of this function is
+%          omitted or is set to 0 then the dimensionality of xInit xInit
+%          determines the order of the model used. A 3X1 vector means a
+%          stationary target model; a 6X1 vector means a nearly constant
+%          velocity model (the discretized continuous white noise
+%          acceleration model) and a 9X1 vector means a nearly constant
+%          acceleration model (the discretized continuous white noise jerk
+%          model).
+%   param3 If mode=0, then param3 is T, the time interval between discrete
+%          time steps. Otherwise, it is F, the state transition matrix
+%          under a linear, discrete-time model.
+%   param4 If mode=0, then param 4 is q0, the power spectral density of the
+%          process noise. Otherwise, it is Q, the process noise covariance
+%          matrix under a linear, discrete-time model.
+%     mode If mode=0 or the mode parameter is omitted, then a polynomial
+%          linear motion based on the dimensionality of xInit is used.
+%          Otherwise, for mode=1, the given transition matrix and state
+%          covariance matrix in param3 and param4 for an arbitrary
+%          discrete-time model are used.
 %
 %The first and second moments of the prior (i.e. measurement-free)
 %distribution that are computed are useful for evaluating the posterior

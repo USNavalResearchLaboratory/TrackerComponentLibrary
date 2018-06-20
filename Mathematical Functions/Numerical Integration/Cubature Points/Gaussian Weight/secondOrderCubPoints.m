@@ -1,4 +1,4 @@
-function [xi, w]=secondOrderCubPoints(numDim,w0,alpha)
+function [xi,w]=secondOrderCubPoints(numDim,w0,alpha,randomize)
 %SECONDDORDERCUBPOINTS Generate second order cubature points for 
 %           integration involving a multidimensional Gaussian probability
 %           density function (PDF). The algorithm implemented is the scaled
@@ -18,6 +18,13 @@ function [xi, w]=secondOrderCubPoints(numDim,w0,alpha)
 %               not placed at the origin spread out from the origin. If
 %               this parameter is omitted or an empty matrix is passed,
 %               then the default of 1 is used.
+%    randomize If this parameter is true, then the points will be
+%              multiplied by a random orthonormal rotation matrix. This
+%              does not change the moments up to the order of the points.
+%              This randomization is done in [3] and [4] to lessen various
+%              effects that arise when using points in the same
+%              orientation repeatedly in tracking. The default if this
+%              parameter is omitted or an empty matrix is passed is false.
 %
 %OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
 %            points. (Each "point" is a vector)
@@ -40,6 +47,14 @@ function [xi, w]=secondOrderCubPoints(numDim,w0,alpha)
 %[2] S. J. Julier, "The scaled unscented transformation," in Proceedings of
 %    the American Control Conference, Anchorage, AK, 8-10 May 2002, pp.
 %    4555-4559.
+%[3] O. Straka, D. Duník, and M. Simandl, "Randomized unscented Kalman
+%    filter in tracking," in Proceedings of the 15th International
+%    Conference on Information Fusion, Singapore, 9-12 Jul. 2012, pp.
+%    503-510.
+%[4] J. Duník, O. Straka, and M. Simandl, "The development of a randomised
+%    unscented Kalman filter," in Proceedings of the 18th World Congress,
+%    The International Federation of Automatic Control, Milan, Italy, 28
+%    Aug. - 2 Sep. 2011, pp. 8-13.
 %
 %August 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -50,6 +65,10 @@ function [xi, w]=secondOrderCubPoints(numDim,w0,alpha)
     
     if(nargin<3||isempty(alpha))
         alpha=1; 
+    end
+    
+    if(nargin<4||isempty(randomize))
+        randomize=false;
     end
 
     numPoints=numDim+2;
@@ -84,6 +103,15 @@ function [xi, w]=secondOrderCubPoints(numDim,w0,alpha)
     %15 of [2].
     w(1)=w(1)/alpha^2+(1-1/alpha^2);
     w(2:end)=w(2:end)/alpha^2;
+    
+    if(randomize)
+        R=randOrthoMat(numDim);
+
+        numPoints=length(w);
+        for curPoint=1:numPoints
+            xi(:,curPoint)=R*xi(:,curPoint);
+        end
+    end
 end
 
 %LICENSE:

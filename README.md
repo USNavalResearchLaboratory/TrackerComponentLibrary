@@ -1,4 +1,4 @@
-**Tracker Component Library Release 3.01, October 2017**
+**Tracker Component Library Release 3.5, May 2018**
 https://github.com/USNavalResearchLaboratory/TrackerComponentLibrary
 
 A paper describing a number of features of the library is<br>
@@ -6,7 +6,7 @@ D. F. Crouse, "The Tracker Component Library: Free Routines for Rapid
 Prototyping," IEEE Aerospace and Electronic Systems Magazine, vol. 32, no.
 5, pp. 18-27, May. 2017.
 
-These are the release notes for the version 3.01 of the Tracker Component
+These are the release notes for the version 3.5 of the Tracker Component
 Library. The Tracker Component Library is a collection of Matlab routines
 (some written in C/C++ requiring compilation compilation) for simulating
 and tracking targets in various scenarios. Due to the complexity of the
@@ -14,14 +14,12 @@ target tracking problem, a great many routines can find use in other areas
 including combinatorics, astronomy, and statistics.
 
 As of version 3.0, the library has been split into two parts. This is the
-publicly available part. A small number of functions have been placed
-into a supplement that is only available to the U.S. DoD and DoD and U.S.
-DoD contractors (Distribution Statement D), though certain parts may be
-available to other U.S. Government Agencies (Distributions Statement C)
-upon request. Many future additions to the library will be placed in the
-the limited distribution supplement. Instructions for obtaining the limited
-distribution potion of the library will be posted in this readme after the
-supplement has been made available.
+publicly available part. A number of functions have been placed into a
+supplement that is only available to the U.S. Government Agencies and their
+contractors. More advanced algorithms added to the library will be placed
+in the limited distribution supplement. The limited distribution supplement
+can be downloaded by authorized individuals from di2e.net at:
+https://bitbucket.di2e.net/projects/TCL
 
 Those looking for magnetic field sythesis code might want to look at
 ./Sample Code/Magnetic Models/ .
@@ -38,11 +36,40 @@ scenarios is as simple as changing the proper components. A lot of other
 sample code is also provided to demonstrate the use of other parts of the
 library.
 
+To use the full library, add the library and all of its subfolders to your
+active path in Matlab. Some functions are available as C/C++ files for use
+in Matlab either because they use third-party libraries (and must be
+compiled to be used) or because the native Matlab implementations provided
+are too slow in certain circumstances. These files can be compiled by
+running the CompileCLibraries function. Precompiled code is not distributed
+with the library. Note that a C/C++ compiler supported by Matlab must be
+installed. See below for comments regarding compilation.
+
+NOTABLE CHANGES SINCE VERSION 3.01
+
+- More compiled versions of 2D and 3D assignment code are available and the
+  C implementations have been more modularized to make then simpler to
+  remove from the Matlab parts of the library and use elsewhere.
+- Sped up the dense interior point linear programming method by a large
+  factor compared to the textbook implementation.
+- A few new optimization methods.
+- Improved the probability distributions. Added new ones, such as the
+  wrapped normal distribution, and added entropy to many of them.
+- For the many functions that have no Matlab implementation and must be
+  compiled to be used (mostly those using third-party libraries), shell .m
+  files have been added to the library, so that one can type "help" and the
+  name of the function to get information on how to use it. Also, if the
+  function is called without having compiled it, then an error alerts the
+  user to the need to compiled the function.
+- Bug fixes and small changes.
+- Updated third-party code. Removed reliance on third-party functions for
+  line searches.
+
 NOTABLE CHANGES SINCE VERSION 3.0
 
 - Minor corrections.
-- Minor modifications to files to make support the final release of the
-  limited distirbution supplement to the library.
+- Minor modifications to files to support the final release of the limited
+  distribution supplement to the library.
 - New 2D and 3D assignment algorithms, among other additions.
 
 NOTABLE CHANGES SINCE VERSION 2.5
@@ -73,20 +100,11 @@ NOTABLE CHANGES SINCE VERSION 2.5
 
 COMPILED CODE:
 
-The compilation of the library has been tested under Matlab2017a for Mac OS
-X 10.11 using clang-800.0.42.1. However, the code should work under other
-versions of Matlab, compilers, and operating systems.  To use the full
-library, add the library and all of its subfolders to your active path in
-Matlab. Some functions are available as C/C++ files for use in Matlab
-either because they use third-party libraries or because the native Matlab
-implementations provided are too slow to use. If the library was downloaded
-without precompiled versions of these files, then they can be compiled by
-running the CompileCLibraries function. Note that a C/C++ compiler
-supported by Matlab must be installed. Additionally, to decode AIS data,
-the compiler must support C++11. As the commands for the compilation of the
-AIS data are at the end of the CompileCLibraries function, if a compiler
-without C++11 support is used, the rest of the library should be
-successfully compiled before an error occurs while compiling the AIS code.
+The compilation of the library has been tested under Matlab2018a for Mac OS
+X 10.11 using the Matlab-supported compiler offered free by Apple. Under
+Windows 10, compilation of the library was verified using Microsoft Visual
+Studio Professional 2017 and also using minGW 5.3 as the compiler.
+Precompiled code is not distributed with the library.
 
 EXTERNAL SOLVERS:
 
@@ -211,5 +229,23 @@ https://visibleearth.nasa.gov/view.php?id=57735
 Place the file in Misc/data . This is used as the default map to show on
 the Earth given by the plotMapOnEllipsoid function.
 
-October 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
+May 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.<br>
 (UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+LICENSE:
+
+The source code is in the public domain and not licensed or under
+copyright. The information and software may be used freely by the public.
+As required by 17 U.S.C. 403, third parties producing copyrighted works
+consisting predominantly of the material produced by U.S. government
+agencies must provide notice with such work(s) identifying the U.S.
+Government material incorporated and stating that such material is not
+subject to copyright protection.
+
+Derived works shall not identify themselves in a manner that implies an
+endorsement by or an affiliation with the Naval Research Laboratory.
+
+RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF THE
+SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY THE NAVAL
+RESEARCH LABORATORY FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE ACTIONS
+OF RECIPIENT IN THE USE OF THE SOFTWARE.

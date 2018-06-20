@@ -15,12 +15,12 @@ function [jobs,tStarts]=scheduleMinLatenessDense(deadlines,durations,tStart)
 %                  omitted or an empty matrix is passed, then tStart=0 is
 %                  used.
 %
-%OUTPUTS: jobs    A numJobsX1 list indicating the order in which the jobs
-%                 should be executed. If deadlines is empty, then an empty
-%                 matrix is returned.
-%         tStarts A numJobsX1 list of when each job should begin being
-%                 executed. If deadlines is empty, then an empty matrix is
-%                 returned.
+%OUTPUTS: jobs A numJobsX1 list indicating the order in which the jobs
+%              should be executed. If deadlines is empty, then an empty
+%              matrix is returned.
+%      tStarts A numJobsX1 list of when each job should begin being
+%              executed. If deadlines is empty, then an empty matrix is
+%              returned.
 %
 %The algorithm is a very simple greedy algorithm described in Chapter 4.3
 %of [1]. The optimal order is just obtained by sorting the deadlines.

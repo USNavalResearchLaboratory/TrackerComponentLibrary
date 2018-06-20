@@ -100,9 +100,9 @@ void iauPn06(double date1, double date2, double dpsi, double deps,
 **
 **  This revision:  2013 November 14
 **
-**  SOFA release 2017-04-20
+**  SOFA release 2018-01-30
 **
-**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 */
 {
    double gamb, phib, psib, eps, r1[3][3], r2[3][3], rt[3][3];
@@ -141,7 +141,7 @@ void iauPn06(double date1, double date2, double dpsi, double deps,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2017
+**  Copyright (C) 2018
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

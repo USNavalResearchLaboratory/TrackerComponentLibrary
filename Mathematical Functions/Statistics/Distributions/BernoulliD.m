@@ -1,17 +1,17 @@
 classdef BernoulliD
 %%BERNOULLID Functions to handle the Bernoulli distribution. This is just a
 %            binary distribution having a certain probability p of being 1.
-%Implemented methods are: mean, var, PMF, CDF, rand, momentGenFun
+%Implemented methods are: mean, var, PMF, CDF, rand, momentGenFun, entropy
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 methods(Static)
 function val=mean(p)
-%%MEAN Obtain the mean of the Bernoullit distribution.
+%%MEAN Obtain the mean of the Bernoulli distribution.
 %
 %INPUTS: p The probability of success of a Bernoulli trial.
 %
-%OUTPUTS: val The mean of the Bernoullit distribution.
+%OUTPUTS: val The mean of the Bernoulli distribution.
 %
 %As noted on the page opposite the inside front cover of [1], the mean is
 %just p.
@@ -34,11 +34,11 @@ function val=mean(p)
 end
 
 function val=var(p)
-%%VAR Obtain the variance of the Bernoullit distribution.
+%%VAR Obtain the variance of the Bernoulli distribution.
 %
 %INPUTS: p The probability of success of a Bernoulli trial.
 %
-%OUTPUTS: val The variance of the Bernoullit distribution.
+%OUTPUTS: val The variance of the Bernoulli distribution.
 %
 %As noted on the page opposite the inside front cover of [1], the mean is
 %just p*(1-p).
@@ -112,7 +112,7 @@ function val=CDF(x,p)
 end
 
 function x=rand(N,p)
-%%RAND Generate Bernoullit random variables with a given mean.
+%%RAND Generate Bernoulli random variables with a given mean.
 %
 %INPUTS: N If N is a scalar, then rand returns an NXN matrix of random
 %          variables. If N=[M,N1] is a two-element row vector, then rand
@@ -172,6 +172,35 @@ function momentVal=momentGenFun(p,numDerivs,t)
     momentVal=exp(t)*p;
     sel=numDerivs==0;
     momentVal(sel)=momentVal(sel)+1-p;
+end
+
+function entropyVal=entropy(p)
+%%ENTROPY Obtain the Shannon entropy of the Bernoulli distribution given in
+%         nats. The Shannon entropy of a discrete distribution is
+%         entropy=-sum_x Pr(x)*log(Pr(x)) where the sum is over all
+%         discrete values of x. Units of nats mean that the natural
+%         logarithm is used in the definition.
+%
+%INPUTS: p The probability of success of a Bernoulli trial.
+%
+%OUTPUTS: entropyVal The value of the Shannon entropy in nats.
+%
+%Shannon entropy is defined in Chapter 2 of [1].
+%
+%REFERENCES:
+%[1] T. M. Cover and J. A. Thomas, Elements of Information Theory, 2nd ed.
+%    Hoboken, NJ: Wiley-Interscience, 2006.
+%
+%April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+    
+    if(p==0||p==1)
+        entropyVal=0;
+        return;
+    end
+
+    q=1-p;
+
+    entropyVal=-q*log(q)-p*log(p);
 end
 end
 end

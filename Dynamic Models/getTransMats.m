@@ -3,15 +3,15 @@ function FMats=getTransMats(F,baseIdx)
 %               obtain a hypermatrix of transition matrices to prediction
 %               forward and backward in time between arbitrary points.
 %
-%INPUTS:    F   An xDimXxDimXN matrix of transition matrices across the
-%               times where there are measurements.
-%       baseIdx As opposed to returning all of the transition matrices, if
-%               the baseIdx parameter is given, then of the complete FMats
-%               matrix, only FMats(:,:,:,baseIdx) is returned. 
+%INPUTS: F An xDimXxDimXN matrix of transition matrices across the times
+%          where there are measurements.
+%  baseIdx As opposed to returning all of the transition matrices, if the
+%          baseIdx parameter is given, then of the complete FMats matrix,
+%          only FMats(:,:,:,baseIdx) is returned. 
 %
-%OUTPUTS:   FMats An xDimXxDimXNXN hypermatrix of the F transition values,
-%                 unless baseIdx is given in which case it is an
-%                 xDimXxDimXN matrix.
+%OUTPUTS: FMats An xDimXxDimXNXN hypermatrix of the F transition values,
+%               unless baseIdx is given in which case it is an xDimXxDimXN
+%               matrix.
 %
 %If x(:,b) is the target state at discrete-time step b, then, in the
 %absence of process noise, the predicted state at discrete time-step a is

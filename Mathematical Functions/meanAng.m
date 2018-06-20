@@ -8,11 +8,11 @@ function angAvg=meanAng(ang,w,dim)
 %INPUTS: ang A vector, matrix or hypermatrix of angles, whereby the
 %            average over a particular dimension (rows=1, columns=2), or
 %            all elements is desired.
-%        w   An optional vector of weights having the same dimensionality
+%          w An optional vector of weights having the same dimensionality
 %            as ang, if a weighted average is desired. The weights do not
 %            have to sum to one. If omitted or an empty matrix is passed,
 %            all angles are treated as having the same weight.
-%       dim  An optional parameter specifying the dimension over which
+%        dim An optional parameter specifying the dimension over which
 %            averaging is performed. This can be 0 (average averything) 1,
 %            average across rows, 2, average across columns, or higher
 %            numbers to average across higher indices of hypermatrices.

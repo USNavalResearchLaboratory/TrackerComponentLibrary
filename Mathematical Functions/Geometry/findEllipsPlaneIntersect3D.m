@@ -1,6 +1,6 @@
 function [m,r,s]=findEllipsPlaneIntersect3D(z,Q,n,q)
 %%FINDELLIPSPLANEINTERSECT3D The intersection of an ellipsoid and a plane
-%               in three dimensions in an ellipse. This function determine
+%               in three dimensions is an ellipse. This function determines
 %               the parameters of the ellipse of intersection in 3D.
 %
 %INPUTS: z The 3X1 center of the ellipsoid. This is a real vector.
@@ -23,10 +23,10 @@ function [m,r,s]=findEllipsPlaneIntersect3D(z,Q,n,q)
 %the ellipsoid, as is required by the algorithm. The algorithm of [1] is
 %only for axis-aligned ellipsoids that are centered at zero. Here, the
 %provided ellipsoid is moved to the origin (z=0) and the plane is similarly
-%shifted with q=q-z. This means that the final results must be shiftd back.
-%Also, an eigenvalue decomposition is used to obtain a rotation matrix to
-%make Q diagonal and to appropriately rotate n and q. This must also be
-%undone in the end.
+%shifted with q=q-z. This means that the final results must be shifted
+%back. Also, an eigenvalue decomposition is used to obtain a rotation
+%matrix to make Q diagonal and to appropriately rotate n and q. This must
+%also be undone in the end.
 %
 %EXAMPLE:
 %This example draws the ellipsoid, the plane, and the ellipse of
@@ -84,6 +84,14 @@ function [m,r,s]=findEllipsPlaneIntersect3D(z,Q,n,q)
 %the plane within the ellipsoid. This point will replace the original q.
 [boolVal,q]=ellipsoidAndPlaneIntersect(z,Q,n,q);
 
+%If the ellipsoid and the plane do not intersect.
+if(boolVal==false)
+    m=[];
+    r=[];
+    s=[];
+    return;
+end
+
 %Move the origin to the center of the ellipsoid.
 q=q-z;
 
@@ -96,14 +104,6 @@ D1=diag(d1);
 %system.
 q=V'*q;
 n=V'*n;
-
-%If the ellipsoid and the plane do not intersect.
-if(boolVal==false)
-    m=[];
-    r=[];
-    s=[];
-    return;
-end
 
 %The vectors (r and s) orthogonal to n can be obtained using the null
 %function.
@@ -136,7 +136,7 @@ beta2=dot(D1s,D1s);
 %Equation 12
 kappa=dot(q,n);
 
-%Equation 18
+%Equation 25
 d=kappa^2/dot((1./d1).^2,n.^2);
 
 %Equation 10

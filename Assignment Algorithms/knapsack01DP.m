@@ -20,7 +20,7 @@ function [valuesSelected,costVal]=knapsack01DP(v,w,W)
 %          costVal The sum of the selected items in v. 0 is returned if the
 %                  problem is infeasible.
 %
-%The knapsack problem is NP-complete. The complexity of this algorithm
+%The knapsack problem is NP-hard. The complexity of this algorithm
 %scaled with W. It is O(n*W) The algorithm is sovled via dynamic
 %programming. A development of the recursion in such a dynamic programming
 %approach is given in Chapter 5.4 of [1]. However, this is a very common

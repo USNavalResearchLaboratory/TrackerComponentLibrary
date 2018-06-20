@@ -43,9 +43,8 @@ function CRLB=directionOnlyStaticLocCRLB(t,lRx,M,SRLocal,xi,w)
 %              estimator of the target location given the measurements. The
 %              CRLB is the inverse of the Fisher information matrix.
 %
-%The CRLB algorithm is implemented based on the paper "Bearings-only
-%localization in 2D and 3D using direction cosines" by David F. Crouse.
-%The CRLB is also discussed in Section 2.7.2 of [1].
+%The CRLB algorithm is implemented based on [1]. The CRLB is also discussed
+%in Section 2.7.2 of [2].
 %
 %EXAMPLE:
 %4 sensors on Hawaiian islands
@@ -81,6 +80,9 @@ function CRLB=directionOnlyStaticLocCRLB(t,lRx,M,SRLocal,xi,w)
 % %The minRMSE should be about 52.4562.
 %
 %REFERENCES:
+%[1] D. F. Crouse, "Bearings-Only Localization Using Direction Cosines," in
+%    Proceedings of the 19th International Conference on Information
+%    Fusion, Heidelberg, Germany, July 2016.
 %[1] Y. Bar-Shalom, X. R. Li, and T. Kiruabarajan, Estimation with
 %    Applications to Tracking and Navigation. New York: Wiley Interscience,
 %    2001.

@@ -4,24 +4,23 @@ function J=FIMPostNoClutter(H,F,R,Q,PD)
 %                 factor technique for a linear system with a detection
 %                 probability less than or equal to 1.
 %
-%INPUTS:    H   The zDim X xDim measurement matrix such that H*x+w is the
-%               measurement, where x is the state and w is zero-mean 
-%               Gaussian noise with covariance matrix R.
-%           F   The xDim X xDim state transition matrix The state at
-%               discrete-time k+1 is modeled as F times the state at time k
-%               plus zero-mean Gaussian process noise with covariance
-%               matrix Q.
-%           R   The zDim X zDim measurement covariance matrix. This must be
-%               positive definite.
-%           Q   The xDim X xDim process noise covariance matrix. If this is
-%               singular, an iterative solution is used. Otherwise, an
-%               explicit algorithm is used. If Q is singular, then the
-%               Fischer information matrix must be positive definite or
-%               numerical issues will arise.
-%           PD  The optional detection probability of the target at each
-%               scan. If omitted, PD is assumed to be one.
+%INPUTS: H The zDim X xDim measurement matrix such that H*x+w is the
+%          measurement, where x is the state and w is zero-mean Gaussian
+%          noise with covariance matrix R.
+%        F The xDim X xDim state transition matrix The state at discrete-
+%          time k+1 is modeled as F times the state at time k plus zero-
+%          mean Gaussian process noise with covariance matrix Q.
+%        R The zDim X zDim measurement covariance matrix. This must be
+%          positive definite.
+%        Q The xDim X xDim process noise covariance matrix. If this is
+%          singular, an iterative solution is used. Otherwise, an explicit
+%          algorithm is used. If Q is singular, then the Fischer
+%          information matrix must be positive definite or numerical issues
+%          will arise.
+%       PD The optional detection probability of the target at each scan.
+%          If omitted, PD is assumed to be one.
 %
-%OUTPUTS:   J   The asymptotic posterior Fisher information matrix.
+%OUTPUTS: J The asymptotic posterior Fisher information matrix.
 %
 %The inverse of the Fisher information matrix for a dynamic system is the 
 %posterior Cramér-Rao lower bound (PCRLB). This finds the asymptotic value
@@ -85,7 +84,7 @@ if(rcond(Q)<1e-15)
     maxIter=5000;
     
     %The convergence criteria that are used if the Q matrix is singular or
-    %nealy singular.
+    %nearly singular.
     RelTol=1e-12;
     AbsTol=1e-15;
     
@@ -113,6 +112,7 @@ else
 
     J=RiccatiSolveD(D11\D12,eye(n,n),D22-D12'*inv(D11)*D12,D11);
 end
+
 end
 
 %LICENSE:

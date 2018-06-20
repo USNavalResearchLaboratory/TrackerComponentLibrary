@@ -25,19 +25,18 @@ function [pList,intersectionCode]=ellipseIntersect(param1,param2,param3,param4,p
 %         param5, param6, and param7 are respectively the mean, symmetric
 %         matrix and scalar threshold specifying a second ellipse. 
 %
-%OUTPUTS: pList             A matrix where each column is an [x;y] point
-%                           specifying an intersection location of the two
-%                           ellipses. If the ellipses do not intersect,
-%                           then pList is empty.
-%         intersectionCode  Intersection code describes how the ellipses
-%                           intersect.
-%                           0  means that they do not intersect.
-%                           -1 means that one ellipse completely engulfs
-%                              the other.
-%                           A positive integer is the number of
-%                           intersecting points.
+%OUTPUTS: pList A matrix where each column is an [x;y] point specifying an
+%               intersection location of the two ellipses. If the ellipses
+%               do not intersect, then pList is empty.
+% intersectionCode Intersection code describes how the ellipses intersect.
+%               0  means that they do not intersect.
+%               -1 means that one ellipse completely engulfs the other.
+%               A positive integer is the number of intersecting points.
 %
-%The algorithm is based in part on information in [1].
+%The algorithm is based in part on information in [1]. The basic idea is
+%that the two ellipses can be written as two bivariate quadratic
+%polynomials and solutions to intersection will correspond to real
+%solutions to those polynomials.
 %
 %REFERENCES:
 %[1] D. Eberly. (2011, 26 Sep.) Intersection of ellipses. [Online].

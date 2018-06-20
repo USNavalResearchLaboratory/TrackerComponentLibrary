@@ -234,7 +234,7 @@ SunToEarthState=readJPLEphem(TDB1,TDB2,3,11);
 sunDist=norm(SunToEarthState(1:3)-obsPosGeo);
 
 %Perform the aberration correction.
-rGCRS=aberrCorr(relPos,obsVelBCRS,sunDist);
+rGCRS=aberCorr(relPos,obsVelBCRS,sunDist);
 
 %If the position in the ITRS is desired.
 if(nargout>1)

@@ -9,7 +9,7 @@ function [zRuv,RRuv]=Cart2RuvStdRefracCubature(zC,SR,useHalfRange,zTx,zRx,M,Ns,x
 %
 %INPUTS: zC A 3XnumMeas matrix of Cartesian points in global [x;y;z]
 %           Cartesian coordinates that are to be converted.
-%       SR  The 3X3XnumMeas lower-triangular square root of the
+%        SR The 3X3XnumMeas lower-triangular square root of the
 %           measurement covariance matrices for each measurement. If all of
 %           the matrices are the same, then this can just be a single 3X3
 %           matrix.
@@ -87,7 +87,7 @@ function [zRuv,RRuv]=Cart2RuvStdRefracCubature(zC,SR,useHalfRange,zTx,zRx,M,Ns,x
 %    Standards, Oct. 1959. [Online]. Available:
 %    http://digicoll.manoa.hawaii.edu/techreports/PDF/NBS4.pdf
 %
-%June 2016 David Crouse, Naval Research Laboratory, Washington D.C.
+%June 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 if(nargin<3||isempty(useHalfRange))

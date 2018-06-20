@@ -4,7 +4,7 @@ function [n,a]=multilinOrthogRegress(zSamp)
 %            regression. It is a type of total least squares estimation.
 %            here, the equation for a line/plane/hyperplane/etc. is taken
 %            to be dot(n,x-a)=0, where n is a unit vector and x is the free
-%            parameter.This function finds n and a to minimize
+%            parameter. This function finds n and a to minimize
 %            sum_{i=1}^numPoints dot(n,zSamp(:,i)-a).
 %
 %INPUTS: zSamp A numDimsXnumPoints set of numPoints data samples.
@@ -32,12 +32,12 @@ function [n,a]=multilinOrthogRegress(zSamp)
 % [nEst,aEst]=multilinOrthogRegress(zTrue)
 % %One will see that nEst equals n within finite precision bounds. However,
 % %aEst will not equal a. This is because a is not unique. However, one can
-% %verify that dot(n,zTrue(:,i)-a) is zero, within finite precision douns for
-% %all i.
+% %verify that dot(n,zTrue(:,i)-a) is zero, within finite precision bounds
+% %for all i.
 % zSamp=zTrue+0.01*randn(size(zTrue));
 % [nEst1,aEst1]=multilinOrthogRegress(zSamp)
-% %With noise added to both components, one gets a solution that is close to
-% %the correct solution.
+% %With noise added to both components, one gets a solution that is close
+% %to the correct solution.
 %
 %REFERENCES:
 %[1] P. J. Schneider and D. H. Eberly, Geometric Tools for Computer

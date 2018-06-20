@@ -1,6 +1,6 @@
 classdef BetaD
 %%BETAD Functions to handle the beta distribution of the first kind.
-%Implemented methods are: mean, var, PDF, CDF, rand
+%Implemented methods are: mean, var, PDF, CDF, rand, entropy
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
     
@@ -109,11 +109,11 @@ function val=rand(N,a,b)
 %%RAND Generate beta distributed random variables with the given
 %      parameters.
 %
-%INPUTS:   N  If N is a scalar, then rand returns an NXN matrix of random
-%             variables. If N=[M,N1] is a two-element row vector, then rand
-%             returns an MXN1 matrix of random variables.
-%           a The shape parameter that is the exponent of x; a>0.
-%           b The shape parameter that is the exponent of 1-x; b>0.
+%INPUTS: N If N is a scalar, then rand returns an NXN matrix of random
+%          variables. If N=[M,N1] is a two-element row vector, then rand
+%          returns an MXN1 matrix of random variables.
+%        a The shape parameter that is the exponent of x; a>0.
+%        b The shape parameter that is the exponent of 1-x; b>0.
 %
 %OUTPUTS:   vals   A matrix whose dimensions are determined by N of the
 %                  generated beta random variables.
@@ -141,6 +141,31 @@ function val=rand(N,a,b)
     %It is unlikely that X and Y will both be zero, but the line below
     %corrects for the just in case.
     val(isnan(val))=0;
+end
+
+function entropyVal=entropy(a,b)
+%%ENTROPY Obtain the differential entropy of the Beta distribution given in
+%         nats. The differential entropy of a continuous distribution is
+%         entropy=-int_x p(x)*log(p(x))  dx where the integral is over all
+%         values of x. Units of nats mean that the natural logarithm is
+%         used in the definition. Unlike the Shannon entropy for discrete
+%         variables, the differential entropy of continuous variables can
+%         be both positive and negative.
+%
+%INPUTS: a The shape parameter that is the exponent of x; a>0.
+%        b The shape parameter that is the exponent of 1-x; b>0. 
+%
+%OUTPUTS: entropyVal The value of the differential entropy in nats.
+%
+%Differential entropy is defined in Chapter 8 of [1].
+%
+%REFERENCES:
+%[1] T. M. Cover and J. A. Thomas, Elements of Information Theory, 2nd ed.
+%    Hoboken, NJ: Wiley-Interscience, 2006.
+%
+%April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+    
+    entropyVal=betaln(a,b)-(a-1)*psi(a)-(b-1)*psi(b)+(a+b-2)*psi(a+b);
 end
 end
 end

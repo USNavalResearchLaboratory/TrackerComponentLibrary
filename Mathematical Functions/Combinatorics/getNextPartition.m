@@ -1,32 +1,31 @@
 function [thePartition,r,m,d]=getNextPartition(n,r,m,d)
-%%GETNEXTPARTITION  Get the next partition of the integer n. A partition is
-%                   a set of other integers that sum to n. This goes
-%                   through all possible partitions in reverse
-%                   lexicographic order. If this function is called only
-%                   with n, then the first partition is returned. The
-%                   values r, m, and d are needed to get subsequent
-%                   partitions. If the last partition is passed, then an
-%                   empty matrix is returned. The total number of
-%                   partitions for a given n can be found using the
-%                   numberOfPartitions function. Unlike the function
-%                   getNextMPartition, this goes through partitions of n
-%                   into all numbers of parts, whereas getNextMPartition
-%                   only goes through partitions of m parts.
+%%GETNEXTPARTITION Get the next partition of the integer n. A partition is
+%                  a set of other integers that sum to n. This goes
+%                  through all possible partitions in reverse
+%                  lexicographic order. If this function is called only
+%                  with n, then the first partition is returned. The
+%                  values r, m, and d are needed to get subsequent
+%                  partitions. If the last partition is passed, then an
+%                  empty matrix is returned. The total number of
+%                  partitions for a given n can be found using the
+%                  numberOfPartitions function. Unlike the function
+%                  getNextMPartition, this goes through partitions of n
+%                  into all numbers of parts, whereas getNextMPartition
+%                  only goes through partitions of m parts.
 %
-%INPUTS:    n  A positive integer that one wishes to partition. If this is
-%              the only parameter passed, then the first partition in
-%              reverse lexicographic order is returned.
-%           r  A parameter needed to get subsequent partitions that is
-%              returned by this function upon generating a partition. The
-%              first d entries are all of the digits in the partition,
-%              without repeats. The other elements are needed to compute
-%              future partitions.
-%           m  A vector specifying the number of times that the digits in r
-%              are repeated. This is returned by this function and has to
-%              be passed to get subsequent partitions.
-%           d  The number of elements in r and m that contribute to the
-%              current partition. This is returned by this function and has
-%              to be passed to get subsequent partitions.
+%INPUTS: n A positive integer that one wishes to partition. If this is the
+%          only parameter passed, then the first partition in reverse
+%          lexicographic order is returned.
+%        r A parameter needed to get subsequent partitions that is returned
+%          by this function upon generating a partition. The first d
+%          entries are all of the digits in the partition, without repeats.
+%          The other elements are needed to compute future partitions.
+%        m A vector specifying the number of times that the digits in r are
+%          repeated. This is returned by this function and has to be passed
+%          to get subsequent partitions.
+%        d The number of elements in r and m that contribute to the current
+%          partition. This is returned by this function and has to be
+%          passed to get subsequent partitions.
 %
 %OUTPUTS: thePartition The next partition, which is also encoded in the
 %                      returned values of r, m, and d. The elements are in
@@ -35,11 +34,11 @@ function [thePartition,r,m,d]=getNextPartition(n,r,m,d)
 %                      this is the first partition. If the parameters for
 %                      the final partition were passed, then this is an
 %                      empty matrix.
-%           r,m,d      The updated values of r, m, and d that should be
+%                r,m,d The updated values of r, m, and d that should be
 %                      passed to get the next partition. Note that the
 %                      entire partition is encoded in r, m, and d.
 %
-%The algorithm is the algorithm NEXPAR taken from Chapter 9 of [1].
+%The algorithm is based on NEXPAR in Chapter 9 of [1].
 %
 %The function is called as
 %[thePartition,r,m,d]=getNextPartition(n);

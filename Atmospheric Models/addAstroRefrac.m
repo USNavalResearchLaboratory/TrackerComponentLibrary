@@ -8,7 +8,7 @@ function [z0,deltaZ]=addAstroRefrac(algorithm,plhObs,zTrue,Rh,P,T,wl)
 %                  are:
 %                  0: Use a numerical integration method from Chapter 7.2
 %                     of [1] and from [2]. This algorithm uses the inputs
-%                     plhObs, z0, Rh, P, T, and wl and makes use of the
+%                     plhObs,z0, Rh, P, T, and wl and makes use of the
 %                     Sinclair atmospheric model. This algoirthm is the
 %                     most precise of all of the methods. The acceptable
 %                     zenith distances are capped at 100 degrees, which

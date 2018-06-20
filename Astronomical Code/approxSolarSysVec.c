@@ -22,7 +22,7 @@
  *                  Earth (solarBody=0) and 1000AD- 3000AD for everything
  *                  else.
  *        solarBody A parameter specifying the solar body. Possible values
- * %                are:
+ *                  are:
  *                  0 (The default if omitted) The Earth.
  *                  1 Mercury
  *                  2 Venus

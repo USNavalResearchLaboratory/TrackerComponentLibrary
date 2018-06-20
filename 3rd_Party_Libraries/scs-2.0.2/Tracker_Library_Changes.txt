@@ -1,0 +1,25 @@
+The archive for the Matlab version of SCS has been added to this archive
+for the C version. The archive for the C version is in the 
+scs-matlab-master folder. The Matlab version is from
+https://github.com/bodono/scs-matlab
+and the C version is from 
+https://github.com/cvxgrp/scs
+
+Files that are not used have been compressed into "Unused Code.zip"
+archives.
+
+In order to keep all code with licenses containing copyleft provisions or
+that force modifications to be published out of the Tracker Component
+Library, the files related to the compiled version of the "direct" version
+of the splitting conic solver have put into the "unused Code" archives. The
+compile script make_scs.m was modified to be consistent with the removal of
+this code. Additionally, the GPU code was put into an unused code archive
+as it is not used.
+
+As the direct algorithm is no longer available in a compiled version, the
+Matlab implementation of the direct algorithm in the examples folder is
+used instead. The file scs_matlab was modified so that it uses the
+params.verbose option that is available in the compiled version and it
+only displays outputs if verbose is true.
+
+January 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.

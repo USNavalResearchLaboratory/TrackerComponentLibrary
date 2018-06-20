@@ -1,29 +1,28 @@
 function [minCostPath,minCost]=ViterbiAlg(costMats)
-%%VITERBIALG  Use the Viterbi algorithm to find the recursive, optimal
-%             (minimum cost) solution to a trellis optimization problem.
-%             This can be, for example to estimate the state sequence of a
-%             discrete-time finite-state Markov process. The Viterbi
-%             algorithm is a form of dynamic programming. The algorithm is
-%             implemented for a fixed number of states at each step. If the
-%             number of states varies, then just put Inf for the cost of
-%             the unused states at each step.
+%%VITERBIALG Use the Viterbi algorithm to find the recursive, optimal
+%            (minimum cost) solution to a trellis optimization problem.
+%            This can be, for example to estimate the state sequence of a
+%            discrete-time finite-state Markov process. The Viterbi
+%            algorithm is a form of dynamic programming. The algorithm is
+%            implemented for a fixed number of states at each step. If the
+%            number of states varies, then just put Inf for the cost of
+%            the unused states at each step.
 %
-%INPUTS: costMats  A numStatesXnumStatesXnumTransitions hypermatrix of
-%                  costs of transitioning between states at each state.
-%                  This is a set of adjacency matrices, one for each stage.
-%                  There are numStates states at each stage. to go from the
-%                  kth state state to the k+1th state, the const
-%                  costMats(i,j,k) is the cost of transitioning from state
-%                  i forward to state j. Infinite costs can be used when
-%                  transitions are not allowed. The cumulative cost
-%                  function is the sum of costs along the path through the
-%                  states.
+%INPUTS: costMats A numStatesXnumStatesXnumTransitions hypermatrix of costs
+%                 of transitioning between states at each state. This is a
+%                 set of adjacency matrices, one for each stage. There are
+%                 numStates states at each stage. To go from the kth state
+%                 to the k+1th state, the const costMats(i,j,k) is the cost
+%                 of transitioning from state i forward to state j.
+%                 Infinite costs can be used when transitions are not
+%                 allowed. The cumulative cost function is the sum of costs
+%                 along the path through the states.
 %
 %OUTPUTS: minCostPath The indices of the states in the minimum cost path.
 %                     This is a numTransitions+1 vector. When multiple
 %                     paths have equal cost, this just chooses the first
 %                     one.
-%        minCost      The cost of the minCost path. This is the sum of the
+%             minCost The cost of the minCost path. This is the sum of the
 %                     transition costs in costMats.
 %
 %A good explanation of the Viterbi algorithm is given in [1]. The total

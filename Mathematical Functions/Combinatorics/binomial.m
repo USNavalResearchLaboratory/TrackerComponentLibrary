@@ -3,9 +3,9 @@ function val = binomial(n,k)
 %          of ways of choosing k items from a total selection of n where
 %          the ordering of the selection does not matter.
 %
-%INPUTS:  n A nonnegative  integer indicating the number of things from 
-%           which one can choose.
-%         k The number of items that are be chosen. This must be >=0.
+%INPUTS: n A nonnegative  integer indicating the number of things from 
+%          which one can choose.
+%        k The number of items that are be chosen. This must be >=0.
 %
 %OUTPUTS: val The value of n Choose k.
 %

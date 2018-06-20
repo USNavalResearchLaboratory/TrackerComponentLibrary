@@ -3,25 +3,24 @@
  *               either using the IAU 2006 precession model or the Vondrak
  *               400 millennia precession model.
  *
- *INPUTS:     x The NXnumVec collection of vectors in the ICRS to convert.
- *              N can be 2, or 3. If the vectors are 2D, then they are
- *              assumed to be azimuth and elevation in radians. 3D vectors
- *              are assumed to be Cartesian position.
- *   Jul1, Jul2 Two parts of a Julian date given in terrestrial time (TT).
- *              The units of the date are days. The full date is the sum of
- *              both terms. The date is broken into two parts to provide
- *              more bits of precision. It does not matter how the date is
- *              split.
- *       method An optional parameter specifying which algorithm is to be
- *              used. Possible values are
- *              0 (The default if omitted or an empty matrix is passed) Use
- *                 the IAU 2006 precession model.
- *              1 Use the long-term (Vondrak) precession model.
+ *INPUTS: x The NXnumVec collection of vectors in the ICRS to convert. N
+ *          can be 2, or 3. If the vectors are 2D, then they are assumed to
+ *          be azimuth and elevation in radians. 3D vectors are assumed to
+ *          be Cartesian position.
+ * Jul1, Jul2 Two parts of a Julian date given in terrestrial time (TT).
+ *          The units of the date are days. The full date is the sum of
+ *          both terms. The date is broken into two parts to provide more
+ *          bits of precision. It does not matter how the date is split.
+ *   method An optional parameter specifying which algorithm is to be used.
+ *          Possible values are
+ *          0 (The default if omitted or an empty matrix is passed) Use the
+ *            IAU 2006 precession model.
+ *          1 Use the long-term (Vondrak) precession model.
  *
- *OUTPUTS: xG    The vectors rotated into the ecliptic coordinate system.
- *               If the input was 2D azimuth and elevation, the output will
- *               be the same. If the input was Cartesian, then the output
- *               will be Cartesian.
+ *OUTPUTS: xG The vectors rotated into the ecliptic coordinate system. If
+ *            the input was 2D azimuth and elevation, the output will be
+ *            the same. If the input was Cartesian, then the output will be
+ *            Cartesian.
  *
  *This function is a Matlab interface for the relevant functions in the
  *International Astronomical Union's (IAU) Standard's of Fundamental

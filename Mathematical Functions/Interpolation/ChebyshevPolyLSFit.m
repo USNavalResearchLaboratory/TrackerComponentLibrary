@@ -7,27 +7,26 @@ function a=ChebyshevPolyLSFit(tauList,n,fList,dfList,w)
 %                     least squares problem, whereby the derivatives at the
 %                     endpoints are perfectly matched.
 %
-%INPUTS: tauList  An NX1 or 1XN set of points for which the interpolation
-%                 weights should be found. tauList should be sorted in
-%                 increasing order.
-%              n  The non-negative integer maximum order of the
-%                 highest-order Chebyshev polynomial in the expansion.
-%           fList The function to be interpolated at the values of tauList.
-%          dfList An optional set of derivatives of the function to be
-%                 interpolated evaluated at the points in tauList.
-%               w If dfList is provided, one can optionally provide w,
-%                 which is a 2X1 or 1X2 weighting vector, where w(1) is the
-%                 weighting for the squared function errors and w(2) is the
-%                 weighting for the squared derivative errors. Different
-%                 weightings can be useful in the least squared problem,
-%                 because the function and its derivative will typically
-%                 span different domains.
+%INPUTS: tauList An NX1 or 1XN set of points for which the interpolation
+%                weights should be found. tauList should be sorted in
+%                increasing order.
+%              n The non-negative integer maximum order of the
+%                highest-order Chebyshev polynomial in the expansion.
+%          fList The function to be interpolated at the values of tauList.
+%         dfList An optional set of derivatives of the function to be
+%                interpolated evaluated at the points in tauList.
+%              w If dfList is provided, one can optionally provide w, which
+%                is a 2X1 or 1X2 weighting vector, where w(1) is the
+%                weighting for the squared function errors and w(2) is the
+%                weighting for the squared derivative errors. Different
+%                weightings can be useful in the least squared problem,
+%                because the function and its derivative will typically
+%                span different domains.
 %
-%OUTPUTS: a       A set of weights that can be used with the function
-%                 ChebyshevPolySynth(tau,a,tauStart,tauEnd) to interpolate
-%                 a point tau, where tauStart=tauList(1) and
-%                 tauEnd=tauList(end) and the points tau is within the star
-%                 and end bounds.
+%OUTPUTS: a A set of weights that can be used with the function
+%           ChebyshevPolySynth(tau,a,tauStart,tauEnd) to interpolate a
+%           point tau, where tauStart=tauList(1) and tauEnd=tauList(end)
+%           and the points tau is within the starting and ening  bounds.
 %
 %The algorithm implemented is taken from [1]. There it is suggested that
 %when performing least squares Chebyshev polynomial fitting with

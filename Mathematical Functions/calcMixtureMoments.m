@@ -1,4 +1,4 @@
-function [mu, P]=calcMixtureMoments(xi,w,PHyp,muHyp,diffTransFun)
+function [mu, P]=calcMixtureMoments(xi,w,PHyp,muHyp,diffTransFun,numMergeDims)
 %%CALCMIXTUREMOMENTS Given a set of sample vectors xi and associated
 %                    positive weights w, calculate the first two moments of
 %                    the mixture. Those are, the mean mu and the covariance
@@ -7,7 +7,7 @@ function [mu, P]=calcMixtureMoments(xi,w,PHyp,muHyp,diffTransFun)
 %                    Gaussian mixture, when xi is the set of mean vectors,
 %                    w is the set of  weights and the third input PHyp is
 %                    the set of covariance matrices for the hypotheses.
-%                    The final input makes P on the output the mean squared
+%                    The input muHyp makes P on the output the mean squared
 %                    error matrix for an estimate muHyp rather than a
 %                    covariance matrix.
 %
@@ -38,17 +38,25 @@ function [mu, P]=calcMixtureMoments(xi,w,PHyp,muHyp,diffTransFun)
 %           passing a function to wrap data can be used as an ad-hoc fix
 %           for computing a covariance matrix when using circular data,
 %           such as when dealing with longitudinal values.
+% numMergeDims It is possible that numDim> the number of dimensions that
+%           one actually cares about for the merged. If so, then this is
+%           the number of dimensions that should actually be merged. This
+%           discrepancy can arise when reducting models in an IMM for
+%           display where some models have additional non-mixing
+%           components. The default if this parameter is omitted or an
+%           empty matris is passed is numDim.
 %
-%OUTPUTS: mu The mean taking the values of mu as values of a probability
-%            mass function at the points in xi.
-%          P The covariance matrix taking the values of mu as values of a
-%            probability mass function at the points in xi.
+%OUTPUTS: mu The numMergeDimsX1 mean of the mixture.
+%          P The numMergeDimsXnumMergeDims covariance matrix of the
+%            mixture.
 %
 %This function can be used to conveniently compute the mean and covariance
 %of a set of cubature points and weights. It can also be used to compute
 %the mean and covariance of a Gaussian mixture distribution, if xi are the
 %means of the components and w are the weights associated with each
-%component in the mixture.
+%component in the mixture. This function is also useful in reducing
+%mixtures in multiple model algorithms, and reducing hypotheses in data
+%association algorithms.
 %
 %Equations for computing the moments of mixtures are derived in Chapter
 %1.4.16 of [1].
@@ -60,6 +68,10 @@ function [mu, P]=calcMixtureMoments(xi,w,PHyp,muHyp,diffTransFun)
 %
 %March 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+if(nargin<6||isempty(numMergeDims))
+    numMergeDims=size(xi,1);
+end
 
 if(nargin<5)
     diffTransFun=[];
@@ -73,7 +85,6 @@ if(nargin<3)
     PHyp=[];
 end
 
-xiDim=size(xi,1);
 numPoints=size(xi,2);
 
 if(nargin<2||isempty(w))
@@ -83,29 +94,29 @@ end
 %Make sure that w is a column vector
 w=w(:);
 
-mu=sum(bsxfun(@times,xi,w'),2);%The mean
+mu=sum(bsxfun(@times,xi(1:numMergeDims,:),w'),2);%The mean
 
 if(nargout>1)
     if(~isempty(muHyp))
-        mean2Use=muHyp;
+        mean2Use=muHyp(1:numMergeDims);
     else
         mean2Use=mu;
     end
     
     if(~isempty(diffTransFun))
-        diff=diffTransFun(bsxfun(@minus,xi,mean2Use));
+        diff=diffTransFun(bsxfun(@minus,xi(1:numMergeDims,:),mean2Use));
     else
-        diff=bsxfun(@minus,xi,mean2Use);
+        diff=bsxfun(@minus,xi(1:numMergeDims,:),mean2Use);
     end
-    P=zeros(xiDim,xiDim);
-    for curPoint=1:numPoints
-        P=P+w(curPoint)*(diff(:,curPoint)*diff(:,curPoint)');
-    end
-    
-    %Add in the weighted covariance matrices, if provided.
-    if(~isempty(PHyp))
-        numHyp=length(w);
-        P=P+sum(bsxfun(@times,PHyp,reshape(w,[1,1,numHyp])),3);
+    P=zeros(numMergeDims,numMergeDims);
+    if(~isempty(PHyp))%If covariance matrices are provided.
+        for curPoint=1:numPoints
+            P=P+w(curPoint)*(PHyp(1:numMergeDims,1:numMergeDims,curPoint)+diff(:,curPoint)*diff(:,curPoint)');
+        end
+    else
+        for curPoint=1:numPoints
+            P=P+w(curPoint)*(diff(:,curPoint)*diff(:,curPoint)');
+        end
     end
 end
 end

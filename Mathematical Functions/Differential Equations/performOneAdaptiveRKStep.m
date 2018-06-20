@@ -106,7 +106,7 @@ function [deltaTNew,xNew,tNew,k,dxdtCur,exitCode]=performOneAdaptiveRKStep(xCur,
                 failedReducingStepSize=true;
                 
                 %The Fehlberg step reduction (using the relative error).
-                deltaTMag=max(deltaTMinMag, deltaTMag * max(0.1, 0.8*(RelTol/theError)^(1/RKOrder)));
+                deltaTMag=max(deltaTMinMag,deltaTMag*max(0.1, 0.8*(RelTol/theError)^(1/RKOrder)));
             else
                 %Just halve the step size.
                 deltaTMag=deltaTMag/2;

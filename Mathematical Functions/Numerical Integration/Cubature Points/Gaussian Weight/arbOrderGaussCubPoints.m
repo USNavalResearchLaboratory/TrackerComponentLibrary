@@ -1,4 +1,4 @@
-function [xi,w]=arbOrderGaussCubPoints(numDim,n,beta,algorithm)
+function [xi,w]=arbOrderGaussCubPoints(numDim,n,beta,algorithm,randomize)
 %%ARBORDERGAUSSCUBPOINTS Generate cubature points for integrating with a
 %               weighting function of a standard 0-I multivariate Gaussian
 %               PDF times |x|^beta. That is,
@@ -7,7 +7,7 @@ function [xi,w]=arbOrderGaussCubPoints(numDim,n,beta,algorithm)
 %               normal PDF.
 %
 %INPUTS: numDim An integer specifying the dimensionality of the points to
-%               be generated.
+%               be generated. numDim>1.
 %             n A positive integer such that 2n-1 is the highest degree to
 %               which the cubature  points are accurate.
 %          beta An integer specifying the exponent of the norm(x) term in
@@ -28,7 +28,14 @@ function [xi,w]=arbOrderGaussCubPoints(numDim,n,beta,algorithm)
 %               2 Use the tensor product rule of linCubPoints2MultiDim
 %                 applied to 1D points. This option only supports beta=0. 
 %               3 Use Smolyak's algorithm via linCubPoints2MultiDim
-%                 applied to 1D points. This option only supports beta=0. 
+%                 applied to 1D points. This option only supports beta=0.
+%     randomize If this parameter is true, then the points will be
+%               multiplied by a random orthonormal rotation matrix. This
+%               does not change the moments up to the order of the points.
+%               This randomization is done in [2] and [3] to lessen various
+%               effects that arise when using points in the same
+%               orientation repeatedly in tracking. The default if this
+%               parameter is omitted or an empty matrix is passed is false.
 %
 %OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
 %            points. (Each "point" is a vector)
@@ -42,9 +49,21 @@ function [xi,w]=arbOrderGaussCubPoints(numDim,n,beta,algorithm)
 %REFERENCES:
 %[1] A.H. Stroud, Approximate Calculation of Multiple Integrals. Cliffs,
 %    NJ: Prentice-Hall, Inc., 1971.
+%[2] O. Straka, D. Duník, and M. Simandl, "Randomized unscented Kalman
+%    filter in tracking," in Proceedings of the 15th International
+%    Conference on Information Fusion, Singapore, 9-12 Jul. 2012, pp.
+%    503-510.
+%[3] J. Duník, O. Straka, and M. Simandl, "The development of a randomised
+%    unscented Kalman filter," in Proceedings of the 18th World Congress,
+%    The International Federation of Automatic Control, Milan, Italy, 28
+%    Aug. - 2 Sep. 2011, pp. 8-13.
 %
 %October 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release
+
+if(nargin<5||isempty(randomize))
+    randomize=false;
+end
 
 if(nargin<4||isempty(algorithm))
    algorithm=0; 
@@ -52,6 +71,10 @@ end
 
 if(nargin<3||isempty(beta))
    beta=0; 
+end
+
+if(numDim==1)
+    error('numDim must be >1.') 
 end
 
 switch(algorithm)
@@ -130,6 +153,16 @@ switch(algorithm)
     otherwise
         error('Unknown algorithm specified')
 end
+
+if(randomize)
+    R=randOrthoMat(numDim);
+
+    numPoints=length(w);
+    for curPoint=1:numPoints
+        xi(:,curPoint)=R*xi(:,curPoint);
+    end
+end
+
 end
 
 %LICENSE:

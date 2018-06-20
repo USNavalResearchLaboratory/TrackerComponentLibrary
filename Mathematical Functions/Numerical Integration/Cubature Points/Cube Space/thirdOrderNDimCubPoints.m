@@ -34,7 +34,7 @@ function [xi,w]=thirdOrderNDimCubPoints(numDim,algorithm)
 %[1] A.H. Stroud, Approximate Calculation of Multiple Integrals. Cliffs,
 %    NJ: Prentice-Hall, Inc., 1971.
 %[2] R. Cools, "An encyclopedia of cubature formulas," Journal of
-%    Complexity, vol. 19, no. 3, pp. 445?453, Jun. 2003.
+%    Complexity, vol. 19, no. 3, pp. 445-453, Jun. 2003.
 %
 %October 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

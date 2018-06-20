@@ -5,7 +5,10 @@
  *                     when implementing routines utilizing interval
  *                     algebra. Note that this does not appear to change
  *                     the rounding mode used in other mex files called
- *                     from Matlab.
+ *                     from Matlab. When running things in parallel, the 
+ *                     rounding mode will have to be set for each parallel
+ *                     process. For example, set it at the start of a
+ *                     parfor loop, not outside the loop.
  *
  *INPUTS: roundMode An integer specifying the rounding mode to use.
  *                  Possible values are
@@ -18,13 +21,10 @@
  *                set and a nonzero value (corresponding to the outout of
  *                fesetround in C) otherwise.
  *
- *The rounding modes are standardized in [1]. This function just calls the
- *standard C function fesetround. Other mex functions in Matlab might also
- *change the rounding mode. Note that there is no guarantee that parallel
- *processes in Matlab will inherit the same rounding mode as the process
- *spawning them. Thus, if rounding modes matter for example, within a
- *parfor loop, then they should probably be queried/ set within the loop
- *itself.
+ *The rounding modes are standardized in [1]. The native Matlab version of
+ *this function calls the undocumented system_dependent('setround',dir)
+ *function in Matlab. The version that can be compiled in C just calls the
+ *standard C function fesetround.
  *
  *The algorithm can be compiled for use in Matlab  using the 
  *CompileCLibraries function.
@@ -32,20 +32,13 @@
  *The algorithm is run in Matlab using the command format
  *retVal=setProcRoundingMode(roundMode);
  *
- *As an example, consider
+ *EXAMPLE:
  *  setProcRoundingMode(0);
  *  1+eps(0)>1
  *  %The result should be false (0).
  *  setProcRoundingMode(3);
  *  1+eps(0)>1
  *  %The result should be true (1).
- *
- *Matlab also has an undocumented built-in method of changing the rounding
- *direction, which is not used here, because it might be removed in a
- *future version of Matlab. The function is
- *system_dependent('setround',dir)
- *where dir can be -Inf, Inf, 0 and 0.5 for rounding towards -/+Inf,
- *rounding towards 0, and rounding toward the nearest value.
  *
  *REFERENCES:
  *[1] IEEE Standard 754-1985 for Binary Floating-point Arithmetic, IEEE,
@@ -57,8 +50,8 @@
 
 /*This header is required by Matlab.*/
 #include "mex.h"
-#if defined(_WIN32) || defined(_WIN64)
-//This header is needed for _controlfp_s under Windows
+#if _MSC_VER
+//This header is needed for _controlfp_s under Windows in Visual Studio
 #include <float.h>
 #else
 /*This header is needed for fesetround*/
@@ -85,11 +78,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     }
     
     roundMode=getIntFromMatlab(prhs[0]);
-    
+
     //Most versions of Windows have their own hard-to-find method of
     //controlling the rounding direction of the processor rather than
     //actually supporting the C99 standard and providing fesetround.
-    #if defined(_WIN32) || defined(_WIN64)
+    #if _MSC_VER
     {
         int err;
         unsigned int control_word;

@@ -5,7 +5,7 @@
 %              functions in the Tracker Component Library to perform such
 %              estimation.
 %
-%Each of the examples initialize the conjugate prior distirbutions with
+%Each of the examples initialize the conjugate prior distributions with
 %unifnromative priors. Then, they are updated given a set of measurements
 %and the estimates are shown. The estimates can be compared to the original
 %variables being estimated in the code. 

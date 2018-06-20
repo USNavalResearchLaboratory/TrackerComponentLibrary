@@ -28,7 +28,7 @@ function H=calcSpherHessian(x,systemType,useHalfRange,lTx,lRx,M)
 %          type of spherical coordinate system), so that the range
 %          reported is a one-way range (or just half a bistatic range).
 %          The default if this parameter is not provided is false if lTx
-%          and is provided and true if it is omitted (monostatic). 
+%          is provided and true if it is omitted (monostatic). 
 %      lTx The 3X1 transmitter position in the global coordinate system
 %          with [x;y;z] components. If omitted or an empty matrix is
 %          passed, then a vector of zeros is used.

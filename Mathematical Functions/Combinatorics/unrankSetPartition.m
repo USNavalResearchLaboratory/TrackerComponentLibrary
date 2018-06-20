@@ -25,7 +25,7 @@ function [R,WT]=unrankSetPartition(n,rank,WT)
 %REFERENCES:
 %[1] S. G. Williamson, "Ranking algorithms for lists of partitions," SIAM
 %    Journal on Computing, vol. 5, no. 4, pp. 602-617, 1976.
-%[2] Z.Kokosi?ki,"A parallel dynamic programming algorithm for unranking
+%[2] Z.Kokosinski,"A parallel dynamic programming algorithm for unranking
 %    set partitions," Technical Transactions Automatic Control, vol. 11,
 %    2013.
 %

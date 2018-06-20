@@ -4,15 +4,14 @@ function chi=getPermMatrix(rank,n,dim)
 %                      matrix can be used to rearrange n stacked vectors
 %                      dim dimensions.
 %
-%INPUTS:    rank The order of the desired permutation of
-%                [0 1 2 ... n-1] in lexicographic order. Note 
-%                that 0<=rank<=(n!-1).
-%           n    The number of elements in the desired permutation; the
-%                number of things that might be reordered with this matrix.
-%           dim  The dimensionality of the n things being reordered.
+%INPUTS: rank The order of the desired permutation of [0 1 2 ... n-1] in
+%             lexicographic order. Note  that 0<=rank<=(n!-1).
+%           n The number of elements in the desired permutation; the
+%             number of things that might be reordered with this matrix.
+%         dim The dimensionality of the n things being reordered.
 %
-%OUTPUTS:   chi  The permutation matrix (consisting of ones and zeros) that
-%                can rearrange n stacked vectors of dimensionality dim.
+%OUTPUTS: chi The permutation matrix (consisting of ones and zeros) that
+%             can rearrange n stacked vectors of dimensionality dim.
 %
 %Given an (n*dim)X1 vector v of n stacked subvectors of dimension dim, 
 %chi*v rearranges the subvectors in v according to the given permutation. 

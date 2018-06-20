@@ -35,7 +35,7 @@ function [distMat,pathMatrix]=findAllPairsShortestPath(adjMat)
 %                  When there is a cycle, the path begins and ends
 %                  with the same node.
 %
-%The Floyd?Warshall all-pairs shortest path algorithm is given in Chapter
+%The Floyd-Warshall all-pairs shortest path algorithm is given in Chapter
 %6.5 of [1] and Chapter 25.2 of [2]. The method of generating the path
 %matrix is closer to that of [2] than that of [1]. As noted in [3], if no
 %negative cycles are present in the graph, then the magnitude of all of

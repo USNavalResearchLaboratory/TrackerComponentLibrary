@@ -7,10 +7,9 @@ function H=rangeHessian(x,useHalfRange,lTx,lRx)
 %INPUTS: x A numPosDimXN set of N target position vectors of the form
 %          [x], [x;y] or [x;y;z].
 % useHalfRange A boolean value specifying whether the bistatic range value
-%          should be divided by two. This normally comes up
-%          when operating in monostatic mode, so that the range reported is
-%          a one-way range. The default if this parameter is not provided
-%          is false.
+%          should be divided by two. This normally comes up when operating
+%          in monostatic mode, so that the range reported is a one-way
+%          range. The default if this parameter is not provided is false.
 %      lTx The numPosDimX1 position vector of the transmitter. If this
 %          parameter is omitted or an empty matrix is passed, then the
 %          transmitter is assumed to be at the origin.

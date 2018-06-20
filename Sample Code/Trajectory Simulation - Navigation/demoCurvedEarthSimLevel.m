@@ -60,7 +60,7 @@ disp('1) Computing the initial heading and distance to navigate on a geodesic cu
 %altitude. Using a non-zero altitude is significantly slower.
 
 tic;%True means use the approximation for non-zero altitude flight.
-[azStart0,dist0]=indirectGeodeticProb(latLonStart,latLonEnd);
+[azStart0,dist0,azEnd0]=indirectGeodeticProb(latLonStart,latLonEnd);
 time0=toc;
 disp(['Assuming a zero altitude, the computation took ', num2str(time0), ' seconds.'])
 

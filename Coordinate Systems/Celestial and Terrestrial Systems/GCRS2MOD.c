@@ -4,19 +4,19 @@
  *          ecliptic of date, IAU 2006/2000A model. The transformation is
  *          performed by adding the precession and frame bias.
  *
- *INPUTS:  xVec     The 3XN matrix of N 3X1 Cartesian vectors that are to
- *                  be rotated from the GCRS coordinate system into the MOD
- *                  coordinate system.
- *         TT1, TT2 Jul1,Jul2 Two parts of a Julian date given in TT. The
- *                  units of the date are days. The full date is the sum of
- *                  both terms. The date is broken into two parts to
- *                  provide more bits of precision. It does not matter how
- *                  the date is split.
+ *INPUTS: xVec The 3XN matrix of N 3X1 Cartesian vectors that are to be
+ *             rotated from the GCRS coordinate system into the MOD
+ *             coordinate system.
+ * TT1, TT2 Jul1,Jul2 Two parts of a Julian date given in TT. The units
+ *             of the date are days. The full date is the sum of both
+ *             terms. The date is broken into two parts to provide more
+ *             bits of precision. It does not matter how the date is
+ *             split.
  *
- *OUTPUTS: xRot     The 3XN matrix of the N 3X1 input vector rotated into
- *                  the MOD coordinate system.
- *         rotMat   The 3X3 rotation matrix such that
- *                  xRot(:,i)=rotMat*xVec(:,i).
+ *OUTPUTS: xRot The 3XN matrix of the N 3X1 input vector rotated into the
+ *              MOD coordinate system.
+ *       rotMat The 3X3 rotation matrix such that
+ *              xRot(:,i)=rotMat*xVec(:,i).
  *
  *This uses functions in the the International Astronomical Union's (IAU)
  *Standard's of Fundamental Astronomy (SOFA) library to obtain the product

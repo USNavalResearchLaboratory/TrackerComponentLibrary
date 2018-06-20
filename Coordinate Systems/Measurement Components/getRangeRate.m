@@ -91,7 +91,7 @@ function rr=getRangeRate(xTar,useHalfRange,xTx,xRx)
     % dtrRat=dtr./sqrt(sum(dtr.*dtr,1));
     % dtlRat=dtl./sqrt(sum(dtl.*dtl,1));
     % rr=sum((dtrRat+dtlRat).*vt,1)-sum(dtrRat.*vr,1)-sum(dtlRat.*vi,1);
-    %However, this appears to be slower than explicitely writing out the
+    %However, this appears to be slower than explicitly writing out the
     %multiplications below.
     if(numDim==2)
         dtrRat=bsxfun(@rdivide,dtr,sqrt(dtr(1,:).*dtr(1,:)+dtr(2,:).*dtr(2,:)));

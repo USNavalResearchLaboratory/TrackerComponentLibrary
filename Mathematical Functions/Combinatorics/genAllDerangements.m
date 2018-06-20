@@ -6,7 +6,7 @@ function derangements=genAllDerangements(n)
 %
 %INPUTS: n The positive integer dimensionality of the derangements desired.
 %
-%OUTPUTS: derangements An nXnumDergane matrix of all derangements of n
+%OUTPUTS: derangements An nXnumDerange matrix of all derangements of n
 %                  items. For n<=1, an empty matrix is returned as there
 %                  are no derangements.
 %

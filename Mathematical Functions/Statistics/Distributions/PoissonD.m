@@ -37,11 +37,9 @@ function val=var(lambda)
 %%VAR Obtain the variance of the Poisson distribution for the specified
 %     mean parameter
 %
-%INPUTS: lambda  The mean (and variance) of the Poisson distribution 
-%                under consideration.
+%INPUTS: lambda The mean (and variance) of the Poisson distribution,
 %
-%OUTPUTS: val  The variance of the Poisson distribution under
-%              consideration.
+%OUTPUTS: val The variance of the Poisson distribution.
 %
 %The Poisson distribution is discussed in Chapter 2.8 of [1].
 %
@@ -161,7 +159,7 @@ function momentVal=momentGenFun(lambda,numDerivs,t)
 %              it at t=0 provides the kth noncentral moment of the
 %              distribution.
 %
-%INPUTS: lambda The mean (and variance) of the Poisson distribution..
+%INPUTS: lambda The mean (and variance) of the Poisson distribution.
 %     numDerivs The number of derivatives to take with respect to the
 %               argument of the moment generating function. numDerivs>=0.
 %             t The numPointsX1 or 1XnumPoints vector of points where the

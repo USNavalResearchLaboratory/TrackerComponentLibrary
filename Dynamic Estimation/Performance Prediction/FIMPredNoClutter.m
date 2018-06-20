@@ -4,23 +4,22 @@ function J=FIMPredNoClutter(H,F,R,Q,PD)
 %                 factor technique for a linear system with a detection
 %                 probability less than or equal to 1.
 %
-%INPUTS:    H   The zDim X xDim measurement matrix such that H*x+w is the
-%               measurement, where x is the state and w is zero-mean 
-%               Gaussian noise with covariance matrix R.
-%           F   The xDim X xDim state transition matrix The state at
-%               discrete-time k+1 is modeled as F times the state at time k
-%               plus zero-mean Gaussian process noise with covariance
-%               matrix Q.
-%           R   The zDim X zDim measurement covariance matrix.
-%           Q   The xDim X xDim process noise covariance matrix. If this is
-%               singular, an iterative solution is used. Otherwise, an
-%               explicit algorithm is used. If Q is singular, then the
-%               Fischer information matrix must be positive definite or
-%               numerical issues will arise.
-%           PD  The optional detection probability of the target at each
-%               scan. If omitted, PD is assumed to be one.
+%INPUTS: H The zDim X xDim measurement matrix such that H*x+w is the
+%          measurement, where x is the state and w is zero-mean Gaussian
+%          noise with covariance matrix R.
+%        F The xDim X xDim state transition matrix The state at discrete-
+%          time k+1 is modeled as F times the state at time k plus zero-
+%          mean Gaussian process noise with covariance matrix Q.
+%        R The zDim X zDim measurement covariance matrix.
+%        Q The xDim X xDim process noise covariance matrix. If this is
+%          singular, an iterative solution is used. Otherwise, an
+%          explicit algorithm is used. If Q is singular, then the Fischer
+%          information matrix must be positive definite or numerical issues
+%          will arise.
+%       PD The optional detection probability of the target at each scan.
+%          If omitted, PD is assumed to be one.
 %
-%OUTPUTS:   J   The asymptotic prior Fisher information matrix.
+%OUTPUTS: J The asymptotic prior Fisher information matrix.
 %
 %The inverse of the Fisher information matrix for a dynamic system is the 
 %posterior Cramér-Rao lower bound (PCRLB). This finds the asymptotic value
@@ -64,8 +63,3 @@ end
 %SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY THE NAVAL
 %RESEARCH LABORATORY FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE ACTIONS
 %OF RECIPIENT IN THE USE OF THE SOFTWARE.
-
-
-
-
-

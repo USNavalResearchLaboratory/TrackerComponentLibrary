@@ -9,24 +9,24 @@ function F=FVanKeuk(T,x,tau,numDim)
 %           akin to a direct discrete-time version of the Singer's
 %           dynamic model.
 %
-%INPUTS: T    The time-duration of the propagation interval in seconds.
-%        x    The unused target state. This is just present so that this
-%             can be passed as a function handle to things that expect the
-%             first to parameters to be T and x.
-%       tau   The maneuver autocorrelation time in seconds. Presumably,
-%             this parameter can be chosen according to the same criteria
-%             as in Singer's dynamic model. That is, a reasonable range for
-%             tau is between 5 and 20 seconds. This parameter can be a
-%             scalar if the same parameter is used for all dimensions or a
-%             numDimX1 or 1XnumDim vector if different values are used
-%             across the dimensions.
-%      numDim The number of dimensions of the simulation problem. If
-%             the numDim parameter is omitted, then numDim=3 (3D motion)
-%             is assumed.
+%INPUTS: T The time-duration of the propagation interval in seconds.
+%        x The unused target state. This is just present so that this can
+%          be passed as a function handle to things that expect the first
+%          two parameters to be T and x.
+%      tau The maneuver autocorrelation time in seconds. Presumably, this
+%          parameter can be chosen according to the same criteria as in
+%          Singer's dynamic model. That is, a reasonable range for tau is
+%          between 5 and 20 seconds. This parameter can be a scalar if the
+%          same parameter is used for all dimensions or a numDimX1 or
+%          1XnumDim vector if different values are used across the
+%          dimensions.
+%   numDim The number of dimensions of the simulation problem. If the
+%          numDim parameter is omitted, then numDim=3 (3D motion) is
+%          assumed.
 %
-%OUTPUTS: F     The state transition matrix under van Keuk's dynamic model
-%               in numDim dimensions where the state is stacked [position;
-%               velocity;acceleration].
+%OUTPUTS: F The state transition matrix under van Keuk's dynamic model in
+%           numDim dimensions where the state is stacked
+%           [position;velocity;acceleration].
 %
 %Van Keuk's dynamic model is described in Chapter 2.2.1 of [1] and is
 %described in slightly more detail in [2]. The model is essentially a

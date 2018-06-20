@@ -20,7 +20,7 @@ function a=getNextMultisetPermutation(a,isInit)
 %           sequence and isInit=false, then this function returns an empty
 %           matrix.
 %
-%This function implements algorithm L of Chapter 7.2.1 of [1]. 
+%This function implements Algorithm L of Chapter 7.2.1 of [1]. 
 %
 %REFERENCES:
 %[1] D. E. Knuth, The Art of Computer Programming. Vol. 4, Fascicle 3:

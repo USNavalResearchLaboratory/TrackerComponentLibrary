@@ -1,4 +1,4 @@
-function [xi,w]=seventhOrderCubPoints(numDim,algorithm)
+function [xi,w]=seventhOrderCubPoints(numDim,algorithm,randomize)
 %%SEVENTHORDERCUBPOINTS Generate seventh order cubature points for
 %                       integration involving a multidimensional Gaussian
 %                       probability density function (PDF). Note that if
@@ -36,6 +36,14 @@ function [xi,w]=seventhOrderCubPoints(numDim,algorithm)
 %                 multiplying s,t, and r by a factor of sqrt(4/5).
 %               9 (The default if numDim==1) Call quadraturePoints1D(4), 4
 %                  points, numDim=1.
+%     randomize If this parameter is true, then the points will be
+%               multiplied by a random orthonormal rotation matrix. This
+%               does not change the moments up to the order of the points.
+%               This randomization is done in [5] and [6] to lessen various
+%               effects that arise when using points in the same
+%               orientation repeatedly in tracking. The default if this
+%               parameter is omitted or an empty matrix is passed is false.
+%               This parameter is ignored if numDim==1.
 %
 %OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
 %            points. (Each "point" is a vector)
@@ -57,6 +65,14 @@ function [xi,w]=seventhOrderCubPoints(numDim,algorithm)
 %[4] David F. Crouse , "Basic tracking using nonlinear 3D monostatic and
 %    bistatic measurements," IEEE Aerospace and Electronic Systems 
 %    Magazine, vol. 29, no. 8, Part II, pp. 4-53, Aug. 2014.
+%[5] O. Straka, D. Duník, and M. Simandl, "Randomized unscented Kalman
+%    filter in tracking," in Proceedings of the 15th International
+%    Conference on Information Fusion, Singapore, 9-12 Jul. 2012, pp.
+%    503-510.
+%[6] J. Duník, O. Straka, and M. Simandl, "The development of a randomised
+%    unscented Kalman filter," in Proceedings of the 18th World Congress,
+%    The International Federation of Automatic Control, Milan, Italy, 28
+%    Aug. - 2 Sep. 2011, pp. 8-13.
 %
 %July 2012 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -71,6 +87,10 @@ function [xi,w]=seventhOrderCubPoints(numDim,algorithm)
         else%Assume %n==1
             algorithm=9;
         end
+    end
+    
+    if(nargin<3||isempty(randomize))
+        randomize=false;
     end
     
     switch(algorithm)
@@ -264,6 +284,15 @@ function [xi,w]=seventhOrderCubPoints(numDim,algorithm)
             [xi,w]=quadraturePoints1D(4);
         otherwise
             error('Unknown algorithm selected')
+    end
+    
+    if(numDim>1&&randomize)
+        R=randOrthoMat(numDim);
+        
+        numPoints=length(w);
+        for curPoint=1:numPoints
+            xi(:,curPoint)=R*xi(:,curPoint);
+        end
     end
 end
 

@@ -1,4 +1,4 @@
-function [col4rowBest, row4colBest, gainBest]=kBest2DAssign(C,k,maximize)
+function [col4rowBest,row4colBest,gainBest]=kBest2DAssign(C,k,maximize)
 %%KBEST2DASSIGN Find the k lowest (or highest) cost 2D assignments for the
 %               two-dimensional assignment problem with a rectangular cost
 %               matrix C.
@@ -40,6 +40,36 @@ function [col4rowBest, row4colBest, gainBest]=kBest2DAssign(C,k,maximize)
 %increasing number of constraints. Much of the assignment code is in the
 %handle subclass MurtyData. Instances of MurtyData are stored in an ordered
 %list implemented using the BinaryHeap class.
+%
+%EXAMPLE:
+%This is the example used in [1]. We show how to turn the col4row and
+%row4col outputs into the tuples as shown in the paper.
+% C=[7,   51,  52,  87,  38,  60,  74,  66,   0   20;
+%    50,  12,   0,  64,   8,  53,   0,  46,  76,  42;
+%    27,  77,   0,  18,  22,  48,  44,  13,   0,  57;
+%    62,   0,   3,   8,   5,   6,  14,   0   26,  39;
+%     0,  97,   0,   5,  13,   0,  41,  31,  62,  48;
+%    79,  68,   0,   0,  15,  12,  17,  47,  35,  43;
+%    76,  99,  48,  27,  34,   0,   0,   0,  28,   0;
+%    0,  20,   9,  27,  46,  15,  84,  19,   3,  24;
+%    56,  10,  45,  39,   0,  93,  67,  79,  19,  38;
+%    27,   0,  39,  53,  46,  24,  69,  46,  23,   1];
+% numSol=2;
+% [col4row, row4col, gain]=kBest2DAssign(C,numSol);
+% N=size(C,1);%It is a square matrix.
+% tuples=zeros(2,N,numSol);
+% for curSol=1:numSol
+%     for curRow=1:N
+%         tuples(1,curRow,curSol)=curRow;
+%         tuples(2,curRow,curSol)=col4row(curRow,curSol);
+%     end
+% end
+% %The costs of the two solutions are
+% gain
+% %The tuples of each solution are:
+% tuples(:,:,1)
+% tuples(:,:,2)
+% %One will see that the gain and tuples match the paper.
 %
 %REFERENCES:
 %[1] K. G. Murty, "An algorithm for ranking all the assignments in order of

@@ -1,29 +1,29 @@
 function Q=QTaylor(deltaT,xCur,curT,D,dadx,method)
-%%QTAYLOR        Get the process noise covariance under a nonlinear
-%                continuous-time random process specified by the Langevin
-%                equation forward in time by a step-size of deltaT using a
-%                Taylor scheme with additive noise.
+%%QTAYLOR Get the process noise covariance under a nonlinear continuous-
+%         time random process specified by the Langevin equation forward in
+%         time by a step-size of deltaT using a Taylor scheme with additive
+%          noise.
 %
-%INPUTS:deltaT   The size of the single step over which to generate the
-%                process noise covariance matrix.
-%        xCur    The initial target state at time curT.
-%        curT    The time of the initial state xCur.
-%        D       The diffusion function in the continuous-time stochastic
-%                dynamic model. It takes the state and a time variable as
-%                its arguments, D(x,t). Since the process noise must be
-%                additive, D(x,t) should not depend on x.
-%        dadx    A xDimXxDim matrix of the derivative of the drift function
-%                with respect to the state at state xCur and time curT.
-%                This can also be a function that takes the state and a
-%                time variable as its arguments, dadx(x,t).
-%    method      Set to 0 for the shorter Euler-Maruyama expansion, 1 for
-%                the order 1.5 strong Taylor (default), and 2 for the order
-%                2.0 weak Taylor.
+%INPUTS: deltaT The size of the single step over which to generate the
+%               process noise covariance matrix.
+%          xCur The initial target state at time curT.
+%          curT The time of the initial state xCur.
+%             D The diffusion function in the continuous-time stochastic
+%               dynamic model. It takes the state and a time variable as
+%               its arguments, D(x,t). Since the process noise must be
+%               additive, D(x,t) should not depend on x.
+%          dadx A xDimXxDim matrix of the derivative of the drift function
+%               with respect to the state at state xCur and time curT.
+%               This can also be a function that takes the state and a time
+%               variable as its arguments, dadx(x,t).
+%        method Set to 0 for the shorter Euler-Maruyama expansion, 1 for
+%               the order 1.5 strong Taylor (default), and 2 for the order
+%               2.0 weak Taylor.
 %
-%OUTPUTS: Q     The process noise covariance matrix under a nonlinear
-%               continuous-time random process specified by the Langevin
-%               equation forward in time by a step-size of deltaT using a
-%               strong Taylor scheme with additive noise.
+%OUTPUTS: Q The process noise covariance matrix under a nonlinear
+%           continuous-time random process specified by the Langevin
+%           equation forward in time by a step-size of deltaT using a
+%           strong Taylor scheme with additive noise.
 %
 %The process noise covariance matrix is derived from the stochastic order
 %1.5 Taylor scheme with additive noise described in 10.4 of [1].

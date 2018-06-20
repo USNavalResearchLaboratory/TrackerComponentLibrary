@@ -34,7 +34,7 @@ function dq=dualQuatMult(dq2,dq1,handed)
 %[1] B. Kenwright, "A beginners guide to dual-quaternions: What they are,
 %    how they work, and how to use them for 3D character hierarchies," in
 %    Proceedings of the 20th International Conference on Computer Graphics,
-%    Visualization and Computer Vision, Prague, Czech Republic, 24?27 Jun.
+%    Visualization and Computer Vision, Prague, Czech Republic, 24-27 Jun.
 %    2012.
 %
 %November 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.

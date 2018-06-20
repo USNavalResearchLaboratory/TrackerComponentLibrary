@@ -129,7 +129,7 @@ function [xPostSet,PPostSet,muPost,xMerged,PMerged]=multipleModelUpdate(AlgSel,x
 %REFERENCES:
 %[1] J. D. Glass, W. D. Blair, and Y. Bar-Shalom, "IMM estimators with
 %    unbiased mixing for tracking targets performing coordinated turns," in
-%    Proceedings of the IEEE Aerospace Conference, Big Sky, MT, 2?9 Mar.
+%    Proceedings of the IEEE Aerospace Conference, Big Sky, MT, 2-9 Mar.
 %    2013.
 %[2] T. Yuan, Y. Bar-Shalom, P. Willett, E. Mozeson, S. Pollak, and D.
 %    Hardiman, "A multiple IMM estimation approach with unbiased mixing for
@@ -163,7 +163,7 @@ end
 
 numMergeDims=min(numMixDims);
 
-%The function is written to assume acell array was passed, so if the same
+%The function is written to assume a cell array was passed, so if the same
 %thing is used for all functions, just duplicate it in a cell array.
 if(isa(measUpdateFuns,'function_handle'))
     measUpdateFuns=repmat({measUpdateFuns},[numModels,1]);
@@ -184,7 +184,7 @@ switch(AlgSel)
         %The combined output is just the weighted mixture of the
         %components; no interaction at all between the components is
         %involved in the update of each filter.
-        [xMerged,PMerged]=mixMoments(muPost,xPostSet,PPostSet,numMergeDims);
+        [xMerged,PMerged]=calcMixtureMoments(xPostSet,muPost,PPostSet,[],[],numMergeDims);
      case 'GPB1'%Generalized pseudo-Bayesian 1
         %%Perform mode-matched filtering
         [xPostSet,PPostSet,likelihoods]=updateModels(xPredSet,PPredSet,measUpdateFuns,z,R,numStateDims);
@@ -203,7 +203,8 @@ switch(AlgSel)
         end
         
         %Combine the estimates
-        [xMerged,PMerged]=mixMoments(muPost,xPostSet,PPostSet,numMergeDims);
+        [xMerged,PMerged]=calcMixtureMoments(xPostSet,muPost,PPostSet,[],[],numMergeDims);
+
         %The merged output is the only output.
         xPostSet=xMerged;
         PPostSet=PMerged;
@@ -235,7 +236,7 @@ switch(AlgSel)
         end
         
         %%Combine the estimates
-        [xMerged,PMerged]=mixMoments(muPost,xPostSet,PPostSet,numMergeDims);
+        [xMerged,PMerged]=calcMixtureMoments(xPostSet,muPost,PPostSet,[],[],numMergeDims);
     case 'GPB2'%Generalized Pseudo-Bayesian 2 estimator
         %Unlike the other filters, xPredSet, PPredSet contains predicted
         %states for every pair of prior and current models in the GBP2
@@ -283,8 +284,8 @@ switch(AlgSel)
             muPost=ones(numModels,1)*(1/numModels);
         end
         
-        %Combine the results into a state esitmate and covariance matrix.
-        [xMerged,PMerged]=mixMoments(muPost,xPostSet,PPostSet,numMergeDims);
+        %Combine the results into a state estimate and covariance matrix.
+        [xMerged,PMerged]=calcMixtureMoments(xPostSet,muPost,PPostSet,[],[],numMergeDims);
     otherwise
         error('Unknown algorithm selected')
 end
@@ -439,34 +440,6 @@ function [xOut,POut]=IMMMixing(muMerge,xSet,PSet,numStateDims,numMixDims)
             POut(idxAllSet,idxAllSet,curOut)=POut(idxAllSet,idxAllSet,curOut)+muMerge(curIn,curOut)*(PMixCur+diff*diff');
         end
     end
-end
-
-function [xMixed,PMixed]=mixMoments(w,xUpdates,PUpdates,numMergeDims)
-%%MIXMOMENTS Find the moments of the mixture distribution, only using the
-%            first numMixDims of the models.
-
-numModels=length(w);
-xMixed=zeros(numMergeDims,1);
-PMixed=zeros(numMergeDims,numMergeDims);
-
-%Indices used for mixing.
-idx=1:numMergeDims;
-
-%Compute the mean.
-for curModel=1:numModels
-    xCur=xUpdates(idx,curModel);
-    
-    xMixed=xMixed+xCur*w(curModel);
-end
-
-%Compute the covariance matrix, with a spread of the means term.
-for curModel=1:numModels
-    xCur=xUpdates(idx,curModel);
-    PCur=PUpdates(idx,idx,curModel);
-    diff=xCur-xMixed;
-    
-    PMixed=PMixed+w(curModel)*(PCur+diff*diff');
-end
 end
 
 %LICENSE:

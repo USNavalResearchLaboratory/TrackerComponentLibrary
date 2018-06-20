@@ -36,6 +36,19 @@ function [xi,w,theta]=GaussLegendrePoints1D(n)
 %errant undefined LL terms and it is thus necessary to rederive that
 %equation.
 %
+%EXAMPLE:
+%Here, we integrate x.^2.*exp(-x.^2-x/2) from -1 to 1 using the
+%Gauss-Legendre quadrature points. We then compare the result to an
+%analytic solution.
+% [xi,w]=GaussLegendrePoints1D(20);
+% f=@(x)(x.^2.*exp(-x.^2-x/2));
+% numIntSol=sum(w'.*f(xi));
+% analyticSol=(-12-20*exp(1)+9*exp(25/16)*sqrt(pi)*(erf(3/4)+erf(5/4)))/(32*exp(3/2));
+% 
+% relError=(numIntSol-analyticSol)/abs(analyticSol)
+%One can see that the relative error is om the order of eps(1), so the
+%analytic and quadrature solutions agree well.
+%
 %REFERENCES:
 %[1] I. Bogaert, "Iteration-free computation of Gauss-Legendre quadrature
 %    nodes and weights," SIAM Journal on Scientific Computing, vol. 36,
@@ -88,7 +101,7 @@ else
         %substituting F for W. Specifically Equation 4.2 is 
         %G_m(y)=(1/y)*(sin(y)/y))^(2*m-1)*F_m(y,cot(y))
         %Thus, one can see that there is an extra sine term used in these
-        %interpolated values.    
+        %interpolated values.
         GW1=((((((((-2.20902861044616638398573427475e-14*x+2.30365726860377376873232578871e-12)*x-1.75257700735423807659851042318e-10)*x+1.03756066927916795821098009353e-8)*x-4.63968647553221331251529631098e-7)*x+0.149644593625028648361395938176e-4)*x-0.326278659594412170300449074873e-3)*x+0.436507936507598105249726413120e-2)*x-0.305555555555553028279487898503e-1)*x+0.833333333333333302184063103900e-1;
         GW2=(((((((3.63117412152654783455929483029e-12*x+7.67643545069893130779501844323e-11)*x-7.12912857233642220650643150625e-9)*x+2.11483880685947151466370130277e-7)*x-0.381817918680045468483009307090e-5)*x+0.465969530694968391417927388162e-4)*x-0.407297185611335764191683161117e-3)*x+0.268959435694729660779984493795e-2)*x-0.111111111111214923138249347172e-1;
         GW3=(((((((2.01826791256703301806643264922e-9*x-4.38647122520206649251063212545e-8)*x+5.08898347288671653137451093208e-7)*x-0.397933316519135275712977531366e-5)*x+0.200559326396458326778521795392e-4)*x-0.422888059282921161626339411388e-4)*x-0.105646050254076140548678457002e-3)*x-0.947969308958577323145923317955e-4)*x+0.656966489926484797412985260842e-2;

@@ -104,7 +104,7 @@ function [constantNames,constantValues,kSize,ss,ipt,au_km,EarthMoonRatio,DENum,I
 %'RE    ' The radius of the Earth in kilometers.
 %'AM    ' The radius of the Sun in kilometers.
 %
-%August 2017 David Crouse, Naval Research Laboratory, Washington D.C.
+%August 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 %If no ephemeris is given, assume that the DE430t is in a folder named data

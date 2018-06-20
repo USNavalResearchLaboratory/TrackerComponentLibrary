@@ -111,7 +111,7 @@ function val=invCDF(prob,n,options)
 %OUTPUTS: val The argument(s) of the CDF that would give the probability or
 %             probabilities in prob.
 %
-%The sine distirbution is complicated and not easily inverted, so the
+%The sine distribution is complicated and not easily inverted, so the
 %fminbnd function is used to invert the CDF.
 %
 %October 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.

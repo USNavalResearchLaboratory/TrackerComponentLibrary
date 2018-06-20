@@ -20,7 +20,7 @@ function [xUpdate,PUpdate,innov,Pzz]=EKFUpdate(xPred,PPred,z,R,h,HJacob,numIter,
 %              desired. If this parameter is omitted or an empty matrix is
 %              passed, the default value of zero is used. That is, just
 %              use the standard update without any additional iterations.
-%     FHessian This parameter is only provided if a second-order EKF is
+%     HHessian This parameter is only provided if a second-order EKF is
 %              desired. This is either a function handle for the
 %              measurement Hessian hypermatrix, or it is the measurement
 %              Hessian hypermatrix itself. The matrix is

@@ -31,7 +31,7 @@ function [X,y,Z,exitCode]=semiDefProg(C,AMats,a,algorithm,initVals,algParams)
 %             algorithm. If this is omitted or an empty matrix is passed,
 %             then the default values used in Section 5 of [3] are used.
 %             When provided, the structure must contain members initVals.X,
-%             initVals.y and initVals.Z. The initial estiamte is not used
+%             initVals.y and initVals.Z. The initial estimate is not used
 %             if algorithm=4.
 %   algParams An optional structure containing parameters that affect the
 %             convergence and evaluation of the algorithms. If algorithm=4,

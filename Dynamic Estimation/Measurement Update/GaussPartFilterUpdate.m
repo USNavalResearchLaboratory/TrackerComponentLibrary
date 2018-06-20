@@ -53,7 +53,7 @@ function [xUpdate,PUpdate,xiPart,wPart]=GaussPartFilterUpdate(xPred,PPred,zLike,
 %theorem.
 %
 %REFERENCES:
-%[1] J. H. Kotecha and P. M. Djuri?, "Gaussian particle filtering,"
+%[1] J. H. Kotecha and P. M. Djuric, "Gaussian particle filtering,"
 %    IEEE Transactions on Signal Processing, vol. 51, no. 10, pp.
 %    2592-2601, Oct. 2003.
 %

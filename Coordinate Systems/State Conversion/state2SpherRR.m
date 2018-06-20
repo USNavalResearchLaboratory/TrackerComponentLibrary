@@ -50,17 +50,15 @@ function z=state2SpherRR(xTar,systemType,useHalfRange,xTx,xRx,M)
 %             states being converted.
 %           M A 3X3XN hypermatrix of the rotation matrices to go from the
 %             alignment of the global coordinate system to that at the
-%             receiver. The z-axis of the local coordinate system of the
-%             the receiver is the pointing direction of the receiver. If
-%             omitted, then it is assumed that the local coordinate system
-%             is aligned with the global and M=eye(3) --the identity matrix
-%             is used. If only a single 3X3 matrix is passed, then is is
-%             assumed to be the same for all of the N conversions.
+%             receiver. If omitted, then it is assumed that the local
+%             coordinate system is aligned with the global and M=eye(3).
+%             If only a single 3X3 matrix is passed, then it is assumed to
+%             be the same for all of the N conversions.
 %
-%OUTPUTS:   z A 4XN matrix of the target states in xTar converted into
-%             bistatic spherical and bistatic range rate coordinates. If
-%             useHalfRange=true, then the r component is half the bistatic
-%             range and the range rate is correspondingly halved.
+%OUTPUTS: z A 4XN matrix of the target states in xTar converted into
+%           bistatic spherical and bistatic range rate coordinates. If
+%           useHalfRange=true, then the r component is half the bistatic
+%           range and the range rate is correspondingly halved.
 %
 %Details of the conversions are given in [1].
 %

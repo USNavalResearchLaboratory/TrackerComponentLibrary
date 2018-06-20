@@ -11,8 +11,8 @@ function sourceLoc=TDOAOnlyStaticLocEst(timeDelays,refRxLocs,nonRefRxLocs,c)
 %             measurements.
 %
 %INPUTS: timeDelays If only one reference receiver is present, this can be
-%               a numRxX1 vector of the time delays between the reach of
-%               the receivers (in nonRefRxLocs) and the reference receiver.
+%               a numRxX1 vector of the time differences between the the
+%               receivers (in nonRefRxLocs) and the reference receiver.
 %               In the general case, this is a numRefsX1 cell array where
 %               the ith cell holds the numRxiX1 vector of delays for the
 %               receivers associated with the ith reference. The type
@@ -45,6 +45,37 @@ function sourceLoc=TDOAOnlyStaticLocEst(timeDelays,refRxLocs,nonRefRxLocs,c)
 %
 %The algorithm implemented is taken from [1].
 %
+%EXAMPLE:
+% S1=[9;39;100];
+% S2=[65;10;-60];
+% S3=[64;71;43];
+% S4=[-128;6;12];
+% S5=[0;-20;4];
+% c=341;%The propagation speed.
+% t=[27;0;-42];%The true target location.
+% 
+% lRx1=S1;
+% lRx2=zeros(3,3);
+% TDOA=zeros(3,1);
+% %First TDOA pair is S2-S1
+% lRx2(:,1)=S2;
+% TDOA(1)=(norm(t-S2)-norm(t-S1))/c;
+% 
+% %Second TDOA pair is S3-S1
+% lRx2(:,2)=S3;
+% TDOA(2)=(norm(t-S3)-norm(t-S1))/c;
+% 
+% %Third TDOA pair is S4-S1
+% lRx2(:,3)=S4;
+% TDOA(3)=(norm(t-S4)-norm(t-S1))/c;
+% 
+% %Fourth TDOA pair is S4-S1
+% lRx2(:,4)=S5;
+% TDOA(4)=(norm(t-S5)-norm(t-S1))/c;
+% zCart=TDOAOnlyStaticLocEst(TDOA,lRx1,lRx2,c)
+%One will find that zCart is essentially the same as t, the true target
+%location.
+%
 %REFERENCES:
 %[1] M. D. Gillette and H. F. Silverman, "A linear closed-form algorithm
 %    for source localization from time-differences of arrival," IEEE Signal
@@ -66,7 +97,7 @@ else
     %building the matrix is a little bit more complciated.
     numRefs=size(refRxLocs,2);
 
-    %count the total number of receivers for all of the references.
+    %Count the total number of receivers for all of the references.
     totalNumRx=0;
     for curRef=1:numRefs
         totalNumRx=totalNumRx+size(nonRefRxLocs{curRef},2);

@@ -11,12 +11,12 @@
 *
 *INPUTS: x The NXnumVec collection of vectors in TIRS coordinates to
 *          convert (units do not matter). N can be 3, or 6. If the vectors
-*          are 3D, then they are position. 6D
-*          vectors are assumed to be position and velocity. Since the TIRS
-*          and ITRS co-rotate, there is no Coriolis effect to add. Also,
-*          the accelerations due to the wobble of the rotation axis over
-*          time are not considered. These accelerations are very small.
-*          Thus, the function just rotates both halves of the vector.
+*          are 3D, then they are position. 6D vectors are assumed to be
+*          position and velocity. Since the TIRS and ITRS co-rotate, there
+*          is no Coriolis effect to add. Also, the accelerations due to the
+*          wobble of the rotation axis over time are not considered. These
+*          accelerations are very small. Thus, the function just rotates
+*          both halves of the vector.
 * TT1, TT2 Two parts of a Julian date given in terrestrial time (TT).
 *          The units of the date are days. The full date is the sum of
 *          both terms. The date is broken into two parts to provide more

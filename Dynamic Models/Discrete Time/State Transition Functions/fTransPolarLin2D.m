@@ -45,7 +45,7 @@ function xPred=fTransPolarLin2D(T,x,qTheta)
 %REFERENCES:
 %[1] D. Laneuville, "Polar versus Cartesian velocity models for maneuvering
 %    target tracking with IMM," in Proceedings of the IEEE Aerospace
-%    Conference, Big Sky, MT, 2?9 Mar. 2013.
+%    Conference, Big Sky, MT, 2-9 Mar. 2013.
 %[2] J. L. Gertz, "Multisensor surveillance for improved aircraft
 %    tracking," The Lincoln Laboratory Journal, vol. 2, no. 3, pp. 381-396,
 %    1989.

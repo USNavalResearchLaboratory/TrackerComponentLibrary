@@ -37,7 +37,7 @@ function [xPred,PPred]=discQMCKalPred(xPrev,PPrev,f,Q,numSamples,stateDiffTrans,
 %integration rather than cubature integration.
 %
 %REFERENCES:
-%[1] D. Guo and X. Wang, "Quasi-Momte-Carlo filtering in nonlinear
+%[1] D. Guo and X. Wang, "Quasi-Monte-Carlo filtering in nonlinear
 %    dynamical systems," IEEE Transactions on Signal Processing, vol. 54,
 %    no. 6, pp. 2087-2098, Jun. 2006.
 %

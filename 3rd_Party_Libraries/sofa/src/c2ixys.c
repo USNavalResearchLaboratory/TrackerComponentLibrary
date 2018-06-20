@@ -54,9 +54,9 @@ void iauC2ixys(double x, double y, double s, double rc2i[3][3])
 **
 **  This revision:  2014 November 7
 **
-**  SOFA release 2017-04-20
+**  SOFA release 2018-01-30
 **
-**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 */
 {
    double r2, e, d;
@@ -77,7 +77,7 @@ void iauC2ixys(double x, double y, double s, double rc2i[3][3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2017
+**  Copyright (C) 2018
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

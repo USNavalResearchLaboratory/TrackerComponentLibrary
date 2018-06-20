@@ -1,5 +1,5 @@
 function [zCart,exitCode]=TDOA2Cart(TDOA,lRx1,lRx2,c,AbsTol,RelTol,params)
-%%TDOA2CART Given the minimum number of time delay of arrival (TDOA)
+%%TDOA2CART Given the minimum number of time difference of arrival (TDOA)
 %           measurements between sensors necessary to determine the
 %           location of an object (2 in 2D and 3 in 3D), solve for the
 %           location of the object by solving a set of simultaneous
@@ -11,47 +11,48 @@ function [zCart,exitCode]=TDOA2Cart(TDOA,lRx1,lRx2,c,AbsTol,RelTol,params)
 %
 %INPUTS: TDOA A vector containing 2 (for 2D) or 3 (for 3D) TDOA
 %             measurements. The TDOA measurements correspond to differences
-%             taken between sensors whose locations are given in lRx1 and
-%             lRx2.
+%             taken between sensors whose locations are given in lRx2 and
+%             lRx1.
 %        lRx1 A 2X2 or 3X3 matrix of 2 (or 2D) or 3 (for 3D) positions of
-%             the receiver locations that form the reference time time
+%             the receiver locations that form the reference time from
 %             which the TDOA measurement is computed. lRx1(:,i) is the
-%             location of the ith receiver.
+%             location of the ith receiver. If all of the reference times
+%             are the same, then this can be a single 2X1 or 3X1 vector.
 %        lRx2 A 2X2 or 3X3 matrix of 2 (or 2D) or 3 (for 3D) positions of
-%             the receiver locations whose reception time is subtracted
-%             from the reference time of the corresponding receiver in lRx1
-%             to get the corresponding TDOA.
+%             the receiver locations from whose reception time the time of
+%             arrival at lRx1 is subtracted to get the TDOA measurements.
 %           c The propagation speed in the medium in question. If this
 %             parameter is omitted or an empty matrix is passed, the
 %             default value of Constants.speedOfLight is used.
-% AbsTol,RelTol In some geometries of targets and recievers and when noise
-%             is added to the measurements, meaningless complex solutions
-%             can be produced. AbsTol and RelTol are tolerances for
-%             determining whether is solution is numerically real and
-%             should be kept or numerically complex and should be
-%             discarded. A solution x is kept if abs(imag(x))<AbsTol
-%             or if abs(imag(x))<RelTol*abs(real(x)). If omitted or empty
-%             matrices are passed, the default values of AbsTol=1e-9 and
-%             RelTol=1e-7 are used. Additionally, AbsTol and RelTol are
-%             used to eliminate false solutions that arise due to the TDOAs
-%             being squared when formulating the polynomial problem. That
-%             is, some solutions can arise having the wrong sign. These
-%             solutions are eliminated if
-%             ~(absDiff<AbsTol || absDiff<RelTol*abs(TDOA(curEq))) is true.
-%             This criterion is used rather than just comparing the signs
-%             of TDOA computations to improve performance when TDOA values
-%             are small/ zero.
-%      params An optional structure of parameters for the polyRootsMultiDim
-%             function, which is used by this function. possible members
-%             are maxDegIncreases and useMotzkinNull, both of which are
-%             described in the function polyRootsMultiDim. Default values
-%             for the function polyRootsMultiDim will be used if this
-%             parameter is omitted or an empty matrix is passed.
+% AbsTol,RelTol In some geometries of targets and
+%             recievers and when noise is added to the measurements,
+%             meaningless complex solutions can be produced. AbsTol and
+%             RelTol are tolerances for determining whether a solution is
+%             numerically real and should be kept or numerically complex
+%             and should be discarded. A solution x is kept if
+%             abs(imag(x))<AbsTol or if abs(imag(x))<RelTol*abs(real(x)).
+%             If omitted or empty matrices are passed, the default values
+%             of AbsTol=1e-9 and RelTol=1e-7 are used. Additionally, AbsTol
+%             and RelTol are used to eliminate false solutions that arise
+%              due to the TDOAs being squared when
+%             formulating the polynomial problem. These solutions are
+%             eliminated if ~(absDiff<AbsTol ||
+%             absDiff<RelTol*abs(TDOA(curEq))) is true. This criterion is
+%             used rather than just comparing the signs of TDOA
+%             computations to improve performance when TDOA values are
+%             small/ zero.
+%      params An optional structure of parameters that are for the
+%             polyRootsMultiDim function, which is used by this function.
+%             Possible members are maxDegIncreases and useMotzkinNull, both
+%             of which are described in the function polyRootsMultiDim.
+%             Default values for the function polyRootsMultiDim will be
+%             used if this parameter is omitted or an empty matrix is
+%             passed.
 %
 %OUTPUTS: zCart The 2XnumSol or 3XnumSol set of 2D or 3D real solutions for
 %               the location of the target.
-%      exitCode The exit code returned by the function polyRootsMultiDim,
-%               which is used to solve the problem.
+%      exitCode This is the exit code returned by the function
+%               polyRootsMultiDim, which is used to solve the problem.
 %
 %The algorithm is based on the simultaneous multivariate polynomial
 %formulation of [1]. Note that in 3D, the third measurement must not be a
@@ -61,9 +62,10 @@ function [zCart,exitCode]=TDOA2Cart(TDOA,lRx1,lRx2,c,AbsTol,RelTol,params)
 %the previous two. However, one could use sensor2-sensor4 and it would be
 %independent.
 %
-%EXAMPLE: The 2D example from [1] is here. Note that the TDOA numbers given
-%in the example are incorrect. The correct numbers are used here.
-%The locations of the three sensors
+%EXAMPLE 1:
+%The example here is similar to the 2D example from [1]. Note that the
+%TDOA numbers given in the example are incorrect. The correct numbers are
+%used here.
 % S1=[9;39];
 % S2=[65;10];
 % S3=[64;71];
@@ -73,19 +75,19 @@ function [zCart,exitCode]=TDOA2Cart(TDOA,lRx1,lRx2,c,AbsTol,RelTol,params)
 % lRx1=zeros(2,2);
 % lRx2=zeros(2,2);
 % TDOA=zeros(2,1);
-% %First TDOA pair is S1-S2
+% %First TDOA pair is S2-S1
 % lRx1(:,1)=S1;
 % lRx2(:,1)=S2;
-% TDOA(1)=(norm(t-S1)-norm(t-S2))/c;
-% %Second TDOA pair is S1-S3
+% TDOA(1)=(norm(t-S2)-norm(t-S1))/c;
+% %Second TDOA pair is S3-S1
 % lRx1(:,2)=S1;
 % lRx2(:,2)=S3;
-% TDOA(2)=(norm(t-S1)-norm(t-S3))/c;
+% TDOA(2)=(norm(t-S3)-norm(t-S1))/c;
 % zCart=TDOA2Cart(TDOA,lRx1,lRx2,c)
-%One will get the correct solution [27;42];
+%One will get the correct solution [27;42], within finite precision limits.
 %
-%EXAMPLE:
-% %Here, we give a 3D example.
+%EXAMPLE 2:
+%Here, we give a 3D example.
 % S1=[9;39;100];
 % S2=[65;10;-60];
 % S3=[64;71;43];
@@ -96,18 +98,18 @@ function [zCart,exitCode]=TDOA2Cart(TDOA,lRx1,lRx2,c,AbsTol,RelTol,params)
 % lRx1=zeros(3,3);
 % lRx2=zeros(3,3);
 % TDOA=zeros(3,1);
-% %First TDOA pair is S1-S2
+% %First TDOA pair is S2-S1
 % lRx1(:,1)=S1;
 % lRx2(:,1)=S2;
-% TDOA(1)=(norm(t-S1)-norm(t-S2))/c;
-% %Second TDOA pair is S1-S3
+% TDOA(1)=(norm(t-S2)-norm(t-S1))/c;
+% %Second TDOA pair is S3-S1
 % lRx1(:,2)=S1;
 % lRx2(:,2)=S3;
-% TDOA(2)=(norm(t-S1)-norm(t-S3))/c;
-% %Third TDOA pair is S4-S3
+% TDOA(2)=(norm(t-S3)-norm(t-S1))/c;
+% %Third TDOA pair is S3-S4
 % lRx1(:,3)=S4;
 % lRx2(:,3)=S3;
-% TDOA(3)=(norm(t-S4)-norm(t-S3))/c;
+% TDOA(3)=(norm(t-S3)-norm(t-S4))/c;
 % zCart=TDOA2Cart(TDOA,lRx1,lRx2,c)
 %One will get the correct solution [27;0;-42].
 %
@@ -119,7 +121,7 @@ function [zCart,exitCode]=TDOA2Cart(TDOA,lRx1,lRx2,c,AbsTol,RelTol,params)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 if(nargin<4||isempty(c))
-   c=Constants.speedOfLight;
+    c=Constants.speedOfLight;
 end
 
 if(nargin<5||isempty(AbsTol))
@@ -127,11 +129,11 @@ if(nargin<5||isempty(AbsTol))
 end
 
 if(nargin<6||isempty(RelTol))
-   RelTol=1e-7; 
+    RelTol=1e-7; 
 end
 
 if(nargin<7)
-   params=[]; 
+    params=[]; 
 end
 
 maxDegIncreases=[];
@@ -147,6 +149,17 @@ if(~isempty(params))
 end
 
 numDim=size(lRx1,1);
+
+%If all of the reference points are the same.
+if(size(lRx1,2)==1)
+    lRx1=repmat(lRx1,[1,numDim]);
+end
+
+%For the definition of lRx1 and lRx2 used in the equations, it is the
+%opposite of the definition above, so we swap them.
+temp=lRx1;
+lRx1=lRx2;
+lRx2=temp;
 
 u=(lRx1+lRx2)/2;
 v=(lRx1-lRx2)/2;
@@ -206,7 +219,7 @@ switch(numDim)
             xPolys{curMeas}=xPoly;
         end
     otherwise
-        error('The dimensionality of the locations is invalid')
+        error('The dimensionality of the locations is invalid.')
 end
 
 %Plug the result into a multivariate polynomial solver.
@@ -223,12 +236,12 @@ zCart=real(theRoots(:,sel));
 %near zero. Thus, as opposed to comparing the sign, we use the same AbsTol
 %and RelTol as for determining whether something is complex to determine
 %whether we should discard a solution.
-
 numSol=size(zCart,2);
 sel=true(numSol,1);
 for curSol=1:numSol
    for curEq=1:numDim
         TDOAComp=(norm(zCart(:,curSol)-lRx1(:,curEq))-norm(zCart(:,curSol)-lRx2(:,curEq)))/c;
+        
         absDiff=abs(TDOAComp-TDOA(curEq));
 
         if(~(absDiff<AbsTol || absDiff<RelTol*abs(TDOA(curEq))))
@@ -237,6 +250,12 @@ for curSol=1:numSol
         end
    end
 end
+
+%Make sure that we do not end up with no solutions.
+if(all(sel==false))
+    sel(1)=true;
+end
+
 zCart=zCart(:,sel);
 
 end

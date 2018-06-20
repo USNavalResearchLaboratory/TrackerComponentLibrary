@@ -3,38 +3,41 @@ function J=calcPolarJacob(x,systemType,useHalfRange,lTx,lRx,M)
 %                ignoring atmospheric effects with respect to Cartesian
 %                position.
 %
-%INPUTS:   x The 2X1 position of the target in Cartesian coordinates in the
-%            order [x;y].
+%INPUTS: x The 2X1 position of the target in Cartesian coordinates in the
+%          order [x;y].
 % systemType An optional parameter specifying the axis from which the
 %          angles are measured. Possible values are
 %          0 (The default if omitted or an empty matrix is passed) The
 %            azimuth angle is counterclockwise from the x axis.
 %          1 The azimuth angle is measured clockwise from the y axis.
 % useHalfRange A boolean value specifying whether the bistatic range value
-%           should be divided by two. This normally comes up when operating
-%           in monostatic mode, so that the range reported is a one-way
-%           range. The default if this parameter is not provided, or an
-%           empty matrix is passed, is true.
-%       lTx The 2X1 [x;y] location vector of the transmitter in global
-%           Cartesian coordinates. If this parameter is omitted or an
-%           empty matrix is passed, then the transmitter is assumed to be
-%           at the origin.
-%       lRx The 2X1 [x;y] location vector of the receiver in global
-%           Cartesian coordinates. If this parameter is omitted or an
-%           empty matrix is passed, then the receiver is assumed to be at
-%           the origin.
-%         M A 2X2 rotation matrices to go from the alignment of the global
-%           coordinate system to that at the receiver. If omitted or an
-%           empty matrix is passed, then it is assumed that the local
-%           coordinate system is aligned with the global and M=eye(2) --the
-%           identity matrix is used.
+%          should be divided by two. This normally comes up when operating
+%          in monostatic mode, so that the range reported is a one-way
+%          range. The default if this parameter is not provided, or an
+%          empty matrix is passed, is true.
+%      lTx The 2X1 [x;y] location vector of the transmitter in global
+%          Cartesian coordinates. If this parameter is omitted or an
+%          empty matrix is passed, then the transmitter is assumed to be at
+%          the origin.
+%      lRx The 2X1 [x;y] location vector of the receiver in global
+%          Cartesian coordinates. If this parameter is omitted or an
+%          empty matrix is passed, then the receiver is assumed to be at
+%          the origin.
+%        M A 2X2 rotation matrices to go from the alignment of the global
+%          coordinate system to that at the receiver. As noted below, this
+%          can be omitted or an empty matrix passed, because M does not
+%          actually matter.
 %
 %OUTPUTS: J The Jacobian matrix with derivatives with respect to position
 %           components. Each row is a component of range and azimuth in
 %           that order with derivatives taken with respect to [x,y] across
 %           columns.
 %
-%This function just calls rangeGradient and polAngGradient.
+%This function just calls rangeGradient and polAngGradient. The rotation of
+%the coordinate system by M does not affect the moments, because all it
+%effectively does is add a constant value to the angle. The matrix M is
+%just included to indicate that the function will work with differently
+%rotated coordinate systems.
 %
 %February 2017 David F.Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

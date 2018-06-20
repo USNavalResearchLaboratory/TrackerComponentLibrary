@@ -3,38 +3,36 @@
  *          coordinate system. The TEME system is non-standard and is
  *          generally only used in the Specialized General Perturbations 4
  *          (SGP4) orbital propagation algorithm. Note that the velocity
- *           conversion does not include the (small) centrifugal effect of
- *           polar motion.
+ *          conversion does not include the (small) centrifugal effect of
+ *          polar motion.
  *
- *INPUTS:   x   The NXnumVec collection of vectors to convert. N can be 3,
- *              or 6. If the vectors are 3D, then they are position.
- *              6D vectors are assumed to be position
- *              and velocity, whereby the angular velocity of the Earth's
- *              rotation is taken into account using a non-relativistic
- *              formula.
- * Jul1, Jul2  Two parts of a Julian date given in terrestrial time (TT).
- *              The units of the date are days. The full date is the sum of
- *              both terms. The date is broken into two parts to provide
- *              more bits of precision. It does not matter how the date is
- *              split.
- *  deltaTTUT1  An optional parameter specifying the difference between TT
- *              and UT1 in seconds. This information can be obtained from
- *http://www.iers.org/nn_11474/IERS/EN/DataProducts/EarthOrientationData/eop.html?__nnn=true
- *              or 
- http://www.usno.navy.mil/USNO/earth-orientation/eo-products
- *              If this parameter is omitted or if an empty matrix is
- *              passed, then the value provided by the function getEOP
- *              will be used instead.
- *       xpyp   xpyp=[xp;yp] are the polar motion coordinates in radians
- *              including the effects of tides and librations. If this
- *              parameter is omitted or an empty matrix is passed the value
- *              from the function getEOP will be used.
- *        LOD   The difference between the length of the day using
- *              terrestrial time, international atomic time, or UTC without
- *              leap seconds and the length of the day in UT1. This is an
- *              instantaneous parameter (in seconds) proportional to the
- *              rotation rate of the Earth. This is only needed if more
- *              than just position components are being converted.
+ *INPUTS: x The NXnumVec collection of vectors to convert. N can be 3, or
+ *          6. If the vectors are 3D, then they are position. 6D vectors
+ *          are assumed to be position and velocity, whereby the angular
+ *          velocity of the Earth's rotation is taken into account using a
+ *          non-relativistic formula.
+ * Jul1, Jul2 Two parts of a Julian date given in terrestrial time (TT).
+ *          The units of the date are days. The full date is the sum of
+ *          both terms. The date is broken into two parts to provide more
+ *          bits of precision. It does not matter how the date is split.
+ *  deltaTTUT1 An optional parameter specifying the difference between TT
+ *          and UT1 in seconds. This information can be obtained from
+ * http://www.iers.org/nn_11474/IERS/EN/DataProducts/EarthOrientationData/eop.html?__nnn=true
+ *          or 
+ * http://www.usno.navy.mil/USNO/earth-orientation/eo-products
+ *          If this parameter is omitted or if an empty matrix is passed,
+ *          then the value provided by the function getEOP will be used
+ *          instead.
+ *     xpyp xpyp=[xp;yp] are the polar motion coordinates in radians
+ *          including the effects of tides and librations. If this
+ *          parameter is omitted or an empty matrix is passed the value
+ *          from the function getEOP will be used.
+ *      LOD The difference between the length of the day using terrestrial
+ *          time, international atomic time, or UTC without leap seconds
+ *          and the length of the day in UT1. This is an instantaneous
+ *          parameter (in seconds) proportional to the rotation rate of the
+ *          Earth. This is only needed if more than just position
+ *          components are being converted.
  *
  *The conversion from the TEME to the pseudo-Earth-Fixed (PEF) coordinate
  *system is described in [1] and the relationship between the ITRS and the

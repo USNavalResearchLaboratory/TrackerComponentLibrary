@@ -10,7 +10,7 @@ function retVal=permBound(A)
 %
 %OUTPUTS: val An approxmation of the matrix permanent of A.
 %
-%This function implements a modified version of the the matrix permanent
+%This function implements a modified version of the matrix permanent
 %approximation e4 described in [1]. In the case of a zero column sum, the
 %e4 permanent bound by column is bad, but the same approximation by row is
 %good. In general, since the bound is an upper bound regardless of whether

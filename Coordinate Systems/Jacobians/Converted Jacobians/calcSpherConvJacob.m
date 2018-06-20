@@ -32,8 +32,7 @@ function J=calcSpherConvJacob(zSpher,systemType,useHalfRange,lTx,lRx,M)
 %           type of spherical coordinate system), so that the range
 %           reported is a one-way range (or just half a bistatic range).
 %           The default if this parameter is not provided is false if lTx
-%           and is provided and true if it is are omitted (monostatic).
-%           If no range values are provided, an empty matrix can be passed.
+%           is provided and true if it is are omitted (monostatic).
 %       lTx The 3X1 [x;y;z] location vector of the transmitter in global
 %           Cartesian coordinates. If this parameter is omitted or an
 %           empty matrix is passed, then the transmitter is assumed to be
@@ -41,13 +40,10 @@ function J=calcSpherConvJacob(zSpher,systemType,useHalfRange,lTx,lRx,M)
 %       lRx The 3X1 [x;y;z] location vector of the receiver in Cartesian
 %           coordinates. If this parameter is omitted or an empty matrix
 %           is passed, then the receiver is assumed to be at the origin.
-%         M A 3X3 rotation matrix to go from the alignment of the global
-%           coordinate system to that at the receiver. The z-axis of the
-%           local coordinate system of the receiver is the pointing
-%           direction of the receiver. If omitted or an empty matrix is
-%           passed, then it is assumed that the local coordinate system is
-%           aligned with the global and M=eye(3) --the identity matrix is
-%           used. 
+%         M A 3X3 rotation matrices to go from the alignment of the global
+%           coordinate system to that at the receiver. If omitted, then it
+%           is assumed that the local coordinate system is aligned with the
+%           global and M=eye(3) --the identity matrix is used.
 %
 %OUTPUTS: J The 3X3XN set of Jacobian matrices, one for each point given.
 %           Each row is a components of [range;azimuth;elevation] in that

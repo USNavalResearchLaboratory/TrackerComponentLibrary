@@ -85,7 +85,7 @@ function [knownSols,targetStates,exitFlag]=orbDet3Dir(numHalfRevs,obsLocs,unitDi
 %                  -1  The maximum number of iterations (100) was reached
 %                      without convergence.
 %                   0  A solution was found.
-%                   1  The algorithm termianted because it could not find a
+%                   1  The algorithm terminated because it could not find a
 %                      valid estimate of the location of the target at time
 %                      This is often because the Lambert problem (finding
 %                      the target state at time 2 given the positions at

@@ -2,31 +2,29 @@
  *           Terrestrial Intermediate Reference System (TIRS) to the
  *           Celestial Intermediate Reference System (CIRS).
  *
- *INPUTS:     x The NXnumVec collection of vectors to convert. N can be 3,
- *              or 6. If the vectors are 3D, then they are position.
- *              6D vectors are assumed to be position
- *              and velocity, whereby the angular velocity of the Earth's
- *              rotation is taken into account using a non-relativistic
- *              formula.
- *   Jul1, Jul2 Two parts of a Julian date given in terrestrial time (TT).
- *              The units of the date are days. The full date is the sum of
- *              both terms. The date is broken into two parts to provide
- *              more bits of precision. It does not matter how the date is
- *              split.
- *   deltaTTUT1 An optional parameter specifying the difference between TT
- *              and UT1 in seconds. This information can be obtained from
- *http://www.iers.org/nn_11474/IERS/EN/DataProducts/EarthOrientationData/eop.html?__nnn=true
- *              or 
- http://www.usno.navy.mil/USNO/earth-orientation/eo-products
- *              If this parameter is omitted or if an empty matrix is
- *              passed, then the value provided by the function getEOP
- *              will be used instead.
- *          LOD The difference between the length of the day using
- *              terrestrial time, international atomic time, or UTC without
- *              leap seconds and the length of the day in UT1. This is an
- *              instantaneous parameter (in seconds) proportional to the
- *              rotation rate of the Earth. This is only needed if more
- *              than just position components are being converted.
+ *INPUTS: x The NXnumVec collection of vectors to convert. N can be 3, or
+ *          6. If the vectors are 3D, then they are position. 6D vectors
+ *          are assumed to be position and velocity, whereby the angular
+ *          velocity of the Earth's rotation is taken into account using a
+ *          non-relativistic formula.
+ * Jul1, Jul2 Two parts of a Julian date given in terrestrial time (TT).
+ *          The units of the date are days. The full date is the sum of
+ *          both terms. The date is broken into two parts to provide more
+ *          bits of precision. It does not matter how the date is split.
+ * deltaTTUT1 An optional parameter specifying the difference between TT
+ *          and UT1 in seconds. This information can be obtained from
+ *          http://www.iers.org/nn_11474/IERS/EN/DataProducts/EarthOrientationData/eop.html?__nnn=true
+ *          or 
+ *          http://www.usno.navy.mil/USNO/earth-orientation/eo-products
+ *          If this parameter is omitted or if an empty matrix is passed,
+ *          then the value provided by the function getEOP will be used
+ *          instead.
+ *      LOD The difference between the length of the day using terrestrial
+ *          time, international atomic time, or UTC without leap seconds
+ *          and the length of the day in UT1. This is an instantaneous
+ *          parameter (in seconds) proportional to the rotation rate of the
+ *          Earth. This is only needed if more than just position
+ *          components are being converted.
  *
  *OUTPUTS: vec A 3XN or 6XN matrix of vectors converted from TIRS
  *             coordinates to CIRS coordinates.

@@ -28,9 +28,10 @@ function val=perm(A,boolRowsSkip,boolColsSkip)
 %time unless P=NP. However, efficient non-polynomial time algorithms exist.
 %This file implements the method in theorem 4.1 on page 26 in Chapter 2 of
 %[2] when dealing with general rectangular matrices. When dealing with
-%square matrices, the algorithm PERMAN from Chapter 23 of [3] is used as it
-%is more efficient and appears to be less susceptible to finite precision
-%errors. When skipping rows or columns, only Ryser's algorithm is used.
+%square matrices, an algorithm based on PERMAN from Chapter 23 of [3] is
+%used, because it is more efficient and appears to be less susceptible to
+%finite precision errors. When skipping rows or columns, only Ryser's
+%algorithm is used.
 %
 %EXAMPLE:
 %Suppose that one is given a boolean matrix where 1 indicates that a target

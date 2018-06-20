@@ -1,16 +1,16 @@
 function statePred=propagateOrbitKepler(stateOrig,deltaT,GM,epsVal)
-%%PROPAGATEORBITKEPLER Propagate a state consisting of position and velocity
-%                 forward while under a simple, two-mody ballistic,
-%                 Keplerian dynamic model.
+%%PROPAGATEORBITKEPLER Propagate a state consisting of position and
+%                 velocity forward while under a simple, two-body
+%                 ballistic, Keplerian dynamic model.
 %
 %INPUTS: stateOrig A 6XN matrix of N states to propagate forward in time by
-%                  the same interval. A state consists of poistion and
+%                  the same interval. A state consists of position and
 %                  velocity in a (quasi)-inertial coordinate system with
 %                  the mass producing body at the origin. Units are meters
 %                  and meter per second.
 %           deltaT The time duration in seconds by which the state should
 %                  be predicted forward.
-%             GM   An optional value of the universal gravitational
+%               GM An optional value of the universal gravitational
 %                  constant times the mass of the Earth. If omitted, the
 %                  value Constants.WGS84GMWithAtmosphere is used. The
 %                  units are m^3/sec^2.

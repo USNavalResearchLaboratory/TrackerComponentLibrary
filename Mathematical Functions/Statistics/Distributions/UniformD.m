@@ -1,7 +1,7 @@
 classdef UniformD
 %%UNIFORMD Functions to handle the scalar and multivariate (hyper-
 %     rectangularly bounded) uniform distributions.
-%Implemented methods are: mean, cov, PDF, CDF (scalar only), rand
+%Implemented methods are: mean, cov, PDF, CDF (scalar only), rand, entropy
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
@@ -71,7 +71,7 @@ function vals=PDF(z,bounds)
 end
 
 function val=CDF(z,bounds)
-%%CDF Evaluate a scalar uniform cumulative distirbution function (CDF) at a
+%%CDF Evaluate a scalar uniform cumulative distribution function (CDF) at a
 %     certain point given the bounds of the distribution.
 %
 %INPUTS: z The scalar point(s) at which the CDF should be evaluated.
@@ -108,6 +108,34 @@ function x=rand(N,bounds)
 
     x=(bounds(2,:)-bounds(1,:))'.*rand(xDim,N)+bounds(1,:)';
 end
+
+function entropyVal=entropy(bounds)
+%%ENTROPY Obtain the differential entropy of the multivariate uniform
+%         distribution given in nats. The differential entropy of a
+%         continuous distribution is entropy=-int_x p(x)*log(p(x)) dx where
+%         the integral is over all values of x. Units of nats mean that the
+%         natural logarithm is used in the definition. Unlike the Shannon
+%         entropy for discrete variables, the differential entropy of
+%         continuous variables can be both positive and negative.
+%
+%INPUTS: bounds A 2XnumDim matrix of the minimum and maximum integer bounds 
+%               of each of the numDim dimensions of the uniform
+%               distribution. bounds(1,:) is the set of minimum bounds and
+%               bounds(2,:) is the set of maximum bounds.
+%
+%OUTPUTS: entropyVal The value of the differential entropy in nats.
+%
+%Differential entropy is defined in Chapter 8 of [1].
+%
+%REFERENCES:
+%[1] T. M. Cover and J. A. Thomas, Elements of Information Theory, 2nd ed.
+%    Hoboken, NJ: Wiley-Interscience, 2006.
+%
+%April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    entropyVal=log(prod(bounds(2,:)-bounds(1,:)));
+end
+
 end
 end
 

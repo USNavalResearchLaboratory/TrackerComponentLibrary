@@ -51,7 +51,7 @@ AlgSel='IMM';
 T=5;
 
 %%STEP 1: Generate the simulation scenario.
-display('Generating the "true" track for the simulation scenario.')
+disp('Generating the "true" track for the simulation scenario.')
 TTotal=125+90+125+30+125;
 %The extra sample is the very first step in the trajectory.
 numSamples=TTotal/T+1;
@@ -134,7 +134,7 @@ for curStep=(baseStep+1):(baseStep+numStepSeg)
 end
 
 %%STEP 2: Generate measurements.
-display('Generating the measurements for the simulation; A simple Cartesian model is used.')
+disp('Generating the measurements for the simulation; A simple Cartesian model is used.')
 %The measurements are just Cartesian with 100 meters of noise added per
 %dimension, with no correlation between them.
 H=[1,0,0,0;
@@ -150,7 +150,7 @@ for curSamp=1:numSamples
 end
 
 %Plot the trajectory and the measurements
-display('Plotting the trajectory the measurements, and the true maneuver mode.')
+disp('Plotting the trajectory the measurements, and the true maneuver mode.')
 figure(1)
 clf
 hold on
@@ -182,8 +182,8 @@ set(h3,'FontSize',14,'FontWeight','bold','FontName','Times')
 %first-order white-noise process model, a Kalman filter with a first-order
 %Gauss-Markov model, a reduced state estimator, and the
 %separated covariance filter.
-display('Computing the baseline scenarios with just a Kalman filter and with the')
-display('reduced state estimator.')
+disp('Computing the baseline scenarios with just a Kalman filter and with the')
+disp('reduced state estimator.')
 
 %A direct-discrete model with a 1m/2s^2 process noise standard deviation is
 %used (normally, a discretized model is preferred, because it is
@@ -334,7 +334,7 @@ set(h3,'FontSize',14,'FontWeight','bold','FontName','Times')
 %%STEP 4: Run the algorithms with the two linear models.
 %The linear model pair consists of trackers using direct discrete linear
 %dynamic models.
-display('Computing the IMM scenario with two linear Kalman filters with different process noises.')
+disp('Computing the IMM scenario with two linear Kalman filters with different process noises.')
 
 %The covariance matrix for the low-noise model.
 QLow=QPolyKalDirectDisc(T,zeros(4,1),1,0.1^2);%0.1m/s^2 process noise
@@ -432,7 +432,7 @@ figure(3)
 plot(absErrIMML,'-r','linewidth',2)
 
 %STEP 5: Run the algorithms with the linear and the coordinated turn model.
-display('Computing the IMM scenario with a linear Kalman filter and an EKF.')
+disp('Computing the IMM scenario with a linear Kalman filter and an EKF.')
 
 %The covariance matrix for the linear model.
 QLinear=QPolyKalDirectDisc(T,zeros(4,1),1,0.01^2);%0.01m/s^2 process noise.
@@ -444,7 +444,7 @@ QLinear=QPolyKalDirectDisc(T,zeros(4,1),1,0.01^2);%0.01m/s^2 process noise.
 %the reduced state filter. The filters should be tuned separately for a
 %fair comparison. Often, improving the IMM's ability to recognize a turn
 %worsens its overall track performance. Thus, a tradeoff must be present.
-QCT=QCoordTurn2D(T,zeros(5,1),0.025^2,(0.5*(pi/180))^2);
+QCT=QCoordTurn(T,zeros(5,1),0.025^2,(0.5*(pi/180))^2);
 
 %The propagation routines for each model
 transFuns=[];

@@ -1,17 +1,18 @@
-/**BINSEARCHC A C implementation of an algorithm to perform a binary search.
+/**BINSEARCHC A C implementation of an algorithm to perform a binary
+*             search.
 *
-*INPUTS:  numInVec  the number of elements in the vector vec.
-*           vec     A vector with elements sorted in increasing order.
-*           key     The value that one wishes to find in the vector vec.
-*           choice  An optional parameter that determines what is returned
-*                   if key is not found.
-*                   0 means return the closest value.
-*                   1 means return the next lower value if there is one,
-*                     otherwise return the lowest value in vec.
-*                   2 means return the next higher value if there is one,
-*                     otherwise return the highest value in vec.
+*INPUTS: numInVec The number of elements in the vector vec.
+*              vec A vector with elements sorted in increasing order.
+*              key The value that one wishes to find in the vector vec.
+*           choice An optional parameter that determines what is returned
+*                  if key is not found.
+*                  0 means return the closest value.
+*                  1 means return the next lower value if there is one,
+*                    otherwise return the lowest value in vec.
+*                  2 means return the next higher value if there is one,
+*                    otherwise return the highest value in vec.
 *
-*OUTPUTS:   The return value is the index of the found element.
+*OUTPUTS: The return value is the index of the found element.
 *
 *December 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 */

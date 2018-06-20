@@ -1,5 +1,5 @@
 function [H,Q,M,W]=matExpIntFam(T,A,B,Qc)
-%%MATEXPINTFAM This function explicitely solves a number of real matrix
+%%MATEXPINTFAM This function explicitly solves a number of real matrix
 %       integral problems that arise when solving for optimal linear
 %       regulators. The integrals are:
 %       H=int_0^T expm(A*s)*B ds

@@ -37,11 +37,15 @@ function [A,xHyp,PHyp,GateMat]=makeStandardLRMatHyps(xPred,SPred,measUpdateFuns,
 %              covariance matrices associated with zMeas. If in a
 %              particular measurement type only the first zpDim components
 %              of zMeas are used, then one will typically only fill/ use
-%              the zpDimXzpDim submatric of a particualr entry in SRMeas.
+%              the zpDimXzpDim submatric of a particualar entry in SRMeas.
+%              If all of the covariance matrices are the same, then SRMeas
+%              can be a single zDimXzDim lower triangular matrix.
 %           PD The target detection probabilities. This can either be a
 %              numTarX1 vector if the targets have different probabilities,
 %              or this can be a scalar value if all of the target detection
-%              probabilities are the same.
+%              probabilities are the same. This value does not include the
+%              effects of gating (set by gammaVal) eliminating measurements
+%              from consideration.
 %       lambda The false alarm density. If the false alarm density is the
 %              same for all measurement types, then this is a scalar value.
 %              If it differs by measurement type (e.g. some measurements
@@ -77,7 +81,7 @@ function [A,xHyp,PHyp,GateMat]=makeStandardLRMatHyps(xPred,SPred,measUpdateFuns,
 %              value in lambda should be used for each measurement. The
 %              values here range from 1 to numMeas. If there is only one
 %              type of measurement, then an empty matrix can be passed.
-%  measJacob,zNative If these two inputs are omitted, then it is assumed
+% measJacob, zNative If these two inputs are omitted, then it is assumed
 %              that lambda is given in Cartesian coordinates. Otherwise, it
 %              is assumed that lambda is given in the native coordinate
 %              system of the (Cartesian-converted) measurements and thus
@@ -119,12 +123,28 @@ function [A,xHyp,PHyp,GateMat]=makeStandardLRMatHyps(xPred,SPred,measUpdateFuns,
 %   GateMat A numTarXnumMeas boolean matrix indicating whether each target
 %           gates with each measurement. 
 %
-%This function builds the dimensionless score function from [1]. This
-%formulation in terms of likelihood ratios eliminates the need to compute
-%the volumes of detection gates. Of course, if these likelihood ratios are
-%computed in Cartesian coordinates, but lambda is in a measurement
-%coordinate system, this is just an approximation. Square root updates are
-%assumed because they tend to be the most numerically stable.
+%This function builds the dimensionless score function from [1]. Note,
+%however that the missed detection probability with gating is 1-PD*PG and
+%not just 1-PD When multiple thresholds [gammaVal} are given, the largest
+%value of PG is seelected to use). This comes from normalizing the PDF of
+%the measurement to the gate. See Section 3.5.3 of [2], where Equation
+%3.5.3-6 has this normalizing term. This normalization term means that one
+%can't just replace PD with PD*PG. This formulation in terms of likelihood
+%ratios eliminates the need to compute the volumes of detection gates. Of
+%course, if these likelihood ratios are computed in Cartesian coordinates,
+%but lambda is in a measurement coordinate system, this is just an
+%approximation. Square root updates are assumed because they tend to be the
+%most numerically stable.
+%
+%Though the gate probability is used in the likelihood computation, it is
+%not used in the computation of the covariance matrix for the missed
+%detection hypothesis. The fact that a measurement is not seen in the gate
+%can potentially mean that the target was detected and its measurement is
+%outside of the gate. The issue is discussed in [3] (See Equation 28).
+%After using this function, one might wish to use calcMissedGateCov to
+%adjust the gate size of the missed detection hypothesis. This doesn't
+%really matter if the detection probability is not near 1 but the gate
+%probability is near 1.
 %
 %REFERENCES:
 %[1] Y. Bar-Shalom, S. S. Blackman, and R. J. Fitzgerald, "Dimensionless
@@ -133,12 +153,16 @@ function [A,xHyp,PHyp,GateMat]=makeStandardLRMatHyps(xPred,SPred,measUpdateFuns,
 %    2007.
 %[2] Y. Bar-Shalom, P. K. Willett, and X. Tian, Tracking and Data Fusion.
 %    Storrs, CT: YBS Publishing, 2011.
+%[3] X. R. Li, "Tracking in clutter with strongest neighbor measurements -
+%    Part i: Theoretical analysis," IEEE Transactions on Automatic Control,
+%    vol. 43, no. 11, pp. 1560-1578, Nov. 1998.
 %
 %February 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 xDim=size(xPred,1);
 numTar=size(xPred,2);
+zDim=size(zMeas,1);
 numMeas=size(zMeas,2);
 numHyp=numMeas+1;%The extra one is the missed detection hypothesis.
 
@@ -175,6 +199,12 @@ if(isscalar(PD))
     PD=PD*ones(numTar,1);
 end
 
+%The gate probability (from an inverse chi-squared PDF). We use the maximum
+%gate probability when multiple ones are present.
+PG=max(1-gammainc(gammaVal/2,zDim/2,'upper'));
+
+%Whether or not the target is detected is affected by whether it exists
+%(the rPred).
 PD=PD(:).*rPred(:);
 
 if(nargin>11&&~isempty(zNative)&&isa(measJacob,'function_handle'))
@@ -183,6 +213,11 @@ if(nargin>11&&~isempty(zNative)&&isa(measJacob,'function_handle'))
     for curType=1:numMeasUpdateFuns
         measJacob{curType}=temp;
     end
+end
+
+%If only one is given, assume they are all the same.
+if(size(SRMeas,3)==1)
+    SRMeas=repmat(SRMeas,[1,1,numMeas]);
 end
 
 %The likelihood ratio matrix.
@@ -240,8 +275,8 @@ for curTar=1:numTar
         end
     end
     
-    %The missed detection likelihood.
-    A(curTar,numMeas+curTar)=(1-PD(curTar));
+    %The missed detection likelihood (includes the gating probability).
+    A(curTar,numMeas+curTar)=(1-PD(curTar)*PG);
     xHyp(:,curTar,end)=xPredCur;
     PHyp(:,:,curTar,end)=SPredCur*SPredCur';
 end

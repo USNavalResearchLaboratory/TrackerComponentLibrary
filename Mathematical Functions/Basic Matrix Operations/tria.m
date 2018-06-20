@@ -1,5 +1,5 @@
 function S=tria(A)
-%%TRIA Square root matrix triangularization. Given a recntangular square
+%%TRIA Square root matrix triangularization. Given a rectangular square
 %      root matrix, obtain a lower-triangular square root matrix that is
 %      square.
 %

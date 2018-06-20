@@ -189,14 +189,14 @@ function [xPredMain,xPredSubsid,g,orders,isFSAL,subsidType]=RungeKNystroemSStep(
 %    vol. 66, no. 7, pp. 265-270, 1986.
 %[6] S. Filippi and J. Gräf "New Runge-Kutta-Nyström formula-pairs of
 %     order 8(7), 9(8), 10(9) and 11(10) for differential equations of the
-%     form y?? = f (x, y)," Journal of Computational and Applied
+%     form y'' = f (x, y)," Journal of Computational and Applied
 %     Mathematics, vol. 14, no. 3, pp. 361-370, Mar. 1986.
 %[7] J. R. Dormand and P. J. Prince, "Runge-Kutta-Nystrom triples,"
 %    Computers
 %    and Mathematics with Applications, vol. 13, no. 12, pp. 937-949, 1987.
 %[8] J. R. Dormand, M. E. A. El-Mikkawy, and P. J. Prince, "Families of
 %    Runge-Kutta-Nystrom formulae," IMA Journal of Numerical Analysis, vol.
-%    7, no. 2, pp. 235?250, Apr. 1987.
+%    7, no. 2, pp. 235-250, Apr. 1987.
 %[9] J. R. Dormand, M. E. A. El-Mikkawy, and P. J. Prince, "High-order
 %    embedded Runge-Kutta-Nystrom formulae," IMA Journal of Numerical
 %    Analysis, vol. 7, no. 2, pp. 423-430, Apr. 1987.
@@ -204,7 +204,7 @@ function [xPredMain,xPredSubsid,g,orders,isFSAL,subsidType]=RungeKNystroemSStep(
 %     Seward, "Algorithm 670: A Runge-Kutta-Nyström code," ACM Transactions
 %     on Mathematical Software, vol. 15, no. 1, pp. 31-40, Mar. 1989.
 %[11] J. R. Dormand, M. E. A. El-Mikkawy, and P. J. Prince,
-%     "Corrigendum: High-order embedded Runge-Kutta-Nystrom formulae,? IMA
+%     "Corrigendum: High-order embedded Runge-Kutta-Nystrom formulae," IMA
 %     Journal of Numerical Analysis, vol. 11, no. 2, p. 297, Apr. 1991.
 %[12] J. Gräf. (2006, 15 Jan.) Bäume, RKN-type methods by Filippi and Gräf
 %     (www.josef-graef.de)" [Online]. Available:

@@ -93,8 +93,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     
     /*Verify the validity of the vector to sort.*/
     checkRealDoubleArray(prhs[0]);
-    numRow = mxGetM(prhs[0]);
-    numCol = mxGetN(prhs[0]);
+    numRow=mxGetM(prhs[0]);
+    numCol=mxGetN(prhs[0]);
     if(numRow>1&&numCol>1){
         mexErrMsgTxt("Too many dimensions in the search vector.");
         return;
@@ -106,8 +106,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         }
     }
 
-    vec = (double*)mxGetData(prhs[0]);
-    key = getDoubleFromMatlab(prhs[1]);
+    vec=(double*)mxGetData(prhs[0]);
+    key=getDoubleFromMatlab(prhs[1]);
     
     foundIdx=binSearchC(numPoints, vec, key, choice);
     

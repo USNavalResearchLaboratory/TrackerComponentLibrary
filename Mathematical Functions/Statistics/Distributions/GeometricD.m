@@ -5,24 +5,25 @@ classdef GeometricD
 %            trials that must be performed until a success is obtained. The
 %            probability of success for each trial is p.
 %Implemented methods are: mean, var, PMF, CDF, invCDF, momentGenFun,
-%                         cumGenFun, rand
+%                         cumGenFun, rand, entropy
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 methods(Static)
 
 function val=mean(p,type)
-%%MEAN  Obtain the mean of the geometric distribution.
+%%MEAN Obtain the mean of the geometric distribution.
 %
-%INPUTS: p    The probability of success of each Bernoulli trial.
-%        type A parameter indicating the type of Geometric distribution.
-%             Possible values are:
-%             0 The distribution is of the number of Bernoulli trials
-%               needed before obtaining a success (a 1).
-%             1 The distribution is of the number of failures obtained from
-%               Bernoulli trials before obtaining a success.
+%INPUTS: p The probability of success of each Bernoulli trial.
+%     type A parameter indicating the type of Geometric distribution.
+%         Possible values are:
+%         0 (The default if omitted or an empty matrix is passed) The
+%           distribution is of the number of Bernoulli trials needed before
+%           obtaining a success (a 1).
+%         1 The distribution is of the number of failures obtained from
+%           Bernoulli trials before obtaining a success.
 %
-%OUTPUTS: val  The mean of the geometric distribution under consideration.
+%OUTPUTS: val The mean of the geometric distribution under consideration.
 %
 %The mean of the geometric distribution, is given in table 5-2 of [1].
 %
@@ -31,6 +32,10 @@ function val=mean(p,type)
 %    Stochastic Processes, 4th ed. Boston: McGraw Hill, 2002.
 %
 %September 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    if(nargin<2||isempty(type))
+       type=0; 
+    end
 
     if(type==0)
         val=1/p;
@@ -44,15 +49,16 @@ end
 function val=var(p,type)
 %%VAR Obtain the variance of the geometric distribution
 %
-%INPUTS: p    The probability of success of each Bernoulli trial.
-%        type A parameter indicating the type of Geometric distribution.
-%             Possible values are:
-%             0 The distribution is of the number of Bernoulli trials
-%               needed before obtaining a success (a 1).
-%             1 The distribution is of the number of failures obtained from
-%               Bernoulli trials before obtaining a success.
+%INPUTS: p The probability of success of each Bernoulli trial.
+%     type A parameter indicating the type of Geometric distribution.
+%          Possible values are:
+%          0 (The default if omitted or an empty matrix is passed) The
+%            distribution is of the number of Bernoulli trials needed
+%            before obtaining a success (a 1).
+%          1 The distribution is of the number of failures obtained from
+%            Bernoulli trials before obtaining a success.
 %
-%OUTPUTS: val  The variance of the geometric distribution.
+%OUTPUTS: val The variance of the geometric distribution.
 %
 %The variance of the geometric distribution, is given in table 5-2 of [1].
 %
@@ -61,6 +67,10 @@ function val=var(p,type)
 %    Stochastic Processes, 4th ed. Boston: McGraw Hill, 2002.
 %
 %September 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    if(nargin<2||isempty(type))
+       type=0; 
+    end
 
     if(type==0||type==1)
         val=(1-p)/p^2;
@@ -73,18 +83,19 @@ function val=PMF(x,p,type)
 %%PMF Evaluate the geometric probability mass function (PMF) at given
 %     points.
 %
-%INPUTS:    x The point(s) at which the Poisson PMF is to be evaluated. x
-%             is an integer. For a type 0 distribution x>=1, for a type 1
-%             distribution, x>=0.
-%           p The probability of success of each Bernoulli trial.
-%        type A parameter indicating the type of Geometric distribution.
-%             Possible values are:
-%             0 The distribution is of the number of Bernoulli trials
-%               needed before obtaining a success (a 1).
-%             1 The distribution is of the number of failures obtained from
-%               Bernoulli trials before obtaining a success.
+%INPUTS: x The point(s) at which the Poisson PMF is to be evaluated. x is
+%          an integer. For a type 0 distribution x>=1, for a type 1
+%          distribution, x>=0.
+%        p The probability of success of each Bernoulli trial.
+%     type A parameter indicating the type of Geometric distribution.
+%          Possible values are:
+%          0 (The default if omitted or an empty matrix is passed) The
+%            distribution is of the number of Bernoulli trials needed
+%            before obtaining a success (a 1).
+%          1 The distribution is of the number of failures obtained from
+%            Bernoulli trials before obtaining a success.
 %
-%OUTPUTS: val  The value(s) of the geometric PMF
+%OUTPUTS: val The value(s) of the geometric PMF
 %
 %The PMF of the geometric distribution, is given in table 5-2 of [1].
 %
@@ -94,6 +105,10 @@ function val=PMF(x,p,type)
 %
 %September 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
     
+    if(nargin<3||isempty(type))
+       type=0; 
+    end
+
     if(type==0)
         val=(1-p).^(x-1)*p;
     elseif(type==1)
@@ -104,21 +119,22 @@ function val=PMF(x,p,type)
 end
 
 function val=CDF(x,p,type)
-%%PMF Evaluate the cumulative distribution function (CDF)of the
-%            geometric distribution at desired points.
+%%PMF Evaluate the cumulative distribution function (CDF)of the geometric
+%     distribution at desired points.
 %
-%INPUTS:    x The point(s) at which the Poisson CDF is to be evaluated. x
-%             is an integer. For a type 0 distribution x>=1, for a type 1
-%             distribution, x>=0.
-%           p The probability of success of each Bernoulli trial.
-%        type A parameter indicating the type of Geometric distribution.
-%             Possible values are:
-%             0 The distribution is of the number of Bernoulli trials
-%               needed before obtaining a success (a 1).
-%             1 The distribution is of the number of failures obtained from
-%               Bernoulli trials before obtaining a success.
+%INPUTS: x The point(s) at which the Poisson CDF is to be evaluated. x is
+%          an integer. For a type 0 distribution x>=1, for a type 1
+%          distribution, x>=0.
+%        p The probability of success of each Bernoulli trial.
+%     type A parameter indicating the type of Geometric distribution.
+%          Possible values are:
+%          0 (The default if omitted or an empty matrix is passed) The
+%            distribution is of the number of Bernoulli trials needed
+%            before obtaining a success (a 1).
+%          1 The distribution is of the number of failures obtained from
+%            Bernoulli trials before obtaining a success.
 %
-%OUTPUTS: val  The value(s) of the geometric CDF
+%OUTPUTS: val The value(s) of the geometric CDF
 %
 %The CDF of the geometric distribution can be obtained by summing the PMF
 %of the distribution. The PMF, is given in Table 5-2 of [1].
@@ -128,6 +144,10 @@ function val=CDF(x,p,type)
 %    Stochastic Processes, 4th ed. Boston: McGraw Hill, 2002.
 %
 %September 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    if(nargin<3||isempty(type))
+       type=0; 
+    end
 
     if(type==0)
         val=1-(1-p).^x;
@@ -148,13 +168,14 @@ function x=invCDF(prob,p,type)
 %           p The probability of success of each Bernoulli trial.
 %        type A parameter indicating the type of Geometric distribution.
 %             Possible values are:
-%             0 The distribution is of the number of Bernoulli trials
-%               needed before obtaining a success (a 1).
+%             0 (The default if omitted or an empty matrix is passed) The
+%               distribution is of the number of Bernoulli trials needed
+%               before obtaining a success (a 1).
 %             1 The distribution is of the number of failures obtained from
 %               Bernoulli trials before obtaining a success.
 %
-%OUTPUTS:   val  The argument(s) of the CDF that would give the probability
-%                or probabilities in prob.
+%OUTPUTS: val The argument(s) of the CDF that would give the probability or
+%             probabilities in prob.
 %
 %The CDF of the geometric distribution is very simple and is easily
 %inverted using logarithms, as is done here. However, since it is a
@@ -169,6 +190,10 @@ function x=invCDF(prob,p,type)
 %    Stochastic Processes, 4th ed. Boston: McGraw Hill, 2002.
 %
 %September 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    if(nargin<3||isempty(type))
+       type=0; 
+    end
 
     if(type==0)
         x=log(1-prob)/log(1-p);
@@ -198,19 +223,20 @@ end
 function vals=rand(N,p,type)
 %%RAND Generate geometrically distributed random variables.
 %
-%INPUTS:    N If N is a scalar, then rand returns an NXN matrix of random
-%             variables. If N=[M,N1] is a two-element row vector, then
-%             rand returns an MXN1 matrix of  random variables.
-%           p The probability of success of each Bernoulli trial.
-%        type A parameter indicating the type of Geometric distribution.
-%             Possible values are:
-%             0 The distribution is of the number of Bernoulli trials
-%               needed before obtaining a success (a 1).
-%             1 The distribution is of the number of failures obtained from
-%               Bernoulli trials before obtaining a success.
+%INPUTS: N If N is a scalar, then rand returns an NXN matrix of random
+%          variables. If N=[M,N1] is a two-element row vector, then rand
+%          returns an MXN1 matrix of  random variables.
+%        p The probability of success of each Bernoulli trial.
+%     type A parameter indicating the type of Geometric distribution.
+%          Possible values are:
+%          0 (The default if omitted or an empty matrix is passed) The
+%            distribution is of the number of Bernoulli trials needed
+%            before obtaining a success (a 1).
+%          1 The distribution is of the number of failures obtained from
+%            Bernoulli trials before obtaining a success.
 %
-%OUTPUTS: vals  A matrix whose dimensions are determined by N of the
-%               generated geometric random variables.
+%OUTPUTS: vals A matrix whose dimensions are determined by N of the
+%              generated geometric random variables.
 %
 %This is an implementation of the inverse transform algorithm of Chapter
 %5.1 of [1]. That algorithm is for a continous distribution, but it can be
@@ -222,6 +248,10 @@ function vals=rand(N,p,type)
 %[1] S. M. Ross, Simulation, Ed. 4, Amsterdam: Elsevier, 2006.
 %
 %September 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    if(nargin<3||isempty(type))
+       type=0; 
+    end
 
     if(isscalar(N))
         dims=[N, N];
@@ -241,20 +271,21 @@ function momentVal=momentGenFun(p,type,numDerivs,t)
 %              it at t=0 provides the kth noncentral moment of the
 %              distribution.
 %
-%INPUTS: p    The probability of success of each Bernoulli trial.
-%        type A parameter indicating the type of Geometric distribution.
-%             Possible values are:
-%             0 The distribution is of the number of Bernoulli trials
-%               needed before obtaining a success (a 1).
-%             1 The distribution is of the number of failures obtained from
-%               Bernoulli trials before obtaining a success.
-%   numDerivs The number of derivatives to take with respect to the
-%             argument of the moment generating function. numDerivs>=0.
-%           t The vector or matrix of points where the moment generating
-%             function should be evaluated. If this parameter is omitted or
-%             an empty matrix is passed, the default value of 0 is used.
+%INPUTS: p The probability of success of each Bernoulli trial.
+%     type A parameter indicating the type of Geometric distribution.
+%          Possible values are:
+%          0 (The default if omitted or an empty matrix is passed) The
+%            distribution is of the number of Bernoulli trials needed
+%            before obtaining a success (a 1).
+%          1 The distribution is of the number of failures obtained from
+%            Bernoulli trials before obtaining a success.
+%  numDerivs The number of derivatives to take with respect to the
+%            argument of the moment generating function. numDerivs>=0.
+%          t The vector or matrix of points where the moment generating
+%            function should be evaluated. If this parameter is omitted or
+%            an empty matrix is passed, the default value of 0 is used.
 %
-%OUTPUTS: momentVal A  matrix of the values of the specified derivative of
+%OUTPUTS: momentVal A matrix of the values of the specified derivative of
 %                   the moment generating function given at the points in t
 %                   or at t=0 if t is omitted.
 %
@@ -285,6 +316,10 @@ function momentVal=momentGenFun(p,type,numDerivs,t)
 %
 %September 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+    if(nargin<2||isempty(type))
+       type=0; 
+    end
 
     if(nargin<4||isempty(t))
        t=0; 
@@ -335,18 +370,19 @@ function cumVal=cumGenFun(p,type,numDerivs,t)
 %           generating function is the natural logarithm of the moment
 %           generating function.
 %
-%INPUTS: p    The probability of success of each Bernoulli trial.
-%        type A parameter indicating the type of Geometric distribution.
-%             Possible values are:
-%             0 The distribution is of the number of Bernoulli trials
-%               needed before obtaining a success (a 1).
-%             1 The distribution is of the number of failures obtained from
-%               Bernoulli trials before obtaining a success.
-%   numDerivs The number of derivatives to take with respect to the
-%             argument of the cumulant generating function. numDerivs>=0.
-%           t The vector or matrix of points where the moment generating
-%             function should be evaluated. If this parameter is omitted or
-%             an empty matrix is passed, the default value of 0 is used.
+%INPUTS: p The probability of success of each Bernoulli trial.
+%     type A parameter indicating the type of Geometric distribution.
+%          Possible values are:
+%          0 (The default if omitted or an empty matrix is passed) The
+%            distribution is of the number of Bernoulli trials needed
+%            before obtaining a success (a 1).
+%          1 The distribution is of the number of failures obtained from
+%            Bernoulli trials before obtaining a success.
+%  numDerivs The number of derivatives to take with respect to the
+%            argument of the cumulant generating function. numDerivs>=0.
+%          t The vector or matrix of points where the moment generating
+%            function should be evaluated. If this parameter is omitted or
+%            an empty matrix is passed, the default value of 0 is used.
 %
 %OUTPUTS: cumVal A  matrix of the values of the specified derivative of
 %                the cumulant generating function given at the points in t
@@ -382,6 +418,10 @@ function cumVal=cumGenFun(p,type,numDerivs,t)
 %
 %September 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+    if(nargin<2||isempty(type))
+       type=0; 
+    end
 
     if(nargin<4||isempty(t))
        t=0; 
@@ -432,9 +472,49 @@ function cumVal=cumGenFun(p,type,numDerivs,t)
         error('Unknown type specified');
     end
 end
-end
-end
 
+function entropyVal=entropy(p,type)
+%%ENTROPY Obtain the Shannon entropy of the Geometric distribution given in
+%         nats. The Shannon entropy of a discrete distribution is
+%         entropy=-sum_x Pr(x)*log(Pr(x)) where the sum is over all
+%         discrete values of x. Units of nats mean that the natural
+%         logarithm is used in the definition.
+%
+%INPUTS: p The probability of success of each Bernoulli trial.
+%     type A parameter indicating the type of Geometric distribution.
+%          Possible values are:
+%          0 (The default if omitted or an empty matrix is passed) The
+%            distribution is of the number of Bernoulli trials needed
+%            before obtaining a success (a 1).
+%          1 The distribution is of the number of failures obtained from
+%            Bernoulli trials before obtaining a success. 
+%
+%OUTPUTS: entropyVal The value of the Shannon entropy in nats.
+%
+%Shannon entropy is defined in Chapter 2 of [1].
+%
+%REFERENCES:
+%[1] T. M. Cover and J. A. Thomas, Elements of Information Theory, 2nd ed.
+%    Hoboken, NJ: Wiley-Interscience, 2006.
+%
+%April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    if(nargin<2||isempty(type))
+       type=0; 
+    end
+
+    switch(type)
+        case 0%Trials before success
+            entropyVal=-((1-p)/p)*log(1-p)-log(p);
+        case 1%Failures before success
+            %The same as case 0.
+            entropyVal=-((1-p)/p)*log(1-p)-log(p); 
+        otherwise
+            error('Unknown type specified.')
+    end
+end
+end
+end
 
 function val=A(n,k)
 %A This implements the function

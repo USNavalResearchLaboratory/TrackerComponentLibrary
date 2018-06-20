@@ -2,16 +2,16 @@ function [xi,w]=thirdOrderStudentTCubPoints(mu,SR,nu)
 %%THIRDORDERSTUDENTTCUBPOINTS Generate third order cubature points for
 %          integration involving a multidimensional Student-t distribution.
 %
-%INPUTS: mu The numDImX1 mean of the distirbution.
+%INPUTS: mu The numDImX1 mean of the distribution.
 %        SR The lower-triangular square root of the numDimXnumDim positive
 %           definite scale matrix of the distribution.
 %        nu The scalar number of degrees of freedom of the distribution
 %           nu>2.
 %
-%OUTPUTS:   xi   A numDim X numCubaturePoints matrix containing the
-%                cubature points. (Each "point" is a vector)
-%           w    A numCubaturePoints X 1 vector of the weights
-%                 associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %The algorithm implemented is taken from [1]. To use Student-t measurement
 %or process noise in a cubature filtering algorithm, simply replace the

@@ -1,4 +1,4 @@
-function [q,recurVals]=getNextSetPartition(param1,recurVals)
+function [partition,recurVals]=getNextSetPartition(param1,recurVals)
 %%GETNEXTSETPARTITION Get the next way of partitioning a set of n unique
 %                  items in lexicographic order. The partition is a
 %                  length-n vector q that specifies which partition each
@@ -15,8 +15,8 @@ function [q,recurVals]=getNextSetPartition(param1,recurVals)
 %                 the first partition.
 %                 this instance,
 %               If two inputs are provided, then param 1 is
-%               q The current set partition that should be updated to get
-%                 the next set partition.
+%               partition The current set partition that should be updated
+%                         to get the next set partition.
 % recurVals A structure containing elements p and nc, which are necessary
 %          to get the next item in the sequence (these values would be
 %          supplied by the previous iteration). The elements of the
@@ -27,28 +27,30 @@ function [q,recurVals]=getNextSetPartition(param1,recurVals)
 %         nc A return value for the current partition; the number of
 %            classes in the output partition (the number of subsets).
 %
-%OUTPUTS: q The updated partition. If the final partition was passed, then
-%           q will be an empty matrix. If only n was passed, then q will be
-%           the first partition. Paritions are numbered in increasing
-%           order. That is, the first occurence of partition numbered i in
-%           q is always before the first occurences of partitions numbered
-%           j>1.
-% recurVals The updated value in recurValues the function nextSetPartition
-%           can be called again to get the next set partition if q was not
-%           empty. If recurVals.nc==n, then the returned partition is the
-%           final partition and a subsequent call will return an empty
-%           matrix.
+%OUTPUTS: partition The updated partition. If the final partition was
+%                   passed, then partition will be an empty matrix. If only
+%                   n was passed, then partition will be the first
+%                   partition. Paritions are numbered in increasing order.
+%                   That is, the first occurence of partition numbered i in
+%                   partition is always before the first occurences of
+%                   partitions numbered j>1.
+%         recurVals The updated value in recurValues the function
+%                   nextSetPartition can be called again to get the next
+%                   set partition if partition was not empty. If
+%                   recurVals.nc==n, then the returned partition is the
+%                   final partition and a subsequent call will return an
+%                   empty  matrix.
 %
-%The algorithm is NEXEQU in Chapter 11 of [1]. There is a total of
+%The algorithm is based on NEXEQU in Chapter 11 of [1]. There is a total of
 %BellNumber(n) set partitions for a particular n.
 %
 %Given a set (1,2,3), the possible partitions and the corresponding values
 %of q are
-%(1,2,3)        q=[1;1;1]
-%(1,2)(3)       q=[1;1;2]
-%(1,3)(2)       q=[1;2;1]
-%(2,3)(1)       q=[1;2;2]
-%(1)(2)(3)      q=[1;2;3]
+%(1,2,3)        partition=[1;1;1]
+%(1,2)(3)       partition=[1;1;2]
+%(1,3)(2)       partition=[1;2;1]
+%(2,3)(1)       partition=[1;2;2]
+%(1)(2)(3)      partition=[1;2;3]
 %This function always returns q so that the partition numbers increase.
 %That is, there are no jumps. For example, q=[2;1;2] is equivalent to
 %q=[1;2;1], but this function will only return the latter.
@@ -71,19 +73,19 @@ if(nargin==1)
     n=param1;
     recurVals.p(1)=n;
     recurVals.nc=1;
-    q=ones(n,1);
+    partition=ones(n,1);
     return;
 end
 
-q=param1;
-n=length(q);
+partition=param1;
+n=length(partition);
 
 p=recurVals.p;
 nc=recurVals.nc;
 
 %If the final set partition was passed, return the empty matrix.
 if(nc==n)
-   q=[];
+   partition=[];
    return;
 end
 
@@ -92,11 +94,11 @@ m=n;
 
 %Step C
 while(1)
-    L=q(m);
+    L=partition(m);
     if(p(L)~=1)
         break;
     end
-    q(m)=1;
+    partition(m)=1;
     m=m-1;
 end
 
@@ -109,7 +111,7 @@ if(L==nc)
 end
 
 %Step E
-q(m)=L+1;
+partition(m)=L+1;
 p(L)=p(L)-1;
 p(L+1)=p(L+1)+1;
 

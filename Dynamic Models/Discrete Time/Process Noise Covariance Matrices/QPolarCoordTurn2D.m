@@ -7,48 +7,46 @@ function Q=QPolarCoordTurn2D(T,x,sigmaTurn2,param4,turnType,tauTurn,tauLinAccel)
 %              acceleration. Additionally, a linear acceleration can be
 %              given.
 %
-%INPUTS: T   The time-duration of the propagation interval in seconds.
-%        x   The target state for 2D motion where the velocity is given in
-%            terms of heading and speed components. If there is no linear
-%            acceleration (acceleration along the direction of motion),
-%            then x can either be x=[x;y;h;v;omega], where h is the heading
-%            in terms of radians counterclockwise from the x-axis, v is the
-%            speed, and omega is the turn rate (the derivative of h with
-%            respect to time) or  x=[x;y;h;v;at] where at is the the
-%            transversal acceleration, which is orthogonal to
-%            the velocity and is defined such that positive values of at
-%            map to positive values of omega. If there is a linear
-%            acceleration, then the target state is either
-%            x=[x;y;h;v;omega;al] where omega is the turn rate and al
-%            is the linear acceleration or the target state is
-%            x=[x;y;h;v;at;al] if the turn is expressed in terms of a
-%            transversal acceleration. The dimensionality of the state is
-%            used to determine whether a linear acceleration component is
-%            present. The linear acceleration component changes the speed.
-%            That means that it is the derivative of the speed.
+%INPUTS: T The time-duration of the propagation interval in seconds.
+%        x The target state for 2D motion where the velocity is given in
+%          terms of heading and speed components. If there is no linear
+%          acceleration (acceleration along the direction of motion),
+%          then x can either be x=[x;y;h;v;omega], where h is the heading
+%          in terms of radians counterclockwise from the x-axis, v is the
+%          speed, and omega is the turn rate (the derivative of h with
+%          respect to time) or  x=[x;y;h;v;at] where at is the the
+%          transversal acceleration, which is orthogonal to the velocity
+%          and is defined such that positive values of at map to positive
+%          values of omega. If there is a linear acceleration, then the
+%          target state is either x=[x;y;h;v;omega;al] where omega is the
+%          turn rate and al is the linear acceleration or the target state
+%          is x=[x;y;h;v;at;al] if the turn is expressed in terms of a
+%          transversal acceleration. The dimensionality of the state is
+%          used to determine whether a linear acceleration component is
+%          present. The linear acceleration component changes the speed.
+%          That means that it is the derivative of the speed.
 % sigmaTurn2 If the turn is specified in terms of a turn rate in radians
-%            per second, then this is the instantaneous variance of the
-%            turn rate noise. If the turn is expressed in terms of a
-%            transverse acceleration, then this is the instantaneous
-%            variance of the transverse acceleration noise.
-%   param4   If a linear acceleration is present this is the instantaneous
-%            variance of the linear acceleration noise. Otherwise this is
-%            the instantaneous variance of the velocity.
-% turnType   A string specifying whether the turn is given in terms of a
-%            turn rate in radians per second or a transversal acceleration
-%            in m/s^2. Possible values are
-%            'TurnRate'   The turn is specified in terms of a turn rate
-%                         (The default if this parameter is omitted).
-%            'TransAccel' The turn is specified in terms of a transversal
-%                         acceleration.
-%   tauTurn  The correlation time constant for the turn rate in seconds.
-%            tau must be positive but does not have to be finite. If this
-%            parameter is omitted, then tauTurn is set to infinity.
-%tauLinAccel The correlation time constant for the linear acceleration (if
-%            present) in seconds. This parameter is not needed if there is
-%            no linear acceleration. If a linear acceleration is present
-%            and this parameter is omitted, then tauLinAccel is set to
-%            infinity.
+%          per second, then this is the instantaneous variance of the turn
+%          rate noise. If the turn is expressed in terms of a transverse
+%          acceleration, then this is the instantaneous variance of the
+%          transverse acceleration noise.
+%   param4 If a linear acceleration is present this is the instantaneous
+%          variance of the linear acceleration noise. Otherwise this is
+%          the instantaneous variance of the velocity.
+% turnType A string specifying whether the turn is given in terms of a
+%          turn rate in radians per second or a transversal acceleration
+%          in m/s^2. Possible values are
+%          'TurnRate'   The turn is specified in terms of a turn rate
+%                       (The default if this parameter is omitted).
+%          'TransAccel' The turn is specified in terms of a transversal
+%                       acceleration.
+%  tauTurn The correlation time constant for the turn rate in seconds.
+%          tau must be positive but does not have to be finite. If this
+%          parameter is omitted, then tauTurn is set to infinity.
+% tauLinAccel The correlation time constant for the linear acceleration (if
+%          present) in seconds. This parameter is not needed if there is no
+%          linear acceleration. If a linear acceleration is present and
+%          this parameter is omitted, then tauLinAccel is set to Inf.
 %
 %OUTPUTS: Q The process noise covariance matrix under a direct discrete-
 %           time coordinated turn model where the velocity is specified in

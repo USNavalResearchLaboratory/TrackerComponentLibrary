@@ -36,9 +36,9 @@ void iauRm2v(double r[3][3], double w[3])
 **
 **  This revision:  2015 January 30
 **
-**  SOFA release 2017-04-20
+**  SOFA release 2018-01-30
 **
-**  Copyright (C) 2017 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 */
 {
    double x, y, z, s2, c2, phi, f;
@@ -65,7 +65,7 @@ void iauRm2v(double r[3][3], double w[3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2017
+**  Copyright (C) 2018
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

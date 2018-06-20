@@ -127,7 +127,7 @@ function [V,gradV,HessianV]=spherHarmonicSetEval(C,S,point,a,c,systemType,spherD
 %[1] J. Rahola, F. Belloni, and A. Richter, "Modelling of radiation
 %    patterns using scalar spherical harmonics with vector coefficients,"
 %    in Proceedings of the 3rd European Conference on Antennas and
-%    Propagation, Berlin, Germany, 23?27 Mar. 2009, pp. 3361?3365.
+%    Propagation, Berlin, Germany, 23-27 Mar. 2009, pp. 3361-3365.
 %
 %December 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

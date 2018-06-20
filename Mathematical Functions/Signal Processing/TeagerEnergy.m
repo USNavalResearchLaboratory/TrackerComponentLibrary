@@ -67,7 +67,7 @@ function E=TeagerEnergy(x,dim)
 %REFERENCES:
 %[1] J. F. Kaiser, "On a simple algorithm to calculate the 'energy' of a
 %    signal," in Proceedings of the International Conference on Acoustics,
-%    Speech and Signal Processing, Albuquerque, NM, 3?6 Apr. 1990, pp.
+%    Speech and Signal Processing, Albuquerque, NM, 3-6 Apr. 1990, pp.
 %    381-384.
 %[2] M. Bahoura and J. Rouat, "Wavelet speech enhancement based on the
 %    Teager energy operator," IEEE Signal Processing Letters, vol. 8, no.
