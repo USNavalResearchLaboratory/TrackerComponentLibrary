@@ -1,10 +1,10 @@
-function realRoot=realRootCubEq(a,b,c)
-%%REALROOTCUBEQ  All cubic equations with real coefficients have at least
-%                one real root. This function finds the real root of a
-%                cubic equation of the form x^3+a*x^2+b*x+c=0.
+function realRoot=realRootCubEq(a2,a1,a0)
+%%REALROOTCUBEQ All cubic equations with real coefficients have at least
+%               one real root. This function finds the real root of a cubic
+%               equation of the form x^3+a2*x^2+a1*x+a0=0.
 %
-%INPUTS: a,b,c  The real values of the coefficients in a cubic equation of
-%               the form x^3+a*x^2+b*x+c=0.
+%INPUTS: a2,a1,a0 The real values of the coefficients in a cubic equation of
+%              the form x^3+a2*x^2+a1*x+a0=0.
 %
 %OUTPUTS: realRoot The real root of the cubic equation. If complex roots
 %                  exist, this is unique. If multiple real roots exist,
@@ -22,17 +22,21 @@ function realRoot=realRootCubEq(a,b,c)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 %Equation 22 on Mathworld.
-Q=(3*b-a^2)/9;
+Q=(3*a1-a2^2)/9;
 %Equation 23 on Mathworld.
-R=(9*a*b-27*c-2*a^3)/54;
+R=(9*a2*a1-27*a0-2*a2^3)/54;
 
-%When summing S and T, the complex parts will cancel. This gets rid of any
-%complex parts to begin with.
-S=nthroot(R+real(sqrt(Q^3+R^2)),3);
-T=nthroot(R-real(sqrt(Q^3+R^2)),3);
+%The square root of equation 49. This can be complex.
+sqrtD=sqrt(Q^3+R^2);
 
-%Equation 52 on Mathworld.
-realRoot=S+T-a/3;
+%Equations 50 and 51. When subsequently summing S and T, the complex parts
+%will cancel. The real commands here get rid of any complex parts to begin
+%with to avoid finite precision errors leaving something complex.
+S=real((R+sqrtD)^(1/3));
+T=real((R-sqrtD)^(1/3));
+
+%Equation 54 on Mathworld.
+realRoot=(S+T)-a2/3;
 end
 
 %LICENSE:
