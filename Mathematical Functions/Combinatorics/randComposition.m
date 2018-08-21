@@ -5,12 +5,11 @@ function q=randComposition(t,n)
 %                 if the total number of possible compositions
 %                 (binomial(n-1,d-1)) is so large as to overflow.
 %
-%INPUTS:    m      The number of slots that can hold items.
-%           n      The number of items that are composed into slots.
+%INPUTS: t The number of slots that can hold items.
+%        n The number of items that are composed into slots.
 %
-%OUTPUTS:    q      An mX1 vector holding the random composition, whose
-%                   elements sum to n. Each element is the number of
-%                   "balls" in that slot.
+%OUTPUTS: q An mX1 vector holding the random composition, whose elements
+%           sum to n. Each element is the number of "balls" in that slot.
 %
 %This function just generates a random rank and unranks that composition
 %using the unrankComposition function.
@@ -18,13 +17,18 @@ function q=randComposition(t,n)
 %October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-totalCompositions=binomial(n-1,d-1);
+totalCompositions=binomial(n-1,t-1);
+
+if(totalCompositions==0)
+    q=[];
+    return;
+end
 
 %The min is for the (presumably zero probability) case that the random
 %variable is 1.
 rank=min(fix(rand(1)*totalCompositions),totalCompositions-1);
 
-q=unrankComposition(rank,n,t);
+q=unrankComposition(rank,t,n);
 end
 
 %LICENSE:
