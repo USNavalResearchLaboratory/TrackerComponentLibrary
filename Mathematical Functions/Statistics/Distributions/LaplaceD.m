@@ -668,7 +668,7 @@ function vals=rand(N,lambda,mu,Gamma)
 %September 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.    
     
     numDim=size(mu,1);
-    Z=ExponentialD.rand([1,N],lambda);
+    Z=ExponentialD.rand([1,N],1/lambda);
     SGamma=chol(Gamma,'lower');
     
     vals=bsxfun(@plus,mu,bsxfun(@times,sqrt(Z),SGamma*randn(numDim,N)));
