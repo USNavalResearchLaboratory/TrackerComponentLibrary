@@ -24,13 +24,27 @@ function J=TDOAGradient(x,lRx1,lRx2,c)
 %A TDOA measurement is of the form (norm(x-lRx1)-norm(x-lRx2))*(1/c). The
 %gradient is straightforward to find from there.
 %
+%EXAMPLE:
+%Here, we validate that the gradient is consistent with the value obtained
+%by numerical differentiation.
+% lRx1=[-3;0];
+% lRx2=[3;0];
+% c=1;
+% xTrue=[4;4];
+% h=@(x)getTDOA(x,lRx1,lRx2,c);
+% grad=TDOAGradient(xTrue,lRx1,lRx2,c);
+% gradNumDiff=numDiff(xTrue,h,1);
+% relErr=(grad-gradNumDiff)./abs(grad)
+%One will see that the relative error is better than 1e-10 in each
+%component, indicating what that results are consistent.
+%
 %February 2017 David F.Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 numDim=size(x,1);
 
 if(nargin<4||isempty(c))
-   c=Constants.speedOfLight;
+    c=Constants.speedOfLight;
 end
 
 if(nargin<3||isempty(lRx2))
@@ -44,7 +58,7 @@ end
 deltaRx1=x-lRx1;
 deltaRx2=x-lRx2;
 
-J=(1/c)*(deltaRx1.'/norm(deltaRx1)+deltaRx2.'/norm(deltaRx2));
+J=(1/c)*(deltaRx1.'/norm(deltaRx1)-deltaRx2.'/norm(deltaRx2));
 
 end
 
