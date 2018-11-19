@@ -164,6 +164,7 @@
 #include <cstring>
 //Defines the size_t and ptrdiff_t types
 #include <cstddef>
+#include <cstdint>
 //For functions to import comples values.
 #include <complex>
 #else
@@ -171,6 +172,7 @@
 #include <string.h>
 //Defines the size_t and ptrdiff_t types
 #include <stddef.h>
+#include <stdint.h>
 
 //This is needed for the bool type to be defined in C.
 //C99 has stdbool, earlier versions do not.

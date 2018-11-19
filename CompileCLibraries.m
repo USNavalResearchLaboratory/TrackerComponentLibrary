@@ -281,7 +281,7 @@ cd ./3rd_Party_Libraries/sofa/src
 %Run commands on the command line to build the library and place it in a
 %known location.
 if(isunix()||ismac())%*NIX/ Mac OS X
-    system('make');
+    system('make -e CFLAGF=''-c -pedantic -Wall -W -O -fPIC'' CFLAGX=''-pedantic -Wall -W -O -fPIC''');
     system('mv ./libsofa_c.a ../../../0_Compiled_Code/libsofa_c.a');
     system('make clean');
     linkCommands{1}='./0_Compiled_Code/libsofa_c.a';
