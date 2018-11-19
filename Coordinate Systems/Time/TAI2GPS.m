@@ -11,7 +11,8 @@ function [Jul1,Jul2]=TAI2GPS(Jul1,Jul2)
 %
 %OUTPUTS: Jul1, Jul2 The time as a Julian date in GPS time.
 %
-%TAI time is the same as GPS, but is always 19 seconds ahead.
+%TAI time is the same as GPS, but is always 19 seconds ahead. A Julian day
+%is composed of 24 hours of 60 minues of 60 seconds.
 %
 %Many temporal coordinate systems standards are compared in [1].
 %
@@ -25,9 +26,9 @@ function [Jul1,Jul2]=TAI2GPS(Jul1,Jul2)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 if(Jul1<Jul2)
-    Jul1=Jul1-19;
+    Jul1=Jul1-19/(24*60*60);
 else
-    Jul2=Jul2-19;
+    Jul2=Jul2-19/(24*60*60);
 end
 end
 
