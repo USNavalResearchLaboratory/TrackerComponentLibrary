@@ -51,6 +51,15 @@ if(nargin<4||isempty(N))
     N=2;
 end
 
+xDim=size(x,1);
+if(nargin<5||isempty(epsilon))
+    %If epsilon is not specified, then use some ad-hoc default value
+    epsilon=max(1e-5*abs(x),1e-7);
+end
+if(isscalar(epsilon))
+   epsilon=repmat(epsilon,[xDim,1]); 
+end
+
 switch(N)
     case 1
         a=1;
@@ -82,16 +91,7 @@ switch(N)
         d=1;
 end
 
-xDim=size(x,1);
 numP=length(a);
-
-if(nargin<5||isempty(epsilon))
-    %If epsilon is not specified, then use some ad-hoc default value
-    epsilon=max(1e-5*x,1e-7);
-end
-if(isscalar(epsilon))
-   epsilon=repmat(epsilon,[xDim,1]); 
-end
 
 J=zeros(fDim,xDim);
 for curEl=1:xDim
