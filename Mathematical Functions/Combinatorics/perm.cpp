@@ -1,25 +1,23 @@
-/**PERM  A C++ implementation of a function to calculate the matrix
-*        permanent allowing for rows and columns to be skipped is desired
-*        (operate on a submatrix). The permanent is equivalent to
-*        calculating the determininant in the standard summation manner
-*        taught in school, except all of the minus signs are replaced with
-*        plus signs.
+/**PERM A C++ implementation of a function to calculate the matrix
+*       permanent allowing for rows and columns to be skipped is desired
+*       (operate on a submatrix). The permanent is equivalent to
+*       calculating the determininant in the standard summation manner
+*       taught in school, except all of the minus signs are replaced with
+*       plus signs.
 *
 *INPUTS: A An mXn matrix of real doubles. If m<=n, then the standard matrix
 *          permanent is found. If m>n, then the permanent of A' is found to
 *          be consistent with the permanents of A and A' being equal in
 *          square matrices. Empty matrices have a permanent of one by
 *          definition.
-*   boolRowsSkip  An optional list of rows in A that should be skipped when
-*                 computing the matrix permanent. This is an mX1 or 1Xm
-*                 boolean vector where a 1 means that row should be
-*                 skipped. If omitted or an empty matrix is passed, no rows
-*                 are skipped.
+* boolRowsSkip  An optional list of rows in A that should be skipped when
+*          computing the matrix permanent. This is an mX1 or 1Xm boolean
+*          vector where a 1 means that row should be skipped. If omitted or
+*          an empty matrix is passed, no rows are skipped.
 *   boolColsSkip  An optional list of columsn in A that should be skipped
-*                 when computing the matrix permanent. This is an nX1 or
-*                 1Xn boolean vector where a 1 means that column should be
-*                 skipped. If omitted or an empty matrix is passed, no
-*                 columns are skipped.
+*          when computing the matrix permanent. This is an nX1 or 1Xn
+*          boolean vector where a 1 means that column should be skipped. If
+*          omitted or an empty matrix is passed, no columns are skipped.
 *
 *OUTPUTS: val The matrix permanent of A.
 *
@@ -32,7 +30,7 @@
 * The algorithm is run in Matlab using the command format
 * val=perm(A)
 *
-* October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
+*October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
@@ -135,7 +133,9 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         if(numRowsKept<=numColsKept) {
             A=reinterpret_cast<double*>(mxGetData(prhs[0]));
         } else {
-            std::swap(numRowsKept, numColsKept); 
+            std::swap(numRowsKept, numColsKept);
+            std::swap(numRow, numCol);
+            std::swap(boolRowsSkip, boolColsSkip);
             
             //This is freed using mxDestroyArray
             AMat=mxCreateDoubleMatrix(numRowsKept,numColsKept,mxREAL);
@@ -163,7 +163,6 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
                     rows2Keep[curIdx]=curIdx+cumSkip;
                     curIdx++;
                 }
-                
             }
         }
         

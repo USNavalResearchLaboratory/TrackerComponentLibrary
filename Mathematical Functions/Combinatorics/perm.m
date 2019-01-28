@@ -15,7 +15,7 @@ function val=perm(A,boolRowsSkip,boolColsSkip)
 %         computing the matrix permanent. This is an mX1 or 1Xm boolean
 %         vector where a 1 means that row should be skipped. If omitted or
 %         an empty matrix is passed, no rows are skipped.
-% boolColsSkip An optional list of columsn in A that should be skipped when
+% boolColsSkip An optional list of columns in A that should be skipped when
 %         computing the matrix permanent. This is an nX1 or 1Xn boolean
 %         vector where a 1 means that column should be skipped. If omitted
 %         or an empty matrix is passed, no columns are skipped.
@@ -33,7 +33,7 @@ function val=perm(A,boolRowsSkip,boolColsSkip)
 %finite precision errors. When skipping rows or columns, only Ryser's
 %algorithm is used.
 %
-%EXAMPLE:
+%EXAMPLE 1:
 %Suppose that one is given a boolean matrix where 1 indicates that a target
 %gates with a measurement and a 0 indicates that it does not gate. To deal
 %with the possibility of missed detections, one often adds dummy
@@ -49,6 +49,20 @@ function val=perm(A,boolRowsSkip,boolColsSkip)
 % perm([ones(5,5),eye(5)])
 % %Leading to 1546 possible assignments to measurements and missed
 % %detections.
+%
+%EXAMPLE 2:
+%This is an example with skip lists.
+% numRow=12;
+% numCol=4;
+% A=magic(numRow);
+% A=A(:,1:numCol);
+% boolRowsSkip=false(numRow,1);
+% boolColsSkip=false(numCol,1);
+% boolRowsSkip(3)=true;
+% boolColsSkip([1,4])=true;
+% perm(A,boolRowsSkip,boolColsSkip)
+% perm(A',boolColsSkip,boolRowsSkip)
+%The permanent values should both be 494938.
 %
 %REFERENCES:
 %[1] L. G. Valiant, "The complexity of computing the permanent,"
@@ -104,6 +118,14 @@ function val=perm(A,boolRowsSkip,boolColsSkip)
             temp=m;
             m=n;
             n=temp;
+            
+            temp=mTotal;
+            mTotal=nTotal;
+            nTotal=temp;
+            
+            temp=boolRowsSkip;
+            boolRowsSkip=boolColsSkip;
+            boolColsSkip=temp;
         end
         
         %Set the mapping of indices of the rows in the submatrix to indices in
