@@ -30,10 +30,10 @@ methods(Static)
 function val=mean(mu)
 %%MEAN  Obtain the mean of the multivariate Laplace distribution.
 %
-%INPUTS: mu  The location parameter of the PDF. If the PDF is
-%               multivariate, then this is a column vector.
+%INPUTS: mu The location parameter of the PDF. If the PDF is multivariate,
+%            then this is a column vector.
 %
-%OUTPUTS: val  The mean of the multivariate Laplace distribution.
+%OUTPUTS: val The mean of the multivariate Laplace distribution.
 %  
 %The mean is given by Equation 10 of [1]. The distribution is aprameterized
 %by its mean, so this function just returns the mean it is given.
@@ -49,8 +49,8 @@ function val=mean(mu)
 end
 
 function val=cov(lambda,Gamma)
-%%COV   Obtain the covariance matrix of the multivariate Laplace
-%       distribution (the variance if scalar).
+%%COV Obtain the covariance matrix of the multivariate Laplace distribution
+%     (the variance if scalar).
 %
 %INPUTS: lambda A scale parameter for the distribution. Note that with
 %               respect to the traditional parameterization of a scalar
@@ -62,8 +62,8 @@ function val=cov(lambda,Gamma)
 %               positive definite with determinant det(Gamma)=1. When
 %               dealing with scalar distributions, this is just 1.
 %
-%OUTPUTS: val  The covariance matrix of the multivariate Laplace
-%              distribution.
+%OUTPUTS: val The covariance matrix of the multivariate Laplace
+%             distribution.
 %
 %The covariance is given by Equation 11 of [1].
 %
@@ -219,7 +219,7 @@ function momentVal=momentGenFun(lambda,mu,Gamma,numDerivs,t)
 %variable and t is a real parameter having the same dimensionality as the
 %random variable. In Equation 13 of [1], the moment generating function of
 %the multivariate Laplace distribution is shown to be
-%exp(mu'*t)/(1-(lambda/2)*t'*Lambda*t)
+%exp(mu'*t)/(1-(lambda/2)*t'*Gambda*t)
 %
 %Derivatives can be evaluated systematically. First, it is clear that all
 %terms of all derivatives are multiplied by exp(mu'*t). Also, all

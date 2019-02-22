@@ -87,6 +87,7 @@ A=[inv(SQ),                zeros(xDim,xDim), SQ\u;
 [~,T] = qr(A);
 
 PInvSqrtPred=T((xDim+1):end,(end-xDim):(end-1));
+
 %Since f may be nonlinear, the information state output described in
 %Bierman is not valid, and the predicted state should be calculated
 %independently.

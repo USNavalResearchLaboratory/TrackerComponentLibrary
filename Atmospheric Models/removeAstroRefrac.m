@@ -1,16 +1,16 @@
 function [zTrue,deltaZ]=removeAstroRefrac(algorithm,plhObs,z0,Rh,P,T,wl)
-%%REMOVEASTROREFRAC   Remove the effects of refraction in an observed
-%                     zenith angle of an object outside the atmosphere
-%                     using low-precision atmospheric models for an
-%                     observer near the surface of the Earth viewing an
-%                     object using a narrowband sensor.
+%%REMOVEASTROREFRAC Remove the effects of refraction in an observed zenith
+%                   angle of an object outside the atmosphere using low-
+%                   precision atmospheric models for an observer near the
+%                   surface of the Earth viewing an object using a
+%                   narrowband sensor.
 %
 %INPUTS: algorithm This specified the algorithm used. The possible values
 %                  are:
 %                  0: Use a numerical integration method from Chapter 7.2
 %                     of [1] and from [2]. This algorithm uses the inputs
 %                     plhObs,z0, Rh, P, T, and wl and makes use of the
-%                     Sinclair atmospheric model. This algoirthm is the
+%                     Sinclair atmospheric model. This algorithm is the
 %                     most precise of all of the methods. The acceptable
 %                     zenith distances are capped at 100 degrees, which
 %                     should be underground.
@@ -254,7 +254,7 @@ end
             %First, find the r value associated with the z value.
             rVal=zenithDist2r(refracFunc,n0,r0,z0,z);
             
-            %Next, find the the index of refraction and its derivative with
+            %Next, find the index of refraction and its derivative with
             %respect to altitude.
             [n,dndr]=refracFunc(rVal-re);
             

@@ -7,9 +7,9 @@ function val=StirlingNumber2(n,k)
 %                 overflows. When n is very large, the function can be
 %                 slow.
 %                 
-%INPUTS:  n The integer total number of items in the set n>=0.
-%         k The desired integer number of non-empty subsets of the set.
-%           k>=0.
+%INPUTS: n The integer total number of items in the set n>=0.
+%        k The desired integer number of non-empty subsets of the set.
+%          k>=0.
 %
 %OUTPUTS: val The number of ways of partitioning n items into k subsets. If
 %             an overflow occurs, this will be infinite.

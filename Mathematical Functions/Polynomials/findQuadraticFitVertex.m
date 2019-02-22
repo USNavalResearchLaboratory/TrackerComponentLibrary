@@ -15,7 +15,7 @@ function x=findQuadraticFitVertex(x1,x2,param1,param2,param3)
 %               g1 The gradient at x1.
 %               g2 The gradient at x2.
 %               param3 is either omitted or an empty matrix is passed when
-%               suing the second formulation.
+%               using the second formulation.
 %
 %OUTPUTS: x The interpolated critical point (minimum or maximum) of the
 %           fitted parabola.

@@ -57,7 +57,7 @@ function CRLB=delayDopplerRateCRLBLFMApprox(B,T,P,TR,SNRIn,c,fc)
 % CRLB(1,1)=CRLB(1,1)*c^2;
 % %Next, we want to convert the Doppler rate into a range rate with units
 % %of meters per second. This requires the carrier frequency fc and the
-% %propagation speed c. We will use 2GHz s the carrier frequency.
+% %propagation speed c. We will use 2GHz as the carrier frequency.
 % fc=2e9;
 % scal=-c/(2*pi*fc);
 % CRLB(2,2)=CRLB(2,2)*scal^2;

@@ -1,26 +1,17 @@
-/**GETNEXTCOMBO A C++ function that returns the next combination in
+/**GETNEXTCOMBO C++ functions that returns the next combination in
 *              lexicographic order given the current combination. If the
-*              final combination in the sequence has been reached, then the
-*              output
+*              final combination in the sequence is passed, then the
+*              return value is 1.     
 *
-*INPUTS:    I  The current combination of r elements. The next combination
-*              in lexicographic order is desired. The first element is the
-*              most significant and one begins with I=[0;1;2;...r]. The
-*              function modified this variable to hold the next
-*              combination. 
-*           n  The number of items from which r items are chosen for
-*              combinations. The elements of I can range from 0 to n-1.      
-*
-*OUTPUTS:   The return variable indicated whether the final combination had
-*           been reached. It is false if the value of I that was passed was
-*          not the final combination, so the modified I is a valid new
-*          combination. It is true if I was the last combination in
-*          lexicographic order and no others follow.
+*The function getNextComboCPP implements the algorithm whereby the values
+*of the combination start at 0 and the function getNextComboCPPFromOne
+*implement the algorithm for values of the function starting at 1.
 *
 *The algorithm is from
 *C. J. Mifsud, "Algorithm 154: Combination in lexicographical order," 
 *Communications of the ACM, vol. 6, no. 3 pp. 103, Mar. 1963.
-*modified to start from zero instead of one.
+*
+*More details on the algorithm are in the Matlab implementation.
 *
 *December 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 */
@@ -36,7 +27,29 @@ bool getNextComboCPP(size_t *I,const size_t n,const size_t r) {
         size_t j, s;
         
         for(j=r-1;j>0;j--) {
-           if(I[j-1]<n-r+j-1) {
+           if(I[j-1]<n+j-r-1) {
+               I[j-1]=I[j-1]+1;
+        
+               for(s=j;s<r;s++) {
+                  I[s]=I[j-1]+s-(j-1); 
+               }
+               return false;
+           }
+        }
+                   
+        return true;
+    }
+}
+
+bool getNextComboCPPFromOne(size_t *I,const size_t n,const size_t r) {
+    if(I[r-1]<n) {
+        I[r-1]+=1;
+        return false;
+    } else {
+        size_t j, s;
+        
+        for(j=r-1;j>0;j--) {
+           if(I[j-1]<n+j-r) {
                I[j-1]=I[j-1]+1;
         
                for(s=j;s<r;s++) {

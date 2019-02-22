@@ -73,8 +73,9 @@ function Q=QCoordTurn(T,x,sigmaV2,sigmaTurn2,sigmaLin2)
 %be particularly poor when the step size is large.
 %
 %The corresponding transition matrix in 2D is given by the function
-%FCoordTurn2D. The corresponding continuous-time functions are aCoordTurn2D
-%and DCoordTurn2D. However, note that the discrete-time functions with
+%FCoordTurn2D. The corresponding continuous-time functions are
+%aCoordTurn2DOmega and aCoordTurn2DTrans with diffusion matrix
+%DCoordTurn2D. However, note that the discrete-time functions with
 %unknown noise is a direct-discrete model and not a discretization of the
 %continuous-time model.
 %

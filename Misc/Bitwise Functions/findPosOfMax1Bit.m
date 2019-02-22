@@ -2,13 +2,13 @@ function bitPos=findPosOfMax1Bit(n)
 %%FINDPOSOFMAX1BIT Given n, which is of an integer data type, determine the
 %           position of the most significant bit (that is a 1).
 %
-%INPUTS: n  An integer or a matrix of integers. These must be an integer
-%           data type, such as uint64 or char, not double or single.
+%INPUTS: n An integer or a matrix of integers. These must be an integer
+%          data type, such as uint64 or char, not double or single.
 %
-%OUTPUTS: bitPos The position of the last 1 in the binary
-%            representation of each of the integers in n. Counting starts
-%            at 1. A value of 0 means that there is no 1 in the binary
-%            representation.
+%OUTPUTS: bitPos The position of the last 1 in the binary representation of
+%                each of the integers in n. Counting starts at 1. A value
+%                of 0 means that there is no 1 in the binary
+%                representation.
 %
 %The algorithm just keeps shifting the number (dividing by 2) until it
 %becomes 0, counting the number of shifts needed.

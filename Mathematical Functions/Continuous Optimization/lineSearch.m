@@ -720,7 +720,7 @@ if(fT>fL)%Case 1: The test value is greater than the last best value. This
     %closer to the previous best value, we take it; otherwise, we take the
     %average of the cubic and the quadratic solution.
 
-    %We know the the minimum is between fL and fT. As it is not desirable
+    %We know the minimum is between fL and fT. As it is not desirable
     %for the interpolation to place the maximum too close too alphaU, we 
     isBracketedNew=true;
     

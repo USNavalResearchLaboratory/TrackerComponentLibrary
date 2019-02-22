@@ -1,8 +1,8 @@
 classdef GammaD
 %%GAMMAD Functions to handle the central and noncentral univariate gamma
-%distributions.
+%        distributions.
 %Methods implemented for both central and noncentral distributions are:
-%PDF, CDF
+%        PDF, CDF
 %Methods only implemented for the central distribution are: mean, var,
 %                                                           invCDF, rand,
 %                                                           entropy
@@ -208,15 +208,15 @@ end
 %Clip negative values to zero to ensure convergence.
 x(x<0)=0;
 
-if(lambda == 0)% Central gamma case
+if(lambda==0)% Central gamma case
     prob=gammainc(x/theta,k);
 else
     if(nargin<6||isempty(maxIter))
-        maxIter = 5000;
+        maxIter=5000;
     end
     
     if(nargin<5||isempty(errTol))
-        errTol = eps(1);
+        errTol=eps(1);
     end
     
     x = x/theta;
@@ -241,7 +241,7 @@ else
         err = remain*gammap;
         remain = remain - pp;
         if(ii > m)
-            if max(err)<errTol || ii>maxIter
+            if(max(err)<=errTol||ii>maxIter)
                 break
             end
         else
@@ -250,13 +250,13 @@ else
             pr = pr*(m-ii+1)/lambda;
             cdf = cdf + pr*gammar;
             remain = remain - pr;
-            if remain<errTol || ii>maxIter
+            if(remain<=errTol||ii>maxIter)
                 break
             end
         end
-        ii = ii+1;
+        ii=ii+1;
     end
-    prob = cdf; %Convergence achieved
+    prob=cdf;%Convergence achieved
 end
 end
 

@@ -54,15 +54,15 @@ function val=perm(A,boolRowsSkip,boolColsSkip)
 %This is an example with skip lists.
 % numRow=12;
 % numCol=4;
-% A=magic(numRow);
-% A=A(:,1:numCol);
+% A=magic(max(numRow,numCol));
+% A=A(1:numRow,1:numCol);
 % boolRowsSkip=false(numRow,1);
 % boolColsSkip=false(numCol,1);
 % boolRowsSkip(3)=true;
 % boolColsSkip([1,4])=true;
 % perm(A,boolRowsSkip,boolColsSkip)
 % perm(A',boolColsSkip,boolRowsSkip)
-%The permanent values should both be 494938.
+% %The permanent values should both be 494938.
 %
 %REFERENCES:
 %[1] L. G. Valiant, "The complexity of computing the permanent,"

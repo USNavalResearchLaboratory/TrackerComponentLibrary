@@ -37,7 +37,7 @@ function J=FIMPostNoClutter(H,F,R,Q,PD)
 %can be rewritten as a Riccati equation that can be solved in a standard
 %manner.
 %
-%If PD=1, the the inverse of the FIM  is the same as the output of
+%If PD=1, the inverse of the FIM  is the same as the output of
 %RiccatiPostNoClutter. Otherwise, the inverse FIM is less than the output
 %of RiccatiPostNoClutter.
 %
@@ -95,6 +95,8 @@ if(rcond(Q)<1e-15)
     Jz=PD*H'*inv(R)*H;
     while(curIter<maxIter)
         J=inv(Q+F*inv(JPrev)*F')+Jz;
+        %Ensure symmetry is preserved.
+        J=(J+J')/2;
         
         diffMag=abs(J-JPrev);
         if(all((diffMag(:)<=RelTol*abs(J(:)))|(diffMag(:)<=AbsTol)))
@@ -103,7 +105,7 @@ if(rcond(Q)<1e-15)
         JPrev=J;
         curIter=curIter+1;
     end
-    warning('Max (5000) Iterations Reached without Convergence.')
+    warning('Max (5000) Iterations Reached Without Convergence.')
 else
     QInv=inv(Q);
     D11=F'*QInv*F;

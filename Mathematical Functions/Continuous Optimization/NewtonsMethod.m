@@ -23,10 +23,12 @@ function [xMin,fMin,exitCode]=NewtonsMethod(f,fHess,x0,epsilon,deltaTestDist,del
 %          function value and gradient.
 %       x0 The NX1-dimensional point from which the minimization starts.
 %  epsilon The parameter determining the accuracy of the desired solution
-%          in terms of the gradient. The function terminates when
-%          norm(g) < epsilon*max([1, norm(x)])
-%          where g is the gradient. The default if omitted or an empty
-%          matrix is passed is 1e-6.
+%          in terms of the gradient. This can be a 2X1 or 1X2 vector, where
+%          epsilon(1) is an absolute tolerance and epsilon(2) is a relative
+%          tolerance, or a single epsilon can be passed for both values to
+%          be set equal. Letting maxVal=max(abs(gradFCur)), the function
+%          terminates when maxVal<=AbsTol or maxVal<=RelTol*max(abs(xMin))
+%          The default if omitted or an empty matrix is passed is 1e-6.
 % deltaTestDist The number of iterations back to use to compute the
 %          decrease of the objective function if a delta-based convergence
 %          test is performed. If zero, then no delta-based convergence
@@ -144,6 +146,14 @@ function [xMin,fMin,exitCode]=NewtonsMethod(f,fHess,x0,epsilon,deltaTestDist,del
         epsilon=1e-6;
     end
 
+    if(length(epsilon)==2)
+        AbsTol=epsilon(1);
+        RelTol=epsilon(2);
+    else
+        AbsTol=epsilon;
+        RelTol=epsilon;
+    end
+
     if(nargin<5||isempty(deltaTestDist))
         deltaTestDist=0;
     end
@@ -251,7 +261,8 @@ function [xMin,fMin,exitCode]=NewtonsMethod(f,fHess,x0,epsilon,deltaTestDist,del
         end
         
         %Check for convergence based on the gradient.
-        if(norm(gradFCur)<epsilon*max([1, norm(xCur)]))
+        maxVal=max(abs(gradFCur));
+        if(maxVal<=AbsTol||maxVal<=RelTol*max(abs(xCur)))
             xMin=xCur;
             fMin=fValCur;
             exitCode=0;

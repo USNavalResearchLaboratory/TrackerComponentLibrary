@@ -42,6 +42,12 @@ end
 
 n=length(a);
 
+%If a scalar is passed, then it is the only permutation.
+if(n==1)
+    a=[];
+    return;
+end
+
 %Step L2, find j.
 j=n-1;
 while(a(j)>=a(j+1))

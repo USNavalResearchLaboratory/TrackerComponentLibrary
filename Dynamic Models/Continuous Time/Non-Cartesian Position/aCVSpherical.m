@@ -1,4 +1,4 @@
-function [aDeriv,aJacob]=aCVSpherical(x,t,systemType)
+function [aVal,aJacob,aHess,papt]=aCVSpherical(x,t,systemType)
 %%ACVSPHERICAL The drift function for a continuous-time motion model where
 %          the target state is given in monostatic spherical coordinates
 %          and the motion is constant velocity in 3D Cartesian coordinates.
@@ -26,14 +26,18 @@ function [aDeriv,aJacob]=aCVSpherical(x,t,systemType)
 %            elevation, one is given the angle away from the z-axis, which
 %            is (pi/2-elevation).
 %
-%OUTPUTS: aDeriv The 6XN set of time-derivatives of the N state vectors
-%                under the Cartesian linear motion model in spherical
-%                coordinates.
-%         AJacob The 6X6XN set of Jacobians of aDeriv, which can be useful
-%                in extended Kalman filters. This is the derivative of each
-%                component of aDeriv (selected by row) with respect to the
-%                elements of the state [r,theta,phi,rDot,thetaDot,phiDot]
-%                selected by column.
+%OUTPUTS: aVal The 6XN set of time-derivatives of the N state vectors
+%              under the Cartesian linear motion model in spherical
+%              coordinates.
+%       aJacob This and higher partial derivatives can only be requested
+%              if N=1. This is the 6X6 matrix of partial derivatives of
+%              aVal such that aJacob(:,i) is the partial derivative of aVal
+%              with respect to x(i).
+%        aHess The 6X6X6  matrix of second derivatives of aVal such
+%              that aHess(:,k1,k2) is the second partial derivative of
+%              aVal with respect to x(k1) and x(k2).
+%         papt The 6X1  partial derivative with resect to time of aVal.
+%              This is all zeros, because the model is time invariant.
 %
 %A derivation of the dynamic model is provided here for systemType=0. The
 %derivations for the other system types are very similar. Let rVec be a
@@ -55,13 +59,13 @@ function [aDeriv,aJacob]=aCVSpherical(x,t,systemType)
 %rVecDot=rDot*u_r+r*uDot_r=rDot*u_r+r*thetaDot*cos(phi)*u_theta+r*phiDot*u_phi
 %The acceleration vector is the derivative of the velocity vector and
 %simplifies to
-%rVecDDot=(rDDot-r*thetaDot*cos(phi)^2-r*phiDot^2)*u_r+((2*rDot*thetaDot+r*thetaDDot)*cos(phi)-2*r*thetaDot*phiDot*sin(phi))*u_theta+(2*rDot*phiDot+r*phiDDot+r*thetaDot^2*cos(phi)*sin(phi))*u_phi
+%rVecDDot=(rDDot-r*thetaDot*cos(phi)^2-r*phiDot^2)*u_r+((2*rDot*thetaDot+r*thetaDDot)*cos(phi)-2*r*thetaDot*phiDot*sin(phi))*u_theta+(2*rDot*phiDot+r*phiDDot+r*thetaDot2*cos(phi)*sin(phi))*u_phi
 %For a constant velocity model, the coefficients of the u_r, u_theta and
 %u_phi vectors in the acceleration equation must be zero. This leads to the
 %dynamics:
-% rDDot=r*phiDot^2+r*thetaDot^2*cos(phi)^2
+% rDDot=r*phiDot^2+r*thetaDot2*cos(phi)^2
 % thetaDDot=(1/r)*(-2*rDot*thetaDot+2*r*thetaDot*phiDot*tan(phi))
-% phiDDot=(1/r)*(-2*rDot*phiDot-r*thetaDot^2*cos(phi)*sin(phi))
+% phiDDot=(1/r)*(-2*rDot*phiDot-r*thetaDot2*cos(phi)*sin(phi))
 %The above three equations define the dynamic model.
 %
 %EXAMPLE 1:
@@ -91,8 +95,8 @@ function [aDeriv,aJacob]=aCVSpherical(x,t,systemType)
 % AJacobNumDiff=numDiff(x,@(xState)aCVSpherical(xState,[],systemType),6);
 % err=(aJacob-AJacobNumDiff)./AJacobNumDiff;
 % max(abs(err(:)))
-%One will see that the maximum error is on the order of 6.8e-9, indicating
-%good agreement.
+%One will see that the maximum error is on the order of 2.4940e-10,
+%indicating good agreement.
 %
 %August 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -113,78 +117,338 @@ sinPhi=sin(phi);
 if(systemType==0||systemType==1)
     tanPhi=sinPhi./cosPhi;
     
-    rDDot=r.*phiDot.^2+r.*thetaDot.^2.*cosPhi.^2;
-    thetaDDot=(1./r).*(-2*rDot.*thetaDot+2*r.*thetaDot.*phiDot.*tanPhi);
-    phiDDot=(1./r).*(-2*rDot.*phiDot-r.*thetaDot.^2.*cosPhi.*sinPhi);
+    phiDot2=phiDot.^2;
+    thetaDot2=thetaDot.^2;
+    sinPhi2=sinPhi.^2;
+    cosPhi2=cosPhi.^2;
+    cosPhiSinPhi=cosPhi.*sinPhi;
     
-    aDeriv=[rDot;thetaDot;phiDot;rDDot;thetaDDot;phiDDot];
+    rDDot=r.*phiDot2+r.*thetaDot2.*cosPhi2;
+    thetaDDot=(-2*rDot.*thetaDot+2*r.*thetaDot.*phiDot.*tanPhi)./r;
+    phiDDot=(-2*rDot.*phiDot-r.*thetaDot2.*cosPhiSinPhi)./r;
+    
+    aVal=[rDot;thetaDot;phiDot;rDDot;thetaDDot;phiDDot];
 
     if(nargout>1)
-        drDDdr=phiDot.^2+thetaDot.^2.*cosPhi.^2;
-        drDDdphi=-2*r.*thetaDot.^2.*cosPhi.*sinPhi;
-        drDDdthetaDot=2*r.*thetaDot.*cosPhi.^2;
-        drDDdphiDot=2*phiDot.*r;
+        N=size(x,2);
+        if(N>1)
+            error('Derivatives are only available for numPoints=1.')
+        end
+        
+        r2=r*r;
+        
+        drDDdr=phiDot2+thetaDot2*cosPhi2;
+        drDDdphi=-2*r*thetaDot2*cosPhiSinPhi;
+        drDDdthetaDot=2*r*thetaDot*cosPhi2;
+        drDDdphiDot=2*phiDot*r;
 
-        dThetaDDdr=(2*rDot.*thetaDot)./r.^2;
-        dThetaDDdphi=2*phiDot.*thetaDot./cosPhi.^2;
-        dThetaDDdrDot=-((2*thetaDot)./r);
-        dThetaDDdthetaDot=-((2*rDot)./r)+2*phiDot.*tanPhi;
+        dThetaDDdr=(2*rDot.*thetaDot)/r2;
+        dThetaDDdphi=2*phiDot.*thetaDot/cosPhi2;
+        dThetaDDdrDot=-((2*thetaDot)/r);
+        dThetaDDdthetaDot=-((2*rDot)/r)+2*phiDot*tanPhi;
         dThetaDDdphiDot=2*thetaDot.*tanPhi;
 
-        dPhiDDdr=(2*phiDot.*rDot)./r.^2;
-        dPhiDDdPhi=(r.*thetaDot.^2.*(sinPhi.^2-cosPhi.^2))./r;
-        dPhiDDdrDot=-((2*phiDot)./r);
-        dPhiDDdthetaDot=-2*thetaDot.*cosPhi.*sinPhi;
-        dPhiDDdphiDot=-((2*rDot)./r);
+        dPhiDDdr=(2*phiDot*rDot)/r2;
+        dPhiDDdPhi=(r*thetaDot2*(sinPhi2-cosPhi2))/r;
+        dPhiDDdrDot=-((2*phiDot)/r);
+        dPhiDDdthetaDot=-2*thetaDot.*cosPhiSinPhi;
+        dPhiDDdphiDot=-((2*rDot)/r);
 
-        N=size(x,2);
-        aJacob=zeros(6,6,N);
-        for k=1:N
-            aJacob(:,:,k)=[ 0,              0,  0,                  1,                  0,                      0;
-                            0,              0,  0,                  0,                  1,                      0;
-                            0,              0,  0,                  0,                  0,                      1;
-                            drDDdr(k),      0,  drDDdphi(k),        0,                  drDDdthetaDot(k),       drDDdphiDot(k);
-                            dThetaDDdr(k),  0,  dThetaDDdphi(k),    dThetaDDdrDot(k),   dThetaDDdthetaDot(k),   dThetaDDdphiDot(k);
-                            dPhiDDdr(k),    0,  dPhiDDdPhi(k),      dPhiDDdrDot(k),     dPhiDDdthetaDot(k),     dPhiDDdphiDot(k)];
+        aJacob=[ 0,           0,  0,               1,               0,                   0;
+                 0,           0,  0,               0,               1,                   0;
+                 0,           0,  0,               0,               0,                   1;
+                 drDDdr,      0,  drDDdphi,        0,               drDDdthetaDot,       drDDdphiDot;
+                 dThetaDDdr,  0,  dThetaDDdphi,    dThetaDDdrDot,   dThetaDDdthetaDot,   dThetaDDdphiDot;
+                 dPhiDDdr,    0,  dPhiDDdPhi,      dPhiDDdrDot,     dPhiDDdthetaDot,     dPhiDDdphiDot];
+
+        if(nargout>2)
+            aHess=zeros(6,6,6);
+            
+            r3=r2*r;
+            cosPhi2=cosPhi*cosPhi;
+            cos2Phi=cosPhi^2-sinPhi^2;
+
+            drDDdrdr=0;
+            drDDdphidr=-2*thetaDot2*cosPhiSinPhi;
+            drDDdthetaDotdr=2*thetaDot*cosPhi2;
+            drDDdphiDotdr=2*phiDot;
+
+            drDDdrdphi=drDDdphidr;
+            drDDdphidphi=-2*r*thetaDot2*cos2Phi;
+            drDDdthetaDotdphi=-4*r*thetaDot*cosPhiSinPhi;
+            drDDdphiDotdphi=0;
+
+            drDDdrdrDot=0;
+            drDDdphidrDot=0;
+            drDDdthetaDotdrDot=0;
+            drDDdphiDotdrDot=0;
+
+            drDDdrdthetaDot=drDDdthetaDotdr;
+            drDDdphidthetaDot=drDDdthetaDotdphi;
+            drDDdthetaDotdthetaDot=2*r*cosPhi2;
+            drDDdphiDotdthetaDot=0;
+
+            drDDdrdphiDot=drDDdphiDotdr;
+            drDDdphidphiDot=drDDdphiDotdphi;
+            drDDdthetaDotdphiDot=drDDdphiDotdthetaDot;
+            drDDdphiDotdphiDot=2*r;
+
+            %%%%
+            dThetaDDdrdr=-((4*rDot*thetaDot)/r3);
+            dThetaDDdphidr=0;
+            dThetaDDdrDotdr=(2*thetaDot)/r2;
+            dThetaDDdthetaDotdr=(2*rDot)/r2;
+            dThetaDDdphiDotdr=0;
+
+            dThetaDDdrdphi=dThetaDDdphidr;
+            dThetaDDdphidphi=4*tanPhi*phiDot*thetaDot/cosPhi2;
+            dThetaDDdrDotdphi=0;
+            dThetaDDdthetaDotdphi=2*phiDot/cosPhi2;
+            dThetaDDdphiDotdphi=2*thetaDot/cosPhi2;
+
+            dThetaDDdrdrDot=dThetaDDdrDotdr;
+            dThetaDDdphidrDot=dThetaDDdrDotdphi;
+            dThetaDDdrDotdrDot=0;
+            dThetaDDdthetaDotdrDot=-(2/r);
+            dThetaDDdphiDotdrDot=0;
+
+            dThetaDDdrdthetaDot=dThetaDDdthetaDotdr;
+            dThetaDDdphidthetaDot=dThetaDDdthetaDotdphi;
+            dThetaDDdrDotdthetaDot=dThetaDDdthetaDotdrDot;
+            dThetaDDdthetaDotdthetaDot=0;
+            dThetaDDdphiDotdthetaDot=2*tanPhi;
+
+            dThetaDDdrdphiDot=dThetaDDdphiDotdr;
+            dThetaDDdphidphiDot=dThetaDDdphiDotdphi;
+            dThetaDDdrDotdphiDot=dThetaDDdphiDotdrDot;
+            dThetaDDdthetaDotdphiDot=dThetaDDdphiDotdthetaDot;
+            dThetaDDdphiDotdphiDot=0;
+
+            %%%
+            dPhiDDdrdr=-((4*phiDot*rDot)/r3);
+            dPhiDDdPhidr=0;
+            dPhiDDdrDotdr=(2*phiDot)/r2;
+            dPhiDDdthetaDotdr=0;
+            dPhiDDdphiDotdr=(2*rDot)/r2;
+
+            dPhiDDdrdphi=dPhiDDdPhidr;
+            dPhiDDdPhidphi=4*thetaDot2*cosPhiSinPhi;
+            dPhiDDdrDotdphi=0;
+            dPhiDDdthetaDotdphi=-2*thetaDot*cos2Phi;
+            dPhiDDdphiDotdphi=0;
+
+            dPhiDDdrdrDot=dPhiDDdrDotdr;
+            dPhiDDdPhidrDot=dPhiDDdrDotdphi;
+            dPhiDDdrDotdrDot=0;
+            dPhiDDdthetaDotdrDot=0;
+            dPhiDDdphiDotdrDot=-(2/r);
+
+            dPhiDDdrdthetaDot=dPhiDDdthetaDotdr;
+            dPhiDDdPhidthetaDot=dPhiDDdthetaDotdphi;
+            dPhiDDdrDotdthetaDot=dPhiDDdthetaDotdrDot;
+            dPhiDDdthetaDotdthetaDot=-2*cosPhiSinPhi;
+            dPhiDDdphiDotdthetaDot=0;
+
+            dPhiDDdrdphiDot=dPhiDDdphiDotdr;
+            dPhiDDdPhidphiDot=dPhiDDdphiDotdphi;
+            dPhiDDdrDotdphiDot=dPhiDDdphiDotdrDot;
+            dPhiDDdthetaDotdphiDot=dPhiDDdphiDotdthetaDot;
+            dPhiDDdphiDotdphiDot=0;
+            
+            aHess(:,:,1)=[ zeros(3,6);
+                           drDDdrdr,      0,  drDDdphidr,        0,                 drDDdthetaDotdr,         drDDdphiDotdr;
+                           dThetaDDdrdr,  0,  dThetaDDdphidr,    dThetaDDdrDotdr,   dThetaDDdthetaDotdr,   dThetaDDdphiDotdr;
+                           dPhiDDdrdr,    0,  dPhiDDdPhidr,      dPhiDDdrDotdr,     dPhiDDdthetaDotdr,     dPhiDDdphiDotdr];
+            aHess(:,:,3)=[ zeros(3,6);
+                           drDDdrdphi,      0,  drDDdphidphi,        0,                 drDDdthetaDotdphi,       drDDdphiDotdphi;
+                           dThetaDDdrdphi,  0,  dThetaDDdphidphi,    dThetaDDdrDotdphi, dThetaDDdthetaDotdphi,   dThetaDDdphiDotdphi;
+                           dPhiDDdrdphi,    0,  dPhiDDdPhidphi,      dPhiDDdrDotdphi,   dPhiDDdthetaDotdphi,     dPhiDDdphiDotdphi];
+            aHess(:,:,4)=[ zeros(3,6);
+                           drDDdrdrDot,      0,  drDDdphidrDot,        0,                  drDDdthetaDotdrDot,       drDDdphiDotdrDot;
+                           dThetaDDdrdrDot,  0,  dThetaDDdphidrDot,    dThetaDDdrDotdrDot, dThetaDDdthetaDotdrDot,   dThetaDDdphiDotdrDot;
+                           dPhiDDdrdrDot,    0,  dPhiDDdPhidrDot,      dPhiDDdrDotdrDot,   dPhiDDdthetaDotdrDot,     dPhiDDdphiDotdrDot];
+            aHess(:,:,5)=[ zeros(3,6);
+                           drDDdrdthetaDot,      0,  drDDdphidthetaDot,        0,                      drDDdthetaDotdthetaDot,       drDDdphiDotdthetaDot;
+                           dThetaDDdrdthetaDot,  0,  dThetaDDdphidthetaDot,    dThetaDDdrDotdthetaDot, dThetaDDdthetaDotdthetaDot,   dThetaDDdphiDotdthetaDot;
+                           dPhiDDdrdthetaDot,    0,  dPhiDDdPhidthetaDot,      dPhiDDdrDotdthetaDot,   dPhiDDdthetaDotdthetaDot,     dPhiDDdphiDotdthetaDot];
+            aHess(:,:,6)=[ zeros(3,6);
+                           drDDdrdphiDot,      0,  drDDdphidphiDot,        0,                    drDDdthetaDotdphiDot,       drDDdphiDotdphiDot;
+                           dThetaDDdrdphiDot,  0,  dThetaDDdphidphiDot,    dThetaDDdrDotdphiDot, dThetaDDdthetaDotdphiDot,   dThetaDDdphiDotdphiDot;
+                           dPhiDDdrdphiDot,    0,  dPhiDDdPhidphiDot,      dPhiDDdrDotdphiDot,   dPhiDDdthetaDotdphiDot,     dPhiDDdphiDotdphiDot];
+            
+            
+            if(nargout>3)
+                papt=zeros(6,1);
+            end
         end
     end
 elseif(systemType==2)
     cotPhi=cosPhi./sinPhi;
-    
-    rDDot=r.*phiDot.^2+r.*thetaDot.^2.*sinPhi.^2;
+    phiDot2=phiDot.^2;
+    thetaDot2=thetaDot.^2;
+    sinPhi2=sinPhi.^2;
+    cosPhiSinPhi=cosPhi.*sinPhi;
+
+    rDDot=r.*phiDot2+r.*thetaDot2.*sinPhi2;
     thetaDDot=(1./r).*(-2*rDot.*thetaDot-2*r.*thetaDot.*phiDot.*cotPhi);
-    phiDDot=(1./r).*(-2*rDot.*phiDot+r.*thetaDot.^2.*cosPhi.*sinPhi);
+    phiDDot=(1./r).*(-2*rDot.*phiDot+r.*thetaDot2.*cosPhiSinPhi);
     
-    aDeriv=[rDot;thetaDot;phiDot;rDDot;thetaDDot;phiDDot];
+    aVal=[rDot;thetaDot;phiDot;rDDot;thetaDDot;phiDDot];
     
     if(nargout>1)
-        drDDdr=phiDot.^2+thetaDot.^2.*sinPhi.^2;
-        drDDdphi=2*r.*thetaDot.^2.*cosPhi.*sinPhi;
-        drDDdthetaDot=2*r.*thetaDot.*sinPhi.^2;
-        drDDdphiDot=2*phiDot.*r;
+        N=size(x,2);
+        if(N>1)
+            error('Derivatives are only available for numPoints=1.')
+        end
 
-        dThetaDDdr=(2*rDot.*thetaDot)./r.^2;
-        dThetaDDdphi=2*phiDot.*thetaDot./sinPhi.^2;
-        dThetaDDdrDot=-((2*thetaDot)./r);
-        dThetaDDdthetaDot=-((2*(rDot+phiDot.*r.*cotPhi))./r);
+        r2=r*r;
+        cosPhi2=cosPhi*cosPhi;
+        
+        drDDdr=phiDot2+thetaDot2*sinPhi2;
+        drDDdphi=2*r*thetaDot2*cosPhiSinPhi;
+        drDDdthetaDot=2*r*thetaDot*sinPhi2;
+        drDDdphiDot=2*phiDot*r;
+
+        dThetaDDdr=(2*rDot*thetaDot)/r2;
+        dThetaDDdphi=2*phiDot*thetaDot/sinPhi2;
+        dThetaDDdrDot=-((2*thetaDot)/r);
+        dThetaDDdthetaDot=-((2*(rDot+phiDot*r*cotPhi))/r);
         dThetaDDdphiDot=-2*thetaDot.*cotPhi;
 
-        dPhiDDdr=(2*phiDot.*rDot)./r.^2;
-        dPhiDDdPhi=(r.*thetaDot.^2.*cosPhi.^2-r.*thetaDot.^2.*sinPhi.^2)./r;
-        dPhiDDdrDot=-((2*phiDot)./r);
-        dPhiDDdthetaDot=2*thetaDot.*cosPhi.*sinPhi;
-        dPhiDDdphiDot=-((2*rDot)./r);
+        dPhiDDdr=(2*phiDot.*rDot)/r2;
+        dPhiDDdPhi=(r*thetaDot2.*cosPhi2-r.*thetaDot2.*sinPhi2)/r;
+        dPhiDDdrDot=-((2*phiDot)/r);
+        dPhiDDdthetaDot=2*thetaDot*cosPhiSinPhi;
+        dPhiDDdphiDot=-((2*rDot)/r);
 
-        N=size(x,2);
-        aJacob=zeros(6,6,N);
-        for k=1:N
-            aJacob(:,:,k)=[ 0,              0,  0,                  1,                  0,                      0;
-                            0,              0,  0,                  0,                  1,                      0;
-                            0,              0,  0,                  0,                  0,                      1;
-                            drDDdr(k),      0,  drDDdphi(k),        0,                  drDDdthetaDot(k),       drDDdphiDot(k);
-                            dThetaDDdr(k),  0,  dThetaDDdphi(k),    dThetaDDdrDot(k),   dThetaDDdthetaDot(k),   dThetaDDdphiDot(k);
-                            dPhiDDdr(k),    0,  dPhiDDdPhi(k),      dPhiDDdrDot(k),     dPhiDDdthetaDot(k),     dPhiDDdphiDot(k)];
-        end
+        aJacob=[ 0,           0,  0,               1,               0,                   0;
+                 0,           0,  0,               0,               1,                   0;
+                 0,           0,  0,               0,               0,                   1;
+                 drDDdr,      0,  drDDdphi,        0,               drDDdthetaDot,       drDDdphiDot;
+                 dThetaDDdr,  0,  dThetaDDdphi,    dThetaDDdrDot,   dThetaDDdthetaDot,   dThetaDDdphiDot;
+                 dPhiDDdr,    0,  dPhiDDdPhi,      dPhiDDdrDot,     dPhiDDdthetaDot,     dPhiDDdphiDot];
+
+        if(nargout>2)
+            aHess=zeros(6,6,6);
+ 
+            sin2Phi=2*sinPhi*cosPhi;
+            cos2Phi=cosPhi^2-sinPhi^2;
+            r3=r2*r;
+
+            drDDdrdr=0;
+            drDDdphidr=thetaDot2*sin2Phi;
+            drDDdthetaDotdr=2*thetaDot*sinPhi2;
+            drDDdphiDotdr=2*phiDot;
+
+            drDDdrdphi=drDDdphidr;
+            drDDdphidphi=2*r*thetaDot2*cos2Phi;
+            drDDdthetaDotdphi=4*r*thetaDot*cosPhiSinPhi;
+            drDDdphiDotdphi=0;
+
+            drDDdrdrDot=0;
+            drDDdphidrDot=0;
+            drDDdthetaDotdrDot=0;
+            drDDdphiDotdrDot=0;
+
+            drDDdrdthetaDot=drDDdthetaDotdr;
+            drDDdphidthetaDot=drDDdthetaDotdphi;
+            drDDdthetaDotdthetaDot=2*r*sinPhi2;
+            drDDdphiDotdthetaDot=0;
+
+            drDDdrdphiDot=drDDdphiDotdr;
+            drDDdphidphiDot=drDDdphiDotdphi;
+            drDDdthetaDotdphiDot=drDDdphiDotdthetaDot;
+            drDDdphiDotdphiDot=2*r;
+
+            %%%
+
+            dThetaDDdrdr=-((4*rDot*thetaDot)/r3);
+            dThetaDDdphidr=0;
+            dThetaDDdrDotdr=(2*thetaDot)/r2;
+            dThetaDDdthetaDotdr=(2*rDot)/r2;
+            dThetaDDdphiDotdr=0;
+
+            dThetaDDdrdphi=dThetaDDdphidr;
+            dThetaDDdphidphi=-4*phiDot*thetaDot*cotPhi/sinPhi2;
+            dThetaDDdrDotdphi=0;
+            dThetaDDdthetaDotdphi=2*phiDot/sinPhi2;
+            dThetaDDdphiDotdphi=2*thetaDot/sinPhi2;
+
+            dThetaDDdrdrDot=dThetaDDdrDotdr;
+            dThetaDDdphidrDot=dThetaDDdrDotdphi;
+            dThetaDDdrDotdrDot=0;
+            dThetaDDdthetaDotdrDot=-(2/r);
+            dThetaDDdphiDotdrDot=0;
+
+            dThetaDDdrdthetaDot=dThetaDDdthetaDotdr;
+            dThetaDDdphidthetaDot=dThetaDDdthetaDotdphi;
+            dThetaDDdrDotdthetaDot=dThetaDDdthetaDotdrDot;
+            dThetaDDdthetaDotdthetaDot=0;
+            dThetaDDdphiDotdthetaDot=-2*cotPhi;
+
+            dThetaDDdrdphiDot=dThetaDDdphiDotdr;
+            dThetaDDdphidphiDot=dThetaDDdphiDotdphi;
+            dThetaDDdrDotdphiDot=dThetaDDdphiDotdrDot;
+            dThetaDDdthetaDotdphiDot=dThetaDDdphiDotdthetaDot;
+            dThetaDDdphiDotdphiDot=0;
+
+            %%%
+            dPhiDDdrdr=-((4*phiDot*rDot)/r3);
+            dPhiDDdPhidr=0;
+            dPhiDDdrDotdr=(2*phiDot)/r2;
+            dPhiDDdthetaDotdr=0;
+            dPhiDDdphiDotdr=(2*rDot)/r2;
+
+            dPhiDDdrdphi=dPhiDDdPhidr;
+            dPhiDDdPhidphi=-4*thetaDot2*cosPhiSinPhi;
+            dPhiDDdrDotdphi=0;
+            dPhiDDdthetaDotdphi=2*thetaDot*cos2Phi;
+            dPhiDDdphiDotdphi=0;
+
+            dPhiDDdrdrDot=dPhiDDdrDotdr;
+            dPhiDDdPhidrDot=dPhiDDdrDotdphi;
+            dPhiDDdrDotdrDot=0;
+            dPhiDDdthetaDotdrDot=0;
+            dPhiDDdphiDotdrDot=0;
+
+            dPhiDDdrdthetaDot=dPhiDDdthetaDotdr;
+            dPhiDDdPhidthetaDot=dPhiDDdthetaDotdphi;
+            dPhiDDdrDotdthetaDot=dPhiDDdthetaDotdrDot;
+            dPhiDDdthetaDotdthetaDot=sin2Phi;
+            dPhiDDdphiDotdthetaDot=0;
+
+            dPhiDDdrdphiDot=dPhiDDdphiDotdr;
+            dPhiDDdPhidphiDot=dPhiDDdphiDotdphi;
+            dPhiDDdrDotdphiDot=dPhiDDdphiDotdrDot;
+            dPhiDDdthetaDotdphiDot=dPhiDDdphiDotdthetaDot;
+            dPhiDDdphiDotdphiDot=0;
+            
+            aHess(:,:,1)=[ zeros(3,6);
+                           drDDdrdr,      0,  drDDdphidr,        0,               drDDdthetaDotdr,       drDDdphiDotdr;
+                           dThetaDDdrdr,  0,  dThetaDDdphidr,    dThetaDDdrDotdr, dThetaDDdthetaDotdr,   dThetaDDdphiDotdr;
+                           dPhiDDdrdr,    0,  dPhiDDdPhidr,      dPhiDDdrDotdr,   dPhiDDdthetaDotdr,     dPhiDDdphiDotdr];
+            aHess(:,:,3)=[ zeros(3,6);
+                           drDDdrdphi,      0,  drDDdphidphi,        0,                 drDDdthetaDotdphi,       drDDdphiDotdphi;
+                           dThetaDDdrdphi,  0,  dThetaDDdphidphi,    dThetaDDdrDotdphi, dThetaDDdthetaDotdphi,   dThetaDDdphiDotdphi;
+                           dPhiDDdrdphi,    0,  dPhiDDdPhidphi,      dPhiDDdrDotdphi,   dPhiDDdthetaDotdphi,     dPhiDDdphiDotdphi];
+            aHess(:,:,4)=[ zeros(3,6);
+                           drDDdrdrDot,      0,  drDDdphidrDot,        0,                  drDDdthetaDotdrDot,       drDDdphiDotdrDot;
+                           dThetaDDdrdrDot,  0,  dThetaDDdphidrDot,    dThetaDDdrDotdrDot, dThetaDDdthetaDotdrDot,   dThetaDDdphiDotdrDot;
+                           dPhiDDdrdrDot,    0,  dPhiDDdPhidrDot,      dPhiDDdrDotdrDot,   dPhiDDdthetaDotdrDot,     dPhiDDdphiDotdrDot];
+            aHess(:,:,5)=[ zeros(3,6);
+                           drDDdrdthetaDot,      0,  drDDdphidthetaDot,        0,                      drDDdthetaDotdthetaDot,       drDDdphiDotdthetaDot;
+                           dThetaDDdrdthetaDot,  0,  dThetaDDdphidthetaDot,    dThetaDDdrDotdthetaDot, dThetaDDdthetaDotdthetaDot,   dThetaDDdphiDotdthetaDot;
+                           dPhiDDdrdthetaDot,    0,  dPhiDDdPhidthetaDot,      dPhiDDdrDotdthetaDot,    dPhiDDdthetaDotdthetaDot,    dPhiDDdphiDotdthetaDot];
+            aHess(:,:,6)=[ zeros(3,6);
+                           drDDdrdphiDot,      0,  drDDdphidphiDot,        0,                    drDDdthetaDotdphiDot,       drDDdphiDotdphiDot;
+                           dThetaDDdrdphiDot,  0,  dThetaDDdphidphiDot,    dThetaDDdrDotdphiDot, dThetaDDdthetaDotdphiDot,   dThetaDDdphiDotdphiDot;
+                           dPhiDDdrdphiDot,    0,  dPhiDDdPhidphiDot,      dPhiDDdrDotdphiDot,   dPhiDDdthetaDotdphiDot,     dPhiDDdphiDotdphiDot];
+            
+            
+            if(nargout>3)
+                papt=zeros(6,1);
+            end
+       end
     end
 else
     error('Unknown systemType specified.') 

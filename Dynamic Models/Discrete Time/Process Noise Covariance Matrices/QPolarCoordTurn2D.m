@@ -14,7 +14,7 @@ function Q=QPolarCoordTurn2D(T,x,sigmaTurn2,param4,turnType,tauTurn,tauLinAccel)
 %          then x can either be x=[x;y;h;v;omega], where h is the heading
 %          in terms of radians counterclockwise from the x-axis, v is the
 %          speed, and omega is the turn rate (the derivative of h with
-%          respect to time) or  x=[x;y;h;v;at] where at is the the
+%          respect to time) or  x=[x;y;h;v;at] where at is the
 %          transversal acceleration, which is orthogonal to the velocity
 %          and is defined such that positive values of at map to positive
 %          values of omega. If there is a linear acceleration, then the
@@ -98,9 +98,10 @@ function Q=QPolarCoordTurn2D(T,x,sigmaTurn2,param4,turnType,tauTurn,tauLinAccel)
 %
 %The corresponding transition matrix is given by the function
 %FPolarCoordTurn2D. The corresponding continuous-time functions are
-%aPolarCoordTurn2D and DPolarCoordTurn2D. However, note that the
-%discrete-time functions with unknown noise is a direct-discrete model and
-%not a discretization of the continuous-time model.
+%aPolarCoordTurn2DOmega, aPolarCoordTurn2DTrans, and DPolarCoordTurn2D.
+%However, note that the discrete-time functions with unknown noise is a
+%direct-discrete model and not a discretization of the continuous-time
+%model.
 %
 %REFERENCES:
 %[1] M. Busch and S. Blackman, "Evaluation of IMM filtering for an air
@@ -109,7 +110,6 @@ function Q=QPolarCoordTurn2D(T,x,sigmaTurn2,param4,turnType,tauTurn,tauLinAccel)
 %[2] Y. Bar-Shalom, X. R. Li, and T. Kirubarajan, Estimation with
 %    Applications to Tracking and Navigation. New York: John Wiley and
 %    Sons, Inc, 2001.
-
 %
 %August 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

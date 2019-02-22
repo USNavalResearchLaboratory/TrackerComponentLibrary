@@ -3,21 +3,21 @@ function [xi,w]=ninthOrderSpherSurfCubPoints(numDim,algorithm)
 %               points for integration over the surface of a unit (hyper-)
 %               sphere (weighting function is just 1).
 %
-%INPUTS:  numDim An integer specifying the dimensionality of the points
-%                to be generated. Currently, only numDim=3 is supported.
-%      algorithm A value indicating which algorithm should be used.
-%                Possible values are
-%                0 (The default if omitted or an empty matrix is passed)
-%                  Formula U3 9-1 in [1], pg. 299, 32 points, numDim=3.
-%                1 Formula U3 9-2 in [1], pg. 300, 42 points, numDim=3,
-%                  with a correction as there should have been a +/- in
-%                  front of the r term in the first set of points.
-%                2 U3 9-3 in [1], pg. 300, 50 points, numDim=3.
+%INPUTS: numDim An integer specifying the dimensionality of the points to
+%               be generated. Currently, only numDim=3 is supported.
+%     algorithm A value indicating which algorithm should be used.
+%               Possible values are
+%               0 (The default if omitted or an empty matrix is passed)
+%                 Formula U3 9-1 in [1], pg. 299, 32 points, numDim=3.
+%               1 Formula U3 9-2 in [1], pg. 300, 42 points, numDim=3, with
+%                 a correction as there should have been a +/- in front of
+%                 the r term in the first set of points.
+%               2 U3 9-3 in [1], pg. 300, 50 points, numDim=3.
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %REFERENCES:
 %[1] A.H. Stroud, Approximate Calculation of Multiple Integrals. Cliffs,

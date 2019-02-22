@@ -1,17 +1,17 @@
 function X=RiccatiSolveC(A,B,Q,R,S,E)
 %%RICCATISOLVEC Solve the general continuous-time Riccati equation.
 %
-%INPUTS:   A   An nXn matrix.
-%          B   An nXm matrix, where m<=n.
-%          Q   An nXn matrix such that Q=Q' and all eigenvalues are
-%              non-negative.
-%          R   An optional mXm matrix such that R=R' and all eigenvalues 
-%              are non-negative. If omitted, eye(m,m) is used.
-%          S   An optional nXm matrix. If omitted, zeros(n,n) is used.
-%          E   An optional nXn matrix. If omitted, eye(n) is used.
+%INPUTS: A An nXn matrix.
+%        B An nXm matrix, where m<=n.
+%        Q An nXn matrix such that Q=Q' and all eigenvalues are non-
+%          negative.
+%        R An optional mXm matrix such that R=R' and all eigenvalues are
+%          non-negative. If omitted, eye(m,m) is used.
+%        S An optional nXm matrix. If omitted, zeros(n,n) is used.
+%        E An optional nXn matrix. If omitted, eye(n) is used.
 %
-%OUTPUTS:   X  The nXn nonnegative definite solution to the discrete-time
-%              algebraic Ricatti equation.
+%OUTPUTS: X The nXn nonnegative definite solution to the discrete-time
+%           algebraic Ricatti equation.
 %
 %This function finds the nonnegative definite solution to the 
 %continuous-time Ricatti equation having the form

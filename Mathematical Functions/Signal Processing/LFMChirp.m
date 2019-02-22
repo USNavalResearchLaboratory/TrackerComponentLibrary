@@ -11,7 +11,7 @@ function [s,t]=LFMChirp(T,fStart,fEnd,tSamp,phi)
 %           number of samples depends on T. Otherwise, this is a numSampX1
 %           array of times at which samples are desired. Samples before
 %           time 0 and after time T are set to zero. If this parameter is
-%           omitted or an empty matrix is passed, the the Nyquist sampling
+%           omitted or an empty matrix is passed, the Nyquist sampling
 %           rate is used.
 %       phi The phase offset of the chirp. If this parameter is omitted or
 %           an empty matrix is passed, then the default of pi/2 is used,

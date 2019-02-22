@@ -1,9 +1,9 @@
 function [yEst,PInvEst,xEst,PEst]=FPInfoSmoother(yPred,PInvPred,z,u,H,F,R,Q,kD)
-%%FPINFOSMOOTHER  Run the Fraser-Potter smoother for linear dynamic and
-%                 measurement models using information filters on a batch
-%                 of data given initial estimates, which could be
-%                 uninformative. The smoothed result at one time step or
-%                 along the entire batch are available.
+%%FPINFOSMOOTHER Run the Fraser-Potter smoother for linear dynamic and
+%                measurement models using information filters on a batch
+%                of data given initial estimates, which could be
+%                uninformative. The smoothed result at one time step or
+%                along the entire batch are available.
 %
 %INPUTS: yPred The predicted information state at the time of the initial
 %              measurement in z. If no prior information is available, then

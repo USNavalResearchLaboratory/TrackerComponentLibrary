@@ -6,7 +6,7 @@ function [a,t,tLength]=BSplinePolyFitMultiDim(tau,tauLengths,y,k,numCentralKnots
 %         the sampled region of the function. B-splines can have continuous
 %         derivatives across the entire sampled region and can be easily
 %         differentiated. This function determines the knots to use by
-%         taking the tensor product of the the approximate knots from
+%         taking the tensor product of the approximate knots from
 %         Equation 10 of Chapter 13 of [1]. The knots are not optimal. The
 %         first and last knots in each dimensions are repeated. This
 %         function can provide interpolation coefficients for multiple sets

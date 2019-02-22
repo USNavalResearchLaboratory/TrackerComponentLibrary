@@ -22,7 +22,7 @@ function [BW,HBWL,HBWR,Rsp,U]=idealArrayBeamwidth(T,xyPoints,BWType,lineParams,b
 %                      omitted or an empty matrix is passed. 
 %          'NullToNull' This is the beamwidth from one null to another on
 %                      either side of the main beam. The algorithm
-%                      evaluates the  response on a gird. rather than
+%                      evaluates the  response on a gird. Rather than
 %                      directly finding the null, this just finds the
 %                      points on either side of the mean beam after which
 %                      the response value increases. This will not work

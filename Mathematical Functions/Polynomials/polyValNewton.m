@@ -1,10 +1,10 @@
 function v=polyValNewton(z,a,c)
-%POLYVALNEWTON    Evaluate a set of polynomial given in Newton's form at
-%                 a desired set of points. This is useful when given a set
-%                 of Hermite interpolating polynomials for interpolating a
-%                 vector.
+%POLYVALNEWTON Evaluate a set of polynomial given in Newton's form at a
+%              desired set of points. This is useful when given a set of
+%              Hermite interpolating polynomials for interpolating a
+%              vector.
 %
-%INPUTS  z A numPointsX1 or 1XnumPoints vector of scalar points where the
+%INPUTS: z A numPointsX1 or 1XnumPoints vector of scalar points where the
 %          values of the numDim polynomials are desired.
 %        a A numDimXn matrix of polynomial coefficients for numDim
 %          polynomials, as described below.
@@ -19,8 +19,8 @@ function v=polyValNewton(z,a,c)
 %y(z)=a(1)+sum_{k=1}^{n-1}a(k+1)(z-c(1))*(z-c(2))*...*(z-c(k))
 %This function just evaluates multiple scalar polynomials.
 %
-%The algorithm is VALUE taken from Chapter 19 of [1] to handle vector
-%values, a loop is used.
+%The algorithm is based on  VALUE from Chapter 19 of [1] to handle vector
+%values; a loop is used here.
 %
 %Newton's polynomial form arises when dealing with Hermite interpolating
 %polynomials as is discussed in Section 2.1.3 of [2] and in Chapters 3.3

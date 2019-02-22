@@ -2,15 +2,14 @@ function val=convertTemperatureUnits(val,unitOrig,unitDest)
 %%CONVERTTEMPERATUREUNITS Convert values of temperature from one set of
 %                         units to another.
 %
-%INPUTS: val           The matrix or vector of values that are to be
-%                      converted.
-%   unitOrig, unitDes  Two character strings indicating the units of val
-%                      and the units into which it is to be converted. The
-%                      possible values are:
-%                      'K' Kelvin    'C' Centigrade/ Celcius
-%                      'R' Rankine   'F' Fahrenheit
+%INPUTS: val The matrix or vector of values that are to be converted.
+%   unitOrig, unitDes Two character strings indicating the units of val and
+%            the units into which it is to be converted. The possible
+%            values are:
+%            'K' Kelvin    'C' Centigrade/ Celcius
+%            'R' Rankine   'F' Fahrenheit
 %
-%OUTPUTS: val  The values converted into the desired coordinate system.
+%OUTPUTS: val The values converted into the desired coordinate system.
 %
 %The conversions are standard and can be found in many places books and
 %places online, such as at

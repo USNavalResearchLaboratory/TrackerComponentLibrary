@@ -89,13 +89,14 @@ function [SGP4Elements,TTEpoch1,TTEpoch2,otherInfo,checksumIsBad]=TLE2SGP4OrbEls
 %                                  out. However, in practice, it is not.
 %                      revolutionNumberAtEpoch The number of orbits the
 %                                  satellite has made since its launch.
-%      checksumIsBad A 2X1 boolean vector indicating whether the checksum
-%                    value for each of the strings is bad. checksumIsBad(1)
-%                    is true if the checksum of TLELine1 is invalid and
-%                    checksumIsBad(2) is true if the checksum of TLELine2
-%                    is invalid. If a checksums is omitted then the value
-%                    will be true. If iether of the strings is too short,
-%                    then this will be an empty matrix.
+%        checksumIsBad A 2X1 boolean vector indicating whether the checksum
+%                      value for each of the strings is bad.
+%                      checksumIsBad(1) is true if the checksum of TLELine1
+%                      is invalid and checksumIsBad(2) is true if the
+%                      checksum of TLELine2 is invalid. If a checksums is
+%                      omitted then the value will be true. If iether of
+%                      the strings is too short, then this will be an empty
+%                      matrix.
 %
 %Note that parts of the input strings that cannot be read will be filled
 %with NaN values.

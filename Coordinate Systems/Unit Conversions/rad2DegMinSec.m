@@ -4,11 +4,11 @@ function [deg,min,sec]=rad2DegMinSec(rad)
 %               useful for displaying angular quantities in a user-frieldy
 %               manner.
 %
-%INPUTS:   rad An angle in radians.
+%INPUTS: rad An angle in radians.
 %
-%OUTPUTS:  deg The integer part of the input in degrees.
-%          min The integer number of arcminutes.
-%          sec A decimal number of arcseconds.
+%OUTPUTS: deg The integer part of the input in degrees.
+%         min The integer number of arcminutes.
+%         sec A decimal number of arcseconds.
 %
 %If a negative number of radians is entered, then degrees, arcminutes and
 %arcseconds will all come back negative.

@@ -1,7 +1,7 @@
 function muCentral=raw2CentralMoments(muRaw)
 %%RAW2CENTRALMOMENTS Given the raw (noncentral) moments of a scalar
 %                    probability distribution, compute the central
-%                    moments of the distribution.
+%                    moments of the distribution.  
 %
 %INPUTS: muRaw An nX1 or 1Xn vector of scalar raw (noncentral) moments.
 %              muRaw(n) is the nth raw moment. Thus, muRaw(1) is the mean
@@ -11,8 +11,12 @@ function muCentral=raw2CentralMoments(muRaw)
 %                   muCentral(n) is the nth order central moment. Thus,
 %                   muCentral(1)=0.
 %
-%The conversion between central and non-central moments it aken from
-%Chapter 5.4 of [1].
+%The conversion between central and non-central moments is taken from
+%Chapter 5.4 of [1]. Note that this function is implemented to work with
+%exact raw moments. If sample raw moments are given, then muCentral will be
+%biased. If there are not too many samples, then the function
+%unbiasedMomentCumulant can be used to obtain unbiased sample central
+%moments directly.
 %
 %The nth noncentral moment of the distribution is the expected value
 %E{x^n}. The nth central moment of the distribution is E{(x-E\{x\})^n}.

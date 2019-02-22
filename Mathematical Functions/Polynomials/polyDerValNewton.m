@@ -9,7 +9,7 @@ function [pDer,p]=polyDerValNewton(z,a,c,numDer)
 %        c A numDimX(n-1) matrix of the control points associated with
 %          each of the numDim polynomial in Newton's form. When performing
 %          Hermite interpolation using a polynomial returned by the
-%          HermiteInterpPoly function, c can be a matrix holding the the
+%          HermiteInterpPoly function, c can be a matrix holding the
 %          values where the interpolating polynomial matches the data for
 %          numDim calls to the HermiteInterpPoly function (one for each
 %          dimension).
@@ -18,14 +18,14 @@ function [pDer,p]=polyDerValNewton(z,a,c,numDer)
 %
 %OUTPUTS: pDer A numDimXnumDerXnumZ hypermatrix of the derivatives for each
 %              of the numZ points for each of the numDim dimensions.
-%           p  A numDimXnumZ vector of the function values at the points.
+%            p A numDimXnumZ vector of the function values at the points.
 %
 %A polynomial function in Newton's form evaluated at point z has the form
 %y(z)=a(1)+sum_{k=1}^{n-1}a(k+1)(z-c(1))*(z-c(2))*...*(z-c(k))
 %
-%The algorithm VALUE taken from Chapter 19 of [1] provides a recursion for
-%evaluating polynomials in Newton form. The derivative algorithm comes from
-%differentiating the recursion.
+%The algorithm is based on VALUE in Chapter 19 of [1], which provides a
+%recursion for evaluating polynomials in Newton form. The derivative
+%algorithm comes from differentiating the recursion.
 %
 %REFERENCES:
 %[1] A. Nijenhuis and H. S. Wilf, Combinatorial Algorithms for Computers

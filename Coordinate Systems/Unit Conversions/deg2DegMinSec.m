@@ -4,11 +4,11 @@ function [deg,min,sec]=deg2DegMinSec(deg)
 %               useful for displaying angular quantities in a user-frieldy
 %               manner.
 %
-%INPUTS:   deg A scalar or matrix of angles degrees.
+%INPUTS: deg A scalar or matrix of angles degrees.
 %
-%OUTPUTS:  deg The integer part of the input deg.
-%          min The integer number of arcminutes in deg.
-%          sec A decimal number of arcseconds.
+%OUTPUTS: deg The integer part of the input deg.
+%         min The integer number of arcminutes in deg.
+%         sec A decimal number of arcseconds.
 %
 %If a negative number of degrees is entered, then degrees, arcminutes and
 %arcseconds will all come back negative.

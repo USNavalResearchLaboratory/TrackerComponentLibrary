@@ -4,13 +4,13 @@ function [xi,w]=secondOrderSimplexCubPoints(numDim)
 %               points such that sum(x)<=1 and all x>=0, where x is a
 %               numDimX1 vector.
 %
-%INPUTS:  numDim An integer specifying the dimensionality of the points
-%                to be generated.
+%INPUTS: numDim An integer specifying the dimensionality of the points to
+%               be generated.
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %This implements formula T_n 2-2 in [1], pg. 307, (numDim+1)*(numDim+2)/2
 %points

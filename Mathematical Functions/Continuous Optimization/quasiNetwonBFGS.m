@@ -7,7 +7,7 @@ function [xMin,fMin,exitCode]=quasiNetwonBFGS(f,x0,D0,epsilon,deltaTestDist,delt
 %                 least-squares problem is desired, then the
 %                 Levenberg-Marquardt algorithm in LSEstLMarquardt is
 %                 often preferable. The limited memory version of thie
-%                 algorithm, quasiNetwonLBFGS, is more appropriate for use
+%                 algorithm, quasiNewtonLBFGS, is more appropriate for use
 %                 with very large matrices. The L-BFGS algorithm also
 %                 supports an additional L1 norm term in the objective
 %                 function. If one wishes to zero a vector (not a scalar),

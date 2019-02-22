@@ -7,29 +7,30 @@ function [u,theta,q]=rotMat2AxisAng(R,handed)
 %                can be expressed as either a right-handed or a left-handed
 %                rotation. The default is right-handed.
 %
-%INPUTS:  R       A 3X3 orthonormal real rotation matrix.
+%INPUTS: R A 3X3 orthonormal real rotation matrix.
 %
-%OUTPUTS: u,theta  The 3X1 unit vector u and rotation angle theta in
-%                  radians such that to rotate a vector v, one could call
-%                  rotateVector(v,u,theta,handed) instead of multiplying
-%                  M*v. theta is the angle by which one would have to
-%                  perform a rotation about the axis u (with the handedness
-%                  of the rotation given by handed) to rotate a vector v
-%                  the same as if one evaluated M*v.
-%                  Also, note that R=axisAng2RotMat(u,theta,handed).
-%         q        A quaternion corresponding to the axis-angle pair where
-%                  q=[cos(theta/2);sin(theta/2)*u]; The first element is
-%                  what many textbooks refer to as q0 or q4. The quaternion
-%                  is ordered in terms of hypercomplex numbers as
-%                  q(1)+i*q(2)+j*q(3)+k*q(4). The handedness of the
-%                  quaternion matches handed (and the handedness of theta).
-%           handed  The handedness of the rotation angle. If omitted, it
-%                   is assumed that the rotation is right-handed
-%                   (the standard). Possible values are
-%            'right' The default if omitted. The rotation is right-handed.
-%            'left'  The rotation is left-handed. The rotation angle is
-%                    counterclockwise when one is looking in the direction
-%                    that the rotation axis points.
+%OUTPUTS: u,theta The 3X1 unit vector u and rotation angle theta in radians
+%                 such that to rotate a vector v, one could call
+%                 rotateVector(v,u,theta,handed) instead of multiplying
+%                 M*v. theta is the angle by which one would have to
+%                 perform a rotation about the axis u (with the handedness
+%                 of the rotation given by handed) to rotate a vector v the
+%                 same as if one evaluated M*v. Also, note that
+%                 R=axisAng2RotMat(u,theta,handed).
+%               q A quaternion corresponding to the axis-angle pair where
+%                 q=[cos(theta/2);sin(theta/2)*u]; The first element is
+%                 what many textbooks refer to as q0 or q4. The quaternion
+%                 is ordered in terms of hypercomplex numbers as
+%                 q(1)+i*q(2)+j*q(3)+k*q(4). The handedness of the
+%                 quaternion matches handed (and the handedness of theta).
+%          handed The handedness of the rotation angle. If omitted, it is
+%                 assumed that the rotation is right-handed (the standard).
+%                 Possible values are
+%                 'right' The default if omitted. The rotation is right-
+%                         handed.
+%                 'left'  The rotation is left-handed. The rotation angle
+%                         is counterclockwise when one is looking in the
+%                         direction that the rotation axis points.
 %
 %The function calls rotMat2Quat to get the quaternion for the rotation and
 %then calls quat2AxisAng to get the axis and angle.

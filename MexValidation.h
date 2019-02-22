@@ -2149,8 +2149,6 @@ std::complex <double> getComplexDoubleFromMatlab(const mxArray * const val) {
     return retVal;
 }
 
-
-
 #endif
 #endif
 

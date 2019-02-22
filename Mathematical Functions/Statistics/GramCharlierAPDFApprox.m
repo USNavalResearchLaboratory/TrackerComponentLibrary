@@ -8,28 +8,28 @@ function PDFVals=GramCharlierAPDFApprox(xVals,quasiMomentMat,muN,SigmaN)
 %               decrease in the distribution must be faster than
 %               exp(-x^2/4) to assure convergence.
 %
-%INPUTS:   xVals The xDimXN set of N points for which the PDF values are
-%                desired.
+%INPUTS: xVals The xDimXN set of N points for which the PDF values are
+%              desired.
 % quasiMomentMat A matrix taking n indices, where 
-%               quasiMomentMat(a1,a2,a3...an) corresponds to the quasi-
-%               moment whose multivariate order is given by a1-1,a2-1, etc.
-%               It is assumed that quasi moments only up to an order equal
-%               to the size of the first dimension of the matrix are
-%               available (other entries in quasiMomentMat are ignored).
-%               All other dimensions must be at least the same size as the
-%               first. Also, the zero-th order moment must be 1 (as the PDF
-%               integrates to 1). If a univariate distribution is used,
-%               then this is a column vector.
-%           muN The nX1 mean vector with respect to with the quasi-moments
-%               are computed. This should generally be the mean of the
-%               distribution being approxiamted. If this parameter is
-%               omitted or an empty matrix is passed, a zero mean vector is
-%               used.
-%        SigmaN The nXn covariance matrix with respect to which the
-%               quasi-moments are computed. This should generally be the
-%               covariance matrix of the distribution being approximated.
-%               If this parameter is omitted or an empty matrix is passed,
-%               the identity matrix is used.
+%              quasiMomentMat(a1,a2,a3...an) corresponds to the quasi-
+%              moment whose multivariate order is given by a1-1,a2-1, etc.
+%              It is assumed that quasi moments only up to an order equal
+%              to the size of the first dimension of the matrix are
+%              available (other entries in quasiMomentMat are ignored).
+%              All other dimensions must be at least the same size as the
+%              first. Also, the zero-th order moment must be 1 (as the PDF
+%              integrates to 1). If a univariate distribution is used,
+%              then this is a column vector.
+%          muN The nX1 mean vector with respect to with the quasi-moments
+%              are computed. This should generally be the mean of the
+%              distribution being approxiamted. If this parameter is
+%              omitted or an empty matrix is passed, a zero mean vector is
+%              used.
+%       SigmaN The nXn covariance matrix with respect to which the
+%              quasi-moments are computed. This should generally be the
+%              covariance matrix of the distribution being approximated.
+%              If this parameter is omitted or an empty matrix is passed,
+%              the identity matrix is used.
 %
 %OUTPUTS: PDFVals The PDF approximated using the quasi-moments evaluated at
 %               the points in xVals. If multiple points are given, the
@@ -101,7 +101,7 @@ for curOrder=1:maxDeg
     numCompositions=binomial(curOrder-1,numIdx-1);
     
     for k=0:(numCompositions-1)
-        curComp=unrankComposition(k,numIdx,curOrder);
+        curComp=unrankTComposition(k,numIdx,curOrder);
         
         curEl=nDim2Index(numDimList,curComp);
         sumVal=sumVal+prod(invFactList(curComp))*quasiMomentMat(curEl)*HermitePoly(zVals,curComp-1,SigmaN);

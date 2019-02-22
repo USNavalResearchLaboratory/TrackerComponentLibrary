@@ -13,60 +13,60 @@ function [xi,w,CvMDistMin,exitCode,sInit]=GaussianLCDSamples(numDim,numSamples,f
 %              given, then running this function multiple times with the
 %              same inputs will give different results.
 %
-%INPUTS: numDim  An integer specifying the dimensionality of the cubature
-%                points to be generated.
-%    numSamples  The number of points to use to approximate a normal zero
-%                mean Gaussian distribution with the identity matrix as its
-%                covariance. This must be >=2*numDim for the covariance
-%                matrix of the resulting samples to be non-singular.
-% forceCovMatch  An optional argument specifying that the covariance matrix
-%                should be forced to match that of a normal (0,I)
-%                distribution. The basic algorithm best fits the
-%                distribution according to certain measures that usually
-%                underestimate the diagonal elements of the covariance
-%                matrix. The default if this is omitted is true, unless
-%                numSamples<2*numDim, in which case it is false, because
-%                such a match cannot be achieved with symmetric samples.
-%   LBFGSOptions A structure containing parameters for the limited-memory
-%                Broyden-Fletcher-Goldfarb-Shanno algorithm, which is used
-%                as a subroutine for optimization. Each member of the
-%                structure is named after an option in the input to the
-%                quasiNewtonLBFGS function. Possible members are numCorr,
-%                epsilon, deltaTestDist, delta, lineSearchParams,
-%                maxIterations, progressCallback. Note that the C and
-%                l1NormRange members within lineSearchParams are not used.
-%                The meanings of the parameters iaredescribed in the
-%                comments to the quasiNewtonLBFGS function. If this
-%                structure is omitted or an empty matrix is passed, then
-%                the default values will be used. If any of the members of
-%                the structure are omitted or empty matrices are passed,
-%                then the default values will be used.
-%  numIntOptions A structure whose parameters specify the accuracy of the
-%                scalar numerical integration used in this function. The
-%                possible members are:
-%                AbsTol The absolute error tolerance. Between a value x and
-%                       its estimate xHat, this is abs(x-xHat).
-%                RelTol The relative error tolerance. Between a value x and
-%                       its esitimate xHat, this is
-%                       abs(x-xHat)/min(abs(x),abs(xHat))
-%                The default values are both 1e-14. If this parameter is
-%                omitted or an empty matrix is passed, the default values
-%                are used. If either member of the structure is omitted or
-%                is assigned an empty matrix, the default value is used.
-%           bMax The upper bound of the integrals, defined as in [1].
-%                Higher numbers lead to more precise results; numbers too
-%                high will run into finite precision problems with respect
-%                to the integral. For numDim<=1000, the authors in [1],
-%                suggest using 70. If omitted or an empty matrix is passed,
-%                the default value of 70 is used.
-%          sInit An optional numDim X fix(numSamples/2) set of points that
-%                is used as the seed for the algorithm. If omitted, a
-%                random seed is used.
+%INPUTS: numDim An integer specifying the dimensionality of the cubature
+%               points to be generated.
+%    numSamples The number of points to use to approximate a normal zero
+%               mean Gaussian distribution with the identity matrix as its
+%               covariance. This must be >=2*numDim for the covariance
+%               matrix of the resulting samples to be non-singular.
+% forceCovMatch An optional argument specifying that the covariance matrix
+%               should be forced to match that of a normal (0,I)
+%               distribution. The basic algorithm best fits the
+%               distribution according to certain measures that usually
+%               underestimate the diagonal elements of the covariance
+%               matrix. The default if this is omitted is true, unless
+%               numSamples<2*numDim, in which case it is false, because
+%               such a match cannot be achieved with symmetric samples.
+%  LBFGSOptions A structure containing parameters for the limited-memory
+%               Broyden-Fletcher-Goldfarb-Shanno algorithm, which is used
+%               as a subroutine for optimization. Each member of the
+%               structure is named after an option in the input to the
+%               quasiNewtonLBFGS function. Possible members are numCorr,
+%               epsilon, deltaTestDist, delta, lineSearchParams,
+%               maxIterations, progressCallback. Note that the C and
+%               l1NormRange members within lineSearchParams are not used.
+%               The meanings of the parameters iaredescribed in the
+%               comments to the quasiNewtonLBFGS function. If this
+%               structure is omitted or an empty matrix is passed, then
+%               the default values will be used. If any of the members of
+%               the structure are omitted or empty matrices are passed,
+%               then the default values will be used.
+% numIntOptions A structure whose parameters specify the accuracy of the
+%               scalar numerical integration used in this function. The
+%               possible members are:
+%               AbsTol The absolute error tolerance. Between a value x and
+%                      its estimate xHat, this is abs(x-xHat).
+%               RelTol The relative error tolerance. Between a value x and
+%                      its esitimate xHat, this is
+%                      abs(x-xHat)/min(abs(x),abs(xHat))
+%               The default values are both 1e-14. If this parameter is
+%               omitted or an empty matrix is passed, the default values
+%               are used. If either member of the structure is omitted or
+%               is assigned an empty matrix, the default value is used.
+%          bMax The upper bound of the integrals, defined as in [1].
+%               Higher numbers lead to more precise results; numbers too
+%               high will run into finite precision problems with respect
+%               to the integral. For numDim<=1000, the authors in [1],
+%               suggest using 70. If omitted or an empty matrix is passed,
+%               the default value of 70 is used.
+%         sInit An optional numDim X fix(numSamples/2) set of points that
+%               is used as the seed for the algorithm. If omitted, a
+%               random seed is used.
 %
 %OUTPUTS: xi The numDim X numSamples set of cubature points for the normal
 %            0-I distribution. If the exit code is not positive, then an
 %            empty matrix is returned.
-%         w  The numDimX1 set of weights associated with the cubature
+%          w The numDimX1 set of weights associated with the cubature
 %            points. These are all just 1/numSamples. If the exit code is
 %            not positive, then an empty matrix is returned.
 % CvMDistMin The minimum Cramér-von Mises distance between the LCD of the

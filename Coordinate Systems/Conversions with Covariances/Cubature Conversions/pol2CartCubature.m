@@ -52,6 +52,41 @@ function [zCart,RCart]=pol2CartCubature(z,SR,systemType,useHalfRange,zTx,zRx,M,x
 %Details of the numerical integration used in the conversion are given in
 %[1].
 %
+%EXAMPLE:
+%This example goes over confusion that can arise when using the
+%"useHalfRange" option. When useHalfRange=false, then the noise model is 
+% zRT=zTrue+SRrt*randn(2,1);
+%where SRrt is SR when considering the round-trip range. That is, the
+%measurement is the true round-trip r-theta value plus the zero-mean
+%Gaussian noise. Now, suppose that we were to halve the range. This is the
+%same as multipling z by
+% C=[1/2,0;
+%      0,1];
+%Thus, we get 
+% C*z=C*zTrue+C*SRrt*randn(2,1);
+%When useHalfRange is true, the assumption is that SR is the covariance
+%matrix incorporating C. That is, the measurement model is 
+% zMono=zTrue+SRmono*randn(3,1);
+%where the one-way square root lower-triangular noise covariance matrix is 
+%SRmono=C*SRrt.
+%To demonstrate this, we consider a monostatic example, where we use a
+%round-trip range and also where we use a one-way range.
+% SRrt=diag([10;1e-3]);
+% zRT=[100e3;0];
+% %Range is just halved; the measurement is otherwise the same.
+% zMono=[100e3/2;0];
+% [zCartBi,RCartBi]=pol2CartCubature(zRT, SRrt,0,false);
+% [zCartMonoWrong,RCartMonoWrong]=pol2CartCubature(zMono, SRrt, true);
+% C=[1/2,0;
+%      0,1];
+% SRmono=C*SRrt;
+% [zCartMono,RCartMono]=pol2CartCubature(zMono, SRmono,0,true);
+% RCartBi-RCartMonoWrong
+% RCartBi-RCartMono
+%Thus, one will see that the conversion using the round-trip range only has
+%an equivalent Cartesian covariance matrix when one properly adjusts the
+%range measurement covariance matrix for the halving.
+%
 %REFERENCES:
 %[1] David F. Crouse , "Basic tracking using nonlinear 3D monostatic and
 %    bistatic measurements," IEEE Aerospace and Electronic Systems 

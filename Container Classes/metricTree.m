@@ -1,9 +1,9 @@
 classdef metricTree < handle
-%%METRICTREE  A metric tree class for performing searches in a radius
-%             around a given point. If a C++ class interface for the metric
-%             tree has been compiled, then its functions will be called in
-%             place of the Matlab routines, since the C++ implementation
-%             can be significantly faster.
+%%METRICTREE A metric tree class for performing searches in a radius
+%            around a given point. If a C++ class interface for the metric
+%            tree has been compiled, then its functions will be called in
+%            place of the Matlab routines, since the C++ implementation
+%            can be significantly faster.
 %
 %The metric tree data structure is implemented as described in [1] and [2].
 %
@@ -47,9 +47,9 @@ classdef metricTree < handle
         %%METRICTREE Construct a new metric tree with space to hold a given
         %            number of nodes.
         %
-        %INPUTS:          k  The dimensionality of the nodes that will be
-        %                    placed in the tree.
-        %                 N  The number of nodes that the tree will hold.
+        %INPUTS: k The dimensionality of the nodes that will be placed in
+        %          the tree.
+        %        N The number of nodes that the tree will hold.
         %
         %OUTPUTS: newTree A new metricTree instance with the proper amount
         %                 of space.
@@ -72,10 +72,10 @@ classdef metricTree < handle
         function buildTreeFromBatch(theTree,dataBatch)
         %BUILDTREEFROMBATCH Build a metric tree from a batch of data.
         %
-        %INPUTS: theTree   The implicitly passed metricTree object.
-        %        dataBatch A kXN array of points that are to be stored in
-        %                  the metric tree. k is the dimensionality of the
-        %                  points and N is the number of points.
+        %INPUTS: theTree The implicitly passed metricTree object.
+        %      dataBatch A kXN array of points that are to be stored in
+        %                the metric tree. k is the dimensionality of the
+        %                points and N is the number of points.
         %
         %The tree is constructed roughly as described in [1].
         %
@@ -110,11 +110,11 @@ classdef metricTree < handle
         %              located within a given search radius of within a
         %              given radius about a given point.
         %
-        %INPUTS: theTree  The implicitly passed metricTree object.
-        %        point    A kXm matrix of k-dimensional points about which
-        %                 range searches will be performed.
-        %       radius    An mX1 vector of the search radii about each
-        %                 point.
+        %INPUTS: theTree The implicitly passed metricTree object.
+        %          point A kXm matrix of k-dimensional points about which
+        %                range searches will be performed.
+        %         radius An mX1 vector of the search radii about each
+        %                point.
         %
         %OUTPUTS: retSet An instance of the ClusterSet class containing all
         %                of the items within the given radius for each

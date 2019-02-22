@@ -1,20 +1,20 @@
 function vec=DelaunayVar(TDB1,TDB2)
-%%DELAUNAYVAR  Get the Delaunay variables that are needed for tide models
-%              involving Doodson numbers using the equations in the IERS
-%              conventions.
+%%DELAUNAYVAR Get the Delaunay variables that are needed for tide models
+%             involving Doodson numbers using the equations in the IERS
+%             conventions.
 %
-%INPUTS: T     The time as measured in Julian centuries Barycentric
-%              dynamical time (TDB).
+%INPUTS: T The time as measured in Julian centuries Barycentric dynamical
+%          time (TDB).
 %
-%OUTPUTS: vec  A vector of the Delaunay variables in the order with all
-%              units in RADIANS.
-%              vec(1) Mean anomaly of the moon: l
-%              vec(2) Mean anomaly of the sun: l'
-%              vec(3) F=L-Omega, The mean longitude of the moon minus the
-%                     mean longitude of the ascending node of the moon.
-%              vec(4) Mean Elongation of the moon from the sun: D
-%              vec(5) Mean Longitude of the Ascending Node of the Moon:
-%                     Omega
+%OUTPUTS: vec A vector of the Delaunay variables in the order with all
+%             units in RADIANS.
+%             vec(1) Mean anomaly of the moon: l
+%             vec(2) Mean anomaly of the sun: l'
+%             vec(3) F=L-Omega, The mean longitude of the moon minus the
+%                    mean longitude of the ascending node of the moon.
+%             vec(4) Mean Elongation of the moon from the sun: D
+%             vec(5) Mean Longitude of the Ascending Node of the Moon:
+%                    Omega
 %
 %This function implements Equation 5.43 in Section 5.7.2 of [1]. The units
 %in those equations are degrees (and arcseconds). However, in Equation 6.8

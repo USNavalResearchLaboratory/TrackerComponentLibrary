@@ -3,99 +3,99 @@ function [t,exitCode]=directionOnlyStaticLocEst(u,lRx,algorithm,params1,params2,
 %                      a target from at least two sensors, estimate the
 %                      Cartesian location of the target in 2D or 3D.
 %
-%INPUTS:  u A 2XnumMeas or 3XnumMeas set of 2D or 3D unit direction vectors 
-%           in a global coordinate system pointing from each sensor to the
-%           target in 2D or 3D. numMeas>=2.
-%       lRx The 2XnumMeas or 3XnumMeas set of Cartesian locations of the
-%           sensors producing the direction vector measurements.
+%INPUTS: u A 2XnumMeas or 3XnumMeas set of 2D or 3D unit direction vectors 
+%          in a global coordinate system pointing from each sensor to the
+%          target in 2D or 3D. numMeas>=2.
+%      lRx The 2XnumMeas or 3XnumMeas set of Cartesian locations of the
+%          sensors producing the direction vector measurements.
 % algorithm A parameter that specifies how the location of the target is to
-%           be estimated. The algorithm chosen specifies what the
-%           parameters params1, params2, and params3 are. Possible values
-%           are
-%           0 (The default if omitted or an empty ,matrix is passed) Use
-%             the suboptimal least-squares triangulation algorithm. This
-%             may be followed by iterations of an explicit solution to the
-%             maximum likelihood conditioned on the distances from each
-%             receiver to the target being known.
-%           1 Use the suboptimal least-squares triangulation algorithm to
-%             get an initial estimate, which is provided to a quasi-Newton
-%             method to locally maximize the likelihood.
-%           2 Use an explicit solution given the distances from each
-%             receiver to the target.
-%           3 Use a quasi-Newton method to maximize the likelihood given an
-%             initial estimate.
-%   params1 The first set of parameters for the selected algorithm. The
-%           meaning depends on the value of algorithm. params1 has the
-%           following meaning for the following values of algorithm:
-%            algorithm=0,1: params1 is the parameters for the suboptimal
-%              least-squares triangulation algorithm. params1 is a
-%              structure that can contain elements with the following names
-%              and meanings:
-%              'W' If weight matrices are to be used in the suboptimal
-%                  least squares algorithm (not recommended), then W is a
-%                  2X2XnumMeas (for 2D) or 3X3XnumMeas (for 3D) set of the
-%                  weights for use in the cost function. If this parameter
-%                  is omitted or an empty matrix is passed, the unweighted
-%                  algorithm is used (W is all identity matrices).
-%              useConstAlg A boolean parameter indicating whether a
-%                  constrained version of the suboptimal least squares
-%                  algorithm should be used. Generally, the simpler,
-%                  unconstrained algorithm suffices. The constraints make
-%                  sure that the estimate is chosen such that all range
-%                  estimates used in the algorithm from the sensors to the
-%                  target are positive. The default if omitted or an empty
-%                  matrix is passed is false.
+%          be estimated. The algorithm chosen specifies what the
+%          parameters params1, params2, and params3 are. Possible values
+%          are:
+%          0 (The default if omitted or an empty ,matrix is passed) Use
+%            the suboptimal least-squares triangulation algorithm. This
+%            may be followed by iterations of an explicit solution to the
+%            maximum likelihood conditioned on the distances from each
+%            receiver to the target being known.
+%          1 Use the suboptimal least-squares triangulation algorithm to
+%            get an initial estimate, which is provided to a quasi-Newton
+%            method to locally maximize the likelihood.
+%          2 Use an explicit solution given the distances from each
+%            receiver to the target.
+%          3 Use a quasi-Newton method to maximize the likelihood given an
+%            initial estimate.
+%  params1 The first set of parameters for the selected algorithm. The
+%          meaning depends on the value of algorithm. params1 has the
+%          following meaning for the following values of algorithm:
+%           algorithm=0,1: params1 is the parameters for the suboptimal
+%             least-squares triangulation algorithm. params1 is a
+%             structure that can contain elements with the following names
+%             and meanings:
+%             'W' If weight matrices are to be used in the suboptimal
+%                 least squares algorithm (not recommended), then W is a
+%                 2X2XnumMeas (for 2D) or 3X3XnumMeas (for 3D) set of the
+%                 weights for use in the cost function. If this parameter
+%                 is omitted or an empty matrix is passed, the unweighted
+%                 algorithm is used (W is all identity matrices).
+%             useConstAlg A boolean parameter indicating whether a
+%                 constrained version of the suboptimal least squares
+%                 algorithm should be used. Generally, the simpler,
+%                 unconstrained algorithm suffices. The constraints make
+%                 sure that the estimate is chosen such that all range
+%                 estimates used in the algorithm from the sensors to the
+%                 target are positive. The default if omitted or an empty
+%                 matrix is passed is false.
 %           algorithm=2: In this instance, params1 is the parameters for
-%                  the explicit solution given the ranges from the sensors
-%                  to the target. The element 'r' of the structure is not
-%                  optional. Possible elements are
-%                  'r' A numMeasX1 or 1XnumMeas vector of the ranges from
-%                      the target to each sensor (for each measurement).
-%                  'RInv' A 2X2XnumMeas (for 2D) or 3X3XnumMeas (for 3D)
-%                      set of inverse covariance matrices of the
-%                      measurements. The matrices can be singular. If this
-%                      parameter is omitted or an empty matrix is passed,
-%                      then identity matrices shall be used.
-%                  'numIter' The number of iterations of the algorithm to
-%                      perform. Each iteration after the first is the same
-%                      algorithm, except it is initialized using the range
-%                      estimates computed from the previous estimate. The
-%                      default if this parameter is omitted or an empty
-%                      matrix is passed is 1. numIter>=0.
-%          algorithm=3: In this instance, params1 is a structure of the
-%                  parameters for a quasi-Newton method to maximize the
-%                  likelihood. The initial estimate 'tInit' is required.
-%                  Possible values are:
-%                  'tInit' The 2X1 or 3X1 initial estimate of the target
-%                      location.
-%                  'RInv' A 2X2XnumMeas (for 2D) or 3X3XnumMeas (for 3D)
-%                      set of inverse covariance matrices of the
-%                      measurements. The matrices can be singular. If this
-%                      parameter is omitted or an empty matrix is passed,
-%                      then identity matrices shall be used. 
-%                  'epsilon','deltaTestDist','delta','lineSearchParams',
-%                   'scaleD','maxIter' -All of these parameters correspond
-%                      to the same named inputs of the function
-%                      quasiNetwonBFGS. See the comments to the function
-%                      quasiNetwonBFGS for more details.
-%   params2 The second set of parameters for the selected algorithm. The
-%           meaning depends on the value of algorithm. params2 has the
-%           following meaning for the following values of algorithm:
-%           algorithm=0 This is the same as params1 for algorithm=2, except
-%                   no initial estimate 'r' will be used as the one
-%                   provided by the suboptimal least squares algorithm will
-%                   be used.
-%           algorithm=1 This is the same as params1 for algorithm=2, except
-%                   'tInit' is not used as the initial target location
-%                   estimate will be obtained using the suboptimal least
-%                   squares algorithm.
-%           algorithm=2,3 params2 is not used, does not need to be
-%                   provided, and will be ignored if provided.
-%   params3 These parameters are only used if algorithms 0 or 1 are chosen
-%           AND params1.useConstAlg is true. params3 is a structure holding
-%           the parameters for the function convexQuadProg. Possible
-%           entries are 'epsVal', and 'maxIter' and are as described in the
-%           comments to convexQuadProg.
+%                 the explicit solution given the ranges from the sensors
+%                 to the target. The element 'r' of the structure is not
+%                 optional. Possible elements are
+%                 'r' A numMeasX1 or 1XnumMeas vector of the ranges from
+%                     the target to each sensor (for each measurement).
+%                 'RInv' A 2X2XnumMeas (for 2D) or 3X3XnumMeas (for 3D)
+%                     set of inverse covariance matrices of the
+%                     measurements. The matrices can be singular. If this
+%                     parameter is omitted or an empty matrix is passed,
+%                     then identity matrices shall be used.
+%                 'numIter' The number of iterations of the algorithm to
+%                     perform. Each iteration after the first is the same
+%                     algorithm, except it is initialized using the range
+%                     estimates computed from the previous estimate. The
+%                     default if this parameter is omitted or an empty
+%                     matrix is passed is 1. numIter>=0.
+%           algorithm=3: In this instance, params1 is a structure of the
+%                 parameters for a quasi-Newton method to maximize the
+%                 likelihood. The initial estimate 'tInit' is required.
+%                 Possible values are:
+%                 'tInit' The 2X1 or 3X1 initial estimate of the target
+%                     location.
+%                 'RInv' A 2X2XnumMeas (for 2D) or 3X3XnumMeas (for 3D)
+%                     set of inverse covariance matrices of the
+%                     measurements. The matrices can be singular. If this
+%                     parameter is omitted or an empty matrix is passed,
+%                     then identity matrices shall be used. 
+%                 'epsilon','deltaTestDist','delta','lineSearchParams',
+%                  'scaleD','maxIter' -All of these parameters correspond
+%                     to the same named inputs of the function
+%                     quasiNetwonBFGS. See the comments to the function
+%                     quasiNetwonBFGS for more details.
+%  params2 The second set of parameters for the selected algorithm. The
+%          meaning depends on the value of algorithm. params2 has the
+%          following meaning for the following values of algorithm:
+%          algorithm=0 This is the same as params1 for algorithm=2, except
+%                  no initial estimate 'r' will be used as the one
+%                  provided by the suboptimal least squares algorithm will
+%                  be used.
+%          algorithm=1 This is the same as params1 for algorithm=2, except
+%                  'tInit' is not used as the initial target location
+%                  estimate will be obtained using the suboptimal least
+%                  squares algorithm.
+%          algorithm=2,3 params2 is not used, does not need to be
+%                  provided, and will be ignored if provided.
+%  params3 These parameters are only used if algorithms 0 or 1 are chosen
+%          AND params1.useConstAlg is true. params3 is a structure holding
+%          the parameters for the function convexQuadProg. Possible
+%          entries are 'epsVal', and 'maxIter' and are as described in the
+%          comments to convexQuadProg.
 %
 %OUTPUTS: t The 2X1 or 3X1 estimate of the target location.
 %  exitCode A 2X1 vector indicating how the algorithm terminated. When
@@ -622,4 +622,3 @@ end
 %SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY THE NAVAL
 %RESEARCH LABORATORY FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE ACTIONS
 %OF RECIPIENT IN THE USE OF THE SOFTWARE.
-

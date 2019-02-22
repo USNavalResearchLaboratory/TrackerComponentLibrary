@@ -4,12 +4,11 @@ function [intEst,totalError,exitCode]=integral1DAdaptive(f,bounds,n,algorithm,c1
 %                 integration is based on the use of embedded cubature
 %                 points, which can use weighting functions, if necessary.
 %                 The integral function built into Matlab does not support
-%                 the use of high-order embedded cubature points nor does
-%                 it support weighting functions. This function evaluates
-%                 the internal from bounds(1) to bounds(2) of w(x)*f(x) dx
-%                 where the bounds are finite and w(x) is a weighting
-%                 function selected by the algorithm option (default
-%                 w(x)=1).
+%                 the use of high-order embedded cubature points. This
+%                 function evaluates the integral from bounds(1) to
+%                 bounds(2) of w(x)*f(x) dx where the bounds are finite and
+%                 w(x) is a weighting function selected by the algorithm
+%                 option (default w(x)=1).
 %
 %INPUTS: f The handle to the function. f(x) can take a vector of points and
 %          return the scalar value of the function at all of the points.
@@ -50,7 +49,7 @@ function [intEst,totalError,exitCode]=integral1DAdaptive(f,bounds,n,algorithm,c1
 %               using the points in xiK
 %   RelTol The maximum relative error tolerance allowed. If omitted or an
 %          empty matrix is passed, the default value of 1e-8 is used.
-%    AbsTol The absolute error tolerance allowed. If omitted or an empty
+%   AbsTol The absolute error tolerance allowed. If omitted or an empty
 %          matrix is passed, the default value of 1e-11 is used.
 % maxSearchReg The algorithm works by splitting space into increasingly
 %          small regions. This optional parameter is the maximum
@@ -210,7 +209,7 @@ end
 %Next, we check whether the convergence criterion is fulfilled and if not,
 %start dividing the search region.
 while(1)
-    %Determine whether either of the the error bounds has been met.
+    %Determine whether either of the error bounds has been met.
     if(totalError<AbsTol||totalError<RelTol*abs(intEst))
         exitCode=0;
         break;

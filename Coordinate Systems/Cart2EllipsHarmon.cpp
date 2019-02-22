@@ -7,14 +7,15 @@
 *                   that are to be transformed into ellipsoidal
 *                   coordinates. Each columns of cartPoints is of the
 *                   format [x;y;z].
-*        E          The linear eccentricity defining the ellipsoidal
+*                 E The linear eccentricity defining the ellipsoidal
 *                   harmonic coordinate system. If this parameter is
 *                   omitted, then the linear eccentricity of the WGS84
 *                   reference ellipsoid is used.
 *
 *OUTPUTS: pointsHarmon A matrix of the converted points. Each column of the
-*                   matrix has the format [reduced latitude;longitude;semiminor axis],
-*                   with reduced latitude and longitude given in radians.
+*                   matrix has the format
+ *                  [reduced latitude;longitude;semiminor axis], with
+*                   reduced latitude and longitude given in radians.
 *
 *The ellipsoidal harmonic coordinate system is described in Chapter 1.15 of
 *[1]. Note that some folks use the complement of the reduced latitude in

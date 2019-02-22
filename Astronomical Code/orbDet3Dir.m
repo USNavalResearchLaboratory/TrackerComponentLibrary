@@ -1,22 +1,22 @@
 function [knownSols,targetStates,exitFlag]=orbDet3Dir(numHalfRevs,obsLocs,unitDirVecs,t12,t13,solSel,findAll,knownSols,rho13EstVec,GM)
-%%ORBDET3DIR  Determine an orbital (ballistic) trajectory using 3 direction
-%             vectors, the number of half-orbits of the satellite between
-%             the first and third vectors, the time differences between the
-%             first and second and between the first and third vectors,
-%             and the location of the observer at each of the times. A
-%             simple Keplerian dynamic model is assumes with the
-%             mass-producing body at the origin. Multiple solutions to the
-%             problem can exist and it is possible that no solutions might
-%             exist. Additional solutions are obtained by calling the
-%             function again with a new initialization and passing the
-%             known solutions as a parameter, or by using the findAll
-%             option for a particular set of numHalfRevs and solSel.
-%             Not all problems have a solution. Invalid solutions 
-%             (those with negative ranges from the observer) can be 
-%             produced and must be passed as known solution back to the
-%             function when searching for additional valid solutions. Not
-%             all solutions will necessarily be found. Light-time is not
-%             taken into account.
+%%ORBDET3DIR Determine an orbital (ballistic) trajectory using 3 direction
+%            vectors, the number of half-orbits of the satellite between
+%            the first and third vectors, the time differences between the
+%            first and second and between the first and third vectors,
+%            and the location of the observer at each of the times. A
+%            simple Keplerian dynamic model is assumes with the
+%            mass-producing body at the origin. Multiple solutions to the
+%            problem can exist and it is possible that no solutions might
+%            exist. Additional solutions are obtained by calling the
+%            function again with a new initialization and passing the
+%            known solutions as a parameter, or by using the findAll
+%            option for a particular set of numHalfRevs and solSel.
+%            Not all problems have a solution. Invalid solutions 
+%            (those with negative ranges from the observer) can be 
+%            produced and must be passed as known solution back to the
+%            function when searching for additional valid solutions. Not
+%            all solutions will necessarily be found. Light-time is not
+%            taken into account.
 %
 %INPUTS: numHalfRevs The number >=0 of half orbital revolutions between the
 %                    first and third direction observation.
@@ -54,13 +54,13 @@ function [knownSols,targetStates,exitFlag]=orbDet3Dir(numHalfRevs,obsLocs,unitDi
 %                    three times in order. If there are no known solutions,
 %                    then this parameter can be omitted or an empty matrix
 %                    can be passed.
-%       rho13EstVec  A 2X1 vector holding initial estimates of the
+%        rho13EstVec A 2X1 vector holding initial estimates of the
 %                    distances of the target at times 1 and 3. This affects
 %                    to which solution the algorithm converges. If this
 %                    parameter is omitted or an empty matrix is passed, a
 %                    default initial guess based on the values of obsLocs
 %                    is used.
-%               GM   An optional value of the universal gravitational
+%                 GM An optional value of the universal gravitational
 %                    constant times the mass of the Earth. If omitted, the
 %                    value Constants.WGS84GMWithAtmosphere is used. The
 %                    units are usually m^3/sec^2.

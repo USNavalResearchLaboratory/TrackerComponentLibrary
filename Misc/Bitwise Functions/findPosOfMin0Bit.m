@@ -2,15 +2,15 @@ function bitPos=findPosOfMin0Bit(n)
 %%FINDPOSOFMIN1BIT Given a positive integer, determine the position of the
 %                  least significant zero bit.
 %
-%INPUTS: n  An integer or a matrix of integers. The integers do not have to
-%           be of type uint64 or int32; they can be doubles. However, using
-%           a double that is larger than the maximum representable integer
-%           without a loss of precision (usually 2^53, determined by the
-%           number of bits in the mantissa of the double).
+%INPUTS: n An integer or a matrix of integers. The integers do not have to
+%          be of type uint64 or int32; they can be doubles. However, using
+%          a double that is larger than the maximum representable integer
+%          without a loss of precision (usually 2^53, determined by the
+%          number of bits in the mantissa of the double).
 %
 %OUTPUTS: bitPos The position(s) of the least significant 0 in the binary
-%            representation of each of the integers in n. Counting starts
-%            at 1.
+%                representation of each of the integers in n. Counting
+%                starts at 1.
 %
 %This just keeps shifting the numbers (dividng by 2) until twice the last
 %number divided by 2 (integer division) equals the last number.

@@ -2,14 +2,13 @@ function xDup=dupEls(x,numTimes)
 %%DUPELS Return a vector with the elements of the vector x duplicated 
 %        numTimes.
 %
-%INPUTS: x        A vectors whose elements are to be duplicated.
-%        numTimes The number of times the elements in x are to be
-%                 duplicated.
+%INPUTS: x A vectors whose elements are to be duplicated.
+% numTimes The number of times the elements in x are to be duplicated.
 %
-%OUTPUTS: xDup    A vector the same orientation (row or column vector) as x
-%                 where the elements of x have been duplicated numTimes.
-%                 For example, if x=[1;2;3], then dupEls(x,3) returns
-%                 [1;1;1;2;2;2;3;3;3].
+%OUTPUTS: xDup A vector the same orientation (row or column vector) as x
+%              where the elements of x have been duplicated numTimes. For
+%              example, if x=[1;2;3], then dupEls(x,3) returns
+%              [1;1;1;2;2;2;3;3;3].
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

@@ -44,12 +44,19 @@ function JPred=PCRLBPredAdd(JPrior,xPrior,PPrior,Q,param5,xi,w)
 %October 2013 David F.Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+    xDim=size(JPrior,1);
+
     if(isa(param5,'function_handle'))
         if(isequal(zeros(xDim,xDim),PPrior))
             F=param5(xPrior);
             constTransMat=true;
         else
             FJacob=param5;
+            
+            if(nargin<8||isempty(xi))
+                [xi,w]=fifthOrderCubPoints(xDim);
+            end
+            
             constTransMat=false;
         end
     else
@@ -73,6 +80,8 @@ function JPred=PCRLBPredAdd(JPrior,xPrior,PPrior,Q,param5,xi,w)
         end
     end
     JPred=QInv-D12'*pinv(JPrior+D11)*D12;
+    %Ensure symmetry is preserved.
+    JPred=(JPred+JPred')/2;
 end
 
 %LICENSE:

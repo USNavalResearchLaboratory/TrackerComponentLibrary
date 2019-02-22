@@ -266,7 +266,7 @@ for curObs=3:numObs
         %Brute-force hypothesis formation and likelihood matrix
         %computation. A is the likelihood matrix.
         measJacob=@(z)calcSpherConvJacob(z,0);
-        [A,xHyp,PHyp]=makeStandardCartOnlyLRMatHyps(x,S,zCart,SRCart,PD,lambda,[],[],zCur,measJacob);
+        [A,xHyp,PHyp]=makeStandardCartOnlyLRMatHyps(x,S,zCart,SRCart,[],PD,lambda,[],[],zCur,measJacob);
         
         %Perform the single scan assignment
         [xPost,PPost]=singleScanUpdate(xHyp,PHyp,A,algSel1(curMethod),algSel2(curMethod));

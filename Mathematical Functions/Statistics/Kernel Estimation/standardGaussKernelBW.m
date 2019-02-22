@@ -45,7 +45,7 @@ function H=standardGaussKernelBW(xi,method,spherData)
 %
 %The methods in Chapter 3 of [1] are for a scalar distribution. We are able
 %to apply them to a multivariate distribution by pre-multiplying the
-%multivaraite distribution by the inverse of the sample standard deviation
+%multivariate distribution by the inverse of the sample standard deviation
 %of the points. If the samples were from a normal distribution (the
 %approximation used here), then the distributions for all of the dimensions
 %would have been made independent by the rotation and we can thus use the
@@ -87,14 +87,14 @@ n=size(xi,2);%Number of points
 
 switch(method)
     case 0%Use Equation 3.30 and 3.28 in [1].
-        sigma2=interquartileRange(xi,[],2)/(GaussianD.invCDF(0.75)-GaussianD.invCDF(0.25));
+        sigma2=interquartileRange(xi,2)/(GaussianD.invCDF(0.75)-GaussianD.invCDF(0.25));
         sigma=min([sigma1,sigma2],[],2);
         h=(4/3)^(1/5)*sigma*n^(-1/5);
     case 1%Use Equation 3.28 in [1].
         h=(4/3)^(1/5)*sigma1*n^(-1/5);
     case 2%Use the interquartile range (scaled appropriately) instead of
           %the standard deviation in [1]. This is Equation 3.29.
-        sigma=interquartileRange(xi,[],2)/(GaussianD.invCDF(0.75)-GaussianD.invCDF(0.25));
+        sigma=interquartileRange(xi,2)/(GaussianD.invCDF(0.75)-GaussianD.invCDF(0.25));
         h=(4/3)^(1/5)*sigma*n^(-1/5);
     otherwise
         error('Unknown method specified')

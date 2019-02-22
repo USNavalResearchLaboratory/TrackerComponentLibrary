@@ -5,21 +5,20 @@ function combo=unrankCombination(rank,n,m,firstElMostSig)
 %                   where the first element of combo is the least
 %                   significant, unless otherwise specified.
 %
-%INPUTS:    rank    The order of the desired combination in lexicographic
-%                   order. Note that 0<=rank<binomial(n,k).
-%           n       The number of items from which m items are chosen for
-%                   the ranked combinations.
-%           m       The number of items chosen.
-%    firstElMostSig An optional parameter specifying whether the first
-%                   element is the most or least significant. The default
-%                   if omitted or an empty matrix is passed is false (the
-%                   first element is the least significant).
+%INPUTS: rank The order of the desired combination in lexicographic order.
+%             Note that 0<=rank<binomial(n,k).
+%           n The number of items from which m items are chosen for the
+%             ranked combinations.
+%           m The number of items chosen.
+% firstElMostSig An optional parameter specifying whether the first element
+%             is the most or least significant. The default if omitted or
+%             an empty matrix is passed is false (the first element is the
+%             least significant).
 %
-%OUTPUTS:   combo   An mX1 vector containing the combination with values in
-%                   INCREASING order. The lowest item is indexed zero. If a
-%                   rank equal to or greater than the total number of
-%                   unique combinations is given, then an empty matrix is
-%                   returned.
+%OUTPUTS: combo An mX1 vector containing the combination with values in
+%               INCREASING order. The lowest item is indexed zero. If a
+%               rank equal to or greater than the total number of unique
+%               combinations is given, then an empty matrix is returned.
 %
 %The rank represents the  combinatorial number system of degree m,
 %where m is the length of the vector comb. The system is described in

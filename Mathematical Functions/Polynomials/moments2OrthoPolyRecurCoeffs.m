@@ -30,7 +30,7 @@ function [a,b,c]=moments2OrthoPolyRecurCoeffs(mu,format)
 %OUTPUTS: a, b, and c The parameters for the 3-term recursion, the format
 %                     of which is selected using the format output.
 %
-%This function implements the transfomration that is given in Section 4 of
+%This function implements the transformation that is given in Section 4 of
 %[1].
 %
 %EXAMPLE:

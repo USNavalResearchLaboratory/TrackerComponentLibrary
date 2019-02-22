@@ -1,4 +1,4 @@
-/**GCRS2MOD Rotate a vector from the the geocentric celestial reference system
+/**GCRS2MOD Rotate a vector from the geocentric celestial reference system
  *          (GCRS) to the mean of date (MOD) coordinate system, which is
  *          the coordinate system using the mean equinox and
  *          ecliptic of date, IAU 2006/2000A model. The transformation is
@@ -18,7 +18,7 @@
  *       rotMat The 3X3 rotation matrix such that
  *              xRot(:,i)=rotMat*xVec(:,i).
  *
- *This uses functions in the the International Astronomical Union's (IAU)
+ *This uses functions in the International Astronomical Union's (IAU)
  *Standard's of Fundamental Astronomy (SOFA) library to obtain the product
  *of the precession rotation matrix and the frame rotation bias matrix. One
  *goes from GCRS to mean of date by applying a frame bias and then

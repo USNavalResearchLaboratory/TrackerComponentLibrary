@@ -4,26 +4,25 @@ function val=convertTimeUnits(val,unitOrig,unitDest)
 %                  convert actual dates in various timescales, look at the
 %                  functions in ./Coordinate Systems/Time .
 %
-%INPUTS: val           The matrix or vector of values that are to be
-%                      converted.
-%   unitOrig, unitDes  Two character strings indicating the units of val
-%                      and the units into which it is to be converted. The
-%                      possible values are:
-%                      'wk'   weeks         'd'   days
-%                      'h'    hour          'min' minutes
-%                      'Ys'   yottaseconds  'Zs'  zettaseconds 
-%                      'Es'   exaseconds    'Ps'  petaseconds 
-%                      'Ts'   tetraseconds  'Gs'  gigaseconds 
-%                      'Ms    megaseconds   'ks'  kiloseconds 
-%                      'hs'   hectoseconds  'das' decaseconds 
-%                      's'    seconds       'ds'  deciseconds
-%                      'cs'   centiseconds  'ms'  milliseconds
-%                      'mus'  microseconds  'ns'  nanoseconds
-%                      'ps'   picoseconds   'fs'  femtoseconds
-%                      'as'   attoseconds   'zs'  zeptoseconds
-%                      'ys    yoctoseconds  'fn'  fortnights (14 days)
+%INPUTS: val The matrix or vector of values that are to be converted.
+% unitOrig, unitDes Two character strings indicating the units of val
+%            and the units into which it is to be converted. The possible
+%            values are:
+%            'wk'   weeks         'd'   days
+%            'h'    hour          'min' minutes
+%            'Ys'   yottaseconds  'Zs'  zettaseconds 
+%            'Es'   exaseconds    'Ps'  petaseconds 
+%            'Ts'   tetraseconds  'Gs'  gigaseconds 
+%            'Ms    megaseconds   'ks'  kiloseconds 
+%            'hs'   hectoseconds  'das' decaseconds 
+%            's'    seconds       'ds'  deciseconds
+%            'cs'   centiseconds  'ms'  milliseconds
+%            'mus'  microseconds  'ns'  nanoseconds
+%            'ps'   picoseconds   'fs'  femtoseconds
+%            'as'   attoseconds   'zs'  zeptoseconds
+%            'ys    yoctoseconds  'fn'  fortnights (14 days)
 %
-%OUTPUTS: val  The values converted into the desired coordinate system.
+%OUTPUTS: val The values converted into the desired coordinate system.
 %
 %%For simplicity, all units are first converted to seconds, and then to the
 %desired set of units.

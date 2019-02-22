@@ -44,6 +44,8 @@ else
     D12=-F'/Q;
     J=QInv-D12'*inv(JPost+D11)*D12;
 end
+%Ensure symmetry is preserved.
+J=(J+J')/2;
 end
 
 %LICENSE:

@@ -34,7 +34,7 @@ function LAST=TT2LAST(Jul1,Jul2,rObsITRS,version,deltaT,xpyp)
 %OUTPUTS: LAST The local apparent sidereal time in radians.
 %
 %The relation between LMST and Greenwhich apparent sidereal time (GAST) is
-%documented in [1]. LAST is GAST added to the the East longitude of the
+%documented in [1]. LAST is GAST added to the East longitude of the
 %observer in the TIRS.
 %
 %REFERENCES:

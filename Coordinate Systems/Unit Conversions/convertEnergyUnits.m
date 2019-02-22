@@ -3,46 +3,45 @@ function val=convertEnergyUnits(val,unitOrig,unitDest)
 %                    another. Note that multiple definitions for BTUs cand
 %                    calories exist.
 %
-%INPUTS: val           The matrix or vector of values that are to be
-%                      converted.
-%   unitOrig, unitDes  Two character strings indicating the units of val
-%                      and the units into which it is to be converted. The
-%                      possible values are:
-%                      'cal'    thermochemical calorie according to ISO
-%                               31-4 
-%                      'calIS'  calorie according to the International
-%                               Steam Table of 1956
-%                      'Cal'    a kilocalorie using the ISO 31-4 definition
-%                      'CalIS'  a kilocalorie using the International Steam
-%                               Table definition
-%                      'kcal'   synonym for Cal
-%                      'kcalIS' synonym for CalIS
-%                      'BTU'    British Thermal Unit according to ISO 31-4 
-%                      'BTUPar' British Thermal Unit according to the
-%                               British parliament
-%                      'BTUIS'  British thermal unit according to the
-%                               International Steam Table of 1956 (In the
-%                               NIST references).
-%                      'eV'     electron Volt
-%                      'erg'    erg (g*cm^2/s^2)
-%                      'tTNT'   ton of TNT (NIST definition)
-%                      'ktTNT'  kiloton of TNT
-%                      'MtTNT'  Megaton of TNT
-%                      'therm'   Therm as defined for the United States
-%                      'thermEU' Therm as defined in the European Union
-%                      'kWh'  kiloWatt-hour 'Wh' Watt-hour
-%                      'Ws'   Watt-second, synonym for Joule.
-%                      'YJ'   yottaJoules  'ZJ'  zettaJoules 
-%                      'EJ'   exaJoules    'PJ'  petaJoules 
-%                      'TJ'   tetraJoules  'GJ'  gigaJoules 
-%                      'MJ    megaJoules   'kJ'  kiloJoules 
-%                      'hJ'   hectoJoules  'daJ' decaJoules 
-%                      'J'    Joules       'dJ'  deciJoules
-%                      'cJ'   centiJoules  'mJ'  milliJoules
-%                      'muJ'  microJoules  'nJ'  nanoJoules
-%                      'pJ'   picoJoules   'fJ'  femtoJoules
-%                      'aJ'   attoJoules   'zJ'  zeptoJoules
-%                      'yJ    yoctoJoules
+%INPUTS: val The matrix or vector of values that are to be converted.
+%   unitOrig, unitDes Two character strings indicating the units of val and
+%            the units into which it is to be converted. The possible
+%            values are:
+%            'cal'     thermochemical calorie according to ISO
+%                      31-4 
+%            'calIS'   calorie according to the International
+%                      Steam Table of 1956
+%            'Cal'     a kilocalorie using the ISO 31-4 definition
+%            'CalIS'   a kilocalorie using the International Steam
+%                      Table definition
+%            'kcal'    synonym for Cal
+%            'kcalIS'  synonym for CalIS
+%            'BTU'     British Thermal Unit according to ISO 31-4 
+%            'BTUPar'  British Thermal Unit according to the
+%                      British parliament
+%            'BTUIS'   British thermal unit according to the
+%                      International Steam Table of 1956 (In the
+%                      NIST references).
+%            'eV'      electron Volt
+%            'erg'     erg (g*cm^2/s^2)
+%            'tTNT'    ton of TNT (NIST definition)
+%            'ktTNT'   kiloton of TNT
+%            'MtTNT'   Megaton of TNT
+%            'therm'   Therm as defined for the United States
+%            'thermEU' Therm as defined in the European Union
+%            'kWh'  kiloWatt-hour 'Wh' Watt-hour
+%            'Ws'   Watt-second, synonym for Joule.
+%            'YJ'   yottaJoules  'ZJ'  zettaJoules 
+%            'EJ'   exaJoules    'PJ'  petaJoules 
+%            'TJ'   tetraJoules  'GJ'  gigaJoules 
+%            'MJ    megaJoules   'kJ'  kiloJoules 
+%            'hJ'   hectoJoules  'daJ' decaJoules 
+%            'J'    Joules       'dJ'  deciJoules
+%            'cJ'   centiJoules  'mJ'  milliJoules
+%            'muJ'  microJoules  'nJ'  nanoJoules
+%            'pJ'   picoJoules   'fJ'  femtoJoules
+%            'aJ'   attoJoules   'zJ'  zeptoJoules
+%            'yJ    yoctoJoules
 %
 %OUTPUTS: val  The values converted into the desired coordinate system.
 %

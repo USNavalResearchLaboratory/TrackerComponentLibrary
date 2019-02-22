@@ -1,46 +1,45 @@
 function unzippedData=readZipArchive(path2File,param2)
-%%READZIPARCHIVE  Read and decompress a single gzip compressed file or
-%                 one or more files from a zip archive into memory without
-%                 saving them to disk. Gzip archives only store a single
-%                 file, zip archives store multiple files. When reading
-%                 multiple files from a zip, one has the option of omitting 
-%                 invisible files. Note that decompressing a large file 
-%                 into memory might cause the Java virtual machine (JVM) to
-%                 run out of memory (and thus, the decompression fails), as
-%                 its memory usage is capped in Matlab. The memory for the
-%                 JVM must be a few times larger than the size of the file
-%                 being decompressed. The memory that Matlab allows for the
-%                 JVM is independent of the amount of RAM in the computer.
-%                 One might have to increase the memory allotment for the
-%                 JVM to extract large files. This is done via
-%                 Preferences->General->Java Heap Memory.
+%%READZIPARCHIVE Read and decompress a single gzip compressed file or one
+%                or more files from a zip archive into memory without
+%                saving them to disk. Gzip archives only store a single
+%                file, zip archives store multiple files. When reading
+%                multiple files from a zip, one has the option of omitting 
+%                invisible files. Note that decompressing a large file into
+%                memory might cause the Java virtual machine (JVM) to run
+%                out of memory (and thus, the decompression fails), as
+%                its memory usage is capped in Matlab. The memory for the
+%                JVM must be a few times larger than the size of the file
+%                being decompressed. The memory that Matlab allows for the
+%                JVM is independent of the amount of RAM in the computer.
+%                One might have to increase the memory allotment for the
+%                JVM to extract large files. This is done via
+%                Preferences->General->Java Heap Memory.
 %                 
-%INPUTS:  path2File  A Matlab character string representing the path to the
-%                    zip archive. For example './text.zip'. The path should
-%                    be OS X/UNIX-style with '/' to indicate folders, not '\'.
-%                    If the file extension is .gz, then it is assumed to be
-%                    a gzip file. Otherwise, it is assumed to be a zip
-%                    archive.
-%         param2     An optional parameter that is only relevant when
-%                    decoding a zip file, not a gzip file. If this is
-%                    omitted, then all of the files in the archive are
-%                    decoded and invisibles files are omitted. If param2 is
-%                    a character string, then it is fileName:
-%                    An optional string representing the name of a single
-%                    file in the archive that is to be decompressed. This
-%                    must be the full path within the zip file. For
-%                    example, if someone compressed test.txt with other
-%                    files in the folder test_folder, then the path to that
-%                    file would be 'test_folder/test.txt'. If fileName is
-%                    provided but is not in the archive, then an error will
-%                    occur.
-%                    Otherwise, one can set param2 to a boolean value
-%                    decodeInvis, whereby all files are decoded such that:
-%                    If this is true, then invisible files are also
-%                    decoded. if this is false, then invisible files are
-%                    not decoded. The default if omitted is false. See the
-%                    function fileIsInvisible for more on how files are
-%                    determined invisible.
+%INPUTS: path2File A Matlab character string representing the path to the
+%                  zip archive. For example './text.zip'. The path should
+%                  be OS X/UNIX-style with '/' to indicate folders, not '\'.
+%                  If the file extension is .gz, then it is assumed to be
+%                  a gzip file. Otherwise, it is assumed to be a zip
+%                  archive.
+%           param2 An optional parameter that is only relevant when
+%                  decoding a zip file, not a gzip file. If this is
+%                  omitted, then all of the files in the archive are
+%                  decoded and invisibles files are omitted. If param2 is
+%                  a character string, then it is
+%                  fileName: An optional string representing the name of a
+%                  single file in the archive that is to be decompressed.
+%                  This must be the full path within the zip file. For
+%                  example, if someone compressed test.txt with other files
+%                  in the folder test_folder, then the path to that file
+%                  would be 'test_folder/test.txt'. If fileName is provided
+%                  but is not in the archive, then an error will occur.
+%                  Otherwise, one can set param2 to a boolean value
+%                  decodeInvis, whereby all files are decoded such that
+%                  If this is true, then invisible files are also decoded,
+%                  and if this is false, then invisible files are not
+%                  decoded. The default if omitted is false. See the
+%                  function fileIsInvisible for more on how files are
+%                  determined invisible.
 %
 %OUTPUTS: unzippedData A numFiles cell array containing the unzipped
 %                      data and the names of the unzipped files.
@@ -202,4 +201,3 @@ end
 %SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY THE NAVAL
 %RESEARCH LABORATORY FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE ACTIONS
 %OF RECIPIENT IN THE USE OF THE SOFTWARE.
-

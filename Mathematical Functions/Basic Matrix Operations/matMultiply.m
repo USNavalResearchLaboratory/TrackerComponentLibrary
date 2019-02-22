@@ -4,16 +4,16 @@ function C=matMultiply(A,B,typename)
 %            addition and multiplication operations can use this for
 %            multiplication.
 %
-%INPUTS:       A  An mXr matrix. This must be of a type where the size
-%                 function works.
-%              B  An rXn matrix. This must be of a type where the size
-%                 function works.
-%        typename An optional string for how space for the output C should
-%                 be allocated. The string is used in feval(typename,m,n);
-%                 For example, if C should be an instance of a class called
-%                 Interval, then typename='Interval' to call the
-%                 constructor of the class. If omitted or an empty matrix
-%                 is passed, then C is allocated as zeros(m,n).
+%INPUTS: A An mXr matrix. This must be of a type where the size function
+%          works.
+%        B An rXn matrix. This must be of a type where the size function
+%          works.
+% typename An optional string for how space for the output C should be
+%          allocated. The string is used in feval(typename,m,n); For
+%          example, if C should be an instance of a class called Interval,
+%          then typename='Interval' to call the constructor of the class.
+%          If omitted or an empty matrix is passed, then C is allocated as
+%          zeros(m,n).
 %
 %OUTPUTS: C The mXn-sized product of matrices A and B.
 %

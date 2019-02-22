@@ -1,4 +1,4 @@
-function [mu, P]=calcMixtureMoments(xi,w,PHyp,muHyp,diffTransFun,numMergeDims)
+function [mu,P]=calcMixtureMoments(xi,w,PHyp,muHyp,diffTransFun,numMergeDims)
 %%CALCMIXTUREMOMENTS Given a set of sample vectors xi and associated
 %                    positive weights w, calculate the first two moments of
 %                    the mixture. Those are, the mean mu and the covariance
@@ -94,7 +94,7 @@ end
 %Make sure that w is a column vector
 w=w(:);
 
-mu=sum(bsxfun(@times,xi(1:numMergeDims,:),w'),2);%The mean
+mu=sum(bsxfun(@times,xi(1:numMergeDims,:),w.'),2);%The mean
 
 if(nargout>1)
     if(~isempty(muHyp))

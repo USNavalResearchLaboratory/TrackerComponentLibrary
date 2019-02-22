@@ -1,4 +1,4 @@
-function [xi,w]=quadraturePoints1D(n,algorithm,c1,c2)
+function [xi,w]=quadraturePoints1D(n,algorithm,c1)
 %%QUADRATUREPOINTS1D Obtain quadrature points and weights to efficiently
 %           numerically evaluate 1D integrals involving various weighting
 %           functions. The quadrature points and weights are based off
@@ -9,68 +9,67 @@ function [xi,w]=quadraturePoints1D(n,algorithm,c1,c2)
 %           particular degree. For high-order polynomials and other
 %           functions, quadrature integration is just an approximation.
 %
-%INPUTS: n  A positive integer such that 2n-1 is the highest degree to
-%           which the quadrature points are accurate. n points are returned
-%           by the function.
+%INPUTS: n A positive integer such that 2n-1 is the highest degree to
+%          which the quadrature points are accurate. n points are returned
+%          by the function.
 % algorithm This specifies the type of weighting function and the range of
-%           the integral. These points can generally be transformed for
-%           integrals over other regions/ with other parameters. Possible
-%           values are
-%           0 (The default if omittted or an empty matrix is passed)
-%             The weighting function is w(x)=1/(sqrt(2*pi))*exp(-x^2/2),
-%             the integration interval is (-Inf,Inf). The algorithm of [2]
-%             is used with parameters from Table 22.7 in Ch. 22 of [1].
-%           1 w(x)=exp(-x^2) on the interval (-Inf,Inf). The algorithm
-%             of [2] is used with parameters from Table 22.7 in Ch. 22 of
-%             [1].
-%           2 w(x)=1 on (-1,1). The function GaussLegendrePoints1D is used.
-%             Note that the transformation 
-%             xiNew=xi*(b-a)/2+(b+a)/2;
-%             wNew=w*(b-a)/2;
-%             can be used to transform the points and weights to the
-%             weighting function w(y)=1 on the range (a,b).
-%           3 w(x)=(1-x^2)^(c1-1/2) on (-1,1) with c1>-1/2. The
-%             algorithm of [2] is used with the values from Table 22.7 of
-%             [1]. Formula 10 is used for the c1=0 case. This becomes
-%             numerically unstable for c1 close to but not equal to zero.
-%           4 w(x)=exp(-x) on (0,Inf). The algorithm of [2] is used
-%             with the values from Table 22.7 of [1].
-%           5 w(x)=x^c1*exp(-x) on (0,Inf). The algorithm of [2] is used
-%             with the values from Table 22.7 of [1] for c1>-1.
-%           6 w(x)=(1+x)^c1 on (-1,1) for c1>-1. This is a special case of
-%             the Jacobi polynomials. The algorithm of [2] is used with
-%             values from Table 22.7 of [1].
-%           7 w(x)=x^c1 on (0,1), c1>-1. The algorithm of [2] is used. The
-%             three-term recursion was derived by explicitly evaluating
-%             the integrals with the desired orthogonality constraints
-%             until a pattern could be identified for an arbitrary order.
-%           8 w(x)=|x|^c1 on (-1,1), c1>=0 and c1 is an integer. The
-%             algorithm of [2] is used. The three-term recursion was
-%             derived by explicitly evaluating the integrals with the
-%             desired orthogonality constraints until a pattern could be
-%             identified for an arbitrary order. Separate patterns for even
-%             and odd integers were found.
-%           9 w(x)=|x|^c1*exp(-x^2) on (-Inf,Inf), c1>=0 and c1 is an
-%             integer. The algorithm of [2] is used. The three-term
-%             recursion was derived by explicitly evaluating the integrals
-%             with the desired orthogonality constraints until a pattern
-%             could be identified for an arbitrary order. Separate patterns
-%             for even and odd integers were found.
-%          10 w(x)=1/sqrt(1-x^2) on (-1,1). The formula in 25.4.38 in [1]
-%             is used. Note that the transformation
-%             xiNew=(b+a)/2+xi*(b-a)/2; can be used to change the
-%             quadrature points to the weighting function
-%             w(y)=1/sqrt((y-a)*(b-y)) on (a,b).
-%          11 w(x)=sqrt(1-x^2) on (-1,1). The formula in 25.4.40 in [1] is
-%             used. Note that the transformation xiNew=(b+a)/2+xi*(b-a)/2
-%             can be used to change the quadrature points to the weighting
-%             function w(y)=sqrt((y-a)*(b-y)) on (a,b).
-%          12 w(x)=sqrt(x/(1-x)) on (0,1). The formula in 25.4.42 in [1] is
-%             used. Note that the transformation xiNew=a+(b-a)*xi can be
-%             used to change the quadrature points to the weighting
-%             function w(x)=sqrt((x-a)/(b-x)) on (a,b).
-%       c1 This is a parameter that is only used with certain algorithms
-%          described above.
+%          the integral. These points can generally be transformed for
+%          integrals over other regions/ with other parameters. Possible
+%          values are
+%          0 (The default if omittted or an empty matrix is passed) The
+%            weighting function is w(x)=1/(sqrt(2*pi))*exp(-x^2/2), the
+%            integration interval is (-Inf,Inf). The algorithm of [2] is
+%            used with parameters from Table 22.7 in Ch. 22 of [1].
+%          1 w(x)=exp(-x^2) on the interval (-Inf,Inf). The algorithm of
+%            [2] is used with parameters from Table 22.7 in Ch. 22 of [1].
+%          2 w(x)=1 on (-1,1). The function GaussLegendrePoints1D is used.
+%            Note that the transformation 
+%            xiNew=xi*(b-a)/2+(b+a)/2;
+%            wNew=w*(b-a)/2;
+%            can be used to transform the points and weights to the
+%            weighting function w(y)=1 on the range (a,b).
+%          3 w(x)=(1-x^2)^(c1-1/2) on (-1,1) with c1>-1/2. The algorithm of
+%            [2] is used with the values from Table 22.7 of [1]. Formula 10
+%            is used for the c1=0 case. This becomes numerically unstable
+%            for c1 close to but not equal to zero.
+%          4 w(x)=exp(-x) on (0,Inf). The algorithm of [2] is used with the
+%            values from Table 22.7 of [1].
+%          5 w(x)=x^c1*exp(-x) on (0,Inf). The algorithm of [2] is used
+%            with the values from Table 22.7 of [1] for c1>-1.
+%          6 w(x)=(1+x)^c1 on (-1,1) for c1>-1. This is a special case of
+%            the Jacobi polynomials. The algorithm of [2] is used with
+%            values from Table 22.7 of [1].
+%          7 w(x)=x^c1 on (0,1), c1>-1. The algorithm of [2] is used. The
+%            three-term recursion was derived by explicitly evaluating
+%            the integrals with the desired orthogonality constraints
+%            until a pattern could be identified for an arbitrary order.
+%          8 w(x)=|x|^c1 on (-1,1), c1>=0 and c1 is an integer. The
+%            algorithm of [2] is used. The three-term recursion was derived
+%            by explicitly evaluating the integrals with the desired
+%            orthogonality constraints until a pattern could be identified
+%            for an arbitrary order. Separate patterns for even and odd
+%            integers were found.
+%          9 w(x)=|x|^c1*exp(-x^2) on (-Inf,Inf), c1>=0 and c1 is an
+%            integer. The algorithm of [2] is used. The three-term
+%            recursion was derived by explicitly evaluating the integrals
+%            with the desired orthogonality constraints until a pattern
+%            could be identified for an arbitrary order. Separate patterns
+%            for even and odd integers were found.
+%         10 w(x)=1/sqrt(1-x^2) on (-1,1). The formula in 25.4.38 in [1] is
+%            used. Note that the transformation
+%            xiNew=(b+a)/2+xi*(b-a)/2; can be used to change the
+%            quadrature points to the weighting function
+%            w(y)=1/sqrt((y-a)*(b-y)) on (a,b).
+%         11 w(x)=sqrt(1-x^2) on (-1,1). The formula in 25.4.40 in [1] is
+%            used. Note that the transformation xiNew=(b+a)/2+xi*(b-a)/2
+%            can be used to change the quadrature points to the weighting
+%            function w(y)=sqrt((y-a)*(b-y)) on (a,b).
+%         12 w(x)=sqrt(x/(1-x)) on (0,1). The formula in 25.4.42 in [1] is
+%            used. Note that the transformation xiNew=a+(b-a)*xi can be
+%            used to change the quadrature points to the weighting
+%            function w(x)=sqrt((x-a)/(b-x)) on (a,b).
+%      c1 This is a parameter that is only used with certain algorithms
+%         described above.
 %
 %OUTPUTS: xi A 1 X n vector containing the quadrature points.
 %          w An nX1 vector of the weights associated with the quadrature

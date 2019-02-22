@@ -1,4 +1,4 @@
-function val=aWeave(x,t,A,alpha,theta0,uTurn)
+function [aVal,aJacob,aHess,papt]=aWeave(x,t,A,alpha,theta0,uTurn)
 %%AWEAVE The drift function for a somewhat sinusoidal weaving motion model
 %        under a 3D flat-Earth approximation. The third example below shows
 %        how this flat-Earth model can be used on a curved Earth.
@@ -6,8 +6,8 @@ function val=aWeave(x,t,A,alpha,theta0,uTurn)
 %INPUTS: x The 6X1 target state at time t consisting of 3 position and 3
 %          velocity components.
 %        t The time at which the drift function is to be evaluated.
-%        A A term determining the magnitude of the deflection during turns.
-%          It should be less than alpha*pi/2 to keep the target from
+%        A A scalar term determining the magnitude of the deflection during
+%          turns. It should be less than alpha*pi/2 to keep the target from
 %          doubling back on its previous path.
 %    alpha The positive scalar weave period in radians per second.
 %   theta0 The scalar phase at time 0 of the weave. A cosine function is
@@ -22,7 +22,14 @@ function val=aWeave(x,t,A,alpha,theta0,uTurn)
 %          this should be [0;0;1]. The default if this parameter is omitted
 %          or an empty matrix is passed is [0;0;1].
 %
-%OUTPUTS: val The flat-Earth time-derivative of the state.
+%OUTPUTS: aVal The 6X1 flat-Earth time-derivative of the state.
+%       aJacob The 6X6 matrix of partial derivatives of aVals such that
+%              aJacob(:,k) is the partial derivative of aVals(:,k) with
+%              respect to x(k).
+%        aHess The 6X6X6 matrix of second partial derivatives of aVals such
+%              that aHess(:,k1,k2) is the second partial derivative of
+%              aVals with respect to x(k1) and x(k2).
+%         papt The 6X1 partial derivative with resect to time of aVals.
 %
 %This model is derived in [1]. It is parameterized in a manner that allows
 %one to create a target trajectory that performed weaves of a desired
@@ -230,7 +237,42 @@ function val=aWeave(x,t,A,alpha,theta0,uTurn)
     end
 
     Omega=A*cos(alpha*t+theta0)*uTurn;
-    val=[x(4:6);cross(Omega,x(4:6))];
+    aVal=[x(4:6);cross(Omega,x(4:6))];
+    
+    if(nargout>1)
+        OmegaX=Omega(1);
+        OmegaY=Omega(2);
+        OmegaZ=Omega(3);
+        
+        aJacob=[0,0,0,1,        0,          0;
+                0,0,0,0,        1,          0;
+                0,0,0,0,        0,          1;
+                0,0,0,0,        -OmegaZ,    OmegaY;
+                0,0,0,OmegaZ,   0,          -OmegaX;
+                0,0,0,-OmegaY,  OmegaX,     0];
+
+        if(nargout>2)
+            aHess=zeros(6,6,6);
+            if(nargout>3)
+                sinTerm=sin(alpha*t+theta0);
+                
+                uTurnX=uTurn(1);
+                uTurnY=uTurn(2);
+                uTurnZ=uTurn(3);
+                
+                vx=x(4);
+                vy=x(5);
+                vz=x(6);
+                
+                papt=[0;
+                      0;
+                      0;
+                      A*alpha*(uTurnZ*vy-uTurnY*vz)*sinTerm;
+                      A*alpha*(-uTurnZ*vx+uTurnX*vz)*sinTerm;
+                      A*alpha*(uTurnY*vx-uTurnX*vy)*sinTerm];
+            end
+        end
+    end
 end
 
 %LICENSE:

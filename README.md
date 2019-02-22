@@ -1,4 +1,4 @@
-**Tracker Component Library Release 3.5, May 2018**
+**Tracker Component Library Release 4.0, January 2019**
 https://github.com/USNavalResearchLaboratory/TrackerComponentLibrary
 
 A paper describing a number of features of the library is<br>
@@ -6,23 +6,25 @@ D. F. Crouse, "The Tracker Component Library: Free Routines for Rapid
 Prototyping," IEEE Aerospace and Electronic Systems Magazine, vol. 32, no.
 5, pp. 18-27, May. 2017.
 
-These are the release notes for the version 3.5 of the Tracker Component
+These are the release notes for the version 4.0 of the Tracker Component
 Library. The Tracker Component Library is a collection of Matlab routines
-(some written in C/C++ requiring compilation compilation) for simulating
-and tracking targets in various scenarios. Due to the complexity of the
-target tracking problem, a great many routines can find use in other areas
-including combinatorics, astronomy, and statistics.
+for simulating and tracking targets in various scenarios. Due to the
+complexity of the target tracking problem, a great many routines can find
+use in other areas including combinatorics, astronomy, and statistics.
+
+Making this code available and open source is in the spirit of OMB M-16-21,
+which can be viewed online at:
+https://sourcecode.cio.gov/
+
+Those looking for magnetic field synthesis code might want to look at
+./Sample Code/Magnetic Models/ .
 
 As of version 3.0, the library has been split into two parts. This is the
 publicly available part. A number of functions have been placed into a
 supplement that is only available to the U.S. Government Agencies and their
-contractors. More advanced algorithms added to the library will be placed
-in the limited distribution supplement. The limited distribution supplement
-can be downloaded by authorized individuals from di2e.net at:
+contractors.The limited distribution supplement can be downloaded by
+authorized individuals from di2e.net at:
 https://bitbucket.di2e.net/projects/TCL
-
-Those looking for magnetic field sythesis code might want to look at
-./Sample Code/Magnetic Models/ .
 
 Those looking to get a quick idea of a very simple end-to-end tracking
 algorithm (track initiation, data association, maintenance, and
@@ -31,10 +33,8 @@ termination) might want to look at
 to see an example of a complete GNN-JIPDAF tracker run on a simple 2D
 tracking scenario, which can be easily transformed into a normal JIPDAF
 by changing a single parameter. The tracker is made from the modular
-components of the library and adapting the tracker to 3D and other
-scenarios is as simple as changing the proper components. A lot of other
-sample code is also provided to demonstrate the use of other parts of the
-library.
+components of the library. A lot of other sample code is also provided to
+demonstrate the use of other parts of the library.
 
 To use the full library, add the library and all of its subfolders to your
 active path in Matlab. Some functions are available as C/C++ files for use
@@ -44,6 +44,33 @@ are too slow in certain circumstances. These files can be compiled by
 running the CompileCLibraries function. Precompiled code is not distributed
 with the library. Note that a C/C++ compiler supported by Matlab must be
 installed. See below for comments regarding compilation.
+
+NOTABLE CHANGES SINCE VERSION 3.5
+
+- Routines related to stochastic calculus have been changed and new ones
+  have been added. They are in:
+  Mathematical Functions/Statistics/Stochastic Processes/
+- New continuous-time state propagation models based on Itô-Taylor
+  expansions have been added to:
+  Dynamic Estimation/State Propagation/Continuous Time/
+- All continuous-time dynamic models in the library have been updated to
+  work with these (and bugs fixed) and some new dynamic models have been
+  added.
+- Functions splitting the measurement prediction and update steps for most
+  filters have been added. This makes hypothesis generation faster,
+  particularly with cubature filters.
+- Functions related to robust estimation have been added to:
+  Mathematical Functions/Statistics/Robust Statistics/
+  One can, for example, fit lines to data corrupted with arbitrary bad
+  measurements.
+- Added many more combinatoric functions and updated existing ones. See
+  Mathematical Functions/Combinatorics/
+- Joint matrix diagonalization algorithms (useful for independent component
+  analysis) have  been added. See
+  Mathematical Functions/Basic Matrix Operations/Joint Matrix Diagonalization/
+- Misc. statistical functions. For example, unbiased estimates of higher-
+  order moments and cumulants are difficult to derive, but can be found
+  using the unbiasedMomentCumulant function.
 
 NOTABLE CHANGES SINCE VERSION 3.01
 
@@ -100,15 +127,16 @@ NOTABLE CHANGES SINCE VERSION 2.5
 
 COMPILED CODE:
 
-The compilation of the library has been tested under Matlab2018a for Mac OS
-X 10.11 using the Matlab-supported compiler offered free by Apple. Under
-Windows 10, compilation of the library was verified using Microsoft Visual
-Studio Professional 2017 and also using minGW 5.3 as the compiler.
-Precompiled code is not distributed with the library.
+The compilation of the library has been tested under Matlab2018b for Mac OS
+X 10.12 using the Matlab-supported compiler offered free by Apple. Under
+Linux, gcc was used as the compiler. The code should also compile under
+Windows 10 using minGW. Precompiled code is not distributed with the
+library.
 
 EXTERNAL SOLVERS:
 
-The folder
+Almost all of the function in the library work without any external
+resources. However, the folder
 ./Mathematical Functions/Polynomials/Generic Multivariate Polynomials/
 contains the function solvePolySysWithExtProg. This is an interface to
 external solvers for simultaneous multivariate polynomial systems. The
@@ -175,9 +203,9 @@ http://www.ngdc.noaa.gov/IAGA/vmod/igrf.html
 The file http://www.ngdc.noaa.gov/IAGA/vmod/igrf12coeffs.txt can be
 downloaded and placed into the folder ./Magnetism/data .
 
-5) The WMM magnetic field coefficients:
+5) The WMM2015v2 magnetic field coefficients:
 https://www.ngdc.noaa.gov/geomag/WMM/soft.shtml
-The coefficient file WMM2015COF.zip shown be downloaded, unzipped and the
+The coefficient file WMM2015v2COF.zip shown be downloaded, unzipped and the
 file WMM.COF placed into ./Magnetism/data .
 
 6) EGM2008 gravitational coefficients
@@ -229,7 +257,7 @@ https://visibleearth.nasa.gov/view.php?id=57735
 Place the file in Misc/data . This is used as the default map to show on
 the Earth given by the plotMapOnEllipsoid function.
 
-May 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.<br>
+January 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.<br>
 (UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 LICENSE:

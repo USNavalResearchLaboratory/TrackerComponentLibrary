@@ -1,17 +1,16 @@
 function [xSmooth,PSmooth]=KalmanSmoother(xInit,PInit,z,u,H,F,R,Q,kD,useFP)
-%%KALMANSMOOTHER  Run the standard forward-backward Kalman smoother for
-%                 linear dynamic and measurement models on a batch of
-%                 measurements. The smoothed result at one time step or
-%                 along the entire batch are available. The initial
-%                 predicted states can not be uninformative. To run the
-%                 smoother without prior predicted values, use the function
-%                 FPInfoSmoother.
+%%KALMANSMOOTHER Run the standard forward-backward Kalman smoother for
+%                linear dynamic and measurement models on a batch of
+%                measurements. The smoothed result at one time step or
+%                along the entire batch are available. The initial
+%                predicted states cannot be uninformative. To run the
+%                smoother without prior predicted values, use the function
+%                FPInfoSmoother.
+%
 %INPUTS: xInit The predicted state at the time of the initial measurement
-%              in z. If no prior information is available, then just pass
-%              an empty matrix.
+%              in z.
 %        PInit The covariance matrix associated with the predicted state
-%              at the time of the initial measurement in z. If no prior
-%              information is avaiable, then just pass an empty matrix.
+%              at the time of the initial measurement in z.
 %            z The zDim X N matrix of measurements for the whole batch.
 %            u The xDim X(N-1) matrix of control inputs for the whole
 %              batch. If there are no control inputs, then set u=[];

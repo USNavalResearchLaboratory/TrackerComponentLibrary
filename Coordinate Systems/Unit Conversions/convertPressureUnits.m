@@ -2,39 +2,38 @@ function val=convertPressureUnits(val,unitOrig,unitDes)
 %%CONVERTPRESSUREUNITS Convert values of pressure from one set of units to
 %                      another.
 %
-%INPUTS: val           The matrix or vector of values that are to be
-%                      converted.
-%   unitOrig, unitDes  Two character strings indicating the units of val
-%                      and the units into which it is to be converted. The
-%                      possible values are:
-%                      'at'  Technical atmospheric units (1kg force/cm^2)
-%                      'atm' Standard atmospheric units (101325Pa)
-%                      'Ybar'   yottabar        'Zbar'  zettabar
-%                      'Ebar'   exabar          'Pbar'  petabar
-%                      'Tbar'   tetrabar        'Gbar'  gigabar
-%                      'Mbar'   megabar         'kbar'  kilobar
-%                      'hbar'   hectobar        'dabar' decabar
-%                      'bar'    bar 10^6 Pa     'dbar'  decibar
-%                      'cbar'   centibar        'mbar'  millibar
-%                      'mubar'  microbar        'nbar'  nanobar
-%                      'pbar'   picobar         'fbar'  femtobar
-%                      'abar'   attobar         'zbar'  zeptobar
-%                      'ybar'   yoctobar
-%                      'Ba'     Barye 1 dyne/cm^2
-%                      'inHg'   inches of mercury
-%                      'mmHg'   millimeters of mercury (1Torr)
-%                      'YPa'    yottaPascals    'ZPa'  zettaPascals
-%                      'EPa'    exaPascals      'PPa'  petaPascals
-%                      'TPa'    tetraPascals    'GPa'  gigaPascals
-%                      'MPa'    megaPascals     'kPa'  kiloPascals
-%                      'hPa'    hectoPascals    'daPa' decaPascals
-%                      'Pa'     Pascals (N/m^2) 'dPa'  deciPascals
-%                      'cPa'    centiPascals    'mPa'  milliPascals
-%                      'muPa'   microPascals    'nPa'  nanoPascals
-%                      'pPa'    picoPascals     'fPa'  femtoPascals
-%                      'aPa'    attoPascals     'zPa'  zeptoPascals
-%                      'yPa'    yoctoPascals 
-%                      'psi'    Pound (Avoirdupois) per square inch                      
+%INPUTS: val The matrix or vector of values that are to be converted.
+% unitOrig, unitDes Two character strings indicating the units of val and
+%            the units into which it is to be converted. The possible
+%            values are:
+%            'at'  Technical atmospheric units (1kg force/cm^2)
+%            'atm' Standard atmospheric units (101325Pa)
+%            'Ybar'   yottabar        'Zbar'  zettabar
+%            'Ebar'   exabar          'Pbar'  petabar
+%            'Tbar'   tetrabar        'Gbar'  gigabar
+%            'Mbar'   megabar         'kbar'  kilobar
+%            'hbar'   hectobar        'dabar' decabar
+%            'bar'    bar 10^6 Pa     'dbar'  decibar
+%            'cbar'   centibar        'mbar'  millibar
+%            'mubar'  microbar        'nbar'  nanobar
+%            'pbar'   picobar         'fbar'  femtobar
+%            'abar'   attobar         'zbar'  zeptobar
+%            'ybar'   yoctobar
+%            'Ba'     Barye 1 dyne/cm^2
+%            'inHg'   inches of mercury
+%            'mmHg'   millimeters of mercury (1Torr)
+%            'YPa'    yottaPascals    'ZPa'  zettaPascals
+%            'EPa'    exaPascals      'PPa'  petaPascals
+%            'TPa'    tetraPascals    'GPa'  gigaPascals
+%            'MPa'    megaPascals     'kPa'  kiloPascals
+%            'hPa'    hectoPascals    'daPa' decaPascals
+%            'Pa'     Pascals (N/m^2) 'dPa'  deciPascals
+%            'cPa'    centiPascals    'mPa'  milliPascals
+%            'muPa'   microPascals    'nPa'  nanoPascals
+%            'pPa'    picoPascals     'fPa'  femtoPascals
+%            'aPa'    attoPascals     'zPa'  zeptoPascals
+%            'yPa'    yoctoPascals 
+%            'psi'    Pound (Avoirdupois) per square inch                      
 %
 %1 atmosphere pressure is defined as 101325Pa in
 %http://www.bipm.org/fr/CGPM/db/10/4/

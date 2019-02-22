@@ -4,19 +4,19 @@ function [s,t]=HFMChirp(T,fStart,fEnd,tSamp,phi)
 %          radar and sonar signal processing. They are more Doppler
 %          insensitive than linear FM chirps.
 %
-%INPUTS:  T The duration of the chirp (seconds).
-%    fStart The frequency at the start of the chirp (Hertz). This must be
-%           >0.
-%      fEnd The frequency at the end of the chirp (Hertz). This must be >0.
-%     tSamp If this is scalar, it is the sampling rate of the chirp and the
-%           number of samples depends on T. Otherwise, this is a numSampX1
-%           array of times at which samples are desired. Samples before
-%           time 0 and after time T are set to zero. If this parameter is
-%           omitted or an empty matrix is passed, the the Nyquist sampling
-%           rate is used.
-%       phi The phase offset of the chirp. If this parameter is omitted or
-%           an empty matrix is passed, then the default of pi/2 is used,
-%           which makes the real part of the signal start at zero.
+%INPUTS: T The duration of the chirp (seconds).
+%   fStart The frequency at the start of the chirp (Hertz). This must be
+%          >0.
+%     fEnd The frequency at the end of the chirp (Hertz). This must be >0.
+%    tSamp If this is scalar, it is the sampling rate of the chirp and the
+%          number of samples depends on T. Otherwise, this is a numSampX1
+%          array of times at which samples are desired. Samples before
+%          time 0 and after time T are set to zero. If this parameter is
+%          omitted or an empty matrix is passed, the Nyquist sampling
+%          rate is used.
+%      phi The phase offset of the chirp. If this parameter is omitted or
+%          an empty matrix is passed, then the default of pi/2 is used,
+%          which makes the real part of the signal start at zero.
 %
 %OUTPUT: s The numSampX1 complex chirp signal.
 %        t The sample times used. If tSamp was not a scalar, then this is

@@ -14,9 +14,9 @@ function [q,nc]=randSetPartition(n,sortEntries)
 %          sortEntries is true, then only q=[1;2;1] would be returned out
 %          of the two. The default if this parameter is omitted is false.
 %
-%OUTPUTS: q  A random set partition of n. This is a length n vector with
-%            values that can range from 1 to n.
-%         nc The number of subsets in the random set partition.
+%OUTPUTS: q A random set partition of n. This is a length n vector with
+%           values that can range from 1 to n.
+%        nc The number of subsets in the random set partition.
 %
 %The algorithm is RANEQU in Chapter 12 of [1].
 %

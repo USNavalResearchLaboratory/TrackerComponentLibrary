@@ -48,7 +48,7 @@ function [azStart,dist,azEnd]=indirectGeodeticProb(latLonStart,latLonEnd,a,f)
 %
 %REFERENCES:
 %[1] C. F. F. Karney, "Algorithms for geodesics," Journal of Geodesy, vol.
-%    87, no. 1, pp. 43?45, Jan. 2013. [Online].
+%    87, no. 1, pp. 43-45, Jan. 2013. [Online].
 %    Available: http://arxiv.org/pdf/1109.4448.pdf
 %[2] C. F. F. Karney. (2013, 31 Aug.) Addenda and errata for papers on
 %    geodesics. [Online].

@@ -1,11 +1,12 @@
-function D=DPolarCoordTurn2D(x,t,qTurn,qSLin)
+function [D,DJacob,DHess,pDpt]=DPolarCoordTurn2D(x,t,qTurn,qSLin)
 %%DPOLARCOORDTURN2D The continuous-time diffusion matrix function for a 2D
 %              coordinated turn model where the velocity is specified as a
 %              heading and an angle. The turn rate can be specified in
 %              terms of a turn rate in radians per econd, or in terms of a
 %              transversal acceleration. Additionally, a linear
 %              acceleration can be given. This diffusion matrix goes with
-%              the drift function aPolarCoordTurn2D.
+%              the drift function aPolarCoordTurn2DOmega and
+%               aPolarCoordTurn2DTrans.
 %
 %INPUTS: x The target state for 2D motion where the velocity is given in
 %          terms of heading and speed components. If there is no linear
@@ -13,7 +14,7 @@ function D=DPolarCoordTurn2D(x,t,qTurn,qSLin)
 %          then x can either be x=[x;y;h;v;omega], where h is the heading
 %          in terms of radians counterclockwise from the x-axis, v is the
 %          speed, and omega is the turn rate (the derivative of h with
-%          respect to time) or  x=[x;y;h;v;at] where at is the the
+%          respect to time) or  x=[x;y;h;v;at] where at is the
 %          transversal acceleration, which is orthogonal to
 %          the velocity and is defined such that positive values of at
 %          map to positive values of omega. If there is a linear
@@ -29,22 +30,28 @@ function D=DPolarCoordTurn2D(x,t,qTurn,qSLin)
 %        t An unused time component so that aPolar2DCV can be used with
 %          Runge-Kutta methods that expect the function to take two
 %          parameters.
-%   qTurn  If the turn is specified in terms of a turn rate in radians
+%    qTurn If the turn is specified in terms of a turn rate in radians
 %          per second, then this is the power spectral density of the
 %          turn rate noise having units of radians squared per seconds
 %          cubed. If the turn is expressed in terms of a transverse
 %          acceleration, then this is the power spectral density of the
 %          transverse acceleration noise, having units of m^2/s^5.
-%   qSLin  If a linear acceleration is used, then this is the power
+%    qSLin If a linear acceleration is used, then this is the power
 %          spectral density of the linear acceleration noise having units
 %          of m^2/s^5. It a linear acceleration is not used, then this is
 %          the power spectral density of the velocity noise having units of
 %          m^2/s^3.
 %
-%OUTPUT: D The diffusion matrix of a 2D continuous-time turning model
-%           where the velocity is given as a heading and an angle. If x has
-%           N columns, then N copies of D are returned with D(:,:,i) being
-%           the ith one.
+%OUTPUTS: D The xDimX2 diffusion matrix of a 2D continuous-time turning
+%           model where the velocity is given as a heading and an angle. If
+%           x has N columns, then N copies of D are returned with D(:,:,i)
+%           being the ith one.
+%   DJacob, DHess The xDimX2XxDim, xDimX2XxDimXxDim matrices of first and
+%           second partial derivatives of the elements of D with respect to
+%           x. These are all zero, since D is a constant. it is the same
+%           for all D and is not repeated N times.
+%      pDpt The xDimX2 partial derivative of D with respect to time. This
+%           is all zeros, because D is a constant.
 %
 %The basic 2D polar coordinated turn model is described in [1]. It is also
 %mentioned in [2], though no differential equations are given and a more
@@ -54,7 +61,8 @@ function D=DPolarCoordTurn2D(x,t,qTurn,qSLin)
 %polar coordinates.
 %
 %More information on turning modeling using trasverse and linear
-%acceleration can be found in the comments to the function aCoordTurn2D.
+%acceleration can be found in the comments to the functions
+%aCoordTurn2DOmega and aCoordTurn2DTrans.
 %
 %A starting point for setting qTurn when a turn rate is given and for
 %setting qSLin when a linear acceleration is not given is to use
@@ -64,8 +72,8 @@ function D=DPolarCoordTurn2D(x,t,qTurn,qSLin)
 %order=2. Similarly, The order chosen in the suggestion function just
 %depends on the number of derivatives of time present.
 %
-%The corresponding drift function is given by the function
-%aPolarCoordTurn2D. The corresponding discrete-time functions are
+%The corresponding drift functions are given by aPolarCoordTurn2DOmega and
+%aPolarCoordTurn2DTrans. The corresponding discrete-time functions are
 %FPolarCoordTurn2D and QPolarCoordTurn2D. However, note that the
 %discrete-time functions with unknown noise is a direct-discrete model and
 %not a discretization of the continuous-time model.
@@ -93,7 +101,8 @@ N=size(x,2);
 rootQTurn=sqrt(qTurn);
 rootQSLin=sqrt(qSLin);
 
-switch(length(x))
+numDim=length(x);
+switch(numDim)
     case 5%If there is no linear acceleration
         D=[0,     0;%Row for x-component noise.
            0,     0;%Row for y-component noise.
@@ -109,6 +118,16 @@ switch(length(x))
            0,   rootQSLin];%Row for linear accelertion noise.
     otherwise
         error('The length of x is neither 5 nor 6.');
+end
+
+if(nargout>1)
+    DJacob=zeros(numDim,2,numDim);
+    if(nargout>2) 
+        DHess=zeros(numDim,2,numDim,numDim);
+        if(nargout>3)
+            pDpt=zeros(numDim,2);
+        end
+    end
 end
 
 if(N>1)

@@ -2,7 +2,7 @@ function FIM=computePolyMeasFIM(x,sigma2List,fTx,measTypes,sensorIdxLists,sensor
 %%COMPUTEPOLYMEASFIM Given simultaneous measurements consisting of
 %           time-delay of arrival, bistatic range, range rate (Doppler)
 %           from an assumed stationary emitter (given moving sensors),
-%           and/ or the the received frequency of measurements from
+%           and/ or the received frequency of measurements from
 %           multiple sensors (assuming a stationary target and moving
 %           sensors), determine the inverse Cramér-Rao lower bound (CRLB)
 %           (the Fisher information matrix) for an estimate of the location

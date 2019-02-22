@@ -88,8 +88,14 @@ xPred=F*xPrev;
 LPred=F*LPrev+Ba;
 TPred=c^2*F*PPrev*F'+LPred*LPred';
 
+%Ensure symmetry
+TPred=(TPred+TPred')/2;
+
 if(nargout>3)
     PPred=(TPred-LPred*LPred')/c^2;
+    
+    %Ensure symmetry
+    PPred=(PPred+PPred')/2;
 end
 end
 

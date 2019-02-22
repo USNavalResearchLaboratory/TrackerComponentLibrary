@@ -4,7 +4,7 @@ function zSpher=spherCD2SpherITRS(zCD,param1,param2,S11)
 %          the International Terrestrial Reference System (ITRS), a
 %          standard Earth-Cenetred-Earth-fixed (ECEF) coordinate system. CD
 %          coordinates is a type of coordinate system where the z-axis is
-%          aligned with the the magnetic dipole of the Earth (under a
+%          aligned with the magnetic dipole of the Earth (under a
 %          dipole model). This coordinate system is useful when studying
 %          the ionosphere.
 %
@@ -18,28 +18,28 @@ function zSpher=spherCD2SpherITRS(zCD,param1,param2,S11)
 %            counterclockwise from the x-axis in the x-y plane. Elevation
 %            is measured up from the x-y plane (towards the z-axis).
 % param1,param2,S11 These optional parameters specify the magnetic field
-%               parameters from which the direction of the CD pole is
-%               derived. These parameters are implied set based on how the
-%               function is called:
-%               1) spherCD2SpherITRS(zCD)
+%            parameters from which the direction of the CD pole is derived.
+%            These parameters are implied set based on how the function is
+%            called:
+%            1) spherCD2SpherITRS(zCD)
 %               If all of the other parameters are omitted, then the CD
 %               pole parameters for the latest epoch of the International
 %               Geomagnetic Reference Field (IGRF) are used; the Schmidt
 %               semi-normalized coefficients are obtained using the
 %               function getIGRFCoeffs.
-%               2) spherCD2SpherITRS(zCD, year)
+%            2) spherCD2SpherITRS(zCD, year)
 %               The parameters of the IGRF for the specified epoch year are
 %               used. The year is in the Gregorian calendar and is
 %               specified as noted in the comments to the getIGRFCoeffs
 %               function.
-%               3) spherCD2SpherITRS(zCD, year, model). This is the
+%            3) spherCD2SpherITRS(zCD, year, model). This is the
 %               same as centeredDipole2Sphere(zCD, year), except model
 %               can be 'IGRF' or 'WMM' to specify which magnetic field
 %               model to use. 'WMM' refers to the World magnetic model
 %               using the function getWMMCoeffs. Note than an empty year
 %               matrix can be passed to get the latest epoch year of either
 %               model.
-%               4) spherCD2SpherITRS(zCD,C10,C11,S11). In this
+%            4) spherCD2SpherITRS(zCD,C10,C11,S11). In this
 %               instance, the first few Schmidt semi-normalized
 %               coefficients for a magnetic field model are given. These
 %               are the only three coefficients used to define the

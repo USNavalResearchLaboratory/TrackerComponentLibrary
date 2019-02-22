@@ -13,11 +13,12 @@ function val=fallingFactorial(x,n)
 %        n The scalar or matrix n value in the product series of
 %          x*(x-1)*...*(x-(n-1)). If x is a matrix, n can be a scalar or a
 %          matrix of the same size. If x is a scalar, n can be a scalar or
-%          a matrix. n must be such that (x-(n-1))>0.
+%          a matrix.
 %
 %OUTPUTS: val The falling factorial (x)_n for each x and the corresponding
 %             n/ for each n and a single x depending on what is a matrix
-%             and what is scalar. 
+%             and what is scalar. Note that if n>x, the falling factorial
+%             is defined to be 0.
 %
 %The falling factorial is discussed in [1]. Note that
 %fallingFactorial(n,n)=factorial(n);
@@ -29,7 +30,7 @@ function val=fallingFactorial(x,n)
 %October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-val=exp(gammaln(x+1)-gammaln(x-n+1));
+val=exp(gammaln(x+1)-gammaln(max(0,x-n+1)));
 
 end
 

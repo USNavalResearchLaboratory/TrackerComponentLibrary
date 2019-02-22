@@ -11,12 +11,9 @@ function demoCurvedEarthSimLevel()
 %                     evolution can be determined using explicit or
 %                     numerically-determined derivatives.
 %
-%Note that when running a function in Matlab for the second time, it can be
-%faster than running it for the first time. Thus, while it might seem like
-%the computation of a geodesic curve using an approximation for a non-zero
-%altitude is faster than that of using a zero altitude, since the second
-%computation is called first, that is not the case when this simulation is
-%run a second time.
+%Note that the indirectGeodeticProb function called by this function must
+%be compiled, so one should run the CompileCLibraries function prior to
+%running this example.
 %
 %September 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

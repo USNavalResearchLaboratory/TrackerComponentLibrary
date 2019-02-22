@@ -42,7 +42,7 @@ function [xi,w]=arbOrderGaussCubPoints(numDim,n,beta,algorithm,randomize)
 %          w A numCubaturePoints X 1 vector of the weights associated with
 %            the cubature points.
 %
-%The algorithm is as described in Chapter 2.6 of [1]. The specialization
+%Algorithm 0 is as described in Chapter 2.6 of [1]. The specialization
 %for Gaussian problems starts near Equation 2.6-16. The transformation to
 %a Gaussian PDF is performed by scaling the points and weights.
 %

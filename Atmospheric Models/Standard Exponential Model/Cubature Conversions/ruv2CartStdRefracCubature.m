@@ -68,7 +68,7 @@ function [zCart,RCart]=ruv2CartStdRefracCubature(zRUVBiased,SR,useHalfRange,zTx,
 %           the ray. The default if this parameter is omitted or an empty
 %           matrix is passed is 1000e3 (1000km).
 %
-%OUTPUTS: zCart The approximate means of the PDF of the the measurements
+%OUTPUTS: zCart The approximate means of the PDF of the measurements
 %               in global Cartesian [x;y;z] coordinates. This is a
 %               3XnumMeas matrix.
 %         RCart The approximate 3X3XnumMeas covariance matrices of the

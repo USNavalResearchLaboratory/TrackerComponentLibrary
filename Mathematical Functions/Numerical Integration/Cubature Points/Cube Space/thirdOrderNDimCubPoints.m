@@ -3,27 +3,27 @@ function [xi,w]=thirdOrderNDimCubPoints(numDim,algorithm)
 %               integration over a numDim-dimensional cube with bounds in
 %               coordinates of (-1,1).
 %
-%INPUTS: numDim  An integer specifying the dimensionality of the points
-%                to be generated. numDim>1.
-%      algorithm An optional parameter specifying the algorithm to be
-%                used to generate the points. Possible values are:
-%                0  (The default if omitted or an empty matrix is passed)
-%                   Formula Cn 3-1 in [1], pg. 230, 2*numDim points, with
-%                   the correction listed in Table I of [2].
-%                1  Formula Cn 3-3 in [1], pg. 230, 2*numDim+1 points.
-%                2  Formula Cn 3-4 in [1], pg. 231, 2^numDim points.
-%                3  Formula Cn 3-6 in [1], pg. 231, 3^numDim points.
-%                4  Formula Cn 3-6 in [1], pg. 231, 3^numDim points.
-%                5  Formula C2 3-1 in [1], pg. 243, 4 points, numDim=2,
-%                   with the correction listed in Table I of [2].
-%                6  Formula C2 3-3 in [1], pg. 244, 9 points, numDim=2.
-%                7  Formula C2 3-4 in [1], pg. 245, 9 points, numDim=2.
-%                8  Formula C3 3-1 in [1], pg. 261, 6 points, numDim=3.
-%                9  Formula C3 3-3 in [1], pg. 261, 9 points, numDim=3.
-%                10  Formula C3 3-4 in [1], pg.261, 13 points, numDim=3.
-%                11 Formula C3 3-5 in [1], pg. 262, 15 points, numDim=3.
-%                12 Formula C3 3-6 in [1], pg. 262, 19 points, numDim=3.
-%                13 Formula C3 3-7 in [1], pg. 263, 20 points, numDim=3.
+%INPUTS: numDim An integer specifying the dimensionality of the points to
+%               be generated. numDim>1.
+%     algorithm An optional parameter specifying the algorithm to be
+%               used to generate the points. Possible values are:
+%               0  (The default if omitted or an empty matrix is passed)
+%                  Formula Cn 3-1 in [1], pg. 230, 2*numDim points, with
+%                  the correction listed in Table I of [2].
+%               1  Formula Cn 3-3 in [1], pg. 230, 2*numDim+1 points.
+%               2  Formula Cn 3-4 in [1], pg. 231, 2^numDim points.
+%               3  Formula Cn 3-6 in [1], pg. 231, 3^numDim points.
+%               4  Formula Cn 3-6 in [1], pg. 231, 3^numDim points.
+%               5  Formula C2 3-1 in [1], pg. 243, 4 points, numDim=2,
+%                  with the correction listed in Table I of [2].
+%               6  Formula C2 3-3 in [1], pg. 244, 9 points, numDim=2.
+%               7  Formula C2 3-4 in [1], pg. 245, 9 points, numDim=2.
+%               8  Formula C3 3-1 in [1], pg. 261, 6 points, numDim=3.
+%               9  Formula C3 3-3 in [1], pg. 261, 9 points, numDim=3.
+%               10  Formula C3 3-4 in [1], pg.261, 13 points, numDim=3.
+%               11 Formula C3 3-5 in [1], pg. 262, 15 points, numDim=3.
+%               12 Formula C3 3-6 in [1], pg. 262, 19 points, numDim=3.
+%               13 Formula C3 3-7 in [1], pg. 263, 20 points, numDim=3.
 %
 %OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
 %            points (Each "point" is a vector).

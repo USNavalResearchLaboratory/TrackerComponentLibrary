@@ -7,14 +7,14 @@ function arr=unrankArrangement(rank,n,m)
 %                   not work for values of n where factorial(n) has a loss
 %                   of precision, even if m is small.
 %
-%INPUTS:    rank The rank of the arrangement counting from zero.
-%           n    The total number of items from which one draws.
-%           m    The number of slots into which these items can be placed.
+%INPUTS: rank The rank of the arrangement counting from zero.
+%           n The total number of items from which one draws.
+%           m The number of slots into which these items can be placed.
 %
-%OUTPUTS:   arr The length-m arrangement of the given rank when drawing
-%               from n items, where the elements start from 1 (not 0).  If
-%               a rank equal to or greater than the total number of unique
-%               arrangements is given, then an empty matrix is returned.
+%OUTPUTS: arr The length-m arrangement of the given rank when drawing from
+%             n items, where the elements start from 1 (not 0).  If a rank
+%             equal to or greater than the total number of unique
+%             arrangements is given, then an empty matrix is returned.
 %
 %An arrangement of n numbers into m spaces is a subset of lexicographically
 %ordered permutations. Thus, an arrangement of a particular rank can be
@@ -38,7 +38,7 @@ function arr=unrankArrangement(rank,n,m)
 
     permRank=factorial(n-m)*rank;
     permVal=unrankPermutation(permRank,n);
-    arr=permVal(1:m);
+	arr=permVal(1:m);
 end
 
 %LICENSE:

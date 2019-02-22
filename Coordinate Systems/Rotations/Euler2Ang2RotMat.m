@@ -8,28 +8,23 @@ function M=Euler2Ang2RotMat(theta1,theta2,series,handed)
 %              components of vectors to be rotated are assumed ordered
 %              [x;y;z].
 %
-%INPUTS:      theta,theta2   The two angles of rotation given in radians
-%                            about the two axes specified in series the
-%                            rotations are taken. The first rotation is
-%                            theta2, then theta1.
-%                     series A character string specifying the series of
-%                            axes about which the two rotations are
-%                            taken. All possible combinations of axes
-%                            without repeating an axis are valid. For
-%                            example, 'xy' means rotate theta2 about the y
-%                            axis, then rotate theta1 about the rotated x
-%                            axis. All possible combinations of values are:
-%                            'xy', 'xz', 'yx', 'yz', 'zx', and 'zy'.
-%                    handed  The handedness of the rotation angles. If
-%                            omitted, it is assumed that the rotations are
-%                            right-handed (the standard). Possible values
-%                            are
-%                            'right' The default if omitted. The rotation
-%                                    is right-handed.
-%                            'left'  The rotation is left-handed. The
-%                                    rotation angle is counterclockwise
-%                                    when one is looking in the direction
-%                                    that the rotation axis points.
+%INPUTS: theta,theta2 The two angles of rotation given in radians about the
+%              two axes specified in series the rotations are taken. The
+%              first rotation is theta2, then theta1.
+%       series A character string specifying the series of axes about which
+%              the two rotations are taken. All possible combinations of
+%              axes without repeating an axis are valid. For example, 'xy'
+%              means rotate theta2 about the y axis, then rotate theta1
+%              about the rotated x axis. All possible combinations of values
+%              are: 'xy', 'xz', 'yx', 'yz', 'zx', and 'zy'.
+%       handed The handedness of the rotation angle. If omitted, it is
+%              assumed that the rotation is right-handed (the standard).
+%              Possible values are:
+%              'right' The default if omitted. The rotation is right-
+%                      handed.
+%              'left'  The rotation is left-handed. The rotation angle is
+%                      clockwise when one is looking into the rotation
+%                      axis.
 %
 %OUTPUTS: M The 3X3 rotation matrix such that M*v rotates the 3X1 vector v
 %           according to the given rotation angles and axes.

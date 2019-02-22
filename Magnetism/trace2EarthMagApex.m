@@ -17,22 +17,22 @@ function [apexPoints,signVals,exitCode]=trace2EarthMagApex(zCart,modSelParam,a,f
 %              (IGRF) at the latest epoch of the model is used via the
 %              function getIGRFCoeffs. Possible other values are
 %              1) year The parameters of the IGRF for the specified epoch 
-%               year are used. The year is in the Gregorian calendar and is
-%               specified as noted in the comments to the getIGRFCoeffs
-%               function.
+%                 year are used. The year is in the Gregorian calendar and
+%                 is specified as noted in the comments to the
+%                 getIGRFCoeffs  function.
 %              2) modSelParam is a structure where modSelParam.algorithm
-%               selects the algorithm to use Possible values for
-%               modSelParam.algorithm are 'IGRF', 'WMM' and 'preloaded'. If
-%               modSelParam.algorithm is 'IGRF or 'WMM', then the IGRF or
-%               the World Magnetic Model (WMM) is used at the fractional
-%               year specified by modSelParam.year (using the function
-%               getIGRFCoeffs or getWMMCoeffs). If modSelParam.algorithm is
-%               preloaded, then the parameters for the model are given by
-%               the modSelParam.C, modSelParam.S, modSelParam.a, and
-%               modSelParam.c, where the parameters have the same format as
-%               the fully normalized outputs of getIGRFCoeffs or
-%               getWMMCoeffs. See comments below for the use of custom
-%               coeffients.
+%                 selects the algorithm to use Possible values for
+%                 modSelParam.algorithm are 'IGRF', 'WMM' and 'preloaded'.
+%                 If modSelParam.algorithm is 'IGRF or 'WMM', then the IGRF
+%                 or the World Magnetic Model (WMM) is used at the
+%                 fractional year specified by modSelParam.year (using the
+%                 function getIGRFCoeffs or getWMMCoeffs). If
+%                 modSelParam.algorithm is preloaded, then the parameters
+%                 for the model are given by the modSelParam.C,
+%                 modSelParam.S, modSelParam.a, and modSelParam.c, where
+%                 the parameters have the same format as the fully
+%                 normalized outputs of getIGRFCoeffs or getWMMCoeffs. See
+%                 comments below for the use of custom coeffients.
 %            a The semi-major axis of the reference ellipsoid. The apex is
 %              defined in terms of a maximum magnetic field line height
 %              above the reference ellipsoid. If this argument is omitted

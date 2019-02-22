@@ -42,7 +42,7 @@ end
 
 indices=zeros(numDim,numIdx);
 idx=idx(:)';%Make it a row vector
-dims=dims(:);%Make it a row vector
+dims=dims(:);%Make it a column vector
 
 %The indices basically form a counting system where the bases of each
 %position are determined by dim. Matlab makes the first dimension the

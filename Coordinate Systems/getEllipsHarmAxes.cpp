@@ -5,19 +5,19 @@
 *                    gradients.
 *
 *INPUTS: pointHarmon A point given in terms of ellipsoidal harmonic reduced
-*                   latitude and longitude in radians and
-*                   a semi-major axis in meters.
-*        E          The linear eccentricity defining the ellipsoidal
-*                   harmonic coordinate system. If this parameter is
-*                   omitted, then the linear eccentricity of the WGS84
-*                   reference ellipsoid is used.
+*                    latitude and longitude in radians and a semi-major
+*                    axis in meters.
+*                  E The linear eccentricity defining the ellipsoidal
+*                    harmonic coordinate system. If this parameter is
+*                    omitted, then the linear eccentricity of the WGS84
+*                    reference ellipsoid is used.
 *
-*OUTPUTS:   u       u(:,1), u(:,2) and u(:,3) are the unit vectors in the
-*                   respective directions of the respective gradients of
-*                   reduced latitude, longitude and the semi-major axis.
-*           c       c(1), c(2) and c(3) are the respective magnitudes of
-*                   the derivative of the Cartesian position with respect
-*                   to reduced latitude, longitude and the semi-major axis.
+*OUTPUTS: u u(:,1), u(:,2) and u(:,3) are the unit vectors in the
+*           respective directions of the respective gradients of reduced
+*           latitude, longitude and the semi-major axis.
+*         c c(1), c(2) and c(3) are the respective magnitudes of the
+*           derivative of the Cartesian position with respect to reduced
+*           latitude, longitude and the semi-major axis.
 *
 *The ellipsoidal harmonic coordinate system is described in Chapter 1.15
 *of [1] and is an orthogonal coordinate system.

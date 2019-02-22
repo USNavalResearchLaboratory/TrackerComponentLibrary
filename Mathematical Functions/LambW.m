@@ -1,16 +1,16 @@
 function w=LambW(z,k)
-%%LAMBDW  Evaluate the primary branch and the -1 branch of the Lambert-W
-%         function, which is also know as a product logarithm. The function
-%         solve z=w*exp(w) for w. This implementation is meant for real
-%         values of z>=-1/exp(1) and will have an error on smaller values,
-%         which would normally return complex solutions.
+%%LAMBDW Evaluate the primary branch and the -1 branch of the Lambert-W
+%        function, which is also know as a product logarithm. The function
+%        solve z=w*exp(w) for w. This implementation is meant for real
+%        values of z>=-1/exp(1) and will have an error on smaller values,
+%        which would normally return complex solutions.
 %
-%INPUTS:  z A vector or matrix of parameters at which the primary branch of
-%           the Lambert W function is to be evaluated. It is assumed that
-%           z>=-exp(-1) for all of the elements.
-%         k An optional parameter specifying the branch of the algorithm to
-%           take. k=0 means the primary branch and -1 means the alternative
-%           real branch. This only affects solutions for z<=0.
+%INPUTS: z A vector or matrix of parameters at which the primary branch of
+%          the Lambert W function is to be evaluated. It is assumed that
+%          z>=-exp(-1) for all of the elements.
+%        k An optional parameter specifying the branch of the algorithm to
+%          take. k=0 means the primary branch and -1 means the alternative
+%          real branch. This only affects solutions for z<=0.
 %
 %OUTPUTS: w The solutions to z=w*exp(w) for all elements in z.
 %

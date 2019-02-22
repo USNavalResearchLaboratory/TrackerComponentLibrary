@@ -79,7 +79,7 @@ function [rDisambig,sourceInfo]=disambiguateClust1D(rMeas,ampMeas,deltaR,rMax,cl
 %with closely spaced targets. An optimal clustering algorithm would be a
 %multiframe assignment problem.
 %
-%Note that because linear averaging os performed, points very near the
+%Note that because linear averaging is performed, points very near the
 %edges will not average to the correct values. However, since measurement
 %noises are typically small and unambiguous intervals large, this is seldom
 %a problem.

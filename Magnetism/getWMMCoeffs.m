@@ -1,5 +1,5 @@
 function [C,S,a,c]=getWMMCoeffs(year,fullyNormalize)
-%%GETWMMCOEFFS Obtain spherical harmonic coefficients for the 2015 
+%%GETWMMCOEFFS Obtain spherical harmonic coefficients for the 2015v2 
 %              version of the DoD's World Magnetic Model (WMM) at a
 %              particular time or at the reference epoch (2015). The WMM
 %              predicts the Earth's core field forward in time from the
@@ -50,11 +50,29 @@ function [C,S,a,c]=getWMMCoeffs(year,fullyNormalize)
 %to the function spherHarmonicEval.
 %
 %Documentation for the WMM is given in [1] and information on Schmidt semi-
-%normalized Legendre functions is given in [2]. The coefficients are
-%distributed at
+%normalized Legendre functions is given in [2]. The most recent update is
+%out-of-cycle and is described in [3]. The coefficients are distributed at:
 %http://www.ngdc.noaa.gov/geomag/WMM/DoDWMM.shtml
 %and being made by the U.S. Government are not subject to copyright
 %protection.
+%
+%EXAMPLE:
+%This shows how to get the magnetic field in the North-East-Down coordinate
+%system that is used in [1] and [3]. We choose one of the test value
+%points:
+% [C,S,a,c]=getWMMCoeffs(2017.5);
+% %(pi/180) converts degrees to radians.
+% pointLLA=[-80*(pi/180);240*(pi/180);100e3];
+% point=ellips2Sphere(pointLLA);
+% 
+% [~,gradV]=spherHarmonicEval(C,S,point,a,c);
+% B=-gradV;Geomagnetic field vector from negative potential gradient.
+%
+% u=getENUAxes(pointLLA);
+% %1e9 constant converts Tesla to to nanotesla
+% NorthX=dot(u(:,2),B)*1e9
+% EastY=dot(u(:,1),B)*1e9
+% DownZ=-dot(u(:,3),B)*1e9
 %
 %REFERENCES:
 %[1] S. Maus, S. McLean, M. Nair, and C. Rollins, "The US/UK world magnetic
@@ -64,6 +82,10 @@ function [C,S,a,c]=getWMMCoeffs(year,fullyNormalize)
 %[2] D. E. Winch, D. J. Ivers, J. P. R. Turner, and R. J. Stening,
 %    "Geomagnetism and Schmidt quasi-normalization," Geophysical Journal
 %    International, vol. 160, no. 2, pp. 487-504, Feb. 2005.
+%[3] Chulliat, A., W. Brown, P. Alken, S. Macmillan, M. Nair, C. Beggan, A.
+%    Woods, B. Hamilton, B. Meyer and R. Redmon, 2019, "Out-of-Cycle Update
+%    of the US/UK World Magnetic Model for 2015-2020," National Centers for
+%    Environmental Information, NOAA, Tech. Rep. doi: 10.25921/xhr3-0t19
 %
 %January 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

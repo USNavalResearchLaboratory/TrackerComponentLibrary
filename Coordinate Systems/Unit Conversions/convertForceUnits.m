@@ -1,31 +1,29 @@
 function val=convertForceUnits(val,unitOrig,unitDes)
-%%CONVERTFORCEUNITS  Convert values of force from one set of units to
-%                    another.
+%%CONVERTFORCEUNITS Convert values of force from one set of units to
+%                   another.
 %
-%INPUTS: val           The matrix or vector of values that are to be
-%                      converted.
-%   unitOrig, unitDes  Two character strings indicating the units of val
-%                      and the units into which it is to be converted. The
-%                      possible values are:
-%                      'dyn'    Dynes (cg*g/s^2)
-%                      'kip'    1000 pounds-force
-%                      'kgf'    kilograms-force
-%                      'lbf'    pounds-force
-%                      'ozf'    ounces-force
-%                      'YPa'    yottaNewtons      'ZPa'  zettaNewtons
-%                      'EPa'    exaNewtons        'PPa'  petaNewtons
-%                      'TPa'    tetraNewtons      'GPa'  gigaNewtons
-%                      'MPa'    megaNewtons       'kPa'  kiloNewtons
-%                      'hPa'    hectoNewtons      'daPa' decaNewtons
-%                      'Pa'     Newtons(kg*m/s^2) 'dPa'  deciNewtons
-%                      'cPa'    centiNewtons      'mPa'  milliNewtons
-%                      'muPa'   microNewtons      'nPa'  nanoNewtons
-%                      'pPa'    picoNewtons       'fPa'  femtoNewtons
-%                      'aPa'    attoNewtons       'zPa'  zeptoNewtons
-%                      'yPa'    yoctoNewtons
-%                      'pdl'    poundals
-%                      'tonf'   ton-force, (2000lbf, Note: other
-%                                           definitions exist)
+%INPUTS: val The matrix or vector of values that are to be converted.
+% unitOrig, unitDes Two character strings indicating the units of val and
+%            the units into which it is to be converted. The possible
+%            values are:
+%            'dyn'    Dynes (cg*g/s^2)
+%            'kip'    1000 pounds-force
+%            'kgf'    kilograms-force
+%            'lbf'    pounds-force
+%            'ozf'    ounces-force
+%            'YPa'    yottaNewtons      'ZPa'  zettaNewtons
+%            'EPa'    exaNewtons        'PPa'  petaNewtons
+%            'TPa'    tetraNewtons      'GPa'  gigaNewtons
+%            'MPa'    megaNewtons       'kPa'  kiloNewtons
+%            'hPa'    hectoNewtons      'daPa' decaNewtons
+%            'Pa'     Newtons(kg*m/s^2) 'dPa'  deciNewtons
+%            'cPa'    centiNewtons      'mPa'  milliNewtons
+%            'muPa'   microNewtons      'nPa'  nanoNewtons
+%            'pPa'    picoNewtons       'fPa'  femtoNewtons
+%            'aPa'    attoNewtons       'zPa'  zeptoNewtons
+%            'yPa'    yoctoNewtons
+%            'pdl'    poundals
+%            'tonf'   ton-force, (2000lbf, Note: other definitions exist)
 %
 %Many of the conversions were taken from [1].
 %

@@ -17,7 +17,7 @@ function [xyZ,sigma,gammaVal]=ellips2PolarStereo(latLon,lambda0,k0,xyPole,a,f)
 %            k0 The unitless central scale factor. If this parameter is
 %               omitted or an empty matrix is passed, then the default of
 %               0.994 is used, which is the value used in the UPS.
-%        xyPole A 2X1 vector holding the the false Easting and False
+%        xyPole A 2X1 vector holding the false Easting and False
 %               Northing of the origin. This is typically given in meters.
 %               If this parameter is omitted or an empty matrix is passed,
 %               then the default of [2000000;2000000] is used, which is the

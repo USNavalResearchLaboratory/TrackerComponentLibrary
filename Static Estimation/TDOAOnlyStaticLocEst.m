@@ -11,7 +11,7 @@ function sourceLoc=TDOAOnlyStaticLocEst(timeDelays,refRxLocs,nonRefRxLocs,c)
 %             measurements.
 %
 %INPUTS: timeDelays If only one reference receiver is present, this can be
-%               a numRxX1 vector of the time differences between the the
+%               a numRxX1 vector of the time differences between the
 %               receivers (in nonRefRxLocs) and the reference receiver.
 %               In the general case, this is a numRefsX1 cell array where
 %               the ith cell holds the numRxiX1 vector of delays for the

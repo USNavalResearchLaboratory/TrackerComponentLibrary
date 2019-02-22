@@ -1,4 +1,4 @@
-function val = binomial(n,k)
+function val=binomial(n,k)
 %%BINOMIAL Evaluate the binomial coefficient n Choose k, the total number
 %          of ways of choosing k items from a total selection of n where
 %          the ordering of the selection does not matter.

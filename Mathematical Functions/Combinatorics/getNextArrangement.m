@@ -14,7 +14,7 @@ function [arr,data]=getNextArrangement(data,m)
 %
 %OUTPUTS: arr The current mX1 arrangement vector. This the last arrangement
 %             in the sequence has been passed, then this is an empty
-%             matrix.
+%             matrix. Values can be from 1 to n.
 %        data The data that should be passed to a subsequent call of this
 %             function (without the m input) to get the next arrangement in
 %             the sequence.

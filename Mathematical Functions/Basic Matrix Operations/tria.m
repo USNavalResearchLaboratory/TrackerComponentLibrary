@@ -3,11 +3,11 @@ function S=tria(A)
 %      root matrix, obtain a lower-triangular square root matrix that is
 %      square.
 %
-%INPUTS:    A A numRowXnumCol matrix that is generally not square.
+%INPUTS: A A numRowXnumCol matrix that is generally not square.
 %
-%OUTPUTS:   S A lower-triangular matrix such that S*S'=A*A'. If
-%             numCol>=numRow, then S is a square numRowXnumRow matrix.
-%             Otherwise, S is a numRowXnumCol matrix.
+%OUTPUTS: S A lower-triangular matrix such that S*S'=A*A'. If
+%           numCol>=numRow, then S is a square numRowXnumRow matrix.
+%           Otherwise, S is a numRowXnumCol matrix.
 %
 %This is the tria function needed for various steps in the cubature Kalman
 %filter and the square root Kalman filter. It is described in [1]. It has

@@ -75,22 +75,22 @@ for curPoint=1:numPoints
     for curRun=1:numRuns 
         zMeas=z+SR*randn(2,1);
 
-        [zCart,RCart]=pol2CartTaylor(zMeas,R,[],0);
+        [zCart,RCart]=pol2CartTaylor(zMeas,R,[],[],0);
         diff=zCartTrue-zCart;
         MSECur(1)=MSECur(1)+diff'*diff;
         NEESCur(1)=NEESCur(1)+diff'*inv(RCart)*diff;
         
-        [zCart,RCart]=pol2CartTaylor(zMeas,R,[],1);
+        [zCart,RCart]=pol2CartTaylor(zMeas,R,[],[],1);
         diff=zCartTrue-zCart;
         MSECur(2)=MSECur(2)+diff'*diff;
         NEESCur(2)=NEESCur(2)+diff'*inv(RCart)*diff;
         
-        [zCart,RCart]=pol2CartTaylor(zMeas,R,[],2);
+        [zCart,RCart]=pol2CartTaylor(zMeas,R,[],[],2);
         diff=zCartTrue-zCart;
         MSECur(3)=MSECur(3)+diff'*diff;
         NEESCur(3)=NEESCur(3)+diff'*inv(RCart)*diff;
         
-        [zCart,RCart]=pol2CartTaylor(zMeas,R,[],3);
+        [zCart,RCart]=pol2CartTaylor(zMeas,R,[],[],3);
         diff=zCartTrue-zCart;
         MSECur(4)=MSECur(4)+diff'*diff;
         NEESCur(4)=NEESCur(4)+diff'*inv(RCart)*diff;

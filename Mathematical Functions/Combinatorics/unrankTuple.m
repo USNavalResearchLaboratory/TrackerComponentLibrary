@@ -1,7 +1,7 @@
 function tuple=unrankTuple(rank,maxVals)
 %%UNRANKTUPLE Obtain the tuple corresponding to its order in the sequence
 %             of tuples given a certain set of maximum values for each
-%             digit.
+%             digit. This effectively converts a value to a
 %
 %INPUTS: rank The rank of the tuple in the order of increasing tuples where
 %             the first digit is the most significant. This ranges from 0

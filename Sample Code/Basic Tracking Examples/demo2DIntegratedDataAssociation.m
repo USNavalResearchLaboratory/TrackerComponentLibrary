@@ -135,7 +135,8 @@ H=[1,0,0,0;
 numSamples=numSamplesTrack+50;
 
 xTrue2=xTrue1;
-xTrue2(1,:)=-xTrue2(1,:)+6.5e3;
+xTrue2(1,:)=-xTrue2(1,:)+6.5e3;%x position component.
+xTrue2(3,:)=-xTrue2(3,:);%Velocity component.
 xTrue=cat(3,xTrue1,xTrue2);
 numTargets=2;
 
@@ -268,7 +269,7 @@ for curScan=1:numSamples
         measJacob=@(z)calcPolarConvJacob(z,0);
         %The inclusion of r takes into account the track existence
         %probabilities.
-        [A,xHyp,PHyp]=makeStandardCartOnlyLRMatHyps(x,S,zCur,SRCur,PD,lambda,r,[],zCurPolar,measJacob);
+        [A,xHyp,PHyp]=makeStandardCartOnlyLRMatHyps(x,S,zCur,SRCur,[],PD,lambda,r,[],zCurPolar,measJacob);
         
         [xUpdate,PUpdate,rUpdate,probNonTargetMeas]=singleScanUpdateWithExistence(xHyp,PHyp,PD,r,A,algSel1,algSel2,param3);
         

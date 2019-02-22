@@ -60,7 +60,7 @@ function [delayDopPlot,Doppler,delay]=delayDopplerPlotNBPulseDop(x,y,M1,M2,wDopp
 %together. The received passband signal is modeled as
 %x_p(t)=real(exp(1j*2*pi*fc)*x(t))
 %where x(t) is the complex baseband signal. To come to baseband, one
-%would take the real part of exp(1j*2*pi*fc) times the the complex baseband
+%would take the real part of exp(1j*2*pi*fc) times the complex baseband
 %signal. In practice, one would use quadrature demodulation to take the
 %real measured signal and obtain the in-phase (real) and quadrature
 %(imaginary) parts of the complex baseband signal.

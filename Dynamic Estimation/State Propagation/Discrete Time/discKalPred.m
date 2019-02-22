@@ -30,6 +30,9 @@ end
 
 xPred=F*xPrev+u;
 PPred=F*PPrev*F'+Q;
+%Handle possible loss of symmetry due to order of operations and finite
+%precision limitations.
+PPred=(PPred+PPred')/2;
 end
 
 %LICENSE:

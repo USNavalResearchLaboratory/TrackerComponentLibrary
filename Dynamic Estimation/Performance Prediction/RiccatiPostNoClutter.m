@@ -96,6 +96,8 @@ if(PD~=1)
     curIter=0;
     while(curIter<maxIter)
         P=F*PPrev*F'+Q-PD*(F*PPrev*F'*H'+Q*H')*inv(H*F*PPrev*F'*H'+H*Q*H'+R)*(F*PPrev*F'*H'+Q*H')';
+        %Ensure symmetry is preserved.
+        P=(P+P')/2;
         
         diffMag=abs(P-PPrev);
         if(all((diffMag(:)<=RelTol*abs(P(:)))|(diffMag(:)<=AbsTol)))
@@ -107,7 +109,6 @@ if(PD~=1)
     end
     exitCode=1;%Convergence not achieved.
 else
-    
     P=PPrev;
 end
 

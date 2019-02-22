@@ -2,12 +2,12 @@ function [xi,w]=arbOrder2DSpherSurfCubPoints(order)
 %%ARBORDER2DSPHERSURFCUBPOINTS Generate cubature points of an aribtrary
 %               order for integration around the unit circle.
 %
-%INPUTS: order. The desired scalar order of the points. order>=1.
+%INPUTS: order The desired scalar order of the points. order>=1.
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %This is formula U2 m-1 of [1].
 %

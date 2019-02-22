@@ -5,20 +5,19 @@ function q=axisAng2Quat(u,theta)
 %              handedness of theta matches the handedness of the
 %              quaternion produced.
 %
-%INPUTS:         u  A unit vector representing the axis about which a
-%                   vector should be rotated using the rotation matrix.
-%             theta The angle in radians by which a vector is to be
-%                   rotated is to be rotated about the axis u when
-%                   multiplied by the rotation matrix. The handedness of
-%                   the rotation angle matches the handedness of the
-%                   quaternion produced.
+%INPUTS: u A unit vector representing the axis about which a vector should
+%          be rotated using the rotation matrix.
+%    theta The angle in radians by which a vector is to be rotated about
+%          the axis u when multiplied by the rotation matrix. The
+%          handedness of the rotation angle matches the handedness of the
+%          quaternion produced.
 %
-%OUTPUTS: q  A 4X1 unit quaternion corresponding to the supplied axis and
-%            angle. The handedness of the quaternion (which is important to
-%            know when using the quaternion with other functions, such as
-%            quatMult) is the same as that of the angle. The quaternion is
-%            ordered in terms of hypercomplex numbers as
-%            q(1)+i*q(2)+j*q(3)+k*q(4).
+%OUTPUTS: q A 4X1 unit quaternion corresponding to the supplied axis and
+%           angle. The handedness of the quaternion (which is important to
+%           know when using the quaternion with other functions, such as
+%           quatMult) is the same as that of the angle. The quaternion is
+%           ordered in terms of hypercomplex numbers as
+%           q(1)+i*q(2)+j*q(3)+k*q(4).
 %
 %Quaternions and rotations are discussed in [1].
 %

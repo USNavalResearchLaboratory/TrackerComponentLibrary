@@ -173,7 +173,7 @@ function [V,gradV,HessianV]=spherHarmonicEval(C,S,point,a,c,systemType,spherDeri
 %where k=1 if m=0 and k=2 otherwise. This differs from the normalization
 %constant that Matlab uses in the normalized version of its built-in
 %associated Legendre function. It is the same as the normalization 
-%constant the the NGA uses in its coefficients for the EGM96 and the
+%constant the NGA uses in its coefficients for the EGM96 and the
 %EGM2008 gravitation models. When considering Schmidt semi-normalized
 %associated Legednre functions, the relation is 
 %S^m_n(x)=P_{nm}(x)*sqrt(2*factorial(n-m)/factorial(n+m))*(-1)^m
@@ -192,7 +192,7 @@ function [V,gradV,HessianV]=spherHarmonicEval(C,S,point,a,c,systemType,spherDeri
 %aR*cos(m*lambda)-aI*sin(m*lambda)+1j*(aI*cos(m*lambda)+aR*sin(m*lambda))
 %Where one can see that it is not possible to independently set the real
 %and the imaginary terms. However, note that the formulation of the inner
-%sum used for complex values starts at -n and not at 0. Expand the the
+%sum used for complex values starts at -n and not at 0. Expand the
 %coefficient A(n,-m)=aR1+1j*aI1. Again, expanding the term,
 %A(n,-m)*exp(-1j*m*lambda), one gets
 %aR1*cos(m*lambda)+aI1*sin(m*lambda)+1j*(aI1*cos(m*lambda)-aR1*sin(m*lambda))

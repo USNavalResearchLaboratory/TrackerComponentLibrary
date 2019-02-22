@@ -5,13 +5,13 @@ function Lambda=getMarkovPTransProbMat(A,T)
 %           useful in certain implementations of the interacting multiple
 %           model (IMM) filter that have variable revisit rates.
 %
-%INPUTS: A  The transition density of the continuous-time Markov process.
-%           The sum of the elements on every row must be zero and all of
-%           the diagonal elements must be negative. The values of the
-%           diagonal elements can be linked to the mean sojourn time in a
-%           given state, as discussed below.
-%        T  The time interval over which the transition probability matrix
-%           is taken to consider.
+%INPUTS: A The transition density of the continuous-time Markov process.
+%          The sum of the elements on every row must be zero and all of
+%          the diagonal elements must be negative. The values of the
+%          diagonal elements can be linked to the mean sojourn time in a
+%          given state, as discussed below.
+%        T The time interval over which the transition probability matrix
+%          is taken to consider.
 %
 %OUTPUTS: Lambda The transition probability matrix over the given time
 %                interval. Lambda(i,j) is the probability that if the

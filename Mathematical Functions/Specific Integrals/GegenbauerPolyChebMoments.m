@@ -22,7 +22,7 @@ function vals=GegenbauerPolyChebMoments(lambda,k)
 %polynomial weighting function.
 %
 %REFERENCES:
-%[1] D.B. Hunter, H.V. Smith, A quadrature formula of Clenshaw?Curtis type
+%[1] D.B. Hunter, H.V. Smith, A quadrature formula of Clenshaw-Curtis type
 %    for the Gegenbauer weight-function, Journal of Computational and
 %    Applied Mathematics 177 (2005) 389-400.
 %

@@ -109,7 +109,7 @@ function [C,S]=fitSpherHarmonics(M,points,vals,a,c)
 %REFERENCES:
 %[1] D. F. Crouse, "An overview of major terrestrial, celestial, and
 %    temporal coordinate systems for target tracking," Naval Research
-%    Laboratory, Washington, DC, Tech. Rep. NRL/FR/5344?16-10,279, 10 Aug.
+%    Laboratory, Washington, DC, Tech. Rep. NRL/FR/5344-16-10,279, 10 Aug.
 %    2016.
 %
 %June 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.

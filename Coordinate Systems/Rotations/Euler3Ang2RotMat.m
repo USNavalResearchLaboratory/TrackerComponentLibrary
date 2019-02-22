@@ -9,29 +9,25 @@ function M=Euler3Ang2RotMat(theta1,theta2,theta3,series,handed)
 %              [x;y;z].
 %
 %INPUTS: theta,theta2,theta3 The three angles of rotation given in radians
-%                            about the three axes specified in series the
-%                            rotations are taken. The first rotation is
-%                            theta3, then theta2, then theta1.
-%                     series A character string specifying the series of
-%                            axes about which the three rotations are
-%                            taken. All possible combinations of axes
-%                            without repeating an axis are valid. For
-%                            example, 'xyz' means rotate theta3 about the z
-%                            axis, then rotate theta2 about the rotated y
-%                            axis, then rotate theta1 about the rotated x
-%                            axis. All possible combinations of values are:
-%                            'xzx', 'xyz', 'yxy', 'yzy', 'zyz', 'zxz',
-%                            'xzy', 'xyz', 'yxz', 'yzx', 'zyx', and 'zxy'.
-%                    handed  The handedness of the rotation angles. If
-%                            omitted, it is assumed that the rotations are
-%                            right-handed (the standard). Possible values
-%                            are
-%                            'right' The default if omitted. The rotation
-%                                    is right-handed.
-%                            'left'  The rotation is left-handed. The
-%                                    rotation angle is counterclockwise
-%                                    when one is looking in the direction
-%                                    that the rotation axis points.
+%              about the three axes specified in series the rotations are
+%              taken. The first rotation is theta3, then theta2, then
+%              theta1.
+%       series A character string specifying the series of axes about which
+%              the three rotations are taken. All possible combinations of
+%              axes without repeating an axis are valid. For example, 'xyz'
+%              means rotate theta3 about the z axis, then rotate theta2
+%              about the rotated y axis, then rotate theta1 about the
+%              rotated x axis. All possible combinations of values are:
+%              'xzx', 'xyz', 'yxy', 'yzy', 'zyz', 'zxz', 'xzy', 'xyz',
+%              'yxz', 'yzx', 'zyx', and 'zxy'.
+%       handed The handedness of the rotation angle. If omitted, it is
+%              assumed that the rotation is right-handed (the standard).
+%              Possible values are:
+%              'right' The default if omitted. The rotation is right-
+%                      handed.
+%              'left'  The rotation is left-handed. The rotation angle is
+%                      clockwise when one is looking into the rotation
+%                      axis.
 %
 %OUTPUTS: M The 3X3 rotation matrix such that M*v rotates the 3X1 vector v
 %           according to the given rotation angles and axes.

@@ -153,7 +153,7 @@ if(year<yearList(1))
 end
 
 if(year>yearList(end))
-    %If the year is after the final year, the the prediction coefficients
+    %If the year is after the final year, the prediction coefficients
     %in the final column of rowData must be used to predict forward the end
     %coefficients.
     idx=length(HeaderData)-1;

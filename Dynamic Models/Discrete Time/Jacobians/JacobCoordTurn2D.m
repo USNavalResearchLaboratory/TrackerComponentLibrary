@@ -17,7 +17,7 @@ function J=JacobCoordTurn2D(T,x,turnType,discPoint,tauTurn,tauLinAccel)
 %          acceleration (acceleration along the direction of motion), then
 %          x can either be x=[x;y;xdot;ydot;omega], where omega is the turn
 %          rate estimate in radians per second counterclockwise from the
-%          x-axis or x=[x;y;xdot;ydot;at] where at is the the transversal
+%          x-axis or x=[x;y;xdot;ydot;at] where at is the transversal
 %          acceleration, which is orthogonal to the velocity and is defined
 %          such that positive values of at map to positive values of omega.
 %          If there is a linear acceleration, then the target state is

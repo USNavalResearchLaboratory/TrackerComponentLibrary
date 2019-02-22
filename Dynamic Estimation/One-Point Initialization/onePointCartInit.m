@@ -22,7 +22,7 @@ function [x,P]=onePointCartInit(zCart,SRCart,higherDerivStdDev)
 %              standard deviations to use for each of the moments
 %              (position, velocity, etc) that cannot be estimated from the
 %              data. As mentioned in [1], for velocity, this might be
-%              vMax/sqrt(2) or vMax/sqrt(3.)
+%              vMax/sqrt(2) or vMax/sqrt(3).
 %
 %OUTPUTS: x The xDimXnumMeas set of target state estimates. All
 %           non-position components are zero. xDim=zDim*(numMoments+1). The

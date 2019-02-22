@@ -9,8 +9,8 @@ function [sigma,B,C]=KroneckerProdSVD(A,m1,n1,m2,n2)
 %         the Frobenius norm) that is the sum of rTilde Kronecker products.
 %         This function is only implemented for real matrices.
 %
-%INPUTS: A    A real m1*m2Xn1*n2 block matrix consisting of m1Xn1 blocks of
-%             sizem2Xn2. A must be real.
+%INPUTS: A A real m1*m2Xn1*n2 block matrix consisting of m1Xn1 blocks of
+%          sizem2Xn2. A must be real.
 % m1,n1,m2,n2 The integer sizes making up the dimensions of A.
 %
 %OUTPUTS: sigma An rX1 vector of the Kronecker singular values, 

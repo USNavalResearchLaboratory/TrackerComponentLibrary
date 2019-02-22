@@ -4,7 +4,7 @@ function [C21,S21,C,S]=getAdjustedGravCoeffs4PolarMotion(C,S,TT1,TT2,updateCAndS
 %                   polar motion as per the IERS 2010 conventions. Polar
 %                   motion is the motion of the motion of the rotation axis
 %                   of the Earth with respect to the crust of the Earth.
-%                   If the crust moves over the the liquid core (the
+%                   If the crust moves over the liquid core (the
 %                   rotation axis moves, then the distribution of mass with
 %                   respect to the crust is a little different. The polar
 %                   motion effects should probably be added after the drift

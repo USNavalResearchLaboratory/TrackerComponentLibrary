@@ -3,36 +3,36 @@ function [xi,w]=fifthOrderSpherSurfCubPoints(numDim,algorithm)
 %               integration over the surface of a unit (hyper-)sphere
 %               (weighting function is just 1).
 %
-%INPUTS: numDim  An integer specifying the dimensionality of the points
-%                to be generated.
-%      algorithm A value indicating which algorithm should be used.
-%                Possible values are
-%                0 (The default if omitted or an empty matrix is passed)
-%                  Use algorithm Un 5-1 from [1]. This requires 2*numDim^2
-%                  points. Negative weights present for numDim>4.
-%                1 Algorithm Un 5-2 of [1] requiring 2^numDim+2*numDim
-%                  points.
-%                2 Algorithm Un 5-3 of [1] requiring 2^(numDim+1)-2 points.
-%                3 Algorithm Un 5-4 of [1] requiring numDim*2^numDim
-%                  points.
-%                4 The algorithm of [2] as taken from [3] requiring
-%                  (numDim+1)*(numDim+2) points. Negative weights present
-%                  for numDim>7.
-%                5 Algorithm U3 5-1 of [1], requiring 12 points and that
-%                  numDim=3.
-%                6 Algorithm U3 5-2 of [1], requiring 14 points and that
-%                  numDim=3.
-%                7 Algorithm U3 5-3 of [1], requiring 18 points and that
-%                  numDim=3.
-%                8 Algorithm U3 5-4 of [1], requiring 20 points and that
-%                  numDim=3.
-%                9 Algorithm U3 5-5 of [1], requiring 30 points and that
-%                  numDim=3.
+%INPUTS: numDim An integer specifying the dimensionality of the points
+%               to be generated.
+%     algorithm A value indicating which algorithm should be used.
+%               Possible values are
+%               0 (The default if omitted or an empty matrix is passed)
+%                 Use algorithm Un 5-1 from [1]. This requires 2*numDim^2
+%                 points. Negative weights present for numDim>4.
+%               1 Algorithm Un 5-2 of [1] requiring 2^numDim+2*numDim
+%                 points.
+%               2 Algorithm Un 5-3 of [1] requiring 2^(numDim+1)-2 points.
+%               3 Algorithm Un 5-4 of [1] requiring numDim*2^numDim
+%                 points.
+%               4 The algorithm of [2] as taken from [3] requiring
+%                 (numDim+1)*(numDim+2) points. Negative weights present
+%                 for numDim>7.
+%               5 Algorithm U3 5-1 of [1], requiring 12 points and that
+%                 numDim=3.
+%               6 Algorithm U3 5-2 of [1], requiring 14 points and that
+%                 numDim=3.
+%               7 Algorithm U3 5-3 of [1], requiring 18 points and that
+%                 numDim=3.
+%               8 Algorithm U3 5-4 of [1], requiring 20 points and that
+%                 numDim=3.
+%               9 Algorithm U3 5-5 of [1], requiring 30 points and that
+%                 numDim=3.
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %REFERENCES:
 %[1] A.H. Stroud, Approximate Calculation of Multiple Integrals. Cliffs,

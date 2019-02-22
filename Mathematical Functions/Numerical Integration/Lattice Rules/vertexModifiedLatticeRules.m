@@ -23,9 +23,11 @@ function [xi,w,varMin]=vertexModifiedLatticeRules(numDim,method,tabIdx,lowerBoun
 %                 This uses Equation 8.10 for the vertices and the formulae
 %                 of Chapter 8.3 and Apendix B. In this instance, tabIdx is
 %                 a prime number that affects the number of points. The
-%                 matlab function primes can be used to find prime numbers.
+%                 Matlab function primes can be used to find prime numbers.
 %                 This option allows the use of untabulated numbers of
 %                 dimensions and points.
+%        tabIdx A parameter whose value depends on the method selected. See
+%               the comments to the method input for more information.
 %lowerBounds,upperBounds If these p[arameters are provided (and are not
 %               empty matrices), then the lattice points will be
 %               transformed for integration over regions other than just

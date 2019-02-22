@@ -15,9 +15,9 @@ function xPred=fTransCoordTurn2D(T,x,turnType,discPoint,tauTurn,tauLinAccel)
 %          motion), then x can either be x=[x;y;xdot;ydot;omega], where
 %          omega is the turn rate estimate in radians per second
 %          counterclockwise from the x-axis or x=[x;y;xdot;ydot;at] where
-%          at is the the transversal acceleration, which is orthogonal to
-%          the velocity and is defined such that positive values of at map
-%          to positive values of omega. If there is a linear acceleration,
+%          at is the transversal acceleration, which is orthogonal to the
+%          velocity and is defined such that positive values of at map to
+%          positive values of omega. If there is a linear acceleration,
 %          then the target state is either x=[x;y;xdot;ydot;omega;al] where
 %          omega is the turn rate and al is the linear acceleration or the
 %          target state is x=[x;y;xdot;ydot;at;al] if the turn is expressed
@@ -108,9 +108,9 @@ function xPred=fTransCoordTurn2D(T,x,turnType,discPoint,tauTurn,tauLinAccel)
 %
 %This state prediction function goes with the process noise covariance
 %matrix given by QCoordTurn2.The corresponding continuous-time drift
-%function for is aCoordTurn2D with its diffusion matrix DCoordTurn2D. Note
-%that this model is a direct-discrete-time model and is not just a
-%discretization of the continuous-time model.
+%functions are aCoordTurn2DOmega and aCoordTurn2DTrans with the diffusion
+%matrix DCoordTurn2D. Note that this model is a direct-discrete-time model
+%and is not just a discretization of the continuous-time model.
 %
 %REFERENCES:
 %[1] X. R. Li and V. P. Jilkov, "Survey of maneuvering target tracking.

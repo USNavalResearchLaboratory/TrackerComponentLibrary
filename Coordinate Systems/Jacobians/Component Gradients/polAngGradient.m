@@ -35,7 +35,7 @@ function JTotal=polAngGradient(xG,systemType,lRx,M)
 %system as
 %xLocal=M*(xG(1:2,curPoint)-lRx(1:2))
 %then compute the gradient J, and then undo the effects of the rotation
-%matrix M in the end to the the global coordinates as JTotal=J*M.
+%matrix M in the end to the global coordinates as JTotal=J*M.
 %However, that is not necessary with polar angles, due to cancellations.
 %Say that M=[m11,m12;m21,m22] is a rotation matrix. Then, the partial
 %derivative with respect to x is explicitly: 

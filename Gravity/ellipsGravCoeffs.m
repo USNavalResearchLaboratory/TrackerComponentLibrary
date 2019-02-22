@@ -35,7 +35,7 @@ function [CBar,SBar,a,c]=ellipsGravCoeffs(maxOrder,isNormalized,omega,a,f,GM)
 %               for the gravitational field that uses the associated
 %               Legendre functions that are fully normalized if
 %               isNormalized=true.
-%          SBar An array holding the the unitless coefficients of the sine
+%          SBar An array holding the unitless coefficients of the sine
 %               terms in a spherical harmonic expression for the
 %               gravitational field that uses the associated Legendre
 %               functions that are fully normalized if isNormalized=true.

@@ -64,7 +64,7 @@ function PEastOfNorth=geogHeading2Mag(points,geoEastOfNorth,coeffType,year,a,f)
 %If everything is consistent, then abs(geoEastOfNorthConv-geoEastOfNorth)
 %should be zero.
 %
-%This function makes use of the functions getWMM2010Coeffs and 
+%This function makes use of the functions getWMMCoeffs and 
 %spherHarmonicEval to determine the magnetic flux vector at the specified
 %points as well as the function getENUAxes to determine the local
 %East-North-Up coordinate axes.

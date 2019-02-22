@@ -5,29 +5,28 @@ function [xPred,PPred]=GaussPartFilterPred(xPrev,PPrev,transPDFSampFun,param4,wP
 %               from the propagated PDF conditioned on the prior state
 %               value.
 %
-%INPUTS:    xPrev   The xDim X 1 state estimate at the previous time-step.
-%           PPrev   The xDim X xDim state covariance matrix at the previous
-%                   time-step.
-%  transPDFSampFun  A function handle such that transPDFSampFun(xPrevVal)
-%                   draws a single sample from the propagated PDF
-%                   conditioned on the value of the prior PDF. This
-%                   requires being able to determine the conditional PDF of
-%                   the propagated state. As described below, in lieu of a
-%                   better method, rejection sampling can be used for the
-%                   sampling function if the transition PDF is known.
-%      param4,wPart These parameters determine the specifics of the
-%                   algorithm used. If param4 is a number and wPart is
-%                   omitted or is an empty matrix, then param4=numParticles
-%                   is the number of particles to use in the update step.
-%                   If param4 and wPart are both omitted or empty matrices
-%                   are passed, then 1e4 particles is used. On the other
-%                   hand, if param4=xiPart and wpart is provided, then
-%                   xiPart and wpart are the particles returned by
-%                   GaussPartFilterUpdate and the alternative time update
-%                   step is used.
+%INPUTS: xPrev The xDim X 1 state estimate at the previous time-step.
+%        PPrev The xDim X xDim state covariance matrix at the previous
+%              time-step.
+% transPDFSampFun A function handle such that transPDFSampFun(xPrevVal)
+%              draws a single sample from the propagated PDF conditioned on
+%              the value of the prior PDF. This requires being able to
+%              determine the conditional PDF of the propagated state. As
+%              described below, in lieu of a better method, rejection
+%              sampling can be used for the sampling function if the
+%              transition PDF is known.
+% param4,wPart These parameters determine the specifics of the algorithm
+%              used. If param4 is a number and wPart is omitted or is an
+%              empty matrix, then param4=numParticles is the number of
+%              particles to use in the update step. If param4 and wPart are
+%              both omitted or empty matrices are passed, then 1e4
+%              particles is used. On the other hand, if param4=xiPart and
+%              wPart is provided, then xiPart and wPart are the particles
+%              returned by GaussPartFilterUpdate and the alternative time
+%              update step is used.
 %
-%OUTPUTS:   xPred   The xDim X 1 predicted state estimate.
-%           PPred   The xDim X xDim predicted state covariance estimate.
+%OUTPUTS: xPred The xDim X 1 predicted state estimate.
+%         PPred The xDim X xDim predicted state covariance estimate.
 %
 %The algorithm is that given in Table I of [1]. There are two variants,
 %depending on whether the particles from a previous measurement update step

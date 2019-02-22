@@ -20,10 +20,10 @@ methods(Static)
 function val=mean(mu)
 %%MEAN Obtain the mean of the Gaussian distribution.
 %
-%INPUTS:    mu  The mean of the PDF. If the PDF is multivariate, then this
-%               is a column vector.
+%INPUTS: mu The mean of the PDF. If the PDF is multivariate, then this is
+%            a column vector.
 %
-%OUTPUTS: val  The mean of the Gaussian distribution.
+%OUTPUTS: val The mean of the Gaussian distribution.
 %
 %The Gaussian distribution is parameterized by its mean and covariance
 %matrix. Thus, this function just returns the mean it is given.
@@ -54,7 +54,7 @@ end
 
 function vals=PDF(z,mu,Sigma)
 %%PDF Evaluate a scalar or multivariate Gaussian (normal) PDF at a certain
-%     point given the mean and the covariance matrix.
+%     points given the mean and the covariance matrix.
 %
 %INPUTS: z The points at which the PDF should be evaluated. If the PDF is
 %          multivariate, then this is a column vector. If evaluation at
@@ -90,28 +90,25 @@ function vals=PDF(z,mu,Sigma)
 end
 
 function vals=PDFI(z,mu,SigmaInv)
-%%PDFI        Evaluate a scalar or multivariate Gaussian (normal) PDF at a
-%             certain points given the mean and the inverse of the
-%             covariance matrix.
+%%PDFI Evaluate a scalar or multivariate Gaussian (normal) PDF at certain
+%      points given the mean and the inverse of the covariance matrix.
 %
-%INPUTS:    z   The points at which the PDF should be evaluated. If the PDF
-%               is multivariate, then this is a column vector. If
-%               evaluation at multiple points are desired, then this is a
-%               numDimXN matrix with each column being the a point (a
-%               vector).
-%           mu  The mean of the PDF. If the PDF is multivariate, then this
-%               is a numDimX1 column vector. If omitted or an empty matrix
-%               is passed, a zero mean is used.
-%      SigmaInv The inverse variance (if scalar) or numDimXnumDim inverse
-%               covariance matrix (if multidimensional) of the PDF.
-%               SigmaInv can be singular. If omitted or an empty matrix is
-%               passed, the identity matrix is used as the covariance
-%               matrix.
+%INPUTS: z The points at which the PDF should be evaluated. If the PDF is
+%          multivariate, then this is a column vector. If evaluations at
+%          multiple points are desired, then this is a numDimXN matrix with
+%          each column being the a point (a vector).
+%       mu The mean of the PDF. If the PDF is multivariate, then this is a
+%          numDimX1 column vector. If omitted or an empty matrix is passed,
+%          a zero mean is used.
+% SigmaInv The inverse variance (if scalar) or numDimXnumDim inverse
+%          covariance matrix (if multidimensional) of the PDF. SigmaInv can
+%          be singular. If omitted or an empty matrix is passed, the
+%          identity matrix is used as the covariance matrix.
 %
-%OUTPUTS: val   The scalar value of the normal PDF with mean mu and
-%               inverse covariance matrix SigmaInv evaluated at the point
-%               z. If multiple points are passed (z is a matrix), then val
-%               is a row vector.
+%OUTPUTS: val The scalar value of the normal PDF with mean mu and inverse
+%             covariance matrix SigmaInv evaluated at the point z. If
+%             multiple points are passed (z is a matrix), then val is a row
+%             vector.
 %
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
@@ -141,18 +138,18 @@ function [PDFDerivVal,coeffPolyPart]=PDFIDerivs(mu,SigmaInv,numDerivs,x)
 %            Derivatives are taken with respect to components of the
 %            argument of the PDF, x.
 %
-%INPUTS: mu  The mean of the PDF. If the PDF is multivariate, then this
-%            is a numDimX1 column vector.
-%   SigmaInv The inverse variance (if scalar) or numDimXnumDim inverse
-%            covariance matrix (if multidimensional) of the PDF.
-%            SigmaInv can be singular.
-%  numDerivs A numDimX1 or 1XnumDim vector indicating the number of
-%            derivatives to take with respect to each of the dimensions of
-%            the state.numDerivs>=0.
-%          x The numDimXnumPoints argument of the PDF at which the
-%            derivatives of the PDF should be evaluated. If this parameter
-%            is omitted or an empty matrix is passed, then a default of
-%            x=zeros(numDim,1) is used.
+%INPUTS: mu The mean of the PDF. If the PDF is multivariate, then this is a
+%           numDimX1 column vector.
+%  SigmaInv The inverse variance (if scalar) or numDimXnumDim inverse
+%           covariance matrix (if multidimensional) of the PDF.
+%           SigmaInv can be singular.
+% numDerivs A numDimX1 or 1XnumDim vector indicating the number of
+%           derivatives to take with respect to each of the dimensions of
+%           the state.numDerivs>=0.
+%         x The numDimXnumPoints argument of the PDF at which the
+%           derivatives of the PDF should be evaluated. If this parameter
+%           is omitted or an empty matrix is passed, then a default of
+%           x=zeros(numDim,1) is used.
 %
 %OUTPUTS: PDFDerivVal A numPointsX1 vector of the values of the derivatives
 %                   of the PDF function given at the points in x or at x=0
@@ -252,24 +249,23 @@ function val=PDFS(z,mu,S)
 %              certain point given the mean and the square root of the
 %              covariance matrix.
 %
-%INPUTS:    z   The points at which the PDF should be evaluated. If the PDF
-%               is multivariate, then this is a column vector. If
-%               evaluation at multiple points are desired, then this is a
-%               numDimXN matrix with each column being the a point (a
-%               vector).
-%           mu  The mean of the PDF. If the PDF is multivariate, then this
-%               is a numDimX1 column vector.
-%           S   The square root of the variance (if scalar) or the
-%               numDimXnumDim lower-triangular square root of the
-%               covariance matrix (if multidimensional) of the PDF such
-%               that S*S'=Sigma, where Sigma is the covariance matrix. S
-%               cannot be a singular matrix. If omitted or an empty matrix
-%               is passed, the identity matrix is used.
+%INPUTS: z The points at which the PDF should be evaluated. If the PDF is
+%          multivariate, then this is a column vector. If evaluations at
+%          multiple points are desired, then this is a numDimXN matrix with
+%          each column being the a point (a vector).
+%       mu The mean of the PDF. If the PDF is multivariate, then this is a
+%          numDimX1 column vector.
+%        S The square root of the variance (if scalar) or the numDimXnumDim
+%          lower-triangular square root of the covariance matrix (if
+%          multidimensional) of the PDF such that S*S'=Sigma, where Sigma
+%          is the covariance matrix. S cannot be a singular matrix. If
+%          omitted or an empty matrix is passed, the identity matrix is
+%          used.
 %
-%OUTPUTS: val   The scalar value(s) of the normal PDF with mean mu and
-%               square root covariance matrix S evaluated at the points in
-%               z. If multiple points are passed (z is a matrix), then val
-%               is a row vector.
+%OUTPUTS: val The scalar value(s) of the normal PDF with mean mu and square
+%             root covariance matrix S evaluated at the points in z. If
+%             multiple points are passed (z is a matrix), then val is a row
+%             vector.
 %
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
@@ -300,10 +296,10 @@ function [grad,CDetGrad,Hess,CDetHess]=PDFSGradHessVechS(x,mu,C)
 %            respect to the vech(C), where C is the lower-triangular square
 %            root of the covariance matrix of the distribution.
 %
-%INPUTS:  x The dXnumPoints points at which the normal PDF is considered.
-%        mu The dX1 mean of the normal PDF.
-%         C The dXd lower-triangular square root covariance matrix of the
-%         normal PDF. This cannot be singular.
+%INPUTS: x The dXnumPoints points at which the normal PDF is considered.
+%       mu The dX1 mean of the normal PDF.
+%        C The dXd lower-triangular square root covariance matrix of the
+%          normal PDF. This cannot be singular.
 %
 %OUTPUTS: grad The gradient of the normal PDF with respect to vech(C)
 %              (vector of first partial derivatives  with respect to the
@@ -456,14 +452,14 @@ function val=CDF(z,mu,var)
 %     the mean and the variance, or for a normal(0,1) distribution if the
 %     mean and variance are omitted.
 %
-%INPUTS:    z   The point(s) at which the CDF should be evaluated.
-%           mu  The mean of the distribution. If omitted or an empty matrix
-%               is passed, a mean of 0 is used.
-%           var The variance of the distribution. If omitted or an empty
-%               matrix is passed, a variance of 1 is used.
+%INPUTS: z The point(s) at which the CDF should be evaluated.
+%       mu The mean of the distribution. If omitted or an empty matrix is
+%          passed, a mean of 0 is used.
+%      var The variance of the distribution. If omitted or an empty matrix
+%          is passed, a variance of 1 is used.
 %
-%OUTPUTS:   val The scalar value(s) of the normal CDF with mean mu and
-%               variance var evaluated at the point(s) z.
+%OUTPUTS: val The scalar value(s) of the normal CDF with mean mu and
+%             variance var evaluated at the point(s) z.
 %
 %This just uses the relation between the normal CDF and the error function
 %along with the erf function in Matlab.
@@ -488,15 +484,15 @@ function val=invCDF(prob,mu,var)
 %     considering a normal(0,1) distribution, this is also known as the
 %     probit function.
 %
-%INPUTS:    prob The probability or probabilities (0<=prob<=1) at which the 
-%                argument of the CDF is desired.
-%           mu  The mean of the distribution. If omitted or an empty matrix
-%               is passed, a mean of 0 is used.
-%           var The variance of the distribution. If omitted or an empty
-%               matrix is passed, a variance of 1 is used.
+%INPUTS: prob The probability or probabilities (0<=prob<=1) at which the 
+%             argument of the CDF is desired.
+%          mu The mean of the distribution. If omitted or an empty matrix
+%             is passed, a mean of 0 is used.
+%         var The variance of the distribution. If omitted or an empty
+%             matrix is passed, a variance of 1 is used.
 %
-%OUTPUTS:   val  The argument(s) of the CDF that would give the probability
-%                or probabilities in prob.
+%OUTPUTS: val The argument(s) of the CDF that would give the probability or
+%             probabilities in prob.
 %
 %This just uses the relation between the normal CDF and the error function
 %along with the erfinv (inverse error function) command in Matlab.
@@ -587,18 +583,18 @@ function [momentVal,coeffPolyPart]=momentGenFun(mu,Sigma,numDerivs,t)
 %              distribution involving the ith, jth, kth power of the first
 %              second, third... components of the random vector.
 %
-%INPUTS: mu  The mean of the PDF. If the PDF is multivariate, then this
-%            is a numDimX1 column vector.
-%      Sigma The variance (if scalar) or numDimXnumDim covariance matrix 
-%            (if multidimensional) of the PDF.
-%  numDerivs A numDimX1 or 1XnumDim vector indicating the number of
-%            derivatives to take with respect to each of the components of
-%            the argument of the moment generating function. numDerivs>=0.
-%          t The numDimXnumPoints argument of the moment generating
-%            function at which the derivatives of the moment generating
-%            function should be evaluated. If this parameter is omitted or
-%            an empty matrix is passed, then a default of
-%            t=zeros(numDim,1) is used.
+%INPUTS: mu The mean of the PDF. If the PDF is multivariate, then this is a
+%           numDimX1 column vector.
+%     Sigma The variance (if scalar) or numDimXnumDim covariance matrix 
+%           (if multidimensional) of the PDF.
+% numDerivs A numDimX1 or 1XnumDim vector indicating the number of
+%           derivatives to take with respect to each of the components of
+%           the argument of the moment generating function. numDerivs>=0.
+%         t The numDimXnumPoints argument of the moment generating
+%           function at which the derivatives of the moment generating
+%           function should be evaluated. If this parameter is omitted or
+%           an empty matrix is passed, then a default of
+%           t=zeros(numDim,1) is used.
 %
 %OUTPUTS: momentVal A numPointsX1 vector of the values of the derivatives
 %                   of the moment generating function given at the points
@@ -669,7 +665,11 @@ for i=1:numIdx
     %exponent in the multivariate normal moment generating function
     
     %Allocate space for the polynomial and make it have the correct shape.
-    basePoly=reshape(zeros(2^numIdx,1),2*ones(1,numIdx));
+    if(numIdx>1)
+        basePoly=reshape(zeros(2^numIdx,1),2*ones(1,numIdx));
+    else
+        basePoly=zeros(2^numIdx,1);
+    end
     
     %The additive term is the component of the mean that was multiplied by 
     basePoly(1)=mu(i);
@@ -797,8 +797,8 @@ end
 end
 
 function x=rand(N,mu,P)
-%%RAND   Generate multivariate Gaussian random variables with a given
-%        mean vector and covariance matrix.
+%%RAND Generate multivariate Gaussian random variables with a given mean
+%      vector and covariance matrix.
 %
 %INPUTS: N The number of random variables to generate.
 %       mu The xDim X1 mean of the multivariate Gaussian to generate.
@@ -822,16 +822,16 @@ function x=rand(N,mu,P)
 end
 
 function x=randS(N,mu,S)
-%%RANDS   Generate multivariate Gaussian random variable with a given
-%         mean vector and lower-triangular square root covariance matrix.
+%%RANDS Generate multivariate Gaussian random variable with a given mean
+%        vector and lower-triangular square root covariance matrix.
 %
 %INPUTS: N The number of random variables to generate.
 %       mu The xDim X1 mean of the multivariate Gaussian to generate.
 %        S The xDim X xDim lower triangular square root covariance matrix
 %          of the multivariate Gaussian to generate.
 %
-%OUTPUT: x   An xDimXN matrix of random instances of the multivariate
-%            Gaussian distribution.
+%OUTPUT: x An xDimXN matrix of random instances of the multivariate
+%          Gaussian distribution.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
@@ -847,30 +847,29 @@ function [P,error,curIter]=integralOverRegion(mu, Sigma,minVals,maxVals,epsVal,a
 %                  that converges significantly faster than generic,
 %                  textbook Monte Carlo integration techniques.
 %
-%INPUTS:   mu The NX1 mean vector of the multivariate normal distribution.
-%       Sigma The NXN positive definite covariance matrix of the
-%             distribution.
-%     minVals An NX1 or 1XN vector of the lower integration bounds for all
-%             of the dimensions.
-%     maxVals An NX1 or 1XN vector of the upper integration bounds. Note
-%             that minVals(i)<maxVals(i) for all elements.
-%      epsVal The desired error tolerance for the probability computation.
-%             If omitted or an empty matrix is passed, the defaut of 1e-6
-%             (1e-4%) is used.
-%       alpha The confidence factor for the standard error tolerance.
-%             Thus, for the estimate of epsVal used to determine
-%             termination to be correct 99% of the time, one should use
-%             alpha=GaussianD.invCDF(0.99); If this parameter is omitted or
-%             an empty matrix is passed, the default value of 2.5 is used.
-%     maxIter The maximum number of iterations to use. If this parameter is
-%             omitted or an empty matrix is passed, the default value of
-%             1000 is used.
+%INPUTS:  mu The NX1 mean vector of the multivariate normal distribution.
+%      Sigma The NXN positive definite covariance matrix of the
+%            distribution.
+%    minVals An NX1 or 1XN vector of the lower integration bounds for all
+%            of the dimensions.
+%    maxVals An NX1 or 1XN vector of the upper integration bounds. Note
+%            that minVals(i)<maxVals(i) for all elements.
+%     epsVal The desired error tolerance for the probability computation.
+%            If omitted or an empty matrix is passed, the defaut of 1e-6
+%            (1e-4%) is used.
+%      alpha The confidence factor for the standard error tolerance. Thus,
+%            for the estimate of epsVal used to determine termination to be
+%            correct 99% of the time, one should use 
+%            alpha=GaussianD.invCDF(0.99); If this parameter is omitted or
+%            an empty matrix is passed, the default value of 2.5 is used.
+%    maxIter The maximum number of iterations to use. If this parameter is
+%            omitted or an empty matrix is passed, the default value of
+%            1000 is used.
 %
-%OUTPUTS:    P The approximate probability within the region (0-1).
-%        error The estimated error in P, with a confidence interval
-%              determined by alpha.
-%      curIter The number of the last iteration performed before
-%              termination.
+%OUTPUTS: P The approximate probability within the region (0-1).
+%     error The estimated error in P, with a confidence interval determined
+%           by alpha.
+%   curIter The number of the last iteration performed before termination.
 %
 %The algorithm is that of [1]. Various transformations are applied to the
 %function to achieve better convergence than when performing typical Monte

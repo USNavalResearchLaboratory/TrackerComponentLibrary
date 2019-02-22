@@ -69,9 +69,9 @@ function [xPred,PPred,exitCode]=CDEKFPred(xPrev,PPrev,a,D,includesJacob,tPrev,tP
 %in [1]. Other methods in this paper are criticized in Section III of [2].
 %
 %REFERENCES:
-%[1] P. Frogerais., J. Bellanger, and L. Senhadji. "Various ways to compute
+%[1] P. Frogerais, J. Bellanger, and L. Senhadji. "Various ways to compute
 %    the continuous-discrete extended Kalman filter," IEEE Transactions on
-%    Automatic Control, vol. 57, no. (4), pp. 1000-1004, 2012
+%    Automatic Control, vol. 57, no. 4, pp. 1000-1004, Apr. 2012.
 %[2] G. Y. Kulikov and M. V. Kulikova. "Accurate numerical implementation
 %    of the continuous-discrete extended Kalman filter," IEEE Transactions
 %    on Automatic Control, vol. 59, no. 1, pp. 273-279, Jan. 2014.

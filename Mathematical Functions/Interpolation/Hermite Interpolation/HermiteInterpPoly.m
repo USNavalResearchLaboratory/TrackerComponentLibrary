@@ -1,12 +1,12 @@
 function [a,c]=HermiteInterpPoly(x,y)
-%%HERMITEINTERPPOL  Given a scalar function y(x) evaluated at certain
-%                   values of x (control points) along with an arbitrary
-%                   number of derivatives of y(x) at those points, this
-%                   function returns the coefficients of the Hermite
-%                   interpolating polynomial. If a large number of control
-%                   points is used, then numerical precision problems can
-%                   lead to bad results. In general, exceeding about 15
-%                   control points can lead to a loss of precision.
+%%HERMITEINTERPPOL Given a scalar function y(x) evaluated at certain
+%                  values of x (control points) along with an arbitrary
+%                  number of derivatives of y(x) at those points, this
+%                  function returns the coefficients of the Hermite
+%                  interpolating polynomial. If a large number of control
+%                  points is used, then numerical precision problems can
+%                  lead to bad results. In general, exceeding about 15
+%                  control points can lead to a loss of precision.
 %
 %INPUTS: x An NpX1 or 1XNp vector of values at which the function y and its
 %          derivative are given. The values are assumed to be given in

@@ -1,7 +1,7 @@
 classdef BinaryHeap < handle
-%%BINARYHEAP   An implementation of a priority queue as a binary heap. A
-%              priority queue is a data structure that allows one to easily
-%              get/ remove the maximum or minimum item in the queue.
+%%BINARYHEAP An implementation of a priority queue as a binary heap. A
+%            priority queue is a data structure that allows one to easily
+%            get/ remove the maximum or minimum item in the queue.
 %
 %DEPENDENCIES: KeyVal.m
 %
@@ -30,15 +30,17 @@ classdef BinaryHeap < handle
         %BINARYHEAP Allocate space for a binary heap and specify whether it
         %           is a max heap.
         %
-        %INPUT: initialMaxSize  The amount of room preallocated for the
-        %                       binary heap. If omitted, then a size-1 heap
-        %                       is preallocated.
-        %       isMaxHeap       A boolean value indicating whether the top
-        %                       of the heap is a maximum or a minimum
-        %                       value. The default if not specified is
-        %                       maximum.
+        %INPUT: initialMaxSize The amount of room preallocated for the
+        %                      binary heap. If omitted, then a size-1 heap
+        %                      is preallocated.
+        %            isMaxHeap A boolean value indicating whether the top
+        %                      of the heap is a maximum or a minimum value.
+        %                      The default if not specified is maximum.
         %
-        %OUTPUTS: newHeap       The newly created heap.
+        %OUTPUTS: newHeap The newly created heap.
+        %
+        %December 2013 David F. Crouse, Naval Research Laboratory,
+        %Washington D.C.
         
             if(nargin<2)
                 isMaxHeap=true;
@@ -57,12 +59,20 @@ classdef BinaryHeap < handle
         end
         
         function val=heapSize(curHeap)
-        %HEAPSIZE  Return the number of elements in the heap.
+        %HEAPSIZE Return the number of elements in the heap.
+        %
+        %December 2013 David F. Crouse, Naval Research Laboratory,
+        %Washington D.C.
+        
            val=curHeap.numInHeap; 
         end
         
         function val=isEmpty(curHeap)
-        %ISEMPTY  Return true if there are no nodes in the heap.
+        %ISEMPTY Return true if there are no nodes in the heap.
+        %
+        %December 2013 David F. Crouse, Naval Research Laboratory,
+        %Washington D.C.
+        
            val=curHeap.numInHeap==0; 
         end
         
@@ -70,11 +80,13 @@ classdef BinaryHeap < handle
         %BUILDHEAPFROMDATA  Build the heap from given data. If the heap was
         %                   already initialized, it will be destroyed.
         %
-        %INPUTS:    curHeap       The implicitly passed object.
-        %           keyArray      A kX1 array of key values.
-        %           dataArray     A linear cell array or a vector
-        %                         containing the data associated with each
-        %                         key value.
+        %INPUTS: curHeap The implicitly passed object.
+        %       keyArray A kX1 array of key values.
+        %      dataArray A linear cell array or a vector containing the
+        %                data associated with each key value.
+        %
+        %December 2013 David F. Crouse, Naval Research Laboratory,
+        %Washington D.C.
             
             numKeys=length(keyArray);
             curHeap.numInHeap=numKeys;
@@ -99,8 +111,12 @@ classdef BinaryHeap < handle
         end
         
         function insert(curHeap,key,value)
-        %INSERT Insert an entry with a specific key and value into the heap.  
-          
+        %INSERT Insert an entry with a specific key and value into the
+        %       heap.
+        %
+        %December 2013 David F. Crouse, Naval Research Laboratory,
+        %Washington D.C.
+
             curHeap.numInHeap=curHeap.numInHeap+1;
             hole=curHeap.numInHeap;
             
@@ -124,6 +140,9 @@ classdef BinaryHeap < handle
         %       element with the largest key. Otherwise, it is the element
         %       with the smallest key. If the heap is empty, then an empty
         %       matrix is returned.
+        %
+        %December 2013 David F. Crouse, Naval Research Laboratory,
+        %Washington D.C.
         
             if(curHeap.numInHeap>0)
                 val=curHeap.heapArray(1);
@@ -136,6 +155,9 @@ classdef BinaryHeap < handle
         %DELETETOP Remove the top element of heap heap (the one that getTop
         %          would return) and return the key and value of the
         %          element as a KeyVal object.
+        %
+        %December 2013 David F. Crouse, Naval Research Laboratory,
+        %Washington D.C.
             
             if(curHeap.numInHeap==0)
                 val=[];
@@ -191,7 +213,6 @@ classdef BinaryHeap < handle
             curHeap.heapArray(hole)=temp;
         end
     end
-    
 end
 
 %LICENSE:

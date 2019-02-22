@@ -82,7 +82,7 @@ for curDegree=1:degree
     numMonomials=binomial(curDegree+numDim-1,numDim-1);
     
     for j=0:(numMonomials-1)
-        curMonomial=unrankComposition(j,numDim,curDegree+numDim,true)-1;
+        curMonomial=unrankTComposition(j,numDim,curDegree+numDim,true)-1;
         termMat(2:end,curTerm)=curMonomial;
         for curEq=1:numEq
             V(curEq,curTerm)=prod(varVals(:,curEq).^curMonomial);

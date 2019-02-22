@@ -3,19 +3,18 @@ function [yPred, PInvPred]=infoFilterDiscPred(yPrev,PInvPrev,F,Q,u)
 %                    with the standard linear information filter with
 %                    additive process noise.
 %
-%INPUTS: yPrev      The xDimX1 information state at the previous time-step.
-%                   The information state is the inverse covariance matrix
-%                   times the target state.
-%        PInvPrev   The xDimXxDim inverse of the state covariance matrix at
-%                   the previous time-step.
-%        F          An xDim X xDim state transition matrix.
-%        Q          The xDimX xDim process noise covariance matrix.
-%        u          An optional xDim X1 vector that is the control input.
-%                   If omitted, no control input is used.
+%INPUTS: yPrev The xDimX1 information state at the previous time-step. The
+%              information state is the inverse covariance matrix times the
+%              target state.
+%     PInvPrev The xDimXxDim inverse of the state covariance matrix at the
+%              previous time-step.
+%            F An xDim X xDim state transition matrix.
+%            Q The xDimX xDim process noise covariance matrix.
+%            u An optional xDim X1 vector that is the control input. If
+%              omitted, no control input is used.
 %
-%OUTPUTS:   yPred    The xDim X 1 predicted information state vector.
-%           PInvPred The predicted xDim X xDim inverse state covariance
-%                    matrix.
+%OUTPUTS: yPred The xDim X 1 predicted information state vector.
+%      PInvPred The predicted xDim X xDim inverse state covariance matrix.
 %
 %The implementation of the prediction step given here is from the flow
 %chart given in [1]. The matrix G in the paper is omitted, since any
@@ -46,6 +45,11 @@ function [yPred, PInvPred]=infoFilterDiscPred(yPrev,PInvPrev,F,Q,u)
 
     DInv=F'+PInvPrev/(F)*Q;
     PInvPred=DInv\PInvPrev/(F);
+    
+    %Handle possible loss of symmetry due to order of operations and finite
+    %precision limitations.
+    PInvPred=(PInvPred+PInvPred')/2;
+
     if(nargin<5||isempty(u))
         yPred=DInv\yPrev;
     else

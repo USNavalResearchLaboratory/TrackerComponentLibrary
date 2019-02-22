@@ -3,11 +3,10 @@ function rank=rankPermutation(perm)
 %                   the lexicographic ordering, where the first element of
 %                   perm is the most significant.
 %
-%INPUTS:   perm An n-length vector consisting of integers from
-%               1 to n.
+%INPUTS: perm An n-length vector consisting of integers from 1 to n.
 %
-%OUTPUTS: rank  The rank of the permutation in a lexicographic ordering of
-%               permutations, counting from zero.
+%OUTPUTS: rank The rank of the permutation in a lexicographic ordering of
+%              permutations, counting from zero.
 %
 %The algorithm is from [1].
 %

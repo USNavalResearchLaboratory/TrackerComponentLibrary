@@ -23,7 +23,8 @@ function [xi,w,errParams]=standardLattice2SRules(numDim,methodIdx,periodizeAlg,u
 %               dimensions, 7 formula are available. They are those taken
 %               from Appendix A of [1]. methodIdx thus ranges from 1 to 7
 %               with an increasing number corresponding to an increasing
-%               number of lattice points used.
+%               number of lattice points used. If omitted or an empty
+%               matrix is passed, then method 1 is used.
 %  periodizeAlg If this parameter is omitted or an empty matrix is passed,
 %               then no periodization of the points will be performed.
 %               Periodization of the points can improve performance when
@@ -32,7 +33,7 @@ function [xi,w,errParams]=standardLattice2SRules(numDim,methodIdx,periodizeAlg,u
 %               periodizeAlg.method and optionally periodizeAlg.param1 and
 %               periodizeAlg.param2. The meaning of the parameters is the
 %               same as in the function periodizeLatticePoints.
-%lowerBounds,upperBounds If these p[arameters are provided (and are not
+% lowerBounds,upperBounds If these parameters are provided (and are not
 %               empty matrices), then the lattice points will be
 %               transformed for integration over regions other than just
 %               +/-1 in all dimensions. These are numDimX1 or 1XnumDim
@@ -74,7 +75,7 @@ function [xi,w,errParams]=standardLattice2SRules(numDim,methodIdx,periodizeAlg,u
 %            of the error of the integral.
 %
 %REFERENCES:
-%[1] I. H. Sloan and S. Joe, Lattice Methods for Multiple integration.
+%[1] I. H. Sloan and S. Joe, Lattice Methods for Multiple Integration.
 %    Oxford: Clarendon Press, 1994.
 %
 %November 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
@@ -200,6 +201,10 @@ switch(numDim)
                    10007,   745];
     otherwise
         error('Unsupported dimensionality chosen')
+end
+
+if(nargin<2||isempty(methodIdx))
+    methodIdx=1;
 end
 
 m=paramTable(methodIdx,1);

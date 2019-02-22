@@ -4,11 +4,11 @@ function colIdx=identifyIndepCols(A,tol)
 %                    The total number of linearly independent columns is
 %                    determined by the rank function.
 %
-%INPUTS: A  A matrix whereby a linearly independent subset of columns is
-%           desired.
-%       tol An optional parameter specifying the tolerance for determinaing
-%           the rank of the matrix. If omitted, the value
-%           tol=max(size(A))*eps(norm(A)) is used.
+%INPUTS: A A matrix whereby a linearly independent subset of columns is
+%          desired.
+%      tol An optional parameter specifying the tolerance for determinaing
+%          the rank of the matrix. If omitted, the value
+%          tol=max(size(A))*eps(norm(A)) is used.
 %
 %OUTPUTS: colIdx A vector of the indices of linearly independent columns of
 %                A. The indices are ordered in terms of increasing

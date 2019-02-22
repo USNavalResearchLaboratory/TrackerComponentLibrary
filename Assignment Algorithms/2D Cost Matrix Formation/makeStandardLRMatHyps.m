@@ -16,7 +16,9 @@ function [A,xHyp,PHyp,GateMat]=makeStandardLRMatHyps(xPred,SPred,measUpdateFuns,
 %               detection probabilities are just multiplied by the target
 %               existence probabilities, if provided and an option for the
 %               false alarm density to be specified in a different
-%               coordinate system is given.
+%               coordinate system is given. Additionally, the missed
+%               detection cost is modified with the gate probability as
+%               described below.
 %
 %INPUTS: xPred A numDimXnumTar set of predicted target states.
 %        SPred A numDimXnumDimXnumTar set of lower-triangular square-root
@@ -125,7 +127,7 @@ function [A,xHyp,PHyp,GateMat]=makeStandardLRMatHyps(xPred,SPred,measUpdateFuns,
 %
 %This function builds the dimensionless score function from [1]. Note,
 %however that the missed detection probability with gating is 1-PD*PG and
-%not just 1-PD When multiple thresholds [gammaVal} are given, the largest
+%not just 1-PD When multiple thresholds [gammaVals] are given, the largest
 %value of PG is seelected to use). This comes from normalizing the PDF of
 %the measurement to the gate. See Section 3.5.3 of [2], where Equation
 %3.5.3-6 has this normalizing term. This normalization term means that one
@@ -201,7 +203,8 @@ end
 
 %The gate probability (from an inverse chi-squared PDF). We use the maximum
 %gate probability when multiple ones are present.
-PG=max(1-gammainc(gammaVal/2,zDim/2,'upper'));
+PG=ChiSquareD.CDF(max(gammaVal),zDim);
+
 
 %Whether or not the target is detected is affected by whether it exists
 %(the rPred).

@@ -48,6 +48,11 @@ function [yPred, PInvPred]=infoFilterDiscPredRev(yPrev,PInvPrev,F,Q,u)
 
     DInv=inv(F')+PInvPrev*Q/(F');
     PInvPred=DInv\PInvPrev*(F);
+    
+    %Handle possible loss of symmetry due to order of operations and finite
+    %precision limitations.
+    PInvPred=(PInvPred+PInvPred')/2;
+    
     if(nargin<5||isempty(u))
         yPred=DInv\yPrev;
     else

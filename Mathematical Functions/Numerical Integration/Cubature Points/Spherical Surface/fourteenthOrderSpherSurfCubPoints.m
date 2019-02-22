@@ -3,8 +3,8 @@ function [xi,w]=fourteenthOrderSpherSurfCubPoints(numDim)
 %               points for integration over the surface of a unit (hyper-)
 %               sphere (weighting function is just 1).
 %
-%INPUTS: numDim  An integer specifying the dimensionality of the points
-%                to be generated. Currently, only numDim=3 is supported.
+%INPUTS: numDim An integer specifying the dimensionality of the points to
+%               be generated. Currently, only numDim=3 is supported.
 %
 %OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
 %            points (Each "point" is a vector).

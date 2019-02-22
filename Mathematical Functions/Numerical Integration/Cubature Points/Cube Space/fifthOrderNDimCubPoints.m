@@ -3,51 +3,48 @@ function [xi,w]=fifthOrderNDimCubPoints(numDim,algorithm)
 %               integration over a numDim-dimensional cube with bounds in
 %               coordinates of (-1,1).
 %
-%INPUTS:   numDim  An integer specifying the dimensionality of the points
-%                  to be generated. numDim>1.
-%        algorithm An optional parameter specifying the algorithm to be
-%                  used to generate the points. Possible values are:
-%                  0  (The default if omitted or an empty matrix is passed)
-%                     Formula Cn 5-2 in [1], pg. 231, 2*numDum^2+1 points.
-%                  1  Formula Cn 5-3 in [1], pg. 232, 3*numDim^2+3*numDim+1
-%                     points.
-%                  2  Formula Cn 5-4 in [1], pg. 233 2^numDim+2*numDim
-%                     points.
-%                  3  Formula Cn 5-5 in [1], pg. 233, 2^numDim+2*numDim+1
-%                     points.
-%                  4  Formula Cn 5-6 in [1], pg. 233, 2^(numDim+1)-1
-%                     points.
-%                  5  Formula Cn 5-7 in [1], pg. 234, numDim*2^numDim+1
-%                     points.
-%                  6  Formula Cn 5-8 in [1], pg. 235, 2^numDim*(numDim+1)
-%                     points.
-%                  7  Formula Cn 5-9 in [1], pg. 234, 3^numDim points.
-%                  8  Formula C2 5-1 in [1], pg. 246, 7 points, numDim=2.
-%                  9  Formula C2 5-2 in [1], pg. 247, 7 points, numDim=2.
-%                  10 Formula C2 5-3 in [1], pg. 248, 8 points, numDim=2.
-%                  11 Formula C2 5-4 in [1], pg. 249, 9 points, numDim=2.
-%                  12 Formula C2 5-5 in [1], pg. 250, 13 points, numDim=2.
-%                  13 Formula C2 5-6 in [1], pg. 251, 13 points, numDim=2.
-%                  14 Formula C3 5-1 in [1], pg. 262, 13 points, numDim=3.
-%                     This is actually the same as the first solution in
-%                     [4].
-%                  15 Formula C3 5-2 in [1], pg. 263, 14 points, numDim=3.
-%                  16 Formula C3 5-3 in [1], pg. 263, 21 points, numDim=3.
-%                  17 Formula C3 5-4 in [1], pg. 263, 23 points, numDim=3.
-%                  18 Formula C3 5-5 in [1], pg. 263, 25 points, numDim=3.
-%                  19 Formula C3 5-6 in [1], pg. 264, 27 points, numDim=3.
-%                  20 Formula C3 5-7 in [1], pg. 264, 29 points, numDim=3.
-%                  21 Formula C3 5-8 in [1], pg. 264, 42 points, numDim=3,
-%                     with corrections taken from Sadowsky's original paper
-%                     [2].
-%                  22 Formula C4 5-1 in [1], pg. 266, 31 points, numDim=4,
-%                     with corrections from the orignal paper by Stroud and
-%                     Goit [3].
+%INPUTS: numDim An integer specifying the dimensionality of the points to
+%               be generated. numDim>1.
+%     algorithm An optional parameter specifying the algorithm to be used
+%               to generate the points. Possible values are:
+%               0  (The default if omitted or an empty matrix is passed)
+%                  Formula Cn 5-2 in [1], pg. 231, 2*numDum^2+1 points.
+%               1  Formula Cn 5-3 in [1], pg. 232, 3*numDim^2+3*numDim+1
+%                  points.
+%               2  Formula Cn 5-4 in [1], pg. 233 2^numDim+2*numDim points.
+%               3  Formula Cn 5-5 in [1], pg. 233, 2^numDim+2*numDim+1
+%                  points.
+%               4  Formula Cn 5-6 in [1], pg. 233, 2^(numDim+1)-1 points.
+%               5  Formula Cn 5-7 in [1], pg. 234, numDim*2^numDim+1
+%                  points.
+%               6  Formula Cn 5-8 in [1], pg. 235, 2^numDim*(numDim+1)
+%                  points.
+%               7  Formula Cn 5-9 in [1], pg. 234, 3^numDim points.
+%               8  Formula C2 5-1 in [1], pg. 246, 7 points, numDim=2.
+%               9  Formula C2 5-2 in [1], pg. 247, 7 points, numDim=2.
+%               10 Formula C2 5-3 in [1], pg. 248, 8 points, numDim=2.
+%               11 Formula C2 5-4 in [1], pg. 249, 9 points, numDim=2.
+%               12 Formula C2 5-5 in [1], pg. 250, 13 points, numDim=2.
+%               13 Formula C2 5-6 in [1], pg. 251, 13 points, numDim=2.
+%               14 Formula C3 5-1 in [1], pg. 262, 13 points, numDim=3.
+%                  This is actually the same as the first solution in [4].
+%               15 Formula C3 5-2 in [1], pg. 263, 14 points, numDim=3.
+%               16 Formula C3 5-3 in [1], pg. 263, 21 points, numDim=3.
+%               17 Formula C3 5-4 in [1], pg. 263, 23 points, numDim=3.
+%               18 Formula C3 5-5 in [1], pg. 263, 25 points, numDim=3.
+%               19 Formula C3 5-6 in [1], pg. 264, 27 points, numDim=3.
+%               20 Formula C3 5-7 in [1], pg. 264, 29 points, numDim=3.
+%               21 Formula C3 5-8 in [1], pg. 264, 42 points, numDim=3,
+%                  with corrections taken from Sadowsky's original paper
+%                  [2].
+%               22 Formula C4 5-1 in [1], pg. 266, 31 points, numDim=4,
+%                  with corrections from the orignal paper by Stroud and
+%                  Goit [3].
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %REFERENCES:
 %[1] A.H. Stroud, Approximate Calculation of Multiple Integrals. Cliffs,

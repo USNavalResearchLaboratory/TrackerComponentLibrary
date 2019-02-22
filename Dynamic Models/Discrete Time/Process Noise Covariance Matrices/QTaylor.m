@@ -2,7 +2,7 @@ function Q=QTaylor(deltaT,xCur,curT,D,dadx,method)
 %%QTAYLOR Get the process noise covariance under a nonlinear continuous-
 %         time random process specified by the Langevin equation forward in
 %         time by a step-size of deltaT using a Taylor scheme with additive
-%          noise.
+%         noise.
 %
 %INPUTS: deltaT The size of the single step over which to generate the
 %               process noise covariance matrix.

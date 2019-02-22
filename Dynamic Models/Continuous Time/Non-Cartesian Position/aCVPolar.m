@@ -1,4 +1,4 @@
-function [aDeriv,aJacob]=aCVPolar(x,t)
+function [aVal,aJacob,aHess,papt]=aCVPolar(x,t)
 %%ACVPOLAR The drift function for a continuous-time motion model where the
 %          target state is given in polar coordinates and the motion is
 %          constant velocity in 2D Cartesian coordinates. This function
@@ -11,14 +11,17 @@ function [aDeriv,aJacob]=aCVPolar(x,t)
 %          Runge-Kutta methods that expect the function to take two
 %          parameters.
 %
-%OUTPUTS: aDeriv The 4XN set of time-derivatives of the N state vectors
-%                under the Cartesian linear motion model in polar
-%                coordinates.
-%         AJacob The 4X4XN set of Jacobians of aDeriv, which can be useful
-%                in extended Kalman filters. This is the derivative of each
-%                component of aDeriv (selected by row) with respect to the
-%                elements of the state [r,theta,rDot,thetaDot] selected by
-%                column.
+%OUTPUTS: aVal The 4XN set of time-derivatives of the N state vectors under
+%              the Cartesian linear motion model in polar coordinates.
+%       aJacob This and higher partial derivatives can only be requested
+%              if N=1. This is the 4X4  matrix of partial derivatives
+%              of aVal such that aJacob(:,i) is the partial derivative of
+%              aVal with respect to x(i).
+%        aHess The 4X4X4  matrix of second derivatives of aVal such
+%              that aHess(:,k1,k2) is the second partial derivative of
+%              aVal with respect to x(k1) and x(k2).
+%         papt The 4X1  partial derivative with resect to time of aVal.
+%              This is all zeros, because the model is time invariant.
 %
 %A derivation of the dynamic model is provided here. Let rVec be a position
 %vector. We shall use the orthonormal basis vectors
@@ -85,16 +88,35 @@ thetaDot=x(4,:);
 rDDot=r.*thetaDot.^2;
 thetaDDot=-(2./r).*rDot.*thetaDot;
 
-aDeriv=[rDot;thetaDot;rDDot;thetaDDot];
+aVal=[rDot;thetaDot;rDDot;thetaDDot];
 
 if(nargout>1)
     N=size(x,2);
-    aJacob=zeros(4,4,N);
-    for k=1:N
-        aJacob(:,:,k)=[0                                0,  1,                          0;
-                       0,                               0,  0,                          1;
-                       thetaDot(k)^2,                   0,  0,                          2*r(k)*thetaDot(k);
-                       2*rDot(k)*thetaDot(k)/r(k)^2,    0,  -((2*thetaDot(k))/r(k)),    -((2*rDot(k))/r(k))];
+    
+    if(N>1)
+        error('Derivatives are only available for numPoints=1.')
+    end
+    
+    aJacob=[0                    0,  1,                 0;
+            0,                   0,  0,                 1;
+            thetaDot^2,          0,  0,                 2*r*thetaDot;
+            2*rDot*thetaDot/r^2, 0,  -((2*thetaDot)/r), -((2*rDot)/r)];
+
+    if(nargout>2)
+        aHess=zeros(4,4,4);
+
+        aHess(:,:,1)=[zeros(2,4);
+                      0,                        0,  0,                2*thetaDot;
+                      -((4*rDot*thetaDot)/r^3), 0,  (2*thetaDot)/r^2, (2*rDot)/r^2];
+        aHess(:,:,3)=[zeros(3,4);
+                      2*thetaDot/r^2,0,0,-(2/r)];
+        aHess(:,:,4)=[zeros(2,4);
+                      2*thetaDot, 0,  0,        2*r;
+                      2*rDot/r^2,   0,  -((2)/r), -((2*rDot)/r)];
+
+        if(nargout>3)
+            papt=zeros(4,1);
+        end
     end
 end
 end

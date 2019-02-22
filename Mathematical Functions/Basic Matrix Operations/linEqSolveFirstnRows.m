@@ -10,13 +10,13 @@ function xn=linEqSolveFirstnRows(A,b,n)
 %                      x is the target state and b is the information
 %                      state.
 %
-%INPUTS: A  The NXN matrix A in the equation A*x=b, where x is unknown. The
-%           matrix can be singular, but the first n rows of x should be
-%           observable.
-%        b  The NX1 column vector b in the equation A*x=b.
-%        n  The number of rows of x, starting from the first row and going
-%           down, for which one wishes to solve in the equation A*b. n must
-%           be less than or equal to the number of rows in A.
+%INPUTS: A The NXN matrix A in the equation A*x=b, where x is unknown. The
+%          matrix can be singular, but the first n rows of x should be
+%          observable.
+%        b The NX1 column vector b in the equation A*x=b.
+%        n The number of rows of x, starting from the first row and going
+%          down, for which one wishes to solve in the equation A*b. n must
+%          be less than or equal to the number of rows in A.
 %
 %OUTPUTS: xn The first n rows of the column vector of x solved from A*x=b.
 %            If any of the components of xn are not finite, then the

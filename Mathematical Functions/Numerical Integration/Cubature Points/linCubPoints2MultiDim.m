@@ -184,7 +184,7 @@ function [xi,w]=SmolyakQuad(d,k,linRule)
     %on the rules on page 17 of [1].
     totalPoints=0;
     for L=max(d,k-d+1):k
-        tuples=getAllCompositions(d,L);
+        tuples=genAllTCompositions(L,d);
         totalPoints=totalPoints+sum(prod(num1DPoints(tuples),1));
     end
     
@@ -194,7 +194,7 @@ function [xi,w]=SmolyakQuad(d,k,linRule)
     numAdded=0;
     for L=max(d,k-d+1):k
         %All tuples of dimension d whose 1-norm is equal to L.
-        tuples=getAllCompositions(d,L)';
+        tuples=genAllTCompositions(L,d)';
         numTuples=size(tuples,1);
 
         for i=1:numTuples

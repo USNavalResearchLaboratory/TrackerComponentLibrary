@@ -1,8 +1,9 @@
-function [corr,offsets]=correlation(x,y,scaling)
-%%CORRELATION Estimate the correlation between two discrete sequences x and
-%             y. The strict definition of the autocorrelation is 
+function [corr,offsets]=correlation(x,y,maxLag,scaling)
+%%CORRELATION Estimate the correlation between two scalar discrete
+%             sequences x and y. The strict definition of the
+%             correlation is 
 %             r(m)=sum_{n=-Inf}^Inf x(n+m)*y(n)' m=0,+/-1, +/-2, etc.
-%             which is equivalent to 
+%             (if x=y, then it is autocorrelation), which is equivalent to 
 %             r(m)=sum_{n=-Inf}^Inf x(n)*y(n+m)'
 %             However, since the input sequences are finite, the
 %             correlation returned by this function if x and y are length
@@ -10,18 +11,27 @@ function [corr,offsets]=correlation(x,y,scaling)
 %             r(-m)' for m<0 The values are arranged into a vector corr
 %             such that corr(m)=r(m-N) for m=1,2,...(2*N-1)
 %             Thus, r(0) is corr(N), r(-1) is corr(N-1) and r(1) is
-%             corr(N+1).
+%             corr(N+1). Consider the sampleAutocorrMats function for
+%             vector sequences.
 %
-%INPUTS: x A numDimX X 1 or a 1X numDimX sequence.
+%INPUTS: x A numDimXX1 or a 1XnumDimX sequence.
 %        y If y is omitted, then an autocorrelation of x is computed (the
-%          same as y=x. If y is provided, then is is a numDimY X1  or
-%          1 X numDimY sequence. If numDimX~=numDimY, the shorted sequence
+%          same as y=x). If y is provided, then this is a numDimY X1  or
+%          1 X numDimY sequence. If numDimX~=numDimY, the shorter sequence
 %          is zero-padded at the end to make tham have equal length.
+%   maxLag The output is given for delays from -maxLag to maxLag
+%          (including the zero-lag point). The maximum possible value of
+%          maxLag is fix((2*max([numDimX,numDimY])-1)/2). If
+%          numDImX=numDimY=N, then this is just N-1. If one wishes the
+%          output to be shorter than the maximum, then maxLag can be
+%          passed. If this parameter is omitted or an empty matrix is
+%          passed, then this scalar parameter is set to the maximum
+%          possible value.
 %  scaling This optionally specifies how the output is normalized. Possible
 %          values are:
-%          'none' (The default if omitted or an empty matrix is passed) No
-%                 scaling is performed.
-%          'biased' The output corr is divided by max(numDimX,numDimY).
+%          'none'     (The default if omitted or an empty matrix is passed)
+%                     No scaling is performed.
+%          'biased'   The output corr is divided by max(numDimX,numDimY).
 %          'unbiased' The ith element of the output corr is divided by
 %                     max(numDimX,numDimY)+abs(offets(i))
 %
@@ -42,16 +52,16 @@ function [corr,offsets]=correlation(x,y,scaling)
 %Consider example 2.46 of [1].
 % x=[1;3;-2;1;2;-1;4;4;2];
 % y=[2;-1;4;1;-2;3];
-% c=correlation(x,y);
-% N=max([length(x),length(y)]);
+% [c,offsets]=correlation(x,y);
+% %If N=max([length(x),length(y)]), then offsets=(1-N):(N-1).
 % figure()
-% stem((1-N):(N-1),c)
+% stem(offsets,c)
 % %The stem command plots the correlation for the proper delays.
 % %Now, we consider the autocorrelation of x
-% c=correlation(x,x);
-% N=length(x);
+% [c,offsets]=correlation(x,x);
+% %If N=length(x), then offsets=(1-N):(N-1).
 % figure()
-% stem((1-N):(N-1),c)
+% stem(offsets,c)
 %
 %Note that in economics, the definition of cross correlation is typically
 %applied to the sequences x-mean(x) and y-mean(y) instead of directly to x
@@ -68,7 +78,7 @@ if(nargin<2||isempty(y))
     y=x;%Compute an autocorrelation.
 end
 
-if(nargin<3||isempty(scaling))
+if(nargin<4||isempty(scaling))
    scaling='none';
 end
 
@@ -81,15 +91,22 @@ elseif(numY<numX)
 end
 numEls=max([numX,numY]);
 
+absMaxLag=fix((2*numEls-1)/2);
+if(nargin<3||isempty(maxLag))
+   maxLag=absMaxLag;
+elseif(maxLag>absMaxLag)
+    error('maxLag must be <=fix((2*max([numDimX,numDimY])-1)/2)')
+end
+
+numShort=(absMaxLag-maxLag);
+
 %FFTs are used for efficiency with long sequences. This is similar to how
 %FFTs are used with basic convolutions.
 FFTLength=2^nextpow2(2*numEls-1);
 r=ifft(fft(x(:),FFTLength).*conj(fft(y(:),FFTLength)));
 
-%Keeps values corresponding to lags -(numEls-1):(numEls-1)
-corr=[r((end-numEls+2):end);r(1:numEls)];
-
-maxLag=fix((2*numEls-1)/2);
+%Keeps values corresponding to lags -maxLag:maxLag
+corr=[r((end-numEls+2+numShort):end);r(1:(numEls-numShort))];
 offsets=(-(maxLag):maxLag)';
 
 switch(scaling)
@@ -99,7 +116,7 @@ switch(scaling)
     case 'unbiased'
         corr=corr./(numEls-abs(offsets));
     otherwise
-        error('Unknown scaling specified')     
+        error('Unknown scaling specified.')     
 end
 end
 

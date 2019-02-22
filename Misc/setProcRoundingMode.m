@@ -33,7 +33,7 @@ function retVal=setProcRoundingMode(roundMode)
 % setProcRoundingMode(3);
 % 1+eps(0)>1
 % %The result should be true (1).
-
+%
 %REFERENCES:
 %[1] IEEE Standard 754-1985 for Binary Floating-point Arithmetic, IEEE,
 %    (1985).

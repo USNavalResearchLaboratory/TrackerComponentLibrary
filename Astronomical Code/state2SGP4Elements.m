@@ -1,55 +1,50 @@
 function [SGP4Elements,didConverge]=state2SGP4Elements(stateVec,dragTerm,dragType,TTEpoch1,TTEpoch2,opsMode,gravityModel)
-%%STATE2SGP4ELEMENTS  Convert the state of a target orbiting the Earth
-%                     given in terms of position and velocity in True
-%                     Equator Mean Equinox (TEME) of date coordinate
-%                     system into orbital elements used by the Simplified
-%                     General Perturbations 4 (SGP4)/ Simplified Deep Space
-%                     Perturbations 4 (SDP4) propagator given by the
-%                     propagateOrbitSGP4 function. This only work for
-%                     elliptical orbits, not for orbits that are on escape
-%                     trajectories (parabolic, hyperbolic).
+%%STATE2SGP4ELEMENTS Convert the state of a target orbiting the Earth given
+%                    in terms of position and velocity in True Equator Mean
+%                    Equinox (TEME) of date coordinate system into orbital
+%                    elements used by the Simplified General Perturbations
+%                    4 (SGP4)/ Simplified Deep Space Perturbations 4 (SDP4)
+%                    propagator given by the propagateOrbitSGP4 function.
+%                    This only work for elliptical orbits, not for orbits
+%                    that are on escape trajectories (parabolic,
+%                    hyperbolic).
 %
-%INPUTS:    stateVec A 6X1 state vector consisting of 3D position and 
-%                    velocity components in the TEME coordinate system in
-%                    meters and meters per second.
-%           dragTerm The drag term associated with the target. This can
-%                    either be the B* term used in the SGP4 propagator 
-%                    (which has units of inverse Earth radii) or the
-%                    ballistic coefficient BC, defined as BC=Cd*Area/mass 
-%                    where Cd is the drag coefficient having units of 
-%                    kg/m^2. If this parameter is omitted, zero drag is
-%                    assumed.
-%           dragType Specified the type of the drag term. Possible values
-%                    are
-%                    0 (The default if omitted) The drag term is a
-%                      ballistic coefficient.
-%                    1 The drag term is the B* term used in the SGP4
-%                      propagator.
+%INPUTS: stateVec A 6X1 state vector consisting of 3D position and velocity
+%                 components in the TEME coordinate system in meters and
+%                 meters per second.
+%        dragTerm The drag term associated with the target. This can either
+%                 be the B* term used in the SGP4 propagator (which has
+%                 units of inverse Earth radii) or the ballistic
+%                 coefficient BC, defined as BC=Cd*Area/mass where Cd is
+%                 the drag coefficient having units of kg/m^2. If this
+%                 parameter is omitted, zero drag is assumed.
+%        dragType Specified the type of the drag term. Possible values are
+%                 0 (The default if omitted) The drag term is a ballistic
+%                    coefficient.
+%                 1 The drag term is the B* term used in the SGP4
+%                   propagator.
 % TTEpoch1, TTEpoch2 The epoch time of the SGP4Elements given in
-%                    terrestrial time (TT) as a two-part Julian date.
-%                    These are only required if
-%                    2*pi/SGP4Elements(6)>=225, which is when the deep
-%                    space propagator is used. Otherwise, these inputs
-%                    can be omitted or empty matrices can be passed.
-%            opsMode An optional parameter specifying the orbital
-%                    propagation mode. Possible values are
-%                    0 (The default if omitted) Use a model that is
-%                      supposed to be similar to what the Air Force Space
-%                      Command (AFSPC) uses when they publish orbital
-%                      elements.
-%                    1 Use a model that is supposed to be a slight
-%                      improvement over what the AFSPC uses.
-%       gravityModel An optional parameter specifying which gravitational
-%                    model should be used. Since the gravitational models
-%                    stem from ellipsoidal Earth models, the choice of
-%                    the model also affects the radius of the Earth term
-%                    used in the algorithm. Possible values are
-%                    0 (The default if omitted). Use a gravitational
-%                      model based on the WGS-72 reference ellipsoid.
-%                      This appears to be what the AFSPC uses in their
-%                      TLE sets.
-%                    1 Use a gravitational model based on the WGS-84
-%                      reference ellipsoid.
+%                 terrestrial time (TT) as a two-part Julian date. These
+%                 are only required if 2*pi/SGP4Elements(6)>=225, which is
+%                 when the deep space propagator is used. Otherwise, these
+%                 inputs can be omitted or empty matrices can be passed.
+%         opsMode An optional parameter specifying the orbital propagation
+%                 model. Possible values are
+%                 0 (The default if omitted) Use a model that is supposed
+%                   to be similar to what the Air Force Space Command
+%                   (AFSPC) uses when they publish orbital elements.
+%                 1 Use a model that is supposed to be a slight improvement
+%                   over what the AFSPC uses.
+%    gravityModel An optional parameter specifying which gravitational
+%                 model should be used. Since the gravitational models stem
+%                 from ellipsoidal Earth models, the choice of the model
+%                 also affects the radius of the Earth term used in the
+%                 algorithm. Possible values are
+%                 0 (The default if omitted). Use a gravitational model
+%                   based on the WGS-72 reference ellipsoid. This appears
+%                   to be what the AFSPC uses in their TLE sets.
+%                 1 Use a gravitational model based on the WGS-84 reference
+%                   ellipsoid.
 %
 %OUTPUTS: SGP4Elements The 7X1 vector of SGP4 orbital elements that
 %                      correspond to the target state vector or an empty
@@ -74,8 +69,8 @@ function [SGP4Elements,didConverge]=state2SGP4Elements(stateVec,dragTerm,dragTyp
 %                        BSTAR=BC*rho0/2 where rho0=2.461e-5 kg/m^2. The
 %                        ballistic coefficient BC is Cd*Area/mass where Cd
 %                        is the drag coefficient of the object.
-%       didConverge A boolean value indicating whether the algorith
-%                   converged to an accurate solution.
+%         didConverge A boolean value indicating whether the algorith
+%                     converged to an accurate solution.
 %
 %The algorithm first converts the state vector into the set of orbital
 %elements described in [1] via the state2OrbEls function. These orbital

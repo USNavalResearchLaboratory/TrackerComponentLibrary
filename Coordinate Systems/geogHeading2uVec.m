@@ -93,7 +93,7 @@ if(size(angUpFromLevel,2)==1)
     angUpFromLevel=angUpFromLevel';
 end
 
-%Get the the unit vectors for East, North, and Up.
+%Get the unit vectors for East, North, and Up.
 uLocal=getENUAxes(point,false,a,f);
 uEast=uLocal(:,1);
 uNorth=uLocal(:,2);

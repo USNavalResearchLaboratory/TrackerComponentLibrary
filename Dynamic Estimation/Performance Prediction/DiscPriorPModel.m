@@ -69,6 +69,8 @@ if(mode~=0)
         FPow=F^n;
         P=P+FPow*Q*FPow';
     end
+    %Ensure symmetry is preserved.
+    P=(P+P')/2;
     return;
 end
 
@@ -85,6 +87,8 @@ switch(length(xInit))
     otherwise
         [FSum,P]=getFQSumDCWNA(k,T,q0);
 end
+%Ensure symmetry is preserved.
+P=(P+P')/2;
 xHat=FSum*xInit;
 end
     

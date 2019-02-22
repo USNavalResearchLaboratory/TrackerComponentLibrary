@@ -1,4 +1,4 @@
-function [thePartition,r,m,d]=getNextPartition(n,r,m,d)
+function [thePartition,theData]=getNextPartition(n,theData)
 %%GETNEXTPARTITION Get the next partition of the integer n. A partition is
 %                  a set of other integers that sum to n. This goes
 %                  through all possible partitions in reverse
@@ -14,36 +14,39 @@ function [thePartition,r,m,d]=getNextPartition(n,r,m,d)
 %                  only goes through partitions of m parts.
 %
 %INPUTS: n A positive integer that one wishes to partition. If this is the
-%          only parameter passed, then the first partition in reverse
-%          lexicographic order is returned.
-%        r A parameter needed to get subsequent partitions that is returned
-%          by this function upon generating a partition. The first d
-%          entries are all of the digits in the partition, without repeats.
-%          The other elements are needed to compute future partitions.
-%        m A vector specifying the number of times that the digits in r are
-%          repeated. This is returned by this function and has to be passed
-%          to get subsequent partitions.
-%        d The number of elements in r and m that contribute to the current
-%          partition. This is returned by this function and has to be
-%          passed to get subsequent partitions.
+%          only parameter passed (or theData is an empty matrix), then the 
+%          first partition in reverse lexicographic order is returned.
+%  theData After the first  partition has been returned, one must pass
+%          theData retruend by the function back here to get subsequent
+%          values. This is a structure with members:
+%          r A parameter needed to get subsequent partitions that is
+%            returned by this function upon generating a partition. The
+%            first d entries are all of the digits in the partition,
+%            without repeats. The other elements are needed to compute
+%            future partitions.
+%          m A vector specifying the number of times that the digits in r
+%            are repeated. T
+%          d The number of elements in r and m that contribute to the
+%            current partition.
 %
 %OUTPUTS: thePartition The next partition, which is also encoded in the
-%                      returned values of r, m, and d. The elements are in
-%                      DECREASING order. This is a series of integers that
-%                      sum to n. If n is the only parameter passed, then
-%                      this is the first partition. If the parameters for
-%                      the final partition were passed, then this is an
-%                      empty matrix.
-%                r,m,d The updated values of r, m, and d that should be
-%                      passed to get the next partition. Note that the
-%                      entire partition is encoded in r, m, and d.
+%                      returned values of r, m, and d in data. The elements
+%                      are in DECREASING order. This is a series of
+%                      integers that sum to n. If n is the only parameter
+%                      passed, then this is the first partition. If the
+%                      parameters for the final partition were passed, then
+%                      this is an empty matrix.
+%              theData The updated values of r, m, and d in a structure
+%                      that should be passed to get the next partition.
+%                      Note that the entire partition is encoded in r, m,
+%                      and d.
 %
 %The algorithm is based on NEXPAR in Chapter 9 of [1].
 %
 %The function is called as
-%[thePartition,r,m,d]=getNextPartition(n);
+%[thePartition,theData]=getNextPartition(n);
 %to get the first parition and as
-%[thePartition,r,m,d]=getNextPartition(n,r,m,d);
+%[thePartition,theData]=getNextPartition(n,theData);
 %to get subsequent partitions.
 %
 %REFERENCES:
@@ -54,14 +57,18 @@ function [thePartition,r,m,d]=getNextPartition(n,r,m,d)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 %If this is the first partition.
-if(nargin==1)
+if(nargin==1||isempty(theData))
     %Step A
-    r(1)=n;
-    m(1)=1;
-    d=1;
-    thePartition=r;
+    theData.r(1)=n;
+    theData.m(1)=1;
+    theData.d=1;
+    thePartition=n;
     return;
 end
+
+r=theData.r;
+m=theData.m;
+d=theData.d;
 
 %If the last partition was passed.
 if(m(d)==n)
@@ -106,6 +113,10 @@ for idx=1:d
     thePartition(partIdx:(partIdx+numRep-1))=r(idx);
     partIdx=partIdx+numRep;
 end
+
+theData.r=r;
+theData.m=m;
+theData.d=d;
 
 end
 

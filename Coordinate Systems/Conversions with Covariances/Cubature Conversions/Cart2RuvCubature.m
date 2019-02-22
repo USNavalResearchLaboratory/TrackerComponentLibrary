@@ -50,7 +50,7 @@ function [zRuv, RRuv]=Cart2RuvCubature(z,SR,useHalfRange,zTx,zRx,M,includeW,xi,w
 %        w A numCubaturePoints X 1 vector of the weights associated
 %          with the cubature points.
 %
-%OUTPUTS: zRuv The approximate means of the PDF of the the measurements
+%OUTPUTS: zRuv The approximate means of the PDF of the measurements
 %              in bistatic [r;u;v] coordinates or [r;u;v;w] coordinates if
 %              includeW is true. This is a 3XnumMeas  or a 4XnumMeas
 %              matrix.

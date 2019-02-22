@@ -6,8 +6,8 @@ function val=subfactorial(n)
 %              rearranged such that no items remain in their original
 %              positions.
 %
-%INPUTS: n  A scalar or matrix of positive, real integers whose
-%           subfactorials are desired; n>=1.
+%INPUTS: n A scalar or matrix of positive, real integers whose
+%          subfactorials are desired; n>=1.
 %
 %OUTPUTS: val The subfactorial of the values in n. This is often written as
 %             !n as opposed to the notation n! for the factorial.

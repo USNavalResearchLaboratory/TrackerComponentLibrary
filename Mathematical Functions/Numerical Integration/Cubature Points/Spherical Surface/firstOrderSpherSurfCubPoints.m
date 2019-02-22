@@ -3,13 +3,13 @@ function [xi,w]=firstOrderSpherSurfCubPoints(numDim)
 %                   integration over the surface of the unit sphere
 %                   (weighting function is just 1).
 %
-%INPUTS: numDim  An integer specifying the dimensionality of the points
-%                to be generated. numDim>=1.
+%INPUTS: numDim An integer specifying the dimensionality of the points to
+%               be generated. numDim>=1.
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %The formula for the points is the simple formula on page 431 of [1].
 %

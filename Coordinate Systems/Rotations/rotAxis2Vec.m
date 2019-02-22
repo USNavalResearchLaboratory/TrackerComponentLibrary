@@ -8,7 +8,7 @@ function R=rotAxis2Vec(u,axis,method)
 %             dimensions>=2.
 %
 %INPUTS: u1 A numDimXN unit vector representing the direction into which
-%           the the chosen axis is to be rotated. Non-unit vectors that are
+%           the chosen axis is to be rotated. Non-unit vectors that are
 %           passed will be normalized. For N>1, multiple rotation matrices
 %           are returned.
 %      axis The axis that is chosen. This selection the index can be a

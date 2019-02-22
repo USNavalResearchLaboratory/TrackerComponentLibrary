@@ -1,4 +1,4 @@
-function val=aPolarLin2D(x,t,T)
+function [aVal,aJacob,aHess,papt]=aPolarLin2D(x,t,T)
 %APOLARLIN2D The drift function for a 2D continuous-time constant heading
 %            motion model where the target state is given in terms of
 %            position, direction of velocity in radians counterclockwise
@@ -12,14 +12,24 @@ function val=aPolarLin2D(x,t,T)
 %          Alternatively, a 5XN state vector of [2D position;direction
 %          angle;speed; speed derivative] can be used to cover a linearly
 %          accelerating target.
-%        t An unused time component so that aPolar2DCV can be used with
+%        t An unused time component is so that aPolar2DCV can be used with
 %          Runge-Kutta methods that expect the function to take two
 %          parameters.
 %        T The time-duration of the propagation interval in seconds. This
 %          is only needed when linear acceleration is included.
 %
-%OUTPUTS: val The 4XN or 5XN set of time-derivatives of the state under the
-%             constant heading motion model.
+%OUTPUTS: aVal The 4XN or 5XN set of time-derivatives of the state under
+%              the constant heading motion model.
+%       aJacob This and higher partial derivatives can only be requested
+%              if N=1. This is the 4X4 or 5X5 matrix of partial derivatives
+%              of aVal such that aJacob(:,i) is the partial derivative of
+%              aVal with respect to x(i).
+%        aHess The 4X4X4 or 5X5X5 matrix of second derivatives of aVal such
+%              that aHess(:,k1,k2) is the second partial derivative of
+%              aVal with respect to x(k1) and x(k2).
+%         papt The 4X1 or 5X1 partial derivative with resect to time of
+%              aVal. This is all zeros, because the model is time
+%              invariant.
 %
 %The idea of decomposing the velocity into direction and speed components
 %is presented in [1], where the direction component is differently defined
@@ -36,29 +46,81 @@ function val=aPolarLin2D(x,t,T)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 N=size(x,2);
-val=zeros(size(x));
+aVal=zeros(size(x));
 
 for curX=1:N
     %The direction component.
     theta=x(3,curX);
     v=x(4,curX);
 
+    cosTheta=cos(theta);
+    sinTheta=sin(theta);
+    
     if(size(x,1)==4)%If it is just constant velocity.
-        val(:,curX)=[v*cos(theta);
-             v*sin(theta);
+        aVal(:,curX)=[v*cosTheta;
+             v*sinTheta;
              0;
              0];
+         
+        if(nargout>1)
+            if(N>1)
+                error('Derivatives are only available for N=1.')
+            end
+            aJacob=[0,0,-v*sinTheta,   cosTheta;
+                    0,0,v*cosTheta,    sinTheta;
+                    0,0,0,             0;
+                    0,0,0,             0];
+                
+            if(nargout>2)
+                aHess=zeros(4,4,4);
+                
+                aHess(:,:,3)=[0,0,-v*cosTheta,-sinTheta;
+                              0,0,-v*sinTheta,cosTheta;
+                              zeros(2,4)];
+                aHess(:,:,4)=[0,0,-sinTheta,0;
+                              0,0,cosTheta, 0;
+                              zeros(2,4)];
+                if(nargout>3)
+                    papt=zeros(4,1);
+                end     
+            end
+        end
     else%If a linear acceleration is also given.
         vDot=x(5,curX);
-        val(:,curX)=[(v+(T/2)*vDot)*cos(theta);
-             (v+(T/2)*vDot)*sin(theta);
-             0;
-             vDot;
-             0];
+        
+        vSum=(v+(T/2)*vDot);
+        T2=T/2;
+        
+        aVal(:,curX)=[vSum*cosTheta;
+                      vSum*sinTheta;
+                      0;
+                      vDot;
+                      0];
+        if(nargout>1)
+            aJacob=[0,0,-vSum*sinTheta, cosTheta,T2*cosTheta;
+                    0,0,vSum*cosTheta,  sinTheta,T2*sinTheta;
+                    0,0,0,              0,        0;
+                    0,0,0,              0,        1;
+                    0,0,0,              0,        0];
+            if(nargout>2)
+                aHess=zeros(5,5,5);
+                
+                aHess(:,:,3)=[0,0,-vSum*cosTheta,-sinTheta,-T2*sinTheta;
+                              0,0,-vSum*sinTheta,cosTheta,T2*cosTheta;
+                              zeros(3,5)];
+                aHess(:,:,4)=[0,0,-sinTheta,0,0;
+                              0,0,cosTheta,0,0;
+                              zeros(3,5)];
+                aHess(:,:,5)=[0,0,-T2*sinTheta,0,0;
+                              0,0,T2*cosTheta,0,0;
+                              zeros(3,5)];
+                if(nargout>3)
+                    papt=zeros(5,1);
+                end
+            end
+        end
     end
-
 end
-
 end
 
 %LICENSE:

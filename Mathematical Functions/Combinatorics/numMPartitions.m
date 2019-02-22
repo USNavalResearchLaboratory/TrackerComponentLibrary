@@ -1,18 +1,23 @@
-function val=numMPartitions(n,m)
-%%NUMMPARTITIONS  Get the number of ways of partitioning the integer n
-%                 into m parts, where order does not matter (unlike
-%                 compositions, where order matters). That is the number of
-%                 ways of getting m nonzero integers that sum to n. The
-%                 amount of memory for this implementation is proportional
-%                 to n*m and thus the solution becomes slow for very large
-%                 n and m values.
+function val=numMPartitions(n,m,getUpToM)
+%%NUMMPARTITIONS Get the number of ways of partitioning the integer n into
+%                m parts, where order does not matter (unlike compositions,
+%                where order matters). That is the number of ways of
+%                getting m nonzero integers that sum to n. The amount of
+%                memory for this implementation is proportional to n*m and
+%                thus the solution becomes slow for very large n and m
+%                values.
 %
-%INPUTS: n  The integer to be partitioned.
-%        m  The number of parts into which the integer is to be
-%           partitioned.
+%INPUTS: n The positive n>0 integer to be partitioned.
+%        m The number of parts into which the integer is to be partitioned.
+% getUpToM This parameter changes what is returned. If false (the default
+%          if omitted or an empty matrix is passed), the number of
+%          ways of partitioning n into m parts is returned. If true, then
+%          the total number of ways of partitioning n into m or fewer parts
+%          is returned.
 %
 %OUTPUTS: val The number of ways of partitioning the integer n into m
-%             parts.
+%             parts or if getUpToM=true, then this is the total number of
+%             ways of partitioning n into m or fewer parts.
 %
 %The counting method is based on the recurrence relation in Chapter 7.2.1.4
 %of [1]. The algorithm could be implemented to use less memory. However,
@@ -27,6 +32,10 @@ function val=numMPartitions(n,m)
 %October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<3||isempty(getUpToM))
+    getUpToM=false;
+end
+
 P=eye(n+1,m+1);
 P(:,1+1)=1;
 
@@ -35,8 +44,11 @@ for curN=2:n
         P(curN+1,curK+1)=P(curN-1+1,curK-1+1)+P(curN-curK+1,curK+1);
     end
 end
-val=P(end,end);
-
+if(getUpToM)
+    val=sum(P(end,:));
+else
+    val=P(end,end);
+end
 end
 
 %LICENSE:

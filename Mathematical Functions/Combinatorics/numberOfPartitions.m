@@ -1,25 +1,25 @@
 function numPart=numberOfPartitions(n,returnAll)
-%%NUMBEROFPARTITIONS  The number of ways of partitioning the positive
-%                     integer n. This is the number of ways of writing n as
-%                     a sum of other positive integers. This is sometimes
-%                     called partition function p. If one only wants the
-%                     number of possible ways of partitioning n into m
-%                     parts, then the function numMPartitions should be
-%                     used.
+%%NUMBEROFPARTITIONS The number of ways of partitioning the positive
+%                    integer n. This is the number of ways of writing n as
+%                    a sum of other positive integers. This is sometimes
+%                    called partition function p. If one only wants the
+%                    number of possible ways of partitioning n into m
+%                    parts, then the function numMPartitions should be
+%                    used.
 %
-%INPUTS: n        The positive integer, n>0, that is to be considered for
-%                 partitioning.
-%       returnAll An optional parameter specifying what should be returned.
-%                 Possible values are
-%                 false (the default if omitted) Only the number of
-%                       partitions of n is returned.
-%                 true  A vector of all of the numbers of partitions from
-%                       n=0 to n are returned. The number of partitions of
-%                       a positive integer 0<=i<=n is thus numPart(i+1);
+%INPUTS: n The positive integer, n>0, that is to be considered for
+%          partitioning.
+% returnAll An optional parameter specifying what should be returned.
+%          Possible values are
+%          false (The default if omitted or an empty matrix is passed) Only
+%                 the number of partitions of n is returned.
+%           true  A vector of all of the numbers of partitions from n=0 to
+%                 n are returned. The number of partitions of a positive
+%                 integer 0<=i<=n is thus numPart(i+1);
 %
 %OUTPUTS: numPart The number of possible partitions of the integer n, if
 %                 returnAll is omitted or is false, or an (n+1)X1 vector of
-%                 the number of partitions of all integers from 1 to n.
+%                 the number of partitions of all integers from 0 to n.
 %
 %For n<=250, the algorithm used is the recursion taken from Chapter
 %7.2.1.4 of [1]. The recursion is also mentioned in [2]. However, as n gets
@@ -47,7 +47,7 @@ function numPart=numberOfPartitions(n,returnAll)
 %October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<2)
+if(nargin<2||isempty(returnAll))
     returnAll=false;
 end
 

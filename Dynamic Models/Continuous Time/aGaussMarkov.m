@@ -1,4 +1,4 @@
-function aDeriv=aGaussMarkov(x,t,tau,order)
+function [aVal,aJacob,aHess,papt]=aGaussMarkov(x,t,tau,order)
 %AGAUSSMARKOV The drift function for an arbitrary-order Gauss Markov
 %             process. Gauss-Markov processes have exponentially-correlated
 %             noise in their highest moment. A zeroth-order process is an
@@ -30,10 +30,20 @@ function aDeriv=aGaussMarkov(x,t,tau,order)
 %          1=position and velocity, etc. If this parameter is omitted, the
 %          default value of 2 (Singer's model) is used.
 %
-%OUTPUTS: aDeriv The time-derivative of the state under the Gauss-Markov model
-%             having the given order and whose dimensionality is inferred
-%             from x, whose elements are ordered
-%             [position;velocity;acceleration;etc].
+%OUTPUTS: aVal The time-derivative of the state under the Gauss-Markov model
+%              having the given order and whose dimensionality is inferred
+%              from x, whose elements are ordered
+%              [position;velocity;acceleration;etc].
+%       aJacob The xDimXxDim Jacobian of aVal (it is the same for all x and
+%              not repeated N times). This is such that aJacob(:,k) is the
+%              partial derivative of aVal with respect to the kth element
+%              of x.
+%        aHess The xDimXxDimXxDim hypermatrix such that aHess(:,k1,k2) is
+%              the second partial derivative of aVal with respect to
+%              elements k1 and k2 of x (all zero in this instance). It is
+%              the same for all x.
+%         papt The xDimX1 partial derivative of aVal with respect to t (all
+%              zero in this instance). It is the same for all x.
 %
 %The Singer model (order=2) is introduced for tracking in [1]. The first-
 %order model, the integrated Ornstein-Uhlenbeck process, is discussed for
@@ -83,13 +93,25 @@ xDim=size(x,1);
 numDim=xDim/(order+1);
 
 %Allocate space
-aDeriv=zeros(xDim,1);
+aVal=zeros(xDim,1);
 
 %All but the highest-order moment are just integrated.
-aDeriv(1:(numDim*order))=x((numDim+1):end);
+aVal(1:(numDim*order))=x((numDim+1):end);
 
 %The highest-order moment is set to -1/tau times itself. 
-aDeriv((numDim*order+1):end)=-1/tau*x((numDim*order+1):end);
+aVal((numDim*order+1):end)=-1/tau*x((numDim*order+1):end);
+
+if(nargout>1)
+    aJacob=[zeros(xDim,numDim),[eye(xDim-numDim,xDim-numDim);zeros(numDim,xDim-numDim)]];
+
+    if(nargout>2)
+        aHess=zeros(xDim,xDim,xDim);
+
+        if(nargout>3)
+            papt=zeros(xDim,1);
+        end
+    end
+end
 end
 
 %LICENSE:

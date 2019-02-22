@@ -11,7 +11,7 @@ function CRLB=directionOnlyStaticLocCRLB(t,lRx,M,SRLocal,xi,w)
 %             assumption is that the measurements are sufficiently far from
 %             the edge of the observable region/ the noise is sufficiently
 %             low that the measured components will never exceed valid
-%             values to be one (in 2D) or two (in 3D) cpmponents of unit
+%             values to be one (in 2D) or two (in 3D) components of unit
 %             vectors.
 %
 %INPUTS:  t The 2X1 (in 2D) or 3X1 (in 3D) location of the target in global

@@ -22,6 +22,7 @@ function y=roundTies2EvenOdd(x,mode)
 %y2=[-1,-3,-3,-1,-2,-2,-3,0,1,3,3,1,2,2,3]
 %
 %November 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
     if(nargin<2||isempty(mode))
         mode=0;

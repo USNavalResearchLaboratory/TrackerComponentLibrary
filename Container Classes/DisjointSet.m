@@ -45,9 +45,9 @@ classdef DisjointSet < handle
         %               as a list of targets that gate with a common
         %               measurement, cluster them together.
         %
-        %INPUTS: DSObj  The implicitly passed calling object.
-        %        uList  A one-dimensional list of indices of targets to
-        %               merge into one cluster
+        %INPUTS: DSObj The implicitly passed calling object.
+        %        uList A one-dimensional list of indices of targets to
+        %              merge into one cluster
         
             numInList=length(uList);
             if(numInList==0)
@@ -62,14 +62,14 @@ classdef DisjointSet < handle
         end
         
         function unionFromBinMat(DSObj,binMat)
-        %%UNIONFROMBINMAT  Given a binary matrix specifying which 
-        %                  measurements gate with which targets, cluster
-        %                  together all targets that gate with each other.
+        %%UNIONFROMBINMAT Given a binary matrix specifying which 
+        %                 measurements gate with which targets, cluster
+        %                 together all targets that gate with each other.
         %
-        %INPUTS: DSObj     The implicitly passed calling object.
-        %        binMat    A numTarXnumMeas binary matrix where numTar is
-        %                  the same as the length of setArray in DSObj and
-        %                  numMeas is an arbitrary number. 
+        %INPUTS: DSObj The implicitly passed calling object.
+        %        binMat A numTarXnumMeas binary matrix where numTar is
+        %               the same as the length of setArray in DSObj and
+        %               numMeas is an arbitrary number. 
         %
         %This algorithm takes the union of all elements of setArray in each
         %column corresponding to ones in the column. Thus, if this is a

@@ -1,23 +1,21 @@
-function [A,xHyp,PHyp,GateMat]=makeStandardCartOnlyLRMatHyps(xPred,SPred,zCart,SRCart,PD,lambda,rPred,gammaVal,zNative,measJacob)
+function [A,xHyp,PHyp,GateMat]=makeStandardCartOnlyLRMatHyps(xPred,SPred,zCart,SRCart,SRCartMax,PD,lambda,rPred,gammaVal,zNative,measJacob)
 %%MAKESTANDARDCARTONLYLRMATHYPS Create the likelihood ratio matrix used for
-%               2D assignment under standard Gaussian approximations in the
-%               coordinate system of the target states using Gaussian-
-%               approximated Cartesian position-only measurements and
-%               provide all updated state estimates using the Cartesian
-%               measurements. This function can also perform simultaneous
-%               brute-force gating, returning a matrix indicating whether
-%               each measurement gates with each target. This function is
-%               appropriate for use in Cartesian-converted measurement
-%               tracking without range rate information. This assumes that
-%               the false alarms occur due to a Poisson point process with
-%               a constant density lambda that is either in the coordinate
-%               system of the states (Cartesian) or in the coordinate
-%               system of a converted measurement when appropriate
-%               parameters are passed. This implements the unitless ratio
-%               of [1], except detection probabilities are just multiplied
-%               by the target existence probabilities, if provided, and an
-%               option for the false alarm density to be specified in a
-%               different coordinate system is given.
+%         2D assignment under standard Gaussian approximations in the
+%         coordinate system of the target states using Gaussian-
+%         approximated Cartesian position-only measurements and provide
+%         updated state estimates when tracks gate with the measurements. 
+%         Brute-force gating is used. This function is appropriate for use
+%         in Cartesian-converted measurement tracking without range rate
+%         information. This assumes that the false alarms occur due to a
+%         Poisson point process with a constant density lambda that is
+%         either in the coordinate system of the states (Cartesian) or in
+%         the coordinate system of a converted measurement when appropriate
+%         parameters are passed. This implements the unitless ratio of [1],
+%         except the missed detection probability with gating is 1-PD*PG
+%         and not just 1-PD due to Section 3.5.3 of [2] (for multiple
+%         gammaVal values, the larged PG is chosen). Additionally, the
+%         covariance inflation due to gating applied to a missed detection
+%         hypothesis (due to [3], Equation 28) can be used, if desired.
 %
 %INPUTS: xPred A numDimXnumTar set of predicted target states. The
 %              first posDim Components are position.
@@ -29,6 +27,17 @@ function [A,xHyp,PHyp,GateMat]=makeStandardCartOnlyLRMatHyps(xPred,SPred,zCart,S
 %              measurement covariance matrices. If all of the covariance
 %              matrices are the same, then SRCart can be a single zDimXzDim
 %              lower triangular matrix.
+%    SRCartMax A zDimXzDimXnumTar set of maximum measurement covariance
+%              matrices that can be taken into consideration for gating and
+%              will be used to compute the covariance inflation of [3]
+%              (Equation 28) for missed detection hypotheses. If only a
+%              single zDimXzDim matrix is passed, it is assumed the same
+%              for all targets. If an empty matrix is passed, then the
+%              covariance inflation is not performed. The inflation is
+%              insignificant if the gate probability PG is almost 1 and
+%              PD is less than 1 by a decent amount. On the other hand, if
+%              PD is high but PG is low, then this can be the difference
+%              between track divergence or not.
 %           PD The target detection probabilities. This can either be a
 %              numTarX1 vector if the targets have different probabilities,
 %              or this can be a scalar value if all of the target detection
@@ -85,9 +94,13 @@ function [A,xHyp,PHyp,GateMat]=makeStandardCartOnlyLRMatHyps(xPred,SPred,zCart,S
 %           0.
 %      xHyp A numDimXnumTarX(numMeas+1) set of conditionally updated target
 %           states (using the prior, the measurement, and the
-%           sqrtKalmanUpdate function), one for each association hypothesis
-%           in A. The last hypothesis (missed detection) is the same as the
-%           prediction value.
+%           sqrtKalmanMeasPred and sqrtKalmanUpdateWithPred functions,
+%           which are equivalent to the sqrtKalmanUpdate function), one for
+%           each association hypothesis in A. For hypotheses that do not
+%           gate, then the corresponding entry in xHyp is all zeros. The
+%           last hypothesis (missed detection) is the same as the
+%           prediction value, but the covariance might be inflated as in
+%           [3] if the SRCartMax input is provided.
 %      PHyp A numDimXnumDimXnumTarX(numMeas+1) set of conditionally updated
 %           target covariance matrices corresponding to the state estimate
 %           in xHyp. Hypotheses are not provided in square root form so as
@@ -99,13 +112,15 @@ function [A,xHyp,PHyp,GateMat]=makeStandardCartOnlyLRMatHyps(xPred,SPred,zCart,S
 %in terms of likelihood ratios eliminates the need to compute the volumes
 %of detection gates. Of course, if these likelihood ratios are computed in
 %Cartesian coordinates, but lambda is in a measurement coordinate system,
-%this is just an approximation. The updated target hypotheses are obtained
-%using the sqrtKalmanUpdate function.
+%this is just an approximation.
 %
 %The assignment matrix returned by this function is commonly used in
 %functions such as assign2D, singleScanUpdate, and
 %singleScanUpdateWithExistence. This function is useful when performing
 %tracking using Cartesian-converted measurements.
+%
+%Developments of the score function are given in [1] and relevant parts of
+%Section 3.5.3 and other sections of [2].
 %
 %REFERENCES:
 %[1] Y. Bar-Shalom, S. S. Blackman, and R. J. Fitzgerald, "Dimensionless
@@ -114,39 +129,141 @@ function [A,xHyp,PHyp,GateMat]=makeStandardCartOnlyLRMatHyps(xPred,SPred,zCart,S
 %    2007.
 %[2] Y. Bar-Shalom, P. K. Willett, and X. Tian, Tracking and Data Fusion.
 %    Storrs, CT: YBS Publishing, 2011.
+%[3] X. R. Li, "Tracking in clutter with strongest neighbor measurements -
+%    Part i: Theoretical analysis," IEEE Transactions on Automatic Control,
+%    vol. 43, no. 11, pp. 1560-1578, Nov. 1998.
 %
-%July 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%June 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 xDim=size(xPred,1);
+
+if(nargin<11)
+    measJacob=[]; 
+end
 
 if(nargin<10)
     zNative=[]; 
 end
 
-if(nargin<9)
-    measJacob=[]; 
-end
-
-if(nargin<8||isempty(gammaVal))
+if(nargin<9||isempty(gammaVal))
     gammaVal=Inf;
 end
 
-if(nargin<7||isempty(rPred))
-    numTar=size(xPred,2);
+numTar=size(xPred,2);
+zDim=size(zCart,1);
+numMeas=size(zCart,2);
+
+if(nargin<8||isempty(rPred))
     %Assume all targets exist with probability 1.
     rPred=ones(numTar,1);
 end
 
-posDim=size(zCart,1);
+%If only one is given, assume they are all the same.
+if(size(SRCart,3)==1)
+    SRCart=repmat(SRCart,[1,1,numMeas]);
+end
+
+%If only one is given, assume they are all the same.
+if(~isempty(SRCartMax)&&size(SRCartMax,3)==1)
+    SRCartMax=repmat(SRCartMax,[1,1,numTar]);
+end
+
+if(~isempty(SRCartMax)&&isempty(zCart))
+    %Get the correct measurement dimensionality to use to update the missed
+    %detection covariance matrix with PG for the possibility that the
+    %measurement is actually outside of the gate.
+    zDim=size(SRCartMax,1);
+end
+
+if(isscalar(PD))
+    PD=PD*ones(numTar,1);
+end
+
+%The gate probability (from an inverse chi-squared PDF). Choose PG to be
+%the maximum gate when multiple gammaVal values are given.
+PG=ChiSquareD.CDF(max(gammaVal),zDim);
+
+%Whether or not the target is detected is affected by whether it exists
+%(the rPred).
+PD=PD(:).*rPred(:);
 
 %The measurement matrix.
-H=[eye(posDim,posDim),zeros(posDim,xDim-posDim)];
+H=[eye(zDim,zDim),zeros(zDim,xDim-zDim)];
 
-measUpdateFuns=@(x,S,z,SR)sqrtKalmanUpdate(x,S,z,SR,H);
+numHyp=numMeas+1;%The extra one is the missed detection hypothesis.
 
-[A,xHyp,PHyp,GateMat]=makeStandardLRMatHyps(xPred,SPred,measUpdateFuns,zCart,SRCart,PD,lambda,rPred,gammaVal,[],zNative,measJacob);
+%The likelihood ratio matrix.
+A=zeros(numTar,numMeas+numTar);
+%The gating matrix
+GateMat=false(numTar,numMeas);
 
+%Conditional hypothesis updates.
+xHyp=zeros(xDim,numTar,numHyp);
+PHyp=zeros(xDim,xDim,numTar,numHyp);
+for curTar=1:numTar
+    xPredCur=xPred(:,curTar);
+    SPredCur=SPred(:,:,curTar);
+
+    %The missed detection likelihood (includes the gating probability).
+    A(curTar,numMeas+curTar)=(1-PD(curTar)*PG);
+    xHyp(:,curTar,numHyp)=xPredCur;
+    PHyp(:,:,curTar,numHyp)=SPredCur*SPredCur';
+    
+    if(numMeas>0||~isempty(SRCartMax))
+        %Get the filter measurement prediction once (not for all
+        %measurements). This is independent of the measurement covariance
+        %matrix.
+        [zPred,PzPred,otherInfo]=sqrtKalmanMeasPred(xPredCur,SPredCur,H);
+    
+        %If upper bounds on the measurement covariances to consider for
+        %each target are provided.
+        if(~isempty(SRCartMax))
+            %The gain corresponding to a gate with the maximum considered
+            %Cartesian covariance matrix for that target.
+            W=calcSqrtKalmanGain(SRCartMax(:,:,curTar),otherInfo);
+            Pzz=PzPred+(SRCartMax(:,:,curTar)*SRCartMax(:,:,curTar)');
+            PMissed=calcMissedGateCov(PHyp(:,:,curTar,numHyp),Pzz,W,PD(curTar),gammaVal,PG);
+            PHyp(:,:,curTar,numHyp)=PMissed;
+        end
+    end
+    
+    for curMeas=1:numMeas
+        %First, we evaluate the Mahalanobis distance necessary for gating,
+        %then we evaluate the measurement update and the likelihood ratio
+        %if the target gates.
+        innov=zCart(:,curMeas)-zPred;
+        
+        Pzz=PzPred+(SRCart(:,:,curMeas)*SRCart(:,:,curMeas))';
+        mahabDist=innov'*inv(Pzz)*innov;
+        if(mahabDist>gammaVal)
+            %If it does not gate, then assign a zero likelihood ratio.
+            A(curTar,curMeas)=0;
+            continue;
+        end
+        
+        %It gates.
+        GateMat(curTar,curMeas)=true;
+        
+        %Perform the measurement update.
+        [xUpdate, SUpdate,innov,Szz]=sqrtKalmanUpdateWithPred(zCart(:,curMeas),SRCart(:,:,curMeas),zPred,otherInfo);
+ 
+        xHyp(:,curTar,curMeas)=xUpdate;
+        PHyp(:,:,curTar,curMeas)=SUpdate*SUpdate';
+        
+        if(nargin>10&&~isempty(zNative))
+            %If the clutter density is given in some local measurement
+            %coordinate system, then compute the Jacobian to do a single-
+            %point transformation.
+            JDet=det(measJacob(zNative(:,curMeas)));
+        else
+            JDet=1;
+        end
+
+        %Evaluate the likelihood ratio.
+        A(curTar,curMeas)=PD(curTar)/(JDet*lambda)*GaussianD.PDFS(innov,zeros(zDim,1),Szz);
+    end
+end
 end
 
 %LICENSE:

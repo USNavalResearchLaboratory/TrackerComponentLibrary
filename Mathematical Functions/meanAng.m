@@ -1,9 +1,9 @@
 function angAvg=meanAng(ang,w,dim)
-%%MEANANG  Find the weighted or unweighted mean of a set of angles in
-%          radians. This function is needed, because one cannot simply
-%          average angles, because issues can arise at the boundary of
-%          0/(2*pi) or -pi/pi or any other areas that are multiples of
-%          2*pi apart.
+%%MEANANG Find the weighted or unweighted mean of a set of angles in
+%         radians. This function is needed, because one cannot simply
+%         average angles, because issues can arise at the boundary of
+%         0/(2*pi) or -pi/pi or any other areas that are multiples of
+%         2*pi apart.
 %
 %INPUTS: ang A vector, matrix or hypermatrix of angles, whereby the
 %            average over a particular dimension (rows=1, columns=2), or

@@ -227,7 +227,7 @@ end
 %Here the steps of Section 4.1 of [1] are implemented.
 %%STEP 1
 %We must obtain the normal reference estimates.
-rVals=getAllCompositions(2,jMax+2)-1;
+rVals=genAllTCompositions(jMax+2,2)-1;
 numR=size(rVals,2);
 
 for k=1:numR
@@ -244,7 +244,7 @@ for j=(jMax-2):-2:4
     %STEP 2, part a
     %Use g and Equation 4 to estimate values of Psi for the current j
     %value.
-    rVals=getAllCompositions(2,j+2)-1;
+    rVals=genAllTCompositions(j+2,2)-1;
     numR=size(rVals,2);
     for k=1:numR
         r=rVals(:,k);
@@ -356,7 +356,7 @@ function [A2,A3,A4]=getA2A3A4(j,psiMat)
 
 %All of the r values for the sums in the Equations for A2,A3, and A4. The
 %values start from 0.
-rVals=getAllCompositions(2,j+2)-1;
+rVals=genAllTCompositions(j+2,2)-1;
 numRVals=size(rVals,2);
 
 %The value of mu_2(K) when using the standard bivariate normal distribution

@@ -5,13 +5,13 @@ function [xi,w]=secondOrderCrossPolyCubPoints(numDim)
 %               three an octohedron, in n a cross polytope (or
 %               n-dimensional octahedron).
 %
-%INPUTS:  numDim An integer specifying the dimensionality of the points
-%                to be generated.
+%INPUTS: numDim An integer specifying the dimensionality of the points to
+%               be generated.
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %Algorithm G_n 2-1 in [1], pg. 303, with n+1 points is used.
 %

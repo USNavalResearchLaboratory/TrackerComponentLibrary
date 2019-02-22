@@ -1,13 +1,12 @@
 function [R,t,c]=findTransParam(A,B)
 %%FINDTRANSPARAM Given two sets of vectors, this algorithm find the
 %                transformation parameters to transform the vectors in A to
-%                B. If one output parameter is desired, the the
-%                transformation is just a least-squares estimate of the
-%                rotation matrix for the transformation A=R*B. If more
-%                outputs are desired, then a least squares estimate of the
-%                parameters for the transformation A=bsxfun(@plus,c*R*B,t)
-%                is given. If only R and t are desired, it is assumed that
-%                c=1.
+%                B. If one output parameter is desired, the transformation
+%                is just a least-squares estimate of the rotation matrix
+%                for the transformation A=R*B. If more outputs are desired,
+%                then a least squares estimate of the parameters for the
+%                transformation A=bsxfun(@plus,c*R*B,t) is given. If only R
+%                and t are desired, it is assumed that c=1.
 %
 %INPUTS: A An mXn matrix of n m-dimensional real vectors in the destination
 %          coordinate system.

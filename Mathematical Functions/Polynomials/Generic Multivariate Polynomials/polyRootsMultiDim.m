@@ -62,7 +62,7 @@ function [rootVals,exitCode]=polyRootsMultiDim(polyCoeffMats,maxDegIncreases,use
 %root finding method for multivariate poylnomials. The polynomials in
 %polyCoeffMats are converted into term matrices. The degree negative
 %lexicographic ordering in the paper, for a fixed degree, coincides with
-%the ordering of the terms provided by unrankComposition with
+%the ordering of the terms provided by unrankTComposition with
 %firstElMostSig=true. Thus, ranking and unranking of compositions is used
 %to keep track of the monomials in the columns of the Macaulay matrix.
 %
@@ -435,7 +435,7 @@ for i=1:s%Going through all the polynomials
 
     numMonomials=binomial(degree+n-1,n-1);
     for j=0:(numMonomials-1)
-        curMonomial=unrankComposition(j,n,degree+n,true)-1;
+        curMonomial=unrankTComposition(j,n,degree+n,true)-1;
 
         %Add the polynomial multiplied by the current monomial.
         for curTerm=1:numTerms
@@ -445,7 +445,7 @@ for i=1:s%Going through all the polynomials
             deg=sum(monomial2Add);
             offset=numBeforeDeg(deg+1);
 
-            idx=rankComposition(monomial2Add+1,true)+offset+1;
+            idx=rankTComposition(monomial2Add+1,true)+offset+1;
             MRows(curRow,idx)=termMat(1,curTerm);
         end
         curRow=curRow+1;
@@ -506,7 +506,7 @@ for i=1:s%Going through all the polynomials
         deg=sum(termMat(2:end,curTerm));
         offset=numBeforeDeg(deg+1);
         
-        idx=rankComposition(termMat(2:end,curTerm)+1,true)+offset+1;
+        idx=rankTComposition(termMat(2:end,curTerm)+1,true)+offset+1;
         M(curRow,idx)=termMat(1,curTerm);
     end
     curRow=curRow+1;
@@ -521,7 +521,7 @@ for i=1:s%Going through all the polynomials
         
         numMonomials=binomial(degree+n-1,n-1);
         for j=0:(numMonomials-1)
-            curMonomial=unrankComposition(j,n,degree+n,true)-1;
+            curMonomial=unrankTComposition(j,n,degree+n,true)-1;
             
             %Add the polynomial multiplied by the current monomial.
             for curTerm=1:numTerms
@@ -531,7 +531,7 @@ for i=1:s%Going through all the polynomials
                 deg=sum(monomial2Add);
                 offset=numBeforeDeg(deg+1);
                 
-                idx=rankComposition(monomial2Add+1,true)+offset+1;
+                idx=rankTComposition(monomial2Add+1,true)+offset+1;
                 M(curRow,idx)=termMat(1,curTerm);
             end
             curRow=curRow+1;

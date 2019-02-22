@@ -6,15 +6,14 @@ function perm=unrankPermutation(rank,n)
 %                   factorial(numElements) is small enough to be evaluated
 %                   without a loss of precision.
 %
-%INPUTS:    rank The order of the desired permutation of
-%                [1;2;3;...;n] in lexicographic order. Note 
-%                that 0<=rank<=(n!-1).
-%           n    The number of elements in the desired permutation.
+%INPUTS: rank The order of the desired permutation of [1;2;3;...;n] in
+%             lexicographic order. Note that 0<=rank<=(n!-1).
+%           n The number of elements in the desired permutation.
 %
-%OUTPUTS: perm  The permutation having the given lexicographic rank and
-%               number of elements (having values 1 to n). If a rank equal
-%               to or greater than the  total number of unique permutations
-%               is given, then an empty matrix is returned.
+%OUTPUTS: perm The permutation having the given lexicographic rank and
+%              number of elements (having values 1 to n). If a rank equal
+%              to or greater than the  total number of unique permutations
+%              is given, then an empty matrix is returned.
 %
 %The algorithm is from [1].
 %

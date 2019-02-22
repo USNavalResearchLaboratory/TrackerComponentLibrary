@@ -32,7 +32,7 @@ function demoNonlinearMeasFilters()
 %    2001.
 %[2] O. Straka, J. Duník, and M. Simandl, "Design of pure propagation
 %    unscented Kalman filter," in Proceedings of the 19th World Congress of
-%    the The International Federation of Automatic Control, Cape Town,
+%    The International Federation of Automatic Control, Cape Town,
 %    South Africa, 24-29 Aug. 2014, pp. 5399-5938.
 %[2] D. F. Crouse, "Cubature/ unscented/ sigma point Kalman filtering with
 %    angular measurement models," in Proceedings of the 18th International

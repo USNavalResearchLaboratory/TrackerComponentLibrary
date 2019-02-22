@@ -16,74 +16,74 @@ function [zConv,RConv]=ruv2RuvCubature(z,SR,useHalfRange,zTx1,zRx1,M1,zTx2,zRx2,
 %         unit vector coordinate is not needed. However, r-u-v-w
 %         coordinates include the third component.
 %
-%INPUTS: z  A 3XN matrix of vectors with elements [r;u;v], where r is the
-%           bistatic range from the transmitter to the target to the
-%           receiver, and u and v are direction cosines. Each u,v pair
-%           should have a magnitude less than or equal to one. If the
-%           magnitude is greater than one, then the pair is normalized
-%           before conversion to avoid imaginary results. It is assumed
-%           that all directions are in front of the receiver (the third
-%           component of the direction unit vector is positive).
-%       SR  The 3X3XN lower-triangular square root of the measurement
-%           covariance matrices for the measurements. If all of the
-%           matrices are the same, then this can just be a single matrix.
+%INPUTS: z A 3XN matrix of vectors with elements [r;u;v], where r is the
+%          bistatic range from the transmitter to the target to the
+%          receiver, and u and v are direction cosines. Each u,v pair
+%          should have a magnitude less than or equal to one. If the
+%          magnitude is greater than one, then the pair is normalized
+%          before conversion to avoid imaginary results. It is assumed
+%          that all directions are in front of the receiver (the third
+%          component of the direction unit vector is positive).
+%       SR The 3X3XN lower-triangular square root of the measurement
+%          covariance matrices for the measurements. If all of the
+%          matrices are the same, then this can just be a single matrix.
 % useHalfRange A scalar boolean value or a 2X1 or 1X2 vector of boolean
-%           values specifying whether the bistatic range value should be
-%           divided by two. This normally comes up when operating in
-%           monostatic mode, so that the range reported is a one-way range.
-%           The default if an empty matrix is provided is false.
-%           useHalfRange(1) applies to the first (source) bistatic channel
-%           and useHalfRange(2) to the second (destination) bistatic
-%           channel. If a scalar is passed, then both values are taken to
-%           be the same.
-%      zTx1 The 3X1 [x;y;z] location vector of the transmitter originating
-%           the measurements z in global Cartesian coordinates. zTx1 can
-%           have more than 3 rows; additional rows are ignored.
-%      zRx1 The 3X1 [x;y;z] location vector of the receiver in Cartesian
-%           coordinates that produced the measurements z. zRx1 can
-%           have more than 3 rows; additional rows are ignored.
-%        M1 A 3X3 rotation matrix to go from the alignment of the global
-%           coordinate system to the local alignment of the original
-%           sensor. The z vector of the local coordinate system of the
-%           sensor is the pointing direction of the sensor.
+%          values specifying whether the bistatic range value should be
+%          divided by two. This normally comes up when operating in
+%          monostatic mode, so that the range reported is a one-way range.
+%          The default if an empty matrix is provided is false.
+%          useHalfRange(1) applies to the first (source) bistatic channel
+%          and useHalfRange(2) to the second (destination) bistatic
+%          channel. If a scalar is passed, then both values are taken to
+%          be the same.
+%     zTx1 The 3X1 [x;y;z] location vector of the transmitter originating
+%          the measurements z in global Cartesian coordinates. zTx1 can
+%          have more than 3 rows; additional rows are ignored.
+%     zRx1 The 3X1 [x;y;z] location vector of the receiver in Cartesian
+%          coordinates that produced the measurements z. zRx1 can
+%          have more than 3 rows; additional rows are ignored.
+%       M1 A 3X3 rotation matrix to go from the alignment of the global
+%          coordinate system to the local alignment of the original
+%          sensor. The z vector of the local coordinate system of the
+%          sensor is the pointing direction of the sensor.
 % zTx2,zRx2,M2 These are the same as zTx1,zRx1, and M1, but for the
-%           coordinate system into which the bistatic r-u-v(-w)
-%           measurements should be converted.
-%  includeW A value indicating whether a third direction cosine component
-%           should be included in the output and how to perform the
-%           averaging. This helps for determining whether the converted
-%           measurement is located behind the receiving radar. The u and v
-%           direction cosines are two parts of a 3D unit vector. Generally,
-%           one might assume that the target is in front of the sensor, so
-%           the third component would be positive and is not needed.
-%           However, the third component can be included if ambiguity
-%           exists. Possible values are:
-%           0 (The default if omitted or an empty matrix is passed) Do not
-%              include the third direction component.
-%           1 Include the third direction component and perform the
-%             averaging over the directions as a mean direction. A linear
-%             covariance matrix is computed with respect to the mean
-%             direction values.
-%           2 Include the third component and just perform weighted linear
-%             averaging. The three directional components will no longer
-%             have unit magnitude.
-%        xi A 3 X numCubaturePoints (or 4X numCubaturePoints for r-u-v-w)
-%           matrix of cubature points for the numeric integration. If this
-%           and the final parameter are omitted or empty matrices are
-%           passed, then fifthOrderCubPoints is used to generate cubature
-%           points.
-%        w  A numCubaturePoints X 1 vector of the weights associated with
-%           the cubature points.
+%          coordinate system into which the bistatic r-u-v(-w)
+%          measurements should be converted.
+% includeW A value indicating whether a third direction cosine component
+%          should be included in the output and how to perform the
+%          averaging. This helps for determining whether the converted
+%          measurement is located behind the receiving radar. The u and v
+%          direction cosines are two parts of a 3D unit vector. Generally,
+%          one might assume that the target is in front of the sensor, so
+%          the third component would be positive and is not needed.
+%          However, the third component can be included if ambiguity
+%          exists. Possible values are:
+%          0 (The default if omitted or an empty matrix is passed) Do not
+%             include the third direction component.
+%          1 Include the third direction component and perform the
+%            averaging over the directions as a mean direction. A linear
+%            covariance matrix is computed with respect to the mean
+%            direction values.
+%          2 Include the third component and just perform weighted linear
+%            averaging. The three directional components will no longer
+%            have unit magnitude.
+%       xi A 3 X numCubaturePoints (or 4X numCubaturePoints for r-u-v-w)
+%          matrix of cubature points for the numeric integration. If this
+%          and the final parameter are omitted or empty matrices are
+%          passed, then fifthOrderCubPoints is used to generate cubature
+%          points.
+%       w  A numCubaturePoints X 1 vector of the weights associated with
+%          the cubature points.
 %
-%OUTPUTS:zConv The approximate mean of the PDF of the the measurement
-%              in bistatic [r;u;v] (or [r;u;v;w]) coordinates for each
-%              measurement in the coordinate system of the second bistatic
-%              path. This is a 3XN or 4XN matrix.
-%        RConv The approximate 3X3XN (or 4X4XN) covariance
-%              matrices of the PDF of the bistatic [r;u;v] converted
-%              measurements. If the w component is included, so that the
-%              output is 4X4XN, then the matrices should be assumed to be
-%              singular.
+%OUTPUTS: zConv The approximate mean of the PDF of the measurement
+%               in bistatic [r;u;v] (or [r;u;v;w]) coordinates for each
+%               measurement in the coordinate system of the second bistatic
+%               path. This is a 3XN or 4XN matrix.
+%         RConv The approximate 3X3XN (or 4X4XN) covariance
+%               matrices of the PDF of the bistatic [r;u;v] converted
+%               measurements. If the w component is included, so that the
+%               output is 4X4XN, then the matrices should be assumed to be
+%               singular.
 %
 %Given just r-u-v coordinates, the conversion is performed using linear
 %sums as in [1].  If a very large directional uncertainty exists, then

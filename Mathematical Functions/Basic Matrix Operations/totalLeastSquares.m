@@ -8,20 +8,20 @@ function [X,E0,R0]=totalLeastSquares(A,B,d,t)
 %          A*X=B for X where both A and B can be noisy, whereas the normal
 %          least squares problem solves for the case where only B is noisy.
 %
-%INPUTS: A  A real mXn matrix.
-%        B  A real nXk matrix.
-%        d  Optional  mX1 vector of real diagonal elements for the matrix
-%           D, which affects how the errors are weighted. If omitted, a
-%           vector of ones is used (D is just an identity matrix).
-%        t  Optional (n+k)X1 vector of real diagonal elements for the
-%           matrix T, which affects show errors are weighted. If omitted, a
-%           vector of ones is used (T is just an identity matrix).
+%INPUTS: A A real mXn matrix.
+%        B A real nXk matrix.
+%        d Optional  mX1 vector of real diagonal elements for the matrix D,
+%          which affects how the errors are weighted. If omitted, a vector
+%          of ones is used (D is just an identity matrix).
+%        t Optional (n+k)X1 vector of real diagonal elements for the matrix
+%          T, which affects show errors are weighted. If omitted, a vector
+%          of ones is used (T is just an identity matrix).
 %
-%OUTPUTS: X     The nXk real solution of the total least squares problem.
-%         E0,R0 The error matrices associated with the solution to the
-%               problem. They are such that (A+E0)*X=(B+R0) and the
-%               Frobenius norm of D*[E0,R0]*T, which is computed via
-%               norm(D*[E0,R0]*T,'fro'), is minimized.
+%OUTPUTS: X The nXk real solution of the total least squares problem.
+%     E0,R0 The error matrices associated with the solution to the problem.
+%           They are such that (A+E0)*X=(B+R0) and the Frobenius norm of
+%           D*[E0,R0]*T, which is computed via norm(D*[E0,R0]*T,'fro'), is
+%           minimized.
 %
 %The algorithm for solving the total least squares problem is taken from
 %Chapter 6.3.1 of [1].

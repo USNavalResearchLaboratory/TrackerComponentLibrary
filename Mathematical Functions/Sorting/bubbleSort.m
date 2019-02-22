@@ -25,16 +25,16 @@ function [A,idxList]=bubbleSort(A,byCol,gtCompareFunc)
 %           arrays are supported, so no ambiguity between 1D and 2D inputs
 %           would exist.
 %gtCompareFunc  A function handle that performs a greather-than comparison
-%               of two entries in A. This lets one define custom comparison
-%               operations. Providing a less-than comparison for this will
-%               cause the list to be sorted in descending order rather than
-%               ascending order. When sorting an array or matrix, the
-%               the function handle takes inputs of the form
-%               gtCompareFunc(A(:,i),A(:,j)) if byCol=true and with
-%               reversed row and column indices if byCol=false. When
-%               comparing cell arrays, it must handle inputs of the form
-%               gtCompareFunc(A{i},A{j}). The default if this parameter is
-%               omitted is @(x1,x2)(x1>x2);
+%           of two entries in A. This lets one define custom comparison
+%           operations. Providing a less-than comparison for this will
+%           cause the list to be sorted in descending order rather than
+%           ascending order. When sorting an array or matrix, the
+%           function handle takes inputs of the form
+%           gtCompareFunc(A(:,i),A(:,j)) if byCol=true and with reversed
+%           row and column indices if byCol=false. When comparing cell
+%           arrays, it must handle inputs of the form
+%           gtCompareFunc(A{i},A{j}). The default if this parameter is
+%           omitted is @(x1,x2)(x1>x2);
 %
 %OUTPUTS: A The sorted array/ matrix/ cell array. If gtCompareFunc
 %           performs a greater-than comparison, then it is in increasing

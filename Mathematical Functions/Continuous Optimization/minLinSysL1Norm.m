@@ -1,6 +1,6 @@
 function [x,info]=minLinSysL1Norm(A,b,algorithm,params)
 %%MINLINSYSL1NORM This function solves the optimization problem
-%                 minimize norm(A*x-b,1) over x. The reult differs from
+%                 minimize norm(A*x-b,1) over x. The result differs from
 %                 solving such a system using pinv(A)*b, because the l1,
 %                 not the l2 norm is used. Complex valued arguments are
 %                 allowed. This algorithm does not work well if A does not

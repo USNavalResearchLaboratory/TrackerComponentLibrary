@@ -26,28 +26,28 @@ function [xPredMain,xPredSubsid,g,orders,isFSAL,subsidType]=RungeKNystroemGStep(
 %        [xPredMain,xPredSubsid,g,orders,isFSAL]=RungeKNystroemGStep(xVec,t,df,deltaT,dfCur,order,solutionChoice)
 %        to actually do a full step and provide the orders. All of the
 %        inputs in the full step are:
-%        xVec    The value of the vector state over which integration is
+%           xVec The value of the vector state over which integration is
 %                being performed. The dimensionality must be a multiple of
 %                two with the second half of the elements being the
 %                derivatives of the first half of the elements [x; dxdt]
 %                (e.g. velocity is the second half and position is the
 %                first half).
-%        t       The time at which xVal is taken.
-%        df      df(xVec,t) returns the second dervative of derivative of x
+%              t The time at which xVal is taken.
+%             df df(xVec,t) returns the second dervative of derivative of x
 %                with respect to time taken at time t. The output is half
 %                the dimensionality of xVec.
-%        deltaT  The size of the single (time) step over which the 
+%         deltaT The size of the single (time) step over which the 
 %                Runge-Kutta-Nyström integration is performed.
-%        dfCur   The value df(xVal,t). This is requested so that
+%          dfCur The value df(xVal,t). This is requested so that
 %                methods that are FSAL can pass g(:,end) on subsequent
 %                steps instead of having to perform a redundant
 %                evaluation of df. If omitted or an empty matrix is
 %                passed, the function df(xVal,curT) is evaluated to get
 %                dfCur.
-%         order  The main integration order of the Runge-Kutta method.
+%          order The main integration order of the Runge-Kutta method.
 %                If this parameter is omitted, then the default order of
 %                5 is used. Order can range from 5 to 7.
-%solutionChoice  Different Runge-Kutta formulae exist for some orders. If
+% solutionChoice Different Runge-Kutta formulae exist for some orders. If
 %                this parameter is provided, then the selected formula
 %                for the given order is used. Otherwise the default
 %                (solutionChoice=0) formula is used. The algorithms
@@ -66,9 +66,9 @@ function [xPredMain,xPredSubsid,g,orders,isFSAL,subsidType]=RungeKNystroemGStep(
 %         Then there are just three outputs, orders, isFSAL and subsidType, 
 %         described below.
 %         Otherwise, all of the outputs are
-%         xPredMain The entire state vector state propagated forward an
-%                   interval of deltaT at the order of precision given by
-%                   the input order. This is the main integration order.
+%           xPredMain The entire state vector state propagated forward an
+%                     interval of deltaT at the order of precision given by
+%                     the input order. This is the main integration order.
 %         xPredSubsid The subsidiary estimate. This is a different order
 %                     than the main integration order can can be used in
 %                     algorithms that adaptively adjust the stepsize.
@@ -119,14 +119,13 @@ function [xPredMain,xPredSubsid,g,orders,isFSAL,subsidType]=RungeKNystroemGStep(
 %indicates that the function is not FSAL.
 %
 %REFERENCES:
-%
 %[1] E. Fehlberg, "Classical seventh-, sixth-, and fifth-order Runge-Kutta-
-%Nyström formulas with stepsize control for general second-order
-%differential equations," National Aeronautics and Space Administration,
-%Marshall Space Flight Center, AL, Tech. Rep. NASA TR R-432, Oct. 1974.
-%
+%    Nyström formulas with stepsize control for general second-order
+%    differential equations," National Aeronautics and Space
+%    Administration, Marshall Space Flight Center, AL, Tech. Rep. NASA TR
+%    R-432, Oct. 1974.
 %[2] J. R. Dormand, Numerical Methods for Differential Equations.
-%Raton: CRC Press, 1996.
+%    Raton: CRC Press, 1996.
 %
 %March 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

@@ -5,7 +5,7 @@
 *INPUTS: A A numRowXnumCol matrix that is generally not square.
 *
 *OUTPUTS: S A lower-triangular matrix such that S*S'=A*A'. If
- *          numCol>=numRow, then S is a square numRowXnumRow matrix.
+*           numCol>=numRow, then S is a square numRowXnumRow matrix.
 *           Otherwise, S is a numRowXnumCol matrix.
 *
 *This is the tria function needed for various steps in the cubature Kalman

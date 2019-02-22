@@ -14,7 +14,7 @@ function [Q,Z,QAZ,QBZ]=HessenbergTriRed(A,B)
 %        QBZThe matrix Q'*B*Z
 %
 %This implements algorithm 7.7.1 in Chapter 7.7.4 of [1], modified to
-%obtain the the Q and Z matrices explicitly. This is similar to the hess
+%obtain the Q and Z matrices explicitly. This is similar to the hess
 %function in Matlab.
 %
 %REFERENCES:

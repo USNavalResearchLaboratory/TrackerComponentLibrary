@@ -57,6 +57,11 @@ function cartPoints=pol2Cart(z,systemType,useHalfRange,zTx,zRx,M)
 %February 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(isempty(z))
+    cartPoints=zeros(2,0);
+    return
+end
+
 N=size(z,2);
 
 if(nargin<6||isempty(M))

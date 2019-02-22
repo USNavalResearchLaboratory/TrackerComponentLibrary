@@ -1,4 +1,4 @@
-function [aDeriv,AJacob]=aCircTurn(x,t,uTurn)
+function [aDeriv,aJacob,aHess,papt]=aCircTurn(x,t,uTurn)
 %%ACIRCTURN The drift function for a constant-speed circular turning model
 %           about an arbitrary axis.
 %
@@ -13,11 +13,16 @@ function [aDeriv,AJacob]=aCircTurn(x,t,uTurn)
 %          matrix is passed, then uTurn=[0;0;1] is used, which means that
 %          the turn takes place in the x-y plane.
 %
-%OUTPUTS: aDeriv The flat-Earth time-derivative of the state.
-%         AJacob The Jacobian of aDeriv, which can be useful in extended
-%                Kalman filters. This is the derivative of each component
-%                of aDeriv (selected by row) with respect to the elements
-%                of the state [x,y,z,xDot,yDot,zDot] selected by column.
+%OUTPUTS: aDeriv The 7X1 flat-Earth time-derivative of the state.
+%       aJacob A 7X7 matrix of first partial derivatives of aVal with respect
+%              to the elements of xState. aJacob(:,k) is the derivative of
+%              aVal with respect to the kth element of xState.
+%        aHess A 7X7X7 collection of second partial derivatives of aVal
+%              with respect to the elements of xState. ahess(:,k1,k2) is
+%              the second partial derivative with respect to xState(k1) and
+%              xState(k2).
+%         papt The 7X1 vector of the partial derivative of aVal with
+%              respect to time. This is all zeros.
 %
 %A derivation of the continuous-time flat-Earth circular turn model is
 %given in [1] along with a description of how to use the model on a curved
@@ -42,28 +47,69 @@ function [aDeriv,AJacob]=aCircTurn(x,t,uTurn)
     aDeriv=[x(4:6);Omega(2)*x(6)-Omega(3)*x(5);Omega(3)*x(4)-Omega(1)*x(6);Omega(1)*x(5)-Omega(2)*x(4);0];
     
     if(nargout>1)
-        dxdvx=0;
         dxdvy=-uTurn(3)*x(7);
         dxdvz=uTurn(2)*x(7);
         dxdx7=-uTurn(3)*x(5)+uTurn(2)*x(6);
         
         dydvx=uTurn(3)*x(7);
-        dydvy=0;
         dydvz=-uTurn(1)*x(7);
         dydx7=uTurn(3)*x(4)-uTurn(1)*x(6);
         
         dzdvx=-uTurn(2)*x(7);
         dzdvy=uTurn(1)*x(7);
-        dzdvz=0;
         dzdx7=-uTurn(2)*x(4)+uTurn(1)*x(5);
 
-        AJacob=[0,  0,    0,  1,        0,      0,      0;
+        aJacob=[0,  0,    0,  1,        0,      0,      0;
                 0,  0,    0,  0,        1,      0,      0;
                 0,  0,    0,  0,        0,      1,      0;
-                0,  0,    0,  dxdvx,    dxdvy,  dxdvz,  dxdx7;
-                0,  0,    0,  dydvx,    dydvy,  dydvz,  dydx7;
-                0,  0,    0,  dzdvx,    dzdvy,  dzdvz,  dzdx7;
+                0,  0,    0,  0,        dxdvy,  dxdvz,  dxdx7;
+                0,  0,    0,  dydvx,    0,      dydvz,  dydx7;
+                0,  0,    0,  dzdvx,    dzdvy,  0,      dzdx7;
                 0,  0,    0,  0,        0,      0,      0];
+
+        if(nargout>2)
+            aHess=zeros(7,7,7);
+ 
+            dxdvydx7=-uTurn(3);
+            dxdvzdx7=uTurn(2);
+            dydvxdx7=uTurn(3);
+            dydvzdx7=-uTurn(1);
+            dzdvxdx7=-uTurn(2);
+            dzdvydx7=uTurn(1);
+
+            aHess(:,:,4)=[0,  0,    0,  0,        0,      0,      0;
+                          0,  0,    0,  0,        0,      0,      0;
+                          0,  0,    0,  0,        0,      0,      0;
+                          0,  0,    0,  0,        0,      0,      0;
+                          0,  0,    0,  0,        0,      0,      dydvxdx7;
+                          0,  0,    0,  0,        0,      0,      dzdvxdx7;
+                          0,  0,    0,  0,        0,      0,      0];
+            aHess(:,:,5)=[0,  0,    0,  0,        0,      0,      0;
+                          0,  0,    0,  0,        0,      0,      0;
+                          0,  0,    0,  0,        0,      0,      0;
+                          0,  0,    0,  0,        0,      0,      dxdvydx7;
+                          0,  0,    0,  0,        0,      0,      0;
+                          0,  0,    0,  0,        0,      0,      dzdvydx7;
+                          0,  0,    0,  0,        0,      0,      0];
+            aHess(:,:,6)=[0,  0,    0,  0,        0,      0,      0;
+                          0,  0,    0,  0,        0,      0,      0;
+                          0,  0,    0,  0,        0,      0,      0;
+                          0,  0,    0,  0,        0,      0,      dxdvzdx7;
+                          0,  0,    0,  0,        0,      0,      dydvzdx7;
+                          0,  0,    0,  0,        0,      0,      0;
+                          0,  0,    0,  0,        0,      0,      0];
+            aHess(:,:,7)=[0,  0,    0,  0,        0,                0,  0;
+                          0,  0,    0,  0,        0,                0,  0;
+                          0,  0,    0,  0,        0,                0,  0;
+                          0,  0,    0,  0,        dxdvydx7,  dxdvzdx7,  0;
+                          0,  0,    0,  dydvxdx7, 0,         dydvzdx7,  0;
+                          0,  0,    0,  dzdvxdx7, dzdvydx7,         0,  0;
+                          0,  0,    0,  0,        0,                0,  0];
+
+            if(nargout>3)
+                papt=zeros(7,1);
+            end
+        end
     end
 end
 

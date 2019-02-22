@@ -2,24 +2,23 @@ function val=convertAngleUnits(val,unitOrig,unitDest)
 %%CONVERTANGLEUNITS Convert values of plane angles from one set of units to
 %                   another.
 %
-%INPUTS: val           The matrix or vector of values that are to be
-%                      converted.
-%   unitOrig, unitDes  Two character strings indicating the units of val
-%                      and the units into which it is to be converted. The
-%                      possible values are:
-%                      'rad'  radians               'deg' degrees
-%                      'amin' arcminute             'as'  arcsecond
-%                      'mas'  milliarcsecond        'mus' microarcsecond
-%                      'mil'  mil (1/6400 a circle, the NATO usage)
-%                      'grad' grad (1/400 a circle) aka gon.
-%                      'rev'  revolution (unit of 360 degrees) aka turn.
-%                      'quad' quadrant (1/4 a circle)
-%                      'sext' sextant (1/6 a circle)
-%                      'ha'   hour angle (1/24 a circle)
-%                      'pt'   point (1/32 a circle)
-%                      'sign' sign (1/12 a circle)
+%INPUTS: val The matrix or vector of values that are to be converted.
+% unitOrig, unitDes Two character strings indicating the units of val and
+%           the units into which it is to be converted. The possible values
+%           are:
+%           'rad'  radians               'deg' degrees
+%           'amin' arcminute             'as'  arcsecond
+%           'mas'  milliarcsecond        'mus' microarcsecond
+%           'mil'  mil (1/6400 a circle, the NATO usage)
+%           'grad' grad (1/400 a circle) aka gon.
+%           'rev'  revolution (unit of 360 degrees) aka turn.
+%           'quad' quadrant (1/4 a circle)
+%           'sext' sextant (1/6 a circle)
+%           'ha'   hour angle (1/24 a circle)
+%           'pt'   point (1/32 a circle)
+%           'sign' sign (1/12 a circle)
 %
-%OUTPUTS: val  The values converted into the desired coordinate system.
+%OUTPUTS: val The values converted into the desired coordinate system.
 %
 %For simplicity, all units are first converted to radians, and then to the
 %desired set of units.

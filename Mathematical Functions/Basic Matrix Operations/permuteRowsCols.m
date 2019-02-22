@@ -12,24 +12,24 @@ function A=permuteRowsCols(A,sigma,tau,doInversePermutation)
 %                 can perform an inverse permutation to undo a previous
 %                 reordering.
 %
-%INPUTS: A  An MXN matrix whose rows and columns one wishes to reorder.
-%     sigma A permutation of indices (from 1 to M) for how the rows should
-%           be reordered (or how they were reordered if
-%           doInversePermutation is true).
-%       tau A permutation of indices (from 1 to N) for how the columns
-%           should be reordered (or how they were reordered if
-%           (doInversePermutation is true).
+%INPUTS: A An MXN matrix whose rows and columns one wishes to reorder.
+%    sigma A permutation of indices (from 1 to M) for how the rows should
+%          be reordered (or how they were reordered if doInversePermutation
+%          is true).
+%      tau A permutation of indices (from 1 to N) for how the columns
+%          should be reordered (or how they were reordered if
+%          (doInversePermutation is true).
 % doInversePermutation A parameter specifying whether the ordering given by
-%           sigma and tau is desired, or whether one should use the inverse
-%           permutations to, for example, undo a previous reordering.
+%          sigma and tau is desired, or whether one should use the inverse
+%          permutations to, for example, undo a previous reordering.
 %
 %OUTPUTS: A The matrix A with reordered rows and columns.
 %
 %Reordering the rows and columns of a matrix without using a temporary
-%matrix copy is a challenge. The algorithm used here is the algorithm
-%RENUMB taken from [1], after being modified as the book actually gave an
-%algorithm for the inverse permutation, whereas one generally wants it for
-%the actual permutation.
+%matrix copy is a challenge. The algorithm used here is based on RENUMB in
+%[1], after being modified as the book actually gave an algorithm for the
+%inverse permutation, whereas one generally wants it for the actual
+%permutation.
 %
 %REFERENCES:
 %[1] A. Nijenhuis and H. S. Wilf, Combinatorial Algorithms for Computers
@@ -43,8 +43,8 @@ if(nargin<4)
 end
 
 if(doInversePermutation==false)
-    [~,~,sigma]=permutationCycles(sigma,-1);
-    [~,~,tau]=permutationCycles(tau,-1);
+    [~,~,sigma]=numPermutationCycles(sigma,-1);
+    [~,~,tau]=numPermutationCycles(tau,-1);
 end
 
 M=size(A,1);
@@ -53,8 +53,8 @@ N=size(A,2);
 %Step A
 %Determine the number of cycles NC of the permutation sigma, the sign IS of
 %the permutation, and modify sigma into a tagged permutation.
-[~,~,sigma]=permutationCycles(sigma,1);
-[~,~,tau]=permutationCycles(tau,1);
+[~,~,sigma]=numPermutationCycles(sigma,1);
+[~,~,tau]=numPermutationCycles(tau,1);
 
 for i=1:M
 %Step B, find next cycle of sigma
@@ -106,12 +106,12 @@ for i=1:M
                     continue;
                 end
                 k=k-1;
-                %End of product cycle?
+                %Is it the end of aproduct cycle?
                 if(i1~=i)
                     continue;
                 end
                 j2=abs(tau(j2));
-                %All product cycles done?
+                %Are all product cycles complete?
                 if(k~=0)
                     startNewProductCycle=true;
                 end
@@ -133,8 +133,8 @@ tau=abs(tau);
 %were written in C or a similar language and used the input parameters
 %sigma and tau as scratch space rather than creating copies.
 % if(doInversePermutation==false)
-%     [~,~,sigma]=permutationCycles(sigma,-1);
-%     [~,~,tau]=permutationCycles(tau,-1);
+%     [~,~,sigma]=numPermutationCycles(sigma,-1);
+%     [~,~,tau]=numPermutationCycles(tau,-1);
 % end
 
 end

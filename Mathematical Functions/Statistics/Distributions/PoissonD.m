@@ -278,7 +278,7 @@ function vals=rand(N,lambda)
 %OUTPUTS: vals A matrix whose dimensions are determined by N of the
 %              generated Poisson random variables.
 %
-%The Poisson random variables are generated according to the the simple
+%The Poisson random variables are generated according to the simple
 %method given in Chapter 4.2 of [1].
 %
 %The algorithm can handle small and large values of lambda. However, there

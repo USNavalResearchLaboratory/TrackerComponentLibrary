@@ -25,30 +25,30 @@ function [xPredMain,xPredSubsid,g,orders,isFSAL,subsidType]=RungeKNystroemSStep(
 %        can be run as
 %        [xPredMain,xPredSubsid,g,orders,isFSAL,subsidType]=RungeKNystroemSStep(xVec,t,df,deltaT,dfCur,order,solutionChoice)
 %        to actually do a full step. All of the inputs in the full step are:
-%        xVec    The value of the vector state over which integration is
+%           xVec The value of the vector state over which integration is
 %                being performed. The dimensionality must be a multiple of
 %                two with the second half of the elements being the
 %                derivatives of the first half of the elements (e.g.
 %                velocity is the second half and position is the first
 %                half).
-%        t       The time at which xVal is taken.
-%        df      df(x,t) returns the second dervative of derivative of x
+%              t The time at which xVal is taken.
+%             df df(x,t) returns the second dervative of derivative of x
 %                with respect to time taken at time t. The output is half
 %                the dimensionality of xVec. Note that the first input is
 %                just the first half of xVec, not all of xVec as df is not
 %                supposed to depend on the derivative components.
-%        deltaT  The size of the single (time) step over which the 
+%         deltaT The size of the single (time) step over which the 
 %                Runge-Kutta-Nyström integration is performed.
-%        dfCur   The value df(xVal,t). This is requested so that
+%          dfCur The value df(xVal,t). This is requested so that
 %                methods that are FSAL can pass g(:,end) on subsequent
 %                steps instead of having to perform a redundant
 %                evaluation of df. If omitted or an empty matrix is
 %                passed, the function df(xVal,curT) is evaluated to get
 %                dfCur.
-%         order  The main integration order of the Runge-Kutta method.
+%          order The main integration order of the Runge-Kutta method.
 %                If this parameter is omitted, then the default order of
 %                5 is used. Order can range from 4 to 12.
-%solutionChoice  Different Runge-Kutta formulae exist for some orders. If
+% solutionChoice Different Runge-Kutta formulae exist for some orders. If
 %                this parameter is provided, then the selected formula
 %                for the given order is used. Otherwise the default
 %                (solutionChoice=0) formula is used. The algorithms
@@ -78,7 +78,7 @@ function [xPredMain,xPredSubsid,g,orders,isFSAL,subsidType]=RungeKNystroemSStep(
 %                        taken from [12]. (This is RKN 11(12) - 20, not not
 %                        RKN 11(12) - 20 opt)
 %                 (11,1) RKN11(12)21F, which is mentioned in [6] as
-%                        RKN 11(12) - 20 opt, but whose coefficeints are
+%                        RKN 11(12) - 20 opt, but whose coefficients are
 %                        not directly provided. The coefficients were taken
 %                        from [12].
 %                 (11,2) RKN11(10)18F from [6]. These are the RKN11(10)-17
@@ -96,7 +96,7 @@ function [xPredMain,xPredSubsid,g,orders,isFSAL,subsidType]=RungeKNystroemSStep(
 %                        rational form) from the comments in the function
 %                        in [10], as the comments said that those were the
 %                        coefficients provided by the authors of [9].
-
+%
 %OUTPUTS: If the function is run with two inputs as
 %         [orders,isFSAL,subsidType]=RungeKNystroemSStep(order,solutionChoice)
 %         Then there are just three outputs, orders, isFSAL and subsidType, 
@@ -106,38 +106,38 @@ function [xPredMain,xPredSubsid,g,orders,isFSAL,subsidType]=RungeKNystroemSStep(
 %                   interval of deltaT at the order of precision given by
 %                   the input order. This is the main integration order.
 %         xPredSubsid The subsidiary estimate. This is a different order
-%                     than the main integration order can can be used in
-%                     algorithms that adaptively adjust the stepsize.
-%                     Depending on the combination of (order,
-%                     solutionChoice), this is either a full state vector
-%                     or just the first or second (first derivatives) half
-%                     of the state vector. The output depends on the
-%                     (order, solutionChoice) pair and the output
-%                     subsidType indicates the type of subsidary output.
-%                   g The values of the second derivatives df evaluated at
-%                     various points as determined by the selected
-%                     algorithm. These can sometimes be reused in
-%                     interpolation routines to reduce the number of
-%                     computations required. In all of
-%                     the methods, g(:,1) is equal to df(xVal,t). In
-%                     FSAL methods, g(:,end) is df(xPredMain,t+deltaT)
-%              orders A 2X1 vector whereby order(1)=order, the input
-%                     parameter, and orders(2) is the order of xPredSubsid.
-%                     The value of orders(2) depends on the algorithm
-%                     chosen by the combination of the order and
-%                     solutionChoice inputs.
-%              isFSAL Indicates whether the first evaluation of the f of
-%                     the next step is equal to g(:,end). If so, this can
-%                     be passed to the function on the next step rather
-%                     than having to make an additional evaluation of f.
-%          subsidType Indicates the nature of the output xPredSubsid.
-%                     Possible values are
-%                     0 xPredSubsid is a complete state vector, having the
-%                       same dimensionality as xVec.
-%                     1 xPredSubsid does not contain any first derivatives
-%                       and thus is half the dimensionality of xVec.
-%                     2 xPredSubsid only contains first derivatives and
-%                       thus is half the dimensionality of xVec.
+%                   than the main integration order can can be used in
+%                   algorithms that adaptively adjust the stepsize.
+%                   Depending on the combination of (order,
+%                   solutionChoice), this is either a full state vector or
+%                   just the first or second (first derivatives) half or
+%                   the state vector. The output depends on the
+%                   (order, solutionChoice) pair and the output subsidType
+%                   indicates the type of subsidary output.
+%                 g The values of the second derivatives df evaluated at
+%                   various points as determined by the selected
+%                   algorithm. These can sometimes be reused in
+%                   interpolation routines to reduce the number of
+%                   computations required. In all of the methods, g(:,1) is
+%                   equal to df(xVal,t). In FSAL methods, g(:,end) is
+%                   df(xPredMain,t+deltaT)
+%            orders A 2X1 vector whereby order(1)=order, the input
+%                   parameter, and orders(2) is the order of xPredSubsid.
+%                   The value of orders(2) depends on the algorithm chosen
+%                   by the combination of the order and solutionChoice
+%                   inputs.
+%            isFSAL Indicates whether the first evaluation of the f of the
+%                   next step is equal to g(:,end). If so, this can be
+%                   passed to the function on the next step rather than
+%                   having to make an additional evaluation of f.
+%        subsidType Indicates the nature of the output xPredSubsid.
+%                   Possible values are:
+%                   0 xPredSubsid is a complete state vector, having the
+%                     same dimensionality as xVec.
+%                   1 xPredSubsid does not contain any first derivatives
+%                     and thus is half the dimensionality of xVec.
+%                   2 xPredSubsid only contains first derivatives and is
+%                     thus half the dimensionality of xVec.
 %
 %The general formula used for performing the step is discussed in all of
 %the references.
@@ -1407,7 +1407,7 @@ switch(order)
                 orders=[11;12];
             case 1
                 %RKN11(12)21F, which is mentioned in [6] as RKN 11(12)
-                %- 20 opt, but whose coefficeints are not directly
+                %- 20 opt, but whose coefficients are not directly
                 %provided. The coefficients were taken from [12].
                 A=zeros(21,21);
                 A(2,1)=0.5425347222222222222222222225e-2;

@@ -3,20 +3,20 @@ function [xi,w]=seventhOrderNDimCubPoints(numDim,algorithm)
 %               integration over a numDim-dimensional cube with bounds in
 %               coordinates of (-1,1).
 %
-%INPUTS: numDim  An integer specifying the dimensionality of the points
-%                to be generated. Currently, only numDim=2 and numDim=3 are
-%                supported.
-%      algorithm An optional parameter specifying the algorithm to be
-%                used to generate the points. Possible values are:
-%               0 (The default if omitted or an empty matrix is passed and
-%                 numDim=2) Formula C2 7-1 in [1], pg. 252, 12 points,
-%                 numDim=2.
-%               1 Formula C2 7-3 in [1], pg. 253, 13 points, numDim=2, with
-%                 the correction in Table I of [2].
-%               2 Formula C2 7-4 in [1], pg. 255, 16 points, numDim=2.
-%               3 Formula C2 7-5 in [1], pg. 255, 21 points, numDim=2.
-%               4 Formula C2 7-6 in [1], pg. 255, 25 points, numDim=2.
-%               5 Formula C3 7-2 in [1], pg. 265, 34 points, numDim=3.
+%INPUTS: numDim An integer specifying the dimensionality of the points to
+%               be generated. Currently, only numDim=2 and numDim=3 are
+%              supported.
+%    algorithm An optional parameter specifying the algorithm to be
+%              used to generate the points. Possible values are:
+%              0 (The default if omitted or an empty matrix is passed and
+%                numDim=2) Formula C2 7-1 in [1], pg. 252, 12 points,
+%                numDim=2.
+%              1 Formula C2 7-3 in [1], pg. 253, 13 points, numDim=2, with
+%                the correction in Table I of [2].
+%              2 Formula C2 7-4 in [1], pg. 255, 16 points, numDim=2.
+%              3 Formula C2 7-5 in [1], pg. 255, 21 points, numDim=2.
+%              4 Formula C2 7-6 in [1], pg. 255, 25 points, numDim=2.
+%              5 Formula C3 7-2 in [1], pg. 265, 34 points, numDim=3.
 %
 %OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
 %            points (Each "point" is a vector).

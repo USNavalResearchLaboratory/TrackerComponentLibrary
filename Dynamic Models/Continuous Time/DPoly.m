@@ -1,4 +1,4 @@
-function D=DPoly(x,t,q0,order,numDim)
+function [D,DJacob,DHess,pDpt]=DPoly(x,t,q0,order,numDim)
 %%DPOLY The diffusion matrix for a continuous-time additive noise model in
 %       numDim dimensions of motion with order moments of position whereby
 %       the noise is only added to the highest-order derivatives of
@@ -29,11 +29,17 @@ function D=DPoly(x,t,q0,order,numDim)
 %          numDim parameter is omitted, then numDim=3 (3D motion) is
 %          assumed.
 %
-%OUTPUT: D The diffusion matrix of a continuous-time linear additive noise
-%          model where the noise is only added to the highest order terms
-%          of the state. If the input x has multiple columns, then the same
-%          number of copies of D are returned with D(:,:,i) being the ith
-%          one.
+%OUTPUTS: D The diffusion matrix of a continuous-time linear additive noise
+%           model where the noise is only added to the highest order terms
+%           of the state. If the input x has multiple columns, then the
+%           same number of copies of D are returned with D(:,:,i) being the
+%           ith one.
+%   DJacob, DHess The xDimXnumDimXxDim, xDimXnumDimXxDimXxDim matrices of
+%           first and second partial derivatives of the elements of D with
+%           respect to x. These are all zero, since D is a constant. it is
+%           the same for all D and is not repeated N times.
+%      pDpt The xDimXnumDim partial derivative of D with respect to time.
+%           This is all zeros, because D is a constant.
 %
 %It is assumed that the state is ordered
 %[position;velocity;acceleration;etc] for up to order moments of
@@ -78,6 +84,16 @@ function D=DPoly(x,t,q0,order,numDim)
     
     if(numD>1)
        D=repmat(D,[1,1,numD]); 
+    end
+    
+    if(nargout>1)
+        DJacob=zeros(xDim,numDim,xDim);
+        if(nargout>2)
+            DHess=zeros(xDim,numDim,xDim,xDim);
+            if(nargout>3)
+                pDpt=zeros(xDim,numDim);
+            end
+        end
     end
 end
 

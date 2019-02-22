@@ -1,17 +1,18 @@
 function [a,c]=HermiteInterpMultiPoly(x,y,numDims)
 %%HERMITEINTERPMULTIPOLYS Given a multidimensional function y(x) evaluated
-%             a certain values of x (control point) along with an arbitrary
-%             number of derivatives of y(x) at those points, this function
-%             returns the coefficients of the Hermite interpolating
-%             polynomials fitting those points across all dimensions. This
-%             function differs from findHermiteInterpPolySet in that this
-%             function tries to find one high-order Hermite interpolation
-%             polynomial for each dimension that matches all of the points
-%             given, whereas findHermiteInterpPolySet finds a set of
-%             low-order polynomials, which is more practical for large
-%             regions as finite precision errors can dominate this
-%             function. Compare this to the function HermiteInterpPoly,
-%             which can only handle scalar values.
+%             a certain values of x (control points) along with an
+%             arbitrary number of derivatives of y(x) at those points, this
+%             function returns the coefficients of the Hermite
+%             interpolating polynomials fitting those points across all
+%             dimensions. This function differs from
+%             findHermiteInterpPolySet in that this function tries to find
+%             one high-order Hermite interpolation polynomial for each
+%             dimension that matches all of the points given, whereas
+%             findHermiteInterpPolySet finds a set of low-order
+%             polynomials, which is more practical for large regions as
+%             finite precision errors can dominate this function. Compare
+%             this to the function HermiteInterpPoly, which can only handle
+%             scalar values.
 %
 %INPUTS: x An NpX1 or 1XNp vector of real, scalar values at which the
 %          function y and its derivative are given. The values are assumed

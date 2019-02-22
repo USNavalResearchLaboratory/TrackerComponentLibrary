@@ -3,26 +3,26 @@ function [xi,w]=seventhOrderSpherSurfCubPoints(numDim,algorithm)
 %               integration over the surface of a unit (hyper-)sphere
 %               (weighting function is just 1).
 %
-%INPUTS: numDim  An integer specifying the dimensionality of the points
-%                to be generated, numDim>=2.
-%      algorithm A value indicating which algorithm should be used.
-%                Possible values are
-%                0 (The default if omitted or an empty matrix is passed)
-%                  Use formula I from [1], 2^numDim+2*numDim^2 points,
-%                  numDim>=3. For numDim>8, negative weights are present.
-%                1 Formula II from [1],
-%                  2^numDim+(4/3)*numDim*(numDim-1)*(numDim-2)+2*numDim
-%                  points, numDim>=4.
-%                2 Formula III from [1],
-%                  2^numDim+(4/3)*numDim*(numDim-1)*(numDim-2)+2*numDim*(numDim-1)
-%                  points, numDim>=4.
-%                3 Formula from [2], 2^n+2*n^2 points, numDim>=3
-%                4 Un 7-1 from [3], 2^n+2*n^2 points, with the correction
-%                  from Table I of [4], numDim>=3.
-%                5 Un 7-2 from [3], 2^n*(n+1) points
-%                6 U3 7-1 in [3], 24 points, numDim=3
-%                7 U3 7-2 in [3], 26 points, numDim=3
-%                8 U4 7-1 in [3], 48 points, numDim=4
+%INPUTS: numDim An integer specifying the dimensionality of the points to
+%               be generated, numDim>=2.
+%     algorithm A value indicating which algorithm should be used.
+%               Possible values are
+%               0 (The default if omitted or an empty matrix is passed)
+%                 Use formula I from [1], 2^numDim+2*numDim^2 points,
+%                 numDim>=3. For numDim>8, negative weights are present.
+%               1 Formula II from [1],
+%                 2^numDim+(4/3)*numDim*(numDim-1)*(numDim-2)+2*numDim
+%                 points, numDim>=4.
+%               2 Formula III from [1],
+%                 2^numDim+(4/3)*numDim*(numDim-1)*(numDim-2)+2*numDim*(numDim-1)
+%                 points, numDim>=4.
+%               3 Formula from [2], 2^n+2*n^2 points, numDim>=3
+%               4 Un 7-1 from [3], 2^n+2*n^2 points, with the correction
+%                 from Table I of [4], numDim>=3.
+%               5 Un 7-2 from [3], 2^n*(n+1) points
+%               6 U3 7-1 in [3], 24 points, numDim=3
+%               7 U3 7-2 in [3], 26 points, numDim=3
+%               8 U4 7-1 in [3], 48 points, numDim=4
 %
 %OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
 %            points. (Each "point" is a vector)

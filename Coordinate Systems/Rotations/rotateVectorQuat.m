@@ -5,19 +5,19 @@ function vRot=rotateVectorQuat(v,q,handed)
 %                  A rotation quaternion can be obtained, for example,
 %                  using the axisAng2Quat function.
 %
-%INPUTS: v   The 3XN set of N vectors that are to be rotated.
-%        q   A 4X1 unit quaternion corresponding to a rotation. The
-%            ordering of the elements corresponds to the hypercomplex
-%            decomposition  as q(1)+i*q(2)+j*q(3)+k*q(4), where
-%            i, j, and k are all roots of -1.
-%     handed The handedness of the quaternion. If omitted, it is assumed
-%            that the quaternion is right-handed (the standard). Possible
-%            values are
-%            'right' The default if omitted. The quaternion multiplication
-%                    is assumed right-handed (standard).
-%            'left'  The quaternion multiplication is assumed left-handed.
-%                    This is used in someplaces, including the reference
-%                    from Shuster, below.
+%INPUTS: v The 3XN set of N vectors that are to be rotated.
+%        q A 4X1 unit quaternion corresponding to a rotation. The ordering
+%          of the elements corresponds to the hypercomplex decomposition
+%          as q(1)+i*q(2)+j*q(3)+k*q(4), where i, j, and k are all roots of
+%          -1.
+%   handed The handedness of the quaternion. If omitted, it is assumed
+%          that the quaternion is right-handed (the standard). Possible
+%          values are
+%          'right' The default if omitted. The quaternion multiplication is
+%                  assumed right-handed (standard).
+%          'left'  The quaternion multiplication is assumed left-handed.
+%                  This is used in someplaces, including the reference
+%                  from Shuster, below.
 %
 %OUTPUTS: vRot The 3XN set of vectors v rotated according to the rotation
 %              implied by the unit quaternion with the given handedness.
@@ -61,7 +61,6 @@ for curVec=1:N
     v4=quatMult(quatMult(q,[0;v(:,curVec)],handed),qC,handed);
     vRot(:,curVec)=v4(2:4);
 end
-
 end
 
 %LICENSE:

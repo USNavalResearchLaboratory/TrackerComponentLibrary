@@ -2,7 +2,7 @@ function [derivVal,derivStructure]=chainRuleDeriv(desDeriv,derivF,derivX,n1,deri
 %%CHAINRULEDERIV For a function
 %                f(x1(y1,...,yn2),x2(y1,...yn2),...,xn1(y1,...yn2))
 %                Evaluate derivatives with respect to y1...yn2. For
-%                example, one might want to evaluate d^3f/(dx1^2dx2). Here,
+%                example, one might want to evaluate d^3f/(dy1^2dy2). Here,
 %                we say n1=numX and n2=numY.
 %
 %INPUTS: desDeriv An n2X1 or 1Xn2 vector containing the integer
@@ -95,12 +95,12 @@ function [derivVal,derivStructure]=chainRuleDeriv(desDeriv,derivF,derivX,n1,deri
 % y1=pi;
 % y2=-1/10;
 % %We would like to evaluate some third-order derivatives. For the
-% %derivatives of x, we choose to build tables to pass to the chainRuleDeriv
-% %function. the tables have to be include all partial derivatives that are
-% %needed. We will build 4X4 tables. Such tables could be used to compute
-% %all derivatives with sum(desDeriv)<=3 and some values with
-% %sum(desDeriv)>3. Note that there is no need to fill entries of the table
-% %higher than the maximum desired derivative level.
+% %derivatives of x, we choose to build tables to pass to the
+% %chainRuleDeriv function. the tables have to be include all partial
+% %derivatives that are needed. We will build 4X4 tables. Such tables could
+% %be used to compute all derivatives with sum(desDeriv)<=3 and some values
+% %with sum(desDeriv)>3. Note that there is no need to fill entries of the
+% %table higher than the maximum desired derivative level.
 % n1=3;
 % maxEls=3;
 % %derivX has n2+1 columns.

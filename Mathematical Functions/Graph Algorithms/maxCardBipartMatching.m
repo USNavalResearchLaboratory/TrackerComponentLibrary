@@ -1,4 +1,4 @@
-function [col4row,row4col]=maxCardBipartMatching(A)
+function [col4row,row4col]=maxCardBipartMatching(A,algorithm)
 %%MAXCARDBIPARTMATCHING Solve the maximum cardinality bipartite matching
 %           problem. That is, find the maximum cardinality rows of A to
 %           columns of A given that a connection between the two exists
@@ -6,22 +6,29 @@ function [col4row,row4col]=maxCardBipartMatching(A)
 %
 %INPUTS: A A numRowsXnumCols matrix indicating connections between the rows
 %          and the columns. A(i,j)=0 indicates that there is no connection
-%          from row i to column j; A(i,j)=1 means there is a conection.
+%          from row i to column j; A(i,j)=1 means there is a connection.
+% algorithm An optional parameter specifying the algorithm to use. Possible
+%          values are:
+%          0 (The default if omitted or an empty matrix is passed) Use the
+%            Hopcroft-Karp algorithm, which is described briefly in Chapter
+%            26.6 of [1] and in more detail in the original paper of [2].
+%          1 Use the cardinality matching algorithm given as Algorithm 3.1
+%            in Chapter 3.2 of [3].
 %
-%OUTPUTS: col4Row The column to which a particular row is assigned in the 
+%OUTPUTS: col4row The column to which a particular row is assigned in the 
 %                 maximum cardinality bipartite matching. col4Row(curRow)=0
 %                 means that the row is not assigned to any column. This is
 %                 a column vector.
-%         row4Col The the row to which a particular column is assigned in
+%         row4col The row to which a particular column is assigned in
 %                 the maximum cardinality bipartite matching.
 %                 row4Col(curCol)=0 means that the column is not assigned
 %                 to any row. This is a column vector.
 %
-%This is an implementation of the Hop-croft-Karp algorithm. The algorithm
-%is decribed briefly in Chapter 26.6 of [1]. It is originally from [2],
+%This is an implementation of the Hopcroft-Karp algorithm. The algorithm
+%is described briefly in Chapter 26.6 of [1]. It is originally from [2],
 %where a more detailed description is used.
 %
-%Examples:
+%EXAMPLE:
 % A=[1, 0, 1, 0, 0, 0, 0;
 %    1, 1, 0, 0, 0, 0, 0;
 %    1, 0, 1, 0, 0, 0, 0;
@@ -40,7 +47,41 @@ function [col4row,row4col]=maxCardBipartMatching(A)
 % %A completely infeasible problem.
 % A=zeros(5,5);
 % [col4row,row4col]=maxCardBipartMatching(A)
-% col4row=[0;0;0;0;5]; 
+% col4row=[0;0;0;0;0]; 
+%
+%REFERENCES:
+%[1] T. H. Cormen, C. E. Leiserson, R. L. Rivest, and C. Stein, 
+%    Introduction to Algorithms, 2nd ed. Cambridge, MA: The MIT Press,
+%    2001.
+%[2] J. E. Hopcroft and R. M. Karp, "An n^(5/2) algorithm for maximum
+%    matchings in bipartite graphs," SIAM Journal on Computing, vol. 2, no.
+%    4, pp. 225-231, Dec. 1973.
+%[3] R. Burkard, M. Dell'Amico, and S. Martello, Assignment Problems.
+%    Philadelphia: Society for Industrial and Applied Mathematics, 2009.
+%
+%November 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+if(nargin<2||isempty(algorithm))
+    algorithm=0;
+end
+
+switch(algorithm)
+    case 0
+        [col4row,row4col]=HopcroftKarp(A);
+    case 1
+        [col4row,row4col]=CardinalityMatching(A);
+    otherwise
+        error('Unknown algorithm specified.')
+end
+end
+
+function [col4row,row4col]=HopcroftKarp(A)
+%%HOPCROFTKARP Solve the maximum cardinality bipartite matching problem
+%              using the Hopcroft-Karp algorithm. 
+%
+%The algorithm is described briefly in Chapter 26.6 of [1]. It is
+%originally from [2], where a more detailed description is used.
 %
 %REFERENCES:
 %[1] T. H. Cormen, C. E. Leiserson, R. L. Rivest, and C. Stein, 
@@ -51,8 +92,6 @@ function [col4row,row4col]=maxCardBipartMatching(A)
 %    4, pp. 225-231, Dec. 1973.
 %
 %November 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
-%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
-
 
 numRows=size(A,1);
 numCols=size(A,2);
@@ -182,6 +221,87 @@ else%Reached a leaf node (the sential node). we have an augmenting path.
     retVal=true;
     return
 end
+end
+
+function [col4row,row4col]=CardinalityMatching(A)
+%%CARDINALITYMATCHING Solve the maximum cardinality bipartite matching
+%              problem using the cardinality matching algorithm. 
+%
+%This implements algorithm3.1 from Chapter3.2 of [1].
+%
+%REFERENCES:
+%[1] R. Burkard, M. Dell'Amico, and S. Martello, Assignment Problems.
+%    Philadelphia: Society for Industrial and Applied Mathematics, 2009.
+%
+%October 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+numRows=size(A,1);
+numCols=size(A,2);
+
+row4col=zeros(numCols,1);
+col4row=zeros(numRows,1);
+
+l=zeros(numCols,1);%Allocate for the labels and mark unlabeled.
+r=zeros(numRows,1);
+%Unmatched row vertices.
+L=1:numRows;
+numL=numRows;
+R=zeros(numCols,1);%Allocate space.
+numR=0;
+
+while(numL>0||numR>0)
+    if(numL>0)
+        x=L(numL);
+        %Scan the left vertex
+        numL=numL-1;
+        
+        for j=1:numCols
+            if(A(x,j)&&l(j)==0)%If the edge exists and it is unlabeled.
+                l(j)=x;
+
+                numR=numR+1;
+                R(numR)=j;
+            end
+        end
+    else%numR>0
+        x=R(numR);
+        %Scan the right vertex.
+        numR=numR-1;
+        
+        if(row4col(x)~=0)%If this edge is in the matching.
+            i=row4col(x);
+            r(i)=x;%Label it.
+            numL=numL+1;
+            L(numL)=i;
+        else
+            %Backtrack the labels to get the path and keep track of
+            %unmatched vertices.
+            while(1)
+                i=l(x);
+                col4row(i)=x;
+                row4col(x)=i;
+
+                x=r(i);
+
+                if(x==0)
+                    break;
+                end
+            end
+            
+            LUnmatched=(col4row==0);
+            numL=sum(LUnmatched);
+            idx=1:numRows;
+            L(1:numL)=idx(LUnmatched);
+
+            numR=0;
+
+            %Cancel all labels.
+            l(:)=0;
+            r(:)=0;
+        end
+    end
+end
+
 end
 
 %LICENSE:

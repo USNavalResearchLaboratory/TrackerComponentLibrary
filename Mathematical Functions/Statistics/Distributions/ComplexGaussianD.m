@@ -19,13 +19,13 @@ classdef ComplexGaussianD
 methods(Static)
 
 function val=mean(mu)
-%%MEAN  Obtain the mean of the circularly-symmetric complex Gaussian
-%       distribution.
+%%MEAN Obtain the mean of the circularly-symmetric complex Gaussian
+%      distribution.
 %
-%INPUTS:    mu  The mean of the PDF. If the PDF is multivariate, then this
-%               is a column vector.
+%INPUTS: mu The mean of the PDF. If the PDF is multivariate, then this ia a
+%           column vector.
 %
-%OUTPUTS: val  The mean of the Gaussian distribution.
+%OUTPUTS: val The mean of the Gaussian distribution.
 %
 %The circularly-symmetric complex Gaussian distribution is parameterized by
 %its mean and covariance matrix. Thus, this function just returns the mean
@@ -37,14 +37,14 @@ function val=mean(mu)
 end
 
 function val=cov(Sigma)
-%%COV   Obtain the covariance matrix of the Gaussian distribution (the
-%       variance if scalar).
+%%COV Obtain the covariance matrix of the Gaussian distribution (the
+%     variance if scalar).
 %
-%INPUTS:  Sigma The variance (if scalar) or Hermitian covariance matrix (if
-%               multidimensional) of the PDF. The variance cannot be zero
-%               and the covariance matrix cannot be singular.
+%INPUTS: Sigma The variance (if scalar) or Hermitian covariance matrix (if
+%              multidimensional) of the PDF. The variance cannot be zero
+%              and the covariance matrix cannot be singular.
 %
-%OUTPUTS: val  The covariance matrix of the Gaussian distribution.
+%OUTPUTS: val The covariance matrix of the Gaussian distribution.
 %
 %The circularly-symmetric complex Gaussian distribution is parameterized by
 %its mean and covariance matrix. Thus, this function just returns the
@@ -57,28 +57,27 @@ function val=cov(Sigma)
 end
 
 function vals=PDF(z,mu,Sigma)
-%%PDF         Evaluate a scalar or multivariate circularly-symmetric
-%             complex Gaussian (normal) PDF at a certain point given the
-%             mean and the covariance matrix.
+%%PDF Evaluate a scalar or multivariate circularly-symmetric complex
+%     Gaussian (normal) PDF at a certain point given the mean and the
+%     covariance matrix.
 %
-%INPUTS:    z   The points at which the PDF should be evaluated. If the PDF
-%               is multivariate, then this is a column vector. If
-%               evaluation at multiple points are desired, then this is a
-%               numDimXN matrix with each column being the a point (a
-%               vector).
-%           mu  The mean of the PDF. If the PDF is multivariate, then this
-%               is a numDImX1 column vector. If omitted or an empty matrix
-%               is passed, a zero mean is used.
-%         Sigma The variance (if scalar) or numDimXnumDim Hermitian
-%               covariance matrix (if multidimensional) of the PDF. The
-%               variance cannot be zero and the covariance matrix cannot be
-%               singular. If omitted or an empty matrix is passed, the
-%               identity matrix is used as the covariance matrix.
+%INPUTS: z The points at which the PDF should be evaluated. If the PDF is
+%          multivariate, then this is a column vector. If values at
+%          multiple points are desired, then this is a numDimXN matrix with
+%          each column being the a point (a vector).
+%       mu The mean of the PDF. If the PDF is multivariate, then this is a
+%          numDImX1 column vector. If omitted or an empty matrix is passed,
+%          a zero mean is used.
+%    Sigma The variance (if scalar) or numDimXnumDim Hermitian covariance
+%          matrix (if multidimensional) of the PDF. The variance cannot be
+%          zero and the covariance matrix cannot be singular. If omitted or
+%          an empty matrix is passed, the identity matrix is used as the
+%          covariance matrix.
 %
-%OUTPUTS: vals  The scalar values of the complex normal PDF with mean mu
-%               and covariance matrix Sigma evaluated at the points in z.
-%               If multiple points are passed (z is a matrix), then val is
-%               a row vector.
+%OUTPUTS: vals The scalar values of the complex normal PDF with mean mu
+%              and covariance matrix Sigma evaluated at the points in z. If
+%              multiple points are passed (z is a matrix), then val is a
+%              row vector.
 %
 %The circularly-symmetric complex normal distribution is presented with
 %respect to the real normal distribution in [1].
@@ -112,28 +111,26 @@ function vals=PDF(z,mu,Sigma)
 end
 
 function vals=PDFI(z,mu,SigmaInv)
-%%PDFI        Evaluate a scalar or multivariate circularly-symmetric
-%             complex Gaussian (normal) PDF at a certain points given the
-%             mean and the inverse of the covariance matrix.
+%%PDFI Evaluate a scalar or multivariate circularly-symmetric complex
+%      Gaussian (normal) PDF at a certain points given the mean and the
+%      inverse of the covariance matrix.
 %
-%INPUTS:    z   The points at which the PDF should be evaluated. If the PDF
-%               is multivariate, then this is a column vector. If
-%               evaluation at multiple points are desired, then this is a
-%               numDimXN matrix with each column being the a point (a
-%               vector).
-%           mu  The mean of the PDF. If the PDF is multivariate, then this
-%               is a numDimX1 column vector. If omitted or an empty matrix
-%               is passed, a zero mean is used.
-%      SigmaInv The inverse variance (if scalar) or numDimXnumDim inverse
-%               covariance matrix (if multidimensional) of the PDF.
-%               SigmaInv can be singular. If omitted or an empty matrix is
-%               passed, the identity matrix is used as the covariance
-%               matrix.
+%INPUTS: z The points at which the PDF should be evaluated. If the PDF is
+%          multivariate, then this is a column vector. If values at
+%          multiple points are desired, then this is a numDimXN matrix with
+%          each column being the a point (a vector).
+%       mu The mean of the PDF. If the PDF is multivariate, then this is a
+%          numDimX1 column vector. If omitted or an empty matrix is passed,
+%          a zero mean is used.
+% SigmaInv The inverse variance (if scalar) or numDimXnumDim inverse
+%          covariance matrix (if multidimensional) of the PDF. SigmaInv can
+%          be singular. If omitted or an empty matrix is passed, the
+%          identity matrix is used as the covariance matrix.
 %
-%OUTPUTS: val   The scalar value of the normal PDF with mean mu and
-%               inverse covariance matrix SigmaInv evaluated at the point
-%               z. If multiple points are passed (z is a matrix), then val
-%               is a row vector.
+%OUTPUTS: val The scalar value of the normal PDF with mean mu and inverse
+%             covariance matrix SigmaInv evaluated at the point z. If
+%             multiple points are passed (z is a matrix), then val is a row
+%             vector.
 %
 %The circularly-symmetric complex normal distribution is presented with
 %respect to the real normal distribution in [1].
@@ -173,24 +170,23 @@ function val=PDFS(z,mu,S)
 %              complex Gaussian (normal) PDF at a certain point given the
 %              mean and the square root of the covariance matrix.
 %
-%INPUTS:    z   The points at which the PDF should be evaluated. If the PDF
-%               is multivariate, then this is a column vector. If
-%               evaluation at multiple points are desired, then this is a
-%               numDimXN matrix with each column being the a point (a
-%               vector).
-%           mu  The mean of the PDF. If the PDF is multivariate, then this
-%               is a numDimX1 column vector.
-%           S   The square root of the variance (if scalar) or the
-%               numDimXnumDim lower-triangular square root of the
-%               covariance matrix (if multidimensional) of the PDF such
-%               that S*S'=Sigma, where Sigma is the covariance matrix. S
-%               cannot be a singular matrix. If omitted or an empty matrix
-%               is passed, the identity matrix is used.
+%INPUTS: z The points at which the PDF should be evaluated. If the PDF is
+%          multivariate, then this is a column vector. If values at
+%          multiple points are desired, then this is a numDimXN matrix with
+%          each column being the a point (a vector).
+%       mu The mean of the PDF. If the PDF is multivariate, then this is a
+%          numDimX1 column vector.
+%        S The square root of the variance (if scalar) or the numDimXnumDim
+%          lower-triangular square root of the covariance matrix (if
+%          multidimensional) of the PDF such that S*S'=Sigma, where Sigma
+%          is the covariance matrix. S cannot be a singular matrix. If
+%          omitted or an empty matrix is passed, the identity matrix is
+%          used.
 %
-%OUTPUTS: val   The scalar value(s) of the normal PDF with mean mu and
-%               square root covariance matrix S evaluated at the points in
-%               z. If multiple points are passed (z is a matrix), then val
-%               is a row vector.
+%OUTPUTS: val The scalar value(s) of the normal PDF with mean mu and square
+%             root covariance matrix S evaluated at the points in z. I
+%             multiple points are passed (z is a matrix), then val is a
+%             row vector.
 %
 %The circularly-symmetric complex normal distribution is presented with
 %respect to the real normal distribution in [1].
@@ -228,20 +224,20 @@ end
 
 
 function x=rand(N,mu,P)
-%%RAND   Generate multivariate circularly-symmetric complex Gaussian random
-%        variables with a given mean vector and covariance matrix.
+%%RAND Generate multivariate circularly-symmetric complex Gaussian random
+%      variables with a given mean vector and covariance matrix.
 %
-%INPUTS:  N  The number of random variables to generate.
-%        mu  The xDim X1 mean of the multivariate Gaussian to generate. If
-%            omitted or an empty matrix is passed, a mean of zero is used.
-%            and xDim is taken to be 1.
-%        P   The xDim X xDim positive definite hermitian covariance matrix
-%            of the multivariate Gaussian to generate. If this parameter is
-%            omitted or an empty matrix is passed, then the identity matrix
-%            will be used.
+%INPUTS: N The number of random variables to generate.
+%       mu The xDim X1 mean of the multivariate Gaussian to generate. If
+%          omitted or an empty matrix is passed, a mean of zero is used.
+%          and xDim is taken to be 1.
+%        P The xDim X xDim positive definite hermitian covariance matrix
+%          of the multivariate Gaussian to generate. If this parameter is
+%          omitted or an empty matrix is passed, then the identity matrix
+%          will be used.
 %
-%OUTPUT: x   An xDimXN matrix of random instances of the multivariate
-%            Gaussian distribution.
+%OUTPUT: x An xDimXN matrix of random instances of the multivariate
+%          Gaussian distribution.
 %
 %The circularly-symmetric complex normal distribution is presented with
 %respect to the real normal distribution in [1]. The variables are
@@ -274,18 +270,18 @@ end
 
 
 function x=randS(N,mu,S)
-%%RANDS   Generate multivariate Gaussian random variable with a given
-%         mean vector and lower-triangular square root covariance matrix.
+%%RANDS Generate multivariate Gaussian random variable with a given mean
+%       vector and lower-triangular square root covariance matrix.
 %
-%INPUTS:  N  The number of random variables to generate.
-%        mu  The xDim X1 mean of the multivariate Gaussian to generate.
-%         S  The xDim X xDim lower triangular square root covariance matrix
-%            of the multivariate Gaussian to generate. If this parameter is
-%            omitted or an empty matrix is passed, then the identity matrix
-%            is used.
+%INPUTS: N The number of random variables to generate.
+%       mu The xDim X1 mean of the multivariate Gaussian to generate.
+%        S The xDim X xDim lower triangular square root covariance matrix
+%          of the multivariate Gaussian to generate. If this parameter is
+%          omitted or an empty matrix is passed, then the identity matrix
+%          is used.
 %
-%OUTPUT: x   An xDimXN matrix of random instances of the multivariate
-%            Gaussian distribution.
+%OUTPUT: x An xDimXN matrix of random instances of the multivariate
+%          Gaussian distribution.
 %
 %The circularly-symmetric complex normal distribution is presented with
 %respect to the real normal distribution in [1]. The variables are

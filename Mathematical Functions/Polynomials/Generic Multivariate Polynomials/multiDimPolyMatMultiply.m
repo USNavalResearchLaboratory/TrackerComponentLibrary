@@ -12,7 +12,7 @@ function C=multiDimPolyMatMultiply(A,B)
 %          B An rXn cell array where each element contains a hypermatrix
 %            representing a multivariate polynomial.
 %
-%OUTPUTS: C The mXn-sized product of the the matrices of multivariate
+%OUTPUTS: C The mXn-sized product of the matrices of multivariate
 %           polynomials, A and B. C is a cell array where each entry is a
 %           hypermatrix of coefficients of the multivariate polynomial.
 %

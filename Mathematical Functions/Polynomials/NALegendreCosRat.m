@@ -49,7 +49,7 @@ function [PBarUVals,dPBarUValsdTheta,d2PBarUValsdTheta2]=NALegendreCosRat(theta,
 %where k=1 if m=0 and k=2 otherwise. This differs from the normalization
 %constant that Matlab uses in the normalized version of its built-in
 %associated Legendre function. It is the same as the normalization 
-%constant the the NGA uses in its coefficients for the EGM96 and the
+%constant the NGA uses in its coefficients for the EGM96 and the
 %EGM2008 gravitation models.
 %
 %The fully normalized associated Legendre function ratios that this
@@ -67,7 +67,7 @@ function [PBarUVals,dPBarUValsdTheta,d2PBarUValsdTheta2]=NALegendreCosRat(theta,
 %    2002.
 %[3] D. F. Crouse, "An overview of major terrestrial, celestial, and
 %    temporal coordinate systems for target tracking," Naval Research
-%    Laboratory, Washington, DC, Tech. Rep. NRL/FR/5344?16-10,279, 10 Aug.
+%    Laboratory, Washington, DC, Tech. Rep. NRL/FR/5344-16-10,279, 10 Aug.
 %    2016.
 %
 %December 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.

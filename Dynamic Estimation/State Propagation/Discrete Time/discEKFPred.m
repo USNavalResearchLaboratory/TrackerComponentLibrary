@@ -90,6 +90,9 @@ else
 end
 xPred=f(xPrev)+xPredHessTerm;
 PPred=F*PPrev*F'+Q+PxxHessTerm;
+%Handle possible loss of symmetry due to order of operations and finite
+%precision limitations.
+PPred=(PPred+PPred')/2;
 end
 
 %LICENSE:

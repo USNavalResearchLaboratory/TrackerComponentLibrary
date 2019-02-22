@@ -22,7 +22,7 @@ function val=aDynFlat2CurvedUDyn(xStacked,t,aDyn,uDyn)
 %                 xStacked.
 %               t The time at which the drift function should be evaluated.
 %            aDyn The flat-Earth drift function of the form aDyn(x,t),
-%                 where is the the non-stakced state. It is assumed that
+%                 where is the non-stakced state. It is assumed that
 %                 the first three components returned by aDyn are the local
 %                 velocity components of the state and that nothing in aDyn
 %                 is position-dependent.

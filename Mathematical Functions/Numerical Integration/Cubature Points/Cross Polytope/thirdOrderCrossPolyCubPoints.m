@@ -5,19 +5,19 @@ function [xi,w]=thirdOrderCrossPolyCubPoints(numDim,algorithm)
 %               three an octohedron, in n a cross polytope (or
 %               n-dimensional octahedron).
 %
-%INPUTS:  numDim An integer specifying the dimensionality of the points
-%                to be generated.
-%      algorithm A value indicating which algorithm should be used.
-%                Possible values are
-%                0 (The default if omitted or an empty matrix is passed)
-%                  Formula G_n 3-1 in [1], pg. 304, 2*numDim points.
-%                1 Formula G_n 3-2 in [1], pg. 304, 2^numDim points,
-%                  numDim<4.
+%INPUTS: numDim An integer specifying the dimensionality of the points to
+%               be generated.
+%     algorithm A value indicating which algorithm should be used. Possible
+%               values are:
+%               0 (The default if omitted or an empty matrix is passed)
+%                 Formula G_n 3-1 in [1], pg. 304, 2*numDim points.
+%               1 Formula G_n 3-2 in [1], pg. 304, 2^numDim points,
+%                 numDim<4.
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%            points. (Each "point" is a vector)
+%          w A numCubaturePoints X 1 vector of the weights associated with
+%            the cubature points.
 %
 %REFERENCES:
 %[1] A.H. Stroud, Approximate Calculation of Multiple Integrals. Cliffs,

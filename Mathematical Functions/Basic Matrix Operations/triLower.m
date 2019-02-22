@@ -1,11 +1,11 @@
 function A=triLower(A)
-%%TRILOWER  Zero the upper-triangular potion of the matrix and multiply the
-%           diagonal terms by 0.5
+%%TRILOWER Zero the upper-triangular potion of the matrix and multiply the
+%          diagonal terms by 0.5
 %
-%INPUTS:    A   A square matrix.
+%INPUTS: A A square matrix.
 %
-%OUTPUTS:   A   The matrix A with the upper-triangular portion zeroed and
-%               the diagonal elements divided by 2.
+%OUTPUTS:  A The matrix A with the upper-triangular portion zeroed and the
+%            diagonal elements divided by 2.
 %
 %This function plays a role in turning the derivative of the covariance
 %matrix into the derivative of the lower-triangular square root of the
@@ -26,7 +26,7 @@ for curRow=1:numRows
     A(curRow,curRow)=0.5*A(curRow,curRow);
     A(curRow,(curRow+1):numCol )=0;
 end
-
+end
 %LICENSE:
 %
 %The source code is in the public domain and not licensed or under

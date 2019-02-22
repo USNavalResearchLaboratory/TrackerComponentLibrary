@@ -1,9 +1,9 @@
 function [zQD,apexPoints,exitCode]=ITRS2QD(zCart,modSelParam,a,f,RelTol,AbsTol,maxSteps)
-%%ITRS2QD   Convert a Cartesian locations in the International
-%           Terrestrial Reference System (ITRS), a type of Earth-Centered
-%           Earth-Fixed (ECEF) system, into (non-Cartesian) quasi-dipole
-%           coordinates. These coordinate systems relate to the Earth's
-%           magnetic field and are useful when considering the ionosphere.
+%%ITRS2QD Convert a Cartesian locations in the International Terrestrial
+%         Reference System (ITRS), a type of Earth-Centered Earth-Fixed
+%         (ECEF) system, into (non-Cartesian) quasi-dipole coordinates.
+%         These coordinate systems relate to the Earth's magnetic field and
+%         are useful when considering the ionosphere.
 %
 %INPUTS: zCart One or more points given in Cartesian coordinates in the
 %              ITRS with units of meters. zCart is a 3XN matrix with each

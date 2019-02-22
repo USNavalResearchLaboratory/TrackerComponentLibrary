@@ -12,7 +12,7 @@ function v=polyIntValNewton(z,a,c,K)
 %        c A numDim X(n-1) matrix of the control points associated with
 %          each of the numDim polynomial in Newton's form. When performing
 %          Hermite interpolation using a polynomial returned by the
-%          HermiteInterpPoly function, c can be a matrix holding the the
+%          HermiteInterpPoly function, c can be a matrix holding the
 %          values where the interpolating polynomial matches the data for
 %          numDim calls to the HermiteInterpPoly function (one for each
 %          dimension).
@@ -27,9 +27,10 @@ function v=polyIntValNewton(z,a,c,K)
 %y(z)=a(1)+sum_{k=1}^{n-1}a(k+1)(z-c(1))*(z-c(2))*...*(z-c(k))
 %This function will evaluate numDim integrals of such functions
 %
-%The algorithm VALUE taken from Chapter 19 of [1] provides a recursion for
-%evaluating polynomials in Newton form. The integral algorithm comes from
-%integrating the recursion. The evaluation of the integral has the form
+%The underlying approach is based on VALUE in Chapter 19 of [1], which
+%provides a recursion for evaluating polynomials in Newton form. The
+%integral algorithm comes from integrating the recursion. The evaluation of
+%the integral has the form
 %Y(z)=sum{k=1}^{n}a(k)sum_{m=1}^{k}(-1)^(k-m)*z^m/m*sum(prod(C_{k-m}(c(1:k-1))
 %where C_{k}(c) is all the possible combinations of the vector c, taken k
 %at a time, and prod(C) is the product of all the elements in each set.

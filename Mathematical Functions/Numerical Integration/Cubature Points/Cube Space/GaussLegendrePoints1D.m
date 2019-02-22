@@ -136,7 +136,7 @@ end
 end
 
 function val=J1AsympSqJ0Zero(k)
-%This implements the the square of the first order Bessel function of the
+%This implements the square of the first order Bessel function of the
 %first kind evaluated at the kth zero of the zeroth-order Bessel function
 %of the first kind. A table is used for values of k less than 101 and the
 %asymptotic expansion of Equation 4.5 is used for higher values of k.

@@ -4,23 +4,23 @@ function R=quat2RotMat(q,handed)
 %             chosen to support standard right-handed quaternion rotation,
 %             or non-standard left-handed rotations that some authors use.
 %
-%INPUTS: q   A 4X1 unit quaternion corresponding to the rotation matrix.
-%            The quaternion is ordered [cos(theta/2);sin(theta/2)u']
-%            where u is a unit vector for the axis of rotation and theta
-%            is the rotation angle about that unit vector according to the
-%            specified handedness. The ordering of the elements corresponds
-%            to the hypercomplex decomposition q(1)+i*q(2)+j*q(3)+k*q(4),
-%            where i, j, and k are all roots of -1.
-%     handed The handedness of the quaternion. If omitted, it is assumed
-%            that the quaternion is right-handed (the standard). Possible
-%            values are
-%            'right' The default if omitted. The quaternion multiplication
-%                    is assumed right-handed (standard).
-%            'left'  The quaternion multiplication is assumed left-handed.
-%                    This is used in someplaces, including the reference
-%                    from Shuster, below.
+%INPUTS: q A 4X1 unit quaternion corresponding to the rotation matrix. The
+%          quaternion is ordered [cos(theta/2);sin(theta/2)u'] where u is a
+%          unit vector for the axis of rotation and theta is the rotation
+%          angle about that unit vector according to the specified
+%          handedness. The ordering of the elements corresponds to the
+%          hypercomplex decomposition q(1)+i*q(2)+j*q(3)+k*q(4), where i,
+%          j, and k are all roots of -1.
+%   handed The handedness of the quaternion. If omitted, it is assumed that
+%          the quaternion is right-handed (the standard). Possible values
+%          are:
+%          'right' The default if omitted. The quaternion multiplication is
+%                  assumed right-handed (standard).
+%          'left'  The quaternion multiplication is assumed left-handed.
+%                  This is used in someplaces, including the reference from
+%                  Shuster, below.
 %
-%OUTPUTS: R  A 3X3 orthonormal rotation matrix.
+%OUTPUTS: R A 3X3 orthonormal rotation matrix.
 %
 %If q does not have unit magnitude, then R will not be a rotation matrix.
 %

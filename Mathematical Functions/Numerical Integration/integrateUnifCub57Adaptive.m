@@ -249,7 +249,7 @@ while(1)
     totalErr=totalErr+regionError;
     
     if(shouldDivide==true)
-        %Determine whether either of the the error bounds has been met.
+        %Determine whether either of the error bounds has been met.
         if(all(totalErr(:)<AbsTol(:))||all(totalErr(:)./max(abs(intEst(:)))<RelTol))
             exitCode=0;
             return;

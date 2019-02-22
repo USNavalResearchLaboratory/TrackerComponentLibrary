@@ -1,4 +1,4 @@
-function [aDeriv,AJacob]=aJ1Gravity(xState,includeCoriolis,GM,omega)
+function [aVal,aJacob,aHess,papt]=aJ1Gravity(xState,includeCoriolis,GM,omega)
 %%AJ1GRAVITY This is the J1 dynamic model for simple ballistic targets near
 %            the Earth, neglecting atmospheric drag. It is assumed that the
 %            global origin is at the center of the Earth. If one is
@@ -31,12 +31,17 @@ function [aDeriv,AJacob]=aJ1Gravity(xState,includeCoriolis,GM,omega)
 %               passed, then omega=Constants.EGM2008EarthRotationRate is
 %               used.
 %
-%OUTPUTS: aDeriv The 6X1 derivative of the state xState with respect to
-%                time. The elements are [velocity;acceleration].
-%         AJacob The Jacobian of aDeriv, which can be useful in extended
-%                Kalman filters. This is the derivative of each component
-%                of aDeriv (selected by row) with respect to the elements
-%                of the state [x,y,z,xDot,yDot,zDot] selected by column.
+%OUTPUTS: aVal The 6X1 derivative of the state xState with respect to time.
+%              The elements are [velocity;acceleration].
+%       aJacob A 6X6 matrix of first partial derivatives of aVal with respect
+%              to the elements of xState. aJacob(:,k) is the derivative of
+%              aVal with respect to the kth element of xState.
+%        aHess A 6X6X6 collection of second partial derivatives of aVal
+%              with respect to the elements of xState. aHess(:,k1,k2) is
+%              the second partial derivative with respect to xState(k1) and
+%              xState(k2).
+%         papt The 6X1 vector of the partial derivative of aVal with
+%              respect to time. This is all zeros.
 %
 %The J1 model is simply Newton's law for a point mass. It is the J2 model
 %without the oblateness term. The J2 model is derived in Appendix F.4 of
@@ -93,7 +98,7 @@ end
 a=aNewton+aCoriol;
 
 %The time-derivative of the state vector under the J1 dynamic model.
-aDeriv=[v;a];
+aVal=[v;a];
 
 if(nargout>1)
     rMag5=rMag3*rMag2;
@@ -101,13 +106,18 @@ if(nargout>1)
     y2=y*y;
     z2=z*z;
 
-    axx=(GM*(2*x2-y2-z2))/rMag5;
-    ayy=-(GM*(x2-2*y2+z2))/rMag5;
-    azz=-(GM*(x2+y2-2*z2))/rMag5;
-    axy=(3*GM*x*y)/rMag5;
-    axz=(3*GM*x*z)/rMag5;
-    ayz=(3*GM*y*z)/rMag5;
+    aXx=(GM*(2*x2-y2-z2))/rMag5;
+    aXy=(3*GM*x*y)/rMag5;
+    aXz=(3*GM*x*z)/rMag5;
     
+    %aYx=aXy;
+    aYy=-(GM*(x2-2*y2+z2))/rMag5;
+    aYz=(3*GM*y*z)/rMag5;
+
+    %aZx=aXz
+    %aZy=aYz
+    aZz=-(GM*(x2+y2-2*z2))/rMag5;
+
     %If Coriolis and centrifugal acceleration terms should be added due to
     %the rotation of the Earth.
     if(includeCoriolis)
@@ -122,12 +132,70 @@ if(nargout>1)
         daYCorioldvx=0;
     end
 
-    AJacob=[0,                  0,              0,      1,              0,              0;
+    aJacob=[0,                  0,              0,      1,              0,              0;
             0,                  0,              0,      0,              1,              0;
             0,                  0,              0,      0,              0,              1;
-            axx+daXCorioldx,    axy,            axz,    0,              daXCorioldvy,   0;
-            axy,                ayy+daYCorioldy,ayz,    daYCorioldvx,   0,              0;
-            axz,                ayz,            azz,    0,              0,              0];
+            aXx+daXCorioldx,    aXy,            aXz,    0,              daXCorioldvy,   0;
+            aXy,                aYy+daYCorioldy,aYz,    daYCorioldvx,   0,              0;
+            aXz,                aYz,            aZz,    0,              0,              0];
+
+    if(nargout>2)
+        aHess=zeros(6,6,6);
+        rMag7=rMag5*rMag2;
+        
+        x3=x2*x;
+        y3=y2*y;
+        z3=z2*z;
+
+        aXxx=GM*(-6*x3+9*x*(y2+z2))/rMag7;
+        aXxy=(3*GM*y*(-4*x2+y2+z2))/rMag7;
+        aXxz=(3*GM*z*(-4*x2+y2+z2))/rMag7;
+
+        aXyx=aXxy;
+        aXyy=(3*GM*x*(x2-4*y2+z2))/rMag7;
+        aXyz=-(15*GM*x*y*z)/rMag7;
+
+        aXzx=aXxz;
+        aXzy=aXyz;
+        aXzz=(3*GM*x*(x2+y2-4*z2))/rMag7;
+
+        aYyx=aXyy;
+        aYyy=GM*(-6*y3+9*y*(x2+z2))/rMag7;
+        aYyz=(3*GM*z*(x2-4*y2+z2))/rMag7;
+
+        aYzx=aXyz;
+        aYzy=aYyz;
+        aYzz=(3*GM*y*(x2+y2-4*z2))/rMag7;
+
+        aZzx=aXzz;
+        aZzy=aYzz;
+        aZzz=GM*(-6*z3+9*z*(x2+y2))/rMag7;
+
+        aHess(:,:,1)=[0,    0,      0,  0,   0,   0;
+                      0,    0,      0,  0,   0,   0;
+                      0,    0,      0,  0,   0,   0;
+                      aXxx, aXyx,aXzx,  0,   0,   0;
+                      aXyx, aYyx,aYzx,  0,   0,   0;
+                      aXzx, aYzx,aZzx,  0,   0,   0];
+
+        aHess(:,:,2)=[0,    0,      0,  0,   0,   0;
+                      0,    0,      0,  0,   0,   0;
+                      0,    0,      0,  0,   0,   0;
+                      aXxy, aXyy,aXzy,  0,   0,   0;
+                      aXyy, aYyy,aYzy,  0,   0,   0;
+                      aXzy, aYzy,aZzy,  0,   0,   0];
+
+        aHess(:,:,3)=[0,    0,      0,  0,   0,   0;
+                      0,    0,      0,  0,   0,   0;
+                      0,    0,      0,  0,   0,   0;
+                      aXxz, aXyz,aXzz,  0,   0,   0;
+                      aXyz, aYyz,aYzz,  0,   0,   0;
+                      aXzz, aYzz,aZzz,  0,   0,   0];
+
+        if(nargout>3)
+            papt=zeros(6,1);
+        end       
+    end
 end
 end
 

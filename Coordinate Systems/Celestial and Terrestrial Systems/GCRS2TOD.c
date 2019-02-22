@@ -20,7 +20,7 @@
  *       rotMat The 3X3 rotation matrix such that
  *              xRot(:,i)=rotMat*xVec(:,i).
  *
- *This uses functions in the the International Astronomical Union's (IAU)
+ *This uses functions in the International Astronomical Union's (IAU)
  *Standard's of Fundamental Astronomy (SOFA) library to obtain the product
  *of the nutation and precession rotation matrices  and the frame rotation
  *bias matrix. One goes from GCRS to TOD by applying a frame bias and then

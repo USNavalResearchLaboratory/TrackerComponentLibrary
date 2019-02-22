@@ -82,7 +82,7 @@ function [xPredMain,xPredSubsid,k,orders,isFSAL]=RungeKStep(xVal,curT,f,deltaT,f
 %                   (7,0) Verner's RK7(8)13 algorithm from [4].
 %                   (7,1) Fehlberg's RK7(8)13 formula of [2].
 %                   (8,0) RK8(7)13M from Prince and Dormand [7].
-%                   (8,1) Verner's RK8(9)16 algorithm.
+%                   (8,1) Verner's RK8(9)16 algorithm in [4].
 %
 %OUTPUTS: If the function is run with two inputs as
 %         [orders,isFSAL]=RungeKStep(order,solutionChoice)

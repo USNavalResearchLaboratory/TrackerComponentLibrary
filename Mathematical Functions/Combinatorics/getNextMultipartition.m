@@ -28,7 +28,7 @@ function [vOut,data]=getNextMultipartition(data)
 %As an example, there are nine multipartitions of the set (1,1,2,2). These
 %are
 %(1,1,2,2);  (1,1,2),(2);  (1,1),(2,2);  (1,1),(2),(2); (1,2,2),(1);
-%(12),(12);  (12),(1),(2);  (1),(1),(2,2); (1),(1),(2),(2)
+%(1,2),(1,2);  (1,2),(1),(2);  (1),(1),(2,2); (1),(1),(2),(2)
 %However, represented in terms of the output vOut, we have 9 matrices:
 % [2;  [2,0; [2,0; [2,0,0;  [1,1;  [1,1;  [1,1,0;  [1,1,0;  [1,1,0,0
 %  2]   1,1]  0,2]  0,1,1]   2,0]   1,1]   1,0,1]   0,0,2]   0,0,1,1]

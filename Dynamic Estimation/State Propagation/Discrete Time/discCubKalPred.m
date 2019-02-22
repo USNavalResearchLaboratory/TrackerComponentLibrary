@@ -96,8 +96,8 @@ function [xPred, PPred]=discCubKalPred(xPrev,PPrev,f,Q,xi,w,stateDiffTrans,state
     %Calculate the predicted covariance matrix.
     PPred=Q;
     for curP=1:numCubPoints
-       diff=stateDiffTrans(xPropPoints(:,curP)-xPred);
-       PPred=PPred+w(curP)*(diff*diff');
+        diff=stateDiffTrans(xPropPoints(:,curP)-xPred);
+        PPred=PPred+w(curP)*(diff*diff');
     end
 end
 

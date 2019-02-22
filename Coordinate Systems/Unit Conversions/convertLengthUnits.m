@@ -2,32 +2,31 @@ function val=convertLengthUnits(val,unitOrig,unitDest)
 %%CONVERTLENGTHUNITS Convert values of length from one set of units to
 %                    another.
 %
-%INPUTS: val           The matrix or vector of values that are to be
-%                      converted.
-%   unitOrig, unitDes  Two character strings indicating the units of val
-%                      and the units into which it is to be converted. The
-%                      possible values are:
-%                      'Ym'   yottameters        'Zm'  zettameters
-%                      'Em'   exameters          'Pm'  petameters
-%                      'Tm'   tetrameters        'Gm'  gigameters
-%                      'Mm    megameters         'km'  kilometers
-%                      'hm'   hectometers        'dam' decameters
-%                      'm'    meters             'dm'  decimeters
-%                      'cm'   centimeters        'mm'  millimeters
-%                      'mum'  micrometers        'nm'  nanometers
-%                      'pm'   picometers         'fm'  femtometers
-%                      'am'   attometers         'zm'  zeptometers
-%                      'ym'   yoctometers        'nml' nautical miles
-%                      'mi'   miles              'yd'  yards
-%                      'ft'   feet               'in'  inches
-%                      'pt'   points             'pica'picas (1/6 inch)
-%                      'ftm'  fathoms            'AU'  astronomical units
-%                      'ly'   light-years        'pc'  parsec
-%                      'Ang'  Angströms          'mil' mils (1/1000 inches)
-%                      'cbl'  Cable length (0.1nml) Note that many other
-%                             definitions of a cable length exist.                
-%                      'USft' US survey feet     'USmi' US survey miles
-%                      'USftm'US survey fathoms  
+%INPUTS: val The matrix or vector of values that are to be converted.
+% unitOrig, unitDes Two character strings indicating the units of val and
+%            the units into which it is to be converted. The possible
+%            values are:
+%            'Ym'   yottameters        'Zm'  zettameters
+%            'Em'   exameters          'Pm'  petameters
+%            'Tm'   tetrameters        'Gm'  gigameters
+%            'Mm    megameters         'km'  kilometers
+%            'hm'   hectometers        'dam' decameters
+%            'm'    meters             'dm'  decimeters
+%            'cm'   centimeters        'mm'  millimeters
+%            'mum'  micrometers        'nm'  nanometers
+%            'pm'   picometers         'fm'  femtometers
+%            'am'   attometers         'zm'  zeptometers
+%            'ym'   yoctometers        'nml' nautical miles
+%            'mi'   miles              'yd'  yards
+%            'ft'   feet               'in'  inches
+%            'pt'   points             'pica'picas (1/6 inch)
+%            'ftm'  fathoms            'AU'  astronomical units
+%            'ly'   light-years        'pc'  parsec
+%            'Ang'  Angströms          'mil' mils (1/1000 inches)
+%            'cbl'  Cable length (0.1nml) Note that many other definitions
+%                   of a cable length exist.                
+%            'USft' US survey feet     'USmi' US survey miles
+%            'USftm'US survey fathoms  
 %
 %OUTPUTS: val  The values converted into the desired coordinate system.
 %

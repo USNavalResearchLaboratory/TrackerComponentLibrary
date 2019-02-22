@@ -394,7 +394,7 @@ if(nargout>1)
     thetaOrig=atan(sol.y(2,1));
     uLocal=[cos(thetaOrig);sin(thetaOrig);0];
 
-    %The inverse rotation is given the the transpose of the rotation
+    %The inverse rotation is given the transpose of the rotation
     %matrix. This is the apparent direction of the object as seen by the
     %observer.
     uArrive=ECEF2LocalRot'*uLocal;

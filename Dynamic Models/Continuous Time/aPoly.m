@@ -1,4 +1,4 @@
-function [aDeriv,AJacob]=aPoly(x,t,numDim)
+function [aVal,aJacob,aHess,papt]=aPoly(x,t,numDim)
 %%APOLY The drift function for a linear continuous-time motion model with a
 %       given order in a specified number of Cartesian dimensions. The
 %       order of the linear filter, that is the number of moments of
@@ -14,12 +14,18 @@ function [aDeriv,AJacob]=aPoly(x,t,numDim)
 %          assumed. The dimensionality of the state must be an integer
 %          multiple of numDim.
 %
-%OUTPUTS: aDeriv The time-derivative of the N state vectors under the
-%                linear motion model.
-%         AJacob The Jacobian of aDeriv, which can be useful in extended
-%                Kalman filters. This is the derivative of each component
-%                of aDeriv (selected by row) with respect to the elements
-%                of the state [x,y,z,xDot,yDot,zDot] selected by column.
+%OUTPUTS: aVal The xDimXN time-derivative of the N state vectors under the
+%              linear motion model.
+%       aJacob The xDimXxDim Jacobian of aVal (it is the same for all x and
+%              not repeated N times). This is such that aJacob(:,k) is the
+%              partial derivative of aVal with respect to the kth element
+%              of x.
+%        aHess The xDimXxDimXxDim hypermatrix such that aHess(:,k1,k2) is
+%              the second partial derivative of aVal with respect to
+%              elements k1 and k2 of x (all zero in this instance). It is
+%              the same for all x.
+%         papt The xDimX1 partial derivative of aVal with respect to t (all
+%              zero in this instance). It is the same for all x.
 %
 %The drift function corresponds to the state transition given in
 %discrete-time by the function FPolyKal.
@@ -27,19 +33,27 @@ function [aDeriv,AJacob]=aPoly(x,t,numDim)
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    if(nargin<3)
-        numDim=3; 
-    end
-    
-    numTar=size(x,2);
+if(nargin<3)
+    numDim=3; 
+end
 
-    aDeriv=[x((numDim+1):end,:);zeros(numDim,numTar)];
-    
-    if(nargout>1)
-        xDim=size(x,1);
-        
-        AJacob=[zeros(xDim,numDim),[eye(xDim-numDim,xDim-numDim);zeros(numDim,xDim-numDim)]];
+numTar=size(x,2);
+
+aVal=[x((numDim+1):end,:);zeros(numDim,numTar)];
+
+if(nargout>1)
+    xDim=size(x,1);
+
+    aJacob=[zeros(xDim,numDim),[eye(xDim-numDim,xDim-numDim);zeros(numDim,xDim-numDim)]];
+
+    if(nargout>2)
+        aHess=zeros(xDim,xDim,xDim);
+
+        if(nargout>3)
+            papt=zeros(xDim,1);
+        end
     end
+end
 end
 
 %LICENSE:

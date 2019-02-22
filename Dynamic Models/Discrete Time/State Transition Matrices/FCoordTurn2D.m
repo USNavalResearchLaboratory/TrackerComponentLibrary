@@ -14,7 +14,7 @@ function F=FCoordTurn2D(T,x,turnType,discPoint,tauTurn,tauLinAccel)
 %          acceleration (acceleration along the direction of motion), then
 %          x can either be x=[x;y;xdot;ydot;omega], where omega is the turn
 %          rate estimate in radians per second counterclockwise from the
-%          x-axis or x=[x;y;xdot;ydot;at] where at is the the transversal
+%          x-axis or x=[x;y;xdot;ydot;at] where at is the transversal
 %          acceleration, which is orthogonal to the velocity and is defined
 %          such that positive values of at map to positive values of omega.
 %          If there is a linear acceleration, then the target state is
@@ -102,10 +102,10 @@ function F=FCoordTurn2D(T,x,turnType,discPoint,tauTurn,tauLinAccel)
 %zero. Care is also taken to avoid NaNs when omega is close to zero.
 %
 %This state transition matrix goes with the process noise covariance matrix
-%given by QCoordTurn.The corresponding continuous-time drift function for
-%is aCoordTurn2D with its diffusion matrix DCoordTurn2D. Note that this
-%model is a direct-discrete-time model and is not just a discretization of
-%the continuous-time model.
+%given by QCoordTurn.The corresponding continuous-time drift functions for
+%are aCoordTurn2DOmega and aCoordTurn2DTrans with the diffusion matrix
+%DCoordTurn2D. Note that this model is a direct-discrete-time model and is
+%not just a discretization of the continuous-time model.
 %
 %REFERENCES:
 %[1] X. R. Li and V. P. Jilkov, "Survey of maneuvering target tracking.

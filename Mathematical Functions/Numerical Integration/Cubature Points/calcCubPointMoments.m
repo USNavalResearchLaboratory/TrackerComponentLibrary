@@ -36,7 +36,7 @@ function [mu,P]=calcCubPointMoments(z,S,h,xi,w)
 %            integration.
 %
 %This function is only appropriate when the domain of the transformed
-%points is linear. For example, if the the transformation results in an
+%points is linear. For example, if the transformation results in an
 %angle from -pi to pi, then angles near +/-pi might get averaged to zero,
 %producing very bad results. In such an instance, the relevant components
 %of the mixture should be averaged using meanAng.

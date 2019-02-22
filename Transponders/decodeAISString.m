@@ -11,7 +11,7 @@ function [decodedMessage,reportName,reportDescription,fieldDescriptions]=decodeA
 %                 Marine Electronics Association (NMEA) formatted ASCII
 %                 text. Each message is on its own line.
 %
-%OUTPUTS:decodedMessage A cell array of structures whose components are
+%OUTPUTS: decodedMessage A cell array of structures whose components are
 %                    the decoded message elements, one message per cell.
 %                    If an incomplete or invalid message is provided, it
 %                    will be skipped.

@@ -22,20 +22,30 @@ function sqrtA=cholSemiDef(A,upperOrLower,method,epsVal)
 %            using Matlab's ldl function followed by a triangularization
 %            step to assure that the block-diagonal result is actually
 %            diagonal. Chapter 4.2.3 of [1] related the LDL decomposition
-%            to the Cholesky decomposition. values in the diagonal matrix D
+%            to the Cholesky decomposition. Values in the diagonal matrix D
 %            that are less than epsVal*max(diag(D)) are replaced with
-%            epsVal*max(diag(D)).
+%            epsVal*max(diag(D)). It is assumed that no negative
+%            eigenvalues are present, otherwise Matlab's function might
+%            return D and a tridiagonal marix. In such an instance, the
+%            off-diagonal elements are discarded.
 %          1 This is similar to 0, but no triangularization step is
 %            performed. Thus, A=sqrtA*sqrtA' but sqrtA might not be
 %            completely diagonal. This is faster than option 0.
 %          2 Perform a traditional Cholesky decomposition as in Chapter 4.2
 %            of [1]. However, if the argument of the square root step in
-%            the algorithm is less than epsVal, replace it with epsVal. 
+%            the algorithm is less than epsVal, replace it with epsVal.
+%          3 Perform an SVD and set the singular values that are less than
+%            epsVal*max(diag(S)) to epsVal*max(diag(S)). U and V from the
+%            svd will be equal when A is postive semidefinite. We average
+%            them and then perform a QR decomposition on sqrt(S)*U'. The
+%            result is Q is a unitary matrix and A=R'*R (because
+%            Q*Q'=identity).
 %    epsVal A positive value that affects how the algorithm works with
 %          semi-definite and non-positive definite matrices. The default
-%          for methos 0 and 1 is 0. The default for method 2 is eps().
-%          Using nonzero values in methods 0 and 1 will not guarantee that 
-%          A=sqrtA*sqrtA'. Method 2 requires this to be nonzero.   
+%          for methods 0 and 1 is 0. The default for method 2 is
+%          eps(max(diag(A))). Using nonzero values in methods 0 and 1 will
+%          not guarantee that A=sqrtA*sqrtA'. Method 2 requires this to be
+%          nonzero.   
 %
 %OUTPUTS: sqrtA The upper or lower-triangular Cholesky decomposition of A.
 %               If 'upper' is chosen, then sqrtA'*sqrtA=A. Otherwise
@@ -45,7 +55,8 @@ function sqrtA=cholSemiDef(A,upperOrLower,method,epsVal)
 %triangular) matrix C such that A=C*C'. A solution only exists if A is
 %symmetric and positive semi-definite. Given a non-positive semi-definite
 %matrix, this function will return a matrix that is "close" to satisfying
-%the equality.
+%the equality. Before all the algorithms, symmetry is forced via
+%A=(A+A')/2. This is important for 
 %
 %This function uses the fact that Matlab's LDL decomposition algorithm can
 %handle positive semi-definite matrices. The algebraic relationship between
@@ -71,23 +82,26 @@ end
 
 if(nargin<4||isempty(epsVal))
     if(method==2)
-        epsVal=eps();
+        epsVal=eps(max(diag(A)));
     else
         epsVal=0;
     end
 end
 
+%Force symmetry.
+A=(A+A')/2;
+
 if(method==0||method==1)
     [L,D]=ldl(A);
 
-    %The absolute value is to handle precision limitations that would make an
-    %otherwise positive semi-definite matrix not positive semi-definite. The
-    %tria function is to deal with the fact that when A is poorly conditioned,
-    %Matlab will return an L that is not actually lower-triangular. Thus, while
-    %L*sqrt(D) is indeed a matrix square root, it is not a valid Cholesky
-    %decomposition. The tria function turns it into a valid Cholesky
-    %decomposition.
-    dAbs=abs(diag(D));
+    %The absolute value is to handle precision limitations that would make
+    %an otherwise positive semi-definite matrix not positive semi-definite.
+    %The tria function is to deal with the fact that when A is poorly
+    %conditioned, Matlab will return an L that is not actually lower-
+    %triangular. Thus, while L*sqrt(D) is indeed a matrix square root, it
+    %is not a valid Cholesky decomposition. The tria function turns it into
+    %a valid Cholesky decomposition.
+    dAbs=abs(abs(diag(D)));
 
     diagVal=diag(sqrt(max(diag(D),epsVal*max(dAbs))));
 
@@ -97,6 +111,30 @@ if(method==0||method==1)
     end
 elseif(method==2)
     sqrtA=cholTradLoad(A,epsVal);
+elseif(method==3)
+    [U,S,V]=svd(A);
+    s=diag(S);
+    sMax=abs(max(s));
+    s=sqrt(max(s,epsVal*sMax));
+    U=(U+V)/2;%U should equal V when A is positive semidefinite.
+    [~,R]=qr(diag(s)*U');%Q would be unitary
+    %We will make the diagonal elements positive.
+    S=diag(sign(diag(R)));
+    R=R*S;
+    sqrtA=R';
+elseif(method==4)
+    %If A is perfectly symmetric (ensured above), then the eigenvectors
+    %returned by this eigenvalue decomposition should be orthonormal.
+    [V,D]=eig(A);
+    d=diag(D);
+    dMax=abs(max(d));
+    d=max(d,epsVal*dMax);
+    d=sqrt(d);
+    [~,R]=qr(diag(d)*V');%Q would be unitary
+    %We will make the diagonal elements positive.
+    S=diag(sign(diag(R)));
+    R=R*S;
+    sqrtA=R';
 else
     error('Unknown method specified.')
 end

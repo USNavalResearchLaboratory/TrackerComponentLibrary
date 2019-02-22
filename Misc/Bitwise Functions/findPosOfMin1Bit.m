@@ -2,13 +2,13 @@ function bitPos=findPosOfMin1Bit(n)
 %%FINDPOSOFMIN1BIT Given n, which is of an integer data type, determine the
 %           position of the least significant bit that is a 1.
 %
-%INPUTS: An integer or a matrix of integers. These must be an integer
-%           data type (i.e. not a double).
+%INPUTS: n An integer or a matrix of integers. These must be an integer
+%          data type (i.e. not a double).
 %
-%OUTPUTS: bitPos The position of the first 1 in the binary
-%            representation of each of the integers in n. Counting starts
-%            at 1. A value of 0 means that there is no 1 in the binary
-%            representation.
+%OUTPUTS: bitPos The position of the first 1 in the binary representation
+%                of each of the integers in n. Counting starts at 1. A
+%                value of 0 means that there is no 1 in the binary
+%                representation.
 %
 %The algorithm just keeps shifting the number (dividing by 2) until it
 %the first digit is no longer 0, counting the number of shifts needed.

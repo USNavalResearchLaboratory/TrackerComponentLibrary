@@ -6,18 +6,16 @@ function val=convertSpeedUnits(val,unitOrigNum,unitOrigDenom,unitDestNum,unitDes
 %                   unitOrigNum='nml';unitOrigDenom='h';unitDestNum='m';
 %                   unitDestDenom='s';
 %
-%INPUTS: val           The matrix or vector of values that are to be
-%                      converted.
-%unitOrigNum,unitOrigDenom
-%unitDestNum,unitDestDenom Four character strings indicating the units of
-%                      val and the units into which it is to be converted.
-%                      unitOrigNum and unitDestNum are the units of
-%                      distance and can take the values listed in
-%                      convertTimeUnits. unitOrigDenom and unitDestDenom
-%                      are the length units and can take the values listed
-%                      in convertLengthUnits.
+%INPUTS: val The matrix or vector of values that are to be converted.
+% unitOrigNum,unitOrigDenom
+% unitDestNum,unitDestDenom Four character strings indicating the units of
+%            val and the units into which it is to be converted.
+%            unitOrigNum and unitDestNum are the units of distance and can
+%            take the values listed in convertTimeUnits. unitOrigDenom and
+%            unitDestDenom are the length units and can take the values
+%            listed in convertLengthUnits.
 %
-%OUTPUTS: val  The values converted into the desired coordinate system.
+%OUTPUTS: val The values converted into the desired coordinate system.
 %
 %This just uses the functions convertLengthUnits and convertTimeUnits to
 %get the approprimate multiplication factors to convert the length and time

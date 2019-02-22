@@ -4,20 +4,25 @@ function [vals,numReps]=runLenEncode(x)
 %              repeats and providing a vector of how many consecutive
 %              repeats each value has.
 %
-%INPUTS: x  A numValsX1 or 1XnumVals vector.
+%INPUTS: x A numValsX1 or 1XnumVals vector.
 %
-%OUTPUTS:    vals The values in x with no consecutive repeated elements.
-%         numReps The number of times each element in vals is repeated to
-%                 obtain the original string x.
+%OUTPUTS: vals The values in x with no consecutive repeated elements.
+%      numReps The number of times each element in vals is repeated to
+%              obtain the original string x.
 %
 %Run length encoding can be a simple, useful data compression method when
 %dealing with data containing many consecutive repeated values, such as a
 %black and white bitmap image.
 %
 %September 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 %Allocate the maximum possible amount of space for the variables.
 numVals=length(x);
+
+%Allocate
+vals=zeros(numVals,1);
+numReps=zeros(numVals,1);
 
 curIdx=1;
 vals(curIdx)=x(1);

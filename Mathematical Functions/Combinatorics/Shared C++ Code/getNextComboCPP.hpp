@@ -6,6 +6,7 @@
 #include <stddef.h>
 
 bool getNextComboCPP(size_t *I,const size_t n,const size_t r);
+bool getNextComboCPPFromOne(size_t *I,const size_t n,const size_t r);
 
 #endif
 

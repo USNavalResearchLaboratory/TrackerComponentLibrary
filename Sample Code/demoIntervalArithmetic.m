@@ -1,9 +1,9 @@
 function demoIntervalArithmetic()
-%%DEMOINTERVALARITHMETIC  Demonstate how to use the Interval class for
-%                         interval arithmetic. An interval defines a range,
-%                         or set, of possible values rather than a single
-%                         point. This allows calculations to be performed
-%                         while keeping track of error bounds.
+%%DEMOINTERVALARITHMETIC Demonstate how to use the Interval class for
+%                        interval arithmetic. An interval defines a range,
+%                        or set, of possible values rather than a single
+%                        point. This allows calculations to be performed
+%                        while keeping track of error bounds.
 %
 %
 %November 2015 David Karnick, Naval Research Laboratory, Washington D.C.

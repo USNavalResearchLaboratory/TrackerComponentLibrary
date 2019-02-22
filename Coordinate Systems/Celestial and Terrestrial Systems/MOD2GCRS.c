@@ -17,7 +17,7 @@
  *        rotMat The 3X3 rotation matrix such that
  *               xRot(:,i)=rotMat*xVec(:,i).
  *
- *This uses functions in the the International Astronomical Union's (IAU)
+ *This uses functions in the International Astronomical Union's (IAU)
  *Standard's of Fundamental Astronomy (SOFA) library to obtain the product
  *of the precession rotation matrix and the frame rotation bias matrix. One
  *goes from GCRS to mean of date by applying a frame bias and then
@@ -27,7 +27,7 @@
  *Rotation and Reference Systems Service Std. 36, 2010.
  *among other sources.
  *
- *The algorithm can be compiled for use in Matlab  using the 
+ *The algorithm can be compiled for use in Matlab using the 
  *CompileCLibraries function.
  *
  *The algorithm is run in Matlab using the command format

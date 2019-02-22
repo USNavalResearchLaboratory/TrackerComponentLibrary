@@ -16,7 +16,7 @@ function [zCart,RCart]=spher2CartTaylor(zMeas,R,zRx,M,algorithm)
 %             elevation, with the angles in radians To convert N points,
 %             zMeas is a 3XN matrix with each column having the format
 %             [range;azimuth; elevation].
-%          R  The 3X3XN covariance matrices associated with polPoint. If
+%           R The 3X3XN covariance matrices associated with polPoint. If
 %             all of the matrices are the same, then this can just be a
 %             single 3X3 matrix.
 %         zRx The 3XN [x;y;z] location vectors of the receivers in

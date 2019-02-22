@@ -1,4 +1,4 @@
-function J=uvGradient(xG,lRx,M)
+function J=uvGradient(xG,lRx,M,includeW)
 %%UVGRADIENT Determine the gradient of a direction cosine measurement with
 %          respect to 3D position. Relativity and atmospheric effects
 %          are not taken into account.
@@ -10,10 +10,20 @@ function J=uvGradient(xG,lRx,M)
 %         M A 3X3 rotation matrix from the global Coordinate system to the
 %           orientation of the coordinate system at the receiver. If
 %           omitted, it is assumed to be the identity matrix.
+%  includeW An optional boolean value indicating whether a third direction
+%           cosine component should be included. The u and v direction
+%           cosines are two parts of a 3D unit vector. Generally, one might
+%           assume that the target is in front of the sensor, so the third
+%           component would be positive and is not needed. However, the
+%           third component can be included if ambiguity exists. The default
+%           if this parameter is omitted or an empty matrix is passed is 
+%           false.
 %
 %OUTPUTS: J A 2X3XN set of N Jacobian matrices where the rows are [u;v] in
 %           that order and the columns take the derivative of the rows
-%           component with respect to [x,y,z] in that order.
+%           component with respect to [x,y,z] in that order. If includeW is
+%           true, then this is a 3X3XN set of Jacobian matrices, where the
+%           final row has derivatives of w.
 %
 %A derivation of the components of the Jacobian is given in [1].
 %
@@ -25,17 +35,25 @@ function J=uvGradient(xG,lRx,M)
 %February 2017 David F.Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<4||isempty(includeW))
+    includeW=false;
+end
+
 if(nargin<3||isempty(M))
-   M=eye(3,3); 
+    M=eye(3,3); 
 end
 
 if(nargin<2||isempty(lRx))
-   lRx=zeros(3,1); 
+    lRx=zeros(3,1); 
 end
 
 N=size(xG,2);
 
-J=zeros(2,3,N);
+if(includeW)
+    J=zeros(3,3,N);
+else
+    J=zeros(2,3,N);
+end
 for curPoint=1:N
     %Convert the state into the local coordinate system.
     xLocal=M*(xG(1:3,curPoint)-lRx(1:3));
@@ -56,13 +74,22 @@ for curPoint=1:N
     dv(1)=-x*y/r^3;
     dv(2)=(x^2+z^2)/r^3;
     dv(3)=-y*z/r^3;
-
+  
     %Now, the gradient vectors for the angular components must be
     %rotated back into the global coordinate system.
     du=du*M;
     dv=dv*M;
 
-    J(:,:,curPoint)=[du;dv];
+    if(includeW)
+        dw=zeros(1,3);
+        dw(1)=-x*z/r^3;
+        dw(2)=-y*z/r^3;
+        dw(3)=(x^2+y^2)/r^3;
+        dw=dw*M;
+        J(:,:,curPoint)=[du;dv;dw];
+    else
+        J(:,:,curPoint)=[du;dv];
+    end
 end
 end
 

@@ -17,62 +17,62 @@ function zCart=ruv2CartStdRefrac(zRUVBiased,useHalfRange,zTx,zRx,M,Ns,ce,ellipsO
 %         satellites, grazing the Earth's atmosphere. The algorithm might
 %         have an error if the ray path goes too far underground.
 %
-%INPUTS: z  A 3XN matrix of refraction-corrupted measurements with elements
-%           [r;u;v], where r is the bistatic range from the transmitter to
-%           the target to the receiver, and u and v are direction cosines.
-%           Each u,v pair should have a magnitude less than or equal to
-%           one. If the magnitude is greater than one, then the pair is
-%           normalized before conversion to avoid imaginary results.
-%           Alternatively, one can pass a 4XN matrix of [r;u;v;w] vectors
-%           where [u;v;w] form a full unit vector in the receiver's local
-%           3D Cartesian coordinates.
+%INPUTS: z A 3XN matrix of refraction-corrupted measurements with elements
+%          [r;u;v], where r is the bistatic range from the transmitter to
+%          the target to the receiver, and u and v are direction cosines.
+%          Each u,v pair should have a magnitude less than or equal to
+%          one. If the magnitude is greater than one, then the pair is
+%          normalized before conversion to avoid imaginary results.
+%          Alternatively, one can pass a 4XN matrix of [r;u;v;w] vectors
+%          where [u;v;w] form a full unit vector in the receiver's local
+%          3D Cartesian coordinates.
 % useHalfRange A boolean value specifying whether the bistatic range value
-%           should be divided by two. This normally comes up when operating
-%           in monostatic mode, so that the range reported is a one-way
-%           range. The default if this parameter is not provided (or an
-%           empty matrix is provided) is false.
-%       zTx The 3X1 [x;y;z] location vector of the transmitter in global
-%           Cartesian coordinates.  If this parameter is omitted or an
-%           empty matrix is passed, then the receiver is placed at the origin.
-%       zRx The 3X1 [x;y;z] location vector of the receiver in global
-%           Cartesian coordinates. If this parameter is omitted or an empty
-%           matrix is passed, then the receiver is placed at the origin.
-%         M A 3X3 rotation matrix to go from the alignment of the global
-%           coordinate system to the local alignment fo the receiver. The z
-%           vector of the local coordinate system of the receiver is the
-%           pointing direction of the receiver. If this matrix is omitted,
-%           then the identity matrix is used.
-%        Ns The atmospheric refractivity reduced to the WGS-84 reference
-%           ellipsoid. Note that the refractivity is (n-1)*1e6, where n is
-%           the index of refraction. The function reduceStdRefrac2Spher can
-%           be used to reduce a refractivity to the ellipsoidal surface.
-%           This function does not allowe different refractivities to be
-%           used as the transmitter and receiver. If this parameter is
-%           omitted or an empty matrix is passed, a default value of 313 is
-%           used.
-%        ce The optional decay constant of the exponential model. The
-%           refractivity N at height h is N=Ns*exp(-ce*(h-h0)) where h0 is
-%           the reference height (in this function, the height of the
-%           reference ellipsoid surface is used). ce is related to the
-%           change in refractivity at an elevation of 1km based on the
-%           refractivity at sea level as
-%           ce=log(Ns/(Ns+DeltaN))/1000;%Units of inverse meters.
-%           where the change in refractivity for a change in elevation of
-%           1km is DeltaN=-multConst*exp(expConst*Ns); In [1], standard
-%           values for the two constants are expConst=0.005577; and
-%           multConst=7.32; If ce is omitted or an empty matrix is passed,
-%           the value based on the standard model is used.
+%          should be divided by two. This normally comes up when operating
+%          in monostatic mode, so that the range reported is a one-way
+%          range. The default if this parameter is not provided (or an
+%          empty matrix is provided) is false.
+%      zTx The 3X1 [x;y;z] location vector of the transmitter in global
+%          Cartesian coordinates.  If this parameter is omitted or an
+%          empty matrix is passed, then the receiver is placed at the origin.
+%      zRx The 3X1 [x;y;z] location vector of the receiver in global
+%          Cartesian coordinates. If this parameter is omitted or an empty
+%          matrix is passed, then the receiver is placed at the origin.
+%        M A 3X3 rotation matrix to go from the alignment of the global
+%          coordinate system to the local alignment fo the receiver. The z
+%          vector of the local coordinate system of the receiver is the
+%          pointing direction of the receiver. If this matrix is omitted,
+%          then the identity matrix is used.
+%       Ns The atmospheric refractivity reduced to the WGS-84 reference
+%          ellipsoid. Note that the refractivity is (n-1)*1e6, where n is
+%          the index of refraction. The function reduceStdRefrac2Spher can
+%          be used to reduce a refractivity to the ellipsoidal surface.
+%          This function does not allowe different refractivities to be
+%          used as the transmitter and receiver. If this parameter is
+%          omitted or an empty matrix is passed, a default value of 313 is
+%          used.
+%       ce The optional decay constant of the exponential model. The
+%          refractivity N at height h is N=Ns*exp(-ce*(h-h0)) where h0 is
+%          the reference height (in this function, the height of the
+%          reference ellipsoid surface is used). ce is related to the
+%          change in refractivity at an elevation of 1km based on the
+%          refractivity at sea level as
+%          ce=log(Ns/(Ns+DeltaN))/1000;%Units of inverse meters.
+%          where the change in refractivity for a change in elevation of
+%          1km is DeltaN=-multConst*exp(expConst*Ns); In [1], standard
+%          values for the two constants are expConst=0.005577; and
+%          multConst=7.32; If ce is omitted or an empty matrix is passed,
+%          the value based on the standard model is used.
 % ellipOpts Optioanlly, a structure that contains elements changing the
-%           reference ellipsoid used. Possible entries are a for the
-%           semi-major axis and f for the flattening factor. If this
-%           parameter is omitted or an empty matrix is passed, then
-%           a=Constants.WGS84SemiMajorAxis and f=Constants.WGS84Flattening.
-%      xMax This function traces the ray to a maximum displacement in the
-%           local tangent plane prior (or vertically for nearly vertical
-%           directions) to attempting to find a particular range. This is
-%           an optional parameter specifying the maximum distance to trace
-%           the ray. The default if this parameter is omitted or an empty
-%           matrix is passed is 1000e3 (1000km).
+%          reference ellipsoid used. Possible entries are a for the
+%          semi-major axis and f for the flattening factor. If this
+%          parameter is omitted or an empty matrix is passed, then
+%          a=Constants.WGS84SemiMajorAxis and f=Constants.WGS84Flattening.
+%     xMax This function traces the ray to a maximum displacement in the
+%          local tangent plane prior (or vertically for nearly vertical
+%          directions) to attempting to find a particular range. This is an
+%          optional parameter specifying the maximum distance to trace the
+%          ray. The default if this parameter is omitted or an empty matrix
+%          is passed is 1000e3 (1000km).
 %
 %This function implements the algorithm of [1]. If the target is collocated
 %with the transmitter or the receiver, then the algorithm will fail. The

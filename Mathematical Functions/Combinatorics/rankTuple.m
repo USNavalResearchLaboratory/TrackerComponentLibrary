@@ -2,10 +2,10 @@ function rank=rankTuple(tuple,maxVals)
 %%RANKTUPLE Obtain the order of a particular tuple in the total sequence of
 %           tuples given a certain set of maximum values for each digit.
 %
-%INPUTS: tuple  An NX1 or 1XN tuple. The values of the digits in the tuple
-%               range from 0 to the value given in maxVals.
-%       maxVals An NX1 or 1XN vector of the maximum value that each digit
-%               of the tuple can take.
+%INPUTS: tuple An NX1 or 1XN tuple. The values of the digits in the tuple
+%              range from 0 to the value given in maxVals.
+%      maxVals An NX1 or 1XN vector of the maximum value that each digit of
+%              the tuple can take.
 %
 %OUTPUTS: rank The rank of the tuple (the order in the sequence of
 %              increasing tuples where the first digit is the most

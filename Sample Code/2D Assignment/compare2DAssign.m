@@ -137,7 +137,7 @@ MatlabkB50b100h50=zeros(numRuns,1);
 MatlabkB100b100h2=zeros(numRuns,1);
 MatlabkB100b100h25=zeros(numRuns,1);
 MatlabkB100b100h50=zeros(numRuns,1);
-parfor curRun=1:numRuns
+for curRun=1:numRuns
     %10X20 Matrix
     C=rand(10,20);
     k=2;
@@ -209,7 +209,7 @@ CByCol500=zeros(numRuns,1);
 CByCol500b1000=zeros(numRuns,1);
 CByCol3000=zeros(numRuns,1);
 
-parfor curRun=1:numRuns
+for curRun=1:numRuns
     %100X100 Matrix
     C=rand(100,100);
     %C++ Implementation, where the inner loop scans by row.

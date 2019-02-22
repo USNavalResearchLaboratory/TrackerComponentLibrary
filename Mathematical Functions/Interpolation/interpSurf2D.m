@@ -24,7 +24,7 @@ function [zInterp,gradInterp,gradDerivMatInterp]=interpSurf2D(xyPoints,xyPointsR
 %                 given in xyPoints.
 %      gradInterp The 2XnumRef gradients of the interpolated surface
 %                 evaluated at the points in xyPoints.
-%gradDerivMatInterp The 2X2XnumRef second derivative matrices of the
+% gradDerivMatInterp The 2X2XnumRef second derivative matrices of the
 %                 interpolated surface at the points of interest.
 %
 %The 2D surface from which the derivatives are derived is found using the

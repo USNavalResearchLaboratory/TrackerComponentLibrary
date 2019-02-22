@@ -4,21 +4,21 @@ function q=rotMat2Quat(R,handed)
 %             right-handed quaternion multiplication rules, or non-standard
 %             left-handed rules that some authors choose to use.
 %
-%INPUTS:  M   A 3X3 orthonormal real rotation matrix.
-%     handed The handedness of the quaternion. If omitted, it is assumed
-%            that the quaternion is right-handed (the standard). Possible
-%            values are
-%            'right' The default if omitted. The quaternion multiplication
-%                    is assumed right-handed (standard).
-%            'left'  The quaternion multiplication is assumed left-handed.
-%                    This is used in someplaces, including the reference
-%                    from Shuster, below.
+%INPUTS:  M A 3X3 orthonormal real rotation matrix.
+%    handed The handedness of the quaternion. If omitted, it is assumed
+%           that the quaternion is right-handed (the standard). Possible
+%           values are:
+%           'right' The default if omitted. The quaternion multiplication
+%                   is assumed right-handed (standard).
+%           'left'  The quaternion multiplication is assumed left-handed.
+%                   This is used in someplaces, including the reference
+%                   from Shuster, below.
 %
-%OUTPUTS: q   A 4X1 unit quaternion corresponding to the rotation matrix.
-%             The quaternion is ordered [cos(theta/2);sin(theta/2)u']
-%             where u is a unit vector for the axis of rotation and theta
-%             is the counterclockwise (right-handed) or clockwise
-%             (left-handed) rotation angle about that unit vector.
+%OUTPUTS: q A 4X1 unit quaternion corresponding to the rotation matrix. The
+%           quaternion is ordered [cos(theta/2);sin(theta/2)u'] where u is
+%           a unit vector for the axis of rotation and theta is the
+%           counterclockwise (right-handed) or clockwise (left-handed)
+%           rotation angle about that unit vector.
 %
 %The formulae for converting a rotation matrix are from [1], where a minor
 %change has been performed to support both right and left-handed

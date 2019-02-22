@@ -2,10 +2,10 @@ function numBits=systemNumberOfBits()
 %%SYSTEMNUMBEROFBITS Return the number of bits of the system. For example,
 %                    a 32-bit or 64,bit system.
 %
-%INPUTS:  None
+%INPUTS: None
 %
-%OUTPUTS: numBits   The number of bits of the system. This will typically
-%                   be 32 or 64.
+%OUTPUTS: numBits The number of bits of the system. This will typically be
+%                 32 or 64.
 %
 %This function just uses the fact that the last two characters of the file
 %extension of a mex file are the number of bits of the system. If systems

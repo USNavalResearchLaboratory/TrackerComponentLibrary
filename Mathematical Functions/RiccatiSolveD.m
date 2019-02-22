@@ -1,17 +1,17 @@
 function X=RiccatiSolveD(A,B,Q,R,S,E)
 %%RICCATISOLVED Solve the general discrete-time Riccati equation.
 %
-%INPUTS:   A   An nXn matrix.
-%          B   An nXm matrix, where m<=n.
-%          Q   An nXn matrix such that Q=Q' and all eigenvalues are
-%              non-negative.
-%          R   An mXm matrix such that R=R' and all eigenvalues are
-%              non-negative.
-%          S   An optional nXm matrix. If omitted, zeros(n,m) is used.
-%          E   An optional nXn matrix. If omitted, eye(n) is used.
+%INPUTS: A An nXn matrix.
+%        B An nXm matrix, where m<=n.
+%        Q An nXn matrix such that Q=Q' and all eigenvalues are non-
+%          negative.
+%        R An mXm matrix such that R=R' and all eigenvalues are non-
+%          negative.
+%        S An optional nXm matrix. If omitted, zeros(n,m) is used.
+%        E An optional nXn matrix. If omitted, eye(n) is used.
 %
-%OUTPUTS:   X  The nXn nonnegative definite solution to the discrete-time
-%              algebraic Ricatti equation.
+%OUTPUTS: X The nXn nonnegative definite solution to the discrete-time
+%           algebraic Ricatti equation.
 %
 %This function finds the nonnegative definite solution to the discrete-time
 %Ricatti equation having the form

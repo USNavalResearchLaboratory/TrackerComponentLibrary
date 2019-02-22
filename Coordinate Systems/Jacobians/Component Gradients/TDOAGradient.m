@@ -1,11 +1,11 @@
 function J=TDOAGradient(x,lRx1,lRx2,c)
 %%TDOAGRADIENT Determine the gradient of a time-delay of arrival (TDOA)
-%           measurement in 2D or 3D space with respect to position
+%           measurement in 1D, 2D, or 3D space with respect to position
 %           (gradient components for velocity etc. are zero and are not
 %           provided). Atmospheric and other propagation effects are not
 %           taken into account.
 %
-%INPUTS: x The numPosDimX1 target position vector of the form [x;y] or
+%INPUTS: x The numPosDimX1 target position vector of the form [x], [x;y] or
 %          [x;y;z].
 % lRx1,lRx2 The numPosDimX1 locations of the receivers. This assumes that
 %          the TDOA measurement is taken using the time received at lRx1
@@ -18,8 +18,8 @@ function J=TDOAGradient(x,lRx1,lRx2,c)
 %          value of Constants.speedOfLight is used.
 %
 %OUTPUTS: J A 1XnumPosDim gradient of the TDOA with derivatives taken with
-%           respect to components [x,y,z] in 3D or [x,y] in 2D in that
-%           order.
+%           respect to components [x,y,z] in 3D, [x,y] in 2D or [x] in 1D,
+%           in thatorder.
 %
 %A TDOA measurement is of the form (norm(x-lRx1)-norm(x-lRx2))*(1/c). The
 %gradient is straightforward to find from there.

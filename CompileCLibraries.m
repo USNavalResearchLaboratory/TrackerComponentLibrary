@@ -10,10 +10,9 @@
 %                   the library to ensure that the compiled versions are
 %                   found first.
 %
-%The file has been sucessfully run on Mac OS X 10.11 using XCode
-%(clang/llvm) as the compiled and under Windows 10 both using the
-%Microsoft Visual Studio (Visual C++ 2017) as well as minGW 5.3 as
-%compilers.
+%The file has been sucessfully run on Mac OS X 10.12 using XCode
+%(clang/llvm) as the compiled and under CentOS Linux using the gcc
+%compiler.
 %
 %The option '-U__STDC_UTF_16__' is included in all of the mex commands to
 %get rid of an error that can occur when using older versions of Matlab
@@ -155,9 +154,9 @@ mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-
 
 %Compile the mathematical functions
 %Compile turnOrientation
-mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Mathematical Functions/Shared C++ Code/','./Mathematical Functions/Geometry/turnOrientation.cpp');
+mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Mathematical Functions/Accurate Arithmetic/Shared C++ Code/','./Mathematical Functions/Geometry/turnOrientation.cpp');
 %Compile exactSignOfSum
-mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Mathematical Functions/Shared C++ Code/','./Mathematical Functions/exactSignOfSum.cpp');
+mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Mathematical Functions/Accurate Arithmetic/Shared C++ Code/','./Mathematical Functions/Accurate Arithmetic/exactSignOfSum.cpp');
 %Compile pointIsInPolygon
 mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Mathematical Functions/Geometry/Shared C++ Code/','./Mathematical Functions/Geometry/pointIsInPolygon.cpp','./Mathematical Functions/Geometry/Shared C++ Code/pointIsInPolygonCPP.cpp');
 %Compile twoLineIntersectionPoint2D
@@ -165,7 +164,7 @@ mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-
 %Compile signedPolygonArea
 mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Mathematical Functions/Geometry/Shared C++ Code/','./Mathematical Functions/Geometry/signedPolygonArea.cpp','./Mathematical Functions/Geometry/Shared C++ Code/signedPolygonAreaCPP.cpp');
 %Compile clipPolygonSH2D
-mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Mathematical Functions/Shared C++ Code/','-I./Mathematical Functions/Geometry/Shared C++ Code/','./Mathematical Functions/Geometry/clipPolygonSH2D.cpp','./Mathematical Functions/Geometry/Shared C++ Code/twoLineIntersectionPoint2DCPP.cpp','./Mathematical Functions/Geometry/Shared C++ Code/signedPolygonAreaCPP.cpp');
+mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Mathematical Functions/Accurate Arithmetic/Shared C++ Code/','-I./Mathematical Functions/Geometry/Shared C++ Code/','./Mathematical Functions/Geometry/clipPolygonSH2D.cpp','./Mathematical Functions/Geometry/Shared C++ Code/twoLineIntersectionPoint2DCPP.cpp','./Mathematical Functions/Geometry/Shared C++ Code/signedPolygonAreaCPP.cpp');
 %Compile perm
 mex('-v','-largeArrayDims','-U__STDC_UTF_16__','-outdir','./0_Compiled_Code/','-I./','-I./Mathematical Functions/Combinatorics/Shared C++ Code/','./Mathematical Functions/Combinatorics/perm.cpp','./Mathematical Functions/Combinatorics/Shared C++ Code/getNextComboCPP.cpp','./Mathematical Functions/Combinatorics/Shared C++ Code/permCPP.cpp');
 %Compile getNextCombo

@@ -102,8 +102,10 @@ lambda=1e-4;
 bounds=[minRange,-pi;
         maxRange,pi];
 
+%Gate probability
+PG=0.9997;
 %Threshhold for gating
-gammaVal=ChiSquareD.invCDF(0.99999,2);
+gammaVal=ChiSquareD.invCDF(PG,2);
 
 %Noise variances and square root covariance matrix.
 %Assumed standard deviations of the measurement noise components.
@@ -176,7 +178,7 @@ for curStep=3:numSamples
     %converted.
     [zCart,RCart]=pol2CartCubature(zPol,SR,0,true,sensorLoc,sensorLoc,[],xi,w);
     numMeas=size(zCart,2);
-    
+
     %Transform the covariance matrices to square-root covariance matrices
     SRCart=zeros(zDim,zDim,numMeas);
     for curMeas=1:numMeas
@@ -190,10 +192,32 @@ for curStep=3:numSamples
     for curTar=1:numTargets
         [xEst(:,curTar,curStep),SEst(:,:,curTar,curStep)]=sqrtDiscKalPred(xEst(:,curTar,curStep-1),SEst(:,:,curTar,curStep-1),F,SQ);
     end
-   
-    %%COMPUTE LIKELIHOODS AND GATE
-    [A,xHyp,PHyp,GateMat]=makeStandardCartOnlyLRMatHyps(xEst(:,:,curStep),SEst(:,:,:,curStep),zCart,SRCart,PD,lambda,[],gammaVal,zPol,measJacob);
+
+    %%GET HEURISTIC MAXIMUM GATE SIZE
+    %The function makeStandardCartOnlyLRMatHyps can adjust for the gate
+    %size being finite. The maximum gate size to be considered for each
+    %target could be approximated using a measurement covariance at the
+    %predicted target location. However, here, we simply use a maximum
+    %value over all of the measurements in each dimension as a heuristic.
+    if(numMeas>0)
+        SRMax=zeros(2,2);
+        SRMax(1,1)=max(SRCart(1,1,:));
+        SRMax(2,2)=max(SRCart(2,2,:));
+    else%If there are no measurements, we assume that nothing useful could
+        %have been outside the gates, so no covariance inflation is
+        %performed. In practical scenarios, this may or may not be a good
+        %approximation. However, with PG generally near 1, the covariance
+        %inflation often does not matter.
+        SRMax=[];
+    end
+    %In practice, however, this won't really make a difference if the gate
+    %probability PG is very close to 1 and PD is not close to 1 (one could
+    %have set SRMax=[], not done the correction, and gotten usually the
+    %same result) 
     
+    %%COMPUTE LIKELIHOODS AND GATE
+    [A,xHyp,PHyp,GateMat]=makeStandardCartOnlyLRMatHyps(xEst(:,:,curStep),SEst(:,:,:,curStep),zCart,SRCart,SRMax,PD,lambda,[],gammaVal,zPol,measJacob);
+
     %PERFORM CLUSTERING AND UPDATE EACH CLUSTER INDEPENDENTLY
     %Next, we can to break the targets and measurements up into clusters
     %for the updating. We do this, because the computation of the
@@ -429,11 +453,3 @@ end
 %SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY THE NAVAL
 %RESEARCH LABORATORY FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE ACTIONS
 %OF RECIPIENT IN THE USE OF THE SOFTWARE.
-
-
-
-
-
-
-
-

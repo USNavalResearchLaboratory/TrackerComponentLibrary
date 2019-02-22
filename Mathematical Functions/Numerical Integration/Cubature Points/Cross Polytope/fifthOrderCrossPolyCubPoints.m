@@ -5,23 +5,23 @@ function [xi,w]=fifthOrderCrossPolyCubPoints(numDim,algorithm)
 %               three an octohedron, in n a cross polytope (or
 %               n-dimensional octahedron).
 %
-%INPUTS:  numDim An integer specifying the dimensionality of the points
-%                to be generated.
-%      algorithm A value indicating which algorithm should be used.
-%                Possible values are
-%                0 (The default if omitted or an empty matrix is passed)
-%                  Formula G_n 5-2 in [1], pg. 305, 4*numDim^2-4*numDim+1
-%                  points, 2<=numDim<=7.
-%                1 G_n 5-3 in [1], pg. 305, 2^numDim+2*numDim points,
-%                  numDim=3,4,5, with a correction that the first term with
-%                  (r;0;0...0) be put through fullSymPerms.
-%                2 G_n 5-4 in [1], pg. 306, 2^{numDim+1)-1 points, n<4.
-%                3 G_3 5-1 in [1], pg. 306, 13 points, numDim=3.
+%INPUTS: numDim An integer specifying the dimensionality of the points to
+%               be generated.
+%     algorithm A value indicating which algorithm should be used.
+%               Possible values are
+%               0 (The default if omitted or an empty matrix is passed)
+%                 Formula G_n 5-2 in [1], pg. 305, 4*numDim^2-4*numDim+1
+%                 points, 2<=numDim<=7.
+%               1 G_n 5-3 in [1], pg. 305, 2^numDim+2*numDim points,
+%                 numDim=3,4,5, with a correction that the first term with
+%                 (r;0;0...0) be put through fullSymPerms.
+%               2 G_n 5-4 in [1], pg. 306, 2^{numDim+1)-1 points, n<4.
+%               3 G_3 5-1 in [1], pg. 306, 13 points, numDim=3.
 %
-%OUTPUTS:   xi      A numDim X numCubaturePoints matrix containing the
-%                   cubature points. (Each "point" is a vector)
-%           w       A numCubaturePoints X 1 vector of the weights
-%                   associated with the cubature points.
+%OUTPUTS: xi A numDim X numCubaturePoints matrix containing the cubature
+%              points. (Each "point" is a vector)
+%            w A numCubaturePoints X 1 vector of the weights associated
+%              with the cubature points.
 %
 %REFERENCES:
 %[1] A.H. Stroud, Approximate Calculation of Multiple Integrals. Cliffs,

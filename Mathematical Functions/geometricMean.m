@@ -25,8 +25,8 @@ function val=geometricMean(x,dim)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 if(isempty(x))
-   val=[];
-   return
+    val=[];
+    return
 end
 
 xDims=size(x);

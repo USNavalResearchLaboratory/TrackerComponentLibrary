@@ -1,23 +1,28 @@
-function [x,P,gammaVec,Gamma]=ellipsoidIntersect(xi,Pi,xj,Pj)
+function [P,Gamma,x,gammaVec]=ellipsoidIntersect(Pi,Pj,xi,xj,zeta)
 %%ELLIPSOIDINTERSECT Perform ellipsoidal intersection to merge two Gaussian
-%                    estimates having an unknown correction. Compare this
+%                    estimates having an unknown correlation. Compare this
 %                    function to covarianceIntersect and
 %                    covarianceIntersectSCI.
 %
-%INPUTS: xi,Pi The nX1 mean vector and nXn positive definite covariance
-%              matrix of the first estimate.
-%        xj,Pj The nX1 mean vector and nXn positive definite covariance
-%              matrix of the second estimate.
+%INPUTS: Pi, Pj The nXn positive definite covariance matrices of the first
+%               and second estimates.
+%        xi, xj The nX1 mean vectors of the first and second estimates. If
+%               one does not want x or gammaVec on the output, then these
+%               can be omitted.
+%          zeta An optional parameter that is a small value that is used to
+%               determine approximate equality of some eigenvalues. If
+%               omitted or an empty matrix is passed, the smallest value
+%               possible that can make a difference is chosen.
 %
-%OUTPUTS: x, P The nX1 mean and nXn covariance matrix of the estimate fused
-%              using ellipsoidal intersection.
-%     gammaVec The mutual mean vector used in the fusion.
-%        Gamma The mutual covariance matrix used in the fusion.
+%OUTPUTS: P The nXn covariance matrix of the fused estimate.
+%     Gamma The mutual covariance matrix used in the fusion.
+%         x The nX1 mean value of the fused estimate.
+%  gammaVec The mutual mean vector used in the fusion.
 %
-%The algorithm in [1] is used, (which is an expanded version of [2]), where
-%the mutual mean and covariance matrix are defined.
+%The algorithm in [1] is used, (which is an expanded discussion of what is
+%in [2]), where the mutual mean and covariance matrix are defined.
 %
-%EXAMPLE:
+%EXAMPLE 1:
 %Here, we recreate the example in Fig. 5 of [2].
 % xi=[1;-2];
 % Pi=[3,0;
@@ -25,15 +30,44 @@ function [x,P,gammaVec,Gamma]=ellipsoidIntersect(xi,Pi,xj,Pj)
 % xj=[-2;-1];
 % Pj=[2,-0.8;
 %     -0.8,1];
-% [x,P,gammaVec,Gamma]=ellipsoidIntersect(xi,Pi,xj,Pj);
+% [P,Gamma,x,gammaVec]=ellipsoidIntersect(Pi,Pj,xi,xj);
 % figure(1)
 % clf
 % hold on
 % threshold=1;
-% drawEllipse(xi,inv(Pi),threshold,'--r')
-% drawEllipse(xj,inv(Pj),threshold,'--g')
-% drawEllipse(x,inv(P),threshold,'-b')%The fused estimate.
-% drawEllipse(gammaVec,inv(Gamma),threshold,'-.k')%The mutual estimate.
+% drawEllipse(xi,inv(Pi),threshold,'--r','linewidth',2)
+% drawEllipse(xj,inv(Pj),threshold,'--g','linewidth',2)
+% drawEllipse(x,inv(P),threshold,'-b','linewidth',2)%The fused estimate.
+% drawEllipse(gammaVec,inv(Gamma),threshold,'-.k','linewidth',2)%The mutual estimate
+% axis([-3.5 4.5 -3 1])
+% set(gca,'FontSize',14,'FontWeight','bold','FontName','Times')
+%legend({'\epsilon_{x_i,P_i}(x)','\epsilon_{x_j,P_j}(x)','\epsilon_{x_\gamma,\Gamma}(x)','\epsilon_{x_{if},P_{if}}(x)'},'FontSize',18)
+%
+%EXAMPLE 2:
+%Here, we recreate Fig. 2 of [1] without the covariance intersection
+%ellipse.
+% xi=[0.5;1];
+% Pi=[2.5,-1;
+%     -1,1.2];
+% xj=[2;1];
+% Pj=[0.8,-0.5;
+%     -0.5,4];
+% zeta=0.1;
+% [P1,~,x1]=ellipsoidIntersect(Pi,Pj,xi,xj,zeta);
+% zeta=1e-6;
+% [P2,~,x2]=ellipsoidIntersect(Pi,Pj,xi,xj,zeta);
+% figure(1)
+% clf
+% hold on
+% threshold=0.9;
+% drawEllipse(xi,inv(Pi),threshold,'--r','linewidth',2)
+% drawEllipse(xj,inv(Pj),threshold,'--g','linewidth',2)
+% %The fused estimates.
+% drawEllipse(x1,inv(P1),threshold,'-b','linewidth',2)
+% drawEllipse(x2,inv(P2),threshold,'-b','linewidth',2)
+% axis([-1.5 3 -1 3.1])
+% set(gca,'FontSize',14,'FontWeight','bold','FontName','Times')
+% legend({'\epsilon_{x_i,P_i}(x)','\epsilon_{x_j,P_j}(x)','\epsilon_{x_f,P_{f}}(x)'},'FontSize',18,'Location','SouthWest')
 %
 %REFERENCES:
 %[1] J. Sijs and M. Lazar, "State fusion with unknown correlation:
@@ -65,9 +99,6 @@ T=Si*DiRoot*Sj;
 %way substituting Pj. The result is that \hat{P}_i is the identity matrix
 %and \hat{P}_j is the diagonal matrix whose main diagonal is dj.
 
-mui=T\xi;
-muj=T\xj;
-
 %DGamma in Equation 11 and for finding muGamma in Equation 14a.
 dGamma=zeros(xDim,1);
 for curDim=1:xDim
@@ -88,28 +119,35 @@ Gamma=T*DGamma*T';
 Wi=diag(1./dj-1./dGamma);
 Wj=diag(1-1./dGamma);
 
-%Make sure that zeta is large enough to make a difference.
-zeta=max(max(eps(Wi(:))),max(eps(Wj(:))));
+if(nargin<5||isempty(zeta))
+    %Choose the smallest zeta that is large enough to make a difference.
+    zeta=max(max(eps(Wi(:))),max(eps(Wj(:))));
+end
 %Equation 16c.
 if(abs(dj-1)>=10*zeta)
     eta=0; 
 else
-    eta=10*zeta;
+    eta=zeta;
 end
 
 %Add the eta term to Equation 16b.
 Wi=Wi+eta*eye(xDim,xDim);
 Wj=Wj+eta*eye(xDim,xDim);
 
-%Equation 16a
-muGamma=(Wi+Wj)\(Wi*mui+Wj*muj);
-%Described after Equation 16c.
-gammaVec=T*muGamma;
-
 %Equation 8. We using pinv for better numerical stability.
 P=pinv(inv(Pi)+inv(Pj)-inv(Gamma));
-x=P*(Pi\xi+Pj\xj-Gamma\gammaVec);
 
+if(nargout>2)
+    %Equation 13
+    mui=T\xi;
+    muj=T\xj;
+    %Equation 16a
+    muGamma=(Wi+Wj)\(Wi*mui+Wj*muj);
+    %Described after Equation 16c.
+    gammaVec=T*muGamma;
+
+    x=P*(Pi\xi+Pj\xj-Gamma\gammaVec);
+end
 end
 
 %LICENSE:

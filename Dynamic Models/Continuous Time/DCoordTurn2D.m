@@ -1,16 +1,17 @@
-function D=DCoordTurn2D(x,t,q0,qTurn,qLin)
+function [D,DJacob,DHess,pDpt]=DCoordTurn2D(x,t,q0,qTurn,qLin)
 %DCOORDTURN2D The continuous-time diffusion matrix function for a 2D
 %             coordinated turn model with a Cartesian state. The turn rate
 %             can be specified in terms of a turn rate in radians per
 %             second, or in terms of a transversal acceleration.
 %             Additionally, a linear acceleration can be given. This
-%             diffusion matrix goes with the drift function aCoordTurn2D.
+%             diffusion matrix goes with the drift functions
+%             aCoordTurn2DOmega and aCoordTurn2DTrans.
 %
 %INPUTS: x The target state for 2D motion. If there is no linear
 %          acceleration (acceleration along the direction of motion), then
 %          x can either be x=[x;y;xdot;ydot;omega], where omega is the turn
 %          rate estimate in radians per second counterclockwise from the
-%          x-axis or x=[x;y;xdot;ydot;at] where at is the the transversal
+%          x-axis or x=[x;y;xdot;ydot;at] where at is the transversal
 %          acceleration, which is orthogonal to the velocity and is defined
 %          such that positive values of at map to positive values of omega.
 %          If there is a linear acceleration, then the target state is
@@ -47,6 +48,12 @@ function D=DCoordTurn2D(x,t,q0,qTurn,qLin)
 %           where the velocity is given as a Cartesian vector. If x has
 %           N columns, then N copies of D are returned with D(:,:,i) being
 %           the ith one.
+%   DJacob, DHess The xDimXmXxDim, xDimXmXxDimXxDim matrices of first and
+%           second partial derivatives of the elements of D with respect to
+%           x. These are all zero, since D is a constant. it is the same
+%           for all D and is not repeated N times.
+%      pDpt The xDimX2 partial derivative of D with respect to time. This
+%           is all zeros, because D is a constant.
 %
 %The basic 2D coordinated turn model in Cartesian coordinates is described
 %in Section VA of [1]. When the turn rate is something that must be
@@ -76,11 +83,11 @@ function D=DCoordTurn2D(x,t,q0,qTurn,qLin)
 %and order=2. The order chosen in the suggestion function just depends on
 %the number of derivatives of time present.
 %
-%The corresponding drift function is given by the function aCoordTurn2D.
-%The corresponding discrete-time functions are FCoordTurn2D and
-%QCoordTurn. However, note that the discrete-time functions with
-%unknown noise is a direct-discrete model and not a discretization of the
-%continuous-time model.
+%The corresponding drift functions are given by the functions
+%aCoordTurn2DOmega and aCoordTurn2DTrans. The corresponding discrete-time
+%functions are FCoordTurn2D and QCoordTurn. However, note that the
+%discrete-time functions with unknown noise is a direct-discrete model and
+%not a discretization of the continuous-time model.
 %
 %REFERENCES:
 %[1] X. R. Li and V. P. Jilkov, "Survey of maneuvering target tracking.
@@ -105,7 +112,8 @@ N=size(x,2);
 rootQ0=sqrt(q0);
 rootQTurn=sqrt(qTurn);
 
-switch(length(x))
+numDim=length(x);
+switch(numDim)
     case 5%There is no linear acceleration
         %Equation 61 in Li's paper combined with Equation 67.
         D=[0,       0,      0;%Row for x-component noise.
@@ -113,6 +121,7 @@ switch(length(x))
            rootQ0,  0,      0;%Row for velocity-x noise.
            0,       rootQ0, 0;%Row for velocity-y noise.
            0,       0,      rootQTurn];%Row for turn noise.
+       m=3;
     case 6%There is a linear acceleration component.
         rootQLin=sqrt(qLin);
         %Similar to Equation 61 in Li's paper combined with Equation 67,
@@ -124,8 +133,19 @@ switch(length(x))
            0,       rootQ0, 0,  0;%Row for velocity-y noise.
            0,       0, rootQTurn,0;%Row for turn rate noise.
            0,       0,      0,  rootQLin];%Row for linear accel. noise.
+       m=4;
     otherwise
         error('The length of x is neither 5 nor 6.');
+end
+
+if(nargout>1)
+    DJacob=zeros(numDim,m,numDim);
+    if(nargout>2) 
+        DHess=zeros(numDim,m,numDim,numDim);
+        if(nargout>3)
+            pDpt=zeros(numDim,m);
+        end
+    end
 end
 
 if(N>1)

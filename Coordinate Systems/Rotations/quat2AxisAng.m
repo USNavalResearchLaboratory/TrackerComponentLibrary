@@ -1,20 +1,20 @@
 function [u,theta]=quat2AxisAng(q)
-%%QUAT2AXISANG  Convert a unit quaternion to the axis and angle of the
-%               rotation represented by the quaternion. The handedness of
-%               the angle matches the handedness of the quaternion.
+%%QUAT2AXISANG Convert a unit quaternion to the axis and angle of the
+%              rotation represented by the quaternion. The handedness of
+%              the angle matches the handedness of the quaternion.
 %
-%INPUTS:   q A 4X1 unit quaternion corresponding to the rotation matrix.
-%            The quaternion is ordered in terms of hypercomplex numbers as
-%            q(1)+i*q(2)+j*q(3)+k*q(4). Since this is a unit-magnitude
-%            quaternion, the ordering of the elements can also be expressed
-%            as [cos(theta/2);sin(theta/2)u'] where u is a unit vector for
-%            the axis of rotation and theta rotation angle about that unit
-%            vector, according to whatever handedness is used with the
-%            quaternion.
+%INPUTS: q A 4X1 unit quaternion corresponding to the rotation matrix. The
+%          quaternion is ordered in terms of hypercomplex numbers as
+%          q(1)+i*q(2)+j*q(3)+k*q(4). Since this is a unit-magnitude
+%          quaternion, the ordering of the elements can also be expressed
+%          as [cos(theta/2);sin(theta/2)u'] where u is a unit vector for
+%          the axis of rotation and theta rotation angle about that unit
+%          vector, according to whatever handedness is used with the
+%          quaternion.
 %
-%OUTPUTS:        u  A unit vector representing a rotation axis.
-%             theta The angle in radians by which a vector is to be
-%                   rotated is to be rotated about the axis u.
+%OUTPUTS: u A unit vector representing a rotation axis.
+%     theta The angle in radians by which a vector is to be rotated about
+%           the axis u.
 %
 %The relation between an rotation about a given axis by a given angle and a
 %quaternion is described in [1].

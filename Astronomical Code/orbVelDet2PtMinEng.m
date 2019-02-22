@@ -1,17 +1,17 @@
 function [vMinStartEllip,tMinEllip,tMinParab]=orbVelDet2PtMinEng(r1Vec,r2Vec,GM)
-%%ORBVELDET2PTMINENG  Determine the time of the minimum energy elliptical
-%                     trajectory between two orbital points and the initial
-%                     velocity needed to achieve that trajectory. This is
-%                     for the two-body problem assuming a Keplerian
-%                     gravitational model in a generic inertial coordinate
-%                     system. Also determine the time of the minimum energy
-%                     parabolic trajectory, which is less than the time of
-%                     the elliptical trajectory. Note that these are
-%                     zero-revolution solutions. That is, the path does not
-%                     complete a full revolution of the planet between the
-%                     points. Also, the shortest way between the points is
-%                     used for the elliptical solution (there are two ways
-%                     to go around an ellipse).
+%%ORBVELDET2PTMINENG Determine the time of the minimum energy elliptical
+%                    trajectory between two orbital points and the initial
+%                    velocity needed to achieve that trajectory. This is
+%                    for the two-body problem assuming a Keplerian
+%                    gravitational model in a generic inertial coordinate
+%                    system. Also determine the time of the minimum energy
+%                    parabolic trajectory, which is less than the time of
+%                    the elliptical trajectory. Note that these are
+%                    zero-revolution solutions. That is, the path does not
+%                    complete a full revolution of the planet between the
+%                    points. Also, the shortest way between the points is
+%                    used for the elliptical solution (there are two ways
+%                    to go around an ellipse).
 %
 %INPUTS: r1Vec,r2Vec 3X1 position vectors in (quasi)-inertial Cartesian
 %                    coordinates where the massive body is at the origin.

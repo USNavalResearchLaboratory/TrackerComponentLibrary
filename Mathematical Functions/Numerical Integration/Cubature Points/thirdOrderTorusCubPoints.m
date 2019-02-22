@@ -4,7 +4,7 @@ function [xi,w]=thirdOrderTorusCubPoints(rho1,rho2)
 %             The region is specified as 
 %             (sqrt(x^2+y^2)-rho1)^2+z^2<=rho2^2 with 0<rho2<=rho1<Inf.
 %
-%INPUTS:rho1,rho2 The two defining parameters of the torus as given above
+%INPUTS: rho1,rho2 The two defining parameters of the torus as given above
 %              with 0<rho2<=rho1<Inf. rho2 is the radius of the filled-in
 %              portion of the ring and rho1 is the distance of the center
 %              of the ring (the hole) from the center of the filled-in

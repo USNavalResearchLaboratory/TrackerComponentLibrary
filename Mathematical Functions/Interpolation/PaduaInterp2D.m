@@ -13,7 +13,7 @@ function [interpVals,C]=PaduaInterp2D(deg,f,xEval,C)
 %            to 1 and return an NX1 or 1XN vector of values. If C is
 %            provided and is not an empty matrix, then an empty matrix can
 %            be passed for f.
-%      xEval A 2XnumPoints set of numPoints points where the the function
+%      xEval A 2XnumPoints set of numPoints points where the function
 %            should be interpolated. If one just wants to compute C, then
 %            this parameter can be omitted or an empty matrix passed.
 %          C An optional parameter. If interpolation is meant to be

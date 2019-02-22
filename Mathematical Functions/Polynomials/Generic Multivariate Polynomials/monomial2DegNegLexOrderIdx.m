@@ -11,7 +11,7 @@ function [index,numBeforeDeg]=monomial2DegNegLexOrderIdx(monomial,numBeforeDeg)
 %                 numBeforeDegVec vector, then this should be an empty
 %                 matrix and numBeforeDegVec should contain the
 %                 dimensionality and the maximum degree desired.
-% numBeforeDeg An optional parameter. Providing this parameter will
+%    numBeforeDeg An optional parameter. Providing this parameter will
 %                 speed up repeated calls to this function by avoiding the
 %                 recalculation of certain values. This vector is such that
 %                 numBeforeDeg(i+1) is the number of monomial terms
@@ -24,7 +24,7 @@ function [index,numBeforeDeg]=monomial2DegNegLexOrderIdx(monomial,numBeforeDeg)
 %                 monomial=[] and numBeforeDeg=[numDim;maxDeg], where
 %                 maxDeg the maximum degree desired, >=0.
 %
-%OUTPUTS:index A numMonomialsX1 vector of the position of the monomials in
+%OUTPUTS: index A numMonomialsX1 vector of the position of the monomials in
 %              the ordering of monomials in degree negative lexicographic
 %              order, starting from 1. If monomial=[] and numBeforeDeg
 %              is set to the dimensionality and maximum degree, then this
@@ -42,7 +42,7 @@ function [index,numBeforeDeg]=monomial2DegNegLexOrderIdx(monomial,numBeforeDeg)
 %polynomials as in [1] and [2].
 %
 %The degree negative lexicographic ordering, for a fixed degree, coincides
-%with the ordering of the terms provided by unrankComposition with
+%with the ordering of the terms provided by unrankTComposition with
 %firstElMostSig=true. However, that rank is only an offset for a given
 %degree. The number of terms before that degree is the sum of the number of
 %compositions of lower degrees. Thus, one sees the need for the
@@ -55,15 +55,15 @@ function [index,numBeforeDeg]=monomial2DegNegLexOrderIdx(monomial,numBeforeDeg)
 % monomial=[1,12,1,0;
 %           0, 4,1,0;
 %           0, 8,1,0];
-% [index,numBeforeDeg]=monomialIdxDegNegLexOrder(monomial)
+% [index,numBeforeDeg]=monomial2DegNegLexOrderIdx(monomial)
 % %One will get the indices index=[2;2687;15;1].
 % %The value numBeforeDeg can be reused with monomials having the same
 % %number of variables, such as
 % monomial=[0;1;1];
-% index=monomialIdxDegNegLexOrder(monomial,numBeforeDeg)
+% index=monomial2DegNegLexOrderIdx(monomial,numBeforeDeg)
 % %On the other hand, if one only wants the numBeforeDeg vector for up to
 % %degree 24 for three variables, then one
-% [~,numBeforeDeg]=monomialIdxDegNegLexOrder([],[3,24])
+% [~,numBeforeDeg]=monomial2DegNegLexOrderIdx([],[3,24])
 %
 %REFERENCES:
 %[1] P. Dreesen, "Back to the roots: Polynomial system solving using linear
@@ -110,7 +110,7 @@ index=zeros(1,numMonomials);
 
 for curMonomial=1:numMonomials
     offset=numBeforeDeg(degs(curMonomial)+1);
-    index(curMonomial)=rankComposition(monomial(:,curMonomial)+1,true)+offset+1;
+    index(curMonomial)=rankTComposition(monomial(:,curMonomial)+1,true)+offset+1;
 end
 end
 

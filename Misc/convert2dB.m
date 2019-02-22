@@ -12,10 +12,10 @@ function val=convert2dB(val,units,refVal)
 %     refVal The real reference value that forms the zero-dB level. If val
 %            holds powers, then this will typically have units of Watts. If
 %            vals hold voltages, then this will typically have units of
-%            ohms. If this parameter is omitted or an empty matrix is
+%            Volts. If this parameter is omitted or an empty matrix is
 %            passed, the default of 1 is used.
 %
-%OUTPUTS: value The input value converted to decibels.
+%OUTPUTS: val The input value converted to decibels.
 %
 %Decibels are defined in terms of power. If a voltage is given, then the
 %output is 10*log10(abs(val).^2./refVal). Otherwise, the output when given
@@ -29,7 +29,7 @@ if(nargin<3||isempty(refVal))
 end
 
 if(nargin<2||isempty(units))
-   units='voltage'; 
+    units='voltage'; 
 end
 
 switch(units)

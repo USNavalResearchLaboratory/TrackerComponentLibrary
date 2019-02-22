@@ -17,8 +17,8 @@ function hashVal=hashPoint2Grid(point,cellSizes,numCellsPerDim)
 %               appropriately shifted in all dimensions.
 %     cellSizes A numDimX1 or 1XnumDim array of the widths of the cells in
 %               each dimension of the grid.
-%numCellsPerDim A numDimX1 or 1XnumDim array listing the number of cells in
-%               each dimension.
+% numCellsPerDim A numDimX1 or 1XnumDim array listing the number of cells
+%               in each dimension.
 %
 %OUTPUTS: hashVal An NX1 array of the hash values for each of the points.
 %                 This is an integer starting from 1.

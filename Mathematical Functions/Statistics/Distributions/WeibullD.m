@@ -181,22 +181,32 @@ val=lambda*(-log(1-prob)).^(1/k);
 
 end
     
-
-function vals=rand(N,lambda,k)
+function vals=rand(N,lambda,k,lowerBound)
 %%RAND Generate Weibull distributed random variables with the given
-%      parameters.
+%      parameters. This function can also be used to generate random
+%      variable from a Weibull distribution that is clipped so that only
+%      values above a certain threshold are generated. That can be useful
+%      when performing simulations and generating false alarms that are all
+%      above a given threshold.
 %
 %INPUTS: N If N is a scalar, then rand returns an NXN matrix of random
 %          variables. If N=[M,N1] is a two-element row vector, then rand
 %          returns an MXN1 matrix of random variables.
 %   lambda The scale parameter of the distribution. lambda>0.
 %        k The shape parameter of the distribution. k>0.
+% lowerBound An optional parameter specifying a lower bound below which
+%          none of the randomly generated values should go. If this is
+%          omitted or an empty matrix is passed, then lowerBound=0 and a
+%          non-clipped Weibull distribution is used.
 %
 %OUTPUTS: vals A matrix whose dimensions are determined by N of the
 %              generated Weibull random variables.
 %
 %This is an implementation of the inverse transform algorithm of Chapter
-%5.1 of [1].
+%5.1 of [1]. To clip values to only being above lowerBound, the CDF value
+%of the lower bound is determined and the uniform random variables as used
+%in the inverse transform algoirthm are all only generated above the
+%threshold.
 %
 %REFERENCES:
 %[1] S. M. Ross, Simulation, Ed. 4, Amsterdam: Elsevier, 2006.
@@ -209,8 +219,19 @@ function vals=rand(N,lambda,k)
         dims=N;
     end
 
-    U=rand(dims);
-    vals=WeibullD.invCDF(U,lambda,k);
+    if(nargin<4||isempty(lowerBound)||lowerBound<=0)
+        %If we are evaluating a standard Weibull-distributed random
+        %variable rather than one that has been clipped to a particular
+        %region.
+        U=rand(dims);
+        vals=WeibullD.invCDF(U,lambda,k);
+    else
+        %Only generate Weibull random variables that are >=lowerBound.
+        p=WeibullD.CDF(lowerBound,lambda,k);
+        %Generate a uniform random variable between p and 1.
+        U=p+(1-p)*rand(dims);
+        vals=WeibullD.invCDF(U,lambda,k);
+    end
 end
 
 function entropyVal=entropy(lambda,k)

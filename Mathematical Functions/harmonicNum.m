@@ -1,11 +1,15 @@
-function val=harmonicNum(n)
+function val=harmonicNum(n,algorithm)
 %%HARMONICNUM Determine the nth Harmonic number. The nth harmonic number is
 %             \sum_{k=1}^n(1/k). Harmonic numbers arise in a number of
 %             areas of statistics.
 %
-%INPUTS:   n A scalar or matrix of Harmonic number positions. Non-integer
-%            values are allowed. As are negative values. Note that negative
-%            integers produce an infinite result.
+%INPUTS: n A scalar or matrix of Harmonic number positions. Non-integer
+%          values are allowed. As are negative values. Note that negative
+%          integers produce an infinite result.
+% algorithm This chooses how the number is computed. Possible values are
+%          0 (The default if omitted or an empty matrix is passed) Compute
+%            it from the polygamma function.
+%          1 Compute it by directly evaluating the \sum_{k=1}^n(1/k).
 %
 %OUTPUTS: val The values of the Harmonic numbers at the positions given in
 %             n.
@@ -28,8 +32,20 @@ function val=harmonicNum(n)
 %November 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-val=Constants.EulerMascheroni+polygamma(0,n+1);
-
+if(nargin<2||isempty(algorithm))
+    algorithm=0;
+end
+switch(algorithm)
+    case 0
+        val=Constants.EulerMascheroni+polygamma(0,n+1);
+	case 1
+        val=0;
+        for k=1:n
+           val=val+1/k; 
+        end
+    otherwise
+        error('Unknown algorithm specified.')
+end
 end
 
 %LICENSE:

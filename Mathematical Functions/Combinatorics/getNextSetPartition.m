@@ -13,7 +13,6 @@ function [partition,recurVals]=getNextSetPartition(param1,recurVals)
 %               n The number of items in the set to be partitioned. Given
 %                 only this input, the function will return the values in
 %                 the first partition.
-%                 this instance,
 %               If two inputs are provided, then param 1 is
 %               partition The current set partition that should be updated
 %                         to get the next set partition.

@@ -239,7 +239,7 @@ classdef AVLTree < handle
                 return;
             end
             
-            %If the the key matches this node, return the value of this
+            %If the key matches this node, return the value of this
             %node.
             if(key2Find==theTree.keyVal)
                 foundKeyVal=theTree.keyVal;

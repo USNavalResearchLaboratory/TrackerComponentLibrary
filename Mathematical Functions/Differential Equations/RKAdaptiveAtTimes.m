@@ -1,12 +1,12 @@
 function xList=RKAdaptiveAtTimes(xInit,theTimes,f,initStepSize,order,solutionChoice,RelTol,AbsTol,maxSteps)
-%%RKADAPTIVEATTIMES  Perform multiple steps of Runge-Kutta propagation
-%                    using an adaptive step size. Runge-Kutta methods are
-%                    derivative-free techniques for solving ordinary
-%                    differential equations. That is, integrating
-%                    dx/dt=f(x,t) given initial conditions
-%                    (xStart,tSpan(1)). More information on available
-%                    algorithms for the steps is given in the comments to
-%                    the function RungeKStep.
+%%RKADAPTIVEATTIMES Perform multiple steps of Runge-Kutta propagation
+%                   using an adaptive step size. Runge-Kutta methods are
+%                   derivative-free techniques for solving ordinary
+%                   differential equations. That is, integrating
+%                   dx/dt=f(x,t) given initial conditions
+%                   (xStart,tSpan(1)). More information on available
+%                   algorithms for the steps is given in the comments to
+%                   the function RungeKStep.
 %
 %INPUTS: xInit The initial value of the state (scalar or vector) over which
 %              integration is being performed.

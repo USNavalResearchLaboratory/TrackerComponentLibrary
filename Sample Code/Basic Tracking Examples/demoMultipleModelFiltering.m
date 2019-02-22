@@ -348,7 +348,7 @@ transFuns{2}=@(xPrev,PPrev)discKalPred(xPrev,PPrev,F,QHigh);
 %The measurement update function is the same for both models.
 measUpdateFuns=@(x,P,z,R)KalmanUpdate(x,P,z,R,H);
 
-%Allocate space for the IMM model states. This is the size of the the
+%Allocate space for the IMM model states. This is the size of the
 %largest state by the number of models, except when using the GPB1
 %estimator, in which case it is just the size of the state (all states have
 %to be the same size).

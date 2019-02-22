@@ -5,15 +5,20 @@
 *              combination is the least significant element for defining
 *              the lexicographic order.
 *
-*INPUTS:    I  The current combination of r elements. The next combination
-*              in lexicographic order is desired. The first element is the
-*              most significant and one begins with I=[0;1;2;...r].
-*           n  The number of items from which r items are chosen for
-*              combinations. The elements of I can range from 0 to n-1.
+*INPUTS: I The rX1 or 1Xr current combination of r elements. The next
+*          combination in lexicographic order is desired. The first element
+*          is the least significant and one begins with I=[0;1;2;...;r-1]
+*          is startVal=0 and I=[1;2;3;...;r] if startVal=1.
+*        n The number of items from which r items are chosen for
+*          combinations. The elements of I can range from 0 to n-1. if
+*          startVal=0 or they range from 1 to n if startVal=1.
+* startVal This is zero or 1, indicating which value the value at which the
+*          elements in I can start. The default if omitted or an empty
+*          matrix is passed is 0.
 *
-*OUTPUTS:   I  The next combination in the lexicographic sequence, or an
-*              empty matrix if the final combination in the lexicographic
-*              ordering is provided.
+*OUTPUTS: I The next combination in the lexicographic sequence, or an
+*           empty matrix if the final combination in the lexicographic
+*           ordering is provided.
 *
 * This function can be useful for generating combinations when used in a
 * loop. It is more computationally efficient than sequentially unranking
@@ -45,12 +50,13 @@
 void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray *prhs[]) {
     size_t n, r;
     size_t *I;
+    bool startVal=0;
     
     if(nrhs<2){
         mexErrMsgTxt("Not enough inputs.");
     }
     
-    if(nrhs>2) {
+    if(nrhs>3) {
         mexErrMsgTxt("Too many inputs.");
     }
     
@@ -60,31 +66,54 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     
     n=getSizeTFromMatlab(prhs[1]);
     I=copySizeTArrayFromMatlab(prhs[0],&r);
+    
+    if(nrhs>2) {
+        startVal=getBoolFromMatlab(prhs[2]);
+    }
 
     //Verify that the I vector is not so messed up it will crash Matlab.
     {
         size_t i;
-        size_t maxEl=0;
+        size_t maxEl=I[0];
+        size_t minEl=I[0];
         
         //Find the maximum value in I.
-        for(i=0;i<r;i++) {
+        for(i=1;i<r;i++) {
             if(maxEl<I[i]) {
                 maxEl=I[i];
+            }
+            if(minEl>I[i]) {
+                minEl=I[i];
             }
         }
         
         //If the maximum value in I is too big, or I is too big or too
         //small.
-        if(maxEl>n-1||r>n||r<1) {
-            mexErrMsgTxt("The I vector is invalid.");
+        if(startVal==0) {
+            if(maxEl>n-1||r>n||r<1) {
+                mexErrMsgTxt("The I vector is invalid.");
+            }
+        }
+        else {//Idexation starts at 1.
+            if(maxEl>n||minEl<1||r>n||r<1) {
+                mexErrMsgTxt("The I vector is invalid.");
+            }
         }
     }
-    
-    //If the final combination in lexicographic order was passed.
-    if(getNextComboCPP(I,n,r)==true){
-        plhs[0]=mxCreateDoubleMatrix(0, 0,mxREAL);
+
+    if(startVal==0) {
+        //If the final combination in lexicographic order was passed.
+        if(getNextComboCPP(I,n,r)==true){
+            plhs[0]=mxCreateDoubleMatrix(0, 0,mxREAL);
+        } else {
+            plhs[0]=mat2MatlabDoubles(I,r,1);
+        }
     } else {
-        plhs[0]=mat2MatlabDoubles(I,r,1);
+        if(getNextComboCPPFromOne(I,n,r)==true){
+            plhs[0]=mxCreateDoubleMatrix(0, 0,mxREAL);
+        } else {
+            plhs[0]=mat2MatlabDoubles(I,r,1);
+        }
     }
 }
 

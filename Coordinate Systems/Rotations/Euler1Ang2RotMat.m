@@ -5,22 +5,22 @@ function M=Euler1Ang2RotMat(theta,series,handed)
 %            left-handed depending on handed. The components of vectors to
 %            be rotated are assumed ordered [x;y;z].
 %
-%INPUTS:  theta The angle in radians about which the rotation matrix should
-%               rotate a vector around the axis given by series. The
-%               handedness of the angle is given by handed.
-%        series A text string specifying the angle about which the rotation
-%               is performed. This can be 'x', 'y', or 'z'.
-%       handed  The handedness of the rotation angle. If omitted, it
-%               is assumed that the rotation is right-handed (the
-%               standard). Possible values are
-%               'right' The default if omitted. The rotation is
-%                       right-handed.
-%               'left'  The rotation is left-handed. The rotation angle
-%                       is clockwise when one is looking into the rotation
-%                       axis.
+%INPUTS: theta The angle in radians about which the rotation matrix should
+%              rotate a vector around the axis given by series. The
+%              handedness of the angle is given by handed.
+%       series A text string specifying the angle about which the rotation
+%              is performed. This can be 'x', 'y', or 'z'.
+%       handed The handedness of the rotation angle. If omitted, it is
+%              assumed that the rotation is right-handed (the standard).
+%              Possible values are:
+%              'right' The default if omitted. The rotation is right-
+%                      handed.
+%              'left'  The rotation is left-handed. The rotation angle is
+%                      clockwise when one is looking into the rotation
+%                      axis.
 %
-%OUTPUTS: M    The rotation matrix such that M*v rotates a vector v
-%              by theta about the specified axis.
+%OUTPUTS: M The rotation matrix such that M*v rotates a vector v by theta
+%           about the specified axis.
 %
 %Euler angles are discussed in [1].
 %

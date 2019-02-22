@@ -16,33 +16,33 @@ function [zITRS,rotMat]=CartCD2ITRS(zCartCD,param1,param2,S11)
 %               derived. These aprameters are impied set base don how the
 %               function is called:
 %               1) ITRS2CartCD(zCart)
-%               If all of the other parameters are omitted, then the CD
-%               pole parameters for the latest epoch of the International
-%               Geomagnetic Reference Field (IGRF) are used; the Schmidt
-%               semi-normalized coefficients are obtained using the
-%               function getIGRFCoeffs.
+%                  If all of the other parameters are omitted, then the CD
+%                  pole parameters for the latest epoch of the
+%                  International Geomagnetic Reference Field (IGRF) are
+%                  used; the Schmidt semi-normalized coefficients are
+%                  obtained using the function getIGRFCoeffs.
 %               2) ITRS2CartCD(zCart, year)
-%               The parameters of the IGRF for the specified epoch year are
-%               used. The year is in the Gregorian calendar and is
-%               specified as noted in the comments to the getIGRFCoeffs
-%               function.
-%               3) ITRS2CartCD(zCart, year, model). This is the
-%               same as spher2CenteredDipole(zSpher, year), except model
-%               can be 'IGRF' or 'WMM' to specify which magnetic field
-%               model to use. 'WMM' refers to the World magnetic model
-%               using the function getWMMCoeffs. Note than an empty year
-%               matrix can be passed to get the latest epoch year of either
-%               model.
-%               4) ITRS2CartCD(zCart,C10,C11,S11). In this
-%               instance, the first few Schmidt semi-normalized
-%               coefficients for a magnetic field model are given. These
-%               are the only three coefficients used to define the
-%               orientation of the CD pole. If using the getWMMCoeffs or
-%               getIGRFCoeffs function to get the coordinates, then from
-%               the outputs of those functions (specifying in the second
-%               input that they should not be fully normalized), the
-%               outputs C and S of the functions are used here as
-%               C10=C(1+1,0+1), C11=C(1+1,1+1), S11=C(1+1,1+1).
+%                  The parameters of the IGRF for the specified epoch year
+%                  are used. The year is in the Gregorian calendar and is
+%                  specified as noted in the comments to the getIGRFCoeffs
+%                  function.
+%               3) ITRS2CartCD(zCart, year, model). This is the same as
+%                  spher2CenteredDipole(zSpher, year), except model can be
+%                  'IGRF' or 'WMM' to specify which magnetic field model
+%                  to use. 'WMM' refers to the World magnetic model using
+%                  the function getWMMCoeffs. Note than an empty year
+%                  matrix can be passed to get the latest epoch year of
+%                  either model.
+%               4) ITRS2CartCD(zCart,C10,C11,S11). In this instance, the
+%                  first few Schmidt semi-normalized coefficients for a
+%                  magnetic field model are given. These are the only three
+%                  coefficients used to define the orientation of the CD 
+%                  pole. If using the getWMMCoeffs or getIGRFCoeffs
+%                  function to get the coordinates, then from the outputs
+%                  of those functions (specifying in the second input that
+%                  they should not be fully normalized), the outputs C and
+%                  S of the functions are used here as
+%                  C10=C(1+1,0+1), C11=C(1+1,1+1), S11=C(1+1,1+1).
 %
 %OUTPUTS: zITRS The points in zCartCD rotated into ITRS. The ITRS and the
 %               CD coordinate systems are related by a rotation.

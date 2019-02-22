@@ -1,4 +1,4 @@
-function [aDeriv,aJacob]=aCVRuv(x,t)
+function [aDeriv,aJacob,aHess,papt]=aCVRuv(x,t)
 %ACVRUV The drift function for a continuous-time motion model where the
 %       the target state is given in monostatic range and u-v direction
 %       cosine coordinates and the motion is constant-velocity in 3D
@@ -15,7 +15,7 @@ function [aDeriv,aJacob]=aCVRuv(x,t)
 %OUTPUTS: aDeriv The 6XN set of time-derivatives of the N state vectors
 %                under the Cartesian linear motion model in r-u-v
 %                coordinates.
-%         AJacob The 6X6XN set of Jacobians of aDeriv, which can be useful
+%         aJacob The 6X6XN set of Jacobians of aDeriv, which can be useful
 %                in extended Kalman filters. This is the derivative of each
 %                component of aDeriv (selected by row) with respect to the
 %                elements of the state [r,u,v,rDot,uDot,vDot] selected by
@@ -23,9 +23,9 @@ function [aDeriv,aJacob]=aCVRuv(x,t)
 %
 %The derivation of the model is quite lengthy. A summary is given here. Let
 %rVec be a position vector. We shall use the orthonormal basis vectors:
-%uVec1=[u;v;sqrt(1-u^2-v^2)]
-%uVec2=[sqrt((1-u^2-v^2)/(1-v^2));0;-u/sqrt(1-v^2)]
-%uVec3=[-u*v/sqrt(1-v^2);sqrt(1-v^2);-v*sqrt((1-u^2-v^2)/(1-v^2))];
+%uVec1=[u;v;sqrtw]
+%uVec2=[sqrt(w/(1-v2));0;-u/sqrt(1-v2)]
+%uVec3=[-u*v/sqrt(1-v2);sqrt(1-v2);-v*sqrt(w/(1-v2))];
 %Note that uVec2 is a normalized version of the derivative of uVec1 with
 %respect to u and uVec3 is cross(u1,u2). The time-derivatives of the basis
 %vectors can themselves be expressed as basis vectors:
@@ -80,68 +80,239 @@ rDot=x(4,:);
 uDot=x(5,:);
 vDot=x(6,:);
 
-w2=max(0,1-u.^2-v.^2);
+u2=u.^2;
+v2=v.^2;
+r2=r.^2;
+
+w2=max(0,1-u2-v2);
 w=sqrt(w2);
 
-diffV2=1-v.^2;
+diffV2=1-v2;
 diffV=sqrt(diffV2);
-denomV2=w2.*diffV2;
-denomV=sqrt(denomV2);
+diffV3=diffV*diffV2;
 
-diffU2=1-u.^2;
+diffU2=1-u2;
 diffU=sqrt(diffU2);
-denomU2=w2.*diffU2;
-denomU=sqrt(denomU2);
+diffU3=diffU*diffU2;
 
-c1v=(uDot.*diffV2+u.*v.*vDot)./denomV;
-c1u=(vDot.*diffU2+u.*v.*uDot)./denomU;
-c2v=vDot./diffV;
-c2u=uDot./diffU;
-c4v=v.*(-u.^2.*(1./w)-w).*(-uDot.*diffV2-u.*v.*vDot)./diffV2.^2;
-c4u=u.*(-v.^2.*(1./w)-w).*(-vDot.*diffU2-u.*v.*uDot)./diffU2.^2;
+uDot2=uDot*uDot;
+vDot2=vDot*vDot;
+w3=w2*w;
 
-d2v=2*rDot.*c2v+r.*c1v.*c4v;
-d2u=2*rDot.*c2u+r.*c1u.*c4u;
-
-rDDot=r.*((uDot.^2.*diffV2+2*u.*uDot.*v.*vDot+diffU2.*vDot.^2)./w2);
-
-uDDot=-d2u.*diffU./r-u.*uDot.^2./diffU2;
-vDDot=-d2v.*diffV./r-v.*vDot.^2./diffV2;
+rDDot=-(r*(-uDot2*diffV2-2*u*uDot*v*vDot-diffU2*vDot2))/w2;
+uDDot=-((2*rDot*uDot)/r)-(u*uDot2)/diffU2-(u*diffU*w*(u*uDot*v+vDot-u2*vDot)^2)/(diffU3*w3);
+vDDot=-((2*rDot*vDot)/r)-(v*vDot2)/diffV2-(v*diffV*w*(uDot-uDot*v2+u*v*vDot)^2)/(diffV3*w3);
 
 aDeriv=[rDot;uDot;vDot;rDDot;uDDot;vDDot];
 
 if(nargout>1)
-    ddrDDdr=-(-uDot.^2.*diffV2-2*u.*uDot.*v.*vDot-diffU2.*vDot.^2)./w2;
-    ddrDDdu=(2*r.*(u.*uDot+v.*vDot).*(uDot-uDot.*v.^2+u.*v.*vDot))./w2.^2;
-    ddrDDdv=-((2*r.*(-u.*uDot.*v-diffU2.*vDot).*(u.*uDot+v.*vDot))./w2.^2);
-
-    ddrDDduDot=((2*r.*(uDot-uDot.*v.^2+u.*v.*vDot))./w2);
-    ddrDDdvDot=-(2*r.*(-u.*uDot.*v-diffU2.*vDot))./w2;
-
-    dduDDdr=(2*rDot.*uDot)./r.^2;
-    dduDDdu=(-uDot.^2.*(1+u.^2-v.^2).*diffV2-4*u.*uDot.*v.*diffV2.*vDot+(-1+v.^2-u.^2.*(-2+u.^2+3*v.^2)).*vDot.^2)./w2.^2;
-    dduDDdv=(2*u.*(-u.*uDot.*v-diffU2.*vDot).*(u.*uDot+v.*vDot))./w2.^2;
-    dduDDdrDot=-((2*uDot)./r);
-    dduDDduDot=-((2*rDot)./r)-(2*u.*(uDot-uDot.*v.^2+u.*v.*vDot))./w2;
-    dduDDdvDot=-(2*u.*(u.*uDot.*v+vDot-u.^2.*vDot))./w2;
-
-    ddvDDdr=(2*rDot.*vDot)./r.^2;
-    ddvDDdu=-((2*v.*(u.*uDot+v.*vDot).*(uDot-uDot.*v.^2+u.*v.*vDot))./w2.^2);
-    ddvDDdv=(uDot.^2.*(u.^2.*(1-3*v.^2)-diffV2.^2)-4*u.*diffU2.*uDot.*v.*vDot+diffU2.*(-1+u.^2-v.^2).*vDot.^2)./w2.^2;
-    ddvDDdrDot=-((2*vDot)./r);
-    ddvDDduDot=-(2*v.*(uDot-uDot.*v.^2+u.*v.*vDot))./w2;
-    ddvDDdvDot=-((2*rDot)./r)-(2*v.*(u.*uDot.*v+vDot-u.^2.*vDot))./w2;
-
-    
     N=size(x,2);
-    aJacob=zeros(6,6,N);
-    for k=1:N
-        aJacob(:,:,k)=[0,               0,              0,              1,              0,              0;
-                       0,               0,              0,              0,              1,              0;
-                       0,               0,              0,              0,              0,              1;
-                       ddrDDdr(k),      ddrDDdu(k),     ddrDDdv(k),     0,  ddrDDduDot(k),  ddrDDdvDot(k);
-                       dduDDdr(k),      dduDDdu(k),     dduDDdv(k),     dduDDdrDot(k),  dduDDduDot(k),  dduDDdvDot(k);
-                       ddvDDdr(k),      ddvDDdu(k),     ddvDDdv(k),     ddvDDdrDot(k),  ddvDDduDot(k),  ddvDDdvDot(k)];
+    if(N>1)
+        error('Derivatives are only available for numPoints=1.')
+    end
+
+    w4=w2^2;
+
+    ddrDDdr=-(-uDot2*diffV2-2*u*uDot*v*vDot-diffU2*vDot2)/w2;
+    ddrDDdu=(2*r*(u*uDot+v*vDot)*(uDot-uDot*v2+u*v*vDot))/w4;
+    ddrDDdv=-((2*r*(-u*uDot*v-diffU2*vDot)*(u*uDot+v*vDot))/w4);
+
+    ddrDDduDot=((2*r*(uDot-uDot*v2+u*v*vDot))/w2);
+    ddrDDdvDot=-(2*r*(-u*uDot*v-diffU2*vDot))/w2;
+
+    dduDDdr=(2*rDot*uDot)/r2;
+    dduDDdu=(-uDot2*(1+u2-v2)*diffV2-4*u*uDot*v*diffV2*vDot+(-1+v2-u2*(-2+u2+3*v2))*vDot2)/w4;
+    dduDDdv=(2*u*(-u*uDot*v-diffU2*vDot)*(u*uDot+v*vDot))/w4;
+    dduDDdrDot=-((2*uDot)/r);
+    dduDDduDot=-((2*rDot)/r)-(2*u*(uDot-uDot*v2+u*v*vDot))/w2;
+    dduDDdvDot=-(2*u*(u*uDot*v+vDot-u2*vDot))/w2;
+
+    ddvDDdr=(2*rDot*vDot)/r2;
+    ddvDDdu=-((2*v*(u*uDot+v*vDot)*(uDot-uDot*v2+u*v*vDot))/w4);
+    ddvDDdv=(uDot2*(u2*(1-3*v2)-diffV2^2)-4*u*diffU2*uDot*v*vDot+diffU2*(-1+u2-v2)*vDot2)/w4;
+    ddvDDdrDot=-((2*vDot)/r);
+    ddvDDduDot=-(2*v*(uDot-uDot*v2+u*v*vDot))/w2;
+    ddvDDdvDot=-((2*rDot)/r)-(2*v*(u*uDot*v+vDot-u2*vDot))/w2;
+
+    aJacob=[0,               0,              0,              1,              0,              0;
+            0,               0,              0,              0,              1,              0;
+            0,               0,              0,              0,              0,              1;
+            ddrDDdr,         ddrDDdu,        ddrDDdv,        0,              ddrDDduDot,     ddrDDdvDot;
+            dduDDdr,         dduDDdu,        dduDDdv,        dduDDdrDot,     dduDDduDot,     dduDDdvDot;
+            ddvDDdr,         ddvDDdu,        ddvDDdv,        ddvDDdrDot,     ddvDDduDot,     ddvDDdvDot];
+
+    if(nargout>2)
+        aHess=zeros(6,6,6);
+        
+        u4=u2*u2;
+        v4=v2*v2;
+        w6=w3*w3;
+        diffU4=diffU2*diffU2;
+        diffV4=diffV2*diffV2;
+
+        ddrDDdrdr=0;
+        ddrDDdudr=(2*(u*uDot+v*vDot)*(uDot-uDot*v2+u*v*vDot))/w4;
+        ddrDDdvdr=-((2*(-u*uDot*v-diffU2*vDot)*(u*uDot+v*vDot))/w4);
+        ddrDDduDotdr=((2*(uDot-uDot*v2+u*v*vDot))/w2);
+        ddrDDdvDotdr=-(-2*u*uDot*v-2*diffU2*vDot)/w2;
+
+        ddrDDdrdu=ddrDDdudr;
+        ddrDDdudu=-(2*r*(-uDot2*(1+3*u2-v2)*diffV2-2*u*uDot*v*(3+u2-3*v2)*vDot+v2*(-1-3*u2+v2)*vDot2))/w6;
+        ddrDDdvdu=(2*r*(uDot*(1+u2-v2)+2*u*v*vDot)*(2*u*uDot*v+vDot-u2*vDot+v2*vDot))/w6;
+        ddrDDduDotdu=(-4*r*u*uDot*(-diffV2)+2*r*v*(1+u2-v2)*vDot)/w4;
+        ddrDDdvDotdu=(2*r*v*(uDot*(1+u2-v2)+2*u*v*vDot))/w4;
+
+        ddrDDdrdv=ddrDDdvdr;
+        ddrDDdudv=ddrDDdvdu;
+        ddrDDdvdv=-(2*r*(u2*uDot2*(-1+u2-3*v2)+2*u*uDot*v*(-3+3*u2-v2)*vDot+diffU2*(-1+u2-3*v2)*vDot2))/w6;
+        ddrDDduDotdv=(2*r*u*(2*u*uDot*v+vDot-u2*vDot+v2*vDot))/w4;
+        ddrDDdvDotdv=(2*r*u*uDot*(1-u2+v2)+4*r*diffU2*v*vDot)/w4;
+
+        ddrDDdrdRDot=0;
+        ddrDDdudRDot=0;
+        ddrDDdvdRDot=0;
+        ddrDDduDotdRDot=0;
+        ddrDDdvDotdRDot=0;
+
+        ddrDDdrduDot=ddrDDduDotdr;
+        ddrDDduduDot=ddrDDduDotdu;
+        ddrDDdvduDot=ddrDDduDotdv;
+        ddrDDduDotduDot=(2*r*diffV2)/w2;
+        ddrDDdvDotduDot=(2*r*u*v)/w2;
+
+        ddrDDdrdvDot=ddrDDdvDotdr;
+        ddrDDdudvDot=ddrDDdvDotdu;
+        ddrDDdvdvDot=ddrDDdvDotdv;
+        ddrDDduDotdvDot=ddrDDdvDotduDot;
+        ddrDDdvDotdvDot=(2*r*diffU2)/w2;
+
+        %%%
+        dduDDdrdr=-((4*rDot*uDot)/r^3);
+        dduDDdudr=0;
+        dduDDdvdr=0;
+        dduDDdrDotdr=(2*uDot)/r2;
+        dduDDduDotdr=(2*rDot)/r2;
+        dduDDdvDotdr=0;
+
+        dduDDdrdu=dduDDdudr;
+        dduDDdudu=-(2*u*uDot2*(3+u2-3*v2)*diffV2-4*uDot*v*diffV2*(-1-3*u2+v2)*vDot+2*u*v2*(3+u2-3*v2)*vDot2)/w6;
+        dduDDdvdu=-(2*u2*uDot2*v*(3+u2-3*v2)+4*u*uDot*(1-v4+u2*(-1+3*v2))*vDot+2*v*(1-u4+(-1+3*u2)*v2)*vDot2)/w6;
+        dduDDdrDotdu=0;
+        dduDDduDotdu=-(2*diffV2*(uDot*(1+u2-v2)+2*u*v*vDot))/w4;
+        dduDDdvDotdu=(-4*u*uDot*v*diffV2-2*(diffU4+(-1+3*u2)*v2)*vDot)/w4;
+
+        dduDDdrdv=dduDDdvdr;
+        dduDDdudv=dduDDdvdu;
+        dduDDdvdv=-(2*u*(u2*uDot2*(1-u2+3*v2)+2*u*uDot*v*(3-3*u2+v2)*vDot-diffU2*(-1+u2-3*v2)*vDot2))/w6;
+        dduDDdrDotdv=0;
+        dduDDduDotdv=(2*u2*(-2*u*uDot*v+u2*vDot-(1+v2)*vDot))/w4;
+        dduDDdvDotdv=(2*u*(u*uDot*(-1+u2-v2)-2*diffU2*v*vDot))/w4;
+
+        dduDDdrdRDot=dduDDdrDotdr;
+        dduDDdudRDot=dduDDdrDotdu;
+        dduDDdvdRDot=dduDDdrDotdv;
+        dduDDdrDotdRDot=0;
+        dduDDduDotdRDot=-(2/r);
+        dduDDdvDotdRDot=0;
+
+        dduDDdrduDot=dduDDduDotdr;
+        dduDDduduDot=dduDDduDotdu;
+        dduDDdvduDot=dduDDduDotdv;
+        dduDDdrDotduDot=dduDDduDotdRDot;
+        dduDDduDotduDot=-((2*u*diffV2)/w2);
+        dduDDdvDotduDot=-(2*u2*v)/w2;
+
+        dduDDdrdvDot=dduDDdvDotdr;
+        dduDDdudvDot=dduDDdvDotdu;
+        dduDDdvdvDot=dduDDdvDotdv;
+        dduDDdrDotdvDot=dduDDdvDotdRDot;
+        dduDDduDotdvDot=dduDDdvDotduDot;
+        dduDDdvDotdvDot=-(2*u*diffU2)/w2;
+
+        %%%
+        ddvDDdrdr=-((4*rDot*vDot)/r^3);
+        ddvDDdudr=0;
+        ddvDDdvdr=0;
+        ddvDDdrDotdr=(2*vDot)/r2;
+        ddvDDduDotdr=0;
+        ddvDDdvDotdr=(2*rDot)/r2;
+
+        ddvDDdrdu=ddvDDdudr;
+        ddvDDdudu=-(2*v*(uDot2*(-1+v)*(1+v)*(-1-3*u2+v2)+2*u*uDot*v*(3+u2-3*v2)*vDot+v2*(1+3*u2-v2)*vDot2))/w6;
+        ddvDDdvdu=-(2*u*uDot2*(1-v4+u2*(-1+3*v2))+4*uDot*v*(1-u4+(-1+3*u2)*v2)*vDot+2*u*v2*(3-3*u2+v2)*vDot2)/w6;
+        ddvDDdrDotdu=0;
+        ddvDDduDotdu=(2*v*(2*u*uDot*(-diffV2)+v*(-1-u2+v2)*vDot))/w4;
+        ddvDDdvDotdu=-((2*v2*(uDot*(1+u2-v2)+2*u*v*vDot))/w4);
+
+        ddvDDdrdv=ddvDDdvdr;
+        ddvDDdudv=ddvDDdvdu;
+        ddvDDdvdv=-(2*u2*uDot2*v*(3-3*u2+v2)-4*u*diffU2*uDot*(-1+u2-3*v2)*vDot+2*diffU2*v*(3-3*u2+v2)*vDot2)/w6;
+        ddvDDdrDotdv=0;
+        ddvDDduDotdv=(-2*uDot*(diffV4+u2*(-1+3*v2))-4*u*diffU2*v*vDot)/w4;
+        ddvDDdvDotdv=(2*diffU2*(-2*u*uDot*v+u2*vDot-(1+v2)*vDot))/w4;
+
+        ddvDDdrdRDot=ddvDDdrDotdr;
+        ddvDDdudRDot=ddvDDdrDotdu;
+        ddvDDdvdRDot=ddvDDdrDotdv;
+        ddvDDdrDotdRDot=0;
+        ddvDDduDotdRDot=0;
+        ddvDDdvDotdRDot=-(2/r);
+
+        ddvDDdrduDot=ddvDDduDotdr;
+        ddvDDduduDot=ddvDDduDotdu;
+        ddvDDdvduDot=ddvDDduDotdv;
+        ddvDDdrDotduDot=ddvDDduDotdRDot;
+        ddvDDduDotduDot=-((2*v*diffV2)/w2);
+        ddvDDdvDotduDot=-(2*u*v2)/w2;
+
+        ddvDDdrdvDot=ddvDDdvDotdr;
+        ddvDDdudvDot=ddvDDdvDotdu;
+        ddvDDdvdvDot=ddvDDdvDotdv;
+        ddvDDdrDotdvDot=ddvDDdvDotdRDot;
+        ddvDDduDotdvDot=ddvDDdvDotduDot;
+        ddvDDdvDotdvDot=((2*(-1+u^2)*v)/w2);
+        
+        aHess(:,:,1)=[0,               0,              0,              0,              0,              0;
+                      0,               0,              0,              0,              0,              0;
+                      0,               0,              0,              0,              0,              0;
+                      ddrDDdrdr,       ddrDDdudr,      ddrDDdvdr,      0,              ddrDDduDotdr,   ddrDDdvDotdr;
+                      dduDDdrdr,       dduDDdudr,      dduDDdvdr,      dduDDdrDotdr,   dduDDduDotdr,   dduDDdvDotdr;
+                      ddvDDdrdr,       ddvDDdudr,      ddvDDdvdr,      ddvDDdrDotdr,   ddvDDduDotdr,   ddvDDdvDotdr];
+        aHess(:,:,2)=[0,               0,              0,              0,              0,              0;
+                      0,               0,              0,              0,              0,              0;
+                      0,               0,              0,              0,              0,              0;
+                      ddrDDdrdu,       ddrDDdudu,      ddrDDdvdu,      0,              ddrDDduDotdu,   ddrDDdvDotdu;
+                      dduDDdrdu,       dduDDdudu,      dduDDdvdu,      dduDDdrDotdu,   dduDDduDotdu,   dduDDdvDotdu;
+                      ddvDDdrdu,        ddvDDdudu,     ddvDDdvdu,      ddvDDdrDotdu,   ddvDDduDotdu,   ddvDDdvDotdu];
+        aHess(:,:,3)=[0,               0,              0,              0               0,              0;
+                      0,               0,              0,              0,              0,              0;
+                      0,               0,              0,              0,              0,              0;
+                      ddrDDdrdv,       ddrDDdudv,      ddrDDdvdv,      0,              ddrDDduDotdv,   ddrDDdvDotdv;
+                      dduDDdrdv,       dduDDdudv,      dduDDdvdv,      dduDDdrDotdv,   dduDDduDotdv,   dduDDdvDotdv;
+                      ddvDDdrdv,       ddvDDdudv,      ddvDDdvdv,      ddvDDdrDotdv,   ddvDDduDotdv,   ddvDDdvDotdv];
+        aHess(:,:,4)=[0,               0,              0,              0,              0,              0;
+                      0,               0,              0,              0,              0,              0;
+                      0,               0,              0,              0,              0,              0;
+                      ddrDDdrdRDot,    ddrDDdudRDot,   ddrDDdvdRDot,   0,              ddrDDduDotdRDot,ddrDDdvDotdRDot;
+                      dduDDdrdRDot,    dduDDdudRDot,   dduDDdvdRDot,   dduDDdrDotdRDot,dduDDduDotdRDot,dduDDdvDotdRDot;
+                      ddvDDdrdRDot,    ddvDDdudRDot,   ddvDDdvdRDot,   ddvDDdrDotdRDot,ddvDDduDotdRDot,ddvDDdvDotdRDot];
+        aHess(:,:,5)=[0,               0,              0,              0,              0,              0;
+                      0,               0,              0,              0,              0,              0;
+                      0,               0,              0,              0,              0,              0;
+                      ddrDDdrduDot,    ddrDDduduDot,   ddrDDdvduDot,   0,              ddrDDduDotduDot,ddrDDdvDotduDot;
+                      dduDDdrduDot,    dduDDduduDot,   dduDDdvduDot,   dduDDdrDotduDot,dduDDduDotduDot,dduDDdvDotduDot;
+                      ddvDDdrduDot,    ddvDDduduDot,   ddvDDdvduDot,   ddvDDdrDotduDot,ddvDDduDotduDot,ddvDDdvDotduDot];
+        aHess(:,:,6)=[0,               0,              0,              0,              0,              0;
+                      0,               0,              0,              0,              0,              0;
+                      0,               0,              0,              0,              0,              0;
+                      ddrDDdrdvDot,    ddrDDdudvDot,   ddrDDdvdvDot,   0,              ddrDDduDotdvDot,ddrDDdvDotdvDot;
+                      dduDDdrdvDot,    dduDDdudvDot,   dduDDdvdvDot,   dduDDdrDotdvDot,dduDDduDotdvDot,dduDDdvDotdvDot;
+                      ddvDDdrdvDot,    ddvDDdudvDot,   ddvDDdvdvDot,   ddvDDdrDotdvDot,ddvDDduDotdvDot,ddvDDdvDotdvDot];
+        
+        
+        if(nargout>3) 
+            papt=zeros(6,1);
+        end
     end
 end
 end

@@ -63,7 +63,7 @@ function [zRuv,RRuv]=Cart2RuvStdRefracCubature(zC,SR,useHalfRange,zTx,zRx,M,Ns,x
 %           parameter is omitted or an empty matrix is passed, then
 %           a=Constants.WGS84SemiMajorAxis and f=Constants.WGS84Flattening.
 %
-%OUTPUTS: zRuv The approximate means of the PDF of the the measurements
+%OUTPUTS: zRuv The approximate means of the PDF of the measurements
 %              in refraction-corrupted bistatic [r;u;v] coordinates. This
 %              is a 3XnumMeas matrix.
 %         RRuv The approximate 3X3XnumMeas covariance matrices of the

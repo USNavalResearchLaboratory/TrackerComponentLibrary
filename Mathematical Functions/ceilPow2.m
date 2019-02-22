@@ -1,12 +1,12 @@
 function p2Vals=ceilPow2(nums)
-%%CEILPOW2   Find the smallest powers of 2 that are greater than or equal
-%            to the non-negative, real values in vals.
+%%CEILPOW2 Find the smallest powers of 2 that are greater than or equal to
+%          the non-negative, real values in vals.
 %
-%INPUTS:  nums  An array or matrix of non-negative, real values.
+%INPUTS: nums An array or matrix of non-negative, real values.
 %
-%OUTPUTS:p2Vals Values corresponding to the power of 2 greater than or
-%               equal to the values in nums having the same datatype as
-%               nums (float, int32, etc.).
+%OUTPUTS: p2Vals Values corresponding to the power of 2 greater than or
+%                equal to the values in nums having the same datatype as
+%                nums (float, int32, etc.).
 %
 %This function checks for the data type of the passed value. If the
 %value passed returns true from the function isfloat then an algorithm

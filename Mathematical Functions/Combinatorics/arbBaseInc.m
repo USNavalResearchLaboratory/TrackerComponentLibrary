@@ -2,16 +2,14 @@ function digVec=arbBaseInc(digVec,base)
 %%ARBBASEINC Increment a vector whose elements represent digits in an
 %            arbitrary base (radix) counting system. 
 %
-%INPUTS:    digVec A vector of length n whose elements range in value from
-%                  0 to base-1 and which should be incremented by one.
-%           base   The base (radix) of the number represented by digVec,
-%                  where each element in the vector is a digit of radix
-%                  base.
-%OUTPUTS:   digVec The vector incremented by one. If the incremented vector
-%                  requires more than n places to represent, then an empty
-%                  matrix will be returned. If any of the elements of
-%                  digVec are base or larger, then the output will have no
-%                  meaning.
+%INPUTS: digVec A vector of length n whose elements range in value from 0
+%               to base-1 and which should be incremented by one.
+%          base The base (radix) of the number represented by digVec, where
+%               each element in the vector is a digit of radix base.
+%OUTPUTS: digVec The vector incremented by one. If the incremented vector
+%               requires more than n places to represent, then an empty
+%               matrix will be returned. If any of the elements of digVec
+%               are base or larger, then the output will have no meaning.
 %
 %This is just a simple function for computing the next n-tuple in a certain
 %base. It is essentially a recursion for the method described in Chapter

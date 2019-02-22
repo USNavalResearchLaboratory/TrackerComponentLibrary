@@ -2,7 +2,7 @@ function [p,params]=getNextPermutation(p,params)
 %%GETNEXTPERMUTATION Get the next permutation of the integers 1:N. The
 %              ordering is not lexicographic.
 %
-%INPUTS: p If  the first permutation in the sequence is desired, then this
+%INPUTS: p If the first permutation in the sequence is desired, then this
 %          is N, the number of items to be permuted and the second input is
 %          omitted. Otherwise, this is p, the NX1 vector of the previous
 %          permutation found.

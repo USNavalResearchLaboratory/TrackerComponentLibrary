@@ -33,7 +33,7 @@ function [rho,P,T,Te]=jacchiaAtmosParam(Jul1,Jul2,point,F10,F10b,Kp)
 %
 %The 1971 Jacchia atmospheric model computes atmospheric densities in two
 %major steps. First, the exospheric temperature is computed based on solar
-%and geomagnetic data. Then, the the density is calculated using a
+%and geomagnetic data. Then, the density is calculated using a
 %bi-polynomial fit. The algorithms in this function are taken primarily
 %from Section 3.5.3 of [1] with guidance and some substitutions from the
 %original paper [2]. This function does not take into account the seasonal

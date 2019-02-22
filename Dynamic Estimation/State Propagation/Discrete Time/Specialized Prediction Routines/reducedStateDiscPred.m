@@ -157,6 +157,9 @@ FTotal=F+du;
 %Equation 17 in [1].
 MPred=FTotal*MPrev*FTotal';
 
+%Ensure symmetry
+MPred=(MPred+MPred')/2;
+
 %Equation 18 in [1].
 DPred=FTotal*DPrev+G;
 
@@ -166,6 +169,8 @@ xPred=F*xPrev+u;
 %Equation 19 in [1].
 PPred=MPred+DPred*Lambda*DPred';
 
+%Ensure symmetry
+PPred=(PPred+PPred')/2;
 end
 
 %LICENSE:
