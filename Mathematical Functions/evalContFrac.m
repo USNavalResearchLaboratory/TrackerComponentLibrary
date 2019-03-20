@@ -5,24 +5,24 @@ function f=evalContFrac(bFunc,aFunc,tinyVal,maxIter)
 %              of function for the a and b values such that the required
 %              number of terms can be requested.
 %
-%INPUTS:  bFunc This can either be a function such that bFunc(i) provides
-%               b(i) in the continued fraction, or this can be a maxNX1 or
-%               1XmaxN vector of explicit b values.
-%         aFunc This has to be of the same type as bFunc, either a function
-%               handle or a vector to provide the a values. If a vector,
-%               then it is 1X(maxN-1) or (maxN-1)X1 as it takes one fewer
-%               call to the a terms than the b terms to evaluate the
-%               continued fraction.
-%       tinyVal An optional parameter that is less than typical values of
-%               eps(b), but is not zero. This parameter is used to mitigate
-%               divide-by zero errors. The default if this parameter is
-%               omitted or an empty matrix is passed if 2e-100.
-%       maxIter An optional parameter considering the maximum number of
-%               terms to evaluate in the continued fraction. The default
-%               value if omitted is 1000. This parameter is only used if
-%               aFunc and bFunc are functions, not arrays. If they are
-%               arrays, then the maximum number of terms used is determined
-%               by the array length.
+%INPUTS: bFunc This can either be a function such that bFunc(i) provides
+%              b(i) in the continued fraction, or this can be a maxNX1 or
+%              1XmaxN vector of explicit b values.
+%        aFunc This has to be of the same type as bFunc, either a function
+%              handle or a vector to provide the a values. If a vector,
+%              then it is 1X(maxN-1) or (maxN-1)X1 as it takes one fewer
+%              call to the a terms than the b terms to evaluate the
+%              continued fraction.
+%      tinyVal An optional parameter that is less than typical values of
+%              eps(b), but is not zero. This parameter is used to mitigate
+%              divide-by zero errors. The default if this parameter is
+%              omitted or an empty matrix is passed if 2e-100.
+%      maxIter An optional parameter considering the maximum number of
+%              terms to evaluate in the continued fraction. The default
+%              value if omitted is 1000. This parameter is only used if
+%              aFunc and bFunc are functions, not arrays. If they are
+%              arrays, then the maximum number of terms used is determined
+%              by the array length.
 %
 %OUTPUTS: f The value of the continued fraction. The smallest possible
 %           value that this can take if b(0)=0 and all a and b are
@@ -68,10 +68,11 @@ end
 
 b0=bFunc(1);
 if(b0==0)
-    f=eps;
+    f=tinyVal;
 else
     f=b0;
 end
+
 CPrev=f;
 DPrev=0;
 
@@ -81,12 +82,16 @@ while(j<maxIter)
     aj=aFunc(j);
     
     DCur=bj+aj*DPrev;
-    DCur=max(tinyVal,DCur);
+    if(DCur==0)
+        DCur=tinyVal;
+    end
     DCur=1/DCur;
     DPrev=DCur;
     
     CCur=bj+aj/CPrev;
-    CCur=max(tinyVal,CCur);
+    if(CCur==0)
+        CCur=tinyVal;
+    end
     CPrev=CCur;
     
     Delta=CCur*DCur;
@@ -97,7 +102,6 @@ while(j<maxIter)
     end
     j=j+1;
 end
-
 end
 
 %LICENSE:
