@@ -7,13 +7,13 @@ classdef RiceD
 methods(Static)
     
 function val=mean(s,sigma)
-%%MEAN  Obtain the mean of the Rice distribution for given noncentrality
-%       and scale parameters.
+%%MEAN Obtain the mean of the Rice distribution for given noncentrality
+%      and scale parameters.
 %
-%INPUTS:    s      The noncentrality parameter of the distribution.
-%           sigma  The scale parameter of the distribution.
+%INPUTS: s The noncentrality parameter of the distribution.
+%    sigma The scale parameter of the distribution.
 %
-%OUTPUTS: val  The mean of the Rice distribution.
+%OUTPUTS: val The mean of the Rice distribution.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
     
@@ -22,13 +22,13 @@ function val=mean(s,sigma)
 end
 
 function val=var(s,sigma)
-%%VAR   Obtain the variance of the Rice distribution for given
-%       noncentrality and scale parameters.
+%%VAR Obtain the variance of the Rice distribution for given noncentrality
+%     and scale parameters.
 %
-%INPUTS:    s      The noncentrality parameter of the distribution.
-%           sigma  The scale parameter of the distribution.
+%INPUTS: s The noncentrality parameter of the distribution.
+%    sigma The scale parameter of the distribution.
 %
-%OUTPUTS: val  The variance of the Rice distribution.
+%OUTPUTS: val The variance of the Rice distribution.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
     
@@ -38,16 +38,16 @@ function val=var(s,sigma)
 end 
     
 function val=PDF(x,s,sigma)
-%%PDF      Evaluate the Rice probability distribution function at one or
-%          more desired points.
+%%PDF Evaluate the Rice probability distribution function at one or more
+%     desired points.
 %
-%INPUTS:    x      The point(s) at which the Rice PDF is to be 
-%                  evaluated. Note that x>=0.
-%           s      The noncentrality parameter of the distribution.
-%           sigma  The scale parameter of the distribution.
+%INPUTS: x The point(s) at which the Rice PDF is to be evaluated. Note that
+%          x>=0.
+%        s The noncentrality parameter of the distribution.
+%    sigma The scale parameter of the distribution.
 %
-%OUTPUTS:   val The value(s) of the Rice PDF with parameters s and sigma
-%               evaluated at x.
+%OUTPUTS: val The value(s) of the Rice PDF with parameters s and sigma
+%             evaluated at x.
 %
 %The PDF of the Rice distribution is given in Chapter 2.1.4 of [1].
 %
@@ -57,20 +57,30 @@ function val=PDF(x,s,sigma)
 %
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
-    val=(x/sigma^2).*exp(-(x.^2+s^2)/(2*sigma^2)).*besseli(0,x*s/sigma^2);
+    %We are evaluating 
+    %val=(x/sigma^2).*exp(-(x.^2+s^2)/(2*sigma^2)).*besseli(0,x*s/sigma^2);
+    %However, if x*s/sigma^2 is large, then this function could return
+    %NaNs. large doesn't have to be all that large. For example, s=30,
+    %sigma=1, x=100. means that ratio is 3000. Thus, we use besseli with
+    %the third argument to get a scaled value, then take the logarithm, do
+    %everything else in the logarithmic domain and take the exponent to
+    %undo the logarithm.
+    
+    besselArg=x*s/sigma^2;
+    val=exp(log(besseli(0,besselArg,1))+besselArg-(x.^2+s^2)/(2*sigma^2)+log(x/sigma^2));
 end
 
 function val=CDF(x,s,sigma)
-%%CDF      Evaluate the cumulative distribution function of the
-%          gamma distribution at desired points.
+%%CDF Evaluate the cumulative distribution function of the Rice
+%     distribution at desired points.
 %
-%INPUTS:    x     The point(s) at which the Rice CDF is to be 
-%                 evaluated. Note that x>=0.
-%           s     The noncentrality parameter of the distribution.
-%           sigma The scale parameter of the distribution.
+%INPUTS: x The point(s) at which the Rice CDF is to be evaluated. Note that
+%          x>=0.
+%        s The noncentrality parameter of the distribution.
+%    sigma The scale parameter of the distribution.
 %
-%OUTPUTS:   prob The value(s) of the CDF of the Rice distribution
-%                with parameters k and theta evaluated at x.
+%OUTPUTS: prob The value(s) of the CDF of the Rice distribution with
+%              parameters k and theta evaluated at x.
 %
 %The CDF of the Rice distribution can be expressed in terms of Marcum's Q
 %function as shown in Chapter 2.1.4 of [1].
