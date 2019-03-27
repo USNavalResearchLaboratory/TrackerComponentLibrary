@@ -94,16 +94,16 @@ switch(definition)
         x=sort(x,dim,'ascend');
         if(mod(n,2)==0)%Split the halves
             idxVec{dim}=1:(n/2);
-            Q1=median(x(idxVec{:}));
+            Q1=median(x(idxVec{:}),dim);
             
             idxVec{dim}=(n/2+1):n;
-            Q3=median(x(idxVec{:}));
+            Q3=median(x(idxVec{:}),dim);
         else%Assign the median point to the third quartile.
             idxVec{dim}=1:floor(n/2);
-            Q1=median(x(idxVec{:}));
+            Q1=median(x(idxVec{:}),dim);
             
             idxVec{dim}=ceil(n/2):n;
-            Q3=median(x(idxVec{:}));
+            Q3=median(x(idxVec{:}),dim);
         end
     case 1%Alternative successive median definition 1.
         idxVec=repmat({':'},1,ndims(x));
@@ -111,33 +111,33 @@ switch(definition)
         x=sort(x,dim,'ascend');
         if(mod(n,2)==0)%Split the halves
             idxVec{dim}=1:(n/2);
-            Q1=median(x(idxVec{:}));
+            Q1=median(x(idxVec{:}),dim);
             
             idxVec{dim}=(n/2+1):n;
-            Q3=median(x(idxVec{:}));
+            Q3=median(x(idxVec{:}),dim);
         else%Omit the median point.
             idxVec{dim}=1:floor(n/2);
-            Q1=median(x(idxVec{:}));
+            Q1=median(x(idxVec{:}),dim);
             
             idxVec{dim}=(ceil(n/2)+1):n;
-            Q3=median(x(idxVec{:}));
+            Q3=median(x(idxVec{:}),dim);
         end
     case 2%Alternative successive median definition 2.
         idxVec=repmat({':'},1,ndims(x));
         
         if(mod(n,2)==0)%Split the halves
             idxVec{dim}=1:(n/2);
-            Q1=median(x(idxVec{:}));
+            Q1=median(x(idxVec{:}),dim);
             
             idxVec{dim}=(n/2+1):n;
-            Q3=median(x(idxVec{:}));
+            Q3=median(x(idxVec{:}),dim);
         else%Include the median point in both the upper and the lower
             %quartiles.
             idxVec{dim}=1:ceil(n/2);
-            Q1=median(x(idxVec{:}));
+            Q1=median(x(idxVec{:}),dim);
             
             idxVec{dim}=(ceil(n/2)):n;
-            Q3=median(x(idxVec{:}));
+            Q3=median(x(idxVec{:}),dim);
         end
         
     case 3%The percentile definition, option 0.

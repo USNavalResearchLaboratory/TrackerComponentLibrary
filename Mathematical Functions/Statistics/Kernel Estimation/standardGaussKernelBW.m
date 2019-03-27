@@ -1,9 +1,9 @@
 function H=standardGaussKernelBW(xi,method,spherData)
-%%STANDARDGAUSSKERNELBW Estimate the (univariate of multivariate) kernel
+%%STANDARDGAUSSKERNELBW Estimate the (univariate or multivariate) kernel
 %             bandwidth when approximating a PDF using a set of samples
 %             with a Gaussian kernel. This function provides the bandwidth
 %             estimate based on the optimal solution if the underlying
-%             density being samples is normal. If the density is not
+%             density of the samples is normal. If the density is not
 %             normal, then this function is just an approximation. The
 %             kernel bandwidth estimate can be used with the points xi in
 %             the function kernelApprox to approximate the continuous
@@ -47,13 +47,18 @@ function H=standardGaussKernelBW(xi,method,spherData)
 %to apply them to a multivariate distribution by pre-multiplying the
 %multivariate distribution by the inverse of the sample standard deviation
 %of the points. If the samples were from a normal distribution (the
-%approximation used here), then the distributions for all of the dimensions
-%would have been made independent by the rotation and we can thus use the
-%scalar method on each dimension and then rotate the final result back.
+%approximation used here), then we can replace the scalar bandwidth
+%formula with the solution for numDim-dimensions given in Chapter 2.4.2 of
+%[2]. The pre-multiplication to decorrelate the dimensions is necessary for
+%the use of that formula. Ultimately, we then have then rotate the final
+%result back.
 %
 %REFERENCES:
 %[1] B. W. Silverman, Density Estimation for Statistics and Data Analysis.
 %    Chapman and Hall, 1986.
+%[2] A. D. Bowman and A. Azzalini, Applied Smoothing Techniques for Data
+%    Analysis: The Kernel Approach with S-Plus Illustrations. Oxford:
+%    Clarendon Press, 2004.
 %
 %December 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -89,16 +94,16 @@ switch(method)
     case 0%Use Equation 3.30 and 3.28 in [1].
         sigma2=interquartileRange(xi,2)/(GaussianD.invCDF(0.75)-GaussianD.invCDF(0.25));
         sigma=min([sigma1,sigma2],[],2);
-        h=(4/3)^(1/5)*sigma*n^(-1/5);
     case 1%Use Equation 3.28 in [1].
-        h=(4/3)^(1/5)*sigma1*n^(-1/5);
+        sigma=sigma1;
     case 2%Use the interquartile range (scaled appropriately) instead of
           %the standard deviation in [1]. This is Equation 3.29.
         sigma=interquartileRange(xi,2)/(GaussianD.invCDF(0.75)-GaussianD.invCDF(0.25));
-        h=(4/3)^(1/5)*sigma*n^(-1/5);
     otherwise
         error('Unknown method specified')
 end
+
+h=(4/(n*(numDims+2)))^(1/(numDims+4))*sigma;
 
 %Undo any rotation/scaling.
 if(numDims>1&&spherData)

@@ -446,6 +446,7 @@ w=wNew(1:numEls);
 
 end
 end
+end
 
 %LICENSE:
 %
