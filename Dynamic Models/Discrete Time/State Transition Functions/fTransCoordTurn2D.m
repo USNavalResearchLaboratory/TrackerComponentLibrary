@@ -10,49 +10,49 @@ function xPred=fTransCoordTurn2D(T,x,turnType,discPoint,tauTurn,tauLinAccel)
 %              non-accelerating, straight-line motion.
 %
 %INPUTS: T The time-duration of the propagation interval in seconds.
-%        x The 5xN or 6xN set of N target states for 2D motion. If there is
-%          no linear acceleration (acceleration along the direction of
+%        x The 5xN or 6xN set of N target states for 2D motion. If there
+%          is no linear acceleration (acceleration along the direction of
 %          motion), then x can either be x=[x;y;xdot;ydot;omega], where
 %          omega is the turn rate estimate in radians per second
 %          counterclockwise from the x-axis or x=[x;y;xdot;ydot;at] where
 %          at is the transversal acceleration, which is orthogonal to the
 %          velocity and is defined such that positive values of at map to
 %          positive values of omega. If there is a linear acceleration,
-%          then the target state is either x=[x;y;xdot;ydot;omega;al] where
-%          omega is the turn rate and al is the linear acceleration or the
-%          target state is x=[x;y;xdot;ydot;at;al] if the turn is expressed
-%          in terms of a transversal acceleration. The dimensionality of
-%          the state is used to determine whether a linear acceleration
-%          component is present. The linear acceleration component changes
-%          the speed. That means that it acts in the direction of the
-%          velocity vector.
+%          then the target state is either x=[x;y;xdot;ydot;omega;al]
+%          where omega is the turn rate and al is the linear acceleration
+%          or the target state is x=[x;y;xdot;ydot;at;al] if the turn is
+%          expressed in terms of a transversal acceleration. The
+%          dimensionality of the state is used to determine whether a
+%          linear acceleration component is present. The linear
+%          acceleration component changes the speed. That means that it
+%          acts in the direction of the velocity vector.
 % turnType A string specifying whether the turn is given in terms of a
-%          turn rate in radians per second or a transversal acceleration in
-%          m/s^2. Possible values are
+%          turn rate in radians per second or a transversal acceleration
+%          in m/s^2. Possible values are
 %          'TurnRate'   The turn is specified in terms of a turn rate
 %                       (The default if this parameter is omitted).
 %          'TransAccel' The turn is specified in terms of a transversal
 %                       acceleration.
 % discPoint This optional parameter specified what value of the turn rate
-%          is used for the discretized state prediction. The three possible
-%          values were suggested in Li's paper cited below. Possible values
-%          are:
+%          is used for the discretized state prediction. The three
+%          possible values were suggested in Li's paper cited
+%          below. Possible values are
 %          0 (The default if omitted) use omega=x(5), or the equivalent
 %            value when specifying the turn rate using a transverse
-%            acceleration, from the non-predicted target state for building
-%            the state transition matrix, \omega_k.
+%            acceleration, from the non-predicted target state for
+%            building the state transition matrix. \omega_k
 %          1 Use the average value of the predicted omega (or the average
-%            value of the transverse acceleration) over the interval T for
-%            building the state transition matrix. \bar{\omega}
-%          2 Use the approximate average value of the predicted omega over
-%            the interval T for building the state transition matrix,
-%            \bar{\omega} This is the suggestion of using half the prior
-%            and prediction, as was given in Li's paper. When given a
-%            transverse acceleration instead of a turn rate, half of the
-%            prior and predicted accelerations is used.
+%            value of the transverse acceleration) over the interval T
+%            for building the state transition matrix. \bar{\omega}
+%          2 Use the approximate average value of the predicted omega
+%            over the interval T for building the state transition
+%            matrix. \bar{\omega} This is the suggestion of using half
+%            the prior and prediction, as was given in Li's paper. When
+%            given a transverse acceleration instead of a turn rate, half
+%            of the prior and predicted accelerations is used.
 %          3 Use the forward-predicted omega (or transverse acceleration)
 %            for building the state transition matrix. \omega_{k+1}
-% tauTurn  The correlation time constant for the turn rate in seconds.
+%  tauTurn The correlation time constant for the turn rate in seconds.
 %          tau must be positive but does not have to be finite. If this
 %          parameter is omitted, then tauTurn is set to infinity.
 % tauLinAccel The correlation time constant for the linear acceleration (if
@@ -98,17 +98,18 @@ function xPred=fTransCoordTurn2D(T,x,turnType,discPoint,tauTurn,tauLinAccel)
 %for the turn rate. That is,
 %alDot=-(1/tauLinAccel)*al+noise
 %This is similar to how (total) acceleration decays in the Singer dynamic
-%model, which was described in [4]. The linear acceleration time T is just
-%added to the velocity in the direction of motion of the target in this
-%discretization. Care is taken to avoid NaNs when the veloicty is close to
-%zero.
+%model, which was described in [4].
+%
+%The linear acceleration time T is just added to the velocity in the
+%direction of motion of the target in this discretization. Care is taken to
+%avoid NaNs when the veloicty is close to zero.
 %
 %Care is taken to avoid NaNs when omega is close to zero due to division by
 %zero.
 %
 %This state prediction function goes with the process noise covariance
-%matrix given by QCoordTurn2.The corresponding continuous-time drift
-%functions are aCoordTurn2DOmega and aCoordTurn2DTrans with the diffusion
+%matrix given by QCoordTurn.The corresponding continuous-time drift
+%function are aCoordTurn2DOmega and aCoordTurn2DTrans with the diffusion
 %matrix DCoordTurn2D. Note that this model is a direct-discrete-time model
 %and is not just a discretization of the continuous-time model.
 %
@@ -120,8 +121,8 @@ function xPred=fTransCoordTurn2D(T,x,turnType,discPoint,tauTurn,tauLinAccel)
 %    for an advanced ATC system," in Multitarget-Multisensor Tracking:
 %    Applications and Advances, Y. Bar-Shalom, Ed. Norwood, MA: Artech
 %    House, 1992, vol. II, ch. 1.
-%[3] H. A. P. Blom, R. A. Hogendoorn, and B. A. van Doorn, "Design
-%    of a multisensor tracking system for advanced air traffic control," in
+%[3] H. A. P. Blom, R. A. Hogendoorn, and B. A. van Doorn, "Design of a
+%    multisensor tracking system for advanced air traffic control," in
 %    Multitarget-Multisensor Tracking: Applications and Advances, Y. Bar-
 %    Shalom, Ed. Norwood, MA: Artech House, 1992, vol. II, ch. 2.
 %[4] R. A. Singer,"Estimating optimal tracking filter performance for
