@@ -40,10 +40,10 @@ function retVal=permBound(A)
     if(isempty(A))
         retVal=1;
         return; 
-   elseif(numel(A)==1) 
-        val=A; 
+    elseif(numel(A)==1) 
+        retVal=A; 
         return; 
-  end 
+    end
    
     m=size(A,1);
     n=size(A,2);
