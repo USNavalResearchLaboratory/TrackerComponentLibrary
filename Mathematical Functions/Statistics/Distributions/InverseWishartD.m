@@ -87,7 +87,7 @@ function val=rand(Psi,nu)
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
     
-    val=WishartD.rand(inv(Psi),nu);
+    val=inv(WishartD.rand(inv(Psi),nu));
 end
 end
 end
