@@ -12,33 +12,29 @@ function [xpyp,dXdY,deltaUTCUT1,deltaTTUT1,LOD]=getEOP(JulUTC1,JulUTC2,refreshFr
 %        xpyp and dXdY are just set to zero.
 %
 %INPUTS: JulUTC1,JulUTC2 NX1 or 1XN vectors of two-part pseudo-Julian dates
-%                       given in UTC. The units of the date are days. The
-%                       full date is the sum of both terms. The date is
-%                       broken into two parts to provide more bits of
-%                       precision. It does not matter how the date is
-%                       split.
-%     refreshFromSource An optional parameter. If this parameter is given,
-%                       a database of Earth orientation parameters is
-%                       loaded from the selected source, replacing any
-%                       previously loaded database. As the external sources
-%                       are updated no more than once per day, this
-%                       parameter should NOT be provided often, so as to
-%                       minimize internet traffic. If this parameter is
-%                       anything but -1, a warning is given. Possible
-%                       values of this parameter are
-%                      -1) (The default) Load the data from the local file
+%                    given in UTC. The units of the date are days. The full
+%                    date is the sum of both terms. The date is broken into
+%                    two parts to provide more bits of precision. It does
+%                    not matter how the date is split.
+%  refreshFromSource An optional parameter. If this parameter is given, a
+%                    database of Earth orientation parameters is loaded
+%                    from the selected source, replacing any previously
+%                    loaded database. As the external sources are updated
+%                    no more than once per day, this parameter should NOT
+%                    be provided often, so as to minimize internet traffic.
+%                    If this parameter is anything but -1, a warning is
+%                    given. Possible values of this parameter are:
+%                    -1) (The default) Load the data from the local file
 %                       ./data/EOP.txt. No internet connection is required.
-%                       0) Get the finals2000A.daily file from the
-%                          US Naval Observatory. This has EOP parameters
-%                          for the last 90 days and prediction for the next
-%                          90 days.
-%                       1) Get the finals2000A.daily file from the IERS
-%                          data center.
-%                       2) Get the finals.data file from the US Naval
-%                          Observatory. This has EOP parameters since 1992
-%                          and predictions for the next year.
-%                       3) Get the finals.data file from the IERS data
-%                          center.
+%                    0) Get the finals2000A.daily file from the US Naval
+%                       Observatory. This has EOP parameters for the last
+%                       90 days and prediction for the next 90 days.
+%                    1) Get the finals2000A.daily file from the IERS data
+%                       center.
+%                    2) Get the finals.data file from the US Naval
+%                       Observatory. This has EOP parameters since 1992 and
+%                       predictions for the next year.
+%                    3) Get the finals.data file from the IERS data center.
 %      replaceEOPtxt An optional boolean argument. If this parameter is
 %                    true, then the file ./EOP.txt will be replaced with
 %                    the downloaded data file when the refreshFromSource
@@ -177,12 +173,12 @@ function [xpyp,dXdY,deltaUTCUT1,deltaTTUT1,LOD]=getEOP(JulUTC1,JulUTC2,refreshFr
 end
 
 function [xpInt,ypInt,UT1UTCInt,dXInt,dYInt,LODInt]=interpEOP(JulTable,xpTable,ypTable,dXTable,dYTable,UT1UTCTable,LODTable,JulDes)
-%%INTERPEOP  Given tables of Earth orientation parameters, interpolate the
-%            values at a particular date that may or may not be withing the
-%            tables. This function uses Matlab's interp1 function to
-%            perform the interpolation and calls subroutines translated
-%            from interp.f in the IERS 2010 conventions to adjust the
-%            values for tidal and librational effects.
+%%INTERPEOP Given tables of Earth orientation parameters, interpolate the
+%           values at a particular date that may or may not be withing the
+%           tables. This function uses Matlab's interp1 function to
+%           perform the interpolation and calls subroutines translated from
+%           interp.f in the IERS 2010 conventions to adjust the values for
+%           tidal and librational effects.
 %
 %March 2014 David F. Crouse, Naval Research Laboratory, Washington D.C
 
@@ -200,16 +196,16 @@ function [xpInt,ypInt,UT1UTCInt,dXInt,dYInt,LODInt]=interpEOP(JulTable,xpTable,y
         %Correct for the oceanic effect      
         [cor_x,cor_y,cor_ut1,cor_lod]=PMUT1_OCEANS(JulDes(curDate));
 
-        xpInt(curDate) = xpInt(curDate) + cor_x;
-        ypInt(curDate) = ypInt(curDate) + cor_y;
+        xpInt(curDate)=xpInt(curDate)+cor_x;
+        ypInt(curDate)=ypInt(curDate)+cor_y;
         UT1UTCInt(curDate) = UT1UTCInt(curDate) + cor_ut1;
         LODInt(curDate)= LODInt(curDate)+cor_lod;
 
         %Correct for the lunisolar effect 
         [cor_x,cor_y]=PM_GRAVI (JulDes(curDate));
 
-        xpInt(curDate)   = xpInt(curDate) + cor_x;
-        ypInt(curDate)   = ypInt(curDate) + cor_y;
+        xpInt(curDate)=xpInt(curDate) + cor_x;
+        ypInt(curDate)=ypInt(curDate) + cor_y;
     end
     
     %Set values for dates outside of the tabulated range to zero, except
@@ -407,10 +403,10 @@ function [cor_x,cor_y,cor_ut1,cor_lod]=PMUT1_OCEANS(rjd)
 
    end
   
-       cor_x   = cor_x * 1e-6;   % arcsecond (")
-       cor_y   = cor_y * 1e-6;  % arcsecond (")
-       cor_ut1 = cor_ut1 * 1e-6; % second (s)
-       cor_lod = cor_lod * 1e-6; % second (s)
+       cor_x   = cor_x * 1e-6;%arcsecond (")
+       cor_y   = cor_y * 1e-6;%arcsecond (")
+       cor_ut1 = cor_ut1 * 1e-6;%second (s)
+       cor_lod = cor_lod * 1e-6;%second (s)
 end
 
 
@@ -515,29 +511,29 @@ end
 
 
 function [dataRet,rawText]=processEOPData(source)
-%%PROCESSEOPDATA   Process a text file containing Earth orientation
-%                  parameter data. Either a path can be provided to the
-%                  text file, or the data can be downloaded from an online
-%                  source (assuming an available internet connection).
-%                  The sources provide parameter data for the IERS 2000
-%                  models of precession and nutation.
+%%PROCESSEOPDATA Process a text file containing Earth orientation parameter
+%                data. Either a path can be provided to the text file, or
+%                the data can be downloaded from an online source (assuming
+%                an available internet connection). The sources provide
+%                parameter data for the IERS 2000 models of precession and
+%                nutation.
 %
-%INPUTS: source  A number indicating the type and source of the data. This
-%                can either be a character string containing the path to a
-%                text file to load or it can be an integer indicating
-%                whence the data should be obtained. If a text file is
-%                provided, it must have the same formatting as one of the
-%                files that can be downloaded. Possible integer values
-%                indicating online sources are
-%                0) (The default) Get the finals2000A.daily file from the
-%                   US Naval Observatory. This has EOP parameters for the
-%                   last 90 days and prediction for the next 90 days.
-%                1) Get the finals2000A.daily file from the IERS data
-%                   center.
-%                2) Get the finals.data file from the US Naval Observatory.
-%                   This has EOP parameters since 1992 and predictions for
-%                   the next year.
-%                3) Get the finals.data file from the IERS data center.
+%INPUTS: source A number indicating the type and source of the data. This
+%               can either be a character string containing the path to a
+%               text file to load or it can be an integer indicating
+%               whence the data should be obtained. If a text file is
+%               provided, it must have the same formatting as one of the
+%               files that can be downloaded. Possible integer values
+%               indicating online sources are
+%               0) (The default) Get the finals2000A.daily file from the
+%                  US Naval Observatory. This has EOP parameters for the
+%                  last 90 days and prediction for the next 90 days.
+%               1) Get the finals2000A.daily file from the IERS data
+%                  center.
+%               2) Get the finals.data file from the US Naval Observatory.
+%                  This has EOP parameters since 1992 and predictions for
+%                  the next year.
+%               3) Get the finals.data file from the IERS data center.
 %
 %OUTPUTS: dataRet A matrix where each row is a set of EOP. It has the
 %                 format:
@@ -545,7 +541,8 @@ function [dataRet,rawText]=processEOPData(source)
 %x (arcseconds), y (arcseconds), UT1-UTC (seconds), LOD (milliseconds),
 %dX (arcseconds), dY (arcseconds), xErr, yErr, UT1-UTC Err, LOD Err, dX
 %Err, dYErr]
-%         rawText The raw ASCII text of the downloaded data file.
+%         rawText The raw ASCII text of the downloaded data file. In the
+%                 raw file, dX and dY are given in milliarcseconds.
 %
 %The values of dX and dY that are those where the free-core nutation has
 %not been removed. The Err parameters are the errors in the other
@@ -564,9 +561,11 @@ function [dataRet,rawText]=processEOPData(source)
 %http://hpiers.obspm.fr/eoppc/bul/bulb/explanatory.html
 %
 %When interpolating to a given date, tidal effects need to be added back to
-%the values as described in the IERS conventions:
-%G. Petit and B. Luzum, IERS Conventions (2010), International Earth
-%Rotation and Reference Systems Service Std. 36, 2010.
+%the values as described in the IERS conventions in [1].
+%
+%REFERENCES:
+%[1] G. Petit and B. Luzum, IERS Conventions (2010), International Earth
+%    Rotation and Reference Systems Service Std. 36, 2010.
 %
 %April 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
@@ -585,21 +584,18 @@ if(ischar(source))
     rawText = fread(fileID,'*char')';
     fclose(fileID);
 else
+    options=weboptions('ContentType','text');
     switch(source)
         case 0
-            [rawText,status]=urlread('http://maia.usno.navy.mil/ser7/finals.daily');
+            rawText=webread('http://maia.usno.navy.mil/ser7/finals.daily',options);
         case 1
-            [rawText,status]=urlread('https://datacenter.iers.org/eop/-/somos/5Rgv/latest/13');
+            rawText=webread('https://datacenter.iers.org/eop/-/somos/5Rgv/latest/13',options);
         case 2
-            [rawText,status]=urlread('http://maia.usno.navy.mil/ser7/finals.data');
+            rawText=webread('http://maia.usno.navy.mil/ser7/finals.data',options);
         case 3
-            [rawText,status]=urlread('https://datacenter.iers.org/eop/-/somos/5Rgv/latest/10');
+            rawText=webread('https://datacenter.iers.org/eop/-/somos/5Rgv/latest/10',options);
         otherwise
             error('Invalid data source given')
-    end
-
-    if(status==0)
-       error('The download of the EOP data file failed.') 
     end
 end
 
@@ -653,7 +649,7 @@ for curEntry=1:numEntry
     dataRet(curEntry,7)=sscanf(rawText(idx),'%f');%UT1-UTC
     
     idx=baseIdx+(69:78);
-    dataRet(curEntry,13)=sscanf(rawText(idx),'%f');%error in UT1-UTC
+    dataRet(curEntry,13)=sscanf(rawText(idx),'%f');%Error in UT1-UTC
     
     if(returnList(curEntry)>baseIdx+80)
         idx=baseIdx+(80:86);
@@ -668,21 +664,25 @@ for curEntry=1:numEntry
         if(returnList(curEntry)>baseIdx+98)
             idx=baseIdx+(98:106);
             %dX with free core nutation not removed, not always filled.
-            val=sscanf(rawText(idx),'%f');
+            %The 1000 converts milliarcseconds to arcseconds.
+            val=sscanf(rawText(idx),'%f')/1000;
             if(~isempty(val))
                 dataRet(curEntry,9)=val;
 
                 idx=baseIdx+(107:115);
                 %Error in dX with free core nutation not removed.
-                dataRet(curEntry,15)=sscanf(rawText(idx),'%f');
+                %The 1000 converts milliarcseconds to arcseconds.
+                dataRet(curEntry,15)=sscanf(rawText(idx),'%f')/1000;
 
                 idx=baseIdx+(117:125);
                 %dY with free core nutation not removed.
-                dataRet(curEntry,10)=sscanf(rawText(idx),'%f');
+                %The 1000 converts milliarcseconds to arcseconds.
+                dataRet(curEntry,10)=sscanf(rawText(idx),'%f')/1000;
 
                 idx=baseIdx+(126:134);
                 %Error in dY with free core nutation not removed.
-                dataRet(curEntry,16)=sscanf(rawText(idx),'%f');
+                %The 1000 converts milliarcseconds to arcseconds.
+                dataRet(curEntry,16)=sscanf(rawText(idx),'%f')/1000;
             end
         else%Mark the data as unavailable by setting the error to Inf.
             dataRet(curEntry,15)=Inf;
@@ -696,7 +696,6 @@ for curEntry=1:numEntry
     
     baseIdx=returnList(curEntry);
 end
-
 end
 
 %LICENSE:
