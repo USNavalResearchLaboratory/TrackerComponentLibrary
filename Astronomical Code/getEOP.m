@@ -23,7 +23,9 @@ function [xpyp,dXdY,deltaUTCUT1,deltaTTUT1,LOD]=getEOP(JulUTC1,JulUTC2,refreshFr
 %                    no more than once per day, this parameter should NOT
 %                    be provided often, so as to minimize internet traffic.
 %                    If this parameter is anything but -1, a warning is
-%                    given. Possible values of this parameter are:
+%                    given. If available, the more accurate Bulletin B
+%                    values are used. Otherwise, Bulletin A values are
+%                    used. Possible values of this parameter are:
 %                    -1) (The default) Load the data from the local file
 %                       ./data/EOP.txt. No internet connection is required.
 %                    0) Get the finals2000A.daily file from the US Naval
@@ -82,7 +84,10 @@ function [xpyp,dXdY,deltaUTCUT1,deltaTTUT1,LOD]=getEOP(JulUTC1,JulUTC2,refreshFr
 %5.1. The original Fortran routine is available at
 %ftp://hpiers.obspm.fr/eop-pc/models/interp.f
 %As documented in the "License for IERS Code" file in the
-%3rd_Party_Libraries folder, these routines are in the public domain.
+%3rd_Party_Libraries folder, these routines are in the public domain. As
+%described in the PMUT1_OCEANS function below, some coefficients from the
+%interp.f file have been modified to agree with that is in the IERS 2010
+%conventions.
 %
 %The citation for the IERS 2010 Conventions is [1].
 %
@@ -184,10 +189,10 @@ function [xpInt,ypInt,UT1UTCInt,dXInt,dYInt,LODInt]=interpEOP(JulTable,xpTable,y
 
 	numDates=size(JulDes,1);
 
-    xpInt = interp1(JulTable,xpTable,JulDes,'pchip',NaN);
-    ypInt = interp1(JulTable,ypTable,JulDes,'pchip',NaN);
-    UT1UTCInt = interp1(JulTable,UT1UTCTable,JulDes,'pchip',NaN);
-    LODInt = interp1(JulTable,LODTable,JulDes,'pchip');
+    xpInt=interp1(JulTable,xpTable,JulDes,'pchip',NaN);
+    ypInt=interp1(JulTable,ypTable,JulDes,'pchip',NaN);
+    UT1UTCInt=interp1(JulTable,UT1UTCTable,JulDes,'pchip',NaN);
+    LODInt=interp1(JulTable,LODTable,JulDes,'pchip');
     
     dXInt=interp1(JulTable,dXTable,JulDes,'pchip',NaN);
     dYInt=interp1(JulTable,dYTable,JulDes,'pchip',NaN);
@@ -198,11 +203,11 @@ function [xpInt,ypInt,UT1UTCInt,dXInt,dYInt,LODInt]=interpEOP(JulTable,xpTable,y
 
         xpInt(curDate)=xpInt(curDate)+cor_x;
         ypInt(curDate)=ypInt(curDate)+cor_y;
-        UT1UTCInt(curDate) = UT1UTCInt(curDate) + cor_ut1;
-        LODInt(curDate)= LODInt(curDate)+cor_lod;
+        UT1UTCInt(curDate)=UT1UTCInt(curDate) + cor_ut1;
+        LODInt(curDate)=LODInt(curDate)+cor_lod;
 
         %Correct for the lunisolar effect 
-        [cor_x,cor_y]=PM_GRAVI (JulDes(curDate));
+        [cor_x,cor_y]=PM_GRAVI(JulDes(curDate));
 
         xpInt(curDate)=xpInt(curDate) + cor_x;
         ypInt(curDate)=ypInt(curDate) + cor_y;
@@ -223,6 +228,26 @@ end
 function [cor_x,cor_y,cor_ut1,cor_lod]=PMUT1_OCEANS(rjd)
 %This function is taken from interp.f, which is mentioned in the 
 %IERS 2010 conventions, and has been converted to Matlab.
+%
+%The origin of the lunisolar arguments are from [1] and is what was in
+%interp.f. However, the iers conventions modified some of the terms.
+%For example, the constant -6962890.2665 in the fundamental argument Omega
+%in [1] has been changed to -6962890.5431. Additionally, a coefficient of 
+%-0.001037 in interp.f disagrees with the value in [1] and in [2]. Thus,
+%the code below has those coefficients modified compared to the original
+%ones in interp.f. Comments for those parameters have been added and a
+%comment in French has been replaced by one in English.
+%
+%A link to the original interp.f function is on the site:
+%http://hpiers.obspm.fr/eop-pc/models/models_ru.html
+%
+%REFERENCES:
+%[1] J. L. Simon, P. Bretagnon, J. Chapront, M. Chapront-Touzé, G. Francou,
+%    and J. Laskar, "Numerical expressions for precession formulae and mean
+%    elements for the moon and the planets," Astronomy and Astrophysics,
+%    vol. 282, no. 2, pp. 663?683, 1994.
+%[2] G. Petit and B. Luzum, IERS Conventions (2010), International Earth
+%    Rotation and Reference Systems Service Std. 36, 2010.
 %
 %March 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %
@@ -249,7 +274,6 @@ function [cor_x,cor_y,cor_ut1,cor_lod]=PMUT1_OCEANS(rjd)
 %     coded by Ch. Bizouard (2002), initially coded by McCarthy and 
 %     D.Gambis(1997) for the 8 prominent tidal waves.  
       
-      nlines=71;
       ARG=zeros(6,1); %Array of the tidal arguments   
       DARG=zeros(6,1); %Array of their time derivative 
             
@@ -330,6 +354,8 @@ function [cor_x,cor_y,cor_ut1,cor_lod]=PMUT1_OCEANS(rjd)
      2, 1, 0, 0, 0, 0,  -1.77,   1.79,   1.71,   1.04, -0.146,  0.037;
      2, 1, 0, 0, 0,-1,  -0.77,   0.78,   0.75,   0.45, -0.064,  0.017;
      2, 0, 0, 2, 0, 2,  -0.33,   0.62,   0.65,   0.19, -0.049,  0.018];
+ 
+     nlines=size(data,1);
 
      narg=data(:,1:6);
      XSIN=data(:,7);
@@ -342,42 +368,52 @@ function [cor_x,cor_y,cor_ut1,cor_lod]=PMUT1_OCEANS(rjd)
       T = (rjd - 51544.5)/36525; %julian century
 
 % Arguments in the following order : chi=GMST+pi,l,lp,F,D,Omega
-% et leur derivee temporelle 
+% and their time derivatives.
 
-      ARG(1) = (67310.54841 +(876600*3600 + 8640184.812866)*T +0.093104*T^2 -6.2-6*T^3)*15.0 + 648000.0;
+      ARG(1) = (67310.54841 +(876600*3600 + 8640184.812866)*T +0.093104*T^2 -6.2e-6*T^3)*15.0 + 648000.0;
       ARG(1)= mod(ARG(1),1296000)*secrad; 
    
       DARG(1) = (876600*3600 + 8640184.812866 + 2 * 0.093104 * T - 3 * 6.2-6*T^2)*15;
       DARG(1) = DARG(1)* secrad / 36525.0;   % rad/day
 
+      %(l) The mean anomaly of the Moon.
       ARG(2) = -0.00024470*T^4 + 0.051635*T^3 + 31.8792*T^2+ 1717915923.2178*T + 485868.249036;
       ARG(2) = mod(ARG(2),1296000)*secrad;
       
       DARG(2) = -4*0.00024470*T^3 + 3*0.051635*T^2 + 2*31.8792*T + 1717915923.2178;
       DARG(2) = DARG(2)* secrad / 36525.0;   % rad/day
 
-      ARG(3) = -0.00001149*T^4 - 0.000136*T^3 -  0.5532*T^2+ 129596581.0481*T + 1287104.79305;
+      %(l') The mean anomaly of the Sun. Note that the sign of the 0.000136
+      %coefficient in interp.f has been flipped so that it agrees with [1]
+      %and [2].
+      ARG(3) = -0.00001149*T^4 + 0.000136*T^3 -  0.5532*T^2+ 129596581.0481*T + 1287104.79305;
       ARG(3) = mod(ARG(3),1296000)*secrad;
 
-      DARG(3) = -4*0.00001149*T^3 - 3*0.000136*T^2 -  2*0.5532*T + 129596581.0481;
+      DARG(3) = -4*0.00001149*T^3 + 3*0.000136*T^2 -  2*0.5532*T + 129596581.0481;
       DARG(3) = DARG(3)* secrad / 36525.0;   % rad/day
-          
+      
+      %(F) This is the mean longitude of the Moon minus Omega, the mean
+      %longitude of the ascending node of the Moon.
       ARG(4) = 0.00000417*T^4 - 0.001037*T^3 - 12.7512*T^2+ 1739527262.8478*T + 335779.526232;
       ARG(4) = mod(ARG(4),1296000)*secrad;
 
       DARG(4) = 4*0.00000417*T^3 - 3*0.001037*T^2 - 2*12.7512*T + 1739527262.8478;
       DARG(4) = DARG(4)* secrad / 36525.0;   % rad/day
     
+      %(D) Mean elongation of the Moon from the Sun.
       ARG(5) = -0.00003169*T^4 + 0.006593*T^3 - 6.3706*T^2+ 1602961601.2090*T + 1072260.70369;
       ARG(5) = mod(ARG(5),1296000)*secrad;
 
       DARG(5) = -4*0.00003169*T^3 + 3*0.006593*T^2- 2*6.3706*T + 1602961601.2090;
       DARG(5) = DARG(5)* secrad / 36525.0;   % rad/day
 
-      ARG(6) = -0.00005939*T^4 + 0.007702*T^3+ 7.4722*T^2- 6962890.2665*T + 450160.398036;
+      %(Omega) Mean longitude of the ascending node of the Moon. Note that
+      %the 6962890.2665 coefficient in [1] has been modified from the
+      %interp.f file to agree with the IERS 2010 conventions in [2].
+      ARG(6) = -0.00005939*T^4 + 0.007702*T^3+ 7.4722*T^2- 6962890.5431*T + 450160.398036;
       ARG(6) = mod(ARG(6),1296000)*secrad;
 
-      DARG(6) = -4*0.00005939*T^3 + 3*0.007702*T^2+ 2*7.4722*T - 6962890.2665;
+      DARG(6) = -4*0.00005939*T^3 + 3*0.007702*T^2+ 2*7.4722*T - 6962890.5431;
       DARG(6) = DARG(6)* secrad / 36525.0;   % rad/day
 
 % CORRECTIONS
@@ -403,16 +439,30 @@ function [cor_x,cor_y,cor_ut1,cor_lod]=PMUT1_OCEANS(rjd)
 
    end
   
-       cor_x   = cor_x * 1e-6;%arcsecond (")
-       cor_y   = cor_y * 1e-6;%arcsecond (")
-       cor_ut1 = cor_ut1 * 1e-6;%second (s)
-       cor_lod = cor_lod * 1e-6;%second (s)
+   cor_x   = cor_x * 1e-6;%arcsecond (")
+   cor_y   = cor_y * 1e-6;%arcsecond (")
+   cor_ut1 = cor_ut1 * 1e-6;%second (s)
+   cor_lod = cor_lod * 1e-6;%second (s)
 end
 
 
 function [cor_x,cor_y]=PM_GRAVI (rjd)
 %This function is taken from interp.f, which is mentioned in the 
-%IERS 2010 conventions, and has been converted to Matlab.
+%IERS 2010 conventions, and has been converted to Matlab. The same changes
+%to the constants in PMUT1_OCEANS have been made to the constants used in
+%this function.
+%
+%As discussed in the comments to PMUT1_OCEANS, constants relating to
+%celestial body positions have been modified from interp.f, which is based
+%on [1] to match the values in [2].
+%
+%REFERENCES:
+%[1] J. L. Simon, P. Bretagnon, J. Chapront, M. Chapront-Touzé, G. Francou,
+%    and J. Laskar, "Numerical expressions for precession formulae and mean
+%    elements for the moon and the planets," Astronomy and Astrophysics,
+%    vol. 282, no. 2, pp. 663?683, 1994.
+%[2] G. Petit and B. Luzum, IERS Conventions (2010), International Earth
+%    Rotation and Reference Systems Service Std. 36, 2010.
 %
 %March 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %
@@ -434,14 +484,12 @@ function [cor_x,cor_y]=PM_GRAVI (rjd)
 %
 %     coded by Ch. Bizouard (2002)
       
-      nlines=10;
-      halfpi = 1.5707963267948966;
+      halfpi = pi/2;
       secrad=2*halfpi/(180*3600);
 
 %  Diurnal lunisolar tidal terms present in x (microas),y(microas)      
 %  NARG(j,6) : Multipliers of GMST+pi and Delaunay arguments. 
 	
-
      data=[1,-1, 0,-2, 0,-1,    -.44,   .25,   -.25,  -.44;
       1,-1, 0,-2, 0,-2,   -2.31,  1.32,  -1.32, -2.31;
       1, 1, 0,-2,-2,-2,    -.44,   .25,   -.25,  -.44;
@@ -452,7 +500,8 @@ function [cor_x,cor_y]=PM_GRAVI (rjd)
       1, 0, 0, 0, 0, 0,   14.27, -8.19,   8.19, 14.27;
       1, 0, 0, 0, 0,-1,    1.93, -1.11,   1.11,  1.93;
       1, 1, 0, 0, 0, 0,     .76,  -.43,    .43,   .76];
- 
+     
+     nlines=size(data,1);
      narg=data(:,1:6);
      XSIN=data(:,7);
      XCOS=data(:,8);
@@ -462,29 +511,34 @@ function [cor_x,cor_y]=PM_GRAVI (rjd)
       T = (rjd - 51544.5)/36525.0;%  julian century
 
 % Arguments in the following order : chi=GMST+pi,l,lp,F,D,Omega
-% et leur derivee temporelle 
+% and their time derivatives.
 
-      ARG(1) = (67310.54841 +(876600*3600 + 8640184.812866)*T +0.093104*T^2 -6.2-6*T^3)*15.0 + 648000.0;
+      ARG(1) = (67310.54841 +(876600*3600 + 8640184.812866)*T +0.093104*T^2 -6.2e-6*T^3)*15.0 + 648000.0;
       ARG(1)=mod(ARG(1),1296000)*secrad;
    
-
+      %(l) The mean anomaly of the Moon.
       ARG(2) = -0.00024470*T^4 + 0.051635*T^3 + 31.8792*T^2+ 1717915923.2178*T + 485868.249036;
       ARG(2) = mod(ARG(2),1296000)*secrad;
       
-
-      ARG(3) = -0.00001149*T^4 - 0.000136*T^3 -  0.5532*T^2+ 129596581.0481*T + 1287104.79305;
+      %(l') The mean anomaly of the Sun. Note that the sign of the 0.000136
+      %coefficient in interp.f has been flipped so that it agrees with [1]
+      %and [2].
+      ARG(3) = -0.00001149*T^4 + 0.000136*T^3 -  0.5532*T^2+ 129596581.0481*T + 1287104.79305;
       ARG(3) = mod(ARG(3),1296000)*secrad;
 
-          
+      %(F) This is the mean longitude of the Moon minus Omega, the mean
+      %longitude of the ascending node of the Moon.
       ARG(4) = 0.00000417*T^4 - 0.001037*T^3 - 12.7512*T^2+ 1739527262.8478*T + 335779.526232;
       ARG(4) = mod(ARG(4),1296000)*secrad;
 
-    
+      %(D) Mean elongation of the Moon from the Sun.
       ARG(5) = -0.00003169*T^4 + 0.006593*T^3 - 6.3706*T^2 + 1602961601.2090*T + 1072260.70369;
       ARG(5) = mod(ARG(5),1296000)*secrad;
 
-  
-      ARG(6) = -0.00005939*T^4 + 0.007702*T^3+ 7.4722*T^2- 6962890.2665*T + 450160.398036;
+      %(Omega) Mean longitude of the ascending node of the Moon. Note that
+      %the 6962890.2665 coefficient in [1] has been modified from the
+      %interp.f file to agree with the IERS 2010 conventions in [2].
+      ARG(6) = -0.00005939*T^4 + 0.007702*T^3+ 7.4722*T^2- 6962890.5431*T + 450160.398036;
       ARG(6) = mod(ARG(6),1296000)*secrad;
 
 
@@ -539,8 +593,7 @@ function [dataRet,rawText]=processEOPData(source)
 %                 format:
 %[Year(UTC), month(UTC), day(UTC), Modified Julian Day (UTC),
 %x (arcseconds), y (arcseconds), UT1-UTC (seconds), LOD (milliseconds),
-%dX (arcseconds), dY (arcseconds), xErr, yErr, UT1-UTC Err, LOD Err, dX
-%Err, dYErr]
+%dX (arcseconds), dY (arcseconds)]
 %         rawText The raw ASCII text of the downloaded data file. In the
 %                 raw file, dX and dY are given in milliarcseconds.
 %
@@ -548,6 +601,11 @@ function [dataRet,rawText]=processEOPData(source)
 %not been removed. The Err parameters are the errors in the other
 %parameters having the same units as the parameters. It is not documented
 %whether the errors are one, two or more standard deviations.
+%
+%Bulletin B values, which are more accurate, are used if available.
+%Otherwise, Bulletin A values are used. The difference between Bulletin A
+%and B values is given at
+%http://hpiers.obspm.fr/iers/bul/bulb/explanatory.html
 %
 %Some values are not always available, especially as predictions. When a
 %value is not available, it is set to zero and the error value associated
@@ -621,6 +679,50 @@ for curEntry=1:numEntry
     
     idx=baseIdx+(8:15);%The fractional modified Julian date
     dataRet(curEntry,4)=sscanf(rawText(idx),'%f');
+    
+    %If the bulletin B data is provided, then use that instead of the
+    %Bulletin A data. However, in files where Bulletin B is provided, when
+    %it stops being provided, it is replaced with spaces, so we have to
+    %test for the length of the line and then also test to make sure that
+    %there are not just spaces at the end.
+    if(returnList(curEntry)>baseIdx+135)
+        idx=baseIdx+(135:144);%x-coordinate of polar motion in arcseconds
+        val=sscanf(rawText(idx),'%f');
+    else
+       val=[]; 
+    end
+    if(~isempty(val))
+        dataRet(curEntry,5)=val;
+
+        idx=baseIdx+(145:154);%y-coordinate of polar motion in arcseconds
+        dataRet(curEntry,6)=sscanf(rawText(idx),'%f');
+        
+        idx=baseIdx+(155:165);
+        dataRet(curEntry,7)=sscanf(rawText(idx),'%f');%UT1-UTC
+        
+        idx=baseIdx+(80:86);
+        val=sscanf(rawText(idx),'%f');%LOD, not always filled.
+        if(~isempty(val))
+            dataRet(curEntry,8)=val;
+        else
+            %Mark as unavailable by setting it to Inf.
+            dataRet(curEntry,8)=Inf;
+        end
+
+        idx=baseIdx+(166:175);
+        %dX with free core nutation not removed, not always filled.
+        %The 1000 converts milliarcseconds to arcseconds.
+        dataRet(curEntry,9)=sscanf(rawText(idx),'%f')/1000;
+        
+        idx=baseIdx+(176:185);
+        %dY with free core nutation not removed.
+        %The 1000 converts milliarcseconds to arcseconds.
+        dataRet(curEntry,10)=sscanf(rawText(idx),'%f')/1000;
+
+        %Go to the next entry.
+        baseIdx=returnList(curEntry);
+        continue;
+    end
 
     idx=baseIdx+(19:27);%x-coordinate of polar motion in arcseconds
     
@@ -634,31 +736,17 @@ for curEntry=1:numEntry
         break;
     end
 
-    idx=baseIdx+(28:36);
-    %Error in the x-coordinate of polar motion
-    dataRet(curEntry,11)=sscanf(rawText(idx),'%f');
-    
     idx=baseIdx+(38:46);%y-coordinate of polar motion in arcseconds
     dataRet(curEntry,6)=sscanf(rawText(idx),'%f');
-    
-    idx=baseIdx+(47:55);
-    %Error in the y-coordinate of polar motion.
-    dataRet(curEntry,12)=sscanf(rawText(idx),'%f');
-    
+
     idx=baseIdx+(59:68);
     dataRet(curEntry,7)=sscanf(rawText(idx),'%f');%UT1-UTC
-    
-    idx=baseIdx+(69:78);
-    dataRet(curEntry,13)=sscanf(rawText(idx),'%f');%Error in UT1-UTC
-    
+
     if(returnList(curEntry)>baseIdx+80)
         idx=baseIdx+(80:86);
         val=sscanf(rawText(idx),'%f');%LOD, not always filled.
         if(~isempty(val))
             dataRet(curEntry,8)=val;
-            idx=baseIdx+(87:93);
-            %Error in LOD, not always filled.
-            dataRet(curEntry,14)=sscanf(rawText(idx),'%f');
         end
         
         if(returnList(curEntry)>baseIdx+98)
@@ -669,20 +757,10 @@ for curEntry=1:numEntry
             if(~isempty(val))
                 dataRet(curEntry,9)=val;
 
-                idx=baseIdx+(107:115);
-                %Error in dX with free core nutation not removed.
-                %The 1000 converts milliarcseconds to arcseconds.
-                dataRet(curEntry,15)=sscanf(rawText(idx),'%f')/1000;
-
                 idx=baseIdx+(117:125);
                 %dY with free core nutation not removed.
                 %The 1000 converts milliarcseconds to arcseconds.
                 dataRet(curEntry,10)=sscanf(rawText(idx),'%f')/1000;
-
-                idx=baseIdx+(126:134);
-                %Error in dY with free core nutation not removed.
-                %The 1000 converts milliarcseconds to arcseconds.
-                dataRet(curEntry,16)=sscanf(rawText(idx),'%f')/1000;
             end
         else%Mark the data as unavailable by setting the error to Inf.
             dataRet(curEntry,15)=Inf;
