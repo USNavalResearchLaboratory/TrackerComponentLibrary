@@ -54,7 +54,7 @@ for curHyp=1:numHyp
     c=-c;
         
     %Use the shortest path algorithm to find the optimal 2D assignment.
-    orderList=ShortestPathAssignment(c);
+    orderList=assign2D(c);
     
     diff=xEst-x(:,orderList,curHyp);
     val=val+w(curHyp)*sum(sum(diff.*diff));
