@@ -66,6 +66,10 @@ function [col4row,row4col,gain]=linBottleneckAssign(C,solSel)
 %October 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<2||isempty(solSel))
+    solSel=0;
+end
+
 n=size(C,1);
 
 c0=min(C(:));
@@ -80,12 +84,18 @@ end
 
 sel=C<c1&C>c0;
 CSel=C(sel);
-while(~isempty(CSel))
-    cStar=medianHi(CSel(:));
-    [c0,c1]=feasCheck(C,cStar,c0,c1);
+if(isempty(CSel))
+    %This instance can occur, for example, if the matrix contains only two
+    %values, such as if C is the identity matrix.
+    cStar=c1;
+else
+    while(~isempty(CSel))
+        cStar=medianHi(CSel(:));
+        [c0,c1]=feasCheck(C,cStar,c0,c1);
 
-    sel=C<c1&C>c0;
-    CSel=C(sel);
+        sel=C<c1&C>c0;
+        CSel=C(sel);
+    end
 end
 
 if(cStar~=c0)
