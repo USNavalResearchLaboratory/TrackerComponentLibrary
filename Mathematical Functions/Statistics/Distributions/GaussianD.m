@@ -473,11 +473,11 @@ function val=CDF(z,mu,var)
        var=1; 
     end
 
-    x=(z-mu)/var;
+    x=(z-mu)/sqrt(var);
     val=(1+erf(x/sqrt(2)))/2;
 end
 
-function val=invCDF(prob,mu,var)
+function val=invCDF(prob,mu,varVal)
 %%CDF Evaluate the inverse CDF of a scalar Gaussian (normal) distribution
 %     at a given point given the mean and the variance, or for a
 %     normal(0,1) distribution if the mean and variance are omitted. When
@@ -488,7 +488,7 @@ function val=invCDF(prob,mu,var)
 %             argument of the CDF is desired.
 %          mu The mean of the distribution. If omitted or an empty matrix
 %             is passed, a mean of 0 is used.
-%         var The variance of the distribution. If omitted or an empty
+%      varVal The variance of the distribution. If omitted or an empty
 %             matrix is passed, a variance of 1 is used.
 %
 %OUTPUTS: val The argument(s) of the CDF that would give the probability or
@@ -503,11 +503,11 @@ function val=invCDF(prob,mu,var)
        mu=0; 
     end
     
-    if(nargin<3||isempty(var))
-       var=1; 
+    if(nargin<3||isempty(varVal))
+       varVal=1; 
     end
 
-    val=var*sqrt(2)*erfinv(2*prob-1)+mu;
+    val=sqrt(2*varVal)*erfinv(2*prob-1)+mu;
 end
 
 function [mu,SigmaInv,multiConst]=normProdDist(mu1,SigmaInv1,mu2,SigmaInv2)
