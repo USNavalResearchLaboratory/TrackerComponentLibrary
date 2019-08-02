@@ -1,12 +1,12 @@
-function combo=unrankCombination(rank,n,m,firstElMostSig)
+function combo=unrankCombination(theRank,n,m,firstElMostSig,startVal)
 %%UNRANKCOMBIANTION Return the combination of the given rank in the
-%                   lexicographic ordering of combinations consisting of
+%                   colexicographic ordering of combinations consisting of
 %                   m elements chosen from a total set of n elements,
 %                   where the first element of combo is the least
 %                   significant, unless otherwise specified.
 %
-%INPUTS: rank The order of the desired combination in lexicographic order.
-%             Note that 0<=rank<binomial(n,k).
+%INPUTS: theRank The order of the desired combination in colexicographic
+%             order. Note that 0<=rank<binomial(n,m).
 %           n The number of items from which m items are chosen for the
 %             ranked combinations.
 %           m The number of items chosen.
@@ -14,16 +14,20 @@ function combo=unrankCombination(rank,n,m,firstElMostSig)
 %             is the most or least significant. The default if omitted or
 %             an empty matrix is passed is false (the first element is the
 %             least significant).
+%    startVal This is zero or 1, indicating which value the value at which
+%             the elements in combo can start. The default if omitted or an
+%             empty matrix is passed is 0.
 %
 %OUTPUTS: combo An mX1 vector containing the combination with values in
-%               INCREASING order. The lowest item is indexed zero. If a
-%               rank equal to or greater than the total number of unique
-%               combinations is given, then an empty matrix is returned.
+%               INCREASING order if firstElMostSig=false. The lowest item
+%               is indexed startVal. If a rank equal to or greater than the
+%               total number of unique combinations is given, then an empty
+%               matrix is returned.
 %
-%The rank represents the  combinatorial number system of degree m,
+%The rank represents the combinatorial number system of degree m,
 %where m is the length of the vector comb. The system is described in
 %Chapter 7.2.1.3 of [1]. Under that system, it can be observed that the
-%first time the highest-value element of a combination vector acquaires a
+%first time the highest-value element of a combination vector acquires a
 %new value, all of the other terms in the binomial sum needed to find the
 %rank are zero. Thus, one can pick off values in a ranked combinations
 %similarly to how one might use logarithms repeatedly to extract the digits
@@ -37,13 +41,17 @@ function combo=unrankCombination(rank,n,m,firstElMostSig)
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<5||isempty(startVal))
+    startVal=0;
+end
+
 if(nargin<4||isempty(firstElMostSig))
     firstElMostSig=false;
 end
 
 combo=zeros(m,1);
 
-if(rank>=binomial(n,m))
+if(theRank>=binomial(n,m))
     combo=[];
     return
 end
@@ -52,15 +60,14 @@ end
 %be in the combination is one less than the total number of things from
 %which one can choose.
 cap=n-1;
-curFloor=rank;
+curFloor=theRank;
 for i=0:(m-1)
     %If all of the remaining values count down to zero.
     if(curFloor==0) 
         for k=i:(m-1)
             combo(k+1)=m-k-1;
         end
-        combo=fliplr(combo')';
-        return;
+        break;
     end
     
     j=0;
@@ -75,6 +82,7 @@ for i=0:(m-1)
     curFloor=curFloor-curBinom;
 end
 
+combo=combo+startVal;
 if(firstElMostSig==false)
     combo=flipud(combo(:));
 end
