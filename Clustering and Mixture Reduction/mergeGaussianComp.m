@@ -3,22 +3,21 @@ function [w,mu,P]=mergeGaussianComp(w,mu,P,clust)
 %                   components with their weighted mean and covariance
 %                   matrix.
 %
-%INPUTS: w      A NX1 vector of weights of the components of the Gaussian
-%               mixture.
-%        mu     An xDimXN matrix of the means of the vector components of
-%               the Gaussian mixture.
-%        P      An xDim XxDim XN hypermatrix of the covariance matrices for
-%               the components of the Gaussian mixture.
-%        clust  A vector of the indices of the components in the mixture
-%               that are to be merged. If this parameter is omitted, then
-%               it is assumed that all of the components should be merged.
+%INPUTS: w A NX1 vector of weights of the components of the Gaussian
+%          mixture.
+%       mu An xDimXN matrix of the means of the vector components of the
+%          Gaussian mixture.
+%        P An xDim XxDim XN hypermatrix of the covariance matrices for the
+%          components of the Gaussian mixture.
+%    clust A vector of the indices of the components in the mixture that
+%          are to be merged. If this parameter is omitted, then it is
+%          assumed that all of the components should be merged.
 %
-%OUTPUTS: w     The weights of the mixture after merging the selected
-%               components.
-%         mu    The means of the mixture after merging the selected
-%               components.
-%         P     The covariance matrices of the mixture after merging the
-%               selected components.
+%OUTPUTS: w The weights of the mixture after merging the selected
+%           components.
+%        mu The means of the mixture after merging the selected components.
+%         P The covariance matrices of the mixture after merging the
+%           selected components.
 %
 %An expression for the moments of a mixture is given in Chapter 1 of [1].
 %The simplified form of the covariance sum in the book is not used, since
@@ -74,7 +73,7 @@ function [w,mu,P]=mergeGaussianComp(w,mu,P,clust)
     P=P(:,:,sel);
     
     %Add the merged result to the end of the data set.
-    w(end+1,1)=wMerged;
+    w(end+1)=wMerged;
     mu(:,end+1)=muMerged;
     P(:,:,end+1)=PMerged;
 end
