@@ -167,7 +167,7 @@ if(abs(abs(azimuth)-pi/2)>2e-8)
     dist=a*abs(sec(azimuth))*abs(ellipIntInc2Kind(nu2,e^2)-ellipIntInc2Kind(nu1,e^2));
 else
     %Equation 14b in the paper.
-    dist=a*abs(sin(nu1))*abs(lonEnd-lonStart);
+    dist=a*abs(sin(nu1))*abs(wrapRange(lonEnd-lonStart,-pi,pi));
 end
 
 %If a non-zero height is given, then iterate over the direct rhumb
