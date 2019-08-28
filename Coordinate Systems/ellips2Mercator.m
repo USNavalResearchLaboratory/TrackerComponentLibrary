@@ -23,7 +23,7 @@ function [xy,scalFact]=ellips2Mercator(latLon,a,f)
 %   scalFact The scale factor (both parallel and meridian) at the given
 %            points.
 %
-%The Mercatir projection is discussed in detail in Chapter 7 of [1].
+%The Mercator projection is discussed in detail in Chapter 7 of [1].
 %Equations for the conversion along with a commonly used but very
 %inaccurate spherical Mercator conversion (the "Web" Mercator map) are
 %given in [2]. The spherical Mercator conversion can be obtained by setting
@@ -54,6 +54,7 @@ e2=2*f-f^2;
 e=sqrt(e2);
 
 sinPhi=sin(latLon(1,:));
+cosPhi=cos(latLon(1,:));
 lambda=latLon(2,:);
 
 x=a*lambda;
