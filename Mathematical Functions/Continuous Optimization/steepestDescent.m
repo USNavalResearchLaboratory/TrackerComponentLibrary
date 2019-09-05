@@ -125,7 +125,7 @@ function [xMin,fMin,exitCode]=steepestDescent(f,x0,epsilon,deltaTestDist,delta,l
                 return;
             end
         else%Take a step without a line search.
-            xCur=x-d;
+            xCur=x+d;
             [fValCur,gradFCur]=f(xCur);
         end
 
