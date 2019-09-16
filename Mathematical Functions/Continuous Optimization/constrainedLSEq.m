@@ -29,7 +29,7 @@ function [x,z]=constrainedLSEq(A,b,C,d)
 %November 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-m=size(A,1);
+m=size(A,2);
 
 p=size(C,1);
 H=A'*A;
