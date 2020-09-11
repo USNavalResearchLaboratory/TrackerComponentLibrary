@@ -8,11 +8,11 @@ function [valuesSelected,costVal]=knapsack01DP(v,w,W)
 %        the v's are all 1's, the w's are the sizes of things and W is the
 %        capacity of the knapsack.
 %
-%INPUTS: v  An nX1 or 1Xn vector of positive real values to maximize.
-%        w  An nX1 or 1Xn vector of positive integer capacities required
-%           for each value.
-%        W  The positive integer maximum allowable capacity that can be
-%           filled.
+%INPUTS: v An nX1 or 1Xn vector of positive real values to maximize.
+%        w An nX1 or 1Xn vector of positive integer capacities required for
+%          each value.
+%        W The positive integer maximum allowable capacity that can be
+%          filled.
 %
 %OUTPUTS: valuesSelected The indices of the items in v (and w) that are
 %                  selected. If the problem is infeasible, then an empty

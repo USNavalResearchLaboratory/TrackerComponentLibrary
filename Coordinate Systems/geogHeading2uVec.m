@@ -7,11 +7,12 @@ function u=geogHeading2uVec(point,geoEastOfNorth,angUpFromLevel,a,f)
 %                 direction of a target when one wishes to simulate its
 %                 motion in a particular direction over a curved Earth.
 %
-%INPUTS: point The location of the point in geodetic latitude and longitude
-%              in radians at which the headings are taken. Point can be
-%              [latitude;longitude] or [latitude;longitude;height]. The
-%              height component is ignored if included since it does not
-%              change the result.
+%INPUTS: point The 2X1 or 3X1 location of the point in geodetic latitude 
+%              and longitude in radians at which the headings are taken.
+%              The point can be [latitude;longitude] or
+%              [latitude;longitude;height]. The height component is ignored
+%              if included since it does not change the result. This is a
+%              2XN or 3XN matrix.
 % geoEastOfNorth An NX1 or 1XN array of N geographic headings in radians
 %              clockwise from North that should be turned into ECEF unit
 %              vectors. A geographic heading is a direction in the local
@@ -22,7 +23,7 @@ function u=geogHeading2uVec(point,geoEastOfNorth,angUpFromLevel,a,f)
 %              empty matrix is passed, then the default of 0 is used.
 % angUpFromLevel An NX1 or 1XN array of N angles of the trajectory above
 %              the local tangent plane to the reference ellipsoid. If all
-%              elevations are the same (but geographic headins might vary),
+%              elevations are the same (but geographic headings might vary),
 %              then this can be a scalar value. If this parameter is
 %              omitted or an empty matrix is passed, then the default of 0
 %              is used.

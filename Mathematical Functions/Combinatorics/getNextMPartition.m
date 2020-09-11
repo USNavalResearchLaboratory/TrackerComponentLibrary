@@ -8,12 +8,12 @@ function a=getNextMPartition(param1,m)
 %                   get the next partition. The total number of
 %                   partitions can be found using the function
 %                   numMPartitions(n,m). As combinations are to
-%                   permutations, partitions are to compositons: The order
+%                   permutations, partitions are to compositions: The order
 %                   of the terms in an m-partitions do not matter, whereas
 %                   they matter in a composition.
 %
-%INPUTS:param1 If two parameters are passed to the function, then param1 is
-%            n, the integer to be partitioned. Otherwise, param1 is a,
+%INPUTS: param1 If two parameters are passed to the function, then param1
+%            is n, the integer to be partitioned. Otherwise, param1 is a,
 %            the current partition of the chosen integer n into m parts.
 %            This means that a must be length m and its elements must sum
 %            to n. The elements must be ordered in decreasing order. The

@@ -205,7 +205,6 @@ end
 %gate probability when multiple ones are present.
 PG=ChiSquareD.CDF(max(gammaVal),zDim);
 
-
 %Whether or not the target is detected is affected by whether it exists
 %(the rPred).
 PD=PD(:).*rPred(:);

@@ -17,11 +17,11 @@ static int verbose = 0;
 **
 **  All messages go to stdout.
 **
-**  This revision:  2017 October 21
+**  This revision:  2017 December 6
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 
 static void viv(int ival, int ivalok,
@@ -3844,6 +3844,125 @@ static void t_fave03(int *status)
        "iauFave03", "", status);
 }
 
+static void t_fk425(int *status)
+/*
+**  - - - - - - - -
+**   t _ f k 4 2 5
+**  - - - - - - - -
+**
+**  Test iauFk425 function.
+**
+**  Returned:
+**     status    int         FALSE = success, TRUE = fail
+**
+**  Called:  iauFk425, vvd
+**
+**  This revision:  2018 December 6
+*/
+{
+   double r1950, d1950, dr1950, dd1950, p1950, v1950,
+          r2000, d2000, dr2000, dd2000, p2000, v2000;
+
+
+   r1950 = 0.07626899753879587532;
+   d1950 = -1.137405378399605780;
+   dr1950 = 0.1973749217849087460e-4;
+   dd1950 = 0.5659714913272723189e-5;
+   p1950 = 0.134;
+   v1950 = 8.7;
+
+   iauFk425(r1950, d1950, dr1950, dd1950, p1950, v1950,
+            &r2000, &d2000, &dr2000, &dd2000, &p2000, &v2000);
+
+   vvd(r2000, 0.08757989933556446040, 1e-14,
+       "iauFk425", "r2000", status);
+   vvd(d2000, -1.132279113042091895, 1e-12,
+       "iauFk425", "d2000", status);
+   vvd(dr2000, 0.1953670614474396139e-4, 1e-17,
+       "iauFk425", "dr2000", status);
+   vvd(dd2000, 0.5637686678659640164e-5, 1e-18,
+       "iauFk425", "dd2000", status);
+   vvd(p2000, 0.1339919950582767871, 1e-13, "iauFk425", "p2000", status);
+   vvd(v2000, 8.736999669183529069, 1e-12, "iauFk425", "v2000", status);
+
+}
+
+static void t_fk45z(int *status)
+/*
+**  - - - - - - - -
+**   t _ f k 4 5 z
+**  - - - - - - - -
+**
+**  Test iauFk45z function.
+**
+**  Returned:
+**     status    int         FALSE = success, TRUE = fail
+**
+**  Called:  iauFk45z, vvd
+**
+**  This revision:  2018 December 6
+*/
+{
+   double r1950, d1950, bepoch, r2000, d2000;
+
+
+   r1950 = 0.01602284975382960982;
+   d1950 = -0.1164347929099906024;
+   bepoch = 1954.677617625256806;
+
+   iauFk45z(r1950, d1950, bepoch, &r2000, &d2000);
+
+   vvd(r2000, 0.02719295911606862303, 1e-15,
+       "iauFk45z", "r2000", status);
+   vvd(d2000, -0.1115766001565926892, 1e-13,
+       "iauFk45z", "d2000", status);
+
+}
+
+static void t_fk524(int *status)
+/*
+**  - - - - - - - -
+**   t _ f k 5 2 4
+**  - - - - - - - -
+**
+**  Test iauFk524 function.
+**
+**  Returned:
+**     status    int         FALSE = success, TRUE = fail
+**
+**  Called:  iauFk524, vvd
+**
+**  This revision:  2018 December 6
+*/
+{
+   double r2000, d2000, dr2000, dd2000, p2000, v2000,
+          r1950, d1950, dr1950, dd1950, p1950, v1950;
+
+
+   r2000 = 0.8723503576487275595;
+   d2000 = -0.7517076365138887672;
+   dr2000 = 0.2019447755430472323e-4;
+   dd2000 = 0.3541563940505160433e-5;
+   p2000 = 0.1559;
+   v2000 = 86.87;
+
+   iauFk524(r2000, d2000, dr2000, dd2000, p2000, v2000,
+            &r1950, &d1950, &dr1950,&dd1950, &p1950, &v1950);
+
+   vvd(r1950, 0.8636359659799603487, 1e-13,
+       "iauFk524", "r1950", status);
+   vvd(d1950, -0.7550281733160843059, 1e-13,
+       "iauFk524", "d1950", status);
+   vvd(dr1950, 0.2023628192747172486e-4, 1e-17,
+       "iauFk524", "dr1950", status);
+   vvd(dd1950, 0.3624459754935334718e-5, 1e-18,
+       "iauFk524", "dd1950", status);
+   vvd(p1950, 0.1560079963299390241, 1e-13,
+       "iauFk524", "p1950", status);
+   vvd(v1950, 86.79606353469163751, 1e-11, "iauFk524", "v1950", status);
+
+}
+
 static void t_fk52h(int *status)
 /*
 **  - - - - - - - -
@@ -3885,6 +4004,42 @@ static void t_fk52h(int *status)
        "iauFk52h", "px", status);
    vvd(rvh, -7.6000000940000254, 1e-11,
        "iauFk52h", "rv", status);
+
+}
+
+static void t_fk54z(int *status)
+/*
+**  - - - - - - - -
+**   t _ f k 5 4 z
+**  - - - - - - - -
+**
+**  Test iauFk54z function.
+**
+**  Returned:
+**     status    int         FALSE = success, TRUE = fail
+**
+**  Called:  iauFk54z, vvd
+**
+**  This revision:  2018 December 6
+*/
+{
+   double r2000, d2000, bepoch, r1950, d1950, dr1950, dd1950;
+
+
+   r2000 = 0.02719026625066316119;
+   d2000 = -0.1115815170738754813;
+   bepoch = 1954.677308160316374;
+
+   iauFk54z(r2000, d2000, bepoch, &r1950, &d1950, &dr1950, &dd1950);
+
+   vvd(r1950, 0.01602015588390065476, 1e-14,
+       "iauFk54z", "r1950", status);
+   vvd(d1950, -0.1164397101110765346, 1e-13,
+       "iauFk54z", "d1950", status);
+   vvd(dr1950, -0.1175712648471090704e-7, 1e-20,
+       "iauFk54z", "dr1950", status);
+   vvd(dd1950, 0.2108109051316431056e-7, 1e-20,
+       "iauFk54z", "dd1950", status);
 
 }
 
@@ -9838,7 +9993,11 @@ int main(int argc, char *argv[])
    t_fasa03(&status);
    t_faur03(&status);
    t_fave03(&status);
+   t_fk425(&status);
+   t_fk45z(&status);
+   t_fk524(&status);
    t_fk52h(&status);
+   t_fk54z(&status);
    t_fk5hip(&status);
    t_fk5hz(&status);
    t_fw2m(&status);
@@ -9998,7 +10157,7 @@ int main(int argc, char *argv[])
 }
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

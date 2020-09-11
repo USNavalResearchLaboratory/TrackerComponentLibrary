@@ -66,7 +66,7 @@ vsMag=omega*SpiralOffset;
 vsInit=[0;0;1]*vsMag;
 vTotalInit=vl+vsInit;
 xInit=[xyzStart;vTotalInit];
-aDyn=@(x,t)aSpiralSimp([x;vl;omega],t);
+aDyn=@(x,t)aSpiralSimp([x;vl;omega]);
 xListGeo=RungeKCurvedAtTimes(xInit,uInit,times,aDyn);
 
 %Convert the Cartesian locations into ellipsoidal coordinates.

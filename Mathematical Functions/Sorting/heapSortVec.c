@@ -10,7 +10,7 @@
  *
  *INPUTS: a The vector that is to be sorted. This can be any of the
  *          following types in Matlab: double, single, int8, int16, int32,
- *          int64, uint8, uint16, uint32, uint64, and char.
+ *          int64, uint8, uint16, uint32, and uint64.
  * direction A value indicating the direction in which A should be sorted.
  *          Possible values are boolean:
  *          0 (The default if omitted or an empty matrix is passed) sort in
@@ -127,10 +127,10 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         case mxSINGLE_CLASS:
         {
             float *a, *aOrig;
-            aOrig=(float*)mxGetData(prhs[0]);
+            aOrig=mxGetSingles(prhs[0]);
             
             aMATLAB=mxCreateNumericMatrix(M,N,mxSINGLE_CLASS,mxREAL); 
-            a=(float*)mxGetData(aMATLAB);
+            a=mxGetSingles(aMATLAB);
             
             memcpy(a,aOrig,sizeof(float)*numEls);
             if(nlhs>1) {
@@ -140,29 +140,13 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             }
             break;
         }
-        case mxCHAR_CLASS:
-        {
-            char *a, *aOrig;
-            aOrig=(char*)mxGetData(prhs[0]);
-            
-            aMATLAB=mxCreateNumericMatrix(M,N,mxCHAR_CLASS,mxREAL);  
-            a=(char*)mxGetData(aMATLAB);
-            
-            memcpy(a,aOrig,sizeof(char)*numEls);
-            if(nlhs>1) {
-                heapSortVecIdxCChar(numEls,a,idxList,direction);
-            } else {
-                heapSortVecCChar(numEls,a,direction);
-            }
-            break;
-        } 
         case mxINT8_CLASS:
         {
             int8_t *a, *aOrig;
-            aOrig=(int8_t*)mxGetData(prhs[0]);
+            aOrig=mxGetInt8s(prhs[0]);
             
             aMATLAB=mxCreateNumericMatrix(M,N,mxINT8_CLASS,mxREAL);  
-            a=(int8_t*)mxGetData(aMATLAB);
+            a=mxGetInt8s(aMATLAB);
             
             memcpy(a,aOrig,sizeof(int8_t)*numEls);
             if(nlhs>1) {
@@ -175,10 +159,10 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         case mxUINT8_CLASS:
         {
             uint8_t *a, *aOrig;
-            aOrig=(uint8_t*)mxGetData(prhs[0]);
+            aOrig=mxGetUint8s(prhs[0]);
             
             aMATLAB=mxCreateNumericMatrix(M,N,mxUINT8_CLASS,mxREAL);
-            a=(uint8_t*)mxGetData(aMATLAB);
+            a=mxGetUint8s(aMATLAB);
             
             memcpy(a,aOrig,sizeof(uint8_t)*numEls);
             if(nlhs>1) {
@@ -191,10 +175,10 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         case mxINT16_CLASS:
         {
             int16_t *a, *aOrig;
-            aOrig=(int16_t*)mxGetData(prhs[0]);
+            aOrig=mxGetInt16s(prhs[0]);
             
             aMATLAB=mxCreateNumericMatrix(M,N,mxINT16_CLASS,mxREAL);
-            a=(int16_t*)mxGetData(aMATLAB);
+            a=mxGetInt16s(aMATLAB);
             
             memcpy(a,aOrig,sizeof(int16_t)*numEls);
             if(nlhs>1) {
@@ -207,10 +191,10 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         case mxUINT16_CLASS:
         {
             uint16_t *a, *aOrig;
-            aOrig=(uint16_t*)mxGetData(prhs[0]);
+            aOrig=mxGetUint16s(prhs[0]);
             
             aMATLAB=mxCreateNumericMatrix(M,N,mxUINT16_CLASS,mxREAL);
-            a=(uint16_t*)mxGetData(aMATLAB);
+            a=mxGetUint16s(aMATLAB);
             
             memcpy(a,aOrig,sizeof(uint16_t)*numEls);
             if(nlhs>1) {
@@ -223,10 +207,10 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         case mxINT32_CLASS:
         {
             int32_t *a, *aOrig;
-            aOrig=(int32_t*)mxGetData(prhs[0]);
+            aOrig=mxGetInt32s(prhs[0]);
             
             aMATLAB=mxCreateNumericMatrix(M,N,mxINT32_CLASS,mxREAL);
-            a=(int32_t*)mxGetData(aMATLAB);
+            a=mxGetInt32s(aMATLAB);
             
             memcpy(a,aOrig,sizeof(int32_t)*numEls);
             if(nlhs>1) {
@@ -239,10 +223,10 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         case mxUINT32_CLASS:
         {
             uint32_t *a, *aOrig;
-            aOrig=(uint32_t*)mxGetData(prhs[0]);
+            aOrig=mxGetUint32s(prhs[0]);
             
             aMATLAB=mxCreateNumericMatrix(M,N,mxUINT32_CLASS,mxREAL);
-            a=(uint32_t*)mxGetData(aMATLAB);
+            a=mxGetUint32s(aMATLAB);
             
             memcpy(a,aOrig,sizeof(uint32_t)*numEls);
             if(nlhs>1) {
@@ -255,10 +239,10 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         case mxINT64_CLASS:
         {
             int64_t *a, *aOrig;
-            aOrig=(int64_t*)mxGetData(prhs[0]);
+            aOrig=mxGetInt64s(prhs[0]);
             
             aMATLAB=mxCreateNumericMatrix(M,N,mxINT64_CLASS,mxREAL);
-            a=(int64_t*)mxGetData(aMATLAB);
+            a=mxGetInt64s(aMATLAB);
             
             memcpy(a,aOrig,sizeof(int64_t)*numEls);
             if(nlhs>1) {
@@ -271,10 +255,10 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         case mxUINT64_CLASS:
         {
             uint64_t *a, *aOrig;
-            aOrig=(uint64_t*)mxGetData(prhs[0]);
+            aOrig=mxGetUint64s(prhs[0]);
             
             aMATLAB=mxCreateNumericMatrix(M,N,mxUINT64_CLASS,mxREAL);
-            a=(uint64_t*)mxGetData(aMATLAB);
+            a=mxGetUint64s(aMATLAB);
             
             memcpy(a,aOrig,sizeof(uint64_t)*numEls);
             if(nlhs>1) {
@@ -284,6 +268,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             }
             break;
         }
+        case mxCHAR_CLASS:
         case mxUNKNOWN_CLASS:
         case mxCELL_CLASS:
         case mxSTRUCT_CLASS:

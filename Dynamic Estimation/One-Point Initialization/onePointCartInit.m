@@ -1,4 +1,4 @@
-function [x,P]=onePointCartInit(zCart,SRCart,higherDerivStdDev)
+function [x,P]=onePointCartInit(zCart,SRCart,higherDerivStdDev,matType)
 %%ONEPOINTCARTINIT This function implements single-point initialization for
 %              target states that consist of components of position,
 %              velocity, acceleration, etc. This function initializes
@@ -14,15 +14,25 @@ function [x,P]=onePointCartInit(zCart,SRCart,higherDerivStdDev)
 %
 %INPUTS: zCart A zDimXnumMeas set of Cartesian measurements for which
 %              single-point differencing should be used to start tracks.
-%       SRCart A zDimXzDimXnumMeas set of lower-triangular square root
+%       SRCart If matType is omitted or is 0, then this is a
+%              zDimXzDimXnumMeas set of lower-triangular square root
 %              covariance matrices associated with the measurements in
 %              zCart. If all of the matrices are the same, then a single
-%              zDimXzDim matrix can be passed.
+%              zDimXzDim matrix can be passed. If matType=1, then this is a
+%              set of covariance matrices.
 % higherDerivStdDev A numMomentsX1 of 1XnumMoments vector containing the
 %              standard deviations to use for each of the moments
 %              (position, velocity, etc) that cannot be estimated from the
 %              data. As mentioned in [1], for velocity, this might be
 %              vMax/sqrt(2) or vMax/sqrt(3).
+%      matType An optional input specifying whether SRCart is a set of
+%              lower-triangular square roots of the covariance matrix, or
+%              whether it is the set of covariance matrices. Possible
+%              values are:
+%              0 (The default if omitted or an empty matrix is passed)
+%                SRCart holds lower-triangular square root covariance
+%                matrices.
+%              1 SRCart holds covariance matrices.
 %
 %OUTPUTS: x The xDimXnumMeas set of target state estimates. All
 %           non-position components are zero. xDim=zDim*(numMoments+1). The
@@ -43,6 +53,10 @@ function [x,P]=onePointCartInit(zCart,SRCart,higherDerivStdDev)
 %November 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<4||isempty(matType))
+    matType=0; 
+end
+
 zDim=size(zCart,1);
 numMeas=size(zCart,2);
 
@@ -57,12 +71,20 @@ x=zeros(xDim,numMeas);
 P=zeros(xDim,xDim,numMeas);
 
 x(1:zDim,:)=zCart;
-for curMeas=1:numMeas
-    P(1:zDim,1:zDim,curMeas)=SRCart(:,:,curMeas)*SRCart(:,:,curMeas)';
+switch(matType)
+    case 0
+        for curMeas=1:numMeas
+            P(1:zDim,1:zDim,curMeas)=SRCart(:,:,curMeas)*SRCart(:,:,curMeas)';
+        end
+    case 1
+        for curMeas=1:numMeas
+            P(1:zDim,1:zDim,curMeas)=SRCart(:,:,curMeas);
+        end
+    otherwise
+        error('Unknown matrix type specified.')
 end
 
 sel=(zDim+1):xDim;
-
 P(sel,sel,:)=repmat(kron(diag(higherDerivStdDev(:).^2),eye(zDim,zDim)),1,1,numMeas);
 end
 

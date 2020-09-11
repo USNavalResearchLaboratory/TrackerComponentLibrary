@@ -59,20 +59,19 @@ end
 switch(handed)
     case 'left'
         %The rotation matrix for a left-handed quaternion algebra, as in
-        %Shuster.
+        %[1].
         R=[q(1)^2+q(2)^2-q(3)^2-q(4)^2, 2*(q(2)*q(3)+q(1)*q(4)),    2*(q(2)*q(4)-q(1)*q(3));
            2*(q(2)*q(3)-q(1)*q(4)),     q(1)^2-q(2)^2+q(3)^2-q(4)^2,2*(q(3)*q(4)+q(1)*q(2));
            2*(q(2)*q(4)+q(1)*q(3)),     2*(q(3)*q(4)-q(1)*q(2)),    q(1)^2-q(2)^2-q(3)^2+q(4)^2];
     case 'right'
         %The rotation matrix for a right-handed quaternion algebra is the
-        %transpose of the matrix from Schuster
+        %transpose of the matrix from [1].
         R=[q(1)^2+q(2)^2-q(3)^2-q(4)^2, 2*(q(2)*q(3)-q(1)*q(4)),    2*(q(2)*q(4)+q(1)*q(3));
            2*(q(2)*q(3)+q(1)*q(4)),     q(1)^2-q(2)^2+q(3)^2-q(4)^2,2*(q(3)*q(4)-q(1)*q(2));
            2*(q(2)*q(4)-q(1)*q(3)),     2*(q(3)*q(4)+q(1)*q(2)),    q(1)^2-q(2)^2-q(3)^2+q(4)^2];
     otherwise
         error('Invalid handedness provided.')
 end
-
 
 end
 

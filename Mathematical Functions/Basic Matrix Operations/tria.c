@@ -34,8 +34,8 @@
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     ptrdiff_t numRows,numCols,lwork,info;
     double *AOrig, *A, *R, *tau, *work;
-    size_t tauLength,workArraySize,curRow,curCol;
-    mxArray *AMat, *RMat;
+    size_t tauLength,curRow,curCol;
+    mxArray *RMat;
     
     if(nrhs<1){
         mexErrMsgTxt("Not enough inputs.");
@@ -61,7 +61,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     //A. Thus, we shall insert it into the new array in the appropriate
     //order.
     A=mxMalloc((size_t)numRows*(size_t)numCols*sizeof(double));
-    AOrig=(double*)mxGetData(prhs[0]);
+    AOrig=mxGetDoubles(prhs[0]);
     
     for(curRow=0;curRow<numRows;curRow++) {
         for(curCol=0;curCol<numCols;curCol++) {
@@ -144,7 +144,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     //the matrix to be returned to Matlab, we just allocate another matrix
     //to return.
     RMat=mxCreateDoubleMatrix(numCols,tauLength,mxREAL);
-    R=(double*)mxGetData(RMat);
+    R=mxGetDoubles(RMat);
     for(curRow=0;curRow<tauLength;curRow++) {
         for(curCol=0;curCol<numCols;curCol++) {
             R[curCol+numCols*curRow]=A[curRow+numRows*curCol];

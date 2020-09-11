@@ -43,7 +43,7 @@ function [xEst,exitCode,path]=homotopyPathFollow(x0,f,df,homF,dHomF,errorTols,st
 %                      cufrrent estimate of x. These are tolerances of the
 %                      change in the gradient. The default values are both
 %                      1e-10.
-%           AbsTolAns,RelTolAns These are tolerances related to the the
+%           AbsTolAns,RelTolAns These are tolerances related to the
 %                      gradients in the stage of the estimator. The endgame
 %                      is after the solution has been bracketed (a point
 %                      with lambda<=1 and a point with lambda>=1 have been

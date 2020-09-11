@@ -41,8 +41,7 @@ void Cart2RuvGenCPP(double *retData,const double *zC,bool useHalfRange,double *z
  **/
 
     double zCL[3],zTxL[3];
-    double r1,r2,r;
-    double u,v;
+    double r1,r2;
     double diff0,diff1,diff2;
  
     //Compute the target location in the receiver's coordinate system.

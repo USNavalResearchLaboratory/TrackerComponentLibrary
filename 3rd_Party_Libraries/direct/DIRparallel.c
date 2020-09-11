@@ -147,10 +147,12 @@ static integer c_n1 = -1;
 /* | Subroutine for sampling. This sampling is done in parallel, the master| */
 /* | prozessor is also evaluating the function sometimes.                  | */
 /* +-----------------------------------------------------------------------+ */
-/* Subroutine */ void direct_dirsamplef_(doublereal *c__, integer *arrayi, integer *new__, integer *length, doublereal *f, integer *maxi, 
+/* Subroutine */ void direct_dirsamplef_(doublereal *c__, integer *arrayi, doublereal 
+	*delta, integer *sample, integer *new__, integer *length, 
+	FILE *logfile, doublereal *f, integer *free, integer *maxi, 
 	integer *point, fp fcn, doublereal *x, doublereal *l, doublereal *
-	minf, integer *minpos, doublereal *u, integer *n, 
-	doublereal *fmax, integer *
+	minf, integer *minpos, doublereal *u, integer *n, integer *maxfunc, 
+	integer *maxdeep, integer *oops, doublereal *fmax, integer *
 	ifeasiblef, integer *iinfesiblef, void *fcn_data)
 {
     /* System generated locals */

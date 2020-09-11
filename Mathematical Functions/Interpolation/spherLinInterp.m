@@ -1,15 +1,15 @@
 function pInterp=spherLinInterp(u,p1,p2,normalize)
-%%SPHERLININTERP    Perform spherical linear interpolation (SLERP) between
-%                   two vectors at a number of points. SLERP is useful for
-%                   obtaining a smooth interpolation between two 3D
-%                   directions as unit vectors or between two orientations,
-%                   represented in 4D using  quaternions. The interpolation
-%                   is performed the shortway on the sphere between the
-%                   vectors. However, note that with quaternions q and -q
-%                   represent the same orientation, thus if the last
-%                   elements of the quaternions have opposite signs, then
-%                   the rotation will be the long way. The interpolation
-%                   routine can also be used with non-unit vectors.
+%%SPHERLININTERP Perform spherical linear interpolation (SLERP) between two
+%                vectors at a number of points. SLERP is useful for
+%                obtaining a smooth interpolation between two 3D directions
+%                as unit vectors or between two orientations, represented
+%                in 4D using  quaternions. The interpolation is performed
+%                the short way on the sphere between the vectors. However,
+%                note that with quaternions q and -q represent the same
+%                orientation, thus if the last elements of the quaternions
+%                have opposite signs, then the rotation will be the long
+%                way. The interpolation routine can also be used with non-
+%                unit vectors.
 %
 %INPUTS: u  A 1XN or NX1 vector of the n points at which interpolation
 %           should be performed. These are values from 0 to 1 that

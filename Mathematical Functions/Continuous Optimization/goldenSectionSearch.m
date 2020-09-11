@@ -69,7 +69,7 @@ if(nargin<4||isempty(maxIter))
 end
 
 if(nargin<3||isempty(XTol))
-   XTol=1e-9; 
+	XTol=1e-9; 
 end
 
 tau=(3-sqrt(5))/2;%The golden ratio
@@ -136,8 +136,7 @@ for curIter=1:maxIter
         
         gAlpha=gb;
         gAlphaBar=gbBar;
-        
-        
+
         b=alpha+tau*(alphaBar-alpha);
         gb=g(b);
         bBar=alphaBar-tau*(alphaBar-alpha);

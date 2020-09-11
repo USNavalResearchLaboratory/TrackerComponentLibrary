@@ -100,7 +100,7 @@ function [xUpdate,PUpdate,rUpdate,probNonTargetMeas]=singleScanUpdateWithExisten
 % Well, P(exists and observed|Z) is just sum(betas(:,1:(end-1)),2)
 % On the other hand
 % P(exists and not observed |Z)=P(exists|Z,not observed)*P(not observed|Z)
-% Well, P(not observed|Z)=P(not observed|Z,exists)=betas(:,end)
+% Well, P(not observed|Z)=betas(:,end)
 % That leaves 
 % P(exists|Z,not observed)=P(exists|not observed)=P(exists and not observed)/P(not observed)
 % Well,
@@ -135,11 +135,11 @@ function [xUpdate,PUpdate,rUpdate,probNonTargetMeas]=singleScanUpdateWithExisten
 %Ch. 9.4.1 of [2] and Eq. 69 of [3] take this other value to be something
 %based on an assumes spatial density of new objects being discovered.
 %
-%The prediction step in filtering using such target exisitence
-%probabilities is exactly the same as in any other single-Gaussian filter
-%except the existence probabilities rUpdate are typically multiplied by a
-%transition probability (to go from existence to non-existence) before the
-%next update. This value is a design parameter.
+%The prediction step in filtering using such target existence probabilities
+%is exactly the same as in any other single-Gaussian filter except the
+%existence probabilities rUpdate are typically multiplied by a transition
+%probability (to go from existence to non-existence) before the next
+%update. This value is a design parameter.
 %
 %Note that the type of integrated tracking filter described here
 %corresponds to one using Markov Chain 1 in [1]. The other option contains
@@ -215,7 +215,7 @@ end
 rPred=rPred(:);
 
 %Updated probabilities of target existence.
-rUpdate=(sum(betas(:,1:(end-1)),2)+((1-PD).*rPred)./(1-PD.*rPred).*betas(:,end)).';
+rUpdate=((1-betas(:,end))+((1-PD).*rPred)./(1-PD.*rPred).*betas(:,end)).';
 
 %The probability that each measurement did not originate from a known
 %target.

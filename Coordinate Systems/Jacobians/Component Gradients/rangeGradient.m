@@ -18,9 +18,9 @@ function J=rangeGradient(x,useHalfRange,lTx,lRx)
 %          parameter is omitted or an empty matrix is passed, then the
 %          receiver is assumed to be at the origin.
 %
-%OUTPUTS: J A 1XnumPosDimXN set of gradients of the bistatic range with
-%           derivatives taken with respect to components [x,y,z] in 3D,
-%           [x,y] in 2D, or [x] in 1D  in that order for each point in x.
+%OUTPUTS: J A 1XnumPosDimXN set of partial derivatives of the bistatic
+%           range with respect to components [x,y,z] in 3D, [x,y] in 2D, or
+%           [x] in 1D  in that order for each point in x.
 %
 %Gradients with respect to bistatic range are discussed in [1].
 %

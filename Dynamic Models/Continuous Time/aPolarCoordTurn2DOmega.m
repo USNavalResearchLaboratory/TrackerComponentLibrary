@@ -1,4 +1,4 @@
-function [aVal,aJacob,aHess,papt]=aPolarCoordTurn2DOmega(x,t,tauInv,tauAccelInv)
+function [aVal,aJacob,aHess,papt]=aPolarCoordTurn2DOmega(x,tauInv,tauAccelInv)
 %%APOLARCOORDTURN2DOMEGA The continuous-time drift function for a 2D
 %           coordinated turn model with the velocity expressed in terms of
 %           a heading angle and a speed rather than in terms of a Cartesian
@@ -19,9 +19,6 @@ function [aVal,aJacob,aHess,papt]=aPolarCoordTurn2DOmega(x,t,tauInv,tauAccelInv)
 %               rate, typically in radians per second. If a linear
 %               acceleration component is provided, then the state is
 %               [xPos;yPos;theta;v;omega,al].
-%             t An unused time component so that this function can be used
-%               with Runge-Kutta methods that expect the function to take
-%               two parameters.
 %        tauInv The inverse of the correlation time constant tau for the
 %               turn rate in seconds. tauInv must be positive. The default
 %               if omitted or an empty matrix is passed is 0.
@@ -67,11 +64,11 @@ function [aVal,aJacob,aHess,papt]=aPolarCoordTurn2DOmega(x,t,tauInv,tauAccelInv)
 %January 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<3||isempty(tauInv))
+if(nargin<2||isempty(tauInv))
     tauInv=0;
 end
 
-if(nargin<4||isempty(tauAccelInv))
+if(nargin<3||isempty(tauAccelInv))
     tauAccelInv=0;
 end
 

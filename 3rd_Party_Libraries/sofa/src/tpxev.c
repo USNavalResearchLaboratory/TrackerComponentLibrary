@@ -72,9 +72,9 @@ int iauTpxev(double v[3], double v0[3], double *xi, double *eta)
 **
 **  This revision:   2018 January 2
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
    const double TINY = 1e-6;
@@ -127,7 +127,7 @@ int iauTpxev(double v[3], double v0[3], double *xi, double *eta)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
@@ -220,5 +220,4 @@ int iauTpxev(double v[3], double v0[3], double *xi, double *eta)
 **                 United Kingdom
 **
 **--------------------------------------------------------------------*/
-
 }

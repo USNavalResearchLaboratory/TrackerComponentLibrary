@@ -46,15 +46,14 @@ function val=var(a,b)
     val=a*b/((a+b)^2*(a+b+1));
 end
 
-
 function val=PDF(x,a,b)
 %%PDF Evaluate the probability density function (PDF) of the beta
 %     distribution at one or more points.
 %
-%INPUTS:    x The point(s) at which the beta PDF is to be evaluated. The
-%             support of the beta distribution is (0,1).
-%           a The shape parameter that is the exponent of x; a>0.
-%           b The shape parameter that is the exponent of 1-x; b>0. 
+%INPUTS: x The point(s) at which the beta PDF is to be evaluated. The
+%          support of the beta distribution is (0,1).
+%        a The shape parameter that is the exponent of x; a>0.
+%        b The shape parameter that is the exponent of 1-x; b>0. 
 %
 %OUTPUTS: val The value(s) of the beta PDF.
 %
@@ -78,10 +77,10 @@ function val=CDF(x,a,b)
 %%CDF Evaluate the cumulative distribution function (PDF) of the beta
 %     distribution at one or more points.
 %
-%INPUTS:    x The point(s) at which the beta CDF is to be evaluated. The
-%             support of the beta distribution is (0,1).
-%           a The shape parameter that is the exponent of x; a>0.
-%           b The shape parameter that is the exponent of 1-x; b>0. 
+%INPUTS: x The point(s) at which the beta CDF is to be evaluated. The
+%          support of the beta distribution is (0,1).
+%        a The shape parameter that is the exponent of x; a>0.
+%        b The shape parameter that is the exponent of 1-x; b>0. 
 %
 %OUTPUTS: val The value(s) of the beta CDF.
 %
@@ -115,12 +114,35 @@ function val=rand(N,a,b)
 %        a The shape parameter that is the exponent of x; a>0.
 %        b The shape parameter that is the exponent of 1-x; b>0.
 %
-%OUTPUTS:   vals   A matrix whose dimensions are determined by N of the
-%                  generated beta random variables.
+%OUTPUTS: vals A matrix whose dimensions are determined by N of the
+%              generated beta random variables.
 %
 %The relationship between beta and gamma random variables is given in
 %Example 6-12 of Chapter 6.2 of [1]. That relation is used here to generate
 %the beta random variables.
+%
+%EXAMPLE:
+%Here, we see that a histogram of the samples matches well with the PDF. 
+% N=1e4;
+% numPlotPoints=500;
+% a=5;
+% b=7;
+% 
+% ySamp=BetaD.rand([N,1],a,b);
+% 
+% x=linspace(0,1,numPlotPoints);
+% y=BetaD.PDF(x,a,b);
+% 
+% figure(1)
+% clf
+% hold on
+% histogram(ySamp,'Normalization','pdf')
+% plot(x,y,'linewidth',2);
+% h1=xlabel('x');
+% h2=ylabel('PDF(x)');
+% set(gca,'FontSize',14,'FontWeight','bold','FontName','Times')
+% set(h1,'FontSize',14,'FontWeight','bold','FontName','Times')
+% set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
 %
 %REFERENCES:
 %[1] A. Papoulis and S. U. Pillai, Probability, Random Variables and

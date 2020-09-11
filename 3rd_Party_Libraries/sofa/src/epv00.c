@@ -99,11 +99,11 @@ int iauEpv00(double date1, double date2,
 **  5) It is permissible to use the same array for pvh and pvb, which
 **     will receive the barycentric values.
 **
-**  This revision:  2017 March 16
+**  This revision:  2019 June 23
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
 /*
@@ -2393,7 +2393,7 @@ int iauEpv00(double date1, double date2,
    double t, t2, xyz, xyzd, a, b, c, ct, p, cp,
           ph[3], vh[3], pb[3], vb[3], x, y, z;
 
-/*--------------------------------------------------------------------*/
+/* ------------------------------------------------------------------ */
 
 /* Time since reference epoch, Julian years. */
    t = ((date1 - DJ00) + date2) / DJY;
@@ -2543,7 +2543,7 @@ int iauEpv00(double date1, double date2,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

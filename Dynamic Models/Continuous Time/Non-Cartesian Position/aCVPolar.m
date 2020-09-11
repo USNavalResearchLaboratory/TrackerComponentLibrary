@@ -1,4 +1,4 @@
-function [aVal,aJacob,aHess,papt]=aCVPolar(x,t)
+function [aVal,aJacob,aHess,papt]=aCVPolar(x)
 %%ACVPOLAR The drift function for a continuous-time motion model where the
 %          target state is given in polar coordinates and the motion is
 %          constant velocity in 2D Cartesian coordinates. This function
@@ -7,9 +7,6 @@ function [aVal,aJacob,aHess,papt]=aCVPolar(x,t)
 %
 %INPUTS: x The 4XN state vector of N targets in the order of
 %          [r;theta;rDot;thetaDot]. The angle theta is given in radians.
-%        t An unused time component so that aCVPolar can be used with
-%          Runge-Kutta methods that expect the function to take two
-%          parameters.
 %
 %OUTPUTS: aVal The 4XN set of time-derivatives of the N state vectors under
 %              the Cartesian linear motion model in polar coordinates.
@@ -60,7 +57,7 @@ function [aVal,aJacob,aHess,papt]=aCVPolar(x,t)
 % xEndCart=F*xInitCart;
 % RelTol=1e-10;
 % AbsTol=1e-13;
-% xStepsPolar=RKAdaptiveOverRange(xInitSpher,[0;T],@(x,t)aCVPolar(x,t),0.1,0,[],[],RelTol,AbsTol);
+% xStepsPolar=RKAdaptiveOverRange(xInitSpher,[0;T],@(x,t)aCVPolar(x),0.1,0,[],[],RelTol,AbsTol);
 % xEndPolarRK=xStepsPolar(:,end);
 % xEndPolarExact=stateCart2Pol(xEndCart,systemType);
 % max(abs(xEndPolarRK-xEndPolarExact))

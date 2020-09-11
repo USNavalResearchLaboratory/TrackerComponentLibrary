@@ -60,14 +60,14 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
        return;
     }
     checkRealDoubleArray(prhs[0]);
-    vec=(double*)mxGetData(prhs[0]);
+    vec=mxGetDoubles(prhs[0]);
     
     TT1=getDoubleFromMatlab(prhs[1]);
     TT2=getDoubleFromMatlab(prhs[2]);
     
     //Allocate the return vector
     retMATLAB=mxCreateDoubleMatrix(3,numItems,mxREAL);
-    retVec=mxGetData(retMATLAB);
+    retVec=mxGetDoubles(retMATLAB);
     
     //Call the IAU function to get the rotation matrix.
     iauBp06(TT1, TT2, rb, rp, rbp);

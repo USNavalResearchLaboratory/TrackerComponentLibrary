@@ -88,6 +88,7 @@ classdef AVLTree < handle
             theTree.left=[];
             theTree.right=[];
         end
+
         function val=isempty(theTree)
         %%ISEMPTY This returns true if there are no KeyVal pairs in this
         %         tree.
@@ -101,19 +102,25 @@ classdef AVLTree < handle
         %        initialized. This is empty if there is nothing in the
         %        tree. If nothing is in the tree, then this is an empty
         %        matrix.
+        
             val=theTree.keyVal;
         end
         
         function insert(theTree,keyVal2Insert)
-        %%INSERT  Insert a new keyVal pair into the tree. An error is
-        %         raised if a node with the same key already exists in the
-        %         tree.
+        %%INSERT Insert a new keyVal pair into the tree. An error is
+        %        raised if a node with the same key already exists in the
+        %        tree.
         %
-        %INPUTS: theTree    The implicitly passed AVLTree object.
-        %        key2Insert An instance of the KeyVal class containing the
-        %                   key and its associated value to insert.
+        %INPUTS: theTree The implicitly passed AVLTree object.
+        %     key2Insert An instance of the KeyVal class containing the
+        %                key and its associated value to insert.
         %
         %OUTPUTS: none
+        %
+        %The KeyVal object is directly inserted into the tree without
+        %duplicating it. Subsequent changes to the passed KeyVal object
+        %will affect what is in the tree. Changing the value of the object
+        %will invalidate the tree structure.
         %
         %This function is based on page 312 of the Preiss book.
             
@@ -147,10 +154,10 @@ classdef AVLTree < handle
         end
         
         function didSucceed=remove(theTree,theKey)
-        %%REMOVE    Remove a node having the given key from the tree.
+        %%REMOVE Remove a node having the given key from the tree.
         %
-        %INPUTS: theTree    The implicitly passed AVLTree object.
-        %        theKey     The key of the object to remove from the tree.
+        %INPUTS: theTree The implicitly passed AVLTree object.
+        %         theKey The key of the object to remove from the tree.
         %
         %OUTPUTS: didSucceed A boolean value indicating whether the key was
         %                    removed from the tree. This will only be false
@@ -168,7 +175,7 @@ classdef AVLTree < handle
                 return;
             end
             
-            if(theKey==theTree.keyVal)%If this node should be removed.
+            if(theKey==theTree.keyVal.key)%If this node should be removed.
                 if(~isempty(theTree.left))
                     theTree.keyVal=theTree.left.findMax();
                     theTree.left.remove(theTree.keyVal);
@@ -194,7 +201,7 @@ classdef AVLTree < handle
                     return;
                 end
                 didSucceed=true;
-            elseif(theKey<theTree.keyVal&&~isempty(theTree.left))
+            elseif(theKey<theTree.keyVal.key&&~isempty(theTree.left))
                 didSucceed=theTree.left.remove(theKey);
                 
                 %If the left node should be deleted.
@@ -220,16 +227,22 @@ classdef AVLTree < handle
         end
         
         function foundKeyVal=find(theTree,key2Find)
-        %%FIND  Find the KeyVal object corresponding to a key in the tree.
-        %       If a key is not in the tree, then an empty matrix is
-        %       returned.
+        %%FIND Find the KeyVal object corresponding to a key in the tree.
+        %      If a key is not in the tree, then an empty matrix is
+        %      returned.
         %
-        %INPUTS: theTree    The implicitly passed AVLTree object.
-        %        key2Find   The key to find in the tree.
+        %INPUTS: theTree The implicitly passed AVLTree object.
+        %       key2Find The key to find in the tree.
         %
         %OUTPUTS: foundKeyVal The keyVal object having the provided key. If
         %                     the key is not in the tree, then an empty
         %                     matrix is returned.
+        %
+        %The returned KeyVal class is the actual value in the tree, which
+        %is a handle class. The key itself should NOT be modified. Doing so
+        %would invalidate the structure of the AVLTree. If one wishes to
+        %modify a key, they should remove the old key/value from the tree
+        %and then reinsert it under a new key.
         %
         %This is based on the description on page 311 of the Preiss book.
             
@@ -241,9 +254,9 @@ classdef AVLTree < handle
             
             %If the key matches this node, return the value of this
             %node.
-            if(key2Find==theTree.keyVal)
+            if(key2Find==theTree.keyVal.key)
                 foundKeyVal=theTree.keyVal;
-            elseif(key2Find<theTree.keyVal&&~isempty(theTree.left))
+            elseif(key2Find<theTree.keyVal.key&&~isempty(theTree.left))
                 foundKeyVal=theTree.left.find(key2Find);
             elseif(~isempty(theTree.right))
                 foundKeyVal=theTree.right.find(key2Find);
@@ -251,6 +264,32 @@ classdef AVLTree < handle
                 %There are no left or right children and this node is not
                 %the key, so the key is not in the tree.
                 foundKeyVal=[];
+            end
+        end
+        
+        function keyNotFound=replaceValue4Key(theTree,key2Find,newValue)
+        %%REPLACEVALUE4KEY Find the KeyVal object corresponding to a key in
+        %       the tree and replace its value with the new given value
+        %       (The key remains unchanged).
+        %
+        %INPUTS: theTree The implicitly passed AVLTree object.
+        %       key2Find The key to find in the tree.
+        %       newValue The new value to associate with the specified key.
+        %
+        %OUTPUTS: keyNotFound If the key is not found (and thus the tree
+        %                remains unchanged, then this is true. Otherwise,
+        %                this is false.
+        %
+        %This function just calls "find" and then changes the value part of
+        %the KeyVal pair.
+            
+            foundKeyVal=theTree.find(key2Find);
+            
+            if(isempty(foundKeyVal))
+                keyNotFound=true;
+            else
+                foundKeyVal.value=newValue;
+                keyNotFound=false;
             end
         end
         
@@ -294,19 +333,19 @@ classdef AVLTree < handle
         end
         
         function inOrderTraversal(theTree,evalFuncHandle)
-        %%INORDERTRAVERSAL  A recursive function that visits all of
-        %                   the nodes in the tree in order of increasing
-        %                   keys. At each node, the function evalFuncHandle
-        %                   is called with the keyVal pair. An in-order
-        %                   traversal of an AVL tree is the same as a
-        %                   depth-first traversal.
+        %%INORDERTRAVERSAL A recursive function that visits all of
+        %                  the nodes in the tree in order of increasing
+        %                  keys. At each node, the function evalFuncHandle
+        %                  is called with the keyVal pair. An in-order
+        %                  traversal of an AVL tree is the same as a
+        %                  depth-first traversal.
         %
-        %INPUTS: theTree    The implicitly passed AVLTree object. If the
-        %                   tree is empty, then evalFuncHandle will never
-        %                   be called.
-        %    evalFuncHandle A handle for a function that is called at every
-        %                   node with the keyVal object that forms the data
-        %                   of the node.
+        %INPUTS: theTree The implicitly passed AVLTree object. If the tree
+        %                is empty, then evalFuncHandle will never be
+        %                called.
+        % evalFuncHandle A handle for a function that is called at every
+        %                node with the keyVal object that forms the data of
+        %                the node.
         %
         %OUTPUTS: none
         %
@@ -384,7 +423,7 @@ classdef AVLTree < handle
         end
         
         function delete(theTree)
-            %DELETE The destructor.
+        %DELETE The destructor function.
             
             if(~isempty(theTree.left))
                 delete(theTree.left);

@@ -38,13 +38,13 @@ classdef ClusterSet < handle
 %
 %November 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
-    
+
     properties
         clusterEls
         clusterSizes
         offsetArray
     end
-    
+
     methods
         function newClust=ClusterSet(clusterEls,clusterSizes,offsetArray)
         %%CLUSTERSET    The constructor for a ClusterSet class. This

@@ -7,10 +7,6 @@ function thePerm=randPermutation(n)
 %
 %Floyd's algorithm in [1] is used.
 %
-%EXAMPLE:
-%Here, one can see that a histogram of the indices of the ranked
-%permutations from is approximately uniform.
-%
 %REFERENCES:
 %[1] J. Bentley and B. Floyd, "Programming pearls: A sample of brilliance,"
 %   Communications of the ACM, vol. 30, no. 9, pp. 754-757, Sep. 1987.

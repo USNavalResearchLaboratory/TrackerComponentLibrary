@@ -1,6 +1,6 @@
 /**RELVECADD Special relativistic addition of velocity vectors. In the
- *            inertial reference coordinate system, an observer moves with
- *            constant velocity vObsFrame. In the coordinate system of the
+ *           inertial reference coordinate system, an observer moves with
+ *           constant velocity vObsFrame. In the coordinate system of the
  *           observer, an object moves with constant velocity vObjInFrame.
  *           This computes the velocity of the observed object in the
  *           inertial reference frame. Under special relativity, it is not
@@ -62,15 +62,15 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     }
     
     checkRealDoubleArray(prhs[0]);
-    vObsFrame=(double*)mxGetData(prhs[0]);
+    vObsFrame=mxGetDoubles(prhs[0]);
     checkRealDoubleArray(prhs[1]);
-    vObjInFrame=(double*)mxGetData(prhs[1]);
+    vObjInFrame=mxGetDoubles(prhs[1]);
     
     c=getScalarMatlabClassConst("Constants","speedOfLight");
     
     //Allocate space for the return values.
     retMATLAB=mxCreateDoubleMatrix(3,numVec,mxREAL);
-    vObjRef=(double*)mxGetData(retMATLAB);
+    vObjRef=mxGetDoubles(retMATLAB);
 
     for(i=0;i<numVec;i++) {
         relVecAddC(c,vObsFrame+3*i,vObjInFrame+3*i,vObjRef+3*i);

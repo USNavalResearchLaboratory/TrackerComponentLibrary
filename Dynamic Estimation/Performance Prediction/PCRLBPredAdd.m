@@ -10,11 +10,15 @@ function JPred=PCRLBPredAdd(JPrior,xPrior,PPrior,Q,param5,xi,w)
 %       xPrior The (column vector) mean of the distribution of the true
 %              (but unknown to the tracker) possible target location at the
 %              previous time. It is assumed that the distribution of the
-%              target location is Gaussian.
+%              target location is Gaussian. If param5  is not a function
+%              handle, then xPrior is not used and an empty matrix can be
+%              passed.
 %       PPrior The covariance of the distribution of the true (but unknown
 %              to the tracker) possible target location at the previous
 %              time. If the target motion is deterministic but unknown to
-%              the tracker, then PPrior is a matrix of zeros.
+%              the tracker, then PPrior is a matrix of zeros. If param5 is
+%              not a function handle, then PPrior is not used and an empty
+%              matrix can be passed.
 %            Q The covariance matrix of the additive process noise.
 %       param5 Either the fixed xDimXxDim state transition matrix F, or a
 %              function handle FJacob to get the state transition Jacobian

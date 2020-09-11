@@ -40,7 +40,6 @@ for curIter=1:maxIter
         break;
     end
 end
-
 end
 
 %LICENSE:

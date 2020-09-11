@@ -1,26 +1,23 @@
 function [mu,P,w,cost]=kMeanspp(z,K,maxIter)
-%%KMEANSPP  Run the k-means++ algorithm for clustering a set of more than K
-%           data points into k clusters. The k-means++ algorithm is the
-%           same as the general k-means algorithm, except a different
-%           initiatlization routine is used.
+%%KMEANSPP Run the k-means++ algorithm for clustering a set of more than K
+%          data points into k clusters. The k-means++ algorithm is the
+%          same as the general k-means algorithm, except a different
+%          initialization routine is used.
 %
-%INPUTS:  z        A zDim X numPoints set of vectors that are to be
-%                  clustered.
-%         K        The number of clusters to form. K>=numPoints.
-%         maxIter  The maximum number of iterations to perform for
-%                  clustering. If omitted,
-%                  maxIter=1000;
+%INPUTS: z A zDim X numPoints set of vectors that are to be clustered.
+%        K The number of clusters to form. K>=numPoints.
+%  maxIter The maximum number of iterations to perform for clustering. If
+%          omitted, maxIter=1000;
 %
-%OUTPUTS: mu       A zDim X K set of the cluster means. 
-%         P        A zDim X zDim X K set of sample covariance matrices for
-%                  each of the k clusters, where mu(:,n) is the mean of the
-%                  nth cluster.
-%         w        A KX1 vector of weights such that w(n) is the fraction
-%                  of the total original points assigned to the nth
-%                  cluster.
-%         cost     The cost of the k-means assignment. This is the sum of
-%                  the squared distances between the points assigned to a
-%                  cluster and the cluster mean.
+%OUTPUTS: mu A zDim X K set of the cluster means. 
+%          P A zDim X zDim X K set of sample covariance matrices for each
+%            of the k clusters, where mu(:,n) is the mean of the nth
+%            cluster.
+%          w A KX1 vector of weights such that w(n) is the fraction of the
+%            total original points assigned to the nth cluster.
+%       cost The cost of the k-means assignment. This is the sum of the
+%            squared distances between the points assigned to a cluster and
+%            the cluster mean.
 %
 %The k-means algorithm is a suboptimal algorithm that tries to find a set
 %of k-means such that the sum of the squared distances from the points to
@@ -51,11 +48,12 @@ zDim=size(z,1);
 numPoints=size(z,2);
 
 mu=zeros(zDim,K);
+
 %Use k-mean++ initialization.
 %The first center is chosen randomly.
 mu(:,1)=z(:,randi([1;numPoints]));
 diff=mu(:,1)*ones(1,numPoints)-z;
-nearestMuDist=sum(diff.*diff,1);%the squared distances from this point.
+nearestMuDist=sum(diff.*diff,1);%The squared distances from this point.
 
 for k=2:K
     %The points are chosen with a probability equal to the ratio of the
@@ -83,17 +81,17 @@ while(sum(sum(muPrev~=mu))~=0&&numIter<maxIter)
     selClust=zeros(1,numPoints);
     for k=1:K
         diff=bsxfun(@minus,z,mu(:,k));%mu(:,k)*ones(1,numPoints)-z;
-        dist=sum(diff.*diff,1);%the squared distances from this center.
+        dist=sum(diff.*diff,1);%The squared distances from this center.
         
         sel=dist<minCosts;
         minCosts(sel)=dist(sel);
-        selClust(sel)=k;%Assign those points to this cluster if it has the lowest cost.
+        %Assign those points to this cluster if it has the lowest cost.
+        selClust(sel)=k;
     end
     
     %Now, all of the points are assigned to clusters, and we can calculate
     %a new set of means.
     muPrev=mu;
-    
     for k=1:K
         mu(:,k)=mean(z(:,selClust==k),2);
     end

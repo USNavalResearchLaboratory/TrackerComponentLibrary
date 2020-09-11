@@ -33,7 +33,7 @@ double getRangeRate2DCPP(const double *xTar,bool useHalfRange,const double *xTx,
  *April 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
  **/
     
-    double vt[2],vr[2],vi[2],dtr[2],dtl[2],dtrRat,dtlRat;
+    double vt[2],vr[2],vi[2],dtr[2],dtl[2];
     double magVal,rr;
 
     vt[0]=xTar[2];
@@ -91,7 +91,7 @@ double getRangeRate3DCPP(const double *xTar,bool useHalfRange,const double *xTx,
  *April 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
  **/
     
-    double vt[3],vr[3],vi[3],dtr[3],dtl[3],dtrRat,dtlRat;
+    double vt[3],vr[3],vi[3],dtr[3],dtl[3];
     double magVal, rr;
 
     vt[0]=xTar[3];

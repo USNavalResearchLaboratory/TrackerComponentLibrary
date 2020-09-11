@@ -25,6 +25,10 @@ function [zeroVal,exitFlag]=BrentRootFind(f,xSpan,AbsTol,maxIter)
 %This function implements the first algorithm described by Brent in [1].
 %That is the zero algorithm.
 %
+%This function usually outperforms bisectionRootFind. However, if the
+%function being zeroed is very flat over much of the bounded region, then
+%this function might get stuck and return a bad value.
+%
 %EXAMPLE:
 % f=@(x)(x.^2-4);
 % xSpan=[0;5];

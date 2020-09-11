@@ -2,7 +2,7 @@ function [pList,intersectionCode]=ellipseIntersect(param1,param2,param3,param4,p
 %%ELLIPSEINTERSECT Determine whether two 2D ellipses overlap. If the
 %                  ellipses intersect, then return the point(s) of
 %                  intersection. If they do not, indicate whether one
-%                  ellipse is enclosed in the other
+%                  ellipse is enclosed in the other.
 %
 %INPUTS:  The function behaves differently depending upon whether two or
 %         six parameters are passed. If two parameters are passed, then
@@ -54,7 +54,7 @@ else
     a=MatVec2Poly(param1,param2,param3);
     b=MatVec2Poly(param4,param5,param6);
     mu1=param1;
-    mu2=param2;
+    mu2=param4;
 end
 
 %Allocate space for the maximum number of solutions.
@@ -115,11 +115,11 @@ pList=unique(pList','rows')';
 
 if(isempty(pList))
     intersectionCode=0;
-    
+
     %Determine whether one ellipse is enclosed in the other.
     val=a(1)*mu2(1)^2+a(2)*mu2(2)^2+a(3)*mu2(1)*mu2(2)+a(4)*mu2(1)+a(5)*mu2(2)+a(6);
     if(val<=0)
-        %If the center of the second ellipse is in the first 
+        %If the center of the second ellipse is in the first.
         intersectionCode=-1;
         return;
     end
@@ -152,26 +152,38 @@ function a=MatVec2Poly(mu,P,gamma)
 %             determine the corresponding coeficients of the polynomial
 %             associated with the ellipse.
 %
-%INPUTS:  mu    A 2X1 vector specifying the center of the ellipse.
-%         P     A 2X2 symmetric, positive definite matrix.
-%         gamma A scalar threshold.
+%INPUTS:  mu A 2X1 vector specifying the center of the ellipse.
+%          P A 2X2 symmetric, positive definite matrix.
+%      gamma A scalar threshold.
 %
 %OUTPUTS: The coefficients of an ellipse in the form corresponding to
-%           a(1)*x^2+a(2)*y^2+a(3)*x*y+a(4)*x+a(5)*y+a(6)=0
-%           Note that for a to represent an ellipse a1*a2-(a3/2)^2>0.
+%         a(1)*x^2+a(2)*y^2+a(3)*x*y+a(4)*x+a(5)*y+a(6)=0
+%         Note that for a to represent an ellipse a1*a2-(a3/2)^2>0.
 %
 %The parameters mu P and gamma specify an ellipse given by the equation
 %(z-mu)'*inv(P)*(z-mu)=gamma
-%where z is a 2X1 vector. 
+%where z is a 2X1 vector.
+%
+%Using the return format of this function, the points inside fo the ellipse
+%are such that
+%a(1)*x^2+a(2)*y^2+a(3)*x*y+a(4)*x+a(5)*y+a(6)<=0
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
     
-    a(1)=P(1,1);
-    a(2)=P(2,2);
-    a(3)=2*P(1,2);
-    a(4)=-2*(mu(1)*P(1,1)+mu(2)*P(1,2));
-    a(5)=-2*(mu(1)*P(1,2)+mu(2)*P(2,2));
-    a(6)=mu(1)^2*P(1,1)+2*mu(1)*mu(2)*P(1,2)+mu(2)^2*P(2,2)-gamma;
+%     a(1)=P(1,1);
+%     a(2)=P(2,2);
+%     a(3)=2*P(1,2);
+%     a(4)=-2*(mu(1)*P(1,1)+mu(2)*P(1,2));
+%     a(5)=-2*(mu(1)*P(1,2)+mu(2)*P(2,2));
+%     a(6)=mu(1)^2*P(1,1)+2*mu(1)*mu(2)*P(1,2)+mu(2)^2*P(2,2)-gamma;
+
+a(1)=P(1,1); 
+a(2)=P(2,2);
+a(3)=2*P(1,2);
+a(4)=-2*(mu(1)*P(1,1)+mu(2)*P(1,2));
+a(5)=-2*(mu(1)*P(1,2)+mu(2)*P(2,2));
+a(6)=mu(1)^2*P(1,1)+2*mu(1)*mu(2)*P(1,2)+mu(2)^2*P(2,2)-gamma;
+
 end
 
 function mu=Poly2Center(a)

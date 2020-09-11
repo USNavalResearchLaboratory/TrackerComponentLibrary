@@ -71,7 +71,7 @@ void FukishimaAlg(double *points,double *retData,size_t numVec,double a,double f
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     double *points,a,f;
-    size_t numVec,i;
+    size_t numVec;
     mxArray *retMat;
     double *retData;
     int algorithm=0;
@@ -92,7 +92,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         mexErrMsgTxt("The input vector has a bad dimensionality.");
     }
     
-    points=(double*)mxGetData(prhs[0]);
+    points=mxGetDoubles(prhs[0]);
     //points[0] is x
     //points[1] is y
     //points[2] is z
@@ -115,7 +115,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     
     //Allocate space for the return variables.
     retMat=mxCreateDoubleMatrix(3,numVec,mxREAL);
-    retData=(double*)mxGetData(retMat);
+    retData=mxGetDoubles(retMat);
     
     switch(algorithm) {
         case 0://Olson's algorithm

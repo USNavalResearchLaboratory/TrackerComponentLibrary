@@ -94,7 +94,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     
     PBarVals.numClust=M+1;
     PBarVals.totalNumEl=numPBar;
-    PBarVals.clusterEls=reinterpret_cast<double*>(mxGetData(clusterElsMATLAB));
+    PBarVals.clusterEls=mxGetDoubles(clusterElsMATLAB);
     
     u=fabs(sin(theta));
 
@@ -130,7 +130,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         
         dPBarValsdTheta.numClust=M+1;
         dPBarValsdTheta.totalNumEl=numPBar;
-        dPBarValsdTheta.clusterEls=reinterpret_cast<double*>(mxGetData(clusterElsMATLAB));
+        dPBarValsdTheta.clusterEls=mxGetDoubles(clusterElsMATLAB);
 
         NALegendreCosRatDerivCPP(dPBarUValsdTheta, PBarUVals, theta);
         
@@ -161,7 +161,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         
         d2PBarValsdTheta2.numClust=M+1;
         d2PBarValsdTheta2.totalNumEl=numPBar;
-        d2PBarValsdTheta2.clusterEls=reinterpret_cast<double*>(mxGetData(clusterElsMATLAB));
+        d2PBarValsdTheta2.clusterEls=mxGetDoubles(clusterElsMATLAB);
         
         NALegendreCosRatDeriv2CPP(d2PBarValsdTheta2, dPBarUValsdTheta, PBarUVals,theta);
         

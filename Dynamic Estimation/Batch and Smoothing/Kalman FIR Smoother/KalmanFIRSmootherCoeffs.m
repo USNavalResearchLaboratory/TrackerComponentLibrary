@@ -1,34 +1,32 @@
 function [A, B, PkN]=KalmanFIRSmootherCoeffs(H,F,R,Q,kD)
-%%KALMANFIRSMOOTHERCOEFFS  Obtain the coefficients for a linear Kalman finite
-%                     impulse response (FIR) smoother such that one can
-%                     obtain a state and state covariance estimate from a
-%                     batch of measurements and a set of control inputs
-%                     with no prior information.
+%%KALMANFIRSMOOTHERCOEFFS Obtain the coefficients for a linear Kalman
+%                   finite impulse response (FIR) smoother such that one
+%                   can obtain a state and state covariance estimate from a
+%                   batch of measurements and a set of control inputs with
+%                   no prior information.
 %
-%INPUTS:    H   The zDim X xDim X N hypermatrix of measurement matrices
-%               such that H(:,:,k)*x+w is the measurement at time k, where
-%               x is the state and w is zero-mean Gaussian noise with
-%               covariance matrix R (:,:,k).
-%           F   The xDim X xDim X (N-1) hypermatrix of state transition
-%               matrices. The state at discrete-time k is modeled as
-%               F(:,:,k) times the state at time k plus zero-mean
-%               Gaussian process noise with covariance matrix Q(:,:,k).
-%           R   The zDim X zDim X N hypermatrix of measurement covariance
-%               matrices.
-%           Q   The xDim X xDim X (N-1) hypermatrix of process noise
-%               covariance matrices.
-%           kD  The discrete time-step at which the smoothed state estimate
-%               is desired, where z(:,1) is at discrete time-step 1 (not
-%               0).
+%INPUTS: H The zDim X xDim X N hypermatrix of measurement matrices such
+%          that H(:,:,k)*x+w is the measurement at time k, where x is the
+%          state and w is zero-mean Gaussian noise with covariance matrix
+%          R(:,:,k).
+%        F The xDim X xDim X (N-1) hypermatrix of state transition
+%          matrices. The state at discrete-time k is modeled as F(:,:,k)
+%          times the state at time k plus zero-mean Gaussian process noise
+%          with covariance matrix Q(:,:,k).
+%        R The zDim X zDim X N hypermatrix of measurement covariance
+%          matrices.
+%        Q The xDim X xDim X (N-1) hypermatrix of process noise covariance
+%          matrices.
+%       kD The discrete time-step at which the smoothed state estimate is
+%          desired, where z(:,1) is at discrete time-step 1 (not 0).
 %
-%OUTPUTS:   A   An xDim X zDim X N matrix of coefficients for the
-%               measurements.
-%           B   An xDim X gDim X (N-1) matrix of coefficients for the 
-%               control inputs. The control input at time N only affects
-%               the state at time N+1 and thus is not needed.
-%           PkN The covariance matrix cooresponding to the smoothed at
-%               discrete-time kD that one can obtain using the matrices A
-%               and B.
+%OUTPUTS: A An xDim X zDim X N matrix of coefficients for the measurements.
+%         B An xDim X gDim X (N-1) matrix of coefficients for the control
+%           inputs. The control input at time N only affects the state at
+%           time N+1 and thus is not needed.
+%       PkN The covariance matrix cooresponding to the smoothed at
+%           discrete-time kD that one can obtain using the matrices A and
+%           B.
 %
 %The sum of A(:,:,k)*z(:,k)+B(:,:,k)*u(:,k), where z and u are the
 %measurement and control input at time k over all k, provides the estimate.

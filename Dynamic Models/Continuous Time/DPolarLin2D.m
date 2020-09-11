@@ -1,4 +1,4 @@
-function [D,DJacob,DHess,pDpt]=DPolarLin2D(x,t,q0Dir,param4)
+function [D,DJacob,DHess,pDpt]=DPolarLin2D(x,q0Dir,param4)
 %%DPOLARCV2D The diffusion matrix for a continuous-time constant heading
 %            motion model where the target state is given in terms of
 %            position, direction of velocity in radians counterclockwise
@@ -13,9 +13,6 @@ function [D,DJacob,DHess,pDpt]=DPolarLin2D(x,t,q0Dir,param4)
 %          dimensionality of x matters; the components are ignored. The
 %          dimensionality is used to determine whether linear acceleration
 %          is modeled and what N is.
-%        t An unused time component so that aLinear can be used with
-%          Runge-Kutta methods that expect the function to take two
-%          parameters.
 %    q0Dir The power spectral density of the process noise for the heading
 %          direction. The units are rad^2/s.
 %   param4 If x is only 4D, that is, does not model a constant linear

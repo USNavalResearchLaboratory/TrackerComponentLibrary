@@ -182,7 +182,7 @@ end
 
 %The gate probability (from an inverse chi-squared PDF). Choose PG to be
 %the maximum gate when multiple gammaVal values are given.
-PG=ChiSquareD.CDF(max(gammaVal),zDim);
+PG=ChiSquareD.CDF(max(gammaVal(:)),zDim);
 
 %Whether or not the target is detected is affected by whether it exists
 %(the rPred).

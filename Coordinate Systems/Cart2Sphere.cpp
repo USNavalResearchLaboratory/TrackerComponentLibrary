@@ -99,13 +99,13 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     mxArray *retMat;
     double *retData;
     //These two could be declared const, but that would just require extra
-    //typecasting, since the return value of mxGetData for the inputs is
+    //typecasting, since the return value of mxGetDoubles for the inputs is
     //not const and would have to be typecase, or these would have to be
     //typecast.
     double zeroVector[3]={0,0,0};
     double identMat[9]={1,0,0,0,1,0,0,0,1};
     
-    bool useHalfRange,hasRange;
+    bool useHalfRange;
 
     if(nrhs<1||nrhs>6) {
         mexErrMsgTxt("Incorrect number of inputs.");
@@ -126,7 +126,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     }
     
     checkRealDoubleArray(prhs[0]);
-    points=reinterpret_cast<double*>(mxGetData(prhs[0]));
+    points=mxGetDoubles(prhs[0]);
     
     if(nrhs<2||mxIsEmpty(prhs[1])) {
         systemType=0;
@@ -163,7 +163,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             return;
         }
 
-        zTx=reinterpret_cast<double*>(mxGetData(prhs[3]));
+        zTx=mxGetDoubles(prhs[3]);
         if(numVecs==N) {
             zTxOffset=numTxRows;
         }
@@ -184,7 +184,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             return;
         }
 
-        zRx=reinterpret_cast<double*>(mxGetData(prhs[4]));
+        zRx=mxGetDoubles(prhs[4]);
 
         if(numVecs==N) {
             zRxOffset=numRxRows;
@@ -216,14 +216,14 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             mexErrMsgTxt("The rotation matrices have the wrong dimensionality."); 
         }
         
-        M=reinterpret_cast<double*>(mxGetData(prhs[5]));
+        M=mxGetDoubles(prhs[5]);
         if(numMats==N) {
             MOffset=9;
         }
     }
 
     retMat=mxCreateDoubleMatrix(3,N,mxREAL);
-    retData=reinterpret_cast<double*>(mxGetData(retMat));
+    retData=mxGetDoubles(retMat);
     
     //Convert each of the measurements
     for(i=0;i<N;i++) {

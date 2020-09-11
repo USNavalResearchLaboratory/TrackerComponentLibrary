@@ -26,7 +26,7 @@ function [xy,scalFact]=ellips2Mercator(latLon,a,f)
 %The Mercator projection is discussed in detail in Chapter 7 of [1].
 %Equations for the conversion along with a commonly used but very
 %inaccurate spherical Mercator conversion (the "Web" Mercator map) are
-%given in [2]. The spherical Mercator conversion can be obtained by setting
+%given in [2]. The "web" Mercator conversion can be obtained by setting
 %f to zero.
 %
 %REFERENCES:

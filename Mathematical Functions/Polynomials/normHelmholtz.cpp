@@ -79,7 +79,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     CountingClusterSetCPP<double> dHBardu;//The first derivatives
     CountingClusterSetCPP<double> d2HBardu2;//The second derivatives
     CountingClusterSetCPP<double> d3HBardu3;//The third derivatives
-    size_t M, numH, i;
+    size_t M, numH;
     mxArray *CSRetVal;
     mxArray *clusterElsMATLAB, *numClustMATLAB;
     
@@ -112,7 +112,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
 
     HBar.numClust=M+1;
     HBar.totalNumEl=numH;
-    HBar.clusterEls=reinterpret_cast<double*>(mxGetData(clusterElsMATLAB));
+    HBar.clusterEls=mxGetDoubles(clusterElsMATLAB);
 
     normHelmHoltzCPP(HBar,u,scalFactor);
     
@@ -128,7 +128,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         
         dHBardu.numClust=M+1;
         dHBardu.totalNumEl=numH;
-        dHBardu.clusterEls=reinterpret_cast<double*>(mxGetData(clusterEls1stDerivMATLAB));
+        dHBardu.clusterEls=mxGetDoubles(clusterEls1stDerivMATLAB);
         
         normHelmHoltzDerivCPP(dHBardu,HBar);
         //Set the second return value
@@ -145,7 +145,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         
         d2HBardu2.numClust=M+1;
         d2HBardu2.totalNumEl=numH;
-        d2HBardu2.clusterEls=reinterpret_cast<double*>(mxGetData(clusterEls2ndDerivMATLAB));
+        d2HBardu2.clusterEls=mxGetDoubles(clusterEls2ndDerivMATLAB);
         
         normHelmHoltzDeriv2CPP(d2HBardu2,HBar);
         
@@ -163,7 +163,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         
         d3HBardu3.numClust=M+1;
         d3HBardu3.totalNumEl=numH;
-        d3HBardu3.clusterEls=reinterpret_cast<double*>(mxGetData(clusterEls3rdDerivMATLAB));
+        d3HBardu3.clusterEls=mxGetDoubles(clusterEls3rdDerivMATLAB);
         
         normHelmHoltzDeriv3CPP(d3HBardu3,HBar);
         

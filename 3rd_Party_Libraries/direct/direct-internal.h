@@ -10,7 +10,8 @@
 
 #include "direct.h"
 
-//DFC 2015-9-30: Removed timer code; changed memory allocation routines to those in Matlab.
+//DFC 2015-9-30: Removed timer code; changed memory allocation routines to
+//those in Matlab.
 
 #ifdef __cplusplus
 extern "C"
@@ -32,7 +33,7 @@ extern void direct_dirheader_(
      FILE *logfile, integer *version,
      doublereal *x, integer *n, doublereal *eps, integer *maxf, integer *
      maxt, doublereal *l, doublereal *u, integer *algmethod, integer *
-     maxfunc, doublereal *fglobal, doublereal *fglper,
+     maxfunc, const integer *maxdeep, doublereal *fglobal, doublereal *fglper,
      integer *ierror, doublereal *epsfix, integer *iepschange, doublereal *
      volper, doublereal *sigmaper);
 extern void direct_dirinit_(
@@ -53,47 +54,47 @@ extern void direct_dirpreprc_(doublereal *u, doublereal *l, integer *n,
 extern void direct_dirchoose_(
      integer *anchor, integer *s, integer *actdeep,
      doublereal *f, doublereal *minf, doublereal epsrel, doublereal epsabs, doublereal *thirds,
-     integer *maxpos, integer *length, const integer *maxdeep,
+     integer *maxpos, integer *length, integer *maxfunc, const integer *maxdeep,
      const integer *maxdiv, integer *n, FILE *logfile,
      integer *cheat, doublereal *kmax, integer *ifeasiblef, integer jones);
 extern void direct_dirdoubleinsert_(
      integer *anchor, integer *s, integer *maxpos, integer *point, 
-     doublereal *f,
+     doublereal *f, const integer *maxdeep, integer *maxfunc, 
      const integer *maxdiv, integer *ierror);
-extern integer direct_dirgetmaxdeep_(integer *pos, integer *length,
+extern integer direct_dirgetmaxdeep_(integer *pos, integer *length, integer *maxfunc,
 			      integer *n);
 extern void direct_dirget_i__(
      integer *length, integer *pos, integer *arrayi, integer *maxi, 
-     integer *n);
+     integer *n, integer *maxfunc);
 extern void direct_dirsamplepoints_(
      doublereal *c__, integer *arrayi, 
      doublereal *delta, integer *sample, integer *start, integer *length, 
      FILE *logfile, doublereal *f, integer *free, 
      integer *maxi, integer *point, doublereal *x, doublereal *l,
-     doublereal *u, integer *n, 
-     integer *oops);
+     doublereal *minf, integer *minpos, doublereal *u, integer *n, 
+     integer *maxfunc, const integer *maxdeep, integer *oops);
 extern void direct_dirdivide_(
      integer *new__, integer *currentlength, 
      integer *length, integer *point, integer *arrayi, integer *sample, 
      integer *list2, doublereal *w, integer *maxi, doublereal *f, 
-     integer *n);
+     integer *maxfunc, const integer *maxdeep, integer *n);
 extern void direct_dirinsertlist_(
      integer *new__, integer *anchor, integer *point, doublereal *f, 
      integer *maxi, integer *length, integer *maxfunc, 
-     integer *n, integer *samp, integer jones);
+     const integer *maxdeep, integer *n, integer *samp, integer jones);
 extern void direct_dirreplaceinf_(
-     integer *free,
+     integer *free, integer *freeold, 
      doublereal *f, doublereal *c__, doublereal *thirds, integer *length, 
      integer *anchor, integer *point, doublereal *c1, doublereal *c2, 
-     integer *maxfunc, integer *maxdim, integer *n,
+     integer *maxfunc, const integer *maxdeep, integer *maxdim, integer *n, 
      FILE *logfile, doublereal *fmax, integer jones);
 extern void direct_dirsummary_(
      FILE *logfile, doublereal *x, doublereal *l, doublereal *u, 
      integer *n, doublereal *minf, doublereal *fglobal, 
-     integer *numfunc);
+     integer *numfunc, integer *ierror);
 extern integer direct_dirgetlevel_(
      integer *pos, integer *length, 
-     integer *n, integer jones);
+     integer *maxfunc, integer *n, integer jones);
 extern void direct_dirinfcn_(
      fp fcn, doublereal *x, doublereal *c1, 
      doublereal *c2, integer *n, doublereal *f, integer *flag__, 
@@ -101,10 +102,12 @@ extern void direct_dirinfcn_(
 
 /* DIRserial.c / DIRparallel.c */
 extern void direct_dirsamplef_(
-     doublereal *c__, integer *arrayi, integer *new__, integer *length, doublereal *f, integer *maxi,
+     doublereal *c__, integer *arrayi, doublereal 
+     *delta, integer *sample, integer *new__, integer *length, 
+     FILE *logfile, doublereal *f, integer *free, integer *maxi, 
      integer *point, fp fcn, doublereal *x, doublereal *l, doublereal *
-     minf, integer *minpos, doublereal *u, integer *n, 
-     doublereal *fmax, integer *
+     minf, integer *minpos, doublereal *u, integer *n, integer *maxfunc, 
+     const integer *maxdeep, integer *oops, doublereal *fmax, integer *
      ifeasiblef, integer *iinfesiblef, void *fcn_data, int *force_stop);
 
 /* DIRect.c */

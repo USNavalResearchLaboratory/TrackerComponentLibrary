@@ -31,7 +31,7 @@ void MMOSPAApproxCPP(double *MMOSPAEst,
  *        numTar    The size of the second dimensions that x splits into
  *        numHyp    The size of the third dimensions that x splits into.
  *        numScan   The number of forward scans of the approximation
- *                  algoirthm to perform.
+ *                  algorithm to perform.
  *
  *OUTPUT: The output is placed in MMOSPAEst and orderList and is
  *        The MMOSPA estimate and the ordering idices of the hypotheses.

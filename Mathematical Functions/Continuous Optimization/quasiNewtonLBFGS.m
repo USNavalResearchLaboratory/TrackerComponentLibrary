@@ -180,7 +180,7 @@ function [xMin,fMin,exitCode]=quasiNewtonLBFGS(f,x0,numCorr,epsilon,deltaTestDis
 %    "A Limited Memory Algorithm for Bound Constrained Optimization".
 %    SIAM Journal on Scientific and Statistical Computing 16 (5):
 %    1190-1208. doi:10.1137/0916069.
-%[3] J. J. Moré and D. J. Thuente, "Line search algorithms with
+%[3] J. J. Morï¿½ and D. J. Thuente, "Line search algorithms with
 %    guaranteed sufficient decrease," ACM Transactions on Mathematical
 %    Software, vol. 20, no. 3, pp. 286-307, Sep. 1994.
 %

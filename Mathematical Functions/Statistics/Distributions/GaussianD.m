@@ -2,16 +2,16 @@ classdef GaussianD
 %%GAUSSIAND Functions to handle the scalar and multivariate Gaussian
 %           distribution.
 %Implemented methods are: mean,cov, PDF, PDFI, PDFIDerivs (for multivariate
-%                         derivatives of the PDF), PDFS, PDFSGradHessVechS
-%                         (for the gradient and Hessian of the elements of
-%                         a lower-triangular square-root of the covariance
-%                         matrix), CDF (for scalar distributions), invCDF
-%                         (for scalar distributions), normProdDist,
-%                         normConvDist (for scalar distributions),
-%                         momentGenFun (multivariate, including
-%                         derivatives), cumGenFun (multivariate, including
-%                         derivatives), rand, randS, integralOverRegion,
-%                         entropy
+%                         derivatives of the PDF), PDFS, logPDFS,
+%                         PDFSGradHessVechS (for the gradient and Hessian
+%                         of the elements of a lower-triangular square-root
+%                         of the covariance matrix), CDF (for scalar
+%                         distributions), invCDF (for scalar
+%                         distributions), normProdDist, normConvDist (for
+%                         scalar distributions), momentGenFun
+%                         (multivariate, including derivatives), cumGenFun
+%                         (multivariate, including derivatives), rand,
+%                         randS, integralOverRegion, entropy
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
@@ -21,9 +21,9 @@ function val=mean(mu)
 %%MEAN Obtain the mean of the Gaussian distribution.
 %
 %INPUTS: mu The mean of the PDF. If the PDF is multivariate, then this is
-%            a column vector.
+%           a numDimX1 column vector.
 %
-%OUTPUTS: val The mean of the Gaussian distribution.
+%OUTPUTS: val The numDimX1 mean of the Gaussian distribution.
 %
 %The Gaussian distribution is parameterized by its mean and covariance
 %matrix. Thus, this function just returns the mean it is given.
@@ -41,11 +41,11 @@ function val=cov(Sigma)
 %               multidimensional) of the PDF. The variance cannot be zero
 %               and the covariance matrix cannot be singular.
 %
+%OUTPUTS: val The covariance matrix of the Gaussian distribution.
+%
 %The Gaussian distribution is parameterized by its mean and covariance
 %matrix. Thus, this function just returns the covariance matrix it is
 %given.
-%
-%OUTPUTS: val  The covariance matrix of the Gaussian distribution.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
@@ -53,7 +53,7 @@ function val=cov(Sigma)
 end
 
 function vals=PDF(z,mu,Sigma)
-%%PDF Evaluate a scalar or multivariate Gaussian (normal) PDF at a certain
+%%PDF Evaluate a scalar or multivariate Gaussian (normal) PDF at specified
 %     points given the mean and the covariance matrix.
 %
 %INPUTS: z The points at which the PDF should be evaluated. If the PDF is
@@ -89,8 +89,46 @@ function vals=PDF(z,mu,Sigma)
     vals=(det(2*pi*Sigma))^(-1/2)*exp(-0.5*invSymQuadForm(diff,Sigma));
 end
 
-function vals=PDFI(z,mu,SigmaInv)
-%%PDFI Evaluate a scalar or multivariate Gaussian (normal) PDF at certain
+function vals=logPDF(z,mu,Sigma)
+%%LOGPDF Evaluate the natural logarithm of a scalar or multivariate
+%        Gaussian (normal) PDF at a certain points given the mean and the
+%        covariance matrix.
+%
+%INPUTS: z The points at which the PDF should be evaluated. If the PDF is
+%          multivariate, then this is a column vector. If evaluation at
+%          multiple points are desired, then this is a numDimXN matrix with
+%          each column being the a point (a vector).
+%       mu The mean of the PDF. If the PDF is multivariate, then this is a
+%          numDimX1 column vector. If omitted or an empty matrix is passed,
+%          a zero mean is used.
+%    Sigma The variance (if scalar) or numDimXnumDim covariance matrix
+%          (if multidimensional) of the PDF. The variance cannot be zero
+%          and the covariance matrix cannot be singular. If omitted or an
+%          empty matrix is passed, the identity matrix is used as the
+%          covariance matrix.
+%
+%OUTPUTS: vals The scalar values of the natural logarithm of the normal PDF
+%              with mean mu and covariance matrix Sigma evaluated at the
+%              points in z. If multiple points are passed (z is a matrix),
+%              then val is a row vector.
+%
+%March 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
+    
+    numDim=size(z,1);
+    if(nargin<2||isempty(mu))
+        mu=zeros(numDim,1);
+    end
+    
+    if(nargin<3||isempty(Sigma))
+       Sigma=eye(numDim,numDim); 
+    end
+    
+    diff=bsxfun(@minus,z,mu);
+    vals=-(1/2)*log(det(2*pi*Sigma))-(1/2)*invSymQuadForm(diff,Sigma);
+end
+
+function vals=PDFI(z,mu,SigmaInv,SigmaInvDet)
+%%PDFI Evaluate a scalar or multivariate Gaussian (normal) PDF at specified
 %      points given the mean and the inverse of the covariance matrix.
 %
 %INPUTS: z The points at which the PDF should be evaluated. If the PDF is
@@ -104,6 +142,10 @@ function vals=PDFI(z,mu,SigmaInv)
 %          covariance matrix (if multidimensional) of the PDF. SigmaInv can
 %          be singular. If omitted or an empty matrix is passed, the
 %          identity matrix is used as the covariance matrix.
+% SigmaInvDet Optionally, a length-N set of determinants of the matrices
+%          in SigmaInv can be passed so as to speed up the computation. If
+%          omitted or an empty matrix is passed, determinants will be taken
+%          as needed.
 %
 %OUTPUTS: val The scalar value of the normal PDF with mean mu and inverse
 %             covariance matrix SigmaInv evaluated at the point z. If
@@ -123,12 +165,17 @@ function vals=PDFI(z,mu,SigmaInv)
        SigmaInv=eye(numDim,numDim); 
     end
     
+    if(nargin<4||isempty(SigmaInvDet))    
+        constVal=sqrt(det(SigmaInv)/(2*pi)^(n));
+    else
+        constVal=sqrt(SigmaInvDet/(2*pi)^(n));
+    end
     for curPoint=1:numPoints
         diff=z(:,curPoint)-mu;
         %Note that det(A^(-1))=1/det(A) and that det(a*A)=a^n*det(A), where
         %a is a scalar and A is an nXn matrix.
-        
-        vals(curPoint)=sqrt((2*pi)^(-n)*det(SigmaInv))*exp(-0.5*diff'*SigmaInv*diff);
+
+        vals(curPoint)=constVal*exp(-0.5*(diff'*SigmaInv*diff));
     end
 end
 
@@ -245,9 +292,9 @@ end
 end
 
 function val=PDFS(z,mu,S)
-%%GAUSSIANPDFS Evaluate a scalar or multivariate Gaussian (normal) PDF at a
-%              certain point given the mean and the square root of the
-%              covariance matrix.
+%%PDFS Evaluate a scalar or multivariate Gaussian (normal) PDF at specifed
+%      points given the mean and the lower-triangular square root of the
+%      covariance matrix.
 %
 %INPUTS: z The points at which the PDF should be evaluated. If the PDF is
 %          multivariate, then this is a column vector. If evaluations at
@@ -290,11 +337,58 @@ function val=PDFS(z,mu,S)
     val = (1/((2*pi)^(n/2)*abs(det(S))))*exp(-0.5*sum(diff.*diff,1)); 
 end
 
+function val=logPDFS(z,mu,S)
+%%LOGPDFS Evaluate the natural logarithm of a scalar or multivariate
+%         Gaussian (normal) PDF at specified points given the mean and the
+%         lower-triangular square root of the covariance matrix.
+%
+%INPUTS: z The points at which the PDF should be evaluated. If the PDF is
+%          multivariate, then this is a column vector. If evaluations at
+%          multiple points are desired, then this is a numDimXN matrix with
+%          each column being the a point (a vector).
+%       mu The mean of the PDF. If the PDF is multivariate, then this is a
+%          numDimX1 column vector.
+%        S The square root of the variance (if scalar) or the numDimXnumDim
+%          lower-triangular square root of the covariance matrix (if
+%          multidimensional) of the PDF such that S*S'=Sigma, where Sigma
+%          is the covariance matrix. S cannot be a singular matrix. If
+%          omitted or an empty matrix is passed, the identity matrix is
+%          used.
+%
+%OUTPUTS: val The scalar value(s) of the natural logarithm of the normal
+%             PDF with mean mu and square root covariance matrix S
+%             evaluated at the points in z. If multiple points are passed
+%             (z is a matrix), then val is a row vector.
+%
+%March 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    if(nargin<2||isempty(mu))
+        mu=zeros(numDim,1);
+    end
+
+    if(nargin<3||isempty(S))
+    	S=eye(numDim,numDim); 
+    end
+
+%Note that (S*S')^(-1)=(S')^(-1)*S^(-1)
+    diff=S\bsxfun(@minus,z,mu);
+%Note that det(S*S')=det(S)*det(S') and that det(S)=det(S') so
+%det(S*S')=det(S)^2. Also, det(a*S)=a^ndet(S), where a is a scalar and S is
+%an nXn matrix. Thus,
+%det(2*pi*S*S')=det(sqrt(2*pi)*S)^2=(2*pi)^n*det(S)^2
+    n=size(z,1);
+    %The abs in the determinant is necessary if the main diagonal of S has
+    %negative terms. S can still be such that S*S'=Sigma as the sign of
+    %those terms is not unique due to the squaring.
+    % val=-(n/2)*log((2*pi))-log(abs(det(S)))-0.5*sum(diff.*diff,1); 
+    val=log((1/((2*pi)^(n/2)*abs(det(S))))*exp(-0.5*sum(diff.*diff,1)));
+end
+
 function [grad,CDetGrad,Hess,CDetHess]=PDFSGradHessVechS(x,mu,C)
-%%PDFDERIVSS Find the gradient and (if requested Hessian) of the normal
-%            (Gaussian) probability density function (PDF), taken with
-%            respect to the vech(C), where C is the lower-triangular square
-%            root of the covariance matrix of the distribution.
+%%PDFGRADHESSVECHS Find the gradient and (if requested Hessian) of the
+%            normal (Gaussian) probability density function (PDF), taken
+%            with respect to the vech(C), where C is the lower-triangular
+%            square root of the covariance matrix of the distribution.
 %
 %INPUTS: x The dXnumPoints points at which the normal PDF is considered.
 %       mu The dX1 mean of the normal PDF.
@@ -447,19 +541,20 @@ end
 
 end
 
-function val=CDF(z,mu,var)
-%%CDF Evaluate a scalar Gaussian (normal) CDF at a specified points given
-%     the mean and the variance, or for a normal(0,1) distribution if the
-%     mean and variance are omitted.
+function val=CDF(z,mu,varVal)
+%%CDF Evaluate cumulative distribution function (CDF) of a a scalar
+%     Gaussian (normal) distribution at a specified points given the mean
+%     and the variance, or for a normal(0,1) distribution if the mean and
+%     variance are omitted.
 %
-%INPUTS: z The point(s) at which the CDF should be evaluated.
+%INPUTS: z A matrix of the point(s) at which the CDF should be evaluated.
 %       mu The mean of the distribution. If omitted or an empty matrix is
 %          passed, a mean of 0 is used.
-%      var The variance of the distribution. If omitted or an empty matrix
+%   varVal The variance of the distribution. If omitted or an empty matrix
 %          is passed, a variance of 1 is used.
 %
 %OUTPUTS: val The scalar value(s) of the normal CDF with mean mu and
-%             variance var evaluated at the point(s) z.
+%             variance varVal evaluated at the point(s) z.
 %
 %This just uses the relation between the normal CDF and the error function
 %along with the erf function in Matlab.
@@ -469,11 +564,12 @@ function val=CDF(z,mu,var)
     if(nargin<2||isempty(mu))
        mu=0; 
     end
-    if(nargin<3||isempty(var))
-       var=1; 
+
+    if(nargin<3||isempty(varVal))
+       varVal=1; 
     end
 
-    x=(z-mu)/sqrt(var);
+    x=(z-mu)/sqrt(varVal);
     val=(1+erf(x/sqrt(2)))/2;
 end
 
@@ -807,8 +903,8 @@ function x=rand(N,mu,P)
 %          or an empty matrix is passed, then the identity matrix will be
 %          used.
 %
-%OUTPUT: x An xDimXN matrix of random instances of the multivariate
-%          Gaussian distribution.
+%OUTPUTS: x An xDimXN matrix of random instances of the multivariate
+%           Gaussian distribution.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
@@ -822,16 +918,16 @@ function x=rand(N,mu,P)
 end
 
 function x=randS(N,mu,S)
-%%RANDS Generate multivariate Gaussian random variable with a given mean
-%        vector and lower-triangular square root covariance matrix.
+%%RANDS Generate multivariate Gaussian random variables with a given mean
+%       vector and lower-triangular square root covariance matrix.
 %
 %INPUTS: N The number of random variables to generate.
 %       mu The xDim X1 mean of the multivariate Gaussian to generate.
 %        S The xDim X xDim lower triangular square root covariance matrix
 %          of the multivariate Gaussian to generate.
 %
-%OUTPUT: x An xDimXN matrix of random instances of the multivariate
-%          Gaussian distribution.
+%OUTPUTS: x An xDimXN matrix of random instances of the multivariate
+%           Gaussian distribution.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 

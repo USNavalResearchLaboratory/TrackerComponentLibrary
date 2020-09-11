@@ -66,7 +66,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     }
     
     numVertices=mxGetN(prhs[0]);
-    vertices=reinterpret_cast<double*>(mxGetData(prhs[0]));
+    vertices=mxGetDoubles(prhs[0]);
     
     A=signedPolygonAreaCPP(vertices,numVertices);
     plhs[0]=doubleMat2Matlab(&A,1,1);

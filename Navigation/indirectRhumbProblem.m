@@ -2,62 +2,63 @@ function [azimuth, dist]=indirectRhumbProblem(latLonStart,latLonEnd,height,useHe
 %INDIRECTRHUMBPROBLEM Given a starting and ending latitude and longitude on
 %                     a reference ellipsoid, determine the heading (in
 %                     radians East of North) and the distance one must
-%                     travel on a constant-heading course to go from the
-%                     starting point to the stopping point. A constant
-%                     heading course follows a rhumb line (loxodrome) and
-%                     is usually not the shortest path between two points.
+%                     travel on the shortest constant-heading course to go
+%                     from the starting point to the stopping point. A
+%                     constant heading course follows a rhumb line
+%                     (loxodrome) and is usually not the shortest path
+%                     between two points.
 %
-%INPUTS:latLonStart A 2X1 vector of the starting ellipsoidal latitude
-%                   (North) and longitude (East) in radians.
-%         latLonEnd A 2X1 vector of the ending ellipsoidal latitude
-%                   (North) and longitude (East) in radians.
-%            height The height above the reference ellipsoid at which the
-%                   trajectory should be determined. This changes the
-%                   distance traveled, but not the azimuthal angle of
-%                   departure. If this parameter is omitted, then the
-%                   default value of 0 is used.
-%   useHeightApprox If true, and the height is not zero, then an
-%                   approximation is made for how dist scales with
-%                   altitude. Specifically, an equiatorial trajectory will
-%                   scale as (a+height)/a. Thus, this scaling factor is
-%                   applied to any trajectory to scale dist with altitude.
-%                   If height is false, a significantly slower iterative
-%                   optimization technique is used. The default value is
-%                   true. The difference made when useHeightApprox=false is
-%                   can generally be assumed to be less than 80m. This
-%                   parameter is ignored if height=0.
-%                 a The semi-major axis of the reference ellipsoid. If
-%                   this argument is omitted, the value in
-%                   Constants.WGS84SemiMajorAxis is used.
-%                 f The flattening factor of the reference ellipsoid. If
-%                   this argument is omitted, the value in
-%                   Constants.WGS84Flattening is used.
-%     numSteps4Circ If height!=0 then an algorithm propagating a state
-%                   in ECEF coordinates around the curved Earth is used to
-%                   solve the direct geodetic problem as a step in solving
-%                   the indirect geodetic problem. This parameter
-%                   determines the number of steps that would be needed in
-%                   the direct geodetic problem for a target that
-%                   circumnavigates the globe around the equator. The
-%                   default value if this parameter is not provided is
-%                   2000. A value of 6000 appears to be about the best
-%                   number for overall precision. Reducing the number of
-%                   steps will speed up the function. This parameter is not
-%                   used if height=0.
+%INPUTS: latLonStart A 2X1 vector of the starting ellipsoidal latitude
+%                    (North) and longitude (East) in radians. This cannot
+%                    be a pole.
+%          latLonEnd A 2X1 vector of the ending ellipsoidal latitude
+%                    (North) and longitude (East) in radians.
+%             height The height above the reference ellipsoid at which the
+%                    trajectory should be determined. This changes the
+%                    distance traveled, but not the azimuthal angle of
+%                    departure. If this parameter is omitted, then the
+%                    default value of 0 is used.
+%    useHeightApprox If true, and the height is not zero, then an
+%                    approximation is made for how dist scales with
+%                    altitude. Specifically, an equiatorial trajectory will
+%                    scale as (a+height)/a. Thus, this scaling factor is
+%                    applied to any trajectory to scale dist with altitude.
+%                    If height is false, a significantly slower iterative
+%                    optimization technique is used. The default value is
+%                    true. The difference made when useHeightApprox=false is
+%                    can generally be assumed to be less than 80m. This
+%                    parameter is ignored if height=0.
+%                  a The semi-major axis of the reference ellipsoid. If
+%                    this argument is omitted, the value in
+%                    Constants.WGS84SemiMajorAxis is used.
+%                  f The flattening factor of the reference ellipsoid. If
+%                    this argument is omitted, the value in
+%                    Constants.WGS84Flattening is used.
+%      numSteps4Circ If height!=0 then an algorithm propagating a state
+%                    in ECEF coordinates around the curved Earth is used to
+%                    solve the direct geodetic problem as a step in solving
+%                    the indirect geodetic problem. This parameter
+%                    determines the number of steps that would be needed in
+%                    the direct geodetic problem for a target that
+%                    circumnavigates the globe around the equator. The
+%                    default value if this parameter is not provided is
+%                    2000. A value of 6000 appears to be about the best
+%                    number for overall precision. Reducing the number of
+%                    steps will speed up the function. This parameter is not
+%                    used if height=0.
 %
 %OUTPUTS: azimuth The constant heading in radians East of North that one
 %                 must travel to go on a constant-heading course from
-%                 latLonStart to latLonEnd. The azimuth value will not be
-%                 accurate if latLonStart is at a geographic pole.
+%                 latLonStart to latLonEnd.
 %            dist The distance that one must travel on a constant-heading
 %                 course to go from latLonStart to latLonEnd.
 %
 %If height=0, the algorithm is mostly taken from [1]. However, a formula
 %using isometric latitudes, which are described in Chapter 3 of [2] to get
 %the azimuth angle was used, because it is simpler. The formula is also
-%explicitly mentioned in Equation 2 of [3]. However, the expression for
+%explicitly mentioned in Equation 3 of [3]. However, the expression for
 %computing the distance from that paper is only for a sphere, not for an 
-%llipsoid, which is why the Carlton-Wippern distance computation using an
+%ellipsoid, which is why the Carlton-Wippern distance computation using an
 %incomplete elliptic integral of the second kind is preferred.
 %
 %When the azimuth found by the technique is very close to +/-pi/2 (when one
@@ -67,13 +68,11 @@ function [azimuth, dist]=indirectRhumbProblem(latLonStart,latLonEnd,height,useHe
 %as a very small number is multiplied by a very large number. However, this
 %reduces the accuracy of the method.
 %
-%Generally, calling directRhumbProblem(latLonStart,azimuth,dist,a,f) with
-%the azimuth and dist returned by this function will return latLonStart.
-%However, if the starting point is at one of the poles, then that will not
-%be the case, because the azimuth for trajectories starting or ending at
-%the poles is always either zero or pi (all directions are South). If the
-%stopping point is at a pole, then directRhumbProblem will correctly
-%return a polar location, but the longitude will generally be wrong.
+%Generally, calling directRhumbProblem or directRhumbProbGen with the
+%azimuth and dist returned by this function will return latLonStart.
+%However, if the stopping point is at a pole, then directRhumbProblem will
+%correctly return a polar location, but the longitude will generally be
+%wrong.
 %
 %When height!=0, the algorithm can be significantly slower if no
 %approximation is used. Around the equator, the distance scales as
@@ -85,6 +84,52 @@ function [azimuth, dist]=indirectRhumbProblem(latLonStart,latLonEnd,height,useHe
 %than 80m. The search region for the value of dist used in the fminbnd
 %function was set to 0.9*dist to 1.1*dist, where dist is the distance
 %obtained after scaling the distance from the zero-altitude solution.
+%
+%EXAMPLE:
+%A trajectory that crosses the international date line and and goes from
+%the Northern hemisphere to the southern hemisphere. We also compute the
+%reverse path and show that the azimuth angles in each direction are
+%consistent with each other. We then plot the trajectory on an image of the
+%spherical Earth.
+% N=100;
+% latStart=degMinSec2Rad(37,47.5);
+% lonStart=degMinSec2Rad(-122,-27.8);
+% latEnd=degMinSec2Rad(-33,-51.7);
+% lonEnd=degMinSec2Rad(151,12.7);
+% 
+% latLonStart=[latStart;lonStart];
+% latLonEnd=[latEnd;lonEnd];
+% [azimuth,dist]=indirectRhumbProblem(latLonStart,latLonEnd);
+% [azEnd,distRev]=indirectRhumbProblem(latLonEnd,latLonStart);
+% 
+% %If the forward and reverse estimates agree, then these values will
+% %ideally be zero.
+% azimuth-(-azEnd)
+% dist-distRev
+% 
+% distVals=linspace(0,dist,N);
+% latLonWayPoints=directRhumbProblem(latLonStart,azimuth,distVals);
+% 
+% %Show that the approximate direct algorithm reaches nearly the same
+% %endpoint as the indirect algorithm.
+% xEndWay=ellips2Cart([latLonWayPoints(:,end);0]);
+% xEnd=ellips2Cart([latLonEnd;0]);
+% max(abs(xEndWay-xEnd))
+% max(abs(wrapRange(latLonWayPoints(:,end)-latLonEnd,-pi,pi)))
+% 
+% xStartCart=ellips2Cart([latLonStart;0]);
+% xEndCart=ellips2Cart([latLonEnd;0]);
+% %The path is displayed slightly above the Earth's surface to make it
+% %easier to see.
+% pathPoints=ellips2Cart([latLonWayPoints;0.02*ones(1,N)]);
+% 
+% figure(1)
+% clf
+% hold on
+% plotMapOnEllipsoid([]);
+% scatter3(xStartCart(1),xStartCart(2),xStartCart(3),100,'filled')
+% scatter3(xEndCart(1),xEndCart(2),xEndCart(3),100,'filled')
+% plot3(pathPoints(1,:),pathPoints(2,:),pathPoints(3,:),'-r','linewidth',4)
 %
 %REFERENCES:
 %[1] K. C. Carlton-Wippern, "On loxodromic navigation," Journal of
@@ -191,7 +236,7 @@ end
 end
 
 function cost=distCostFunc(distCur,endCart,latLonStart,azStart,height,a,f,numSteps4Circ)
-    latLonCalc=directRhumbProblem(latLonStart,azStart,distCur,height,a,f,numSteps4Circ);
+    latLonCalc=directRhumbProbGen(latLonStart,azStart,distCur,height,false,a,f,numSteps4Circ);
     cost=norm(ellips2Cart([latLonCalc;height],a,f)-endCart);
 end
 

@@ -241,7 +241,7 @@ MurtyHyp *shortestPathUpdateCPP(const MurtyHyp *parentHyp, ScratchSpace &workMem
  * M. L. Miller, H. S. Stone, and I. J. Cox, "Optimizing Murty's ranked
  * assignment method," IEEE Transactions on Aerospace and Electronic
  * Systems, vol. 33, no. 3, pp. 851-862, Jul. 1997.
- * to efficiently implement Murty's algoirthm. This function is only used
+ * to efficiently implement Murty's algorithm. This function is only used
  * in the k-best 2D assignment algorithm, not in the regular 2D assignment
  * algorithm. The return value is the new solution. The dual variables from
  * the parent hypothesis parentHyp are inherited and modified. This

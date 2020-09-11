@@ -39,12 +39,12 @@ function [rootVals,exitCode]=polyRootsMultiDim(polyCoeffMats,maxDegIncreases,use
 %               limit, then one can set maxDegIncreases to Inf and degree
 %               increases will be allowed until Matlab runs out of memory.
 % useMotzkinNull A key step in the algorithm is the determination of
-%               nullspaces. By defauly, the null command built into Matlab
-%               is used. However, if desired, the Motzkin algorithm
-%               described in [1] can be used. The Motzkin algorithm is
-%               generally not as numerically stable, but it can be useful
-%               if one wishes to step through the code and compare the
-%               results to the values in [1].
+%               nullspaces. By defauly, the nullspace function is used.
+%               However, if desired, the Motzkin algorithm described in [1]
+%               can be used. The Motzkin algorithm is generally not as
+%               numerically stable, but it can be useful if one wishes to
+%               step through the code and compare the results to the values
+%               in [1].
 %
 %OUTPUTS: rootVals An nXnumSol matrix of the numSol zeros of the polynomial
 %                  system found, or an empty matrix if exitCode does not
@@ -209,7 +209,7 @@ q=size(N,2);
 if(useMotzkinNull)
     Z=MotzkinMatrix(N);
 else
-    Z=null(N);
+    Z=nullspace(N);
 end
 N=[];%N is no longer needed.
 
@@ -340,7 +340,7 @@ end
 
 function W=MotzkinRow(b,epsVal)
 %Chapter 3.2.1. A subroutine in the Motzkin method for finding the null
-%space of a matrix. This implements the row-cubroutine used by the
+%space of a matrix. This implements the row-subroutine used by the
 %MotzkinMatrix function.
 
 n=length(b);
@@ -374,7 +374,6 @@ for i=(ip-1):-1:1
     W(i,i)=1;
     W(ip,i)=-b(i);
 end
-
 end
 
 function H=MotzkinMatrix(A)
@@ -390,7 +389,6 @@ epsVal=max(size(A))*eps(norm(A));
 b=A(1,:);
 
 H=MotzkinRow(b,epsVal);
-
 for i=2:m
    b=A(i,:)*H;
    H=H*MotzkinRow(b,epsVal);

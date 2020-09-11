@@ -122,14 +122,14 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     
     checkRealDoubleArray(prhs[0]);
     
-    numRow = mxGetM(prhs[0]);
-    numVec = mxGetN(prhs[0]);
+    numRow=mxGetM(prhs[0]);
+    numVec=mxGetN(prhs[0]);
     
     if(!(numRow==3||numRow==6)) {
         mexErrMsgTxt("The input vector has a bad dimensionality.");
     }
     
-    xVec=(double*)mxGetData(prhs[0]);
+    xVec=mxGetDoubles(prhs[0]);
     TT1=getDoubleFromMatlab(prhs[1]);
     TT2=getDoubleFromMatlab(prhs[2]);
     
@@ -179,8 +179,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
             return;
         }
         
-        xpyp=(double*)mxGetData(retVals[0]);
-        dXdY=(double*)mxGetData(retVals[1]);
+        xpyp=mxGetDoubles(retVals[0]);
+        dXdY=mxGetDoubles(retVals[1]);
         xp=xpyp[0];
         yp=xpyp[1];
         dX=dXdY[0];
@@ -210,11 +210,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         size_t dim1, dim2;
         
         checkRealDoubleArray(prhs[4]);
-        dim1 = mxGetM(prhs[4]);
-        dim2 = mxGetN(prhs[4]);
+        dim1=mxGetM(prhs[4]);
+        dim2=mxGetN(prhs[4]);
         
         if((dim1==2&&dim2==1)||(dim1==1&&dim2==2)) {
-            double *xpyp=(double*)mxGetData(prhs[4]);
+            double *xpyp=mxGetDoubles(prhs[4]);
         
             xp=xpyp[0];
             yp=xpyp[1];
@@ -228,11 +228,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         size_t dim1, dim2;
         
         checkRealDoubleArray(prhs[5]);
-        dim1 = mxGetM(prhs[5]);
-        dim2 = mxGetN(prhs[5]);
+        dim1=mxGetM(prhs[5]);
+        dim2=mxGetN(prhs[5]);
         
         if((dim1==2&&dim2==1)||(dim1==1&&dim2==2)) {
-            double *dXdY=(double*)mxGetData(prhs[5]);
+            double *dXdY=mxGetDoubles(prhs[5]);
         
             dX=dXdY[0];
             dY=dXdY[1];
@@ -304,7 +304,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     
     //Allocate space for the return vectors.
     retMat=mxCreateDoubleMatrix(numRow,numVec,mxREAL);
-    retData=(double*)mxGetData(retMat);
+    retData=mxGetDoubles(retMat);
     
     {
         size_t curVec;
@@ -350,7 +350,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         size_t i,j;
         
         plhs[1]=mxCreateDoubleMatrix(3,3,mxREAL);
-        elPtr=(double*)mxGetData(plhs[1]);
+        elPtr=mxGetDoubles(plhs[1]);
         
         for (i=0;i<3;i++) {
             for(j=0;j<3;j++) {

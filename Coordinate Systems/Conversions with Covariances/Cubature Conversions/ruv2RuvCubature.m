@@ -86,9 +86,8 @@ function [zConv,RConv]=ruv2RuvCubature(z,SR,useHalfRange,zTx1,zRx1,M1,zTx2,zRx2,
 %               singular.
 %
 %Given just r-u-v coordinates, the conversion is performed using linear
-%sums as in [1].  If a very large directional uncertainty exists, then
-%the use of a linear covariance matrix for directional data is
-%inappropriate.
+%sums as in [1]. If a very large directional uncertainty exists, then the
+%use of a linear covariance matrix for directional data is inappropriate.
 %
 %Note that when given only r-u-v and not r-u-v-w coordinates, an implicit
 %assumption is that the measurement is not extremely close to being outside

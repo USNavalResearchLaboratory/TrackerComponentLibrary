@@ -13,13 +13,14 @@ function [NCycle,signVal,permut]=numPermutationCycles(permut,option)
 %                   permutations as well as in algorithms for permuting
 %                   matrix elements in place.
 %
-%INPUTS: permut A permutation of n elements. That is, an NX1 or 1NX vector
+%INPUTS: permut A permutation of n elements. That is, an NX1 or 1XN vector
 %              of numbers from 1 to n.
-%       option An optional input specifying what the return value permVal
+%       option An optional input specifying what the return value permut
 %              should be. Possible values are:
-%              0) (The default if omitted) permVal=permut.
-%              1) permVal is the tagged permutation.
-%             -1) permVal is the inverse permutation.
+%              0) (The default if omitted) permut on putput=permut on the
+%                 input.
+%              1) permut is the tagged permutation.
+%             -1) permut is the inverse permutation.
 %
 %OUTPUTS: NCycle The number of cycles in the permutation permut.
 %        signVal The sign of the permutation permut. This is also known as

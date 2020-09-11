@@ -78,9 +78,9 @@ int iauD2dtf(const char *scale, int ndp, double d1, double d2,
 **
 **  This revision:  2014 February 15
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
    int leap;
@@ -190,7 +190,7 @@ int iauD2dtf(const char *scale, int ndp, double d1, double d2,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

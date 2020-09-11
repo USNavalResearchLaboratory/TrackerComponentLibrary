@@ -36,7 +36,7 @@ function [CMerged,omega,xMerged]=covarianceIntersect(C1,C2,optCrit,x1,x2)
 %The first (non-dissertation) publication of covariance intersection for
 %fusing measurements having unknown correlations is [2]. Various optimality
 %criteria are derived in [3]. However, the most practical approach is that
-%if [1], which clearly expresses the solution in terms of the solution of
+%of [1], which clearly expresses the solution in terms of the solution of
 %polynomials, with some solutions given in closed form. Thus, this function
 %uses the closed form solutions, when available, and the general polynomial
 %solutions otherwise.

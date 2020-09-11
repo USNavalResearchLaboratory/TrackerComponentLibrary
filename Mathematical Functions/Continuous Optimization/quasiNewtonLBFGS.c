@@ -179,7 +179,7 @@
  *    "A Limited Memory Algorithm for Bound Constrained Optimization".
  *    SIAM Journal on Scientific and Statistical Computing 16 (5):
  *    1190-1208. doi:10.1137/0916069.
- *[3] J. J. Moré and D. J. Thuente, "Line search algorithms with
+ *[3] J. J. Morï¿½ and D. J. Thuente, "Line search algorithms with
  *    guaranteed sufficient decrease," ACM Transactions on Mathematical
  *    Software, vol. 20, no. 3, pp. 286-307, Sep. 1994.
  *
@@ -256,7 +256,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     //Allocate space for the state.
     x=mxCalloc(xDim, sizeof(double));
     //Copy the passed initial estimate.
-    memcpy(x, mxGetData(prhs[1]), sizeof(double)*xDim);
+    memcpy(x, mxGetDoubles(prhs[1]), sizeof(double)*xDim);
 
     //Set all of the default values for the param structure. If other
     //inputs are provided, then these will be changed.
@@ -380,7 +380,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
                 mexErrMsgTxt("The size of l1NormRange is incorrect."); 
             }
 
-            indices=(double*)mxGetData(theField);
+            indices=mxGetDoubles(theField);
 
             if(indices[0]!=floor(indices[0])||indices[1]!=floor(indices[1])) {
                 mexErrMsgTxt("The indices in l1NormRange must be integers."); 
@@ -484,8 +484,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     //Set the outputs
     //First set x.
     plhs[0]=mxCreateNumericMatrix(0, 0, mxDOUBLE_CLASS, mxREAL);
-    mxFree(mxGetPr(plhs[0]));
-    mxSetPr(plhs[0], x);
+    mxFree(mxGetDoubles(plhs[0]));
+    mxSetDoubles(plhs[0], x);
     mxSetM(plhs[0], xDim);
     mxSetN(plhs[0], 1);
     
@@ -521,10 +521,10 @@ static double MatlabCallback(void *MatlabFunctionHandles,
     rhs[1]=mxCreateNumericMatrix(0, 0, mxDOUBLE_CLASS, mxREAL);
 
     //Set the matrix data to x 
-    oldPtr=mxGetPr(rhs[1]);
+    oldPtr=mxGetDoubles(rhs[1]);
     //x will not be modified, but the const must be typecast away to use
-    //the mxSetPr function.
-    mxSetPr(rhs[1], (double*)x);
+    //the mxSetDoubles function.
+    mxSetDoubles(rhs[1], (double*)x);
     mxSetM(rhs[1], (size_t)n);
     mxSetN(rhs[1], 1);
 
@@ -536,7 +536,7 @@ static double MatlabCallback(void *MatlabFunctionHandles,
 
     //Copy the gradient into gVal, checking for errors.
     verifySizeReal((size_t)n,1,lhs[1]);
-    memcpy(gVal, mxGetData(lhs[1]), sizeof(double)*(size_t)n);
+    memcpy(gVal, mxGetDoubles(lhs[1]), sizeof(double)*(size_t)n);
 
     //Get rid of the returned Matlab matrices.
     mxDestroyArray(lhs[0]);
@@ -544,7 +544,7 @@ static double MatlabCallback(void *MatlabFunctionHandles,
     
     //Set the data pointer back to what it was during allocation that
     //mxDestroyArray does not have a problem. 
-    mxSetPr(rhs[1],oldPtr);
+    mxSetDoubles(rhs[1],oldPtr);
     mxSetM(rhs[1], 0);
     mxSetN(rhs[1], 0);
 

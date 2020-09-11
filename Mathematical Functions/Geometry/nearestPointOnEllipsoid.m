@@ -44,7 +44,7 @@ function zp=nearestPointOnEllipsoid(zIn,A,pIn,gammaVal,epsVal)
 %one is chosen.
 %
 %The algorithm in Chapter 10.5.2 of [1] only handles axis-aligned
-%ellipsoids. This function dealds with general ellipsoids by shifting
+%ellipsoids. This function deals with general ellipsoids by shifting
 %everything to the origin, doing an eigenvalue/ eigenvector decomposition
 %of A to rotate things to be axis-aligned and then undoing that in the end.
 %The value gammaVal is handled by replacing A with A/gammaVal.

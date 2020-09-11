@@ -98,7 +98,7 @@ function zC=ruv2Cart(z,useHalfRange,zTx,zRx,M)
     
     %The bistatic range is used in the conversions below.
     if(useHalfRange)
-       rB=2*rB; 
+        rB=2*rB; 
     end
     
     %If a full unit vector is given.
@@ -128,6 +128,13 @@ function zC=ruv2Cart(z,useHalfRange,zTx,zRx,M)
         zTxL=M(:,:,curPoint)*(zTx(1:3,curPoint)-zRx(1:3,curPoint));
 
         r1=(rB(curPoint)^2-norm(zTxL)^2)/(2*(rB(curPoint)-dot(uVec,zTxL)));
+        
+        %This deals with the case where a point with zero range in the
+        %monostatic case is passed. In the bistatic case, a zero range is
+        %invalid.
+        if(rB(curPoint)==0)
+            r1=0;
+        end
 
         %This is the Cartesian location in the local coordinate system of
         %the receiver.

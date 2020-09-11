@@ -79,7 +79,8 @@ function [yHat,Sigma]=strongTaylorStepMeanCov(y,aCur,BCur,deltaT,algorithm,pBpy,
 %exception of algorithm=2, all of the noise terms in the expressions are
 %Gaussian (sometimes correlated) and thus, with some algebra and the known
 %central moments of the Gaussian distribution, one can compute the mean and
-%covariance matrix of the stochastic Itô-Taylor expansions.
+%covariance matrix of the stochastic Itô-Taylor expansions. Specific
+%derivations are given in [2].
 %
 %For algorithm 2, there are double Itô stochastic integral terms. To
 %expand the cross product of the Wiener process and the double stochastic
@@ -152,6 +153,8 @@ function [yHat,Sigma]=strongTaylorStepMeanCov(y,aCur,BCur,deltaT,algorithm,pBpy,
 %REFERENCES:
 %[1] P. E. Kloeden and E. Platen, Numerical Solution of Stochastic
 %    Differential Equations. Berlin: Springer, 1999.
+%[2] D. F. Crouse, "Itô-Taylor expansion moments for continuous-time state
+%    propagation," NRL Memo, 2019.
 %
 %December 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

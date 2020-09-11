@@ -1,34 +1,40 @@
-function KLDis=KLDistGauss(mu,P)
-%%KLDISTGAUSS Obtain the Kullback-Leibler (KL) distance between two
-%             multivariate Gaussian distributions.
+function KLDis=KLDistGauss(mu1,P1,mu2,P2)
+%%KLDISTGAUSS Compute the Kullback-Leibler (KL) divergence (also known as
+%            the KL distance or relative entropy) between two multivariate
+%            Gaussian distributions. As defined in Chapter 8.5 of [1], the
+%            relative entropy  between two continuous PDFs, f and g, is
+%            D(f||g)=integral_{x} f(x) log(f(x)/g(x)) dx
+%            The integral is over an appropriate domain of x, in this case
+%            the n-dimensional real space for an n-dimensional state. Note
+%            that changing the order of f and g changes the result (the
+%            operation is not commutative).
 %
-%INPUTS: mu   An xDim X 2 matrix of the mean vectors of the 2 Gaussian
-%             distributions whose KL distance is desired.
-%        P    An xDim X xDim X2 hypermatrix of the covariance matrices of
-%             the two distributions whose KL distance is desired.
+%INPUTS: mu1, P1 The nX1 mean and nXn covariance matrix of the first
+%                Gaussian PDF.
+%        mu2, P2 The nX1 mean and nXn covariance matrix of the second
+%                Gaussian PDF.
 %
-%OUTPUTS: KLDis The KL distance between the two distributions.
+%OUTPUTS: val The value of the Kullback-Leibler divergence between the
+%             first and the second Gaussian distributions.
 %
 %The KL distance between the PDF f_1(x) and the PDF f_2(x) is given by
 %integral f_1(x)*log(f_1(x)/f_2(x)) dx
 %The KL distance can be difference if f_1 and f_2 are switched. Here,
-%mu(:,1) and P(:,:,1) correspond to f_1 and mu(:,2) and P(:,:,2) to f_2.
+%mu1 and P1 correspond to f_1 and mu2 and P2 to f_2.
 %
-%The expression for the Kullback Leibler distance between two multivariate
-%Gaussian distributions is from Theorem 1 of [1].
+%The Kullback-Leiber divergence between two Gaussian PDFs is used in
+%Gaussian mixture reduction algorithms and an explicit expression is given
+%in Theorem 1 in [2].
 %
 %REFERENCES:
-%[1] A. R. Runnalls, "Kullback-Leibler approach to Gaussian mixture
-%    reduction," IEEE Trans. Aerosp. Electron. Syst., vol. 43, no. 3, pp.
-%    989-999, Jul. 2007.
+%[1] T. M. Cover and J. A. Thomas, Elements of Information Theory, 2nd ed.
+%    Hoboken, NJ: Wiley-Interscience, 2006.
+%[2] A. R. Runnalls, "Kullback-Leibler approach to Gaussian mixture
+%    reduction," IEEE Transactions on Aerospace and Electronic Systems,
+%    vol. 43, no. 3, pp. 989-999, Jul. 2007.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
-
-    mu1=mu(:,1);
-    mu2=mu(:,2);
-    P1=P(:,:,1);
-    P2=P(:,:,2);
     
     KLDis=0.5*(trace(lsqminnorm(P2,(P1-P2+(mu1-mu2)*(mu1-mu2)')))+log(det(P2)/det(P1)));
 end

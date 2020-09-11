@@ -1,10 +1,10 @@
 function checksum=NMEAChecksum(NMEAString)
-%%NMEACHECKSUMVALID  Compute the checksum of a National Maritime
-%                    Electronics Association (NMEA) 0183 sentence. This is
-%                    the message standard used for Automatic Identification
-%                    System (AIS) messages sent by transponders on ships.
-%                    This function is useful for validating checksums to
-%                    determine whether to discard a message as corrupt.
+%%NMEACHECKSUM Compute the checksum of a National Maritime Electronics
+%              Association (NMEA) 0183 sentence. This is the message
+%              standard used for Automatic Identification System (AIS)
+%              messages sent by transponders on ships. This function is
+%              useful for validating checksums to determine whether to
+%              discard a message as corrupt.
 %
 %INPUTS: NMEAString A NMEA 0183 string as a sequence of characters. The
 %                   string should start with a ! or $ and everything until

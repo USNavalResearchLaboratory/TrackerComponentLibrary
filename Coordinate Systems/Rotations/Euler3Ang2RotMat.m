@@ -34,6 +34,28 @@ function M=Euler3Ang2RotMat(theta1,theta2,theta3,series,handed)
 %
 %Euler angles are discussed in [1].
 %
+%EXAMPLE:
+%Here, we rotate by some arbitrary angles and one can see that the
+%rotations from this functions are equal to sunsequently appending the
+%rotations.
+% theta1=2*pi*rand();
+% theta2=2*pi*rand();
+% theta3=2*pi*rand();
+% max(max(abs(Euler3Ang2RotMat(theta1,theta2,theta3,'xzx')-Euler1Ang2RotMat(theta1,'x')*Euler1Ang2RotMat(theta2,'z')*Euler1Ang2RotMat(theta3,'x'))))
+% max(max(abs(Euler3Ang2RotMat(theta1,theta2,theta3,'xyx')-Euler1Ang2RotMat(theta1,'x')*Euler1Ang2RotMat(theta2,'y')*Euler1Ang2RotMat(theta3,'x'))))
+% max(max(abs(Euler3Ang2RotMat(theta1,theta2,theta3,'yxy')-Euler1Ang2RotMat(theta1,'y')*Euler1Ang2RotMat(theta2,'x')*Euler1Ang2RotMat(theta3,'y'))))
+% max(max(abs(Euler3Ang2RotMat(theta1,theta2,theta3,'yzy')-Euler1Ang2RotMat(theta1,'y')*Euler1Ang2RotMat(theta2,'z')*Euler1Ang2RotMat(theta3,'y'))))
+% max(max(abs(Euler3Ang2RotMat(theta1,theta2,theta3,'zyz')-Euler1Ang2RotMat(theta1,'z')*Euler1Ang2RotMat(theta2,'y')*Euler1Ang2RotMat(theta3,'z'))))
+% max(max(abs(Euler3Ang2RotMat(theta1,theta2,theta3,'zxz')-Euler1Ang2RotMat(theta1,'z')*Euler1Ang2RotMat(theta2,'x')*Euler1Ang2RotMat(theta3,'z'))))
+% max(max(abs(Euler3Ang2RotMat(theta1,theta2,theta3,'xzy')-Euler1Ang2RotMat(theta1,'x')*Euler1Ang2RotMat(theta2,'z')*Euler1Ang2RotMat(theta3,'y'))))
+% max(max(abs(Euler3Ang2RotMat(theta1,theta2,theta3,'xyz')-Euler1Ang2RotMat(theta1,'x')*Euler1Ang2RotMat(theta2,'y')*Euler1Ang2RotMat(theta3,'z'))))
+% max(max(abs(Euler3Ang2RotMat(theta1,theta2,theta3,'yxz')-Euler1Ang2RotMat(theta1,'y')*Euler1Ang2RotMat(theta2,'x')*Euler1Ang2RotMat(theta3,'z'))))
+% max(max(abs(Euler3Ang2RotMat(theta1,theta2,theta3,'yzx')-Euler1Ang2RotMat(theta1,'y')*Euler1Ang2RotMat(theta2,'z')*Euler1Ang2RotMat(theta3,'x'))))
+% max(max(abs(Euler3Ang2RotMat(theta1,theta2,theta3,'zyx')-Euler1Ang2RotMat(theta1,'z')*Euler1Ang2RotMat(theta2,'y')*Euler1Ang2RotMat(theta3,'x'))))
+% max(max(abs(Euler3Ang2RotMat(theta1,theta2,theta3,'zxy')-Euler1Ang2RotMat(theta1,'z')*Euler1Ang2RotMat(theta2,'x')*Euler1Ang2RotMat(theta3,'y'))))
+%All of the above differences will be zero or around eps(), indicating
+%agreement within finite precision limits.
+%
 %REFERENCES:
 %[1] M. D. Shuster, "A survey of attitude representations," The Journal of
 %    Astronautical Sciences, vol. 41, no. 4, pp. 439-517, Oct. - Dec. 1993.
@@ -63,7 +85,7 @@ c3=cos(theta3);
 s3=sin(theta3);
 
 %All of the formuae below are for right-handed rotations. Flipping the sign
-%of the angles makes the left-handed rotations.
+%of the angles makes them left-handed rotations.
 switch(series)
     %First the Euler angle combinations.
     case 'xzx'
@@ -92,29 +114,29 @@ switch(series)
            s2*s3, c3*s2, c2];
     %Next, the Tait-Bryan-Cardan angle combinations.
     case 'xzy'
-        M=[          c2*c3,     s2,         -c2*s3;
-           -c1*c3*s2+s1*s3,  c1*c2, c3*s1+c1*s2*s3;
-            c3*s1*s2+c1*s3, -c2*s1, c1*c3-s1*s2*s3];
+        M=[c2*c3,           -s2,    c2*s3;
+           c1*c3*s2+s1*s3,	c1*c2,	-c3*s1+c1*s2*s3;
+           c3*s1*s2-c1*s3,	c2*s1,	c1*c3+s1*s2*s3];
     case 'xyz'
-        M=[         c2*c3,           c2*s3,   -s2;
-           c3*s1*s2-c1*s3,  c1*c3+s1*s2*s3, c2*s1;
-           c1*c3*s2+s1*s3, -c3*s1+c1*s2*s3, c1*c2];
+        M=[c2*c3,           -c2*s3          s2;
+           c3*s1*s2+c1*s3,	c1*c3-s1*s2*s3	-c2*s1;
+           -c1*c3*s2+s1*s3,	c3*s1+c1*s2*s3	c1*c2];
     case 'yxz'
-        M=[c1*c3-s1*s2*s3,  c3*s1*s2+c1*s3, -c2*s1;
-                   -c2*s3,           c2*c3,     s2;
-           c3*s1+c1*s2*s3, -c1*c3*s2+s1*s3,  c1*c2];
+        M=[c1*c3+s1*s2*s3,	c3*s1*s2-c1*s3,	c2*s1;
+           c2*s3,           c2*c3,          -s2;
+          -c3*s1+c1*s2*s3,	c1*c3*s2+s1*s3,	c1*c2];
     case 'yzx'
-        M=[c1*c2, c1*c3*s2+s1*s3, -c3*s1+c1*s2*s3;
-             -s2,          c2*c3,           c2*s3;
-           c2*s1, c3*s1*s2-c1*s3,  c1*c3+s1*s2*s3];
+        M=[c1*c2,	-c1*c3*s2+s1*s3,    c3*s1+c1*s2*s3;
+           s2,      c2*c3,              -c2*s3;
+           -c2*s1,	c3*s1*s2+c1*s3,      c1*c3-s1*s2*s3];
     case 'zyx'
-        M=[ c1*c2, c3*s1+c1*s2*s3, -c1*c3*s2+s1*s3;
-           -c2*s1, c1*c3-s1*s2*s3,  c3*s1*s2+c1*s3;
-               s2,         -c2*s3,           c2*c3];
+        M=[c1*c2,   -c3*s1+c1*s2*s3,    c1*c3*s2+s1*s3;
+           c2*s1,   c1*c3+s1*s2*s3,     c3*s1*s2-c1*s3;
+           -s2,     c2*s3,              c2*c3];
     case 'zxy'
-        M=[ c1*c3+s1*s2*s3, c2*s1, c3*s1*s2-c1*s3;
-           -c3*s1+c1*s2*s3, c1*c2, c1*c3*s2+s1*s3;
-                     c2*s3,   -s2,          c2*c3];
+        M=[c1*c3-s1*s2*s3,	-c2*s1, c3*s1*s2+c1*s3;
+           c3*s1+c1*s2*s3,	c1*c2,  -c1*c3*s2+s1*s3;
+           -c2*s3,          s2,     c2*c3];
     otherwise
         error('Invalid rotation series provided.')
 end

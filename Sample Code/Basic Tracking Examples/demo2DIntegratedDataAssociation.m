@@ -370,6 +370,7 @@ set(h1,'FontSize',14,'FontWeight','bold','FontName','Times')
 set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
 set(h3,'FontSize',14,'FontWeight','bold','FontName','Times')
 axis square
+
 end
 
 function [xTrue,T,numSamples]=genManeuveringTrack()

@@ -23,7 +23,7 @@ function T=discretizeAndOverlapVals(g1,g2,numLevels,adjMat)
 %               1X2 vector where numLevels(1) is the number of levels for
 %               the real discretization and numLevels(2) is the number of
 %               levels for the complex discretization. The discretization
-%               is uniformely spaced across the range of real and imaginary
+%               is uniformly spaced across the range of real and imaginary
 %               points.
 %        adjMat This is an NXN adjacency matrix such that adjMat(i,j) is
 %               nonzero if element i is adjacent to element j. The value of

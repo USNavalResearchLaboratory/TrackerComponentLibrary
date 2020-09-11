@@ -5,6 +5,7 @@
 *February 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 **/
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
+
 #include "CoordFuncs.hpp"
 #include <math.h>
 
@@ -12,7 +13,6 @@ void spherAngGradientGenCPP(double *retMat,const double *xG,const size_t systemT
     double x,y,z;
     double temp[3];
     double J[6];
-    double multVal=1;
     //Transform from global coordinates to local coordinates.
     //xLocal=M*(xG(1:3)-lRx(1:3));
     temp[0]=xG[0]-lRx[0];

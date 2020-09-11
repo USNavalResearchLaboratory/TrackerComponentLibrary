@@ -9,10 +9,12 @@ function points=Cart2Ellipse(cartPoints,algorithm,a,f)
 %         algorithm This specified the algorithm to use for the conversion.
 %                   Note that none work at the origin. Possible values are:
 %                   0 (The default if this parameter is omitted or an empty
-%                     matrix is passed) Use the algorithm of Olson in [1].
+%                     matrix is passed) Use the algorithm of Olson in [1]. 
 %                   1 Use the Algorithm of Sofair in [2], which is a
-%                     modification of [3].
-%                   2 Use the algorithm of Fukushima in [4].
+%                     modification of [3]. This will not work close to the
+%                     center of the Earth.
+%                   2 Use the algorithm of Fukushima in [4]. This should
+%                     work close to the center of the Earth.
 %                 a The semi-major axis of the reference ellipsoid. If this
 %                   argument is omitted, the value in
 %                   Constants.WGS84SemiMajorAxis is used.
@@ -25,11 +27,12 @@ function points=Cart2Ellipse(cartPoints,algorithm,a,f)
 %                latitude and longitude given in radians.
 %
 %The algorithm of Olson in [1] appears to be the most precise non-iterative
-%method available. The method of Sofair in [2] and [3] is also a
-%non-iterative algorithm, but tends to have singificantly worse accuracy.
-%Fukushima's algorithm in [4] is iterative and is implemented assuming
-%convergence in six or fewer iterations. Its accuracy appears to be
-%marginally better than [1], but it is slower.
+%method available for targets far above the Earth. The method of Sofair in
+%[2] and [3] is also a non-iterative algorithm, but tends to have
+%significantly worse accuracy for such targets. Fukushima's algorithm in
+%[4] is iterative and is implemented assuming convergence in six or fewer
+%iterations. Its accuracy appears to be marginally better than [1], but it
+%is slower.
 %
 %REFERENCES:
 %[1] D. K. Olson, "Converting Earth-centered, Earth-fixed coordinates to

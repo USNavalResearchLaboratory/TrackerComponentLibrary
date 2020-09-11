@@ -1,4 +1,4 @@
-function [aVal,aJacob,aHess,papt]=aSpherManeuver(x,t)
+function [aVal,aJacob,aHess,papt]=aSpherManeuver(x)
 %ASPHERMANEUVER The drift function for a 3D continous-time constant direction
 %           and speed dynamic model where the target state is given as
 %           position, and a velocity that is given as azimuth (phi),
@@ -13,9 +13,6 @@ function [aVal,aJacob,aHess,papt]=aSpherManeuver(x,t)
 %          measured counterclockwise from the x-axis in the x-y plane.
 %          Elevation is measured up from the x-y plane (towards the
 %          z-axis).
-%        t An unused time component is so that aPolar2DCV can be used with
-%          Runge-Kutta methods that expect the function to take two
-%          parameters.
 %
 %OUTPUTS: aVal The 8X1 or 9X1 time-derivative of the state under the
 %              spherical constant acceleration motion model.
@@ -32,7 +29,7 @@ function [aVal,aJacob,aHess,papt]=aSpherManeuver(x,t)
 %The 8D model is model 2 in [1]. The 9D model just adds a derivative term
 %for the speed component. In the 9D model, the drift function corresponding
 %to that used in [1] just adds the noise component to the last 3 terms and
-%thus one could use DPoly(zeros(9,1),[],q0,1,3). 
+%thus one could use DPoly(zeros(9,1),q0,1,3). 
 %
 %REFERENCES:
 %[1] D. Laneuville, "New models for 3D maneuvering target tracking," in New

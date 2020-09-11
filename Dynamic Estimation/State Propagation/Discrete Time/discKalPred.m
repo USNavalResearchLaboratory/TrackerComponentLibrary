@@ -1,18 +1,18 @@
-function [xPred, PPred]=discKalPred(xPrev,PPrev,F,Q,u)
+function [xPred,PPred]=discKalPred(xPrev,PPrev,F,Q,u)
 %DISCKALPRED Perform the discrete-time prediction step that comes with 
 %            the standard linear Kalman filter with additive Gaussian
 %            process noise.
 %
-%INPUTS: xPrev The xDim X 1 state estimate at the previous time-step.
-%        PPrev The xDim X xDim state covariance matrix at the previous
+%INPUTS: xPrev The xDimX1 state estimate at the previous time-step.
+%        PPrev The xDimXxDim state covariance matrix at the previous
 %              time-step.
-%            F An xDim X xDim state transition matrix.
-%            Q The xDimX xDim process noise covariance matrix.
-%            u An optional xDim X1 vector that is the control input. If
+%            F An xDimXxDim state transition matrix.
+%            Q The xDimXxDim process noise covariance matrix.
+%            u An optional xDimX1 vector that is the control input. If
 %              omitted, no control input is used.
 %
-%OUTPUTS: xPred The xDim X 1 predicted state estimate.
-%         PPred The xDim X xDim predicted state covariance matrix.
+%OUTPUTS: xPred The xDimX1 predicted state estimate.
+%         PPred The xDimXxDim predicted state covariance matrix.
 %
 %The algorithm is derived in Chapter 5 of [1].
 %
@@ -25,7 +25,7 @@ function [xPred, PPred]=discKalPred(xPrev,PPrev,F,Q,u)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 if(nargin<5||isempty(u))
-   u=0; 
+    u=0; 
 end
 
 xPred=F*xPrev+u;

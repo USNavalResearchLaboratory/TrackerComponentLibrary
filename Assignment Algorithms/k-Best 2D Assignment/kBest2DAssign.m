@@ -144,7 +144,6 @@ function [col4rowBest,row4colBest,gainBest]=kBest2DAssign(C,k,maximize)
         %until splitting is no longer possible and get rid of the
         %hypothesis from the list.
         smallestSol=HypList.deleteTop();
-        
         smallestSol.key.split(HypList);
         
         %Save the ordered best solutions.

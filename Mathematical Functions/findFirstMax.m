@@ -3,11 +3,11 @@ function idx=findFirstMax(arr)
 %              order, which might be full of duplicates, find the first
 %              occurrence of the maximum value.
 %
-%INPUTS:    arr A vector of values, with possible repeats, sorted in
-%               increasing order.
+%INPUTS: arr A vector of values, with possible repeats, sorted in
+%            increasing order.
 %
-%OUTPUTS:   idx The index of the first occurrence of the maximum value
-%               (last) element in arr.    
+%OUTPUTS: idx The index of the first occurrence of the maximum value
+%             (last) element in arr.    
 %
 %The easiest way to find the first occurrence of the maximum value is to
 %scan downward in the array from the end until a value different from the

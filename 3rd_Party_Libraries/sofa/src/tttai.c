@@ -38,11 +38,11 @@ int iauTttai(double tt1, double tt2, double *tai1, double *tai2)
 **     Explanatory Supplement to the Astronomical Almanac,
 **     P. Kenneth Seidelmann (ed), University Science Books (1992)
 **
-**  This revision:  2013 June 18
+**  This revision:  2019 June 20
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
 
@@ -51,7 +51,7 @@ int iauTttai(double tt1, double tt2, double *tai1, double *tai2)
 
 
 /* Result, safeguarding precision. */
-   if ( tt1 > tt2 ) {
+   if ( fabs(tt1) > fabs(tt2) ) {
       *tai1 = tt1;
       *tai2 = tt2 - dtat;
    } else {
@@ -64,7 +64,7 @@ int iauTttai(double tt1, double tt2, double *tai1, double *tai2)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

@@ -11,11 +11,13 @@ function JPost=PCRLBUpdateAddNoClutter(JPred,xCur,PCur,R,PD,paramH,xi,w)
 %         xCur The (column vector) mean of the distribution of the true
 %              (but unknown to the tracker) possible target location at the
 %              current time. It is assumed that the distribution of the
-%              target locations is Gaussian.
+%              target locations is Gaussian. This is only needed if paramH
+%              is a function. Otherwise, an empty matrix can be passed.
 %         PCur The covariance of the distribution of the true (but unknown
 %              to the tracker) possible target location at the current
 %              time. If the target motion is deterministic but unknown to
-%              the tracker, then PCur is a matrix of zeros.
+%              the tracker, then PCur is a matrix of zeros. If an empty
+%              matrix is passed, it is assumed that PCur is all zeros.
 %            R The covariance matrix of the additive measurement noise.
 %           PD The detection probability of the target at the current step.
 %       paramH Either the fixed measurement matrix H (which is zDimXxDim),
@@ -60,7 +62,7 @@ function JPost=PCRLBUpdateAddNoClutter(JPred,xCur,PCur,R,PD,paramH,xi,w)
 %    bistatic measurements," IEEE Aerospace and Electronic Systems 
 %    Magazine, vol. 29, no. 8, Part II, pp. 4-53, Aug. 2014.
 %[2] M. Hernandez, B. Ristic, A. Farina, and L. Timmoneri, "A
-%    comparison of two Cramér-Rao bounds for nonlinear filtering with
+%    comparison of two Cramï¿½r-Rao bounds for nonlinear filtering with
 %    Pd<1," IEEE Transactions on Signal Processing, vol. 52, no. 9, pp.
 %    2361-2370, Sep. 2004.
 %

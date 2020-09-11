@@ -665,13 +665,20 @@ bool assign2DFullCAlt(const bool maximize, const double *C, double * restrict ga
  *[tuplesRet,~,u,v]=assign2DMissedDetect(C(1:numRow,2:numCol),maximize,true);
  *Here, we have to give the proper offset to skip the first column of CMod.
  */
-    isInfeasible=assign2DMissedDetectC(maximize, CMod+numRow, gain, tuples, restBuffer, u, v, numRow, numConstCol);
+    if(numConstCol==0) {
+        for(curRow=0;curRow<numRow-1;curRow++) {
+            v[curRow]=0;
+        }
 
-    if(isInfeasible) {
-        (*numTuples)=0;
-        (*gain)=-1;
-        //Return that the problem is infeasible.
-        return true;
+    } else {
+        isInfeasible=assign2DMissedDetectC(maximize, CMod+numRow, gain, tuples, restBuffer, u, v, numRow, numConstCol);
+
+        if(isInfeasible) {
+            (*numTuples)=0;
+            (*gain)=-1;
+            //Return that the problem is infeasible.
+            return true;
+        }
     }
     
     //Adjust the dual variables for the transformations that were performed
@@ -730,7 +737,7 @@ bool assign2DFullCAlt(const bool maximize, const double *C, double * restrict ga
         } else {
             curTotalTuple=numConstCol;
         }
-
+        
         //Sort the tuples by the assigned row in ascending order, so that
         //we can tell which rows are not assigned.
         qsort(tuples, curTotalTuple, 2*sizeof(ptrdiff_t), compRows);

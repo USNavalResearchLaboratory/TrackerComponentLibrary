@@ -1,0 +1,45 @@
+In the e-mail below, the author of the C version of the NRLMSISE00 has
+released his implementation the public domain contingent on the original
+Fortran implementation being in the public domain. The original Fortran
+implementation was created by employees of the U.S. Naval Research
+Laboratory as official government work and thus is in the public domain.
+
+June 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+Return-Path: <mail@dominikbrodowski.net>
+Received: from mail7.nrl.navy.mil (smail.nrl.navy.mil [132.250.21.117])
+	by radar.nrl.navy.mil (8.13.8/8.13.8) with ESMTP id u5GGjxQW018271
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES128-SHA bits=128 verify=NOT)
+	for <crouse@radar.nrl.navy.mil>; Thu, 16 Jun 2016 12:45:59 -0400
+Received: from isilmar-4.linta.de (isilmar-4.linta.de [136.243.71.142])
+	by mail7.nrl.navy.mil (8.15.2/8.15.2) with ESMTPS id u5GGjrqd022645
+	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO)
+	for <david.crouse@nrl.navy.mil>; Thu, 16 Jun 2016 12:45:54 -0400
+Received: by isilmar-4.linta.de (Postfix, from userid 1000)
+	id B453B200095; Thu, 16 Jun 2016 12:59:45 +0000 (UTC)
+Date: Thu, 16 Jun 2016 14:59:45 +0200
+From: Dominik Brodowski <mail@dominikbrodowski.net>
+To: "David F. Crouse" <david.crouse@nrl.navy.mil>
+Subject: Re: Regarding Your NRLMSISE-00 Code
+Message-ID: <20160616125945.GA15153@isilmar-4.linta.de>
+References: <A4824AB6-9469-4FEC-9436-E55E4281E6AA@nrl.navy.mil>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <A4824AB6-9469-4FEC-9436-E55E4281E6AA@nrl.navy.mil>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Scanned-By: MIMEDefang 2.64 on 132.250.183.240
+X-Scanned-By: MIMEDefang 2.78
+X-Spam-Score: 2.399 (**) DATE_IN_PAST_03_06
+
+David,
+
+many thanks for your message. And I am happy to make the following statement
+regarding the NRLMSISE-00 C code:
+
+	I am placing my NRLMSISE-00 C code into the public domain
+	contingent on the original Fortran code not being subject
+	to US copyright.
+
+Best,
+	Dominik

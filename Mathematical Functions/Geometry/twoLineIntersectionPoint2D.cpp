@@ -3,14 +3,14 @@
  *                    the point of intersection. A line is specified by
  *                    providing two points on the line.
  *
- *INPUTS:   line1 A 2X2 matrix of two points in the first line where
- *                line1(1,:) are the x-coordinates and line1(2,:) are the
- *                y-coordinates.
- *          line2 A 2X2 matrix of two points in the second line defined the
- *                same way as line1.
+ *INPUTS: line1 A 2X2 matrix of two points in the first line where
+ *              line1(1,:) are the x-coordinates and line1(2,:) are the
+ *               y-coordinates.
+ *         line2 A 2X2 matrix of two points in the second line defined the
+ *               same way as line1.
  *
- *OUTPUTS:   point The 2X1 intersection point of the two lines given as
- *                 [x;y] components.
+ *OUTPUTS: point The 2X1 intersection point of the two lines given as [x;y]
+ *               components.
  *
  *The formula in terms of matrix determinants is taken from [1].
  *
@@ -57,12 +57,12 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         return;  
     }
     
-    line1=reinterpret_cast<double*>(mxGetData(prhs[0]));
-    line2=reinterpret_cast<double*>(mxGetData(prhs[1]));
+    line1=mxGetDoubles(prhs[0]);
+    line2=mxGetDoubles(prhs[1]);
 
     //Allocate space for the return point.
     pointMat=mxCreateDoubleMatrix(2,1,mxREAL);
-    point=reinterpret_cast<double*>(mxGetData(pointMat));
+    point=mxGetDoubles(pointMat);
     
     twoLineIntersectionPoint2DCPP(line1,line2,point);
     

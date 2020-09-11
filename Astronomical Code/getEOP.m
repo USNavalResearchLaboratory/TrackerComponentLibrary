@@ -1,50 +1,57 @@
-function [xpyp,dXdY,deltaUTCUT1,deltaTTUT1,LOD]=getEOP(JulUTC1,JulUTC2,refreshFromSource,replaceEOPtxt)
-%%GETEOP Get Earth orientation parameters from a table for a particular
-%        date, using interpolation for points between or outside of the
-%        range of tabulated values. The data can be read from
-%        ./data/EOP.txt or downloaded from the internet. Once the data have
-%        been loaded, they do not have to be reloaded for future function
-%        calls. The Earth orientation parameters are necessary for
-%        high-precision astronomical coordinate conversions. When the date
-%        provided is outside of the range of tabulated values, then linear
-%        interpolation is provided over deltaUTCUT1 and deltaTTUT1, and
-%        piecewise cubic Hermite interpolation is provided over LOD, but
-%        xpyp and dXdY are just set to zero.
+function [xpyp,dXdY,deltaUTCUT1,deltaTTUT1,LOD]=getEOP(JulUTC1,JulUTC2,EOPPath)
+%%GETEOP Get Earth orientation parameters (EOPs) from a table for a
+%        particular date, using interpolation for points between or outside
+%        of the range of tabulated values. The data can be read from
+%        ./data/EOP.txt or from another file. Once the data have been
+%        loaded, they do not have to be reloaded for future function calls,
+%        though one can force a reaload. The Earth orientation parameters
+%        are necessary for high-precision astronomical coordinate
+%        conversions. When the date provided is outside of the range of
+%        tabulated values, then linear interpolation is provided over
+%        deltaUTCUT1 and deltaTTUT1, and piecewise cubic Hermite
+%        interpolation is provided over LOD, but xpyp and dXdY are just set
+%        to zero.
 %
-%INPUTS: JulUTC1,JulUTC2 NX1 or 1XN vectors of two-part pseudo-Julian dates
+%INPUTS: There are two calling method. One is
+%        [minUTCMJD,maxUTCMJD]=getEOP(EOPPath) 
+%        which forces a reload of the data (where EOPPath can even be
+%        completely omitted to use a default path). The other is
+%    [xpyp,dXdY,deltaUTCUT1,deltaTTUT1,LOD]=getEOP(JulUTC1,JulUTC2,EOPPath)
+%        where EOPPath is option in that instance. The first calling method
+%        just loads the data and returns the minimum and maximum modified
+%        Julian Dates (MJDs) in UTC of the data; the second gets the EOPs 
+%        and only uses the EOPPath input if the data has not already been
+%        loaded. Alternatively, clearing this function will also force a
+%        reload. The possible input parameters are:
+%    JulUTC1,JulUTC2 NX1 or 1XN vectors of two-part pseudo-Julian dates
 %                    given in UTC. The units of the date are days. The full
 %                    date is the sum of both terms. The date is broken into
 %                    two parts to provide more bits of precision. It does
 %                    not matter how the date is split.
-%  refreshFromSource An optional parameter. If this parameter is given, a
-%                    database of Earth orientation parameters is loaded
-%                    from the selected source, replacing any previously
-%                    loaded database. As the external sources are updated
-%                    no more than once per day, this parameter should NOT
-%                    be provided often, so as to minimize internet traffic.
-%                    If this parameter is anything but -1, a warning is
-%                    given. If available, the more accurate Bulletin B
-%                    values are used. Otherwise, Bulletin A values are
-%                    used. Possible values of this parameter are:
-%                    -1) (The default) Load the data from the local file
-%                       ./data/EOP.txt. No internet connection is required.
-%                    0) Get the finals2000A.daily file from the US Naval
-%                       Observatory. This has EOP parameters for the last
-%                       90 days and prediction for the next 90 days.
-%                    1) Get the finals2000A.daily file from the IERS data
-%                       center.
-%                    2) Get the finals.data file from the US Naval
-%                       Observatory. This has EOP parameters since 1992 and
-%                       predictions for the next year.
-%                    3) Get the finals.data file from the IERS data center.
-%      replaceEOPtxt An optional boolean argument. If this parameter is
-%                    true, then the file ./EOP.txt will be replaced with
-%                    the downloaded data file when the refreshFromSource
-%                    parameter is provided and is not -1. replacement only
-%                    occurs after the downloaded file is scanned, so if
-%                    scanning fails, then EOP.txt will remain unchanged.
+%            EOPPath An optional parameter. If this parameter is given, a
+%                    database of EOPs is loaded from the file at the
+%                    specified path if the data has not already been
+%                    loaded. If EOPPath is omitted or an empty matrix
+%                    passed and no data has been previously loaded, then
+%                    the local file
+%                    ./data/EOP.txt is used. The parameters can be obtained
+%                    from the International Earth Rotation and Reference
+%                    Service (IERS) at
+%                    https://www.iers.org/IERS/EN/DataProducts/EarthOrientationData/eop.html
+%                    This function preferentially uses more accurate
+%                    Bulletin B values over Bulletin A values. Only the
+%                    IERS2000 models of precession and nutation are
+%                    allowed.
 %
-%OUTPUTS: xpyp A 2XN vector with each column being of the form xpyp=[xp;yp]
+%OUTPUTS: When using the first calling pattern of the function, the outputs
+%         are:
+%          minUTCMJD,maxUTCMJD The minimum and maximum modified Julian
+%              dates (MJDs) in UTC of the EOPs that were loaded. Adding
+%              Constants.MJDOffset to these values gives the actual Julian
+%              date.
+%         when using the second calling pattern that returns EOPs, the
+%         outputs are:
+%         xpyp A 2XN vector with each column being of the form xpyp=[xp;yp]
 %              for the corresponding row in JulUTC1, JulUTC2. These are the
 %              polar motion coordinates in radians including the effects of
 %              tides and librations. For dates outside of the tabulated
@@ -69,8 +76,6 @@ function [xpyp,dXdY,deltaUTCUT1,deltaTTUT1,LOD]=getEOP(JulUTC1,JulUTC2,refreshFr
 %              UT1. This is an instantaneous parameter (a derivative). The
 %              units are seconds.
 %
-%Once loaded, the data stays in memory until this function is cleared.
-%
 %x and y, sometimes called px, py or PMx, PMy are the polar motion
 %coordinates and do not include tidal or libration effects. dX and dY are
 %the celestial pole offsets with respect to the IAU 2006/2000A precession/
@@ -91,6 +96,9 @@ function [xpyp,dXdY,deltaUTCUT1,deltaTTUT1,LOD]=getEOP(JulUTC1,JulUTC2,refreshFr
 %
 %The citation for the IERS 2010 Conventions is [1].
 %
+%A warning is given if the requested date is before the earliest data in
+%the EOP file or after the latest date in the EOP file.
+%
 %This function is most commonly called as
 %[xpyp,dXdY,deltaUTCUT1,deltaTTUT1,LOD]=getEOP(JulUTC1,JulUTC2)
 %
@@ -102,40 +110,55 @@ function [xpyp,dXdY,deltaUTCUT1,deltaTTUT1,LOD]=getEOP(JulUTC1,JulUTC2,refreshFr
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
     persistent dataFile
+    persistent minUTCMJD
+    persistent maxUTCMJD
+
+    %These hold the minimum and maximum UTC dates that are in the EOP data.
+    %EOP data requested outside of this range is clipped to this range.
     
+    if(nargin==1)
+        %If only one input is given, then it is just the path and the point
+        %is to load the data and not do anyting else.
+        EOPPath=JulUTC1;
+        forceLoad=true;
+    elseif(nargin==0)
+        EOPPath=[];
+        forceLoad=true;
+    else
+        forceLoad=false;
+    end
+
+    if(forceLoad||isempty(dataFile))
+        if(nargin==2||isempty(EOPPath))
+            %Load the database of Earth Orientation Parameters from the
+            %local file.
+            ScriptPath=mfilename('fullpath');
+            ScriptFolder = fileparts(ScriptPath);
+            
+            EOPPath=[ScriptFolder,'/data/EOP.txt'];
+        end
+        dataFile=processEOPData(EOPPath);
+        
+        minUTCMJD=min(dataFile(:,4));
+        maxUTCMJD=max(dataFile(:,4));
+    end
+    
+    if(nargin<=1)
+        %If the call to this function only loads the data.
+        xpyp=minUTCMJD;
+        dXdY=maxUTCMJD;
+        return;
+    end
+
     %Make the inputs into column-vectors.
     JulUTC1=JulUTC1(:);
     JulUTC2=JulUTC2(:);
-    
-    if(nargin<3)
-        refreshFromSource=-1;
-    end
-    
-    if(refreshFromSource~=-1)
-       warning('Downloading data from server. There is no need to download again until this function is cleared.')
-    end
-    
-    if(nargin<4)
-        replaceEOPtxt=false;
-    end
-    
-    if(isempty(dataFile)||nargin>2)
-        switch(refreshFromSource)
-            case -1
-                %Load the database of Earth Orientation Parameters from the
-                %local file.
-                ScriptPath=mfilename('fullpath');
-                ScriptFolder = fileparts(ScriptPath);
-                
-                [dataFile,rawText]=processEOPData([ScriptFolder,'/data/EOP.txt']);
-            otherwise
-                [dataFile,rawText]=processEOPData(refreshFromSource);
-        end
-    end
+
     %The coefficient to convert arcseconds to radians.
     as2Rad=(1/60)*(1/60)*pi/180;
     
-    JulTable=dataFile(:,4);%Modified Julian Date UTC Julian dates for the tabulated data.
+    %Modified Julian Date UTC Julian dates for the tabulated data.
+    JulTable=dataFile(:,4);
     xpTable=dataFile(:,5);
     ypTable=dataFile(:,6);
     UT1UTCTable=dataFile(:,7);
@@ -145,7 +168,13 @@ function [xpyp,dXdY,deltaUTCUT1,deltaTTUT1,LOD]=getEOP(JulUTC1,JulUTC2,refreshFr
     
     %Convert the provided two-part date to a modified Julian date in one
     %part for searching and interpolation.
-    JulDes=(JulUTC1-2400000.5)+JulUTC2;
+    JulDes=(JulUTC1-Constants.MJDOffset)+JulUTC2;
+    
+    if(JulDes>maxUTCMJD)
+        warning('Requested date is after the latest date in the Earth orientation parameter data.');
+    elseif(JulDes<minUTCMJD)
+        warning('Requested date is before the earliest date in the Earth orientation parameter data.');
+    end
 
     %Interpolate to the date in JulDes and add in tidal and libration effects.
     [xpInt,ypInt,UT1UTCInt,dXInt,dYInt,LODInt]=interpEOP(JulTable,xpTable,ypTable,dXTable,dYTable,UT1UTCTable,LODTable,JulDes);
@@ -161,20 +190,6 @@ function [xpyp,dXdY,deltaUTCUT1,deltaTTUT1,LOD]=getEOP(JulUTC1,JulUTC2,refreshFr
     leapSeconds=cumLeapSec(year,month,day,dayFrac);
     %The 32.184 is the offset of the zero mark of TT versus UTC and UT1.
     deltaTTUT1=deltaUTCUT1+32.184+leapSeconds;
-    
-    %Overwrite the EOP.txt file, if requested.
-    if(replaceEOPtxt==true&&refreshFromSource~=-1)
-        ScriptPath=mfilename('fullpath');
-        ScriptFolder = fileparts(ScriptPath);
-        fileID = fopen([ScriptFolder,'/data/EOP.txt'],'w');
-    
-        if(fileID==-1)
-           error('Could not open EOP.txt to overwrite it.');
-        end
-        
-        fprintf(fileID,'%s',rawText);
-        fclose(fileID);
-    end
 end
 
 function [xpInt,ypInt,UT1UTCInt,dXInt,dYInt,LODInt]=interpEOP(JulTable,xpTable,ypTable,dXTable,dYTable,UT1UTCTable,LODTable,JulDes)
@@ -242,7 +257,7 @@ function [cor_x,cor_y,cor_ut1,cor_lod]=PMUT1_OCEANS(rjd)
 %http://hpiers.obspm.fr/eop-pc/models/models_ru.html
 %
 %REFERENCES:
-%[1] J. L. Simon, P. Bretagnon, J. Chapront, M. Chapront-Touzé, G. Francou,
+%[1] J. L. Simon, P. Bretagnon, J. Chapront, M. Chapront-Touzï¿½, G. Francou,
 %    and J. Laskar, "Numerical expressions for precession formulae and mean
 %    elements for the moon and the planets," Astronomy and Astrophysics,
 %    vol. 282, no. 2, pp. 663?683, 1994.
@@ -457,7 +472,7 @@ function [cor_x,cor_y]=PM_GRAVI (rjd)
 %on [1] to match the values in [2].
 %
 %REFERENCES:
-%[1] J. L. Simon, P. Bretagnon, J. Chapront, M. Chapront-Touzé, G. Francou,
+%[1] J. L. Simon, P. Bretagnon, J. Chapront, M. Chapront-Touzï¿½, G. Francou,
 %    and J. Laskar, "Numerical expressions for precession formulae and mean
 %    elements for the moon and the planets," Astronomy and Astrophysics,
 %    vol. 282, no. 2, pp. 663?683, 1994.
@@ -541,7 +556,6 @@ function [cor_x,cor_y]=PM_GRAVI (rjd)
       ARG(6) = -0.00005939*T^4 + 0.007702*T^3+ 7.4722*T^2- 6962890.5431*T + 450160.398036;
       ARG(6) = mod(ARG(6),1296000)*secrad;
 
-
 % CORRECTIONS
 
 	cor_x  = 0;
@@ -566,28 +580,10 @@ end
 
 function [dataRet,rawText]=processEOPData(source)
 %%PROCESSEOPDATA Process a text file containing Earth orientation parameter
-%                data. Either a path can be provided to the text file, or
-%                the data can be downloaded from an online source (assuming
-%                an available internet connection). The sources provide
-%                parameter data for the IERS 2000 models of precession and
-%                nutation.
+%                data. The sources provide parameter data for the IERS 2000
+%                models of precession and nutation.
 %
-%INPUTS: source A number indicating the type and source of the data. This
-%               can either be a character string containing the path to a
-%               text file to load or it can be an integer indicating
-%               whence the data should be obtained. If a text file is
-%               provided, it must have the same formatting as one of the
-%               files that can be downloaded. Possible integer values
-%               indicating online sources are
-%               0) (The default) Get the finals2000A.daily file from the
-%                  US Naval Observatory. This has EOP parameters for the
-%                  last 90 days and prediction for the next 90 days.
-%               1) Get the finals2000A.daily file from the IERS data
-%                  center.
-%               2) Get the finals.data file from the US Naval Observatory.
-%                  This has EOP parameters since 1992 and predictions for
-%                  the next year.
-%               3) Get the finals.data file from the IERS data center.
+%INPUTS: source A path to a text file holding the EOP Data.
 %
 %OUTPUTS: dataRet A matrix where each row is a set of EOP. It has the
 %                 format:
@@ -632,30 +628,14 @@ if(nargin<1)
 end
 
 %If the data should be loaded from a file.
-if(ischar(source))
-    fileID = fopen(source);
-    
-    if(fileID==-1)
-       error('Could not open the file at the given path');
-    end
-    
-    rawText = fread(fileID,'*char')';
-    fclose(fileID);
-else
-    options=weboptions('ContentType','text');
-    switch(source)
-        case 0
-            rawText=webread('http://maia.usno.navy.mil/ser7/finals.daily',options);
-        case 1
-            rawText=webread('https://datacenter.iers.org/eop/-/somos/5Rgv/latest/13',options);
-        case 2
-            rawText=webread('http://maia.usno.navy.mil/ser7/finals.data',options);
-        case 3
-            rawText=webread('https://datacenter.iers.org/eop/-/somos/5Rgv/latest/10',options);
-        otherwise
-            error('Invalid data source given')
-    end
+fileID = fopen(source);
+
+if(fileID==-1)
+   error('Could not open the Earth Prientation Parameters file at the given path');
 end
+
+rawText=fread(fileID,'*char')';
+fclose(fileID);
 
 %Find the indices of all of the carriage returns in the file. These will
 %determine when each line ends and the number of them determine the number
@@ -679,7 +659,7 @@ for curEntry=1:numEntry
     
     idx=baseIdx+(8:15);%The fractional modified Julian date
     dataRet(curEntry,4)=sscanf(rawText(idx),'%f');
-    
+
     %If the bulletin B data is provided, then use that instead of the
     %Bulletin A data. However, in files where Bulletin B is provided, when
     %it stops being provided, it is replaced with spaces, so we have to

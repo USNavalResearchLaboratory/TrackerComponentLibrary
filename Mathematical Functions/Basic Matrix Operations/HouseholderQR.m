@@ -43,27 +43,31 @@ function [QFactForm,R,Q]=HouseholderQR(A)
 %November 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-m=size(A,1);
-n=size(A,2);
+[m,n]=size(A);
 
-for j=1:min(n,m-1)
+for j=1:n
     [v,beta]=HouseholderVec(A(j:m,j));
     A(j:m,j:n)=A(j:m,j:n)-(beta*v)*(v'*A(j:m,j:n));
-    A((j+1):m,j)=v(2:(m-j+1));
+    if(j<m)
+        A((j+1):m,j)=v(2:(m-j+1));
+    end
 end
 
-%This comparison  and change of shape is necessary to handle matrices with
-%m<n compared to the text.
-if(m>=n)
-    R=triu(A(1:n,1:n));
-else
-    R=triu(A(1:m,1:n));
-end
 QFactForm=tril(A,-1);
 
-%If the non-factored form of Q is desired.
-if(nargout>2)
-    Q=factFormMat2Explicit(QFactForm);
+if(nargout>1)
+    %This comparison and change of shape is necessary to handle matrices
+    %with m<n compared to the text.
+    if(m>=n)
+        R=triu(A(1:n,1:n));
+    else
+        R=triu(A(1:m,1:n));
+    end
+
+    %If the non-factored form of Q is desired.
+    if(nargout>2)
+        Q=factFormMat2Explicit(QFactForm);
+    end
 end
 end
 

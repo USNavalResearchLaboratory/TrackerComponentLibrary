@@ -62,7 +62,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         return;
     }
     
-    C=mxGetData(prhs[0]);
+    
     nVals=mxGetDimensions(prhs[0]);
     S=mxGetNumberOfDimensions(prhs[0]);
     minIdx=getSizeTFromMatlab(prhs[1]);
@@ -85,77 +85,86 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         case mxDOUBLE_CLASS:
         {
             MMATLAB=mxCreateNumericArray(S,nValsRet,mxDOUBLE_CLASS,mxREAL);
-            double *M=(double*)mxGetData(MMATLAB);
+            double *M=mxGetDoubles(MMATLAB);
+            double *C=mxGetDoubles(prhs[0]);
+
             minMatOverDimCDouble(S,nVals,M,C,minIdx);
         }
             break;
         case mxSINGLE_CLASS:
         {
             MMATLAB=mxCreateNumericArray(S,nValsRet,mxSINGLE_CLASS,mxREAL);
-            float *M=(float*)mxGetData(MMATLAB);
+            float *M=mxGetSingles(MMATLAB);
+            float *C=mxGetSingles(prhs[0]);
             minMatOverDimCFloat(S,nVals,M,C,minIdx);
         }
             break;
         case mxCHAR_CLASS:
         {
             MMATLAB=mxCreateNumericArray(S,nValsRet,mxCHAR_CLASS,mxREAL);
-            char *M=(char*)mxGetData(MMATLAB);
-            minMatOverDimCChar(S,nVals,M,C,minIdx);
+            mxChar *M=mxGetChars(MMATLAB);
+            mxChar *C=mxGetChars(prhs[0]);
+            
+            if(sizeof(mxChar)==1) {
+                minMatOverDimCChar(S,nVals,(char*)M,(char*)C,minIdx);
+            } else if(sizeof(mxChar)==2) {
+                minMatOverDimCUInt16T(S,nVals,(uint16_t*)M,(uint16_t*)C,minIdx);
+            }  
         }
             break;
         case mxINT8_CLASS:
         {
             MMATLAB=mxCreateNumericArray(S,nValsRet,mxINT8_CLASS,mxREAL);
-            int8_t *M=(int8_t*)mxGetData(MMATLAB);
+            int8_t *M=mxGetInt8s(MMATLAB);
             minMatOverDimCInt8T(S,nVals,M,C,minIdx);
         }
             break;
         case mxUINT8_CLASS:
         {
             MMATLAB=mxCreateNumericArray(S,nValsRet,mxUINT8_CLASS,mxREAL);
-            uint8_t *M=(uint8_t*)mxGetData(MMATLAB);
+            uint8_t *M=mxGetUint8s(MMATLAB);
             minMatOverDimCUInt8T(S,nVals,M,C,minIdx);
         }
             break;
         case mxINT16_CLASS:
         {
             MMATLAB=mxCreateNumericArray(S,nValsRet,mxINT16_CLASS,mxREAL);
-            int16_t *M=(int16_t*)mxGetData(MMATLAB);
+            int16_t *M=mxGetInt16s(MMATLAB);
             minMatOverDimCInt16T(S,nVals,M,C,minIdx);
         }
             break;
         case mxUINT16_CLASS:
         {
             MMATLAB=mxCreateNumericArray(S,nValsRet,mxUINT16_CLASS,mxREAL);
-            uint16_t *M=(uint16_t*)mxGetData(MMATLAB);
+            uint16_t *M=mxGetUint16s(MMATLAB);
             minMatOverDimCUInt16T(S,nVals,M,C,minIdx);
         }
             break;
         case mxINT32_CLASS:
         {
             MMATLAB=mxCreateNumericArray(S,nValsRet,mxINT32_CLASS,mxREAL);
-            int32_t *M=(int32_t*)mxGetData(MMATLAB);
+            int32_t *M=mxGetInt32s(MMATLAB);
             minMatOverDimCInt32T(S,nVals,M,C,minIdx);
         }
             break;
         case mxUINT32_CLASS:
         {
             MMATLAB=mxCreateNumericArray(S,nValsRet,mxUINT32_CLASS,mxREAL);
-            uint32_t *M=(uint32_t*)mxGetData(MMATLAB);
+            uint32_t *M=mxGetUint32s(MMATLAB);
             minMatOverDimCUInt32T(S,nVals,M,C,minIdx);
         }
             break;
         case mxINT64_CLASS:
         {
             MMATLAB=mxCreateNumericArray(S,nValsRet,mxINT64_CLASS,mxREAL);
-            int64_t *M=(int64_t*)mxGetData(MMATLAB);
+            int64_t *M=mxGetInt64s(MMATLAB);
             minMatOverDimCInt64T(S,nVals,M,C,minIdx);
         }
             break;
         case mxUINT64_CLASS:
         {
             MMATLAB=mxCreateNumericArray(S,nValsRet,mxUINT64_CLASS,mxREAL);
-            uint64_t *M=(uint64_t*)mxGetData(MMATLAB);
+            uint64_t *M=mxGetUint64s(MMATLAB);
             minMatOverDimCUInt64T(S,nVals,M,C,minIdx);
         }
             break;

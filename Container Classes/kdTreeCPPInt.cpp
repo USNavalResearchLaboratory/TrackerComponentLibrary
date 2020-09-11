@@ -18,7 +18,7 @@
  *or
  *retSet=kdTreeCPPInt('rangeQuery',CPPData,rectMin,rectMax);
  *or
- *numInRange=kdTreeCPPInt('rangeCount',CPPData,rectMin,rectMax,m1);
+ *numInRange=kdTreeCPPInt('rangeCount',CPPData,rectMin,rectMax);
  *or
  *[idxRange, distSquared]=kdTreeCPPInt('findmBestNN',CPPData,point,m);
  *or
@@ -40,7 +40,7 @@
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     char cmd[64];
     kdTreeCPP *theTree;
-    
+ 
     if(nrhs>5) {
         mexErrMsgTxt("Too many inputs.");
     }
@@ -53,10 +53,14 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         size_t k, N;
         mxArray *retPtr;
         
+        if(nrhs!=3) {
+            mexErrMsgTxt("Wrong Number of inputs.");
+        }
+        
         k=getSizeTFromMatlab(prhs[1]);
         N=getSizeTFromMatlab(prhs[2]);
         
-        theTree =  new kdTreeCPP(k,N);
+        theTree = new kdTreeCPP(k,N);
         
         //Convert the pointer to a Matlab matrix to return.
         retPtr=ptr2Matlab<kdTreeCPP*>(theTree);
@@ -69,11 +73,15 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     } else if(!strcmp("buildTreeFromBatch",cmd)) {
         double *dataBatch;
         
+        if(nrhs!=3) {
+            mexErrMsgTxt("Wrong Number of inputs.");
+        }
+        
         //Get the pointer back from Matlab.
         theTree=Matlab2Ptr<kdTreeCPP*>(prhs[1]);   
         
         checkRealDoubleArray(prhs[2]);
-        dataBatch=(double*)mxGetData(prhs[2]);
+        dataBatch=mxGetDoubles(prhs[2]);
         
         theTree->buildTreeFromBatch(dataBatch);
     } else if(!strcmp("rangeQuery",cmd)) {
@@ -81,16 +89,19 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         ClusterSetCPP<size_t> rangeClust;
         double *rectMin, *rectMax;
         mxArray *clustParams[3];
+
+        if(nrhs!=4) {
+            mexErrMsgTxt("Wrong Number of inputs.");
+        }
         
         //Get the inputs
         theTree=Matlab2Ptr<kdTreeCPP*>(prhs[1]);
         checkRealDoubleArray(prhs[2]);
         checkRealDoubleArray(prhs[3]);
-        checkRealDoubleArray(prhs[4]);
-        rectMin=(double*)mxGetData(prhs[2]);
-        rectMax=(double*)mxGetData(prhs[3]);
+        rectMin=mxGetDoubles(prhs[2]);
+        rectMax=mxGetDoubles(prhs[3]);
         numRects=mxGetN(prhs[2]);
-        
+
         //Run the search; rangeCluster now contains the results.
         theTree->rangeQuery(rangeClust,rectMin,rectMax,numRects);
         
@@ -107,13 +118,16 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         double *rectMin, *rectMax;
         size_t *rangeCounts;
         
+        if(nrhs!=4) {
+            mexErrMsgTxt("Wrong Number of inputs.");
+        }
+        
         //Get the inputs
         theTree=Matlab2Ptr<kdTreeCPP*>(prhs[1]);
         checkRealDoubleArray(prhs[2]);
         checkRealDoubleArray(prhs[3]);
-        checkRealDoubleArray(prhs[4]);
-        rectMin=(double*)mxGetData(prhs[2]);
-        rectMax=(double*)mxGetData(prhs[3]);
+        rectMin=mxGetDoubles(prhs[2]);
+        rectMax=mxGetDoubles(prhs[3]);
         numRects=mxGetN(prhs[2]);
         
         //Run the search
@@ -128,10 +142,14 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         size_t *idxRange;
         double *distSquared;
         
+        if(nrhs!=4) {
+            mexErrMsgTxt("Wrong Number of inputs.");
+        }
+        
         //Get the inputs
         theTree=Matlab2Ptr<kdTreeCPP*>(prhs[1]);
         checkRealDoubleArray(prhs[2]);        
-        point=(double*)mxGetData(prhs[2]);
+        point=mxGetDoubles(prhs[2]);
         numPoints=mxGetN(prhs[2]);
         m=getSizeTFromMatlab(prhs[3]);
 
@@ -139,8 +157,13 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         idxRangeMATLAB=allocUnsignedSizeMatInMatlab(m, numPoints);
         
         distSquaredMATLAB=mxCreateNumericMatrix(m,numPoints,mxDOUBLE_CLASS,mxREAL);
-        idxRange=(size_t*)mxGetData(idxRangeMATLAB);
-        distSquared=(double*)mxGetData(distSquaredMATLAB);
+        if(sizeof(size_t)==4) {//32 bit
+            idxRange=(size_t*)mxGetUint32s(idxRangeMATLAB);
+        } else {//64 bit
+            idxRange=(size_t*)mxGetUint64s(idxRangeMATLAB);
+        }
+
+        distSquared=mxGetDoubles(distSquaredMATLAB);
         
         theTree->findmBestNN(idxRange,distSquared, point, numPoints, m);
 
@@ -157,6 +180,10 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     } else if(!strcmp("getAllData", cmd)){
         size_t N;
         size_t k;
+        
+        if(nrhs!=2) {
+            mexErrMsgTxt("Wrong Number of inputs.");
+        }
         
         theTree=Matlab2Ptr<kdTreeCPP*>(prhs[1]);
         N=theTree->N;
@@ -181,9 +208,17 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
                 plhs[0]=signedSizeMat2Matlab(theTree->LOSON,N, 1);
         }
     }else if(!strcmp("getk", cmd)) {
+        if(nrhs!=2) {
+            mexErrMsgTxt("Wrong Number of inputs.");
+        }
+        
         theTree=Matlab2Ptr<kdTreeCPP*>(prhs[1]);
         plhs[0]=unsignedSizeMat2Matlab(&(theTree->k),1,1);
     }else if(!strcmp("getN", cmd)) {
+        if(nrhs!=2) {
+            mexErrMsgTxt("Wrong Number of inputs.");
+        }
+
         theTree=Matlab2Ptr<kdTreeCPP*>(prhs[1]);
         plhs[0]=unsignedSizeMat2Matlab(&(theTree->N),1,1);
     }else {

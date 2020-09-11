@@ -1,14 +1,14 @@
 function u=randDirVec(numDim,N)
-%%RANDDIRVEC  Generate a uniformely distributed random direction vector
+%%RANDDIRVEC Generate a uniformly distributed random direction vector
 %            (unit vector) in an arbitrary number of dimensions.
 %
-%INPUTS: numDim  The number of dimensions of the random unit vector. This
-%                is >=1.
-%             N  The number of random direction vectors to generate. If
-%                this parameter is omitted, then N=1 is used.
+%INPUTS: numDim The number of dimensions of the random unit vector. This
+%               is >=1.
+%             N The number of random direction vectors to generate. If
+%               this parameter is omitted, then N=1 is used.
 %
-%OUTPUTS: u  A numDimXN matrix of N numDim-dimensional unit vectors that
-%            are uniformly distributed on the unit-sphere (or hypersphere).
+%OUTPUTS: u A numDimXN matrix of N numDim-dimensional unit vectors that
+%           are uniformly distributed on the unit-sphere (or hypersphere).
 %
 %One cannot simply generate a uniformly-distributed direction vector by
 %setting each dimensions to a Uniform(-1,1) random variable and then

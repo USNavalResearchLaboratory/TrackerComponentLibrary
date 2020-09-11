@@ -104,13 +104,13 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     /*Extract the input arguments.*/
     {
         size_t numRow,numCol;
-        numRow = mxGetM(prhs[0]);
-        numCol = mxGetN(prhs[0]);
+        numRow=mxGetM(prhs[0]);
+        numCol=mxGetN(prhs[0]);
         
         totalVecs=numRow*numCol;
     
-        numRow = mxGetM(prhs[1]);
-        numCol = mxGetN(prhs[1]);
+        numRow=mxGetM(prhs[1]);
+        numCol=mxGetN(prhs[1]);
         
         if(numRow*numCol!=totalVecs){
             mexErrMsgTxt("The input dimensionalitites do not match.");
@@ -122,19 +122,19 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     }
     
     //Get the dates.
-    Jul1=(double*)mxGetData(prhs[0]);
-    Jul2=(double*)mxGetData(prhs[1]);
+    Jul1=mxGetDoubles(prhs[0]);
+    Jul2=mxGetDoubles(prhs[1]);
     
     //Get the astronomical unit constant.
     AU2Meters=getScalarMatlabClassConst("Constants", "AstronomialUnit");
     
     //Allocate space for the return values.
     xHelioMATLAB=mxCreateDoubleMatrix(6,totalVecs,mxREAL);
-    xHelio=(double*)mxGetData(xHelioMATLAB);
+    xHelio=mxGetDoubles(xHelioMATLAB);
     
     if(solarBody==0) {
         xBaryMATLAB=mxCreateDoubleMatrix(6,totalVecs,mxREAL);
-        xBary=(double*)mxGetData(xBaryMATLAB);
+        xBary=mxGetDoubles(xBaryMATLAB);
     } else {
         //The approximations for the planets are not offered up in
         //Barycentric coordinates.
@@ -142,7 +142,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     }
         
     exitFlagMATLAB=mxCreateDoubleMatrix(totalVecs,1,mxREAL);
-    exitFlag=(double*)mxGetData(exitFlagMATLAB);
+    exitFlag=mxGetDoubles(exitFlagMATLAB);
     
     //Run the functions.
     if(solarBody==0) {

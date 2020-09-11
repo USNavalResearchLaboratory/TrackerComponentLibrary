@@ -1,6 +1,6 @@
 function [house4Agent,agent4House]=stableHouseAlloc(prefLists,houseList)
 %%STABLEHOUSEALLOC This solves the stable house allocation problem with
-%                  seniority.  Given a set of agents who rank a collection
+%                  seniority. Given a set of agents who rank a collection
 %                  of houses, we want to find a stable allocation of houses
 %                  to agents. That is, no pair of agents would both prefer
 %                  to swap houses versus keeping the one they are in.
@@ -9,7 +9,7 @@ function [house4Agent,agent4House]=stableHouseAlloc(prefLists,houseList)
 %                  the same type of assignment will take place, but where
 %                  the agents with seniority are guaranteed not to house a
 %                  house they rank lower than the current one they are
-%                  occupying. THis is a type of 2D assignment problem.
+%                  occupying. This is a type of 2D assignment problem.
 %                  
 %INPUTS: prefLists A numAgentsXnumPrefs list of where
 %                  prefLists(curAgent,curRank) is the number of the house
@@ -103,7 +103,7 @@ function [house4Agent,agent4House]=stableHouseAlloc(prefLists,houseList)
 %must go to the first agent due to seniority, so they get nothing.
 %
 %REFERENCES:
-%[1] A. Abdulkadiro?luŸlu and T Sönmez, "House Allocation with Existing
+%[1] A. Abdulkadiro?luï¿½lu and T Sï¿½nmez, "House Allocation with Existing
 %    Tenants," Journal of Economic Theory, vol. 88, no. 2, pp. 233-260,
 %    Oct. 1999.
 %
@@ -167,7 +167,7 @@ end
 firstAgent=1;
 firstPrefList=ones(numAgents,1);
 
-%Allocate sapce for return variables. Also, if agents or houses are
+%Allocate space for return variables. Also, if agents or houses are
 %unassigned in the end, then these correctly hold zeros.
 agent4House=zeros(numHouses,1);
 house4Agent=zeros(numAgents,1);

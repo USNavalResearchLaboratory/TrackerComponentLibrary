@@ -67,7 +67,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     }
     numElements=max(M,N);
     //Get the input vector.
-    S=reinterpret_cast<double*>(mxGetData(prhs[0]));
+    S=mxGetDoubles(prhs[0]);
     sgn=exactSignOfSumCPP(S, numElements);
     //Set the return value.
     plhs[0]=intMat2MatlabDoubles(&sgn,1,1);

@@ -7,15 +7,15 @@ classdef DirichletD
 methods(Static)
     
 function val=mean(alph)
-%%MEAN  Obtain the mean of the Dirichlet distribution for the given
-%       concentration parameters.
+%%MEAN Obtain the mean of the Dirichlet distribution for the given
+%      concentration parameters.
 %
-%INPUTS: alph   An NX1 vector of positive, real concentration parameters.
-%               The length of alpha determines the length of the random
-%               vector generated. If one wishes for the mean of all of the
-%               parameters to be equal, then just set alph to all ones.
+%INPUTS: alph An NX1 vector of positive, real concentration parameters.
+%             The length of alpha determines the length of the random
+%             vector. If one wishes for the mean of all of the parameters
+%             to be equal, then just set alph to all ones.
 %
-%OUTPUTS: val   The mean of the Dirichlet distribution under consideration.
+%OUTPUTS: val  The mean of the Dirichlet distribution under consideration.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
@@ -23,13 +23,13 @@ function val=mean(alph)
 end
 
 function covMat=cov(alph)
-%%VAR   Obtain the covariance matrix of the Dirichlet distribution
-%       for the given concentration parameters.
+%%VAR Obtain the covariance matrix of the Dirichlet distribution for the
+%     given concentration parameters.
 %
-%INPUTS:  alph   An NX1 vector of positive, real concentration parameters.
-%                The length of alpha determines the length of the random
-%                vector generated. If one wishes for the mean of all of the
-%                parameters to be equal, then just set alph to all ones.
+%INPUTS: alph An NX1 vector of positive, real concentration parameters. The
+%             length of alpha determines the length of the random vector.
+%             If one wishes for the mean of all of the parameters to be
+%             equal, then just set alph to all ones.
 %
 %OUTPUTS: covMat The covariance matrix of the Dirichlet distribution under
 %                consideration.
@@ -56,15 +56,13 @@ function covMat=cov(alph)
 end
     
 function val=PDF(X,alph)
-%%PDF           Evaluate the PDF of the Dirichlet distribution at a
-%               particular vector value with
+%%PDF Evaluate the PDF of the Dirichlet distribution at a particular vector
+%     for the given concentration parameters.
 %
-%INPUTS: X     An NX1 dirichlet random variable. Its elements must sum to
-%              one.
-%       alph   An NX1 vector of positive, real concentration parameters.
-%              The length of alpha determines the length of the random
-%              vector generated. If one wishes for the mean of all of the
-%              parameters to be equal, then just set alph to all ones.
+%INPUTS: X An NX1 dirichlet random variable. Its elements must sum to one.
+%     alph An NX1 vector of positive, real concentration parameters. If one
+%          wishes for the mean of all of the parameters to be equal, then
+%          just set alph to all ones.
 %
 %OUTPUTS: val  The value of the Dirichlet distribution at X given alph.
 %
@@ -81,15 +79,15 @@ function val=PDF(X,alph)
 end
 
 function val=rand(alph)
-%%RAND        Generate a Dirichlet random vector with concentration vector
-%             parameter vector alpha.
+%%RAND Generate a Dirichlet random vector with concentration vector
+%      parameter vector alpha.
 %
-%INPUTS: alph An NX1 vector of positive, real concentration parameters.
-%              The length of alpha determines the length of the random
-%              vector generated. If one wishes for the mean of all of the
-%              parameters to be equal, then just set alph to all ones.
+%INPUTS: alph An NX1 vector of positive, real concentration parameters. The
+%             length of alpha determines the length of the random vector
+%             generated. If one wishes for the mean of all of the
+%             parameters to be equal, then just set alph to all ones.
 %
-%OUTPUTS: val  An NX1 Dirichlet random vector.
+%OUTPUTS: val An NX1 Dirichlet random vector.
 %
 %Dirichlet random vectors have elements that sum to one and whose
 %elements are bounded between 0 and 1. Thus, Dirichlet random vectors are

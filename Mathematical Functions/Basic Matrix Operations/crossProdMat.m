@@ -1,14 +1,14 @@
 function V=crossProdMat(vec,side)
-%%CROSSPRODMAT  Get a matrix so that the cross product between two vectors
-%               can be expressed in terms of a matrix multiplication.
-%               if one wishes to evaluate vec X b as V*b, where V is a
-%               matrix dependent on vec, then the side option can be
-%               omitted or set to left (the default value). If one wishes
-%               to evaluate b X vec as V*b, then the side option should be
-%               set to 'right'. This produces cross product matrices for
-%               right-handed 3D cross products and for 7D cross products
-%               using the 7D cross product defined in terms of an
-%               orthonormal basis using asymmetry as in [1].
+%%CROSSPRODMAT Get a matrix so that the cross product between two vectors
+%              can be expressed in terms of a matrix multiplication.
+%              if one wishes to evaluate vec X b as V*b, where V is a
+%              matrix dependent on vec, then the side option can be
+%              omitted or set to left (the default value). If one wishes
+%              to evaluate b X vec as V*b, then the side option should be
+%              set to 'right'. This produces cross product matrices for
+%              right-handed 3D cross products and for 7D cross products
+%              using the 7D cross product defined in terms of an
+%              orthonormal basis using asymmetry as in [1].
 %
 %INPUTS: vec  The 3X1 or 7X1 vector in a cross product relation that one
 %             wishes to transform into a matrix.

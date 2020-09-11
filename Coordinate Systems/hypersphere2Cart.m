@@ -26,7 +26,7 @@ function x=hypersphere2Cart(rPhiList)
 % ...
 % x(n-1)=sin(phi(1))*...*sin(phi(n-2))*cos(phi(n-1));
 % x(n)=sin(phi(1))*...*sin(phi(n-2))*sin(phi(n-1));
-
+%
 %The definition of the angles differs in 3D from those use in the
 %spher2Cart function.
 %

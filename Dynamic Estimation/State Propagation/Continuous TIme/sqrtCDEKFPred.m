@@ -150,7 +150,8 @@ function [xPred,SPred,exitCode]=sqrtCDEKFPred(xPrev,SPrev,a,D,AJacob,tPrev,tPred
         dPoints=D(xCur,t);
         F=AJacob(xCur,t);
         dP=PCur*F'+F*PCur'+dPoints*dPoints';
-        dS=SCur*triLower(pinv(SCur)*dP*pinv(SCur)');
+        SInv=pinv(SCur);
+        dS=SCur*triLower(SInv*dP*SInv');
         
         dVal=[dx;dS(lowerTriEls)];
     end

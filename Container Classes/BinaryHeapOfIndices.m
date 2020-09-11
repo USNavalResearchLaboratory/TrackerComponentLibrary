@@ -1,22 +1,17 @@
 classdef BinaryHeapOfIndices < handle
 %%BINARYHEAPOFINDICES A binary heap stores values associated with keys. At
-%                    any time, one can easily access the either either with
-%                    either the largest or the smallest key, depending on
-%                    the type of binary heap. This class is specialized for
-%                    the case where the values are indices starting from 1
-%                    that can be inserted in any order. Whereas, in a
-%                    regular binary heap, there is no good way to change
-%                    the key of an element in the heap given its value,
-%                    in this class, the array idxList is maintained so that
-%                    is possible. idxList is the length of all of the
-%                    possible values and idxList(i) holds the position of
-%                    the value index i in the heap. If nothing with index
-%                    value i is in the heap, then idxList(i) is zero.
-%                    This type of binary heap is useful for implementing
-%                    Dijkstra's algorithm, where one has to increment
-%                    things by value, and one knows that allvalues from 1
-%                    to some maximum size will be present (in a fully
-%                    connected graph).
+%    any time, one can easily access either the largest or the smallest
+%    key, depending on the type of binary heap. This class is specialized
+%    for the case where the values are indices starting from 1 that can be
+%    inserted in any order. Whereas, in a regular binary heap, there is no
+%    good way to change the key of an element in the heap given its value,
+%    in this class, the array idxList is maintained so that is possible.
+%    idxList is the length of all of the possible values and idxList(i)
+%    holds the position of the value index i in the heap. If nothing with
+%    index value i is in the heap, then idxList(i) is zero. This type of
+%    binary heap is useful for implementing Dijkstra's algorithm, where one
+%    has to increment things by value, and one knows that all values from 1
+%    to some maximum size will be present (in a fully connected graph).
 %
 %DEPENDENCIES: KeyVal.m
 %
@@ -49,15 +44,15 @@ classdef BinaryHeapOfIndices < handle
         %BINARYHEAPOFINDICES Allocate space for a binary heap and specify
         %                    whether it is a max heap.
         %
-        %INPUT: initialMaxSize  The amount of room preallocated for the
-        %                       binary heap. If omitted, then a size-1 heap
-        %                       is preallocated.
-        %       isMaxHeap       A boolean value indicating whether the top
-        %                       of the heap is a maximum or a minimum
-        %                       value. The default if not specified is
-        %                       maximum.
+        %INPUT: initialMaxSize The amount of room preallocated for the
+        %                      binary heap. If omitted, then a size-1 heap
+        %                      is preallocated.
+        %            isMaxHeap A boolean value indicating whether the top
+        %                      of the heap is a maximum or a minimum
+        %                      value. The default if not specified is
+        %                      maximum.
         %
-        %OUTPUTS: newHeap       The newly created heap.
+        %OUTPUTS: newHeapThe newly created heap.
         
             if(nargin<2)
                 isMaxHeap=true;
@@ -117,9 +112,15 @@ classdef BinaryHeapOfIndices < handle
         %       element with the largest key. Otherwise, it is the element
         %       with the smallest key. If the heap is empty, then an empty
         %       matrix is returned.
+        %
+        %The value returned is a shallow copy of the KeyVal object in the
+        %heap. Changes to it do not affect the values in the heap, unless
+        %those values are handle class objects. Do not try modifying the
+        %key of an object in the heap by modifying the returned KeyVal
+        %object. Use the function changeIndexedKey for changing keys.
         
             if(curHeap.numInHeap>0)
-                val=curHeap.heapArray(1);
+                val=copy(curHeap.heapArray(1));
             else
                 val=[];
             end

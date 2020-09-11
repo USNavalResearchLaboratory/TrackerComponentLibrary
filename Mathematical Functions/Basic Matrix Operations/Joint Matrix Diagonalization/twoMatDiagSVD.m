@@ -12,7 +12,7 @@ function W=twoMatDiagSVD(C1,C2)
 %OUTPUTS: W An NXN matrix such that W*C1*W'=identity matrix and W*C2*W'=a
 %           diagonal matrix.
 %
-%Joint diagonalization of az pair of matrices arises in the fusion problem
+%Joint diagonalization of a pair of matrices arises in the fusion problem
 %discussed in [1], among other applications. If both matrices are not
 %positive definite, then the jointMatDiagFrob function can produce the
 %desired W diagonalization matrix.
@@ -55,7 +55,7 @@ function W=twoMatDiagSVD(C1,C2)
 %around what one would expect with finite precision errors.
 %
 %REFERENCES:
-%[1] J. Nygårds, V. Deleskog, and G. Hendeby, "Safe fusion compared to
+%[1] J. Nygï¿½rds, V. Deleskog, and G. Hendeby, "Safe fusion compared to
 %    established distributed fusion methods," in IEEE International
 %    Conference on Multisensor Fusion and Integration for Intelligent
 %    Systems, Baden-Baden, Germany, 19-21 Sep. 2016, pp. 265-271.
@@ -64,13 +64,13 @@ function W=twoMatDiagSVD(C1,C2)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 %Note that C1=U1*D1*U1' for a valid covariance matrix.
-[U1,D1]=svd(C1);%Equation 6
+[U1,D1,~]=svd(C1);%Equation 6
 d1=diag(D1);
 
 D1Root=diag(1./sqrt(d1));
 
 temp=D1Root*U1';
-[U2,~]=svd(temp*C2*temp');%Equation 7.
+[U2,~,~]=svd(temp*C2*temp');%Equation 7.
 
 W=U2'*D1Root*U1';%Equation 8a
 %Note that W*C1*W'=eye(xDim,xDim);

@@ -44,7 +44,7 @@
 /* |   Lipschitz continues. However, DIRECT has proven to be effective on  | */
 /* |   more complex problems than these.                                   | */
 /* +-----------------------------------------------------------------------+ */
-/* Subroutine */ void direct_direct_(fp fcn, doublereal *x, integer *n, doublereal *eps, doublereal epsabs, integer *maxf, integer *maxt, int *force_stop, doublereal *minf, doublereal *l,
+/* Subroutine */ void direct_direct_(fp fcn, doublereal *x, integer *n, doublereal *eps, doublereal epsabs, integer *maxf, integer *maxt, int *force_stop, doublereal *minf, doublereal *l, 
 	doublereal *u, integer *algmethod, integer *ierror, FILE *logfile, 
 	doublereal *fglobal, doublereal *fglper, doublereal *volper, 
 	doublereal *sigmaper, void *fcn_data,const integer MAXDIV)
@@ -77,15 +77,14 @@
     integer mdeep, *point = 0, start;
     integer *anchor = 0, *length = 0	/* was [90000][64] */, *arrayi = 0;
     doublereal *levels = 0, *thirds = 0;
-    integer writed;
     doublereal epsfix;
     integer oldpos, minpos, maxpos, tstart, actdeep, ifreeold, oldmaxf;
-    integer version,numfunc=0;
+    integer numfunc, version;
     integer jones;
 
     /* FIXME: change sizes dynamically? */
-    //DFC 2015-9-30: Removed timer code
-#define MY_ALLOC(p, t, n) p = (t *) mxMalloc(sizeof(t) * (size_t)(n)); \
+    //DFC 2015-9-30: Changed malloc to mxMalloc
+#define MY_ALLOC(p, t, n) p = (t *) mxMalloc(sizeof(t) * (n)); \
                           if (!(p)) { *ierror = -100; goto cleanup; }
 
     /* Note that I've transposed c__, length, and f relative to the 
@@ -162,17 +161,17 @@
 /* |            for the function within the hyper-box.                     | */
 /* |                                                                       | */
 /* |    minf -- The value of the function at x.                            | */
-/* |  Ierror -- Error flag. If Ierror is lower 0, an error has occured. The| */
-/* |            values of Ierror mean                                      | */
+/* |  Ierror -- Error flag. If Ierror is lower 0, an error has occurred.   | */
+/* |            The values of Ierror mean                                  | */
 /* |            Fatal errors :                                             | */
 /* |             -1   u(i) <= l(i) for some i.                             | */
 /* |             -2   maxf is too large.                                   | */
 /* |             -3   Initialization in DIRpreprc failed.                  | */
 /* |             -4   Error in DIRSamplepoints, that is there was an error | */
 /* |                  in the creation of the sample points.                | */
-/* |             -5   Error in DIRSamplef, that is an error occured while  | */
+/* |             -5   Error in DIRSamplef, that is an error occurred while | */
 /* |                  the function was sampled.                            | */
-/* |             -6   Error in DIRDoubleInsert, that is an error occured   | */
+/* |             -6   Error in DIRDoubleInsert, that is an error occurred  | */
 /* |                  DIRECT tried to add all hyperrectangles with the same| */
 /* |                  size and function value at the center. Either        | */
 /* |                  increase maxdiv or use our modification (Jones = 1). | */
@@ -325,7 +324,6 @@
     --x;
 
     /* Function Body */
-    writed = 0;
     jones = *algmethod;
 /* +-----------------------------------------------------------------------+ */
 /* | Save the upper and lower bounds.                                      | */
@@ -352,10 +350,10 @@
 /* | Write the header of the logfile.                                      | */
 /* +-----------------------------------------------------------------------+ */
     direct_dirheader_(logfile, &version, &x[1], n, eps, maxf, maxt, &l[1], &u[1], 
-	    algmethod, &MAXFUNC, fglobal, fglper, ierror, &epsfix, &
+	    algmethod, &MAXFUNC, &MAXDEEP, fglobal, fglper, ierror, &epsfix, &
 		      iepschange, volper, sigmaper);
 /* +-----------------------------------------------------------------------+ */
-/* | If an error has occured while writing the header (we do some checking | */
+/* | If an error has occurred while writing the header (we do some checking| */
 /* | of variables there), return to the main program.                      | */
 /* +-----------------------------------------------------------------------+ */
     if (*ierror < 0) {
@@ -383,7 +381,7 @@
     direct_dirinitlist_(anchor, &ifree, point, f, &MAXFUNC, &MAXDEEP);
 /* +-----------------------------------------------------------------------+ */
 /* | Call the routine to initialise the mapping of x from the n-dimensional| */
-/* | unit cube to the hypercube given by u and l. If an error occured,     | */
+/* | unit cube to the hypercube given by u and l. If an error occurred,    | */
 /* | give out a error message and return to the main program with the error| */
 /* | flag set.                                                             | */
 /* | JG 07/16/01 Changed call to remove unused data.                       | */
@@ -413,18 +411,16 @@
     if (*ierror < 0) {
 	if (*ierror == -4) {
 	    if (logfile)
-		 fprintf(logfile, "WARNING: Error occured in routine DIRsamplepoints.\n");
+		 fprintf(logfile, "WARNING: Error occurred in routine DIRsamplepoints.\n");
 	    goto cleanup;
 	}
 	if (*ierror == -5) {
 	    if (logfile)
-		 fprintf(logfile, "WARNING: Error occured in routine DIRsamplef..\n");
+		 fprintf(logfile, "WARNING: Error occurred in routine DIRsamplef..\n");
 	    goto cleanup;
 	}
 	if (*ierror == -102) goto L100;
     }
-    
-    //DFC 2015-9-30: Removed timer code
     
     numfunc = maxi + 1 + maxi;
     actmaxdeep = 1;
@@ -457,7 +453,7 @@
 /* +-----------------------------------------------------------------------+ */
 	actdeep = actmaxdeep;
 	direct_dirchoose_(anchor, s, &MAXDEEP, f, minf, *eps, epsabs, levels, &maxpos, length, 
-		 &MAXDEEP, &MAXDIV, n, logfile, &cheat, &
+		&MAXFUNC, &MAXDEEP, &MAXDIV, n, logfile, &cheat, &
 		kmax, &ifeasiblef, jones);
 /* +-----------------------------------------------------------------------+ */
 /* | Add other hyperrectangles to S, which have the same level and the same| */
@@ -466,7 +462,7 @@
 /* | JG 07/16/01 Added Errorflag.                                          | */
 /* +-----------------------------------------------------------------------+ */
 	if (*algmethod == 0) {
-	     direct_dirdoubleinsert_(anchor, s, &maxpos, point, f,
+	     direct_dirdoubleinsert_(anchor, s, &maxpos, point, f, &MAXDEEP, &MAXFUNC,
 		     &MAXDIV, ierror);
 	    if (*ierror == -6) {
 		if (logfile)
@@ -493,7 +489,7 @@
 /* +-----------------------------------------------------------------------+ */
 /* | JG 09/24/00 Calculate the value delta used for sampling points.       | */
 /* +-----------------------------------------------------------------------+ */
-		actdeep_div__ = direct_dirgetmaxdeep_(&s[j - 1], length, 
+		actdeep_div__ = direct_dirgetmaxdeep_(&s[j - 1], length, &MAXFUNC, 
 			n);
 		delta = thirds[actdeep_div__ + 1];
 		actdeep = s[j + MAXDIV-1];
@@ -524,7 +520,7 @@
 /* +-----------------------------------------------------------------------+ */
 /* | Get the Directions in which to decrease the intervall-length.         | */
 /* +-----------------------------------------------------------------------+ */
-		direct_dirget_i__(length, &help, arrayi, &maxi, n);
+		direct_dirget_i__(length, &help, arrayi, &maxi, n, &MAXFUNC);
 /* +-----------------------------------------------------------------------+ */
 /* | Sample the function. To do this, we first calculate the points where  | */
 /* | we need to sample the function. After checking for errors, we then do | */
@@ -533,11 +529,11 @@
 /* +-----------------------------------------------------------------------+ */
 		direct_dirsamplepoints_(c__, arrayi, &delta, &help, &start, length, 
 			logfile, f, &ifree, &maxi, point, &x[
-			1], &l[1], &u[1], n,
-			&oops);
+			1], &l[1], minf, &minpos, &u[1], n, &MAXFUNC, &
+			MAXDEEP, &oops);
 		if (oops > 0) {
 		    if (logfile)
-			 fprintf(logfile, "WARNING: Error occured in routine DIRsamplepoints.\n");
+			 fprintf(logfile, "WARNING: Error occurred in routine DIRsamplepoints.\n");
 		    *ierror = -4;
 		    goto cleanup;
 		}
@@ -545,18 +541,21 @@
 /* +-----------------------------------------------------------------------+ */
 /* | JG 01/22/01 Added variable to keep track of the maximum value found.  | */
 /* +-----------------------------------------------------------------------+ */
-		direct_dirsamplef_(c__, arrayi, &start, length, f, &maxi, point, fcn, &x[
-			1], &l[1], minf, &minpos, &u[1], n, &fmax, &ifeasiblef, &iinfesiblef, 
+		direct_dirsamplef_(c__, arrayi, &delta, &help, &start, length,
+			    logfile, f, &ifree, &maxi, point, fcn, &x[
+			1], &l[1], minf, &minpos, &u[1], n, &MAXFUNC, &
+			MAXDEEP, &oops, &fmax, &ifeasiblef, &iinfesiblef, 
 				   fcn_data, force_stop);
 		if (force_stop && *force_stop) {
 		     *ierror = -102;
 		     goto L100;
 		}
-//DFC 2015-9-30: Removed timer code
-            
+        
+        //DFC 2015-9-30: Removed timer code
+        
 		if (oops > 0) {
 		    if (logfile)
-			 fprintf(logfile, "WARNING: Error occured in routine DIRsamplef.\n");
+			 fprintf(logfile, "WARNING: Error occurred in routine DIRsamplef.\n");
 		    *ierror = -5;
 		    goto cleanup;
 		}
@@ -564,12 +563,12 @@
 /* | Divide the intervalls.                                                | */
 /* +-----------------------------------------------------------------------+ */
 		direct_dirdivide_(&start, &actdeep_div__, length, point, arrayi, &
-			help, list2, w, &maxi, f, n);
+			help, list2, w, &maxi, f, &MAXFUNC, &MAXDEEP, n);
 /* +-----------------------------------------------------------------------+ */
 /* | Insert the new intervalls into the list (sorted).                     | */
 /* +-----------------------------------------------------------------------+ */
 		direct_dirinsertlist_(&start, anchor, point, f, &maxi, length, &
-			MAXFUNC, n, &help, jones);
+			MAXFUNC, &MAXDEEP, n, &help, jones);
 /* +-----------------------------------------------------------------------+ */
 /* | Increase the number of function evaluations.                          | */
 /* +-----------------------------------------------------------------------+ */
@@ -614,7 +613,7 @@
 /* +-----------------------------------------------------------------------+ */
 	*ierror = jones;
 	jones = 0;
-	actdeep_div__ = direct_dirgetlevel_(&minpos, length, n, jones);
+	actdeep_div__ = direct_dirgetlevel_(&minpos, length, &MAXFUNC, n, jones);
 	jones = *ierror;
 /* +-----------------------------------------------------------------------+ */
 /* | JG 07/16/01 Use precalculated values to calculate volume.             | */
@@ -633,7 +632,7 @@
 /* |             minf is assumed. If this measure is smaller then sigmaper,| */
 /* |             we stop DIRECT.                                           | */
 /* +-----------------------------------------------------------------------+ */
-	actdeep_div__ = direct_dirgetlevel_(&minpos, length, n, jones);
+	actdeep_div__ = direct_dirgetlevel_(&minpos, length, &MAXFUNC, n, jones);
 	delta = levels[actdeep_div__];
 	if (delta <= *sigmaper) {
 	    *ierror = 5;
@@ -660,8 +659,8 @@
 /* | If no infeasible points exist (IInfesiblef = 0), skip this.           | */
 /* +-----------------------------------------------------------------------+ */
 	if (iinfesiblef > 0) {
-	     direct_dirreplaceinf_(&ifree, f, c__, thirds, length, anchor, 
-		    point, &u[1], &l[1], &MAXFUNC, n, n,
+	     direct_dirreplaceinf_(&ifree, &ifreeold, f, c__, thirds, length, anchor, 
+		    point, &u[1], &l[1], &MAXFUNC, &MAXDEEP, n, n, 
 		    logfile, &fmax, jones);
 	}
 	ifreeold = ifree;
@@ -743,7 +742,8 @@ L100:
 /* +-----------------------------------------------------------------------+ */
 /* | Give out a summary of the run.                                        | */
 /* +-----------------------------------------------------------------------+ */
-    direct_dirsummary_(logfile, &x[1], &l[1], &u[1], n, minf, fglobal, &numfunc);
+    direct_dirsummary_(logfile, &x[1], &l[1], &u[1], n, minf, fglobal, &numfunc, 
+	    ierror);
 /* +-----------------------------------------------------------------------+ */
 /* | Format statements.                                                    | */
 /* +-----------------------------------------------------------------------+ */

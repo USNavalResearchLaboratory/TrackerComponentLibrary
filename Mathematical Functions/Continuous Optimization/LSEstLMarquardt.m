@@ -58,13 +58,15 @@ function [x,exitCode]=LSEstLMarquardt(fun,x0,hasJacobian,TolG,TolX,delta,deltaAb
 %           0 The maximum number of iterations maxIter was reached.
 %           1 Convergence according to TolG was determined.
 %           2 Convergence according to TolX was determined.
+%           3 The step size became so small that finite precision
+%             limitations preclude changes in x.
 %
 %The Levenberg-Marquart algorithm is a dampened form of the Gauss-Newton
 %method for least squares optimization. Unlike the Gauss-Newton methods, it
 %does not use a line search to determine the stepsize. The original
-%Levenberg-Marquardt algoirthm is described in [1]. The implementation here
+%Levenberg-Marquardt algorithm is described in [1]. The implementation here
 %follows that of Algorithm 3.16 in [2]. When the Jacobian is not provided,
-%the secand version of the algorithm, partially summarized as Algorithm
+%the secant version of the algorithm, partially summarized as Algorithm
 %3.34 in [2], is used. Algorithm 3.34 in 2 omits a number of steps.
 %However, the missing steps coincide with those of Algorithm 3.31, so it is
 %not difficult to add the Jacobian update steps of the secant method to
@@ -109,7 +111,7 @@ function [x,exitCode]=LSEstLMarquardt(fun,x0,hasJacobian,TolG,TolX,delta,deltaAb
 %[2] K. Madsen, H. B. Nielsen, and O. Tingleff, "Methods for non-linear
 %    least squares problems," Informatics and Mathematical Modelling,
 %    Technical University of Denmark, Tech. Rep., Apr. 2004. [Online].
-%    Available: http://www2.imm.dtu.dk/pubdb/views/ publication details.php?id=3215
+%    Available: http://www2.imm.dtu.dk/pubdb/views/edoc_download.php/3215/pdf/imm3215.pdf
 %
 %July 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -137,7 +139,7 @@ end
 N=length(x0);
 
 if(nargin<8||isempty(maxIter))
-     maxIter=100+10*N;
+	maxIter=100+10*N;
 end
 
 if(nargin<9||isempty(maxTries))
@@ -252,6 +254,11 @@ for curIter=1:maxIter
     
     %Compute the next estimate of x.
     xNew=x+h;
+
+    if(xNew==x)
+        exitCode=3;
+        return;
+    end
 
     %If numerical problems arose.
     if(any(~isfinite(xNew)))

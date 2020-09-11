@@ -266,7 +266,7 @@ else
     geoidHeight=zeta+zeta2N/100;
 end
 
-%Now, convert the the appropriate tide system
+%Convert the appropriate tide system.
 switch(tideSys)
     case 1%mean tide
         k=0.3;%A Love number.

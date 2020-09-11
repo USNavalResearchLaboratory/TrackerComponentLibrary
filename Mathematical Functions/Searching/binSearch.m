@@ -1,10 +1,12 @@
-function [val,idx]=binSearch(vec,key,choice)
+function [val,idx]=binSearch(vec,key,choice,idxRange)
 %%BINSEARCH Perform a binary search for the value key in the vector vec,
 %           which has been sorted such that the elements are in ascending
 %           order. The optional choice parameter sets what is returned if
 %           key is not in vec.
 %
 %INPUTS: vec A vector with elements sorted in increasing order.
+%            Alternatively, this can be a function handle to a function
+%            that takes integers as inputs and is strictly increasing. 
 %        key The value that one wishes to find in the vector vec.
 %     choice An optional parameter that determines what is returned if key
 %            is not found. If this parameter is omitted, then the default
@@ -14,6 +16,11 @@ function [val,idx]=binSearch(vec,key,choice)
 %              return the lowest value in vec.
 %            2 means return the next higher value if there is one,
 %              otherwise return the highest value in vec.
+%   idxRange This is the 2X1 or 1X2 range of integers that are considered
+%            as searchable indices in vec (or possible inputs to the
+%            function vec). If vec is a function, then this must be
+%            specified. Otherwise, the default if omitted or an empty
+%            matrix is passed is [1;length(vec)].
 %
 %OUTPUTS: val Either key, if found, or a value nearby as determined by the
 %             parameter closest.
@@ -41,14 +48,22 @@ if(nargin<3)
     choice=0;
 end
 
-UB=length(vec);
-LB=1;
+if(nargin<4||isempty(idxRange))
+    idxRange=[1;length(vec)];
+end
 
-if(vec(UB)<=key)
-    val=vec(UB);
+UB=idxRange(2);
+LB=idxRange(1);
+
+UBVal=vec(UB);
+if(UBVal<=key)
+    val=UBVal;
     idx=UB;
     return;
-elseif(vec(LB)>=key)
+end
+
+LBVal=vec(LB);
+if(LBVal>=key)
     val=vec(LB);
     idx=LB;
     return;

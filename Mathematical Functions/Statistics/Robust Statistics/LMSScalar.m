@@ -17,7 +17,7 @@ function theta=LMSScalar(y)
 %is a solution to 
 %theta=min_theta \median_i abs(y(i)-theta)
 %However, the latter problem can have many solutions.
-
+%
 %EXAMPLE:
 %This is the example from page 165 of [1] (Chapter 4-2). The point 40 is an
 %outlier.

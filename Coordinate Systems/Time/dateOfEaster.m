@@ -1,5 +1,5 @@
 function [day,month]=dateOfEaster(year)
-%%DATEOFEASTER Determin the month and day of the holiday Easter under the
+%%DATEOFEASTER Determine the month and day of the holiday Easter under the
 %              western system (not the orthodox system). This is only valid
 %              after 1582, which is the year that the calendar used in much
 %              of Europe switched from Julian to Gregorian. Note that

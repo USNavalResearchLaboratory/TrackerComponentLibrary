@@ -28,17 +28,24 @@ function [u,c]=getENUAxes(plhPoint,justVertical,a,f)
 %
 %The local East-North-Up coordinate system is an orthonormal coordinate
 %system given by the normalized derivatives of a Cartesian position vector
-%taken with respect to longitude, geodetic, latitude and height. To ensure
-%that the coordinate system is defined everywhere, including at the poles,
-%the unit vector for East is computed as the cross product of the unit
-%vector for North and that for Up. This is because the derivative of a
-%Cartesian position vector at the poles with respect to longitude is zero.
-%The orthogonality relation ensures that an ENU axis can be established
-%anywhere on Earth and at the poles, the longitude coordinate determines
-%the orientation of the axes.
+%taken with respect to longitude, geodetic, latitude and height. It is
+%described in [1], where expressions for the ENU vectors are given.
+%
+%To ensure that the coordinate system is defined everywhere, including at
+%the poles, the unit vector for East is computed as the cross product of
+%the unit vector for North and that for Up. This is because the derivative
+%of a Cartesian position vector at the poles with respect to longitude is
+%zero. The orthogonality relation ensures that an ENU axis can be
+%established anywhere on Earth and at the poles, the longitude coordinate
+%determines the orientation of the axes.
 %
 %If only the up vector is desired, include the fourth parameter set to
 %true.
+%
+%REFERENCES:
+%[1] D. F. Crouse, "Simulating Aerial Targets in 3D Accouting for the
+%    Earth's Curvature," Journal of Advances in Information Fusion, vol.
+%    10, no. 1, pp. 31-57, Jun 2015.
 %
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

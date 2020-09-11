@@ -60,11 +60,11 @@ int iauJdcalf(int ndp, double dj1, double dj2, int iymdf[4])
 **     P. Kenneth Seidelmann (ed), University Science Books (1992),
 **     Section 12.92 (p604).
 **
-**  This revision:  2016 December 2
+**  This revision:  2019 June 20
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
    int j, js;
@@ -81,7 +81,7 @@ int iauJdcalf(int ndp, double dj1, double dj2, int iymdf[4])
    }
 
 /* Copy the date, big then small, and realign to midnight. */
-   if (dj1 >= dj2) {
+   if (fabs(dj1) >= fabs(dj2)) {
       d1 = dj1;
       d2 = dj2;
    } else {
@@ -115,7 +115,7 @@ int iauJdcalf(int ndp, double dj1, double dj2, int iymdf[4])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

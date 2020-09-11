@@ -5,10 +5,10 @@
  *          maxBound=pi, then a value that is some eps above pi will be
  *          wrapped to a value some eps above -pi.  Similarly, a value some
  *          eps below -pi is wrapped to a value some eps above -pi. On the
- *          other hand, if mirrorWrap==true,    then leaving the region of
- *          [minBound,maxBound] goes the other  way. For example, if
- *          mirrorWrap=true, minBound=-pi/2, and    maxBound=pi/2, then a
- *          value that is some eps above pi/2 will  be mapped to a point
+ *          other hand, if mirrorWrap==true, then leaving the region of
+ *          [minBound,maxBound] goes the other way. For example, if
+ *          mirrorWrap=true, minBound=-pi/2, and maxBound=pi/2, then a
+ *          value that is some eps above pi/2 will wbe mapped to a point
  *          some eps below pi/2 and a value some eps below -pi/2 will be
  *          mapped to a point some eps above -pi/2.
  *
@@ -88,7 +88,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     
     //Allocate space for the return values.
     retMat=mxCreateNumericArray(numDims,dims,mxDOUBLE_CLASS,mxREAL);
-    wrapVals=reinterpret_cast<double*>(mxGetData(retMat));
+    wrapVals=mxGetDoubles(retMat);
     
     if(mirrorWrap) {
         for(i=0;i<numEls;i++) {

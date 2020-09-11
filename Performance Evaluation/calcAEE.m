@@ -1,17 +1,29 @@
-function val=calcAEE(xTrue,xEst)
+function val=calcAEE(xTrue,xEst,is3D)
 %%CALCAEE Compute the scalar average Euclidean error (AEE). In [1], it is
 %         argued that the AEE is a better error metric to use than the
 %         root-mean-squared error (RMSE). The AEE is essentially the
 %         average magnitude of the error whereas the RMSE is the square
 %         root of the average squared magnitude of the error.
 %
-%INPUTS: xTrue The truth data. If the truth is the same for all samples of
-%              the estimate, then this is an xDimX1 vector. Otherwise, this
-%              is an xDimXN matrix where N is the number of samples in the
-%              batch.
-%         xEst An xDim X N set of estimates.
+%INPUTS: xTrue The truth data. This is either an xDimXNumSamples matrix or
+%              an xDimXNXnumSamples matrix. The latter formulation is
+%              useful when the MSE over multiple Monte Carlo runs of an
+%              entire length-N track is desired. In the first formulation,
+%              we take N=1. Alternatively, if the same true value is used
+%              for all numSamples, then xTrue can just be an xDimXN matrix.
+%              Alternatively, if xTrue is the same for all numSamples and
+%              all N, then just an xDimX1 matrix can be passed. N and
+%              numSamples are inferred from xEst.
+%         xEst An xDimXnumSamples set of estimates or an xDimXNXnumSamples
+%              set of estimates (if values at N times are desired).
+%         is3D An optional indicating that xEst is 3D. This is only used if
+%              xEst is a matrix. In such an instance, there is an ambiguity
+%              whether xEst is truly 2D, so N=1, or whether numSamples=1
+%              and xEst is 3D with the third dimension being 1. If this
+%              parameter is omitted or an empty matrix is passed, it is
+%              assumed that N=1.
 %
-%OUTPUTS: val The scalar AEE value.
+%OUTPUTS: val The 1XN set of scalar AEE values.
 %
 %The AEE is given in Equation 2 of [1].
 %
@@ -39,14 +51,41 @@ function val=calcAEE(xTrue,xEst)
 %February 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-numEst=size(xEst,2);
-
-if(size(xTrue,2)==1)
-    xTrue=repmat(xTrue,[1,numEst]);
+if(nargin<3||isempty(is3D))
+    is3D=false; 
 end
 
-val=sum(sqrt(sum((xEst-xTrue).^2,1)))/numEst;
+xDim=size(xEst,1);
+if(ismatrix(xEst)&&is3D==false)
+    N=1;
+    numSamples=size(xEst,2);
+    xEst=reshape(xEst,[xDim,1,numSamples]);
+    
+    if(size(xTrue,2)==1)
+        %If the true values are the same for all samples.
+        xTrue=repmat(xTrue,[1,1,numSamples]);
+    else
+        xTrue=reshape(xTrue,[xDim,1,numSamples]);
+    end
+else
+    N=size(xEst,2);
+    numSamples=size(xEst,3);
+    
+    if(ismatrix(xTrue))
+        if(size(xTrue,2)==1)
+            %If the true values are the same for all samples and for all N.
+            xTrue=repmat(xTrue,[1,N,numSamples]);
+        else        
+            %If the true values are the same for all samples.
+            xTrue=repmat(xTrue,[1,1,numSamples]);
+        end
+    end
+end
 
+val=zeros(1,N);
+for k=1:N
+    val(k)=sum(sqrt(sum((xEst(:,k,:)-xTrue(:,k,:)).^2,1)))/numSamples;
+end
 end
 
 %LICENSE:

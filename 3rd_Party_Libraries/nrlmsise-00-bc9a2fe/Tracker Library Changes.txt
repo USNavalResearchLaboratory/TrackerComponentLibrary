@@ -1,0 +1,8 @@
+The function ghp7 has been modified to return the computed altitudes, as
+was the case in the original Fortran code.
+
+The code has been modified to use mxMalloc and mxFree, which are preferred
+in Matlab over malloc and free. Also, printf statements have been replaced
+with the appropriate native. Matlab functions.
+
+June 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.

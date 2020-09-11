@@ -39,7 +39,7 @@ function [V,C,FCost,exitCode]=jointMatDiagFrob(A,w,maxIter,RelTol,AbsTol)
 %  exitCode A parameter indicating how the algorithm terminated. Possible
 %           values are:
 %           0 The algorithm converged.
-%           1 the maximum number of iteratiosn elapsed.
+%           1 the maximum number of iterations elapsed.
 %
 %This function is an implementation of the algorithm described in [1].
 %
@@ -58,7 +58,7 @@ function [V,C,FCost,exitCode]=jointMatDiagFrob(A,w,maxIter,RelTol,AbsTol)
 % A(:,:,1)=C1;
 % A(:,:,2)=C2;
 % [V,C,FCost,exitCode]=jointMatDiagFrob(A)
-% %The algorithm qucikly converges.
+% %The algorithm quickly converges.
 %
 %EXAMPLE 2:
 %Though only approximations can be obtained for more than two matrices in
@@ -78,7 +78,7 @@ function [V,C,FCost,exitCode]=jointMatDiagFrob(A,w,maxIter,RelTol,AbsTol)
 %matrices. Note, however, that the V obtained is not the same as V1.
 %
 %REFERENCES:
-%[1] A. Ziehe, P. Laskov, G. Nolte, and K.-R. Müller, "A fast algorithm for
+%[1] A. Ziehe, P. Laskov, G. Nolte, and K.-R. Mï¿½ller, "A fast algorithm for
 %    joint diagonalization with non-orthogonal transformations and its
 %    application to blind source separation," Journal of Machine Learning,
 %    vol. 5, pp. 777-800, Jul. 2004.
@@ -119,7 +119,7 @@ function [V,C,FCost,exitCode]=ZieheAlg(A,maxIter,RelTol,AbsTol)
 %          instead of 18.
 %
 %REFERENCES:
-%[1] A. Ziehe, P. Laskov, G. Nolte, and K.-R. Müller, "A fast algorithm for
+%[1] A. Ziehe, P. Laskov, G. Nolte, and K.-R. Mï¿½ller, "A fast algorithm for
 %    joint diagonalization with non-orthogonal transformations and its
 %    application to blind source separation," Journal of Machine Learning,
 %    vol. 5, pp. 777-800, Jul. 2004.

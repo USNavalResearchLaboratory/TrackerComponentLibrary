@@ -79,7 +79,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     }
     N=mxGetN(prhs[0]);
     checkRealDoubleArray(prhs[0]);
-    xG=reinterpret_cast<double*>(mxGetData(prhs[0]));
+    xG=mxGetDoubles(prhs[0]);
     
     if(nrhs>1&&!mxIsEmpty(prhs[1])) {
         systemType=getSizeTFromMatlab(prhs[1]);
@@ -101,7 +101,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         dims[3]=N;
             
         HMATLAB=mxCreateNumericArray(4,dims,mxDOUBLE_CLASS,mxREAL);
-        H=reinterpret_cast<double*>(mxGetData(HMATLAB));
+        H=mxGetDoubles(HMATLAB);
     }
     
     if(nrhs>2) {
@@ -111,7 +111,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             }
             checkRealDoubleArray(prhs[2]);
 
-            lRx=reinterpret_cast<double*>(mxGetData(prhs[2]));
+            lRx=mxGetDoubles(prhs[2]);
         } else {
             lRx=zeros;
         }
@@ -122,7 +122,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             }
 
             checkRealDoubleArray(prhs[3]);
-            M=reinterpret_cast<double*>(mxGetData(prhs[3]));
+            M=mxGetDoubles(prhs[3]);
         } else {
             M=identMat;
         }

@@ -55,7 +55,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     CountingClusterSetCPP<double> PBarUVals;
     CountingClusterSetCPP<double> dPBarUValsdTheta;//The first derivatives
     CountingClusterSetCPP<double> d2PBarUValsdTheta2;//The second derivatives
-    size_t M, numPBarU,i;
+    size_t M, numPBarU;
     mxArray *CSRetVal;
     mxArray *clusterElsMATLAB;
     mxArray *clusterEls1stDerivMATLAB, *numClustMATLAB;
@@ -86,7 +86,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
 
     PBarUVals.numClust=M+1;
     PBarUVals.totalNumEl=numPBarU;
-    PBarUVals.clusterEls=reinterpret_cast<double*>(mxGetData(clusterElsMATLAB));
+    PBarUVals.clusterEls=mxGetDoubles(clusterElsMATLAB);
 
     NALegendreCosRatCPP(PBarUVals,theta,scalFactor);
     
@@ -102,7 +102,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         
         dPBarUValsdTheta.numClust=M+1;
         dPBarUValsdTheta.totalNumEl=numPBarU;
-        dPBarUValsdTheta.clusterEls=reinterpret_cast<double*>(mxGetData(clusterEls1stDerivMATLAB));
+        dPBarUValsdTheta.clusterEls=mxGetDoubles(clusterEls1stDerivMATLAB);
 
         NALegendreCosRatDerivCPP(dPBarUValsdTheta, PBarUVals, theta);
         
@@ -119,7 +119,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         
         d2PBarUValsdTheta2.numClust=M+1;
         d2PBarUValsdTheta2.totalNumEl=numPBarU;
-        d2PBarUValsdTheta2.clusterEls=reinterpret_cast<double*>(mxGetData(clusterEls2ndDerivMATLAB));
+        d2PBarUValsdTheta2.clusterEls=mxGetDoubles(clusterEls2ndDerivMATLAB);
         
         NALegendreCosRatDeriv2CPP(d2PBarUValsdTheta2, dPBarUValsdTheta, PBarUVals,theta);
         

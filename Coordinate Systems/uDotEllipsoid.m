@@ -1,22 +1,19 @@
-function uDot=uDotEllipsoid(u,x,t,a,f)
+function uDot=uDotEllipsoid(u,x,a,f)
 %%UDOTELLIPSOID Return the derivative of the basis vectors for the local
 %               coordinate system of a moving observer when using an
 %               ellipsoidal approximation of the curved Earth. Such an
 %               evolving coordinate system has been termed "wander
 %               coordinate" or "naturally evolving coordinates". Targets
-%               moving in non-maneuvering, level flight with
+%               moving locally in non-maneuvering, level flight with
 %               a coordinate system evolving as per this coordinate system
 %               will follow geodesic curves, not rhumb lines.
 %
-%INPUTS: u The orthonormal basis vectors for the local coordinate system.
-%          u(:,3) is the local vertical.
+%INPUTS: u The 3X3 orthonormal basis vectors for the local coordinate
+%          system. u(:,3) is the local vertical.
 %        x An nX1 vector whose first three elements are Cartesian position
 %          in the global ECEF coordinate system and whose next three
 %          elements are velocity in the local (flat-Earth) coordinate
 %          system. Other elements of x do not matter.
-%        t An unused time component that is just here so that this function
-%          can be passed to functions that expect the basis vectors to be
-%          time-dependent.
 %        a The semi-major axis of the reference ellipsoid. If this argument
 %          is omitted, the value in Constants.WGS84SemiMajorAxis is used.
 %        f The flattening factor of the reference ellipsoid. If this
@@ -36,11 +33,11 @@ function uDot=uDotEllipsoid(u,x,t,a,f)
 %September 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    if(nargin<5||isempty(f))
+    if(nargin<4||isempty(f))
         f=Constants.WGS84Flattening;
     end
 
-    if(nargin<4||isempty(a))
+    if(nargin<3||isempty(a))
         a=Constants.WGS84SemiMajorAxis;
     end
 
@@ -49,6 +46,7 @@ function uDot=uDotEllipsoid(u,x,t,a,f)
     
     %The current position.
     r=x(1:3,1);
+    %The local velocity.
     rDotLocal=x(4:6,1);
     
     %Get the velocity in global coordinates.

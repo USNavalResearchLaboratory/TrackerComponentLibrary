@@ -111,14 +111,14 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
  
     checkRealDoubleArray(prhs[0]);
     
-    numRow = mxGetM(prhs[0]);
-    numVec = mxGetN(prhs[0]);
+    numRow=mxGetM(prhs[0]);
+    numVec=mxGetN(prhs[0]);
     
     if(!(numRow==3||numRow==6)) {
         mexErrMsgTxt("The input vector has a bad dimensionality.");
     }
     
-    xVec=(double*)mxGetData(prhs[0]);
+    xVec=mxGetDoubles(prhs[0]);
     TT1=getDoubleFromMatlab(prhs[1]);
     TT2=getDoubleFromMatlab(prhs[2]);
     
@@ -168,7 +168,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
             return;
         }
         
-        xpyp=(double*)mxGetData(retVals[0]);
+        xpyp=mxGetDoubles(retVals[0]);
         xp=xpyp[0];
         yp=xpyp[1];
         //The celestial pole offsets are not used.
@@ -197,11 +197,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         size_t dim1, dim2;
         
         checkRealDoubleArray(prhs[4]);
-        dim1 = mxGetM(prhs[4]);
-        dim2 = mxGetN(prhs[4]);
+        dim1=mxGetM(prhs[4]);
+        dim2=mxGetN(prhs[4]);
         
         if((dim1==2&&dim2==1)||(dim1==1&&dim2==2)) {
-            double *xpyp=(double*)mxGetData(prhs[4]);
+            double *xpyp=mxGetDoubles(prhs[4]);
         
             xp=xpyp[0];
             yp=xpyp[1];
@@ -217,19 +217,19 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     }
     
     {
-     double GMST1982=iauGmst82(UT11, UT12);
+     double GMST2000;
      double omega;
      
-     //Get Greenwhich mean sidereal time under the IAU's 1982 model. This
+     //Get Greenwhich mean sidereal time under the IAU's 2000 model. This
      //is given in radians and will be used to build a rotation matrix to
      //rotate into the PEF system.
-     GMST1982=iauGmst82(UT11, UT12);
+     GMST2000=iauGmst00(UT11, UT12,TT1, TT2);
      {
          double cosGMST,sinGMST;
-         cosGMST=cos(GMST1982);
-         sinGMST=sin(GMST1982);
-         //Build the rotation matrix to rotate by GMST about the z-axis. This
-         //will put the position vector in the PEF system.
+         cosGMST=cos(GMST2000);
+         sinGMST=sin(GMST2000);
+         //Build the rotation matrix to rotate by GMST about the z-axis.
+         //This will put the position vector in the PEF system.
          TEME2PEF[0][0]=cosGMST;
          TEME2PEF[0][1]=sinGMST;
          TEME2PEF[0][2]=0;
@@ -242,7 +242,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
      }
     
      //To go from PEF to ITRS, we need to build the polar motion matrix
-     //using the IAU's 1980 conventions.
+     //using the IAU's 2000 conventions.
      {
          double cosXp,sinXp,cosYp,sinYp;
          cosXp=cos(xp);
@@ -266,7 +266,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
      //The angular velocity vector of the Earth in the TIRS in radians.
      omega=getScalarMatlabClassConst("Constants","IERSMeanEarthRotationRate");
      //Adjust for LOD
-     omega=omega*(1-LOD/86400.0);//86400.0 is the number of seconds in a TT day.
+     omega=omega*(1-LOD/86400.0);//There are 86400.0 seconds in a TT day.
      Omega[0]=0;
      Omega[1]=0;
      Omega[2]=omega;
@@ -274,7 +274,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     
     //Allocate space for the return vectors.
     retMat=mxCreateDoubleMatrix(numRow,numVec,mxREAL);
-    retData=(double*)mxGetData(retMat);
+    retData=mxGetDoubles(retMat);
     
     {
      size_t curVec;
@@ -320,7 +320,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         size_t i,j;
         
         plhs[1]=mxCreateDoubleMatrix(3,3,mxREAL);
-        elPtr=(double*)mxGetData(plhs[1]);
+        elPtr=mxGetDoubles(plhs[1]);
         
         for (i=0;i<3;i++) {
             for(j=0;j<3;j++) {

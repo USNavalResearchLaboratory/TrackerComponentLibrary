@@ -1,5 +1,5 @@
-function [latLonEnd,azEnd]=directGeodeticProbGen(latLonStart,azStart,dist,height,a,f,numSteps4Circ)
-%%DIRECTGEODETICPROBGEN  Solve the direct geodetic problem. That is, given
+function [latLonEnd,azEnd]=directGeodeticProbGen(latLonStart,azStart,dist,height,useHeightApprox,a,f,numSteps4Circ)
+%%DIRECTGEODETICPROBGEN Solve the direct geodetic problem. That is, given
 %                     an initial point and an initial bearing an
 %                     ellipsoidal Earth, find the end point and final
 %                     bearing if one were to travel one or more given
@@ -23,6 +23,16 @@ function [latLonEnd,azEnd]=directGeodeticProbGen(latLonStart,azStart,dist,height
 %                   ellipsoid at which the trajectories should be
 %                   determined. If this parameter is omitted, then the
 %                   default value of 0 is used for all of the trajectories.
+%   useHeightApprox If true, and the height is not zero, then a distance
+%                   scaling heigh approximation is used. A equatorial
+%                   trajectory traveling a distance dist at a height h
+%                   above the reference ellipsoid will only travel
+%                   a/(a+h)*dist over the surface. If useHeightApprox is
+%                   true, then this scaling applied to any trajectry
+%                   (incuding non-equatorial). If useHeightApprox is
+%                   false, a slow iterative optimization used. The default
+%                   value if omitted or an empty matrix is passed is
+%                   false. This parameter is ignored if height=0.
 %                 a The semi-major axis of the reference ellipsoid (in
 %                   meters). If this argument is omitted, the value in
 %                   Constants.WGS84SemiMajorAxis is used.
@@ -51,19 +61,20 @@ function [latLonEnd,azEnd]=directGeodeticProbGen(latLonStart,azStart,dist,height
 %directGeodeticProb.
 %
 %On the other hand, if height!=0, then the technique of propagating a
-%non-maneuvering flat-Earth dynamic model above an ellipsoid from
-%D. F. Crouse, "Simulating Aerial Targets in 3D Accounting for the Earth's
-%Curvature," Journal of Advances in Information Fusion, submitted 2014.
-%is used. The function solves the direct geodetic problem in ECEF
-%coordinates and converts the results back into the appropriate coordinate
-%system for the return values.
+%non-maneuvering flat-Earth dynamic model above an ellipsoid from [1] is
+%used unless the height approximation is selected. The function solves the
+%direct geodetic problem in ECEF coordinates and converts the results back
+%into the appropriate coordinate system for the return values.
 %
-%Note that the function is significantly faster if height=0.
+%REFERENCES:
+%[1] D. F. Crouse, "Simulating Aerial Targets in 3D Accounting for the
+%    Earth's Curvature," Journal of Advances in Information Fusion, vol.
+%    10, no. 1, Jun. 2015.
 %
 %April 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<7||isempty(numSteps4Circ))
+if(nargin<8||isempty(numSteps4Circ))
 %This is the number of steps that would be taken to travel a distance of
 %2*pi*a (circumnavigate the globe the long way). This is a design parameter
 %that should be large enough to ensure that the results are accurate.
@@ -71,12 +82,16 @@ if(nargin<7||isempty(numSteps4Circ))
     numSteps4Circ=2000;
 end
 
-if(nargin<6||isempty(f))
+if(nargin<7||isempty(f))
     f=Constants.WGS84Flattening;
 end
 
-if(nargin<5||isempty(a))
+if(nargin<6||isempty(a))
     a=Constants.WGS84SemiMajorAxis;
+end
+
+if(nargin<5||isempty(useHeightApprox))
+    useHeightApprox=false;
 end
 
 N=length(dist);
@@ -92,7 +107,14 @@ latLonEnd=zeros(2,N);
 azEnd=zeros(N,1);
 
 if(nargin<4||isempty(height))
-   height=zeros(N,1); 
+	height=zeros(N,1); 
+end
+
+if(useHeightApprox)
+    %Scale the distance based on the height and then solve the rumb problem
+    %with the scaled distance.
+    dist(:)=a./(a+height(:)).*dist(:);
+    height(:)=0;
 end
 
 for curTraj=1:N
@@ -133,11 +155,11 @@ for curTraj=1:N
 
     %The dynamic model for how the local coordinate system evolves as the
     %target modes.
-    uDyn=@(u,x,t)uDotEllipsoid(u,x,t,a,f);
-    aDyn=@(x,t)aPoly(x,t,3);%A constant velocity model.
+    uDyn=@(u,x,t)uDotEllipsoid(u,x,a,f);
+    aDyn=@(x,t)aPoly(x,3);%A constant velocity model.
 
     %Compute the Cartesian position and velocity of the target over the entire
-    %trajectory. USe a fourth-order Runge-Kutta method.
+    %trajectory. Use a fourth-order Runge-Kutta method.
     [xList,uList]=RungeKCurvedAtTimes(xInit,uInit,[0;1],aDyn,uDyn,stepSize,4);
     plhEnd=Cart2Ellipse(xList(1:3,end),[],a,f);
     latLonEnd(:,curTraj)=plhEnd(1:2);%The Cartesian location at the end of the trajectory.

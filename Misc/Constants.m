@@ -4,7 +4,8 @@ classdef Constants
 %Constants can be accessed using Constants.constantName without
 %instantiating this class.
 %
-%The WGS84 properties are from  [1].
+%The WGS84 properties are from  [1]. The formula for the mean radius is
+%from [14] and is also used with the WGS72 and GRS80 proeprties.
 %
 %The WGS72 properties are from [2].
 %
@@ -13,6 +14,11 @@ classdef Constants
 %Tha IERS' mean Earth rotation rate, which plays a role in computations of
 %the length-of-day Earth orientation parameter is from
 %http://hpiers.obspm.fr/eop-pc/earthor/ut1lod/UT1.html
+%
+%The value of the amount subjected from a Julian date to get a Modified
+%Julian date is given in the IERS conventions [6]. The number of seconds in
+%a TT Julian day is given as 86400 in [6], indicated as the astronomical
+%unit of time.
 %
 %The ellipsoid properties for the EGM2008 model are taken from 
 %http://earth-info.nga.mil/GandG/wgs84/gravitymod/egm2008/README_FIRST.pdf
@@ -122,6 +128,9 @@ classdef Constants
 %    IFI/Plenum, 1970, vol. 6.
 %[13] Weisstein, Eric W. "Euler-Mascheroni Constant." From MathWorld--A
 %    Wolfram Web Resource. http://mathworld.wolfram.com/Euler-MascheroniConstant.html
+%[14] H. Mortiz, "Geodetic Reference System 1980," Bulletin G�od�sique,
+%    vol. 54, no. 3, pp. 395-405, Sep. 1980. Given with corrections at
+%    https://geodesy.geology.ohio-state.edu/course/refpapers/00740128.pdf
 %
 %January 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -132,11 +141,18 @@ properties (Constant)
     WGS84GMWithAtmosphere=3.986004418*10^(14);%m^3/s^2
     WGS84GMWithoutAtmosphere=3.9860009*10^(14);%m^3/s^2
     WGS84EarthRotationRate=7292115.0*10^(-11);%radians per second.
-    %The following 3 parameters should be consistent with values in the
+    %The following 4 parameters should be consistent with values in the
     %IAU's SOFA library.
     WGS84SemiMajorAxis=6378137.00;%m
     WGS84InverseFlattening=298.257223563;%Unitless
     WGS84Flattening=1/Constants.WGS84InverseFlattening;%Unitless
+    WGS84SemiMinorAxis=(Constants.WGS84SemiMajorAxis*(Constants.WGS84InverseFlattening-1))/Constants.WGS84InverseFlattening;
+    %The squared first numerical eccentricity of the ellipsoid.
+    WGS84e2=2*Constants.WGS84Flattening-Constants.WGS84Flattening^2;
+    
+    %This is consistent with the value in Table 3.3 of [1]. The formula to
+    %derive the mean radius is given in [14].
+    WGS84MeanRadius=(2*Constants.WGS84SemiMajorAxis+Constants.WGS84SemiMinorAxis)/3;
     
     %WGS72 Properties
     WGS72GMWithAtmosphere=398600.8*10^(9);%m^3/s^2
@@ -146,6 +162,10 @@ properties (Constant)
     WGS72InverseFlattening=298.26;%Unitless
     WGS72Flattening=1/Constants.WGS72InverseFlattening;%Unitless
     WGS72C20Bar=-484.1605e-6;%Unitless, tide free
+    WGS72SemiMinorAxis=(Constants.WGS72SemiMajorAxis*(Constants.WGS72InverseFlattening-1))/Constants.WGS72InverseFlattening;
+    WGS72MeanRadius=(2*Constants.WGS72SemiMajorAxis+Constants.WGS72SemiMinorAxis)/3;
+    %The squared first numerical eccentricity of the ellipsoid.
+    WGS72e2=2*Constants.WGS72Flattening-Constants.WGS72Flattening^2;
     
     %GRS80 Properties
     GRS80GMWithAtmosphere=3.986005e14;%m^3/s^s
@@ -154,11 +174,21 @@ properties (Constant)
     GRS80Flattening=1/Constants.GRS80InverseFlattening
     GRS80J2=1.08263e-3;%Dynamical form factor
     GRS80EarthRotationRate=7.292115e-5;%radians/second
+    GRS80SemiMinorAxis=(Constants.GRS80SemiMajorAxis*(Constants.GRS80InverseFlattening-1))/Constants.GRS80InverseFlattening;
+    GRS80MeanRadius=(2*Constants.GRS80SemiMajorAxis+Constants.GRS80SemiMinorAxis)/3;
+    %The squared first numerical eccentricity of the ellipsoid.
+    GRS80e2=2*Constants.GRS80Flattening-Constants.GRS80Flattening^2;
     
     %This is the mean rotation rate at epoch 1820, from which the
     %Length-of-day Earth orientation parameter is related.
     IERSMeanEarthRotationRate=72921151.467064e-12;%Radians per second
     
+    %This is the amount subtracted from a Julian date to transform it into
+    %a Modified Julian date. from 
+    MJDOffset=2400000.5;
+    %TT,TAI Julian days have no leap seconds.
+    secondsPerTTJulianDay=86400;
+
     %The EGM2008 model; the same values are used for the EGM96 model. These
     %values are needed for using the spherical harmonic coefficients in
     %the models. They are also the defining parameters of the reference

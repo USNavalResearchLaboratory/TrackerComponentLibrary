@@ -10,48 +10,46 @@ function [H,costVal,exitCode]=UCVKernelBW(xi,preProcAlg,HInit,epsilon,deltaTestD
 %             unbiased cross-validation (UCV) criterion using a
 %             quasi-Newton method.
 %
-%INPUTS:   xi A numDimXN vector of N samples of the PDF.
+%INPUTS: xi A numDimXN vector of N samples of the PDF.
 %  preProcAlg This specifies how the data is preprocessed before running
-%             the algorithm. After the algorithm is run, the data is
-%             transformed back.
-%             Possible values are:
-%             0 The data is sphered. This means that it is pre-multiplied
-%               by the inverse of the sample covariance matrix. The scaled
-%               data has the identity matrix as its covariance matrix.
-%             1 The data is scaled. This does not eliminate the
-%               cross-correlation terms from the data. In some scenarios,
-%               this can produce a better estimate.
-%             2 (The default if omitted or an empty matrix is passed)
-%               No preprocessing is performed.
-%       HInit An initial estimate of the bandwidth matrix. If this
-%             parameter is omitted or an empty matrix is passed, a standard
-%             Gaussian approximation as given in Chapter 3 of [2] is used.
-%     epsilon The parameter determining the accuracy of the desired
-%             solution in terms of the gradient. The function terminates
-%             when norm(g) < epsilon*max([1, norm(x)]) where g is the
-%             gradient. The default if omitted or an empty matrix is as
-%             given in quasiNetwonBFGS.
-%deltaTestDist The number of iterations back to use to compute the decrease
-%             of the objective function if a delta-based convergence test
-%             is performed. If zero, then no delta-based convergence
-%             testing is done. The default is as given in quasiNetwonBFGS.
-%       delta The delta for the delta convergence test. This determines
-%             the minimum rate of decrease of the objective function.
-%             Convergence is determined if (f'-f)<=delta*f, where f' is
-%             the value of the objective function f deltaTestDist
-%             iterations ago, and f is the current objective function
-%             value. The default if this parameter is omitted or an empty
-%             matrix is passed is  as given in quasiNetwonBFGS.
-%lineSearchParams An optional structure whose members specify
-%             tolerances for the line search. The parameters are described
-%             as in the lineSearch function.
-%      scaleD A boolean parameter indicating whether the inverse Hessian
-%             estimate used in the quasi-Newton method should be scaled as
-%             in Equation 1.201 of Section 1.7 of [3]. The default if
-%             omitted or an empty matrix is passed is as given in
-%             quasiNetwonBFGS.
-%     maxIter The maximum number of iterations to perform. If omitted or an
-%             empty matrix is passed, the default value of 50 is used.
+%           the algorithm. After the algorithm is run, the data is
+%           transformed back. Possible values are:
+%           0 The data is sphered. This means that it is pre-multiplied by
+%             the inverse of the sample covariance matrix. The scaled data
+%             has the identity matrix as its covariance matrix.
+%           1 The data is scaled. This does not eliminate the cross-
+%             correlation terms from the data. In some scenarios, this can
+%             produce a better estimate.
+%           2 (The default if omitted or an empty matrix is passed) No
+%             preprocessing is performed.
+%     HInit An initial estimate of the bandwidth matrix. If this parameter
+%           is omitted or an empty matrix is passed, a standard Gaussian
+%           approximation as given in Chapter 3 of [2] is used.
+%   epsilon The parameter determining the accuracy of the desired solution
+%           in terms of the gradient. The function terminates when
+%           norm(g) < epsilon*max([1, norm(x)]) where g is the gradient.
+%           The default if omitted or an empty matrix is as given in
+%           quasiNetwonBFGS.
+% deltaTestDist The number of iterations back to use to compute the
+%           decrease of the objective function if a delta-based convergence
+%           test is performed. If zero, then no delta-based convergence
+%           testing is done. The default is as given in quasiNetwonBFGS.
+%     delta The delta for the delta convergence test. This determines the
+%           minimum rate of decrease of the objective function. Convergence
+%           is determined if (f'-f)<=delta*f, where f' is the value of the
+%           objective function f deltaTestDist iterations ago, and f is the
+%           current objective function value. The default if this parameter
+%           is omitted or an empty matrix is passed is  as given in
+%           quasiNetwonBFGS.
+% lineSearchParams An optional structure whose members specify tolerances
+%           for the line search. The parameters are described as in the
+%           lineSearch function.
+%    scaleD A boolean parameter indicating whether the inverse Hessian
+%           estimate used in the quasi-Newton method should be scaled as in
+%           Equation 1.201 of Section 1.7 of [3]. The default if omitted or
+%           an empty matrix is passed is as given in quasiNetwonBFGS.
+%   maxIter The maximum number of iterations to perform. If omitted or an
+%           empty matrix is passed, the default value of 50 is used.
 %
 %OUTPUTS: H The numDimXnumDim lower-triangular estimate of the kernel
 %           bandwidth.

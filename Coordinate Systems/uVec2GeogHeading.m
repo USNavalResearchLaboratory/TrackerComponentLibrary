@@ -1,5 +1,5 @@
 function [geoEastOfNorth,angUpFromLevel]=uVec2GeogHeading(point,u,a,f)
-%%GEOHEADING2UVEC Obtain the geographic headings in radians East of true
+%%UVEC2GEOGHEADING Obtain the geographic headings in radians East of true
 %                 North as well as the elevations above the local tangent
 %                 plane according to a particular reference ellipsoid that
 %                 correspond to directions specified by unit vectors in
@@ -38,6 +38,19 @@ function [geoEastOfNorth,angUpFromLevel]=uVec2GeogHeading(point,u,a,f)
 %sin of the elevation is given by the dot product of the given unit
 %vector and the local up vector.
 %
+%EXAMPLE:
+%Here, we show that the transformation is consistent with tis inverse:
+% plhPoint=[0.1;-0.3;4000];
+% geoEastOfNorth=35*(pi/180);
+% angUpFromLevel=15*(pi/180);
+% 
+% uVec=geogHeading2uVec(plhPoint,geoEastOfNorth,angUpFromLevel);
+% [geoEastOfNorthBack,angUpFromLevelBack]=uVec2GeogHeading(plhPoint,uVec);
+% RelErrGeo=(geoEastOfNorth-geoEastOfNorthBack)/geoEastOfNorth
+% RelErrEl=(angUpFromLevel-angUpFromLevelBack)/angUpFromLevel
+%Both relative errors should indicate more than 15 digits of precision,
+%which is consistent with finite precision limits.
+%
 %April 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
@@ -57,9 +70,7 @@ uUp=uLocal(:,3);
 %Perform dot products over all of the vectors.
 magEast=sum(bsxfun(@times,u,uEast),1)';
 magNorth=sum(bsxfun(@times,u,uNorth),1)';
-
 geoEastOfNorth=atan2(magEast,magNorth);
-
 angUpFromLevel=asin(sum(bsxfun(@times,u,uUp),1))';
 
 end

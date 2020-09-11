@@ -1,4 +1,4 @@
-function [aVal,aJacob,aHess,papt]=aCoordTurn2DOmega(xState,t,tauInv,tauAccelInv)
+function [aVal,aJacob,aHess,papt]=aCoordTurn2DOmega(xState,tauInv,tauAccelInv)
 %%ACCORDTURN2DOMEGA The continuous-time drift function for a 2D coordinated
 %              turn model with a Cartesian state and a turn rate given as
 %              part of the state. Additionally, a linear acceleration term
@@ -19,9 +19,6 @@ function [aVal,aJacob,aHess,papt]=aCoordTurn2DOmega(xState,t,tauInv,tauAccelInv)
 %               acceleration component is present. The linear acceleration
 %               component changes the speed. That means that it acts in the
 %               direction of the velocity vector.
-%            t An unused time component so that this function can be used
-%              with Runge-Kutta methods that expect the function to take
-%              two parameters.
 %       tauInv The inverse of the correlation time constant tau for the
 %              turn rate in seconds. tauInv must be positive. The default
 %              if omitted or an empty matrix is passed is zero.
@@ -84,11 +81,11 @@ function [aVal,aJacob,aHess,papt]=aCoordTurn2DOmega(xState,t,tauInv,tauAccelInv)
 %January 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<4||isempty(tauAccelInv))
+if(nargin<3||isempty(tauAccelInv))
     tauAccelInv=0; 
 end
 
-if(nargin<3||isempty(tauInv))
+if(nargin<2||isempty(tauInv))
     tauInv=0; 
 end
 

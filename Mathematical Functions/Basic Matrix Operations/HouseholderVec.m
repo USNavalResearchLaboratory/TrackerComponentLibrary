@@ -3,9 +3,9 @@ function [v,beta]=HouseholderVec(x)
 %          vector v and scalar beta such that P=eye(m,m)-beta*v*v' is
 %          orthogonal and P*x=norm(x)*e1 for real x, where e1 is a vector
 %          with a 1 in the first entry and zeros elsewhere. For complex x,  
-%          P*x=angle(x(1))*norm(x)*e1. The v vector is chosen such that
-%          v(1)=1. If a scalar value is provided, then v=1, beta=0 are
-%          returned.
+%          P*x=(+/-)exp(1j*angle(x(1)))*norm(x)*e1, whereby the sign in
+%          front can vary. The v vector is chosen such that v(1)=1. If a
+%          scalar value is provided, then v=1, beta=0 are returned.
 %
 %INPUTS: x An mX1 vector, real or complex.
 %
@@ -15,7 +15,7 @@ function [v,beta]=HouseholderVec(x)
 %      beta The real scalar beta as mentioned with v. beta= 2/(v'*v). If a
 %           scalar input is given, then beta=0 is returned.
 %
-%For real vectors x, the Householder vector algorithm of Section 5.1.3 of
+%For real vectors x, the Householder vector algorithm of Section 5.1.1 of
 %[1] is used. For complex vectors, the Householder algorithm of Section
 %5.1.13 is used.
 %
@@ -40,7 +40,7 @@ if(m==1)
    return;
 end
 
-if(isreal(x))%The real case from Chapter 5.1.3
+if(isreal(x))%The real case from Chapter 5.1.1 in [1].
     sigma=x(2:m)'*x(2:m);
     v=[1;x(2:m)];
     if(sigma==0&&x(1)>=0)
@@ -57,7 +57,7 @@ if(isreal(x))%The real case from Chapter 5.1.3
         if(x(1)<0)
             v(1)=x(1)-mu;
         else
-            v(1)=-sigma/(abs(x(1))+mu);
+            v(1)=-sigma/(x(1)+mu);
         end
         beta=2*v(1).*v(1)./(sigma+v(1).*v(1));
         v=v./v(1);
@@ -68,19 +68,22 @@ else%The complex case from Chapter 5.1.13
     if(~isfinite(angVal))
         angVal=1;
     end
-    
-    e1=[1;zeros(m-1,1)];
+
     x2Norm=norm(x,2);
     
-    v1=x+angVal*x2Norm*e1;
-    v2=x-angVal*x2Norm*e1;
+    v=zeros(m,1);
+    
+    v(2:end)=x(2:end);
+    v1=x(1)+angVal*x2Norm;
+    v2=x(1)-angVal*x2Norm;
     
     %Of v1 and v2, choose the one with the largest norm.
-    if(v1'*v1>v2'*v2)
-        v=v1;
+    if(abs(v1)>abs(v2))
+        v(1)=v1;
     else
-        v=v2;
+        v(1)=v2;
     end
+    
     v=v/v(1);
     beta=2/(v'*v);
 end

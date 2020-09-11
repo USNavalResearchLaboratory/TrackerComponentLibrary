@@ -43,7 +43,7 @@ function [xPredSet,PPredSet]=multipleModelPred(AlgSel,xSet,PSet,transFuns,numSta
 %  numStateDims An optional array specifying the number of dimensions in
 %               each state. If omitted, it is assumed that all states have
 %               the same size, and that size is size(xSet,1); This is not
-%               used in the GOB1, because all states have the same size in
+%               used in the GPB1, because all states have the same size in
 %               that algorithm.
 %    numMixDims This input is only used in the GPB2 algorithm in the
 %               prediction step, though it is used in the update steps for
@@ -60,7 +60,7 @@ function [xPredSet,PPredSet]=multipleModelPred(AlgSel,xSet,PSet,transFuns,numSta
 %               velocity and drag, the drag term would not be appropriate
 %               to mix with anything else.
 %
-%OUTPUTS:xPredSet The predicted set of target states. For all algorithms
+%OUTPUTS: xPredSet The predicted set of target states. For all algorithms
 %                 except the GPB2, this is xDimMaxXnumModels in size. When
 %                 using the GPB2 algorithm, this is
 %                 xDimMaxXnumModelsXnumModels in size as that method makes
@@ -81,14 +81,20 @@ function [xPredSet,PPredSet]=multipleModelPred(AlgSel,xSet,PSet,transFuns,numSta
 %maximum propagation time, and if no measurement arrives in that timespan,
 %run multipleModelUpdate with empty matrices for the measurement and its
 %covariance and use a measurement update function that just returns the
-%prediction. Thus, the uncertainyt for model swapping could be better taken
+%prediction. Thus, the uncertainty for model swapping could be better taken
 %into account.
 %
 %When using multiple models of different dimensionalities, rather than
-%storing the states/ covariances in a cell array, they are stored in
+%storing the states/covariances in a cell array, they are stored in
 %matrices with the extra elements set to zero. This is much faster in
 %Matlab than using a cell array to store states of the exact sizes of the
 %models.
+%
+%The IMM prediction does not perform the mixing of the models. The mixing
+%is done at the beginning of the measurement update step. If one wishes to
+%perform mixing without a measurement update (which could be done in a
+%missed detection case), that can be done after prediction using
+%multipleModelUpdate with an empty matrix passed for the measurement.
 %
 %REFERENCES:
 %[1] J. D. Glass, W. D. Blair, and Y. Bar-Shalom, "IMM estimators with

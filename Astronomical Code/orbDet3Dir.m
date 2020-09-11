@@ -48,12 +48,12 @@ function [knownSols,targetStates,exitFlag]=orbDet3Dir(numHalfRevs,obsLocs,unitDi
 %                    the solutions using the method specified by Gooding in
 %                    his paper.
 %          knownSols A 3XnumSols matrix of known solutions FOR A GIVEN
-%                    VALUE OF numHalfRevs AND solSel, , where
-%                    knownSols(:,i) is the ith solution consisting of the
-%                    range from the observer to the target at each of the
-%                    three times in order. If there are no known solutions,
-%                    then this parameter can be omitted or an empty matrix
-%                    can be passed.
+%                    VALUE OF numHalfRevs AND solSel, where knownSols(:,i)
+%                    is the ith solution consisting of the range from the
+%                    observer to the target at each of the three times in
+%                    order. If there are no known solutions, then this
+%                    parameter can be omitted or an empty matrix can be
+%                    passed.
 %        rho13EstVec A 2X1 vector holding initial estimates of the
 %                    distances of the target at times 1 and 3. This affects
 %                    to which solution the algorithm converges. If this

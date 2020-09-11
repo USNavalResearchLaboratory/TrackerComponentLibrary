@@ -52,9 +52,9 @@ void iauLtpb(double epj, double rpb[3][3])
 **
 **  This revision:  2015 December 6
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
 /* Frame bias (IERS Conventions 2010, Eqs. 5.21 and 5.33) */
@@ -78,7 +78,7 @@ void iauLtpb(double epj, double rpb[3][3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
@@ -171,5 +171,4 @@ void iauLtpb(double epj, double rpb[3][3])
 **                 United Kingdom
 **
 **--------------------------------------------------------------------*/
-
 }

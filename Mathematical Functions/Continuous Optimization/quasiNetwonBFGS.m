@@ -161,12 +161,13 @@ if(deltaTestDist>0)
     pastFVals=zeros(deltaTestDist,1);
     pastFVals(1)=fValPrev;
 end
-for cutIter=1:maxIter
+for curIter=1:maxIter
     %Equation 1.181 for the descent direction.
     d=-D*gradFPrev;
     
     %Perform a line search in the given descent direction.
     [xCur,fValCur,gradFCur,~,~,exitCode]=lineSearch(f,xPrev,d,[],[],lineSearchParams);
+
     if(isempty(xCur))
         xMin=[];
         fMin=[];
@@ -194,6 +195,7 @@ for cutIter=1:maxIter
     end
 
     %After taking the step, update the inverse Hessian approximation.
+
     D=updateHessianApprox(D,xCur,xPrev,gradFCur,gradFPrev,scaleD);
 
     xPrev=xCur;
@@ -213,15 +215,21 @@ function D=updateHessianApprox(D,xCur,xPrev,gradFCur,gradFPrev,scaleD)
 q=gradFCur-gradFPrev;%Equation 1.184
 p=xCur-xPrev;%Equation 1.183
 
-if(scaleD==true)
-%If D should be scaled as in Equation 1.201. As noted, this can improve the
-%condition number of D and is often recommended after the first iteration.
-    D=(p'*q/(q'*D*q))*D;
-end
+%A test is added so that D does not change if p'*q is very close to zero.
+%Otherwise, D would just be full of NaN and Inf values. The extra realmin
+%test avoids denormalized numbers.
+if(p'*q>max(realmin,max(eps(p),eps(q))))
+    if(scaleD==true)
+    %If D should be scaled as in Equation 1.201. As noted, this can improve
+    %the condition number of D and is often recommended after the first
+    %iteration.
+        D=(p'*q/(q'*D*q))*D;
+    end
 
-%The BFGS update from Problem 1.7.2 with the correction from the errate for
-%the denominator of the p*p' term.
-D=D+(1+q'*D*q/(p'*q))*(p*p')/(p'*q)-(D*q*p'+p*q'*D)/(p'*q);
+    %The BFGS update from Problem 1.7.2 with the correction from the errata
+    %for the denominator of the p*p' term. 
+    D=D+(1+q'*D*q/(p'*q))*(p*p')/(p'*q)-(D*q*p'+p*q'*D)/(p'*q);
+end
 end
 
 %LICENSE:

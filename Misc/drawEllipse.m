@@ -1,5 +1,5 @@
 function h=drawEllipse(z,A,gammaVal,varargin)
-%DRAWELLIPSE Draw 2D ellipses or 3D ellipsoids on the curren plot, where a
+%DRAWELLIPSE Draw 2D ellipses or 3D ellipsoids on the current plot, where a
 %            point zp on the ellipse/ ellipsoid satisfies the equation
 %            (zp-z)'*A*(zp-z)=gammaVal. If z is a 2D/3D location estimate 
 %            and inv(A) a Gaussian covariance matrix associated with the
@@ -130,7 +130,7 @@ switch(numDim)
         end
 
         for curEllip=1:numEllipse
-            if(rank(A)<3)
+            if(rank(A(:,:, curEllip))<3)
                 numPoints=500;
                 %If the ellipsoid is actually just an ellipse, then we will
                 %draw the 2D ellipse in 3D.

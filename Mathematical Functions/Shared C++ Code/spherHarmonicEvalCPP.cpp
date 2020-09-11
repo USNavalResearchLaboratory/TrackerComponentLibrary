@@ -57,18 +57,12 @@ void spherHarmonicEvalCPPReal(double *V, double *gradV, double *HessianV,const C
     //The following are needed if the Legendre algorithm is used.
     double *A=NULL;//Length M1
     double *B=NULL;//Length M1
-    double *PBarUVals=NULL;//Length C.totalNumEl
-    //The folloing is only used if Pines' algorithm is used. It is never
-    //used at the same time as PBarUVals and will thus point to the same
-    //memory.
-    double *HBar=NULL;
     //The following are only used if the gradient or Hessian is desired and
     //the Legendre algorithm is used.
     double *Ar=NULL;//Length M1
     double *Br=NULL;//Length M1
     double *ATheta=NULL;//Length M1
     double *BTheta=NULL;//Length M1
-    double *dPBarUValsdTheta=NULL;//Length C.totalNumEl
     //The following are only used if the Hessian is desired and the
     //Legendre algorithm is used.
     double *AThetaTheta=NULL;//Length M1
@@ -931,12 +925,12 @@ void spherHarmonicEvalCPPReal(double *V, double *gradV, double *HessianV,const C
     delete[] buffer;
 }
 
-void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal, double *gradVImag, double *HessianVReal, double *HessianVImag,const CountingClusterSetCPP<double> &CReal,const CountingClusterSetCPP<double> &CImag,const CountingClusterSetCPP<double> &SReal,const CountingClusterSetCPP<double> &SImag, const double *point, const size_t numPoints, const complex <double> a, const complex <double> c, const size_t systemType, const bool spherDerivs,const double scalFactor,const size_t algorithm) {
+void spherHarmonicEvalCPPComplex(complex<double> *VRet, complex<double> *gradVRet, complex<double> *HessianVRet,const CountingClusterSetCPP<complex<double>> &C,const CountingClusterSetCPP<complex<double>> &S, const double *point, const size_t numPoints, const complex <double> a, const complex <double> c, const size_t systemType, const bool spherDerivs,const double scalFactor,const size_t algorithm) {
     //If a NULL pointer is passed for gradV, then it is assumed that the
     //gradient is not desired. If a NULL pointer is passed for HessianV,
     //then it is assumed that the Hessian is not desired.
-    const size_t M=CReal.numClust-1;
-    const size_t M1=CReal.numClust;
+    const size_t M=C.numClust-1;
+    const size_t M1=C.numClust;
     const double pi=2.0*acos(0.0);
     size_t curPoint;
     double rPrev, thetaPrev;
@@ -963,18 +957,13 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
     //The following are needed if the Legendre algorithm is used.
     complex<double> *A=NULL;//Length M1
     complex<double> *B=NULL;//Length M1
-    double *PBarUVals=NULL;//Length C.totalNumEl
-    //The folloing is only used if Pines' algorithm is used. It is never
-    //used at the same time as PBarUVals and will thus point to the same
-    //memory.
-    double *HBar=NULL;
     //The following are only used if the gradient or Hessian is desired and
     //the Legendre algorithm is used.
     complex<double> *Ar=NULL;//Length M1
     complex<double> *Br=NULL;//Length M1
     complex<double> *ATheta=NULL;//Length M1
     complex<double> *BTheta=NULL;//Length M1
-    double *dPBarUValsdTheta=NULL;//Length C.totalNumEl
+
     //The following are only used if the Hessian is desired and the
     //Legendre algorithm is used.
     complex<double> *AThetaTheta=NULL;//Length M1
@@ -989,23 +978,23 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
     //FuncVals will be used for HBar and PBarUVals.
     //FuncDerivs will be used for dPBarUValsdTheta and dHBardu.
     //FuncDerivs2 will be used for d2PBarUValsdTheta2 and d2HBardu2
-    FuncVals.numClust=CReal.numClust;
-    FuncVals.totalNumEl=CReal.totalNumEl;
-    FuncDerivs.numClust=CReal.numClust;
-    FuncDerivs.totalNumEl=CReal.totalNumEl;
-    FuncDerivs2.numClust=CReal.numClust;
-    FuncDerivs2.totalNumEl=CReal.totalNumEl;
+    FuncVals.numClust=C.numClust;
+    FuncVals.totalNumEl=C.totalNumEl;
+    FuncDerivs.numClust=C.numClust;
+    FuncDerivs.totalNumEl=C.totalNumEl;
+    FuncDerivs2.numClust=C.numClust;
+    FuncDerivs2.totalNumEl=C.totalNumEl;
     
     if(algorithm==2) {//If only Pines' algorithm is used.
-        //This pointers is used to help parition the memory in the real
+        //This pointer is used to help parition the memory in the real
         //buffer.
         double *tempPtr;
 
-        if(gradVReal==NULL&&HessianVReal==NULL) {
-            buffer=new double[2*M1+CReal.totalNumEl];
+        if(gradVRet==NULL&&HessianVRet==NULL) {
+            buffer=new double[2*M1+C.totalNumEl];
             bufferComplex=new complex <double>[M1];
         } else{
-            buffer=new double[2*M1+3*CReal.totalNumEl];
+            buffer=new double[2*M1+3*C.totalNumEl];
             bufferComplex=new complex <double>[M1];
         }
         
@@ -1022,11 +1011,11 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
         tempPtr+=M1;
         FuncVals.clusterEls=tempPtr;//Length C.totalNumEl
         
-        if(!(gradVReal==NULL&&HessianVReal==NULL)) {
-            tempPtr+=CReal.totalNumEl;
+        if(!(gradVRet==NULL&&HessianVRet==NULL)) {
+            tempPtr+=C.totalNumEl;
             FuncDerivs.clusterEls=tempPtr;//Length C.totalNumEl
             
-            tempPtr+=CReal.totalNumEl;
+            tempPtr+=C.totalNumEl;
             FuncDerivs2.clusterEls=tempPtr;// Length C.totalNumEl
         }
     } else {
@@ -1036,19 +1025,19 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
         //If the Legendre algorithm might be used, then the amount of
         //memory needed varies depending on the highest order derivative
         //that is needed.
-        if(HessianVReal!=NULL) {
-            buffer=new double[2*M1+3*CReal.totalNumEl];
+        if(HessianVRet!=NULL) {
+            buffer=new double[2*M1+3*C.totalNumEl];
             bufferComplex=new complex <double>[13*M1];
-        } else if(gradVReal!=NULL) {
+        } else if(gradVRet!=NULL) {
             if(algorithm==0) {//If Pines' algorithm might be used
-                buffer=new double[2*M1+3*CReal.totalNumEl];
+                buffer=new double[2*M1+3*C.totalNumEl];
                 bufferComplex=new complex <double>[7*M1];
             } else {
-                buffer=new double[2*M1+2*CReal.totalNumEl];
+                buffer=new double[2*M1+2*C.totalNumEl];
                 bufferComplex=new complex <double>[7*M1];
             }
         } else {
-            buffer=new double[2*M1+CReal.totalNumEl];
+            buffer=new double[2*M1+C.totalNumEl];
             bufferComplex=new complex <double>[3*M1];
         }
         
@@ -1073,7 +1062,7 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
         tempPtr+=M1;
         FuncVals.clusterEls=tempPtr;//Length C.totalNumEl
             
-        if(gradVReal!=NULL||HessianVReal!=NULL) {
+        if(gradVRet!=NULL||HessianVRet!=NULL) {
             tempPtrComplex+=M1;
             Ar=tempPtrComplex;//Length M1
 
@@ -1086,15 +1075,15 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
             tempPtrComplex+=M1;
             BTheta=tempPtrComplex;//Length M1
 
-            tempPtr+=CReal.totalNumEl;
+            tempPtr+=C.totalNumEl;
             FuncDerivs.clusterEls=tempPtr;//Length C.totalNumEl
 
-            if(HessianVReal!=NULL||algorithm!=0) {
-                tempPtr+=CReal.totalNumEl;
+            if(HessianVRet!=NULL||algorithm!=0) {
+                tempPtr+=C.totalNumEl;
                 FuncDerivs2.clusterEls=tempPtr;//Length C.totalNumEl
             }
 
-            if(HessianVReal!=NULL) {
+            if(HessianVRet!=NULL) {
                 tempPtrComplex+=M1;
                 AThetaTheta=tempPtrComplex;//Length M1
 
@@ -1161,7 +1150,7 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
         //used. It cannot be used for the gradient or Hessian near the
         //poles, because of the singularity of the spherical coordinate
         //system.
-            useLegendre=(fabs(thetaCur)<88.0*pi/180.0||(gradVReal==NULL&&HessianVReal==NULL));
+            useLegendre=(fabs(thetaCur)<88.0*pi/180.0||(gradVRet==NULL&&HessianVRet==NULL));
         } else if (algorithm==1) {
             useLegendre=true;
         } else {
@@ -1196,10 +1185,10 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
 
                 //Get Legendre ratio values if the gradient or Hessian
                 //terms are desired.
-                if(gradVReal!=NULL||HessianVReal!=NULL) {
+                if(gradVRet!=NULL||HessianVRet!=NULL) {
                     NALegendreCosRatDerivCPP(FuncDerivs,FuncVals,theta);
                     
-                    if(HessianVReal!=NULL) {
+                    if(HessianVRet!=NULL) {
                         NALegendreCosRatDeriv2CPP(FuncDerivs2,FuncDerivs,FuncVals,theta);
                     }
                 }
@@ -1214,17 +1203,14 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
                 //Compute the X coefficients for the sum
                 for(m=0;m<=M;m++) {
                     for(n=m;n<=M;n++) {
-                        const complex<double> C (CReal[n][m],CImag[n][m]);
-                        const complex<double> S (SReal[n][m],SImag[n][m]);
-
-                        A[m]+=nCoeff[n]*C*FuncVals[n][m];
-                        B[m]+=nCoeff[n]*S*FuncVals[n][m];
+                        A[m]+=nCoeff[n]*C[n][m]*FuncVals[n][m];
+                        B[m]+=nCoeff[n]*S[n][m]*FuncVals[n][m];
                     }
                 }
                 
                 //If additional terms should be computed so a gradient or
                 //Hessian can be computed.
-                if(gradVReal!=NULL||HessianVReal!=NULL) {
+                if(gradVRet!=NULL||HessianVRet!=NULL) {
                     fill(Ar,Ar+M1,complex<double>(0.0,0.0));
                     fill(Br,Br+M1,complex<double>(0.0,0.0));
                     fill(ATheta,ATheta+M1,complex<double>(0.0,0.0));
@@ -1234,10 +1220,8 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
                     for(m=0;m<=M;m++) {
                         nf=mf;
                         for(n=m;n<=M;n++) {
-                            const complex<double> C (CReal[n][m],CImag[n][m]);
-                            const complex<double> S (SReal[n][m],SImag[n][m]);
-                            const complex<double> CScal=nCoeff[n]*C;
-                            const complex<double> SScal=nCoeff[n]*S;
+                            const complex<double> CScal=nCoeff[n]*C[n][m];
+                            const complex<double> SScal=nCoeff[n]*S[n][m];
                             double curVal;
                             
                             curVal=FuncVals[n][m];
@@ -1254,7 +1238,7 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
                         mf++;
                     }
                     
-                    if(HessianVReal!=NULL) {
+                    if(HessianVRet!=NULL) {
                         fill(Arr,Arr+M1,complex<double>(0.0,0.0));
                         fill(Brr,Brr+M1,complex<double>(0.0,0.0));
                         fill(AThetar,AThetar+M1,complex<double>(0.0,0.0));
@@ -1266,10 +1250,8 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
                         for(m=0;m<=M;m++) {
                             nf=mf;
                             for(n=m;n<=M;n++) {
-                                const complex<double> C (CReal[n][m],CImag[n][m]);
-                                const complex<double> S (SReal[n][m],SImag[n][m]);
-                                const complex<double> CScal=nCoeff[n]*C;
-                                const complex<double> SScal=nCoeff[n]*S;
+                                const complex<double> CScal=nCoeff[n]*C[n][m];
+                                const complex<double> SScal=nCoeff[n]*S[n][m];
                                 double curVal;
                                 
                                 curVal=FuncVals[n][m];
@@ -1310,12 +1292,11 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
                 //Multiply by the constant in front of the sum and get rid
                 //of the scale factor.
                 V*=crScal;
-                VReal[curPoint]=real(V);
-                VImag[curPoint]=imag(V);
+                VRet[curPoint]=V;
             }
 
             //Compute the gradient, if it is desired.
-            if(gradVReal!=NULL||HessianVReal!=NULL) {
+            if(gradVRet!=NULL||HessianVRet!=NULL) {
                 double J[9];
                 complex<double> dVdr(0,0);
                 complex<double> dVdLambda(0,0);
@@ -1338,40 +1319,27 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
                 //The minus sign adjusts for the coordinate system change.
                 dVdTheta=-crScal*dVdTheta;
                 
-                if(spherDerivs&&gradVReal!=NULL) {
+                if(spherDerivs&&gradVRet!=NULL) {
                     const size_t idx=3*curPoint;
                     
-                    gradVReal[0+idx]=real(dVdr);
-                    gradVReal[1+idx]=real(dVdLambda);
-                    gradVReal[2+idx]=real(dVdTheta);
-                    
-                    gradVImag[0+idx]=imag(dVdr);
-                    gradVImag[1+idx]=imag(dVdLambda);
-                    gradVImag[2+idx]=imag(dVdTheta);
+                    gradVRet[0+idx]=dVdr;
+                    gradVRet[1+idx]=dVdLambda;
+                    gradVRet[2+idx]=dVdTheta;
                 } else {
                     calcSpherConvJacobCPP(J, pointCur,0);
 
-                    if(gradVReal!=NULL) {
+                    if(gradVRet!=NULL) {
                         const size_t idx=3*curPoint;
-                        complex<double> coords[3];
                         
                         //Multiply the transpose of the Jacobian Matrix by
                         //the vector of [dVdr;dVdLambda;dVdTheta]
-                        coords[0]=dVdr*J[0]+dVdLambda*J[1]+dVdTheta*J[2];
-                        coords[1]=dVdr*J[3]+dVdLambda*J[4]+dVdTheta*J[5];
-                        coords[2]=dVdr*J[6]+dVdLambda*J[7]+dVdTheta*J[8];
-
-                        gradVReal[0+idx]=real(coords[0]);
-                        gradVReal[1+idx]=real(coords[1]);
-                        gradVReal[2+idx]=real(coords[2]);
-                        
-                        gradVImag[0+idx]=imag(coords[0]);
-                        gradVImag[1+idx]=imag(coords[1]);
-                        gradVImag[2+idx]=imag(coords[2]);
+                        gradVRet[0+idx]=dVdr*J[0]+dVdLambda*J[1]+dVdTheta*J[2];
+                        gradVRet[1+idx]=dVdr*J[3]+dVdLambda*J[4]+dVdTheta*J[5];
+                        gradVRet[2+idx]=dVdr*J[6]+dVdLambda*J[7]+dVdTheta*J[8];
                     }
                 }
 
-                if(HessianVReal!=NULL) {
+                if(HessianVRet!=NULL) {
                     //Use Horner's method to compute d2V all values.
                     complex<double> d2VdLambdadLambda(0,0);
                     complex<double> d2VdLambdadTheta(0,0);
@@ -1407,33 +1375,20 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
                     if(spherDerivs) {
                         const size_t idx=9*curPoint;
                         
-                        HessianVReal[0+idx]=real(d2Vdrdr);
-                        HessianVReal[1+idx]=real(d2VdrdLambda);
-                        HessianVReal[2+idx]=real(d2VdrdTheta);
+                        HessianVRet[0+idx]=d2Vdrdr;
+                        HessianVRet[1+idx]=d2VdrdLambda;
+                        HessianVRet[2+idx]=d2VdrdTheta;
                         
-                        HessianVReal[3+idx]=real(d2VdrdLambda);
-                        HessianVReal[4+idx]=real(d2VdLambdadLambda);
-                        HessianVReal[5+idx]=real(d2VdLambdadTheta);
+                        HessianVRet[3+idx]=d2VdrdLambda;
+                        HessianVRet[4+idx]=d2VdLambdadLambda;
+                        HessianVRet[5+idx]=d2VdLambdadTheta;
                         
-                        HessianVReal[6+idx]=real(d2VdrdTheta);
-                        HessianVReal[7+idx]=real(d2VdLambdadTheta);
-                        HessianVReal[8+idx]=real(d2VdThetadTheta);
-
-                        HessianVImag[0+idx]=imag(d2Vdrdr);
-                        HessianVImag[1+idx]=imag(d2VdrdLambda);
-                        HessianVImag[2+idx]=imag(d2VdrdTheta);
-                        
-                        HessianVImag[3+idx]=imag(d2VdrdLambda);
-                        HessianVImag[4+idx]=imag(d2VdLambdadLambda);
-                        HessianVImag[5+idx]=imag(d2VdLambdadTheta);
-                        
-                        HessianVImag[6+idx]=imag(d2VdrdTheta);
-                        HessianVImag[7+idx]=imag(d2VdLambdadTheta);
-                        HessianVImag[8+idx]=imag(d2VdThetadTheta);
+                        HessianVRet[6+idx]=d2VdrdTheta;
+                        HessianVRet[7+idx]=d2VdLambdadTheta;
+                        HessianVRet[8+idx]=d2VdThetadTheta;
 
                     } else {
                         double H[27];
-                        complex<double> coords[6];
                         const double drdx=J[0];
                         const double drdy=J[3];
                         const double drdz=J[6];
@@ -1471,54 +1426,24 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
                         const double dPhidydz=H[25];//H(2,3,3)
 
                         //HessianV(1,1,curPoint)
-                        coords[0]=d2VdLambdadLambda*(dLambdadx*dLambdadx)+2.0*d2VdLambdadTheta*dLambdadx*dPhidx+d2VdThetadTheta*(dPhidx*dPhidx)+2.0*dPhidx*drdx*d2VdrdTheta+2.0*dLambdadx*drdx*d2VdrdLambda+dVdLambda*dLambdadxdx+dVdTheta*dPhidxdx+dVdr*drdxdx+(drdx*drdx)*d2Vdrdr;
+                        HessianVRet[0+idx]=d2VdLambdadLambda*(dLambdadx*dLambdadx)+2.0*d2VdLambdadTheta*dLambdadx*dPhidx+d2VdThetadTheta*(dPhidx*dPhidx)+2.0*dPhidx*drdx*d2VdrdTheta+2.0*dLambdadx*drdx*d2VdrdLambda+dVdLambda*dLambdadxdx+dVdTheta*dPhidxdx+dVdr*drdxdx+(drdx*drdx)*d2Vdrdr;
                         //HessianV(2,2,curPoint)
-                        coords[1]=d2VdThetadTheta*(dPhidy*dPhidy)+2.0*dLambdady*dPhidy*d2VdLambdadTheta+dVdLambda*dLambdadydy+dVdTheta*dPhidydy+(dLambdady*dLambdady)*d2VdLambdadLambda+drdydy*dVdr+2.0*dPhidy*drdy*d2VdrdTheta+2.0*dLambdady*drdy*d2VdrdLambda+(drdy*drdy)*d2Vdrdr;
+                        HessianVRet[4+idx]=d2VdThetadTheta*(dPhidy*dPhidy)+2.0*dLambdady*dPhidy*d2VdLambdadTheta+dVdLambda*dLambdadydy+dVdTheta*dPhidydy+(dLambdady*dLambdady)*d2VdLambdadLambda+drdydy*dVdr+2.0*dPhidy*drdy*d2VdrdTheta+2.0*dLambdady*drdy*d2VdrdLambda+(drdy*drdy)*d2Vdrdr;
                         //HessianV(3,3,curPoint)
-                        coords[2]=dVdTheta*dPhidzdz+(dPhidz*dPhidz)*d2VdThetadTheta+dLambdadzdz*dVdLambda+2.0*dLambdadz*dPhidz*d2VdLambdadTheta+(dLambdadz*dLambdadz)*d2VdLambdadLambda+drdzdz*dVdr+2.0*dPhidz*drdz*d2VdrdTheta+2.0*dLambdadz*drdz*d2VdrdLambda+(drdz*drdz)*d2Vdrdr;
+                        HessianVRet[8+idx]=dVdTheta*dPhidzdz+(dPhidz*dPhidz)*d2VdThetadTheta+dLambdadzdz*dVdLambda+2.0*dLambdadz*dPhidz*d2VdLambdadTheta+(dLambdadz*dLambdadz)*d2VdLambdadLambda+drdzdz*dVdr+2.0*dPhidz*drdz*d2VdrdTheta+2.0*dLambdadz*drdz*d2VdrdLambda+(drdz*drdz)*d2Vdrdr;
                         //HessianV(1,2,curPoint)
-                        coords[3]=dPhidy*d2VdLambdadTheta*dLambdadx+dLambdady*d2VdLambdadLambda*dLambdadx+d2VdThetadTheta*dPhidy*dPhidx+dLambdady*d2VdLambdadTheta*dPhidx+drdy*dPhidx*d2VdrdTheta+dPhidy*drdx*d2VdrdTheta+dVdLambda*dLambdadxdy+dVdTheta*dPhidxdy+dVdr*drdxdy+drdy*dLambdadx*d2VdrdLambda+dLambdady*drdx*d2VdrdLambda+drdy*drdx*d2Vdrdr;
+                        HessianVRet[3+idx]=dPhidy*d2VdLambdadTheta*dLambdadx+dLambdady*d2VdLambdadLambda*dLambdadx+d2VdThetadTheta*dPhidy*dPhidx+dLambdady*d2VdLambdadTheta*dPhidx+drdy*dPhidx*d2VdrdTheta+dPhidy*drdx*d2VdrdTheta+dVdLambda*dLambdadxdy+dVdTheta*dPhidxdy+dVdr*drdxdy+drdy*dLambdadx*d2VdrdLambda+dLambdady*drdx*d2VdrdLambda+drdy*drdx*d2Vdrdr;
                         //HessianV(1,3,curPoint)
-                        coords[4]=dPhidz*d2VdLambdadTheta*dLambdadx+dLambdadz*d2VdLambdadLambda*dLambdadx+dPhidz*d2VdThetadTheta*dPhidx+dLambdadz*d2VdLambdadTheta*dPhidx+dVdLambda*dLambdadxdz+dVdTheta*dPhidxdz+dVdr*drdxdz+drdz*dPhidx*d2VdrdTheta+dPhidz*drdx*d2VdrdTheta+drdz*dLambdadx*d2VdrdLambda+dLambdadz*drdx*d2VdrdLambda+drdz*drdx*d2Vdrdr;
-                        coords[5]=dPhidz*d2VdThetadTheta*dPhidy+dVdLambda*dLambdadydz+dVdTheta*dPhidydz+dPhidz*dLambdady*d2VdLambdadTheta+dLambdadz*dPhidy*d2VdLambdadTheta+dLambdadz*dLambdady*d2VdLambdadLambda+drdydz*dVdr+drdz*dPhidy*d2VdrdTheta+dPhidz*drdy*d2VdrdTheta+drdz*dLambdady*d2VdrdLambda+dLambdadz*drdy*d2VdrdLambda+drdz*drdy*d2Vdrdr;
+                        HessianVRet[6+idx]=dPhidz*d2VdLambdadTheta*dLambdadx+dLambdadz*d2VdLambdadLambda*dLambdadx+dPhidz*d2VdThetadTheta*dPhidx+dLambdadz*d2VdLambdadTheta*dPhidx+dVdLambda*dLambdadxdz+dVdTheta*dPhidxdz+dVdr*drdxdz+drdz*dPhidx*d2VdrdTheta+dPhidz*drdx*d2VdrdTheta+drdz*dLambdadx*d2VdrdLambda+dLambdadz*drdx*d2VdrdLambda+drdz*drdx*d2Vdrdr;
+                        //HessianV(2,3,curPoint)
+                        HessianVRet[7+idx]=dPhidz*d2VdThetadTheta*dPhidy+dVdLambda*dLambdadydz+dVdTheta*dPhidydz+dPhidz*dLambdady*d2VdLambdadTheta+dLambdadz*dPhidy*d2VdLambdadTheta+dLambdadz*dLambdady*d2VdLambdadLambda+drdydz*dVdr+drdz*dPhidy*d2VdrdTheta+dPhidz*drdy*d2VdrdTheta+drdz*dLambdady*d2VdrdLambda+dLambdadz*drdy*d2VdrdLambda+drdz*drdy*d2Vdrdr;
 
-                        //HessianV(1,1,curPoint)
-                        HessianVReal[0+idx]=real(coords[0]);
-                        //HessianV(2,2,curPoint)
-                        HessianVReal[4+idx]=real(coords[1]);
-                        //HessianV(3,3,curPoint)
-                        HessianVReal[8+idx]=real(coords[2]);
-                        //HessianV(1,2,curPoint)
-                        HessianVReal[3+idx]=real(coords[3]);
                         //HessianV(2,1,curPoint)
-                        HessianVReal[1+idx]=HessianVReal[3+idx];
-                        //HessianV(1,3,curPoint)
-                        HessianVReal[6+idx]=real(coords[4]);
+                        HessianVRet[1+idx]=HessianVRet[3+idx];
                         //HessianV(3,1,curPoint)
-                        HessianVReal[2+idx]=HessianVReal[6+idx];
-                        //HessianV(2,3,curPoint)
-                        HessianVReal[7+idx]=real(coords[5]);
+                        HessianVRet[2+idx]=HessianVRet[6+idx];
                         //HessianV(3,2,curPoint)
-                        HessianVReal[5+idx]=HessianVReal[7+idx];
-                        
-                        //HessianV(1,1,curPoint)
-                        HessianVImag[0+idx]=imag(coords[0]);
-                        //HessianV(2,2,curPoint)
-                        HessianVImag[4+idx]=imag(coords[1]);
-                        //HessianV(3,3,curPoint)
-                        HessianVImag[8+idx]=imag(coords[2]);
-                        //HessianV(1,2,curPoint)
-                        HessianVImag[3+idx]=imag(coords[3]);
-                        //HessianV(2,1,curPoint)
-                        HessianVImag[1+idx]=HessianVImag[3+idx];
-                        //HessianV(1,3,curPoint)
-                        HessianVImag[6+idx]=imag(coords[4]);
-                        //HessianV(3,1,curPoint)
-                        HessianVImag[2+idx]=HessianVImag[6+idx];
-                        //HessianV(2,3,curPoint)
-                        HessianVImag[7+idx]=imag(coords[5]);
-                        //HessianV(3,2,curPoint)
-                        HessianVImag[5+idx]=HessianVImag[7+idx];
+                        HessianVRet[5+idx]=HessianVRet[7+idx];
                     }
                 }
             }
@@ -1546,11 +1471,11 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
             if(thetaChanged) {
                 normHelmHoltzCPP(FuncVals,u, scalFactor);
                 
-                if(gradVReal!=NULL||HessianVReal!=NULL) {
+                if(gradVRet!=NULL||HessianVRet!=NULL) {
                     normHelmHoltzDerivCPP(FuncDerivs,FuncVals);
                 }
                 
-                if(HessianVReal!=NULL) {
+                if(HessianVRet!=NULL) {
                     normHelmHoltzDeriv2CPP(FuncDerivs2,FuncVals);   
                 }
                 
@@ -1573,10 +1498,7 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
                 for(n=0;n<=M;n++) {
                     complex<double> innerTerm(0,0);
                     for(m=0;m<=n;m++) {
-                        const complex<double> C (CReal[n][m],CImag[n][m]);
-                        const complex<double> S (SReal[n][m],SImag[n][m]);
-
-                        innerTerm+=(C*rm[m]+S*im[m])*FuncVals[n][m];
+                        innerTerm+=(C[n][m]*rm[m]+S[n][m]*im[m])*FuncVals[n][m];
                     }
                     
                     
@@ -1584,12 +1506,11 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
                 }
 
                 V*=crScal;
-                VReal[curPoint]=real(V);
-                VImag[curPoint]=imag(V);
+                VRet[curPoint]=V;
             }
 
             //If only the gradient is desired as the next output       
-            if(gradVReal!=NULL&&HessianVReal==NULL) {
+            if(gradVRet!=NULL&&HessianVRet==NULL) {
                 complex<double> a1(0,0);
                 complex<double> a2(0,0);
                 complex<double> a3(0,0);
@@ -1613,10 +1534,8 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
                         const double dHVal=FuncDerivs[n][m];
                         //The expressions for Lmn, is from Table 14
                         const double Lmn=(nf+mf+1)*HVal+u*dHVal;
-                        const complex<double> C (CReal[n][m],CImag[n][m]);
-                        const complex<double> S (SReal[n][m],SImag[n][m]);
-                        const complex<double> rhoC=nCoeff[n]*C;
-                        const complex<double> rhoS=nCoeff[n]*S;
+                        const complex<double> rhoC=nCoeff[n]*C[n][m];
+                        const complex<double> rhoS=nCoeff[n]*S[n][m];
 
                         A1+=rhoC*HVal;
                         A2+=rhoC*dHVal;
@@ -1659,27 +1578,19 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
                         grad[1]=dVdx*J[3]+dVdy*J[4]+dVdz*J[5];
                         grad[2]=dVdx*J[6]+dVdy*J[7]+dVdz*J[8];
                         
-                        gradVReal[0+idx]=real(grad[0]);
-                        gradVReal[1+idx]=real(grad[1]);
-                        gradVReal[2+idx]=real(grad[2]);
-                                
-                        gradVImag[0+idx]=imag(grad[0]);
-                        gradVImag[1+idx]=imag(grad[1]);
-                        gradVImag[2+idx]=imag(grad[2]);   
+                        gradVRet[0+idx]=grad[0];
+                        gradVRet[1+idx]=grad[1];
+                        gradVRet[2+idx]=grad[2];  
                     } else {//If a gradient in Cartesian coordinates is
                             //desired.
                         size_t idx=3*curPoint;
 
-                        gradVReal[0+idx]=real(dVdx);
-                        gradVReal[1+idx]=real(dVdy);
-                        gradVReal[2+idx]=real(dVdz);
-                        
-                        gradVImag[0+idx]=imag(dVdx);
-                        gradVImag[1+idx]=imag(dVdy);
-                        gradVImag[2+idx]=imag(dVdz);
+                        gradVRet[0+idx]=dVdx;
+                        gradVRet[1+idx]=dVdy;
+                        gradVRet[2+idx]=dVdz;
                     }
                 }
-            } else if(HessianVReal!=NULL) {
+            } else if(HessianVRet!=NULL) {
             //Compute the gradient and Hessian
                 complex <double> a1(0,0);
                 complex <double> a2(0,0);
@@ -1729,11 +1640,9 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
                         const double Lmn=(nf+mf+1)*HVal+u*dHVal;
                         const double dLmn=(nf+mf+2)*dHVal+u*d2HVal;
                         const double Omn=(nf+mf+1)*(n+m+2)*HVal+2.0*u*(nf+mf+2)*dHVal+u*u*d2HVal;
-                        
-                        const complex <double> C (CReal[n][m],CImag[n][m]);
-                        const complex <double> S (SReal[n][m],SImag[n][m]);
-                        const complex <double> rhoC=nCoeff[n]*C;
-                        const complex <double> rhoS=nCoeff[n]*S;
+
+                        const complex <double> rhoC=nCoeff[n]*C[n][m];
+                        const complex <double> rhoS=nCoeff[n]*S[n][m];
 
                         A1+=rhoC*HVal;
                         A2+=rhoC*dHVal;
@@ -1828,33 +1737,20 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
                     }
                     
                     //Compute the gradient, if desired.
-                    if(gradVReal!=NULL) {
+                    if(gradVRet!=NULL) {
                         if(spherDerivs) {
                             const size_t idx=3*curPoint;
-                            complex <double> grad[3];
                             
                             //gradV(:,curPoint)=J'*[dVdx;dVdy;dVdz];
-                            grad[0]=dVdx*dxdr+dVdy*dydr+dVdz*dzdr;
-                            grad[1]=dVdx*dxdAz+dVdy*dydAz+dVdz*dzdAz;
-                            grad[2]=dVdx*dxdEl+dVdy*dydEl+dVdz*dzdEl;
-
-                            gradVReal[0+idx]=real(grad[0]);
-                            gradVReal[1+idx]=real(grad[1]);
-                            gradVReal[2+idx]=real(grad[2]);
-                                    
-                            gradVImag[0+idx]=imag(grad[0]);
-                            gradVImag[1+idx]=imag(grad[1]);
-                            gradVImag[2+idx]=imag(grad[2]);
+                            gradVRet[0+idx]=dVdx*dxdr+dVdy*dydr+dVdz*dzdr;
+                            gradVRet[1+idx]=dVdx*dxdAz+dVdy*dydAz+dVdz*dzdAz;
+                            gradVRet[2+idx]=dVdx*dxdEl+dVdy*dydEl+dVdz*dzdEl;
                         } else {
                             const size_t idx=3*curPoint;
 
-                            gradVReal[0+idx]=real(dVdx);
-                            gradVReal[1+idx]=real(dVdy);
-                            gradVReal[2+idx]=real(dVdz);
-                                    
-                            gradVImag[0+idx]=imag(dVdx);
-                            gradVImag[1+idx]=imag(dVdy);
-                            gradVImag[2+idx]=imag(dVdz);
+                            gradVRet[0+idx]=dVdx;
+                            gradVRet[1+idx]=dVdy;
+                            gradVRet[2+idx]=dVdz;
                         }
                     }
                     
@@ -1862,7 +1758,6 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
                     if(spherDerivs) {
                         const size_t idx=9*curPoint;
                         double H[27];
-                        complex <double> coords[6];
    
                         calcSpherInvHessianCPP(H,pointCur,0);
 
@@ -1888,95 +1783,46 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
                         const double d2zdAzdEl=H[25];//H(2,3,3);
                         
                         //d2Vdrdr, HessianV(1,1,curPoint)
-                        coords[0]=d2Vdydy*dydr*dydr+2.0*d2Vdydz*dydr*dzdr+d2Vdzdz*dzdr*dzdr+2.0*dxdr*dzdr*d2Vdxdz+2.0*dxdr*dydr*d2Vdxdy+dxdr*dxdr*d2Vdxdx+dVdx*d2xdrdr+dVdy*d2ydrdr+dVdz*d2zdrdr;
+                        HessianVRet[0+idx]=d2Vdydy*dydr*dydr+2.0*d2Vdydz*dydr*dzdr+d2Vdzdz*dzdr*dzdr+2.0*dxdr*dzdr*d2Vdxdz+2.0*dxdr*dydr*d2Vdxdy+dxdr*dxdr*d2Vdxdx+dVdx*d2xdrdr+dVdy*d2ydrdr+dVdz*d2zdrdr;
                         //d2VdAzdAz, HessianV(2,2,curPoint)
-                        coords[1]=d2Vdzdz*dzdAz*dzdAz+2.0*dydAz*dzdAz*d2Vdydz+dydAz*dydAz*d2Vdydy+dVdy*d2ydAzdAz+dVdz*d2zdAzdAz+d2xdAzdAz*dVdx+2.0*dxdAz*dzdAz*d2Vdxdz+2.0*dxdAz*dydAz*d2Vdxdy+dxdAz*dxdAz*d2Vdxdx;
+                        HessianVRet[4+idx]=d2Vdzdz*dzdAz*dzdAz+2.0*dydAz*dzdAz*d2Vdydz+dydAz*dydAz*d2Vdydy+dVdy*d2ydAzdAz+dVdz*d2zdAzdAz+d2xdAzdAz*dVdx+2.0*dxdAz*dzdAz*d2Vdxdz+2.0*dxdAz*dydAz*d2Vdxdy+dxdAz*dxdAz*d2Vdxdx;
                         //d2VdEldEl, HessianV(3,3,curPoint)
-                        coords[2]=dzdEl*dzdEl*d2Vdzdz+dVdz*d2zdEldEl+d2ydEldEl*dVdy+2.0*dydEl*dzdEl*d2Vdydz+dydEl*dydEl*d2Vdydy+d2xdEldEl*dVdx+2.0*dxdEl*dzdEl*d2Vdxdz+2.0*dxdEl*dydEl*d2Vdxdy+dxdEl*dxdEl*d2Vdxdx;
+                        HessianVRet[8+idx]=dzdEl*dzdEl*d2Vdzdz+dVdz*d2zdEldEl+d2ydEldEl*dVdy+2.0*dydEl*dzdEl*d2Vdydz+dydEl*dydEl*d2Vdydy+d2xdEldEl*dVdx+2.0*dxdEl*dzdEl*d2Vdxdz+2.0*dxdEl*dydEl*d2Vdxdy+dxdEl*dxdEl*d2Vdxdx;
                         //d2VdrdAz, HessianV(1,2,curPoint)
-                        coords[3]=dzdAz*d2Vdydz*dydr+dydAz*d2Vdydy*dydr+d2Vdzdz*dzdAz*dzdr+dydAz*d2Vdydz*dzdr+dzdAz*dxdr*d2Vdxdz+dxdAz*dzdr*d2Vdxdz+dydAz*dxdr*d2Vdxdy+dxdAz*dydr*d2Vdxdy+dVdx*d2xdrdAz+dVdy*d2ydrdAz+dVdz*d2zdrdAz+dxdAz*dxdr*d2Vdxdx;
+                        HessianVRet[3+idx]=dzdAz*d2Vdydz*dydr+dydAz*d2Vdydy*dydr+d2Vdzdz*dzdAz*dzdr+dydAz*d2Vdydz*dzdr+dzdAz*dxdr*d2Vdxdz+dxdAz*dzdr*d2Vdxdz+dydAz*dxdr*d2Vdxdy+dxdAz*dydr*d2Vdxdy+dVdx*d2xdrdAz+dVdy*d2ydrdAz+dVdz*d2zdrdAz+dxdAz*dxdr*d2Vdxdx;
                         //d2VdrdEl, HessianV(1,3,curPoint)
-                        coords[4]=dzdEl*d2Vdydz*dydr+dydEl*d2Vdydy*dydr+dzdEl*d2Vdzdz*dzdr+dydEl*d2Vdydz*dzdr+dzdEl*dxdr*d2Vdxdz+dxdEl*dzdr*d2Vdxdz+dVdx*d2xdrdEl+dVdy*d2ydrdEl+dVdz*d2zdrdEl+dydEl*dxdr*d2Vdxdy+dxdEl*dydr*d2Vdxdy+dxdEl*dxdr*d2Vdxdx;
+                        HessianVRet[6+idx]=dzdEl*d2Vdydz*dydr+dydEl*d2Vdydy*dydr+dzdEl*d2Vdzdz*dzdr+dydEl*d2Vdydz*dzdr+dzdEl*dxdr*d2Vdxdz+dxdEl*dzdr*d2Vdxdz+dVdx*d2xdrdEl+dVdy*d2ydrdEl+dVdz*d2zdrdEl+dydEl*dxdr*d2Vdxdy+dxdEl*dydr*d2Vdxdy+dxdEl*dxdr*d2Vdxdx;
                         //d2VdAzdEl, HessianV(2,3,curPoint)
-                        coords[5]=dzdEl*d2Vdzdz*dzdAz+dzdEl*dydAz*d2Vdydz+dydEl*dzdAz*d2Vdydz+dVdy*d2ydAzdEl+dVdz*d2zdAzdEl+dydEl*dydAz*d2Vdydy+d2xdAzdEl*dVdx+dzdEl*dxdAz*d2Vdxdz+dxdEl*dzdAz*d2Vdxdz+dydEl*dxdAz*d2Vdxdy+dxdEl*dydAz*d2Vdxdy+dxdEl*dxdAz*d2Vdxdx;
+                        HessianVRet[7+idx]=dzdEl*d2Vdzdz*dzdAz+dzdEl*dydAz*d2Vdydz+dydEl*dzdAz*d2Vdydz+dVdy*d2ydAzdEl+dVdz*d2zdAzdEl+dydEl*dydAz*d2Vdydy+d2xdAzdEl*dVdx+dzdEl*dxdAz*d2Vdxdz+dxdEl*dzdAz*d2Vdxdz+dydEl*dxdAz*d2Vdxdy+dxdEl*dydAz*d2Vdxdy+dxdEl*dxdAz*d2Vdxdx;
 
-                        //d2Vdrdr, HessianV(1,1,curPoint)
-                        HessianVReal[0+idx]=real(coords[0]);
-                        //d2VdAzdAz, HessianV(2,2,curPoint)
-                        HessianVReal[4+idx]=real(coords[1]);
-                        //d2VdEldEl, HessianV(3,3,curPoint)
-                        HessianVReal[8+idx]=real(coords[2]);
-                        //d2VdrdAz, HessianV(1,2,curPoint)
-                        HessianVReal[3+idx]=real(coords[3]);
+ 
                         //d2VdAzdr, HessianV(2,1,curPoint)
-                        HessianVReal[1+idx]=HessianVReal[3+idx];
-                        //d2VdrdEl, HessianV(1,3,curPoint)
-                        HessianVReal[6+idx]=real(coords[4]);
+                        HessianVRet[1+idx]=HessianVRet[3+idx];
                         //d2VdEldr, HessianV(3,1,curPoint)
-                        HessianVReal[2+idx]=HessianVReal[6+idx];
-                        //d2VdAzdEl, HessianV(2,3,curPoint)
-                        HessianVReal[7+idx]=real(coords[5]);
+                        HessianVRet[2+idx]=HessianVRet[6+idx];
                         //d2VdEldAz, HessianV(3,2,curPoint)
-                        HessianVReal[5+idx]=HessianVReal[7+idx];
-
-                        //d2Vdrdr, HessianV(1,1,curPoint)
-                        HessianVImag[0+idx]=imag(coords[0]);
-                        //d2VdAzdAz, HessianV(2,2,curPoint)
-                        HessianVImag[4+idx]=imag(coords[1]);
-                        //d2VdEldEl, HessianV(3,3,curPoint)
-                        HessianVImag[8+idx]=imag(coords[2]);
-                        //d2VdrdAz, HessianV(1,2,curPoint)
-                        HessianVImag[3+idx]=imag(coords[3]);
-                        //d2VdAzdr, HessianV(2,1,curPoint)
-                        HessianVImag[1+idx]=HessianVImag[3+idx];
-                        //d2VdrdEl, HessianV(1,3,curPoint)
-                        HessianVImag[6+idx]=imag(coords[4]);
-                        //d2VdEldr, HessianV(3,1,curPoint)
-                        HessianVImag[2+idx]=HessianVImag[6+idx];
-                        //d2VdAzdEl, HessianV(2,3,curPoint)
-                        HessianVImag[7+idx]=imag(coords[5]);
-                        //d2VdEldAz, HessianV(3,2,curPoint)
-                        HessianVImag[5+idx]=HessianVImag[7+idx];
+                        HessianVRet[5+idx]=HessianVRet[7+idx];
                     } else {
                         const size_t idx=9*curPoint;
                         
                         //HessianV(1,1,curPoint)
-                        HessianVReal[0+idx]=real(d2Vdxdx);
+                        HessianVRet[0+idx]=d2Vdxdx;
                         //HessianV(2,2,curPoint)
-                        HessianVReal[4+idx]=real(d2Vdydy);
+                        HessianVRet[4+idx]=d2Vdydy;
                         //HessianV(3,3,curPoint)
-                        HessianVReal[8+idx]=real(d2Vdzdz);
+                        HessianVRet[8+idx]=d2Vdzdz;
                         //HessianV(1,2,curPoint)
-                        HessianVReal[3+idx]=real(d2Vdxdy);
+                        HessianVRet[3+idx]=d2Vdxdy;
                         //HessianV(2,1,curPoint)
-                        HessianVReal[1+idx]=HessianVReal[3+idx];
+                        HessianVRet[1+idx]=HessianVRet[3+idx];
                         //HessianV(1,3,curPoint)
-                        HessianVReal[6+idx]=real(d2Vdxdz);
+                        HessianVRet[6+idx]=d2Vdxdz;
                         //HessianV(3,1,curPoint)
-                        HessianVReal[2+idx]=HessianVReal[6+idx];
+                        HessianVRet[2+idx]=HessianVRet[6+idx];
                         //HessianV(2,3,curPoint)
-                        HessianVReal[7+idx]=real(d2Vdydz);
+                        HessianVRet[7+idx]=d2Vdydz;
                         //HessianV(3,2,curPoint)
-                        HessianVReal[5+idx]=HessianVReal[7+idx];
-                        
-                        //HessianV(1,1,curPoint)
-                        HessianVImag[0+idx]=imag(d2Vdxdx);
-                        //HessianV(2,2,curPoint)
-                        HessianVImag[4+idx]=imag(d2Vdydy);
-                        //HessianV(3,3,curPoint)
-                        HessianVImag[8+idx]=imag(d2Vdzdz);
-                        //HessianV(1,2,curPoint)
-                        HessianVImag[3+idx]=imag(d2Vdxdy);
-                        //HessianV(2,1,curPoint)
-                        HessianVImag[1+idx]=HessianVImag[3+idx];
-                        //HessianV(1,3,curPoint)
-                        HessianVImag[6+idx]=imag(d2Vdxdz);
-                        //HessianV(3,1,curPoint)
-                        HessianVImag[2+idx]=HessianVImag[6+idx];
-                        //HessianV(2,3,curPoint)
-                        HessianVImag[7+idx]=imag(d2Vdydz);
-                        //HessianV(3,2,curPoint)
-                        HessianVImag[5+idx]=HessianVImag[7+idx];
+                        HessianVRet[5+idx]=HessianVRet[7+idx];
                     }
                 }
             }
@@ -1987,31 +1833,21 @@ void spherHarmonicEvalCPPComplex(double *VReal, double *VImag, double *gradVReal
             //Flip signs of the elevation terms reflecting the
             //difference in definition between systems 0 and 2.
             
-            if(gradVReal!=NULL) {
+            if(gradVRet!=NULL) {
                 idx=3*curPoint;
-                gradVReal[2+idx]=-gradVReal[2+idx];
-                gradVImag[2+idx]=-gradVImag[2+idx];
+                gradVRet[2+idx]=-gradVRet[2+idx];
             }
 
-            if(HessianVReal!=NULL) {
+            if(HessianVRet!=NULL) {
                 idx=9*curPoint;
                 //HessianV(1,3,curPoint)
-                HessianVReal[6+idx]=-HessianVReal[6+idx];
+                HessianVRet[6+idx]=-HessianVRet[6+idx];
                 //HessianV(3,1,curPoint)
-                HessianVReal[2+idx]=-HessianVReal[2+idx];
+                HessianVRet[2+idx]=-HessianVRet[2+idx];
                 //HessianV(2,3,curPoint)
-                HessianVReal[7+idx]=-HessianVReal[7+idx];
+                HessianVRet[7+idx]=-HessianVRet[7+idx];
                 //HessianV(3,2,curPoint)
-                HessianVReal[5+idx]=-HessianVReal[5+idx];
-                
-                //HessianV(1,3,curPoint)
-                HessianVImag[6+idx]=-HessianVImag[6+idx];
-                //HessianV(3,1,curPoint)
-                HessianVImag[2+idx]=-HessianVImag[2+idx];
-                //HessianV(2,3,curPoint)
-                HessianVImag[7+idx]=-HessianVImag[7+idx];
-                //HessianV(3,2,curPoint)
-                HessianVImag[5+idx]=-HessianVImag[5+idx];
+                HessianVRet[5+idx]=-HessianVRet[5+idx];
             }
         }
     }

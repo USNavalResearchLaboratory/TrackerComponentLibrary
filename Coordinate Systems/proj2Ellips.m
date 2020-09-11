@@ -24,9 +24,7 @@ function zGround=proj2Ellips(z,a,f,algorithm)
 %
 %This just transforms the given point into latitude, longitude and
 %altitude, sets the altitude to zero and converts back to Cartesian
-%coordinates. The function used for the conversion from Cartesian to
-%ellipsoidal coordinates assumes that the point in question is not too
-%close to the center of the Earth.
+%coordinates.
 %
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

@@ -1,11 +1,10 @@
 function [zInterp,gradInterp,gradDerivMatInterp]=interpSurf2D(xyPoints,xyPointsRef,zPointsRef,smoothTerm)
-%%INTERPSURF2D  Given a set of values zPointsRef at the 2D points
-%               xyPointsRef that define a surface, interpolate to the
-%               points given in xyPoints and evaluate the interpolated z-
-%               value, the gradient, and the partial derivatives of the
-%               interpolated gradient at the points. For large numbers of
-%               points, b-splines will be more efficient than this
-%               approach.
+%%INTERPSURF2D Given a set of values zPointsRef at the 2D points
+%              xyPointsRef that define a surface, interpolate to the
+%              points given in xyPoints and evaluate the interpolated z-
+%              value, the gradient, and the partial derivatives of the
+%              interpolated gradient at the points. For large numbers of
+%              points, b-splines will be more efficient than this approach.
 %
 %INPUTS: xyPoints A 2XN set of N 2D (x,y) points at which interplation and
 %                 gradients are desired.
@@ -41,6 +40,69 @@ function [zInterp,gradInterp,gradDerivMatInterp]=interpSurf2D(xyPoints,xyPointsR
 %by solving numRef linear equations so that the interpolation equation
 %matches the points at points in zPointsRef at the reference x and y
 %values.
+%
+%EXAMPLE 1:
+%This example shows that the interpolated surface looks smooth, as one would
+%expect.
+% %Get a surface.
+% [X,Y,Z]=peaks(25);
+% %Plot the surface
+% figure(1)
+% clf
+% surface(X,Y,Z,'EdgeColor','none');
+% %The surface consists of 25 points spanning +/-3 in x and y.
+% %Formulate the reference points for the inputs for interpSurf2D 
+% xyPointsRef=[X(:)';Y(:)'];
+% zPointsRef=Z(:);
+% %We would like to first make sure that the interpolated points are not
+% %terrible. To do that, we will evaluate points on a finer grid and make
+% %sure that the plot does not look messed up.
+% numPoints=200;
+% points=linspace(-3,3,numPoints);
+% [XInterp,YInterp]=meshgrid(points,points);
+% xyPoints=[XInterp(:)';YInterp(:)'];
+% zInterp=interpSurf2D(xyPoints,xyPointsRef,zPointsRef);
+% 
+% figure(2)
+% clf
+% surface(XInterp,YInterp,reshape(zInterp,numPoints,numPoints),'EdgeColor','none');
+%The interpolated plot looks very smooth.
+%
+%EXAMPLE 2:
+%This uses the same surface as in example 1, but here we validate the
+%gradient vectors by integrating across the surface from one point to
+%another and seeing if the values match. This example uses a subroutine
+%called integrateFunc, which is given.
+% [X,Y,Z]=peaks(25);
+% xyPointsRef=[X(:)';Y(:)'];
+% zPointsRef=Z(:);
+% %Let's integrate from a corner to the peak.
+% x0=xyPointsRef(:,1);
+% [~,maxIdx]=max(zPointsRef);
+% x1=xyPointsRef(:,maxIdx);
+% 
+% display('The initial height is')
+% zPointsRef(1)
+% display('The true end height is')
+% zPointsRef(maxIdx)
+% display('The height obtained by evaluating the gradient line integral is')
+% integral(@integrateFunc,0,1,'RelTol',1e-10)
+% 
+% function vals=integrateFunc(tVals)
+%     vals=zeros(size(tVals));%Allocate space;
+%     numVals=length(tVals(:));
+% 
+%     xyPointsCur=zeros(2,numVals);
+%     for curPoint=1:numVals
+%        xyPointsCur(:,curPoint)=x0+(x1-x0)*tVals(curPoint); 
+%     end
+% 
+%     [~,gradVals]=interpSurf2D(xyPointsCur,xyPointsRef,zPointsRef);
+% 
+%     for curVal=1:numVals
+%         vals(curVal)=gradVals(:,curVal)'*(x1-x0);
+%     end
+% end
 %
 %REFERENCES:
 %[1] R. L. Hardy, "Multiquadric equations of topography and other irregular

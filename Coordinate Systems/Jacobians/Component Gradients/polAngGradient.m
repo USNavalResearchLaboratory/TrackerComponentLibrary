@@ -17,7 +17,7 @@ function JTotal=polAngGradient(xG,systemType,lRx,M)
 %      lRx The 2X1 [x;y] location vector of the receiver in Cartesian
 %          coordinates. If this parameter is omitted or an empty matrix is
 %          passed, then the receiver is assumed to be at the origin.
-%        M A 2X2 rotation matrices to go from the alignment of the global
+%        M A 2X2 rotation matrix to go from the alignment of the global
 %          coordinate system to that at the receiver. As noted below, this
 %          can be omitted or an empty matrix passed, because  M does not
 %          actually matter.

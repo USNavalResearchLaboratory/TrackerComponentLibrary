@@ -131,7 +131,7 @@ double shortestPathCSlow(double *C,ptrdiff_t *col4rowPtr,ptrdiff_t *row4colPtr, 
         didFlip=true;
     }
     
-    C = (double*)mxGetData(CMat);
+    C=mxGetDoubles(CMat);
     
     /* The cost matrix must have all non-negative elements for the
      * assignment algorithm to work. This forces all of the elements to be
@@ -166,10 +166,16 @@ double shortestPathCSlow(double *C,ptrdiff_t *col4rowPtr,ptrdiff_t *row4colPtr, 
      * to zero.*/
     uMATLAB = mxCreateNumericMatrix(numRow,1,mxDOUBLE_CLASS,mxREAL);
     vMATLAB = mxCreateNumericMatrix(numCol,1,mxDOUBLE_CLASS,mxREAL);
-    col4row=(ptrdiff_t*)mxGetData(col4rowMATLAB);
-    row4col=(ptrdiff_t*)mxGetData(row4colMATLAB);
     
-    gain=shortestPathCSlow(C,col4row,row4col, (double*)mxGetData(uMATLAB), (double*)mxGetData(vMATLAB), numRow, numCol);
+    if(sizeof(ptrdiff_t)==4) {//32 bit
+    	col4row=(ptrdiff_t*)mxGetInt32s(col4rowMATLAB);
+        row4col=(ptrdiff_t*)mxGetInt32s(row4colMATLAB);
+    } else {//64 bit
+        col4row=(ptrdiff_t*)mxGetInt64s(col4rowMATLAB);
+        row4col=(ptrdiff_t*)mxGetInt64s(row4colMATLAB);
+    }
+
+    gain=shortestPathCSlow(C,col4row,row4col,mxGetDoubles(uMATLAB), mxGetDoubles(vMATLAB), numRow, numCol);
     
     mxDestroyArray(CMat);
     /* If a transposed array was used */

@@ -30,8 +30,8 @@ function J=spherAngGradient(xG,systemType,lRx,M)
 %
 %OUTPUTS: J A 2X3XN set of N Jacobian matrices where the rows are
 %           [azimuth;elevation] in that order and the columns take the
-%           derivative of the row components with respect to [x,y,z] in
-%           that order.
+%           partial derivative of the row components with respect to
+%           [x,y,z] in that order.
 %
 %The derivatives can be computed in a straightforward manner from
 %the basic relation between spherical and Cartesian coordinates, which is
@@ -49,8 +49,8 @@ function J=spherAngGradient(xG,systemType,lRx,M)
 % fDim=2;
 % numDiffVal=numDiff(x,f,fDim)
 % funcVal=spherAngGradient(x,systemType)
-%One will see that within freasonable finite precision, the two values are
-%equal.
+%One will see that within reasonable finite precision bounds, the two
+%values are equal.
 %
 %REFERENCES:
 %[1] R. L. Duncombe, "Computational techniques," in Explanatory Supplement

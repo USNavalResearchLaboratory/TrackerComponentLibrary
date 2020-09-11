@@ -1,8 +1,8 @@
-function val=aDynFlat2CurvedUDyn(xStacked,t,aDyn,uDyn)
+function aVal=aDynFlat2CurvedUDyn(xStacked,t,aDyn,uDyn)
 %%ADYNFLAT2CURVEDUDYN Adapts a flat-Earth drift function to a curved
 %                 Earth by jointly propagating the state with the
 %                 derivatives of the basis vectors of a coordinate system
-%                 that changes as the target moves.  The position
+%                 that changes as the target moves. The position
 %                 components of the state are kept in the global coordinate
 %                 system, whereas the other components are kept in the
 %                 local (flat Earth) coordinate system. In the event that
@@ -22,7 +22,7 @@ function val=aDynFlat2CurvedUDyn(xStacked,t,aDyn,uDyn)
 %                 xStacked.
 %               t The time at which the drift function should be evaluated.
 %            aDyn The flat-Earth drift function of the form aDyn(x,t),
-%                 where is the non-stakced state. It is assumed that
+%                 where is the non-stacked state. It is assumed that
 %                 the first three components returned by aDyn are the local
 %                 velocity components of the state and that nothing in aDyn
 %                 is position-dependent.
@@ -30,14 +30,21 @@ function val=aDynFlat2CurvedUDyn(xStacked,t,aDyn,uDyn)
 %                 takes inputs of the form uDyn(u,x,t), where u is the 9X9
 %                 set of coordinate bases and x is the non-stacked state.
 %                 The function returns a 9X9 matrix of derivatives with
-%                 respect to time.
+%                 respect to time. If this input is omitted or an empty
+%                 matrix is passed, then uDyn=@(u,x,t)uDotEllipsoid(u,x,t);
+%                 will be used. That is the drift function for geodesic
+%                 propagation.
 %
 %OUTPUTS: val The stacked derivatives of the state (global position
 %             derivative, local other derivatives) and the local basis
 %             vectors.
 %
 %A discussion on mapping flat-Earth models to a curved Earth is given in
-%[1].
+%[1]. Note that when using a fully stochastic propagation model, one might
+%need to account for the local/global coordiante system differences in the
+%drift function as well. However, if linear models are used, then one can
+%typically just use DPoly setting the numAug input to 9 (the number of
+%dimensions of uDyn).
 %
 %REFERENCES:
 %[1] D. F. Crouse, "Simulating aerial targets in 3D accounting for the
@@ -47,13 +54,17 @@ function val=aDynFlat2CurvedUDyn(xStacked,t,aDyn,uDyn)
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<4||isempty(uDyn))
+    uDyn=@(u,x,t)uDotEllipsoid(u,x);
+end
+
 %Extract the state and the basis vectors. The basis vectors are the final 9
 %elements of xStacked.
 xLen=length(xStacked)-9;
 x=reshape(xStacked(1:xLen),xLen,1);
 u=reshape(xStacked((xLen+1):end),3,3);
 
-%Transform the local target velocity into the global coordinate system.
+%Transform the local tangent velocity into the global coordinate system.
 rDot=getGlobalVectors(x(4:6),u);
 
 %Evaluate the flat-Earth drift function. The first three components
@@ -63,7 +74,7 @@ xLDot=aDyn(x,t);
 %Get the derivatives of the basis vectors.
 uDot=uDyn(u,x,t);
 
-val=[rDot(:);xLDot(4:end);uDot(:)];
+aVal=[rDot(:);xLDot(4:end);uDot(:)];
 end
 
 %LICENSE:

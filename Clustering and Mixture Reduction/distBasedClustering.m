@@ -2,7 +2,7 @@ function [xClust,xCov,clusterList]=distBasedClustering(x,threshold,distFunc,merg
 %%DISTBASEDCLUSTERING Cluster vectors and merge the cluster (also return
 %           cluster information). Two vectors are said to belong to the
 %           same cluster if they are sufficiently close together. "Close"
-%           is detetermined by a distance metric specified by distFun. The
+%           is determined by a distance metric specified by distFun. The
 %           vectors in a cluster can be merged in a number of different
 %           ways.
 %

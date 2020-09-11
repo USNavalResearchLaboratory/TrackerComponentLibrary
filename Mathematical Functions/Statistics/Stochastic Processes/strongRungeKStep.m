@@ -1,6 +1,6 @@
 function [y,fixedTerm]=strongRungeKStep(y,t,a,B,deltaT,algorithm,aCur,BCur,p,ItoAlg)
 %%STRONGRUNGEKSTEP Perform a single step of an explicit strong stochastic
-%           Runge-Kutta method under Itô calculus. This integrates a d-
+%           Runge-Kutta method under Itï¿½ calculus. This integrates a d-
 %           dimensional stochastic differential equation of the form
 %           dy=a(y,t)*dt+B(y,t)*dW
 %           where dW is the differential of an m-dimensional Wiener
@@ -10,8 +10,8 @@ function [y,fixedTerm]=strongRungeKStep(y,t,a,B,deltaT,algorithm,aCur,BCur,p,Ito
 %           explicit derivatives.
 %
 %INPUTS: y The dX1 initial value of the random process.
-%        t The dX1 initial time of the random process. If an empty matrix
-%          is passed, t=0 is used.
+%        t The scalar initial time of the random process. If an empty
+%          matrix is passed, t=0 is used.
 %        a A function handle to the drift function. This is called as
 %          a(y,t) and returns a dX1 vector.
 %        B A function handle to the diffusion matrix function. This is
@@ -51,9 +51,9 @@ function [y,fixedTerm]=strongRungeKStep(y,t,a,B,deltaT,algorithm,aCur,BCur,p,Ito
 %
 %OUTPUTS: y The estimated value of the process after taking a step of
 %           deltaT. This is a random value.
-% fixedTerm This output is used by the semiImplicitStrongRungeKStep. It is
-%           the fixed term in the iterations when using the implicit
-%           version of the algorithm.
+% fixedTerm This output is used by the semiImplicitStrongRungeKStep
+%           function. It is the fixed term in the iterations when using the
+%           implicit version of the algorithm.
 %
 %EXAMPLE 1:
 %This is an example of a nonlinear scalar problem with non-additive noise
@@ -119,9 +119,9 @@ function [y,fixedTerm]=strongRungeKStep(y,t,a,B,deltaT,algorithm,aCur,BCur,p,Ito
 % [muRK,PRK]=calcMixtureMoments(valsRK);
 % abs((muRK-mu)./mu)%Relative mean error.
 % abs((PRK-P)./P)%Relative variance error.
-%The error in the estimate of the mean and the variance should be less than
-%10%. However, if one were to switch to algorithm=-1, the Euler-Maruyama
-%method, then the error will often be over 10%.
+%The errors in the estimate of the mean and the variance elements should be
+%less than 10%. However, if one were to switch to algorithm=-1, the
+%Euler-Maruyama method, then the errors will often be over 10%.
 %
 %REFERENCES:
 %[1] P. E. Kloeden and E. Platen, Numerical Solution of Stochastic

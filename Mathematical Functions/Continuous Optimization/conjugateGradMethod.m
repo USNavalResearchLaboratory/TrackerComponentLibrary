@@ -10,7 +10,7 @@ function [xMin,fMin,exitCode]=conjugateGradMethod(f,x0,epsilon,deltaTestDist,del
 %INPUTS: f A handle to the function (and its gradient) over which the
 %          minimization is to be performed. The function [fVal,gVal]=f(x)
 %          takes the NX1 x vector and returns the real scalar function
-%          value fVal and gradient gVal at the point x.
+%          value fVal and NX1 gradient gVal at the point x.
 %       x0 The NX1-dimensional point from which the minimization starts.
 %  epsilon The parameter determining the accuracy of the desired solution
 %          in terms of the gradient. The function terminates when
@@ -132,7 +132,8 @@ function [xMin,fMin,exitCode]=conjugateGradMethod(f,x0,epsilon,deltaTestDist,del
 
     x=x0;
     [fVal,gradF]=f(x0);
-    %The previous
+    
+    %The previous values are not yet set.
     gradFPrev=[];
     dPrev=[];
     

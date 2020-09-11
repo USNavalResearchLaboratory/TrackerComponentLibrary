@@ -133,7 +133,7 @@
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
 /*This header is for the core SGP4 propagation routine.*/
-#include "sgp4unit.h"
+#include "SGP4.h"
 /*This header is required by Matlab.*/
 #include "mex.h"
 /*This is for input validation*/
@@ -182,7 +182,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     {
         size_t i;
         double *theEls;
-        theEls=(double*)mxGetData(prhs[0]);
+        theEls=mxGetDoubles(prhs[0]);
         
         //Copy the elements into SGP4Elements, adjusting the units from SI
         //to the values used here.
@@ -206,7 +206,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         numTimes=std::max(M,N);
     }
     checkRealDoubleArray(prhs[1]);
-    deltaT=(double*)mxGetData(prhs[1]);
+    deltaT=mxGetDoubles(prhs[1]);
 
     if(nrhs>2&&!mxIsEmpty(prhs[2])&&!mxIsEmpty(prhs[3])) {
         const double TT1=getDoubleFromMatlab(prhs[2]);
@@ -250,18 +250,21 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     
     //Allocate space for the return values
     retMat=mxCreateDoubleMatrix(6,numTimes,mxREAL);
-    retVec=(double*)mxGetData(retMat);
+    retVec=mxGetDoubles(retMat);
     errorMat=mxCreateDoubleMatrix(numTimes,1,mxREAL);
-    errorVals=(double*)mxGetData(errorMat);
+    errorVals=mxGetDoubles(errorMat);
     {
         //This will be filled with the ephemeris information needed for
         //propagating the satellite.
         elsetrec satRec;
         size_t i;
-        
-        sgp4init(gravConstType,//Specified WGS-84 or WGS-72
-                 opsChar,
+
+        SGP4Funcs::sgp4init(gravConstType,//Specified WGS-84 or WGS-72
+                 opsChar,//Mode of operation, 'a' or 'i'.
+                 0,//Satellite number; unused in the sgp4 function.
                  elementEpochTime,//Epoch time of the orbital elements.
+                 0,//xndot; unused in the sgp4 function.
+                 0,//xnddot; unused in the sgp4 function.
                  SGP4Elements[6],//BSTAR drag term.
                  SGP4Elements[0],//Eccentricity
                  SGP4Elements[2],//Argument of perigee
@@ -279,7 +282,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
             double *v=retVec+6*i+3;
             int j;
             
-            sgp4(gravConstType, satRec,  deltaT[i]/60.0, r,  v);
+            SGP4Funcs::sgp4(satRec,  deltaT[i]/60.0, r,  v);
             
             //Convert the units from kilometers and kilometers per second
             //to meters and meters per second.

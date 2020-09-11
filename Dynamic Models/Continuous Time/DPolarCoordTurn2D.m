@@ -1,4 +1,4 @@
-function [D,DJacob,DHess,pDpt]=DPolarCoordTurn2D(x,t,qTurn,qSLin)
+function [D,DJacob,DHess,pDpt]=DPolarCoordTurn2D(x,qTurn,qSLin)
 %%DPOLARCOORDTURN2D The continuous-time diffusion matrix function for a 2D
 %              coordinated turn model where the velocity is specified as a
 %              heading and an angle. The turn rate can be specified in
@@ -6,7 +6,7 @@ function [D,DJacob,DHess,pDpt]=DPolarCoordTurn2D(x,t,qTurn,qSLin)
 %              transversal acceleration. Additionally, a linear
 %              acceleration can be given. This diffusion matrix goes with
 %              the drift function aPolarCoordTurn2DOmega and
-%               aPolarCoordTurn2DTrans.
+%              aPolarCoordTurn2DTrans.
 %
 %INPUTS: x The target state for 2D motion where the velocity is given in
 %          terms of heading and speed components. If there is no linear
@@ -27,9 +27,6 @@ function [D,DJacob,DHess,pDpt]=DPolarCoordTurn2D(x,t,qTurn,qSLin)
 %          present. The linear acceleration component changes the speed.
 %          That means that it is the derivative of the speed. The number of
 %          columns in x determine how many copies of D are returned.
-%        t An unused time component so that aPolar2DCV can be used with
-%          Runge-Kutta methods that expect the function to take two
-%          parameters.
 %    qTurn If the turn is specified in terms of a turn rate in radians
 %          per second, then this is the power spectral density of the
 %          turn rate noise having units of radians squared per seconds

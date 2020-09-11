@@ -186,7 +186,7 @@ totalNumCoeffs=(M+1)*(M+2)/2;
 %folder that is in the same folder as this file. This finds the path to
 %this file. 
 ScriptPath=mfilename('fullpath');
-ScriptFolder = fileparts(ScriptPath);
+ScriptFolder=fileparts(ScriptPath);
 
 %First, see if a .mat file with all of the data exists. If so, then use
 %that and ignore everything else.

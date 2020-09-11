@@ -32,8 +32,9 @@ function cartStates=stateSpher2Cart(x,systemType)
 %OUTPUTS: CartStates The 6XN or 9XN set of target states given in Cartesian
 %                    coordinates.
 %
-%The relationship between the Cartesian and spherical coordinates systems
-%is derived in the comments to the function aCVSphere.
+%The derivation is given in "Basic Linear Cartesian Dynamic Models in Local
+%Coordinates" by David F. Crouse. The function aCVSphere is an
+%implementation of a related linear dynamic model.
 %
 %EXAMPLE:
 %Here we note that the results are consistent with the inverse function:

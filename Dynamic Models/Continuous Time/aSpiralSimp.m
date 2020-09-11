@@ -1,4 +1,4 @@
-function [aVals,aJacob,aHess,papt]=aSpiralSimp(xPoints,t,numRetDims)
+function [aVals,aJacob,aHess,papt]=aSpiralSimp(xPoints,numRetDims)
 %%ASPIRALSIMP The drift function for a non-ballistic spiraling target
 %         motion model in 3 dimensions, formulated in a manner such that it
 %         is simple to make a spiraling target follow a nominal trajectory.
@@ -17,9 +17,6 @@ function [aVals,aJacob,aHess,papt]=aSpiralSimp(xPoints,t,numRetDims)
 %                aVal entries will be 0 for them. If only aVals is
 %                requested on the output, then xPoints can be a matrix of
 %                points.
-%              t An unused time component so that aSpiral can be used with
-%                Runge-Kutta methods that expect the function to take two
-%                parameters.
 %     numRetDims If numRetDims=6, then the last 4 elements in xPoints (the
 %                velocity vector of the overall spiraling model and the
 %                spiral rate) are taken to be constants and the returned

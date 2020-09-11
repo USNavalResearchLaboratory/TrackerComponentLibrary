@@ -1,40 +1,56 @@
-function val=rectContainedInRect(rectMin1,rectMax1,rectMin2,rectMax2)
-%RECTCONTAINEDINRECT Determine whether an axis-aligned  rectangle (or a
+function isContained=rectContainedInRect(rectMin1,rectMax1,rectMin2,rectMax2)
+%RECTCONTAINEDINRECT Determine whether an axis-aligned rectangle (or a
 %                    more general axis-aligned hyperrectangle if the number
 %                    of dimensions is not two) is completely engulfed by
 %                    another rectangle. This does not indicate which
 %                    rectangle is contained in the other.
 %
-%INPUTS: rectMin1 A kX1 vector of the lower bounds of each of the
+%INPUTS: rectMin1 A kX1 or 1Xk vector of the lower bounds of each of the
 %                 dimensions of the first k-dimensional hyperrectangle.
-%        rectMax1 A kX1 vector of the upper bounds of the first
+%        rectMax1 A kX1 or 1Xk vector of the upper bounds of the first
 %                 hyperectangle.
-%        rectMin2 A kX1 vector of the lower bounds of the second
+%        rectMin2 A kX1 or 1Xk vector of the lower bounds of the second
 %                 hyperrectangle.
-%        rectMax2 A kX1 vector of the upper bounds of the second
+%        rectMax2 A kX1 or 1Xk vector of the upper bounds of the second
 %                 hyperrectangle.
 %
-%OUTPUTS: val A boolean value that is true if one hyperrectangle is
-%             completely contained in the other and is false otherwise.
+%OUTPUTS: isContained A boolean value that is true if one hyperrectangle
+%             is completely contained in the other and is false otherwise.
 %
 %December 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 k=length(rectMin1);
 
+isContained=true;
 for curIdx=1:k
     if(rectMin1(curIdx)<rectMin2(curIdx))
-        val=false;
-        return
+        isContained=false;
+        break;
     end
     
     if(rectMax1(curIdx)>rectMax2(curIdx))
-       val=false;
-       return
+       isContained=false;
+       break;
     end
 end
 
-val=true;
+if(isContained==true)
+    return;
+end
+
+isContained=true;
+for curIdx=1:k
+    if(rectMin2(curIdx)<rectMin1(curIdx))
+        isContained=false;
+        return;
+    end
+    
+    if(rectMax2(curIdx)>rectMax1(curIdx))
+       isContained=false;
+       return;
+    end
+end
 end
 
 %LICENSE:

@@ -1,7 +1,8 @@
 /* C-style API for DIRECT functions.  SGJ (August 2007). */
 
-//DFC 2015-9-30: Changed malloc to mxMalloc  and free to mxFree for use in Matlab
-//               Also made MAXDIV an input variable rather than a fixed constant.
+//DFC 2015-9-30: Changed malloc to mxMalloc  and free to mxFree for use in
+//               Matlab. Also made MAXDIV an input variable rather than a
+//               fixed constant.
 
 #include "direct-internal.h"
 
@@ -81,7 +82,7 @@ direct_return_code direct_optimize(
 
      if (dimension < 1) return DIRECT_INVALID_ARGS;
 
-     l = (doublereal *) mxMalloc(sizeof(doublereal) * (size_t)dimension * 2);
+     l = (doublereal *) mxMalloc(sizeof(doublereal) * dimension * 2);
      if (!l) return DIRECT_OUT_OF_MEMORY;
      u = l + dimension;
      for (i = 0; i < dimension; ++i) {
@@ -91,7 +92,7 @@ direct_return_code direct_optimize(
      
      direct_direct_(f, x, &dimension, &magic_eps, magic_eps_abs,
 		    &max_feval, &max_iter, 
-            force_stop,
+		    force_stop,
 		    minf,
 		    l, u,
 		    &algmethod,
@@ -100,7 +101,7 @@ direct_return_code direct_optimize(
 		    &fglobal, &fglobal_reltol,
 		    &volume_reltol, &sigma_reltol,
 		    f_data,
-            MAXDIV);
+             MAXDIV);
 
      mxFree(l);
 

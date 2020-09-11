@@ -1,4 +1,4 @@
-function [aDeriv,aJacob,aHess,papt]=aCVRuv(x,t)
+function [aDeriv,aJacob,aHess,papt]=aCVRuv(x)
 %ACVRUV The drift function for a continuous-time motion model where the
 %       the target state is given in monostatic range and u-v direction
 %       cosine coordinates and the motion is constant-velocity in 3D
@@ -8,9 +8,6 @@ function [aDeriv,aJacob,aHess,papt]=aCVRuv(x,t)
 %          [r;u;;v;rDot;uDot;vDot], where r is monostatic range and u and v
 %          are direction cosines. The target is assumed to always be in
 %          front of the radar and not pass behind the radar.
-%        t An unused time component so that aCVSpherical can be used with
-%          Runge-Kutta methods that expect the function to take two
-%          parameters.
 %
 %OUTPUTS: aDeriv The 6XN set of time-derivatives of the N state vectors
 %                under the Cartesian linear motion model in r-u-v
@@ -63,7 +60,7 @@ function [aDeriv,aJacob,aHess,papt]=aCVRuv(x,t)
 % xEndCart=F*xInitCart;
 % RelTol=1e-10;
 % AbsTol=1e-13;
-% xStepsRuv=RKAdaptiveOverRange(xInitRuv,[0;T],@(x,t)aCVRuv(x,t),0.01,0,[],[],RelTol,AbsTol);
+% xStepsRuv=RKAdaptiveOverRange(xInitRuv,[0;T],@(x,t)aCVRuv(x),0.01,0,[],[],RelTol,AbsTol);
 % xEndRuvRK=xStepsRuv(:,end);
 % xEndRuvExact=stateCart2Ruv(xEndCart);
 % max(abs(xEndRuvRK-xEndRuvExact)./xEndRuvExact)
@@ -89,19 +86,17 @@ w=sqrt(w2);
 
 diffV2=1-v2;
 diffV=sqrt(diffV2);
-diffV3=diffV*diffV2;
 
 diffU2=1-u2;
 diffU=sqrt(diffU2);
-diffU3=diffU*diffU2;
 
-uDot2=uDot*uDot;
-vDot2=vDot*vDot;
-w3=w2*w;
+uDot2=uDot.*uDot;
+vDot2=vDot.*vDot;
+w3=w2.*w;
 
 rDDot=-(r*(-uDot2*diffV2-2*u*uDot*v*vDot-diffU2*vDot2))/w2;
-uDDot=-((2*rDot*uDot)/r)-(u*uDot2)/diffU2-(u*diffU*w*(u*uDot*v+vDot-u2*vDot)^2)/(diffU3*w3);
-vDDot=-((2*rDot*vDot)/r)-(v*vDot2)/diffV2-(v*diffV*w*(uDot-uDot*v2+u*v*vDot)^2)/(diffV3*w3);
+uDDot=-((2*rDot*uDot)/r)-u*(vDot2*diffU2+uDot2*diffV2+2*u*v*uDot*vDot)/w2;
+vDDot=-((2*rDot*vDot)/r)-v*(uDot2*diffV2+vDot2*diffU2+2*u*v*uDot*vDot)/w2;
 
 aDeriv=[rDot;uDot;vDot;rDDot;uDDot;vDDot];
 

@@ -1,4 +1,4 @@
-The function getEOP uses Matlab translations of subroutines of a function interp.f that is provided online by the International Earth Rotation Systems Service (IERS). The e-mail exchnage below confirms that this file is not subject to copyright, so there is no problem with creating a derivative work.
+The function getEOP uses Matlab translations of subroutines of a function interp.f that is provided online by the International Earth Rotation Systems Service (IERS). The e-mail exchange below confirms that this file is not subject to copyright, so there is no problem with creating a derivative work.
 
 June 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 

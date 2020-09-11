@@ -27,9 +27,8 @@ numReps=zeros(numVals,1);
 curIdx=1;
 vals(curIdx)=x(1);
 numReps(curIdx)=1;
-
 for i=2:numVals
-    if x(i-1)==x(i)
+    if(x(i-1)==x(i))
         numReps(curIdx)=numReps(curIdx)+1;
     else
         curIdx=curIdx+1;

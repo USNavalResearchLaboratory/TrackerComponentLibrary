@@ -153,7 +153,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     switch(mxGetClassID(codeArray)){
         case mxCHAR_CLASS:
         {
-            mxChar *code=reinterpret_cast<mxChar*>(mxGetData(codeArray));
+            mxChar *code=mxGetChars(codeArray);
             
             if(nCard==static_cast<size_t>(code[n-1])&&nCard!=0) {
                 lastPassed=true;
@@ -164,7 +164,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         }
         case mxLOGICAL_CLASS:
         {
-            mxLogical* code=reinterpret_cast<mxLogical*>(mxGetData(codeArray)); 
+            mxLogical* code=mxGetLogicals(codeArray); 
             
             if(nCard==static_cast<size_t>(code[n-1])&&nCard!=0) {
                 lastPassed=true;
@@ -175,7 +175,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         }
         case mxDOUBLE_CLASS:
         {
-            double* code=reinterpret_cast<double*>(mxGetData(codeArray));
+            double* code=mxGetDoubles(codeArray);
             
             if(nCard==static_cast<size_t>(code[n-1])&&nCard!=0) {
                 lastPassed=true;
@@ -186,7 +186,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         }
         case mxSINGLE_CLASS:
         {
-            float* code=reinterpret_cast<float*>(mxGetData(codeArray));
+            float* code=mxGetSingles(codeArray);
             
             if(nCard==static_cast<size_t>(code[n-1])&&nCard!=0) {
                 lastPassed=true;
@@ -197,7 +197,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         }
         case mxINT8_CLASS:
         {
-            int8_T* code=reinterpret_cast<int8_T*>(mxGetData(codeArray));
+            int8_T* code=mxGetInt8s(codeArray);
             
             if(nCard==static_cast<size_t>(code[n-1])&&nCard!=0) {
                 lastPassed=true;
@@ -208,7 +208,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         }
         case mxUINT8_CLASS:
         {
-            uint8_T* code=reinterpret_cast<uint8_T*>(mxGetData(codeArray));
+            uint8_T* code=mxGetUint8s(codeArray);
             
             if(nCard==static_cast<size_t>(code[n-1])&&nCard!=0) {
                 lastPassed=true;
@@ -219,7 +219,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         }
         case mxINT16_CLASS:
         {
-            int16_T* code=reinterpret_cast<int16_T*>(mxGetData(codeArray));
+            int16_T* code=mxGetInt16s(codeArray);
             
             if(nCard==static_cast<size_t>(code[n-1])&&nCard!=0) {
                 lastPassed=true;
@@ -230,7 +230,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         }
         case mxUINT16_CLASS:
         {
-            uint16_T* code=reinterpret_cast<uint16_T*>(mxGetData(codeArray));
+            uint16_T* code=mxGetUint16s(codeArray);
             
             if(nCard==static_cast<size_t>(code[n-1])&&nCard!=0) {
                 lastPassed=true;
@@ -241,7 +241,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         }
         case mxINT32_CLASS:
         {
-            int32_T* code=reinterpret_cast<int32_T*>(mxGetData(codeArray));
+            int32_T* code=mxGetInt32s(codeArray);
             
             if(nCard==static_cast<size_t>(code[n-1])&&nCard!=0) {
                 lastPassed=true;
@@ -252,7 +252,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         }
         case mxUINT32_CLASS:
         {
-            uint32_T* code=reinterpret_cast<uint32_T*>(mxGetData(codeArray));
+            uint32_T* code=mxGetUint32s(codeArray);
             
             if(nCard==static_cast<size_t>(code[n-1])&&nCard!=0) {
                 lastPassed=true;
@@ -263,7 +263,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         }
         case mxINT64_CLASS:
         {
-            int64_T* code=reinterpret_cast<int64_T*>(mxGetData(codeArray));
+            int64_T* code=mxGetInt64s(codeArray);
             
             if(nCard==static_cast<size_t>(code[n-1])&&nCard!=0) {
                 lastPassed=true;
@@ -274,7 +274,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         }
         case mxUINT64_CLASS:
         {
-            uint64_T* code=reinterpret_cast<uint64_T*>(mxGetData(codeArray));   
+            uint64_T* code=mxGetUint64s(codeArray);   
             
             if(nCard==static_cast<size_t>(code[n-1])&&nCard!=0) {
                 lastPassed=true;
@@ -302,8 +302,12 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         plhs[0]=mxCreateDoubleMatrix(0, 0, mxREAL);
         if(nlhs>1) {
             mxArray *nCardMat=allocUnsignedSizeMatInMatlab(1, 1);
-            *reinterpret_cast<size_t*>(mxGetData(nCardMat))=n;
-
+            if(sizeof(size_t)==4) {//32 bit
+                *reinterpret_cast<size_t*>(mxGetUint32s(nCardMat))=n;
+            } else {//64 bit
+                *reinterpret_cast<size_t*>(mxGetUint64s(nCardMat))=n;
+            }
+ 
             plhs[1]=nCardMat;
             if(nlhs>2) {
                 //This is isLast
@@ -323,8 +327,12 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     plhs[0]=codeArray;
     if(nlhs>1) {
         mxArray *nCardMat=allocUnsignedSizeMatInMatlab(1, 1);
-        *reinterpret_cast<size_t*>(mxGetData(nCardMat))=nCard;
-        
+        if(sizeof(size_t)==4) {//32 bit
+            *reinterpret_cast<size_t*>(mxGetUint32s(nCardMat))=nCard;
+        } else {//64 bit
+            *reinterpret_cast<size_t*>(mxGetUint64s(nCardMat))=nCard;
+        }
+
         plhs[1]=nCardMat;
         if(nlhs>2) {
             //This is isLast
@@ -334,7 +342,12 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
                 mxArray *jMat=allocUnsignedSizeMatInMatlab(1, 1);
                 //Increment j to be an index for Matlab.
                 j++;
-                *reinterpret_cast<size_t*>(mxGetData(jMat))=j;
+                
+                if(sizeof(size_t)==4) {//32 bit
+                    *reinterpret_cast<size_t*>(mxGetUint32s(jMat))=j;
+                } else {//64 bit
+                    *reinterpret_cast<size_t*>(mxGetUint64s(jMat))=j;
+                }
                 
                 plhs[3]=jMat;
             }

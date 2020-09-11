@@ -1,4 +1,4 @@
-/**%%CALC2DASSIGNMENTPROBS  A C++ implementation of an algorithm that,
+/**CALC2DASSIGNMENTPROBS  A C++ implementation of an algorithm that,
 *                given a matrix of all-positive likelihood ratios,
 *                determines the probability that each row is assigned to
 *                each target. Whereas the assign2D algorithm provides the
@@ -14,34 +14,35 @@
 *                measurements and the final numRow columns have missed
 *                detection likelihoods.
 *
-*INPUTS:    A  A matrix of positive likelihoods or likelihood ratios (NOT
-%              log-likelihood ratios). If diagAugment=true, then A is a
-%              numTar X  (numMeas+numTar) matrix of all-positive
-%              likelihoods or likelihood ratios  for assigning the target
-%              specified by the row to the measurement specified by the
-%              column. Columns > numMeas hold missed-detection likelihoods/
-%              likelihood ratios. Thus, off-diagonal terms for columns >
-%              numMeas should be set to 0 and the diagonal terms set to the
-%              costs of a missed detection for each given target.
-*  diagAugment A boolean variable indicating whether the probabilties
-*              should be found for a general assignment problem or assuming
-*              A ends with a diagonal submatrix of missed detection
-*              probabilities. The default if omitted is false (the general
-*              problem). Setting diagAugment to true changes the shape of
-*              the output.
+*INPUTS: A A matrix of positive likelihoods or likelihood ratios (NOT log-
+*          likelihood ratios). If diagAugment=true, then A is a
+*          numTarX(numMeas+numTar) matrix of all-positive likelihoods or
+*          likelihood ratios for assigning the target specified by the row
+*          to the measurement specified by the column. Columns > numMeas
+*          hold missed-detection likelihoods/ likelihood ratios. Thus, off-
+*          diagonal terms for columns > numMeas should be set to 0 and the
+*          diagonal terms set to the costs of a missed detection for each
+*          given target.
+* diagAugment A boolean variable indicating whether the probabilties
+*          should be found for a general assignment problem or assuming A
+*          ends with a diagonal submatrix of missed detection
+*          probabilities. The default if omitted is false (the general
+*          problem). Setting diagAugment to true changes the shape of the
+*          output. The default if omitted is false. See the description of
+*          the output beta for how this affects the output.
 *
-*OUTPUTS:  beta If diagAugment is omitted or false, then beta has the same
-*               dimensionality as A and hold the probability of assigning
-*               each row to each column in the traditional 2D assignment
-*               problem (Each row must be assigned to at least one column,
-*               each column can be assigned to at most one row, or vice
-*               versa if there are more rows than columns. If diagAugment
-*               is true, then beta is a numTar X (numMeas+1) matrix of
-*               probabilities of assigning the target given by the row to
-*               the measurement given by the column. The final column is a
-*               set of missed detection probabilities. Thus, in this case,
-*               beta has fewer columns as A, because the final numRow
-*               columns are collapsed into one column on return.
+*OUTPUTS: beta If diagAugment is omitted or false, then beta has the same
+*              dimensionality as A and hold the probability of assigning
+*              each row to each column in the traditional 2D assignment
+*              problem (Each row must be assigned to at least one column,
+*              each column can be assigned to at most one row, or vice
+*              versa if there are more rows than columns. If diagAugment
+*              is true, then beta is a numTar X (numMeas+1) matrix of
+*              probabilities of assigning the target given by the row to
+*              the measurement given by the column. The final column is a
+*              set of missed detection probabilities. Thus, in this case,
+*              beta has fewer columns than A, because the final numRow
+*              columns are collapsed into one column on return.
 *
 *Details of the algorithm are given in the comments to the Matlab
 *implementation.
@@ -81,8 +82,8 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         mexErrMsgTxt("Too many outputs.");
     }
     
-    numRow = mxGetM(prhs[0]);
-    numCol = mxGetN(prhs[0]);
+    numRow=mxGetM(prhs[0]);
+    numCol=mxGetN(prhs[0]);
     
     //If an empty matrix is passed, then return an empty matrix.
     if(numRow==0||numCol==0) {
@@ -97,7 +98,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     }
     
     //Get the matrix.
-    A=(double*)mxGetData(prhs[0]);
+    A=mxGetDoubles(prhs[0]);
     
     //If we are solving the general probability problem.
     if(diagAugment==false) {
@@ -112,7 +113,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         //Allocate the return values.
         numBetaCols=numCol;
         betaMatlab=mxCreateDoubleMatrix(numRow,numBetaCols,mxREAL);
-        beta=(double*)mxGetData(betaMatlab);
+        beta=mxGetDoubles(betaMatlab);
         
         //Allocate the space for the indices of the rows and columns that
         //are kept in the submatrix to be passed to the permCPPSkip
@@ -166,7 +167,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
 
         //Allocate the return values.
         betaMatlab=mxCreateDoubleMatrix(numRow,numBetaCols,mxREAL);
-        beta=(double*)mxGetData(betaMatlab);
+        beta=mxGetDoubles(betaMatlab);
 
         //Allocate the space for the indices of the rows and columns
         //that are kept in the submatrix to be passed to the

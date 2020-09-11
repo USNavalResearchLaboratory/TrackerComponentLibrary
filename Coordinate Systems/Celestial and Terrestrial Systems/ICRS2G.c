@@ -61,18 +61,18 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     
     checkRealDoubleArray(prhs[0]);
     
-    numRow = mxGetM(prhs[0]);
-    numVec = mxGetN(prhs[0]);
+    numRow=mxGetM(prhs[0]);
+    numVec=mxGetN(prhs[0]);
     
     if(!(numRow==2||numRow==3)) {
         mexErrMsgTxt("The input vector has a bad dimensionality.");
     }
 
-    xVec=(double*)mxGetData(prhs[0]);
+    xVec=mxGetDoubles(prhs[0]);
     
     //Allocate space for the return vectors.
     retMat=mxCreateDoubleMatrix(numRow,numVec,mxREAL);
-    retData=(double*)mxGetData(retMat);
+    retData=mxGetDoubles(retMat);
     
     if(numRow==3) {
         for(curVec=0;curVec<numVec;curVec++) {

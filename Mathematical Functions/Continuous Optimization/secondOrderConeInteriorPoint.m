@@ -227,7 +227,7 @@ for curIter=1:maxIter
     
     while(1)
         if(boolValPrev==true)
-            if(lk==0);
+            if(lk==0)
                 break;
             end
             lk=lk-1;

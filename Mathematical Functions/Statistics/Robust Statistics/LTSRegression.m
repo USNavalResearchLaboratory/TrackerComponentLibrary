@@ -50,7 +50,7 @@ function [theta,b,QMin]=LTSRegression(x,y,h)
 % yEst=theta*xEst+b;
 % plot(xEst,yEst,'-r','linewidth',2)
 % axis([-30-20,70+20,-30-20,50+20])%Zoom in.
-% legend('Samples','Least Squares Fit','LMS Fit','location','NorthWest')
+% legend('Samples','Least Squares Fit','LTS Fit','location','NorthWest')
 % h1=xlabel('x');
 % h2=ylabel('y');
 % set(gca,'FontSize',14,'FontWeight','bold','FontName','Times')

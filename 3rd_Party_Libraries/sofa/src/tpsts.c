@@ -57,9 +57,9 @@ void iauTpsts(double xi, double eta, double a0, double b0,
 **
 **  This revision:   2018 January 2
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
    double sb0, cb0, d;
@@ -74,7 +74,7 @@ void iauTpsts(double xi, double eta, double a0, double b0,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
@@ -167,5 +167,4 @@ void iauTpsts(double xi, double eta, double a0, double b0,
 **                 United Kingdom
 **
 **--------------------------------------------------------------------*/
-
 }

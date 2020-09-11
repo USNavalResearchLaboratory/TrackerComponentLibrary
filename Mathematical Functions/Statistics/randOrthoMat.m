@@ -10,7 +10,7 @@ function randOrthoMat=randOrthoMat(numDim)
 %               matrix should have.
 %
 %OUTPUTS: randOrthoMat A numDimXnumDim random orthogonal matrix with a
-%               determininant of either +1 or -1.
+%                     determinant of either +1 or -1.
 %
 %As noted in [1], random orthogonal matrices can be obtained by first
 %gennerating a matrix of independent standard normal random variables, then

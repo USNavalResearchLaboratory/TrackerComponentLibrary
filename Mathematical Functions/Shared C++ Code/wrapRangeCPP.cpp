@@ -3,7 +3,7 @@
  *             back off the end (wrapRangeMirrorCPP).
  *
  *This function is a C++ implementation of the function wrapRange in
- *Matlab. See the function wrapRange for more details on the
+ *Matlab. See the Matlab function wrapRange for more details on the
  *implementation.
  *
  *December 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.

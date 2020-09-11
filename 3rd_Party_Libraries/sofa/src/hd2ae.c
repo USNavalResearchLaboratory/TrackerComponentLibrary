@@ -63,9 +63,9 @@ void iauHd2ae (double ha, double dec, double phi,
 **
 **  Last revision:   2017 September 12
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
    double sh, ch, sd, cd, sp, cp, x, y, z, r, a;
@@ -94,7 +94,7 @@ void iauHd2ae (double ha, double dec, double phi,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
@@ -187,5 +187,4 @@ void iauHd2ae (double ha, double dec, double phi,
 **                 United Kingdom
 **
 **--------------------------------------------------------------------*/
-
 }

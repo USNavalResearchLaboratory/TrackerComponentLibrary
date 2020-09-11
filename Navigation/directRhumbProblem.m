@@ -1,55 +1,71 @@
-function latLonEnd=directRhumbProblem(latLonStart,azimuth,dist,height,a,f,numSteps4Circ)
-%%DIRECTRHUMBLINEPROBLEM Given a starting location on the surface of the
-%                        reference ellipsoid as well as a constant heading
-%                        a distance to travel, determine the location of a
-%                        vessel traveling at the constant heading after
-%                        traveling the distance. A constant heading
-%                        trajectory is a rhumb line (loxodrome) and is
-%                        usually not the shortest path between two points.
+function latLonEnd=directRhumbProblem(latLonStart,azimuth,dist,algorithm,a,f)
+%%DIRECTRHUMBPROBLEM Given a starting location on the surface of the
+%                 reference ellipsoid as well as a constant heading a
+%                 distance to travel, determine the location of a vessel
+%                 traveling at the constant heading after traveling the
+%                 distance. A constant heading trajectory is a rhumb line
+%                 (loxodrome) and is usually not the shortest path between
+%                 two points.
 %
 %INPUTS: latLonStart A 2X1 vector of the starting ellipsoidal latitude
-%                    (North) and longitude (East) in radians.
+%                    (North) and longitude (East) in radians. This cannot
+%                    be a pole (cannot be +/-pi/2).
 %            azimuth The constant heading that is to be traveled in
 %                    radians East of North.
-%               dist The distance that is to be traveled on a constant
-%                    heading course.
-%             height The heights above the reference ellipsoid at which the
-%                    trajectoriey should be determined. If this parameter
-%                    is omitted, then the default value of 0 is used.
+%               dist The NX1 or 1XN set of distances on the ellipsoid-
+%                    approximated Earth starting from latLonStart where one
+%                    wishes to find the stopping point. The distances must
+%                    be less than the rhumb distance to reach the pole or
+%                    invalid results will be obtained.
+%          algorithm An optional parameter specifying the algorithm to use.
+%                    Possible values are:
+%                    0 Use the algorithm of [1] coupled with a formula
+%                      using isometric latitudes, which are described in
+%                      Chapter 3 of [2] to get the azimuth angle.
+%                    1 Use the explicit approximation of [4].
 %                  a The semi-major axis of the reference ellipsoid. If
-%                    this argument is omitted, the value in
-%                    Constants.WGS84SemiMajorAxis is used.
+%                    this argument is omitted or an empty matrix is passed,
+%                    the value in Constants.WGS84SemiMajorAxis is used.
 %                  f The flattening factor of the reference ellipsoid. If
-%                    this argument is omitted, the value in
-%                    Constants.WGS84Flattening is used.
-%      numSteps4Circ If height!=0, then an algorithm propagating a state in
-%                    ECEF coordinates around the curved Earth is used. This
-%                    parameter determines the number of steps that would be
-%                    needed for a target that circumnavigates the globe
-%                    around the equator. The default value if this
-%                    parameter is not provided is 2000. A value of 6000
-%                    appears to be about the best number for overall
-%                    precision. Reducing the number of steps will speed up
-%                    the function. This parameter is not used if height=0.
+%                    this argument is omitted or an empty matrix is passed,
+%                    the value in Constants.WGS84Flattening is used.
 %
 %OUTPUTS: latLonEnd The ellipsoidal latitude and longitude that one will be
 %                    after starting at latLonStart and traveling a distance
 %                    of dist at a constant heading on azimuth.
 %
-%The algorithm for zero-altitude is taken from [1]. However, a formula
-%using isometric latitudes, which are described in Chapter 3 of [2] to get
-%the azimuth angle was used, because it is simpler. The formula is
-%also explicitly mentioned in Equation 2 of [3]. However, the expression
-%for computing the distance from [3] is only for a sphere, not for an
-%ellipsoid, which is why the Carlton-Wippern distance computation using an
-%incomplete elliptic integral of the second kind is preferred.
+%Algorithm 0 is taken from [1]. However, a formula using isometric
+%latitudes, which are described in Chapter 3 of [2] to get the azimuth
+%angle was used, because it is simpler. The formula is also explicitly
+%mentioned in Equation 2 of [3]. However, the expression for computing the
+%distance from [3] is only for a sphere, not for an ellipsoid, which is why
+%the Carlton-Wippern distance computation using an incomplete elliptic
+%integral of the second kind is preferred.
 %
-%The algorithm is generally the opposite of indirectRhumbProblem, except
-%when a starting or ending point is at a geographic pole, as discussed in
-%the comments to the indirectRhumbProblem function.
+%Both techniques have singularities with azimuth values near +/-pi/2, and
+%different approximations are used. Algorithm 0 is slower than 1 but is
+%more accurate.
 %
-%The solution for a non-zero altitude is based on [4]. The function is
-%significantly faster if a zero altitude is used.
+%EXAMPLE:
+%We show that after solving
+%the indirect rhumb problem, the trajectory obtained leads to the
+%desired enpoint when given to directRhumbProb. We also show the error
+%incurred by using algorithm 1, which is faster.
+% latStart=degMinSec2Rad(37,47.5);
+% lonStart=degMinSec2Rad(-122,-27.8);
+% latEnd=degMinSec2Rad(-33,-51.7);
+% lonEnd=degMinSec2Rad(151,12.7);
+% latLonStart=[latStart;lonStart];
+% latLonEnd=[latEnd;lonEnd];
+% 
+% [azStart,dist]=indirectRhumbProblem(latLonStart,latLonEnd);
+% latLonPoint0=directRhumbProblem(latLonStart,azStart,dist,0);
+% latLonPoint1=directRhumbProblem(latLonStart,azStart,dist,1);
+% max(abs(wrapRange(latLonPoint0-latLonEnd,-pi,pi)))
+% max(abs(wrapRange(latLonPoint1-latLonEnd,-pi,pi)))
+%One will see that the value from algorithm 0 is pretty much exact, whereas
+%the value from algorithm 1, the approximationm, is close but still notably
+%different.
 %
 %REFERENCES:
 %[1] K. C. Carlton-Wippern, "On loxodromic navigation," Journal of 
@@ -58,149 +74,197 @@ function latLonEnd=directRhumbProblem(latLonStart,azimuth,dist,height,a,f,numSte
 %    Survey, Tech. Rep. 1395, 1987.
 %[3] J. Alexander, "Loxodromes: A rhumb way to go," Mathematics Magazine,
 %    vol. 77, no. 5, pp. 349-356, Dec. 2004.
-%[4] D. F. Crouse, "Simulating aerial targets in 3D accounting for the
-%    Earth's curvature," Journal of Advances in Information Fusion, vol.
-%    10, no. 1, Jun. 2015.
+%[4] G. H. Kaplan, "Practical Sailing Formulas for Rhumb-Line Tracks on an
+%    Oblate Earth," Navigation: Journal of the Institute of Navigation,
+%    vol. 42, no. 2, pp. 313-326 Summer 1995.
 %
-%October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%August 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
-
-if(nargin<7||isempty(numSteps4Circ))
-%This is the number of steps that would be taken to travel a distance of
-%2*pi*a (circumnavigate the globe the long way). This is a design parameter
-%that should be large enough to ensure that the results are accurate.
-%However, if it is too large, finite precision errors will accumulate.
-    numSteps4Circ=2000;
-end
 
 if(nargin<6||isempty(f))
     f=Constants.WGS84Flattening;
 end
 
-if(nargin<5||isempty(f))
+if(nargin<5||isempty(a))
     a=Constants.WGS84SemiMajorAxis;
 end
 
-if(nargin<4||isempty(height))
-   height=0; 
+if(nargin<4||isempty(algorithm))
+    algorithm=0;
 end
 
-if(height==0)
-    latStart=latLonStart(1);
-    lonStart=latLonStart(2);
-
-    %The first numerical eccentricity of the ellipsoid.
-    e=sqrt(2*f-f^2);
-
-    %Convert the ellipsoidal latitudes to a reduced co-latitude. A co-latitude
-    %is pi/2 minus the latitude.
-    nu1=pi/2-ellipsLat2ReducedLat(latStart,f);
-
-    %Make sure that the azimuth is in the range of -pi to pi.
-    azimuth=wrapRange(azimuth,-pi,pi,false);
-
-    %If the azimuth is too close to due East/West, then use the solution for
-    %due East/West to avoid numerical precision issues. Otherwise, use the
-    %solution for other headings in general.
-    if(abs(abs(azimuth)-pi/2)>2e-8)
-        %The solution for general headings.
-
-        %The following sets up and performs the iteration from Equation 13,
-        %which inverts the incomplete elliptic function of the second kind
-        %using Newton's method.
-        nu2=nu1;
-        if(-pi/2<azimuth&&azimuth<pi/2)
-            signVal=1;
-        else
-            signVal=-1;
+switch(algorithm)
+    case 0
+        dist=dist(:);
+        N=length(dist);
+        
+        latLonEnd=zeros(2,N);
+        
+        for k=1:N
+            latLonEnd(:,k)=directRhumbProbCarlton(latLonStart,azimuth,dist(k),a,f);
         end
+    case 1
+        latLonEnd=directRhumbProblemKaplan(latLonStart,azimuth,dist,a,f);
+    otherwise
+        error('Unknown algorithm specified.')
+end
+end
 
-        %It seems to converge in under 6 iterations
-        numIter=6;
-        for curIter=1:numIter
-            num=abs(ellipIntInc2Kind(nu2,e^2)-ellipIntInc2Kind(nu1,e^2))-dist*abs(cos(azimuth))/a;
-            denom=sqrt(1-e^2*sin(nu2)^2);
+function latLonEnd=directRhumbProbCarlton(latLonStart,azimuth,dist,a,f)
+%%DURECTRHUMBPROBCARLTON Solve the direct rhumb problem using the iterative
+%             approximation in [1]. A formula using isometric latitudes,
+%             which are described in Chapter 3 of [2] to get the azimuth
+%             angle was used, because it is simpler than the formula of [1].
+%
+%REFERENCES:
+%[1] K. C. Carlton-Wippern, "On loxodromic navigation," Journal of 
+%    Navigation, vol. 45, no. 2, pp. 292-297, May 1992.
+%
+%October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-            nu2=nu2+signVal*num/denom;
-        end
+latStart=latLonStart(1);
+lonStart=latLonStart(2);
 
-        %Convert the reduced co-latitude of the ending point to an ellipsoidal
-        %latitude. 
-        latEnd=reducedLat2EllipsLat(pi/2-nu2,f);
+%The first numerical eccentricity of the ellipsoid.
+e=sqrt(2*f-f^2);
 
-        %Next, we want to find the ending longitude. This could be done using
-        %equation 11 in the Carlton-Wippern paper. However, we are going to do
-        %it using isometric latitudes, since it is simpler.
-        lonEnd=lonStart+tan(azimuth)*(ellipsLat2IsoLat(latEnd,f)-ellipsLat2IsoLat(latStart,f));
+%Convert the ellipsoidal latitudes to a reduced co-latitude. A co-
+%latitude is pi/2 minus the latitude.
+nu1=pi/2-ellipsLat2ReducedLat(latStart,f);
 
-        %However, if the trajectory is too close to 0/ 180 degrees, then the
-        %ellipsLat2IsoLat function might not be finite, in which case the
-        %difference will be a NaN, rather than 0. Thus, we will check for that
-        %case. In such an instance, the ending longitude is just set to the
-        %starting latitude.
-        if(~isfinite(lonEnd))
-           lonEnd=lonStart; 
-        end
+%Make sure that the azimuth is in the range of -pi to pi.
+azimuth=wrapRange(azimuth,-pi,pi,false);
+
+%If the azimuth is too close to due East/West, then use the solution for
+%due East/West to avoid numerical precision issues. Otherwise, use the
+%solution for other headings in general.
+if(abs(abs(azimuth)-pi/2)>1e-8)
+    %The solution for general headings.
+
+    %The following sets up and performs the iteration from Equation 13,
+    %which inverts the incomplete elliptic function of the second kind
+    %using Newton's method.
+    nu2=nu1;
+    if(-pi/2<azimuth&&azimuth<pi/2)
+        signVal=1;
     else
-        %The solution for East-West headings. This inverts equation 14b to get
-        %the ending longitude.
-
-        %If it is going East (positive direction)
-        if(abs(azimuth-pi/2)<abs(azimuth+pi/2))
-            signVal=1;
-        else
-            signVal=-1;
-        end
-        lonEnd=lonStart+signVal*dist/(a*abs(sin(nu1)));
-
-        %If one tries to have an East-West trajectory at the pole, then the
-        %denominator above will be 0. This keeps it from returning a NaN.
-        if(~isfinite(lonEnd))
-           lonEnd=lonStart; 
-        end
-
-        latEnd=latStart;
+        signVal=-1;
     end
-        %Make sure that the longitude is within the proper range.
-        latLonEnd=[latEnd;wrapRange(lonEnd,-pi,pi,false)];
+
+    %It seems to converge in under 6 iterations
+    numIter=6;
+    for curIter=1:numIter
+        num=abs(ellipIntInc2Kind(nu2,e^2)-ellipIntInc2Kind(nu1,e^2))-dist*abs(cos(azimuth))/a;
+        denom=sqrt(1-e^2*sin(nu2)^2);
+
+        nu2=nu2+signVal*num/denom;
+    end
+
+    %Convert the reduced co-latitude of the ending point to an ellipsoidal
+    %latitude. 
+    latEnd=reducedLat2EllipsLat(pi/2-nu2,f);
+
+    %Next, we want to find the ending longitude. This could be done using
+    %equation 11 in the Carlton-Wippern paper. However, we are going to do
+    %it using isometric latitudes, since it is simpler.
+    lonEnd=lonStart+tan(azimuth)*(ellipsLat2IsoLat(latEnd,f)-ellipsLat2IsoLat(latStart,f));
+
+    %However, if the trajectory is too close to 0/ 180 degrees, then the
+    %ellipsLat2IsoLat function might not be finite, in which case the
+    %difference will be a NaN, rather than 0. Thus, we will check for that
+    %case. In such an instance, the ending longitude is just set to the
+    %starting latitude.
+    if(~isfinite(lonEnd))
+       lonEnd=lonStart; 
+    end
 else
-    %If the height is not zero, then use the algorithm for propagating a
-    %level, non-maneuvering dynamic model along a rhumb line forward in
-    %time.
+    %The solution for East-West headings. This inverts equation 14b to get
+    %the ending longitude.
 
-    %This is the number of Runge-Kutta steps on a curved Earth that will be
-    %performed.
-    numSteps=ceil(numSteps4Circ*(dist/(2*pi*a)));
-    stepSize=1/numSteps;
-    
-    %We have to calculate the initial location and heading in CARTESIAN
-    %ECEF coordinates.
-    xyzInit=ellips2Cart([latLonStart;height],a,f);
-    
-    %The initial heading in the LOCAL East-North-Up tangent-plane
-    %coordinate system for level flight.
-    uh=[sin(azimuth);cos(azimuth);0];
-    
-    %The speed of the target is such that it travels a distance of dist in
-    %1 unit of time.
-    speed=dist;
-    
-    %The initial target state with the position in the GLOBAL ECEF
-    %coordinate system and the velocity in a LOCAL flat-Earth coordinate
-    %system.
-    xInit=[xyzInit;speed*uh];
-    
-    aDyn=@(x,t)aPoly(x,t,3);%A constant velocity model.
+    %If it is going East (positive direction)
+    if(abs(azimuth-pi/2)<abs(azimuth+pi/2))
+        signVal=1;
+    else
+        signVal=-1;
+    end
+    lonEnd=lonStart+signVal*dist/(a*abs(sin(nu1)));
 
-    %When traveling along a rhumb-line, the local coordinate system is
-    %known at all times: it is the local ENU coordinate system. The local
-    %basis vectors are deterministially known at all places on the Earth.
-    uDet=@(x,t)getENUAxes(Cart2Ellipse(x(1:3),[],a,f));
-    xList=RungeKCurvedAtTimes(xInit,[],[0;1],aDyn,uDet,stepSize,4);
-    plhEnd=Cart2Ellipse(xList(1:3,end),[],a,f);
-    latLonEnd=plhEnd(1:2);%The Cartesian location at the end of the
-                          %trajectory.
+    %If one tries to have an East-West trajectory at the pole, then the
+    %denominator above will be 0. This keeps it from returning a NaN.
+    if(~isfinite(lonEnd))
+        lonEnd=lonStart; 
+    end
+
+    latEnd=latStart;
 end
+%Make sure that the longitude is within the proper range.
+latLonEnd=[latEnd;wrapRange(lonEnd,-pi,pi,false)];
+
+end
+
+function latLonEnd=directRhumbProblemKaplan(latLonStart,azimuth,dist,a,f)
+%%DIRECTRHUMBPROBKAPLAN Solve the direct rhumb problem using the explcit
+%                       approximation in [1].
+%
+%This is a non-iterative approximation that is significantly better than a
+%spherical Earth approximation.
+%
+%REFERENCES:
+%[1] G. H. Kaplan, "Practical Sailing Formulas for Rhumb-Line Tracks on an
+%    Oblate Earth," Navigation: Journal of the Institute of Navigation,
+%    vol. 42, no. 2, pp. 313-326 Summer 1995.
+%
+%August 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+if(nargin<5||isempty(f))
+    f=Constants.WGS84Flattening;
+end
+
+if(nargin<4||isempty(f))
+    a=Constants.WGS84SemiMajorAxis;
+end
+
+phi0=latLonStart(1);
+lambda0=latLonStart(2);
+
+%The first numerical eccentricity of the ellipsoid.
+e=sqrt(2*f-f^2);
+
+eSinPhi0=e*sin(phi0);
+if(abs(abs(azimuth)-pi/2)>1e-8)
+    %If it is not nearly a +/- 90 degree heading.
+    
+    M0=1/sqrt(1-eSinPhi0^2)^3;
+    M=a*(1-e^2)*M0;%Meridian radius of curvature.
+    phiPrime=phi0+dist*cos(azimuth)/M;
+
+    %Equation 13 in [1].
+    phi=phi0+M0*((1-(3/4)*e^2)*(phiPrime-phi0)+(3/8)*e^2*(sin(2*phiPrime)-sin(2*phi0)));
+
+    eSinPhi=e*sin(phi);
+    %Equation 16 in [1].
+    lambda=lambda0+tan(azimuth)*(log(tan(pi/4+phi/2))+...
+           (e/2)*log((1-eSinPhi)./(1+eSinPhi))-...
+           log(tan(pi/4+phi0/2))-(e/2)*log((1-eSinPhi0)/(1+eSinPhi0)));
+else
+    M=a*(1-e^2)/sqrt(1-eSinPhi0^2)^3;
+    phiPrime=phi0+dist*cos(azimuth)/M;
+    
+    %Prime vertical radius of curvature.
+    N0=a/sqrt(1-eSinPhi0^2);
+        
+    %These expressions are in Equation 17 in [1].
+    phi=phiPrime;
+    lambda=lambda0+dist*sin(azimuth)./(N0*cos((1/2)*(phi0+phiPrime)));
+    
+    %The zero azimuth, case where the denominatot above is zero.
+    sel=~isfinite(lambda);
+    lambda(sel)=lambda0(sel);
+end
+
+latLonEnd=[phi;lambda];
 end
 
 %LICENSE:

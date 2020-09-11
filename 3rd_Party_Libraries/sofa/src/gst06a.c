@@ -67,9 +67,9 @@ double iauGst06a(double uta, double utb, double tta, double ttb)
 **
 **  This revision:  2013 June 18
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
    double rnpb[3][3], gst;
@@ -85,7 +85,7 @@ double iauGst06a(double uta, double utb, double tta, double ttb)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

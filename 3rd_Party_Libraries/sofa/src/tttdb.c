@@ -50,11 +50,11 @@ int iauTttdb(double tt1, double tt2, double dtr,
 **
 **     IAU 2006 Resolution 3
 **
-**  This revision:  2013 June 18
+**  This revision:  2019 June 20
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
    double dtrd;
@@ -62,7 +62,7 @@ int iauTttdb(double tt1, double tt2, double dtr,
 
 /* Result, safeguarding precision. */
    dtrd = dtr / DAYSEC;
-   if ( tt1 > tt2 ) {
+   if ( fabs(tt1) > fabs(tt2) ) {
       *tdb1 = tt1;
       *tdb2 = tt2 + dtrd;
    } else {
@@ -75,7 +75,7 @@ int iauTttdb(double tt1, double tt2, double dtr,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

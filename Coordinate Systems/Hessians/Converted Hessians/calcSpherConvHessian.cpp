@@ -96,16 +96,16 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     }
 
     checkRealDoubleArray(prhs[0]);
-    zSpher=reinterpret_cast<double*>(mxGetData(prhs[0]));
-
-    if(systemType!=0&&systemType!=1&&systemType!=2) {
-        mexErrMsgTxt("Unknown system type specified.");
-    }
+    zSpher=mxGetDoubles(prhs[0]);
     
     if(nrhs>1&&!mxIsEmpty(prhs[1])) {
         systemType=getSizeTFromMatlab(prhs[1]);
     } else {
         systemType=0;
+    }
+    
+    if(systemType!=0&&systemType!=1&&systemType!=2) {
+        mexErrMsgTxt("Unknown system type specified.");
     }
     
     if(nrhs<3||mxIsEmpty(prhs[2])) {
@@ -127,7 +127,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         dims[2]=3;
             
         HMATLAB=mxCreateNumericArray(3,dims,mxDOUBLE_CLASS,mxREAL);
-        H=reinterpret_cast<double*>(mxGetData(HMATLAB));
+        H=mxGetDoubles(HMATLAB);
     }
     
     if(nrhs>3) {
@@ -137,7 +137,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             }
             checkRealDoubleArray(prhs[3]);
 
-            lTx=reinterpret_cast<double*>(mxGetData(prhs[3]));
+            lTx=mxGetDoubles(prhs[3]);
         } else {
             lTx=zeros;
         }
@@ -148,7 +148,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             }
             checkRealDoubleArray(prhs[4]);
 
-            lRx=reinterpret_cast<double*>(mxGetData(prhs[4]));
+            lRx=mxGetDoubles(prhs[4]);
         } else {
             lRx=zeros;
         }
@@ -159,7 +159,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             }
 
             checkRealDoubleArray(prhs[5]);
-            M=reinterpret_cast<double*>(mxGetData(prhs[5]));
+            M=mxGetDoubles(prhs[5]);
         } else {
             M=identMat;
         }

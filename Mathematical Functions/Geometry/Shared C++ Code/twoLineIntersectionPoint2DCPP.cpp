@@ -13,21 +13,23 @@
 #include "mathGeometricFuncs.hpp"
 
 void twoLineIntersectionPoint2DCPP(const double *line1, const double *line2,double *point) {
-    //detL1=det(line1);
-    const double detL1=line1[0]*line1[3]-line1[1]*line1[2];
-    //detL2=det(line2);
-    const double detL2=line2[0]*line2[3]-line2[1]*line2[2];
-    //deltaL1=-diff(line1,1,2);
-    const double deltaL1[2]={line1[0]-line1[2],line1[1]-line1[3]};
-    //deltaL2=-diff(line2,1,2);
-    const double deltaL2[2]={line2[0]-line2[2],line2[1]-line2[3]};
-    //denom=det([deltaL1,deltaL2]);
-    const double denom=deltaL1[0]*deltaL2[1]-deltaL1[1]*deltaL2[0];
+    const double x1=line1[0];
+    const double y1=line1[1];
+    const double x2=line1[2];
+    const double y2=line1[3];
+    const double x3=line2[0];
+    const double y3=line2[1];
+    const double x4=line2[2];
+    const double y4=line2[3];
+    double num, den;
     
-    //x=det([[detL1;detL2],[deltaL1(1);deltaL2(1)]])/denom;
-    point[0]=(detL1*deltaL2[0]-detL2*deltaL1[0])/denom;
-    //y=det([[detL1;detL2],[deltaL1(2);deltaL2(2)]])/denom;
-    point[1]=(detL1*deltaL2[1]-detL2*deltaL1[1])/denom;
+    num=(x1*y2-y1*x2)*(x3-x4)-(x1-x2)*(x3*y4-y3*x4); 
+    den=(x1-x2)*(y3-y4)-(y1-y2)*(x3-x4);
+    point[0]=num/den;//x
+
+    num=(x1*y2-y1*x2)*(y3-y4)-(y1-y2)*(x3*y4-y3*x4); 
+    den=(x1-x2)*(y3-y4)-(y1-y2)*(x3-x4); 
+    point[1]=num/den;//y
 }
 
 /*LICENSE:

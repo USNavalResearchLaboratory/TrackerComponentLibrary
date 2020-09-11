@@ -1,4 +1,4 @@
-function [DVal,DJacob,DHess,pDpt]=DGeoBrownian(x,t,DMat)
+function [DVal,DJacob,DHess,pDpt]=DGeoBrownian(x,DMat)
 %%DGEOBROWNIAN This provides the diffusion matrix of the multivariate
 %              geometric Brownian motion process, also known as the Black-
 %              Scholes models. The stochastic differential equation for
@@ -9,9 +9,6 @@ function [DVal,DJacob,DHess,pDpt]=DGeoBrownian(x,t,DMat)
 %              the drift function aGeoBrownian.
 %
 %INPUTS: x The xDimX1 target state vector.
-%        t An unused time component so that this function can be used with
-%          Runge-Kutta methods that expect the function to take two
-%          parameters.
 %     DMat The xDimXm diffusion coefficient matrix.
 %
 %OUTPUTS: DVal The xDimXm diffusion matrix.

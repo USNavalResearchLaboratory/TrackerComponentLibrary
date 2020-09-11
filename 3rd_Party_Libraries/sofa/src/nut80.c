@@ -53,11 +53,11 @@ void iauNut80(double date1, double date2, double *dpsi, double *deps)
 **     P. Kenneth Seidelmann (ed), University Science Books (1992),
 **     Section 3.222 (p111).
 **
-**  This revision:  2013 June 18
+**  This revision:  2019 June 23
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
    double t, el, elp, f, d, om, dp, de, arg, s, c;
@@ -211,7 +211,7 @@ void iauNut80(double date1, double date2, double *dpsi, double *deps)
 /* Number of terms in the series */
    const int NT = (int) (sizeof x / sizeof x[0]);
 
-/*--------------------------------------------------------------------*/
+/* ------------------------------------------------------------------ */
 
 /* Interval between fundamental epoch J2000.0 and given date (JC). */
    t = ((date1 - DJ00) + date2) / DJC;
@@ -279,7 +279,7 @@ void iauNut80(double date1, double date2, double *dpsi, double *deps)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

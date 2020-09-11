@@ -1,7 +1,7 @@
 classdef BinaryHeap < handle
 %%BINARYHEAP An implementation of a priority queue as a binary heap. A
 %            priority queue is a data structure that allows one to easily
-%            get/ remove the maximum or minimum item in the queue.
+%            get/remove the maximum or minimum item in the queue.
 %
 %DEPENDENCIES: KeyVal.m
 %
@@ -141,11 +141,17 @@ classdef BinaryHeap < handle
         %       with the smallest key. If the heap is empty, then an empty
         %       matrix is returned.
         %
+        %The value returned is a shallow copy of the KeyVal object in the
+        %heap. Changes to it do not affect the values in the heap, unless
+        %those values are handle class objects. If the returned key is a
+        %handle class object, one should not modify it; it would invalidate
+        %the structure of the heap.
+        %
         %December 2013 David F. Crouse, Naval Research Laboratory,
         %Washington D.C.
         
             if(curHeap.numInHeap>0)
-                val=curHeap.heapArray(1);
+                val=copy(curHeap.heapArray(1));
             else
                 val=[];
             end

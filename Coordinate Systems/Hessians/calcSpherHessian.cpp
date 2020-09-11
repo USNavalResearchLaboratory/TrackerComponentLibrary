@@ -87,7 +87,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     }
     
     checkRealDoubleArray(prhs[0]);
-    x=reinterpret_cast<double*>(mxGetData(prhs[0]));
+    x=mxGetDoubles(prhs[0]);
     
     if(nrhs>1&&!mxIsEmpty(prhs[1])) {
         systemType=getSizeTFromMatlab(prhs[1]);
@@ -115,7 +115,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         }
         checkRealDoubleArray(prhs[3]);
         
-        lTx=reinterpret_cast<double*>(mxGetData(prhs[3]));
+        lTx=mxGetDoubles(prhs[3]);
     } else {
         lTx=zeros;
     }
@@ -126,7 +126,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         }
         checkRealDoubleArray(prhs[4]);
         
-        lRx=reinterpret_cast<double*>(mxGetData(prhs[4]));
+        lRx=mxGetDoubles(prhs[4]);
     } else {
         lRx=zeros;
     }
@@ -137,7 +137,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         }
 
         checkRealDoubleArray(prhs[5]);
-        M=reinterpret_cast<double*>(mxGetData(prhs[5]));
+        M=mxGetDoubles(prhs[5]);
     } else {
         M=identMat;
     }
@@ -151,7 +151,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         dims[2]=3;
             
         HMATLAB=mxCreateNumericArray(3,dims,mxDOUBLE_CLASS,mxREAL);
-        H=reinterpret_cast<double*>(mxGetData(HMATLAB));
+        H=mxGetDoubles(HMATLAB);
     }
 
     calcSpherHessianCPP(H,x,systemType,useHalfRange,lTx,lRx,M);

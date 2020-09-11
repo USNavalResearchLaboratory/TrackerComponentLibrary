@@ -12,7 +12,7 @@ function val=mean(lambda)
 %
 %INPUTS: lambda The rate parameter of the distribution. lambda>0.
 %
-%OUTPUTS: val  The mean of the exponential distribution.
+%OUTPUTS: val The mean of the exponential distribution.
 %
 %The mean of the exponential distribution is given in Chapter 2.9 of [1].
 %
@@ -33,12 +33,12 @@ function val=mean(lambda)
 end
 
 function val=var(lambda)
-%%VAR   Obtain the variance of the exponential distribution for a given
-%       rate parameter.
+%%VAR Obtain the variance of the exponential distribution for a given rate
+%     parameter.
 %
 %INPUTS: lambda The rate parameter of the distribution. lambda>0.
 %
-%OUTPUTS: val  The variance of the exponential distribution.
+%OUTPUTS: val The variance of the exponential distribution.
 %
 %The variance of the exponential distribution is given in Chapter 2.9 of
 %[1].

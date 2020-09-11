@@ -1,6 +1,6 @@
 /**DIVRECTOPT The dividing rectangles optimization algorithm. This is a
  *           derivative-free global optimization algorithm where the
- *           multidimensional search space can be bounded. This algorrithm
+ *           multidimensional search space can be bounded. This algorithm
  *           tries to minimize a given function of a vector parameter.
  *
  *INPUTS: f A handle to the function over which the minimization is to be
@@ -144,7 +144,7 @@
  *[2] J. M. Gablonsky and C. T. Kelley, "A locally-biased form of the
  *    DIRECT algorithm," Journal of Global Optimization, vol. 21, no. 1,
  *    pp. 27-37, Sep. 2001.
- *[3] M. Bjökman and K. Holmström, "Global optimization using the DIRECT
+ *[3] M. Bjï¿½kman and K. Holmstrï¿½m, "Global optimization using the DIRECT
  *    algorithm in Matlab," The Electronic International Journal Advanced
  *    Modeling and Optimization, vol. 1, no. 2, pp. 17-37, 1999.
  *    [Online]. Available: http://camo.ici.ro/journal/v1n2.htm
@@ -219,8 +219,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         mexErrMsgTxt("The problem has too many dimensions to be solved using this function.");
     }
     
-    lowerBounds=(double*)mxGetData(prhs[1]);
-    upperBounds=(double*)mxGetData(prhs[2]);
+    lowerBounds=mxGetDoubles(prhs[1]);
+    upperBounds=mxGetDoubles(prhs[2]);
     
     //If a structure of options was given
     if(nrhs>3&&!mxIsEmpty(prhs[3])) {
@@ -377,7 +377,6 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
             case DIRECT_GLOBAL_FOUND:
             case DIRECT_VOLTOL:
             case DIRECT_SIGMATOL:
-            case DIRECT_MAXTIME_EXCEEDED:
             default:
                 mexErrMsgTxt("An unknown error occurred.");
             
@@ -386,8 +385,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     
     //Set the return values
     plhs[0]=mxCreateNumericMatrix(0, 0, mxDOUBLE_CLASS, mxREAL);
-    mxFree(mxGetPr(plhs[0]));
-    mxSetPr(plhs[0], x);
+    mxFree(mxGetDoubles(plhs[0]));
+    mxSetDoubles(plhs[0], x);
     mxSetM(plhs[0], numDim);
     mxSetN(plhs[0], 1);
 
@@ -413,11 +412,11 @@ static double MatlabCallback(int n, const double *x, int *undefined_flag, void *
     rhs[1]=mxCreateNumericMatrix(0, 0, mxDOUBLE_CLASS, mxREAL);
 
     //Set the matrix data to x 
-    oldPtr=mxGetPr(rhs[1]);
+    oldPtr=mxGetDoubles(rhs[1]);
     
     //x will not be modified, but the const must be typecast away to use
-    //the mxSetPr function.    
-    mxSetPr(rhs[1],(double*)x);
+    //the mxSetDoubles function.    
+    mxSetDoubles(rhs[1],(double*)x);
     mxSetM(rhs[1], (size_t)n);
     mxSetN(rhs[1], 1);
     
@@ -437,9 +436,9 @@ static double MatlabCallback(int n, const double *x, int *undefined_flag, void *
     mxDestroyArray(lhs[0]);
     mxDestroyArray(lhs[1]);
     
-    //Set the data pointer back to what it was during allocation that
+    //Set the data pointer back to what it was during allocation so that
     //mxDestroyArray does not have a problem. 
-    mxSetPr(rhs[1],oldPtr);
+    mxSetDoubles(rhs[1],oldPtr);
     mxSetM(rhs[1], 0);
     mxSetN(rhs[1], 0);
           

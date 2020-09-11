@@ -67,9 +67,9 @@ double iauEe00(double date1, double date2, double epsa, double dpsi)
 **
 **  This revision:  2008 May 16
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
    double ee;
@@ -82,7 +82,7 @@ double iauEe00(double date1, double date2, double epsa, double dpsi)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

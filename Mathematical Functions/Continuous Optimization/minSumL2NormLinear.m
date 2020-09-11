@@ -1,7 +1,6 @@
 function [x,info]=minSumL2NormLinear(F,g,algorithm,params)
 %%MINSUML2NORMLINEAR This function solves the optimization problem:
-%                       minimize sum_{i]1}^p norm(F(:,:,i)*x+g(:,i))
-%                    for x.
+%                    minimize sum_{i=1}^p norm(F(:,:,i)*x+g(:,i)) for x.
 %
 %INPUTS: F An mXnXp set of p real mXn matrices.
 %        g An mXp set of p real vectors.

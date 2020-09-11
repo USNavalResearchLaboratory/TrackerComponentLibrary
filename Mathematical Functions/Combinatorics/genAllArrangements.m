@@ -6,7 +6,7 @@ function arrs=genAllArrangements(n,m)
 %INPUTS: n The total number of items from which one draws. n>=0
 %        m The number of slots into which these items can be placed. m>=0
 %
-%OUTPUTS: arrs An mXbinomial(n,m)*factorial(m) matrix of all possible
+%OUTPUTS: arrs An mX(binomial(n,m)*factorial(m)) matrix of all possible
 %              arrangements of n items into m slots. If m>n or m=0, then an
 %              empty matrix is returned.
 %

@@ -27,7 +27,7 @@
 
 using namespace std;
 void Cart2EllipsHarmonCPP(double *pointsHarmon,const double *cartPoints, const size_t numPoints, const double E) {
-    const double pi=3.14159265358979323846264338327950288419716939937510;
+    const double pi=3.141592653589793238462643383279502884197169399375105820974944592;
     const double E2=E*E;
     const double *curVec;
     double *curRetVec;

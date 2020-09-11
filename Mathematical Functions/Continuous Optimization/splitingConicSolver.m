@@ -68,7 +68,7 @@ function [x,y,s,info]=splitingConicSolver(A,b,c,cone,params)
 %                  direction method of multipliers (ADMM) iterations. The
 %                  default if omitted is 2500.
 %             'eps' The convergence tolerance. The default value is
-%                  1e-6.
+%                  1e-9.
 %             'verbose' Indicates whether verbose mode should be
 %                  used. The default value is false. If verbose mode is on,
 %                  text with a lot of information will be displayed.
@@ -112,11 +112,15 @@ function [x,y,s,info]=splitingConicSolver(A,b,c,cone,params)
 %           'dobj' The value of the dual objective function.
 %           'resPri' The primal equality residual.
 %           'resDual' The dual equality residual.
-%           'resInfeas' The residual of the infeasibility certification.
-%           'resUnbdd' The unbounded certification residual.
+%           'resInfeas' The residual of the infeasibility certification
+%                   (Only returned if compiled).
+%           'resUnbdd' The unbounded certification residual (only returned
+%               if compiled)
 %           'relGap' The relative duality gap.
-%           'setupTime' The time to setup the problem in millisecond.
-%           'solveTime' The time to solve the problem in milliseconds.
+%           'setupTime' The time to setup the problem in millisecond (only
+%             returned if compiled).
+%           'solveTime' The time to solve the problem in milliseconds (only
+%             returned if compiled.
 %
 %This function does nothing but call the scs_matlab and scs_indirect
 %function from the splitting conic solver (SCS) library, except this
@@ -304,7 +308,7 @@ end
 
 %Lower the default eps.
 if(~isfield(params,'eps'))
-   params.eps=1e-6; 
+   params.eps=1e-9; 
 end
 
 if(~isfield(params,'use_indirect'))

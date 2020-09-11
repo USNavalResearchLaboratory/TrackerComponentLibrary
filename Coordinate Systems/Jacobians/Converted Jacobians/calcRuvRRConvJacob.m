@@ -44,19 +44,19 @@ function J=calcRuvRRConvJacob(zRUVRR,useHalfRange,lTx,lRx,M)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 if(nargin<5||isempty(M))
-   M=eye(3,3); 
+    M=eye(3,3); 
 end
 
 if(nargin<4||isempty(lRx))
-   lRx=zeros(3,1); 
+    lRx=zeros(3,1); 
 end
 
 if(nargin<3||isempty(lTx))
-   lTx=zeros(3,1); 
+    lTx=zeros(3,1); 
 end
 
 if(nargin<2||isempty(useHalfRange))
-   useHalfRange=false; 
+    useHalfRange=false; 
 end
 
 J=[calcRuvConvJacob(zRUVRR(1:3),useHalfRange,lTx(1:3),lRx(1:3),M),zeros(3,1);

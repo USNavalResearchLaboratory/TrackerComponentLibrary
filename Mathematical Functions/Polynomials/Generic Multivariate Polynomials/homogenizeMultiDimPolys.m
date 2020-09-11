@@ -25,7 +25,7 @@ function [termMats,alreadyHomogenized]=homogenizeMultiDimPolys(termMats,makeProj
 %           of the variables. As noted in Section 8 of [1], for a system of
 %           n simultaneous polynomial equations in n unknowns, the
 %           homogenized system/ projective transform system has a number of
-%           solutions exactly equal to the Bézout bound and has no
+%           solutions exactly equal to the Bï¿½zout bound and has no
 %           solutions at infinity. If omitted or an empty matrix is passed,
 %           the default is false.
 %
@@ -42,7 +42,7 @@ function [termMats,alreadyHomogenized]=homogenizeMultiDimPolys(termMats,makeProj
 %            zero.
 %
 %Homogenization of multivariate polynomial systems is often used in
-%multivariate polynomial solving algoirthms to better handle "solutions at
+%multivariate polynomial solving algorithms to better handle "solutions at
 %infinite", which are generally not solutions that one cares about. For
 %example, an application of homogenizing multivariate polynomials is in
 %Section 8 of [1].

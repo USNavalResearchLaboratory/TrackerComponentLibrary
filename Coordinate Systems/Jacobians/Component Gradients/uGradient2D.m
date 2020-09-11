@@ -12,7 +12,7 @@ function J=uGradient2D(x,lRx,M)
 %          omitted, it is assumed to be the identity matrix.
 %
 %OUTPUTS: J A 1X2XN set of N Jacobian matrices where the row represents u
-%           and the columns take the derivative of the rows component with
+%           and the columns take the partial derivatives of the rows with
 %           respect to [x,y] in that order.
 %
 %A derivation of the components of the Jacobian of a 3D u-v measurement is

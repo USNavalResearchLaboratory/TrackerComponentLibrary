@@ -10,9 +10,9 @@ function theCombos=genAllCombinations(n,t,startVal,algorithm)
 % algorithm An optional parameter specifying the algorithm to use. Possible
 %          values are:
 %          0 (The default if omitted or an empty matrix is passed) Use
-%             Algorithm T of Section 7.2.1.3 of [1]. The combinations are
-%             in colexicographic order.
-%          1 Use the algorithm fo [1]. The combinations are in
+%            Algorithm T of Section 7.2.1.3 of [1]. The combinations are in
+%            colexicographic order.
+%          1 Use the algorithm of [1]. The combinations are in
 %            lexicographic order.
 %
 %OUTPUTS: theCombos A tXnumCombos matrix containing all possible
@@ -123,8 +123,8 @@ for curCombo=1:numCombos
     j=j-1;
 end
 
-if(startVal==1)
-    theCombos=theCombos+1; 
+if(startVal~=0)
+    theCombos=theCombos+startVal; 
 end
 end
 

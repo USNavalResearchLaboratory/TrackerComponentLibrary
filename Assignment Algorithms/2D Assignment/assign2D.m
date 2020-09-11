@@ -261,7 +261,6 @@ function [col4row,row4col,gain,u,v]=assign2D(C,maximize)
 end
 
 function [sink, pred, u, v]=ShortestPath(curUnassCol,u,v,C,col4row,row4col)
-    %This assumes that unassigned columns go from 1:numUnassigned
     numRow=size(C,1);
     numCol=size(C,2);
     pred=zeros(numCol,1);
@@ -278,7 +277,7 @@ function [sink, pred, u, v]=ShortestPath(curUnassCol,u,v,C,col4row,row4col)
     sink=0;
     delta=0;
     curCol=curUnassCol;
-    shortestPathCost=ones(numRow,1)*Inf;
+    shortestPathCost=Inf(numRow,1);
     
     while(sink==0)        
         %Mark the current column as having been visited.

@@ -192,7 +192,6 @@ exitCode=2;
 
 end
 
-
 function [hEst,dhEstdh]=hOpt(h,xi)
 %%HOPT This function find hOpt based on Equation 3.45 in Chapter 3.4.6 of
 %      [1] for a Gaussian kernel. The integral over the second derivative

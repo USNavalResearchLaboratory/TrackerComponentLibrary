@@ -17,7 +17,7 @@ function [PsiEst,nuEst]=GaussCovLikeInvWishartConjUpdate(xMeas,muMeas,PsiEst,nuE
 %       PsiEst The xDimXxDim positive-definite, symmetric precision matrix
 %              of the prior (inverse Wishart) distribution.
 %        nuEst The number of degrees of freedom of the prior distribution.
-%              Note that nu>=D.
+%              Note that nu>=xDim.
 %
 %OUTPUTS: PsiEst The precision matrix of the posterior distribution, which
 %                is an inverse Wishart distribution.

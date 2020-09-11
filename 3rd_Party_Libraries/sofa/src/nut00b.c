@@ -121,11 +121,11 @@ void iauNut00b(double date1, double date2, double *dpsi, double *deps)
 **     Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
 **     Francou, G., Laskar, J., Astron.Astrophys. 282, 663-683 (1994)
 **
-**  This revision:  2013 June 18
+**  This revision:  2019 June 23
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
    double t, el, elp, f, d, om, arg, dp, de, sarg, carg,
@@ -255,7 +255,7 @@ void iauNut00b(double date1, double date2, double *dpsi, double *deps)
 /* Number of terms in the series */
    const int NLS = (int) (sizeof x / sizeof x[0]);
 
-/*--------------------------------------------------------------------*/
+/* ------------------------------------------------------------------ */
 
 /* Interval between fundamental epoch J2000.0 and given date (JC). */
    t = ((date1 - DJ00) + date2) / DJC;
@@ -326,7 +326,7 @@ void iauNut00b(double date1, double date2, double *dpsi, double *deps)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

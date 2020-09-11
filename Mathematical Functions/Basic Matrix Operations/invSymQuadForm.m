@@ -57,7 +57,7 @@ function dist=invSymQuadForm(x,M,matType)
             error('Invalid matrix type specified');
     end
 
-    opts.LT = true;
+    opts.LT=true;
     y=linsolve(C,x,opts);
     %y=C\x;
     dist=sum(y.*y,1);

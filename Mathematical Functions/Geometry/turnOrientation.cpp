@@ -100,13 +100,13 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         }
     }
     
-    P1=reinterpret_cast<double*>(mxGetData(prhs[0]));
-    P2=reinterpret_cast<double*>(mxGetData(prhs[1]));
-    P3=reinterpret_cast<double*>(mxGetData(prhs[2]));
+    P1=mxGetDoubles(prhs[0]);
+    P2=mxGetDoubles(prhs[1]);
+    P3=mxGetDoubles(prhs[2]);
     
     //Allocate space for the return values
     retMat=mxCreateDoubleMatrix(numElements,1,mxREAL);
-    retVals=reinterpret_cast<double*>(mxGetData(retMat));
+    retVals=mxGetDoubles(retMat);
     
     for(i=0;i<numElements;i++) {
         retVals[i]=static_cast<double>(turnOrientationCPP(P1+2*i,P2+2*i,P3+2*i));

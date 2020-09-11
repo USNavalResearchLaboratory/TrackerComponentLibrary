@@ -1,4 +1,4 @@
-function [aVal,aJacob,aHess,papt]=aPolarCoordTurn2DTrans(x,t,tauInv,tauAccelInv)
+function [aVal,aJacob,aHess,papt]=aPolarCoordTurn2DTrans(x,tauInv,tauAccelInv)
 %%APOLARCOORDTURNTRANS The continuous-time drift function for a 2D
 %           coordinated turn model with the velocity expressed in terms of
 %           a heading angle and a speed rather than in terms of a Cartesian
@@ -22,17 +22,14 @@ function [aVal,aJacob,aHess,papt]=aPolarCoordTurn2DTrans(x,t,tauInv,tauAccelInv)
 %               acceleration, which acts orthogonally to the velocity
 %               vector. If a linear acceleration component is provided,
 %               then the state is [xPos;yPos;theta;v;at,al].
-%            t An unused time component so that this function can be used
-%              with Runge-Kutta methods that expect the function to take
-%              two parameters.
-%       tauInv The inverse of the correlation time constant tau for the
-%              transversal acceleration in seconds. tauInv must be
-%              positive. The default if omitted or an empty matrix is
-%              passed is zero.
-%  tauAccelInv The inverse of the correlation time constant for the linear
-%              acceleration in seconds. This parameter is not used if there
-%              is no linear acceleration. the default if omitted or an
-%              empty matrix is passed is 0.
+%        tauInv The inverse of the correlation time constant tau for the
+%               transversal acceleration in seconds. tauInv must be
+%               positive. The default if omitted or an empty matrix is
+%               passed is zero.
+%   tauAccelInv The inverse of the correlation time constant for the linear
+%               acceleration in seconds. This parameter is not used if
+%               there is no linear acceleration. the default if omitted or
+%               an empty matrix is passed is 0.
 %
 %OUTPUTS: aVal The 5X1 (or 6X1 with linear acceleration) time-derivative of
 %              the state. 
@@ -64,7 +61,7 @@ function [aVal,aJacob,aHess,papt]=aPolarCoordTurn2DTrans(x,t,tauInv,tauAccelInv)
 %into components of heading and speed rather than in Cartesian space. The
 %generalization to Cartesian space is not difficult and is done here.
 %
-%The corresponding diffusion matrix is given by the function DCoordTurn2D.
+%The corresponding diffusion matrix is given by the function e.
 %The corresponding discrete-time functions are FCoordTurn2D and
 %QCoordTurn. However, note that the discrete-time functions are
 %direct-discrete models and not discretizations of the continuous-time

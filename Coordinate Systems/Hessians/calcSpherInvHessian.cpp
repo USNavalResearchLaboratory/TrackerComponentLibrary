@@ -71,7 +71,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
 
     N=mxGetN(prhs[0]);
     checkRealDoubleArray(prhs[0]);
-    z=reinterpret_cast<double*>(mxGetData(prhs[0]));
+    z=mxGetDoubles(prhs[0]);
     
     if(nrhs>1&&!mxIsEmpty(prhs[1])) {
         systemType=getSizeTFromMatlab(prhs[1]);
@@ -93,7 +93,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         dims[3]=N;
             
         HMATLAB=mxCreateNumericArray(4,dims,mxDOUBLE_CLASS,mxREAL);
-        H=reinterpret_cast<double*>(mxGetData(HMATLAB));
+        H=mxGetDoubles(HMATLAB);
     }
     
     for(curPoint=0;curPoint<N;curPoint++) {

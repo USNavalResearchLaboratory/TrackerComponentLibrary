@@ -1,11 +1,11 @@
 function [cCombo,dataRecur]=getNextRucksackFill(param1,N)
 %%GETNEXTRUCKSACKFILL Get the next combination of items with given positive
 %               weights that will fit into a rucksack (knapsack, backpack)
-%               with a capacity of N. This goes through all feasible combinations
-%               (starting with putting nothing in the bag). Going through
-%               all feasible combinations is not an efficient approach to
-%               determinign the set of items that can be placed into the
-%               bag to maximize its weight.
+%               with a capacity of N. This goes through all feasible
+%               combinations (starting with putting nothing in the bag).
+%               Going through all feasible combinations is not an efficient
+%               approach to determining the set of items that can be placed
+%               into the bag to maximize its weight.
 %
 %INPUTS: param1 To generate the first combination (which will be the empty
 %               set - put nothing in the bag) this is w, an nX1 vector

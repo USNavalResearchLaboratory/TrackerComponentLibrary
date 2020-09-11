@@ -69,7 +69,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         theTree=Matlab2Ptr<metricTreeCPP*>(prhs[1]);   
         
         checkRealDoubleArray(prhs[2]);
-        dataBatch=reinterpret_cast<double*>(mxGetData(prhs[2]));
+        dataBatch=mxGetDoubles(prhs[2]);
         
         theTree->buildTreeFromBatch(dataBatch);
     } else if(!strcmp("searchRadius",cmd)) {
@@ -84,8 +84,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         theTree=Matlab2Ptr<metricTreeCPP*>(prhs[1]);
         checkRealDoubleArray(prhs[2]);
         checkRealDoubleArray(prhs[3]);
-        point=reinterpret_cast<double*>(mxGetData(prhs[2]));
-        radius=reinterpret_cast<double*>(mxGetData(prhs[3]));
+        point=mxGetDoubles(prhs[2]);
+        radius=mxGetDoubles(prhs[3]);
         
         numPoints=mxGetN(prhs[2]);
         if(mxGetM(prhs[2])!=theTree->k){

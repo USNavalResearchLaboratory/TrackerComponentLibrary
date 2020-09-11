@@ -6,9 +6,8 @@ classdef UniformD
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 methods(Static)
-
 function val=mean(bounds)
-%%MEAN  Obtain the mean of the uniform distribution
+%%MEAN Obtain the mean of the uniform distribution
 %
 %INPUTS: bounds A 2XnumDim matrix of the minimum and maximum bounds of each
 %               of the numDim dimensions of the uniform distribution.
@@ -23,8 +22,8 @@ function val=mean(bounds)
 end
   
 function val=cov(bounds)
-%%COV   Obtain the covariance matrix of the uniform distribution (the
-%       variance if scalar).
+%%COV Obtain the covariance matrix of the uniform distribution (the
+%     variance if scalar).
 %
 %INPUTS: bounds A 2XnumDim matrix of the minimum and maximum bounds of each
 %               of the numDim dimensions of the uniform distribution.
@@ -93,7 +92,7 @@ function x=rand(N,bounds)
 %%RAND Generate multivariate uniform random variables with a given set of
 %      bounds
 %
-%INPUTS:  N The scalar number of random variables to generate
+%INPUTS: N The scalar number of random variables to generate.
 %  bounds A 2XnumDim matrix of the minimum and maximum integer bounds of
 %         each of the numDim dimensions of the uniform distribution.
 %         bounds(1,:) is the set of minimum bounds and bounds(2,:) is
@@ -135,7 +134,6 @@ function entropyVal=entropy(bounds)
 
     entropyVal=log(prod(bounds(2,:)-bounds(1,:)));
 end
-
 end
 end
 

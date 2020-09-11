@@ -12,7 +12,9 @@ function point=twoLineIntersectionPoint2D(line1,line2)
 %OUTPUTS:   point The 2X1 intersection point of the two lines given as
 %                 [x;y] components.
 %
-%The formula in terms of matrix determinants is taken from [1].
+%The formula in terms of matrix determinants is taken from [1]. It was
+%observed that certain orderings of the terms can lead to poor finite
+%precision performance.
 %
 %REFERENCES:
 %[1] Weisstein, Eric W. "Line-Line Intersection." From MathWorld--A Wolfram
@@ -21,17 +23,23 @@ function point=twoLineIntersectionPoint2D(line1,line2)
 %December 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-detL1=det(line1);
-detL2=det(line2);
+x1=line1(1,1);
+y1=line1(2,1);
+x2=line1(1,2);
+y2=line1(2,2);
+x3=line2(1,1);
+y3=line2(2,1);
+x4=line2(1,2);
+y4=line2(2,2);
 
-deltaL1=-diff(line1,1,2);
-deltaL2=-diff(line2,1,2);
+num=(x1*y2-y1*x2)*(x3-x4)-(x1-x2)*(x3*y4-y3*x4); 
+den=(x1-x2)*(y3-y4)-(y1-y2)*(x3-x4);
 
-denom=det([deltaL1,deltaL2]);
+x=num/den;
 
-x=det([[detL1;detL2],[deltaL1(1);deltaL2(1)]])/denom;
-y=det([[detL1;detL2],[deltaL1(2);deltaL2(2)]])/denom;
-
+num=(x1*y2-y1*x2)*(y3-y4)-(y1-y2)*(x3*y4-y3*x4); 
+den=(x1-x2)*(y3-y4)-(y1-y2)*(x3-x4); 
+y=num/den;
 point=[x;y];
 
 end

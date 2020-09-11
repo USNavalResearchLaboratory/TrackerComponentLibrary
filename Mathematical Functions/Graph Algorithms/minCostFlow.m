@@ -46,12 +46,12 @@ function [F,totalCost,exitCode]=minCostFlow(AMat,CMat,b,maxIter)
 %amount of flow.
 %
 %The strong polynomial cycle cancelling algorithm of [1] is used. However,
-%the epsilon-based convergence accelration method described in [1] is not
+%the epsilon-based convergence acceleration method described in [1] is not
 %used. Rather, the algorithm is more similar to the simple cycle
 %cancellation algorithm of Chapter 7.2 of [2], except the minimum mean
 %cycle is always augmented rather than any negative cost cycle.
 %
-%The complexity of the non-epsilon accelerated algoirhtm in [1] is bounded
+%The complexity of the non-epsilon accelerated algorithm in [1] is bounded
 %as O(N^2*m^3*log(N)), where N is the number of vertices in the graph, and
 %m is the number of edges. The true complexity depends on the efficiency of
 %the function computeResidualCapacity, which is used to obtain the negative

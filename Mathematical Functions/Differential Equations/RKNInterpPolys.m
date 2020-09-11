@@ -34,10 +34,10 @@ function [interpPolyA,interpPolyC]=RKNInterpPolys(x0,t0,x1,t1,df,probIsGeneral,o
 %             g The values of the derivatives df evaluated at various
 %               points as determined by the algorithm used for the
 %               RungeKNystroemGStep or the RungeKNystroemSStep function.
-%interpMainOrder An optional parameter indicating whether the interpolation
-%               should be the same as the main order of the Runge-Kutta
-%               pair or whether it should be the same as the secondary
-%               order. If omitted, the default value is false.
+% interpMainOrder An optional parameter indicating whether the
+%               interpolation should be the same as the main order of the
+%               Runge-Kutta pair or whether it should be the same as the
+%               secondary order. If omitted, the default value is false.
 %
 %OUTPUTS: interpPolysA,interpPolysC An xDimX(polyOrder+1) and
 %               xDimX(polyOrder) matrices that hold the interpolating

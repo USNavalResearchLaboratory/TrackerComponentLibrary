@@ -12,10 +12,10 @@ function A=signedPolygonArea(vertices)
 %                 does not matter whether or not the first vertex is
 %                 repeated at the end.
 %
-%OUTPUTS:       A The signed area of the polygon.
+%OUTPUTS: A The signed area of the polygon.
 %
-%The formula for computing the signed area of a non-self-intersecting is
-%taken from [1].
+%The formula for computing the signed area of a non-self-intersecting
+%polygon is taken from [1].
 %
 %REFERENCES:
 %[1] Weisstein, Eric W. "Polygon Area." From MathWorld--A Wolfram Web

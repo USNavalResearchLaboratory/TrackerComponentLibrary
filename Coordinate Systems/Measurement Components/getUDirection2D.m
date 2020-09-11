@@ -33,7 +33,7 @@ function u=getUDirection2D(zC,zRx,M,includeV)
 %          this parameter is omitted or an empty matrix is passed is false.
 %
 %OUTPUT: u The 1XN (or 2XN if includeV is true) matrix of direction cosine
-%          values u (or [u;v] for each of the points in zC.
+%          values u (or [u;v]) for each of the points in zC.
 %
 %The conversion is related to the 3D r-u-v conversion, details of which are
 %given in [1].

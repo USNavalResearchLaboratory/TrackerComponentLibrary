@@ -5,7 +5,7 @@ function J=uvGradient(xG,lRx,M,includeW)
 %
 %INPUTS: xG The 3XN target position vectors in the global coordinate system
 %           with [x;y;z] components for which gradients are desired.
-%       lRx The 3X1  position vector of the receiver. If omitted, the
+%       lRx The 3X1 position vector of the receiver. If omitted, the
 %           receiver is placed at the origin.
 %         M A 3X3 rotation matrix from the global Coordinate system to the
 %           orientation of the coordinate system at the receiver. If
@@ -20,10 +20,10 @@ function J=uvGradient(xG,lRx,M,includeW)
 %           false.
 %
 %OUTPUTS: J A 2X3XN set of N Jacobian matrices where the rows are [u;v] in
-%           that order and the columns take the derivative of the rows
-%           component with respect to [x,y,z] in that order. If includeW is
+%           that order and the columns take the partial derivative of the
+%           rows with respect to [x,y,z] in that order. If includeW is
 %           true, then this is a 3X3XN set of Jacobian matrices, where the
-%           final row has derivatives of w.
+%           final row has partial derivatives of w.
 %
 %A derivation of the components of the Jacobian is given in [1].
 %

@@ -1,4 +1,4 @@
-function [aVal,aJacob,aHess,papt]=aCVSpherical(x,t,systemType)
+function [aVal,aJacob,aHess,papt]=aCVSpherical(x,systemType)
 %%ACVSPHERICAL The drift function for a continuous-time motion model where
 %          the target state is given in monostatic spherical coordinates
 %          and the motion is constant velocity in 3D Cartesian coordinates.
@@ -6,9 +6,6 @@ function [aVal,aJacob,aHess,papt]=aCVSpherical(x,t,systemType)
 %INPUTS: x The 6XN state vector of N targets in the order of
 %          [r;theta;phi;rDot;thetaDot;phiDot], where theta is azimuth and
 %          phi elevation. The angles are given in radians.
-%        t An unused time component so that aCVSpherical can be used with
-%          Runge-Kutta methods that expect the function to take two
-%          parameters.
 % systemType An optional parameter specifying the axis from which the
 %          angles are measured in radians. Possible values are
 %          0 (The default if omitted) Azimuth is measured 
@@ -79,7 +76,7 @@ function [aVal,aJacob,aHess,papt]=aCVSpherical(x,t,systemType)
 % xEndCart=F*xInitCart;
 % RelTol=1e-10;
 % AbsTol=1e-13;
-% xStepsSphere=RKAdaptiveOverRange(xInitSpher,[0;T],@(x,t)aCVSpherical(x,t,systemType),0.1,0,[],[],RelTol,AbsTol);
+% xStepsSphere=RKAdaptiveOverRange(xInitSpher,[0;T],@(x,t)aCVSpherical(x,systemType),0.1,0,[],[],RelTol,AbsTol);
 % xEndSphereRK=xStepsSphere(:,end);
 % xEndSphereExact=stateCart2Sphere(xEndCart,systemType);
 % max(abs(xEndSphereRK-xEndSphereExact))
@@ -91,8 +88,8 @@ function [aVal,aJacob,aHess,papt]=aCVSpherical(x,t,systemType)
 %derivative of aDeriv.
 % x=[1000;0.1;-0.25;10;0.01;-0.02];
 % systemType=2;
-% [aDeriv,aJacob]=aCVSpherical(x,[],systemType);
-% AJacobNumDiff=numDiff(x,@(xState)aCVSpherical(xState,[],systemType),6);
+% [aDeriv,aJacob]=aCVSpherical(x,systemType);
+% AJacobNumDiff=numDiff(x,@(xState)aCVSpherical(xState,systemType),6);
 % err=(aJacob-AJacobNumDiff)./AJacobNumDiff;
 % max(abs(err(:)))
 %One will see that the maximum error is on the order of 2.4940e-10,
@@ -101,7 +98,7 @@ function [aVal,aJacob,aHess,papt]=aCVSpherical(x,t,systemType)
 %August 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<3||isempty(systemType))
+if(nargin<2||isempty(systemType))
     systemType=0; 
 end
 

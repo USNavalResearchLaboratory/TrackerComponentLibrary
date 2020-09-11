@@ -70,7 +70,6 @@ numCombos=numMultisetCombos(m,k);
 
 combosVec=zeros(n,numCombos);
 
-
 b(n+1+1)=0;
 for i=n:-1:1
    b(i+1)=b(i+1+1)+m(i); 

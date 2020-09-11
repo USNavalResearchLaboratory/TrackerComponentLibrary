@@ -96,9 +96,9 @@ void iauAper(double theta, iauASTROM *astrom)
 **
 **  This revision:   2013 September 25
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
    astrom->eral = theta + astrom->along;
@@ -107,7 +107,7 @@ void iauAper(double theta, iauASTROM *astrom)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
@@ -200,5 +200,4 @@ void iauAper(double theta, iauASTROM *astrom)
 **                 United Kingdom
 **
 **--------------------------------------------------------------------*/
-
 }

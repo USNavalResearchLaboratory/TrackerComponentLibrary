@@ -1,4 +1,4 @@
-function H=standardGaussKernelBW(xi,method,spherData)
+function [H,mu,SR]=standardGaussKernelBW(param1,method,spherData,N)
 %%STANDARDGAUSSKERNELBW Estimate the (univariate or multivariate) kernel
 %             bandwidth when approximating a PDF using a set of samples
 %             with a Gaussian kernel. This function provides the bandwidth
@@ -9,23 +9,30 @@ function H=standardGaussKernelBW(xi,method,spherData)
 %             the function kernelApprox to approximate the continuous
 %             density.
 %
-%INPUTS: xi A numDimXnumSamples set of samples of the distribution from
-%           which a Gaussian kernel estimator should interpolate a PDF. For
-%           multidimensional estimation, there must be >=numDim samples.
-%           Specifically, the sample covariance matrix must be positive
-%           definite.
+%INPUTS: param1 If N is an empty matrix or is omitted, then this is:
+%              xi A numDimXnumSamples set of samples of the distribution
+%                 from which a Gaussian kernel estimator should interpolate
+%                 a PDF. For multidimensional estimation, there must be
+%                 >=numDim samples. Specifically, the sample covariance
+%                 matrix must be positive definite.
+%           If N is given, then this is:
+%              SR A root covariance matrix such that SR*SR' equals the 
+%                 (exact or approximated) covariance matrix of the PDF
+%                 being approximated.
 %    method An optional parameter specifying the method that should be used
 %           to estimate the bandwidth. Possible values are
-%           0 (The default if omitted or an empty matrix is passed) Use the
-%             method implied by Equation 3.30 and 3.28 in [1], which uses
-%             the lesser of the sample standard deviation or a scaled
-%             interquartile range. This approach is supposed to work well
-%             when the underlying distribution of the samples is not
-%             actually normal and might be bimodal.
-%           1 Use the method of Equation 3.28 in [1], based on the sample
-%             standard deviation.
+%           0 Use the method implied by Equation 3.30 and 3.28 in [1],
+%             which uses the lesser of the sample standard deviation or a
+%             scaled interquartile range. This approach is supposed to work
+%             well when the underlying distribution of the samples is not
+%             actually normal and might be bimodal. This method cannot be
+%             used if N is given.
+%           1 (The default if omitted or an empty matrix is passed) Use the
+%             method of Equation 3.28 in [1], based on the sample standard
+%             deviation.
 %           2 Use the method of Equation 3.29 in [1], based on the
-%             interquartile range of the samples.
+%             interquartile range of the samples. This method cannot be
+%             used if N is given.
 % spherData When the underlying density is truly normal, then the
 %           approximation here is only valid if the cross terms of the
 %           correlation are zero. To make that the case, if this parameter
@@ -39,9 +46,16 @@ function H=standardGaussKernelBW(xi,method,spherData)
 %           diagonal terms of the sample covariance matrix are used and the
 %           data is not squared. The default if this parameter is omitted
 %           or an empty matrix is passed is true.
+%         N If this parameter is provided, then param1 is assumed to be SR
+%           and N is the number of samples that are being smoothed.
+%           Otherwise, if this is omitted or an empty matrix is passed,
+%           param1 is xi.
 %           
 %OUTPUTS: H The kernel bandwidth matrix that can be used in the function
 %           kernelApprox. This will be a lower-triangular matrix.
+%         mu If xi is given, then this is the sample mean. Otherwise, this
+%            is an empty matrix.
+%         SR The root covariance matrix from the input or computed from xi.
 %
 %The methods in Chapter 3 of [1] are for a scalar distribution. We are able
 %to apply them to a multivariate distribution by pre-multiplying the
@@ -51,7 +65,9 @@ function H=standardGaussKernelBW(xi,method,spherData)
 %formula with the solution for numDim-dimensions given in Chapter 2.4.2 of
 %[2]. The pre-multiplication to decorrelate the dimensions is necessary for
 %the use of that formula. Ultimately, we then have then rotate the final
-%result back.
+%result back. The techniques from Chapter 3 of 1 that are used here only
+%differ in how they try to obtain a robust estimate of the standard
+%deviation values.
 %
 %REFERENCES:
 %[1] B. W. Silverman, Density Estimation for Statistics and Data Analysis.
@@ -63,32 +79,41 @@ function H=standardGaussKernelBW(xi,method,spherData)
 %December 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<4)
+    N=[]; 
+end
+
 if(nargin<3||isempty(spherData))
     spherData=true;
 end
 
 if(nargin<2||isempty(method))
-    method=0;
+    method=1;
 end
-numDims=size(xi,1);
+numDims=size(param1,1);
 
-%Make the components independent if a multivariate distribution is given.
-if(numDims>1)
-    [~,S]=calcMixtureMoments(xi);
-    
-    if(spherData)
-        %Normalize the estimates.
-        SR=chol(S,'lower');
+if(isempty(N))%xi is given
+    xi=param1;
+    [mu,S]=calcMixtureMoments(xi);
+    SR=cholSemiDef(S,'lower',1);%Not fully triangular. but S=SR*SR'
+    if(method~=1&&spherData)
         xi=SR\xi;
-        sigma1=ones(numDims,1);
-    else
-        sigma1=sqrt(diag(S));
     end
-else
-    sigma1=std(xi,[],2);
+    N=size(xi,2);%Number of points
+else%S and N are given.
+    if(method~=1)
+        error('If N is given, then method=1 must be used.')
+    end
+    
+    mu=[];
+    SR=param1;
 end
 
-n=size(xi,2);%Number of points
+if(numDims>1&&spherData)
+    sigma1=ones(numDims,1);
+else
+    sigma1=diag(SR);
+end
 
 switch(method)
     case 0%Use Equation 3.30 and 3.28 in [1].
@@ -103,7 +128,7 @@ switch(method)
         error('Unknown method specified')
 end
 
-h=(4/(n*(numDims+2)))^(1/(numDims+4))*sigma;
+h=(4/(N*(numDims+2)))^(1/(numDims+4))*sigma;
 
 %Undo any rotation/scaling.
 if(numDims>1&&spherData)
@@ -114,7 +139,6 @@ if(numDims>1&&spherData)
 else
     H=diag(h);
 end
-
 end
 
 %LICENSE:

@@ -1,19 +1,19 @@
 function [w,mu,P]=RunnalsGaussMixRed(w,mu,P,K)
-%%RUNNALSGAUSSMIXRED  Perform Gaussian mixture Reduction using the greedy
-%                     mergin algorithm by Runnals.
+%%RUNNALSGAUSSMIXRED Perform Gaussian mixture reduction using the greedy
+%                    merging algorithm by Runnals in [1].
 %
-%INPUTS: w      A NX1 vector of weights of the components of the original
-%               Gaussian mixture.
-%        mu     An xDimXN matrix of the means of the vector components of
-%               the original Gaussian mixture.
-%        P      An xDim XxDim XN hypermatrix of the covariance matrices for
-%               the components of the original Gaussian mixture.
-%        K      The number of components desired in the mixture after
-%               reduction.
+%INPUTS: w An NX1 or 1XN vector of weights of the components of the
+%          original Gaussian mixture.
+%       mu An xDimXN matrix of the means of the vector components of the
+%          original Gaussian mixture.
+%        P An xDim XxDim XN hypermatrix of the covariance matrices for the
+%          components of the original Gaussian mixture.
+%        K The number of components desired in the mixture after reduction.
 %
-%OUTPUTS: w     The weights of the mixture after reduction.
-%         mu    The means of the mixture after reduction.
-%         P     The covariance matrices of the mixture after reduction.
+%OUTPUTS: w The KX1 weights of the mixture after reduction.
+%        mu The xDimXK means of the mixture after reduction.
+%         P The xDimXxDimXK covariance matrices of the mixture after
+%           reduction.
 %
 %This implements the suboptimal Gaussian mixture reduction algorithm of
 %[1]. Note that a real efficient C/C++ implementation would be implemented
@@ -22,8 +22,8 @@ function [w,mu,P]=RunnalsGaussMixRed(w,mu,P,K)
 %
 %REFERENCES:
 %[1] A. R. Runnalls, "Kullback-Leibler approach to Gaussian mixture
-%    reduction," IEEE Trans. Aerosp. Electron. Syst., vol. 43, no. 3, pp.
-%    989-999, Jul. 2007.
+%    reduction," IEEE Transactions on Aerospace and Electronic Systems,
+%    vol. 43, no. 3, pp. 989-999, Jul. 2007.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -81,8 +81,16 @@ function [w,mu,P]=RunnalsGaussMixRed(w,mu,P,K)
 end
 
 function val=BDist(w1,w2,mu1,mu2,P1,P2)
-    %This is the distance measure used in "Kullback-Leibler Approach to
-    %Gaussian Mixture Reduction".
+%%BDIST This is the distance measure given in Equation 21 in Section VI-B
+%       in [1].
+%
+%REFERENCES:
+%[1] A. R. Runnalls, "Kullback-Leibler approach to Gaussian mixture
+%    reduction," IEEE Trans. Aerosp. Electron. Syst., vol. 43, no. 3, pp.
+%    989-999, Jul. 2007.
+%
+%October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
     diff=mu1-mu2;
     
     w1m=w1/(w1+w2);

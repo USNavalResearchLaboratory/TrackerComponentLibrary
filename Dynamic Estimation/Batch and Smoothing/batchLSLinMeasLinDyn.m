@@ -3,46 +3,43 @@ function [xEst,PEst]=batchLSLinMeasLinDyn(z,H,F,R,kD,Q,numMeas)
 %                linear measurement model and a linear dynamic model with
 %                optional process noise.
 %
-%INPUTS:   z     The zDim X N matrix of measurements for the whole batch.
-%                It is assumed that the measurements have the same
-%                dimensionality over the batch. If an empty matrix is
-%                passed, then it is assumed that the user only wants the
-%                covariance matrix and not xEst. 
-%          H     The zDim X xDim X N hypermatrix of measurement matrices
-%                such that H(:,:,k)*x+w is the measurement at time k, where
-%                x is the state and w is zero-mean Gaussian noise with
-%                covariance matrix R (:,:,k). Alternatively, if all of the
-%                measurement matrices are the same, one can just pass a
-%                single zDim X xDim matrix.
-%          F  	 An xDim X xDim X (N-1) hypermatrix of  matrices. The state
-%                at discrete-time k+1 is modeled as F(:,:,k) times the 
-%                state at time k plus zero-mean Gaussian process noise with
-%                covariance matrix Q(:,:,k). Alternatively, if all of the
-%                state transition matrices are the same, one can just pass
-%                a single xDim X xDim matrix. Note that all of the F
-%                matrices must be invertible if kD is not equal to one.
-%          R     The zDim X zDim X N hypermatrix of measurement covariance
-%                matrices. Alternatively, if all of the measurement
-%                covariance matrices are the same, one can just pass a
-%                single zDim X zDim matrix.
-%          kD    The discrete time-step for which the covariance matrix of
-%                an estimate is desired, where z(:,1) is at discrete
-%                time-step 1 (not 0).
-%          Q     The xDim X xDim X (N-1) hypermatrix of process noise
-%                covariance matrices. Alternatively, if all of the process
-%                noise covariance matrices are the same, one can just pass
-%                a single xDim X xDim matrix. If an empty matrix is passed
-%                for Q, then the estimation is performed assuming there is
-%                no process noise.
-%       numMeas  If an empty matrix is passed for z, then the numMeas
-%                parameter must be passed indicating the number of
-%                measurements in the batch. Otherwise, this parameter is
+%INPUTS: z The zDim X N matrix of measurements for the whole batch. It is
+%          assumed that the measurements have the same dimensionality over
+%          the batch. If an empty matrix is passed, then it is assumed that
+%          the user only wants the covariance matrix and not xEst. 
+%        H The zDim X xDim X N hypermatrix of measurement matrices such
+%          that H(:,:,k)*x+w is the measurement at time k, where x is the
+%          state and w is zero-mean Gaussian noise with covariance matrix
+%          R(:,:,k). Alternatively, if all of the measurement matrices are
+%          the same, one can just pass a single zDim X xDim matrix.
+%        F An xDim X xDim X (N-1) hypermatrix of  matrices. The state at
+%          discrete-time k+1 is modeled as F(:,:,k) times the state at time
+%          k plus zero-mean Gaussian process noise with covariance matrix
+%          Q(:,:,k). Alternatively, if all of the state transition matrices
+%          are the same, one can just pass a single xDim X xDim matrix.
+%          Note that all of the F matrices must be invertible if kD is not
+%          equal to one.
+%        R The zDim X zDim X N hypermatrix of measurement covariance
+%          matrices. Alternatively, if all of the measurement covariance
+%          matrices are the same, one can just pass a single zDimXzDim
+%          matrix.
+%       kD The discrete time-step for which the covariance matrix of an
+%          estimate is desired, where z(:,1) is at discrete time-step 1
+%          (not 0).
+%        Q The xDim X xDim X (N-1) hypermatrix of process noise covariance
+%          matrices. Alternatively, if all of the process noise covariance
+%          matrices are the same, one can just pass a single xDimXxDim
+%          matrix. If an empty matrix is passed for Q, then the estimation
+%          is performed assuming there is no process noise.
+%  numMeas If an empty matrix is passed for z, then the numMeas parameter
+%          must be passed indicating the number of measurements in the
+%          batch. Otherwise, this parameter is
 %                ignored.
 %
-%OUTPUTS: xEst      The batch state estimate at step kD, unless an empty
-%                   matrix was passed for z, in which case xEst is empty.
-%         PEst      A covariance matrix estimate that goes with the state
-%                   estimate.
+%OUTPUTS: xEst The batch state estimate at step kD, unless an empty matrix
+%              was passed for z, in which case xEst is empty.
+%         PEst A covariance matrix estimate that goes with the state
+%              estimate.
 %
 %The algorithm is an implementation of the method of Section 3.3.2 of [1]
 %for a linear dynamic model. Note that the cases in equation 28 to 32 of

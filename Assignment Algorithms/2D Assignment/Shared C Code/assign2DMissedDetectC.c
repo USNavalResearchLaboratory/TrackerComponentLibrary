@@ -132,8 +132,13 @@ bool assign2DMissedDetectC(const bool maximize, double * restrict C, double * re
             C[i]=-C[i]+CDelta;
         }
     }
-
-    (*gain)=assign2DCMissedDetectBasic(C, tuples, tempBuffer, u, v, numRowsTrue, numCol);
+    
+    if(numCol==0||numRowsTrue==0) {
+        //If the matrix is empty, the problem is infeasible.
+        *gain=-1;
+    } else {
+        (*gain)=assign2DCMissedDetectBasic(C,tuples,tempBuffer,u,v,numRowsTrue,numCol);
+    }
 
     if((*gain)==-1) {
         //If the problem is infeasible.

@@ -25,16 +25,19 @@
 #include <math.h>
 #include <stddef.h>
 
-void getENUAxesCPP(double *u, double *c,const double *plhPoint,const bool justVertical,const double a,const double f) {
-    const double phi=plhPoint[0];//The latitude
-    const double lambda=plhPoint[1];//The longitude
-    const double h=plhPoint[2];//The height
-    const double sinP=sin(phi);
-    const double cosP=cos(phi);
-    const double sinL=sin(lambda);
-    const double cosL=cos(lambda);
-    double *u1,*u2,*u3;//Pointer to the normalized East, North, and Up vectors
-    double *c1,*c2,*c3;//Pointers to the magnitudes of the unnormalized ENU vectors.
+template<class T> 
+void getENUAxesCPP(T *u, T *c,const T *plhPoint,const bool justVertical,const T a,const T f) {
+    const T phi=plhPoint[0];//The latitude
+    const T lambda=plhPoint[1];//The longitude
+    const T h=plhPoint[2];//The height
+    const T sinP=sin(phi);
+    const T cosP=cos(phi);
+    const T sinL=sin(lambda);
+    const T cosL=cos(lambda);
+    //Pointer to the normalized East, North, and Up vectors.
+    T *u1,*u2,*u3;
+    //Pointers to the magnitudes of the unnormalized ENU vectors.
+    T *c1,*c2,*c3;
     size_t i;
     
     if(justVertical==false) {
@@ -60,16 +63,19 @@ void getENUAxesCPP(double *u, double *c,const double *plhPoint,const bool justVe
     u3[0]=cosP*cosL;
     u3[1]=cosP*sinL;
     u3[2]=sinP;
-    *c3=sqrt(u3[0]*u3[0]+u3[1]*u3[1]+u3[2]*u3[2]);//Barring precision problems, this is always one.
-    for(i=0;i<3;i++){u3[i]=u3[i]/(*c3);}
-    
+    //Barring precision problems, this is always one.
+    *c3=sqrt(u3[0]*u3[0]+u3[1]*u3[1]+u3[2]*u3[2]);
+    for(i=0;i<3;i++){u3[i]/=(*c3);}
+
     if(justVertical==false) {
         //The square of the first numerical eccentricity
-        const double e2=2*f-f*f;
+        const T e2=2*f-f*f;
+        const T sqrtArg=sqrt(1-e2*sinP*sinP);
         //The normal radius of curvature.
-        const double Ne=a/sqrt(1-e2*sinP*sinP);
-        //The derivative of the normal radius of curvature with respect to phi.
-        const double dNedPhi=a*e2*cosP*sinP/pow(1-e2*sinP*sinP,3.0/2.0);
+        const T Ne=a/sqrtArg;
+        //The derivative of the normal radius of curvature with respect to
+        //phi.
+        const T dNedPhi=a*e2*cosP*sinP/(sqrtArg*sqrtArg*sqrtArg);
 
         //u1 is dr/dlambda, normalized (East).
         u1[0]=-(Ne+h)*cosP*sinL;
@@ -78,15 +84,16 @@ void getENUAxesCPP(double *u, double *c,const double *plhPoint,const bool justVe
         *c1=sqrt(u1[0]*u1[0]+u1[1]*u1[1]+u1[2]*u1[2]);
 
         //u2 is dr/dphi, normalized (North)
-        u2[0]=(cosP*dNedPhi-(Ne+h)*sinP)*cosL;
-        u2[1]=(cosP*dNedPhi-(Ne+h)*sinP)*sinL;
+        const T temp=cosP*dNedPhi-(Ne+h)*sinP;
+        u2[0]=temp*cosL;
+        u2[1]=temp*sinL;
         u2[2]=(Ne*(1-e2)+h)*cosP+(1-e2)*dNedPhi*sinP;
         *c2=sqrt(u2[0]*u2[0]+u2[1]*u2[1]+u2[2]*u2[2]);
         for(i=0;i<3;i++){u2[i]=u2[i]/(*c2);}
 
-        //If the point is too close to the poles, then it is possible that c1 is
-        //nearly equal to zero. However, u1 can just be found by orthogonality:
-        //it is orthogonal to u3 and u2. u1=cross(u2,u3);
+        //If the point is too close to the poles, then it is possible that
+        //c1 is nearly equal to zero. However, u1 can just be found by
+        //orthogonality: it is orthogonal to u3 and u2. u1=cross(u2,u3);
         u1[0]=u2[1]*u3[2]-u2[2]*u3[1];
         u1[1]=u2[2]*u3[0]-u2[0]*u3[2];
         u1[2]=u2[0]*u3[1]-u2[1]*u3[0];

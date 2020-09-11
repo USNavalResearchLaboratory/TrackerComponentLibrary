@@ -20,8 +20,8 @@ function CartStates=statePol2Cart(x,systemType)
 %OUTPUTS: CartStates The 4XN or 6XN set of target states given in Cartesian
 %                    coordinates.
 %
-%The relationship between the Cartesian and polar coordinates systems is
-%derived in the comments to the function aCVPolar.
+%The derivation is given in [1]. The function aCVPolar is an implementation
+%of a related linear dynamic model.
 %
 %EXAMPLE:
 %Here we note that the results are consistent with the inverse function:
@@ -31,6 +31,11 @@ function CartStates=statePol2Cart(x,systemType)
 % xRet=statePol2Cart(stateCart2Pol(x,systemType),systemType);
 % max(abs(x(:)-xRet(:)))
 %One will see that the error is less than 1e-13, indicating good agreement.
+%
+%REFERENCES:
+%[1] D. F. Crouse, "Basic Linear Cartesian Dynamic Models in Local
+%    Coordinates," Naval Research Laboratory7: Washignton, DC, No.
+%    NRL/MR/5344--19-9882, 24 Aug. 2019.
 %
 %August 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

@@ -75,27 +75,26 @@ function [xState,errorState]=propagateOrbitSGP4(SGP4Elements,deltaT,TTEpoch1,TTE
 %                     1 Use a gravitational model based on the WGS-84
 %                       reference ellipsoid.
 %        
-%OUTPUTS:      xState The 6XN target state at deltaT offset from the epoch
-%                     time. The state consists of position and velocity
-%                     components in the order [x;y;z;xDot;yDot;zDot] and
-%                     is in the obsolete TEME coordinate system having
-%                     units of meters (for position) and meters per
-%                     second (for velocity).
-%          errorState This indicates whether any errors occurred during
-%                     the propagation. Possible values are
-%                      0: There is no problem.
-%                      1: Mean element problem. Eccentricity >= 1.0 or
-%                              eccentricity < -0.001 or semimajor axis
-%                              implied by the elements < 0.95.
-%                      2: Mean motion less than 0.
-%                      3: Partially osculating element problem (these are
-%                         derived from the SGP4Elements), eccentricity <
-%                         0.0  or  eccentricity > 1.0
-%                      4: Semi-latus rectum of the orbit implied by the
-%                             elements is < 0.
-%                      5: Epoch elements are sub-orbital. This error is
-%                         no longer used.
-%                      6: Satellite has decayed.
+%OUTPUTS: xState The 6XN target state at deltaT offset from the epoch time.
+%                The state consists of position and velocity components in
+%                the order [x;y;z;xDot;yDot;zDot] and is in the obsolete
+%                TEME coordinate system having units of meters (for
+%                position) and meters per second (for velocity).
+%     errorState This indicates whether any errors occurred during the
+%                propagation. Possible values are
+%                0: There is no problem.
+%                1: Mean element problem. Eccentricity >= 1.0 or
+%                   eccentricity < -0.001 or semimajor axis implied by the
+%                   elements < 0.95.
+%                2: Mean motion less than 0.
+%                3: Partially osculating element problem (these are derived
+%                   from the SGP4Elements), eccentricity < 0.0  or 
+%                   eccentricity > 1.0
+%                4: Semi-latus rectum of the orbit implied by the elements
+%                   is < 0.
+%                5: Epoch elements are sub-orbital. This error is no longer
+%                   used.
+%                6: Satellite has decayed.
 %
 %The SGP4 propagator is described in [1] and [2]. The implementation here
 %uses the code that Vallado released into the public domain with his
@@ -118,6 +117,74 @@ function [xState,errorState]=propagateOrbitSGP4(SGP4Elements,deltaT,TTEpoch1,TTE
 %[xState,errorState]=propagateOrbitSGP4(SGP4Elements,deltaT,TTEpoch1,TTEpoch2);
 %or if no deep-space model is needed, as
 %[xState,errorState]=propagateOrbitSGP4(SGP4Elements,deltaT);
+%
+%EXAMPLE:
+%Given four sets of two-line element sets, determine and plot the
+%geometries over the period of one day in ECI coordinates. The satellite
+%locations at the start time are marked.
+% %GPS BIIF-8  (PRN 03)    
+% TLELine1{1}='1 40294U 14068A   15020.29385414  .00000070  00000-0  00000+0 0   540';
+% TLELine2{1}='2 40294  54.9733 195.4533 0009937 200.3481 159.6074  2.00552103  1649';
+% %MOLNIYA 1-52            
+% TLELine1{2}='1 13012U 81123A   15018.94905608 -.00000681  00000-0 -14916+0 0  9748';
+% TLELine2{2}='2 13012  64.5459 237.9786 6582041 266.1991 281.9349  2.00764916242351';
+% %IRIDIUM 21 [+]          
+% TLELine1{3}='1 25778U 99032B   15020.52891112  .00000090  00000-0  24907-4 0   692';
+% TLELine2{3}='2 25778  86.3940 231.2123 0002236 103.3219 284.0147 14.34221960822175';
+% %TDRS 5 
+% TLELine1{4}='1 21639U 91054B   15018.78954554  .00000089  00000-0  00000+0 0  7277';
+% TLELine2{4}='2 21639  13.5697  31.2110 0016573 318.7792 244.3708  1.00275730 85939';
+% 
+% numSat=4;
+% SGP4Elements=cell(numSat,1);
+% SGP4TTEpoch1=zeros(numSat,1);
+% SGP4TTEpoch2=zeros(numSat,1);
+% for curTLE=1:numSat
+%     [SGP4Elements{curTLE},SGP4TTEpoch1(curTLE),SGP4TTEpoch2(curTLE)]=TLE2SGP4OrbEls(TLELine1{curTLE},TLELine2{curTLE});
+% end
+% 
+% minEpochFrac=min(SGP4TTEpoch2);
+% %The constant is the number of seconds in a TT Julian day. We are
+% %converting from TT Julian days to seconds.
+% SGP4DeltaEpoch=(minEpochFrac-SGP4TTEpoch2)*86400;
+% 
+% a=Constants.WGS72SemiMajorAxis;%The equatorial radius of the Earth = semi-major axis.
+% f=Constants.WGS72Flattening;%The flattening factor fo the Earth.
+% b=a*(1-f);%The semi-minor axis.
+% 
+% %Determine the geometries over a day.
+% numPoints=500;
+% deltaTOffset=linspace(0,86400,numPoints);%86400 seconds per day.
+% 
+% xState=zeros(6,numPoints,numSat);
+% for curSat=1:numSat
+%     for curOffset=1:numPoints
+%         deltaT=SGP4DeltaEpoch(curSat)+deltaTOffset(curOffset);
+%         %Get the target state in GCRS coordinates at the given time.
+%         xTemp=propagateOrbitSGP4(SGP4Elements{curSat},deltaT,SGP4TTEpoch1(curSat),SGP4TTEpoch2(curSat));
+%         xState(:,curOffset,curSat)=TEME2GCRS(xTemp,SGP4TTEpoch1(curSat),SGP4TTEpoch2(curSat)+deltaT/86400);
+%     end
+% end
+% 
+% %Plot the geometries over the period of one day.
+% figure(1)
+% clf
+% hold on
+% [x,y,z]=ellipsoid(0,0,0,a,a,b,20);
+% surf(x,y,z)
+% colormap(gray);
+% 
+% %Orbits
+% plot3(xState(1,:,1),xState(2,:,1),xState(3,:,1),'-b','linewidth',4)
+% plot3(xState(1,:,2),xState(2,:,2),xState(3,:,2),'-r','linewidth',4)
+% plot3(xState(1,:,3),xState(2,:,3),xState(3,:,3),'-g','linewidth',4)
+% plot3(xState(1,:,4),xState(2,:,4),xState(3,:,4),'-k','linewidth',4)
+% 
+% %Satellite Initial Locations
+% scatter3(xState(1,1,1),xState(2,1,1),xState(3,1,1),100,'sb','filled','MarkerEdgeColor','b','linewidth',3)
+% scatter3(xState(1,1,2),xState(2,1,2),xState(3,1,2),100,'or','filled','MarkerEdgeColor','r','linewidth',3)
+% scatter3(xState(1,1,3),xState(2,1,3),xState(3,1,3),100,'og','filled','MarkerEdgeColor','g','linewidth',3)
+% scatter3(xState(1,1,4),xState(2,1,4),xState(3,1,4),100,'ok','filled','MarkerEdgeColor','k','linewidth',3)
 %
 %REFERENCES:
 %[1] F. R. Hoots and R. L. Roehrich, "Spacetrack report no. 3: Models for

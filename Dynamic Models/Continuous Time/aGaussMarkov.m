@@ -1,4 +1,4 @@
-function [aVal,aJacob,aHess,papt]=aGaussMarkov(x,t,tau,order)
+function [aVal,aJacob,aHess,papt]=aGaussMarkov(x,tau,order)
 %AGAUSSMARKOV The drift function for an arbitrary-order Gauss Markov
 %             process. Gauss-Markov processes have exponentially-correlated
 %             noise in their highest moment. A zeroth-order process is an
@@ -12,9 +12,6 @@ function [aVal,aJacob,aHess,papt]=aGaussMarkov(x,t,tau,order)
 %          order, numDim is the dimensionality of the motion. For example,
 %          2D, 3D. The elements of the state are in the order of position,
 %          velocity, acceleration, etc.
-%        t An unused time component so that aSinger can be used with
-%          Runge-Kutta methods that expect the function to take two
-%          parameters.
 %      tau The time constant of the autocorrelation or the moment of the
 %          given order. For example, if order=2, then tau is the time
 %          constant of the decorrelation time of the acceleration in
@@ -61,7 +58,7 @@ function [aVal,aJacob,aHess,papt]=aGaussMarkov(x,t,tau,order)
 %The drift function corresponds to the state transition given in
 %discrete-time by the function FGaussMarkov. To get the full dynamic model,
 %the drift function should be used with the diffusion function
-%DPoly(x,t,q,order,numDim), where q=(sqrt(2/tau)*sigmam)^2 and sigmam^2 is
+%DPoly(x,q,order,numDim), where q=(sqrt(2/tau)*sigmam)^2 and sigmam^2 is
 %the instantaneous variance of the highest order mooment and  numDim is
 %the number of dimensions in the model. The autocorrelation of the
 %highest-order moment is= sigmam^2*exp(-abs(deltaT)/tau) for some deltaT
@@ -81,11 +78,11 @@ function [aVal,aJacob,aHess,papt]=aGaussMarkov(x,t,tau,order)
 %August 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<4)
+if(nargin<3)
     order=2;
 end
 
-if(nargin<3)
+if(nargin<2)
    tau=20; 
 end
 

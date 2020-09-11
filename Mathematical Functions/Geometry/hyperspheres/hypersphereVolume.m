@@ -2,9 +2,9 @@ function vol=hypersphereVolume(r,numDim)
 %%HYPERSPHEREVOLUME Determine the volume of a sphere of a given radius in
 %                   multiple dimensions.
 %                   
-%INPUTS:     r The radius of the hypersphere. r>0.
-%       numDim The number of dimensions of the hypersphere. numDim>=1. One
-%              dimensions is a line, two a circle, three a sphere, etc.
+%INPUTS: r The radius of the hypersphere. r>0.
+%   numDim The number of dimensions of the hypersphere. numDim>=1. One
+%          dimension is a line, two a circle, three a sphere, etc.
 %
 %OUTPUTS: vol The volume of the hypersphere.
 %

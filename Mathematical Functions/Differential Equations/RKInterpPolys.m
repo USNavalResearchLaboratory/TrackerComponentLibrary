@@ -15,7 +15,7 @@ function [interpPolyA,interpPolyC]=RKInterpPolys(x0,t0,x1,t1,f,order,solutionCho
 %            f  f(xVal,curT) returns the derivative of xVal with
 %               respect to time taken at time curT.
 % (order,solutionChoice) The pair of order and solutionChoice identify
-%               which algoirthm was used to perform the Runge-Kutta step
+%               which algorithm was used to perform the Runge-Kutta step
 %               and thus indicate what the best interpolation routine
 %               should be. If a Rosenbrock method is used, set
 %               solutionChoice=-1;
@@ -23,7 +23,7 @@ function [interpPolyA,interpPolyC]=RKInterpPolys(x0,t0,x1,t1,f,order,solutionCho
 %               points as determined by the algorithm used for the
 %               RungeKStep function. If a Rosenbrock method is used, this
 %               parameter can be omitted or an empty matrix can be passed.
-%interpMainOrder An optional parameter indicating whether the interpolation
+% interpMainOrder An optional parameter indicating whether the interpolation
 %               should be the same as the main order of the Runge-Kutta
 %               pair or whether it should be the same as the secondary
 %               order. If omitted, the default value is true.

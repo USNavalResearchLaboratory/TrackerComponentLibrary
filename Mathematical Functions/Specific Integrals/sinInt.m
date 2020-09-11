@@ -5,8 +5,8 @@ function val=sinInt(x)
 %        defined without pi in the numerator and denominator); that is
 %        sin(x)/x.
 %
-%INPUTS:    x A matrix of real values, at which one wishes to evaluate the
-%             sine integral. x does not have to be finite.
+%INPUTS: x A matrix of real values, at which one wishes to evaluate the
+%          sine integral. x does not have to be finite.
 %
 %OUTPUTS: val A matrix of the real values of the sine integral evaluated at
 %             the points in x.

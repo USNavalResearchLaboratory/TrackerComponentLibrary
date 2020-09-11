@@ -6,12 +6,12 @@ function [midpoint,minDist]=closestPointBetween2Lines(a1,b1,a2,b2)
 %                           line, and then averaging the points (get the
 %                           point halfway between the lines).
 %
-%INPUTS: a1,b1  3XN matrix of parameters for the first line in N pairs of
-%               lines, the closes point between each being desired. The ith
-%               line is represented in parametic form as
-%               r=a1(:,i)*t+b1(:,i), where t is a scalar parameter and r is
-%               a point on the line.
-%        a2,b2  The 3XN set of parameters for the second lines.
+%INPUTS: a1,b1 3XN matrix of parameters for the first line in N pairs of
+%              lines, the closes point between each being desired. The ith
+%              line is represented in parametic form as
+%              r=a1(:,i)*t+b1(:,i), where t is a scalar parameter and r is
+%              a point on the line.
+%        a2,b2 The 3XN set of parameters for the second lines.
 %                           
 %OUTPUTS: midpoint The 3XN set of closest points between each of the N
 %                  pairs of lines.

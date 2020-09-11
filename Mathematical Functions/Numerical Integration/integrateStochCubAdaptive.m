@@ -186,7 +186,7 @@ switch(algorithm)
             end
         end
     otherwise
-        error('Unknown algoirthm specified')
+        error('Unknown algorithm specified.')
 end
 end
 

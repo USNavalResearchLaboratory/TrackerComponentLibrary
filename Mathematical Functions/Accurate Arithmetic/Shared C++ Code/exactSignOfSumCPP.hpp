@@ -10,16 +10,20 @@
  *used with float as well as double and long double values. It cannot be
  *used with integers.
  *
- *The algorithm is taken from
- *H. Ratschek and J. Rokne, "Exact computation of the sign of a finite
- *sum," Applied Mathematics and Computation, vol. 99, no. 2-3, pp. 99-127,
- *15 Mar. 1999.
- *where code is provided in an appendix. The code with minor changes and
- *corrections is also available from Jon Rokne's web site at
+ *Only the function int exactSignOfSumCPP is meant to be called externally.
+ *
+ *The algorithm is taken from [2] where code is provided in an appendix.
+ *The code with minor changes and corrections is also available from Jon
+ *Rokne's web site at
  *http://pages.cpsc.ucalgary.ca/~rokne/convex/sgnsum.cc
  *The implementation here uses the corrections and uses the sort algorithm
  *in the C++ standard template library rather than the sort algorithm
  *provided by Rokne.
+ *
+ *REFERENCES:
+ *[1] H. Ratschek and J. Rokne, "Exact computation of the sign of a finite
+ *   sum," Applied Mathematics and Computation, vol. 99, no. 2-3, pp.
+ *   99-127, 15 Mar. 1999.
  *
  *December 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
  **/
@@ -198,12 +202,13 @@ int exactSignOfSumCPP(const T *S, const size_t nS) {
                     b[1]=bss;
                 }
                 BuildHeapFromTop(n,b);
-            } else
-            b[1]=bs;
-            BuildHeapFromTop(n,b);
-            if(bss!=0) {
-                b[++n]=bss;
-                BuildHeapFromBelow(n,b);
+            } else {
+                b[1]=bs;
+                BuildHeapFromTop(n,b);
+                if(bss!=0) {
+                    b[++n]=bss;
+                    BuildHeapFromBelow(n,b);
+                }
             }
         }
         

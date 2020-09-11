@@ -29,7 +29,7 @@ n=size(A,1);
 %The initial upper triangularization. We are just using qr and not
 %Algorithm 5.2.1.
 %Make B upper triangular
-[Q,B] = qr(B,0);
+[Q,B]=qr(B,0);
 A=Q'*A;%Adjust A accordingly
 
 Z=eye(n,n);

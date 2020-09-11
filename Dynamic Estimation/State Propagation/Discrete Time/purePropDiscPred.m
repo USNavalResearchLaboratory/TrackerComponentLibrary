@@ -74,8 +74,8 @@ function [xi,xPred,PPred]=purePropDiscPred(xi,w,f,Q,stateDiffTrans,stateTrans)
 %REFERENCES:
 %[1] O. Straka, J. Duník, and M. Simandl, "Design of pure propagation
 %    unscented Kalman filter," in Proceedings of the 19th World Congress of
-%    the The International Federation of Automatic Control, Cape Town,
-%    South Africa, 24-29 Aug. 2014, pp. 5399-5938.
+%    The International Federation of Automatic Control, Cape Town, South
+%    Africa, 24-29 Aug. 2014, pp. 5399-5938.
 %
 %August 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

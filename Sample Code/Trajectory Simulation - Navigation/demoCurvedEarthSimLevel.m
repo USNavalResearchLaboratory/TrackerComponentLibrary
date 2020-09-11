@@ -11,17 +11,13 @@ function demoCurvedEarthSimLevel()
 %                     evolution can be determined using explicit or
 %                     numerically-determined derivatives.
 %
-%Note that the indirectGeodeticProb function called by this function must
-%be compiled, so one should run the CompileCLibraries function prior to
-%running this example.
-%
 %September 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-%Simulate level-flight from Hilo Hawaii to Füssen, Germany at a constant
+%Simulate level-flight from Hilo Hawaii to Fï¿½ssen, Germany at a constant
 %altitude on an ellipsoidal Earth, traveling at a constant speed.
 
-disp('Level Flight from Hilo, Hawaii to Füssen, Germany at 8km (ellipsoidal) Altitude and Mach 1')
+disp('Level Flight from Hilo, Hawaii to Fï¿½ssen, Germany at 8km (ellipsoidal) Altitude and Mach 1')
 ellipsAlt=8e3;%8km ellipsoidal altitude.
 
 %The target should be traveling at Mach 1-> the speed of sound. The speed
@@ -40,15 +36,15 @@ phi=19.823*pi/180;%North latitude in radians.
 lambda=-155.470*pi/180;%East longitude in radians.
 latLonStart=[phi;lambda];
 
-%The approximate latitude and longitude of Neuschwanstein Castle in Füssen,
+%The approximate latitude and longitude of Neuschwanstein Castle in Fï¿½ssen,
 %Germany.
 phi=47.5575*pi/180;%North latitude
 lambda=10.7500*pi/180;%East longitude
 latLonEnd=[phi;lambda];
 
-disp('1) Computing the initial heading and distance to navigate on a geodesic curve from Hilo to Füssen')
+disp('1) Computing the initial heading and distance to navigate on a geodesic curve from Hilo to Fï¿½ssen')
 %The initial heading (in local East-North-Up coordinate) and distance
-%traveled to get from Hilo, Hawaii to Füssen, Germany is the solution to
+%traveled to get from Hilo, Hawaii to Fï¿½ssen, Germany is the solution to
 %the indirect geodetic problem. When the altitude is not zero, traditional
 %indirect geodetic problem solution methods will report a distance that is
 %too small, since they assume altitude==0. Here, we will compare the
@@ -80,7 +76,7 @@ disp(['out of a total transit distance of ', num2str(distE), ' meters.'])
 
 disp(' ')%Insert line break
 disp('2) Computing the heading and distance to navigate on a rhumb line (constant-heading trajectory)')
-disp('from Hilo to Füssen')
+disp('from Hilo to Fï¿½ssen')
 tic;
 [azimuthRhumb0, distRhumb0]=indirectRhumbProblem(latLonStart,latLonEnd);
 time0=toc;
@@ -105,7 +101,7 @@ disp(' ')%Insert line break
 disp('3) Computing the trajectory at 1000 points of a non-maneuvering target flying the geodesic path using')
 disp('analytical derivatives.')
 %The continuous-time drift function for a 3D, flat-Earth dynamic model is
-aFlatEarth3D=@(x,t)aPoly(x,t,3);
+aFlatEarth3D=@(x,t)aPoly(x,3);
 %The initial local coordinate system is defined as East-North-Up,
 %corresponding to the x, y and z axes. This lets us easily translate the
 %initial heading given by the indirectGeodeticProb function into components
@@ -125,7 +121,7 @@ xInit=[rGlobalCart;vLocalInit];
 
 %When traveling in a straight line on an ellipsoidal Earth, the local basis
 %vectors evolve according to
-uDyn=@(u,x,t)uDotEllipsoid(u,x,t);
+uDyn=@(u,x,t)uDotEllipsoid(u,x);
 
 %The target is going to travel a distance of distE meters and it is
 %traveling a constant cSoundSTP meters per second. Thus, the total travel
@@ -165,7 +161,7 @@ disp(['Numerical trajectory determination took ', num2str(timeGeoNum),' seconds.
 disp('Computing the trajectory at 1000 points of a non-maneuvering target flying the rhumb path.')
 
 %The initial heading for the Rhumb-line path is different than that of the
-%geodesic curve, because it does not change with time/
+%geodesic curve, because it does not change with time.
 vLocalInit=cSoundSTP*[sin(azimuthRhumbE);cos(azimuthRhumbE);0];
 
 %The initial target state with GLOBAL position and LOCAL velocity is thus

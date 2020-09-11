@@ -103,7 +103,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     /*Transpose the matrix, if necessary, so that we actually do the
      *missed detection analysis by column. The matrix must be duplicated
      *either way, because it must be modified.*/
-    CIn=mxGetPr(prhs[0]);
+    CIn=mxGetDoubles(prhs[0]);
     C=(double*)mxMalloc(numRow*numCol*sizeof(double));
     if(missedDetectByRow) {
         //Duplicate the input array.
@@ -134,7 +134,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     gainMATLAB=mxCreateNumericMatrix(1,1,mxDOUBLE_CLASS,mxREAL);
     uMATLAB=mxCreateNumericMatrix(numCol,1,mxDOUBLE_CLASS,mxREAL);
     vMATLAB=mxCreateNumericMatrix(numRow,1,mxDOUBLE_CLASS,mxREAL);
-    gainPtr=mxGetPr(gainMATLAB);
+    gainPtr=mxGetDoubles(gainMATLAB);
     
     //Allocate the temporary space used by the assign2DMissedDetectC
     //function. We also allocate an additional 2*numCol*sizeof(ptrdiff_t)
@@ -146,7 +146,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 
     {
         void *bufferStart=(void*)(tuples+2*numCol);
-        isInfeasible=assign2DMissedDetectC(maximize, C, gainPtr, tuples, bufferStart, mxGetPr(uMATLAB), mxGetPr(vMATLAB), numRowsTrue, numCol);
+
+        isInfeasible=assign2DMissedDetectC(maximize, C, gainPtr, tuples, bufferStart, mxGetDoubles(uMATLAB), mxGetDoubles(vMATLAB), numRowsTrue, numCol);
     }
 
     //If there is no feasible solution.
@@ -167,7 +168,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         }
         return;
     } else {
-        //Get rid of the entries in v that are relatd to the
+        //Get rid of the entries in v that are related to the
         //"unconstrained" column.
         mxSetM(vMATLAB,numRowsTrue-1);
         
@@ -193,7 +194,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
             vMATLAB=temp;
         } else {
             size_t curCol;
-            
+
             for(curCol=0;curCol<numCol;curCol++) {
                 const size_t idx=2*curCol;
 

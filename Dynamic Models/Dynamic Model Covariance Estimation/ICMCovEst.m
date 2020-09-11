@@ -5,7 +5,7 @@ function [R,Q]=ICMCovEst(z,H,F,u,params2Est,num2Skip,maxLag,xInit,RInit,QInit,nu
 %           system given a sequence of measurements. Only up to xDimXzDim
 %           elements of the process noise covariance matrix Q can be
 %           uniquely determined, so in many systems, this is not a useful
-%           estimator of Q. This algorithm relies on the the fact that the
+%           estimator of Q. This algorithm relies on the fact that the
 %           autocorrelation of the innovations in a matched Kalman filter
 %           Kalman filter should be a zero-mean stochastic process. The
 %           assumed measurement model if x_k is the target state at time k
@@ -215,7 +215,7 @@ for curIter=1:numIters
     %Given  a new R and Q estimate, we can try to improve xInit. This wil
     %bias the estimator, but any initial estimate will bias the estimator.
     if(curIter>1)
-        [~,~,x0,~]=FPInfoSmoother([],[],z,u,H,F,R,Q,1);
+        [~,~,x0,~]=FPInfoBatchSmoother([],[],z,u,H,F,R,Q,1);
     end
 
     %Get the asymptotic prediction covariance given the current R and Q

@@ -1,4 +1,4 @@
-function [aVal,aJacob,aHess,papt]=aPolarLin2D(x,t,T)
+function [aVal,aJacob,aHess,papt]=aPolarLin2D(x,T)
 %APOLARLIN2D The drift function for a 2D continuous-time constant heading
 %            motion model where the target state is given in terms of
 %            position, direction of velocity in radians counterclockwise
@@ -12,9 +12,6 @@ function [aVal,aJacob,aHess,papt]=aPolarLin2D(x,t,T)
 %          Alternatively, a 5XN state vector of [2D position;direction
 %          angle;speed; speed derivative] can be used to cover a linearly
 %          accelerating target.
-%        t An unused time component is so that aPolar2DCV can be used with
-%          Runge-Kutta methods that expect the function to take two
-%          parameters.
 %        T The time-duration of the propagation interval in seconds. This
 %          is only needed when linear acceleration is included.
 %

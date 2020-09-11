@@ -3,8 +3,11 @@ function theArr=randArrangement(n,m)
 %                 spaces. If n=m, then this is a permutation.
 %
 %INPUTS: n The number of items to place into spaced.
-%        m the number of spaces that can take items. m<=n.
+%        m The number of spaces that can take items. m<=n.
 %
+%
+%OUTPUTS: theArr The mX1 arrangement, which can hold values from 1 to n.
+
 %This function implements the algorithm of [1].
 %
 %EXAMPLE:

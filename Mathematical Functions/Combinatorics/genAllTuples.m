@@ -11,8 +11,8 @@ function theTuples=genAllTuples(maxVals,firstIsMostSig)
 %                most significant). The default if this parameter is
 %                omitted or an empty matrix is passed is true.
 %
-%OUTPUTS: theTuples An NXprod(maxVals+1) matrix of all of the tuples. The
-%                ordering is such that theTuples(1,k) is the most
+%OUTPUTS: theTuples An NXnumTuples(maxVals) matrix of all of the tuples.
+%                The ordering is such that theTuples(1,k) is the most
 %                significant digit of the kth tuple and theTuples(N,k) is
 %                the least significant digit of the kth tuple.
 %
@@ -26,10 +26,10 @@ if(nargin<2||isempty(firstIsMostSig))
 end
 
 N=length(maxVals);
-numTuples=prod(maxVals+1);
-theTuples=zeros(N,numTuples);
+tupleCount=numTuples(maxVals);
+theTuples=zeros(N,tupleCount);
 theTuples(:,1)=getNextTuple(N);
-for k=2:numTuples
+for k=2:tupleCount
     theTuples(:,k)=getNextTuple(theTuples(:,k-1),maxVals,firstIsMostSig);
 end
 

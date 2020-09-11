@@ -16,10 +16,10 @@ methods(Static)
 function val=mean(nu,lambda)
 %%MEAN Obtain the mean of chi squared probability distribution.
 %
-%INPUTS: nu  The number of degrees of freedom of the chi-squared
-%            distribution. Note that nu>0.
-%       lambda The non-centrality parameter of the distribution. In the
-%              central chi-squared distribution, this is zero.
+%INPUTS: nu The number of degrees of freedom of the chi-squared
+%           distribution. Note that nu>0.
+%    lambda The non-centrality parameter of the distribution. In the
+%           central chi-squared distribution, this is zero.
 %
 %OUTPUTS: val The mean of the chi squared distribution under consideration.
 %
@@ -261,7 +261,6 @@ function entropyVal=entropy(nu)
     
     entropyVal=nu/2+log(2)+gammaln(nu/2)+(1-nu/2)*psi(nu/2);
 end
-
 end
 end
 

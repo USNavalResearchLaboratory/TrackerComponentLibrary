@@ -1,22 +1,24 @@
 function [yUpdate, PInvUpdate]=infoFilterUpdate(yPred,PInvPred,z,R,H)
 %%INFOFILTERUPDATE Perform the measurement update step in the standard 
-%                  linear information filter.
+%                  linear information filter. Using an information filter
+%                  means that instead of propagating a state x and its
+%                  covariance matrix P, one propagates inv(P) and 
+%                  y=inv(P)*x.
 %
 %INPUTS: yPred The xDimX1 predicted information state. The information
 %              state is the inverse covariance matrix times the target
 %              state.
 %     PInvPred The xDimXxDim inverse of the predicted state covariance
 %              matrix.
-%            z The zDim X 1 vector measurement.
-%            R The zDim X zDim measurement covariance matrix. This must be
+%            z The zDimX1 vector measurement.
+%            R The zDimXzDim measurement covariance matrix. This must be
 %              positive definite.
-%            H The zDim X xDim measurement matrix for a linear measurement
+%            H The zDimXxDim measurement matrix for a linear measurement
 %              model. That is z=H*x+w, where w is measurement noise having
 %              covariance matrix R.
 %
-%OUTPUTS: yUpdate The xDim X 1 updated (posterior) information state
-%                 vector.
-%      PInvUpdate The updated xDim X xDim inverse state covariance matrix.
+%OUTPUTS: yUpdate The xDimX1 updated (posterior) information state vector.
+%      PInvUpdate The updated xDimXxDim inverse state covariance matrix.
 %
 %The information filter is algebraically equivalent to the standard linear
 %Kalman filter, but allows for track propagation with very uncertain
@@ -35,7 +37,64 @@ function [yUpdate, PInvUpdate]=infoFilterUpdate(yPred,PInvPred,z,R,H)
 %PInv=inv(P)
 %which means that the filter can be used even when PInv is singular.
 %
-%More information on information filtering is given in Chapter 7.2 of [2]
+%More information on information filtering is given in Chapter 7.2 of [2].
+%
+%EXAMPLE:
+%In this example, we feed two measurements to the information filter and
+%show that the result has a consistent NEES and the RMSE is the same as the
+%second measurement.
+% T=1;%Sample period.
+% numRuns=1000;
+% %Parameters for the noise process dynamics and measurement.
+% H=[eye(2,2),zeros(2,2)];
+% zDim=size(H,1);
+% xDim=size(H,2);
+% R=diag([40;40]);
+% SR=chol(R,'lower');
+% 
+% %Statistics for the initial state.
+% x0Mean=[1e3;0;75;-50];
+% x0Cov=diag([1e3^2;100^2;25^2;25^2]);
+% x0S=chol(x0Cov,'lower');
+% 
+% %Parameters for the state dynamics.
+% q=processNoiseSuggest('PolyKal-ROT',9.8,1);
+% F=FPolyKal(T,zeros(xDim,1),1);
+% Q=QPolyKal(T,zeros(xDim,1),1,q);
+% SQ=chol(Q,'lower');
+% 
+% RMSEMeas=0;
+% RMSE=0;
+% NEES=0;
+% for curRun=1:numRuns
+%     %Draw the initial state.
+%     x1True=x0Mean+x0S*randn(xDim,1);
+%     %Get the first measurement.
+%     z1=H*x1True+SR*randn(zDim,1);
+% 
+%     x2True=F*x1True+SQ*randn(xDim,1);
+%     z2=H*x2True+SR*randn(zDim,1);
+%     
+%     %Two-point initialization.
+%     y0=zeros(xDim,1);
+%     PInv0=zeros(xDim,xDim);
+%     [yUpdate,PInvUpdate]=infoFilterUpdate(y0,PInv0,z1,R,H);
+%     [yPred, PInvPred]=infoFilterDiscPred(yUpdate,PInvUpdate,F,Q);
+%     [yUpdate,PInvUpdate]=infoFilterUpdate(yPred,PInvPred,z2,R,H);
+%     xEst2=PInvUpdate\yUpdate;
+%     
+%     diff=xEst2-x2True;
+%     NEES=NEES+diff'*PInvUpdate*diff;
+%     RMSE=RMSE+sum(diff(1:2).^2);
+%     diff=z2-x2True(1:2);
+%     RMSEMeas=RMSEMeas+sum(diff(1:2).^2);
+% end
+% RMSEMeas=sqrt(RMSEMeas/numRuns)
+% RMSE=sqrt(RMSE/numRuns)
+% NEES=NEES/(xDim*numRuns)
+%Ine will see that RMSEMeas equal RMSE< because with just two measurements,
+%one cannot smmooth the position estimate syet. Additionally, NEES will be
+%close to 1 indicating covariance consistency.
 %
 %REFERENCES:
 %[1] David F. Crouse , "Basic tracking using nonlinear 3D monostatic and

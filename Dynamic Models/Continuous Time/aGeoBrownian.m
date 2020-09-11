@@ -1,4 +1,4 @@
-function [aVal,aJacob,aHess,papt]=aGeoBrownian(x,t,a)
+function [aVal,aJacob,aHess,papt]=aGeoBrownian(x,a)
 %AGEOBROWNIAN This provides the drift function value matrix of the
 %             multivariate geometric Brownian motion process, also known as
 %             the Black- Scholes models. The stochastic differential
@@ -9,9 +9,6 @@ function [aVal,aJacob,aHess,papt]=aGeoBrownian(x,t,a)
 %             function goes with the diffusion function DGeoBrownian.
 %
 %INPUTS: x The xDimX1 target state vector.
-%        t An unused time component so that this function can be used with
-%          Runge-Kutta methods that expect the function to take two
-%          parameters.
 %        a The xDimX1 coefficient vector.
 %
 %OUTPUTS: aVal The xDimXN time-derivative of the state vector under the

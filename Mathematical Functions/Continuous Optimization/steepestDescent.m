@@ -97,19 +97,17 @@ function [xMin,fMin,exitCode]=steepestDescent(f,x0,epsilon,deltaTestDist,delta,l
     else
         lineSearchParams=[];
     end
-    
-    N=size(x0,1);
 
     if(nargin<7||isempty(maxIter))
         maxIter=100; 
     end
 
     x=x0;
-    [fVal,gradF]=f(x0);
+    [fValCur,gradF]=f(x0);
 
     if(deltaTestDist>0)
         pastFVals=zeros(deltaTestDist,1);
-        pastFVals(1)=fVal;
+        pastFVals(1)=fValCur;
     end
 
     for cutIter=1:maxIter
@@ -118,12 +116,15 @@ function [xMin,fMin,exitCode]=steepestDescent(f,x0,epsilon,deltaTestDist,delta,l
 
         if(useLineSearch)
             %Perform a line search in the given descent direction.
-            [xCur,fValCur,gradFCur,~,~,exitCode]=lineSearch(f,x,d,[],[],lineSearchParams);
-            if(isempty(xCur))
-                xMin=[];
-                fMin=[];
+            [xNew,fValNew,gradFCur,~,~,exitCode]=lineSearch(f,x,d,[],[],lineSearchParams);
+            if(isempty(xNew))
+                %Just return the last valid values.
+                xMin=x;
+                fMin=fValCur;
                 return;
             end
+            xCur=xNew;
+            fValCur=fValNew;
         else%Take a step without a line search.
             xCur=x+d;
             [fValCur,gradFCur]=f(xCur);
@@ -153,7 +154,7 @@ function [xMin,fMin,exitCode]=steepestDescent(f,x0,epsilon,deltaTestDist,delta,l
                 return; 
             end
             pastFVals=circshift(pastFVals,[1,0]);
-            pastFVals(1)=fVal;
+            pastFVals(1)=fValCur;
         end
         
         x=xCur;

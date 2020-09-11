@@ -1,4 +1,4 @@
-function [D,DJacob,DHess,pDpt]=DPoly(x,t,q0,order,numDim)
+function [D,DJacob,DHess,pDpt]=DPoly(x,q0,order,numDim,omitDims)
 %%DPOLY The diffusion matrix for a continuous-time additive noise model in
 %       numDim dimensions of motion with order moments of position whereby
 %       the noise is only added to the highest-order derivatives of
@@ -14,11 +14,6 @@ function [D,DJacob,DHess,pDpt]=DPoly(x,t,q0,order,numDim)
 %          parameters x should be a (order+1)*numDim X N, where N is the
 %          number of D matrices on the output. If an empty matrix is
 %          passed, then it is assumed only one output is desired.
-%        t The time at which the diffusion matrix is desired. This is
-%          unused, since the diffusion matrix in the basic additive noise
-%          model is time-invariant. This is here so that DPoly can be used
-%          with Runge-Kutta methods that expect the function to take two
-%          arguments.
 %       q0 The power spectral density of the noise for each dimension. If
 %          the power spectral density of the noise is the same in all
 %          dimensions, the a scalar q0 can be passed.
@@ -28,15 +23,20 @@ function [D,DJacob,DHess,pDpt]=DPoly(x,t,q0,order,numDim)
 %   numDim The number of dimensions of the simulation problem. If the
 %          numDim parameter is omitted, then numDim=3 (3D motion) is
 %          assumed.
+% omitDims The number of dimensions at the end of the state to which noise
+%          will not be added. The default if omitted or an empty matrix is
+%          passed is 0. This could be useful if tracking in 3D using a 2D
+%          state and one does not want to add noise to the final component,
+%          because the target is constrained to a flat surface.
 %
-%OUTPUTS: D The diffusion matrix of a continuous-time linear additive noise
-%           model where the noise is only added to the highest order terms
-%           of the state. If the input x has multiple columns, then the
-%           same number of copies of D are returned with D(:,:,i) being the
-%           ith one.
+%OUTPUTS: D The xDimXnumDimXN diffusion matrix of a continuous-time linear
+%           additive noise model where the noise is only added to the
+%           highest order terms of the state. If the input x has multiple
+%           columns, then the same number of copies of D are returned with
+%           D(:,:,i) being the ith one.
 %   DJacob, DHess The xDimXnumDimXxDim, xDimXnumDimXxDimXxDim matrices of
 %           first and second partial derivatives of the elements of D with
-%           respect to x. These are all zero, since D is a constant. it is
+%           respect to x. These are all zero, since D is a constant. It is
 %           the same for all D and is not repeated N times.
 %      pDpt The xDimXnumDim partial derivative of D with respect to time.
 %           This is all zeros, because D is a constant.
@@ -60,26 +60,32 @@ function [D,DJacob,DHess,pDpt]=DPoly(x,t,q0,order,numDim)
 
     %The max allows the user to pass an empty matrix.
     numD=max(size(x,2),1);
+
+    if(nargin<5||isempty(omitDims))
+        omitDims=0;
+    end
     
-    if(nargin<5||isempty(numDim))
+    if(nargin<4||isempty(numDim))
         numDim=3;
     end
     
-    if(nargin<4||isempty(order))
+    if(nargin<3||isempty(order))
        order=1; 
     end
     
+    numOmitEls=numDim-omitDims;
+    
     if(isscalar(q0))
-        q0=ones(numDim,1)*q0;
+        q0=ones(numOmitEls,1)*q0;
     end
     
     q0R=sqrt(q0);
     xDim=(order+1)*numDim;
     
-    D=zeros(xDim,numDim);
+    D=zeros(xDim,numOmitEls);
     
-    for curDim=1:numDim
-        D((xDim-curDim+1),numDim-curDim+1)=q0R(numDim-curDim+1);
+    for curDim=1:numOmitEls
+        D((xDim-curDim+1-omitDims),numOmitEls-curDim+1)=q0R(numOmitEls-curDim+1);
     end
     
     if(numD>1)
@@ -87,11 +93,11 @@ function [D,DJacob,DHess,pDpt]=DPoly(x,t,q0,order,numDim)
     end
     
     if(nargout>1)
-        DJacob=zeros(xDim,numDim,xDim);
+        DJacob=zeros(xDim,numOmitEls,xDim);
         if(nargout>2)
-            DHess=zeros(xDim,numDim,xDim,xDim);
+            DHess=zeros(xDim,numOmitEls,xDim,xDim);
             if(nargout>3)
-                pDpt=zeros(xDim,numDim);
+                pDpt=zeros(xDim,numOmitEls);
             end
         end
     end

@@ -17,7 +17,7 @@ function [IDVarNorm,IDVar,IDVarMax]=identVarGauss(w,mu,Sigma,xDim)
 %          all of the targets for each hypothesis. Alternatively, if the
 %          target states are all uncorrelated, this can be an
 %          xDimXnumTarXnumHyp hypermatrix.
-%    Sigma This is an (xDim*numTar)XxDim*numTar)XnumHyp set of covaraince
+%    Sigma This is an (xDim*numTar)XxDim*numTar)XnumHyp set of covariance
 %          matrices for all of the stacked mean values in mu for each
 %          hypothesis. If all of the target states are uncorrelated, an
 %          xDimXxDimXnumTarXnumHyp set of hypermatrices for each target and
@@ -56,7 +56,7 @@ function [IDVarNorm,IDVar,IDVarMax]=identVarGauss(w,mu,Sigma,xDim)
 % mu(:,1,1)=mu(:,1,1)+500;
 % mu(:,1,2)=mu(:,1,2)+500;
 % IDVarNorm1=identVarGauss(w,mu,Sigma)
-% %Here, one gets an ID variance of essenitally 1, meaning that the
+% %Here, one gets an ID variance of essentially 1, meaning that the
 % %identities are very clear. on the other hand, if the targets are made to
 % %coincide, then the identity variance becomes zero.
 % mu(:,2,1)=mu(:,1,1);

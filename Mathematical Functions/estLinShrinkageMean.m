@@ -15,18 +15,18 @@ function [xEst,PML]=estLinShrinkageMean(z,H,R,scaleUnknown)
 %                  Gaussian noise with covariance matrix R. R only needs to
 %                  be known within a scalar constant of the true value.
 %
-%INPUTS: z  A zDim X 1 vector of a measurement or a stacked vector for
-%           multiple measurements.
-%        H  A zDim X xDim measurement matrix where zDim>=xDim. H'*R*H' 
-%           should be invertible.
-%        R  The covariance matrix for z. This only needs to be known within
-%           a scalar constant of the true value.
+%INPUTS: z A zDim X 1 vector of a measurement or a stacked vector for
+%          multiple measurements.
+%        H A zDim X xDim measurement matrix where zDim>=xDim. H'*R*H' 
+%          should be invertible.
+%        R The covariance matrix for z. This only needs to be known within
+%          a scalar constant of the true value.
 %scaleUnknown A boolean value. This is true if the covariance matrix R is
-%           only known within a constant of the true value, otherwise, this
-%           is false. To use scaleUnknown=true, it is required that
-%           zDim>xDim. The default if this parameter is omitted is false.
+%          only known within a constant of the true value, otherwise, this
+%          is false. To use scaleUnknown=true, it is required that
+%          zDim>xDim. The default if this parameter is omitted is false.
 %
-%OUTPUTS:xEst The James-Stein estimator of the unknown mean. If xDim<=2,
+%OUTPUTS: xEst The James-Stein estimator of the unknown mean. If xDim<=2,
 %             this will be the ML estimate. Otherwise, this will have a MSE
 %             less than the ML estimate but be biased.
 %         PML The covariance matrix of the ML estimate. This can be used as

@@ -54,7 +54,7 @@ end
 x=xy(1,:);
 y=xy(2,:);
 
-lambda=x/a;
+lambda=wrapRange(x/a,-pi,pi);
 conformalLat=Gudermannian(y/a);
 phi=conformLat2EllipsLat(conformalLat,f);
 

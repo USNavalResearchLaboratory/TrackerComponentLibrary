@@ -4,7 +4,7 @@ function [xk,objfunvals,xkk] = solveLASSOProblem(A,b,alpha,varargin)
 %               problem is
 %               minimize (1/2)*norm(A*x-b,2)^2+alpha*norm(x,1)
 %               Thus, the LASSO problem is the same as the ridge regression
-%               problem except the secon term uses an l_1 norm instead of
+%               problem except the second term uses an l_1 norm instead of
 %               an l_2 norm. This type of optimization plays a notable role
 %               in compressive sensing algorithms. The optimization problem
 %               is solved using the Fast-Iterative Shrinkage and

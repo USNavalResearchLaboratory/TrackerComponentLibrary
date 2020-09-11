@@ -9,62 +9,60 @@ function [H,AMISE,exitCode]=plugIn2DGaussKernelBW(xi,numStages,preProcAlg,HInit,
 %             to use. The estimation algorithm used is a so-called
 %             "plug-in" estimator.
 %
-%INPUTS:   xi A 2XN vector of N samples of the PDF.
+%INPUTS: xi A 2XN vector of N samples of the PDF.
 %   numStages The number of stages to use in the estimator. This must be
-%             >=1, and is normally not very large. If omitted or an empty
-%             matrix is passed, the default value of 2 is used.
+%           >=1, and is normally not very large. If omitted or an empty
+%           matrix is passed, the default value of 2 is used.
 %  preProcAlg This specifies how the data is preprocessed before running
-%             the algorithm. The data must be preprocessed as the algorithm
-%             assumes that the standard deviation in each dimension is the
-%             same. After the algorithm is run, the data is transformed back.
-%             Possible values are:
-%             0 (The default if omitted or an empty matrix is passed) The
-%               data is sphered. This means that it is pre-multiplied by
-%               the inverse of the sample covariance matrix. The scaled
-%               data has the identity matrix as its covariance matrix.
-%             1 The data is scaled. This does not eliminate the
-%               cross-correlation terms from the data. In some scenarios,
-%               this can produce a better estimate.
-%       HInit An initial estimate of the bandwidth matrix. If this
-%             parameter is omitted or an empty matrix is passed, a standard
-%             Gaussian approximation as given in Chapter 3 of [2] is used.
-%     epsilon The parameter determining the accuracy of the desired
-%             solution in terms of the gradient. The function terminates
-%             when norm(g) < epsilon*max([1, norm(x)]) where g is the
-%             gradient. The default if omitted or an empty matrix is as
-%             given in NewtonsMethod.
-%deltaTestDist The number of iterations back to use to compute the decrease
-%             of the objective function if a delta-based convergence test
-%             is performed. If zero, then no delta-based convergence
-%             testing is done. The default is as given in NewtonsMethod.
-%       delta The delta for the delta convergence test. This determines
-%             the minimum rate of decrease of the objective function.
-%             Convergence is determined if (f'-f)<=delta*f, where f' is
-%             the value of the objective function f deltaTestDist
-%             iterations ago, and f is the current objective function
-%             value. The default if this parameter is omitted or an empty
-%             matrix is passed is 0.
-%lineSearchParams An optional structure whose members specify tolerances
-%             for the line search. The parameters are described as in the
-%             lineSearch function, except if -1 is passed instead of a
-%             parameter structure, then no line search is performed. The
-%             default if omitted or an empty matrix is passed is -1.
+%           the algorithm. The data must be preprocessed as the algorithm
+%           assumes that the standard deviation in each dimension is the
+%           same. After the algorithm is run, the data is transformed back.
+%           Possible values are:
+%           0 (The default if omitted or an empty matrix is passed) The
+%             data is sphered. This means that it is pre-multiplied by
+%             the inverse of the sample covariance matrix. The scaled
+%             data has the identity matrix as its covariance matrix.
+%           1 The data is scaled. This does not eliminate the
+%             cross-correlation terms from the data. In some scenarios,
+%             this can produce a better estimate.
+%     HInit An initial estimate of the bandwidth matrix. If this
+%           parameter is omitted or an empty matrix is passed, a standard
+%           Gaussian approximation as given in Chapter 3 of [2] is used.
+%   epsilon The parameter determining the accuracy of the desired
+%           solution in terms of the gradient. The function terminates
+%           when norm(g) < epsilon*max([1, norm(x)]) where g is the
+%           gradient. The default if omitted or an empty matrix is as
+%           given in NewtonsMethod.
+% deltaTestDist The number of iterations back to use to compute the
+%           decrease of the objective function if a delta-based convergence
+%           test is performed. If zero, then no delta-based convergence
+%           testing is done. The default is as given in NewtonsMethod.
+%     delta The delta for the delta convergence test. This determines
+%           the minimum rate of decrease of the objective function.
+%           Convergence is determined if (f'-f)<=delta*f, where f' is the
+%           value of the objective function f deltaTestDist iterations ago,
+%           and f is the current objective function value. The default if
+%           this parameter is omitted or an empty matrix is passed is 0.
+% lineSearchParams An optional structure whose members specify tolerances
+%           for the line search. The parameters are described as in the
+%           lineSearch function, except if -1 is passed instead of a
+%           parameter structure, then no line search is performed. The
+%           default if omitted or an empty matrix is passed is -1.
 % cholSemiVal A value indicating whether a method similar to that suggested
-%             in Chapter 1.4 of [1] for using a modified Cholesky
-%             decomposition of the Hessian matrix should be used so as to
-%             assure that one always obtains a descent direction. If a
-%             positive value <1 of cholSemiVal is given, then the Hessian
-%             matrix is decomposed with cholSemiDef with epsVal of
-%             cholSemiVal. If a negative value is provided, then no
-%             decomposition is done and no effort is made to assure that
-%             the direction traveled is a descent direction. The default if
-%             this parameter is omitted or an empty matrix is passed is
-%             1e-6, This parameter assumes the "Hessian" matrix is
-%             symmetric. Thus, this option should be set to -1 if this
-%             function is used to zero a vector rather than minimize a
-%             function.
-%     maxIter The maximum number of iterations to perform. If omitted or an
-%             empty matrix is passed, the default value of 50 is used.
+%           in Chapter 1.4 of [1] for using a modified Cholesky
+%           decomposition of the Hessian matrix should be used so as to
+%           assure that one always obtains a descent direction. If a
+%           positive value <1 of cholSemiVal is given, then the Hessian
+%           matrix is decomposed with cholSemiDef with epsVal of
+%           cholSemiVal. If a negative value is provided, then no
+%           decomposition is done and no effort is made to assure that the
+%           direction traveled is a descent direction. The default if this
+%           parameter is omitted or an empty matrix is passed is 1e-6, This
+%           parameter assumes the "Hessian" matrix is symmetric. Thus, this
+%           option should be set to -1 if this function is used to zero a
+%           vector rather than minimize a function.
+%   maxIter The maximum number of iterations to perform. If omitted or an
+%           empty matrix is passed, the default value of 50 is used.
 %
 %OUTPUTS: H The 2X2 lower-triangular estimate of the kernel bandwidth.
 %     AMISE The estimated AMISE of the given bandwidth.

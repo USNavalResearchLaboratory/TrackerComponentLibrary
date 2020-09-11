@@ -7,7 +7,7 @@ function [azStart,dist,azEnd]=indirectGeodeticProbGen(latLonStart,latLonEnd,heig
 %           fixed height above the reference ellipsoid either using a
 %           simple approximation, or using a slow exact technique.
 %
-%INPUTS:latLonStart The initial point given in geodetic latitude and
+%INPUTS: latLonStart The initial point given in geodetic latitude and
 %           longitude in radians of the format [latitude;longitude].
 % latLonEnd The final point for the geodesic path given in geodetic
 %           latitude and longitude in radians. latLonEnd has the same
@@ -15,32 +15,34 @@ function [azStart,dist,azEnd]=indirectGeodeticProbGen(latLonStart,latLonEnd,heig
 %    height The height above the reference ellipsoid at which the
 %           trajectory should be determined. This changes the distance
 %           traveled, but not the azimuthal angle of departure. If this
-%           parameter is omitted, then the default value of 0 is used.
+%           parameter is omitted or an empty matrix is passed, then the
+%           default value of 0 is used.
 % useHeightApprox If true, and the height is not zero, then an
 %           approximation is made for how dist scales with altitude.
-%           Specifically, an equiatorial trajectory will scale as
+%           Specifically, an equatorial trajectory will scale as
 %           (a+height)/a. Thus, this scaling factor is applied to any
-%           trajectory to scale dist with altitude. If height is false, a
-%           significantly slower iterative optimization technique is used.
-%           The default value is true. The difference made when
-%           useHeightApprox=false can generally be assumed to be less than
-%           80m. This parameter is ignored if height=0.
+%           trajectory to scale dist with altitude. If useHeightApprox is
+%           false, a significantly slower iterative optimization technique
+%           is used. The default value if omitted or an empty matrix is
+%           passed is true. The difference made when useHeightApprox=false
+%           can often be assumed to be less than 80m on the Earth. This
+%           parameter is ignored if height=0.
 %         a The semi-major axis of the reference ellipsoid (in meters). If
-%           this argument is omitted, the value in
-%           Constants.WGS84SemiMajorAxis is used.
+%           this argument is omitted or an empty matrix is passed, the
+%           value in Constants.WGS84SemiMajorAxis is used.
 %         f The flattening factor of the reference ellipsoid. If this
-%           argument is omitted, the value in Constants.WGS84Flattening is
-%           used.
+%           argument is omitted or an empty matrix is passed, the value in
+%           Constants.WGS84Flattening is used.
 % numSteps4Circ If height!=0 then an algorithm propagating a state in ECEF
 %           coordinates around the curved Earth is used to solve the direct
 %           geodetic problem as a step in solving the indirect geodetic
 %           problem. This parameter determines the number of steps that
 %           would be needed in the direct geodetic problem for a target
 %           that circumnavigates the globe around the equator. The default
-%           value if this parameter is not provided is 2000. A value of
-%           6000 appears to be about the best number for overall precision.
-%           Reducing the number of steps will speed up the function. This
-%           parameter is not used if height=0.
+%           value if this parameter is omitted or an empty matrix is passed
+%           is 2000. A value of 6000 appears to be about the best number
+%           for overall precision. Reducing the number of steps will speed
+%           up the function. This parameter is not used if height=0.
 %
 %OUTPUTS: azStart The forward azimuth at the starting point in radians East
 %                 of true North on the reference ellipsoid. This is the
@@ -87,24 +89,24 @@ function [azStart,dist,azEnd]=indirectGeodeticProbGen(latLonStart,latLonEnd,heig
 %April 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<7)
+if(nargin<7||isempty(numSteps4Circ))
    numSteps4Circ=2000; 
 end
 
-if(nargin<6)
+if(nargin<6||isempty(f))
     f=Constants.WGS84Flattening;
 end
 
-if(nargin<5)
+if(nargin<5||isempty(a))
     a=Constants.WGS84SemiMajorAxis;
 end
 
-if(nargin<4)
-   useHeightApprox=true; 
+if(nargin<4||isempty(useHeightApprox))
+    useHeightApprox=true; 
 end
 
-if(nargin<3)
-   height=0; 
+if(nargin<3||isempty(height))
+    height=0; 
 end
 
 [azStart,dist,azEnd]=indirectGeodeticProb(latLonStart,latLonEnd,a,f);
@@ -128,13 +130,13 @@ if(height~=0)
     end
     %Only determine the ending azimuth if necessary.
     if(nargout>2)
-        [~,azEnd]=directGeodeticProbGen(latLonStart,azStart,dist,height,a,f,numSteps4Circ);
+        [~,azEnd]=directGeodeticProbGen(latLonStart,azStart,dist,height,false,a,f,numSteps4Circ);
     end
 end
 end
 
 function cost=distCostFunc(distCur,endCart,latLonStart,azStart,height,a,f,numSteps4Circ)
-    latLonCalc=directGeodeticProbGen(latLonStart,azStart,distCur,height,a,f,numSteps4Circ);
+    latLonCalc=directGeodeticProbGen(latLonStart,azStart,distCur,height,false,a,f,numSteps4Circ);
     cost=norm(ellips2Cart([latLonCalc;height],a,f)-endCart);
 end
 

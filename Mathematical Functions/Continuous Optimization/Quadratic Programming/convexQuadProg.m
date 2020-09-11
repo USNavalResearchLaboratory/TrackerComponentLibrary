@@ -1,14 +1,18 @@
 function [x,f,exitCode]=convexQuadProg(G,a,C,b,numEqConst,epsVal,maxIter)
-%%CONVEXQUADPROG Perform quadratic programming on a strictly convex
-%                problem. Specifically, this algorithm solves the
-%                optimization problem 
+%%CONVEXQUADPROG Perform quadratic programming on a convex problem.
+%                Specifically, this algorithm solves the optimization
+%                problem 
 %                minimize_x a'*x+(1/2)*x'*G*x
 %                such that C(:,1:numEqConst)'*x=b(1:numEqConst)
 %                     and C(:,(numEqConst+1):end)'*x>=b((numEqConst+1):end)
-%                Strict convexity means that G is positive definite. A dual
-%                active set algorithm is used.
+%                A dual active set algorithm for strictly convex problems
+%                is used. Strict convexity means that G is positive
+%                definite. The algorithm is robust to poorly considitioned
+%                matrices. Thus, to handle the semidefinite case,
+%                eigenvalue thresholding is applied prior to running the
+%                algorithm.
 %
-%INPUTS: G An nXn real, positive definite symmetric matrix (n>0).
+%INPUTS: G An nXn real, positive (semi)definite symmetric matrix (n>0).
 %        a An nX1 real vector.
 %        C An nXm real matrix (m>=0). The first numEqConst constraints (the
 %          equality constraints) must be linearly independent or the
@@ -133,6 +137,18 @@ if(nargin<7||isempty(maxIter))
     maxIter=200;
 end
 
+%This portion is to compensate for the possibility that G is positive
+%semidefinite.
+[V,D]=eig(G);
+d=diag(D);
+dNew=max(d,2*max(size(G))*eps(max(d)));
+if(~all(dNew==d))
+    %Only change G if some eigenvalues were too small.
+    D=diag(dNew);
+    G=V*D/V;
+    G=(G+G')/2;%Ensure symmetry.
+end
+
 %If there are no constraints, the return the unconstrained solution.
 if(isempty(b))
     x=-G\a;
@@ -141,11 +157,11 @@ if(isempty(b))
     return
 end
 
-%Step 0: Find the unconstraiend minimum and initialize parameters.
+%Step 0: Find the unconstrained minimum and initialize parameters.
 H=inv(G);
 x=-G\a;
 f=(1/2)*a'*x;
-%Values are added to and deleted from A. Tough this is inefficient, it is
+%Values are added to and deleted from A. Though this is inefficient, it is
 %questionable whether any particular data structure could make it notably
 %more efficient than what Matlab does without reprogramming this function
 %in C.
@@ -223,7 +239,7 @@ for curIter=1:maxIter
     
     %Step 2c: Determine a new S-pair and take the step.
     %Step 2ci: If no step exists in the primal or dual spaces.
-    if(~isfinite(t)||t==0)
+    if(~isfinite(t)||(t==0&&~all(uPlus==0)))
         %The problem is infeasible. The t=0 condition comes from adding
         %equality constraints to inequality constraints.
         x=[];

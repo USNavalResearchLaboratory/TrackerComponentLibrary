@@ -89,15 +89,15 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     }
     
     checkRealDoubleArray(prhs[0]);
-    vOrig=(double*)mxGetData(prhs[0]);
+    vOrig=mxGetDoubles(prhs[0]);
     checkRealDoubleArray(prhs[1]);
-    obsVel=(double*)mxGetData(prhs[1]);
+    obsVel=mxGetDoubles(prhs[1]);
     
     c=getScalarMatlabClassConst("Constants","speedOfLight");
     
     //Allocate space for the return values.
     retMATLAB=mxCreateDoubleMatrix(3,numVec,mxREAL);
-    retVec=(double*)mxGetData(retMATLAB);
+    retVec=mxGetDoubles(retMATLAB);
     
     //If the third parameter is provided, then use the algorithm from the IAU.
     if(nrhs>2) {
@@ -114,7 +114,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
             return;
         }
         checkRealDoubleArray(prhs[0]);
-        sunDist=(double*)mxGetData(prhs[2]);
+        sunDist=mxGetDoubles(prhs[2]);
 
         for(curVec=0;curVec<numVec;curVec++) {
             double vecMag,unitVec[3];

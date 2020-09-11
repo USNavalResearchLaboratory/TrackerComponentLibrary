@@ -129,9 +129,9 @@ void iauApcs(double date1, double date2, double pv[2][3],
 **
 **  This revision:   2017 March 16
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
 /* au/d to m/s */
@@ -178,7 +178,7 @@ void iauApcs(double date1, double date2, double pv[2][3],
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
@@ -271,5 +271,4 @@ void iauApcs(double date1, double date2, double pv[2][3],
 **                 United Kingdom
 **
 **--------------------------------------------------------------------*/
-
 }

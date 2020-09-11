@@ -1,12 +1,12 @@
 function [yNext,didConverge]=semiImplicitStrongRungeKStep(y,t,a,B,deltaT,algorithm,aCur,BCur,useNewton,maxIter,theta,RelTol,AbsTol,p,ItoAlg)
 %%SEMIIMPLICITSTRINGRUNGEKSTEP Perform a single step of a semi-implicit
-%           strong stochastic Runge-Kutta method under Itô calculus. This
+%           strong stochastic Runge-Kutta method under Itï¿½ calculus. This
 %           integrates a d-dimensional stochastic differential equation of
 %           the form
 %           dy=a(y,t)*dt+B(y,t)*dW
 %           where dW is the differential of an m-dimensional Wiener
 %           process. As noted in Chapter 9.8 of [1], fully implicit strong
-%           Itô-Taylor expansions are unstable. Thus, fully
+%           Itï¿½-Taylor expansions are unstable. Thus, fully
 %           implicit strong stochastic Runge Kutta methods would also be
 %           unstable. Thus, semi-implicit techniques are typically used.
 %           Strong methods converge to an optimal path as the stepsize
@@ -15,13 +15,13 @@ function [yNext,didConverge]=semiImplicitStrongRungeKStep(y,t,a,B,deltaT,algorit
 %           derivatives.
 %
 %INPUTS: y The dX1 initial value of the random process.
-%        t The dX1 initial time of the random process. If an empty matrix
-%          is passed, t=0 is used.
+%        t The scalar initial time of the random process. If an empty
+%          matrix is passed, t=0 is used.
 %        a A function handle to the drift function. This is called as
-%          a(y,t) and returns a dX1 vector. If one wishes to Use Newton's
+%          a(y,t) and returns a dX1 vector. If one wishes to use Newton's
 %          method for the implicit iteration, then the calling format is
-%          [aVal,papt]=a(y,t), where papt is the dXd matrix of partial
-%          derivatives of a with respect to the elements of y papt(:,i) is
+%          [aVal,papy]=a(y,t), where papy is the dXd matrix of partial
+%          derivatives of a with respect to the elements of y papy(:,i) is
 %          the derivative with respect to the ith component of y.
 %        B A function handle to the diffusion matrix function. This is
 %          called as B(y,t) and returns a dXm matrix.
@@ -59,7 +59,7 @@ function [yNext,didConverge]=semiImplicitStrongRungeKStep(y,t,a,B,deltaT,algorit
 %           5 Use the semi-implicit order 1.5 method for autonomous
 %             additive noise from Equation 3.6 of Chapter 12.3 of [1],
 %             removing the relevant B terms. This is the semi-implicit
-%             version ofEquation 2.19 in Chapter 11.2 of [1] removing the
+%             version of Equation 2.19 in Chapter 11.2 of [1] removing the
 %             relevant B terms.
 % aCur, BCur Often one might already have the values a(x,t) and B(x,t). If
 %          so, then they should be provided as the dX1 and dXm aCur and
@@ -289,7 +289,7 @@ if(nargin<12||isempty(RelTol))
     RelTol=0; 
 end
 
-if(nargin<11||isempty(thetaVals))
+if(nargin<11||isempty(theta))
     theta=1/2;
 end
 
@@ -311,6 +311,10 @@ end
 
 if(nargin<6||isempty(algorithm))
     algorithm=1;
+end
+
+if(isempty(t))
+    t=0; 
 end
 
 if(algorithm>=-1&&algorithm<=2)%0, 1 or 2

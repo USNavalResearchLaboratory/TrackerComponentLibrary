@@ -6,7 +6,7 @@ function points=regularPGonCoords(p)
 %            unit distance from the origin. The polygon is unique within a
 %            rotation about the origin.
 %
-%INPUTS:       p The number of sides of the polygon. This must be >=3.
+%INPUTS: p The number of sides of the polygon. This must be >=3.
 %
 %OUTPUTS: points A 2Xp set of the vertices of the polygon.
 %

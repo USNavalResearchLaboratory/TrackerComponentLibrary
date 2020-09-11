@@ -1,4 +1,4 @@
-This code is taken from version 2.4.2 of the NLOpt library from
+This code is taken from version 2.6.1 of the NLOpt library from
 http://ab-initio.mit.edu/wiki/index.php/NLopt
 The code has been modified to get rid of most of the warning when 
 compiling. These include, for example, complaints that variables are unused
@@ -12,4 +12,4 @@ divisions. Previously, it had been hard-coded in the function. Changes that
 are not meant to silence warnings are commented with DFC in the relevant
 files. The DIRparallel file is not used in the Tracker Component Library.
 
-September 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
+August 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.

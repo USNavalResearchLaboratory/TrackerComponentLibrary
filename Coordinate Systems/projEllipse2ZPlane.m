@@ -28,8 +28,6 @@ function [M,kpp,c]=projEllipse2ZPlane(M,kpp,c,zHeight)
 %November 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-t=[1200;43;zHeight];
-
 deltaVal=zHeight-kpp(3);
 
 A=M(1:2,1:2);

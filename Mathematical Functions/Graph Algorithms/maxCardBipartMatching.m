@@ -227,7 +227,7 @@ function [col4row,row4col]=CardinalityMatching(A)
 %%CARDINALITYMATCHING Solve the maximum cardinality bipartite matching
 %              problem using the cardinality matching algorithm. 
 %
-%This implements algorithm3.1 from Chapter3.2 of [1].
+%This implements algorithm 3.1 from Chapter3.2 of [1].
 %
 %REFERENCES:
 %[1] R. Burkard, M. Dell'Amico, and S. Martello, Assignment Problems.
@@ -294,7 +294,6 @@ while(numL>0||numR>0)
             L(1:numL)=idx(LUnmatched);
 
             numR=0;
-
             %Cancel all labels.
             l(:)=0;
             r(:)=0;

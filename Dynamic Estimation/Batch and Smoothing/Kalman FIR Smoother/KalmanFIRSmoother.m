@@ -1,38 +1,35 @@
 function [xEst,PEst]=KalmanFIRSmoother(z,u,H,F,R,Q,kD)
-%%KALMANFIRSMOOTHER  Run the finite impulse response Kalman smoother on a
-%                    batch of data.
+%%KALMANFIRSMOOTHER Run the finite impulse response Kalman smoother on a
+%                   batch of data.
 %
-%INPUTS:    z   The zDim X N matrix of measurements for the whole batch.
-%           u   The xDim X(N-1) matrix of control inputs for the whole
-%               batch. If there are no control inputs, then set u=[];
-%           H   The zDim X xDim X N hypermatrix of measurement matrices
-%               such that H(:,:,k)*x+w is the measurement at time k, where
-%               x is the state and w is zero-mean Gaussian noise with
-%               covariance matrix R (:,:,k). Alternatively, if all of the
-%               measurement matrices are the same, one can just pass a
-%               single zDim X xDim matrix.
-%           F   The xDim X xDim X (N-1) hypermatrix of state transition
-%               matrices. The state at discrete-time k is modeled as
-%               F(:,:,k) times the state at time k plus zero-mean
-%               Gaussian process noise with covariance matrix Q(:,:,k).
-%               Alternatively, if all of the state transition matrices are
-%               the same, one can just pass a
-%               single xDim X xDim matrix.
-%           R   The zDim X zDim X N hypermatrix of measurement covariance
-%               matrices. Alternatively, if all of the measurement
-%               covariance matrices are the same, one can just pass a
-%               single zDim X zDim matrix.
-%           Q   The xDim X xDim X (N-1) hypermatrix of process noise
-%               covariance matrices. Alternatively, if all of the process
-%               noise covariance matrices are the same, one can just pass a
-%               single xDim X xDim matrix.
-%           kD  The discrete time-step at which the smoothed state estimate
-%               is desired, where z(:,1) is at discrete time-step 1 (not
-%               0).
+%INPUTS: z The zDim X N matrix of measurements for the whole batch.
+%        u The xDim X(N-1) matrix of control inputs for the whole batch. If
+%          there are no control inputs, then set u=[];
+%        H The zDim X xDim X N hypermatrix of measurement matrices such
+%          that H(:,:,k)*x+w is the measurement at time k, where x is the
+%          state and w is zero-mean Gaussian noise with covariance matrix
+%          R(:,:,k). Alternatively, if all of the measurement matrices are
+%          the same, one can just pass a single zDim X xDim matrix.
+%        F The xDim X xDim X (N-1) hypermatrix of state transition
+%          matrices. The state at discrete-time k is modeled as F(:,:,k)
+%          times the state at time k plus zero-mean Gaussian process noise
+%          with covariance matrix Q(:,:,k). Alternatively, if all of the
+%          state transition matrices are the same, one can just pass a
+%          single xDim X xDim matrix.
+%        R The zDim X zDim X N hypermatrix of measurement covariance
+%          matrices. Alternatively, if all of the measurement covariance
+%          matrices are the same, one can just pass a single zDim X zDim
+%          matrix.
+%        Q The xDimXxDimX(N-1) hypermatrix of process noise covariance
+%          matrices. Alternatively, if all of the process noise covariance
+%          matrices are the same, one can just pass a single xDimXxDim
+%          matrix.
+%       kD The discrete time-step at which the smoothed state estimate is
+%          desired, where z(:,1) is at discrete time-step 1 (not 0).
 %
-%OUTPUTS: xEst  The smoothed state estimate at step kD.
-%         PEst  The covariance matrix associated with the smoothed state
-%               estimate at step kD.
+%OUTPUTS: xEst The smoothed state estimate at step kD.
+%         PEst The covariance matrix associated with the smoothed state
+%              estimate at step kD.
 %
 %The assumed forward-time dynamic equations are
 %x(:,k)=F(:,:,k-1)*x(:,k-1)+u(:,k-1)+noise

@@ -1,6 +1,6 @@
 #include "sofa.h"
 
-int iauDat(int iy, int im, int id, double fd, double *deltat )
+int iauDat(int iy, int im, int id, double fd, double *deltat)
 /*
 **  - - - - - - -
 **   i a u D a t
@@ -120,15 +120,15 @@ int iauDat(int iy, int im, int id, double fd, double *deltat )
 **  Called:
 **     iauCal2jd    Gregorian calendar to JD
 **
-**  This revision:  2017 October 7
+**  This revision:  2019 July 5
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
 /* Release year for this version of iauDat */
-   enum { IYV = 2017};
+   enum { IYV = 2019};
 
 /* Reference dates (MJD) and drift rates (s/day), pre leap seconds */
    static const double drift[][2] = {

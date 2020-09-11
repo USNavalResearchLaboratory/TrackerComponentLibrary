@@ -129,12 +129,16 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     MMOSPAEstMATLAB = mxCreateNumericMatrix(xDim,numTar,mxDOUBLE_CLASS,mxREAL);
     orderListMATLAB=allocUnsignedSizeMatInMatlab(numTar,numHyp);
 
-    MMOSPAEst=reinterpret_cast<double*>(mxGetData(MMOSPAEstMATLAB));
-    orderList=reinterpret_cast<size_t*>(mxGetData(orderListMATLAB));
+    MMOSPAEst=mxGetDoubles(MMOSPAEstMATLAB);
+    if(sizeof(size_t)==4) {//32 bit
+        orderList=reinterpret_cast<size_t*>(mxGetUint32s(orderListMATLAB));
+    } else {//64 bit
+        orderList=reinterpret_cast<size_t*>(mxGetUint64s(orderListMATLAB));
+    }
 
 /*Get the matrices*/
-    x = reinterpret_cast<double*>(mxGetData(prhs[0])); 
-    w = reinterpret_cast<double*>(mxGetData(prhs[1]));
+    x=mxGetDoubles(prhs[0]); 
+    w=mxGetDoubles(prhs[1]);
     
     //Run the algorithm
     MMOSPAApproxCPP(MMOSPAEst,

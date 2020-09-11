@@ -91,9 +91,9 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     
     //Allocate space for the return matrix
     retMat=mxCreateDoubleMatrix(prodDim,prodDim,mxREAL);
-    A=(double*)mxGetData(prhs[0]);
-    B=(double*)mxGetData(prhs[1]);
-    K=(double*)mxGetData(retMat);
+    A=mxGetDoubles(prhs[0]);
+    B=mxGetDoubles(prhs[1]);
+    K=mxGetDoubles(retMat);
     
     {
        size_t i1,i2,j1,j2;

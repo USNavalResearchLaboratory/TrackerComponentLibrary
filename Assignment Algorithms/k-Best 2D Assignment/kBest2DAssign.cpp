@@ -120,8 +120,8 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     /* Get the dimensions of the input data and the pointer to the matrix.
      * It is assumed that the matrix is not so large in M or N as to cause
      * an overflow when using a SIGNED integer data type.*/
-    numRow = mxGetM(prhs[0]);
-    numCol = mxGetN(prhs[0]);
+    numRow=mxGetM(prhs[0]);
+    numCol=mxGetN(prhs[0]);
 
     /* Transpose the matrix, if necessary, so that the number of rows is
      * >= the number of columns.*/
@@ -144,13 +144,18 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     row4colMATLAB=allocSignedSizeMatInMatlab(numCol,k);
 
     gainMATLAB = mxCreateNumericMatrix(k,1,mxDOUBLE_CLASS,mxREAL);
-    col4rowBest=(ptrdiff_t*)mxGetData(col4rowMATLAB);
-    row4colBest=(ptrdiff_t*)mxGetData(row4colMATLAB);
-    gainBest=(double*)mxGetData(gainMATLAB);
+    if(sizeof(ptrdiff_t)==4) {//32 bit
+    	col4rowBest=(ptrdiff_t*)mxGetInt32s(col4rowMATLAB);
+        row4colBest=(ptrdiff_t*)mxGetInt32s(row4colMATLAB);
+    } else {//64 bit
+        col4rowBest=(ptrdiff_t*)mxGetInt64s(col4rowMATLAB);
+        row4colBest=(ptrdiff_t*)mxGetInt64s(row4colMATLAB);
+    }
+    gainBest=mxGetDoubles(gainMATLAB);
 
     /*The assignment algorithm returns a nonzero value if no valid
      * solutions exist.*/
-    numFound=kBest2D(k,numRow,numCol,maximize, (double*)mxGetData(CMat), workMem, col4rowBest,row4colBest,gainBest);
+    numFound=kBest2D(k,numRow,numCol,maximize, mxGetDoubles(CMat), workMem, col4rowBest,row4colBest,gainBest);
     mxDestroyArray(CMat);
     
     if(numFound==0){

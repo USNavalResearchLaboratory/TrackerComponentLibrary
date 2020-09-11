@@ -50,10 +50,15 @@ function [xPostSet,PPostSet,muPost,xMerged,PMerged]=multipleModelUpdate(AlgSel,x
 %               this is xDimMaxXxDimMaxXnumModelsXnumModels for all
 %               possible combinations of model switches.
 %             z A zDimX1 measurement that will be used to update all of the
-%               models.
+%               models. If using the IMM, an empty matrix can be passed if
+%               one wishes to perform the hypothesis mixing, but not an
+%               update (a missed detection event).
 %             R A zDimXzDim measurement covariance matrix that will be used
-%               when updating all of the models.
-%measUpdateFuns A function handle used for updating all of the models or a
+%               when updating all of the models. If using the IMM, an empty
+%               matrix can be passed if one wishes to perform the
+%               hypothesis mixing, but not an update (a missed detection
+%               event).
+% measUpdateFuns A function handle used for updating all of the models or a
 %               numModelsX1 cell array of numModels function handles for
 %               updating each model when differences in the types of states
 %               necessitate different function handles. Each function
@@ -92,7 +97,7 @@ function [xPostSet,PPostSet,muPost,xMerged,PMerged]=multipleModelUpdate(AlgSel,x
 %               parameter is not used and should be omitted when using the
 %               GPB1 algorithm. 
 %  
-%OUTPUTS:xPostSet The updated set of target states for the models. For all
+%OUTPUTS: xPostSet The updated set of target states for the models. For all
 %                 of the methods except the GPB1, this is xDimMaxXnumModels
 %                 in size. For the GBP1, it is xDimMaxX1 as the GPB1 merges
 %                 everything into a single hypothesis. Note that the
@@ -151,8 +156,8 @@ numModels=size(xPredSet,2);
 %If the number of dimensions in the states is omitted, assume all the
 %states are the same size.
 if(nargin<9)
-   xDim=size(xPredSet,1);
-   numStateDims=repmat(xDim,[numModels,1]);
+	xDim=size(xPredSet,1);
+	numStateDims=repmat(xDim,[numModels,1]);
 end
 
 %If the number of dimensions involved in mixing is omitted, assume that all
@@ -223,18 +228,26 @@ switch(AlgSel)
         %%unbiased when the states have different dimensionalities.
         [xPredSet,PPredSet]=IMMMixing(muMerge,xPredSet,PPredSet,numStateDims,numMixDims);
 
-        %%Perform mode-matched filtering on the mixed estimates.
-        [xPostSet,PPostSet,likelihoods]=updateModels(xPredSet,PPredSet,measUpdateFuns,z,R,numStateDims);
+        if(isempty(z))
+            %If no measurement is provided, but one wanted to do the IMM
+            %mixing at this time (a missed detection event).
+            xPostSet=xPredSet;
+            PPostSet=PPredSet;
+            muPost=muPrev;
+        else
+            %%Perform mode-matched filtering on the mixed estimates.
+            [xPostSet,PPostSet,likelihoods]=updateModels(xPredSet,PPredSet,measUpdateFuns,z,R,numStateDims);
 
-        %%Mode probability update
-        muPost=cBar.*likelihoods;
-        muPost=muPost/sum(muPost);
-        %Deal with all of the likelihoods being too small by assuming a
-        %uniform distribution if nonfinite numbers arise.
-        if(any(~isfinite(muPost)))
-            muPost=ones(numModels,1)*(1/numModels);
+            %%Mode probability update
+            muPost=cBar.*likelihoods;
+            muPost=muPost/sum(muPost);
+            %Deal with all of the likelihoods being too small by assuming a
+            %uniform distribution if nonfinite numbers arise.
+            if(any(~isfinite(muPost)))
+                muPost=ones(numModels,1)*(1/numModels);
+            end
         end
-        
+
         %%Combine the estimates
         [xMerged,PMerged]=calcMixtureMoments(xPostSet,muPost,PPostSet,[],[],numMergeDims);
     case 'GPB2'%Generalized Pseudo-Bayesian 2 estimator
@@ -306,7 +319,6 @@ function [xSet,PSet,likelihoods]=updateModels(xSet,PSet,measUpdateFuns,z,R,numSt
         likelihoods(curModel)=(det(2*pi*S))^(-1/2)*exp(-0.5*invSymQuadForm(innov,S));
     end
 end
-
 
 function [xSet,PSet,likelihoods]=updateModelsGPB2(xSet,PSet,measUpdateFuns,z,R,numStateDims)
 %Update all of the numModels^2 hypotheses with the measurement.

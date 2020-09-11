@@ -96,11 +96,11 @@ double iauEect00(double date1, double date2)
 **     McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
 **     IERS Technical Note No. 32, BKG (2004)
 **
-**  This revision:  2017 October 12
+**  This revision:  2019 June 23
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
 /* Time since J2000.0, in Julian centuries */
@@ -179,7 +179,7 @@ double iauEect00(double date1, double date2)
    const int NE0 = (int) (sizeof e0 / sizeof (TERM));
    const int NE1 = (int) (sizeof e1 / sizeof (TERM));
 
-/*--------------------------------------------------------------------*/
+/* ------------------------------------------------------------------ */
 
 /* Interval between fundamental epoch J2000.0 and current date (JC). */
    t = ((date1 - DJ00) + date2) / DJC;
@@ -236,7 +236,7 @@ double iauEect00(double date1, double date2)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

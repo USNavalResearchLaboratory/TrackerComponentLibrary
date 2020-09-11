@@ -17,9 +17,9 @@ function J=TDOAGradient(x,lRx1,lRx2,c)
 %          parameter is omitted or an empty matrix is passed, the default
 %          value of Constants.speedOfLight is used.
 %
-%OUTPUTS: J A 1XnumPosDim gradient of the TDOA with derivatives taken with
-%           respect to components [x,y,z] in 3D, [x,y] in 2D or [x] in 1D,
-%           in thatorder.
+%OUTPUTS: J A 1XnumPosDim gradient of the TDOA with partial derivatives
+%           taken with respect to components [x,y,z] in 3D, [x,y] in 2D or
+%           [x] in 1D, in that order.
 %
 %A TDOA measurement is of the form (norm(x-lRx1)-norm(x-lRx2))*(1/c). The
 %gradient is straightforward to find from there.

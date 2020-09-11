@@ -16,8 +16,9 @@ function CartStates=stateRu2D2Cart(x)
 %OUTPUTS: CartStates The 4XN or 6XN set of target states given in Cartesian
 %                    coordinates.
 %
-%The relationship between the Cartesian and polar coordinates systems is
-%derived in the comments to the function aCVRu2D.
+%The derivation is given in "Basic Linear Cartesian Dynamic Models in Local
+%Coordinates" by David F. Crouse. The function aCVRu2D is an
+%implementation of a related linear dynamic model.
 %
 %EXAMPLE:
 %Here we note that the results are consistent with the inverse function:

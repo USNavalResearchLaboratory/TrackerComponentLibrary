@@ -129,7 +129,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         return;
     }
     checkRealDoubleArray(prhs[0]);
-    catData=(double*)mxGetData(prhs[0]);
+    catData=mxGetDoubles(prhs[0]);
     
     //Get the UTC time
     Jul1=getDoubleFromMatlab(prhs[1]);
@@ -141,7 +141,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         return;
     }
     checkRealDoubleArray(prhs[3]);
-    zObs=(double*)mxGetData(prhs[3]);
+    zObs=mxGetDoubles(prhs[3]);
     
     //Get the relative humidity
     if(nrhs>4&&mxGetM(prhs[4])!=0) {
@@ -221,8 +221,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
             mexErrMsgTxt("Error using the getEOP function.");
             return;
         }
-        xpyp=(double*)mxGetData(retVals[0]);
-        dXdY=(double*)mxGetData(retVals[1]);//The celestial pole offsets are not used.
+        xpyp=mxGetDoubles(retVals[0]);
+        dXdY=mxGetDoubles(retVals[1]);//The celestial pole offsets are not used.
         xp=xpyp[0];
         yp=xpyp[1];
         deltaT=getDoubleFromMatlab(retVals[2]);
@@ -288,9 +288,9 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         uNorth=uENU+3;
         uUp=uENU+6;
         
-        zRet=(double*)mxGetData(zSpherMATLAB);
+        zRet=mxGetDoubles(zSpherMATLAB);
         if(nlhs>1) {
-            uRet=(double*)mxGetData(uObsMATLAB);
+            uRet=mxGetDoubles(uObsMATLAB);
         }
         
         for(i=0;i<numStars;i++) {

@@ -51,8 +51,8 @@ function z=Cart2Ru2D(zC,useHalfRange,zTx,zRx,M,includeV)
 %          useHalfRange=true, then the r component is half the bistatic
 %          range (half the round-trip range for a monostatic scenario).
 % 
-%The conversion is related to the 3D r-u-v conversion, details of which are
-%given in [1].
+%The 2D r-u conversion is related to the 3D r-u-v conversion, details of
+%which are given in [1].
 %
 %REFERENCES:
 %[1] David F. Crouse , "Basic tracking using nonlinear 3D monostatic and

@@ -52,7 +52,7 @@ function F=FGaussMarkov(T,x,tau,order)
 %The process noise covariance matrix associated with this model can be
 %obtained using the function QGaussMarkov. The continuous-time drift
 %function associated with the model is aGaussMarkov and the continuous-time
-%diffusion matrix is given by DPoly(x,t,q,order,numDim) where q is the
+%diffusion matrix is given by DPoly(x,q,order,numDim) where q is the
 %power spectral density of the noise, usually expressed as
 %q=(sqrt(2/tau)*sigmam)^2 where sigmam^2 is the instantaneous variance of
 %the highest order momoent and  numDim is the number of dimensions in the

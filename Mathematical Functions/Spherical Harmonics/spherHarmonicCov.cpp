@@ -32,7 +32,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     CountingClusterSetCPP<double> CStdDev;
     CountingClusterSetCPP<double> SStdDev;
     size_t numPoints, pointDim;
-    size_t i, M, totalNumEls;
+    size_t M, totalNumEls;
     mxArray *sigma2MATLAB;
     //This variable is only used if nlhs>1. It is set to zero here to
     //suppress a warning if compiled using -Wconditional-uninitialized.
@@ -58,8 +58,8 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         mexErrMsgTxt("Invalid data passed.");
     }
 
-    CStdDev.clusterEls=reinterpret_cast<double*>(mxGetData(prhs[0]));
-    SStdDev.clusterEls=reinterpret_cast<double*>(mxGetData(prhs[1]));
+    CStdDev.clusterEls=mxGetDoubles(prhs[0]);
+    SStdDev.clusterEls=mxGetDoubles(prhs[1]);
 
     //The number of elements in the CountingClusterSetCPP
     totalNumEls=mxGetM(prhs[0])*mxGetN(prhs[0]);
@@ -95,7 +95,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
 
     checkRealDoubleArray(prhs[2]);
     numPoints=mxGetN(prhs[2]);
-    point=reinterpret_cast<double*>(mxGetData(prhs[2]));
+    point=mxGetDoubles(prhs[2]);
     if(pointDim==2) {
         size_t curPoint;
         double *curCopyPoint;
@@ -145,7 +145,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     
     //Allocate space for the return values
     sigma2MATLAB=mxCreateDoubleMatrix(numPoints, 1,mxREAL);
-    sigma2=reinterpret_cast<double*>(mxGetData(sigma2MATLAB));
+    sigma2=mxGetDoubles(sigma2MATLAB);
     
     if(nlhs>1) {
         mwSize dims[3];
@@ -155,7 +155,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         dims[2]=numPoints;
         
         SigmaMATLAB=mxCreateNumericArray(3,dims,mxDOUBLE_CLASS,mxREAL);
-        Sigma=reinterpret_cast<double*>(mxGetData(SigmaMATLAB));
+        Sigma=mxGetDoubles(SigmaMATLAB);
     } else {
         Sigma=NULL;
     }

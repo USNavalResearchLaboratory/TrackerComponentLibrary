@@ -148,7 +148,7 @@ function [zCart,RCart]=spher2CartCubature(spherPoint,SR,systemType,useHalfRange,
     end
 
     if(nargin<7||isempty(M))
-       M=[]; 
+        M=[]; 
     end
     
     if(isempty(zTx)&&(nargin<4||isempty(useHalfRange)))

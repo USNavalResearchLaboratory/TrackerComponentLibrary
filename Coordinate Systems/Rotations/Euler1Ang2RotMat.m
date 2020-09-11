@@ -31,7 +31,7 @@ function M=Euler1Ang2RotMat(theta,series,handed)
 %September 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<3)
+if(nargin<3||isempty(handed))
    handed='right';
 end
 
@@ -62,7 +62,6 @@ switch(series)
     otherwise
         error('Invalid rotation axis specified')
 end
-
 
 end
 

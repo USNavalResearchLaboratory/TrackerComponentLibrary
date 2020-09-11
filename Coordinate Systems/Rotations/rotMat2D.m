@@ -3,7 +3,7 @@ function M=rotMat2D(theta,isClockwise)
 %          for a given angle.
 %
 %INPUTS: theta The angle in radians about which the rotation matrix should
-%               rotate a 2X1 vector. 
+%              rotate a 2X1 vector. 
 %  isClockwise An optional boolean parameter indication whether the
 %              rotation is clockwise. The default if omitted or an empty
 %              matrix is passed is false.

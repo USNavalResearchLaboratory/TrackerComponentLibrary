@@ -37,8 +37,7 @@ function F=FPolarCoordTurn2D(T,x,turnType,discPoint,tauTurn,tauLinAccel)
 %                       acceleration.
 % discPoint This optional parameter specified what value of the turn rate
 %          is used for the discretized state prediction. The three possible
-%          values were suggested in Li's paper cited below. Possible values
-%          are:
+%          values were suggested in Li's paper, [3]. Possible values are:
 %          0 (The default if omitted) use omega=x(5), or the equivalent
 %            value when specifying the turn rate using a transverse
 %            acceleration, from the non-predicted target state for

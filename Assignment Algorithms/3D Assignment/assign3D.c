@@ -87,12 +87,12 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         return;
     }
 
-    C=mxGetPr(prhs[0]);
+    C=mxGetDoubles(prhs[0]);
     
     //The scalar special case.
     if(mxIsScalar(prhs[0])) {
         mxArray *tuplesMATLAB=mxCreateDoubleMatrix(3,1,mxREAL);
-        double *tuplesD=mxGetPr(tuplesMATLAB);
+        double *tuplesD=mxGetDoubles(tuplesMATLAB);
         tuplesD[0]=1;
         tuplesD[1]=1;
         tuplesD[2]=1;
@@ -265,7 +265,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     }
 
     uMATLAB=mxCreateNumericMatrix((size_t)nDims[2],1,mxDOUBLE_CLASS,mxREAL);
-    u=mxGetPr(uMATLAB);
+    u=mxGetDoubles(uMATLAB);
     
     //Determine the size of the buffer needed for the function. We
     //allocate space for an additional 3*n1 ptrdiff_t values to hold the

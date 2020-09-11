@@ -31,6 +31,21 @@ function M=Euler2Ang2RotMat(theta1,theta2,series,handed)
 %
 %Euler angles are discussed in [1].
 %
+%EXAMPLE:
+%Here, we rotate by some arbitrary angles and one can see that the
+%rotations from this functions are equal to sunsequently appending the
+%rotations.
+% theta1=2*pi*rand();
+% theta2=2*pi*rand();
+% max(max(abs(Euler2Ang2RotMat(theta1,theta2,'xy','right')-Euler1Ang2RotMat(theta1,'x')*Euler1Ang2RotMat(theta2,'y'))))
+% max(max(abs(Euler2Ang2RotMat(theta1,theta2,'xz','right')-Euler1Ang2RotMat(theta1,'x')*Euler1Ang2RotMat(theta2,'z'))))
+% max(max(abs(Euler2Ang2RotMat(theta1,theta2,'yx','right')-Euler1Ang2RotMat(theta1,'y')*Euler1Ang2RotMat(theta2,'x'))))
+% max(max(abs(Euler2Ang2RotMat(theta1,theta2,'yz','right')-Euler1Ang2RotMat(theta1,'y')*Euler1Ang2RotMat(theta2,'z'))))
+% max(max(abs(Euler2Ang2RotMat(theta1,theta2,'zx','right')-Euler1Ang2RotMat(theta1,'z')*Euler1Ang2RotMat(theta2,'x'))))
+% max(max(abs(Euler2Ang2RotMat(theta1,theta2,'zy','right')-Euler1Ang2RotMat(theta1,'z')*Euler1Ang2RotMat(theta2,'y'))))
+%All of the above differences will be zero or around eps(), indicating
+%agreement within finite precision limits.
+%
 %REFERENCES:
 %[1] M. D. Shuster, "A survey of attitude representations," The Journal of
 %    Astronautical Sciences, vol. 41, no. 4, pp. 439-517, Oct. - Dec. 1993.
@@ -38,7 +53,7 @@ function M=Euler2Ang2RotMat(theta1,theta2,series,handed)
 %September 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<4)
+if(nargin<4||isempty(handed))
     handed='right';
 end
 

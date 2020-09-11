@@ -706,32 +706,38 @@ end
 %variables.
 COrig=C;
 
-%Subtract the costs of the unconstrained row from all of the constrained
-%rows. The cost of assigning a column to the unconstrained row thus
-%becomes 0 (even though we do not update it), and we can then solve the
-%problem using the assign2DMissedDetect algorithm.
-C(2:numRow,2:numCol)=bsxfun(@minus,C(2:numRow,2:numCol),C(2:numRow,1));
+if(numCol==1)
+    u=[];
+    v=zeros(numRow-1,1);
+    tuplesRet=zeros(2,0);
+else
+    %Subtract the costs of the unconstrained row from all of the constrained
+    %rows. The cost of assigning a column to the unconstrained row thus
+    %becomes 0 (even though we do not update it), and we can then solve the
+    %problem using the assign2DMissedDetect algorithm.
+    C(2:numRow,2:numCol)=bsxfun(@minus,C(2:numRow,2:numCol),C(2:numRow,1));
 
-[tuplesRet,~,u,v]=assign2DMissedDetect(C(1:numRow,2:numCol),maximize,true);
+    [tuplesRet,~,u,v]=assign2DMissedDetect(C(1:numRow,2:numCol),maximize,true);
 
-%If the problem appears to be infeasible.
-if(isempty(tuplesRet))
-    tuples=[];
-    gain=-1;
-    return;
+    %If the problem appears to be infeasible.
+    if(isempty(tuplesRet))
+        tuples=[];
+        gain=-1;
+        return;
+    end
+
+    % %If one took the gain from assign2DMissedDetect, one could undo the
+    % %subtraction of the unassigned row costs here. However, we choose to
+    % recompute the gain from scratch at the end.
+    % for k=1:size(tuplesRet,2)
+    %     if(tuplesRet(1,k)~=1)
+    %         gain=gain+C(tuplesRet(1,k),1);
+    %     end
+    % end
 end
 
-% %If one took the gain from assign2DMissedDetect, one could undo the
-% %subtraction of the unassigned row costs here. However, we choose to
-% recompute the gain from scratch at the end.
-% for k=1:size(tuplesRet,2)
-%     if(tuplesRet(1,k)~=1)
-%         gain=gain+C(tuplesRet(1,k),1);
-%     end
-% end
-
-%Adjust the dual variables for the transformations that were performed on
-%C.
+%Adjust the dual variables for the transformations that were performed
+%on C.
 v=v+C(2:numRow,1);
 
 %Determine the number of rows that were assigned to something other than

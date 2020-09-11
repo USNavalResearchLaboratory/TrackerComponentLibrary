@@ -1,4 +1,4 @@
-function [aVals,aJacob,aHess,papt]=aSpiral(xPoints,t)
+function [aVals,aJacob,aHess,papt]=aSpiral(xPoints)
 %%ASPIRAL The drift function for a spiraling target motion model in 3
 %         dimensions. This formulation of the dynamic model is more
 %         difficult to use to make a target go in a desired direction than
@@ -8,9 +8,6 @@ function [aVals,aJacob,aHess,papt]=aSpiral(xPoints,t)
 %                velocity, acceleration, and a scalar spiral rate. If x is
 %                an xDim X numStates matrix, then the spiraling model is
 %                evaluated for all of the state vectors.
-%              t An unused time component so that aSpiral can be used with
-%                Runge-Kutta methods that expect the function to take two
-%                parameters.
 %
 %OUTPUTS: aVals The 10XN flat-Earth time-derivative(s) of the state.
 %        aJacob This and higher partial derivatives can only be requested

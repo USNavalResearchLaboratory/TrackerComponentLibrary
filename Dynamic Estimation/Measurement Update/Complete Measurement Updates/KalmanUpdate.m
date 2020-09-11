@@ -1,18 +1,22 @@
-function [xUpdate,PUpdate,innov,Pzz,W]=KalmanUpdate(xPred,PPred,z,R,H)
+function [xUpdate,PUpdate,innov,Pzz,W]=KalmanUpdate(xPred,PPred,z,R,H,condIssue)
 %KALMANUPDATE Perform the measurement update step in the standard linear
 %             Kalman filter. This assumes that the predicted target state
 %             and the measurement are both multivariate Gaussian
 %             distributed.
 %
-%INPUTS: xPred The xDim X 1 predicted target state.
-%        PPred The xDim X xDim predicted state covariance matrix.
-%            z The zDim X 1 measurement vector.
-%            R The zDim X zDim measurement covariance matrix. 
+%INPUTS: xPred The xDimX1 predicted target state.
+%        PPred The xDimXxDim predicted state covariance matrix.
+%            z The zDimX1 measurement vector.
+%            R The zDimXzDim measurement covariance matrix. 
 %            H The optional zDimXxDim measurement matrix. The measurement
 %              is modeled as z=H*x+noise. If this parameter is omitted or
 %              an empty matrix is passed, then H will be taken as a
 %              zDimXxDim identity matrix followed by columns of zeros
 %              (Assuming that zDim<=xDim. Otherwise, H must be provided).
+%    condIssue An optional parameter indicating whether a conditioning issue
+%              with the measurmenet covariance matrix. Singularity can occur if
+%              two elements are perfectly correlated. This replaces the matrix
+%              inverse with a pseudoinverse.
 %
 %OUTPUTS: xUpdate The xDim X 1 updated target state vector.
 %         PUpdate The updated xDim X xDim state covariance matrix.
@@ -35,6 +39,82 @@ function [xUpdate,PUpdate,innov,Pzz,W]=KalmanUpdate(xPred,PPred,z,R,H)
 %The Joseph-form covariance update is used for improved numerical
 %stability. The algorithm is derived in Chapter 5 of [1].
 %
+%EXAMPLE:
+%This example simulates a linear dynamic process that extracts Cartesian
+%measurements. it then looks at the measurement error reduction factor
+%(MERF), and the normalized estimation error squared (NEES). The MERF
+%should be less than 1 or else there is no point in using the filter-
+%connecting the dots works better. The NEES should be close to 1 to
+%indicate covariance consistency.
+% numMonteCarlo=500;
+% numSteps=50;
+% %Power spectral density of the process noise.
+% q0=processNoiseSuggest('PolyKal-ROT',2*9.8,1);
+% xDim=4;%2D position and velocity.
+% T=1;%prediction interval.
+% F=FPolyKal(T,zeros(xDim,1),1);
+% Q=QPolyKal(T,zeros(xDim,1),1,q0);
+% SQ=chol(Q,'lower');
+% R=[50^2,-1000;
+%    -1000,50^2];
+% SR=chol(R,'lower');
+% H=[eye(2,2),zeros(2,2)];
+% zDim=size(H,1);
+% 
+% z=zeros(zDim,numSteps,numMonteCarlo);
+% xTrue=zeros(xDim,numSteps,numMonteCarlo);
+% %The initial state.
+% xTrue(:,1,:)=repmat([1e3;0;75;-50],[1,1,numMonteCarlo]);
+% maxVel=400;%Used for single-point initiation.
+% higherDerivStdDev=maxVel/sqrt(2);%used for single-point initiation.
+% 
+% xEst=zeros(xDim,numSteps,numMonteCarlo);
+% PEst=zeros(xDim,xDim,numSteps,numMonteCarlo);
+% for curRun=1:numMonteCarlo
+%     z(:,1,curRun)=H*xTrue(:,1,curRun)+SR*randn(zDim,1);
+%     for curStep=2:numSteps        
+%         xTrue(:,curStep,curRun)=F*xTrue(:,curStep-1,curRun)+SQ*randn(xDim,1);
+%         z(:,curStep,curRun)=H*xTrue(:,curStep,curRun)+SR*randn(zDim,1);
+%     end
+% 
+%     %One-point initialization. This works in this instance, because H
+%     %extracts the Cartesian components.
+%     [xInit,PInit]=onePointCartInit(z(:,1,curRun),R,higherDerivStdDev,1);
+%     xEst(:,1,curRun)=xInit;
+%     PEst(:,:,1,curRun)=PInit;
+%     for curStep=2:numSteps
+%         [xPred,PPred]=discKalPred(xEst(:,curStep-1,curRun,1),PEst(:,:,curStep-1,curRun,1),F,Q);
+%         [xUpdate,PUpdate]=KalmanUpdate(xPred,PPred,z(:,curStep,curRun),R,H);
+%         xEst(:,curStep,curRun)=xUpdate;
+%         PEst(:,:,curStep,curRun)=PUpdate;
+%     end
+% end
+% 
+% posTrue=xTrue(1:2,:,:);
+% %The MERF requires the measurement to be in the same coordinates are the
+% %corresponding element sof the state.
+% MERF=calcMERF(posTrue,z,xEst(1:2,:,:),0,true);
+% NEES=calcNEES(xTrue,xEst,PEst);
+% figure(1)
+% clf
+% hold on
+% plot(MERF,'-k','linewidth',2)
+% h1=xlabel('step');
+% h2=ylabel('Measurement Error Reduction Factor');
+% set(gca,'FontSize',14,'FontWeight','bold','FontName','Times')
+% set(h1,'FontSize',14,'FontWeight','bold','FontName','Times')
+% set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
+% 
+% figure(2)
+% clf
+% hold on
+% plot(NEES,'-r','linewidth',2)
+% h1=xlabel('step');
+% h2=ylabel('NEES');
+% set(gca,'FontSize',14,'FontWeight','bold','FontName','Times')
+% set(h1,'FontSize',14,'FontWeight','bold','FontName','Times')
+% set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
+%
 %REFERENCES:
 %[1] Y. Bar-Shalom, X. R. Li, and T. Kirubarajan, Estimation with
 %    Applications to Tracking and Navigation. New York: John Wiley and
@@ -42,6 +122,12 @@ function [xUpdate,PUpdate,innov,Pzz,W]=KalmanUpdate(xPred,PPred,z,R,H)
 %
 %July 2012 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+xDim=size(xPred,1);
+
+if(nargin<6||isempty(condIssue))
+    condIssue=false;
+end
 
 if(nargin<5||isempty(H))
 	zDim=size(z,1); 
@@ -54,13 +140,23 @@ innov=z-zPred;
 Pzz=R+H*PPred*H';
 %Ensure symmetry
 Pzz=(Pzz+Pzz')/2;
-W=PPred*H'/Pzz;
+
+if(condIssue==false)
+    opts.SYM=true;
+    opts.RECT=false;
+    opts.TRANSA=false;
+    W=linsolve(Pzz,H*PPred,opts)';%W=PPred*H'/Pzz;
+else
+    %If there is possibly poor conditioning.
+    W=PPred*H'*pinv(Pzz);
+end
 
 xUpdate=xPred+W*innov;
 
 temp=W*H;
-temp=eye(size(temp))-temp;
+temp=eye(xDim,xDim)-temp;
 PUpdate=temp*PPred*temp'+W*R*W';
+
 %Ensure symmetry
 PUpdate=(PUpdate+PUpdate')/2;
 end

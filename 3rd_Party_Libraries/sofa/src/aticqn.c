@@ -3,9 +3,9 @@
 void iauAticqn(double ri, double di, iauASTROM *astrom,
                int n, iauLDBODY b[], double *rc, double *dc)
 /*
-**  - - - - - - - - -
+**  - - - - - - - - - -
 **   i a u A t i c q n
-**  - - - - - - - - -
+**  - - - - - - - - - -
 **
 **  Quick CIRS to ICRS astrometric place transformation, given the star-
 **  independent astrometry parameters plus a list of light-deflecting
@@ -102,11 +102,11 @@ void iauAticqn(double ri, double di, iauASTROM *astrom,
 **     iauC2s       p-vector to spherical
 **     iauAnp       normalize angle into range +/- pi
 **
-**  This revision:   2013 October 9
+**  This revision:   2018 December 13
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
    int j, i;
@@ -182,7 +182,7 @@ void iauAticqn(double ri, double di, iauASTROM *astrom,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
@@ -275,5 +275,4 @@ void iauAticqn(double ri, double di, iauASTROM *astrom,
 **                 United Kingdom
 **
 **--------------------------------------------------------------------*/
-
 }

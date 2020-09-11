@@ -10,7 +10,7 @@ function cartPoints=spher2Cart(points,systemType,useHalfRange,zTx,zRx,M)
 %           elevation, with the angles in radians, or in terms of just
 %           azimuth and elevation if Cartesian unit vectors are desired. To
 %           convert N points, points is a 3XN matrix with each column
-%           having the format [range;azimuth; elevation] or it is a 2XN
+%           having the format [range;azimuth;elevation] or it is a 2XN
 %           matrix with each column having format [azimuth; elevation] if
 %           unit vectors are desired. Note that many math texts use a polar
 %           angle (pi/2-elevation) in place of elevation. A polar angle is
@@ -38,7 +38,7 @@ function cartPoints=spher2Cart(points,systemType,useHalfRange,zTx,zRx,M)
 %           type of spherical coordinate system), so that the range
 %           reported is a one-way range (or just half a bistatic range).
 %           The default if this parameter is not provided is false if zTx
-%           is provided and true if itis omitted (monostatic). If no
+%           is provided and true if it is omitted (monostatic). If no
 %           range values are provided, an empty matrix can be passed.
 %       zTx The 3XN [x;y;z] location vectors of the transmitters in global
 %           Cartesian coordinates. If this parameter is omitted, then the
@@ -48,12 +48,12 @@ function cartPoints=spher2Cart(points,systemType,useHalfRange,zTx,zRx,M)
 %           more than 3 rows; additional rows are ignored. If monostatic or
 %           no range values are provided, an empty matrix can be passed.
 %       zRx The 3XN [x;y;z] location vectors of the receivers in Cartesian
-%           coordinates.  If this parameter is omitted, then the
-%           receivers are assumed to be at the origin. If only a single
-%           vector is passed, then the receiver location is assumed the
-%           same for all of the target states being converted. zRx can have
-%           more than 3 rows; additional rows are ignored. If monostatic or
-%           no range values are provided, an empty matrix can be passed.
+%           coordinates. If this parameter is omitted, then the receivers
+%           are assumed to be at the origin. If only a single vector is
+%           passed, then the receiver location is assumed the same for all
+%           of the target states being converted. zRx can have more than 3
+%           rows; additional rows are ignored. If monostatic or no range
+%           values are provided, an empty matrix can be passed.
 %         M A 3X3XN hypermatrix of the rotation matrices to go from the
 %           alignment of the global coordinate system to that at the
 %           receiver. If omitted, then it is assumed that the local

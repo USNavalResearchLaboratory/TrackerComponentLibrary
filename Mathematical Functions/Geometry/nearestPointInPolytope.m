@@ -20,7 +20,7 @@ function [x,exitCode]=nearestPointInPolytope(P,z,algorithm,algParams)
 %            convexQuadProgSOCP function. 
 % algParams Optional parameters for the algorithm. For algorithm=0,
 %          tolerances values Z1, Z2 and Z3 in [1] can be specified. Also,
-%          max_iters can be used to specify the maximum number fo
+%          max_iters can be used to specify the maximum number of
 %          iterations of the algorithm. the default is 100*m. The defaults
 %          for Z1, Z2, and Z3 are those given in [1]: 1e-12, 1e-10, and
 %          1e-10. For algorithm=1, algParams is the params input to the
@@ -30,7 +30,7 @@ function [x,exitCode]=nearestPointInPolytope(P,z,algorithm,algParams)
 %           is in the polytope.
 %  exitCode A value indicating how the algorithm terminated. For
 %           algorithm=1, this is the value of the info output of the
-%           function convexQuadProgSOCP. For alfgorithm=0, the values are
+%           function convexQuadProgSOCP. For algorithm=0, the values are
 %           as follows:
 %           0 The algorithm converged according to the optimality criterion
 %             using Z1 in Step 1c in [1]. 
@@ -59,8 +59,8 @@ function [x,exitCode]=nearestPointInPolytope(P,z,algorithm,algParams)
 % algParams.eps=1e-12;
 % x1=nearestPointInPolytope(P,z,algorithm,algParams);
 % %Because of how both solutions are obtained, they should be both on the
-% %polytope. However, one will see that Wolfe's solution is generally better
-% %than the quadratic programming solution:
+% %polytope. However, one will see that Wolfe's solution is generally
+% %better than the quadratic programming solution:
 % norm(x0-z)
 % norm(x1-z)%Larger error.
 %

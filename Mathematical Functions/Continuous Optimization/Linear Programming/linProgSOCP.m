@@ -1,11 +1,11 @@
-function [optCost,xOpt,info]=linProgSOCP(A,b,ALeq,bLeq,c,maximize,params)
+function [optCost,xOpt,info]=linProgSOCP(A,b,ALeq,bLeq,c,maximize,nonnegConst,params)
 %%LINPRODSOCP Used a second-order cone programming algorithm to solve a
 %             linear programming problem involving equality and/or
 %             inequality constraints.  This solves the problem:
 %                        minimize (maximize) c'*x
 %                        given     A*x=b
 %                              ALeq*x<=bLeq
-%                                   x>=0
+%                                   x>=0 (if nonnegConst is true)
 %            Second order cone programming is a generalization of linear
 %            programming. The function splitingConicSolver is used to
 %            perform the optimization.
@@ -24,6 +24,9 @@ function [optCost,xOpt,info]=linProgSOCP(A,b,ALeq,bLeq,c,maximize,params)
 % maximize A boolean variable specifying whether the problem is to maximize
 %          or minimize the cost function. The default if omitted or an
 %          empty matrix is passed is false.
+% nonnegConst A parameter indicating whether the nonegtivity constraint
+%          should be included. The default if omitted or an empty matrix is
+%          passed is true.
 %   params Parameters that affect how the function splitingConicSolver,
 %          which is used by this function, works. See the comments to
 %          splitingConicSolver for more information.
@@ -33,7 +36,9 @@ function [optCost,xOpt,info]=linProgSOCP(A,b,ALeq,bLeq,c,maximize,params)
 %                 maximum number of iterations. This is the minimum/maximum
 %                 value of c'*x. If the algorithm did not terminate
 %                 successfully, then an empty matrix is returned. If the
-%                 cost is unbounded, then Inf or -Inf is returned.
+%                 cost is unbounded, then Inf or -Inf is returned. An INf
+%                 or -Inf can also be returned if accuracy errors prevented
+%                 the algorithm from getting a solution.
 %            xOpt The optimal vector x associated with the optimal cost. If
 %                 the problem is unbounded or the algorithm did not
 %                 terminate successfully, then an empty matrix is returned.
@@ -73,7 +78,11 @@ if(nargin<6||isempty(maximize))
     maximize=false;
 end
 
-if(nargin<7||isempty(params))
+if(nargin<7||isempty(nonnegConst))
+   nonnegConst=true; 
+end
+
+if(nargin<8||isempty(params))
    params=[]; 
 end
 
@@ -85,8 +94,13 @@ numDim=length(c);
 numEqConst=length(b);
 numIneqConst=length(bLeq);
 
-F=zeros(numEqConst+numDim+numIneqConst,numDim);
-g=zeros(numEqConst+numDim+numIneqConst);
+if(nonnegConst)
+    F=zeros(numEqConst+numDim+numIneqConst,numDim);
+    g=zeros(numEqConst+numDim+numIneqConst,1);
+else
+    F=zeros(numEqConst+numIneqConst,numDim);
+    g=zeros(numEqConst+numIneqConst,1);
+end
 
 %First, add the equality constraints.
 cone=[];
@@ -96,10 +110,12 @@ g(1:numEqConst)=b;
 curRow=numEqConst+1;
 
 %Next, we will add the non-negativity constraints on all of the x terms.
-sel=curRow:(curRow+numDim-1);
-F(sel,:)=-eye(numDim,numDim);
-g(sel)=0;
-curRow=curRow+numDim;
+if(nonnegConst)
+    sel=curRow:(curRow+numDim-1);
+    F(sel,:)=-eye(numDim,numDim);
+    g(sel)=0;
+    curRow=curRow+numDim;
+end
 
 %Finally, we will add the inequality constraints.
 sel=curRow:(curRow+numIneqConst-1);
@@ -107,7 +123,11 @@ F(sel,:)=ALeq;
 g(sel)=bLeq;
 
 %The total number of inequality constraints.
-cone.l=numDim+numIneqConst;
+if(nonnegConst)
+    cone.l=numDim+numIneqConst;
+else
+    cone.l=numIneqConst;
+end
 [xOpt,~,~,info]=splitingConicSolver(F,g,c,cone,params);
 
 optCost=info.pobj;

@@ -27,34 +27,27 @@
 //For the case that complex values are passed.
 #include <complex>
 
+using namespace std;
+
 void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray *prhs[]) {
     double scalFactor;
+    //Copies are only made if real and complex inputs are mixed. In such an
+    //instance, we convert everything to complex. If copies are made, they
+    //will need to be freed prior to returning.
+    mxArray *CCopy=NULL;
+    mxArray *SCopy=NULL;
     std::complex <double> a,c;
     bool spherDerivs;
     size_t algorithm;
     double *point, *pointCopy=NULL;
-    CountingClusterSetCPP<double> CReal;
-    CountingClusterSetCPP<double> SReal;
-    CountingClusterSetCPP<double> CImag;
-    CountingClusterSetCPP<double> SImag;
     size_t numPoints, pointDim;
-    size_t i, M, totalNumEls;
+    size_t M, totalNumEls;
     mxArray *VMATLAB;
     mxArray *gradVMATLAB;
     mxArray *HessianVMATLAB;
-    double *VReal;
-    double *VImag;
-    double *gradVReal=NULL;
-    double *gradVImag=NULL;
-    double *HessianVReal=NULL;
-    double *HessianVImag=NULL;
     bool useComplexAlg=false;
     mxComplexity complexVal;
     size_t systemType;
-    //Buffer is only used to hold temporary space in case the complex
-    //algorithm is run but not all (real/ complex) parts are available. For
-    //example, if S is real and C is complex.
-    double *buffer=NULL;
     
     if(nrhs<3||nrhs>9) {
         mexErrMsgTxt("Wrong number of inputs.");
@@ -64,7 +57,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         mexErrMsgTxt("Invalid number of outputs.");
     }
 
-    //Check the validity of the ClusterSets
+    //Check the validity of the coefficients.
     checkDoubleArray(prhs[0]);
     checkDoubleArray(prhs[1]);
     
@@ -74,14 +67,6 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         mexErrMsgTxt("Invalid data passed.");
     }
     
-    CReal.clusterEls=mxGetPr(prhs[0]);
-    CImag.clusterEls=mxGetPi(prhs[0]);
-    useComplexAlg=useComplexAlg|(CImag.clusterEls!=NULL);
-    
-    SReal.clusterEls=mxGetPr(prhs[1]);
-    SImag.clusterEls=mxGetPi(prhs[1]);
-    useComplexAlg=useComplexAlg|(SImag.clusterEls!=NULL);
-
     //The number of elements in the ClusterSets
     totalNumEls=mxGetM(prhs[0])*mxGetN(prhs[0]);
 
@@ -95,19 +80,8 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     if((M+1)*(M+2)/2!=totalNumEls) {
         mexErrMsgTxt("S and C contain an inconsistent number of elements.");
     }
-    
-    //Otherwise, fill in the values for the cluster sizes and the ofset
-    //array.
-    CReal.numClust=M+1;
-    CImag.numClust=M+1;
-    SReal.numClust=M+1;
-    SImag.numClust=M+1;
-    CReal.totalNumEl=totalNumEls;
-    CImag.totalNumEl=totalNumEls;
-    SReal.totalNumEl=totalNumEls;
-    SImag.totalNumEl=totalNumEls;
-
-    //Get the other parameters.
+        
+    //Get the other parameters before getting C and S.
     pointDim=mxGetM(prhs[2]);
     if((pointDim!=3&&pointDim!=2)||mxIsEmpty(prhs[2])) {
         mexErrMsgTxt("The points have an incorrect dimensionality.");
@@ -115,7 +89,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
 
     checkRealDoubleArray(prhs[2]);
     numPoints=mxGetN(prhs[2]);
-    point=reinterpret_cast<double*>(mxGetData(prhs[2]));
+    point=mxGetDoubles(prhs[2]);
     if(pointDim==2) {
         size_t curPoint;
         double *curCopyPoint;
@@ -139,13 +113,17 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
 
     if(nrhs<4||mxIsEmpty(prhs[3])) {
         if(pointDim==2) {
-            a=1;
+            a=1.0;
         } else {
             a=getScalarMatlabClassConst("Constants", "EGM2008SemiMajorAxis");
         }
     } else {
-        a=getComplexDoubleFromMatlab(prhs[3]);
-        useComplexAlg=useComplexAlg|(imag(a)!=0);
+        if(mxIsComplex(prhs[3])) {
+            a=getComplexDoubleFromMatlab(prhs[3]);
+            useComplexAlg=true;
+        } else {
+            a=static_cast<double>(getDoubleFromMatlab(prhs[3]));
+        }
     }
     
     if(nrhs<5||mxIsEmpty(prhs[4])) {
@@ -155,8 +133,12 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             c=getScalarMatlabClassConst("Constants", "EGM2008GM");
         }
     } else {
-        c=getComplexDoubleFromMatlab(prhs[4]);
-        useComplexAlg=useComplexAlg|(imag(c)!=0);
+        if(mxIsComplex(prhs[4])) {
+            c=getComplexDoubleFromMatlab(prhs[4]);
+            useComplexAlg=true;
+        } else {
+            c=getDoubleFromMatlab(prhs[4]);
+        }
     }
     
     if(nrhs<6||mxIsEmpty(prhs[5])) {
@@ -191,49 +173,19 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         mexErrMsgTxt("Unknown algorithm option specified.");
     }
     
-    //Allocate space for the return values
+    useComplexAlg=useComplexAlg||mxIsComplex(prhs[0])||mxIsComplex(prhs[1]);
+    
     if(useComplexAlg) {
-        size_t numNulls;
-        double *buffCur;
         complexVal=mxCOMPLEX;
-
-        //If the real or complex component of C or S is missing, then
-        //allocate a matrix ful of zeros.
-        numNulls=(CReal.clusterEls==NULL)+(CImag.clusterEls==NULL)+(SReal.clusterEls==NULL)+(SImag.clusterEls==NULL);
-        buffer=reinterpret_cast<double*>(mxCalloc(numNulls*totalNumEls,sizeof(double)));
-        
-        buffCur=buffer;
-        if(CReal.clusterEls==NULL) {
-            CReal.clusterEls=buffCur;
-            buffCur+=totalNumEls;
-        }
-        
-        if(CImag.clusterEls==NULL) {
-            CImag.clusterEls=buffCur;
-            buffCur+=totalNumEls;
-        }
-        
-        if(SReal.clusterEls==NULL) {
-            SReal.clusterEls=buffCur;
-            buffCur+=totalNumEls;
-        }
-        
-        if(SImag.clusterEls==NULL) {
-            SImag.clusterEls=buffCur;
-        }
-    } else {  
+    } else {
         complexVal=mxREAL;
     }
     
+    //Allocate space for the return values.
     VMATLAB=mxCreateDoubleMatrix(numPoints,1,complexVal);
-    VReal=mxGetPr(VMATLAB);
-    VImag=mxGetPi(VMATLAB);//If it is purely real, this is just NULL.
-
     if(nlhs>1) {
         gradVMATLAB=mxCreateDoubleMatrix(3,numPoints,complexVal);
-        gradVReal=mxGetPr(gradVMATLAB);
-        gradVImag=mxGetPi(gradVMATLAB);
-
+        
         if(nlhs>2) {
             mwSize dims[3];
 
@@ -242,15 +194,69 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             dims[2]=numPoints;
 
             HessianVMATLAB=mxCreateNumericArray(3,dims,mxDOUBLE_CLASS,complexVal);
-            HessianVReal=mxGetPr(HessianVMATLAB);
-            HessianVImag=mxGetPi(HessianVMATLAB);
         }
-    }
-
+    }    
+    
     if(useComplexAlg) {
-        spherHarmonicEvalCPPComplex(VReal, VImag, gradVReal, gradVImag, HessianVReal, HessianVImag, CReal, CImag, SReal, SImag, point, numPoints, a, c, systemType, spherDerivs,scalFactor,algorithm);
-    } else {
-        spherHarmonicEvalCPPReal(VReal,gradVReal,HessianVReal,CReal,SReal,point,numPoints,real(a),real(c),systemType, spherDerivs,scalFactor,algorithm);
+        complex<double> *V;
+        complex<double> *gradV=NULL;
+        complex<double> *HessianV=NULL;
+        CountingClusterSetCPP<complex<double>> C;
+        CountingClusterSetCPP<complex<double>> S;
+        
+        C.numClust=M+1;
+        S.numClust=M+1;
+        C.totalNumEl=totalNumEls;
+        S.totalNumEl=totalNumEls;
+        
+        if(!mxIsComplex(prhs[0])) {
+            CCopy=mxDuplicateArray(prhs[0]);
+            mxMakeArrayComplex(CCopy);
+            C.clusterEls=reinterpret_cast<complex<double>*>(mxGetComplexDoubles(CCopy));
+        } else {
+            C.clusterEls=reinterpret_cast<complex<double>*>(mxGetComplexDoubles(prhs[0]));
+        }
+        
+        if(!mxIsComplex(prhs[1])) {
+            SCopy=mxDuplicateArray(prhs[1]);
+            mxMakeArrayComplex(SCopy);
+            S.clusterEls=reinterpret_cast<complex<double>*>(mxGetComplexDoubles(SCopy));
+        } else {
+            S.clusterEls=reinterpret_cast<complex<double>*>(mxGetComplexDoubles(prhs[1]));
+        }
+        
+        V=reinterpret_cast<complex<double>*>(mxGetComplexDoubles(VMATLAB));
+        if(nlhs>1) {
+            gradV=reinterpret_cast<complex<double>*>(mxGetComplexDoubles(gradVMATLAB));
+            if(nlhs>2) {
+                HessianV=reinterpret_cast<complex<double>*>(mxGetComplexDoubles(HessianVMATLAB));
+            }
+        }
+
+        spherHarmonicEvalCPPComplex(V,gradV,HessianV,C,S,point,numPoints,a,c,systemType,spherDerivs,scalFactor,algorithm);
+    } else {//All data is real.
+        double *V;
+        double *gradV=NULL;
+        double *HessianV=NULL;
+        CountingClusterSetCPP<double> C;
+        CountingClusterSetCPP<double> S;
+        
+        C.numClust=M+1;
+        S.numClust=M+1;
+        C.totalNumEl=totalNumEls;
+        S.totalNumEl=totalNumEls;
+        C.clusterEls=mxGetDoubles(prhs[0]);
+        S.clusterEls=mxGetDoubles(prhs[1]);
+        
+        V=mxGetDoubles(VMATLAB);
+        if(nlhs>1) {
+            gradV=mxGetDoubles(gradVMATLAB);
+            if(nlhs>2) {
+                HessianV=mxGetDoubles(HessianVMATLAB);
+            }
+        }
+  
+       spherHarmonicEvalCPPReal(V,gradV,HessianV,C,S,point,numPoints,real(a),real(c),systemType,spherDerivs,scalFactor,algorithm);  
     }
 
     plhs[0]=VMATLAB;
@@ -264,9 +270,13 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     if(pointCopy!=NULL) {
         delete pointCopy;
     }
-
-    if(buffer!=NULL) {
-        mxFree(buffer);
+    
+    if(CCopy!=NULL) {
+        mxDestroyArray(CCopy);
+    }
+    
+    if(SCopy!=NULL) {
+        mxDestroyArray(SCopy);
     }
 }
 

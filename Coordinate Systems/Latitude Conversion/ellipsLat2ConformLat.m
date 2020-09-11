@@ -1,4 +1,4 @@
-function conformalLat=ellipsLat2ConformLat(ellipsLat,f)
+function conformalLat=ellipsLat2ConformLat(ellipsLat,f,algorithm)
 %%ELLIPSLAT2CONFORMLAT Convert an ellipsoidal (geodetic) latitude of a
 %                    point on the surface of a reference ellipsoid into a
 %                    latitude in terms of a sphere that is conformal with
@@ -13,6 +13,13 @@ function conformalLat=ellipsLat2ConformLat(ellipsLat,f)
 %                f The flattening factor of the reference ellipsoid. If
 %                  this argument is omitted, the value in
 %                  Constants.WGS84Flattening is used.
+%        algorithm An optional parameter specifying how the conformal
+%                  latitude shall be determined. Both methods are
+%                  algebraically equivalent and differ only in complexity
+%                  and finite precision errors. Possible values are:
+%                  0 (The default if omitted or an empty matrix is passed)
+%                    Use the formula given in Section 2.4 of [2].
+%                  1 Use the formula in Equation 3.1a of [1]. 
 %
 %OUTPUTS: conformalLat The latitudes in ellipsLat converted to conformal
 %                  latitudes. This ranges from -pi/2 to pi/2.
@@ -33,13 +40,26 @@ function conformalLat=ellipsLat2ConformLat(ellipsLat,f)
 %July 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<3||isempty(algorithm))
+    algorithm=0;
+end
+
 if(nargin<2||isempty(f))
     f=Constants.WGS84Flattening;
 end
 
-isoLat=ellipsLat2IsoLat(ellipsLat,f);
-conformalLat=asin(tanh(isoLat));
+switch(algorithm)
+    case 0
+        isoLat=ellipsLat2IsoLat(ellipsLat,f);
+        conformalLat=asin(tanh(isoLat));
+    case 1
+        sinLat=sin(ellipsLat);
+        e=sqrt(2*f-f^2);
 
+        conformalLat=2*atan(sqrt(((1+sinLat)./(1-sinLat)).*((1-e*sinLat)./(1+e*sinLat)).^e))-pi/2;
+    otherwise
+        error('Unknown algorithm specified.')
+end
 end
 
 %LICENSE:

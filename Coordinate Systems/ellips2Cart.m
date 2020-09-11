@@ -8,11 +8,11 @@ function cartPoints=ellips2Cart(points,a,f)
 %               points is a 3XN matrix with each column having the format
 %               [latitude;longitude; height].
 %             a The semi-major axis of the reference ellipsoid. If this
-%               argument is omitted, the value in
-%               Constants.WGS84SemiMajorAxis is used.
+%               argument is omitted or an empty matrix is passed, the value
+%               in Constants.WGS84SemiMajorAxis is used.
 %             f The flattening factor of the reference ellipsoid. If this
-%               argument is omitted, the value in Constants.WGS84Flattening
-%               is used.
+%               argument is omitted or an empty matrix is passed, the value
+%               in Constants.WGS84Flattening is used.
 %
 %OUTPUTS: cartPoints For N points, cartPoints is a 3XN matrix of the
 %               converted points with each column having the format

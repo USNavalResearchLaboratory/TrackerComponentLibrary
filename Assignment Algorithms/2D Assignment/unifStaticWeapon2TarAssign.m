@@ -23,7 +23,8 @@ function x=unifStaticWeapon2TarAssign(V,q,M)
 %           assigned to the targets. This is the optimal solution.
 %
 %The algorithm is from [1], the global optimality of the algorithm is
-%proven. The algorithm is also described in Chapter 3 of [2].
+%proven. The algorithm is also described in Chapter 3 of [2]. The algorithm
+%is also known as the maximal marginal return (MMR) algorithm.
 %
 %REFERENCES:
 %[1] G. G. den Broeder Jr., R. E. Ellison, and L. Emerling, "On optimum

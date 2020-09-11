@@ -50,7 +50,7 @@ function [xPred,PPred]=stochTaylorCubPredAdd(xPrev,PPrev,a,BVal,deltaT,numSteps,
 %The basic idea behind the prediction filter is described in [1]. The steps
 %of the algorithm when holding papx constant are summarized in Appendix A
 %of [1]. Here, a typo in step 5 is corrected, since square roots were
-%missing on two of the Q terms.
+%missing on two of the Q terms. Specific derivations are given in [2].
 %
 %The option for the Euler-Maruyama method is a trivial modification
 %obtained by truncating the expansion used in the paper.
@@ -134,6 +134,8 @@ function [xPred,PPred]=stochTaylorCubPredAdd(xPrev,PPrev,a,BVal,deltaT,numSteps,
 %    for continous-discrete systems: Theory and simulations," IEEE
 %    Transactions on Signal Processing, vol. 58, no. 10, pp. 4977-4993,
 %    Oct. 2010.
+%[2] D. F. Crouse, "Itô-Taylor expansion moments for continuous-time state
+%    propagation," NRL Memo, 2019.
 %
 %December 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

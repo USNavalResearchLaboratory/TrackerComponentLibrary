@@ -16,11 +16,14 @@ function kernelEst=kernelApprox(x,xi,H,K)
 %       xi A numDimXnumNodes set of samples of the PDF.
 %        H The numDimXnumDim square bandwidth of the kernel estimator.
 %          This is often a lower-triangular matrix. See below for details.
-%        K An optional function handle to the kernel. A kernel should be
-%          some type of PDF. K(x) should be able to return a 1XnumNodes
-%          set of values when given a numDimXnumNodes set of x values.
-%          If K is omitted or an empty matrix is passed, then the kernel is
-%          assumed to be a multivariate Gaussian PDF.
+%        K This selects the kernel to use. Possible inputs are:
+%          0 (The default if omitted or an empty matrix is passed) Use the
+%            Gaussian kernel.
+%          1 Use the Epanechnikov kernel.
+%          One can also pass a function handle to the kernel. A kernel
+%          should be some type of PDF. K(x) should be able to return a
+%          1XnumNodes set of values when given a numDimXnumNodes set of x
+%          values.
 %
 %OUTPUTS: kernelEst A numDimXnumPoints matrix of the estimated value of the
 %               PDF implied by the samples of the PDF and the kernel at
@@ -39,12 +42,23 @@ function kernelEst=kernelApprox(x,xi,H,K)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 numPoints=size(x,2);
-numDim=size(xi,1);
+
 n=size(xi,2);
 
 if(nargin<4||isempty(K))
     %Use a standard Gaussian kernel if none is specified.
-    K=@(x)((2*pi)^(-numDim/2)*exp(-1/2*sum(x.*x,1)));
+    K=0;
+end
+
+if(~isa(K,'function_handle'))
+    switch(K)
+        case 0%Gaussian kernel 
+            K=@(x)GaussianKernel(x);
+        case 1%Epanechnikov kernel
+            K=@(x)EpanechnikovKernel(x);
+        otherwise
+            error('Unknown kernel specified.')
+    end
 end
 
 sumVal=zeros(numPoints,1);

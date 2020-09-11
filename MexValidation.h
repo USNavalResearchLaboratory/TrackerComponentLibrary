@@ -3,13 +3,23 @@
  * or C++ code.
  *
  *The following functions that can be used in both C and C++ programs:
+ *checkRealArray            Gives an error if an array is not real, has
+ *                          more than two indices, or is empty.
  *checkRealDoubleArray      Gives an error if an array is not composed of
- *                          real doubles and has more than two indices.
+ *                          real doubles, has more than two indices, or is
+ *                          empty.
  *checkDoubleArray          Gives an error if an array is not composed of
- *                          doubles and has more than two indices.
+ *                          doubles, has more than two indices, or is
+ *                          empty.
  *checkRealDoubleHypermatrix This is the same as checkRealDoubleArray
  *                          except it does not throw an error if the matrix
  *                          has more than two indices.
+ *checkRealInt32Array       Gives an error if an array is not composed of
+ *                          real int32_t values, has more than two indices,
+ *                          or is empty.
+ *checkInt32Array           Gives an error if an array is not composed of
+ *                          int32_t values, has more than two indices, or
+ *                          is empty.
  *verifySizeReal            Verify that a Matlab matrix is 2D, has the
  *                          desired dimensions, and is real.
  *convert2DReal2DoubleMat   Convert a Matlab matrix of real values for
@@ -55,6 +65,11 @@
  *                          of the array by modifying an input parameter.
  *                          The array is allocated using mxAlloc and thus
  *                          should be freed using mxFree.
+ *copyPtrDiffTArrayFromMatlab  Returns a copy of an array from Matlab as an
+ *                          array of ptrdiff_t values and indicates the
+ *                          length of the array by modifying an input
+ *                          parameter.  The array is allocated using
+ *                          mxAlloc and thus should be freed using mxFree.
  *copyBoolArrayFromMatlab   Returns a copy of an array from Matlab
  *                          converted into boolean variables and indicates
  *                          the length of the array by modifying an input
@@ -70,6 +85,11 @@
  *                          Matlab data is of a type that can not be
  *                          transformed into a boolean or if it is
  *                          complex.
+ *getInt32FromMatlab        Turns a passed Matlab data type into an real
+ *                          int32_t variable. Provides an error if the
+ *                          Matlab data is of a type that can not be
+ *                          transformed into an int32_t or if it is
+ *                          complex.
  *doubleMat2Matlab          Convert an array or matrix of doubles into
  *                          a matrix to be returned to Matlab.
  *floatMat2MatlabDoubles    Convert an array or matrix of single-precision
@@ -80,6 +100,10 @@
  *                          a matrix to be returned to Matlab as double
  *                          floating point numbers (the default data format
  *                          in Matlab).
+ *int32Mat2MatlabDoubles    Convert an array or matrix of int32_T values
+ *                          into a matrix to be returned to Matlab as
+ *                          double floating point numbers (the default data
+ *                          format in Matlab).
  *sizeTMat2MatlabDoubles    Convert an array or matrix of size_t values
  *                          into a matrix to be returned to Matlab as
  *                          double floating point numbers (the default data
@@ -88,7 +112,7 @@
  *                          into a matrix to be returned to Matlab as
  *                          double floating point numbers (the default data
  *                          format in Matlab).
- *boolMat2Matlab            Convert an array or matrix of doubles into
+ *boolMat2Matlab            Convert an array or matrix of bool values into
  *                          a matrix to be returned to Matlab (as type
  *                          mxLogical).
  *allocUnsignedSizeMatInMatlab Allocate a matrix for holding size_t values
@@ -142,15 +166,7 @@
  *                          data type is not a type that can be converted
  *                          to a double or is not scalar.
  *
- *DEPENDENCIES: matrix.h
- *              mex.h
- *              algorithms if using C++
- *              cstfdef if using C++
- *              string.h if using C
- *              stddef.h if using C
- *              stdbool.h if using C99 or later.
- *
- *December 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
+ *September 2020 David F. Crouse, Naval Research Laboratory, Washington D.C.
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
@@ -228,54 +244,64 @@ double fMin(double a,double b) {
 
 #endif
 #endif
+//void checkRealArray(const mxArray * const val);
+//void checkRealDoubleArray(const mxArray * const val);
+//void checkDoubleArray(const mxArray * const val);
+//void checkRealDoubleHypermatrix(const mxArray * const val);
+//void checkRealInt32Array(const mxArray * const val);
+//void checkInt32Array(const mxArray * const val);
+//void verifySizeReal(const size_t M, const size_t N, const mxArray * const val);
+//mxArray *convert2DReal2DoubleMat(const mxArray * const val);
+//mxArray *convert2DReal2SignedIntMat(const mxArray * const val);
+//mxArray *convert2DReal2UnsignedIntMat(const mxArray * const val);
+//mxArray *convert2DReal2SignedSizeMat(const mxArray * const val);
+//mxArray *convert2DReal2UnsignedSizeMat(const mxArray * const val);
 
-void checkRealDoubleArray(const mxArray * const val);
-void checkDoubleArray(const mxArray * const val);
-void checkRealDoubleHypermatrix(const mxArray * const val);
-void verifySizeReal(const size_t M, const size_t N, const mxArray * const val);
-mxArray *convert2DReal2DoubleMat(const mxArray * const val);
-mxArray *convert2DReal2SignedIntMat(const mxArray * const val);
-mxArray *convert2DReal2UnsignedIntMat(const mxArray * const val);
-mxArray *convert2DReal2SignedSizeMat(const mxArray * const val);
-mxArray *convert2DReal2UnsignedSizeMat(const mxArray * const val);
+//int getIntFromMatlab(const mxArray * const val);
+//size_t getSizeTFromMatlab(const mxArray * const val);
+//ptrdiff_t getPtrDiffTFromMatlab(const mxArray * const val);
+//size_t *copySizeTArrayFromMatlab(const mxArray * const val, size_t *arrayLen);
+//ptrdiff_t *copyPtrDiffTArrayFromMatlab(const mxArray * const val, size_t *arrayLen);
+//bool *copyBoolArrayFromMatlab(const mxArray * const val, size_t *arrayLen);
+//double getDoubleFromMatlab(const mxArray * const val);
+//bool getBoolFromMatlab(const mxArray * const val);
+//int32_t getInt32FromMatlab(const mxArray * const val);
 
-int getIntFromMatlab(const mxArray * const val);
-size_t getSizeTFromMatlab(const mxArray * const val);
-ptrdiff_t getPtrDiffTFromMatlab(const mxArray * const val);
-size_t *copySizeTArrayFromMatlab(const mxArray * const val, size_t *arrayLen);
-bool *copyBoolArrayFromMatlab(const mxArray * const val, size_t *arrayLen);
-double getDoubleFromMatlab(const mxArray * const val);
-bool getBoolFromMatlab(const mxArray * const val);
-
-mxArray *doubleMat2Matlab(const double * const arr,const size_t numRow, const size_t numCol);
-mxArray *floatMat2MatlabDoubles(const float * const arr,const size_t numRow, const size_t numCol);
-mxArray *intMat2MatlabDoubles(const int * const arr,const size_t numRow, const size_t numCol);
-mxArray *sizeTMat2MatlabDoubles(const size_t * const arr,const size_t numRow, const size_t numCol);
-mxArray *ptrDiffTMat2MatlabDoubles(const ptrdiff_t * const arr,const size_t numRow, const size_t numCol);
-mxArray *boolMat2Matlab(const bool * const arr,const size_t numRow, const size_t numCol);
-mxArray *allocUnsignedSizeMatInMatlab(const size_t numRow, const size_t numCol);
-mxArray *allocSignedSizeMatInMatlab(const size_t numRow, const size_t numCol);
-mxArray *allocUnsignedCharMatInMatlab(const size_t numRow, const size_t numCol);
-mxArray *allocUnsignedIntMatInMatlab(const size_t numRow, const size_t numCol);
-mxArray *allocSignedIntMatInMatlab(const size_t numRow, const size_t numCol);
-mxArray *unsignedSizeMat2Matlab(const size_t * const arr, const size_t numRow, const size_t numCol);
-mxArray *unsignedCharMat2Matlab(const unsigned char * const arr, const size_t numRow, const size_t numCol);
-mxArray *signedSizeMat2Matlab(const ptrdiff_t * const arr, const size_t numRow, const size_t numCol);
-double getScalarMatlabClassConst(const char * const className, const char * const constName);
-bool pointerIsAligned(const void *pointer, const size_t byteCount);
+//mxArray *doubleMat2Matlab(const double * const arr,const size_t numRow, const size_t numCol);
+//mxArray *floatMat2MatlabDoubles(const float * const arr,const size_t numRow, const size_t numCol);
+//mxArray *intMat2MatlabDoubles(const int * const arr,const size_t numRow, const size_t numCol);
+//mxArray *sizeTMat2MatlabDoubles(const size_t * const arr,const size_t numRow, const size_t numCol);
+//mxArray *ptrDiffTMat2MatlabDoubles(const ptrdiff_t * const arr,const size_t numRow, const size_t numCol);
+//mxArray *boolMat2Matlab(const bool * const arr,const size_t numRow, const size_t numCol);
+//mxArray *allocUnsignedSizeMatInMatlab(const size_t numRow, const size_t numCol);
+//mxArray *allocSignedSizeMatInMatlab(const size_t numRow, const size_t numCol);
+//mxArray *allocUnsignedCharMatInMatlab(const size_t numRow, const size_t numCol);
+//mxArray *allocUnsignedIntMatInMatlab(const size_t numRow, const size_t numCol);
+//mxArray *allocSignedIntMatInMatlab(const size_t numRow, const size_t numCol);
+//mxArray *unsignedSizeMat2Matlab(const size_t * const arr, const size_t numRow, const size_t numCol);
+//mxArray *unsignedCharMat2Matlab(const unsigned char * const arr, const size_t numRow, const size_t numCol);
+//mxArray *signedSizeMat2Matlab(const ptrdiff_t * const arr, const size_t numRow, const size_t numCol);
+//double getScalarMatlabClassConst(const char * const className, const char * const constName);
+//bool pointerIsAligned(const void *pointer, const size_t byteCount);
 
 #ifdef __cplusplus
-//One cannot use prototypes for template functions. The templace C++-only
+//One cannot use prototypes for template functions. The template C++-only
 //functions are full implementations.
 std::complex <double> getComplexDoubleFromMatlab(const mxArray * const val);
 #endif
 
-void checkRealDoubleArray(const mxArray * const val){
+void checkRealArray(const mxArray * const val) {
     if(mxIsComplex(val)==true) {
         mexErrMsgTxt("A parameter that should be real matrix of doubles has complex components.");
     }
     
-    checkDoubleArray(val);
+    if(mxIsEmpty(val)) {
+        mexErrMsgTxt("A parameter that should be real matrix is empty.");
+    }
+    
+    if(mxGetNumberOfDimensions(val)>2){
+        mexErrMsgTxt("A parameter has too many dimensions.");
+    }
 }
 
 void checkDoubleArray(const mxArray * const val) {
@@ -290,6 +316,14 @@ void checkDoubleArray(const mxArray * const val) {
     if(mxGetClassID(val)!=mxDOUBLE_CLASS) {
         mexErrMsgTxt("A parameter that should be a real double is of a different data type.");
     }
+}
+
+void checkRealDoubleArray(const mxArray * const val){
+    if(mxIsComplex(val)==true) {
+        mexErrMsgTxt("A parameter that should be real matrix of doubles has complex components.");
+    }
+    
+    checkDoubleArray(val);
 }
 
 void checkRealDoubleHypermatrix(const mxArray * const val){
@@ -308,6 +342,28 @@ void checkRealDoubleHypermatrix(const mxArray * const val){
     if(mxGetClassID(val)!=mxDOUBLE_CLASS) {
         mexErrMsgTxt("A parameter that should be a real double is of a different data type.");
     }
+}
+
+void checkInt32Array(const mxArray * const val) {
+    if(mxIsEmpty(val)) {
+        mexErrMsgTxt("A parameter that should be real matrix of int32_t values is empty.");
+    }
+    
+    if(mxGetNumberOfDimensions(val)>2){
+        mexErrMsgTxt("A parameter has too many dimensions.");
+    }
+    
+    if(mxGetClassID(val)!=mxINT32_CLASS) {
+        mexErrMsgTxt("A parameter that should be int32_t values is of a different data type.");
+    }
+}
+
+void checkRealInt32Array(const mxArray * const val) {
+    if(mxIsComplex(val)==true) {
+        mexErrMsgTxt("A parameter that should be real matrix of int32_t values has complex components.");
+    }
+    
+    checkInt32Array(val);
 }
 
 void verifySizeReal(const size_t M, const size_t N, const mxArray * const val) {
@@ -345,12 +401,12 @@ mxArray *convert2DReal2DoubleMat(const mxArray * const val) {
     N=mxGetN(val);
     numElements=M*N;
     retMat=mxCreateDoubleMatrix(M,N,mxREAL);
-    retData=(double*)mxGetData(retMat);
+    retData=mxGetDoubles(retMat);
     
     switch(mxGetClassID(val)){
         case mxCHAR_CLASS:
         {
-            mxChar *data=(mxChar*)mxGetData(val);
+            mxChar *data=mxGetChars(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(double)data[i];
             }
@@ -358,7 +414,7 @@ mxArray *convert2DReal2DoubleMat(const mxArray * const val) {
         }
         case mxLOGICAL_CLASS:
         {
-            mxLogical *data=(mxLogical*)mxGetData(val);
+            mxLogical *data=mxGetLogicals(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(double)data[i];
             }
@@ -366,7 +422,7 @@ mxArray *convert2DReal2DoubleMat(const mxArray * const val) {
         }
         case mxDOUBLE_CLASS:
         {
-            double *data=(double*)mxGetData(val);
+            double *data=mxGetDoubles(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(double)data[i];
             }
@@ -374,7 +430,7 @@ mxArray *convert2DReal2DoubleMat(const mxArray * const val) {
         }
         case mxSINGLE_CLASS:
         {
-            float *data=(float*)mxGetData(val);
+            float *data=mxGetSingles(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(double)data[i];
             }
@@ -382,7 +438,7 @@ mxArray *convert2DReal2DoubleMat(const mxArray * const val) {
         }
         case mxINT8_CLASS:
         {
-            int8_T *data=(int8_T*)mxGetData(val);
+            int8_T *data=mxGetInt8s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(double)data[i];
             }
@@ -390,7 +446,7 @@ mxArray *convert2DReal2DoubleMat(const mxArray * const val) {
         }
         case mxUINT8_CLASS:
         {
-            uint8_T *data=(uint8_T*)mxGetData(val);
+            uint8_T *data=mxGetUint8s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(double)data[i];
             }
@@ -398,7 +454,7 @@ mxArray *convert2DReal2DoubleMat(const mxArray * const val) {
         }
         case mxINT16_CLASS:
         {
-            int16_T *data=(int16_T*)mxGetData(val);
+            int16_T *data=mxGetInt16s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(double)data[i];
             }
@@ -406,7 +462,7 @@ mxArray *convert2DReal2DoubleMat(const mxArray * const val) {
         }
         case mxUINT16_CLASS:
         {
-            uint16_T *data=(uint16_T*)mxGetData(val);
+            uint16_T *data=mxGetUint16s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(double)data[i];
             }
@@ -414,7 +470,7 @@ mxArray *convert2DReal2DoubleMat(const mxArray * const val) {
         }
         case mxINT32_CLASS:
         {
-            int32_T *data=(int32_T*)mxGetData(val);
+            int32_T *data=mxGetInt32s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(double)data[i];
             }
@@ -422,7 +478,7 @@ mxArray *convert2DReal2DoubleMat(const mxArray * const val) {
         }
         case mxUINT32_CLASS:
         {
-            uint32_T *data=(uint32_T*)mxGetData(val);
+            uint32_T *data=mxGetUint32s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(double)data[i];
             }
@@ -430,7 +486,7 @@ mxArray *convert2DReal2DoubleMat(const mxArray * const val) {
         }
         case mxINT64_CLASS:
         {
-            int64_T *data=(int64_T*)mxGetData(val);
+            int64_T *data=mxGetInt64s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(double)data[i];
             }
@@ -438,7 +494,7 @@ mxArray *convert2DReal2DoubleMat(const mxArray * const val) {
         }
         case mxUINT64_CLASS:
         {
-            uint64_T *data=(uint64_T*)mxGetData(val);
+            uint64_T *data=mxGetUint64s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(double)data[i];
             }
@@ -452,7 +508,24 @@ mxArray *convert2DReal2DoubleMat(const mxArray * const val) {
         case mxOPAQUE_CLASS:
         case mxOBJECT_CLASS:
         default:
-            mexErrMsgTxt("A parameter is of a data type that can not be used.");
+            mexErrMsgTxt("A parameter is of a data type that cannot be used.");
+    }
+    
+    return retMat;
+}
+
+mxArray *allocSignedIntMatInMatlab(const size_t numRow, const size_t numCol){
+    mxArray *retMat=NULL;
+    
+    switch(sizeof(int)) {
+        case 4:
+            retMat=mxCreateNumericMatrix(numRow,numCol,mxINT32_CLASS,mxREAL);
+            break;
+        case 8:
+            retMat=mxCreateNumericMatrix(numRow,numCol,mxINT64_CLASS,mxREAL);
+            break;
+        default:
+            mexErrMsgTxt("The integer size of this computer is neither 64 nor 32 bit. Thus, the Matlab data type for pointer conversion could not be determined.");
     }
     
     return retMat;
@@ -480,12 +553,16 @@ mxArray *convert2DReal2SignedIntMat(const mxArray * const val) {
     numElements=M*N;
     
     retMat=allocSignedIntMatInMatlab(M,N);
-    retData=(int*)mxGetData(retMat);
+    if(sizeof(int)==4) {//32 bit
+        retData=(int*)mxGetInt32s(retMat);
+    } else {//64 bit
+        retData=(int*)mxGetInt64s(retMat);
+    }
     
     switch(mxGetClassID(val)){
         case mxCHAR_CLASS:
         {
-            mxChar *data=(mxChar*)mxGetData(val);
+            mxChar *data=mxGetChars(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(int)data[i];
             }
@@ -493,7 +570,7 @@ mxArray *convert2DReal2SignedIntMat(const mxArray * const val) {
         }
         case mxLOGICAL_CLASS:
         {
-            mxLogical *data=(mxLogical*)mxGetData(val);
+            mxLogical *data=mxGetLogicals(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(int)data[i];
             }
@@ -501,7 +578,7 @@ mxArray *convert2DReal2SignedIntMat(const mxArray * const val) {
         }
         case mxDOUBLE_CLASS:
         {
-            double *data=(double*)mxGetData(val);
+            double *data=mxGetDoubles(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(int)data[i];
             }
@@ -509,7 +586,7 @@ mxArray *convert2DReal2SignedIntMat(const mxArray * const val) {
         }
         case mxSINGLE_CLASS:
         {
-            float *data=(float*)mxGetData(val);
+            float *data=mxGetSingles(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(int)data[i];
             }
@@ -517,7 +594,7 @@ mxArray *convert2DReal2SignedIntMat(const mxArray * const val) {
         }
         case mxINT8_CLASS:
         {
-            int8_T *data=(int8_T*)mxGetData(val);
+            int8_T *data=mxGetInt8s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(int)data[i];
             }
@@ -525,7 +602,7 @@ mxArray *convert2DReal2SignedIntMat(const mxArray * const val) {
         }
         case mxUINT8_CLASS:
         {
-            uint8_T *data=(uint8_T*)mxGetData(val);
+            uint8_T *data=mxGetUint8s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(int)data[i];
             }
@@ -533,7 +610,7 @@ mxArray *convert2DReal2SignedIntMat(const mxArray * const val) {
         }
         case mxINT16_CLASS:
         {
-            int16_T *data=(int16_T*)mxGetData(val);
+            int16_T *data=mxGetInt16s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(int)data[i];
             }
@@ -541,7 +618,7 @@ mxArray *convert2DReal2SignedIntMat(const mxArray * const val) {
         }
         case mxUINT16_CLASS:
         {
-            uint16_T *data=(uint16_T*)mxGetData(val);
+            uint16_T *data=mxGetUint16s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(int)data[i];
             }
@@ -549,7 +626,7 @@ mxArray *convert2DReal2SignedIntMat(const mxArray * const val) {
         }
         case mxINT32_CLASS:
         {
-            int32_T *data=(int32_T*)mxGetData(val);
+            int32_T *data=mxGetInt32s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(int)data[i];
             }
@@ -557,7 +634,7 @@ mxArray *convert2DReal2SignedIntMat(const mxArray * const val) {
         }
         case mxUINT32_CLASS:
         {
-            uint32_T *data=(uint32_T*)mxGetData(val);
+            uint32_T *data=mxGetUint32s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(int)data[i];
             }
@@ -565,7 +642,7 @@ mxArray *convert2DReal2SignedIntMat(const mxArray * const val) {
         }
         case mxINT64_CLASS:
         {
-            int64_T *data=(int64_T*)mxGetData(val);
+            int64_T *data=mxGetInt64s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(int)data[i];
             }
@@ -573,7 +650,7 @@ mxArray *convert2DReal2SignedIntMat(const mxArray * const val) {
         }
         case mxUINT64_CLASS:
         {
-            uint64_T *data=(uint64_T*)mxGetData(val);
+            uint64_T *data=mxGetUint64s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(int)data[i];
             }
@@ -588,6 +665,23 @@ mxArray *convert2DReal2SignedIntMat(const mxArray * const val) {
         case mxOBJECT_CLASS:
         default:
             mexErrMsgTxt("A parameter is of a data type that can not be used.");
+    }
+    
+    return retMat;
+}
+
+mxArray *allocUnsignedIntMatInMatlab(const size_t numRow, const size_t numCol) {
+    mxArray *retMat=NULL;
+    
+    switch(sizeof(unsigned int)) {
+        case 4:
+            retMat = mxCreateNumericMatrix(numRow,numCol,mxUINT32_CLASS,mxREAL);
+            break;
+        case 8:
+            retMat = mxCreateNumericMatrix(numRow,numCol,mxUINT64_CLASS,mxREAL);
+            break;
+        default:
+            mexErrMsgTxt("The integer size of this computer is neither 64 nor 32 bit. Thus, the Matlab data type for pointer conversion could not be determined.");
     }
     
     return retMat;
@@ -615,12 +709,16 @@ mxArray *convert2DReal2UnsignedIntMat(const mxArray * const val) {
     numElements=M*N;
     
     retMat=allocUnsignedIntMatInMatlab(M,N);
-    retData=(unsigned int*)mxGetData(retMat);
+    if(sizeof(unsigned int)==4) {//32 bit
+        retData=(unsigned int*)mxGetUint32s(retMat);
+    } else {//64 bit
+        retData=(unsigned int*)mxGetUint64s(retMat);
+    }
     
     switch(mxGetClassID(val)){
         case mxCHAR_CLASS:
         {
-            mxChar *data=(mxChar*)mxGetData(val);
+            mxChar *data=mxGetChars(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(unsigned int)data[i];
             }
@@ -628,7 +726,7 @@ mxArray *convert2DReal2UnsignedIntMat(const mxArray * const val) {
         }
         case mxLOGICAL_CLASS:
         {
-            mxLogical *data=(mxLogical*)mxGetData(val);
+            mxLogical *data=mxGetLogicals(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(unsigned int)data[i];
             }
@@ -636,7 +734,7 @@ mxArray *convert2DReal2UnsignedIntMat(const mxArray * const val) {
         }
         case mxDOUBLE_CLASS:
         {
-            double *data=(double*)mxGetData(val);
+            double *data=mxGetDoubles(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(unsigned int)data[i];
             }
@@ -644,7 +742,7 @@ mxArray *convert2DReal2UnsignedIntMat(const mxArray * const val) {
         }
         case mxSINGLE_CLASS:
         {
-            float *data=(float*)mxGetData(val);
+            float *data=mxGetSingles(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(unsigned int)data[i];
             }
@@ -652,7 +750,7 @@ mxArray *convert2DReal2UnsignedIntMat(const mxArray * const val) {
         }
         case mxINT8_CLASS:
         {
-            int8_T *data=(int8_T*)mxGetData(val);
+            int8_T *data=mxGetInt8s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(unsigned int)data[i];
             }
@@ -660,7 +758,7 @@ mxArray *convert2DReal2UnsignedIntMat(const mxArray * const val) {
         }
         case mxUINT8_CLASS:
         {
-            uint8_T *data=(uint8_T*)mxGetData(val);
+            uint8_T *data=mxGetUint8s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(unsigned int)data[i];
             }
@@ -668,7 +766,7 @@ mxArray *convert2DReal2UnsignedIntMat(const mxArray * const val) {
         }
         case mxINT16_CLASS:
         {
-            int16_T *data=(int16_T*)mxGetData(val);
+            int16_T *data=mxGetInt16s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(unsigned int)data[i];
             }
@@ -676,7 +774,7 @@ mxArray *convert2DReal2UnsignedIntMat(const mxArray * const val) {
         }
         case mxUINT16_CLASS:
         {
-            uint16_T *data=(uint16_T*)mxGetData(val);
+            uint16_T *data=mxGetUint16s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(unsigned int)data[i];
             }
@@ -684,7 +782,7 @@ mxArray *convert2DReal2UnsignedIntMat(const mxArray * const val) {
         }
         case mxINT32_CLASS:
         {
-            int32_T *data=(int32_T*)mxGetData(val);
+            int32_T *data=mxGetInt32s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(unsigned int)data[i];
             }
@@ -692,7 +790,7 @@ mxArray *convert2DReal2UnsignedIntMat(const mxArray * const val) {
         }
         case mxUINT32_CLASS:
         {
-            uint32_T *data=(uint32_T*)mxGetData(val);
+            uint32_T *data=mxGetUint32s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(unsigned int)data[i];
             }
@@ -700,7 +798,7 @@ mxArray *convert2DReal2UnsignedIntMat(const mxArray * const val) {
         }
         case mxINT64_CLASS:
         {
-            int64_T *data=(int64_T*)mxGetData(val);
+            int64_T *data=mxGetInt64s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(unsigned int)data[i];
             }
@@ -708,7 +806,7 @@ mxArray *convert2DReal2UnsignedIntMat(const mxArray * const val) {
         }
         case mxUINT64_CLASS:
         {
-            uint64_T *data=(uint64_T*)mxGetData(val);
+            uint64_T *data=mxGetUint64s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(unsigned int)data[i];
             }
@@ -723,6 +821,23 @@ mxArray *convert2DReal2UnsignedIntMat(const mxArray * const val) {
         case mxOBJECT_CLASS:
         default:
             mexErrMsgTxt("A parameter is of a data type that can not be used.");
+    }
+    
+    return retMat;
+}
+
+mxArray *allocSignedSizeMatInMatlab(const size_t numRow, const size_t numCol) {
+    mxArray *retMat=NULL;
+    
+    switch(sizeof(ptrdiff_t)) {
+        case 4:
+            retMat = mxCreateNumericMatrix(numRow,numCol,mxINT32_CLASS,mxREAL);
+            break;
+        case 8:
+            retMat = mxCreateNumericMatrix(numRow,numCol,mxINT64_CLASS,mxREAL);
+            break;
+        default:
+            mexErrMsgTxt("The integer size of this computer is neither 64 nor 32 bit. Thus, the Matlab data type for pointer conversion could not be determined.");
     }
     
     return retMat;
@@ -750,12 +865,16 @@ mxArray *convert2DReal2SignedSizeMat(const mxArray * const val) {
     numElements=M*N;
     
     retMat=allocSignedSizeMatInMatlab(M,N);
-    retData=(ptrdiff_t*)mxGetData(retMat);
-    
+    if(sizeof(ptrdiff_t)==4) {//32 bit
+        retData=(ptrdiff_t*)mxGetInt32s(retMat);
+    } else {//64 bit
+        retData=(ptrdiff_t*)mxGetInt64s(retMat);
+    }
+
     switch(mxGetClassID(val)){
         case mxCHAR_CLASS:
         {
-            mxChar *data=(mxChar*)mxGetData(val);
+            mxChar *data=mxGetChars(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(ptrdiff_t)data[i];
             }
@@ -763,7 +882,7 @@ mxArray *convert2DReal2SignedSizeMat(const mxArray * const val) {
         }
         case mxLOGICAL_CLASS:
         {
-            mxLogical *data=(mxLogical*)mxGetData(val);
+            mxLogical *data=mxGetLogicals(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(ptrdiff_t)data[i];
             }
@@ -771,7 +890,7 @@ mxArray *convert2DReal2SignedSizeMat(const mxArray * const val) {
         }
         case mxDOUBLE_CLASS:
         {
-            double *data=(double*)mxGetData(val);
+            double *data=mxGetDoubles(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(ptrdiff_t)data[i];
             }
@@ -779,7 +898,7 @@ mxArray *convert2DReal2SignedSizeMat(const mxArray * const val) {
         }
         case mxSINGLE_CLASS:
         {
-            float *data=(float*)mxGetData(val);
+            float *data=mxGetSingles(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(ptrdiff_t)data[i];
             }
@@ -787,7 +906,7 @@ mxArray *convert2DReal2SignedSizeMat(const mxArray * const val) {
         }
         case mxINT8_CLASS:
         {
-            int8_T *data=(int8_T*)mxGetData(val);
+            int8_T *data=mxGetInt8s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(ptrdiff_t)data[i];
             }
@@ -795,7 +914,7 @@ mxArray *convert2DReal2SignedSizeMat(const mxArray * const val) {
         }
         case mxUINT8_CLASS:
         {
-            uint8_T *data=(uint8_T*)mxGetData(val);
+            uint8_T *data=mxGetUint8s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(ptrdiff_t)data[i];
             }
@@ -803,7 +922,7 @@ mxArray *convert2DReal2SignedSizeMat(const mxArray * const val) {
         }
         case mxINT16_CLASS:
         {
-            int16_T *data=(int16_T*)mxGetData(val);
+            int16_T *data=mxGetInt16s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(ptrdiff_t)data[i];
             }
@@ -811,7 +930,7 @@ mxArray *convert2DReal2SignedSizeMat(const mxArray * const val) {
         }
         case mxUINT16_CLASS:
         {
-            uint16_T *data=(uint16_T*)mxGetData(val);
+            uint16_T *data=mxGetUint16s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(ptrdiff_t)data[i];
             }
@@ -819,7 +938,7 @@ mxArray *convert2DReal2SignedSizeMat(const mxArray * const val) {
         }
         case mxINT32_CLASS:
         {
-            int32_T *data=(int32_T*)mxGetData(val);
+            int32_T *data=mxGetInt32s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(ptrdiff_t)data[i];
             }
@@ -827,7 +946,7 @@ mxArray *convert2DReal2SignedSizeMat(const mxArray * const val) {
         }
         case mxUINT32_CLASS:
         {
-            uint32_T *data=(uint32_T*)mxGetData(val);
+            uint32_T *data=mxGetUint32s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(ptrdiff_t)data[i];
             }
@@ -835,7 +954,7 @@ mxArray *convert2DReal2SignedSizeMat(const mxArray * const val) {
         }
         case mxINT64_CLASS:
         {
-            int64_T *data=(int64_T*)mxGetData(val);
+            int64_T *data=mxGetInt64s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(ptrdiff_t)data[i];
             }
@@ -843,7 +962,7 @@ mxArray *convert2DReal2SignedSizeMat(const mxArray * const val) {
         }
         case mxUINT64_CLASS:
         {
-            uint64_T *data=(uint64_T*)mxGetData(val);
+            uint64_T *data=mxGetUint64s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(ptrdiff_t)data[i];
             }
@@ -858,6 +977,23 @@ mxArray *convert2DReal2SignedSizeMat(const mxArray * const val) {
         case mxOBJECT_CLASS:
         default:
             mexErrMsgTxt("A parameter is of a data type that can not be used.");
+    }
+    
+    return retMat;
+}
+
+mxArray *allocUnsignedSizeMatInMatlab(const size_t numRow, const size_t numCol) {
+    mxArray *retMat=NULL;
+    
+    switch(sizeof(size_t)) {
+        case 4:
+            retMat = mxCreateNumericMatrix(numRow,numCol,mxUINT32_CLASS,mxREAL);
+            break;
+        case 8:
+            retMat = mxCreateNumericMatrix(numRow,numCol,mxUINT64_CLASS,mxREAL);
+            break;
+        default:
+            mexErrMsgTxt("The integer size of this computer is neither 64 nor 32 bit. Thus, the Matlab data type for pointer conversion could not be determined.");
     }
     
     return retMat;
@@ -885,12 +1021,16 @@ mxArray *convert2DReal2UnsignedSizeMat(const mxArray * const val) {
     numElements=M*N;
     
     retMat=allocUnsignedSizeMatInMatlab(M,N);
-    retData=(size_t*)mxGetData(retMat);
+    if(sizeof(size_t)==4) {//32 bit
+        retData=(size_t*)mxGetUint32s(retMat);
+    } else {//64 bit
+        retData=(size_t*)mxGetUint64s(retMat);
+    }
     
     switch(mxGetClassID(val)){
         case mxCHAR_CLASS:
         {
-            mxChar *data=(mxChar*)mxGetData(val);
+            mxChar *data=mxGetChars(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(size_t)data[i];
             }
@@ -898,7 +1038,7 @@ mxArray *convert2DReal2UnsignedSizeMat(const mxArray * const val) {
         }
         case mxLOGICAL_CLASS:
         {
-            mxLogical *data=(mxLogical*)mxGetData(val);
+            mxLogical *data=mxGetLogicals(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(size_t)data[i];
             }
@@ -906,7 +1046,7 @@ mxArray *convert2DReal2UnsignedSizeMat(const mxArray * const val) {
         }
         case mxDOUBLE_CLASS:
         {
-            double *data=(double*)mxGetData(val);
+            double *data=mxGetDoubles(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(size_t)data[i];
             }
@@ -914,7 +1054,7 @@ mxArray *convert2DReal2UnsignedSizeMat(const mxArray * const val) {
         }
         case mxSINGLE_CLASS:
         {
-            float *data=(float*)mxGetData(val);
+            float *data=mxGetSingles(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(size_t)data[i];
             }
@@ -922,7 +1062,7 @@ mxArray *convert2DReal2UnsignedSizeMat(const mxArray * const val) {
         }
         case mxINT8_CLASS:
         {
-            int8_T *data=(int8_T*)mxGetData(val);
+            int8_T *data=mxGetInt8s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(size_t)data[i];
             }
@@ -930,7 +1070,7 @@ mxArray *convert2DReal2UnsignedSizeMat(const mxArray * const val) {
         }
         case mxUINT8_CLASS:
         {
-            uint8_T *data=(uint8_T*)mxGetData(val);
+            uint8_T *data=mxGetUint8s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(size_t)data[i];
             }
@@ -938,7 +1078,7 @@ mxArray *convert2DReal2UnsignedSizeMat(const mxArray * const val) {
         }
         case mxINT16_CLASS:
         {
-            int16_T *data=(int16_T*)mxGetData(val);
+            int16_T *data=mxGetInt16s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(size_t)data[i];
             }
@@ -946,7 +1086,7 @@ mxArray *convert2DReal2UnsignedSizeMat(const mxArray * const val) {
         }
         case mxUINT16_CLASS:
         {
-            uint16_T *data=(uint16_T*)mxGetData(val);
+            uint16_T *data=mxGetUint16s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(size_t)data[i];
             }
@@ -954,7 +1094,7 @@ mxArray *convert2DReal2UnsignedSizeMat(const mxArray * const val) {
         }
         case mxINT32_CLASS:
         {
-            int32_T *data=(int32_T*)mxGetData(val);
+            int32_T *data=mxGetInt32s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(size_t)data[i];
             }
@@ -962,7 +1102,7 @@ mxArray *convert2DReal2UnsignedSizeMat(const mxArray * const val) {
         }
         case mxUINT32_CLASS:
         {
-            uint32_T *data=(uint32_T*)mxGetData(val);
+            uint32_T *data=mxGetUint32s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(size_t)data[i];
             }
@@ -970,7 +1110,7 @@ mxArray *convert2DReal2UnsignedSizeMat(const mxArray * const val) {
         }
         case mxINT64_CLASS:
         {
-            int64_T *data=(int64_T*)mxGetData(val);
+            int64_T *data=mxGetInt64s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(size_t)data[i];
             }
@@ -978,7 +1118,7 @@ mxArray *convert2DReal2UnsignedSizeMat(const mxArray * const val) {
         }
         case mxUINT64_CLASS:
         {
-            uint64_T *data=(uint64_T*)mxGetData(val);
+            uint64_T *data=mxGetUint64s(val);
             for(i=0;i<numElements;i++) {
                 retData[i]=(size_t)data[i];
             }
@@ -1010,40 +1150,40 @@ int getIntFromMatlab(const mxArray * const val) {
     
     switch(mxGetClassID(val)){
         case mxCHAR_CLASS:
-            retVal=(int)*(mxChar*)mxGetData(val);
+            retVal=(int)*mxGetChars(val);
             break;
         case mxLOGICAL_CLASS:
-            retVal=(int)*(mxLogical*)mxGetData(val);
+            retVal=(int)*mxGetLogicals(val);
             break;
         case mxDOUBLE_CLASS:
-            retVal=(int)*(double*)mxGetData(val);
+            retVal=(int)*mxGetDoubles(val);
             break;
         case mxSINGLE_CLASS:
-            retVal=(int)*(float*)mxGetData(val);
+            retVal=(int)*mxGetSingles(val);
             break;
         case mxINT8_CLASS:
-            retVal=(int)*(int8_T*)mxGetData(val);
+            retVal=(int)*mxGetInt8s(val);
             break;
         case mxUINT8_CLASS:
-            retVal=(int)*(uint8_T*)mxGetData(val);
+            retVal=(int)*mxGetUint8s(val);
             break;
         case mxINT16_CLASS:
-            retVal=(int)*(int16_T*)mxGetData(val);
+            retVal=(int)*mxGetInt16s(val);
             break;
         case mxUINT16_CLASS:
-            retVal=(int)*(uint16_T*)mxGetData(val);
+            retVal=(int)*mxGetUint16s(val);
             break;
         case mxINT32_CLASS:
-            retVal=(int)*(int32_T*)mxGetData(val);
+            retVal=(int)*mxGetInt32s(val);
             break;
         case mxUINT32_CLASS:
-            retVal=(int)*(uint32_T*)mxGetData(val);
+            retVal=(int)*mxGetUint32s(val);
             break;
         case mxINT64_CLASS:
-            retVal=(int)*(int64_T*)mxGetData(val);
+            retVal=(int)*mxGetInt64s(val);
             break;
         case mxUINT64_CLASS:
-            retVal=(int)*(uint64_T*)mxGetData(val);
+            retVal=(int)*mxGetUint64s(val);
             break;
         case mxUNKNOWN_CLASS:
         case mxCELL_CLASS:
@@ -1070,14 +1210,14 @@ size_t getSizeTFromMatlab(const mxArray * const val) {
     
     switch(mxGetClassID(val)){
         case mxCHAR_CLASS:
-            retVal=(size_t)*(mxChar*)mxGetData(val);
+            retVal=(size_t)*mxGetChars(val);
             break;
         case mxLOGICAL_CLASS:
-            retVal=(size_t)*(mxLogical*)mxGetData(val);
+            retVal=(size_t)*mxGetLogicals(val);
             break;
         case mxDOUBLE_CLASS:
         {
-            double temp=*(double*)mxGetData(val);
+            double temp=*mxGetDoubles(val);
             if(temp<0) {
                 mexErrMsgTxt("A parameter that should be positive is not.");
             }
@@ -1086,7 +1226,7 @@ size_t getSizeTFromMatlab(const mxArray * const val) {
         }
         case mxSINGLE_CLASS:
         {
-            float temp=*(float*)mxGetData(val);
+            float temp=*mxGetSingles(val);
             if(temp<0) {
                 mexErrMsgTxt("A parameter that should be positive is not.");
             }
@@ -1095,7 +1235,7 @@ size_t getSizeTFromMatlab(const mxArray * const val) {
         }
         case mxINT8_CLASS:
         {
-            int8_T temp=*(int8_T*)mxGetData(val);
+            int8_T temp=*mxGetInt8s(val);
             if(temp<0) {
                 mexErrMsgTxt("A parameter that should be positive is not.");
             }
@@ -1103,11 +1243,11 @@ size_t getSizeTFromMatlab(const mxArray * const val) {
             break;
         }
         case mxUINT8_CLASS:
-            retVal=(size_t)*(uint8_T*)mxGetData(val);
+            retVal=(size_t)*mxGetUint8s(val);
             break;
         case mxINT16_CLASS:
         {
-            int16_T temp=*(int16_T*)mxGetData(val);
+            int16_T temp=*mxGetInt16s(val);
             if(temp<0) {
                 mexErrMsgTxt("A parameter that should be positive is not.");
             }
@@ -1115,11 +1255,11 @@ size_t getSizeTFromMatlab(const mxArray * const val) {
             break;
         }
         case mxUINT16_CLASS:
-            retVal=(size_t)*(uint16_T*)mxGetData(val);
+            retVal=(size_t)*mxGetUint16s(val);
             break;
         case mxINT32_CLASS:
         {
-            int32_T temp=*(int32_T*)mxGetData(val);
+            int32_T temp=*mxGetInt32s(val);
             if(temp<0) {
                 mexErrMsgTxt("A parameter that should be positive is not.");
             }
@@ -1127,11 +1267,11 @@ size_t getSizeTFromMatlab(const mxArray * const val) {
             break;
         }
         case mxUINT32_CLASS:
-            retVal=(size_t)*(uint32_T*)mxGetData(val);
+            retVal=(size_t)*mxGetUint32s(val);
             break;
         case mxINT64_CLASS:
         {
-            int64_T temp=*(int64_T*)mxGetData(val);
+            int64_T temp=*mxGetInt64s(val);
             if(temp<0) {
                 mexErrMsgTxt("A parameter that should be positive is not.");
             }
@@ -1139,7 +1279,7 @@ size_t getSizeTFromMatlab(const mxArray * const val) {
             break;
         }
         case mxUINT64_CLASS:
-            retVal=(size_t)*(uint64_T*)mxGetData(val);
+            retVal=(size_t)*mxGetUint64s(val);
             break;
         case mxUNKNOWN_CLASS:
         case mxCELL_CLASS:
@@ -1166,14 +1306,14 @@ ptrdiff_t getPtrDiffTFromMatlab(const mxArray * const val) {
     
     switch(mxGetClassID(val)){
         case mxCHAR_CLASS:
-            retVal=(ptrdiff_t)*(mxChar*)mxGetData(val);
+            retVal=(ptrdiff_t)*mxGetChars(val);
             break;
         case mxLOGICAL_CLASS:
-            retVal=(ptrdiff_t)*(mxLogical*)mxGetData(val);
+            retVal=(ptrdiff_t)*mxGetLogicals(val);
             break;
         case mxDOUBLE_CLASS:
         {
-            double temp=*(double*)mxGetData(val);
+            double temp=*mxGetDoubles(val);
             if(temp<0) {
                 mexErrMsgTxt("A parameter that should be positive is not.");
             }
@@ -1182,7 +1322,7 @@ ptrdiff_t getPtrDiffTFromMatlab(const mxArray * const val) {
         }
         case mxSINGLE_CLASS:
         {
-            float temp=*(float*)mxGetData(val);
+            float temp=*mxGetSingles(val);
             if(temp<0) {
                 mexErrMsgTxt("A parameter that should be positive is not.");
             }
@@ -1191,7 +1331,7 @@ ptrdiff_t getPtrDiffTFromMatlab(const mxArray * const val) {
         }
         case mxINT8_CLASS:
         {
-            int8_T temp=*(int8_T*)mxGetData(val);
+            int8_T temp=*mxGetInt8s(val);
             if(temp<0) {
                 mexErrMsgTxt("A parameter that should be positive is not.");
             }
@@ -1199,11 +1339,11 @@ ptrdiff_t getPtrDiffTFromMatlab(const mxArray * const val) {
             break;
         }
         case mxUINT8_CLASS:
-            retVal=(ptrdiff_t)*(uint8_T*)mxGetData(val);
+            retVal=(ptrdiff_t)*mxGetUint8s(val);
             break;
         case mxINT16_CLASS:
         {
-            int16_T temp=*(int16_T*)mxGetData(val);
+            int16_T temp=*mxGetInt16s(val);
             if(temp<0) {
                 mexErrMsgTxt("A parameter that should be positive is not.");
             }
@@ -1211,11 +1351,11 @@ ptrdiff_t getPtrDiffTFromMatlab(const mxArray * const val) {
             break;
         }
         case mxUINT16_CLASS:
-            retVal=(ptrdiff_t)*(uint16_T*)mxGetData(val);
+            retVal=(ptrdiff_t)*mxGetUint16s(val);
             break;
         case mxINT32_CLASS:
         {
-            int32_T temp=*(int32_T*)mxGetData(val);
+            int32_T temp=*mxGetInt32s(val);
             if(temp<0) {
                 mexErrMsgTxt("A parameter that should be positive is not.");
             }
@@ -1223,11 +1363,11 @@ ptrdiff_t getPtrDiffTFromMatlab(const mxArray * const val) {
             break;
         }
         case mxUINT32_CLASS:
-            retVal=(ptrdiff_t)*(uint32_T*)mxGetData(val);
+            retVal=(ptrdiff_t)*mxGetUint32s(val);
             break;
         case mxINT64_CLASS:
         {
-            int64_T temp=*(int64_T*)mxGetData(val);
+            int64_T temp=*mxGetInt64s(val);
             if(temp<0) {
                 mexErrMsgTxt("A parameter that should be positive is not.");
             }
@@ -1235,7 +1375,7 @@ ptrdiff_t getPtrDiffTFromMatlab(const mxArray * const val) {
             break;
         }
         case mxUINT64_CLASS:
-            retVal=(ptrdiff_t)*(uint64_T*)mxGetData(val);
+            retVal=(ptrdiff_t)*mxGetUint64s(val);
             break;
         case mxUNKNOWN_CLASS:
         case mxCELL_CLASS:
@@ -1281,7 +1421,7 @@ size_t *copySizeTArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
     switch(mxGetClassID(val)){
         case mxCHAR_CLASS:
         {
-            mxChar *mexData=(mxChar*)mxGetData(val);
+            mxChar *mexData=mxGetChars(val);
             
             for(i=0;i<numEl;i++) {
                 retVal[i]=(size_t)mexData[i];
@@ -1290,7 +1430,7 @@ size_t *copySizeTArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         }
         case mxLOGICAL_CLASS:
         {
-            mxLogical *mexData=(mxLogical*)mxGetData(val);
+            mxLogical *mexData=mxGetLogicals(val);
             
             for(i=0;i<numEl;i++) {
                 retVal[i]=(size_t)mexData[i];
@@ -1299,7 +1439,7 @@ size_t *copySizeTArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         }
         case mxDOUBLE_CLASS:
         {
-            double *mexData=(double*)mxGetData(val);
+            double *mexData=mxGetDoubles(val);
             
             for(i=0;i<numEl;i++) {
                 if(mexData[i]<0) {
@@ -1313,7 +1453,7 @@ size_t *copySizeTArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         }
         case mxSINGLE_CLASS:
         {
-            float *mexData=(float*)mxGetData(val);
+            float *mexData=mxGetSingles(val);
             
             for(i=0;i<numEl;i++) {
                 if(mexData[i]<0) {
@@ -1327,7 +1467,7 @@ size_t *copySizeTArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         }
         case mxINT8_CLASS:
         {
-            int8_T *mexData=(int8_T*)mxGetData(val);
+            int8_T *mexData=mxGetInt8s(val);
             
             for(i=0;i<numEl;i++) {
                 if(mexData[i]<0) {
@@ -1341,7 +1481,7 @@ size_t *copySizeTArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         }
         case mxUINT8_CLASS:
         {
-            uint8_T *mexData=(uint8_T*)mxGetData(val);
+            uint8_T *mexData=mxGetUint8s(val);
             
             for(i=0;i<numEl;i++) {
                 retVal[i]=(size_t)mexData[i];
@@ -1350,7 +1490,7 @@ size_t *copySizeTArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         }
         case mxINT16_CLASS:
         {
-            int16_T *mexData=(int16_T*)mxGetData(val);
+            int16_T *mexData=mxGetInt16s(val);
             
             for(i=0;i<numEl;i++) {
                 if(mexData[i]<0) {
@@ -1364,7 +1504,7 @@ size_t *copySizeTArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         }
         case mxUINT16_CLASS:
         {
-            uint16_T *mexData=(uint16_T*)mxGetData(val);
+            uint16_T *mexData=mxGetUint16s(val);
             
             for(i=0;i<numEl;i++) {
                 retVal[i]=(size_t)mexData[i];
@@ -1373,7 +1513,7 @@ size_t *copySizeTArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         }
         case mxINT32_CLASS:
         {
-            int32_T *mexData=(int32_T*)mxGetData(val);
+            int32_T *mexData=mxGetInt32s(val);
             
             for(i=0;i<numEl;i++) {
                 if(mexData[i]<0) {
@@ -1387,20 +1527,16 @@ size_t *copySizeTArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         }
         case mxUINT32_CLASS:
         {
-            uint32_T *mexData=(uint32_T*)mxGetData(val);
-            
-            if(sizeof(size_t)==sizeof(uint64_T)) {
-                memcpy(retVal,mexData,numEl*sizeof(uint32_T));
-            } else {
-                for(i=0;i<numEl;i++) {
-                    retVal[i]=(size_t)mexData[i];
-                }
+            uint32_T *mexData=mxGetUint32s(val);
+
+            for(i=0;i<numEl;i++) {
+                retVal[i]=(size_t)mexData[i];
             }
             break;
         }
         case mxINT64_CLASS:
         {
-            int64_T *mexData=(int64_T*)mxGetData(val);
+            int64_T *mexData=mxGetInt64s(val);
             
             for(i=0;i<numEl;i++) {
                 if(mexData[i]<0) {
@@ -1415,14 +1551,10 @@ size_t *copySizeTArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         }
         case mxUINT64_CLASS:
         {
-            uint64_T *mexData=(uint64_T*)mxGetData(val);
-            
-            if(sizeof(size_t)==sizeof(uint64_T)) {
-                memcpy(retVal,mexData,numEl*sizeof(uint64_T));
-            } else {
-                for(i=0;i<numEl;i++) {
-                    retVal[i]=(size_t)mexData[i];
-                }
+            uint64_T *mexData=mxGetUint64s(val);
+
+            for(i=0;i<numEl;i++) {
+                retVal[i]=(size_t)mexData[i];
             }
             break;
         }
@@ -1436,6 +1568,158 @@ size_t *copySizeTArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         default:
             mxFree(retVal);
             
+            mexErrMsgTxt("A parameter is of a data type that can not be used.");
+    }
+    
+    return retVal;
+}
+
+ptrdiff_t *copyPtrDiffTArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
+//The length of the returned array is placed into the arrayLen variable.
+    size_t M,N,i;
+    size_t numEl=0;
+    ptrdiff_t *retVal=NULL;
+    
+    if(mxIsComplex(val)==true) {
+        mexErrMsgTxt("A parameter that should be real has complex components.");
+    }
+    
+    if(mxGetNumberOfDimensions(val)>2) {
+        mexErrMsgTxt("A parameter that should be an array has extra dimensions.");
+    }
+    
+    M=mxGetM(val);
+    N=mxGetN(val);
+    
+    if(M==1&&N>=1) {
+        numEl=N;
+    } else if(M>1&&N==1){
+        numEl=M;
+    } else {
+        mexErrMsgTxt("A parameter that should be an array has an incorrect dimensionality.");
+    }
+    
+    *arrayLen=numEl;
+    retVal=(ptrdiff_t*)mxMalloc(numEl*sizeof(ptrdiff_t));    
+            
+    switch(mxGetClassID(val)){
+        case mxCHAR_CLASS:
+        {
+            mxChar *mexData=mxGetChars(val);
+            
+            for(i=0;i<numEl;i++) {
+                retVal[i]=(ptrdiff_t)mexData[i];
+            }
+            break;
+        }
+        case mxLOGICAL_CLASS:
+        {
+            mxLogical *mexData=mxGetLogicals(val);
+            
+            for(i=0;i<numEl;i++) {
+                retVal[i]=(ptrdiff_t)mexData[i];
+            }
+            break;
+        }
+        case mxDOUBLE_CLASS:
+        {
+            double *mexData=mxGetDoubles(val);
+            
+            for(i=0;i<numEl;i++) {
+                retVal[i]=(ptrdiff_t)mexData[i];
+            }
+            break;
+        }
+        case mxSINGLE_CLASS:
+        {
+            float *mexData=mxGetSingles(val);
+            
+            for(i=0;i<numEl;i++) {
+                retVal[i]=(ptrdiff_t)mexData[i];
+            }
+            break;
+        }
+        case mxINT8_CLASS:
+        {
+            int8_T *mexData=mxGetInt8s(val);
+            
+            for(i=0;i<numEl;i++) {
+                retVal[i]=(ptrdiff_t)mexData[i];
+            }
+            break;
+        }
+        case mxUINT8_CLASS:
+        {
+            uint8_T *mexData=mxGetUint8s(val);
+            
+            for(i=0;i<numEl;i++) {
+                retVal[i]=(ptrdiff_t)mexData[i];
+            }
+            break;
+        }
+        case mxINT16_CLASS:
+        {
+            int16_T *mexData=mxGetInt16s(val);
+            
+            for(i=0;i<numEl;i++) {
+                retVal[i]=(ptrdiff_t)mexData[i];
+            }
+            break;
+        }
+        case mxUINT16_CLASS:
+        {
+            uint16_T *mexData=mxGetUint16s(val);
+            
+            for(i=0;i<numEl;i++) {
+                retVal[i]=(ptrdiff_t)mexData[i];
+            }
+            break;
+        }
+        case mxINT32_CLASS:
+        {
+            int32_T *mexData=mxGetInt32s(val);
+            
+            for(i=0;i<numEl;i++) {
+                retVal[i]=(ptrdiff_t)mexData[i];
+            }
+            break;
+        }
+        case mxUINT32_CLASS:
+        {
+            uint32_T *mexData=mxGetUint32s(val);
+            
+            for(i=0;i<numEl;i++) {
+                retVal[i]=(ptrdiff_t)mexData[i];
+            }
+            break;
+        }
+        case mxINT64_CLASS:
+        {
+            int64_T *mexData=mxGetInt64s(val);
+            
+            for(i=0;i<numEl;i++) {
+                retVal[i]=(ptrdiff_t)mexData[i];
+            }
+            break;
+        }
+        case mxUINT64_CLASS:
+        {
+            uint64_T *mexData=mxGetUint64s(val);
+            
+            for(i=0;i<numEl;i++) {
+                retVal[i]=(ptrdiff_t)mexData[i];
+            }
+            break;
+        }
+        case mxUNKNOWN_CLASS:
+        case mxCELL_CLASS:
+        case mxSTRUCT_CLASS:
+        case mxVOID_CLASS:
+        case mxFUNCTION_CLASS:
+        case mxOPAQUE_CLASS:
+        case mxOBJECT_CLASS:
+        default:
+            mxFree(retVal);
             mexErrMsgTxt("A parameter is of a data type that can not be used.");
     }
     
@@ -1473,7 +1757,7 @@ bool *copyBoolArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
     switch(mxGetClassID(val)){
         case mxCHAR_CLASS:
         {
-            mxChar *mexData=(mxChar*)mxGetData(val);
+            mxChar *mexData=mxGetChars(val);
             
             for(i=0;i<numEl;i++) {
                 retVal[i]=(bool)mexData[i];
@@ -1482,7 +1766,7 @@ bool *copyBoolArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         }
         case mxLOGICAL_CLASS:
         {
-            mxLogical *mexData=(mxLogical*)mxGetData(val);
+            mxLogical *mexData=mxGetLogicals(val);
             
             for(i=0;i<numEl;i++) {
                 retVal[i]=(bool)mexData[i];
@@ -1491,7 +1775,7 @@ bool *copyBoolArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         }
         case mxDOUBLE_CLASS:
         {
-            double *mexData=(double*)mxGetData(val);
+            double *mexData=mxGetDoubles(val);
             
             for(i=0;i<numEl;i++) {
                 retVal[i]=(bool)mexData[i];
@@ -1500,7 +1784,7 @@ bool *copyBoolArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         }
         case mxSINGLE_CLASS:
         {
-            float *mexData=(float*)mxGetData(val);
+            float *mexData=mxGetSingles(val);
             
             for(i=0;i<numEl;i++) {
                 retVal[i]=(bool)mexData[i];
@@ -1509,7 +1793,7 @@ bool *copyBoolArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         }
         case mxINT8_CLASS:
         {
-            int8_T *mexData=(int8_T*)mxGetData(val);
+            int8_T *mexData=mxGetInt8s(val);
             
             for(i=0;i<numEl;i++) {
                 retVal[i]=(bool)mexData[i];
@@ -1518,7 +1802,7 @@ bool *copyBoolArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         }
         case mxUINT8_CLASS:
         {
-            uint8_T *mexData=(uint8_T*)mxGetData(val);
+            uint8_T *mexData=mxGetUint8s(val);
             
             for(i=0;i<numEl;i++) {
                 retVal[i]=(bool)mexData[i];
@@ -1527,7 +1811,7 @@ bool *copyBoolArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         }
         case mxINT16_CLASS:
         {
-            int16_T *mexData=(int16_T*)mxGetData(val);
+            int16_T *mexData=mxGetInt16s(val);
             
             for(i=0;i<numEl;i++) {
                 retVal[i]=(bool)mexData[i];
@@ -1536,7 +1820,7 @@ bool *copyBoolArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         }
         case mxUINT16_CLASS:
         {
-            uint16_T *mexData=(uint16_T*)mxGetData(val);
+            uint16_T *mexData=mxGetUint16s(val);
             
             for(i=0;i<numEl;i++) {
                 retVal[i]=(bool)mexData[i];
@@ -1545,7 +1829,7 @@ bool *copyBoolArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         }
         case mxINT32_CLASS:
         {
-            int32_T *mexData=(int32_T*)mxGetData(val);
+            int32_T *mexData=mxGetInt32s(val);
             
             for(i=0;i<numEl;i++) {
                 retVal[i]=(bool)mexData[i];
@@ -1554,7 +1838,7 @@ bool *copyBoolArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         }
         case mxUINT32_CLASS:
         {
-            uint32_T *mexData=(uint32_T*)mxGetData(val);
+            uint32_T *mexData=mxGetUint32s(val);
             
             for(i=0;i<numEl;i++) {
                 retVal[i]=(bool)mexData[i];
@@ -1563,7 +1847,7 @@ bool *copyBoolArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         }
         case mxINT64_CLASS:
         {
-            int64_T *mexData=(int64_T*)mxGetData(val);
+            int64_T *mexData=mxGetInt64s(val);
             
             for(i=0;i<numEl;i++) {
                 retVal[i]=(bool)mexData[i];
@@ -1572,7 +1856,7 @@ bool *copyBoolArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
         }
         case mxUINT64_CLASS:
         {
-            uint64_T *mexData=(uint64_T*)mxGetData(val);
+            uint64_T *mexData=mxGetUint64s(val);
             
             for(i=0;i<numEl;i++) {
                 retVal[i]=(bool)mexData[i];
@@ -1595,8 +1879,6 @@ bool *copyBoolArrayFromMatlab(const mxArray * const val, size_t *arrayLen) {
     return retVal;
 }
 
-
-
 double getDoubleFromMatlab(const mxArray * const val) {
     double retVal=0;
     if(mxIsComplex(val)==true) {
@@ -1609,40 +1891,40 @@ double getDoubleFromMatlab(const mxArray * const val) {
     
     switch(mxGetClassID(val)){
         case mxCHAR_CLASS:
-            retVal=(double)*(mxChar*)mxGetData(val);
+            retVal=(double)*mxGetChars(val);
             break;
         case mxLOGICAL_CLASS:
-            retVal=(double)*(mxLogical*)mxGetData(val);
+            retVal=(double)*mxGetLogicals(val);
             break;
         case mxDOUBLE_CLASS:
-            retVal=(double)*(double*)mxGetData(val);
+            retVal=(double)*mxGetDoubles(val);
             break;
         case mxSINGLE_CLASS:
-            retVal=(double)*(float*)mxGetData(val);
+            retVal=(double)*mxGetSingles(val);
             break;
         case mxINT8_CLASS:
-            retVal=(double)*(int8_T*)mxGetData(val);
+            retVal=(double)*mxGetInt8s(val);
             break;
         case mxUINT8_CLASS:
-            retVal=(double)*(uint8_T*)mxGetData(val);
+            retVal=(double)*mxGetUint8s(val);
             break;
         case mxINT16_CLASS:
-            retVal=(double)*(int16_T*)mxGetData(val);
+            retVal=(double)*mxGetInt16s(val);
             break;
         case mxUINT16_CLASS:
-            retVal=(double)*(uint16_T*)mxGetData(val);
+            retVal=(double)*mxGetUint16s(val);
             break;
         case mxINT32_CLASS:
-            retVal=(double)*(int32_T*)mxGetData(val);
+            retVal=(double)*mxGetInt32s(val);
             break;
         case mxUINT32_CLASS:
-            retVal=(double)*(uint32_T*)mxGetData(val);
+            retVal=(double)*mxGetUint32s(val);
             break;
         case mxINT64_CLASS:
-            retVal=(double)*(int64_T*)mxGetData(val);
+            retVal=(double)*mxGetInt64s(val);
             break;
         case mxUINT64_CLASS:
-            retVal=(double)*(uint64_T*)mxGetData(val);
+            retVal=(double)*mxGetUint64s(val);
             break;
         case mxUNKNOWN_CLASS:
         case mxCELL_CLASS:
@@ -1669,40 +1951,40 @@ bool getBoolFromMatlab(const mxArray * const val) {
     
     switch(mxGetClassID(val)){
         case mxCHAR_CLASS:
-            retVal=*(mxChar*)mxGetData(val)!=0.0;
+            retVal=*mxGetChars(val)!=0.0;
             break;
         case mxLOGICAL_CLASS:
-            retVal=*(mxLogical*)mxGetData(val)!=0;
+            retVal=*mxGetLogicals(val)!=0;
             break;
         case mxDOUBLE_CLASS:
-            retVal=*(double*)mxGetData(val)!=0.0;
+            retVal=*mxGetDoubles(val)!=0.0;
             break;
         case mxSINGLE_CLASS:
-            retVal=*(float*)mxGetData(val)!=0;
+            retVal=*mxGetSingles(val)!=0;
             break;
         case mxINT8_CLASS:
-            retVal=*(int8_T*)mxGetData(val)!=0;
+            retVal=*mxGetInt8s(val)!=0;
             break;
         case mxUINT8_CLASS:
-            retVal=*(uint8_T*)mxGetData(val)!=0;
+            retVal=*mxGetUint8s(val)!=0;
             break;
         case mxINT16_CLASS:
-            retVal=*(int16_T*)mxGetData(val)!=0;
+            retVal=*mxGetInt16s(val)!=0;
             break;
         case mxUINT16_CLASS:
-            retVal=*(uint16_T*)mxGetData(val)!=0;
+            retVal=*mxGetUint16s(val)!=0;
             break;
         case mxINT32_CLASS:
-            retVal=*(int32_T*)mxGetData(val)!=0;
+            retVal=*mxGetInt32s(val)!=0;
             break;
         case mxUINT32_CLASS:
-            retVal=*(uint32_T*)mxGetData(val)!=0;
+            retVal=*mxGetUint32s(val)!=0;
             break;
         case mxINT64_CLASS:
-            retVal=*(int64_T*)mxGetData(val)!=0;
+            retVal=*mxGetInt64s(val)!=0;
             break;
         case mxUINT64_CLASS:
-            retVal=*(uint64_T*)mxGetData(val)!=0;
+            retVal=*mxGetUint64s(val)!=0;
             break;
         case mxUNKNOWN_CLASS:
         case mxCELL_CLASS:
@@ -1717,12 +1999,72 @@ bool getBoolFromMatlab(const mxArray * const val) {
     return retVal;
 }
 
+int32_t getInt32FromMatlab(const mxArray * const val) {
+    int32_t retVal=0;
+    if(mxIsComplex(val)==true) {
+        mexErrMsgTxt("A parameter that should be real has complex components.");
+    }
+    
+    if(mxGetNumberOfElements(val)!=1) {
+        mexErrMsgTxt("A parameter that should be scalar is not.");
+    }
+    
+    switch(mxGetClassID(val)){
+        case mxCHAR_CLASS:
+            retVal=(int32_t)*mxGetChars(val);
+            break;
+        case mxLOGICAL_CLASS:
+            retVal=(int32_t)*mxGetLogicals(val);
+            break;
+        case mxDOUBLE_CLASS:
+            retVal=(int32_t)*mxGetDoubles(val);
+            break;
+        case mxSINGLE_CLASS:
+            retVal=(int32_t)*mxGetSingles(val);
+            break;
+        case mxINT8_CLASS:
+            retVal=(int32_t)*mxGetInt8s(val);
+            break;
+        case mxUINT8_CLASS:
+            retVal=(int32_t)*mxGetUint8s(val);
+            break;
+        case mxINT16_CLASS:
+            retVal=(int32_t)*mxGetInt16s(val);
+            break;
+        case mxUINT16_CLASS:
+            retVal=(int32_t)*mxGetUint16s(val);
+            break;
+        case mxINT32_CLASS:
+            retVal=(int32_t)*mxGetInt32s(val);
+            break;
+        case mxUINT32_CLASS:
+            retVal=(int32_t)*mxGetUint32s(val);
+            break;
+        case mxINT64_CLASS:
+            retVal=(int32_t)*mxGetInt64s(val);
+            break;
+        case mxUINT64_CLASS:
+            retVal=(int32_t)*mxGetUint64s(val);
+            break;
+        case mxUNKNOWN_CLASS:
+        case mxCELL_CLASS:
+        case mxSTRUCT_CLASS:
+        case mxVOID_CLASS:
+        case mxFUNCTION_CLASS:
+        case mxOPAQUE_CLASS:
+        case mxOBJECT_CLASS:
+        default:
+            mexErrMsgTxt("A parameter is of a data type that can not be used.");
+    }
+    return retVal; 
+}
+
 mxArray *doubleMat2Matlab(const double * const arr,const size_t numRow, const size_t numCol) {
     mxArray *retMat;
-    void *dataPtr;
+    double *dataPtr;
     
     retMat=mxCreateDoubleMatrix(numRow,numCol,mxREAL);
-    dataPtr=mxGetData(retMat);
+    dataPtr=mxGetDoubles(retMat);
     memcpy(dataPtr,arr,numRow*numCol*sizeof(double));
 
     return retMat;
@@ -1735,7 +2077,7 @@ mxArray *floatMat2MatlabDoubles(const float * const arr,const size_t numRow, con
     size_t i;
     
     retMat=mxCreateDoubleMatrix(numRow,numCol,mxREAL);
-    dataPtr=(double*)mxGetData(retMat);
+    dataPtr=mxGetDoubles(retMat);
     for(i=0;i<totalNumEl;i++) {
         dataPtr[i]=(double)arr[i];
     }
@@ -1750,7 +2092,7 @@ mxArray *intMat2MatlabDoubles(const int * const arr,const size_t numRow, const s
     size_t i;
     
     retMat=mxCreateDoubleMatrix(numRow,numCol,mxREAL);
-    dataPtr=(double*)mxGetData(retMat);
+    dataPtr=mxGetDoubles(retMat);
     
     for(i=0;i<totalNumEl;i++) {
         dataPtr[i]=(double)arr[i];
@@ -1766,7 +2108,7 @@ mxArray *sizeTMat2MatlabDoubles(const size_t * const arr,const size_t numRow, co
     size_t i;
     
     retMat=mxCreateDoubleMatrix(numRow,numCol,mxREAL);
-    dataPtr=(double*)mxGetData(retMat);
+    dataPtr=mxGetDoubles(retMat);
     
     for(i=0;i<totalNumEl;i++) {
         dataPtr[i]=(double)arr[i];
@@ -1782,7 +2124,7 @@ mxArray *ptrDiffTMat2MatlabDoubles(const ptrdiff_t * const arr,const size_t numR
     size_t i;
     
     retMat=mxCreateDoubleMatrix(numRow,numCol,mxREAL);
-    dataPtr=(double*)mxGetData(retMat);
+    dataPtr=mxGetDoubles(retMat);
     
     for(i=0;i<totalNumEl;i++) {
         dataPtr[i]=(double)arr[i];
@@ -1807,86 +2149,22 @@ mxArray *boolMat2Matlab(const bool * const arr,const size_t numRow, const size_t
     return retMat;
 }
 
-
-mxArray *allocUnsignedSizeMatInMatlab(const size_t numRow, const size_t numCol) {
-    mxArray *retMat=NULL;
-    
-    switch(sizeof(size_t)) {
-        case 4:
-            retMat = mxCreateNumericMatrix(numRow,numCol,mxUINT32_CLASS,mxREAL);
-            break;
-        case 8:
-            retMat = mxCreateNumericMatrix(numRow,numCol,mxUINT64_CLASS,mxREAL);
-            break;
-        default:
-            mexErrMsgTxt("The integer size of this computer is neither 64 nor 32 bit. Thus, the Matlab data type for pointer conversion could not be determined.");
-    }
-    
-    return retMat;
-}
-
-mxArray *allocSignedSizeMatInMatlab(const size_t numRow, const size_t numCol) {
-    mxArray *retMat=NULL;
-    
-    switch(sizeof(ptrdiff_t)) {
-        case 4:
-            retMat = mxCreateNumericMatrix(numRow,numCol,mxINT32_CLASS,mxREAL);
-            break;
-        case 8:
-            retMat = mxCreateNumericMatrix(numRow,numCol,mxINT64_CLASS,mxREAL);
-            break;
-        default:
-            mexErrMsgTxt("The integer size of this computer is neither 64 nor 32 bit. Thus, the Matlab data type for pointer conversion could not be determined.");
-    }
-    
-    return retMat;
-}
-
 mxArray *allocUnsignedCharMatInMatlab(const size_t numRow, const size_t numCol) {
     return mxCreateNumericMatrix(numRow,numCol,mxUINT8_CLASS,mxREAL);
 }
 
-mxArray *allocUnsignedIntMatInMatlab(const size_t numRow, const size_t numCol) {
-    mxArray *retMat=NULL;
-    
-    switch(sizeof(unsigned int)) {
-        case 4:
-            retMat = mxCreateNumericMatrix(numRow,numCol,mxUINT32_CLASS,mxREAL);
-            break;
-        case 8:
-            retMat = mxCreateNumericMatrix(numRow,numCol,mxUINT64_CLASS,mxREAL);
-            break;
-        default:
-            mexErrMsgTxt("The integer size of this computer is neither 64 nor 32 bit. Thus, the Matlab data type for pointer conversion could not be determined.");
-    }
-    
-    return retMat;
-}
-
-mxArray *allocSignedIntMatInMatlab(const size_t numRow, const size_t numCol){
-    mxArray *retMat=NULL;
-    
-    switch(sizeof(int)) {
-        case 4:
-            retMat = mxCreateNumericMatrix(numRow,numCol,mxINT32_CLASS,mxREAL);
-            break;
-        case 8:
-            retMat = mxCreateNumericMatrix(numRow,numCol,mxINT64_CLASS,mxREAL);
-            break;
-        default:
-            mexErrMsgTxt("The integer size of this computer is neither 64 nor 32 bit. Thus, the Matlab data type for pointer conversion could not be determined.");
-    }
-    
-    return retMat;
-}
-
 mxArray *unsignedSizeMat2Matlab(const size_t * const arr, const size_t numRow, const size_t numCol) {
     mxArray *retMat;
-    void *dataPtr;
+    size_t *dataPtr;
     
     retMat=allocUnsignedSizeMatInMatlab(numRow, numCol);
     
-    dataPtr=mxGetData(retMat);
+    if(sizeof(size_t)==4) {//32 bit
+        dataPtr=(size_t*)mxGetUint32s(retMat);
+    } else {//64 bit
+        dataPtr=(size_t*)mxGetUint64s(retMat);
+    }
+
     memcpy(dataPtr,arr,numRow*numCol*sizeof(size_t));
 
     return retMat;
@@ -1894,11 +2172,11 @@ mxArray *unsignedSizeMat2Matlab(const size_t * const arr, const size_t numRow, c
 
 mxArray *unsignedCharMat2Matlab(const unsigned char * const arr, const size_t numRow, const size_t numCol) {
     mxArray *retMat;
-    void *dataPtr;
+    unsigned char *dataPtr;
     
     retMat=allocUnsignedCharMatInMatlab(numRow, numCol);
     
-    dataPtr=mxGetData(retMat);
+    dataPtr=(unsigned char*)mxGetUint8s(retMat);
     memcpy(dataPtr,arr,numRow*numCol*sizeof(unsigned char));
 
     return retMat;
@@ -1906,11 +2184,16 @@ mxArray *unsignedCharMat2Matlab(const unsigned char * const arr, const size_t nu
 
 mxArray *signedSizeMat2Matlab(const ptrdiff_t * const arr, const size_t numRow, const size_t numCol) {
     mxArray *retMat;
-    void *dataPtr;
+    ptrdiff_t *dataPtr;
     
     retMat=allocSignedSizeMatInMatlab(numRow,numCol);
     
-    dataPtr=mxGetData(retMat);
+    if(sizeof(ptrdiff_t)==4) {//32 bit
+        dataPtr=(ptrdiff_t*)mxGetInt32s(retMat);
+    } else {//64 bit
+        dataPtr=(ptrdiff_t*)mxGetInt64s(retMat);
+    }
+
     memcpy(dataPtr,arr,numRow*numCol*sizeof(ptrdiff_t));
 
     return retMat;
@@ -1954,10 +2237,10 @@ mxArray *ptr2Matlab(T thePointer) {
     
     switch(sizeof(void*)) {
         case 4:
-            retArray = mxCreateNumericMatrix(1,1,mxINT32_CLASS,mxREAL);
+            retArray=mxCreateNumericMatrix(1,1,mxINT32_CLASS,mxREAL);
             break;
         case 8:
-            retArray = mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
+            retArray=mxCreateNumericMatrix(1,1,mxINT64_CLASS,mxREAL);
             break;
         default:
             mexErrMsgTxt("The integer size of this computer is neither 64 nor 32 bit. Thus, the Matlab data type for pointer conversion could not be determined.");
@@ -1990,7 +2273,7 @@ mxArray *mat2MatlabDoubles(T *arr,const size_t numRow,const size_t numCol) {
     size_t i;
     
     retMat=mxCreateDoubleMatrix(numRow,numCol,mxREAL);
-    dataPtr=(double*)mxGetData(retMat);
+    dataPtr=mxGetDoubles(retMat);
     
     for(i=0;i<totalNumEl;i++) {
         dataPtr[i]=static_cast<double>(arr[i]);   
@@ -2000,139 +2283,68 @@ mxArray *mat2MatlabDoubles(T *arr,const size_t numRow,const size_t numCol) {
 }
 
 std::complex <double> getComplexDoubleFromMatlab(const mxArray * const val) {
-    double realPart=0;
-    double imagPart=0;
-    void *realData;
-    void *imagData;
 
     if(mxGetNumberOfElements(val)!=1) {
         mexErrMsgTxt("A parameter that should be scalar is not.");
     }
     
-    realData=mxGetData(val);
-    imagData=mxGetImagData(val);
-    
+    if(mxIsComplex(val)==false) {
+        mexErrMsgTxt("A parameter that should be real has complex components.");
+    }
+ 
     switch(mxGetClassID(val)){
-        case mxCHAR_CLASS:
-            if(realData!=NULL) {
-                realPart=(double)*(mxChar*)realData;
-            }
-            
-            if(imagData!=NULL) {
-                imagPart=(double)*(mxChar*)imagData;
-            }
-            
-            break;
-        case mxLOGICAL_CLASS:
-            if(realData!=NULL) {
-                realPart=(double)*(mxLogical*)realData;
-            }
-            
-            if(imagData!=NULL) {
-                imagPart=(double)*(mxLogical*)imagData;
-            }
-
-            break;
         case mxDOUBLE_CLASS:
-            if(realData!=NULL) {
-                realPart=(double)*(double*)realData;
-            }
-            
-            if(imagData!=NULL) {
-                imagPart=(double)*(double*)imagData;
-            }
-            
-            break;
+        {
+            mxComplexDouble *theCompNum=mxGetComplexDoubles(val);
+            return std::complex<double>(theCompNum->real,theCompNum->imag);
+        }
         case mxSINGLE_CLASS:
-            if(realData!=NULL) {
-                realPart=(double)*(float*)realData;
-            }
-            
-            if(imagData!=NULL) {
-                imagPart=(double)*(float*)imagData;
-            }
-
-            break;
+        {
+            mxComplexSingle *theCompNum=mxGetComplexSingles(val);
+            return std::complex<double> (static_cast<double>(theCompNum->real),static_cast<double>(theCompNum->imag));
+        }
         case mxINT8_CLASS:
-            if(realData!=NULL) {
-                realPart=(double)*(int8_T*)realData;
-            }
-            
-            if(imagData!=NULL) {
-                imagPart=(double)*(int8_T*)imagData;
-            }
-
-            break;
+        {
+            mxComplexInt8 *theCompNum=mxGetComplexInt8s(val);
+            return std::complex<double> (static_cast<double>(theCompNum->real),static_cast<double>(theCompNum->imag));
+        }
         case mxUINT8_CLASS:
-            if(realData!=NULL) {
-                realPart=(double)*(uint8_T*)realData;
-            }
-            
-            if(imagData!=NULL) {
-                imagPart=(double)*(uint8_T*)imagData;
-            }
-
-            break;
+        {
+            mxComplexUint8 *theCompNum=mxGetComplexUint8s(val);
+            return std::complex<double> (static_cast<double>(theCompNum->real),static_cast<double>(theCompNum->imag));
+        }
         case mxINT16_CLASS:
-            if(realData!=NULL) {
-                realPart=(double)*(int16_T*)realData;
-            }
-            
-            if(imagData!=NULL) {
-                imagPart=(double)*(int16_T*)imagData;
-            }
-
-            break;
+        {
+            mxComplexInt16 *theCompNum=mxGetComplexInt16s(val);
+            return std::complex<double> (static_cast<double>(theCompNum->real),static_cast<double>(theCompNum->imag));
+        }
         case mxUINT16_CLASS:
-            if(realData!=NULL) {
-                realPart=(double)*(uint16_T*)realData;
-            }
-            
-            if(imagData!=NULL) {
-                imagPart=(double)*(uint16_T*)imagData;
-            }
-
-            break;
+        {
+            mxComplexUint16 *theCompNum=mxGetComplexUint16s(val);
+            return std::complex<double> (static_cast<double>(theCompNum->real),static_cast<double>(theCompNum->imag));
+        }
         case mxINT32_CLASS:
-            if(realData!=NULL) {
-                realPart=(double)*(int32_T*)realData;
-            }
-            
-            if(imagData!=NULL) {
-                imagPart=(double)*(int32_T*)imagData;
-            }
-
-            break;
+        {
+            mxComplexInt32 *theCompNum=mxGetComplexInt32s(val);
+            return std::complex<double> (static_cast<double>(theCompNum->real),static_cast<double>(theCompNum->imag));
+        }
         case mxUINT32_CLASS:
-            if(realData!=NULL) {
-                realPart=(double)*(uint32_T*)realData;
-            }
-            
-            if(imagData!=NULL) {
-                imagPart=(double)*(uint32_T*)imagData;
-            }
-
-            break;
+        {
+            mxComplexUint32 *theCompNum=mxGetComplexUint32s(val);
+            return std::complex<double> (static_cast<double>(theCompNum->real),static_cast<double>(theCompNum->imag));
+        }
         case mxINT64_CLASS:
-            if(realData!=NULL) {
-                realPart=(double)*(int64_T*)realData;
-            }
-            
-            if(imagData!=NULL) {
-                imagPart=(double)*(int64_T*)imagData;
-            }
-
-            break;
+        {
+            mxComplexInt64 *theCompNum=mxGetComplexInt64s(val);
+            return std::complex<double> (static_cast<double>(theCompNum->real),static_cast<double>(theCompNum->imag));
+        }
         case mxUINT64_CLASS:
-            if(realData!=NULL) {
-                realPart=(double)*(uint64_T*)realData;
-            }
-            
-            if(imagData!=NULL) {
-                imagPart=(double)*(uint64_T*)imagData;
-            }
-
-            break;
+        {
+            mxComplexUint64 *theCompNum=mxGetComplexUint64s(val);
+            return std::complex<double> (static_cast<double>(theCompNum->real),static_cast<double>(theCompNum->imag));
+        }
+        case mxLOGICAL_CLASS:
+        case mxCHAR_CLASS:
         case mxUNKNOWN_CLASS:
         case mxCELL_CLASS:
         case mxSTRUCT_CLASS:
@@ -2141,12 +2353,11 @@ std::complex <double> getComplexDoubleFromMatlab(const mxArray * const val) {
         case mxOPAQUE_CLASS:
         case mxOBJECT_CLASS:
         default:
-            mexErrMsgTxt("A parameter is of a data type that can not be used.");
+            mexErrMsgTxt("A parameter is of a data type that cannot be used.");
     }
     
-    std::complex <double> retVal(realPart,imagPart);
-    
-    return retVal;
+    //It should never get here.
+    return 0;
 }
 
 #endif

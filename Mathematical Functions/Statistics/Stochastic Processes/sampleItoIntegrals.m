@@ -1,11 +1,13 @@
-function [I1Idx,I2Idx]=sampleItoIntegrals(m,deltaT,p,algorithm)
+function [I1Idx,I2Idx]=sampleItoIntegrals(m,deltaT,p,algorithm,deltaW,deltaP,Wj)
 %%SAMPLEITOINTEGRALS Return a random samples of Itô integrals with 1 and 2
-%          subscripts. These are multiple Ito integrals of 1 (not of a
+%          subscripts. These are multiple Itô integrals of 1 (not of a
 %          general function). The assumed Wiener process can be
 %          multidimensional, in which case this function returns the
 %          necessary cross terms too. All values are generated with the
 %          same assumed Wiener process. These are useful in Itô-Taylor
-%          expansions of stochastic differential equations.
+%          expansions of stochastic differential equations. Integrals of a
+%          jump-diffusion process with specified jumps can also be
+%          approximated using algorithm 0.
 %
 %INPUTS: m The scalar dimensionality of the Wiener process, m>=1.
 %   deltaT The time interval over which the integrals are taken.
@@ -15,29 +17,55 @@ function [I1Idx,I2Idx]=sampleItoIntegrals(m,deltaT,p,algorithm)
 % algorithm An optional parameter specifying the algorithm to use. Possible
 %          values are:
 %          0 (The default if omitted or an empty matrix is passed) Use the
-%            expansion based on a componentwise Fourier expansion of the
+%            expansion based on a component-wise Fourier expansion of the
 %            process, which is given in Chapter 10.4 (pages 353-354) of
-%            [1].
+%            [1]. This algorithm is also provided in [3] in Chapter 5.3,
+%            pages 263-264 along with modifications to account for jump 
+%            process terms. If deltaW is given, the integral is computed 
+%            using that Wiener process difference. If deltaP and W are 
+%            given, the Itô integrals involving Poisson measures with mark 
+%            independent jump coefficients are also calculated.
 %          1 Simulate discrete steps in the underlying Wiener process
-%            and use the defintion of the Itô integral to approxiamte the
+%            and use the defintion of the Itô integral to approximate the
 %            values using multiple sums.
 %          2 Use the algorithm described in [2]. This has better asymptotic
 %            convergence as a function of p than 0. However, it is slower
 %            than 0 due to operations with large matrices. Note that this
 %            algorithm does not provide Ij0 or I0j.
+%   deltaW An mX1 vector of the difference between the position of each 
+%          Wiener process at the beginning of the current time step and the 
+%          position at the end of the current time step. If omitted, a
+%          scaled normal random variable is generated according to the time
+%          step deltaT.
+%   deltaP A scalar representing the number of Poissonian jumps which have
+%          occurred during the time interval. If given, W is expected to be
+%          defined as well. Otherwise, an error will occur. This input is
+%          only used if algorithm=0.
+%       Wj An mXdeltaP matrix where each row corresponds to an individual 
+%          Wiener process and each column corresponds to the values of the 
+%          processes at the time a Poissonian jump occurs. This input is
+%          only used if algorithm=0. Note this must contain only the Wiener
+%          process values at the jump times, not the process values at the
+%          beginning and end of the time interval.
 %
 %OUTPUTS: I1Idx A structure whose members are all Itô integrals with 1
 %               subscript. Members are:
 %               I0 for I_0 (scalar) This is the deterministic integral of
 %                                   the region 0->deltaT.
 %               Ij for I_j (mX1)
-%         I2Idx A structure whose members are all Ito integrals with 2
+%               Im1 for I_{-1} (scalar) This is the number of Poissonian
+%                                       jumps which occurred over the time
+%                                       interval.
+%         I2Idx A structure whose members are all Itô integrals with 2
 %               subscripts. Members are:
 %               I00 for I_{0,0} (scalar) This is the deterministic second
 %                                        integral of the region 0->deltaT.
 %               I0j for I_{0,j} (mX1)
 %               Ij0 for I_{j,0} (mX1)
-%               Ij1j2 for I_{j1,j2} (mXm)              
+%               Ij1j2 for I_{j1,j2} (mXm)
+%               Ij1m1 for I_{j1,-1} (mX1)
+%               Im1j1 for I_{-1,j1} (mX1)
+%               Im1m1 for I_{-1,-1} (scalar)
 %
 %For algorithm 1, the Itô integral is defined in a manner similar to a
 %Riemann-Stieljes integral. That is, the integral of some function f(x),
@@ -88,11 +116,16 @@ function [I1Idx,I2Idx]=sampleItoIntegrals(m,deltaT,p,algorithm)
 %[1] P. E. Kloeden and E. Platen, Numerical Solution of Stochastic
 %    Differential Equations. Berlin: Springer, 1999.
 %[2] M. Wiktorsson, "Joint characteristic function and simultaneous
-%   simulation of iterated Itô integrals for multiple independent Brownian
-%   motions," The Annals of Applied Probability, vol. 11, no. 2, pp.
-%   470-487, May 2001.
+%    simulation of iterated Itô integrals for multiple independent Brownian
+%    motions," The Annals of Applied Probability, vol. 11, no. 2, pp.
+%    470-487, May 2001.
+%[3] Platen, Eckhard, and Nicola Bruti-Liberati. Numerical solution of 
+%    stochastic differential equations with jumps in finance. Vol. 64. 
+%    Springer Science & Business Media, 2010.
 %
 %November 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%Support for jump processes added by Codie T. Lewis July 2019 , Naval
+%Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 if(nargin<4||isempty(algorithm))
@@ -108,12 +141,30 @@ if(nargin<3||isempty(p))
 end
 
 switch(algorithm)
-    case 0%From [1]
+    case 0%From [1] and [3]
         sqrtDeltaT=sqrt(deltaT);
-
-        xi=randn(m,1);
-
-        deltaW=sqrtDeltaT*xi;
+        
+        %Check if the Wiener processes were generated externally.
+        if(~exist('deltaW','var')||isempty(deltaW))
+            xi=randn(m,1);
+            deltaW=sqrtDeltaT*xi;
+        else
+            xi=deltaW/sqrtDeltaT;
+        end
+        
+        %Equations 6.2.5 in Chapter 6.2 of [3].
+        if(exist('deltaP','var')&&~isempty(deltaP))
+            I1Idx.Im1=deltaP;
+            if(nargout>1)
+                I2Idx.Im1m1=0.5*(deltaP^2-deltaP);
+                if(exist('Wj','var')&&~isempty(Wj))
+                    I2Idx.Ij1m1=sum(Wj,2)-deltaP*deltaW;
+                else
+                    I2Idx.Ij1m1=-deltaP*deltaW; % A vector of zeros.
+                end
+                I2Idx.Im1j1=deltaP*deltaW-I2Idx.Ij1m1;
+            end
+        end
 
         I0=deltaT;
         %Equation 4.7 in Chapter 10.4 of [1].
@@ -121,13 +172,14 @@ switch(algorithm)
 
         I1Idx.I0=I0;
         I1Idx.Ij=Ij;
+        
         if(nargout>1)
             I00=deltaT^2/2;
             I2Idx.I00=I00;
 
             if(m==1)
                 %Use the explicit solutions for scalar problems. The
-                %solution for Ij0 for scalr problems is from equation 4.3
+                %solution for Ij0 for scalar problems is from equation 4.3
                 %of Chapter 10.4 of [1].
                 I2Idx.Ij0=(1/2)*deltaT^(3/2)*(xi+(1/sqrt(3))*randn(1));
                 I2Idx.I0j=deltaW*deltaT-I2Idx.Ij0;

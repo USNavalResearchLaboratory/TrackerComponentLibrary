@@ -2,11 +2,11 @@
 *               order, which might be full of duplicates, find the first
 *               occurrence of the maximum value. An implementation in C++.
 *
-*INPUTS:    arr A vector of values, with possible repeats, sorted in
-*               increasing order.
+*INPUTS: arr A vector of values, with possible repeats, sorted in
+*            increasing order.
 *
-*OUTPUTS:   idx The index of the first occurrence of the maximum value
-*               (last) element in arr.    
+*OUTPUTS: idx The index of the first occurrence of the maximum value (last)
+*             element in arr.    
 *
 * The easiest way to find the first occurrence of the maximum value is to
 * scan downward in the array from the end until a value different from the
@@ -66,12 +66,17 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         }
     }
     
-    arr = reinterpret_cast<double*>(mxGetData(prhs[0]));
+    arr=mxGetDoubles(prhs[0]);
     foundIdx= findFirstMaxCPP(arr,numPoints);
     
     //Set the return value
     retIdx=allocUnsignedSizeMatInMatlab(1,1);
-    *reinterpret_cast<size_t *>(mxGetData(retIdx))=foundIdx+1;
+    if(sizeof(size_t)==4) {//32 bit
+        *reinterpret_cast<size_t *>(mxGetUint32s(retIdx))=foundIdx+1;
+    } else {//64 bit
+        *reinterpret_cast<size_t *>(mxGetUint64s(retIdx))=foundIdx+1;
+    }
+
     plhs[0]=retIdx;
 }
 

@@ -22,15 +22,16 @@
 
 /*This header is required by Matlab.*/
 #include "mex.h"
+#include "matrix.h"
 /*This is for input validation*/
 #include "MexValidation.h"
-
 #include "basicMatOps.h"
+#include <stdbool.h>
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     double *orderMatlab;
-    void *CPermReal, *CPermImag=NULL;
-    void *CReal, *CImag;
+    void *CPerm;
+    void *CData;
     mxArray *CPermMATLAB;
     const size_t *nVals;
     size_t *order, *nValsNew, *nValsExtended=NULL;
@@ -39,6 +40,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     void *tempBuffer, *curBufferSpot;
     mxClassID CClass;
     size_t classDataSize;
+    bool isComplex;
 
     if(nrhs!=2) {
         mexErrMsgTxt("Incorrect number of inputs.");
@@ -70,61 +72,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     }
     
     checkRealDoubleArray(prhs[1]);
-    
-    CClass=mxGetClassID(prhs[0]);
-    switch(CClass) {
-        case mxLOGICAL_CLASS:
-             classDataSize=sizeof(mxLogical);
-             break;
-        case mxCHAR_CLASS:
-            classDataSize=sizeof(char);
-            break;
-        case mxDOUBLE_CLASS:
-            classDataSize=sizeof(double);
-            break;
-        case mxSINGLE_CLASS:
-            classDataSize=sizeof(float);
-            break;
-        case mxINT8_CLASS:
-            classDataSize=sizeof(int8_t);
-            break;
-        case mxUINT8_CLASS:
-            classDataSize=sizeof(uint8_t);
-            break;
-        case mxINT16_CLASS:
-            classDataSize=sizeof(int16_t);
-            break;
-        case mxUINT16_CLASS:
-            classDataSize=sizeof(uint16_t);
-            break;
-        case mxINT32_CLASS:
-            classDataSize=sizeof(int32_t);
-            break;
-        case mxUINT32_CLASS:
-            classDataSize=sizeof(uint32_t);
-            break;
-        case mxINT64_CLASS:
-            classDataSize=sizeof(int64_t);
-            break;
-        case mxUINT64_CLASS:
-            classDataSize=sizeof(uint64_t);
-            break;
-        case mxUNKNOWN_CLASS:
-        case mxFUNCTION_CLASS:
-        case mxCELL_CLASS:
-        case mxSTRUCT_CLASS:
-        case mxVOID_CLASS:
-        case mxOPAQUE_CLASS:
-        case mxOBJECT_CLASS:
-        default:
-            mexErrMsgTxt("C is of an unsupported class.");
-            return;
-    }
-    
-    CReal=mxGetData(prhs[0]);
-    CImag=mxGetImagData(prhs[0]);
-
-    orderMatlab=mxGetPr(prhs[1]);
+    orderMatlab=mxGetDoubles(prhs[1]);
     for(i=0;i<S;i++) {
         if(orderMatlab[i]<1||orderMatlab[i]>numOrderEls) {
             mexErrMsgTxt("The values in order must be from 1 to numOrderEls.");
@@ -137,17 +85,17 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     nVals=mxGetDimensions(prhs[0]);
     
     //Allocate temporary space plus the space needed for order and
-    //nValsNew Also, if  numOrderEls>S, then space must be allocated for a
+    //nValsNew. Also, if  numOrderEls>S, then space must be allocated for a
     //new nVals vector.
     if(numOrderEls>S) {
         const size_t SOrig=S;
         
         S=numOrderEls;
-        tempBuffer=mxMalloc(numElsInC*sizeof(double)+permuteMatrixCBufferSize(S)+3*S*sizeof(size_t));
-        order=(size_t*)tempBuffer;
-        nValsNew=order+S;
-        nValsExtended=nValsNew+S;
-        curBufferSpot=(void*)(nValsExtended+S);
+        tempBuffer=mxMalloc(permuteMatrixCBufferSize(S)+3*S*sizeof(size_t));
+        order=(size_t*)tempBuffer;//Length S
+        nValsNew=order+S;//Length S
+        nValsExtended=nValsNew+S;//Length S
+        curBufferSpot=(void*)(nValsExtended+S);//Length permuteMatrixCBufferSize(S).
         
         //Copy nVals into nValsExtended and add the 1s at the end.
         memcpy(nValsExtended,nVals,SOrig*sizeof(size_t));
@@ -158,10 +106,10 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         nVals=nValsExtended;
     }
     else {
-        tempBuffer=mxMalloc(numElsInC*sizeof(double)+permuteMatrixCBufferSize(S)+2*S*sizeof(size_t));
-        order=(size_t*)tempBuffer;
-        nValsNew=order+S;
-        curBufferSpot=(void*)(nValsNew+S);
+        tempBuffer=mxMalloc(permuteMatrixCBufferSize(S)+2*S*sizeof(size_t));
+        order=(size_t*)tempBuffer;//Length S
+        nValsNew=order+S;//Length S
+        curBufferSpot=(void*)(nValsNew+S);// Length permuteMatrixCBufferSize(S).
     }
             
     for(i=0;i<S;i++) {//Copy order into a format usable by the function.
@@ -176,27 +124,161 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         }
     }
 
+    //Determine the data size and allocate the return matrix.
+    isComplex=mxIsComplex(prhs[0]);
+    CClass=mxGetClassID(prhs[0]);
+    
     //Allocate the return matrix. We initially give it the original
-    //dimensions. the dimensions will be set to the permuted dimensions
+    //dimensions. The dimensions will be set to the permuted dimensions
     //after calling permuteMatrixC.
-    if(CImag==NULL) {//If it is real.
+    if(isComplex) {
+        CPermMATLAB=mxCreateNumericArray(S,nVals,CClass,mxCOMPLEX);    
+    } else {
         CPermMATLAB=mxCreateNumericArray(S,nVals,CClass,mxREAL);
-        CPermReal=mxGetData(CPermMATLAB);
-    } else {//If it is imaginary.
-        CPermMATLAB=mxCreateNumericArray(S,nVals,CClass,mxCOMPLEX);
-        CPermReal=mxGetData(CPermMATLAB);
-        CPermImag=mxGetImagData(CPermMATLAB);
     }
 
-    if(CReal==NULL) {
-        mexErrMsgTxt("The real portion of the data is missing.");
-        return;
+    switch(CClass) {
+        case mxLOGICAL_CLASS:
+             if(isComplex) {
+                mexErrMsgTxt("Complex logical variables are not supported.");
+                return;
+             }
+             classDataSize=sizeof(mxLogical);
+             CData=(void*)mxGetLogicals(prhs[0]);
+             CPerm=(void*)mxGetLogicals(CPermMATLAB);
+             break;
+        case mxCHAR_CLASS:
+             if(isComplex) {
+                mexErrMsgTxt("Complex character variables are not supported.");
+                return;
+             }
+            classDataSize=sizeof(mxChar);
+            CData=(void*)mxGetChars(prhs[0]);
+            CPerm=(void*)mxGetChars(CPermMATLAB);
+            break;
+        case mxDOUBLE_CLASS:
+            if(isComplex) {
+                classDataSize=sizeof(mxComplexDouble);
+                CData=(void*)mxGetComplexDoubles(prhs[0]);
+                CPerm=(void*)mxGetComplexDoubles(CPermMATLAB);
+            } else {
+                classDataSize=sizeof(mxDouble);
+                CData=(void*)mxGetDoubles(prhs[0]);
+                CPerm=(void*)mxGetDoubles(CPermMATLAB);
+            }
+            break;
+        case mxSINGLE_CLASS:
+            if(isComplex) {
+                classDataSize=sizeof(mxComplexSingle);
+                CData=(void*)mxGetComplexSingles(prhs[0]);
+                CPerm=(void*)mxGetComplexSingles(CPermMATLAB);
+            } else {
+                classDataSize=sizeof(mxSingle);
+                CData=(void*)mxGetSingles(prhs[0]);
+                CPerm=(void*)mxGetSingles(CPermMATLAB);
+            }
+            break;
+        case mxINT8_CLASS:
+            if(isComplex) {
+                classDataSize=sizeof(mxComplexInt8);
+                CData=(void*)mxGetComplexInt8s(prhs[0]);
+                CPerm=(void*)mxGetComplexInt8s(CPermMATLAB);
+            } else {
+                classDataSize=sizeof(mxInt8);
+                CData=(void*)mxGetInt8s(prhs[0]);
+                CPerm=(void*)mxGetInt8s(CPermMATLAB);
+            }
+            break;
+        case mxUINT8_CLASS:
+            if(isComplex) {
+                classDataSize=sizeof(mxComplexUint8);
+                CData=(void*)mxGetComplexUint8s(prhs[0]);
+                CPerm=(void*)mxGetComplexUint8s(CPermMATLAB);
+            } else {
+                classDataSize=sizeof(mxUint8);
+                CData=(void*)mxGetUint8s(prhs[0]);
+                CPerm=(void*)mxGetUint8s(CPermMATLAB);
+            }
+            break;
+        case mxINT16_CLASS:
+            if(isComplex) {
+                classDataSize=sizeof(mxComplexInt16);
+                CData=(void*)mxGetComplexInt16s(prhs[0]);
+                CPerm=(void*)mxGetComplexInt16s(CPermMATLAB);
+            } else {
+                classDataSize=sizeof(mxInt16);
+                CData=(void*)mxGetInt16s(prhs[0]);
+                CPerm=(void*)mxGetInt16s(CPermMATLAB);
+            }
+            break;
+        case mxUINT16_CLASS:
+            if(isComplex) {
+                classDataSize=sizeof(mxComplexUint16);
+                CData=(void*)mxGetComplexUint16s(prhs[0]);
+                CPerm=(void*)mxGetComplexUint16s(CPermMATLAB);
+            } else {
+                classDataSize=sizeof(mxUint16);
+                CData=(void*)mxGetUint16s(prhs[0]);
+                CPerm=(void*)mxGetUint16s(CPermMATLAB);
+            }
+            break;
+        case mxINT32_CLASS:
+            if(isComplex) {
+                classDataSize=sizeof(mxComplexInt32);
+                CData=(void*)mxGetComplexInt32s(prhs[0]);
+                CPerm=(void*)mxGetComplexInt32s(CPermMATLAB);
+            } else {
+                classDataSize=sizeof(mxInt32);
+                CData=(void*)mxGetInt32s(prhs[0]);
+                CPerm=(void*)mxGetInt32s(CPermMATLAB);
+            }
+            break;
+        case mxUINT32_CLASS:
+            if(isComplex) {
+                classDataSize=sizeof(mxComplexUint32);
+                CData=(void*)mxGetComplexUint32s(prhs[0]);
+                CPerm=(void*)mxGetComplexUint32s(CPermMATLAB);
+            } else {
+                classDataSize=sizeof(mxUint32);
+                CData=(void*)mxGetUint32s(prhs[0]);
+                CPerm=(void*)mxGetUint32s(CPermMATLAB);
+            }
+            break;
+        case mxINT64_CLASS:
+            if(isComplex) {
+                classDataSize=sizeof(mxComplexInt64);
+                CData=(void*)mxGetComplexInt64s(prhs[0]);
+                CPerm=(void*)mxGetComplexInt64s(CPermMATLAB);
+            } else {
+                classDataSize=sizeof(mxInt64);
+                CData=(void*)mxGetInt64s(prhs[0]);
+                CPerm=(void*)mxGetInt64s(CPermMATLAB);
+            }
+            break;
+        case mxUINT64_CLASS:
+            if(isComplex) {
+                classDataSize=sizeof(mxComplexUint64);
+                CData=(void*)mxGetComplexUint64s(prhs[0]);
+                CPerm=(void*)mxGetComplexUint64s(CPermMATLAB);
+            } else {
+                classDataSize=sizeof(mxUint64);
+                CData=(void*)mxGetUint64s(prhs[0]);
+                CPerm=(void*)mxGetUint64s(CPermMATLAB);
+            }
+            break;
+        case mxUNKNOWN_CLASS:
+        case mxFUNCTION_CLASS:
+        case mxCELL_CLASS:
+        case mxSTRUCT_CLASS:
+        case mxVOID_CLASS:
+        case mxOPAQUE_CLASS:
+        case mxOBJECT_CLASS:
+        default:
+            mexErrMsgTxt("C is of an unsupported class.");
+            return;
     }
-    
-    permuteMatrixC(S,nVals, nValsNew, CPermReal, CReal, classDataSize, curBufferSpot, order);
-    if(CImag!=NULL) {
-        permuteMatrixC(S,nVals, nValsNew, CPermImag, CImag, classDataSize, curBufferSpot, order);
-    }
+
+    permuteMatrixC(S,nVals, nValsNew, CPerm, CData, classDataSize, curBufferSpot, order);
 
     if(mxSetDimensions(CPermMATLAB,nValsNew,S)) {
         mexErrMsgTxt("An error occurred setting return array dimension vector.");
@@ -204,7 +286,6 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     }
     
     mxFree(tempBuffer);
-    
     plhs[0]=CPermMATLAB;    
 }
 

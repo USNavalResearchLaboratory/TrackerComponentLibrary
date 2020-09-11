@@ -61,7 +61,6 @@ switch(systemType)
         
         azimuth=atan2(y,x);
         elevation=asin(z);
-        
     case 1
         x=sin(azimuth).*cos(elevation);
         y=sin(elevation);

@@ -108,7 +108,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         plhs[0]=mxCreateDoubleMatrix(0,0,mxREAL);//tuples
         if(nlhs>1) {
             gainMATLAB=mxCreateNumericMatrix(1,1,mxDOUBLE_CLASS,mxREAL);
-            gainPtr=(double*)mxGetData(gainMATLAB);
+            gainPtr=mxGetDoubles(gainMATLAB);
             *gainPtr=0;
             plhs[1]=gainMATLAB;//Gain
             
@@ -127,7 +127,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
      * using a SIGNED integer data type.*/
     numRow=mxGetM(prhs[0]);
     numCol=mxGetN(prhs[0]);
-    CIn=mxGetPr(prhs[0]);
+    CIn=mxGetDoubles(prhs[0]);
 
     switch(algorithm){
         case 0:
@@ -155,15 +155,16 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             uMATLAB=mxCreateNumericMatrix(augmentedSize,1,mxDOUBLE_CLASS,mxREAL);
             vMATLAB=mxCreateNumericMatrix(augmentedSize,1,mxDOUBLE_CLASS,mxREAL);
 
-            gainPtr=mxGetPr(gainMATLAB);
-            u=mxGetPr(uMATLAB);
-            v=mxGetPr(vMATLAB);
+            gainPtr=mxGetDoubles(gainMATLAB);
+            u=mxGetDoubles(uMATLAB);
+            v=mxGetDoubles(vMATLAB);
 
             {
                 //The first part of the buffer holds the tuples, the second
                 //part is the buffer to pass to assign2DFullC.
                 void* bufferStart=(void*)((char*)(tempBuffer)+2*(augmentedSize+1)*sizeof(size_t));
                 tuples=(ptrdiff_t*)(tempBuffer);
+
                 isInfeasible=assign2DFullC(maximize,C,gainPtr,tuples,&numTuples,bufferStart,u,v,numRow,numCol);
             }
             mxFree(C);
@@ -201,15 +202,16 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
                 vMATLAB=mxCreateNumericMatrix(maxMemVal,1,mxDOUBLE_CLASS,mxREAL);
             }
 
-            gainPtr=mxGetPr(gainMATLAB);
-            u=mxGetPr(uMATLAB);
-            v=mxGetPr(vMATLAB);
+            gainPtr=mxGetDoubles(gainMATLAB);
+            u=mxGetDoubles(uMATLAB);
+            v=mxGetDoubles(vMATLAB);
 
             //The first part of the buffer holds the tuples, the second
             //part is the buffer to pass to assign2DFullCAlt.
             tuples=(ptrdiff_t*)(tempBuffer);
             bufferStart=(void*)((size_t*)(tempBuffer)+2*maxNumTuples);
             isInfeasible=assign2DFullCAlt(maximize,CIn,gainPtr,tuples,&numTuples,bufferStart,u,v,numRow,numCol);
+            
             break;
         }
         default:
@@ -225,7 +227,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         plhs[0]=mxCreateDoubleMatrix(2,0,mxREAL);//tuples
         if(nlhs>1) {
             gainMATLAB=mxCreateNumericMatrix(1,1,mxDOUBLE_CLASS,mxREAL);
-            gainPtr=(double*)mxGetData(gainMATLAB);
+            gainPtr=mxGetDoubles(gainMATLAB);
             *gainPtr=-1;
             plhs[1]=gainMATLAB;//Gain
             

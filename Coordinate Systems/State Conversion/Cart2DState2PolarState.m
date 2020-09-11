@@ -42,8 +42,9 @@ function xPol=Cart2DState2PolarState(xCart,systemType)
 %[1] M. Busch and S. Blackman, "Evaluation of IMM filtering for an air
 %    defense system application," in Proceedings of SPIE: Signal and Data
 %    Processing of Small Targets, vol. 2561, 9 Jul. 1995, pp. 435-447.
-%[1] J. L. Gertz, "Multisensor surveillance for improved aircraft tracking,"
-%    The Lincoln Laboratory Journal, vol. 2, no. 3, pp. 381-396, 1989.
+%[1] J. L. Gertz, "Multisensor surveillance for improved aircraft
+%    tracking," The Lincoln Laboratory Journal, vol. 2, no. 3, pp. 381-396,
+%    1989.
 %
 %July 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

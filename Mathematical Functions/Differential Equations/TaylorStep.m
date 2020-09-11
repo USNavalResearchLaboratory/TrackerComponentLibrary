@@ -49,7 +49,7 @@ function xNew=TaylorStep(deltaT,x,order,a,papt,papx,p2apxpt,p2apt2,p2apxpx)
 %solution:
 %x(1)=sin(omega*t^2)^2, x(2)=cos(omega*t^2)^2, x(3)=cos(omega*t^2)
 %We then get second order differential equations in terms of these
-%variables with x(4), x(5), and x(6) defined as the the derivatives of
+%variables with x(4), x(5), and x(6) defined as the derivatives of
 %x(1), x(2), and x(3), respectively. The full system is epxressed without
 %trigonometric functions. We demonstrate that as the order of the Taylor
 %step increases, the solution reaches an increasingly high number of digits

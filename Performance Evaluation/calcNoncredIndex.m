@@ -16,7 +16,7 @@ function NCI=calcNoncredIndex(xTrue,xEst,PEst,type,Sigma)
 %              index to use. Possible values are
 %              1 Use the type-1 index defined in Equation 3 in [1]. This
 %                requires either that Sigma be provided or that the sample
-%                estimate of sigma be nonsingular.
+%                estimate of Sigma be nonsingular.
 %              2 (The default if this parameter is omitted or an empty
 %                matrix is passed) Use the type-2 index defined in
 %                Equations 4 and 6 of [1].

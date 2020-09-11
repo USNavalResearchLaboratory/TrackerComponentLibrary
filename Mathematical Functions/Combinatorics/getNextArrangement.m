@@ -1,13 +1,14 @@
 function [arr,data]=getNextArrangement(data,m)
 %%GETNEXTARRANGEMENT Return the next arrangement of n items put into m
 %                    spaces. The arrangements are generated in
-%                    lexicographic order.
+%                    lexicographic order. There is a total of
+%                    binomial(n,r)*factorial(r) arrangements.
 %
 %INPUTS: data If the first arrangement is desired, then this is n, the
 %             number of items to use and the second input must be given.
 %             Otherwise, this is the data structure returned from the
 %             previous call to this function and the second input must be
-%             omitted.
+%             omitted or have an empty matrix passed.
 %           m This input is only provided when obtaining the first
 %             arrangement in the sequence. This is the number of slots to
 %             use. m<=n or else no arrangements exist.

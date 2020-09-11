@@ -1,21 +1,20 @@
 function [w,mu,P]=EMAlgGaussClust(z,w,mu,P,numIter)
-%%EMALGGAUSSCLUST  Use the expectation maximization (EM) algorithm to
-%                  refine estimates of the components of a Gaussian mixture
-%                  with a known number of terms given a set of samples.
+%%EMALGGAUSSCLUST Use the expectation maximization (EM) algorithm to
+%                 refine estimates of the components of a Gaussian mixture
+%                 with a known number of terms given a set of samples.
 %
-%INPUTS: z      A zDim X numPoints set of samples of the Gaussian mixture.
-%        w      A KX1 set of initial weight estimates of the K Gaussians in
-%               the mixture.
-%        mu     A zDim X K set of initial mean estimates of the component
-%               Gaussians in the mixture.
-%        P      A zDim X zDim X K hypermatrix of initial covariance matrix
-%               estimates of the components of the Gaussians in the
-%               mixture.
-%       numIter The number of iterations of the EM algorithm to perform.
+%INPUTS: z A zDim X numPoints set of samples of the Gaussian mixture.
+%        w A KX1 set of initial weight estimates of the K Gaussians in the
+%          mixture.
+%       mu A zDim X K set of initial mean estimates of the component
+%          Gaussians in the mixture.
+%        P A zDim X zDim X K hypermatrix of initial covariance matrix
+%          estimates of the components of the Gaussians in the mixture.
+%  numIter The number of iterations of the EM algorithm to perform.
 %
-%OUTPUTS: w     The refined weights.
-%         mu    The refined means.
-%         P     The refined covariance matrix estimates.
+%OUTPUTS: w The refined weights.
+%        mu The refined means.
+%         P The refined covariance matrix estimates.
 %
 %The EM algorithm for Gaussian mixtures is an implementation of the
 %algorithm described in Chapter 9.2.2 of [1].

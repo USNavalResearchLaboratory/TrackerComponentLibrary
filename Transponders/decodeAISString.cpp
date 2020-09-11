@@ -288,11 +288,7 @@ void AIS_8_200_55_ToMatlab(libais::Ais8_200_55 *msg, mxArray **decodedMessage,mx
 void AIS_8_366_56_ToMatlab(libais::Ais8_366_56 *msg, mxArray **decodedMessage,mxArray **fieldDescriptions);
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) { 
-    mxArray *decodedStruct=NULL;
-    mxArray *reportName=NULL;
-    mxArray *reportDescription=NULL;
-    mxArray *fieldDescriptions=NULL;
-    
+
     if(nrhs!=1) {
         mexErrMsgTxt("Wrong number of inputs.");
         return;
@@ -5703,14 +5699,14 @@ void AIS_8_1_22_ToMatlab(libais::Ais8_1_22 *msg, mxArray **decodedMessage,mxArra
 
                 //Fill in the components for this subarea
                 angleArray=mxCreateDoubleMatrix(c->angles.size(),1,mxREAL);
-                data=reinterpret_cast<double*>(mxGetData(angleArray));
+                data=mxGetDoubles(angleArray);
                 for(curItem=0;curItem<c->angles.size();curItem++) {
                     data[curItem]=c->angles[curItem];
                 }
                 mxSetFieldByNumber(reportStruct,0,1,angleArray);
                 
                 distArray=mxCreateDoubleMatrix(c->dists_m.size(),1,mxREAL);
-                data=reinterpret_cast<double*>(mxGetData(distArray));
+                data=mxGetDoubles(distArray);
                 for(curItem=0;curItem<c->dists_m.size();curItem++) {
                     data[curItem]=c->dists_m[curItem];
                 }
@@ -5739,14 +5735,14 @@ void AIS_8_1_22_ToMatlab(libais::Ais8_1_22 *msg, mxArray **decodedMessage,mxArra
 
                 //Fill in the components for this subarea
                 angleArray=mxCreateDoubleMatrix(c->angles.size(),1,mxREAL);
-                data=reinterpret_cast<double*>(mxGetData(angleArray));
+                data=mxGetDoubles(angleArray);
                 for(curItem=0;curItem<c->angles.size();curItem++) {
                     data[curItem]=c->angles[curItem];
                 }
                 mxSetFieldByNumber(reportStruct,0,1,angleArray);
                 
                 distArray=mxCreateDoubleMatrix(c->dists_m.size(),1,mxREAL);
-                data=reinterpret_cast<double*>(mxGetData(distArray));
+                data=mxGetDoubles(distArray);
                 for(curItem=0;curItem<c->dists_m.size();curItem++) {
                     data[curItem]=c->dists_m[curItem];
                 }

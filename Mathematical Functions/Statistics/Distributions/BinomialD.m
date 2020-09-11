@@ -107,7 +107,7 @@ function val=PMF(k,n,p)
 end
 
 function val=CDF(k,n,p)
-%%CDF Evaluate the cumulative distribution function of the binomial
+%%CDF Evaluate the cumulative distribution function (CDF) of the binomial
 %     distribution at a desired point.
 %
 %INPUTS: k The nonnegative integer point(s) at which the binomial CDF is to
@@ -146,17 +146,65 @@ function val=CDF(k,n,p)
     
     val(sel)=betainc(1-p,n-k(sel),k(sel)+1);
 end
+
+function k=invCDF(probVals,n,p,choice)
+%%INVCDF Evaluate the inverse sumulative distribution function (CDF) of the
+%        binomial distirbution for given probabilities.
+%
+%INPUTS: probVals The CDF probability value(s) at which the argument of the
+%          binomial CDF is to be determined. Note that 0<=prob<=1.
+%        n The number of trials of which k or fewer successes are observed.
+%        p The probability of success for the underlying Bernoulli trials.
+%          0<=p<=1.
+%   choice An optional parameter indicating what to do when probVals does
+%          not exactly equal a CDF value (which will presumably be the case
+%          most of the time). Possible values are:
+%          0 Return the k that is the closest value.
+%          1 (The default if omitted or an empty matrix is passed) return
+%            the next lower k if it exists, otherwise return 0.
+%          2 Return the next higher k if there is one, otherwise return n.
+%
+%OUTPUTS: k The set of non-negative integer points that are the inverse CDF
+%           values (number of trials) corresponding to the values in
+%           probVals.  This has the same dimensions as probVals.
+%
+%Though one can sum the PMF values until the resulting CDF values exceed
+%prob, this can be slow as n gets large and the recursive computation of
+%costs can be subject to finite precision limitations. These issues can be
+%avoided by expressing the CDF in terms of the regularized incomplete beta
+%function, which is given in [1]. The CDF can be evaluated using betainc
+%without summing all of the terms. The inverse is found using the binSearch
+%function.
+%
+%REFERENCES:
+%[1] Weisstein, Eric W. "Binomial Distribution." From MathWorld--A Wolfram
+%    Web Resource. http://mathworld.wolfram.com/BinomialDistribution.html
+%
+
+    if(nargin<3&&~isempty(choice))
+        choice=1;
+    end
+
+   f=@(idx)BinomialD.CDF(idx,n,p);
+   k=zeros(size(probVals));
+   numPts=numel(probVals);
+   
+    for i=1:numPts
+        [~,k(i)]=binSearch(f,probVals(i),choice,[0;n]);
+    end
+end
+
     
 function vals=rand(N,n,p)
 %%RAND Generate binomial random variables with a given number of trials and
 %      probability of success.
 %
-%INPUTS:    N  If N is a scalar, then rand returns an NXN matrix of random
-%              variables. If N=[M,N1] is a two-element row  vector, then
-%              rand returns an MXN1 matrix of random variables.
-%           n  The number of trials performed.
-%           p  The probability of success for the underlying Bernoulli 
-%              trials. 0<=p<=1.
+%INPUTS: N If N is a scalar, then rand returns an NXN matrix of random
+%          variables. If N=[M,N1] is a two-element row  vector, then rand
+%          returns an MXN1 matrix of random variables.
+%        n The number of trials performed.
+%        p The probability of success for the underlying Bernoulli trials.
+%          0<=p<=1.
 %
 %The algorithm used depends on the value of n*min(p,1-p). If
 %n*min(p,1-p)>=10, then the binomial, triangle, parallelogram, exponential
@@ -381,6 +429,7 @@ end
 
 end
 end
+
 %LICENSE:
 %
 %The source code is in the public domain and not licensed or under

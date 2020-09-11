@@ -40,7 +40,9 @@ function sqrtA=cholSemiDef(A,upperOrLower,method,epsVal)
 %            them and then perform a QR decomposition on sqrt(S)*U'. The
 %            result is Q is a unitary matrix and A=R'*R (because
 %            Q*Q'=identity).
-%    epsVal A positive value that affects how the algorithm works with
+%          4 This is the same as 3, except the first step is an eigenvalue
+%            decomposition instead of a QR decomposition.
+%   epsVal A positive value that affects how the algorithm works with
 %          semi-definite and non-positive definite matrices. The default
 %          for methods 0 and 1 is 0. The default for method 2 is
 %          eps(max(diag(A))). Using nonzero values in methods 0 and 1 will

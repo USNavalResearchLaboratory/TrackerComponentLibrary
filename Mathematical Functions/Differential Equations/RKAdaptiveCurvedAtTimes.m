@@ -8,25 +8,26 @@ function [xList,uList]=RKAdaptiveCurvedAtTimes(xInit,uInit,times,aDyn,uFunc,init
 %                     system. This Runge-Kutta method is used to integrate
 %                     flat-Earth models on a curved Earth.
 %
-%INPUTS: xInit The initial value of the state (scalar or vector) over which
-%              integration is being performed. The first three components
-%              of xInit must be the position in global Cartesian
-%              coordinates. The next 3 components must be the target
-%              velocity in local (flat) Cartesian coordinates. The other
-%              components are arbitrary in the local coordinate system.
-%        uInit If the basis vectors evolve according to a differential
-%              equation, as is the case when moving along geodesics on the
-%              surface of the Earth, then this is a 3X 3 matrix of vectors
-%              specifying the local coordinate axes. uInit(:,i) coresponds
-%              to the ith position component in xInit. That is xInit(i)
-%              for i from 1 to 3. On the other hand, if the basis vectors
-%              are deterministically known at all locations as a function
-%              of x and t, then an empty matrix should be passed for uInit.
+%INPUTS: xInit The xDimX1 initial value of the state over which integration
+%              is being performed. The first three components of xInit must
+%              be the position in global Cartesian coordinates. The next 3
+%              components must be the target velocity in local (flat)
+%              Cartesian coordinates. The other components are arbitrary in
+%              the local coordinate system.
+%        uInit If the orthonormal basis vectors evolve according to a
+%              differential equation, as is the case when moving along
+%              geodesics on the surface of the Earth, then this is a 3X3
+%              matrix of vectors specifying the local coordinate axes.
+%              uInit(:,i) corresponds to the ith position component in
+%              xInit. That is xInit(i) for i from 1 to 3. On the other
+%              hand, if the basis vectors are deterministically known at
+%              all locations as a function of x and t, then an empty matrix
+%              should be passed for uInit.
 %        times The times at which state estimates are desired. times(1) is
 %              the time of xInit.
 %         aDyn aDyn(xVal,curT) returns the derivative of the state taken at
 %              time curT. If this parameter is omitted, then
-%              aDyn=@(x,t)aPoly(x,t,3); will be used. This assumes that the
+%              aDyn=@(x,t)aPoly(x,3); will be used. This assumes that the
 %              state is in 3D and a simple, position, velocity, etc. motion
 %              model is used.
 %        uFunc If uInit is not empty, then uFunc is a function handle of
@@ -111,12 +112,12 @@ if(nargin<5||isempty(uFunc))
     if(isempty(uInit))
         uFunc=@(x,t)getENUAxes(Cart2Ellipse(x(1:3)));
     else%If the basis vectors evolve.
-        uFunc=@(u,x,t)uDotEllipsoid(u,x,t);
+        uFunc=@(u,x,t)uDotEllipsoid(u,x);
     end
 end
 
 if(nargin<4)
-    aDyn=@(x,t)aPoly(x,t,3);
+    aDyn=@(x,t)aPoly(x,3);
 end
 
 xDim=length(xInit);

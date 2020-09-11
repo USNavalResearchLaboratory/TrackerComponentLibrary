@@ -1,13 +1,13 @@
 function [xPred,PPred]=stochTaylorCubPred(xPrev,PPrev,aFun,BFun,t,deltaT,numSteps,isStrong,algorithm,simplified,xi,w)
 %%STOCHTAYLORCUBPRED Given a (multivariate) Gaussian prior distribution
 %           with mean xPrev and covariance matrix PPrev under a continuous
-%           time dynamic model under Itô calculus of the form:
+%           time dynamic model under Itï¿½ calculus of the form:
 %           dx=aFun(x,t)dt+BFun(x,t)*dw
 %           where dw is the differential of a Wiener process and aFun and
 %           BFun are drift and diffusion functions, approximate the mean
 %           and covariance matrix of the distribution predicted forward
 %           deltaT. This is done by computing the moments of a strong or
-%           weak stochastic Itô-Taylor expansion, possibly taking more than
+%           weak stochastic Itï¿½-Taylor expansion, possibly taking more than
 %           one step (using the previous expansion as the prior to the next
 %           step).
 %
@@ -33,7 +33,7 @@ function [xPred,PPred]=stochTaylorCubPred(xPrev,PPrev,aFun,BFun,t,deltaT,numStep
 %       deltaT The time increment over which the prediction is taken.
 %     numSteps The number of steps to take for the prediction. The default
 %              if omitted or an empty matrix is passed is 1.
-%     isStrong A parameter indicating whether a strong Itô-Taylor expansion
+%     isStrong A parameter indicating whether a strong Itï¿½-Taylor expansion
 %              step should be take (true) or a weak one (false). The
 %              default if omitted or an empty matrix is passed is true.
 %    algorithm A parameter specifying the algorithm to use. The meaning of
@@ -56,7 +56,7 @@ function [xPred,PPred]=stochTaylorCubPred(xPrev,PPrev,aFun,BFun,t,deltaT,numStep
 %                Equation 3.16 of Chapter 10.3 of [1] provides the solution
 %                under Stratonovich calculus. However, one can modify
 %                Equation 3.3 in the same manner to obtain a solution under
-%                Itô calculus, which is what is done here. This requires
+%                Itï¿½ calculus, which is what is done here. This requires
 %                pBpy and that d=m. Given diagonal noise, the result should
 %                be the same as algorithm 3.
 %              5 Use the strong order 1.5 Taylor method for autonomous
@@ -103,7 +103,8 @@ function [xPred,PPred]=stochTaylorCubPred(xPrev,PPrev,aFun,BFun,t,deltaT,numStep
 %The notion of using cubature integration to solve this problem is
 %described in [2], though only an expansion for the special case with
 %autonomous additive noise is considered. The implementation here is a
-%generalization to many different Itô-taylor expansions given in [1].
+%generalization to many different Itï¿½-taylor expansions given in [1].
+%Specific derivations are given in [3].
 %
 %EXAMPLE:
 %We demonstrate the consistency of mean and covariance produced by the
@@ -127,8 +128,8 @@ function [xPred,PPred]=stochTaylorCubPred(xPrev,PPrev,aFun,BFun,t,deltaT,numStep
 % [xPredT,PPredT]=BlackScholesPredGaussPrior(xPrev,PPrev,a,D,deltaT);
 % 
 % t=0;
-% aFun=@(x,t)aGeoBrownian(x,t,a);
-% BFun=@(x,t)DGeoBrownian(x,t,D);
+% aFun=@(x,t)aGeoBrownian(x,a);
+% BFun=@(x,t)DGeoBrownian(x,D);
 % 
 % algorithm=0;
 % [xPred,PPred]=stochTaylorCubPred(xPrev,PPrev,aFun,BFun,t,deltaT,numSteps,isStrong,algorithm,simplified);
@@ -152,6 +153,8 @@ function [xPred,PPred]=stochTaylorCubPred(xPrev,PPrev,aFun,BFun,t,deltaT,numStep
 %    for continous-discrete systems: Theory and simulations," IEEE
 %    Transactions on Signal Processing, vol. 58, no. 10, pp. 4977-4993,
 %    Oct. 2010.
+%[3] D. F. Crouse, "Itï¿½-Taylor expansion moments for continuous-time state
+%    propagation," NRL Memo, 2019.
 %
 %December 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

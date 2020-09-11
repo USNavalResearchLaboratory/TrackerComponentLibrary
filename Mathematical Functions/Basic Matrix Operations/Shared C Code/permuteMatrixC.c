@@ -45,7 +45,7 @@ void permuteMatrixC(const size_t S,const size_t *nVals, size_t * restrict nValsN
  *          stored. This cannot be the same as the input C.
  *        C A pointer to the original matrix that is to be permuted.
  *          Elements are stored by columns, then rows, etc, as in Matlab.
- *  CElSide The number of bytes in each element of C and CPermMat.
+ *  CElSize The number of bytes in each element of C and CPermMat.
  * tempBuffer A buffer of at least permuteMatrixCBufferSize(S) bytes to
  *          hold temporary results.
  *    order A length S array holding the values from 0 to S-1 with no

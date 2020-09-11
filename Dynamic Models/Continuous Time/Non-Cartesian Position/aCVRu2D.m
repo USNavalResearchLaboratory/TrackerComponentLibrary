@@ -1,4 +1,4 @@
-function [aVal,aJacob,aHess,papt]=aCVRu2D(x,t)
+function [aVal,aJacob,aHess,papt]=aCVRu2D(x)
 %%ACVRU2D The drift function for a continuous-time motion model where the
 %         target state is given in 2D range and a single directionc cosine 
 %         coordinates and the motion is constant velocity in 2D Cartesian
@@ -8,9 +8,6 @@ function [aVal,aJacob,aHess,papt]=aCVRu2D(x,t)
 %          [r;u;rDot;uDot]. it is required that abs(u)<1. The target is
 %          assumed to be in front of the sensor (hence the lack of
 %          explicitly providing v).
-%        t An unused time component so that aCVRu2D can be used with
-%          Runge-Kutta methods that expect the function to take two
-%          parameters.
 %
 %OUTPUTS: aVal The 4XN set of time-derivatives of the N state vectors
 %              under the Cartesian linear motion model in r-u coordinates.
@@ -55,7 +52,7 @@ function [aVal,aJacob,aHess,papt]=aCVRu2D(x,t)
 % xEndCart=F*xInitCart;
 % RelTol=1e-10;
 % AbsTol=1e-13;
-% xStepsRu2D=RKAdaptiveOverRange(xInitRu2D,[0;T],@(x,t)aCVRu2D(x,t),0.1,0,[],[],RelTol,AbsTol);
+% xStepsRu2D=RKAdaptiveOverRange(xInitRu2D,[0;T],@(x,t)aCVRu2D(x),0.1,0,[],[],RelTol,AbsTol);
 % xEndRu2DRK=xStepsRu2D(:,end);
 % xEndRu2DExact=stateCart2Ru2D(xEndCart);
 % max(abs(xEndRu2DRK-xEndRu2DExact))

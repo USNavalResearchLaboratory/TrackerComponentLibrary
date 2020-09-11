@@ -44,19 +44,19 @@ function [x,t]=randLinTrajConstEnds(x0,x2,deltaT,q0,order,N,numTraj,FFun,QFun)
 %
 %Consider a process at points 0, 1, and 2, where we are given the value at
 %time x0. The transition models are:
-%x1=F0*x0+w1
-%x2=F1*x1+w2
-%Where x0 is given (deterministic) and w1 and w2 are independent zero-mean
-%Gaussian random variables with covariance matrices Q1 and Q1.
+%x1=F0*x0+w0
+%x2=F1*x1+w1
+%Where x0 is given (deterministic) and w0 and w1 are independent zero-mean
+%Gaussian random variables with covariance matrices Q0 and Q1.
 %x1 and x2 are jointly normal with mean mu and covariance matrix Sigma:
 %mu=[x1Pred; = [F0*x0
 %    x2Pred]    F1*F0*x0];
-%Sigma=[   Q1,        Q1*F1'; =[Pxx, Pxz;
-%       F1*Q1,  F1*Q1*F1'+Q2]   Pxz',Pzz];
+%Sigma=[   Q0,        Q0*F1'; =[Pxx, Pxz;
+%       F1*Q0,  F1*Q0*F1'+Q1]   Pxz',Pzz];
 %When given the value of x2, the conditional distribution of x1|x0,x2 is
 %the same as the Kalman filter update taking the measurement covariance
-%matrix to be Q2, the measurement matrix H to be F1, the prior state to be
-%F0*x0, and the covariance of the prior state to be Q1. Thus, as derived,
+%matrix to be Q1, the measurement matrix H to be F1, the prior state to be
+%F0*x0, and the covariance of the prior state to be Q0. Thus, as derived,
 %for example, in [Ch. 5,1], [2], the posterior distribution of x1 is
 %Gaussian with mean and covariance matrix
 %x1Bar=x1Pred+Pxz/Pzz*(x2-x2Pred)  Px1=Pxx-Pxz*inv(Pzz)*Pxz';

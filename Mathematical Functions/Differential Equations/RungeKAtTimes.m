@@ -59,8 +59,7 @@ function xList=RungeKAtTimes(xInit,theTimes,f,deltaTMax,order,solutionChoice)
             deltaT=deltaTStep/numSteps;
         end
         
-        xStep=RungeKSteps(xList(:,curTime-1),theTimes(curTime-1),f,deltaT,numSteps,order,solutionChoice);        
-        xList(:,curTime)=xStep(:,end);
+        xList(:,curTime)=RungeKSteps(xList(:,curTime-1),theTimes(curTime-1),f,deltaT,numSteps,order,solutionChoice,true);        
     end
 end
 

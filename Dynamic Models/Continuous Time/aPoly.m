@@ -1,4 +1,4 @@
-function [aVal,aJacob,aHess,papt]=aPoly(x,t,numDim)
+function [aVal,aJacob,aHess,papt]=aPoly(x,numDim)
 %%APOLY The drift function for a linear continuous-time motion model with a
 %       given order in a specified number of Cartesian dimensions. The
 %       order of the linear filter, that is the number of moments of
@@ -7,8 +7,6 @@ function [aVal,aJacob,aHess,papt]=aPoly(x,t,numDim)
 %INPUTS: x The xDimXN state vector of N targets in the order of
 %          [position;velocity;acceleration;etc] for however many
 %          derivatives of position there are.
-%        t An unused time component so that aPoly can be used with Runge-
-%          Kutta methods that expect the function to take two parameters.
 %   numDim The number of dimensions of the simulation problem. If the
 %          numDim parameter is omitted, then numDim=3 (3D motion) is
 %          assumed. The dimensionality of the state must be an integer
@@ -33,18 +31,17 @@ function [aVal,aJacob,aHess,papt]=aPoly(x,t,numDim)
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<3)
+if(nargin<2)
     numDim=3; 
 end
 
 numTar=size(x,2);
+xDim=size(x,1);
 
-aVal=[x((numDim+1):end,:);zeros(numDim,numTar)];
+aVal=[x((numDim+1):(xDim),:);zeros(numDim,numTar)];
 
 if(nargout>1)
-    xDim=size(x,1);
-
-    aJacob=[zeros(xDim,numDim),[eye(xDim-numDim,xDim-numDim);zeros(numDim,xDim-numDim)]];
+    aJacob=[zeros(xDim,numDim),[eye(xDim-numDim,xDim-numDim);zeros(numDim,xDim-numDim)],zeros(xDim,numDim)];
 
     if(nargout>2)
         aHess=zeros(xDim,xDim,xDim);

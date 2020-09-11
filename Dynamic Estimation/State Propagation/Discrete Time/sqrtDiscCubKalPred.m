@@ -1,42 +1,40 @@
 function [xPred, SPred, xPropCenPoints]=sqrtDiscCubKalPred(xPrev,SPrev,f,SQ,xi,w,stateDiffTrans,stateAvgFun,stateTrans)
-%%SQRTDISCCUBKALPRED  Perform the discrete-time prediction step that comes  
-%                     with the square root implementation of the cubature
-%                     Kalman filter with additive process noise.
+%%SQRTDISCCUBKALPRED Perform the discrete-time prediction step that comes  
+%                    with the square root implementation of the cubature
+%                    Kalman filter with additive process noise.
 %
-%INPUTS:    xPrev   The xDim X 1 state estimate at the previous time-step.
-%           SPrev   The xDim X xDim lower-triangular square root of the 
-%                   state covariance matrix at the previous time-step.
-%           f       A function handle for the state transition function
-%                   that takes the state as its parameter.
-%           SQ      The xDimX xDim lower-triangular square root of the 
-%                   process noise covariance matrix.
-%           xi      An xDim X numCubPoints matrix of cubature points.        
-%           w       A numCubPoints X 1 vector of the weights associated
-%                   with the cubature points. These must be all positive.
-% stateDiffTrans    An optional function handle that takes an xDimXN matrix
-%                   of N differences between states estimates and
-%                   transforms them however might be necessary. For
-%                   example, a state continaing angular components will
-%                   generally need differences between angular components
-%                   wrapped to the range +/-pi.
-%    stateAvgFun    An optional function that given an xDimXN matrix of N
-%                   state estimates and an NX1 vector of weights, provides
-%                   the weighted average of the state estimates. This is
-%                   necessary if, for example, states with angular
-%                   components are averaged.
-%     stateTrans    An optional function that takes a state estimate and
-%                   transforms it. This is useful if one wishes the
-%                   elements of the state to be bound to a certain domain.
-%                   For example, if an element of the state is an angle,
-%                   one should generally want to bind it to the region
-%                   +/-pi. This is not applied to the output of f.
+%INPUTS: xPrev The xDim X 1 state estimate at the previous time-step.
+%        SPrev The xDim X xDim lower-triangular square root of the state
+%              covariance matrix at the previous time-step.
+%            f A function handle for the state transition function that
+%              takes the state as its parameter.
+%           SQ The xDimX xDim lower-triangular square root of the process
+%              noise covariance matrix.
+%           xi An xDim X numCubPoints matrix of cubature points.        
+%            w A numCubPoints X 1 vector of the weights associated with the
+%              cubature points. These must be all positive.
+% stateDiffTrans An optional function handle that takes an xDimXN matrix of
+%              N differences between states estimates and transforms them
+%              however might be necessary. For example, a state continaing
+%              angular components will generally need differences between
+%              angular components wrapped to the range +/-pi.
+%  stateAvgFun An optional function that given an xDimXN matrix of N state
+%              estimates and an NX1 vector of weights, provides the
+%              weighted average of the state estimates. This is necessary
+%              if, for example, states with angular components are
+%              averaged.
+%   stateTrans An optional function that takes a state estimate and
+%              transforms it. This is useful if one wishes the elements of
+%              the state to be bound to a certain domain. For example, if
+%              an element of the state is an angle, one should generally
+%              want to bind it to the region +/-pi. This is not applied to
+%              the output of f.
 %
-%OUTPUTS:   xPred   The xDim X 1 predicted state estimate.
-%           SPred   The xDim X xDim lower-triangular square root of the
-%                   predicted state covariance estimate.
-%  xPropCenPoints   The centered propagated cubature state points. This
-%                   matrix is needed if the backwards smoothing step is
-%                   being applied.
+%OUTPUTS: xPred The xDim X 1 predicted state estimate.
+%         SPred The xDim X xDim lower-triangular square root of the
+%               predicted state covariance estimate.
+% xPropCenPoints The centered propagated cubature state points. This matrix
+%               is needed if the backwards smoothing step is being applied.
 %
 %The mathematics behind the function sqrtDiscCubKalPred are described in 
 %more detail in Section IX of [1] and in [2]. The use of stateDiffTrans,

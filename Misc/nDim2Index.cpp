@@ -64,7 +64,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     
     //If an empty matrix is passed, return an empty matrix.
     if(mxIsEmpty(prhs[1])) {
-        plhs[0]=mxCreateDoubleMatrix(numDim,0,mxREAL);
+        plhs[0]=mxCreateDoubleMatrix(0,0,mxREAL);
         return;
     }
     
@@ -81,8 +81,8 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     checkRealDoubleArray(prhs[0]);
     checkRealDoubleArray(prhs[1]);
     
-    dims=mxGetPr(prhs[0]);
-    indicesIn=mxGetPr(prhs[1]);
+    dims=mxGetDoubles(prhs[0]);
+    indicesIn=mxGetDoubles(prhs[1]);
 
     multIdx=reinterpret_cast<double*>(mxMalloc(numDim*sizeof(double)));
     multIdx[0]=1;
@@ -112,7 +112,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     }
     
     retMat=mxCreateDoubleMatrix(numIdx,1,mxREAL);
-    idx=mxGetPr(retMat);
+    idx=mxGetDoubles(retMat);
     
     for(j=0;j<numIdx;j++) {
         idx[j]=1;

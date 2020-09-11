@@ -1,20 +1,24 @@
-function clippedPolygon=clipPolygonSH2D(polygon2Clip,convexClipPolygon)
+function clippedPolygon=clipPolygonSH2D(polygon2Clip,convexClipPolygon,makeFirstEqualLast)
 %%CLIPPOLYGONSH2D Clip a non-self-intersecting polygon to a region
 %                 specified by a convex polygon using a 2D implementation
 %                 of the Sutherland-Hodgman algorithm. If the polygon being
 %                 clipped was concave at the vertices outside of the
 %                 clipping region, the resulting clipped polygon will have
 %                 overlapping edges on the boundary of the region rather
-%                 than being slip into multiple separate polygons.
+%                 than being split into multiple separate polygons.
 %
 %INPUTS: polygon2Clip A 2XN list of N>=3 vertices making up the polygon of
 %                     the form [x;y]. It does not matter whether vertices
 %                     are repeated.
 %   convexClipPolygon A 2XNClip list of NClip>=3 vertices making up the
 %                     convex clipping polygon. Vertices should not be
-%                     repeated. The first vertex should not be repeated on
-%                     the end. The vertices should be in a counterclockwise
+%                     repeated. The first vertex must not be repeated on
+%                     the end. The vertices must be in a counterclockwise
 %                     order.
+%  makeFirstEqualLast If this is true, then the last element in the clipped
+%                     polygon will be guaranteed to equal the first
+%                     element, thus fully closing the polygon. The default
+%                     if omitted or an empty matrix is passed is false.
 %
 %OUTPUTS: clippedPolygon The polygon polygon2Clip clipped to the convex
 %                        region specified by convexClipPolygon. If
@@ -27,9 +31,9 @@ function clippedPolygon=clipPolygonSH2D(polygon2Clip,convexClipPolygon)
 %authors focus a lot of its attention on clipping polyhedra to planes. A
 %quick search online will yield many result explaining how it works in 2D
 %in a more intuitive manner. The original paper also includes a technique
-%for diving a polygon into multiple parts when it is split by the clipping
-%region rather than just having coincident edges on the edge of the
-%clipping region. 
+%for dividing a polygon into multiple parts when it is split by the
+%clipping region rather than just having coincident edges on the edge of
+%the clipping region. 
 %
 %The Sutherland-Hodgman algorithm requires that the vertices in the
 %clipping polygon be in counterclockwise order.
@@ -45,6 +49,10 @@ function clippedPolygon=clipPolygonSH2D(polygon2Clip,convexClipPolygon)
 %
 %December 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+    if(nargin<3||isempty(makeFirstEqualLast))
+        makeFirstEqualLast=true;
+    end
 
     %The clipping polygon must have its vertices going in a
     %counterclockwise order. Check whether that is the case.
@@ -66,9 +74,11 @@ function clippedPolygon=clipPolygonSH2D(polygon2Clip,convexClipPolygon)
         numVertices=size(curPolygon,2);
         
         %The maximum possible number of vertices in the clipped polygon.
-        maxClippedVertices=ceil((3/2)*numVertices);
+        maxClippedVertices=ceil((3/2)*numVertices)+(makeFirstEqualLast>0);
         clippedPolygonNew=zeros(2,maxClippedVertices);
-        numVerticesNew=0;%Number of vertices that have been added to clippedPolygonNew
+        
+        %Number of vertices that have been added to clippedPolygonNew
+        numVerticesNew=0;
         prevVertex=curPolygon(:,end);        
         for curV=1:numVertices
             curVertex=curPolygon(:,curV);
@@ -83,6 +93,7 @@ function clippedPolygon=clipPolygonSH2D(polygon2Clip,convexClipPolygon)
                 if(~vertexIsInsideClipEdge(prevVertex,prevClipVertex,curClipEdge))
                     numVerticesNew=numVerticesNew+1;
                     clippedPolygonNew(:,numVerticesNew)=twoLineIntersectionPoint2D([prevVertex,curVertex],[curClipVertex,prevClipVertex]);
+
                 end
                 
                 numVerticesNew=numVerticesNew+1;
@@ -104,10 +115,17 @@ function clippedPolygon=clipPolygonSH2D(polygon2Clip,convexClipPolygon)
         
         %The object is not in the viewing area at all.
         if(isempty(curPolygon))
-            break;
+            clippedPolygon=[];
+            return
         end
         
         prevClipVertex=curClipVertex;
+    end
+    
+    if(makeFirstEqualLast)
+        if(any(curPolygon(:,1)~=curPolygon(:,end)))
+            curPolygon(:,end+1)=curPolygon(:,1);
+        end
     end
     
     clippedPolygon=curPolygon;

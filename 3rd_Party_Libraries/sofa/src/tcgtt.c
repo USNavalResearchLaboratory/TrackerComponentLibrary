@@ -37,11 +37,11 @@ int iauTcgtt(double tcg1, double tcg2, double *tt1, double *tt2)
 **
 **     IAU 2000 Resolution B1.9
 **
-**  This revision:  2013 June 18
+**  This revision:  2019 June 20
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
 
@@ -50,7 +50,7 @@ int iauTcgtt(double tcg1, double tcg2, double *tt1, double *tt2)
 
 
 /* Result, safeguarding precision. */
-   if ( tcg1 > tcg2 ) {
+   if ( fabs(tcg1) > fabs(tcg2) ) {
       *tt1 = tcg1;
       *tt2 = tcg2 - ( ( tcg1 - DJM0 ) + ( tcg2 - t77t ) ) * ELG;
    } else {
@@ -63,7 +63,7 @@ int iauTcgtt(double tcg1, double tcg2, double *tt1, double *tt2)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

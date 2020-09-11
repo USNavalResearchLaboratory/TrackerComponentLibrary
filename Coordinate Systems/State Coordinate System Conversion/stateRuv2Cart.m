@@ -6,7 +6,7 @@ function CartStates=stateRuv2Cart(x)
 %               [r;u;v;rDot;uDot;vDot;rDDot;uDDot;vDDot],
 %               where two Ds indicate a second derivative with respect to
 %               time. In Cartesian coordinates, the converted state has the
-%               form [x;yz;;xDot;yDot;zDot;xDDot;yDDot;zDDot]. The target
+%               form [x;y;z;xDot;yDot;zDot;xDDot;yDDot;zDDot]. The target
 %               is assumed to be in front of the radar.
 %
 %INPUTS: x The 6XN or 9XN set of r-u-v state vectors consisting of
@@ -16,8 +16,9 @@ function CartStates=stateRuv2Cart(x)
 %OUTPUTS: CartStates The 6XN or 9XN set of target states given in Cartesian
 %                    coordinates.
 %
-%The relationship between the Cartesian and r-u-v coordinates systems
-%is derived in the comments to the function aCVRuv.
+%The derivation is given in "Basic Linear Cartesian Dynamic Models in Local
+%Coordinates" by David F. Crouse. The function aCVRuv is an
+%implementation of a related linear dynamic model.
 %
 %EXAMPLE:
 %Here we note that the results are consistent with the inverse function:

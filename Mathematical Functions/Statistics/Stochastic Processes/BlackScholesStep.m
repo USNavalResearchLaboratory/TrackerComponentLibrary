@@ -41,8 +41,8 @@ function xT=BlackScholesStep(x,a,D,deltaT)
 % xMC=zeros(d,numRuns);
 % numSimSteps=500;
 % deltaTSim=deltaT/numSimSteps;
-% aFun=@(x,t)aGeoBrownian(x,t,a);
-% BFun=@(x,t)DGeoBrownian(x,t,D);
+% aFun=@(x,t)aGeoBrownian(x,a);
+% BFun=@(x,t)DGeoBrownian(x,D);
 % parfor curRun=1:numRuns
 %     x(:,curRun)=BlackScholesStep(x0,a,D,deltaT);
 %     

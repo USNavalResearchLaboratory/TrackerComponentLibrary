@@ -1,4 +1,4 @@
-**Tracker Component Library Release 4.0, January 2019**
+**Tracker Component Library Release 4.5, September 2019**
 https://github.com/USNavalResearchLaboratory/TrackerComponentLibrary
 
 A paper describing a number of features of the library is<br>
@@ -6,11 +6,12 @@ D. F. Crouse, "The Tracker Component Library: Free Routines for Rapid
 Prototyping," IEEE Aerospace and Electronic Systems Magazine, vol. 32, no.
 5, pp. 18-27, May. 2017.
 
-These are the release notes for the version 4.0 of the Tracker Component
+These are the release notes for the version 4.5 of the Tracker Component
 Library. The Tracker Component Library is a collection of Matlab routines
 for simulating and tracking targets in various scenarios. Due to the
 complexity of the target tracking problem, a great many routines can find
 use in other areas including combinatorics, astronomy, and statistics.
+Version 4.5 is currently the last planned release.
 
 Making this code available and open source is in the spirit of OMB M-16-21,
 which can be viewed online at:
@@ -25,6 +26,8 @@ supplement that is only available to the U.S. Government Agencies and their
 contractors.The limited distribution supplement can be downloaded by
 authorized individuals from di2e.net at:
 https://bitbucket.di2e.net/projects/TCL
+Note that access to the Bitbucket portion of di2e.net is not automatic and
+has to be requested after logging into di2e.net for the first time.
 
 Those looking to get a quick idea of a very simple end-to-end tracking
 algorithm (track initiation, data association, maintenance, and
@@ -45,85 +48,28 @@ running the CompileCLibraries function. Precompiled code is not distributed
 with the library. Note that a C/C++ compiler supported by Matlab must be
 installed. See below for comments regarding compilation.
 
-NOTABLE CHANGES SINCE VERSION 3.5
+NOTABLE CHANGES SINCE VERSION 4.0
 
-- Routines related to stochastic calculus have been changed and new ones
-  have been added. They are in:
-  Mathematical Functions/Statistics/Stochastic Processes/
-- New continuous-time state propagation models based on Itô-Taylor
-  expansions have been added to:
-  Dynamic Estimation/State Propagation/Continuous Time/
-- All continuous-time dynamic models in the library have been updated to
-  work with these (and bugs fixed) and some new dynamic models have been
-  added.
-- Functions splitting the measurement prediction and update steps for most
-  filters have been added. This makes hypothesis generation faster,
-  particularly with cubature filters.
-- Functions related to robust estimation have been added to:
-  Mathematical Functions/Statistics/Robust Statistics/
-  One can, for example, fit lines to data corrupted with arbitrary bad
-  measurements.
-- Added many more combinatoric functions and updated existing ones. See
-  Mathematical Functions/Combinatorics/
-- Joint matrix diagonalization algorithms (useful for independent component
-  analysis) have  been added. See
-  Mathematical Functions/Basic Matrix Operations/Joint Matrix Diagonalization/
-- Misc. statistical functions. For example, unbiased estimates of higher-
-  order moments and cumulants are difficult to derive, but can be found
-  using the unbiasedMomentCumulant function.
-
-NOTABLE CHANGES SINCE VERSION 3.01
-
-- More compiled versions of 2D and 3D assignment code are available and the
-  C implementations have been more modularized to make then simpler to
-  remove from the Matlab parts of the library and use elsewhere.
-- Sped up the dense interior point linear programming method by a large
-  factor compared to the textbook implementation.
-- A few new optimization methods.
-- Improved the probability distributions. Added new ones, such as the
-  wrapped normal distribution, and added entropy to many of them.
-- For the many functions that have no Matlab implementation and must be
-  compiled to be used (mostly those using third-party libraries), shell .m
-  files have been added to the library, so that one can type "help" and the
-  name of the function to get information on how to use it. Also, if the
-  function is called without having compiled it, then an error alerts the
-  user to the need to compiled the function.
-- Bug fixes and small changes.
-- Updated third-party code. Removed reliance on third-party functions for
-  line searches.
-
-NOTABLE CHANGES SINCE VERSION 3.0
-
-- Minor corrections.
-- Minor modifications to files to support the final release of the limited
-  distribution supplement to the library.
-- New 2D and 3D assignment algorithms, among other additions.
-
-NOTABLE CHANGES SINCE VERSION 2.5
-
-- Many new functions have been added.
-- Many corrections have been made and a number of functions in different
-  areas have been added or made more versatile/ stable.
-- A number of routines related to signal processing have been added to the
-  library in the Mathematical Functions/Signal Processing folder.
-- Less reliance on third-party libraries and compiled code. NASA's SPICE
-  library has been removed and the function readJPLEphem can be used to
-  read in NASA JPL's ephemerides without compiling anything. Additionally,
-  the directGeodeticProb function has been rewritten in Matlab and does not
-  use GeographicLib, though the GeographicLib library is still used to
-  solve the indirect geodetic problem.
-- Spherical harmonic synthesis has been simplified and now works with
-  vector coefficients and complex coefficients. Additionally, in addition
-  to obtaining a potential and a gradient, one can obtain a Hessian matrix,
-  opening the door to simulation of gravity gradiometer measurements.
-  Fitting of low to moderate order spherical harmonic coefficients to
-  measured data is now possible with the fitSpherHarmonics function.
-- Arbitrary-order multivariate B-spline fitting, evaluation,
-  differentiation, and integration has been added. 
-- Linear dynamic models expressed in non-Cartesian coordinate systems have
-  been added along with conversions of states between coordinate systems.
-  See /Dynamic Models/Continuous Time/Non-Cartesian Position/ and
-  /Coordinate Systems/State Coordinate System Conversion/
+- Added numerous new routines related to navigation. Existing routines have
+  been updated. See the Navigation folder. Dependence on GeographicLib has
+  been removed. 
+- Added specialized assignment routines: inverse 2D assignment
+  (invAssign2D), 2D semi-assignment (semiAssign2D), lexicographic
+  bottleneck assignment (lexBottleneckAssign), and k-cardinality 2D
+  assignment (kCard2DAssign).
+- Added handling stochastic differential equations with jumps. See
+  strongStochTaylorStepJump, strongRungeKStepJump, among others in
+  Mathematical Functions/Statistics/Stochastic Processes. Some
+  algorithms are demoed in demoMertonModel
+- Added functions for the design of aberration-free lenses in
+  Atmosphere and Refraction/Design of Lenses/
+- Additional probability distributions.
+- Additional and improved combinatorial routines.
+- Expanded functions related to Gaussian mixture reduction in the
+  "Clustering and Mixture Reduction" folder.
+- Added the Wigner-Ville transform.
+- Misc. other functions, such as ellipsOfEllipsSum for finding the minimum
+  ellipsoid enclosing the Minkowski sum of two ellipsoids.
 
 COMPILED CODE:
 
@@ -257,7 +203,7 @@ https://visibleearth.nasa.gov/view.php?id=57735
 Place the file in Misc/data . This is used as the default map to show on
 the Earth given by the plotMapOnEllipsoid function.
 
-January 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.<br>
+September 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.<br>
 (UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 LICENSE:

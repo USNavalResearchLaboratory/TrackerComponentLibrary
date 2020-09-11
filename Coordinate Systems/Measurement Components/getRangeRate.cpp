@@ -77,7 +77,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     mxArray *retMat;
     double *retData;
     //These two could be declared const, but that would just require extra
-    //typecasting, since the return value of mxGetData for the inputs is
+    //typecasting, since the return value of mxGetDoubles for the inputs is
     //not const and would have to be typecase, or these would have to be
     //typecast.
     double zeroVector[6]={0,0,0,0,0,0};
@@ -102,7 +102,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     }
     
     checkRealDoubleArray(prhs[0]);
-    points=reinterpret_cast<double*>(mxGetData(prhs[0]));
+    points=mxGetDoubles(prhs[0]);
     
     if(nrhs<2||mxIsEmpty(prhs[1])) {
         useHalfRange=true;
@@ -124,7 +124,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             return;
         }
 
-        zTx=reinterpret_cast<double*>(mxGetData(prhs[2]));
+        zTx=mxGetDoubles(prhs[2]);
         if(numVecs==N) {
             zTxOffset=numRows;
         }
@@ -145,7 +145,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             return;
         }
 
-        zRx=reinterpret_cast<double*>(mxGetData(prhs[3]));
+        zRx=mxGetDoubles(prhs[3]);
 
         if(numVecs==N) {
             zRxOffset=numRows;
@@ -153,7 +153,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     }
 
     retMat=mxCreateDoubleMatrix(1,N,mxREAL);
-    retData=reinterpret_cast<double*>(mxGetData(retMat));
+    retData=mxGetDoubles(retMat);
     
     //Convert each of the measurements
     if(xTarOffset==4) {//If it is in 2D

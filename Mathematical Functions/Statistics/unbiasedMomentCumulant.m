@@ -4,8 +4,8 @@ function [val,retData]=unbiasedMomentCumulant(x,r,isMoment,algorithm,retData)
 %           statistic), which is E{(x-mu)^r}, where E is the expected value
 %           operation, when given only samples of x and not knowing the
 %           mean mu. Alternatively, one could compute an unbiased estimate
-%           of the the rth order cumulant (k statistic). Note that for r=0,
-%           if a moment is desired, then the mean is returned, rather than
+%           of the rth order cumulant (k statistic). Note that for r=0, if
+%           a moment is desired, then the mean is returned, rather than
 %           returning 0. If r is a vector, one can estimate generalized h
 %           statistics, which are an esitmate of
 %           E{(x-mu)^r(1)}*E{(x-mu)^r(2)}*...*E{(x-mu)^r(v)} However,

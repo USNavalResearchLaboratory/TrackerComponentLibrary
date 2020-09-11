@@ -3,7 +3,7 @@
  *                  non-self-intersecting 2D polygon given its vertices.
  *                  More comments on the implementation are given in the
  *                  Matlab implementation signedPolygonArea.m and its C++
- *                  version signedPolygonAreaCPP.cpp, which calls this
+ *                  version signedPolygonArea.cpp, which calls this
  *                  subroutine.
  *
  *December 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.

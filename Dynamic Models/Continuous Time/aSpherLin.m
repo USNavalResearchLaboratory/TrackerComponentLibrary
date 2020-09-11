@@ -1,4 +1,4 @@
-function [aVal,aJacob,aHess,papt]=aSpherLin(x,t)
+function [aVal,aJacob,aHess,papt]=aSpherLin(x)
 %%ASPHERLIN The drift function for a 3D continous-time constant direction
 %           and speed dynamic model where the target state is given as
 %           position, and a velocity that is given as azimuth (phi),
@@ -11,9 +11,6 @@ function [aVal,aJacob,aHess,papt]=aSpherLin(x,t)
 %          system type 0 in the spher2Cart: Azimuth is measured 
 %          counterclockwise from the x-axis in the x-y plane. Elevation
 %          is measured up from the x-y plane (towards the z-axis).
-%        t An unused time component is so that aPolar2DCV can be used with
-%          Runge-Kutta methods that expect the function to take two
-%          parameters.
 %
 %OUTPUTS: aVal The 6X1 time-derivative of the state under the constant
 %              heading motion model.
@@ -28,7 +25,7 @@ function [aVal,aJacob,aHess,papt]=aSpherLin(x,t)
 %
 %The model here is model 1 in [1]. The drift function corresponding to that
 %used in [1] just adds the noise component to the last 3 terms and thus one
-%could use DPoly(zeros(6,1),[],q0,1,3).
+%could use DPoly(zeros(6,1),q0,1,3).
 %
 %REFERENCES:
 %[1] D. Laneuville, "New models for 3D maneuvering target tracking," in New

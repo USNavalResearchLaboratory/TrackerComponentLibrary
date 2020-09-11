@@ -1,7 +1,7 @@
 function [x,fVal,exitCode]=divRectOpt(f,lowerBounds,upperBounds,options)
 %%DIVRECTOPT The dividing rectangles optimization algorithm. This is a
 %           derivative-free global optimization algorithm where the
-%           multidimensional search space can be bounded. This algorrithm
+%           multidimensional search space can be bounded. This algorithm
 %           tries to minimize a given function of a vector parameter.
 %
 %INPUTS: f A handle to the function over which the minimization is to be
@@ -145,7 +145,7 @@ function [x,fVal,exitCode]=divRectOpt(f,lowerBounds,upperBounds,options)
 %[2] J. M. Gablonsky and C. T. Kelley, "A locally-biased form of the
 %    DIRECT algorithm," Journal of Global Optimization, vol. 21, no. 1,
 %    pp. 27-37, Sep. 2001.
-%[3] M. Bjökman and K. Holmström, "Global optimization using the DIRECT
+%[3] M. Bjï¿½kman and K. Holmstrï¿½m, "Global optimization using the DIRECT
 %    algorithm in Matlab," The Electronic International Journal Advanced
 %    Modeling and Optimization, vol. 1, no. 2, pp. 17-37, 1999.
 %    [Online]. Available: http://camo.ici.ro/journal/v1n2.htm

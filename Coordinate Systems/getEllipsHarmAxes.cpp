@@ -64,7 +64,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     }
     
     checkRealDoubleArray(prhs[0]);
-    pointHarmon=reinterpret_cast<double*>(mxGetData(prhs[0]));
+    pointHarmon=mxGetDoubles(prhs[0]);
     
     //If the linear eccentricity is not given, then use the WGS-84 value
     //from the Constants class.
@@ -96,8 +96,8 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     //Allocate the return variables.
     uMATLAB=mxCreateDoubleMatrix(3, 3,mxREAL);
     cMATLAB=mxCreateDoubleMatrix(3, 1,mxREAL);
-    u=reinterpret_cast<double*>(mxGetData(uMATLAB));
-    c=reinterpret_cast<double*>(mxGetData(cMATLAB));
+    u=mxGetDoubles(uMATLAB);
+    c=mxGetDoubles(cMATLAB);
     
     //Compute the values to return.
     getEllipsHarmAxesCPP(u,c,pointHarmon,E);

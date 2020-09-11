@@ -1,13 +1,10 @@
-function [aDeriv,aJacob,aHess,papt]=aCircTurn(x,t,uTurn)
+function [aDeriv,aJacob,aHess,papt]=aCircTurn(x,uTurn)
 %%ACIRCTURN The drift function for a constant-speed circular turning model
 %           about an arbitrary axis.
 %
 %INPUTS: x The 7X1 target state at time t. It consists of 3D position,
 %          velocity, and the scalar turn rate. The axis of the turn is a
 %          parameter to this drift function.
-%        t An unused time component so that aCircTurn can be used with
-%          Runge-Kutta methods that expect the function to take two
-%          parameters.
 %    uTurn A unit vector indicating the axis of rotation about which the
 %          turn is performed. If this parameter is omitted or an empty
 %          matrix is passed, then uTurn=[0;0;1] is used, which means that
@@ -36,7 +33,7 @@ function [aDeriv,aJacob,aHess,papt]=aCircTurn(x,t,uTurn)
 %March 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    if(nargin<3||isempty(uTurn))
+    if(nargin<2||isempty(uTurn))
         uTurn=[0;0;1]; 
     end
 

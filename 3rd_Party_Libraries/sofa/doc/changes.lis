@@ -1,115 +1,120 @@
-
-            Updates for SOFA Release 14 : 2017 December 4
+            Updates for SOFA Release 15 : 2019 July 22
             - - - - - - - - - - - - - - - - - - - - - - -
 
 Summary of Changes
 ------------------
 The changes fall into the following categories:
 
-1. Change in the copyright status of the DAT routine.
+1. Wrong sign in the ANSI C function iauTdbtcb corrected.
 
-2. Implementation of two new categories of routines, viz:
+2. Update DAT release year.
 
-   a) There are three routines for the horizon/equatorial plane
-       coordinates.
+3. Implementation of four new routines that have been added to the
+   Star Catalog Conversions section dealing with the transformation
+   between the FK4 and the FK5 reference systems.  These routines
+   have have been included partly for completeness but mainly so that
+   positions in publications pre-1984 can be properly handled.  They
+   cover conversions between B1950.0 FK4 and J2000.0 FK5, with and
+   without proper motion.
 
-   b) There are six routines dealing with gnomonic (tangent plane)
-       projections.
+4. Enhancement of 17 routines that compare the two components of
+   given date/time arguments to minimize rounding errors, so that
+   optimum results are achieved even when one of the arguments is
+   negative.  (SOFA is grateful to the Astropy group for drawing
+   attention to the deficiency.)
 
-3. Due to introducing these new routines, The Astrometry Tools
+5. Due to introducing these new routines, the Astrometry Tools
    Cookbook, the test program and other supporting files have also
    been updated.
 
-4. Other minor documentation/typographical corrections to various
-   files.
+6. Miscellaneous typographical corrections and improvements to
+   various other documents.
 
 + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 
-FORTRAN Library
-----------------
+FORTRAN 77 Library
+------------------
 
-1    iau_DAT.for    Code now classified as "user-replaceable support
-                    routine".  Thus the terms & conditions at the end
-                    are also modified.
-     sofa_ts_f.pdf  Updated Cookbook to include information about the
-                    change in status.
+1.  iau_DAT      Year ....
 
-2a   iau_AE2HD      (azimuth, altitude) to (hour angle, declination)
-     iau_HD2AE      (hour angle, declination) to (azimuth, altitude)
-     iau_HD2PA      parallactic angle
+2.  iau_FK425    Convert B1950.0 FK4 star catalog data to J2000.0 FK5.
+    iau_FK524    Convert J2000.0 FK5 star catalog data to B1950.0 FK4.
+    iau_FK45Z    Convert a B1950.0 FK4 star position to J2000.0 FK5,
+                 assuming zero proper motion in the FK5 system.
+    iau_FK54Z    Convert a J2000.0 FK5 star position to B1950.0 FK4,
+                 assuming zero proper motion in FK5 and zero parallax.
 
-2b   iau_TPORS      solve for tangent point, spherical
-     iau_TPORV      solve for tangent point, vector
-     iau_TPSTS      project tangent plane to celestial, spherical
-     iau_TPSTV      project tangent plane to celestial, vector
-     iau_TPXES      project celestial to tangent plane, spherical
-     iau_TPXEV      project celestial to tangent plane, vector
+3. iau_JD2CAL    In all these routines the Fortran function ABS was
+   iau_JD2CALF   included when comparing the two argument data/time
+   iau_TAITT     parameter.
+   iau_TAIUT1
+   iau_TAIUTC
+   iau_TCBTDB
+   iau_TCGTT
+   iau_TDBTCB
+   iau_TDBTT
+   iau_TTTAI
+   iau_TTTCG
+   iau_TTTDB
+   IAU_TTUT1
+   iau_UT1TAI
+   iau_UT1TT
+   iau_UT1UTC
+   iau_UTCTAI
 
-3    t_sofa_f.for   Validation program.
-     sofa_ast_f.pdf Astrometry Tools Cookbook, with added information
-                    on the new routines
-     board.lis
-     copyr.lis
-     intro.lis
-     sofa_lib.lis
-     title.lis
-
-4.  The following routines/files have had very minor documentation
-    changes, mostly typographical
-     iau_ATIOQ
-     iau_EECT00
-     iau_EQEQ94
-     iau_FK52H
-     iau_FK5HIP
-     iau_GMST82
-     iau_H2FK5
-     iau_PLAN94
-     sofa_pn_f.pdf
+4. t_sofa_f.for     Addition of new routines.
 
 + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 
 ANSI C Library
 --------------
 
-1    iauDat.c        Code now classified as "user-replaceable support
-                     routine".  Thus the terms & conditions at the end
-                     are also modified.
-     sofa_ts_c.pdf   Updated Cookbook to include information about the
-                     change in status.
+1.  iauTdbtcb.c Replace
+                    *tcb1 = f - ( d - ( f - t77tf ) ) * elbb;
+                by
+                    *tcb1 = f + ( d - ( f - t77tf ) ) * elbb;
 
-2a   iauAe2hd        (azimuth, altitude) to (hour angle, declination)
-     iauHd2ae        (hour angle, declination) to (azimuth, altitude)
-     iauHd2pa        parallactic angle
+                n.b. the sign error affects only one of two paths
+                through the code.
 
-2b   iauTpors        solve for tangent point, spherical
-     iauTporv        solve for tangent point, vector
-     iauTpsts        project tangent plane to celestial, spherical
-     iauTpstv        project tangent plane to celestial, vector
-     iauTpxes        project celestial to tangent plane, spherical
-     iauTpxev        project celestial to tangent plane, vector
+2. iauDat       Release year.
 
-3    sofa.h          The include file updated with the new routines
-     sofa_ast_c.pdf  Astrometry Tools Cookbook, with added information
-                     on the new routines
-     t_sofa_c.c      Validation program.
-     board.lis
-     copyr.lis
-     intro.lis
-     sofa_lib.lis
-     title.lis
+3. iauFk425     Convert B1950.0 FK4 star catalog data to J2000.0 FK5.
+   iauFk524     Convert J2000.0 FK5 star catalog data to B1950.0 FK4.
+   iauFk45z     Convert a B1950.0 FK4 star position to J2000.0 FK5,
+                assuming zero proper motion in the FK5 system.
+   iauFk54z     Convert a J2000.0 FK5 star position to B1950.0 FK4,
+                assuming zero proper motion in FK5 and zero parallax.
+   sofa.h       Inclusion of the above routines' prototype
+                declarations.
 
-4. The following routines/files have had minor documentation changes,
-   mostly typographical
-   iauEect00
-   iauEqeq94
-   iauFk52h
-   iauFk5hip
-   iauGmst82
-   iauH2fk5
-   iauPlan94
-   sofa_pn_c.pdf
+4. iauJd2cal    In these 17 routines the ANSI C function fabs() was
+   iauJd2calf   included when comparing the two argument data/time
+   iauJd2calf   parameter.
+   iauTaitt
+   iauTaiut1
+   iauTaiutc
+   iauTcbtdb
+   iauTcgtt
+   iauTdbtcb
+   iauTdbtt
+   iauTttai
+   iauTttcg
+   iauTttdb
+   IAUTtut1
+   iauUt1tai
+   iauUt1tt
+   iauUt1utc
+   iauUtctai
+
+5. t_sofa_c.c   Addition of new routines.
 
 + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
-+ End of Updates
-+ 2017 December 4
-+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + 
++ SOFA thanks all those who have reported the various issues that go
++ to ensuring the libraries and documentation are kept up-to-date and
++ relevant.
++
++ End of updates
++ 2019 June 30
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+

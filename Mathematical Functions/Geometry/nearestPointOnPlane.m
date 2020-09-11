@@ -4,11 +4,12 @@ function zp=nearestPointOnPlane(z,n,p0)
 %           the plane, p0 is a point and x is the free variable. All
 %           quantities are real.
 %
-%INPUTS: z A numDimX1 point.
+%INPUTS: z A numDimXnumPoints set of points to project.
 %        n A numDimX1 normal to the plane.
 %       p0 A numDimX1 point on the plane.
 %
-%OUTPUTS: zp The numDImX1 projection of the point z onto the plane.
+%OUTPUTS: zp The numDimXnumPoints set of projections of the points in z
+%            onto the plane.
 %
 %The expression for the nearest point to a plane is given in Chapter 12.1
 %of [1].
@@ -37,7 +38,10 @@ d=-n'*p0;
 %x'*n+d=0;
 
 u=n/(n'*n);
-zp=z-(z'*n+d)*u;
+
+%For a single point z, the following line is equivalent to
+%zp=z-(z'*n+d)*u;
+zp=bsxfun(@minus,z,bsxfun(@times,sum(bsxfun(@times,z,n),1)+d,u));
 
 end
 

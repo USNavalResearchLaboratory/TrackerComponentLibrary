@@ -75,9 +75,9 @@ void iauLd(double bm, double p[3], double q[3], double e[3],
 **
 **  This revision:   2013 October 9
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
    int i;
@@ -106,7 +106,7 @@ void iauLd(double bm, double p[3], double q[3], double e[3],
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
@@ -199,5 +199,4 @@ void iauLd(double bm, double p[3], double q[3], double e[3],
 **                 United Kingdom
 **
 **--------------------------------------------------------------------*/
-
 }

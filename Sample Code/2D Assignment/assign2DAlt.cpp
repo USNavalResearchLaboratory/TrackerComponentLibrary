@@ -105,8 +105,8 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     /* Get the dimensions of the input data and the pointer to the matrix.
      * It is assumed that the matrix is not so large in M or N as to cause
      * an overflow when using a SIGNED integer data type.*/
-    numRow = mxGetM(prhs[0]);
-    numCol = mxGetN(prhs[0]);
+    numRow=mxGetM(prhs[0]);
+    numCol=mxGetN(prhs[0]);
 
     /* Transpose the matrix, if necessary, so that the number of row is
      * >= the number of columns.*/
@@ -139,7 +139,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     isFeasible=assign2D(numRow,
              numCol,
              maximize,
-             reinterpret_cast<double*>(mxGetData(CMat)),
+             mxGetDoubles(CMat),
              workMem,
              problemSol);
    
@@ -154,7 +154,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             plhs[1]=mxCreateNumericMatrix(0,0,mxDOUBLE_CLASS,mxREAL);
             if(nlhs>2) {
                 plhs[2]=mxCreateDoubleMatrix(1,1,mxREAL);
-                *reinterpret_cast<double*>(mxGetData(plhs[2]))=-1;
+                *mxGetDoubles(plhs[2])=-1;
                 
                 if(nlhs>3) {
                     plhs[3]=uMATLAB;
@@ -184,10 +184,16 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     for_each(problemSol->col4row, problemSol->col4row+numRow, increment<ptrdiff_t>);
     
     /*Copy the results into the return variables*/
-    copy(problemSol->row4col,problemSol->row4col+numCol,reinterpret_cast<ptrdiff_t*>(mxGetData(row4colMATLAB)));
-    copy(problemSol->col4row,problemSol->col4row+numRow,reinterpret_cast<ptrdiff_t*>(mxGetData(col4rowMATLAB)));
-    copy(problemSol->u,problemSol->u+numCol,reinterpret_cast<double*>(mxGetData(uMATLAB)));
-    copy(problemSol->v,problemSol->v+numRow,reinterpret_cast<double*>(mxGetData(vMATLAB)));
+    if(sizeof(ptrdiff_t)==4) {//32 bits
+        copy(problemSol->row4col,problemSol->row4col+numCol,reinterpret_cast<ptrdiff_t*>(mxGetInt32s(row4colMATLAB)));
+        copy(problemSol->col4row,problemSol->col4row+numRow,reinterpret_cast<ptrdiff_t*>(mxGetInt32s(col4rowMATLAB)));
+    } else {//64 bits
+        copy(problemSol->row4col,problemSol->row4col+numCol,reinterpret_cast<ptrdiff_t*>(mxGetInt64s(row4colMATLAB)));
+        copy(problemSol->col4row,problemSol->col4row+numRow,reinterpret_cast<ptrdiff_t*>(mxGetInt64s(col4rowMATLAB)));
+    }
+
+    copy(problemSol->u,problemSol->u+numCol,mxGetDoubles(uMATLAB));
+    copy(problemSol->v,problemSol->v+numRow,mxGetDoubles(vMATLAB));
     
     /* If a transposed array was used */
     if(didFlip==true) {
@@ -202,7 +208,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         plhs[1]=row4colMATLAB;
         if(nlhs>2) {
             plhs[2]=mxCreateDoubleMatrix(1,1,mxREAL);
-            *reinterpret_cast<double*>(mxGetData(plhs[2]))=problemSol->gain;
+            *mxGetDoubles(plhs[2])=problemSol->gain;
             
             if(nlhs>3) {
                 plhs[3]=uMATLAB;

@@ -162,11 +162,11 @@ int iauPlan94(double date1, double date2, int np, double pv[2][3])
 **              Chapront-Touze, M., Francou, G., and Laskar, J.,
 **              Astron.Astrophys., 282, 663 (1994).
 **
-**  This revision:  2017 October 12
+**  This revision:  2019 June 23
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
 /* Gaussian constant */
@@ -343,7 +343,7 @@ int iauPlan94(double date1, double date2, int np, double pv[2][3])
     { -47645, 11647, 2166, 3194,  679,    0,-244,  -419, -2531,    48 }
    };
 
-/*--------------------------------------------------------------------*/
+/* ------------------------------------------------------------------ */
 
 /* Validate the planet number. */
    if ((np < 1) || (np > 8)) {
@@ -468,7 +468,7 @@ int iauPlan94(double date1, double date2, int np, double pv[2][3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

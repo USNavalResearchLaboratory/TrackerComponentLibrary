@@ -62,7 +62,7 @@ function Q=QGaussMarkov(T,x,q,tau,order)
 %The state transition matrix associated with this model can be
 %obtained using the function FGaussMarkov. The continuous-time drift
 %function associated with the model is aGaussMarkov and the continuous-time
-%diffusion matrix is given by DPoly(x,t,q,order,numDim) where q is the
+%diffusion matrix is given by DPoly(x,q,order,numDim) where q is the
 %power spectral density of the noise.
 %
 %REFERENCES:

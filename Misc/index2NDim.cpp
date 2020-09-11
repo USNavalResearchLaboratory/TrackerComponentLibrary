@@ -43,7 +43,6 @@
 
 void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray *prhs[]) {
     double *dims, *idxIn, *idx, *indices, *maxVals;
-    mxClassID dimsType, idxType;
     double dimProd=1;
     size_t i,curIndic, numIdx, numDim;
     mxArray *retMat;
@@ -69,8 +68,8 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     
     checkRealDoubleArray(prhs[0]);
     checkRealDoubleArray(prhs[1]);
-    dims=mxGetPr(prhs[0]);
-    idxIn=mxGetPr(prhs[1]);
+    dims=mxGetDoubles(prhs[0]);
+    idxIn=mxGetDoubles(prhs[1]);
     
     //Determine the total number of elements implied by the dimensions.
     for(i=0;i<numDim;i++) {
@@ -90,7 +89,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     std::copy(idxIn,idxIn+numIdx,idx);
     
     retMat=mxCreateDoubleMatrix(numDim,numIdx,mxREAL);
-    indices=mxGetPr(retMat);
+    indices=mxGetDoubles(retMat);
     
     //The indices basically form a counting system where the bases of each
     //position are determined by dim. Matlab makes the first dimension the

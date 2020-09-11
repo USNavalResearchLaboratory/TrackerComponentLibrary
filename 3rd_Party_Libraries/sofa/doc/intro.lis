@@ -74,7 +74,7 @@ SCOPE
 The routines currently available are listed in the next two chapters of
 this document.
 
-The "astronomy" library comprises 185 routines (plus one obsolete
+The "astronomy" library comprises 189 routines (plus one obsolete
 Fortran routine that now appears under a revised name).  The areas
 addressed include calendars, astrometry, time scales, Earth rotation,
 ephemerides, precession-nutation, star catalog transformations,

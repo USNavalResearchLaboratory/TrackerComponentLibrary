@@ -8,17 +8,19 @@ function y=polyValGen(p,x,direction)
 %       polyval, but allows one to choose between the formats without
 %       calling flip to reverse the order of the elements in p.
 %
-%INPUTS: p An NX1 or 1XN set of polynomial coefficients.
+%INPUTS: p An NX1 or 1XN set of real or complex polynomial coefficients;
+%          wN>=1.
 %        x A real or complex scalar point or a matrix of points at which
 %          the scalar polynomial should be evaluated.
 % direction An optional parameter specifying which of the two polynomial
 %          formats is used. Possible values are:
-%          0 (The default if omitted or an empty matrix is passed) p(1)is
-%            the coefficient of the hihest order x term.
+%          0 (The default if omitted or an empty matrix is passed) p(1) is
+%            the coefficient of the highest order x term.
 %          1 p(1) is the coefficient of the lowest order x term.
 %
 %OUTPUTS: y The value or values of the polynomial in p evaluated at the
-%           points (s) in x. This is the same size as x.
+%           point(s) in x. This is the same size as x, unless x is an empty
+%           matrix, in which case y is 0.
 %
 %The function is evaluated using Horner's rule, which is described in [1].
 %

@@ -86,7 +86,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
        return;
     }
     checkRealDoubleArray(prhs[0]);
-    origVec=(double*)mxGetData(prhs[0]);
+    origVec=mxGetDoubles(prhs[0]);
     
     TT1=getDoubleFromMatlab(prhs[1]);
     TT2=getDoubleFromMatlab(prhs[2]);
@@ -100,7 +100,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
             return;
         }
         checkRealDoubleArray(prhs[3]);
-        dXdY=(double*)mxGetData(prhs[3]);
+        dXdY=mxGetDoubles(prhs[3]);
         dX=dXdY[0];
         dY=dXdY[1];
     }else {//get the from the function getEOP, if theya re not provided.
@@ -144,7 +144,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
             return;
         }
         
-        dXdY=(double*)mxGetData(retVals[1]);//The celestial pole offsets are not used.
+        dXdY=mxGetDoubles(retVals[1]);//The celestial pole offsets are not used.
         dX=dXdY[0];
         dY=dXdY[1];
         
@@ -201,7 +201,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     }
     
     retMATLAB=mxCreateDoubleMatrix(3,numItems,mxREAL);
-    retVec=mxGetData(retMATLAB);
+    retVec=mxGetDoubles(retMATLAB);
     
     for(i=0;i<numItems;i++) {
         //Multiply the original vectors by the matrix to put it into the GCRS.
@@ -214,7 +214,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         double *retData;
         size_t j;
         plhs[1]=mxCreateDoubleMatrix(3,3,mxREAL);
-        retData=(double*)mxGetData(plhs[1]);
+        retData=mxGetDoubles(plhs[1]);
         for(i=0;i<3;i++) {
             for(j=0;j<3;j++) {
                 retData[3*i+j]=rotMat[j][i];

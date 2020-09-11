@@ -106,20 +106,25 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         }
     }
 
-    vec=(double*)mxGetData(prhs[0]);
+    vec=mxGetDoubles(prhs[0]);
     key=getDoubleFromMatlab(prhs[1]);
     
     foundIdx=binSearchC(numPoints, vec, key, choice);
     
     retVal=mxCreateDoubleMatrix(1,1,mxREAL);
-    *(double *)mxGetData(retVal)=vec[foundIdx];
+    *mxGetDoubles(retVal)=vec[foundIdx];
     plhs[0]=retVal;
 
     if(nlhs>1){
         mxArray *retIdx;
 
         retIdx=allocUnsignedSizeMatInMatlab(1,1);
-        *(size_t *)mxGetData(retIdx)=foundIdx+1;
+        if(sizeof(size_t)==4) {//32 bit
+            *(size_t *)mxGetUint32s(retIdx)=foundIdx+1;
+        } else {//64 bit
+            *(size_t *)mxGetUint64s(retIdx)=foundIdx+1;
+        }
+        
         plhs[1]=retIdx;
     }
 }

@@ -1,11 +1,12 @@
 function z=real2ComplexSignal(x,M)
 %%REAL2COMPLEXSIGNAL Given the real in-phase part of a signal, this
 %          function returns a complex signal with in-phase and quadrature
-%          parts. This function can also simultaneously decimate the signal
-%          by 1/2 or interpolate the signal out by an integer multiple. The
-%          signal length must be divisible by 2 to perform decimation.
+%          parts (the analytic signal). This function can also
+%          simultaneously decimate the signal by 1/2 or interpolate the
+%          signal out by an integer multiple. The signal length must be
+%          divisible by 2 to perform decimation.
 %
-%INPUTS: x The NX1  or 1XN signal. N must be divisble by 2 if M=1/2.
+%INPUTS: x The NX1  or 1XN real signal. N must be divisible by 2 if M=1/2.
 %        M A positive integer >=1. The length of the output sequence will
 %          be M*N. However, one can also pass M=1/2 to decimate the signal
 %          by 1/2. If this parameter is omitted or an empty matrix is

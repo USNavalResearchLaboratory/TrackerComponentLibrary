@@ -81,9 +81,9 @@ void iauHfk5z(double rh, double dh, double date1, double date2,
 **
 **  This revision:  2013 June 18
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
    double t, ph[3], r5h[3][3], s5h[3], sh[3], vst[3],
@@ -129,7 +129,7 @@ void iauHfk5z(double rh, double dh, double date1, double date2,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

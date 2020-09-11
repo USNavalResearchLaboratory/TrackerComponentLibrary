@@ -33,7 +33,7 @@ function uDot=uDotNumeric(u,x,t,vertFunc,epsVal)
 %OUTPUTS: uDot The derivative of the basis vector u with respect to time.
 %
 %The solution is detailed in [1]. Compare to uDotEllipsoid where an
-%explicit solutions for an ellipsoidal surface is possible.
+%explicit solution for an ellipsoidal surface is possible.
 %
 %REFERENCES:
 %[1] D. F. Crouse, "Simulating aerial targets in 3D accounting for the

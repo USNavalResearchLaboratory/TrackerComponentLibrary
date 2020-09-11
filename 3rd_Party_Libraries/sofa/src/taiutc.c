@@ -61,11 +61,11 @@ int iauTaiutc(double tai1, double tai2, double *utc1, double *utc2)
 **     Explanatory Supplement to the Astronomical Almanac,
 **     P. Kenneth Seidelmann (ed), University Science Books (1992)
 **
-**  This revision:  2013 September 12
+**  This revision:  2019 June 20
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
    int big1;
@@ -74,7 +74,7 @@ int iauTaiutc(double tai1, double tai2, double *utc1, double *utc2)
 
 
 /* Put the two parts of the TAI into big-first order. */
-   big1 = ( tai1 >= tai2 );
+   big1 = ( fabs(tai1) >= fabs(tai2) );
    if ( big1 ) {
       a1 = tai1;
       a2 = tai2;
@@ -113,7 +113,7 @@ int iauTaiutc(double tai1, double tai2, double *utc1, double *utc2)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

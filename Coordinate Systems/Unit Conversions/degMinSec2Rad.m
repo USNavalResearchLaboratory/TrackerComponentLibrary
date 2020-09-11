@@ -3,8 +3,10 @@ function rad=degMinSec2Rad(deg,min,sec)
 %               arcseconds to radians.
 %
 %INPUTS: deg A scalar or matrix number of degrees.
-%        min A number of arcminutes, having the same dimensions as deg.
-%        sec A number of arcseconds, having the same dimensions as deg.
+%        min A number of arcminutes, having the same dimensions as deg. If
+%            omitted or an empty matrix is passed, this is assumed to be 0.
+%        sec A number of arcseconds, having the same dimensions as deg. If
+%            omitted or an empty matrix is passed, this is assumed to be 0.
 %
 %OUTPUTS: rad The angle or angles converted into radians, wrapped to -pi to
 %             pi.
@@ -14,6 +16,14 @@ function rad=degMinSec2Rad(deg,min,sec)
 %
 %October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+if(nargin<3||isempty(sec))
+    sec=0;
+end
+
+if(nargin<2||isempty(min))
+   min=0; 
+end
 
 deg=deg+min/60+sec/(60*60);
 rad=wrapRange((pi/180)*deg,-pi,pi,false);

@@ -54,8 +54,10 @@ function [optCost,xOpt,exitCode]=linProgInteriorPoint(A,b,ALeq,bLeq,c,maximize,m
 %                 never be exactly zero.
 %        exitCode A flag indicating the status upon termination. It can be
 %                 0 Successful termination.
-%                 1 The cost is unbounded.
+%                 1 The cost is unbounded based on c.
 %                 2 Maximum number of iterations reached.
+%                 3 A non-finite number was encountered. This is usually
+%                   the result fo the cost function being unbounded.
 %
 %The c vector can contain infinite elements to force a variable x to be
 %zero. This is handled by finding such elements, removing them, and running
@@ -292,6 +294,13 @@ for curIter=1:maxIter
     rh3=-(x.*s-mu*e);
 
     d2=x.*sInv;
+    
+    if(any(~isfinite(d2)))
+    	exitCode=3;
+        optCost=[];
+        xOpt=[];
+        return;
+    end
 
     %If the conditioning of the D2=diag(d2) matrix is too bad, then use a
     %pseudoinverse to invert (A*D2*A'). Otherwise, one assumes that \ will
@@ -299,7 +308,7 @@ for curIter=1:maxIter
     d2Mag=abs(d2);
     temp=d2.*rh2-sInv.*rh3;
     D2APrime=bsxfun(@times,d2,A');
-    if(min(d2Mag)/max(d2Mag)<eps())
+    if(min(d2Mag)/max(d2Mag)<4*eps())
         dp=pinv(A*D2APrime)*(A*temp+rh1);
     else
         dp=(A*D2APrime)\(A*temp+rh1);
@@ -347,7 +356,7 @@ for curIter=1:maxIter
 
     betaP=min(1,alpha*minxRat);
     betaD=min(1,alpha*minsRat);
-    
+
     %Step 5 (Solution Update)
     %We limit the minimum size of elements of x and s to 2^25*realmin so as
     %to reduce numerical issues when solving for the step sizes. The

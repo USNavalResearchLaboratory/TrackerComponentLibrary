@@ -1,13 +1,13 @@
 function x=findQuadraticFitVertex(x1,x2,param1,param2,param3)
 %%FINDQUADRATICFIRVERTEX Find the minimum of a parabola that fits given
-%           scalr data when presented with one of two parameterizations.
+%           scalar data when presented with one of two parameterizations.
 %           the first parameterization uses two function values and one
 %           derivaitve value. The second parameterization uses just two
 %           derivative values.
 %
 %INPUTS: x1, x2 The two points at which the values are taken.
 % param1,param2,param3 These thee values can be given in two ways, which
-%               determins their maining. The first is:
+%               determine their meaning. The first is:
 %               f1 The value of the function at x1.
 %               f2 The value of the function at x2.
 %               g1 The derivative of the function at x1.

@@ -9,7 +9,7 @@ function intVal=monomialIntSphere(alpha,wExp)
 %INPUTS: alpha An NX1 or 1XN vector of the integer exponents of the
 %              monomial term. All elements must be >=0.
 %         wExp The exponent term in the weighting function w(x) described
-%              above. This must be an integer >-N. the default if this
+%              above. This must be an integer >-N. The default if this
 %              parameter is omitted or an empty matrix is passed is 0,
 %              which means that w(x)=1.
 %
@@ -35,7 +35,7 @@ function intVal=monomialIntSphere(alpha,wExp)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 if(nargin<2||isempty(wExp))
-   wExp=0; 
+    wExp=0; 
 end
 
 if(all(mod(alpha,2)==0))

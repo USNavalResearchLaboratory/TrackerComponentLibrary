@@ -1,9 +1,9 @@
-classdef KeyVal
-%KEYVAL     A class that encapsulates a key and a value, which could be
-%           an instance of a handle class. It is assumed that standard
-%           comparison operations can be performed on the keys. This class
-%           is useful for inserting elements into a BinaryHeap or other
-%           data structure that requires a key and a value. 
+classdef KeyVal < handle
+%KEYVAL A class that encapsulates a key and a value, which could be an
+%       instance of a handle class. It is assumed that standard comparison
+%       operations can be performed on the keys. This class is useful for
+%       inserting elements into a BinaryHeap or other data structure that
+%       requires a key and a value. 
 %
 %DEPENDENCIES: NONE
 %
@@ -102,6 +102,15 @@ classdef KeyVal
             else
                 val=obj1==obj2.key;
             end
+        end
+        
+        function objCopy=copy(obj)
+        %%COPY Create a new KeyVal class where the keys and values are
+        %      duplicates of those in this class. This is a shallow copy.
+        %      We do not call the copy function on handle class values to
+        %      make deep copies.
+        
+            objCopy=KeyVal(obj.key,obj.value);
         end
     end
 end

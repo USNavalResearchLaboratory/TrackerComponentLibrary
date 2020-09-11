@@ -7,21 +7,21 @@
 *               algorithm is a type of winding number algorithm, the
 *               winding number omega can also be obtained.
 *
-*INPUTS: vertices   A 2XN matrix of the N vertices making up the polygon in
-*                   order. Edges are between neighboring vertices. The last
-*                   vertex can be the same as the first vertex. If not, it
-*                   is assumed that an edge exists between the last and 
-*                   first vertices.
-*           point   A 2XnumPoints set of points that will be determined to
-*                   be inside or outside of the polygon given by vertices.
-*boundaryIsImportant An optional boolean variable indicating whether the
-*                   boundary of the polygon is important. If
-*                   boundaryIsImportant=true, then an algorithm that will
-*                   correctly indicate points on the boundary as being in
-*                   the polygon will be used. If it is false, then the
-*                   results for points on the boundary can be inconsistent,
-*                   though the algorithm will be slightly faster. The
-*                   default is true.
+*INPUTS: vertices A 2XN matrix of the N vertices making up the polygon in
+*                 order. Edges are between neighboring vertices. The last
+*                 vertex can be the same as the first vertex. If not, it is
+*                 assumed that an edge exists between the last and first
+*                 vertices.
+*           point A 2XnumPoints set of points that will be determined to be
+*                 inside or outside of the polygon given by vertices.
+* boundaryIsImportant An optional boolean variable indicating whether the
+*                 boundary of the polygon is important. If
+*                 boundaryIsImportant=true, then an algorithm that will
+*                 correctly indicate points on the boundary as being in
+*                 the polygon will be used. If it is false, then the
+*                 results for points on the boundary can be inconsistent,
+*                 though the algorithm will be slightly faster. The default
+*                 is true.
 *
 *OUTPUTS: isInPolygon An NX1 vector where the ith element is true if the
 *                     ith is true if the ith point is in the polygon, false
@@ -83,11 +83,11 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
 
     checkRealDoubleArray(prhs[0]);
     checkRealDoubleArray(prhs[1]);
-    P=reinterpret_cast<double*>(mxGetData(prhs[0]));//The vertex data
-    R=reinterpret_cast<double*>(mxGetData(prhs[1]));//The points
+    P=mxGetDoubles(prhs[0]);//The vertex data
+    R=mxGetDoubles(prhs[1]);//The points
     
-    numRow = mxGetM(prhs[0]);
-    numCol = mxGetN(prhs[0]);
+    numRow=mxGetM(prhs[0]);
+    numCol=mxGetN(prhs[0]);
 
     if(numRow !=2) {
         mexErrMsgTxt("The vertices must be two-dimensional.");
@@ -98,8 +98,8 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     }
     numVertices=numCol;
     
-    numRow = mxGetM(prhs[1]);
-    numPoints = mxGetN(prhs[1]);
+    numRow=mxGetM(prhs[1]);
+    numPoints=mxGetN(prhs[1]);
     if(numRow!=2||numPoints==0) {
         mexErrMsgTxt("The points must be two-dimensional.");
     }
@@ -112,7 +112,12 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     omegasMatlab=allocSignedSizeMatInMatlab(numPoints,1);
     isInPolygonMatlab=mxCreateLogicalMatrix(numPoints,1);
     isInPolygon=mxGetLogicals(isInPolygonMatlab);
-    omegas=reinterpret_cast<ptrdiff_t*>(mxGetData(omegasMatlab));
+    
+    if(sizeof(ptrdiff_t)==4) {//32 bit
+        omegas=reinterpret_cast<ptrdiff_t*>(mxGetInt32s(omegasMatlab));
+    } else {//64 bit
+        omegas=reinterpret_cast<ptrdiff_t*>(mxGetInt64s(omegasMatlab));
+    }
 
     for(i=0;i<numPoints;i++) {
         isInPolygon[i]=static_cast<mxLogical>(pointIsInPolygonCPP(P,numVertices,R+2*i,boundaryIsImportant,omegas+i));

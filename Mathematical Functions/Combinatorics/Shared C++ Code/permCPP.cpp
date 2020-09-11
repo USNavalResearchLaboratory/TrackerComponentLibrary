@@ -40,8 +40,8 @@
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
 #include "permCPP.hpp"
-#include "getNextComboCPP.hpp"
 #include "getNextGrayCodeCPP.hpp"
+#include "getNextComboCPP.hpp"
 
 //For the fill function
 #include <algorithm>

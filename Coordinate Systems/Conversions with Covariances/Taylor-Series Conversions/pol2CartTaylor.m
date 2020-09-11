@@ -41,7 +41,7 @@ function [zCart,RCart]=pol2CartTaylor(polPoint,R,zRx,M,algorithm)
 %    Applications to Tracking and Navigation. New York: Wiley Interscience,
 %    2001.
 %[2] D. Lerro and Y. Bar-Shalom, "Tracking with debiased consistent
-%    converted measurements versus EKF," IEEE transactions on Aerospace
+%    converted measurements versus EKF," IEEE Transactions on Aerospace
 %    and Electronic Systems, vol. 29, no. 3, pp. 1015-1022, Jul. 1993.
 %[3] M. Longbin, S. Xiaoquan, Z. Yiyu, S. Z. Kang, and Y. Bar-Shalom,
 %    "Unbiased converted measurements for tracking," IEEE Transactions

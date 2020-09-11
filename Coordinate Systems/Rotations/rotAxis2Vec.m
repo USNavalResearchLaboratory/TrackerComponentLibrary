@@ -1,22 +1,22 @@
-function R=rotAxis2Vec(u,axis,method)
+function R=rotAxis2Vec(u,axisVal,method)
 %%ROTAXIS2VEC Get a rotation matrix that rotates the a coordinate axis
 %             (e.g. the z-axis) in the direction of a given vector u. That
 %             is, u=R*z. Another way to look at it for non-unit vectors
 %             when considering three dimensions is R'*u=[0;0;norm(u)]
 %             The solution to the problem is not unique, so two methods
 %             are given. This algorithm works with the number of
-%             dimensions>=2.
+%             dimensions>=1.
 %
 %INPUTS: u1 A numDimXN unit vector representing the direction into which
 %           the chosen axis is to be rotated. Non-unit vectors that are
 %           passed will be normalized. For N>1, multiple rotation matrices
 %           are returned.
-%      axis The axis that is chosen. This selection the index can be a
+%   axisVal The axis that is chosen. This selection the index can be a
 %           number from 1 to numDim, or it can be 'x', 'y' or 'z' to select
 %           dimensions 1, 2, and 3. if this parameter is omitted and
 %           numDim=3, then axis=3 is used, otherwise axis=1 is used.
-%    method This selects the type of rotation used. Possible valuea are:
-%           0 (The default if omitted or an empty matrix is passed. Use a
+%    method This selects the type of rotation used. Possible values are:
+%           0 (The default if omitted or an empty matrix is passed). Use a
 %             Householder rotation via the function HouseholderVec. This
 %             has the property that R*R is the identity matrix. This method
 %             is also numerically stabler than method 1.
@@ -31,6 +31,14 @@ function R=rotAxis2Vec(u,axis,method)
 %           vector) for all of the vectors in u, where theAxis is the
 %           chosen axis. That is [1;0;0] for 'x' (or 1), [0;1;0] for 'y' or
 %           2, and [0;0;1] for z or 3.
+%
+%EXAMPLE:
+% uVec=[53;183;-225;86;31;-130;-43;34];
+% axisVal=5;
+% R=rotAxis2Vec(uVec,axisVal);
+% R'*uVec
+%One will see that the rotated uVec is about 
+%[0;0;0;0;339.3891571632777;0;0;0];
 %
 %REFERENCES:
 %[1] D. F. Crouse, "On measurement-based light-time corrections for
@@ -51,28 +59,28 @@ function R=rotAxis2Vec(u,axis,method)
         error('This method only works for 3D vectors.') 
     end
 
-    if(nargin<2||isempty(axis))
+    if(nargin<2||isempty(axisVal))
         if(numDim==3)
-            axis=3;
+            axisVal=3;
         else
-            axis=1;
+            axisVal=1;
         end
     end
     
-    if(ischar(axis))
-        switch(axis)
+    if(ischar(axisVal))
+        switch(axisVal)
             case 'x'
-                axis=1;
+                axisVal=1;
             case 'y'
-                axis=2;
+                axisVal=2;
             case 'z'
-                axis=3;
+                axisVal=3;
             otherwise
                 error('Invalid axis specified.')
         end
     end
     
-    if(axis~=fix(axis)||~isreal(axis)||axis<1||axis>numDim)
+    if(axisVal~=fix(axisVal)||~isreal(axisVal)||axisVal<1||axisVal>numDim)
         error('Invalid axis specified.')
     end
 
@@ -89,14 +97,13 @@ function R=rotAxis2Vec(u,axis,method)
             %index. The permutation vector is used to make it work for any
             %axis value.
             permVec=1:numDim;
-            permVec(axis)=1;
-            permVec(1)=axis;
+            permVec(axisVal)=1;
+            permVec(1)=axisVal;
 
             for curVec=1:numVec
                 [v,beta]=HouseholderVec(u(permVec,curVec));
 
                 R(:,:,curVec)=eye(numDim,numDim)-beta*(v*v');
-                
                 R(:,:,curVec)=R(permVec,permVec,curVec);
             end
         case 1
@@ -105,13 +112,15 @@ function R=rotAxis2Vec(u,axis,method)
  
             %Normalize the vectors
             u=bsxfun(@rdivide,u,sqrt(sum(u.*u,1)));
-            switch(axis)
+            switch(axisVal)
                 case 1
                     for curVec=1:numVec
-                        s=-sqrt(0.5*(1-u(1,curVec)));
+                        %The calls to max are to deal with possible finite
+                        %precision issues.
+                        s=-sqrt(max(0,(1/2)*(1-u(1,curVec))));
                         dist=sqrt(u(2,curVec)^2+u(3,curVec)^2);
 
-                        q=[sqrt(1-s^2),0,-s*u(3,curVec)/dist,s*u(2,curVec)/dist];
+                        q=[sqrt(max(0,1-s^2)),0,-s*u(3,curVec)/dist,s*u(2,curVec)/dist];
 
                         %Deal with the case where the x axis is passed.
                         q(~isfinite(q))=0;
@@ -120,9 +129,11 @@ function R=rotAxis2Vec(u,axis,method)
                     end
                 case 2
                     for curVec=1:numVec
-                        s=-sqrt(0.5*(1-u(2,curVec)));
+                        %The calls to max are to deal with possible finite
+                        %precision issues.
+                        s=-sqrt(max(0,(1/2)*(1-u(2,curVec))));
                         dist=sqrt(u(1,curVec)^2+u(3,curVec)^2);
-                        q=[sqrt(1-s^2),s*u(3,curVec)/dist,0,-s*u(1,curVec)/dist];
+                        q=[sqrt(max(0,1-s^2)),s*u(3,curVec)/dist,0,-s*u(1,curVec)/dist];
 
                         %Deal with the case where the y axis is passed.
                         q(~isfinite(q))=0;
@@ -131,9 +142,11 @@ function R=rotAxis2Vec(u,axis,method)
                     end
                 case 3
                     for curVec=1:numVec
-                        s=-sqrt(0.5*(1-u(3,curVec)));
+                        %The calls to max are to deal with possible finite
+                        %precision issues.
+                        s=-sqrt(max(0,(1/2)*(1-u(3,curVec))));
                         dist=sqrt(u(1,curVec)^2+u(2,curVec)^2);
-                        q=[sqrt(1-s^2),-s*u(2,curVec)/dist,s*u(1,curVec)/dist,0];
+                        q=[sqrt(max(0,1-s^2)),-s*u(2,curVec)/dist,s*u(1,curVec)/dist,0];
 
                         %Deal with the case where the z axis is passed.
                         q(~isfinite(q))=0;

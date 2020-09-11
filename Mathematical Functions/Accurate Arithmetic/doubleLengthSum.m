@@ -1,6 +1,6 @@
 function [z,ze]=doubleLengthSum(x,xe,y,ye)
 %%DOUBLELENGTHSUM Given two doublelength values, which could, for example,
-%       be returned by exactpairMult or exactPairSum, find their sum as
+%       be returned by exactPairMult or exactPairSum, find their sum as
 %       another doublelength value.
 %
 %INPUTS: x,xe A real doublelength floating point number. The exact number

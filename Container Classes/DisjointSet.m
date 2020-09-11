@@ -69,14 +69,18 @@ classdef DisjointSet < handle
         %INPUTS: DSObj The implicitly passed calling object.
         %        binMat A numTarXnumMeas binary matrix where numTar is
         %               the same as the length of setArray in DSObj and
-        %               numMeas is an arbitrary number. 
+        %               numMeas is an arbitrary number. If an empty matrix
+        %               is passed, nothing is done.
         %
         %This algorithm takes the union of all elements of setArray in each
         %column corresponding to ones in the column. Thus, if this is a
         %gating matrix for targets and measurements, this will create all
         %of the target clusters.
         %
-        
+            if(isempty(binMat))
+                return;
+            end
+
             numTar=size(binMat,1);
             numMeas=size(binMat,2);
 

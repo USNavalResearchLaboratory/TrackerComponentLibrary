@@ -7,8 +7,8 @@ function [xEst,PEst,logLikes]=singleScanUpdate(xHyp,PHyp,A,algSel1,algSel2,param
 %                  global nearest neighbor (GNN) update, a joint
 %                  probabilistic data association (JPDA) update, a JPDA*
 %                  update, a GNN-JPDA update, or approximate JPDA and
-%                  GNN-JPDA updates as well as a naïve nearest neighbor
-%                  algorithm. In all instances except for the naïve nearest
+%                  GNN-JPDA updates as well as a naï¿½ve nearest neighbor
+%                  algorithm. In all instances except for the naï¿½ve nearest
 %                  neighbor algorithm, it is assumed that each measurement
 %                  can be assigned to at most one target, and each target
 %                  can be assigned to at most one measurement.
@@ -41,13 +41,13 @@ function [xEst,PEst,logLikes]=singleScanUpdate(xHyp,PHyp,A,algSel1,algSel2,param
 %             1) JPDA
 %             2) GNN
 %             3) Parallel single-target PDAs
-%             4) Naïve nearest neighbor
+%             4) Naï¿½ve nearest neighbor
 %             5) JPDA*
 %             6) Approximate GNN-JPDA
 %             7) Approximate JPDA 
 %             8) Set JPDA
-%             9) Naïve nearest neighbor JPDA
-%             10) Approximate naïve nearest neighbor JPDA
+%             9) Naï¿½ve nearest neighbor JPDA
+%             10) Approximate naï¿½ve nearest neighbor JPDA
 %     algSel2 An optional parameter that further specifies the algorithm
 %             used when algSel1=6-7. If omitted but algSel1 is specified, a
 %             default value of 0 is used. If both algSel1 and algSel2
@@ -88,18 +88,18 @@ function [xEst,PEst,logLikes]=singleScanUpdate(xHyp,PHyp,A,algSel1,algSel2,param
 %not named) in [3]. The GNN-JPDA consists of using the global nearest
 %neighbor estimate with a covariance matrix computed as in the JPDA. Thus
 %the same approximations that can be used in the JPDA can be used in the
-%GNN-JPDA. The Set JPDA is described in 
+%GNN-JPDA. The Set JPDA is described in [4].
 %
 %The approximate routines simply change how the target-measurement
 %association probabilities are computed. They are described in the comments
 %to the function calc2DAssignmentProbsApprox.
 %
-%Naïve nearest neighbor association consists of just choosing the most
+%Naï¿½ve nearest neighbor association consists of just choosing the most
 %likely assignment of a target to a measurement or missed detection without
 %regard to whether one measurmeent is assigned to multiple targets.
 %
 %One possible way to form the A matrix is to use likelihood ratios going
-%into the dimensionless score function from [4]. This is implemented for a
+%into the dimensionless score function from [5]. This is implemented for a
 %standard Cartesian/Gaussian model using makeStandardCartOnlyLRMatHyps.
 %
 %REFERENCES:
@@ -111,7 +111,10 @@ function [xEst,PEst,logLikes]=singleScanUpdate(xHyp,PHyp,A,algSel1,algSel2,param
 %[3] O. E. Drummond, "Best hypothesis target tracking and sensor fusion,"
 %    in Proceedings of SPIE: Signal and Data Processing of Small Targets
 %    Conference, vol. 3809, Denver, CO, Oct. 1999, pp. 586-600.
-%[4] Y. Bar-Shalom, S. S. Blackman, and R. J. Fitzgerald, "Dimensionless
+%[4] L. Svensson, D. Svensson, M. Guerriero, and P. Willett, "Set JPDA
+%    filter for multitarget tracking," IEEE Transactions on Signal
+%    Processing, vol. 59, no. 10, pp. 4677-4691, Oct. 2011.
+%[5] Y. Bar-Shalom, S. S. Blackman, and R. J. Fitzgerald, "Dimensionless
 %    score function for multiple hypothesis tracking," IEEE Transactions on
 %    Aerospace and Electronic Systems, vol. 43, no. 1, pp. 392-400, Jan.
 %    2007.
@@ -221,7 +224,7 @@ function [xEst,PEst,logLikes]=singleScanUpdate(xHyp,PHyp,A,algSel1,algSel2,param
             if(nargout>2)
                 logLikes=logLikefromABeta(A,beta);
             end
-        case 4%Naïve nearest neighbor
+        case 4%Naï¿½ve nearest neighbor
             %The assignment for each target
             logLikes=zeros(numTar,1);
             for curTar=1:numTar
@@ -311,7 +314,7 @@ function [xEst,PEst,logLikes]=singleScanUpdate(xHyp,PHyp,A,algSel1,algSel2,param
             if(nargout>2)
                 logLikes=[];
             end
-        case 9%Naïve nearest neighbor-JPDA
+        case 9%Naï¿½ve nearest neighbor-JPDA
             %The assignment for each target
             logLikes=zeros(numTar,1);
             for curTar=1:numTar
@@ -336,8 +339,8 @@ function [xEst,PEst,logLikes]=singleScanUpdate(xHyp,PHyp,A,algSel1,algSel2,param
                 P=reshape(PHyp(:,:,curTar,:),[xDim,xDim,numHyp]);
                 [~,PEst(:,:,curTar)]=calcMixtureMoments(x,beta(curTar,:),P,xEst(:,curTar));
             end
-        case 10%Approxmate naïve nearest neighbor-JPDA
-            %This is the same as the naïve nearest neighbor-JPDA, except
+        case 10%Approxmate naï¿½ve nearest neighbor-JPDA
+            %This is the same as the naï¿½ve nearest neighbor-JPDA, except
             %the method for computing the betas is different.
             
             %The assignment for each target

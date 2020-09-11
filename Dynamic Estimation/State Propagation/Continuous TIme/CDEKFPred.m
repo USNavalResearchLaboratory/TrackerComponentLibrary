@@ -152,7 +152,7 @@ function [xPred,PPred,exitCode]=CDEKFPred(xPrev,PPrev,a,D,includesJacob,tPrev,tP
     %Make sure that the matrix remains symmetric.
     PPred=(PPred+PPred')/2;
     
-    %This is to deal with the propagation making it possible not positive
+    %This is to deal with the propagation making it possibly not positive
     %definite.
     SPred=cholSemiDef(PPred,'lower');
     PPred=SPred*SPred';

@@ -205,7 +205,7 @@ function vals=rand(N,lambda,k,lowerBound)
 %This is an implementation of the inverse transform algorithm of Chapter
 %5.1 of [1]. To clip values to only being above lowerBound, the CDF value
 %of the lower bound is determined and the uniform random variables as used
-%in the inverse transform algoirthm are all only generated above the
+%in the inverse transform algorithm are all only generated above the
 %threshold.
 %
 %REFERENCES:

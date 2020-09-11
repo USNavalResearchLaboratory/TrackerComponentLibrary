@@ -81,7 +81,7 @@ function M=findRFTransParam(plhPoint,az,el,zRot,a,f)
 %
 %REFERENCES:
 %[1] B. L. Diamond, et al, "The Aries Program: Coordinates,
-%    transformations, trajectories and tracking",  MIT, Sept. 1975
+%    transformations, trajectories and tracking",  MIT, Sept. 1975.
 %
 %August 2015 David Karnick, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

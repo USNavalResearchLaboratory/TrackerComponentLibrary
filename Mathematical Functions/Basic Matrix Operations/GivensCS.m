@@ -38,8 +38,7 @@ if(isreal(a) && isreal(b))
     end
 
 else
-   %The algorithm of Chapter 5.1.13. 
-    
+    %The algorithm of Chapter 5.1.13. 
     [cAlpha,sAlpha]=GivensCS(real(a),imag(a));
     [cBeta,sBeta]=GivensCS(real(b),imag(b));
     [cTheta,sTheta]=GivensCS(norm(a),norm(b));

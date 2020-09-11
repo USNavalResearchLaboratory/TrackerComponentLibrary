@@ -33,7 +33,7 @@
 #      make distclean     delete all generated binaries
 #      make realclean     same as distclean
 #
-# Last revision:   2018 January 26
+# Last revision:   2019 July 22
 #
 # Copyright International Astronomical Union.  All rights reserved.
 #
@@ -183,7 +183,11 @@ SOFA_OBS = iauA2af.o \
            iauFasa03.o \
            iauFaur03.o \
            iauFave03.o \
+           iauFk425.o \
+           iauFk45z.o \
+           iauFk524.o \
            iauFk52h.o \
+           iauFk54z.o \
            iauFk5hip.o \
            iauFk5hz.o \
            iauFw2m.o \
@@ -572,8 +576,16 @@ iauFaur03.o : faur03.c sofa.h sofam.h
 	$(CCOMPC) $(CFLAGF) -o $@ faur03.c
 iauFave03.o : fave03.c sofa.h sofam.h
 	$(CCOMPC) $(CFLAGF) -o $@ fave03.c
+iauFk425.o  : fk425.c  sofa.h sofam.h
+	$(CCOMPC) $(CFLAGF) -o $@ fk425.c
+iauFk45z.o  : fk45z.c  sofa.h sofam.h
+	$(CCOMPC) $(CFLAGF) -o $@ fk45z.c
+iauFk524.o  : fk524.c  sofa.h sofam.h
+	$(CCOMPC) $(CFLAGF) -o $@ fk524.c
 iauFk52h.o  : fk52h.c  sofa.h sofam.h
 	$(CCOMPC) $(CFLAGF) -o $@ fk52h.c
+iauFk54z.o  : fk54z.c  sofa.h sofam.h
+	$(CCOMPC) $(CFLAGF) -o $@ fk54z.c
 iauFk5hip.o : fk5hip.c sofa.h sofam.h
 	$(CCOMPC) $(CFLAGF) -o $@ fk5hip.c
 iauFk5hz.o  : fk5hz.c  sofa.h sofam.h

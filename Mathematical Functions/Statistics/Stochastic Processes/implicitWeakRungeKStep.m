@@ -1,7 +1,8 @@
 function [yNext,didConverge]=implicitWeakRungeKStep(y,t,a,B,deltaT,algorithm,aCur,BCur,useNewton,useGaussian,maxIter,RelTol,AbsTol)
 %%IMPLICITWEAKRUNGEKSTEP Perform a single step of an implicit weak
-%           stochastic Runge-Kutta method under Itô calculus. This integrates a d-
-%           dimensional stochastic differential equation of the form:
+%           stochastic Runge-Kutta method under Itï¿½ calculus. This
+%           integrates d-dimensional stochastic differential equation of
+%           the form:
 %           dy=a(y,t)*dt+B(y,t)*dW
 %           where dW is the differential of an m-dimensional Wiener
 %           process. As the stepsize used decreases, weak methods converge
@@ -10,13 +11,13 @@ function [yNext,didConverge]=implicitWeakRungeKStep(y,t,a,B,deltaT,algorithm,aCu
 %           not converge to the optimal path, unlike strong methods.
 %
 %INPUTS: y The dX1 initial value of the random process.
-%        t The dX1 initial time of the random process. If an empty matrix
-%          is passed, t=0 is used.
+%        t The scalar initial time of the random process. If an empty
+%          matrix is passed, t=0 is used.
 %        a A function handle to the drift function. This is called as
-%          a(y,t) and returns a dX1 vector. If one wishes to Use Newton's
+%          a(y,t) and returns a dX1 vector. If one wishes to use Newton's
 %          method for the implicit iteration, then the calling format is
-%          [aVal,papt]=a(y,t), where papt is the dXd matrix of partial
-%          derivatives of a with respect to the elements of y papt(:,i) is
+%          [aVal,papy]=a(y,t), where papy is the dXd matrix of partial
+%          derivatives of a with respect to the elements of y papy(:,i) is
 %          the derivative with respect to the ith component of y.
 %        B A function handle to the diffusion matrix function. This is
 %          called as B(y,t) and returns a dXm matrix.
@@ -270,6 +271,10 @@ end
 
 if(nargin<7||isempty(aCur))
     aCur=a(y,t); 
+end
+
+if(isempty(t))
+    t=0; 
 end
 
 if(algorithm>=0&&algorithm<=2)

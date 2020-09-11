@@ -108,7 +108,7 @@ while(gammaVal<1)
         Delta=1-gammaVal;
     end
     
-    %The exponential in Line 11 of Algoirthm 1 in [1] would NOT apply to
+    %The exponential in Line 11 of Algorithm 1 in [1] would NOT apply to
     %the weight values. Thus, we cannot use the logWTilde term above when
     %getting the actual unnormalized posterior weights with the effects of
     %Delta included.

@@ -119,19 +119,19 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         deflecLimit=NULL;
     }
 
-    vObsSource=(double*)mxGetData(prhs[0]);
+    vObsSource=mxGetDoubles(prhs[0]);
             
     //Get the observer position and convert from meters to AU.
     {
-        double *temp=(double*)mxGetData(prhs[1]);
+        double *temp=mxGetDoubles(prhs[1]);
         posObs[0]=temp[0]/DAU;
         posObs[1]=temp[1]/DAU;
         posObs[2]=temp[2]/DAU;
     }
     
-    MSolar=(double*)mxGetData(prhs[2]);
+    MSolar=mxGetDoubles(prhs[2]);
     //The units have to be converted to AU and AU/Day
-    xBody=(double*)mxGetData(prhs[3]);
+    xBody=mxGetDoubles(prhs[3]);
        
     //Allocate space to hold the parameters of the astronomical bodies in a
     //manner suitable for the iauLdn function.
@@ -166,7 +166,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     
     //Allocate space for the return values.
     vDeflMATLAB=mxCreateDoubleMatrix(3,numSource,mxREAL);
-    vDefl=(double*)mxGetData(vDeflMATLAB);
+    vDefl=mxGetDoubles(vDeflMATLAB);
     
     baseIdx=0;
     for(curSource=0;curSource<numSource;curSource++) {

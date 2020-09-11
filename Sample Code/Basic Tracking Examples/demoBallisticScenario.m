@@ -166,7 +166,7 @@ lambdaV=lambda*(2*clutR)*(2*clutAngs)^2;
 q0=processNoiseSuggest('PolyKal-ROT',1e-2,deltaT);
 
 a=rDot;
-D=@(x,t)DPoly(x,t,q0,1,3);
+D=@(x,t)DPoly(x,q0,1,3);
 
 H=[1,0,0,0,0,0;
    0,1,0,0,0,0;

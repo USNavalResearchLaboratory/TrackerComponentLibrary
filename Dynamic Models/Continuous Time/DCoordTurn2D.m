@@ -1,4 +1,4 @@
-function [D,DJacob,DHess,pDpt]=DCoordTurn2D(x,t,q0,qTurn,qLin)
+function [D,DJacob,DHess,pDpt]=DCoordTurn2D(x,q0,qTurn,qLin)
 %DCOORDTURN2D The continuous-time diffusion matrix function for a 2D
 %             coordinated turn model with a Cartesian state. The turn rate
 %             can be specified in terms of a turn rate in radians per
@@ -24,9 +24,6 @@ function [D,DJacob,DHess,pDpt]=DCoordTurn2D(x,t,q0,qTurn,qLin)
 %          That means that it acts in the direction of the velocity vector.
 %          The number of columns in x determine how many copies of D are
 %          returned.
-%        t An unused time component so that DCoordTurn2D can be used with
-%          Runge-Kutta methods that expect the function to take two
-%          parameters.
 %       q0 The power spectral density of the process noise of the velocity
 %          components. It is assumed to be the same in both dimensions. It
 %          covers perturbations from an ideal coordinated turn trajectory

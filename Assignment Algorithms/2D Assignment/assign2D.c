@@ -97,7 +97,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     /* Transpose the matrix, if necessary, so that the number of rows is
      * >= the number of columns. The matrix must be duplicated either way,
      * because it will be modified.*/
-    CIn=mxGetPr(prhs[0]);
+    CIn=mxGetDoubles(prhs[0]);
     C=(double*)mxMalloc(numRow*numCol*sizeof(double));
     if(numRow>=numCol) {
         //Duplicate the input array.
@@ -140,7 +140,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     
     {
         void* bufferStart=(void*)(row4col+numCol);
-        isInfeasible=assign2DC(maximize, C, &gain, col4row, row4col, bufferStart, mxGetPr(uMATLAB), mxGetPr(vMATLAB), numRow, numCol);
+        isInfeasible=assign2DC(maximize, C, &gain, col4row, row4col, bufferStart, mxGetDoubles(uMATLAB), mxGetDoubles(vMATLAB), numRow, numCol);
     }
     mxFree(C);
 

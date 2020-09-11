@@ -84,7 +84,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         return;
     }
     checkRealDoubleArray(prhs[0]);
-    catData=(double*)mxGetData(prhs[0]);
+    catData=mxGetDoubles(prhs[0]);
 
     //If non-empty values are provided.
     if(nrhs>1&&mxGetM(prhs[1])!=0) {
@@ -105,7 +105,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     
     //Allocate the return matrices
     catDataRetMATLAB=mxCreateDoubleMatrix(numStars,6,mxREAL);
-    catDataRet=(double*)mxGetData(catDataRetMATLAB);
+    catDataRet=mxGetDoubles(catDataRetMATLAB);
     
     //Set the pointers for each column of data in the original catalog.
     RArad=catData;

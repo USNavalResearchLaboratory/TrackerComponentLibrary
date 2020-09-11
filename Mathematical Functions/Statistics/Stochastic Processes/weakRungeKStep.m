@@ -1,6 +1,6 @@
 function [y,fixedTerm]=weakRungeKStep(y,t,a,B,deltaT,algorithm,aCur,BCur,useGaussian)
 %%WEAKRUNGEKSTEP Perform a single step of an explicit weak stochastic
-%           Runge-Kutta method under Itô calculus. This integrates a d-
+%           Runge-Kutta method under Itï¿½ calculus. This integrates a d-
 %           dimensional stochastic differential equation of the form:
 %           dy=a(y,t)*dt+B(y,t)*dW
 %           where dW is the differential of an m-dimensional Wiener
@@ -10,8 +10,8 @@ function [y,fixedTerm]=weakRungeKStep(y,t,a,B,deltaT,algorithm,aCur,BCur,useGaus
 %           not converge to the optimal path, unlike strong methods.
 %
 %INPUTS: y The dX1 initial value of the random process.
-%        t The dX1 initial time of the random process. If an empty matrix
-%          is passed, t=0 is used.
+%        t The scalar initial time of the random process. If an empty
+%          matrix is passed, t=0 is used.
 %        a A function handle to the drift function. This is called as
 %          a(y,t) and returns a dX1 vector.
 %        B A function handle to the diffusion matrix function. This is
@@ -128,6 +128,10 @@ end
 
 if(nargin<7||isempty(BCur))
     BCur=B(y,t);
+end
+
+if(isempty(t))
+    t=0; 
 end
 
 d=size(BCur,1);

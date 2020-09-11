@@ -10,11 +10,14 @@ function y=evalClenshawRecurSeries(c,alphaVal,betaVal,F0,F1,method)
 %           others. This function is more efficient if alpha and beta are
 %           constants.
 %
-%INPUTS:  c An (N+1)X1 or 1X(N+1 vector of coefficients for the sum.
+%INPUTS:  c An (N+1)X1 or 1X(N+1) vector of coefficients for the sum.
 %  alphaVal, betaVal These are the coefficients in the recursion on F given
-%           above. These can either both be scalar or matrix constants, or
-%           they can both be function handles that take a single parameter,
-%           as implied by the function above.
+%           above. These can either both be constants, or they can
+%           both be function handles that take a single parameter, as
+%           implied by the functions alpha(k) and beta(k) shown in the
+%           above equation. If function handles, they must return scalar
+%           values. If constants, they can be scalars or vectors. if
+%           vectors, they must be the same dimensionality as F0 and F1 
 %    F0, F1 If method=0, then F0=F(0) and F1=F(1). The first two values of
 %           F are needed to start the recursion. On the other hand, if
 %           method=1, then F0=F(N) and F1=F(N-1) as the recursion goes in
@@ -139,9 +142,9 @@ function y=evalClenshawRecurSeries(c,alphaVal,betaVal,F0,F1,method)
 
                 y=c(N+1).*FN-betaVal.*FN1.*y1-FN.*y2;
             otherwise
-                error('UnKnown method specified.')
+                error('Unknown method specified.')
         end
-    else%If the alpha and beta terms are functions of the order.
+    else%If the alpha and beta terms are functions.
          switch(method)
             case 0%The standard Clenshaw recursion.
                 for k=N:-1:1

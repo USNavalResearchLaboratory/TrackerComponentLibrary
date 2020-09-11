@@ -2,16 +2,17 @@ function partList=genAllSetPartitions(n)
 %%GENALLSETPARTITIONS Generate all ways of partitioning a set of n unique
 %                  items. A partition is a length-n vector that specifies
 %                  which partition each item belongs to. The order of the
-%                  items in the partitions is not important and the order of the
-%                  partitions themselves is not important.
+%                  items in the partitions is not important and the order
+%                  of the partitions themselves is not important.
 %
-%INPUTS: The integer number of unique items in the set to partition; n>=1.
+%INPUTS: n The integer number of unique items in the set to partition; n>=1.
 %
 %OUTPUTS: partList The nXnumPart list of set partitions. The indexation
 %                  begins at 1. for the ith partition partList(k,i) is the
 %                  index of the set to which item i belongs.
 %
-%This function implements Algorithm H of Section 7.2.1.5 of [1].
+%This function implements Algorithm H of Section 7.2.1.5 of [1]. The number
+%of set partitions is given by BellNumber(n).
 %
 %EXAMPLE:
 %A set of 3 objects is partitioned as 

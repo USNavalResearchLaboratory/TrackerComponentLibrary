@@ -68,7 +68,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     {
     size_t mDim=mxGetM(prhs[0]);
     size_t nDim=mxGetN(prhs[0]);
-    double *thePoint=reinterpret_cast<double*>(mxGetData(prhs[0]));
+    double *thePoint=mxGetDoubles(prhs[0]);
     //If a point with ellipsoidal height is provided.
     if((mDim==3&&nDim==1)||(mDim==1&&nDim==3)) {
         plhPoint[0]=thePoint[0];
@@ -115,8 +115,8 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         uMATLAB=mxCreateDoubleMatrix(3, 1,mxREAL);
         cMATLAB=mxCreateDoubleMatrix(1, 1,mxREAL);
     }
-    u=reinterpret_cast<double*>(mxGetData(uMATLAB));
-    c=reinterpret_cast<double*>(mxGetData(cMATLAB));
+    u=mxGetDoubles(uMATLAB);
+    c=mxGetDoubles(cMATLAB);
     
     //Compute the values to return.
     getENUAxesCPP(u,c,plhPoint,justVertical,a,f);

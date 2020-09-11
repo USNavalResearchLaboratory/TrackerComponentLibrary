@@ -131,7 +131,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         }
         
         if(numRowsKept<=numColsKept) {
-            A=reinterpret_cast<double*>(mxGetData(prhs[0]));
+            A=mxGetDoubles(prhs[0]);
         } else {
             std::swap(numRowsKept, numColsKept);
             std::swap(numRow, numCol);
@@ -141,7 +141,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             AMat=mxCreateDoubleMatrix(numRowsKept,numColsKept,mxREAL);
             didAlloc=true;
             mexCallMATLAB(1, &AMat, 1,  const_cast<mxArray **>(&prhs[0]), "transpose");
-            A=reinterpret_cast<double*>(mxGetData(AMat));
+            A=mxGetDoubles(AMat);
         }
         
         //Set the mapping of indices of the rows in the submatrix to
@@ -203,7 +203,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     
     if(numRow==numCol) {
         double *buffer;
-        A=reinterpret_cast<double*>(mxGetData(prhs[0]));
+        A=mxGetDoubles(prhs[0]);
         
         //Allocate temporary scratch space.
         buffer = reinterpret_cast<double*>(mxMalloc((2*numRow+1)*sizeof(double)));
@@ -213,7 +213,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         bool didAlloc=false;
         size_t *buffer;
         if(numRow<=numCol) {
-            A=reinterpret_cast<double*>(mxGetData(prhs[0]));
+            A=mxGetDoubles(prhs[0]);
         } else {
             std::swap(numRow, numCol); 
 
@@ -221,7 +221,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             AMat=mxCreateDoubleMatrix(numRow,numCol,mxREAL);
             didAlloc=true;
             mexCallMATLAB(1, &AMat, 1,  const_cast<mxArray **>(&prhs[0]), "transpose");
-            A=reinterpret_cast<double*>(mxGetData(AMat));
+            A=mxGetDoubles(AMat);
         }
         
         buffer=reinterpret_cast<size_t*>(mxMalloc(numCol*sizeof(size_t)));

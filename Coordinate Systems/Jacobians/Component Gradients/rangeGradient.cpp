@@ -74,7 +74,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     }
 
     checkRealDoubleArray(prhs[0]);
-    x=reinterpret_cast<double*>(mxGetData(prhs[0]));
+    x=mxGetDoubles(prhs[0]);
     
     if(nrhs<2||mxIsEmpty(prhs[1])) {
         useHalfRange=false;
@@ -92,7 +92,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             return;
         }
         checkRealDoubleArray(prhs[2]);
-        lTx=reinterpret_cast<double*>(mxGetData(prhs[2]));
+        lTx=mxGetDoubles(prhs[2]);
     }
     
     if(nrhs<4||mxIsEmpty(prhs[3])) {
@@ -105,7 +105,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             return;
         }
         checkRealDoubleArray(prhs[3]);
-        lRx=reinterpret_cast<double*>(mxGetData(prhs[3]));
+        lRx=mxGetDoubles(prhs[3]);
     }
     
     {
@@ -117,7 +117,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         retMat=mxCreateNumericArray(3,dims,mxDOUBLE_CLASS,mxREAL);
     }
     
-    retData=reinterpret_cast<double*>(mxGetData(retMat));
+    retData=mxGetDoubles(retMat);
 
     for(i=0;i<N;i++) {
         rangeGradientCPP(numRows,retData,tempSpace,x,useHalfRange,lTx,lRx);

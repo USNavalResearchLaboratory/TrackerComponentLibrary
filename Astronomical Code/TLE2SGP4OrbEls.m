@@ -1,14 +1,14 @@
 function [SGP4Elements,TTEpoch1,TTEpoch2,otherInfo,checksumIsBad]=TLE2SGP4OrbEls(TLELine1,TLELine2)
-%%TLE2SGP4ORBELS  Conver a North American Aerospace Defense Command (NORAD)
-%                 two-line element (TLE) satellite ephemeride into a format
-%                 that can be used with the propagateOrbitSGP4 function for
-%                 determining the position and velocity of the satellite at
-%                 different times using the Simplified General
-%                 Perturbations 4 (SGP4) model/ the Simplified Deep Space
-%                 Perturbations 4 (SDP4) mode for distant satellites.
-%                 TLEs are how the Air Force Space Command (AFSPC) has
-%                 publically released information on satellite orbits for
-%                 years.
+%%TLE2SGP4ORBELS Convert a North American Aerospace Defense Command (NORAD)
+%                two-line element (TLE) satellite ephemerides into a format
+%                that can be used with the propagateOrbitSGP4 function for
+%                determining the position and velocity of the satellite at
+%                different times using the Simplified General
+%                Perturbations 4 (SGP4) model/ the Simplified Deep Space
+%                Perturbations 4 (SDP4) model for distant satellites.
+%                TLEs are how the Air Force Space Command (AFSPC) has
+%                publicly released information on satellite orbits for
+%                years.
 %
 %INPUTS: TLELine1, TLELine2 The character strings for each of the two lines
 %                           that make up the TLE ephemeride, including all
@@ -68,20 +68,21 @@ function [SGP4Elements,TTEpoch1,TTEpoch2,otherInfo,checksumIsBad]=TLE2SGP4OrbEls
 %                                  of the satellite.
 %                      IDLaunchNumber The number of the launch in in the
 %                                  launch year that put up the satellite.
-%                      IDPieceOfLaunch A number indicating which piece of
+%                      IDPieceOfLaunch A string indicating which piece of
 %                                  the launch the satellite is.
 %                      firstDerivMeanMotion The first derivative of the
 %                                  mean motion in radians per second
-%                                  squared. This is useful with the older 
+%                                  squared. This is useful with the older
+%                                  orbital propagators.
 %                      secondDerivMeanMotion The second derivative of the
 %                                  mean motion in radians per second cubed.
-%                      ephemerisType originally, this was a number from
+%                      ephemerisType Originally, this was a number from
 %                                  1-5 indicating the type of orbital
 %                                  propagator used to generate the
 %                                  ephemeris with 1=SGP, 2=SGP4, 3=SDP4,
 %                                  4=SGP8, and 5=SDP8. However, it is
 %                                  always set to zero in TLEs that are
-%                                  publically released and is thus
+%                                  publicly released and is thus
 %                                  meaningless.
 %                      elementNumber A number indicating which TLE set this
 %                                  TLE is from. The number is supposed to
@@ -107,7 +108,7 @@ function [SGP4Elements,TTEpoch1,TTEpoch2,otherInfo,checksumIsBad]=TLE2SGP4OrbEls
 %Vallado's public-domain code for the SGP4 propagator that was downloaded
 %from http://www.centerforspace.com/downloads/
 %
-%A sample TLE that accompanies Vallado's code is
+%A sample TLE that accompanies Vallado's code is:
 %TLELine1='1 11801U          80230.29629788  .01431103  00000-0  14311-1      13'
 %TLELine2='2 11801  46.7916 230.4354 7318036  47.4722  10.4117  2.28537848    13'
 %
@@ -157,112 +158,112 @@ end
 
 %Set the implied decimal points to help deal with bad values when doing a
 %formatted read.
-    for j=11:16
-        if(TLELine1(j)==' ')
-            TLELine1(j)='_';
-        end
+for j=11:16
+    if(TLELine1(j)==' ')
+        TLELine1(j)='_';
     end
+end
 
-    if(TLELine1(45)~=' ')
-        TLELine1(44)=TLELine1(45);
-    end
-    TLELine1(45)='.';
-     
-    if(TLELine1(8)==' ')
-        TLELine1(8)='U';
-    end
+if(TLELine1(45)~=' ')
+    TLELine1(44)=TLELine1(45);
+end
+TLELine1(45)='.';
 
-    if(TLELine1(10)==' ')
-        TLELine1(10)='.';
-    end
+if(TLELine1(8)==' ')
+    TLELine1(8)='U';
+end
 
-    for j=46:50
-        if (TLELine1(j)==' ')
-            TLELine1(j)='0';
-        end
-    end
-    
-    if(TLELine1(52)==' ')
-        TLELine1(52)='0';
-    end
-    
-    if(TLELine1(54)~=' ')
-        TLELine1(53)=TLELine1(54);
-    end
-    TLELine1(54)='.';
-    TLELine2(26)='.';
-     
-    for j=27:33
-        if(TLELine2(j)==' ')
-            TLELine2(j)='0';
-        end
-    end
-     
-    if(TLELine1(63)==' ')
-        TLELine1(63)='0';
-    end
+if(TLELine1(10)==' ')
+    TLELine1(10)='.';
+end
 
-    if((length(TLELine1)<68)||(TLELine1(68)==' '))
-        TLELine1(68)='0';
+for j=46:50
+    if (TLELine1(j)==' ')
+        TLELine1(j)='0';
     end
+end
 
-    %Parse the stuff that most folks do not care about.
-    otherInfo.line1Number = str2double(TLELine1(1));
-    otherInfo.line2Number = str2double(TLELine2(1));
-    otherInfo.satelliteNumber1 = str2double(TLELine1(3:7));
-    otherInfo.satelliteNumber2 = str2double(TLELine2(3:7));
+if(TLELine1(52)==' ')
+    TLELine1(52)='0';
+end
 
-    otherInfo.classification = TLELine1(8);
-    otherInfo.IDLaunchYear = str2double(TLELine1(10:11));
-    otherInfo.IDLaunchNumber= str2double(TLELine1(12:14));
-    otherInfo.IDPieceOfLaunch= str2double(TLELine1(15:17));
-    
-    %Convert revolutions per day squared into radians per second squared,
-    %with 86400 seconds per TT Julian day.
-    otherInfo.firstDerivMeanMotion=str2double(TLELine1(34:43))*(2*pi/86400^2);
-    %Convert revolutions per day cubed into radians per second cubed,
-    %with 86400 seconds per TT Julian day.
-    otherInfo.secondDerivMeanMotion=str2double(TLELine1(44:50))*10.0^str2double(TLELine1(51:52))*(2*pi/86400^3); 
-    otherInfo.ephemerisType = str2double(TLELine1(63));
-    otherInfo.elementNumber = str2double(TLELine1(65:68));
-    otherInfo.revolutionNumberAtEpoch=str2double(TLELine2(64:68));
+if(TLELine1(54)~=' ')
+    TLELine1(53)=TLELine1(54);
+end
+TLELine1(54)='.';
+TLELine2(26)='.';
 
-    %Parse the stuff that most folks care about
-    inclination = str2double(TLELine2(8:16))*deg2Rad;
-    RAAscendingNode = str2double(TLELine2(17:25))*deg2Rad;
-    eccentricity = str2double(TLELine2(26:33));
-    argumentOfPerigee = str2double(TLELine2(34:42))*deg2Rad;
-    meanAnomaly = str2double(TLELine2(43:51))*deg2Rad;
-    %Convert from revolutions per day to radians per second, with 86400
-    %seconds per TT Julian day.
-    meanMotion=str2double(TLELine2(52:63))*(2*pi/86400); 
-    BSTARDrag= str2double(TLELine1(53:59))*10.0^str2double(TLELine1(60:61));
-
-    %Get the time of the orbital elements.
-    epochYear = str2double(TLELine1(19:20));
-    epochDays = str2double(TLELine1(21:32));
-
-    %Assume that the years only run from 1957->2057 and find the actual
-    %epoch year.
-    if (epochYear < 57)
-        year=epochYear+2000;
-    else
-        year=epochYear+1900;
+for j=27:33
+    if(TLELine2(j)==' ')
+        TLELine2(j)='0';
     end
-    %Convert into a two-part Julian date in TT.
-    [month,dayOfMonth]=dayOfYear2MonthDay(year,fix(epochDays));
-    dayFrac=epochDays-fix(epochDays);
-    [hour,minute,second]=fracDayOfMonth2HourMinSec(year,month,dayOfMonth,dayFrac);
-    [TTEpoch1,TTEpoch2]=Cal2TT(year,month,dayOfMonth,hour,minute,second);
-    
-    SGP4Elements=zeros(7,1);
-    SGP4Elements(1)=eccentricity;
-    SGP4Elements(2)=inclination;
-    SGP4Elements(3)=argumentOfPerigee;
-    SGP4Elements(4)=RAAscendingNode;
-    SGP4Elements(5)=meanAnomaly;
-    SGP4Elements(6)=meanMotion;
-    SGP4Elements(7)=BSTARDrag;
+end
+
+if(TLELine1(63)==' ')
+    TLELine1(63)='0';
+end
+
+if((length(TLELine1)<68)||(TLELine1(68)==' '))
+    TLELine1(68)='0';
+end
+
+%Parse the stuff that most folks do not care about.
+otherInfo.line1Number = str2double(TLELine1(1));
+otherInfo.line2Number = str2double(TLELine2(1));
+otherInfo.satelliteNumber1 = str2double(TLELine1(3:7));
+otherInfo.satelliteNumber2 = str2double(TLELine2(3:7));
+
+otherInfo.classification = TLELine1(8);
+otherInfo.IDLaunchYear = str2double(TLELine1(10:11));
+otherInfo.IDLaunchNumber= str2double(TLELine1(12:14));
+otherInfo.IDPieceOfLaunch= TLELine1(15:17);
+
+%Convert revolutions per day squared into radians per second squared,
+%with 86400 seconds per TT Julian day.
+otherInfo.firstDerivMeanMotion=str2double(TLELine1(34:43))*(2*pi/86400^2);
+%Convert revolutions per day cubed into radians per second cubed,
+%with 86400 seconds per TT Julian day.
+otherInfo.secondDerivMeanMotion=str2double(TLELine1(44:50))*10.0^str2double(TLELine1(51:52))*(2*pi/86400^3); 
+otherInfo.ephemerisType = str2double(TLELine1(63));
+otherInfo.elementNumber = str2double(TLELine1(65:68));
+otherInfo.revolutionNumberAtEpoch=str2double(TLELine2(64:68));
+
+%Parse the stuff that most folks care about
+inclination = str2double(TLELine2(8:16))*deg2Rad;
+RAAscendingNode = str2double(TLELine2(17:25))*deg2Rad;
+eccentricity = str2double(TLELine2(26:33));
+argumentOfPerigee = str2double(TLELine2(34:42))*deg2Rad;
+meanAnomaly = str2double(TLELine2(43:51))*deg2Rad;
+%Convert from revolutions per day to radians per second, with 86400
+%seconds per TT Julian day.
+meanMotion=str2double(TLELine2(52:63))*(2*pi/86400); 
+BSTARDrag= str2double(TLELine1(53:59))*10.0^str2double(TLELine1(60:61));
+
+%Get the time of the orbital elements.
+epochYear = str2double(TLELine1(19:20));
+epochDays = str2double(TLELine1(21:32));
+
+%Assume that the years only run from 1957->2057 and find the actual
+%epoch year.
+if (epochYear < 57)
+    year=epochYear+2000;
+else
+    year=epochYear+1900;
+end
+%Convert into a two-part Julian date in TT.
+[month,dayOfMonth]=dayOfYear2MonthDay(year,fix(epochDays));
+dayFrac=epochDays-fix(epochDays);
+[hour,minute,second]=fracDayOfMonth2HourMinSec(year,month,dayOfMonth,dayFrac);
+[TTEpoch1,TTEpoch2]=Cal2TT(year,month,dayOfMonth,hour,minute,second);
+
+SGP4Elements=zeros(7,1);
+SGP4Elements(1)=eccentricity;
+SGP4Elements(2)=inclination;
+SGP4Elements(3)=argumentOfPerigee;
+SGP4Elements(4)=RAAscendingNode;
+SGP4Elements(5)=meanAnomaly;
+SGP4Elements(6)=meanMotion;
+SGP4Elements(7)=BSTARDrag;
 end
 
 function isValid=validateTLEChecksum(theTLELine)

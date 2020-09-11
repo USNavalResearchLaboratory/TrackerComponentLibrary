@@ -1,16 +1,16 @@
 function [sMin,sMax,s0]=projEllipseOntoLine(z,A,gammaVal,x0,v)
 %%PROJELLIPSEONTOLINE Determine the orthogonal projection of an ellipse or
-%                   ellipsoid onto a line.
+%                     ellipsoid onto a line.
 %
-%INPUTS: z  The numDimX1 center of the ellipsoid.
-%        A  A numDimXnumDim symmetric, positive definite matrix that
-%           specifies the size and shape of the ellipse or ellipsoid, where
-%           a point zp is on the ellipse/ellipsoid if
-%           (zp-z)'*A*(zp-z)=gammaVal.
-%  gammaVal The threshold for declaring a point to be in the ellipsoid. If
-%           an empty matrix is passed, the default value of 1 is used.
-%      x0,v Two numDimX1 vectors that specify the line. A point y is on the
-%           line if y=x0+s*v, where s is a scalar quantity.
+%INPUTS: z The numDimX1 center of the ellipsoid.
+%        A A numDimXnumDim symmetric, positive definite matrix that
+%          specifies the size and shape of the ellipse or ellipsoid, where
+%          a point zp is on the ellipse/ellipsoid if
+%          (zp-z)'*A*(zp-z)=gammaVal.
+% gammaVal The threshold for declaring a point to be in the ellipsoid. If
+%          an empty matrix is passed, the default value of 1 is used.
+%     x0,v Two numDimX1 vectors that specify the line. A point y is on the
+%          line if y=x0+s*v, where s is a scalar quantity.
 %
 %OUTPUTS: sMin,sMax The range of values of s on the line y=x0+s*v onto
 %                   which the ellipsoid is orthogonally projected. These

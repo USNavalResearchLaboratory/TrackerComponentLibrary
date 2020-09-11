@@ -75,7 +75,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     }
     
     checkRealDoubleArray(prhs[0]);
-    xVec=(double*)mxGetData(prhs[0]);
+    xVec=mxGetDoubles(prhs[0]);
     
     TT1=getDoubleFromMatlab(prhs[1]);
     TT2=getDoubleFromMatlab(prhs[2]);
@@ -86,7 +86,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     
     //Allocate the return vector
     retMATLAB=mxCreateDoubleMatrix(numRow,numVec,mxREAL);
-    retData=mxGetData(retMATLAB);
+    retData=mxGetDoubles(retMATLAB);
     
     switch(method) {
         case 0://Use the IAU 2006 model

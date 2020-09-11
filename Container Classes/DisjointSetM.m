@@ -21,13 +21,16 @@ classdef DisjointSetM < DisjointSet
     methods
         function newSet=DisjointSetM(numTar,numMeas)
             %The constructor method
-            newSet = newSet@DisjointSet(numTar);
+            newSet=newSet@DisjointSet(numTar);
             newSet.numMeasInTree=zeros(numTar,1);
             newSet.measToNode=zeros(numMeas,1);
         end
         
         function unionFromList(DSObj,uList,measNum)
-        %%UNIONFROMLIST Cluster targets from a given measurement together.             
+        %%UNIONFROMLIST Merge clusters of targets from a given common
+        %               measurement. NOTE: Calling unionFromList twice with
+        %               the same measurement number will produce incorrect
+        %               results.           
         %
         %INPUTS: DSObj  The implicitly passed calling object.
         %        uList  A one-dimensional list of indices of targets to
@@ -36,8 +39,7 @@ classdef DisjointSetM < DisjointSet
         %
         %The uList passed for a particular measNum should a list of the
         %indices of ALL of the targets that gate with the measurement.
-        %Calling unionFromList twice with the same measurement number will
-        %produce incorrect results.
+        %
         
             numInList=length(uList);
             if(numInList==0)
@@ -53,21 +55,56 @@ classdef DisjointSetM < DisjointSet
             end
         end
         
-        function unionFromBinMat(DSObj,binMat)
-        %UNIONFROMBINMAT  Given a binary matrix specifying which 
-        %                 measurements gate with which targets, cluster
-        %                 together all targets that gate with each other.
+        function unionFromBoolList(DSObj,boolList,measNum)
+        %%UNIONFROMBOOLLIST Merge targets specified by a boolean array for
+        %               a given measurement index. NOTE: Calling
+        %               unionFromBoolList twice with the same measurement
+        %               number will produce incorrect results.    
         %
-        %INPUTS: DSObj     The implicitly passed calling object.
-        %        binMat    A numTarXnumMeas binary matrix where numTar is
-        %                  the same as the length of setArray in DSObj and
-        %                  numMeas is the number of measurements with which
-        %                  the DisjointSet object was created.
+        %INPUTS: DSObj  The implicitly passed calling object.
+        %     boolList  A length numTarX1 or 1XnumTar boolean array
+        %               indicating whether which targets are in the same
+        %               cluster due to the specified measurement.
+        %       measNum The index of the measurement.
+        %
+
+            numTar=length(DSObj.setArray);
+            %Check for input validity.
+            assert(numTar==length(DSObj.setArray))
+            
+            tarIdxCur=find(boolList,1);
+            
+            if(isempty(tarIdxCur))
+                %If no target gates with the specified measurement.
+                return;
+            end
+            
+            rootIdx1=DSObj.find(tarIdxCur);
+            DSObj.numMeasInTree(rootIdx1)=DSObj.numMeasInTree(rootIdx1)+1;
+            DSObj.measToNode(measNum)=rootIdx1;
+            for curTarIdx=(tarIdxCur+1):numTar
+                if(boolList(curTarIdx))
+                    rootIdx2=DSObj.find(curTarIdx);
+                    rootIdx1=DSObj.unionRoots(rootIdx1,rootIdx2);
+                end
+            end
+        end
+        
+        function unionFromBinMat(DSObj,binMat)
+        %UNIONFROMBINMAT Given a binary matrix specifying which 
+        %                measurements gate with which targets, cluster
+        %                together all targets that gate with each other.
+        %
+        %INPUTS: DSObj The implicitly passed calling object.
+        %       binMat A numTarXnumMeas binary matrix where numTar is the
+        %              same as the length of setArray in DSObj and numMeas
+        %              is the number of measurements with which the
+        %              DisjointSet object was created.
         %
         %The measurement number is assumed from the column index when
         %clustering. This function should not be called multiple times with
         %different binary matrices as it will produce incorrect results.
-        %Rather, multiple binary matrices and be OR-ed together prior to
+        %Rather, multiple binary matrices can be OR-ed together prior to
         %calling this method.
         
             numTar=size(binMat,1);
@@ -101,7 +138,7 @@ classdef DisjointSetM < DisjointSet
             end
         end
         
-        function [newCSet, newCSMeasSet,ungatedMeas]=createClusterSet(DSObj)
+        function [newCSet,newCSMeasSet,ungatedMeas]=createClusterSet(DSObj)
         %%CREATECLUSTERSET Turn the DisjointSet object into a ClusterSet so
         %                  that targets in each cluster can be easily
         %                  addressed. Also produce a corresponding

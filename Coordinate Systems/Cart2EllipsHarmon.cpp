@@ -79,7 +79,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     }
 
     checkRealDoubleArray(prhs[0]);
-    cartPoints=(double*)mxGetData(prhs[0]);
+    cartPoints=mxGetDoubles(prhs[0]);
     
     //If the linear eccentricity is not given, then use the WGS-84 value
     //from the Constants class.
@@ -110,7 +110,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
 
     //Allocate the return variables.
     pointsHarmonMATLAB=mxCreateDoubleMatrix(3, numPoints,mxREAL);
-    pointsHarmon=(double*)mxGetData(pointsHarmonMATLAB);
+    pointsHarmon=mxGetDoubles(pointsHarmonMATLAB);
     
     //Compute the values to return.
     Cart2EllipsHarmonCPP(pointsHarmon,cartPoints, numPoints, E);

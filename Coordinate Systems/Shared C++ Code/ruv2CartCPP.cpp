@@ -92,6 +92,14 @@ void ruv2CartGenCPP(double *retData,const double *z,const bool useHalfRange,cons
     }
     
     r1=(rB*rB-(zTxL[0]*zTxL[0]+zTxL[1]*zTxL[1]+zTxL[2]*zTxL[2]))/(2.0*(rB-(uVec[0]*zTxL[0]+uVec[1]*zTxL[1]+uVec[2]*zTxL[2])));
+    
+    //This deals with the case where a point with zero range in the
+    //monostatic case is passed. In the bistatic case, a zero range is
+    //invalid.
+    if(rB==0) {
+        r1=0;
+    }
+
     //zL is the Cartesian location in the local coordinate system of
     //the receiver
     {

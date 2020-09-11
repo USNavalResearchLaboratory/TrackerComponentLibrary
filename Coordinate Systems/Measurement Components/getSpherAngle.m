@@ -33,10 +33,10 @@ function azEl=getSpherAngle(zC,systemType,zRx,M)
 %          or an empty matrix is passed, then it is assumed that the local
 %          coordinate system is aligned with the global and M=eye(3) --the
 %          identity matrix is used. If only a single 3X3 matrix is passed,
-%          then is=t is assumed to be the same for all of the N conversions.
+%          then is=t is assumed to be the same for all N conversions.
 %
 %OUTPUT: azEl The 2XN matrix of azimuth and elevation angles in radians in
-%             the form [u;v] or [iu;v;w].
+%             the form [azimuth;elevation].
 %
 %The conversion from Cartesian to spherical coordinates is given in Chapter
 %14.4.4.2 of [1].

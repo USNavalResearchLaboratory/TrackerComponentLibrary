@@ -108,9 +108,9 @@ void iauAtciqn(double rc, double dc, double pr, double pd,
 **
 **  This revision:   2013 October 9
 **
-**  SOFA release 2018-01-30
+**  SOFA release 2019-07-22
 **
-**  Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 */
 {
    double pco[3], pnat[3], ppr[3], pi[3], w;
@@ -136,7 +136,7 @@ void iauAtciqn(double rc, double dc, double pr, double pd,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
+**  Copyright (C) 2019
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
@@ -229,5 +229,4 @@ void iauAtciqn(double rc, double dc, double pr, double pd,
 **                 United Kingdom
 **
 **--------------------------------------------------------------------*/
-
 }

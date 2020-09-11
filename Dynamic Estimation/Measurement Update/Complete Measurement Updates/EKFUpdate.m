@@ -3,10 +3,10 @@ function [xUpdate,PUpdate,innov,Pzz,W]=EKFUpdate(xPred,PPred,z,R,h,HJacob,numIte
 %           order Extended Kalman Filter (EKF) or iterated Extended Kalman
 %           filter (IEKF), which is what one gets with numIter>0.
 %
-%INPUTS: xPred The xDim X 1 predicted target state.
-%        PPred The xDim X xDim predicted state covariance matrix.
-%            z The zDim X 1 vector measurement.
-%            R The zDim X zDim measurement covariance matrix.
+%INPUTS: xPred The xDimX1 predicted target state.
+%        PPred The xDimXxDim predicted state covariance matrix.
+%            z The zDimX1 vector measurement.
+%            R The zDimXzDim measurement covariance matrix.
 %            h A function handle for the measurement function that takes
 %              the state as its argument.
 %       HJacob A function handle for the measurement Jacobian matrix that
@@ -24,12 +24,12 @@ function [xUpdate,PUpdate,innov,Pzz,W]=EKFUpdate(xPred,PPred,z,R,h,HJacob,numIte
 %              desired. This is either a function handle for the
 %              measurement Hessian hypermatrix, or it is the measurement
 %              Hessian hypermatrix itself. The matrix is
-%              xDim X xDim X zDim. The matrix HHess=HHessian(x) is such
-%              that HHess(i,j,k) is the second derivative of the kth
-%              element of the vector returned by h with respect to the ith
-%              and jth components of x. The Hessian matrix is symmetric. If
-%              this parameter is omitted or an empty matrix is passed, a
-%              first-order EKF update is used.
+%              xDimXxDimXzDim. The matrix HHess=HHessian(x) is such that
+%              HHess(i,j,k) is the second derivative of the kth element
+%              of the vector returned by h with respect to the ith and jth
+%              components of x. The Hessian matrix is symmetric. If this
+%              parameter is omitted or an empty matrix is passed, a first-
+%              order EKF update is used.
 %   innovTrans An optional function handle that transforms the value of the
 %              difference between the observation and any predicted points.
 %              This only needs to be supplied when a measurement difference
@@ -109,8 +109,8 @@ if(nargin<7||isempty(numIter))
     numIter=0;
 end
 
-if(nargin<8||isempty(HHessian))
-   HHessian=[]; 
+if(nargin<8)
+    HHessian=[]; 
 end
 
 if(nargin<9||isempty(innovTrans))

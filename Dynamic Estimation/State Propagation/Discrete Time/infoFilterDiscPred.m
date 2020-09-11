@@ -10,7 +10,7 @@ function [yPred, PInvPred]=infoFilterDiscPred(yPrev,PInvPrev,F,Q,u)
 %              previous time-step.
 %            F An xDim X xDim state transition matrix.
 %            Q The xDimX xDim process noise covariance matrix.
-%            u An optional xDim X1 vector that is the control input. If
+%            u An optional xDimX1 vector that is the control input. If
 %              omitted, no control input is used.
 %
 %OUTPUTS: yPred The xDim X 1 predicted information state vector.

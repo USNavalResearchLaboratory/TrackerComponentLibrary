@@ -249,7 +249,7 @@ switch(algorithm)
             return;
         end
 
-        %Refine the estimate, if possible, using the explicit
+        %Refine the estimate, if possible, using the explicit algorithm.
         for curIter=1:numIter
             r=sqrt(sum(bsxfun(@minus,t,lRx).^2,1));
             t=triangulateKnownR(r,u,lRx,RInv);

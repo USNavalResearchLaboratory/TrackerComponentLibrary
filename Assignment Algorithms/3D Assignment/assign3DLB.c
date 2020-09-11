@@ -112,7 +112,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         return;
     }
 
-    C=mxGetPr(prhs[0]);
+    C=mxGetDoubles(prhs[0]);
     
     if(nrhs>1&&!mxIsEmpty(prhs[1])) {
          method=getIntFromMatlab(prhs[1]);

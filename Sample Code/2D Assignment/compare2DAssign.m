@@ -50,7 +50,7 @@ fprintf('%i Monte Carlo runs shall be used used\n',numRuns)
 oldPath=path();
 curDir=pwd;
 ScriptPath=mfilename('fullpath');
-ScriptFolder = fileparts(ScriptPath);
+ScriptFolder=fileparts(ScriptPath);
 %Set the current working directory to the folder in which this script is
 %located.
 cd(ScriptFolder)
