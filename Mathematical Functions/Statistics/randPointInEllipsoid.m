@@ -74,8 +74,8 @@ switch(algorithm)
     case 0%The algorithm of Section 3.1.1 of [1], modified for more than
           %two dimensions.
         S=inv(invS);
-        minBounds=-diag(S);
-        maxBounds=diag(S);
+        minBounds=-sqrt(diag(S));
+        maxBounds=sqrt(diag(S));
         span=maxBounds-minBounds;
         
         for curVal=1:N

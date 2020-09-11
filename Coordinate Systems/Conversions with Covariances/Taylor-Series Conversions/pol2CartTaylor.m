@@ -105,7 +105,7 @@ switch(algorithm)
             RCart(1,1,curPoint)=r^2*sigmaTheta2*sT^2+sigmaR2*cT^2;
             %Equation 10.4.3-6
             RCart(1,2,curPoint)=(sigmaR2-r^2*sigmaTheta2)*sT*cT;
-            RCart(2,1,curPoint)=RCart(1,2);
+            RCart(2,1,curPoint)=RCart(1,2,curPoint);
             %Equation 10.4.3-5
             RCart(2,2,curPoint)=r^2*sigmaTheta2*cT^2+sigmaR2*sT^2;
             
@@ -139,7 +139,7 @@ switch(algorithm)
             RCart(1,1,curPoint)=r^2*expTerm2*(cT^2*deltaCosh+sT^2*deltaSinh)+sigmaR2*expTerm2*(cT^2*deltaCosh2+sT^2*deltaSinh2);
             %Equation 13c
             RCart(1,2,curPoint)=sT*cT*expTerm2^2*(sigmaR2+(r^2+sigmaR2)*(1-1/expTerm));
-            RCart(2,1,curPoint)=RCart(1,2);
+            RCart(2,1,curPoint)=RCart(1,2,curPoint);
             %Equation 13b
             RCart(2,2,curPoint)=r^2*expTerm2*(sT^2*deltaCosh+cT^2*deltaSinh)+sigmaR2*expTerm2*(sT^2*deltaCosh2+cT^2*deltaSinh2);
             
@@ -172,7 +172,7 @@ switch(algorithm)
             RCart(1,1,curPoint)=(b1Inv^2-2)*r^2*cT^2+(1/2)*(r^2+sigmaR2)*(1+b2*c2T);
             %Equation 7c in [2].
             RCart(1,2,curPoint)=b1Inv^2*r^2*cT*sT-2*r^2*cT*sT+(1/2)*(r^2+sigmaR2)*b2*s2T;
-            RCart(2,1,curPoint)=RCart(1,2);
+            RCart(2,1,curPoint)=RCart(1,2,curPoint);
             %Equation 7b in [2].
             RCart(2,2,curPoint)=(b1Inv^2-2)*r^2*sT^2+(1/2)*(r^2+sigmaR2)*(1-b2*c2T);
             
@@ -208,7 +208,7 @@ switch(algorithm)
             RCart(1,1,curPoint)=(1/2)*(r^2+sigmaR2)*(1+c2T*expTerm2)-expTerm*r^2*cT^2;
             %Equation 18
             RCart(1,2,curPoint)=(1/2)*(r^2+sigmaR2)*s2T*expTerm2-expTerm*r^2*cT*sT;
-            RCart(2,1,curPoint)=RCart(1,2);
+            RCart(2,1,curPoint)=RCart(1,2,curPoint);
             %Equation 17
             RCart(2,2,curPoint)=(1/2)*(r^2+sigmaR2)*(1-c2T*expTerm2)-expTerm*r^2*sT^2;
             

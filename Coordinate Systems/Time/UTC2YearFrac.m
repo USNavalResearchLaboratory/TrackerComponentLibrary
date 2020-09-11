@@ -48,7 +48,7 @@ leapSecs=cumLeapSec(year,month,day,dayFrac)-cumLeapSec(year,oneRep,oneRep,zeroRe
 
 %The total number of seconds in the year.
 totalSec=numSecInYear(year);
-secOfYear=second+dayCount*24*60*60+leapSecs;
+secOfYear=second+(dayCount-1)*24*60*60+leapSecs;
 yearFrac=year+secOfYear./totalSec;
 end
 
