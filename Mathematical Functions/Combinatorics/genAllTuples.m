@@ -26,7 +26,7 @@ if(nargin<2||isempty(firstIsMostSig))
 end
 
 N=length(maxVals);
-tupleCount=numTuples(maxVals);
+tupleCount=prod(maxVals+1);
 theTuples=zeros(N,tupleCount);
 theTuples(:,1)=getNextTuple(N);
 for k=2:tupleCount
