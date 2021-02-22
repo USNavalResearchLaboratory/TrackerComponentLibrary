@@ -234,7 +234,7 @@ for curTar=1:numTar
         %if the target gates.
         innov=zCart(:,curMeas)-zPred;
         
-        Pzz=PzPred+(SRCart(:,:,curMeas)*SRCart(:,:,curMeas))';
+        Pzz=PzPred+(SRCart(:,:,curMeas)*SRCart(:,:,curMeas)');
         mahabDist=innov'*inv(Pzz)*innov;
         if(mahabDist>gammaVal)
             %If it does not gate, then assign a zero likelihood ratio.
