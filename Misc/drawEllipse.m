@@ -6,7 +6,7 @@ function h=drawEllipse(z,A,gammaVal,varargin)
 %            estimate, then the ellipse is a probability region, where
 %            gammaVal determines what amount of probability is in the
 %            region. If omitted, gammaVal=16.2235 for 2D or
-%            gammaVal=18.8049 for 3D, which corresponds to approximately to
+%            gammaVal=18.8049 for 3D, which corresponds approximately to
 %            the 99.97% confidence region, is used (The value comes from
 %            respectively ChiSquareD.invCDF(0.9997,2) and
 %            ChiSquareD.invCDF(0.9997,3)).
@@ -21,7 +21,9 @@ function h=drawEllipse(z,A,gammaVal,varargin)
 %          case the fill3 command is used to draw an ellipse in 3D.
 % gammaVal An optional parameter specifying the size of the ellipse/
 %          ellipsoid. If omitted or an empty matrix is passed, then
-%          gammaVal=16.2235 in 2D or gammaVal=18.8049 in 3D is used.
+%          gammaVal=16.2235 in 2D or gammaVal=18.8049 in 3D is used. These
+%          are approximately the values for a 99.97% confidence region if A
+%          are inverse covariance matrices of a Gaussian distribution.
 %          gammaVal must be positive.
 % varargin Sets of values that should be passed to the plot function to
 %          format the ellipses or that will be passed to the surf function
@@ -40,29 +42,8 @@ function h=drawEllipse(z,A,gammaVal,varargin)
 %           change the transparency of object i to 50%, one can use the
 %           alpha(h{i},0.5) command.
 %
-%An eigendecomposition of a matrix A breaks it into parts V and D such that
-%V*D*V'=A, where V is a rotation matrix and D is a diagonal matrix.
-%Considering the problem here, this means that (zp-z)'*A*(zp-z)=
-%(V'*zp-V'*z)'*D*(V'*zp-V'*z). If we substitute kp=V'*zp and k=V'*z, then
-%the equation is (kp-k)'*D*(kp-k)=gammaVal, which is the equation for an
-%ellipse where the axes are aligned with the coordinate axes. Thus, one can
-%first find the points for an ellipse that is aligned with the coordinate
-%axes (the kp points), and then rotate it back to the proper alignment (the
-%zp points). However, it is simpler to first find an ellipse centered about
-%zero. Thus, substitute l=kp-k and find the l points, then shift and rotate
-%them to get the z-points.
-%
-%When considering an ellipse, suppose that l=[x;y] and D=diag(a,b). Then
-%the ellipse equation is
-%x^2*a+y^2*b=gammaVal
-%Solving for y in terms of x, we have
-%y=+/-sqrt((gammaVal-x^2*a)/b).
-%The x values are limited so that the argument of the square root is
-%positive. Thus the x values range from -sqrt(gammaVal/a) to
-%+sqrt(gammaVal/a). Thus, a simple way to plot this centered, axis-aligned
-%ellipse is to generate x-values in the valid range and then find the two
-%sets of y values. This function does that and transforms the results to
-%get the corresponding z values. 1000 points are used in the plot.
+%When drawing 2D ellipses, the function getEllipsePoints is used to get the
+%points on the ellipse, which are subsequently plotted.
 %
 %To find the points on an axis-aligned ellipsoid, we will use the ellipsoid
 %function that is built into Matlab. Suppose that l=[x;y;z] and
@@ -93,26 +74,8 @@ switch(numDim)
         end
 
         numPoints=1000;
-        for curEllip=1:numEllipse
-            %Perform an eigenvalue decomposition of A.
-            [V,D]=eig(A(:,:,curEllip));
-            %We will put the smallest eigenvalue at the start, if it is
-            %not already there.
-            [~,idx]=sort(diag(D),'ascend');
-            V=V(idx,idx);
-            D=D(idx,idx);
-            a=D(1,1);
-            b=D(2,2);
-
-            xBound=sqrt(gammaVal/a);
-            x=linspace(-xBound,xBound,numPoints);
-            %The real command deals with possible finite precision issues.
-            y=real(sqrt((gammaVal-x.^2*a)/b));
-            %The centered, axis-aligned ellipse points.
-            l=[x,fliplr(x);
-               y,-fliplr(y)];
-            zp=bsxfun(@plus,V*l,z(idx,curEllip));
-            zp=zp(idx,:);%Undo the reordering.
+        for curEllip=1:numEllipse            
+            zp=getEllipsePoints(z(:,curEllip),A(:,:,curEllip),gammaVal,numPoints,false);
             
             %Make sure that all of the ellipses are printed.
             if(curEllip~=1)

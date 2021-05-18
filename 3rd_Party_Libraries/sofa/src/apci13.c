@@ -117,9 +117,9 @@ void iauApci13(double date1, double date2,
 **
 **  This revision:   2013 October 9
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double ehpv[2][3], ebpv[2][3], r[3][3], x, y, s;
@@ -147,7 +147,7 @@ void iauApci13(double date1, double date2,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

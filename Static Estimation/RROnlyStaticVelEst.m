@@ -1,4 +1,4 @@
-function [vEst]=RROnlyStaticVelEst(rr,states1,states2,zTar)
+function vEst=RROnlyStaticVelEst(rr,states1,states2,zTar)
 %%RRONLYSTATICVELEST Perform least-squares estimation of a target velocity
 %                    vector given only range rate measurements from
 %                    different bistatic channels. This function can work

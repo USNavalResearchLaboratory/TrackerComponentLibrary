@@ -109,11 +109,11 @@ void iauFk524(double r2000, double d2000,
 **     from FK4 B1950.0 to FK5 J2000.0 using matrices in 6-space".
 **     Astron.J. 97, 274.
 **
-**  This revision:   2018 December 5
+**  This revision:   2019 October 3
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
 /* Radians per year to arcsec per century */
@@ -194,7 +194,7 @@ void iauFk524(double r2000, double d2000,
       }
    }
 
-/* Apply E-terms (equivalent to Seidelmann 3.592-3, two iterations). */
+/* Apply E-terms (equivalent to Seidelmann 3.592-3, one iteration). */
 
 /* Direction. */
    w = iauPm(r1[0]);
@@ -237,7 +237,7 @@ void iauFk524(double r2000, double d2000,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

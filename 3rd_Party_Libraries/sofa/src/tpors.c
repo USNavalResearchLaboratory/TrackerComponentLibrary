@@ -90,9 +90,9 @@ int iauTpors(double xi, double eta, double a, double b,
 **
 **  This revision:   2018 January 2
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double xi2, r, sb, cb, rsb, rcb, w2, w, s, c;
@@ -126,7 +126,7 @@ int iauTpors(double xi, double eta, double a, double b,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

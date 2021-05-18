@@ -211,13 +211,13 @@ for curPoint=1:numPoints
         ApexCDSpher=Cart2Sphere(ITRS2CartCD(apexPoint,C(2),C(3),S(3)));
         phi=ApexCDSpher(2);%The centered dipole longitude (azimuth).
     end
-    %The apex latitude (hR=0)/ modified apex latitude. The sign is determined
-    %by the vertical component of the magnetic field. That is, it is positive
-    %when the magnetic field vector is pointing down (mostly the northern
-    %geographic hemisphere) and negative when it is pointing up.
+    %The apex latitude (hR=0)/ modified apex latitude. The sign is
+    %determined by the vertical component of the magnetic field. That is,
+    %it is positive when the magnetic field vector is pointing down (mostly
+    %the northern geographic hemisphere) and negative when it is pointing
+    %up.
     lambdaA=-signVal*acos(sqrt((a+hR)/(a+hA)));
-
-
+    
     zSpher=Cart2Sphere(zITRS);
     %The third coordinate as suggested by [2].
     VCoord=-signVal*spherHarmonicEval(C,S,zSpher,aMagMod,cMagMod);
@@ -225,7 +225,6 @@ for curPoint=1:numPoints
 
     exitCode(curPoint)=0;
 end
-
 end
 
 %LICENSE:

@@ -45,7 +45,7 @@ void iauNum00a(double date1, double date2, double rmatn[3][3])
 **     of date and the p-vector V(mean) is with respect to the mean
 **     equatorial triad of date.
 **
-**  3) A faster, but slightly less accurate result (about 1 mas), can be
+**  3) A faster, but slightly less accurate, result (about 1 mas) can be
 **     obtained by using instead the iauNum00b function.
 **
 **  Called:
@@ -57,11 +57,11 @@ void iauNum00a(double date1, double date2, double rmatn[3][3])
 **     P. Kenneth Seidelmann (ed), University Science Books (1992),
 **     Section 3.222-3 (p114).
 **
-**  This revision:  2013 June 18
+**  This revision:  2020 November 27
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double dpsi, deps, epsa, rb[3][3], rp[3][3], rbp[3][3], rbpn[3][3];
@@ -75,7 +75,7 @@ void iauNum00a(double date1, double date2, double rmatn[3][3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

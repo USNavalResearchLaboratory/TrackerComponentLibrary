@@ -17,7 +17,7 @@ double iauEo06a(double date1, double date2)
 **     date1,date2  double    TT as a 2-part Julian Date (Note 1)
 **
 **  Returned (function value):
-**                  double    equation of the origins in radians
+**                  double    the equation of the origins in radians
 **
 **  Notes:
 **
@@ -59,11 +59,11 @@ double iauEo06a(double date1, double date2)
 **
 **     Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 **
-**  This revision:  2013 June 18
+**  This revision:  2020 November 14
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double r[3][3], x, y, s, eo;
@@ -85,7 +85,7 @@ double iauEo06a(double date1, double date2)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

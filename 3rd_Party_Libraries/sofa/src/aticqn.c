@@ -44,11 +44,11 @@ void iauAticqn(double ri, double di, iauASTROM *astrom,
 **      eral   double       "local" Earth rotation angle (radians)
 **      refa   double       refraction constant A (radians)
 **      refb   double       refraction constant B (radians)
-**      n     int           number of bodies (Note 3)
-**      b     iauLDBODY[n] data for each of the n bodies (Notes 3,4):
-**       bm    double       mass of the body (solar masses, Note 5)
-**       dl    double       deflection limiter (Note 6)
-**       pv    [2][3]       barycentric PV of the body (au, au/day)
+**     n      int          number of bodies (Note 3)
+**     b      iauLDBODY[n] data for each of the n bodies (Notes 3,4):
+**      bm     double       mass of the body (solar masses, Note 5)
+**      dl     double       deflection limiter (Note 6)
+**      pv     [2][3]       barycentric PV of the body (au, au/day)
 **
 **  Returned:
 **     rc,dc  double     ICRS astrometric RA,Dec (radians)
@@ -102,11 +102,11 @@ void iauAticqn(double ri, double di, iauASTROM *astrom,
 **     iauC2s       p-vector to spherical
 **     iauAnp       normalize angle into range +/- pi
 **
-**  This revision:   2018 December 13
+**  This revision:   2021 January 6
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    int j, i;
@@ -182,7 +182,7 @@ void iauAticqn(double ri, double di, iauASTROM *astrom,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

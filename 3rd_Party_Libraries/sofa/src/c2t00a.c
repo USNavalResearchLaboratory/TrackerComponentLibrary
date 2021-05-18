@@ -8,7 +8,7 @@ void iauC2t00a(double tta, double ttb, double uta, double utb,
 **  - - - - - - - - - -
 **
 **  Form the celestial to terrestrial matrix given the date, the UT1 and
-**  the polar motion, using the IAU 2000A nutation model.
+**  the polar motion, using the IAU 2000A precession-nutation model.
 **
 **  This function is part of the International Astronomical Union's
 **  SOFA (Standards Of Fundamental Astronomy) software collection.
@@ -18,7 +18,7 @@ void iauC2t00a(double tta, double ttb, double uta, double utb,
 **  Given:
 **     tta,ttb  double         TT as a 2-part Julian Date (Note 1)
 **     uta,utb  double         UT1 as a 2-part Julian Date (Note 1)
-**     xp,yp    double         coordinates of the pole (radians, Note 2)
+**     xp,yp    double         CIP coordinates (radians, Note 2)
 **
 **  Returned:
 **     rc2t     double[3][3]   celestial-to-terrestrial matrix (Note 3)
@@ -49,7 +49,7 @@ void iauC2t00a(double tta, double ttb, double uta, double utb,
 **  2) The arguments xp and yp are the coordinates (in radians) of the
 **     Celestial Intermediate Pole with respect to the International
 **     Terrestrial Reference System (see IERS Conventions 2003),
-**     measured along the meridians to 0 and 90 deg west respectively.
+**     measured along the meridians 0 and 90 deg west respectively.
 **
 **  3) The matrix rc2t transforms from celestial to terrestrial
 **     coordinates:
@@ -64,7 +64,7 @@ void iauC2t00a(double tta, double ttb, double uta, double utb,
 **     celestial-to-intermediate matrix, ERA is the Earth rotation
 **     angle and RPOM is the polar motion matrix.
 **
-**  4) A faster, but slightly less accurate result (about 1 mas), can
+**  4) A faster, but slightly less accurate, result (about 1 mas) can
 **     be obtained by using instead the iauC2t00b function.
 **
 **  Called:
@@ -79,11 +79,11 @@ void iauC2t00a(double tta, double ttb, double uta, double utb,
 **     McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
 **     IERS Technical Note No. 32, BKG (2004)
 **
-**  This revision:  2013 June 18
+**  This revision:  2020 November 27
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double rc2i[3][3], era, sp, rpom[3][3];
@@ -108,7 +108,7 @@ void iauC2t00a(double tta, double ttb, double uta, double utb,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

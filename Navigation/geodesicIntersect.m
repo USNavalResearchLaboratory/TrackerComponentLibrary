@@ -101,7 +101,7 @@ function latLonPoint=geodesicIntersect(az1,az2,latLon1,latLon2,convgCrit,a,f,Abs
 %[1] S. Baselga, J. C. Martinez-Llario, "Intersection and point-to-line
 %    solutions for geodesics on the ellipsoid," Studi Geophysica et
 %    Geodaetica, vol. 62, no. 3, pp. 353-363, Jul. 2018.
-%[2] H. Mortiz, "Geodetic Reference System 1980," Bulletin G�od�sique,
+%[2] H. Mortiz, "Geodetic Reference System 1980," Bulletin Geodesique,
 %    vol. 54, no. 3, pp. 395-405, Sep. 1980. Given with corrections at
 %    https://geodesy.geology.ohio-state.edu/course/refpapers/00740128.pdf
 %

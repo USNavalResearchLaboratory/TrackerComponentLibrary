@@ -24,8 +24,8 @@ double iauGst00b(double uta, double utb)
 **
 **  1) The UT1 date uta+utb is a Julian Date, apportioned in any
 **     convenient way between the argument pair.  For example,
-**     JD=2450123.7 could be expressed in any of these ways, among
-**     others:
+**     JD(UT1)=2450123.7 could be expressed in any of these ways,
+**     among others:
 **
 **             uta            utb
 **
@@ -52,7 +52,7 @@ double iauGst00b(double uta, double utb)
 **       component of GMST and the equation of the equinoxes.  This
 **       results in errors of order 0.1 mas at present.
 **
-**     . The IAU 2000B abridged nutation model (McCarthy & Luzum, 2001)
+**     . The IAU 2000B abridged nutation model (McCarthy & Luzum, 2003)
 **       is used, introducing errors of up to 1 mas.
 **
 **  3) This GAST is compatible with the IAU 2000 resolutions and must be
@@ -82,11 +82,11 @@ double iauGst00b(double uta, double utb)
 **     McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
 **     IERS Technical Note No. 32, BKG (2004)
 **
-**  This revision:  2013 June 18
+**  This revision:  2020 November 19
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double gmst00, ee00b, gst;
@@ -100,7 +100,7 @@ double iauGst00b(double uta, double utb)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

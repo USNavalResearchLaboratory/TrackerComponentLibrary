@@ -48,7 +48,7 @@ void iauApco(double date1, double date2,
 **      v      double[3]    barycentric observer velocity (vector, c)
 **      bm1    double       sqrt(1-|v|^2): reciprocal of Lorenz factor
 **      bpn    double[3][3] bias-precession-nutation matrix
-**      along  double       longitude + s' (radians)
+**      along  double       adjusted longitude (radians)
 **      xpl    double       polar motion xp wrt local meridian (radians)
 **      ypl    double       polar motion yp wrt local meridian (radians)
 **      sphi   double       sine of geodetic latitude
@@ -92,6 +92,9 @@ void iauApco(double date1, double date2,
 **     CONVENTION:  the longitude required by the present function is
 **     right-handed, i.e. east-positive, in accordance with geographical
 **     convention.
+**
+**     The adjusted longitude stored in the astrom array takes into
+**     account the TIO locator and polar motion.
 **
 **  4) xp and yp are the coordinates (in radians) of the Celestial
 **     Intermediate Pole with respect to the International Terrestrial
@@ -150,31 +153,50 @@ void iauApco(double date1, double date2,
 **     iauAtioq, iauAtoiq, iauAtciq* and iauAticq*.
 **
 **  Called:
-**     iauAper      astrometry parameters: update ERA
+**     iauIr        initialize r-matrix to identity
+**     iauRz        rotate around Z-axis
+**     iauRy        rotate around Y-axis
+**     iauRx        rotate around X-axis
+**     iauAnpm      normalize angle into range +/- pi
 **     iauC2ixys    celestial-to-intermediate matrix, given X,Y and s
 **     iauPvtob     position/velocity of terrestrial station
 **     iauTrxpv     product of transpose of r-matrix and pv-vector
 **     iauApcs      astrometry parameters, ICRS-GCRS, space observer
 **     iauCr        copy r-matrix
 **
-**  This revision:   2013 October 9
+**  This revision:   2021 January 7
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
-   double sl, cl, r[3][3], pvc[2][3], pv[2][3];
+   double r[3][3], a, b, eral, c, pvc[2][3], pv[2][3];
 
 
-/* Longitude with adjustment for TIO locator s'. */
-   astrom->along = elong + sp;
+/* Form the rotation matrix, CIRS to apparent [HA,Dec]. */
+   iauIr(r);
+   iauRz(theta+sp, r);
+   iauRy(-xp, r);
+   iauRx(-yp, r);
+   iauRz(elong, r);
 
-/* Polar motion, rotated onto the local meridian. */
-   sl = sin(astrom->along);
-   cl = cos(astrom->along);
-   astrom->xpl = xp*cl - yp*sl;
-   astrom->ypl = xp*sl + yp*cl;
+/* Solve for local Earth rotation angle. */
+   a = r[0][0];
+   b = r[0][1];
+   eral = ( a != 0.0 || b != 0.0 ) ?  atan2(b, a) : 0.0;
+   astrom->eral = eral;
+
+/* Solve for polar motion [X,Y] with respect to local meridian. */
+   a = r[0][0];
+   c = r[0][2];
+   astrom->xpl = atan2(c, sqrt(a*a+b*b));
+   a = r[1][2];
+   b = r[2][2];
+   astrom->ypl = ( a != 0.0 || b != 0.0 ) ? -atan2(a, b) : 0.0;
+
+/* Adjusted longitude. */
+   astrom->along = iauAnpm(eral - theta);
 
 /* Functions of latitude. */
    astrom->sphi = sin(phi);
@@ -183,9 +205,6 @@ void iauApco(double date1, double date2,
 /* Refraction constants. */
    astrom->refa = refa;
    astrom->refb = refb;
-
-/* Local Earth rotation angle. */
-   iauAper(theta, astrom);
 
 /* Disable the (redundant) diurnal aberration step. */
    astrom->diurab = 0.0;
@@ -209,7 +228,7 @@ void iauApco(double date1, double date2,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

@@ -15,11 +15,11 @@
 **  the context of the SOFA software, and have no other official IAU
 **  status.  In addition, self consistency is not guaranteed.
 **
-**  This revision:   2017 March 16
+**  This revision:   2020 June 16
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 
 /* Star-independent astrometry parameters */
@@ -135,7 +135,8 @@ typedef struct {
 #define dint(A) ((A)<0.0?ceil(A):floor(A))
 
 /* dnint(A) - round to nearest whole number (double) */
-#define dnint(A) ((A)<0.0?ceil((A)-0.5):floor((A)+0.5))
+#define dnint(A) (fabs(A)<0.5?0.0\
+                                :((A)<0.0?ceil((A)-0.5):floor((A)+0.5)))
 
 /* dsign(A,B) - magnitude of A with sign of B (double) */
 #define dsign(A,B) ((B)<0.0?-fabs(A):fabs(A))
@@ -155,7 +156,7 @@ typedef struct {
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

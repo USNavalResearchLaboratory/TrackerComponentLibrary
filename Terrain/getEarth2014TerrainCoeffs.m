@@ -37,7 +37,7 @@ function [C,S]=getEarth2014TerrainCoeffs(M,coeffType)
 %model, because it does not use extended precision arithmetic.
 %
 %The Earth 2014 data can be downloaded from
-%https://geodesy.curtin.edu.au/research/harmonic.cfm
+%http://ddfe.curtin.edu.au/models/Earth2014/
 %To use the data for all of the models, place the files
 %Earth2014.SUR2014.degree2160.bshc, Earth2014.BED2014.degree2160.bshc
 %Earth2014.TBI2014.degree2160.bshc, Earth2014.RET2014.degree2160.bshc

@@ -26,16 +26,16 @@ void iauRv2m(double w[3], double r[3][3])
 **     supplied to This function has the same direction as the Euler
 **     axis, and its magnitude is the angle in radians.
 **
-**  2) If w is null, the unit matrix is returned.
+**  2) If w is null, the identity matrix is returned.
 **
 **  3) The reference frame rotates clockwise as seen looking along the
 **     rotation vector from the origin.
 **
-**  This revision:  2015 January 30
+**  This revision:  2020 August 21
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double x, y, z, phi, s, c, f;
@@ -72,7 +72,7 @@ void iauRv2m(double w[3], double r[3][3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

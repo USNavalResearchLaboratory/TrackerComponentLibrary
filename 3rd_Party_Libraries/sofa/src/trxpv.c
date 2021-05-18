@@ -18,20 +18,26 @@ void iauTrxpv(double r[3][3], double pv[2][3], double trpv[2][3])
 **     pv       double[2][3]    pv-vector
 **
 **  Returned:
-**     trpv     double[2][3]    r * pv
+**     trpv     double[2][3]    r^T * pv
 **
-**  Note:
-**     It is permissible for pv and trpv to be the same array.
+**  Notes:
+**
+**  1) The algorithm is for the simple case where the r-matrix r is not
+**     a function of time.  The case where r is a function of time leads
+**     to an additional velocity component equal to the product of the
+**     derivative of the transpose of r and the position vector.
+**
+**  2) It is permissible for pv and rpv to be the same array.
 **
 **  Called:
 **     iauTr        transpose r-matrix
 **     iauRxpv      product of r-matrix and pv-vector
 **
-**  This revision:  2013 June 18
+**  This revision:  2020 September 26
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double tr[3][3];
@@ -47,7 +53,7 @@ void iauTrxpv(double r[3][3], double pv[2][3], double trpv[2][3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

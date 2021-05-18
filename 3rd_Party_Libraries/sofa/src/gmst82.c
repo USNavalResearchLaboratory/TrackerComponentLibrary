@@ -65,11 +65,11 @@ double iauGmst82(double dj1, double dj2)
 **
 **     Aoki et al., Astron.Astrophys., 105, 359-361 (1982).
 **
-**  This revision:  2017 October 12
+**  This revision:  2020 January 12
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
 /* Coefficients of IAU 1982 GMST-UT1 model */
@@ -78,9 +78,8 @@ double iauGmst82(double dj1, double dj2)
    double C = 0.093104;
    double D =  -6.2e-6;
 
-/* Note: the first constant, A, has to be adjusted by 12 hours */
-/* because the UT1 is supplied as a Julian date, which begins  */
-/* at noon.                                                    */
+/* The first constant, A, has to be adjusted by 12 hours because the */
+/* UT1 is supplied as a Julian date, which begins at noon.           */
 
    double d1, d2, t, f, gmst;
 
@@ -105,7 +104,7 @@ double iauGmst82(double dj1, double dj2)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

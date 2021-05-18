@@ -53,11 +53,11 @@
 
 
 
-                               Release 15
+                               Release 17
 
-                              2018 July 22
+                             2021 January 25
 
-contents.lis                                             2019 July 22
+contents.lis                                             2018 January 26
 
 
                              --------
@@ -83,7 +83,7 @@ contents.lis                                             2019 July 22
 
                  A3   SOFA Board membership
 
-intro.lis                                                 2017 October 7
+intro.lis                                                2018 December 7
 
 
                   -------------------------------
@@ -94,7 +94,7 @@ intro.lis                                                 2017 October 7
   SOFA stands for "Standards Of Fundamental Astronomy".  The SOFA
   software libraries are a collection of subprograms, in source-
   code form, which implement official IAU algorithms for fundamental-
-  astronomy computations.   The subprograms at present comprise 185
+  astronomy computations.   The subprograms at present comprise 189
   "astronomy" routines supported by 55 "vector/matrix" routines,
   available in both Fortran77 and C implementations.
 
@@ -172,9 +172,9 @@ angles used by the astronomy routines.
 
 There is no explicit commitment by SOFA to support historical models,
 though as time goes on a legacy of superseded models will naturally
-accumulate.  There is, for example, no support of B1950/FK4 star
-coordinates, or pre-1976 precession models, though these capabilities
-could be added were there significant demand.
+accumulate.  There is, for example, no support of pre-1976 precession
+models, though these capabilities could be added were there significant
+demand.
 
 Though the SOFA software libraries are rather limited in scope, and are
 likely to remain so for a considerable time, they do offer distinct
@@ -299,7 +299,7 @@ Resources for operating the SOFA Center are provided by Her Majesty's
 Nautical Almanac Office, operated by the United Kingdom Hydrographic
 Office.
 
-sofa_lib.lis                                              2019 July 22
+sofa_lib.lis                                             2018 December 7
 
                      ----------------------
                      SOFA Astronomy Library
@@ -551,15 +551,15 @@ ROUTINES
 
   Star catalog conversions
 
-     FK425     convert B1950.0 FK4 star catalog data to J2000.0 FK5
-     FK45Z     convert a B1950.0 FK4 star position to J2000.0 FK5, assuming zero proper motion in the FK5 system
-     FK524     convert J2000.0 FK5 star catalog data to B1950.0 FK4
      FK52H     transform FK5 star data into the Hipparcos system
-     FK54Z     convert a J2000.0 FK5 star position to B1950.0 FK4, assuming zero proper motion in FK5 system and zero parallax
      FK5HIP    FK5 to Hipparcos rotation and spin
      FK5HZ     FK5 to Hipparcos assuming zero Hipparcos proper motion
      H2FK5     transform Hipparcos star data into the FK5 system
      HFK5Z     Hipparcos to FK5 assuming zero Hipparcos proper motion
+     FK425     transform FK4 star data into FK5
+     FK45Z     FK4 to FK5 assuming zero FK5 proper motion
+     FK524     transform FK5 star data into FK4
+     FK54Z     FK5 to FK4 assuming zero FK5 proper motion
 
   Ecliptic coordinates
 
@@ -699,15 +699,14 @@ CALLS: FORTRAN VERSION
    D =  iau_FASA03 ( T )
    D =  iau_FAUR03 ( T )
    D =  iau_FAVE03 ( T )
-   CALL iau_FK425  ( R1950, D1950, DR1950, DD1950, P1950, V1950,
-  :                  R2000, D2000, DR2000, DD2000, P2000, V2000 )
-   CALL iau_FK45Z  ( R1950, D1950, BEPOCH, R2000, D2000 )
-   CALL iau FK524  ( R2000, D2000,DR2000, DD2000, P2000, V2000,
-  :                  R1950, D1950,DR1950, DD1950, P1950, V1950 )
+   CALL iau_FK425 ( R1950, D1950, DR1950, DD1950, P1950, V1950,
+  :                 R2000, D2000, DR2000, DD2000, P2000, V2000 )
+   CALL iau_FK45Z ( R1950, D1950, BEPOCH, R2000, D2000 )
+   CALL iau_FK524 ( R2000, D2000, DR2000, DD2000, P2000, V2000,
+  :                 R1950, D1950, DR1950, DD1950, P1950, V1950 )
    CALL iau_FK52H  ( R5, D5, DR5, DD5, PX5, RV5,
   :                  RH, DH, DRH, DDH, PXH, RVH )
-   CALL iau_FK54Z  ( R2000, D2000, BEPOCH, R1950, D1950, DR1950,
-  :                  DD1950 )
+   CALL iau_FK54Z ( R2000, D2000, BEPOCH, R1950, D1950, DR1950, DD1950 )
    CALL iau_FK5HIP ( R5H, S5H )
    CALL iau_FK5HZ  ( R5, D5, DATE1, DATE2, RH, DH )
    CALL iau_FW2M   ( GAMB, PHIB, PSI, EPS, R )
@@ -920,16 +919,15 @@ CALLS: C VERSION
    d = iauFasa03 ( t );
    d = iauFaur03 ( t );
    d = iauFave03 ( t );
-       iauFk425  ( r1950, d1950, dr1950, dd1950, p1950, v1950,
-                   &r2000, &d2000, &dr2000, &dd2000, &p2000, &v2000);
-       iauFk45z  ( r1950, d1950, bepoch, &r2000, &d2000);
-
-       iauFk524  ( r2000, d2000, dr2000, dd2000, p2000, v2000,
-                   &r1950, &d1950, &dr1950, &dd1950, &p1950, &v1950);
+       iauFk425 ( r1950, d1950, dr1950, dd1950, p1950, v1950,
+                  &r2000, &d2000, &dr2000, &dd2000, &p2000, &v2000 );
+       iauFk45z ( r1950, d1950, bepoch, &r2000, &d2000 );
+       iauFk524 ( r2000, d2000, dr2000, dd2000, p2000, v2000,
+                  &r1950, &d1950, &dr1950, &dd1950, &p1950, &v1950 );
        iauFk52h  ( r5, d5, dr5, dd5, px5, rv5,
                    &rh, &dh, &drh, &ddh, &pxh, &rvh );
-       iauFk54z  ( r2000, d2000, bepoch, &r1950, &d1950,&dr1950,
-                   &dd1950);
+       iauFk54z ( r2000, d2000, bepoch,
+                  &r1950, &d1950, &dr1950, &dd1950 );
        iauFk5hip ( r5h, s5h );
        iauFk5hz  ( r5, d5, date1, date2, &rh, &dh );
        iauFw2m   ( gamb, phib, psi, eps, r );
@@ -1381,11 +1379,8 @@ void iauA2af(int ndp, double angle, char *sign, int idmsf[4])
 **     angle   double  angle in radians
 **
 **  Returned:
-**     sign    char    '+' or '-'
+**     sign    char*   '+' or '-'
 **     idmsf   int[4]  degrees, arcminutes, arcseconds, fraction
-**
-**  Called:
-**     iauD2tf      decompose days to hms
 **
 **  Notes:
 **
@@ -1419,6 +1414,9 @@ void iauA2af(int ndp, double angle, char *sign, int idmsf[4])
 **     case where angle is very nearly 2pi and rounds up to 360 degrees,
 **     by testing for idmsf[0]=360 and setting idmsf[0-3] to zero.
 **
+**  Called:
+**     iauD2tf      decompose days to hms
+**
 */
 
 
@@ -1441,11 +1439,8 @@ void iauA2tf(int ndp, double angle, char *sign, int ihmsf[4])
 **     angle   double  angle in radians
 **
 **  Returned:
-**     sign    char    '+' or '-'
+**     sign    char*   '+' or '-'
 **     ihmsf   int[4]  hours, minutes, seconds, fraction
-**
-**  Called:
-**     iauD2tf      decompose days to hms
 **
 **  Notes:
 **
@@ -1478,6 +1473,9 @@ void iauA2tf(int ndp, double angle, char *sign, int ihmsf[4])
 **     does not, it is up to the caller to test for and handle the
 **     case where angle is very nearly 2pi and rounds up to 24 hours,
 **     by testing for ihmsf[0]=24 and setting ihmsf[0-3] to zero.
+**
+**  Called:
+**     iauD2tf      decompose days to hms
 **
 */
 
@@ -1599,9 +1597,9 @@ void iauAe2hd (double az, double el, double phi,
 **
 **  Last revision:   2017 September 12
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double sa, ca, se, ce, sp, cp, x, y, z, r;
@@ -1629,7 +1627,7 @@ void iauAe2hd (double az, double el, double phi,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
@@ -2326,7 +2324,7 @@ void iauApco(double date1, double date2,
 **      v      double[3]    barycentric observer velocity (vector, c)
 **      bm1    double       sqrt(1-|v|^2): reciprocal of Lorenz factor
 **      bpn    double[3][3] bias-precession-nutation matrix
-**      along  double       longitude + s' (radians)
+**      along  double       adjusted longitude (radians)
 **      xpl    double       polar motion xp wrt local meridian (radians)
 **      ypl    double       polar motion yp wrt local meridian (radians)
 **      sphi   double       sine of geodetic latitude
@@ -2370,6 +2368,9 @@ void iauApco(double date1, double date2,
 **     CONVENTION:  the longitude required by the present function is
 **     right-handed, i.e. east-positive, in accordance with geographical
 **     convention.
+**
+**     The adjusted longitude stored in the astrom array takes into
+**     account the TIO locator and polar motion.
 **
 **  4) xp and yp are the coordinates (in radians) of the Celestial
 **     Intermediate Pole with respect to the International Terrestrial
@@ -2428,7 +2429,11 @@ void iauApco(double date1, double date2,
 **     iauAtioq, iauAtoiq, iauAtciq* and iauAticq*.
 **
 **  Called:
-**     iauAper      astrometry parameters: update ERA
+**     iauIr        initialize r-matrix to identity
+**     iauRz        rotate around Z-axis
+**     iauRy        rotate around Y-axis
+**     iauRx        rotate around X-axis
+**     iauAnpm      normalize angle into range +/- pi
 **     iauC2ixys    celestial-to-intermediate matrix, given X,Y and s
 **     iauPvtob     position/velocity of terrestrial station
 **     iauTrxpv     product of transpose of r-matrix and pv-vector
@@ -3125,7 +3130,7 @@ void iauApio(double sp, double theta,
 **      v      double[3]    unchanged
 **      bm1    double       unchanged
 **      bpn    double[3][3] unchanged
-**      along  double       longitude + s' (radians)
+**      along  double       adjusted longitude (radians)
 **      xpl    double       polar motion xp wrt local meridian (radians)
 **      ypl    double       polar motion yp wrt local meridian (radians)
 **      sphi   double       sine of geodetic latitude
@@ -3202,8 +3207,12 @@ void iauApio(double sp, double theta,
 **     iauAtioq and iauAtoiq.
 **
 **  Called:
+**     iauIr        initialize r-matrix to identity
+**     iauRz        rotate around Z-axis
+**     iauRy        rotate around Y-axis
+**     iauRx        rotate around X-axis
+**     iauAnpm      normalize angle into range +/- pi
 **     iauPvtob     position/velocity of terrestrial station
-**     iauAper      astrometry parameters: update ERA
 **
 */
 
@@ -3591,11 +3600,11 @@ void iauAtciqn(double rc, double dc, double pr, double pd,
 **      eral   double       "local" Earth rotation angle (radians)
 **      refa   double       refraction constant A (radians)
 **      refb   double       refraction constant B (radians)
-**      n     int           number of bodies (Note 3)
-**      b     iauLDBODY[n] data for each of the n bodies (Notes 3,4):
-**       bm    double        mass of the body (solar masses, Note 5)
-**       dl    double        deflection limiter (Note 6)
-**       pv    [2][3]        barycentric PV of the body (au, au/day)
+**     n      int          number of bodies (Note 3)
+**     b      iauLDBODY[n] data for each of the n bodies (Notes 3,4):
+**      bm     double       mass of the body (solar masses, Note 5)
+**      dl     double       deflection limiter (Note 6)
+**      pv     [2][3]       barycentric PV of the body (au, au/day)
 **
 **  Returned:
 **     ri,di   double    CIRS RA,Dec (radians)
@@ -4074,11 +4083,11 @@ void iauAticqn(double ri, double di, iauASTROM *astrom,
 **      eral   double       "local" Earth rotation angle (radians)
 **      refa   double       refraction constant A (radians)
 **      refb   double       refraction constant B (radians)
-**      n     int           number of bodies (Note 3)
-**      b     iauLDBODY[n] data for each of the n bodies (Notes 3,4):
-**       bm    double       mass of the body (solar masses, Note 5)
-**       dl    double       deflection limiter (Note 6)
-**       pv    [2][3]       barycentric PV of the body (au, au/day)
+**     n      int          number of bodies (Note 3)
+**     b      iauLDBODY[n] data for each of the n bodies (Notes 3,4):
+**      bm     double       mass of the body (solar masses, Note 5)
+**      dl     double       deflection limiter (Note 6)
+**      pv     [2][3]       barycentric PV of the body (au, au/day)
 **
 **  Returned:
 **     rc,dc  double     ICRS astrometric RA,Dec (radians)
@@ -4751,11 +4760,11 @@ void iauAtoiq(const char *type,
 **  3) The accuracy of the result is limited by the corrections for
 **     refraction, which use a simple A*tan(z) + B*tan^3(z) model.
 **     Providing the meteorological parameters are known accurately and
-**     there are no gross local effects, the predicted observed
+**     there are no gross local effects, the predicted intermediate
 **     coordinates should be within 0.05 arcsec (optical) or 1 arcsec
 **     (radio) for a zenith distance of less than 70 degrees, better
 **     than 30 arcsec (optical or radio) at 85 degrees and better than
-**     20 arcmin (optical) or 30 arcmin (radio) at the horizon.
+**     20 arcmin (optical) or 25 arcmin (radio) at the horizon.
 **
 **     Without refraction, the complementary functions iauAtioq and
 **     iauAtoiq are self-consistent to better than 1 microarcsecond all
@@ -4782,8 +4791,9 @@ void iauBi00(double *dpsibi, double *depsbi, double *dra)
 **   i a u B i 0 0
 **  - - - - - - - -
 **
-**  Frame bias components of IAU 2000 precession-nutation models (part
-**  of MHB2000 with additions).
+**  Frame bias components of IAU 2000 precession-nutation models;  part
+**  of the Mathews-Herring-Buffett (MHB2000) nutation series, with
+**  additions.
 **
 **  This function is part of the International Astronomical Union's
 **  SOFA (Standards Of Fundamental Astronomy) software collection.
@@ -4817,9 +4827,9 @@ void iauBi00(double *dpsibi, double *depsbi, double *dra)
 **     Astrophys., 387, 700, 2002.
 **
 **     Mathews, P.M., Herring, T.A., Buffet, B.A., "Modeling of nutation
-**     and precession   New nutation series for nonrigid Earth and
+**     and precession:  New nutation series for nonrigid Earth and
 **     insights into the Earth's interior", J.Geophys.Res., 107, B4,
-**     2002.  The MHB2000 code itself was obtained on 9th September 2002
+**     2002.  The MHB2000 code itself was obtained on 2002 September 9
 **     from ftp://maia.usno.navy.mil/conv2000/chapter5/IAU2000A.
 **
 */
@@ -5074,7 +5084,7 @@ void iauC2i00a(double date1, double date2, double rc2i[3][3])
 **     Reference System (see IERS Conventions 2003), ERA is the Earth
 **     Rotation Angle and RPOM is the polar motion matrix.
 **
-**  3) A faster, but slightly less accurate result (about 1 mas), can be
+**  3) A faster, but slightly less accurate, result (about 1 mas) can be
 **     obtained by using instead the iauC2i00b function.
 **
 **  Called:
@@ -5493,7 +5503,7 @@ void iauC2t00a(double tta, double ttb, double uta, double utb,
 **  - - - - - - - - - -
 **
 **  Form the celestial to terrestrial matrix given the date, the UT1 and
-**  the polar motion, using the IAU 2000A nutation model.
+**  the polar motion, using the IAU 2000A precession-nutation model.
 **
 **  This function is part of the International Astronomical Union's
 **  SOFA (Standards Of Fundamental Astronomy) software collection.
@@ -5503,7 +5513,7 @@ void iauC2t00a(double tta, double ttb, double uta, double utb,
 **  Given:
 **     tta,ttb  double         TT as a 2-part Julian Date (Note 1)
 **     uta,utb  double         UT1 as a 2-part Julian Date (Note 1)
-**     xp,yp    double         coordinates of the pole (radians, Note 2)
+**     xp,yp    double         CIP coordinates (radians, Note 2)
 **
 **  Returned:
 **     rc2t     double[3][3]   celestial-to-terrestrial matrix (Note 3)
@@ -5534,7 +5544,7 @@ void iauC2t00a(double tta, double ttb, double uta, double utb,
 **  2) The arguments xp and yp are the coordinates (in radians) of the
 **     Celestial Intermediate Pole with respect to the International
 **     Terrestrial Reference System (see IERS Conventions 2003),
-**     measured along the meridians to 0 and 90 deg west respectively.
+**     measured along the meridians 0 and 90 deg west respectively.
 **
 **  3) The matrix rc2t transforms from celestial to terrestrial
 **     coordinates:
@@ -5549,7 +5559,7 @@ void iauC2t00a(double tta, double ttb, double uta, double utb,
 **     celestial-to-intermediate matrix, ERA is the Earth rotation
 **     angle and RPOM is the polar motion matrix.
 **
-**  4) A faster, but slightly less accurate result (about 1 mas), can
+**  4) A faster, but slightly less accurate, result (about 1 mas) can
 **     be obtained by using instead the iauC2t00b function.
 **
 **  Called:
@@ -5576,7 +5586,7 @@ void iauC2t00b(double tta, double ttb, double uta, double utb,
 **  - - - - - - - - - -
 **
 **  Form the celestial to terrestrial matrix given the date, the UT1 and
-**  the polar motion, using the IAU 2000B nutation model.
+**  the polar motion, using the IAU 2000B precession-nutation model.
 **
 **  This function is part of the International Astronomical Union's
 **  SOFA (Standards Of Fundamental Astronomy) software collection.
@@ -5617,7 +5627,7 @@ void iauC2t00b(double tta, double ttb, double uta, double utb,
 **  2) The arguments xp and yp are the coordinates (in radians) of the
 **     Celestial Intermediate Pole with respect to the International
 **     Terrestrial Reference System (see IERS Conventions 2003),
-**     measured along the meridians to 0 and 90 deg west respectively.
+**     measured along the meridians 0 and 90 deg west respectively.
 **
 **  3) The matrix rc2t transforms from celestial to terrestrial
 **     coordinates:
@@ -5658,8 +5668,8 @@ void iauC2t06a(double tta, double ttb, double uta, double utb,
 **  - - - - - - - - - -
 **
 **  Form the celestial to terrestrial matrix given the date, the UT1 and
-**  the polar motion, using the IAU 2006 precession and IAU 2000A
-**  nutation models.
+**  the polar motion, using the IAU 2006/2000A precession-nutation
+**  model.
 **
 **  This function is part of the International Astronomical Union's
 **  SOFA (Standards Of Fundamental Astronomy) software collection.
@@ -5700,7 +5710,7 @@ void iauC2t06a(double tta, double ttb, double uta, double utb,
 **  2) The arguments xp and yp are the coordinates (in radians) of the
 **     Celestial Intermediate Pole with respect to the International
 **     Terrestrial Reference System (see IERS Conventions 2003),
-**     measured along the meridians to 0 and 90 deg west respectively.
+**     measured along the meridians 0 and 90 deg west respectively.
 **
 **  3) The matrix rc2t transforms from celestial to terrestrial
 **     coordinates:
@@ -5910,7 +5920,7 @@ void iauC2tpe(double tta, double ttb, double uta, double utb,
 **  3) The arguments xp and yp are the coordinates (in radians) of the
 **     Celestial Intermediate Pole with respect to the International
 **     Terrestrial Reference System (see IERS Conventions 2003),
-**     measured along the meridians to 0 and 90 deg west respectively.
+**     measured along the meridians 0 and 90 deg west respectively.
 **
 **  4) The matrix rc2t transforms from celestial to terrestrial
 **     coordinates:
@@ -6000,7 +6010,7 @@ void iauC2txy(double tta, double ttb, double uta, double utb,
 **  3) The arguments xp and yp are the coordinates (in radians) of the
 **     Celestial Intermediate Pole with respect to the International
 **     Terrestrial Reference System (see IERS Conventions 2003),
-**     measured along the meridians to 0 and 90 deg west respectively.
+**     measured along the meridians 0 and 90 deg west respectively.
 **
 **  4) The matrix rc2t transforms from celestial to terrestrial
 **     coordinates:
@@ -6257,7 +6267,7 @@ void iauD2tf(int ndp, double days, char *sign, int ihmsf[4])
 **     days    double  interval in days
 **
 **  Returned:
-**     sign    char    '+' or '-'
+**     sign    char*   '+' or '-'
 **     ihmsf   int[4]  hours, minutes, seconds, fraction
 **
 **  Notes:
@@ -6981,9 +6991,9 @@ double iauEe00b(double date1, double date2)
 **        Greenwich apparent ST = GMST + equation of the equinoxes
 **
 **  3) The result is compatible with the IAU 2000 resolutions except
-**     that accuracy has been compromised for the sake of speed.  For
-**     further details, see McCarthy & Luzum (2001), IERS Conventions
-**     2003 and Capitaine et al. (2003).
+**     that accuracy has been compromised (1 mas) for the sake of speed.
+**     For further details, see McCarthy & Luzum (2003), IERS
+**     Conventions 2003 and Capitaine et al. (2003).
 **
 **  Called:
 **     iauPr00      IAU 2000 precession adjustments
@@ -7248,7 +7258,7 @@ double iauEo06a(double date1, double date2)
 **     date1,date2  double    TT as a 2-part Julian Date (Note 1)
 **
 **  Returned (function value):
-**                  double    equation of the origins in radians
+**                  double    the equation of the origins in radians
 **
 **  Notes:
 **
@@ -7310,10 +7320,10 @@ double iauEors(double rnpb[3][3], double s)
 **
 **  Given:
 **     rnpb  double[3][3]  classical nutation x precession x bias matrix
-**     s     double        the quantity s (the CIO locator)
+**     s     double        the quantity s (the CIO locator) in radians
 **
 **  Returned (function value):
-**           double        the equation of the origins in radians.
+**           double        the equation of the origins in radians
 **
 **  Notes:
 **
@@ -8172,7 +8182,7 @@ double iauFaom03(double t)
 **     IERS Technical Note No. 32, BKG (2004)
 **
 **     Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
-**     Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
+**     Francou, G., Laskar, J., 1994, Astron.Astrophys. 282, 663-683.
 **
 */
 
@@ -8486,12 +8496,12 @@ void iauFk45z(double r1950, double d1950, double bepoch,
 **  (Bessel-Newcomb) system to the later IAU 1976 FK5 (Fricke) system,
 **  in such a way that the FK5 proper motion is zero.  Because such a
 **  star has, in general, a non-zero proper motion in the FK4 system,
-**  the routine requires the epoch at which the position in the FK4
+**  the function requires the epoch at which the position in the FK4
 **  system was determined.
 **
 **  Given:
 **     r1950,d1950    double   B1950.0 FK4 RA,Dec at epoch (rad)
-**     bepoch         double   Besselian epoch (e.g. 1979.3D0)
+**     bepoch         double   Besselian epoch (e.g. 1979.3)
 **
 **  Returned:
 **     r2000,d2000    double   J2000.0 FK5 RA,Dec (rad)
@@ -8503,7 +8513,7 @@ void iauFk45z(double r1950, double d1950, double bepoch,
 **     negligible extent.
 **
 **  2) The method is from Appendix 2 of Aoki et al. (1983), but using
-**     the constants of Seidelmann (1992).  See the routine iauFk425
+**     the constants of Seidelmann (1992).  See the function iauFk425
 **     for a general introduction to the FK4 to FK5 conversion.
 **
 **  3) Conversion from equinox B1950.0 FK4 to equinox J2000.0 FK5 only
@@ -8755,7 +8765,7 @@ void iauFk54z(double r2000, double d2000, double bepoch,
 **
 **  Notes:
 **
-**  1) In contrast to the iauFk524  routine, here the FK5 proper
+**  1) In contrast to the iauFk524 function, here the FK5 proper
 **     motions, the parallax and the radial velocity are presumed zero.
 **
 **  2) This function converts a star position from the IAU 1976 FK5
@@ -8763,14 +8773,14 @@ void iauFk54z(double r2000, double d2000, double bepoch,
 **     cases such as distant radio sources where it is presumed there is
 **     zero parallax and no proper motion.  Because of the E-terms of
 **     aberration, such objects have (in general) non-zero proper motion
-**     in FK4, and the present routine returns those fictitious proper
+**     in FK4, and the present function returns those fictitious proper
 **     motions.
 **
 **  3) Conversion from B1950.0 FK4 to J2000.0 FK5 only is provided for.
 **     Conversions involving other equinoxes would require additional
 **     treatment for precession.
 **
-**  4) The position returned by this routine is in the B1950.0 FK4
+**  4) The position returned by this function is in the B1950.0 FK4
 **     reference system but at Besselian epoch BEPOCH.  For comparison
 **     with catalogs the BEPOCH argument will frequently be 1950.0. (In
 **     this context the distinction between Besselian and Julian epoch
@@ -8956,13 +8966,16 @@ void iauFw2m(double gamb, double phib, double psi, double eps,
 **
 **        NxPxB = R_1(-eps).R_3(-psi).R_1(phib).R_3(gamb)
 **
-**  3) Three different matrices can be constructed, depending on the
-**     supplied angles:
+**  3) The present function can construct three different matrices,
+**     depending on which angles are supplied as the arguments gamb,
+**     phib, psi and eps:
 **
 **     o  To obtain the nutation x precession x frame bias matrix,
-**        generate the four precession angles, generate the nutation
-**        components and add them to the psi_bar and epsilon_A angles,
-**        and call the present function.
+**        first generate the four precession angles known conventionally
+**        as gamma_bar, phi_bar, psi_bar and epsilon_A, then generate
+**        the nutation components Dpsi and Depsilon and add them to
+**        psi_bar and epsilon_A, and finally call the present function
+**        using those four angles as arguments.
 **
 **     o  To obtain the precession x frame bias matrix, generate the
 **        four precession angles and call the present function.
@@ -8978,7 +8991,9 @@ void iauFw2m(double gamb, double phib, double psi, double eps,
 **     iauRz        rotate around Z-axis
 **     iauRx        rotate around X-axis
 **
-**  Reference:
+**  References:
+**
+**     Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 **
 **     Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 **
@@ -9392,8 +9407,8 @@ double iauGmst00(double uta, double utb, double tta, double ttb)
 **
 **  1) The UT1 and TT dates uta+utb and tta+ttb respectively, are both
 **     Julian Dates, apportioned in any convenient way between the
-**     argument pairs.  For example, JD=2450123.7 could be expressed in
-**     any of these ways, among others:
+**     argument pairs.  For example, JD(UT1)=2450123.7 could be
+**     expressed in any of these ways, among others:
 **
 **            Part A         Part B
 **
@@ -9605,10 +9620,10 @@ double iauGst00a(double uta, double utb, double tta, double ttb)
 **
 **  1) The UT1 and TT dates uta+utb and tta+ttb respectively, are both
 **     Julian Dates, apportioned in any convenient way between the
-**     argument pairs.  For example, JD=2450123.7 could be expressed in
-**     any of these ways, among others:
+**     argument pairs.  For example, JD(UT1)=2450123.7 could be
+**     expressed in any of these ways, among others:
 **
-**            Part A        Part B
+**             uta            utb
 **
 **         2450123.7           0.0       (JD method)
 **         2451545.0       -1421.3       (J2000 method)
@@ -9682,8 +9697,8 @@ double iauGst00b(double uta, double utb)
 **
 **  1) The UT1 date uta+utb is a Julian Date, apportioned in any
 **     convenient way between the argument pair.  For example,
-**     JD=2450123.7 could be expressed in any of these ways, among
-**     others:
+**     JD(UT1)=2450123.7 could be expressed in any of these ways,
+**     among others:
 **
 **             uta            utb
 **
@@ -9710,7 +9725,7 @@ double iauGst00b(double uta, double utb)
 **       component of GMST and the equation of the equinoxes.  This
 **       results in errors of order 0.1 mas at present.
 **
-**     . The IAU 2000B abridged nutation model (McCarthy & Luzum, 2001)
+**     . The IAU 2000B abridged nutation model (McCarthy & Luzum, 2003)
 **       is used, introducing errors of up to 1 mas.
 **
 **  3) This GAST is compatible with the IAU 2000 resolutions and must be
@@ -9770,10 +9785,10 @@ double iauGst06(double uta, double utb, double tta, double ttb,
 **
 **  1) The UT1 and TT dates uta+utb and tta+ttb respectively, are both
 **     Julian Dates, apportioned in any convenient way between the
-**     argument pairs.  For example, JD=2450123.7 could be expressed in
-**     any of these ways, among others:
+**     argument pairs.  For example, JD(UT1)=2450123.7 could be
+**     expressed in any of these ways, among others:
 **
-**            Part A        Part B
+**             uta            utb
 **
 **         2450123.7           0.0       (JD method)
 **         2451545.0       -1421.3       (J2000 method)
@@ -9842,10 +9857,10 @@ double iauGst06a(double uta, double utb, double tta, double ttb)
 **
 **  1) The UT1 and TT dates uta+utb and tta+ttb respectively, are both
 **     Julian Dates, apportioned in any convenient way between the
-**     argument pairs.  For example, JD=2450123.7 could be expressed in
-**     any of these ways, among others:
+**     argument pairs.  For example, JD(UT1)=2450123.7 could be
+**     expressed in any of these ways, among others:
 **
-**            Part A        Part B
+**             uta            utb
 **
 **         2450123.7           0.0       (JD method)
 **         2451545.0       -1421.3       (J2000 method)
@@ -9910,7 +9925,7 @@ double iauGst94(double uta, double utb)
 **
 **  1) The UT1 date uta+utb is a Julian Date, apportioned in any
 **     convenient way between the argument pair.  For example,
-**     JD=2450123.7 could be expressed in any of these ways, among
+**     JD(UT1)=2450123.7 could be expressed in any of these ways, among
 **     others:
 **
 **             uta            utb
@@ -10084,9 +10099,9 @@ void iauHd2ae (double ha, double dec, double phi,
 **
 **  Last revision:   2017 September 12
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double sh, ch, sd, cd, sp, cp, x, y, z, r, a;
@@ -10115,7 +10130,7 @@ void iauHd2ae (double ha, double dec, double phi,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
@@ -10263,9 +10278,9 @@ double iauHd2pa (double ha, double dec, double phi)
 **
 **  Last revision:   2017 September 12
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double cp, cqsz, sqsz;
@@ -10280,7 +10295,7 @@ double iauHd2pa (double ha, double dec, double phi)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
@@ -10594,16 +10609,23 @@ int iauJd2cal(double dj1, double dj2,
 **         2400000.5       50123.2       (MJD method)
 **         2450123.5           0.2       (date & time method)
 **
+**     Separating integer and fraction uses the "compensated summation"
+**     algorithm of Kahan-Neumaier to preserve as much precision as
+**     possible irrespective of the jd1+jd2 apportionment.
+**
 **  3) In early eras the conversion is from the "proleptic Gregorian
 **     calendar";  no account is taken of the date(s) of adoption of
 **     the Gregorian calendar, nor is the AD/BC numbering convention
 **     observed.
 **
-**  Reference:
+**  References:
 **
 **     Explanatory Supplement to the Astronomical Almanac,
 **     P. Kenneth Seidelmann (ed), University Science Books (1992),
 **     Section 12.92 (p604).
+**
+**     Klein, A., A Generalized Kahan-Babuska-Summation-Algorithm.
+**     Computing, 76, 279-293 (2006), Section 3.
 **
 */
 
@@ -10655,10 +10677,11 @@ int iauJdcalf(int ndp, double dj1, double dj2, int iymdf[4])
 **     the Gregorian Calendar, nor is the AD/BC numbering convention
 **     observed.
 **
-**  3) Refer to the function iauJd2cal.
+**  3) See also the function iauJd2cal.
 **
-**  4) NDP should be 4 or less if internal overflows are to be
-**     avoided on machines which use 16-bit integers.
+**  4) The number of decimal places ndp should be 4 or less if internal
+**     overflows are to be avoided on platforms which use 16-bit
+**     integers.
 **
 **  Called:
 **     iauJd2cal    JD to Gregorian calendar
@@ -11308,7 +11331,7 @@ void iauNum00a(double date1, double date2, double rmatn[3][3])
 **     of date and the p-vector V(mean) is with respect to the mean
 **     equatorial triad of date.
 **
-**  3) A faster, but slightly less accurate result (about 1 mas), can be
+**  3) A faster, but slightly less accurate, result (about 1 mas) can be
 **     obtained by using instead the iauNum00b function.
 **
 **  Called:
@@ -12149,12 +12172,16 @@ void iauP06e(double date1, double date2,
 **     za     z_A         equatorial precession: -3rd 323 Euler angle
 **     zetaa  zeta_A      equatorial precession: -1st 323 Euler angle
 **     thetaa theta_A     equatorial precession: 2nd 323 Euler angle
-**     pa     p_A         general precession
+**     pa     p_A         general precession (n.b. see below)
 **     gam    gamma_J2000 J2000.0 RA difference of ecliptic poles
 **     phi    phi_J2000   J2000.0 codeclination of ecliptic pole
 **     psi    psi_J2000   longitude difference of equator poles, J2000.0
 **
 **     The returned values are all radians.
+**
+**     Note that the t^5 coefficient in the series for p_A from
+**     Capitaine et al. (2003) is incorrectly signed in Hilton et al.
+**     (2006).
 **
 **  3) Hilton et al. (2006) Table 1 also contains angles that depend on
 **     models distinct from the P03 precession theory itself, namely the
@@ -12191,7 +12218,10 @@ void iauP06e(double date1, double date2,
 **  8) It is permissible to re-use the same variable in the returned
 **     arguments.  The quantities are stored in the stated order.
 **
-**  Reference:
+**  References:
+**
+**     Capitaine, N., Wallace, P.T. & Chapront, J., 2003,
+**     Astron.Astrophys., 412, 567
 **
 **     Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 **
@@ -12825,6 +12855,10 @@ void iauPmat06(double date1, double date2, double rbp[3][3])
 **
 **     Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 **
+**     IAU: Trans. International Astronomical Union, Vol. XXIVB;  Proc.
+**     24th General Assembly, Manchester, UK.  Resolutions B1.3, B1.6.
+**     (2000)
+**
 **     Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 **
 */
@@ -13298,7 +13332,7 @@ void iauPn00a(double date1, double date2,
 **  2)  The nutation components (luni-solar + planetary, IAU 2000A) in
 **      longitude and obliquity are in radians and with respect to the
 **      equinox and ecliptic of date.  Free core nutation is omitted;
-**      for the utmost accuracy, use the iauPn00  function, where the
+**      for the utmost accuracy, use the iauPn00 function, where the
 **      nutation components are caller-specified.  For faster but
 **      slightly less accurate results, use the iauPn00b function.
 **
@@ -13328,7 +13362,7 @@ void iauPn00a(double date1, double date2,
 **      i.e. rbpn[2][0-2].
 **
 **  10) It is permissible to re-use the same array in the returned
-**      arguments.  The arrays are filled in the order given.
+**      arguments.  The arrays are filled in the stated order.
 **
 **  Called:
 **     iauNut00a    nutation, IAU 2000A
@@ -13403,7 +13437,7 @@ void iauPn00b(double date1, double date2,
 **      longitude and obliquity are in radians and with respect to the
 **      equinox and ecliptic of date.  For more accurate results, but
 **      at the cost of increased computation, use the iauPn00a function.
-**      For the utmost accuracy, use the iauPn00  function, where the
+**      For the utmost accuracy, use the iauPn00 function, where the
 **      nutation components are caller-specified.
 **
 **  3)  The mean obliquity is consistent with the IAU 2000 precession.
@@ -13480,7 +13514,7 @@ void iauPn06(double date1, double date2, double dpsi, double deps,
 **     rp           double[3][3]    precession matrix (Note 5)
 **     rbp          double[3][3]    bias-precession matrix (Note 6)
 **     rn           double[3][3]    nutation matrix (Note 7)
-**     rbpn         double[3][3]    GCRS-to-true matrix (Note 8)
+**     rbpn         double[3][3]    GCRS-to-true matrix (Notes 8,9)
 **
 **  Notes:
 **
@@ -13655,7 +13689,7 @@ void iauPnm00a(double date1, double date2, double rbpn[3][3])
 **  - - - - - - - - - -
 **
 **  Form the matrix of precession-nutation for a given date (including
-**  frame bias), equinox-based, IAU 2000A model.
+**  frame bias), equinox based, IAU 2000A model.
 **
 **  This function is part of the International Astronomical Union's
 **  SOFA (Standards Of Fundamental Astronomy) software collection.
@@ -13663,17 +13697,17 @@ void iauPnm00a(double date1, double date2, double rbpn[3][3])
 **  Status:  support function.
 **
 **  Given:
-**     date1,date2  double     TT as a 2-part Julian Date (Note 1)
+**     date1,date2 double       TT as a 2-part Julian Date (Note 1)
 **
 **  Returned:
-**     rbpn         double[3][3]    classical NPB matrix (Note 2)
+**     rbpn        double[3][3] bias-precession-nutation matrix (Note 2)
 **
 **  Notes:
 **
 **  1) The TT date date1+date2 is a Julian Date, apportioned in any
 **     convenient way between the two arguments.  For example,
-**     JD(TT)=2450123.7 could be expressed in any of these ways,
-**     among others:
+**     JD(TT)=2450123.7 could be expressed in any of these ways, among
+**     others:
 **
 **            date1          date2
 **
@@ -13694,7 +13728,7 @@ void iauPnm00a(double date1, double date2, double rbpn[3][3])
 **     of date date1+date2 and the p-vector V(GCRS) is with respect to
 **     the Geocentric Celestial Reference System (IAU, 2000).
 **
-**  3) A faster, but slightly less accurate result (about 1 mas), can be
+**  3) A faster, but slightly less accurate, result (about 1 mas) can be
 **     obtained by using instead the iauPnm00b function.
 **
 **  Called:
@@ -13734,8 +13768,8 @@ void iauPnm00b(double date1, double date2, double rbpn[3][3])
 **
 **  1) The TT date date1+date2 is a Julian Date, apportioned in any
 **     convenient way between the two arguments.  For example,
-**     JD(TT)=2450123.7 could be expressed in any of these ways,
-**     among others:
+**     JD(TT)=2450123.7 could be expressed in any of these ways, among
+**     others:
 **
 **            date1          date2
 **
@@ -13772,14 +13806,15 @@ void iauPnm00b(double date1, double date2, double rbpn[3][3])
 
 
 
-void iauPnm06a(double date1, double date2, double rnpb[3][3])
+void iauPnm06a(double date1, double date2, double rbpn[3][3])
 /*
 **  - - - - - - - - - -
 **   i a u P n m 0 6 a
 **  - - - - - - - - - -
 **
 **  Form the matrix of precession-nutation for a given date (including
-**  frame bias), IAU 2006 precession and IAU 2000A nutation models.
+**  frame bias), equinox based, IAU 2006 precession and IAU 2000A
+**  nutation models.
 **
 **  This function is part of the International Astronomical Union's
 **  SOFA (Standards Of Fundamental Astronomy) software collection.
@@ -13790,14 +13825,14 @@ void iauPnm06a(double date1, double date2, double rnpb[3][3])
 **     date1,date2 double       TT as a 2-part Julian Date (Note 1)
 **
 **  Returned:
-**     rnpb        double[3][3] bias-precession-nutation matrix (Note 2)
+**     rbpn        double[3][3] bias-precession-nutation matrix (Note 2)
 **
 **  Notes:
 **
 **  1) The TT date date1+date2 is a Julian Date, apportioned in any
 **     convenient way between the two arguments.  For example,
-**     JD(TT)=2450123.7 could be expressed in any of these ways,
-**     among others:
+**     JD(TT)=2450123.7 could be expressed in any of these ways, among
+**     others:
 **
 **            date1          date2
 **
@@ -13813,7 +13848,7 @@ void iauPnm06a(double date1, double date2, double rnpb[3][3])
 **     optimum resolution.  The MJD method and the date & time methods
 **     are both good compromises between resolution and convenience.
 **
-**  2) The matrix operates in the sense V(date) = rnpb * V(GCRS), where
+**  2) The matrix operates in the sense V(date) = rbpn * V(GCRS), where
 **     the p-vector V(date) is with respect to the true equatorial triad
 **     of date date1+date2 and the p-vector V(GCRS) is with respect to
 **     the Geocentric Celestial Reference System (IAU, 2000).
@@ -13846,16 +13881,16 @@ void iauPnm80(double date1, double date2, double rmatpn[3][3])
 **  Status:  support function.
 **
 **  Given:
-**     date1,date2    double         TDB date (Note 1)
+**     date1,date2 double       TT as a 2-part Julian Date (Note 1)
 **
 **  Returned:
 **     rmatpn         double[3][3]   combined precession/nutation matrix
 **
 **  Notes:
 **
-**  1) The TDB date date1+date2 is a Julian Date, apportioned in any
+**  1) The TT date date1+date2 is a Julian Date, apportioned in any
 **     convenient way between the two arguments.  For example,
-**     JD(TDB)=2450123.7 could be expressed in any of these ways,
+**     JD(TT)=2450123.7 could be expressed in any of these ways,
 **     among others:
 **
 **            date1          date2
@@ -13917,7 +13952,7 @@ void iauPom00(double xp, double yp, double sp, double rpom[3][3])
 **  1) The arguments xp and yp are the coordinates (in radians) of the
 **     Celestial Intermediate Pole with respect to the International
 **     Terrestrial Reference System (see IERS Conventions 2003),
-**     measured along the meridians to 0 and 90 deg west respectively.
+**     measured along the meridians 0 and 90 deg west respectively.
 **
 **  2) The argument sp is the TIO locator s', in radians, which
 **     positions the Terrestrial Intermediate Origin on the equator.  It
@@ -14773,6 +14808,7 @@ void iauRefco(double phpa, double tc, double rh, double wl,
 **        total pressure, water-vapour pressure and, in the case
 **        of optical/IR, wavelength.  The formulae for the two cases are
 **        developed from Hohenkerk & Sinclair (1985) and Rueger (2002).
+**        The IAG (1999) optical refractivity for dry air is used.
 **
 **     d) The formula for beta, the ratio of the scale height of the
 **        atmosphere to the geocentric distance of the observer, is
@@ -14798,6 +14834,9 @@ void iauRefco(double phpa, double tc, double rh, double wl,
 **
 **     Hohenkerk, C.Y., & Sinclair, A.T., NAO Technical Note No. 63,
 **     1985.
+**
+**     IAG Resolutions adopted at the XXIIth General Assembly in
+**     Birmingham, 1999, Resolution 3.
 **
 **     Rueger, J.M., "Refractive Index Formulae for Electronic Distance
 **     Measurement with Radio and Millimetre Waves", in Unisurv Report
@@ -14874,7 +14913,7 @@ void iauRv2m(double w[3], double r[3][3])
 **     supplied to This function has the same direction as the Euler
 **     axis, and its magnitude is the angle in radians.
 **
-**  2) If w is null, the unit matrix is returned.
+**  2) If w is null, the identity matrix is returned.
 **
 **  3) The reference frame rotates clockwise as seen looking along the
 **     rotation vector from the origin.
@@ -14970,8 +15009,14 @@ void iauRxpv(double r[3][3], double pv[2][3], double rpv[2][3])
 **  Returned:
 **     rpv      double[2][3]    r * pv
 **
-**  Note:
-**     It is permissible for pv and rpv to be the same array.
+**  Notes:
+**
+**  1) The algorithm is for the simple case where the r-matrix r is not
+**     a function of time.  The case where r is a function of time leads
+**     to an additional velocity component equal to the product of the
+**     derivative of r and the position vector.
+**
+**  2) It is permissible for pv and rpv to be the same array.
 **
 **  Called:
 **     iauRxp       product of r-matrix and p-vector
@@ -16012,7 +16057,7 @@ void iauSxpv(double s, double pv[2][3], double spv[2][3])
 **     spv     double[2][3]    s * pv
 **
 **  Note:
-**     It is permissible for pv and spv to be the same array
+**     It is permissible for pv and spv to be the same array.
 **
 **  Called:
 **     iauS2xpv     multiply pv-vector by two scalars
@@ -16260,7 +16305,7 @@ int iauTcgtt(double tcg1, double tcg2, double *tt1, double *tt2)
 **
 **  References:
 **
-**     McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),.
+**     McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
 **     IERS Technical Note No. 32, BKG (2004)
 **
 **     IAU 2000 Resolution B1.9
@@ -16953,7 +16998,7 @@ void iauTrxp(double r[3][3], double p[3], double trp[3])
 **     p        double[3]      p-vector
 **
 **  Returned:
-**     trp      double[3]      r * p
+**     trp      double[3]      r^T * p
 **
 **  Note:
 **     It is permissible for p and trp to be the same array.
@@ -16984,10 +17029,16 @@ void iauTrxpv(double r[3][3], double pv[2][3], double trpv[2][3])
 **     pv       double[2][3]    pv-vector
 **
 **  Returned:
-**     trpv     double[2][3]    r * pv
+**     trpv     double[2][3]    r^T * pv
 **
-**  Note:
-**     It is permissible for pv and trpv to be the same array.
+**  Notes:
+**
+**  1) The algorithm is for the simple case where the r-matrix r is not
+**     a function of time.  The case where r is a function of time leads
+**     to an additional velocity component equal to the product of the
+**     derivative of the transpose of r and the position vector.
+**
+**  2) It is permissible for pv and rpv to be the same array.
 **
 **  Called:
 **     iauTr        transpose r-matrix
@@ -17307,8 +17358,8 @@ int iauUt1utc(double ut11, double ut12, double dut1,
 **
 **  3) JD cannot unambiguously represent UTC during a leap second unless
 **     special measures are taken.  The convention in the present
-**     function is that the returned quasi JD day UTC1+UTC2 represents
-**     UTC days whether the length is 86399, 86400 or 86401 SI seconds.
+**     function is that the returned quasi-JD UTC1+UTC2 represents UTC
+**     days whether the length is 86399, 86400 or 86401 SI seconds.
 **
 **  4) The function iauD2dtf can be used to transform the UTC quasi-JD
 **     into calendar date and clock time, including UTC leap second
@@ -17589,7 +17640,7 @@ void iauXys00a(double date1, double date2,
 **
 **  Returned:
 **     x,y          double   Celestial Intermediate Pole (Note 2)
-**     s            double   the CIO locator s (Note 2)
+**     s            double   the CIO locator s (Note 3)
 **
 **  Notes:
 **
@@ -17657,7 +17708,7 @@ void iauXys00b(double date1, double date2,
 **
 **  Returned:
 **     x,y          double   Celestial Intermediate Pole (Note 2)
-**     s            double   the CIO locator s (Note 2)
+**     s            double   the CIO locator s (Note 3)
 **
 **  Notes:
 **
@@ -17725,7 +17776,7 @@ void iauXys06a(double date1, double date2,
 **
 **  Returned:
 **     x,y          double  Celestial Intermediate Pole (Note 2)
-**     s            double  the CIO locator s (Note 2)
+**     s            double  the CIO locator s (Note 3)
 **
 **  Notes:
 **
@@ -17786,7 +17837,7 @@ void iauZp(double p[3])
 **  Status:  vector/matrix support function.
 **
 **  Returned:
-**     p        double[3]      p-vector
+**     p        double[3]      zero p-vector
 **
 */
 
@@ -17806,7 +17857,7 @@ void iauZpv(double pv[2][3])
 **  Status:  vector/matrix support function.
 **
 **  Returned:
-**     pv       double[2][3]      pv-vector
+**     pv       double[2][3]      zero pv-vector
 **
 **  Called:
 **     iauZp        zero p-vector
@@ -17833,7 +17884,7 @@ void iauZr(double r[3][3])
 **
 */
 
-copyr.lis                                                2018 January 26
+copyr.lis                                                    2020 June 2
 
 
 COPYRIGHT NOTICE
@@ -17851,7 +17902,7 @@ second updates with no need to download new SOFA code.
 
 *+----------------------------------------------------------------------
 *
-*  Copyright (C) 2019
+*  Copyright (C) 2021
 *  Standards Of Fundamental Astronomy Board
 *  of the International Astronomical Union.
 *
@@ -18015,9 +18066,9 @@ file sofam.h.
 **
 **  This revision:   2018 December 5
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 
 #include "sofam.h"
@@ -18499,7 +18550,7 @@ void iauSxpv(double s, double pv[2][3], double spv[2][3]);
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
@@ -18610,11 +18661,11 @@ void iauSxpv(double s, double pv[2][3], double spv[2][3]);
 **  the context of the SOFA software, and have no other official IAU
 **  status.  In addition, self consistency is not guaranteed.
 **
-**  This revision:   2017 March 16
+**  This revision:   2020 June 16
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 
 /* Star-independent astrometry parameters */
@@ -18730,7 +18781,8 @@ typedef struct {
 #define dint(A) ((A)<0.0?ceil(A):floor(A))
 
 /* dnint(A) - round to nearest whole number (double) */
-#define dnint(A) ((A)<0.0?ceil((A)-0.5):floor((A)+0.5))
+#define dnint(A) (fabs(A)<0.5?0.0\
+                                :((A)<0.0?ceil((A)-0.5):floor((A)+0.5)))
 
 /* dsign(A,B) - magnitude of A with sign of B (double) */
 #define dsign(A,B) ((B)<0.0?-fabs(A):fabs(A))
@@ -18750,7 +18802,7 @@ typedef struct {
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
@@ -18844,7 +18896,7 @@ typedef struct {
 **
 **--------------------------------------------------------------------*/
 
-board.lis                                                 2018 May 03
+board.lis                                                    2020 June 2
 
 
 
@@ -18856,7 +18908,7 @@ Current Membership
    John Bangert - United States Naval Observatory, retired
    Steven Bell - Her Majesty's Nautical Almanac Office (HMNAO)
    Nicole Capitaine - Paris Observatory
-   Mickaël Gastineau - Paris Observatory, IMCCE
+   Mickael Gastineau - Paris Observatory, IMCCE
    Catherine Hohenkerk - HMNAO (Chair, retired)
    Li Jinling - Shanghai Astronomical Observatory
    Brian Luzum - United States Naval Observatory (IERS)
@@ -18864,7 +18916,9 @@ Current Membership
    Jeffrey Percival - University of Wisconsin
    Wendy Puatua - United States Naval Observatory
    Scott Ransom - National Radio Astronomy Observatory
+   Nick Stamatakos - United States Naval Observatory
    Patrick Wallace - RAL Space, retired
+   Toni Wilmot -  Her Majesty's Nautical Almanac Office (Trainee)
 
 
 Past Members
@@ -18880,5 +18934,5 @@ Past Members
    Jin Wen-Jing           Shanghai Astronomical Observatory
 
 
-The e-mail for the Board chair is Catherine.Hohenkerk@ukho.gov.uk
+The email address for the Board chair is catherine.hohenkerk@gmail.com
 

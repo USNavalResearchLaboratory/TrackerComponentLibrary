@@ -1,0 +1,14 @@
+The archive for the Matlab version of SCS is here. The Matlab version is
+from
+https://github.com/bodono/scs-matlab
+A C version can be obtained from 
+https://github.com/cvxgrp/scs
+
+The Matlab interface for the C version appears to not be compatible with of
+Matlab 2020b, so only the Matlab version is available right now.
+
+Files that are not used have been compressed into "Unused Code.zip"
+archives. Also, lines that would have printed intermediate results to the
+console have been commented out.
+
+November 2020 David F. Crouse, Naval Research Laboratory, Washington D.C.

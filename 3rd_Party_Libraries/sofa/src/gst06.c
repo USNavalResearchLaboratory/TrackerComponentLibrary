@@ -26,10 +26,10 @@ double iauGst06(double uta, double utb, double tta, double ttb,
 **
 **  1) The UT1 and TT dates uta+utb and tta+ttb respectively, are both
 **     Julian Dates, apportioned in any convenient way between the
-**     argument pairs.  For example, JD=2450123.7 could be expressed in
-**     any of these ways, among others:
+**     argument pairs.  For example, JD(UT1)=2450123.7 could be
+**     expressed in any of these ways, among others:
 **
-**            Part A        Part B
+**             uta            utb
 **
 **         2450123.7           0.0       (JD method)
 **         2451545.0       -1421.3       (J2000 method)
@@ -69,11 +69,11 @@ double iauGst06(double uta, double utb, double tta, double ttb,
 **
 **     Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 **
-**  This revision:  2013 June 18
+**  This revision:  2020 November 18
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double x, y, s, era, eors, gst;
@@ -94,7 +94,7 @@ double iauGst06(double uta, double utb, double tta, double ttb,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

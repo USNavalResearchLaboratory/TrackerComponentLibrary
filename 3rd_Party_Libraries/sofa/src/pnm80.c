@@ -15,16 +15,16 @@ void iauPnm80(double date1, double date2, double rmatpn[3][3])
 **  Status:  support function.
 **
 **  Given:
-**     date1,date2    double         TDB date (Note 1)
+**     date1,date2 double       TT as a 2-part Julian Date (Note 1)
 **
 **  Returned:
 **     rmatpn         double[3][3]   combined precession/nutation matrix
 **
 **  Notes:
 **
-**  1) The TDB date date1+date2 is a Julian Date, apportioned in any
+**  1) The TT date date1+date2 is a Julian Date, apportioned in any
 **     convenient way between the two arguments.  For example,
-**     JD(TDB)=2450123.7 could be expressed in any of these ways,
+**     JD(TT)=2450123.7 could be expressed in any of these ways,
 **     among others:
 **
 **            date1          date2
@@ -57,11 +57,11 @@ void iauPnm80(double date1, double date2, double rmatpn[3][3])
 **     P. Kenneth Seidelmann (ed), University Science Books (1992),
 **     Section 3.3 (p145).
 **
-**  This revision:  2013 June 18
+**  This revision:  2020 November 27
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double rmatp[3][3], rmatn[3][3];
@@ -80,7 +80,7 @@ void iauPnm80(double date1, double date2, double rmatpn[3][3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

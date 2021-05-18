@@ -16,10 +16,10 @@ double iauEors(double rnpb[3][3], double s)
 **
 **  Given:
 **     rnpb  double[3][3]  classical nutation x precession x bias matrix
-**     s     double        the quantity s (the CIO locator)
+**     s     double        the quantity s (the CIO locator) in radians
 **
 **  Returned (function value):
-**           double        the equation of the origins in radians.
+**           double        the equation of the origins in radians
 **
 **  Notes:
 **
@@ -38,11 +38,11 @@ double iauEors(double rnpb[3][3], double s)
 **
 **     Wallace, P. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 **
-**  This revision:  2013 June 18
+**  This revision:  2020 November 14
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double x, ax, xs, ys, zs, p, q, eo;
@@ -62,7 +62,7 @@ double iauEors(double rnpb[3][3], double s)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

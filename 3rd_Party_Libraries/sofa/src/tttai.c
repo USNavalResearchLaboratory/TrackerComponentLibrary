@@ -40,9 +40,9 @@ int iauTttai(double tt1, double tt2, double *tai1, double *tai2)
 **
 **  This revision:  2019 June 20
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
 
@@ -64,7 +64,7 @@ int iauTttai(double tt1, double tt2, double *tai1, double *tai2)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

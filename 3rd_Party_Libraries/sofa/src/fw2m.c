@@ -44,13 +44,16 @@ void iauFw2m(double gamb, double phib, double psi, double eps,
 **
 **        NxPxB = R_1(-eps).R_3(-psi).R_1(phib).R_3(gamb)
 **
-**  3) Three different matrices can be constructed, depending on the
-**     supplied angles:
+**  3) The present function can construct three different matrices,
+**     depending on which angles are supplied as the arguments gamb,
+**     phib, psi and eps:
 **
 **     o  To obtain the nutation x precession x frame bias matrix,
-**        generate the four precession angles, generate the nutation
-**        components and add them to the psi_bar and epsilon_A angles,
-**        and call the present function.
+**        first generate the four precession angles known conventionally
+**        as gamma_bar, phi_bar, psi_bar and epsilon_A, then generate
+**        the nutation components Dpsi and Depsilon and add them to
+**        psi_bar and epsilon_A, and finally call the present function
+**        using those four angles as arguments.
 **
 **     o  To obtain the precession x frame bias matrix, generate the
 **        four precession angles and call the present function.
@@ -66,15 +69,17 @@ void iauFw2m(double gamb, double phib, double psi, double eps,
 **     iauRz        rotate around Z-axis
 **     iauRx        rotate around X-axis
 **
-**  Reference:
+**  References:
+**
+**     Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 **
 **     Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 **
-**  This revision:  2013 June 18
+**  This revision:  2020 November 17
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
 /* Construct the matrix. */
@@ -88,7 +93,7 @@ void iauFw2m(double gamb, double phib, double psi, double eps,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

@@ -33,7 +33,7 @@
 #      make distclean     delete all generated binaries
 #      make realclean     same as distclean
 #
-# Last revision:   2019 July 22
+# Last revision:   2020 May 11
 #
 # Copyright International Astronomical Union.  All rights reserved.
 #
@@ -64,8 +64,8 @@ SOFA_INC_DIR = $(INSTALL_DIR)/include/
 # for functions, CFLAGX for executables) here.
 
 CCOMPC = gcc
-CFLAGF = -c -pedantic -Wall -W -O
-CFLAGX = -pedantic -Wall -W -O
+CFLAGF = -c -pedantic -Wall -O
+CFLAGX = -pedantic -Wall -O
 
 #----YOU SHOULDN'T HAVE TO MODIFY ANYTHING BELOW THIS LINE---------
 

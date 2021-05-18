@@ -100,20 +100,20 @@ void iauAtioq(double ri, double di, iauASTROM *astrom,
 **     iauC2s       p-vector to spherical
 **     iauAnp       normalize angle into range 0 to 2pi
 **
-**  This revision:   2016 March 9
+**  This revision:   2020 December 7
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
 /* Minimum cos(alt) and sin(alt) for refraction purposes */
    const double CELMIN = 1e-6;
    const double SELMIN = 0.05;
 
-   double v[3], x, y, z, xhd, yhd, zhd, f, xhdt, yhdt, zhdt,
-          xaet, yaet, zaet, azobs, r, tz, w, del, cosdel,
-          xaeo, yaeo, zaeo, zdobs, hmobs, dcobs, raobs;
+   double v[3], x, y, z, sx, cx, sy, cy, xhd, yhd, zhd, f,
+          xhdt, yhdt, zhdt, xaet, yaet, zaet, azobs, r, tz, w, del,
+          cosdel, xaeo, yaeo, zaeo, zdobs, hmobs, dcobs, raobs;
 
 
 /* CIRS RA,Dec to Cartesian -HA,Dec. */
@@ -123,9 +123,13 @@ void iauAtioq(double ri, double di, iauASTROM *astrom,
    z = v[2];
 
 /* Polar motion. */
-   xhd = x + astrom->xpl*z;
-   yhd = y - astrom->ypl*z;
-   zhd = z - astrom->xpl*x + astrom->ypl*y;
+   sx = sin(astrom->xpl);
+   cx = cos(astrom->xpl);
+   sy = sin(astrom->ypl);
+   cy = cos(astrom->ypl);
+   xhd = cx*x + sx*z;
+   yhd = sx*sy*x + cy*y - cx*sy*z;
+   zhd = -sx*cy*x + sy*y + cx*cy*z;
 
 /* Diurnal aberration. */
    f = ( 1.0 - astrom->diurab*yhd );
@@ -188,7 +192,7 @@ void iauAtioq(double ri, double di, iauASTROM *astrom,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

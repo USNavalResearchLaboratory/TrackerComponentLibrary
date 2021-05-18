@@ -4,9 +4,8 @@ function boolVal=fileIsInvisible(path)
 %                  whether the folder/ file is invisible based on the names
 %                  of the folders in the path and the filename.
 %
-%INPUTS:  path    The path to the file. For example, '/test.txt'. The path
-%                 should be UNIX-style with '/' to indicate folders, not
-%                 '\'.
+%INPUTS: path The path to the file. For example, '/test.txt'. The path
+%             should be UNIX-style with '/' to indicate folders, not '\'.
 %
 %OUTPUTS: boolVal True if the file is invisible or is a folder based on the
 %                 path.

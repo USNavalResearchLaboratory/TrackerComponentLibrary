@@ -32,16 +32,16 @@ int iauTcgtt(double tcg1, double tcg2, double *tt1, double *tt2)
 **
 **  References:
 **
-**     McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),.
+**     McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
 **     IERS Technical Note No. 32, BKG (2004)
 **
 **     IAU 2000 Resolution B1.9
 **
-**  This revision:  2019 June 20
+**  This revision:  2020 October 23
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
 
@@ -63,7 +63,7 @@ int iauTcgtt(double tcg1, double tcg2, double *tt1, double *tt2)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

@@ -24,8 +24,8 @@ void iauPnm00b(double date1, double date2, double rbpn[3][3])
 **
 **  1) The TT date date1+date2 is a Julian Date, apportioned in any
 **     convenient way between the two arguments.  For example,
-**     JD(TT)=2450123.7 could be expressed in any of these ways,
-**     among others:
+**     JD(TT)=2450123.7 could be expressed in any of these ways, among
+**     others:
 **
 **            date1          date2
 **
@@ -58,11 +58,11 @@ void iauPnm00b(double date1, double date2, double rbpn[3][3])
 **     24th General Assembly, Manchester, UK.  Resolutions B1.3, B1.6.
 **     (2000)
 **
-**  This revision:  2013 June 18
+**  This revision:  2020 November 27
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double dpsi, deps, epsa, rb[3][3], rp[3][3], rbp[3][3], rn[3][3];
@@ -75,7 +75,7 @@ void iauPnm00b(double date1, double date2, double rbpn[3][3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

@@ -81,11 +81,11 @@ double iauS00(double date1, double date2, double x, double y)
 **     McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
 **     IERS Technical Note No. 32, BKG (2004)
 **
-**  This revision:  2019 June 23
+**  This revision:  2020 November 4
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
 /* Time since J2000.0, in Julian centuries */
@@ -275,43 +275,43 @@ double iauS00(double date1, double date2, double x, double y)
    w5 = sp[5];
 
    for (i = NS0-1; i >= 0; i--) {
-   a = 0.0;
-   for (j = 0; j < 8; j++) {
-       a += (double)s0[i].nfa[j] * fa[j];
-   }
-   w0 += s0[i].s * sin(a) + s0[i].c * cos(a);
+      a = 0.0;
+      for (j = 0; j < 8; j++) {
+          a += (double)s0[i].nfa[j] * fa[j];
+      }
+      w0 += s0[i].s * sin(a) + s0[i].c * cos(a);
    }
 
    for (i = NS1-1; i >= 0; i--) {
-   a = 0.0;
-   for (j = 0; j < 8; j++) {
-       a += (double)s1[i].nfa[j] * fa[j];
-   }
-   w1 += s1[i].s * sin(a) + s1[i].c * cos(a);
+      a = 0.0;
+      for (j = 0; j < 8; j++) {
+          a += (double)s1[i].nfa[j] * fa[j];
+      }
+      w1 += s1[i].s * sin(a) + s1[i].c * cos(a);
    }
 
    for (i = NS2-1; i >= 0; i--) {
-   a = 0.0;
-   for (j = 0; j < 8; j++) {
-       a += (double)s2[i].nfa[j] * fa[j];
-   }
-   w2 += s2[i].s * sin(a) + s2[i].c * cos(a);
+      a = 0.0;
+      for (j = 0; j < 8; j++) {
+          a += (double)s2[i].nfa[j] * fa[j];
+      }
+      w2 += s2[i].s * sin(a) + s2[i].c * cos(a);
    }
 
    for (i = NS3-1; i >= 0; i--) {
-   a = 0.0;
-   for (j = 0; j < 8; j++) {
-       a += (double)s3[i].nfa[j] * fa[j];
-   }
-   w3 += s3[i].s * sin(a) + s3[i].c * cos(a);
+      a = 0.0;
+      for (j = 0; j < 8; j++) {
+          a += (double)s3[i].nfa[j] * fa[j];
+      }
+      w3 += s3[i].s * sin(a) + s3[i].c * cos(a);
    }
 
    for (i = NS4-1; i >= 0; i--) {
-   a = 0.0;
-   for (j = 0; j < 8; j++) {
-       a += (double)s4[i].nfa[j] * fa[j];
-   }
-   w4 += s4[i].s * sin(a) + s4[i].c * cos(a);
+      a = 0.0;
+      for (j = 0; j < 8; j++) {
+          a += (double)s4[i].nfa[j] * fa[j];
+      }
+      w4 += s4[i].s * sin(a) + s4[i].c * cos(a);
    }
 
    s = (w0 +
@@ -325,7 +325,7 @@ double iauS00(double date1, double date2, double x, double y)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

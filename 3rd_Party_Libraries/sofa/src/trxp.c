@@ -18,7 +18,7 @@ void iauTrxp(double r[3][3], double p[3], double trp[3])
 **     p        double[3]      p-vector
 **
 **  Returned:
-**     trp      double[3]      r * p
+**     trp      double[3]      r^T * p
 **
 **  Note:
 **     It is permissible for p and trp to be the same array.
@@ -27,11 +27,11 @@ void iauTrxp(double r[3][3], double p[3], double trp[3])
 **     iauTr        transpose r-matrix
 **     iauRxp       product of r-matrix and p-vector
 **
-**  This revision:  2013 June 18
+**  This revision:  2020 May 24
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double tr[3][3];
@@ -47,7 +47,7 @@ void iauTrxp(double r[3][3], double p[3], double trp[3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

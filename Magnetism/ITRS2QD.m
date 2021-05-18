@@ -180,8 +180,8 @@ for curPoint=1:numPoints
     else
         ellipsApex=Cart2Ellipse(apexPoint,[],a,f);
         hA=ellipsApex(3);%The ellipsoidal height of the apex point.
-        %The longitude is the centered dipole longitude of the apex location;
-        %The C inputs are C_{1,0}, C_{1,1}, and S_{1,1}
+        %The longitude is the centered dipole longitude of the apex
+        %location; the C inputs are C_{1,0}, C_{1,1}, and S_{1,1}
         ApexCDSpher=Cart2Sphere(ITRS2CartCD(apexPoint,C(2),C(3),S(3)));
         phi=ApexCDSpher(2);%The centered dipole longitude (azimuth).
     end

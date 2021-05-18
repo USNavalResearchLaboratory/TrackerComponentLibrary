@@ -9,7 +9,7 @@ function [alpha1,dist,alpha2]=indirectGeodeticProb(latLonStart,latLonEnd,a,f)
 %                  longitude in radians of the format [latitude;longitude].
 %                  The latitude must be between -pi/2 and pi/2 radians and
 %                  the longitude between -pi and pi radians.
-%        latLonEnd The 2X1  final points for the geodesic path given in 
+%        latLonEnd The 2X1  final point for the geodesic path given in 
 %                  geodetic latitude  and longitude in radians. latLonEnd
 %                  has the same format at latLonStart.
 %                a The semi-major axis of the reference ellipsoid (in
@@ -67,7 +67,7 @@ function [alpha1,dist,alpha2]=indirectGeodeticProb(latLonStart,latLonEnd,a,f)
 maxIters=17;
 tinyVal=sqrt(realmin);
 tolPol=2^14*eps(pi/2);%Used to determine whether a point is at a pole.
-tolEq=eps();%Used to determine whether points are almost equaltorial.
+tolEq=eps();%Used to determine whether points are almost equatorial.
 lambda12ConvergeEps=8*eps();
 
 if(nargin<4||isempty(f))
@@ -136,6 +136,12 @@ end
 %It is required that 0<=lambda12<=pi. If that is not the case, flip the
 %signs of the lambda values.
 lambda12=wrapRange(lambda2-lambda1,-pi,pi);
+if(abs(lambda12)<lambda12ConvergeEps)
+    %This heuristic helps with finite precision limitations that can cause
+    %massive errors. It is not described in Karney's papers.
+    lambda12=0;
+end
+
 if(lambda12<0)
     %Flip the sign of the lambda difference so that 0<=lambda12<=pi.
     %Lambda1 and lambda2 are not reused, so they do not need to be

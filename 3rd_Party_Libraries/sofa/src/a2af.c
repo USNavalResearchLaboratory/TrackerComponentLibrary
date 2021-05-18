@@ -18,11 +18,8 @@ void iauA2af(int ndp, double angle, char *sign, int idmsf[4])
 **     angle   double  angle in radians
 **
 **  Returned:
-**     sign    char    '+' or '-'
+**     sign    char*   '+' or '-'
 **     idmsf   int[4]  degrees, arcminutes, arcseconds, fraction
-**
-**  Called:
-**     iauD2tf      decompose days to hms
 **
 **  Notes:
 **
@@ -56,11 +53,14 @@ void iauA2af(int ndp, double angle, char *sign, int idmsf[4])
 **     case where angle is very nearly 2pi and rounds up to 360 degrees,
 **     by testing for idmsf[0]=360 and setting idmsf[0-3] to zero.
 **
-**  This revision:  2013 June 18
+**  Called:
+**     iauD2tf      decompose days to hms
 **
-**  SOFA release 2019-07-22
+**  This revision:  2020 April 1
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  SOFA release 2021-01-25
+**
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
 /* Hours to degrees * radians to turns */
@@ -74,7 +74,7 @@ void iauA2af(int ndp, double angle, char *sign, int idmsf[4])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

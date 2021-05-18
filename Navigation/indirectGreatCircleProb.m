@@ -396,10 +396,6 @@ function [azStart,dist,azEnd,latLonWayPoints]=indirectGreatCircleProbCrouse(latL
 u1=spher2Cart([latLonStart(2);latLonStart(1)]);
 u2=spher2Cart([latLonEnd(2);latLonEnd(1)]);
 
-%The angular distance betwene the points.
-D=angBetweenVecs(u1,u2);
-dist=D*r;
-
 %Rotate the vectors both onto the equator.
 [vec1Rot,vec2Rot,R]=rot2Vecs2CommonAxis(u1,u2);
 
@@ -410,6 +406,9 @@ az1=atan2(vec1Rot(2),vec1Rot(1));
 az2=atan2(vec2Rot(2),vec2Rot(1));
 DLo=wrapRange(az2-az1,-pi,pi);
 goingWest=(DLo<0);
+
+%The distance traveled between the points.
+dist=abs(DLo)*r;
 
 %Unit vectors in the traveling directions are thus either the positive or
 %the negative of the East unit direction vector at the starting and ending

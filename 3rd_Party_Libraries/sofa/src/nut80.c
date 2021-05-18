@@ -55,9 +55,9 @@ void iauNut80(double date1, double date2, double *dpsi, double *deps)
 **
 **  This revision:  2019 June 23
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double t, el, elp, f, d, om, dp, de, arg, s, c;
@@ -279,7 +279,7 @@ void iauNut80(double date1, double date2, double *dpsi, double *deps)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

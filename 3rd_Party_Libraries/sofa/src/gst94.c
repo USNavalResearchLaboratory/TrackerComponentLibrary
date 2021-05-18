@@ -24,7 +24,7 @@ double iauGst94(double uta, double utb)
 **
 **  1) The UT1 date uta+utb is a Julian Date, apportioned in any
 **     convenient way between the argument pair.  For example,
-**     JD=2450123.7 could be expressed in any of these ways, among
+**     JD(UT1)=2450123.7 could be expressed in any of these ways, among
 **     others:
 **
 **             uta            utb
@@ -67,11 +67,11 @@ double iauGst94(double uta, double utb)
 **
 **     IAU Resolution C7, Recommendation 3 (1994)
 **
-**  This revision:  2008 May 16
+**  This revision:  2020 November 18
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double gmst82, eqeq94, gst;
@@ -85,7 +85,7 @@ double iauGst94(double uta, double utb)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

@@ -54,7 +54,7 @@ void iauPn00a(double date1, double date2,
 **  2)  The nutation components (luni-solar + planetary, IAU 2000A) in
 **      longitude and obliquity are in radians and with respect to the
 **      equinox and ecliptic of date.  Free core nutation is omitted;
-**      for the utmost accuracy, use the iauPn00  function, where the
+**      for the utmost accuracy, use the iauPn00 function, where the
 **      nutation components are caller-specified.  For faster but
 **      slightly less accurate results, use the iauPn00b function.
 **
@@ -84,7 +84,7 @@ void iauPn00a(double date1, double date2,
 **      i.e. rbpn[2][0-2].
 **
 **  10) It is permissible to re-use the same array in the returned
-**      arguments.  The arrays are filled in the order given.
+**      arguments.  The arrays are filled in the stated order.
 **
 **  Called:
 **     iauNut00a    nutation, IAU 2000A
@@ -100,11 +100,11 @@ void iauPn00a(double date1, double date2,
 **     n.b. The celestial ephemeris origin (CEO) was renamed "celestial
 **          intermediate origin" (CIO) by IAU 2006 Resolution 2.
 **
-**  This revision:  2013 November 14
+**  This revision:  2020 November 25
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
 /* Nutation. */
@@ -117,7 +117,7 @@ void iauPn00a(double date1, double date2,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

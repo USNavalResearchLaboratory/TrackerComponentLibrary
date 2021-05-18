@@ -28,7 +28,7 @@ void iauPn06(double date1, double date2, double dpsi, double deps,
 **     rp           double[3][3]    precession matrix (Note 5)
 **     rbp          double[3][3]    bias-precession matrix (Note 6)
 **     rn           double[3][3]    nutation matrix (Note 7)
-**     rbpn         double[3][3]    GCRS-to-true matrix (Note 8)
+**     rbpn         double[3][3]    GCRS-to-true matrix (Notes 8,9)
 **
 **  Notes:
 **
@@ -98,11 +98,11 @@ void iauPn06(double date1, double date2, double dpsi, double deps,
 **
 **     Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 **
-**  This revision:  2013 November 14
+**  This revision:  2020 November 25
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double gamb, phib, psib, eps, r1[3][3], r2[3][3], rt[3][3];
@@ -141,7 +141,7 @@ void iauPn06(double date1, double date2, double dpsi, double deps,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

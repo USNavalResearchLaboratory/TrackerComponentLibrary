@@ -37,7 +37,7 @@ function [latLonPoint1,latLonPoint2]=greatCircleTDOALoc(TDOA1,TDOA2,latLonRef,la
 %This example illustrates the geometry of how there can be two solutions.
 %The reference sensor is plotted in red and sensors 1 and two are plotted
 %in green and blue. The distances from the reference sensor to the other
-%sensors are given as red dashed line. The "true" distances to the target
+%sensors are given as a red dashed line. The "true" distances to the target
 %(plotted in yellow) are drawn in black. The problem is solved. In this
 %case, the first solution is correct and we verify that the difference in
 %the latitude and lognitudes found is within finite precision errors. We
@@ -177,7 +177,7 @@ function [latLonPoint1,latLonPoint2]=greatCircleTDOALoc(TDOA1,TDOA2,latLonRef,la
 %
 %REFERENCES:
 %[1] P. Williams and D. Last, "On Loran-C time-difference to co-ordinate
-%    converters," in Proceedings of the 32nd Annual Convention & technical
+%    converters," in Proceedings of the 32nd Annual Convention & Technical
 %    Symposium of the International Loran Association, Boulder, CO, 3-7
 %    Nov. 2003.
 %
@@ -234,8 +234,10 @@ cosBeta1=(val1+val2)/denom;
 cosBeta1Alt=(val1-val2)/(u1^2+u2^2);
 
 %Equation 3.24 in [1], taking the inverse.
-thetams=atan2((cosP1-cosThetam1),(sinP1+sinThetam1*cosBeta1));
-thetamsAlt=atan2((cosP1-cosThetam1),(sinP1+sinThetam1*cosBeta1Alt));
+thetams=atan((cosP1-cosThetam1)/(sinP1+sinThetam1*cosBeta1));
+thetams=thetams+(thetams<0)*pi;
+thetamsAlt=atan((cosP1-cosThetam1)/(sinP1+sinThetam1*cosBeta1Alt));
+thetamsAlt=thetamsAlt+(thetamsAlt<0)*pi;
 
 xyzRef=ellips2Cart([latLonRef;0],r,0);
 xyz1=ellips2Cart([latLon1;0],r,0);
@@ -253,7 +255,7 @@ latLonPoint2=latLonElPoint2(1:2);
 end
 
 function latLonElPoint=getSol4Thetams(thetams,cosP1,sinP1,cosP2,sinP2,A,r)
-%%GETSOL4THETAMS Get a solution for a particualr thetams. This is broken
+%%GETSOL4THETAMS Get a solution for a particular thetams. This is broken
 %                out as a separate function, since the work has to be done
 %                twice, once for each solution.
 %

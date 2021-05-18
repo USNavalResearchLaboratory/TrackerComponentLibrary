@@ -1,7 +1,7 @@
 function [C,S,a,c]=getWMMCoeffs(year,fullyNormalize)
-%%GETWMMCOEFFS Obtain spherical harmonic coefficients for the 2015v2 
+%%GETWMMCOEFFS Obtain spherical harmonic coefficients for the 2020 
 %              version of the DoD's World Magnetic Model (WMM) at a
-%              particular time or at the reference epoch (2015). The WMM
+%              particular time or at the reference epoch (2020). The WMM
 %              predicts the Earth's core field forward in time from the
 %              reference epoch. Past field data, the International
 %              geomagnetic Reference Field (IGRF) is suggested. If a
@@ -15,12 +15,12 @@ function [C,S,a,c]=getWMMCoeffs(year,fullyNormalize)
 %
 %INPUTS: year A decimal number indicating a year in the Gregorian calendar
 %             as specified by universal coordinated time (UTC). For
-%             example, halfway through the year 2017 would be represented
-%             as 2017.5. The precision of the model is not sufficiently
+%             example, halfway through the year 2021 would be represented
+%             as 2021.5. The precision of the model is not sufficiently
 %             fine that leap seconds matter. If this parameter is omitted,
-%             then the reference year of 2015 is used. Years from 2015
-%             onward should be uased as past years are better modeled using
-%             the IGRF.
+%             then the reference year of 2020 is used. Years from 2020
+%             onward should be used, because past years are better modeled
+%             using the IGRF.
 % fullyNormalize Geomagnetic models are normally given in terms of Schmidt
 %             semi-normalized Legendre functions with normalization term
 %             N(n,m)=sqrt((2-KDelta(m))*factorial(n-m)/factorial(n+m))
@@ -50,16 +50,15 @@ function [C,S,a,c]=getWMMCoeffs(year,fullyNormalize)
 %to the function spherHarmonicEval.
 %
 %Documentation for the WMM is given in [1] and information on Schmidt semi-
-%normalized Legendre functions is given in [2]. The most recent update is
-%out-of-cycle and is described in [3]. The coefficients are distributed at:
+%normalized Legendre functions is given in [2].The coefficients are
+%distributed at:
 %http://www.ngdc.noaa.gov/geomag/WMM/DoDWMM.shtml
 %and being made by the U.S. Government are not subject to copyright
 %protection.
 %
 %EXAMPLE:
 %This shows how to get the magnetic field in the North-East-Down coordinate
-%system that is used in [1] and [3]. We choose one of the test value
-%points:
+%system that is used in [1].
 % [C,S,a,c]=getWMMCoeffs(2017.5);
 % %(pi/180) converts degrees to radians.
 % pointLLA=[-80*(pi/180);240*(pi/180);100e3];
@@ -75,17 +74,14 @@ function [C,S,a,c]=getWMMCoeffs(year,fullyNormalize)
 % DownZ=-dot(u(:,3),B)*1e9
 %
 %REFERENCES:
-%[1] S. Maus, S. McLean, M. Nair, and C. Rollins, "The US/UK world magnetic
-%    model for 2010-2015," National Oceanographic and Atmospheric
-%    Organization, Tech. Rep. NESDIS/NGDC, 2010. [Online].
-%    Available: http://www.ngdc.noaa.gov/geomag/WMM/
+%[1] Chulliat, A., W. Brown, P. Alken, C. Beggan, M. Nair, G. Cox,
+%    A. Woods, S. Macmillan, B. Meyer and M. Paniccia, 2020.
+%    The US/UK World Magnetic Model for 2020-2025: Technical Report,
+%    National Centers for Environmental Information, NOAA.
+%    doi: 10.25923/ytk1-yx35
 %[2] D. E. Winch, D. J. Ivers, J. P. R. Turner, and R. J. Stening,
 %    "Geomagnetism and Schmidt quasi-normalization," Geophysical Journal
 %    International, vol. 160, no. 2, pp. 487-504, Feb. 2005.
-%[3] Chulliat, A., W. Brown, P. Alken, S. Macmillan, M. Nair, C. Beggan, A.
-%    Woods, B. Hamilton, B. Meyer and R. Redmon, 2019, "Out-of-Cycle Update
-%    of the US/UK World Magnetic Model for 2015-2020," National Centers for
-%    Environmental Information, NOAA, Tech. Rep. doi: 10.25921/xhr3-0t19
 %
 %January 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -111,7 +107,7 @@ for curRow=1:numRows
 end
 
 %The reference year
-yearRef=2015.0;
+yearRef=2020.0;
 M=12;%The maximum degree and order of the model.
 
 %Allocate space for two sets of coefficients. these are needed so that

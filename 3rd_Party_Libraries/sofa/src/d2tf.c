@@ -18,7 +18,7 @@ void iauD2tf(int ndp, double days, char *sign, int ihmsf[4])
 **     days    double  interval in days
 **
 **  Returned:
-**     sign    char    '+' or '-'
+**     sign    char*   '+' or '-'
 **     ihmsf   int[4]  hours, minutes, seconds, fraction
 **
 **  Notes:
@@ -53,11 +53,11 @@ void iauD2tf(int ndp, double days, char *sign, int ihmsf[4])
 **     case where days is very nearly 1.0 and rounds up to 24 hours,
 **     by testing for ihmsf[0]=24 and setting ihmsf[0-3] to zero.
 **
-**  This revision:  2013 June 18
+**  This revision:  2020 April 20
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    int nrs, n;
@@ -114,7 +114,7 @@ void iauD2tf(int ndp, double days, char *sign, int ihmsf[4])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

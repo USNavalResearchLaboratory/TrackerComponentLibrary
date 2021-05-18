@@ -189,11 +189,11 @@
 //Defines the size_t and ptrdiff_t types
 #include <stddef.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 //This is needed for the bool type to be defined in C.
 //C99 has stdbool, earlier versions do not.
 #if __STDC_VERSION__>=199901L
-#include <stdbool.h>
 
 //If using *NIX or Mac OS X, the functions should be defined without
 //anything extra in math.h
@@ -204,13 +204,6 @@
 #define copySign(a,b) copysign(a,b)
 
 #else
-//This is for the bool that Matlab's headers might define.
-#ifndef _bool_T
-#define false 0
-#define true 1
-#define bool int
-#define _bool_T
-#endif
 
 //These functions are defined in the C standard, but do not seem to be
 //supported by Microsoft's compiler, so they are defined here with
@@ -2364,19 +2357,20 @@ std::complex <double> getComplexDoubleFromMatlab(const mxArray * const val) {
 #endif
 
 /*LICENSE:
-%
-%The source code is in the public domain and not licensed or under
-%copyright. The information and software may be used freely by the public.
-%As required by 17 U.S.C. 403, third parties producing copyrighted works
-%consisting predominantly of the material produced by U.S. government
-%agencies must provide notice with such work(s) identifying the U.S.
-%Government material incorporated and stating that such material is not
-%subject to copyright protection.
-%
-%Derived works shall not identify themselves in a manner that implies an
-%endorsement by or an affiliation with the Naval Research Laboratory.
-%
-%RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF THE
-%SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY THE NAVAL
-%RESEARCH LABORATORY FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE ACTIONS
-%OF RECIPIENT IN THE USE OF THE SOFTWARE.*/
+*
+*The source code is in the public domain and not licensed or under
+*copyright. The information and software may be used freely by the public.
+*As required by 17 U.S.C. 403, third parties producing copyrighted works
+*consisting predominantly of the material produced by U.S. government
+*agencies must provide notice with such work(s) identifying the U.S.
+*Government material incorporated and stating that such material is not
+*subject to copyright protection.
+*
+*Derived works shall not identify themselves in a manner that implies an
+*endorsement by or an affiliation with the Naval Research Laboratory.
+*
+*RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF THE
+*SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY THE NAVAL
+*RESEARCH LABORATORY FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE ACTIONS
+*OF RECIPIENT IN THE USE OF THE SOFTWARE.
+*/

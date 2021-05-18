@@ -1,6 +1,6 @@
 function [C,S,a,c]=getIGRFCoeffs(year,fullyNormalize)
 %%GETIGRFCOEFFS Obtain spherical harmonic coefficients for the
-%               12th generation International Geomagnetic Reference Field
+%               13th generation International Geomagnetic Reference Field
 %               (IGRF) at a particular time or at the latest reference
 %               epoch. Note that the coefficients must be adjusted for
 %               local magnetization effects (buildings, cars, power lines,
@@ -9,11 +9,11 @@ function [C,S,a,c]=getIGRFCoeffs(year,fullyNormalize)
 %
 %INPUTS: year A decimal number indicating a year in the Gregorian
 %             calendar as specified by universal coordinated time (UTC).
-%             For example, halfway through the year 2010 would be
-%             represented as 2010.5. The precision of the model is not
+%             For example, halfway through the year 2013 would be
+%             represented as 2013.5. The precision of the model is not
 %             sufficiently fine that leap seconds matter. If this parameter
 %             is omitted or an empty matrix is passed, then the reference
-%             year of the IGRF model is used. In this instance, 2015.0. For
+%             year of the IGRF model is used. In this instance, 2020.0. For
 %             predicting the magnetic field into the future, it is
 %             suggested that one use the World Magnetic Model (WMM) not the
 %             IGRF.
@@ -71,7 +71,7 @@ function [C,S,a,c]=getIGRFCoeffs(year,fullyNormalize)
 ScriptPath=mfilename('fullpath');
 ScriptFolder = fileparts(ScriptPath);
 
-fileID=fopen([ScriptFolder,'/data/igrf12coeffs.txt']);
+fileID=fopen([ScriptFolder,'/data/igrf13coeffs.txt']);
 data=textscan(fileID,'%s','CommentStyle','#','whitespace',' ','delimiter','\n');
 fclose(fileID);
 data=data{1};

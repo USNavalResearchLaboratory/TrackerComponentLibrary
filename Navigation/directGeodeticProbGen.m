@@ -69,7 +69,7 @@ function [latLonEnd,azEnd]=directGeodeticProbGen(latLonStart,azStart,dist,height
 %REFERENCES:
 %[1] D. F. Crouse, "Simulating Aerial Targets in 3D Accounting for the
 %    Earth's Curvature," Journal of Advances in Information Fusion, vol.
-%    10, no. 1, Jun. 2015.
+%    10, no. 1, pp. 31-57, Jun. 2015.
 %
 %April 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

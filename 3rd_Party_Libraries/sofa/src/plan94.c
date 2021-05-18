@@ -164,9 +164,9 @@ int iauPlan94(double date1, double date2, int np, double pv[2][3])
 **
 **  This revision:  2019 June 23
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
 /* Gaussian constant */
@@ -468,7 +468,7 @@ int iauPlan94(double date1, double date2, int np, double pv[2][3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

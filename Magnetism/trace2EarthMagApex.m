@@ -161,7 +161,7 @@ if(nargin<7||isempty(maxSteps))
     maxSteps=1024;
 end
 
-%The parameters selecting the RUnge-Kutta algorithm to use for the
+%The parameters selecting the Runge-Kutta algorithm to use for the
 %numerical integration.
 order=5;
 solutionChoice=0;
@@ -189,11 +189,11 @@ for curPoint=1:numPoints
 
     uVert=getEllipsVert(zITRS,a,f);
 
-    %If the angle between the direction and the local vertical is >90 degrees,
-    %then it is a decreasing direction. If it is greater, then it is an
-    %increasing direction. This is the same as checking whether the dot
-    %product is negative (the dot product is proportional to the cosine of
-    %the angle).
+    %If the angle between the direction and the local vertical is >90
+    %degrees, then it is a decreasing direction. If it is greater, then it
+    %is an increasing direction. This is the same as checking whether the
+    %dot product is negative (the dot product is proportional to the cosine
+    %of the angle).
     if(dot(uVert,dxdsCur)<0)
         signVal=-1;%Go the other way.
     else
@@ -239,7 +239,7 @@ for curPoint=1:numPoints
             [interpPolyA,interpPolyC]=RKInterpPolys(xPrev,sPrev,xCur,sCur,derivFun,order,solutionChoice,k);
 
             %We will now do a simple line search to find where the direction of
-            %the magnetic field vector is 90 degrees to the
+            %the magnetic field vector is 90 degrees offset.
             costFun=@(sFracEst)levelCostFun(sFracEst,interpPolyA,interpPolyC,a,f);
             try
                 options=optimset('TolX',AbsTol);
@@ -312,3 +312,21 @@ function derivVal=dxds(xCart,signVal,C,S,aMagMod,cMagMod)
     derivVal=signVal*B/norm(B);
 
 end
+
+%LICENSE:
+%
+%The source code is in the public domain and not licensed or under
+%copyright. The information and software may be used freely by the public.
+%As required by 17 U.S.C. 403, third parties producing copyrighted works
+%consisting predominantly of the material produced by U.S. government
+%agencies must provide notice with such work(s) identifying the U.S.
+%Government material incorporated and stating that such material is not
+%subject to copyright protection.
+%
+%Derived works shall not identify themselves in a manner that implies an
+%endorsement by or an affiliation with the Naval Research Laboratory.
+%
+%RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF THE
+%SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY THE NAVAL
+%RESEARCH LABORATORY FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE ACTIONS
+%OF RECIPIENT IN THE USE OF THE SOFTWARE.

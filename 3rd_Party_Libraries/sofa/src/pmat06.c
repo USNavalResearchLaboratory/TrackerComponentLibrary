@@ -54,13 +54,17 @@ void iauPmat06(double date1, double date2, double rbp[3][3])
 **
 **     Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 **
+**     IAU: Trans. International Astronomical Union, Vol. XXIVB;  Proc.
+**     24th General Assembly, Manchester, UK.  Resolutions B1.3, B1.6.
+**     (2000)
+**
 **     Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 **
-**  This revision:  2013 June 18
+**  This revision:  2020 November 24
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    double gamb, phib, psib, epsa;
@@ -76,7 +80,7 @@ void iauPmat06(double date1, double date2, double rbp[3][3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

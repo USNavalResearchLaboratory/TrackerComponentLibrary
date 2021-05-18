@@ -7,7 +7,7 @@ function [xEst,PTaylor,PCRLB]=rangeOnlyStaticLocEstNP(rBi,zLoc1,zLoc2,method,RCo
 %          noisy measurements, bad results are likely if the transmitters/
 %          receivers are nearly coplanar, with scale related to the range
 %          measurement accuracy.
-%                        
+%
 %INPUTS: rBi A numMeasX1 vector of bistatic range measurements where
 %            numMeas>=3 to ensure observability in 3D.
 %      zLoc1 A 3XnumMeas vector of transmitter location vectors, if one

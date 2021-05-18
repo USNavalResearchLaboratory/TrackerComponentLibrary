@@ -1,4 +1,4 @@
-**Tracker Component Library Release 4.5, September 2019**
+**Tracker Component Library Release 5.0, March 2021**
 https://github.com/USNavalResearchLaboratory/TrackerComponentLibrary
 
 A paper describing a number of features of the library is<br>
@@ -6,12 +6,11 @@ D. F. Crouse, "The Tracker Component Library: Free Routines for Rapid
 Prototyping," IEEE Aerospace and Electronic Systems Magazine, vol. 32, no.
 5, pp. 18-27, May. 2017.
 
-These are the release notes for the version 4.5 of the Tracker Component
+These are the release notes for the version 5.0 of the Tracker Component
 Library. The Tracker Component Library is a collection of Matlab routines
 for simulating and tracking targets in various scenarios. Due to the
 complexity of the target tracking problem, a great many routines can find
 use in other areas including combinatorics, astronomy, and statistics.
-Version 4.5 is currently the last planned release.
 
 Making this code available and open source is in the spirit of OMB M-16-21,
 which can be viewed online at:
@@ -21,9 +20,9 @@ Those looking for magnetic field synthesis code might want to look at
 ./Sample Code/Magnetic Models/ .
 
 As of version 3.0, the library has been split into two parts. This is the
-publicly available part. A number of functions have been placed into a
-supplement that is only available to the U.S. Government Agencies and their
-contractors.The limited distribution supplement can be downloaded by
+publicly available part. Many functions have been placed into a supplement
+that is only available to the U.S. Government Agencies and their
+contractors. The limited distribution supplement can be downloaded by
 authorized individuals from di2e.net at:
 https://bitbucket.di2e.net/projects/TCL
 Note that access to the Bitbucket portion of di2e.net is not automatic and
@@ -48,42 +47,42 @@ running the CompileCLibraries function. Precompiled code is not distributed
 with the library. Note that a C/C++ compiler supported by Matlab must be
 installed. See below for comments regarding compilation.
 
-NOTABLE CHANGES SINCE VERSION 4.0
+NOTABLE CHANGES SINCE VERSION 4.5:
 
-- Added numerous new routines related to navigation. Existing routines have
-  been updated. See the Navigation folder. Dependence on GeographicLib has
-  been removed. 
-- Added specialized assignment routines: inverse 2D assignment
-  (invAssign2D), 2D semi-assignment (semiAssign2D), lexicographic
-  bottleneck assignment (lexBottleneckAssign), and k-cardinality 2D
-  assignment (kCard2DAssign).
-- Added handling stochastic differential equations with jumps. See
-  strongStochTaylorStepJump, strongRungeKStepJump, among others in
-  Mathematical Functions/Statistics/Stochastic Processes. Some
-  algorithms are demoed in demoMertonModel
-- Added functions for the design of aberration-free lenses in
-  Atmosphere and Refraction/Design of Lenses/
-- Additional probability distributions.
-- Additional and improved combinatorial routines.
-- Expanded functions related to Gaussian mixture reduction in the
-  "Clustering and Mixture Reduction" folder.
-- Added the Wigner-Ville transform.
-- Misc. other functions, such as ellipsOfEllipsSum for finding the minimum
-  ellipsoid enclosing the Minkowski sum of two ellipsoids.
+- The interfaces of many functions related to state transition matrices and
+  covariance matrices have been updated to remove needless input. For
+  example, the FPolyKal function had previously required a state vector to
+  be passed even though it only used the vector to get its length. Now, one
+  can just pass the length directly.
+- Folder names have been changed to get rid of spaces.
+- A number of new coordinate system conversions have been added including
+  ENU2ECEF, ECEF2ENU, NED2ECEF, ECEF2NED, findRFRTransParam2Tar, and
+  findRFTransParam2TarEllipse, among others.
+- Functions related to copula distributions have been added.
+- A function for merging probability estimates from different sources has
+  been added, fuseIndepProbEsts.
+- A number of new functions related to algebraic geometry have been added,
+  including findConvexHull2DJarvis, drawProjEllipsHull, and
+  nearestPointOnEllipsoid.
+- Constrained optimization on the surface of a sphere via eqConstLSSpher.
+- A new solver for cubic bivariate equations, solveCubicBivarEq.
+- Bug fixes and modifications to a number of functions. For example, the
+  Gaussian mixture reduction algorithm in RunnalsGaussMixRed tends to be
+  much faster than before and its implementation more closely mirrors how
+  one might implement it in C.
 
 COMPILED CODE:
 
-The compilation of the library has been tested under Matlab2018b for Mac OS
-X 10.12 using the Matlab-supported compiler offered free by Apple. Under
-Linux, gcc was used as the compiler. The code should also compile under
-Windows 10 using minGW. Precompiled code is not distributed with the
-library.
+The compilation of the library has been tested under Matlab2020b under
+Windows 10 using minGW64 and Microsoft Visual C++ 2019. The code will
+probably compiler under Mac OS X and Linux. Precompiled code is not
+distributed with th library.
 
 EXTERNAL SOLVERS:
 
 Almost all of the function in the library work without any external
 resources. However, the folder
-./Mathematical Functions/Polynomials/Generic Multivariate Polynomials/
+./Mathematical_Functions/Polynomials/Generic_Multivariate_Polynomials/
 contains the function solvePolySysWithExtProg. This is an interface to
 external solvers for simultaneous multivariate polynomial systems. The
 solvers are external programs and are not included. Though the functions
@@ -91,7 +90,7 @@ polyRootsMultiDim and solveQuadBivarEq can solver certain types of
 simultaneous multivariate polynomials, they are limited. For more general
 systems, an external solver is the best choice. The functions
 polyMeasConvert, polyMeasConvertAsync, and DopplerOnlyInit6D are located in
-subfolders entitled 'Uses External Solver" and use the function
+subfolders entitled 'Uses_External_Solver" and use the function
 solvePolySysWithExtProg. Supported external solvers for the function
 solvePolySysWithExtProg are PHCpack, Bertini, and the certified solver in
 Macaulay2. Note that Macaulay2 tends to fail more often than the other
@@ -144,14 +143,14 @@ into ./Magnetism/data . If all of the data for a single year is loaded,
 then a .mat file containing the data is placed in  the data folder to speed
 up subsequent calls to the function.
 
-4) The IGRF12 magnetic field coefficients:
+4) The IGRF13 magnetic field coefficients:
 http://www.ngdc.noaa.gov/IAGA/vmod/igrf.html
-The file http://www.ngdc.noaa.gov/IAGA/vmod/igrf12coeffs.txt can be
+The file http://www.ngdc.noaa.gov/IAGA/vmod/igrf13coeffs.txt can be
 downloaded and placed into the folder ./Magnetism/data .
 
-5) The WMM2015v2 magnetic field coefficients:
-https://www.ngdc.noaa.gov/geomag/WMM/soft.shtml
-The coefficient file WMM2015v2COF.zip shown be downloaded, unzipped and the
+5) The WMM2020 magnetic field coefficients:
+https://www.ngdc.noaa.gov/geomag/WMM/
+The coefficient file WMM2020COF.zip shown be downloaded, unzipped and the
 file WMM.COF placed into ./Magnetism/data .
 
 6) EGM2008 gravitational coefficients
@@ -203,7 +202,7 @@ https://visibleearth.nasa.gov/view.php?id=57735
 Place the file in Misc/data . This is used as the default map to show on
 the Earth given by the plotMapOnEllipsoid function.
 
-September 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.<br>
+March 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.<br>
 (UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 LICENSE:

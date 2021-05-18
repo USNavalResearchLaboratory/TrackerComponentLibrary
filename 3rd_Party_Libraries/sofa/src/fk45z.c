@@ -19,12 +19,12 @@ void iauFk45z(double r1950, double d1950, double bepoch,
 **  (Bessel-Newcomb) system to the later IAU 1976 FK5 (Fricke) system,
 **  in such a way that the FK5 proper motion is zero.  Because such a
 **  star has, in general, a non-zero proper motion in the FK4 system,
-**  the routine requires the epoch at which the position in the FK4
+**  the function requires the epoch at which the position in the FK4
 **  system was determined.
 **
 **  Given:
 **     r1950,d1950    double   B1950.0 FK4 RA,Dec at epoch (rad)
-**     bepoch         double   Besselian epoch (e.g. 1979.3D0)
+**     bepoch         double   Besselian epoch (e.g. 1979.3)
 **
 **  Returned:
 **     r2000,d2000    double   J2000.0 FK5 RA,Dec (rad)
@@ -36,7 +36,7 @@ void iauFk45z(double r1950, double d1950, double bepoch,
 **     negligible extent.
 **
 **  2) The method is from Appendix 2 of Aoki et al. (1983), but using
-**     the constants of Seidelmann (1992).  See the routine iauFk425
+**     the constants of Seidelmann (1992).  See the function iauFk425
 **     for a general introduction to the FK4 to FK5 conversion.
 **
 **  3) Conversion from equinox B1950.0 FK4 to equinox J2000.0 FK5 only
@@ -83,11 +83,11 @@ void iauFk45z(double r1950, double d1950, double bepoch,
 **     iauPvu       update a pv-vector
 **     iauS2c       spherical to p-vector
 **
-**  This revision:   2018 December 5
+**  This revision:   2020 November 19
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
 /* Radians per year to arcsec per century */
@@ -155,7 +155,7 @@ void iauFk45z(double r1950, double d1950, double bepoch,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **

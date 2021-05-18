@@ -55,7 +55,7 @@ void iauPn00b(double date1, double date2,
 **      longitude and obliquity are in radians and with respect to the
 **      equinox and ecliptic of date.  For more accurate results, but
 **      at the cost of increased computation, use the iauPn00a function.
-**      For the utmost accuracy, use the iauPn00  function, where the
+**      For the utmost accuracy, use the iauPn00 function, where the
 **      nutation components are caller-specified.
 **
 **  3)  The mean obliquity is consistent with the IAU 2000 precession.
@@ -100,11 +100,11 @@ void iauPn00b(double date1, double date2,
 **     n.b. The celestial ephemeris origin (CEO) was renamed "celestial
 **          intermediate origin" (CIO) by IAU 2006 Resolution 2.
 **
-**  This revision:  2013 November 13
+**  This revision:  2020 November 25
 **
-**  SOFA release 2019-07-22
+**  SOFA release 2021-01-25
 **
-**  Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
 /* Nutation. */
@@ -117,7 +117,7 @@ void iauPn00b(double date1, double date2,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2019
+**  Copyright (C) 2021
 **  Standards Of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
