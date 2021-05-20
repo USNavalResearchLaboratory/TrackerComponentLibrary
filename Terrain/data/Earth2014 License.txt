@@ -1,0 +1,263 @@
+As noted below, the data files for the Earth2014 models are in the public domain.
+
+June 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+Return-Path: <ga95zar@mytum.de>
+Received: from mail5.nrl.navy.mil (smail.nrl.navy.mil [132.250.4.114])
+	by radar.nrl.navy.mil (8.13.8/8.13.8) with ESMTP id u5HEJw2q023919
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES128-SHA bits=128 verify=NOT)
+	for <crouse@radar.nrl.navy.mil>; Fri, 17 Jun 2016 10:19:58 -0400
+Received: from postout2.mail.lrz.de (postout2.mail.lrz.de [129.187.255.138])
+	by mail5.nrl.navy.mil (8.15.2/8.15.2) with ESMTPS id u5HEJrOq018902
+	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO)
+	for <david.crouse@nrl.navy.mil>; Fri, 17 Jun 2016 10:19:54 -0400
+Received: from lxmhs52.srv.lrz.de (localhost [127.0.0.1])
+	by postout2.mail.lrz.de (Postfix) with ESMTP id 3rWMnk3cNlzyZS;
+	Fri, 17 Jun 2016 16:19:22 +0200 (CEST)
+X-Virus-Scanned: by amavisd-new at lrz.de in lxmhs52.srv.lrz.de
+X-Spam-Flag: NO
+X-Spam-Score: 0.001 () HTML_MESSAGE
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.886 tagged_above=-999 required=5
+	tests=[ALL_TRUSTED=-1, BAYES_00=-1.9, HTML_MESSAGE=0.001,
+	LRZ_DATE_TZ_0000=0.001, LRZ_DKIM_DESTROY_MTA=0.001,
+	LRZ_DMARC_OVERWRITE=0.001, LRZ_FROM_AP_PHRASE=0.001,
+	LRZ_FROM_PHRASE=0.001, LRZ_FWD_MS_EX=0.001, LRZ_HAS_X_ORIG_IP=0.001,
+	LRZ_MSGID_AN_AN=0.001, LRZ_MSGID_D_HU=0.001, LRZ_MSGID_SPAM_68=0.001,
+	LRZ_RCVD_BADWLRZ_EXCH=0.001, LRZ_RCVD_MS_EX=0.001,
+	SPF_HELO_NONE=0.001] autolearn=no autolearn_force=no
+Received: from postout2.mail.lrz.de ([127.0.0.1])
+	by lxmhs52.srv.lrz.de (lxmhs52.srv.lrz.de [127.0.0.1]) (amavisd-new, port 20024)
+	with LMTP id lO3_-RbFfkpn; Fri, 17 Jun 2016 16:19:21 +0200 (CEST)
+Received: from BADWLRZ-SWMBX03.ads.mwn.de (BADWLRZ-SWMBX03.ads.mwn.de [IPv6:2001:4ca0:0:108::159])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+	(Client CN "BADWLRZ-SWMBX03", Issuer "BADWLRZ-SWMBX03" (not verified))
+	by postout2.mail.lrz.de (Postfix) with ESMTPS id 3rWMnh5hBzzyVl;
+	Fri, 17 Jun 2016 16:19:20 +0200 (CEST)
+Received: from BADWLRZ-SW13MB3.ads.mwn.de (2001:4ca0:0:108::151) by
+ BADWLRZ-SWMBX03.ads.mwn.de (2001:4ca0:0:108::159) with Microsoft SMTP Server
+ (TLS) id 15.0.1156.6; Fri, 17 Jun 2016 16:19:20 +0200
+Received: from BADWLRZ-SW13MB3.ads.mwn.de ([fe80::5c48:4265:465d:d0e7]) by
+ BADWLRZ-SW13MB3.ads.mwn.de ([fe80::5c48:4265:465d:d0e7%13]) with mapi id
+ 15.00.1156.000; Fri, 17 Jun 2016 16:19:19 +0200
+From: "Hirt, Christian" <ga95zar@mytum.de>
+To: "David F. Crouse" <david.crouse@nrl.navy.mil>,
+        Will Featherstone
+	<W.Featherstone@curtin.edu.au>
+CC: Michael Kuhn <M.Kuhn@curtin.edu.au>
+Subject: Re: On Earth2012
+Thread-Topic: On Earth2012
+Thread-Index: AQHRwXzEVByd+4+DTE+Kn3s0aS7S3p/gWJbNgA1GBACAACOzhA==
+Date: Fri, 17 Jun 2016 14:19:19 +0000
+Message-ID: <1466173147902.77398@mytum.de>
+References: <E820B061-5A27-4DBA-B36C-183E5DDC1137@nrl.navy.mil>
+ <SG2PR0201MB17587647FD70AB11B26DA888DE5F0@SG2PR0201MB1758.apcprd02.prod.outlook.com>,<CBD59CAC-9BDC-48A1-9DDA-BB4EBD210844@nrl.navy.mil>
+In-Reply-To: <CBD59CAC-9BDC-48A1-9DDA-BB4EBD210844@nrl.navy.mil>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [2a02:8108:9e40:4cac:7d57:21c:dda5:3ee5]
+Content-Type: multipart/alternative;
+	boundary="_000_146617314790277398mytumde_"
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 2.64 on 132.250.183.240
+X-Scanned-By: MIMEDefang 2.78
+
+--_000_146617314790277398mytumde_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+Dear David,
+
+
+the data has been released by us into the public domain. We recommend that =
+the newer version Earth2014 be used instead of Earth2012. You can find the =
+grids & readme file via
+
+
+http://ddfe.curtin.edu.au/gravitymodels/Earth2014
+
+
+Please note that we do not give any guarantee regarding the correctness & f=
+itness of the data for any intended or unintended application (see our disc=
+laimer).
+
+
+Best regards
+
+
+Christian
+
+
+________________________________
+From: David F. Crouse <david.crouse@nrl.navy.mil>
+Sent: Friday, June 17, 2016 4:07 PM
+To: Will Featherstone
+Cc: Michael Kuhn; Hirt, Christian
+Subject: Re: On Earth2012
+
+Thanks. If the authors could just send me an e-mail saying that the data is=
+ in the public domain, then that would satisfy any possible copyright issue=
+s associated with using the data.
+
+David F. Crouse
+Surveillance Technology Branch
+Radar Division
+Naval Research Laboratory
+Phone: (202) 404-8106
+Fax: (202) 404-8687
+E-Mail: david.crouse@nrl.navy.mil<mailto:david.crouse@nrl.navy.mil>
+
+MAILING ADDRESS:
+Naval Research Laboratory
+Attn: Code 5344 (D. Crouse)
+4555 Overlook Avenue S.W.
+Washington, DC  20375
+
+On Jun 8, 2016, at 9:32 PM, Will Featherstone <W.Featherstone@curtin.edu.au=
+<mailto:W.Featherstone@curtin.edu.au>> wrote:
+
+Dear David,
+I have forwarded (by way of copy to this email) to the creators of this web=
+site.
+I'm no expert on Australian copyright either.
+However, I'm pretty sure that Christian and Michael are keen for the model =
+to be used without restriction.
+Also, think the model has been superseded by Earth2014.
+Kind regards,
+Will
+
+
+
+--_000_146617314790277398mytumde_
+Content-Type: text/html; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
+1">
+<style type=3D"text/css" style=3D"display:none"><!--P{margin-top:0;margin-b=
+ottom:0;} --></style>
+</head>
+<body dir=3D"ltr" style=3D"font-size:12pt;color:#000000;background-color:#F=
+FFFFF;font-family:Calibri,Arial,Helvetica,sans-serif;">
+<p>Dear David,</p>
+<p><br>
+</p>
+<p>the data has been released by us into the public domain. We recommend th=
+at the newer version Earth2014 be used instead of&nbsp;Earth2012. You can f=
+ind the grids &amp; readme file via</p>
+<p><br>
+</p>
+<p><a href=3D"http://ddfe.curtin.edu.au/gravitymodels/Earth2014">http://ddf=
+e.curtin.edu.au/gravitymodels/Earth2014</a><br>
+</p>
+<p><br>
+</p>
+<p>Please note that we do not give any guarantee regarding the correctness =
+&amp; fitness of the data for any intended or unintended application (see o=
+ur disclaimer).<br>
+</p>
+<p><br>
+</p>
+<p>Best regards</p>
+<p><br>
+</p>
+<p>Christian<br>
+</p>
+<p><br>
+</p>
+<div style=3D"word-wrap:break-word">
+<hr tabindex=3D"-1" style=3D"display:inline-block; width:98%">
+<div id=3D"divRplyFwdMsg" dir=3D"ltr"><font style=3D"font-size:11pt" color=
+=3D"#000000" face=3D"Calibri, sans-serif"><b>From:</b> David F. Crouse &lt;=
+david.crouse@nrl.navy.mil&gt;<br>
+<b>Sent:</b> Friday, June 17, 2016 4:07 PM<br>
+<b>To:</b> Will Featherstone<br>
+<b>Cc:</b> Michael Kuhn; Hirt, Christian<br>
+<b>Subject:</b> Re: On Earth2012</font>
+<div>&nbsp;</div>
+</div>
+<div>Thanks. If the authors could just send me an e-mail saying that the da=
+ta is in the public domain, then that would satisfy any possible copyright =
+issues associated with using the data.
+<div class=3D""><br class=3D"">
+</div>
+<div class=3D"">
+<div class=3D"">
+<div class=3D"">
+<div class=3D"" style=3D"color:rgb(0,0,0); letter-spacing:normal; orphans:a=
+uto; text-align:start; text-indent:0px; text-transform:none; white-space:no=
+rmal; widows:auto; word-spacing:0px; word-wrap:break-word">
+<span class=3D"" style=3D"orphans:2; widows:2">David F. Crouse</span><br cl=
+ass=3D"">
+<div class=3D"" style=3D"color:rgb(0,0,0); font-family:Helvetica; font-size=
+:12px; font-style:normal; font-variant:normal; font-weight:normal; letter-s=
+pacing:normal; line-height:normal; orphans:2; text-align:start; text-indent=
+:0px; text-transform:none; white-space:normal; widows:2; word-spacing:0px; =
+word-wrap:break-word">
+Surveillance Technology Branch<br class=3D"">
+Radar Division<br class=3D"">
+Naval Research Laboratory<br class=3D"">
+Phone: (202) 404-8106</div>
+<div class=3D"" style=3D"color:rgb(0,0,0); font-family:Helvetica; font-size=
+:12px; font-style:normal; font-variant:normal; font-weight:normal; letter-s=
+pacing:normal; line-height:normal; orphans:2; text-align:start; text-indent=
+:0px; text-transform:none; white-space:normal; widows:2; word-spacing:0px; =
+word-wrap:break-word">
+Fax: (202) 404-8687<br class=3D"">
+E-Mail:&nbsp;<a href=3D"mailto:david.crouse@nrl.navy.mil" class=3D"">david.=
+crouse@nrl.navy.mil</a><br class=3D"">
+&nbsp;<br class=3D"">
+MAILING ADDRESS:<br class=3D"">
+Naval Research Laboratory<br class=3D"">
+Attn: Code 5344 (D. Crouse)<br class=3D"">
+4555 Overlook Avenue S.W.<br class=3D"">
+Washington, DC &nbsp;20375</div>
+</div>
+</div>
+<br class=3D"">
+<div>
+<blockquote type=3D"cite" class=3D"">
+<div class=3D"">On Jun 8, 2016, at 9:32 PM, Will Featherstone &lt;<a href=
+=3D"mailto:W.Featherstone@curtin.edu.au" class=3D"">W.Featherstone@curtin.e=
+du.au</a>&gt; wrote:</div>
+<br class=3D"Apple-interchange-newline">
+<div class=3D"">
+<div id=3D"divtagdefaultwrapper" class=3D"" style=3D"font-style:normal; fon=
+t-variant:normal; font-weight:normal; letter-spacing:normal; line-height:no=
+rmal; orphans:auto; text-align:start; text-indent:0px; text-transform:none;=
+ white-space:normal; widows:auto; word-spacing:0px; font-size:12pt; backgro=
+und-color:rgb(255,255,255); font-family:Calibri,Arial,Helvetica,sans-serif"=
+>
+<div class=3D"" style=3D"margin-top:0px; margin-bottom:0px">Dear David,</di=
+v>
+<div class=3D"" style=3D"margin-top:0px; margin-bottom:0px">I have forwarde=
+d (by way of copy to this email) to the creators of this website.</div>
+<div class=3D"" style=3D"margin-top:0px; margin-bottom:0px">I'm no expert o=
+n Australian copyright either.</div>
+<div class=3D"" style=3D"margin-top:0px; margin-bottom:0px">However, I'm pr=
+etty sure that Christian and Michael are keen for the model to be used with=
+out restriction.</div>
+<div class=3D"" style=3D"margin-top:0px; margin-bottom:0px">Also, think the=
+ model has been superseded by Earth2014.</div>
+<div class=3D"" style=3D"margin-top:0px; margin-bottom:0px">Kind regards,</=
+div>
+<div class=3D"" style=3D"margin-top:0px; margin-bottom:0px">Will</div>
+<br class=3D"">
+</div>
+</div>
+</blockquote>
+</div>
+<br class=3D"">
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
+
+--_000_146617314790277398mytumde_--
