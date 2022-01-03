@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 int iauTttcg(double tt1, double tt2, double *tcg1, double *tcg2)
 /*
@@ -37,9 +38,9 @@ int iauTttcg(double tt1, double tt2, double *tcg1, double *tcg2)
 **
 **     IAU 2000 Resolution B1.9
 **
-**  This revision:  2019 June 20
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -63,6 +64,8 @@ int iauTttcg(double tt1, double tt2, double *tcg1, double *tcg2)
 
 /* Status (always OK). */
    return 0;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

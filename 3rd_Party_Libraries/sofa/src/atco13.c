@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 int iauAtco13(double rc, double dc,
               double pr, double pd, double px, double rv,
@@ -25,7 +26,7 @@ int iauAtco13(double rc, double dc,
 **
 **  Given:
 **     rc,dc  double   ICRS right ascension at J2000.0 (radians, Note 1)
-**     pr     double   RA proper motion (radians/year; Note 2)
+**     pr     double   RA proper motion (radians/year, Note 2)
 **     pd     double   Dec proper motion (radians/year)
 **     px     double   parallax (arcsec)
 **     rv     double   radial velocity (km/s, +ve if receding)
@@ -156,9 +157,9 @@ int iauAtco13(double rc, double dc,
 **     iauAtciq     quick ICRS to CIRS
 **     iauAtioq     quick CIRS to observed
 **
-**  This revision:   2016 February 2
+**  This revision:   2021 April 3
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */

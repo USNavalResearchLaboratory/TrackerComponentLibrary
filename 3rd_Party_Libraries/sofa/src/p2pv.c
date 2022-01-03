@@ -23,9 +23,9 @@ void iauP2pv(double p[3], double pv[2][3])
 **     iauCp        copy p-vector
 **     iauZp        zero p-vector
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -33,7 +33,7 @@ void iauP2pv(double p[3], double pv[2][3])
    iauCp(p, pv[0]);
    iauZp(pv[1]);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

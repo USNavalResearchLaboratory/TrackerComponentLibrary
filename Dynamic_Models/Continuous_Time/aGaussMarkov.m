@@ -8,10 +8,10 @@ function [aVal,aJacob,aHess,papt]=aGaussMarkov(x,tau,order)
 %             assumed that the a-priori mean of the highest-order moment is
 %             zero.
 %
-%INPUTS: x The numDim*(order+1)X1 dimensional target state. For the given
-%          order, numDim is the dimensionality of the motion. For example,
-%          2D, 3D. The elements of the state are in the order of position,
-%          velocity, acceleration, etc.
+%INPUTS: x The numDim*(order+1)X1 (aka xDimX1) dimensional target state.
+%          For the given order, numDim is the dimensionality of the motion.
+%          For example, 2D, 3D. The elements of the state are in the order
+%          of position, velocity, acceleration, etc.
 %      tau The time constant of the autocorrelation or the moment of the
 %          given order. For example, if order=2, then tau is the time
 %          constant of the decorrelation time of the acceleration in
@@ -31,16 +31,14 @@ function [aVal,aJacob,aHess,papt]=aGaussMarkov(x,tau,order)
 %              having the given order and whose dimensionality is inferred
 %              from x, whose elements are ordered
 %              [position;velocity;acceleration;etc].
-%       aJacob The xDimXxDim Jacobian of aVal (it is the same for all x and
-%              not repeated N times). This is such that aJacob(:,k) is the
-%              partial derivative of aVal with respect to the kth element
-%              of x.
+%       aJacob The xDimXxDim Jacobian of aVal. This is such that
+%              aJacob(:,k) is the partial derivative of aVal with respect
+%              to the kth element of x.
 %        aHess The xDimXxDimXxDim hypermatrix such that aHess(:,k1,k2) is
 %              the second partial derivative of aVal with respect to
-%              elements k1 and k2 of x (all zero in this instance). It is
-%              the same for all x.
+%              elements k1 and k2 of x (all zero in this instance).
 %         papt The xDimX1 partial derivative of aVal with respect to t (all
-%              zero in this instance). It is the same for all x.
+%              zero in this instance).
 %
 %The Singer model (order=2) is introduced for tracking in [1]. The first-
 %order model, the integrated Ornstein-Uhlenbeck process, is discussed for
@@ -59,11 +57,12 @@ function [aVal,aJacob,aHess,papt]=aGaussMarkov(x,tau,order)
 %discrete-time by the function FGaussMarkov. To get the full dynamic model,
 %the drift function should be used with the diffusion function
 %DPoly(1,q,order,numDim), where q=(sqrt(2/tau)*sigmam)^2 and sigmam^2 is
-%the instantaneous variance of the highest order mooment and  numDim is
+%the instantaneous variance of the highest order moment and  numDim is
 %the number of dimensions in the model. The autocorrelation of the
 %highest-order moment is= sigmam^2*exp(-abs(deltaT)/tau) for some deltaT
-%time interval. The discrete-time process noise covariance matrix is given
-%by QGaussMarkov.
+%time interval. These relations come from Ch. 8.2 of [3], after relating
+%the alpha term there to tau. The discrete-time process noise covariance
+%matrix is given by QGaussMarkov.
 %
 %REFERENCES:
 %[1] R. A. Singer,"Estimating optimal tracking filter performance for
@@ -83,7 +82,7 @@ if(nargin<3)
 end
 
 if(nargin<2)
-   tau=20; 
+	tau=20; 
 end
 
 xDim=size(x,1);

@@ -100,9 +100,9 @@ void iauPn00b(double date1, double date2,
 **     n.b. The celestial ephemeris origin (CEO) was renamed "celestial
 **          intermediate origin" (CIO) by IAU 2006 Resolution 2.
 **
-**  This revision:  2020 November 25
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -113,7 +113,7 @@ void iauPn00b(double date1, double date2,
 /* Remaining results. */
    iauPn00(date1, date2, *dpsi, *deps, epsa, rb, rp, rbp, rn, rbpn);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

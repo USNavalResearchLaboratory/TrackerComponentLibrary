@@ -1,4 +1,4 @@
-function cc = EstAlphaStableCovCoeff(x,y,algorithm,p,c1,c2,warn)
+function cc = estAlphaStableCovCoeff(x,y,algorithm,p,c1,c2,warn)
 %%ESTALPHASTABLECOVCOEFF A function to numerically compute the covariation
 %                        of two variables given samples from their
 %                        respective symmetric alpha-stable distributions 
@@ -61,8 +61,8 @@ function cc = EstAlphaStableCovCoeff(x,y,algorithm,p,c1,c2,warn)
 % 
 %     X = a1*U1+a2*U2;
 %     Y = b1*U1+b2*U2;
-%     FLOM(i) = EstAlphaStableCovCoeff(X,Y,1,1);
-%     SCR(i) = EstAlphaStableCovCoeff(X,Y,2);
+%     FLOM(i) = estAlphaStableCovCoeff(X,Y,1,1);
+%     SCR(i) = estAlphaStableCovCoeff(X,Y,2);
 % end
 % 
 % %Compute statistics and exact value
@@ -110,8 +110,8 @@ function cc = EstAlphaStableCovCoeff(x,y,algorithm,p,c1,c2,warn)
 %     X = a1*U1+a2*U2;
 %     Y = b1*U1+b2*U2;
 % 
-%     SCR(i) = EstAlphaStableCovCoeff(X,Y,2);
-%     params = EstAlphaStableParams(Y);
+%     SCR(i) = estAlphaStableCovCoeff(X,Y,2);
+%     params = estAlphaStableParams(Y);
 %     gamEst(i) = params.disp;
 % end
 % 
@@ -148,8 +148,8 @@ if(~exist('p','var')||isempty(p))
 end
 if warn
     %Check that the assumptions are met.
-    xparams = EstAlphaStableParams(x);
-    yparams = EstAlphaStableParams(y);
+    xparams = estAlphaStableParams(x);
+    yparams = estAlphaStableParams(y);
     if(xparams.char<=1||yparams.char<=1)||(xparams.char>2||yparams.char>2)
         warning(strcat('The estimated characteristic of the given',...
                  ' samples does not fall on the interval (1,2].'))

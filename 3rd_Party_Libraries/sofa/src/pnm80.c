@@ -57,9 +57,9 @@ void iauPnm80(double date1, double date2, double rmatpn[3][3])
 **     P. Kenneth Seidelmann (ed), University Science Books (1992),
 **     Section 3.3 (p145).
 **
-**  This revision:  2020 November 27
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -76,7 +76,7 @@ void iauPnm80(double date1, double date2, double rmatpn[3][3])
 /* Combine the matrices:  PN = N x P. */
    iauRxr(rmatn, rmatp, rmatpn);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

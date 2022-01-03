@@ -16,9 +16,8 @@ function CartStates=stateRu2D2Cart(x)
 %OUTPUTS: CartStates The 4XN or 6XN set of target states given in Cartesian
 %                    coordinates.
 %
-%The derivation is given in "Basic Linear Cartesian Dynamic Models in Local
-%Coordinates" by David F. Crouse. The function aCVRu2D is an
-%implementation of a related linear dynamic model.
+%The derivation is given in [1]. The function aCVRu2D is an implementation
+%of a related linear dynamic model.
 %
 %EXAMPLE:
 %Here we note that the results are consistent with the inverse function:
@@ -27,6 +26,11 @@ function CartStates=stateRu2D2Cart(x)
 % xRet=stateRu2D2Cart(stateCart2Ru2D(x));
 % max(abs(x(:)-xRet(:)))
 %One will see that the error is less than 1e-13, indicating good agreement.
+%
+%REFERENCES:
+%[1] D. F. Crouse, "Basic linear Cartesian dynamic models in local
+%    coordinates," Naval Research Laboratory, Washington, DC, Tech. Rep.
+%    NRL/MR/5344-19-9882, 24 Aug. 2019.
 %
 %August 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

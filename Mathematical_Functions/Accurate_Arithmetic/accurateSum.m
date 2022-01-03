@@ -34,7 +34,7 @@ function s=accurateSum(a,algorithm,sortVals)
 % sSorted=accurateSum(a,[],true)
 % sMatlab=sum(a)
 %One will get sUnsorted=3, sSorted=3.000000000000001, which is more
-%correct, and sMatlab=0 (as of matlab 2018b), which is just wrong.
+%correct, and sMatlab=0 (as of Matlab 2018b), which is just wrong.
 %
 %REFERENCES
 %[1] A. Neumaier, "Rundungsfehleranalyse einiger Verfahren zur Summation

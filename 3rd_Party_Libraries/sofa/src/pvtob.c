@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauPvtob(double elong, double phi, double hm,
               double xp, double yp, double sp, double theta,
@@ -66,9 +67,9 @@ void iauPvtob(double elong, double phi, double hm,
 **     iauPom00     polar motion matrix
 **     iauTrxp      product of transpose of r-matrix and p-vector
 **
-**  This revision:   2013 October 9
+**  This revision:   2021 February 24
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */

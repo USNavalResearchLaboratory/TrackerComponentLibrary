@@ -53,9 +53,9 @@
 
 
 
-                               Release 17
+                               Release 18
 
-                             2021 January 25
+                              2021 April 12
 
 contents.lis                                             2018 January 26
 
@@ -83,7 +83,7 @@ contents.lis                                             2018 January 26
 
                  A3   SOFA Board membership
 
-intro.lis                                                2018 December 7
+intro.lis                                                  2021 April 19
 
 
                   -------------------------------
@@ -94,7 +94,7 @@ intro.lis                                                2018 December 7
   SOFA stands for "Standards Of Fundamental Astronomy".  The SOFA
   software libraries are a collection of subprograms, in source-
   code form, which implement official IAU algorithms for fundamental-
-  astronomy computations.   The subprograms at present comprise 189
+  astronomy computations.   The subprograms at present comprise 192
   "astronomy" routines supported by 55 "vector/matrix" routines,
   available in both Fortran77 and C implementations.
 
@@ -159,7 +159,7 @@ SCOPE
 The routines currently available are listed in the next two chapters of
 this document.
 
-The "astronomy" library comprises 189 routines (plus one obsolete
+The "astronomy" library comprises 192 routines (plus one obsolete
 Fortran routine that now appears under a revised name).  The areas
 addressed include calendars, astrometry, time scales, Earth rotation,
 ephemerides, precession-nutation, star catalog transformations,
@@ -219,7 +219,8 @@ in an appendix, diagrams showing the interrelationships between the
 routines supporting the latest (IAU 2006/2000A) models.  Two other pairs
 of documents introduce time scale transformations (sofa_ts_f.pdf and
 sofa_ts_c.pdf ) and astrometric transformations (sofa_ast_f.pdf and
-sofa_ast_c.pdf).
+sofa_ast_c.pdf).  Finally the two files sofa_vm_f.pdf and sofa_vm_c.pdf
+describe the vector/matrix routines used throughout SOFA.
 
 
 PROGRAMMING LANGUAGES AND STANDARDS
@@ -299,7 +300,7 @@ Resources for operating the SOFA Center are provided by Her Majesty's
 Nautical Almanac Office, operated by the United Kingdom Hydrographic
 Office.
 
-sofa_lib.lis                                             2018 December 7
+sofa_lib.lis                                               2021 April 19
 
                      ----------------------
                      SOFA Astronomy Library
@@ -338,7 +339,8 @@ suitable for convenient direct use by writers of astronomical
 applications.
 
 The astronomy routines call on the SOFA vector/matrix library routines,
-which are separately listed.
+which are separately listed, and described in sofa_vm_f.pdf (Fortran)
+and sofa_vm_c.pdf (C).
 
 The routines are designed to exploit the full floating-point accuracy
 of the machines on which they run, and not to rely on compiler
@@ -395,6 +397,8 @@ ROUTINES
      APER13    update context for Earth rotation
      APIO      prepare for CIRS <-> observed, terrestrial, special
      APIO13    prepare for CIRS <-> observed, terrestrial
+     ATCC13    catalog -> astrometric
+     ATCCQ     quick catalog -> astrometric
      ATCI13    catalog -> CIRS
      ATCIQ     quick ICRS -> CIRS
      ATCIQN    quick ICRS -> CIRS, multiple deflections
@@ -463,6 +467,7 @@ ROUTINES
   Ephemerides (limited precision)
 
      EPV00     Earth position and velocity
+     MOON98    Moon position and velocity
      PLAN94    major-planet position and velocity
 
   Precession, nutation, polar motion
@@ -624,6 +629,8 @@ CALLS: FORTRAN VERSION
   :                  REFA, REFB, ASTROM )
    CALL iau_APIO13 ( UTC1, UTC2, DUT1, ELONG, PHI, HM, XP, YP,
   :                  PHPA, TC, RH, WL, ASTROM, J )
+   CALL iau_ATCC13 ( RC, DC, PR, PD, PX, RV, DATE1, DATE2, RA, DA )
+   CALL iau_ATCCQ  ( RC, DC, PR, PD, PX, RV, ASTROM, RA, DA )
    CALL iau_ATCI13 ( RC, DC, PR, PD, PX, RV, DATE1, DATE2, RI, DI, EO )
    CALL iau_ATCIQ  ( RC, DC, PR, PD, PX, RV, ASTROM, RI, DI )
    CALL iau_ATCIQN ( RC, DC, PR, PD, PX, RV, ASTROM, N, B, RI, DI )
@@ -635,7 +642,7 @@ CALLS: FORTRAN VERSION
    CALL iau_ATICQ  ( RI, DI, ASTROM, RC, DC )
    CALL iau_ATCIQN ( RI, DI, ASTROM, N, B, RC, DC )
    CALL iau_ATIO13 ( RI, DI, UTC1, UTC2, DUT1, ELONG, PHI, HM, XP, YP,
-                     PHPA, TC, RH, WL, AOB, ZOB, HOB, DOB, ROB, J )
+  :                  PHPA, TC, RH, WL, AOB, ZOB, HOB, DOB, ROB, J )
    CALL iau_ATIOQ  ( RI, DI, ASTROM, AOB, ZOB, HOB, DOB, ROB )
    CALL iau_ATOC13 ( TYPE, OB1, OB2, UTC1, UTC2, DUT1,
   :                  ELONG, PHI, HM, XP, YP, PHPA, TC, RH, WL,
@@ -742,6 +749,7 @@ CALLS: FORTRAN VERSION
    CALL iau_LTPB   ( EPJ, RPB )
    CALL iau_LTPECL ( EPJ, VEC )
    CALL iau_LTPEQU ( EPJ, VEQ )
+   CALL iau_MOON98 ( DATE1, DATE2, PV )
    CALL iau_NUM00A ( DATE1, DATE2, RMATN )
    CALL iau_NUM00B ( DATE1, DATE2, RMATN )
    CALL iau_NUM06A ( DATE1, DATE2, RMATN )
@@ -845,6 +853,8 @@ CALLS: C VERSION
                    &astrom );
    i = iauApio13 ( utc1, utc2, dut1, elong, phi, hm, xp, yp,
                    phpa, tc, rh, wl, &astrom );
+       iauAtcc13 ( rc, dc, pr, pd, px, rv, date1, date2, &ra, &da );
+       iauAtccq  ( rc, dc, pr, pd, px, rv, &astrom, &ra, &da );
        iauAtci13 ( rc, dc, pr, pd, px, rv, date1, date2,
                    &ri, &di, &eo );
        iauAtciq  ( rc, dc, pr, pd, px, rv, &astrom, &ri, &di );
@@ -964,6 +974,7 @@ CALLS: C VERSION
        iauLtpb   ( epj,  rpb );
        iauLtpecl ( epj,  vec );
        iauLtpequ ( epj,  veq );
+       iauMoon98 ( date1, date2, pv );
        iauNum00a ( date1, date2, rmatn );
        iauNum00b ( date1, date2, rmatn );
        iauNum06a ( date1, date2, rmatn );
@@ -1051,7 +1062,7 @@ CALLS: C VERSION
 
 
 
-sofa_vml.lis                                              2013 October 8
+sofa_vml.lis                                            2020 September 9
 
                    --------------------------
                    SOFA Vector/Matrix Library
@@ -1143,7 +1154,7 @@ OPERATIONS INVOLVING P-VECTORS AND R-MATRICES
      ZR        initialize r-matrix to null
      IR        initialize r-matrix to identity
 
-  Copy/extend/extract
+  Copy
 
      CP        copy p-vector
      CR        copy r-matrix
@@ -1212,7 +1223,7 @@ OPERATIONS INVOLVING PV-VECTORS
      S2PV      spherical to pv-vector
      PV2S      pv-vector to spherical
 
-  Operations on vectors
+  Operations on pv-vectors
 
      PVPPV     pv-vector plus pv-vector
      PVMPV     pv-vector minus pv-vector
@@ -1232,12 +1243,20 @@ OPERATIONS INVOLVING PV-VECTORS
 
 OPERATIONS ON ANGLES
 
+  Wrap
+
      ANP       normalize radians to range 0 to 2pi
      ANPM      normalize radians to range -pi to +pi
+
+  To sexagesimal
+
      A2TF      decompose radians into hours, minutes, seconds
      A2AF      decompose radians into degrees, arcminutes, arcseconds
-     AF2A      degrees, arcminutes, arcseconds to radians
      D2TF      decompose days into hours, minutes, seconds
+
+  From sexagesimal
+
+     AF2A      degrees, arcminutes, arcseconds to radians
      TF2A      hours, minutes, seconds to radians
      TF2D      hours, minutes, seconds to days
 
@@ -1303,61 +1322,61 @@ CALLS: FORTRAN VERSION
 
 CALLS: C VERSION
 
-        iauA2af  ( ndp, angle, &sign, idmsf );
-        iauA2tf  ( ndp, angle, &sign, ihmsf );
-   i =  iauAf2a  ( s, ideg, iamin, asec, &rad );
-   d =  iauAnp   ( a );
-   d =  iauAnpm  ( a );
-        iauC2s   ( p, &theta, &phi );
-        iauCp    ( p, c );
-        iauCpv   ( pv, c );
-        iauCr    ( r, c );
-        iauD2tf  ( ndp, days, &sign, ihmsf );
-        iauIr    ( r );
-        iauP2pv  ( p, pv );
-        iauP2s   ( p, &theta, &phi, &r );
-   d =  iauPap   ( a, b );
-   d =  iauPas   ( al, ap, bl, bp );
-   d =  iauPdp   ( a, b );
-   d =  iauPm    ( p );
-        iauPmp   ( a, b, amb );
-        iauPn    ( p, &r, u );
-        iauPpp   ( a, b, apb );
-        iauPpsp  ( a, s, b, apsb );
-        iauPv2p  ( pv, p );
-        iauPv2s  ( pv, &theta, &phi, &r, &td, &pd, &rd );
-        iauPvdpv ( a, b, adb );
-        iauPvm   ( pv, &r, &s );
-        iauPvmpv ( a, b, amb );
-        iauPvppv ( a, b, apb );
-        iauPvu   ( dt, pv, upv );
-        iauPvup  ( dt, pv, p );
-        iauPvxpv ( a, b, axb );
-        iauPxp   ( a, b, axb );
-        iauRm2v  ( r, p );
-        iauRv2m  ( p, r );
-        iauRx    ( phi, r );
-        iauRxp   ( r, p, rp );
-        iauRxpv  ( r, pv, rpv );
-        iauRxr   ( a, b, atb );
-        iauRy    ( theta, r );
-        iauRz    ( psi, r );
-        iauS2c   ( theta, phi, c );
-        iauS2p   ( theta, phi, r, p );
-        iauS2pv  ( theta, phi, r, td, pd, rd, pV );
-        iauS2xpv ( s1, s2, pv );
-    d = iauSepp  ( a, b );
-    d = iauSeps  ( al, ap, bl, bp );
-        iauSxp   ( s, p, sp );
-        iauSxpv  ( s, pv, spv );
-    i = iauTf2a  ( s, ihour, imin, sec, &rad );
-    i = iauTf2d  ( s, ihour, imin, sec, &days );
-        iauTr    ( r, rt );
-        iauTrxp  ( r, p, trp );
-        iauTrxpv ( r, pv, trpv );
-        iauZp    ( p );
-        iauZpv   ( pv );
-        iauZr    ( r );
+       iauA2af  ( ndp, angle, &sign, idmsf );
+       iauA2tf  ( ndp, angle, &sign, ihmsf );
+   i = iauAf2a  ( s, ideg, iamin, asec, &rad );
+   d = iauAnp   ( a );
+   d = iauAnpm  ( a );
+       iauC2s   ( p, &theta, &phi );
+       iauCp    ( p, c );
+       iauCpv   ( pv, c );
+       iauCr    ( r, c );
+       iauD2tf  ( ndp, days, &sign, ihmsf );
+       iauIr    ( r );
+       iauP2pv  ( p, pv );
+       iauP2s   ( p, &theta, &phi, &r );
+   d = iauPap   ( a, b );
+   d = iauPas   ( al, ap, bl, bp );
+   d = iauPdp   ( a, b );
+   d = iauPm    ( p );
+       iauPmp   ( a, b, amb );
+       iauPn    ( p, &r, u );
+       iauPpp   ( a, b, apb );
+       iauPpsp  ( a, s, b, apsb );
+       iauPv2p  ( pv, p );
+       iauPv2s  ( pv, &theta, &phi, &r, &td, &pd, &rd );
+       iauPvdpv ( a, b, adb );
+       iauPvm   ( pv, &r, &s );
+       iauPvmpv ( a, b, amb );
+       iauPvppv ( a, b, apb );
+       iauPvu   ( dt, pv, upv );
+       iauPvup  ( dt, pv, p );
+       iauPvxpv ( a, b, axb );
+       iauPxp   ( a, b, axb );
+       iauRm2v  ( r, p );
+       iauRv2m  ( p, r );
+       iauRx    ( phi, r );
+       iauRxp   ( r, p, rp );
+       iauRxpv  ( r, pv, rpv );
+       iauRxr   ( a, b, atb );
+       iauRy    ( theta, r );
+       iauRz    ( psi, r );
+       iauS2c   ( theta, phi, c );
+       iauS2p   ( theta, phi, r, p );
+       iauS2pv  ( theta, phi, r, td, pd, rd, pv );
+       iauS2xpv ( s1, s2, pv );
+   d = iauSepp  ( a, b );
+   d = iauSeps  ( al, ap, bl, bp );
+       iauSxp   ( s, p, sp );
+       iauSxpv  ( s, pv, spv );
+   i = iauTf2a  ( s, ihour, imin, sec, &rad );
+   i = iauTf2d  ( s, ihour, imin, sec, &days );
+       iauTr    ( r, rt );
+       iauTrxp  ( r, p, trp );
+       iauTrxpv ( r, pv, trpv );
+       iauZp    ( p );
+       iauZpv   ( pv );
+       iauZr    ( r );
 
 
 
@@ -1597,7 +1616,7 @@ void iauAe2hd (double az, double el, double phi,
 **
 **  Last revision:   2017 September 12
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -3389,6 +3408,147 @@ int iauApio13(double utc1, double utc2, double dut1,
 
 
 
+void iauAtcc13(double rc, double dc,
+               double pr, double pd, double px, double rv,
+               double date1, double date2,
+               double *ra, double *da)
+/*
+**  - - - - - - - - - -
+**   i a u A t c c 1 3
+**  - - - - - - - - - -
+**
+**  Transform a star's ICRS catalog entry (epoch J2000.0) into ICRS
+**  astrometric place.
+**
+**  This function is part of the International Astronomical Union's
+**  SOFA (Standards of Fundamental Astronomy) software collection.
+**
+**  Status:  support function.
+**
+**  Given:
+**     rc     double   ICRS right ascension at J2000.0 (radians, Note 1)
+**     dc     double   ICRS declination at J2000.0 (radians, Note 1)
+**     pr     double   RA proper motion (radians/year, Note 2)
+**     pd     double   Dec proper motion (radians/year)
+**     px     double   parallax (arcsec)
+**     rv     double   radial velocity (km/s, +ve if receding)
+**     date1  double   TDB as a 2-part...
+**     date2  double   ...Julian Date (Note 3)
+**
+**  Returned:
+**     ra,da  double*  ICRS astrometric RA,Dec (radians)
+**
+**  Notes:
+**
+**  1) Star data for an epoch other than J2000.0 (for example from the
+**     Hipparcos catalog, which has an epoch of J1991.25) will require a
+**     preliminary call to iauPmsafe before use.
+**
+**  2) The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
+**
+**  3) The TDB date date1+date2 is a Julian Date, apportioned in any
+**     convenient way between the two arguments.  For example,
+**     JD(TDB)=2450123.7 could be expressed in any of these ways, among
+**     others:
+**
+**            date1          date2
+**
+**         2450123.7           0.0       (JD method)
+**         2451545.0       -1421.3       (J2000 method)
+**         2400000.5       50123.2       (MJD method)
+**         2450123.5           0.2       (date & time method)
+**
+**     The JD method is the most natural and convenient to use in cases
+**     where the loss of several decimal digits of resolution is
+**     acceptable.  The J2000 method is best matched to the way the
+**     argument is handled internally and will deliver the optimum
+**     resolution.  The MJD method and the date & time methods are both
+**     good compromises between resolution and convenience.  For most
+**     applications of this function the choice will not be at all
+**     critical.
+**
+**     TT can be used instead of TDB without any significant impact on
+**     accuracy.
+**
+**  Called:
+**     iauApci13    astrometry parameters, ICRS-CIRS, 2013
+**     iauAtccq     quick catalog ICRS to astrometric
+**
+*/
+
+
+
+void iauAtccq(double rc, double dc,
+              double pr, double pd, double px, double rv,
+              iauASTROM *astrom, double *ra, double *da)
+/*
+**  - - - - - - - - -
+**   i a u A t c c q
+**  - - - - - - - - -
+**
+**  Quick transformation of a star's ICRS catalog entry (epoch J2000.0)
+**  into ICRS astrometric place, given precomputed star-independent
+**  astrometry parameters.
+**
+**  Use of this function is appropriate when efficiency is important and
+**  where many star positions are to be transformed for one date.  The
+**  star-independent parameters can be obtained by calling one of the
+**  functions iauApci[13], iauApcg[13], iauApco[13] or iauApcs[13].
+**
+**  If the parallax and proper motions are zero the transformation has
+**  no effect.
+**
+**  This function is part of the International Astronomical Union's
+**  SOFA (Standards of Fundamental Astronomy) software collection.
+**
+**  Status:  support function.
+**
+**  Given:
+**     rc,dc  double     ICRS RA,Dec at J2000.0 (radians)
+**     pr     double     RA proper motion (radians/year, Note 3)
+**     pd     double     Dec proper motion (radians/year)
+**     px     double     parallax (arcsec)
+**     rv     double     radial velocity (km/s, +ve if receding)
+**     astrom iauASTROM* star-independent astrometry parameters:
+**      pmt    double       PM time interval (SSB, Julian years)
+**      eb     double[3]    SSB to observer (vector, au)
+**      eh     double[3]    Sun to observer (unit vector)
+**      em     double       distance from Sun to observer (au)
+**      v      double[3]    barycentric observer velocity (vector, c)
+**      bm1    double       sqrt(1-|v|^2): reciprocal of Lorenz factor
+**      bpn    double[3][3] bias-precession-nutation matrix
+**      along  double       longitude + s' (radians)
+**      xpl    double       polar motion xp wrt local meridian (radians)
+**      ypl    double       polar motion yp wrt local meridian (radians)
+**      sphi   double       sine of geodetic latitude
+**      cphi   double       cosine of geodetic latitude
+**      diurab double       magnitude of diurnal aberration vector
+**      eral   double       "local" Earth rotation angle (radians)
+**      refa   double       refraction constant A (radians)
+**      refb   double       refraction constant B (radians)
+**
+**  Returned:
+**     ra,da  double*    ICRS astrometric RA,Dec (radians)
+**
+**  Notes:
+**
+**  1) All the vectors are with respect to BCRS axes.
+**
+**  2) Star data for an epoch other than J2000.0 (for example from the
+**     Hipparcos catalog, which has an epoch of J1991.25) will require a
+**     preliminary call to iauPmsafe before use.
+**
+**  3) The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
+**
+**  Called:
+**     iauPmpx      proper motion and parallax
+**     iauC2s       p-vector to spherical
+**     iauAnp       normalize angle into range 0 to 2pi
+**
+*/
+
+
+
 void iauAtci13(double rc, double dc,
                double pr, double pd, double px, double rv,
                double date1, double date2,
@@ -3408,7 +3568,7 @@ void iauAtci13(double rc, double dc,
 **  Given:
 **     rc     double   ICRS right ascension at J2000.0 (radians, Note 1)
 **     dc     double   ICRS declination at J2000.0 (radians, Note 1)
-**     pr     double   RA proper motion (radians/year; Note 2)
+**     pr     double   RA proper motion (radians/year, Note 2)
 **     pd     double   Dec proper motion (radians/year)
 **     px     double   parallax (arcsec)
 **     rv     double   radial velocity (km/s, +ve if receding)
@@ -3501,8 +3661,8 @@ void iauAtciq(double rc, double dc,
 **  Status:  support function.
 **
 **  Given:
-**     rc,dc  double     ICRS RA,Dec at J2000.0 (radians)
-**     pr     double     RA proper motion (radians/year; Note 3)
+**     rc,dc  double     ICRS RA,Dec at J2000.0 (radians, Note 1)
+**     pr     double     RA proper motion (radians/year, Note 2)
 **     pd     double     Dec proper motion (radians/year)
 **     px     double     parallax (arcsec)
 **     rv     double     radial velocity (km/s, +ve if receding)
@@ -3529,13 +3689,11 @@ void iauAtciq(double rc, double dc,
 **
 **  Notes:
 **
-**  1) All the vectors are with respect to BCRS axes.
-**
-**  2) Star data for an epoch other than J2000.0 (for example from the
+**  1) Star data for an epoch other than J2000.0 (for example from the
 **     Hipparcos catalog, which has an epoch of J1991.25) will require a
 **     preliminary call to iauPmsafe before use.
 **
-**  3) The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
+**  2) The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
 **
 **  Called:
 **     iauPmpx      proper motion and parallax
@@ -3579,7 +3737,7 @@ void iauAtciqn(double rc, double dc, double pr, double pd,
 **
 **  Given:
 **     rc,dc  double       ICRS RA,Dec at J2000.0 (radians)
-**     pr     double       RA proper motion (radians/year; Note 3)
+**     pr     double       RA proper motion (radians/year, Note 3)
 **     pd     double       Dec proper motion (radians/year)
 **     px     double       parallax (arcsec)
 **     rv     double       radial velocity (km/s, +ve if receding)
@@ -3756,7 +3914,7 @@ int iauAtco13(double rc, double dc,
 **
 **  Given:
 **     rc,dc  double   ICRS right ascension at J2000.0 (radians, Note 1)
-**     pr     double   RA proper motion (radians/year; Note 2)
+**     pr     double   RA proper motion (radians/year, Note 2)
 **     pd     double   Dec proper motion (radians/year)
 **     px     double   parallax (arcsec)
 **     rv     double   radial velocity (km/s, +ve if receding)
@@ -9060,6 +9218,7 @@ void iauFw2xy(double gamb, double phib, double psi, double eps,
 
 
 
+
 void iauG2icrs ( double dl, double db, double *dr, double *dd )
 /*
 **  - - - - - - - - - -
@@ -10097,9 +10256,9 @@ void iauHd2ae (double ha, double dec, double phi,
 **  7)  Again for efficiency, no range checking of arguments is carried
 **      out.
 **
-**  Last revision:   2017 September 12
+**  Last revision:   2021 February 24
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -10278,7 +10437,7 @@ double iauHd2pa (double ha, double dec, double phi)
 **
 **  Last revision:   2017 September 12
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -11281,6 +11440,108 @@ void iauLtpequ(double epj, double veq[3])
 **    Vondrak, J., Capitaine, N. and Wallace, P., 2012, New precession
 **    expressions, valid for long time intervals (Corrigendum),
 **    Astron.Astrophys. 541, C1
+**
+*/
+
+
+
+void iauMoon98 ( double date1, double date2, double pv[2][3] )
+/*
+**  - - - - - - - - - -
+**   i a u M o o n 9 8
+**  - - - - - - - - - -
+**
+**  Approximate geocentric position and velocity of the Moon.
+**
+**  This function is part of the International Astronomical Union's
+**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**
+**  Status:  support function.
+**
+**  n.b. Not IAU-endorsed and without canonical status.
+**
+**  Given:
+**     date1  double         TT date part A (Notes 1,4)
+**     date2  double         TT date part B (Notes 1,4)
+**
+**  Returned:
+**     pv     double[2][3]   Moon p,v, GCRS (AU, AU/d, Note 5)
+**
+**  Notes:
+**
+**  1) The TT date date1+date2 is a Julian Date, apportioned in any
+**     convenient way between the two arguments.  For example,
+**     JD(TT)=2450123.7 could be expressed in any of these ways, among
+**     others:
+**
+**            date1          date2
+**
+**         2450123.7           0.0       (JD method)
+**         2451545.0       -1421.3       (J2000 method)
+**         2400000.5       50123.2       (MJD method)
+**         2450123.5           0.2       (date & time method)
+**
+**     The JD method is the most natural and convenient to use in cases
+**     where the loss of several decimal digits of resolution is
+**     acceptable.  The J2000 method is best matched to the way the
+**     argument is handled internally and will deliver the optimum
+**     resolution.  The MJD method and the date & time methods are both
+**     good compromises between resolution and convenience.  The limited
+**     accuracy of the present algorithm is such that any of the methods
+**     is satisfactory.
+**
+**  2) This function is a full implementation of the algorithm
+**     published by Meeus (see reference) except that the light-time
+**     correction to the Moon's mean longitude has been omitted.
+**
+**  3) Comparisons with ELP/MPP02 over the interval 1950-2100 gave RMS
+**     errors of 2.9 arcsec in geocentric direction, 6.1 km in position
+**     and 36 mm/s in velocity.  The worst case errors were 18.3 arcsec
+**     in geocentric direction, 31.7 km in position and 172 mm/s in
+**     velocity.
+**
+**  4) The original algorithm is expressed in terms of "dynamical time",
+**     which can either be TDB or TT without any significant change in
+**     accuracy.  UT cannot be used without incurring significant errors
+**     (30 arcsec in the present era) due to the Moon's 0.5 arcsec/sec
+**     movement.
+**
+**  5) The result is with respect to the GCRS (the same as J2000.0 mean
+**     equator and equinox to within 23 mas).
+**
+**  6) Velocity is obtained by a complete analytical differentiation
+**     of the Meeus model.
+**
+**  7) The Meeus algorithm generates position and velocity in mean
+**     ecliptic coordinates of date, which the present function then
+**     rotates into GCRS.  Because the ecliptic system is precessing,
+**     there is a coupling between this spin (about 1.4 degrees per
+**     century) and the Moon position that produces a small velocity
+**     contribution.  In the present function this effect is neglected
+**     as it corresponds to a maximum difference of less than 3 mm/s and
+**     increases the RMS error by only 0.4%.
+**
+**  References:
+**
+**     Meeus, J., Astronomical Algorithms, 2nd edition, Willmann-Bell,
+**     1998, p337.
+**
+**     Simon, J.L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
+**     Francou, G. & Laskar, J., Astron.Astrophys., 1994, 282, 663
+**
+**  Defined in sofam.h:
+**     DAU           astronomical unit (m)
+**     DJC           days per Julian century
+**     DJ00          reference epoch (J2000.0), Julian Date
+**     DD2R          degrees to radians
+**
+**  Called:
+**     iauS2pv      spherical coordinates to pv-vector
+**     iauPfw06     bias-precession F-W angles, IAU 2006
+**     iauIr        initialize r-matrix to identity
+**     iauRz        rotate around Z-axis
+**     iauRx        rotate around X-axis
+**     iauRxpv      product of r-matrix and pv-vector
 **
 */
 
@@ -12559,14 +12820,16 @@ int iauPlan94(double date1, double date2, int np, double pv[2][3])
 **   i a u P l a n 9 4
 **  - - - - - - - - - -
 **
+**  Approximate heliocentric position and velocity of a nominated major
+**  planet:  Mercury, Venus, EMB, Mars, Jupiter, Saturn, Uranus or
+**  Neptune (but not the Earth itself).
+**
 **  This function is part of the International Astronomical Union's
 **  SOFA (Standards Of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
-**  Approximate heliocentric position and velocity of a nominated major
-**  planet:  Mercury, Venus, EMB, Mars, Jupiter, Saturn, Uranus or
-**  Neptune (but not the Earth itself).
+**  n.b. Not IAU-endorsed and without canonical status.
 **
 **  Given:
 **     date1  double       TDB date part A (Note 1)
@@ -12709,7 +12972,7 @@ int iauPlan94(double date1, double date2, int np, double pv[2][3])
 **     which in turn takes precedence over the remote date warning.
 **
 **  Called:
-**     iauAnp       normalize angle into range 0 to 2pi
+**     iauAnpm      normalize angle into range +/- pi
 **
 **  Reference:  Simon, J.L, Bretagnon, P., Chapront, J.,
 **              Chapront-Touze, M., Francou, G., and Laskar, J.,
@@ -12985,7 +13248,7 @@ void iauPmpx(double rc, double dc, double pr, double pd,
 **
 **  Given:
 **     rc,dc  double     ICRS RA,Dec at catalog epoch (radians)
-**     pr     double     RA proper motion (radians/year; Note 1)
+**     pr     double     RA proper motion (radians/year, Note 1)
 **     pd     double     Dec proper motion (radians/year)
 **     px     double     parallax (arcsec)
 **     rv     double     radial velocity (km/s, +ve if receding)
@@ -17884,7 +18147,7 @@ void iauZr(double r[3][3])
 **
 */
 
-copyr.lis                                                    2020 June 2
+copyr.lis                                                    2021 April 12
 
 
 COPYRIGHT NOTICE
@@ -18064,19 +18327,47 @@ file sofam.h.
 **  This file is part of the International Astronomical Union's
 **  SOFA (Standards Of Fundamental Astronomy) software collection.
 **
-**  This revision:   2018 December 5
+**  This revision:   2021 April 18
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 
-#include "sofam.h"
 #include "math.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/* Star-independent astrometry parameters */
+typedef struct {
+   double pmt;        /* PM time interval (SSB, Julian years) */
+   double eb[3];      /* SSB to observer (vector, au) */
+   double eh[3];      /* Sun to observer (unit vector) */
+   double em;         /* distance from Sun to observer (au) */
+   double v[3];       /* barycentric observer velocity (vector, c) */
+   double bm1;        /* sqrt(1-|v|^2): reciprocal of Lorenz factor */
+   double bpn[3][3];  /* bias-precession-nutation matrix */
+   double along;      /* longitude + s' + dERA(DUT) (radians) */
+   double phi;        /* geodetic latitude (radians) */
+   double xpl;        /* polar motion xp wrt local meridian (radians) */
+   double ypl;        /* polar motion yp wrt local meridian (radians) */
+   double sphi;       /* sine of geodetic latitude */
+   double cphi;       /* cosine of geodetic latitude */
+   double diurab;     /* magnitude of diurnal aberration vector */
+   double eral;       /* "local" Earth rotation angle (radians) */
+   double refa;       /* refraction constant A (radians) */
+   double refb;       /* refraction constant B (radians) */
+} iauASTROM;
+/* (Vectors eb, eh, em and v are all with respect to BCRS axes.) */
+
+/* Body parameters for light deflection */
+typedef struct {
+   double bm;         /* mass of the body (solar masses) */
+   double dl;         /* deflection limiter (radians^2/2) */
+   double pv[2][3];   /* barycentric PV of the body (au, au/day) */
+} iauLDBODY;
 
 /* Astronomy/Calendars */
 int iauCal2jd(int iy, int im, int id, double *djm0, double *djm);
@@ -18127,6 +18418,13 @@ int iauApio13(double utc1, double utc2, double dut1,
               double elong, double phi, double hm, double xp, double yp,
               double phpa, double tc, double rh, double wl,
               iauASTROM *astrom);
+void iauAtcc13(double rc, double dc,
+               double pr, double pd, double px, double rv,
+               double date1, double date2,
+               double *ra, double *da);
+void iauAtccq(double rc, double dc,
+              double pr, double pd, double px, double rv,
+              iauASTROM *astrom, double *ra, double *da);
 void iauAtci13(double rc, double dc,
                double pr, double pd, double px, double rv,
                double date1, double date2,
@@ -18196,6 +18494,7 @@ void iauRefco(double phpa, double tc, double rh, double wl,
 /* Astronomy/Ephemerides */
 int iauEpv00(double date1, double date2,
              double pvh[2][3], double pvb[2][3]);
+void iauMoon98(double date1, double date2, double pv[2][3]);
 int iauPlan94(double date1, double date2, int np, double pv[2][3]);
 
 /* Astronomy/FundamentalArgs */
@@ -18661,41 +18960,12 @@ void iauSxpv(double s, double pv[2][3], double spv[2][3]);
 **  the context of the SOFA software, and have no other official IAU
 **  status.  In addition, self consistency is not guaranteed.
 **
-**  This revision:   2020 June 16
+**  This revision:   2021 February 24
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
-
-/* Star-independent astrometry parameters */
-typedef struct {
-   double pmt;        /* PM time interval (SSB, Julian years) */
-   double eb[3];      /* SSB to observer (vector, au) */
-   double eh[3];      /* Sun to observer (unit vector) */
-   double em;         /* distance from Sun to observer (au) */
-   double v[3];       /* barycentric observer velocity (vector, c) */
-   double bm1;        /* sqrt(1-|v|^2): reciprocal of Lorenz factor */
-   double bpn[3][3];  /* bias-precession-nutation matrix */
-   double along;      /* longitude + s' + dERA(DUT) (radians) */
-   double phi;        /* geodetic latitude (radians) */
-   double xpl;        /* polar motion xp wrt local meridian (radians) */
-   double ypl;        /* polar motion yp wrt local meridian (radians) */
-   double sphi;       /* sine of geodetic latitude */
-   double cphi;       /* cosine of geodetic latitude */
-   double diurab;     /* magnitude of diurnal aberration vector */
-   double eral;       /* "local" Earth rotation angle (radians) */
-   double refa;       /* refraction constant A (radians) */
-   double refb;       /* refraction constant B (radians) */
-} iauASTROM;
-/* (Vectors eb, eh, em and v are all with respect to BCRS axes.) */
-
-/* Body parameters for light deflection */
-typedef struct {
-   double bm;         /* mass of the body (solar masses) */
-   double dl;         /* deflection limiter (radians^2/2) */
-   double pv[2][3];   /* barycentric PV of the body (au, au/day) */
-} iauLDBODY;
 
 /* Pi */
 #define DPI (3.141592653589793238462643)
@@ -18896,7 +19166,7 @@ typedef struct {
 **
 **--------------------------------------------------------------------*/
 
-board.lis                                                    2020 June 2
+board.lis                                                  2021 April 16
 
 
 
@@ -18908,10 +19178,10 @@ Current Membership
    John Bangert - United States Naval Observatory, retired
    Steven Bell - Her Majesty's Nautical Almanac Office (HMNAO)
    Nicole Capitaine - Paris Observatory
+   Maria Davis - United States Naval Observatory (IERS)
    Mickael Gastineau - Paris Observatory, IMCCE
    Catherine Hohenkerk - HMNAO (Chair, retired)
    Li Jinling - Shanghai Astronomical Observatory
-   Brian Luzum - United States Naval Observatory (IERS)
    Zinovy Malkin - Pulkovo Observatory, St Petersburg
    Jeffrey Percival - University of Wisconsin
    Wendy Puatua - United States Naval Observatory
@@ -18929,6 +19199,7 @@ Past Members
    Anne-Marie Gontier     Paris Observatory
    George Hobbs           Australia Telescope National Facility
    George Kaplan          United States Naval Observatory
+   Brian Luzum            United States Naval Observatory
    Dennis McCarthy        United States Naval Observatory
    Skip Newhall           Jet Propulsion Laboratory
    Jin Wen-Jing           Shanghai Astronomical Observatory

@@ -33,9 +33,9 @@ void iauPn(double p[3], double *r, double u[3])
 **     iauZp        zero p-vector
 **     iauSxp       multiply p-vector by scalar
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -59,7 +59,7 @@ void iauPn(double p[3], double *r, double u[3])
 /* Return the modulus. */
    *r = w;
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

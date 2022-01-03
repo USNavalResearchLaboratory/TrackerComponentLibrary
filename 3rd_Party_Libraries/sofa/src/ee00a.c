@@ -63,9 +63,9 @@ double iauEe00a(double date1, double date2)
 **     McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
 **     IERS Technical Note No. 32, BKG (2004).
 **
-**  This revision:  2008 May 16
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -86,6 +86,8 @@ double iauEe00a(double date1, double date2)
    ee = iauEe00(date1, date2, epsa, dpsi);
 
    return ee;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

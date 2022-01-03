@@ -32,9 +32,9 @@ void iauRxpv(double r[3][3], double pv[2][3], double rpv[2][3])
 **  Called:
 **     iauRxp       product of r-matrix and p-vector
 **
-**  This revision:  2020 September 26
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -42,7 +42,7 @@ void iauRxpv(double r[3][3], double pv[2][3], double rpv[2][3])
    iauRxp(r, pv[0], rpv[0]);
    iauRxp(r, pv[1], rpv[1]);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

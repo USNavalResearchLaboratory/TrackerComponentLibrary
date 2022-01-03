@@ -1,7 +1,7 @@
 function drawAzBeam(azCenter,beamHalfwidth,range,systemType,lRx,M,closeEnds,varargin)
 %%DRAWANGLEBEAM Draw the outline of a polar beam in a particular direction.
 %           This does not shape the beam based upon gain or anything. It
-%           just outlines a region, drawing a curve on the end. This cna be
+%           just outlines a region, drawing a curve on the end. This can be
 %           useful for determining whether plotted targets are near various
 %           beams in 2D.
 %

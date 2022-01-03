@@ -1,4 +1,4 @@
-function [z,exitCode]=nearestPointOnEllipsoid(zIn,A,pIn,gammaVal,varargin)
+function z=nearestPointOnEllipsoid(zIn,A,pIn,gammaVal,epsRed)
 %%NEARESTPOINTONELLIPSOID Given an ellipsoid in an arbitrary number of
 %        dimensions such that a point zp on the surface of the ellipsoid
 %        satisfies the equation (zIn-zp)'*A*(zIn-zp)=gammaVal find the
@@ -14,42 +14,40 @@ function [z,exitCode]=nearestPointOnEllipsoid(zIn,A,pIn,gammaVal,varargin)
 %   gammaVal The threshold for declaring a point to be on the ellipsoid. If
 %            this parameter is omitted or an empty matrix is passed, the
 %            default value of 1 is used.
-%   varargin Any parameters that one might wish to pass to the fzero
-%            function. These are generally comma-separated things, such as
-%           'TolX',1e-12.
+%     epsRed This function uses the eqConstLSSpher function to solve an
+%            optimziation. This input corresponds to the same-named input
+%            of eqConstLSSpher and is a tolerance for declaring a solution
+%            to be valid. The default if omitted or an empty matrix is
+%            passed is 1e-9.
 %
 %OUTPUTS: z The numDimX1 point on the ellipse that is closest to p. When
 %           multiple solutions exist, only one is chosen.
-%  exitCode This function calls exitCode. This is the same as the exit flag
-%           returned by the fzero function.
 %
 %The optimization problem being solved is
 %minimize norm(z-Pin)^2
 %such that (z-zIn)'*A*(z-zIn)=gammaVal
-%To solve this problem, we will perofrm a few changes of variables. First,
+%To solve this problem, we will perform a few changes of variables. First,
 %we perform an upper triangular Cholesky decomposition of A, so A=S'*S.
-%Next, we make the substitutions
-%zTilde=S*(z-zIn) (in reverse, z=inv(S)*zTilde+zIn).
-%PInTilde=pIn-zIn
-%This means that the minimization problem becomes
-%norm(inv(S)*zTilde-PInTilde)^2
+%Next, we make the substitutions:
+%z=inv(S)*zTilde+zIn (in reverse zTilde=S*(z-zIn)).
+%This leads to the optimization problem:
+%minimize norm(inv(S)*zTilde+zIn-Pin)^2
 %such that norm(zTilde)^2=gammaVal.
 %That formulation of the optimization problem can be solved using the
-%eqConstLSSpher function. The solution to the original problem is then
-%obtained by undoing the transformations.
+%eqConstLSSpher function.
 %
 %EXAMPLE 1:
-%Here, we find the nearest point on an ellipsoid in 3D.
+%Here, we find the nearest point on an ellipsoid in 3D and show that the
+%returned point is indeed on the ellipdois, within finite precision limits.
 % A=[27,  4,  10;
 %     4, 21, 16;
 %    10, 16, 15];
 % z=[12;24;36];
 % p=[1000;-1000;2000];
 % gammaVal=2.5;
-% zp=nearestPointOnEllipsoid(z,A,p,gammaVal)
-%One gets zp=[11.606225228425036;22.829459247176374;37.594179506992610]
-%One can verify that (z-zp)'*A*(z-zp)=gammaVal within finite precision
-%limits.
+% zp=nearestPointOnEllipsoid(z,A,p,gammaVal);
+% %It fits within finite precision limits.
+% (z-zp)'*A*(z-zp)-gammaVal
 %
 %EXAMPLE 2:
 %This example is used in the function nearestPointInEllipsoid. There, since
@@ -75,14 +73,17 @@ function [z,exitCode]=nearestPointOnEllipsoid(zIn,A,pIn,gammaVal,varargin)
 %December 2020 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<5||isempty(epsRed))
+   epsRed=1e-9; 
+end
+
 if(nargin<4||isempty(gammaVal))
     gammaVal=1;
 end
 
 S=chol(A,'upper');
-PInTilde=pIn-zIn;
-
-[zTilde,exitCode]=eqConstLSSpher(inv(S),PInTilde,sqrt(gammaVal),varargin{:});
+pInTilde=pIn-zIn;
+zTilde=eqConstLSSpher(inv(S),pInTilde,sqrt(gammaVal),epsRed);
 z=S\zTilde+zIn;
 
 end

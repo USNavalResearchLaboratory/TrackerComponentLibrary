@@ -11,7 +11,7 @@ function [xUpdate,PUpdate,innov,Pzz,W]=KalmanUpdate(xPred,PPred,z,R,H,condIssue)
 %            H The optional zDimXxDim measurement matrix. The measurement
 %              is modeled as z=H*x+noise. If this parameter is omitted or
 %              an empty matrix is passed, then H will be taken as a
-%              zDimXxDim identity matrix followed by columns of zeros
+%              zDimXzDim identity matrix followed by columns of zeros
 %              (Assuming that zDim<=xDim. Otherwise, H must be provided).
 %    condIssue An optional parameter indicating whether a conditioning
 %              issue with the measurement covariance matrix. Singularity
@@ -32,8 +32,8 @@ function [xUpdate,PUpdate,innov,Pzz,W]=KalmanUpdate(xPred,PPred,z,R,H,condIssue)
 %matrix PPred, and assuming that they are the mean and covariance matrix of
 %a Gaussian distribution, under the measurement model
 %z=H*x+w
-%where z is the measurement, x is the truye target state, H is a zDim*xDim
-%matrix and w is additive Gaussian noise, this function updates the mstate
+%where z is the measurement, x is the true target state, H is a zDimXxDim
+%matrix and w is additive Gaussian noise, this function updates the state
 %estimate and its associated covariance estimate.
 %
 %The Joseph-form covariance update is used for improved numerical

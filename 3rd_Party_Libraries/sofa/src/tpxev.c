@@ -72,7 +72,7 @@ int iauTpxev(double v[3], double v0[3], double *xi, double *eta)
 **
 **  This revision:   2018 January 2
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */

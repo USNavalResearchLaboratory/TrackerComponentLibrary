@@ -24,9 +24,9 @@ void iauPmp(double a[3], double b[3], double amb[3])
 **     It is permissible to re-use the same array for any of the
 **     arguments.
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -35,7 +35,7 @@ void iauPmp(double a[3], double b[3], double amb[3])
    amb[1] = a[1] - b[1];
    amb[2] = a[2] - b[2];
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

@@ -17,13 +17,13 @@ function J=calcRuvJacob(x,useHalfRange,lTx,lRx,M)
 %          passed, then a vector of zeros is used.
 %        M A 3X3 rotation matrix from the global Coordinate system to the
 %          orientation of the coordinate system at the receiver. This is
-%          only necessary if UV direction components are desired. If
+%          only necessary if u-v direction components are desired. If
 %          omitted, it is assumed to be the identity matrix.
 %
-%OUTPUTS: J The Jacobian matrix with derivatives with respect to position
-%           components. Each row is a component of bistatic range, u and v
-%           in that order with derivatives taken with respect to [x,y,z]
-%           across columns.
+%OUTPUTS: J The 3X3 Jacobian matrix with derivatives with respect to
+%           position components. Each row is a component of bistatic range,
+%           u and v in that order with derivatives taken with respect to
+%           [x,y,z] across columns.
 %
 %This function just calls rangeGradient and uvGradient.
 %

@@ -8,7 +8,7 @@ function [xUpdate,PUpdate,innov,Pzz,W]=EKFUpdateWithPred(z,R,zPred,PzPred,otherI
 %           association hypotheses from a single target prediction more
 %           efficient. The full measurement update function is EKFUpdate.
 %
-%INPUTS: z The zDimX1 vector measurement.
+%INPUTS: z The zDimX1 measurement vector.
 %        R The zDimXzDim measurement covariance matrix in the native
 %          coordinate system of the measurement.
 %    zPred The zDimXnumComp measurement predictions from the filter.

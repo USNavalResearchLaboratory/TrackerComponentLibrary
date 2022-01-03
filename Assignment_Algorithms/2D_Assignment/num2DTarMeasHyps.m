@@ -2,7 +2,9 @@ function numHyp=num2DTarMeasHyps(numTar,numMeas)
 %%NUM2DTARMEASHYPS Determine the maximum number of target-measurement
 %             association hypotheses when all targets could be associated
 %             with all measurements and all targets have a missed detection
-%             hypothesis.
+%             hypothesis. This is the maximum complexity of the update step
+%             of a JPDAF. It is the case where everything gates with
+%             everything else.
 %
 %INPUTS:  numTar The number of target present (numTar>=0).
 %        numMeas The number of measurements present (numMeas>=0).

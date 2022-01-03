@@ -19,8 +19,8 @@ function JTotal=rangeRateGradient(xG,useHalfRange,lTx,lRx)
 %          receiver.
 %
 %OUTPUTS: JTotal A 1X(2*numDims)XN set of gradients of the bistatic range
-%           rates in x with partial derivatives taken with respect to
-%           position and velocity components. In 3D, the components are
+%           rates implied by xG with partial derivatives taken with respect
+%           to position and velocity components. In 3D, the components are
 %           taken in the order [x,y,z,xDot,yDot,zDot]; in 2D and 1D they
 %           are taken in the order [x,y,xDot,yDot] and [x,xDot].
 %

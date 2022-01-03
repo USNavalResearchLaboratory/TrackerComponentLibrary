@@ -56,9 +56,9 @@ void iauPnm06a(double date1, double date2, double rbpn[3][3])
 **
 **     Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855.
 **
-**  This revision:  2020 November 27
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -75,7 +75,7 @@ void iauPnm06a(double date1, double date2, double rbpn[3][3])
 /* Equinox based nutation x precession x bias matrix. */
    iauFw2m(gamb, phib, psib + dp, epsa + de, rbpn);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

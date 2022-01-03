@@ -1,9 +1,11 @@
 function [zCart,RCart]=ruv2CartCubature(z,SR,useHalfRange,zTx,zRx,M,xi,w)
-%RUV2CARTCUBATURE Use cubature integration to approximate the moments of
-%                 measurements converted from bistatic r-u-v coordinates
-%                 into Cartesian coordinates. For a two-way monostatic
-%                 conversion, set zTx=zRx to make the transmitter and
-%                 receiver collocated.
+%RUV2CARTCUBATURE Use cubature integration to approximate the mean and
+%                 covariance matrix of noisy measurements converted from
+%                 bistatic r-u-v coordinates into Cartesian coordinates.
+%                 For a two-way monostatic conversion, set zTx=zRx to make
+%                 the transmitter and receiver collocated. In the
+%                 monostatic case, this function is more accurate than 
+%                 monostatRuv2CartTaylor, but it is also slower.
 %
 %INPUTS: z A 3XnumMeas matrix of numMeas vectors to convert. Each has
 %          elements [r;u;v], where r is the bistatic range from the
@@ -24,9 +26,9 @@ function [zCart,RCart]=ruv2CartCubature(z,SR,useHalfRange,zTx,zRx,M,xi,w)
 %          matrix is passed, then the receiver is placed at the origin.
 %        M A 3X3 rotation matrix to go from the alignment of the global
 %          coordinate system to the local alignment of the receiver. The z
-%          vector of the local coordinate system of the receiver is the
-%          pointing direction of the receiver. If this matrix is omitted,
-%          then the identity matrix is used.
+%          axis of the local coordinate system of the receiver is the
+%          pointing direction of the receiver. If this matrix is omitted or
+%          an empty matrix is passed, then the identity matrix is used.
 %       xi A 3XnumCubaturePoints matrix of cubature points for the numeric
 %          integration. If this and the final parameter are omitted or
 %          empty matrices are passed, then fifthOrderCubPoints is used to
@@ -34,9 +36,9 @@ function [zCart,RCart]=ruv2CartCubature(z,SR,useHalfRange,zTx,zRx,M,xi,w)
 %        w A numCubaturePointsX1 vector of the weights associated with the
 %          cubature points.
 %
-%OUTPUTS: zCart The approximate means of the PDF of the Cartesian converted
-%               measurements in [x;y;z] Cartesian coordinates for each
-%               measurement. This is a 3XnumMeas matrix.
+%OUTPUTS: zCart The approximate means of the PDFs of the Cartesian 
+%               converted measurements in [x;y;z] Cartesian coordinates.
+%               This is a 3XnumMeas matrix.
 %         RCart The approximate 3X3XnumMeas set of covariance matrices of
 %               the PDFs of the Cartesian converted measurements.
 %

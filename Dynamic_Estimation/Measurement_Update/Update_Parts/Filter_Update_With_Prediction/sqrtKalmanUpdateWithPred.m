@@ -8,7 +8,7 @@ function [xUpdate, SUpdate,innov,Szz,W]=sqrtKalmanUpdateWithPred(z,SR,zPred,othe
 %           efficient. The full measurement update function is
 %           sqrtKalmanUpdate.
 %
-%INPUTS: z The zDimX1 vector measurement.
+%INPUTS: z The zDimX1 measurement vector.
 %       SR The zDimXzDim lower-triangular square root of the measurement
 %          covariance matrix in the native coordinate system of the
 %          measurement.

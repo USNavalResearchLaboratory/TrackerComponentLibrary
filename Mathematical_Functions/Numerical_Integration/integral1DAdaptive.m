@@ -23,30 +23,30 @@ function [intEst,totalError,exitCode]=integral1DAdaptive(f,bounds,n,algorithm,c1
 %          This parameter is not used if algorithm=-1. The default if this
 %          parameter is omitted or an empty matrix is passed is 8.
 % algorithm This optionally specifies the type of weighting function used
-%           for the integral. This corresponds to the value in the
-%           extQuadraturePoints1D function except option 10 is not
-%           available and methods with unbounded integration regions cannot
-%           be used. Additionally, algorithm=-1 means that n is not used
-%           and the following input, c1, is used to directly provide the
-%           cubature points and weights needed. See the comments to the
-%           function extQuadraturePoints1D for options. The default if this
-%           parameter is omitted or an empty matrix is passed is 2, which
-%           corresponds to a weighting function of 1 (no weighting).
-%        c1 This input is only needed if the algorithm input requires an
-%           additional parameter in the extQuadraturePoints1D function, or
-%           if algorithm =-1. If algorithm=-1, this is a structure
-%           containing the following members:
-%            wG The nX1 set of weights associated with the first n entires
-%               in xiK that would provide integration of an n order 2*n-1
-%               polynomial accuracy.
-%           xiK The Gauss-Kronrod extension of an n-point integration rule.
-%               The first n points are those for an order 2*n-1 rule using
-%               weights wG and the next n+1 points are different. This with
-%               the weights wK have a polynomial accuracy of 2*n+1.
-%            wG The weights of xiK. These are all different from the
-%               weights in wG.
-%           bounds The 2X1 or 1X2 vector of bounds for the integration
-%               using the points in xiK
+%          for the integral. This corresponds to the value in the
+%          extQuadraturePoints1D function except option 10 is not
+%          available and methods with unbounded integration regions cannot
+%          be used. Additionally, algorithm=-1 means that n is not used
+%          and the following input, c1, is used to directly provide the
+%          cubature points and weights needed. See the comments to the
+%          function extQuadraturePoints1D for options. The default if this
+%          parameter is omitted or an empty matrix is passed is 2, which
+%          corresponds to a weighting function of 1 (no weighting).
+%       c1 This input is only needed if the algorithm input requires an
+%          additional parameter in the extQuadraturePoints1D function, or
+%          if algorithm =-1. If algorithm=-1, this is a structure
+%          containing the following members:
+%           wG The nX1 set of weights associated with the first n entires
+%              in xiK that would provide integration of an n order 2*n-1
+%              polynomial accuracy.
+%          xiK The Gauss-Kronrod extension of an n-point integration rule.
+%              The first n points are those for an order 2*n-1 rule using
+%              weights wG and the next n+1 points are different. This with
+%              the weights wK have a polynomial accuracy of 2*n+1.
+%           wG The weights of xiK. These are all different from the
+%              weights in wG.
+%          bounds The 2X1 or 1X2 vector of bounds for the integration
+%              using the points in xiK
 %   RelTol The maximum relative error tolerance allowed. If omitted or an
 %          empty matrix is passed, the default value of 1e-8 is used.
 %   AbsTol The absolute error tolerance allowed. If omitted or an empty

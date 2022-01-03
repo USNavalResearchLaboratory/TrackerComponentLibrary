@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauFk45z(double r1950, double d1950, double bepoch,
               double *r2000, double *d2000)
@@ -83,9 +84,9 @@ void iauFk45z(double r1950, double d1950, double bepoch,
 **     iauPvu       update a pv-vector
 **     iauS2c       spherical to p-vector
 **
-**  This revision:   2020 November 19
+**  This revision:   2021 February 24
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */

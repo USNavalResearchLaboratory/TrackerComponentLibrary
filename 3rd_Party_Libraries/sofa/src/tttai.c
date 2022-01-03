@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 int iauTttai(double tt1, double tt2, double *tai1, double *tai2)
 /*
@@ -38,9 +39,9 @@ int iauTttai(double tt1, double tt2, double *tai1, double *tai2)
 **     Explanatory Supplement to the Astronomical Almanac,
 **     P. Kenneth Seidelmann (ed), University Science Books (1992)
 **
-**  This revision:  2019 June 20
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -61,6 +62,8 @@ int iauTttai(double tt1, double tt2, double *tai1, double *tai2)
 
 /* Status (always OK). */
    return 0;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

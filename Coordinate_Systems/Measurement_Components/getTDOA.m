@@ -1,6 +1,6 @@
 function TDOA=getTDOA(x,lRef,lRx,c)
-%%FUNCTIONGETTDOA Determine the time-delay of arrival (TDOA) in 2D or 3D
-%           space with respect to position. Atmospheric and other
+%%FUNCTIONGETTDOA Determine the time-difference of arrival (TDOA) in 2D or
+%           3D space with respect to position. Atmospheric and other
 %           propagation effects are not taken into account.
 %
 %INPUTS: x The numPosDimXN set of target position vectors of the form

@@ -545,8 +545,8 @@ function xEst=polyMeasConvertAsync(z,measTypes,FhMats,sensorIdxLists,sensorState
 %
 %REFERENCES:
 %[1] D. F. Crouse, "General Multivariate Polynomial Target Localization and
-%    Initial Estimation," Journal of Advances in Information Fusion,
-%    submitted 2016.
+%    Initial Estimation," Journal of Advances in Information Fusion, vol.
+%    13, no. 1, pp. 68-91, Jun. 2018.
 %
 %March 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

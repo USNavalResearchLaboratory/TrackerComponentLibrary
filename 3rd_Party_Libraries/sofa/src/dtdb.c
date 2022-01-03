@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 double iauDtdb(double date1, double date2,
                double ut, double elong, double u, double v)
@@ -162,9 +163,9 @@ double iauDtdb(double date1, double date2,
 **     Simon, J.L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
 **     Francou, G. & Laskar, J., Astron.Astrophys., 282, 663-683 (1994).
 **
-**  This revision:  2018 January 2
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -1164,6 +1165,8 @@ double iauDtdb(double date1, double date2,
    w = wt + wf + wj;
 
    return w;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

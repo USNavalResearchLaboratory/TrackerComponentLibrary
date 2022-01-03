@@ -53,7 +53,7 @@ function demoMertonModel()
     X(:,1) = X0; % Initial condition
 
     %Generate Poisson samples as 2 independent compound Poisson processes
-    CP = [0,genCompoundPoissonProc(lambda,dt,0+dt,T,0)];
+    CP = [0,genMarkedPointProc(lambda,dt,0+dt,T,0)];
 
     %Simulate 2 independent Wiener Processes
     W = [[0;0],sqrt(dt).*randn([2,length(t)-1])];
@@ -86,7 +86,7 @@ function demoMertonModel()
         %Get Euler Approximation
         for run = 1:numruns
             XEuler(:,i) = XEuler(:,i) + strongStochTaylorStepJump(...
-                XEuler(:,i-1),a,B,@(x,k)c(x),lambda,dtapprox,1,[],[],deltaP,Wj);
+                XEuler(:,i-1),a,B,@(x,k,idx)c(x),lambda,dtapprox,1,[],[],deltaP,Wj);
         end
         XEuler(:,i) = XEuler(:,i)/numruns;
             

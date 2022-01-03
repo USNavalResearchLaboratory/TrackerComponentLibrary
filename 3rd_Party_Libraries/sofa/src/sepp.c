@@ -35,9 +35,9 @@ double iauSepp(double a[3], double b[3])
 **     iauPm        modulus of p-vector
 **     iauPdp       scalar product of two p-vectors
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -56,6 +56,8 @@ double iauSepp(double a[3], double b[3])
    s = ((ss != 0.0) || (cs != 0.0)) ? atan2(ss, cs) : 0.0;
 
    return s;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

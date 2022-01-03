@@ -43,10 +43,7 @@ function demoNonlinearMeasFilters()
 
 T=60;%60 second sampling interval
 
-F=[1, 0, T, 0;
-   0, 1, 0, T;
-   0, 0, 1, 0;
-   0, 0, 0, 1];%State transition matrix,
+F=FPolyKal(T,4,1);%State transition matrix.
 Gamma=[0.5*T^2, 0;
          0,     0.5*T^2;
          T,     0;

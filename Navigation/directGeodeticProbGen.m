@@ -52,7 +52,7 @@ function [latLonEnd,azEnd]=directGeodeticProbGen(latLonStart,azStart,dist,height
 %OUTPUTS:latLonEnd A 2XN matrix of geodetic latitude and longitudes of the
 %                  final points of the geodesic trajectory given in radians
 %                  as [latitude;longitude].
-%            azEnd An NX1 vector of rhe forward azimuth (bearing) at the
+%            azEnd An NX1 vector of the forward azimuth (bearing) at the
 %                  ending points in radians East of true North on the
 %                  reference ellipsoid.
 %
@@ -158,16 +158,18 @@ for curTraj=1:N
     uDyn=@(u,x,t)uDotEllipsoid(u,x,a,f);
     aDyn=@(x,t)aPoly(x,3);%A constant velocity model.
 
-    %Compute the Cartesian position and velocity of the target over the entire
-    %trajectory. Use a fourth-order Runge-Kutta method.
+    %Compute the Cartesian position and velocity of the target over the
+    %entire trajectory. Use a fourth-order Runge-Kutta method.
     [xList,uList]=RungeKCurvedAtTimes(xInit,uInit,[0;1],aDyn,uDyn,stepSize,4);
     plhEnd=Cart2Ellipse(xList(1:3,end),[],a,f);
-    latLonEnd(:,curTraj)=plhEnd(1:2);%The Cartesian location at the end of the trajectory.
+    %The Cartesian location at the end of the trajectory.
+    latLonEnd(:,curTraj)=plhEnd(1:2);
 
     %The deviation of plhEnd(3) from the desired height can be used as a
     %measure of the error of the estimate.
 
-    %Get the velocity at the end as a unit vector in ECEF Cartesian coordinate.
+    %Get the velocity at the end as a unit vector in ECEF Cartesian
+    %coordinate.
     vEnd=getGlobalVectors(xList(4:6,end),uList(:,:,end));
     
     %Get a unit vector in the direction of the velocity at the end.

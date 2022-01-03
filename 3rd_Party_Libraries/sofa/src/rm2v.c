@@ -34,9 +34,9 @@ void iauRm2v(double r[3][3], double w[3])
 **  3) The reference frame rotates clockwise as seen looking along
 **     the rotation vector from the origin.
 **
-**  This revision:  2015 January 30
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -61,7 +61,7 @@ void iauRm2v(double r[3][3], double w[3])
       w[2] = 0.0;
    }
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

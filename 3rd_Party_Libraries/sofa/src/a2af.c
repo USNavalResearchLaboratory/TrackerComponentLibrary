@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauA2af(int ndp, double angle, char *sign, int idmsf[4])
 /*
@@ -56,9 +57,9 @@ void iauA2af(int ndp, double angle, char *sign, int idmsf[4])
 **  Called:
 **     iauD2tf      decompose days to hms
 **
-**  This revision:  2020 April 1
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -70,7 +71,7 @@ void iauA2af(int ndp, double angle, char *sign, int idmsf[4])
 /* Scale then use days to h,m,s function. */
    iauD2tf(ndp, angle*F, sign, idmsf);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

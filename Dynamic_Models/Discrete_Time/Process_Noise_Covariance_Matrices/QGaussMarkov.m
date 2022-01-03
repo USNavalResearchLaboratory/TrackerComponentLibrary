@@ -10,13 +10,12 @@ function Q=QGaussMarkov(T,xDim,q,tau,order)
 %             process noise covariance matrix is an exact discretization.
 %
 %INPUTS: T The time-duration of the propagation interval in seconds.
-%     xDim The dimensionality of the target state.
-%          xDim is ((order+1)*numDim)X1 dimensional, where numDim is the
-%          number of position dimensions of space (e.g. 2D or 3D).
+%     xDim The dimensionality of the target state. xDim equals
+%          ((order+1)*numDim), where numDim is the number of position
+%          dimensions of space (e.g. 2D or 3D).
 %        q The power spectral density of the noise corrupting the
 %          highest-order moment. q=(sqrt(2/tau)*sigmam)^2 where sigmam^2 is
-%          the instantaneous variance of the highest order moment and
-%          numDim is the number of dimensions in the model.
+%          the instantaneous variance of the highest order moment.
 %      tau The time constant of the autocorrelation or the moment of the
 %          given order. For example, if order=2, then tau is the time
 %          constant of the decorrelation time of the acceleration in
@@ -46,7 +45,8 @@ function Q=QGaussMarkov(T,xDim,q,tau,order)
 %for a slowly turning aircraft is 20s, and is 5s for an evasive maneuver.
 %The Singer model (order=2) is introduced with solution for tracking in
 %[2]. The first-order model, the integrated Ornstein-Uhlenbeck process, is
-%discussed for tracking in Chapter 3.2.2 of [3] with a discretization.
+%discussed for tracking in Chapter 3.2.2 of [3] with a discretization. In
+%[4], a general solution is written out.
 %
 %This function simply generalizes the result to an arbitrary order.
 %The dynamic model is written in continuous time in each dimension
@@ -70,6 +70,9 @@ function Q=QGaussMarkov(T,xDim,q,tau,order)
 %    Electronic Systems, vol. AES-6, no. 4, pp. 473-483, Jul. 1970.
 %[3] L. D. Stone, C. A. Barlow, and T. L. Corwin, Bayesian Multiple Target
 %    Tracking. Boston: Artech House, 1999.
+%[4] D. F. Crouse, "The tracker component library: Free routines for
+%    rapid prototyping," IEEE Aerospace and Electronic Systems Magazine,
+%    vol. 32, no. 5, pp. 18-27, May 2017.
 %
 %April 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

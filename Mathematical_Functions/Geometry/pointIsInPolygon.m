@@ -7,21 +7,21 @@ function [isInPolygon,omegas]=pointIsInPolygon(vertices,point,boundaryIsImportan
 %                not. As the algorithm is a type of winding number
 %                algorithm, the winding number omega can also be obtained.
 %
-%INPUTS: vertices   A 2XN matrix of the N vertices making up the polygon in
-%                   order. Edges are between neighboring vertices. The last
-%                   vertex can be the same as the first vertex. If not, it
-%                   is assumed that an edge exists between the last and 
-%                   first vertices.
-%           point   A 2XnumPoints set of points that will be determined to
-%                   be inside or outside of the polygon given by vertices.
-%boundaryIsImportant An optional boolean variable indicating whether the
-%                   boundary of the polygon is important. If
-%                   boundaryIsImportant=true, then an algorithm that will
-%                   correctly indicate points on the boundary as being in
-%                   the polygon will be used. If it is false, then the
-%                   results for points on the boundary can be inconsistent,
-%                   though the algorithm will be slightly faster. The
-%                   default is true.
+%INPUTS: vertices A 2XN matrix of the N vertices making up the polygon in
+%                 order. Edges are between neighboring vertices. The last
+%                 vertex can be the same as the first vertex. If not, it is
+%                 assumed that an edge exists between the last and first
+%                 vertices.
+%           point A 2XnumPoints set of points that will be determined to be
+%                 inside or outside of the polygon given by vertices.
+% boundaryIsImportant An optional boolean variable indicating whether the
+%                 boundary of the polygon is important. If
+%                 boundaryIsImportant=true, then an algorithm that will
+%                 correctly indicate points on the boundary as being in the
+%                 polygon will be used. If it is false, then the results
+%                 for points on the boundary can be inconsistent, though
+%                 the algorithm will be slightly faster. The default is
+%                 true.
 %
 %OUTPUTS: isInPolygon An NX1 vector where the ith element is true if the
 %                     ith is true if the ith point is in the polygon, false

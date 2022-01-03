@@ -40,9 +40,9 @@ static const uint64_t infVal=0x7ff0000000000000;
 //For isfinite
 #include <math.h>
 
-static ptrdiff_t assign3DCBasic(ptrdiff_t * restrict tuples,double * restrict fStar, double *qStar,double *u, void *tempSpace,const size_t *nDims,const double *C,const int subgradMethod,const size_t maxIter,const double AbsTol,const double RelTol,const double param1,const double param2,const size_t param3);
+static ptrdiff_t assign3DCBasic(ptrdiff_t * tuples,double * fStar, double *qStar,double *u, void *tempSpace,const size_t *nDims,const double *C,const int subgradMethod,const size_t maxIter,const double AbsTol,const double RelTol,const double param1,const double param2,const size_t param3);
 static size_t updateBestFeasSol3DCBufferSize(const size_t *nDims);
-static ptrdiff_t updateBestFeasSol3DC(ptrdiff_t * restrict tuples, double * restrict fStar,void *tempBuffer2DAssign,const size_t *nDims, const double *C, const ptrdiff_t *gamma1, const double qStar, const double AbsTol, const double RelTol);
+static ptrdiff_t updateBestFeasSol3DC(ptrdiff_t *tuples, double * fStar,void *tempBuffer2DAssign,const size_t *nDims, const double *C, const ptrdiff_t *gamma1, const double qStar, const double AbsTol, const double RelTol);
 
 static size_t updateBestFeasSol3DCBufferSize(const size_t *nDims) {
  /**UPDATEBESTFEASSOL3DCBUFFERSIZE Given the dimensions of the assignment
@@ -76,7 +76,7 @@ size_t assign3DCBufferSize(const size_t *nDims,const int subgradMethod) {
     return buffSize;
 }
 
-ptrdiff_t assign3DC(ptrdiff_t * restrict tuples,double * restrict fStar, double * restrict qStar,double * restrict u,void *tempSpace,const size_t *nDims,double * restrict C,bool maximize,const int subgradMethod,const size_t maxIter,const double AbsTol,const double RelTol,const double param1,const double param2,const size_t param3) {
+ptrdiff_t assign3DC(ptrdiff_t * tuples,double * fStar, double *qStar,double *u,void *tempSpace,const size_t *nDims,double *C,bool maximize,const int subgradMethod,const size_t maxIter,const double AbsTol,const double RelTol,const double param1,const double param2,const size_t param3) {
 /**ASSIGN3DC Approximate the solution to the operations research axial 3D
  *         assignment problem using a dual-primal Lagrangian relaxation
  *         algorithm. This function is the same as assign3DCBasic except
@@ -129,7 +129,7 @@ if(maximize==true) {
 }
 }
 
-static ptrdiff_t assign3DCBasic(ptrdiff_t * restrict tuples,double * restrict fStar, double * restrict qStar,double * restrict u, void *tempSpace,const size_t *nDims,const double *C,const int subgradMethod,const size_t maxIter,const double AbsTol,const double RelTol,const double param1,const double param2,const size_t param3) {
+static ptrdiff_t assign3DCBasic(ptrdiff_t *tuples,double *fStar, double *qStar,double *u, void *tempSpace,const size_t *nDims,const double *C,const int subgradMethod,const size_t maxIter,const double AbsTol,const double RelTol,const double param1,const double param2,const size_t param3) {
 /**ASSIGN3DBASIC Approximate the solution to the minimization-only
  *        operations research axial 3D assignment problem using a dual-
  *        primal Lagrangian relaxation  technique. The optimization problem
@@ -281,20 +281,18 @@ static ptrdiff_t assign3DCBasic(ptrdiff_t * restrict tuples,double * restrict fS
     double rho=0;
     void *curBuffPos=tempSpace;
     //Divide the buffer tempSpace among the variables used in this
-    //function. We are using the restrict keyword for most of the entries,
-    //because each divided segment of these is accessed completely
-    //disjointly from the others
+    //function.
 
-    ptrdiff_t * restrict gamma2=(ptrdiff_t*)curBuffPos;//Size n1*n2
+    ptrdiff_t * gamma2=(ptrdiff_t*)curBuffPos;//Size n1*n2
     curBuffPos=(void*)((uint8_t*)curBuffPos+nDims[0]*nDims[1]*sizeof(ptrdiff_t));
     
-    ptrdiff_t * restrict gamma1=(ptrdiff_t*)(curBuffPos);//Size n1
+    ptrdiff_t * gamma1=(ptrdiff_t*)(curBuffPos);//Size n1
     curBuffPos=(void*)((uint8_t*)curBuffPos+nDims[0]*sizeof(ptrdiff_t));
     
-    double * restrict g=(double*)(ptrdiff_t*)curBuffPos;//Size n3
+    double * g=(double*)(ptrdiff_t*)curBuffPos;//Size n3
     curBuffPos=(void*)((uint8_t*)curBuffPos+nDims[2]*sizeof(double));
     
-    double * restrict d2=(double*)curBuffPos;//Size n1*n2;
+    double * d2=(double*)curBuffPos;//Size n1*n2;
     curBuffPos=(void*)((uint8_t*)curBuffPos+nDims[0]*nDims[1]*sizeof(double));
 
     //The size of tempBuffer2DAssignFeas is determined by the size needed by
@@ -643,7 +641,7 @@ static ptrdiff_t assign3DCBasic(ptrdiff_t * restrict tuples,double * restrict fS
     return -2;
 }
 
-static ptrdiff_t updateBestFeasSol3DC(ptrdiff_t * restrict tuples, double * restrict fStar,void *tempBuffer2DAssign,const size_t *nDims, const double *C, const ptrdiff_t *gamma1, const double qStar, const double AbsTol, const double RelTol) {
+static ptrdiff_t updateBestFeasSol3DC(ptrdiff_t *tuples, double * fStar,void *tempBuffer2DAssign,const size_t *nDims, const double *C, const ptrdiff_t *gamma1, const double qStar, const double AbsTol, const double RelTol) {
 /**UPDATEBESTFEASSOL3DC This function implements a subroutine to
  *        heuristically obtain a feasible solution given a partial set of
  *        assignments. Here, it is just for the 3D assignment problem.
@@ -689,19 +687,19 @@ static ptrdiff_t updateBestFeasSol3DC(ptrdiff_t * restrict tuples, double * rest
     
     //Allocate the memory in tempBuffer2DAssign. Once divided, each
     //variable is disjoint, so they are declared using the restrct keyword. 
-    double * restrict CFeas=(double *)curBuffPos;//CFeas is n1Xn3
+    double * CFeas=(double *)curBuffPos;//CFeas is n1Xn3
     curBuffPos=(void*)((uint8_t*)curBuffPos+n1*n3*sizeof(double));
     
-    double * restrict u2D=(double*)curBuffPos;//u2D is n3X1
+    double * u2D=(double*)curBuffPos;//u2D is n3X1
     curBuffPos=(void*)((uint8_t*)curBuffPos+n3*sizeof(double));
     
-    double * restrict v2D=(double*)curBuffPos;//v2D is n1X1
+    double * v2D=(double*)curBuffPos;//v2D is n1X1
     curBuffPos=(void*)((uint8_t*)curBuffPos+n1*sizeof(double));
     
-    ptrdiff_t * restrict row4col=(ptrdiff_t*)(curBuffPos);//Length n3
+    ptrdiff_t * row4col=(ptrdiff_t*)(curBuffPos);//Length n3
     curBuffPos=(void*)((uint8_t*)curBuffPos+n3*sizeof(ptrdiff_t));
 
-    ptrdiff_t * restrict gammaTilde3=(ptrdiff_t*)curBuffPos;//Length n1
+    ptrdiff_t * gammaTilde3=(ptrdiff_t*)curBuffPos;//Length n1
     curBuffPos=(void*)((uint8_t*)curBuffPos+n1*sizeof(ptrdiff_t));
     
     //tempBuffer2DAssign is at least size assign2DCBufferSize(n1,n3).

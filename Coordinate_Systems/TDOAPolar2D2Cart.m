@@ -14,7 +14,7 @@ function CartPoints=TDOAPolar2D2Cart(points,systemType,lRef,lRx,M,c,mirrorNegati
 %      lRef The 2X1 location of the reference receiver in global
 %           coordinates.
 %       lRx The 2X1 location of the receiver in global coordinates at which
-%           the direction of arrival in spherical coordiantes is locally
+%           the direction of arrival in spherical coordinates is locally
 %           defined and whose time of arrival (TOA) has the TOA at lRef
 %           subtracted to get the TDOA.
 %         M A 2X2 rotation matrix to go from the alignment of the global
@@ -33,9 +33,8 @@ function CartPoints=TDOAPolar2D2Cart(points,systemType,lRef,lRx,M,c,mirrorNegati
 %OUTPUTS: CartPoints The 2XN set of Cartesian locations corresponding to
 %                    the input points.
 %
-%A derivation of a similar coordinate system is given in the paper
-%"Particle Flow Solutions Avoiding Stiff Integration" by David F.
-%Crouse.
+%A derivation of a similar coordinate system in 3D is given in [1]. The
+%derivation of this follows in a similar manner.
 %
 %EXAMPLE:
 %We convert a Cartesian position to TDOA-polar coordinates and then we
@@ -47,6 +46,11 @@ function CartPoints=TDOAPolar2D2Cart(points,systemType,lRef,lRx,M,c,mirrorNegati
 % systemType=0;
 % z=Cart2TDOAPolar2D(xTar,systemType,lRef,lRx);
 % AbsErr=norm(TDOAPolar2D2Cart(z,systemType,lRef,lRx)-xTar)
+%
+%REFERENCES:
+%[1] D. F. Crouse, "Particle flow solutions avoiding stiff integration,"
+%    U.S. Naval Research Laboratory, Washington, DC, Tech. Rep.
+%    NRL/5340/FR-2021/1, 25 May 2021.
 %
 %March 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

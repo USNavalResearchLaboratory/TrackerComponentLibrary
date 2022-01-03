@@ -31,9 +31,9 @@ double iauPas(double al, double ap, double bl, double bp)
 **
 **  2) Zero is returned if the two points are coincident.
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -47,6 +47,8 @@ double iauPas(double al, double ap, double bl, double bp)
    pa = ((x != 0.0) || (y != 0.0)) ? atan2(y, x) : 0.0;
 
    return pa;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

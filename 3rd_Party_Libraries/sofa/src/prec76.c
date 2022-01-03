@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauPrec76(double date01, double date02, double date11, double date12,
                double *zeta, double *z, double *theta)
@@ -71,9 +72,9 @@ void iauPrec76(double date01, double date02, double date11, double date12,
 **     Lieske, J.H., 1979, Astron.Astrophys. 73, 282, equations
 **     (6) & (7), p283.
 **
-**  This revision:  2013 November 19
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -98,7 +99,7 @@ void iauPrec76(double date01, double date02, double date11, double date12,
    *theta = ((2004.3109 + (-0.85330 - 0.000217 * t0) * t0)
           + ((-0.42665 - 0.000217 * t0) - 0.041833 * t) * t) * tas2r;
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

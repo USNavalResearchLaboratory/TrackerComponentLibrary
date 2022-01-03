@@ -22,15 +22,15 @@ function z=Cart2Ruv(zC,useHalfRange,zTx,zRx,M,includeW)
 %          Cartesian coordinates. If this parameter is omitted or an empty
 %          matrix is passed, then the transmitters are assumed to be at the
 %          origin. If only a single vector is passed, then the transmitter
-%          location is assumed the same for all of the target states being
+%          location is assumed the same for all of the points being
 %          converted. zTx can have more than 3 rows; additional rows are
 %          ignored.
 %      zRx The 3XN [x;y;z] location vectors of the receivers in Cartesian
 %          coordinates.  If this parameter is omitted or an empty matrix
 %          is passed, then the receivers are assumed to be at the origin.
 %          If only a single vector is passed, then the receiver location
-%          is assumed the same for all of the target states being converted
-%          zRx can have more than 3 rows; additional rows are ignored.
+%          is assumed the same for all of the points being converted. zRx
+%          can have more than 3 rows; additional rows are ignored.
 %        M A 3X3XN hypermatrix of the rotation matrices to go from the
 %          alignment of the global coordinate system to that at the
 %          receiver. The z-axis of the local coordinate system of the

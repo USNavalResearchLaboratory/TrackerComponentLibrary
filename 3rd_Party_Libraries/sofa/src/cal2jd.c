@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 int iauCal2jd(int iy, int im, int id, double *djm0, double *djm)
 /*
@@ -48,9 +49,9 @@ int iauCal2jd(int iy, int im, int id, double *djm0, double *djm)
 **     P. Kenneth Seidelmann (ed), University Science Books (1992),
 **     Section 12.92 (p604).
 **
-**  This revision:  2013 August 7
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -90,6 +91,8 @@ int iauCal2jd(int iy, int im, int id, double *djm0, double *djm)
 
 /* Return status. */
    return j;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

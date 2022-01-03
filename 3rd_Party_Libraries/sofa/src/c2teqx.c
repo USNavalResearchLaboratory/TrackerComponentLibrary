@@ -57,9 +57,9 @@ void iauC2teqx(double rbpn[3][3], double gst, double rpom[3][3],
 **     McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
 **     IERS Technical Note No. 32, BKG (2004)
 **
-**  This revision:  2013 August 24
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -72,7 +72,7 @@ void iauC2teqx(double rbpn[3][3], double gst, double rpom[3][3],
    iauRz(gst, r);
    iauRxr(rpom, r, rc2t);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

@@ -9,29 +9,11 @@
 *.mexmaci64
 *.exe
 *.obj
+*.o
+*.lib
+*.a
+*.dll
 
 #temp files
 *.asv
 *.m~
-
-#specific compiled files
-cspice.lib
-csupport.lib
-libais.lib
-libais.a
-libsofa_c.lib
-libsofa_c.a
-brief.c
-chronos.c
-ckbrief.c
-commnt.c
-frmdiff.c
-inspekt.c
-mkspk.c
-msopck.c
-spacit.c
-spkdiff.c
-spkmerge.c
-tobin.c
-toxfr.c
-version.c

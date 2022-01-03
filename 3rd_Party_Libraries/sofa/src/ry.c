@@ -33,9 +33,9 @@ void iauRy(double theta, double r[3][3])
 **         (                                        )
 **         (  + sin(theta)     0      + cos(theta)  )
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -60,7 +60,7 @@ void iauRy(double theta, double r[3][3])
    r[2][1] = a21;
    r[2][2] = a22;
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

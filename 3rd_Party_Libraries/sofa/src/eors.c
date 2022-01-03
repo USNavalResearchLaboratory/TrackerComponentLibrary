@@ -38,9 +38,9 @@ double iauEors(double rnpb[3][3], double s)
 **
 **     Wallace, P. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 **
-**  This revision:  2020 November 14
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -59,6 +59,8 @@ double iauEors(double rnpb[3][3], double s)
    eo = ((p != 0) || (q != 0)) ? s - atan2(q, p) : s;
 
    return eo;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 double iauFal03(double t)
 /*
@@ -36,9 +37,9 @@ double iauFal03(double t)
 **     Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
 **     Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -54,6 +55,8 @@ double iauFal03(double t)
              t * (        - 0.00024470 ) ) ) ), TURNAS ) * DAS2R;
 
    return a;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

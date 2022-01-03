@@ -183,7 +183,7 @@ void ellips2CartCPP(const T latitude, const T longitude, const T height, const T
     cartPoint[2]=(Ne*(1-e2)+h)*sinP;
 }
 
-/**ECEF2ENUCPP Convert points from ECEF coordinates to ENU coordiantes.
+/**ECEF2ENUCPP Convert points from ECEF coordinates to ENU coordinates.
  *
  *March 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
  **/

@@ -59,7 +59,7 @@ void iauAe2hd (double az, double el, double phi,
 **
 **  Last revision:   2017 September 12
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */

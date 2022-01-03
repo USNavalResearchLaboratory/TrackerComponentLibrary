@@ -12,7 +12,9 @@ function W=twoMatDiag(C1,C2,algorithm)
 %           0 (The default if omitted or an empty matrix is passed) Use the
 %             singular value decomposition (SVD)-based algorithm given in
 %             [1].
-%           1 Use the eigenvalue-based decomposition given in [2].
+%           1 Use the eigenvalue-based decomposition given in [2]. There is
+%             generally not a need to use the algorithmic variant. It is
+%             not implemented in the C++/mex version of this function.
 %
 %OUTPUTS: W An NXN matrix such that W*C1*W'=identity matrix and W*C2*W'=a
 %           diagonal matrix.
@@ -33,7 +35,7 @@ function W=twoMatDiag(C1,C2,algorithm)
 %     12, 17, 37, 27;
 %     17, 22, 27, 27];
 % %C1 is positive definite. C2 is positive semi-definite.
-% W=twoMatDiagSVD(C1,C2);
+% W=twoMatDiag(C1,C2);
 % offDiagErr1=W*C1*W'-diag(diag(W*C1*W'))
 % offDiagErr2=W*C2*W'-diag(diag(W*C2*W'))
 %One will see that the off-diagonal errors are on the order of 1e-16, which
@@ -53,7 +55,7 @@ function W=twoMatDiag(C1,C2,algorithm)
 %     -32+ 56*1i,   79+  0*1i,  -87- 67*1i,  -48+ 51*1i;
 %     -12+128*1i,  -87+ 67*1i,   76+  0*1i,   -7- 96*1i;
 %      16-114*1i,  -48- 51*1i,   -7+ 96*1i, -147+  0*1i];
-% W=twoMatDiagSVD(C1,C2);
+% W=twoMatDiag(C1,C2);
 % offDiagErr=W*C1*W'-diag(diag(W*C1*W'))
 % offDiagErr=W*C2*W'-diag(diag(W*C2*W'))
 %One will see that the errors are on the order of 1e-14 or less, which is
@@ -85,8 +87,8 @@ switch(algorithm)
 
         D1Root=diag(1./sqrt(d1));
 
-        temp=D1Root*U1';
-        [U2,~,~]=svd(temp*C2*temp');%Equation 7 in [1].
+        temp=U1*D1Root;
+        [U2,~,~]=svd(temp'*C2*temp);%Equation 7 in [1].
 
         W=U2'*D1Root*U1';%Equation 8a in [1].
         %Note that W*C1*W'=eye(xDim,xDim);

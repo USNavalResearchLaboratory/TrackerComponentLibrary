@@ -25,8 +25,8 @@ void iauAtciq(double rc, double dc,
 **  Status:  support function.
 **
 **  Given:
-**     rc,dc  double     ICRS RA,Dec at J2000.0 (radians)
-**     pr     double     RA proper motion (radians/year; Note 3)
+**     rc,dc  double     ICRS RA,Dec at J2000.0 (radians, Note 1)
+**     pr     double     RA proper motion (radians/year, Note 2)
 **     pd     double     Dec proper motion (radians/year)
 **     px     double     parallax (arcsec)
 **     rv     double     radial velocity (km/s, +ve if receding)
@@ -53,13 +53,11 @@ void iauAtciq(double rc, double dc,
 **
 **  Notes:
 **
-**  1) All the vectors are with respect to BCRS axes.
-**
-**  2) Star data for an epoch other than J2000.0 (for example from the
+**  1) Star data for an epoch other than J2000.0 (for example from the
 **     Hipparcos catalog, which has an epoch of J1991.25) will require a
 **     preliminary call to iauPmsafe before use.
 **
-**  3) The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
+**  2) The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
 **
 **  Called:
 **     iauPmpx      proper motion and parallax
@@ -69,9 +67,9 @@ void iauAtciq(double rc, double dc,
 **     iauC2s       p-vector to spherical
 **     iauAnp       normalize angle into range 0 to 2pi
 **
-**  This revision:   2013 October 9
+**  This revision:   2021 April 19
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */

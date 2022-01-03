@@ -75,9 +75,9 @@ void iauFw2m(double gamb, double phib, double psi, double eps,
 **
 **     Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 **
-**  This revision:  2020 November 17
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -89,7 +89,7 @@ void iauFw2m(double gamb, double phib, double psi, double eps,
    iauRz(-psi, r);
    iauRx(-eps, r);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

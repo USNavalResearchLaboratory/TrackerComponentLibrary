@@ -561,13 +561,13 @@ function val=CDF(z,mu,varVal)
 %
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
-    if(nargin<2||isempty(mu))
-       mu=0; 
-    end
+	if(nargin<2||isempty(mu))
+        mu=0; 
+	end
 
-    if(nargin<3||isempty(varVal))
-       varVal=1; 
-    end
+	if(nargin<3||isempty(varVal))
+        varVal=1; 
+	end
 
     x=(z-mu)/sqrt(varVal);
     val=(1+erf(x/sqrt(2)))/2;
@@ -972,7 +972,7 @@ function [P,error,curIter]=integralOverRegion(mu, Sigma,minVals,maxVals,epsVal,a
 %Carlo integration.
 %
 %REFERENCES:
-%[1] A.Genz,"Numerical computation of multivariate normal probabilities,"
+%[1] A.Genz, "Numerical computation of multivariate normal probabilities,"
 %    Journal of Computational and Graphical Statistics, vol. 1, no. 2, pp.
 %    141-149, 1992.
 %
@@ -995,8 +995,9 @@ function [P,error,curIter]=integralOverRegion(mu, Sigma,minVals,maxVals,epsVal,a
     minVals=minVals-mu;
     maxVals=maxVals-mu;
     
-    %First, we reorder the varibles so that the largest integration regions come last.
-    %This is suggested in [1] to make the algorithm faster.
+    %First, we reorder the variables so that the largest integration
+    %regions come last. This is suggested in [1] to make the algorithm
+    %faster.
     [~,idxSort]=sort(maxVals-minVals,'ascend');
     a=minVals(idxSort);
     b=maxVals(idxSort);

@@ -24,7 +24,7 @@ function J=calcRuvRRJacob(x,useHalfRange,xTx,xRx,M)
 %           [range;u;v;range rate] in that order with derivatives taken
 %           with respect to [x,y,z,xDot,yDot,zDot] across columns.
 %
-%This function just calls the functions rangeGradient, uvGradient and
+%This function just calls the functions rangeGradient, uvGradient, and
 %rangeRateGradient.
 %
 %February 2017 David F.Crouse, Naval Research Laboratory, Washington D.C.

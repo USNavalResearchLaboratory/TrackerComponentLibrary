@@ -27,7 +27,7 @@ function J=numDiff(x,f,fDim,N,epsilon)
 %          element of x. If epsilon is omitted or an empty matrix is
 %          passed, then epsilon=max(1e-5*x,1e-7); is used.
 %
-%OUTPUTS: J A fDimXxDim Jacobian matrix. Each column is the derivative
+%OUTPUTS: J n fDimXxDim Jacobian matrix. Each column is the derivative
 %           vector of f with respect to the corresponding element of x. If
 %           at any point the function f returned a NaN or an empty matrix,
 %           J will be an empty matrix.
@@ -53,7 +53,7 @@ end
 
 xDim=size(x,1);
 if(nargin<5||isempty(epsilon))
-    %If epsilon is not specified, then use some ad-hoc default value
+    %If epsilon is not specified, then use some ad-hoc default value.
     epsilon=max(1e-5*abs(x),1e-7);
 end
 if(isscalar(epsilon))

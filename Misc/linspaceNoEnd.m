@@ -13,7 +13,8 @@ function vals=linspaceNoEnd(minVal,maxVal,numPoints,bothEnds)
 %              default of 100 will be used.
 %     bothEnds If false, minVal wil be included in the points, but maxVal
 %              won't. If true, the both minVal and maxVal will be omitted
-%              from the points.
+%              from the points. The default if omitted or an empty matrix
+%              is passed is false.
 %
 %OUTPUTS: vals A 1XnumPoints vector of equispaced points.
 %

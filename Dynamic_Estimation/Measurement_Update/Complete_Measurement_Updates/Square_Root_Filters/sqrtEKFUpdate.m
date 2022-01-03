@@ -3,9 +3,9 @@ function [xUpdate,SUpdate,innov,Szz,W]=sqrtEKFUpdate(xPred,SPred,z,SR,h,HJacob,i
 %              of the first-order Extended Kalman Filter (EKF).
 %
 %INPUTS: xPred The xDim X 1 predicted target state.
-%        SPred The xDim X xDim lower-triangular predicted state covariance
-%              matrix.
-%            z The zDim X 1 vector measurement.
+%        SPred The xDim X xDim lower-triangular square root predicted state
+%              covariance matrix.
+%            z The zDim X 1 measurement vector.
 %           SR The zDim X zDim lower-triangular square root of the
 %              measurement covariance matrix in the native coordinate
 %              system of the measurement.

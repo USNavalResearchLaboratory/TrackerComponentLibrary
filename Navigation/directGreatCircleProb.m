@@ -22,19 +22,17 @@ function latLonPoints=directGreatCircleProb(latLonStart,azimuth,dist,r,algorithm
 %                    instead of distances.
 %                  r The assumed radius of the spherical Earth model. If
 %                    omitted or an empty matrix is passed, the default of
-%                    Constants.WGS84MeanRadius is used. If traveling a
-%                    height h above the reference sphere, then one should
-%                    use something like r=h+Constants.WGS84MeanRadius.
+%                    osculatingSpher4LatLon(latLonStart)is used. If
+%                    traveling a height h above the reference sphere, then
+%                    one should use something like r=h+rEarth.
 %          algorithm An optional parameter selecting the algorithm to use.
 %                    Possible values are:
 %                    0 (The default if omitted or an empty matrix is
-%                      passed if distType=0) Use a custom algorithm that
-%                      rotates the point onto the equator and the direction
-%                      to face East, solves the problem on the equator, and
-%                      then rotates the solution back. This algorithm
-%                      avoids issues with singularities at the poles and is
-%                      consistent with the directions returned by
-%                      indirectGreatCircleProb at the poles.
+%                      passed if distType=0) Use the algorithm of [2],
+%                      which avoids issues with singularities at the
+%                      geographic poles and is consistent with the
+%                      directions returned by indirectGreatCircleProb at
+%                      the poles.
 %                    1 Use the COFI algorithm of [1]. Latitudes within
 %                      2^24*eps(pi/2) of +/-pi/2 (the North and South
 %                      poles) will be clipped to that bound. This avoids a
@@ -112,6 +110,9 @@ function latLonPoints=directGreatCircleProb(latLonStart,azimuth,dist,r,algorithm
 %[1] C.-L. Chen, P.-F. Liu, and W.-T. Gong, "A simple approach to great
 %    circle sailing: The COFI method," The Journal of Navigation, vol. 67,
 %    no. 3, pp. 403-418, May 2014.
+%[2] D. F. Crouse, "Singularity-free great-circle sailing," Naval Research
+%    Laboratory, Washington, DC, Tech. Rep. NRL/5340/MR–2021/4, 26
+%    Jul. 2021.
 %
 %August 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -129,7 +130,7 @@ if(nargin<5||isempty(algorithm))
 end
 
 if(nargin<4||isempty(r))
-    r=Constants.WGS84MeanRadius;
+    r=osculatingSpher4LatLon(latLonStart);
 end
 
 switch(algorithm)
@@ -225,7 +226,12 @@ end
 
 function latLonPoints=directGreatCircleProbCrouse(latLonStart,azimuth,dist,r)
 %%DIRECTGREATCIRCLEPROBCROUSE Solve the direct great circle problem using
-%                           an algorithm by David F. Crouse.
+%                           the algorithm of [1].
+%
+%REFERENCES:
+%[1] D. F. Crouse, "Singularity-free great-circle sailing," Naval Research
+%    Laboratory, Washington, DC, Tech. Rep. NRL/5340/MR–2021/4, 26
+%    Jul. 2021.
 %
 %August 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

@@ -66,7 +66,7 @@ void iauTpstv(double xi, double eta, double v0[3], double v[3])
 **
 **  This revision:   2018 January 2
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */

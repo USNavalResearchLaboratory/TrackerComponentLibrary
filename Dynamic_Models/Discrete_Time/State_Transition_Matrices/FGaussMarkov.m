@@ -10,9 +10,9 @@ function F=FGaussMarkov(T,xDim,tau,order)
 %             transition matrix is an exact discretization.
 %
 %INPUTS: T The time-duration of the propagation interval in seconds.
-%     xDim The dimensionality of the target state.
-%          xDim is ((order+1)*numDim)X1 dimensional, where numDim is the
-%          number of position dimensions of space (e.g. 2D or 3D).
+%     xDim The dimensionality of the target state. xDim equals
+%          ((order+1)*numDim), where numDim is the number of position
+%          dimensions of space (e.g. 2D or 3D).
 %      tau The time constant of the autocorrelation or the moment of the
 %          given order. For example, if order=2, then tau is the time
 %          constant of the decorrelation time of the acceleration in
@@ -38,9 +38,9 @@ function F=FGaussMarkov(T,xDim,tau,order)
 %turning aircraft is 20s, and is 5s for an evasive maneuver.
 %The Singer model (order=2) is introduced with solution for tracking in
 %[2]. The first-order model, the integrated Ornstein-Uhlenbeck process, is
-%discussed for tracking in Chapter 3.2.2 of [3] with a discretization.
+%discussed for tracking in Chapter 3.2.2 of [3] with a discretization. This
+%function simply generalizes the result to an arbitrary order.
 %
-%This function simply generalizes the redult to an arbitrary order.
 %The dynamic model is written in continuous time in each dimension
 %dx/dt=-(1/tau)*x+sqrt(q)*dW where x is the highest order moment. The other
 %moments are just integrated. dw is a differential Wiener process.
@@ -51,8 +51,7 @@ function F=FGaussMarkov(T,xDim,tau,order)
 %diffusion matrix is given by DPoly(1,q,order,numDim) where q is the
 %power spectral density of the noise, usually expressed as
 %q=(sqrt(2/tau)*sigmam)^2 where sigmam^2 is the instantaneous variance of
-%the highest order momoent and  numDim is the number of dimensions in the
-%model.
+%the highest order moment.
 %
 %REFERENCES:
 %[1] Y. Bar-Shalom, X. R. Li, and T. Kirubarajan, Estimation with

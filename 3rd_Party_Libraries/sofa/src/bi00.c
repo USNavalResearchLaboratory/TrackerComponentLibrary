@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauBi00(double *dpsibi, double *depsbi, double *dra)
 /*
@@ -47,9 +48,9 @@ void iauBi00(double *dpsibi, double *depsbi, double *dra)
 **     2002.  The MHB2000 code itself was obtained on 2002 September 9
 **     from ftp://maia.usno.navy.mil/conv2000/chapter5/IAU2000A.
 **
-**  This revision:  2020 October 29
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -67,7 +68,7 @@ void iauBi00(double *dpsibi, double *depsbi, double *dra)
    *depsbi = DEBIAS;
    *dra = DRA0;
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

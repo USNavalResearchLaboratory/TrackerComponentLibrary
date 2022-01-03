@@ -178,7 +178,7 @@ switch(algorithm)
             x=lambdaBeta*lambdaEta*r*cosBeta*cosEta;
             y=lambdaBeta*lambdaEta*r*sinBeta*cosEta;
             z=lambdaEta*r*sinEta;
-            zCart=MInvCur*[x;y;z]+zRx(:,curMeas);
+            zCart(:,curMeas)=MInvCur*[x;y;z]+zRx(:,curMeas);
 
             RCart(1,1,curMeas)=-lambdaBeta^2*lambdaEta^2*r^2*cosBeta^2*cosEta^2+(1/4)*(r^2+sigmaR2)*(1+lambdaBetaPrime*cos2Beta)*(1+lambdaEtaPrime*cos2Eta);
             RCart(2,2,curMeas)=-lambdaBeta^2*lambdaEta^2*r^2*sinBeta^2*cosEta^2+(1/4)*(r^2+sigmaR2)*(1-lambdaBetaPrime*cos2Beta)*(1+lambdaEtaPrime*cos2Eta);
@@ -191,10 +191,6 @@ switch(algorithm)
             RCart(3,2,curMeas)=RCart(2,3,curMeas);
 
             RCart(:,:,curMeas)=MInvCur*RCart(:,:,curMeas)*MInvCur';
-            
-            if(any(eig(RCart(:,:,curMeas)))<0)
-               test=1 
-            end
         end
     otherwise
         error('Unknown algorithm specified')

@@ -1,9 +1,10 @@
-function M=findRFTransParam(plhPoint,az,el,zRot,a,f)
+function M=findRFTransParam(plhPoint,az,el,zRot,a,f,useEUN)
 %%FINDRFTRANSPARAMS Find the transformation matrix needed to rotate a
 %            global Cartesian vector to local radar-facing coordinates.
 %            With az=0, el=0 and zRot=0, the transformation matrix returned
-%            by this function makes the x axis point West, the y-axis point
-%            up and the z-axis point North. With el=0 and zRot=0, az
+%            by this function makes the x-axis point West, the y-axis point
+%            up and the z-axis point North (unless useEUN is true), which
+%            is a right-handed coordinate system. With el=0 and zRot=0, az
 %            being nonzero performs a clockwise rotation of the z and x
 %            axes in the local tangent place of the receiver. el being
 %            nonzero then raises the z axis above the local tangent plane
@@ -36,6 +37,11 @@ function M=findRFTransParam(plhPoint,az,el,zRot,a,f)
 %             f The flattening factor of the reference ellipsoid. If this
 %               argument is omitted, the value in Constants.WGS84Flattening
 %               is used.
+%        useEUN If this is true, then when all rotations are zero, the axes
+%               will point East-Up-North instead of West-Up-North. The WUN
+%               coordinate system is right-handed. The EUN coordinate
+%               system is is left-handed. The default if omitted or an
+%               empty matrix is passed is false.
 %
 %OUTPUTS: M A rotation matrix for the transformation from global Cartesian
 %           coordinates to local radar-facing coordinates. The z axis
@@ -80,11 +86,16 @@ function M=findRFTransParam(plhPoint,az,el,zRot,a,f)
 %make the x axis point up and the y axis point right.
 %
 %REFERENCES:
-%[1] B. L. Diamond, et al, "The Aries Program: Coordinates,
-%    transformations, trajectories and tracking",  MIT, Sept. 1975.
+%[1] B. L. Diamond and M. E. Austin, "The Aries Program: Coordinates,
+%    Transformations, Trajectories and Tracking",  Massachusetts Institute
+%    of Technology Lincoln Laboratory, no. 1975-15, 5 Sept. 1975.
 %
 %August 2015 David Karnick, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+if(nargin<7||isempty(useEUN))
+    useEUN=false;
+end
 
 if(nargin<6||isempty(f))
     f=Constants.WGS84Flattening;
@@ -118,6 +129,11 @@ A = [-cos(az),                  sin(az),          0;
 Mz=Euler1Ang2RotMat(zRot,'z','right');
 
 M=Mz*A*u.';
+
+if(useEUN)
+    %If a left-handed East-Up-North coordinate system should be used.
+    M(1,:)=-M(1,:); 
+end
 end
 
 %LICENSE:

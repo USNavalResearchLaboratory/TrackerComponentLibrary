@@ -34,7 +34,6 @@ function h=drawProjEllipsHull(z,A,gammaVal,AIsInv,varargin)
 %           change the transparency of object i to 50%, one can use the
 %           alpha(h{i},0.5) command.
 %
-%
 %This function just calls getEllipseHullPoints to get a number of points on
 %the hull and then plots the result.
 %

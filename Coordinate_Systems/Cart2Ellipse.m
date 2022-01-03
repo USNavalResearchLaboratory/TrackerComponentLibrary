@@ -57,10 +57,6 @@ function points=Cart2Ellipse(cartPoints,algorithm,a,f)
 %October 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<5||isempty(numIter))
-    numIter=50;
-end
-
 if(nargin<4||isempty(f))
     f=Constants.WGS84Flattening;
 end
@@ -305,9 +301,8 @@ for curPoint=1:numPoints
     w=sqrt(w2);
     z2=z^2;
     r2=w2+z2;
-    %The algorithm will work with points deep close to the origin. Thus,
-    %there is no need to have a test for r being too small as is the case
-    %in [1].
+    %The algorithm will work with points close to the origin. Thus, there
+    %is no need to have a test for r being too small as is the case in [1].
     r=sqrt(r2);
 
     lambda(curPoint)=atan2(y,x);

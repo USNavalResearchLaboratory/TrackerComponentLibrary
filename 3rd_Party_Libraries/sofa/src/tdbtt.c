@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 int iauTdbtt(double tdb1, double tdb2, double dtr,
              double *tt1, double *tt2 )
@@ -50,9 +51,9 @@ int iauTdbtt(double tdb1, double tdb2, double dtr,
 **
 **     IAU 2006 Resolution 3
 **
-**  This revision:  2019 June 20
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 **
@@ -73,6 +74,8 @@ int iauTdbtt(double tdb1, double tdb2, double dtr,
 
 /* Status (always OK). */
    return 0;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

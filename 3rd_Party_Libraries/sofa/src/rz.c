@@ -33,9 +33,9 @@ void iauRz(double psi, double r[3][3])
 **         (                                 )
 **         (       0            0         1  )
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -60,7 +60,7 @@ void iauRz(double psi, double r[3][3])
    r[1][1] = a11;
    r[1][2] = a12;
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

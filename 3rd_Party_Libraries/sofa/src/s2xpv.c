@@ -27,9 +27,9 @@ void iauS2xpv(double s1, double s2, double pv[2][3], double spv[2][3])
 **  Called:
 **     iauSxp       multiply p-vector by scalar
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -37,7 +37,7 @@ void iauS2xpv(double s1, double s2, double pv[2][3], double spv[2][3])
    iauSxp(s1, pv[0], spv[0]);
    iauSxp(s2, pv[1], spv[1]);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

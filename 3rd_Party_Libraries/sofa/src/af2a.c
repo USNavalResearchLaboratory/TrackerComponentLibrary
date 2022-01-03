@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 #include <stdlib.h>
 
 int iauAf2a(char s, int ideg, int iamin, double asec, double *rad)
@@ -39,9 +40,9 @@ int iauAf2a(char s, int ideg, int iamin, double asec, double *rad)
 **  3)  If there are multiple errors, the status value reflects only the
 **      first, the smallest taking precedence.
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -58,6 +59,8 @@ int iauAf2a(char s, int ideg, int iamin, double asec, double *rad)
    if ( iamin < 0 || iamin > 59 ) return 2;
    if ( asec < 0.0 || asec >= 60.0 ) return 3;
    return 0;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

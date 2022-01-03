@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauBp06(double date1, double date2,
              double rb[3][3], double rp[3][3], double rbp[3][3])
@@ -69,9 +70,9 @@ void iauBp06(double date1, double date2,
 **
 **     Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 **
-**  This revision:  2013 August 21
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -93,7 +94,7 @@ void iauBp06(double date1, double date2,
 /* PxB matrix. */
    iauCr(rbpw, rbp);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

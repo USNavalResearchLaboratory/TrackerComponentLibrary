@@ -1,4 +1,4 @@
-/**BASICMATOPSCPP C++ function of basic operations with matrices. See the
+/**BASICMATOPSCPP C++ functions of basic operations with matrices. See the
  *             comments in the Matlab implementations for descriptions of
  *             the functionality.
  *
@@ -11,7 +11,6 @@
 
 //Defines the size_t and ptrdiff_t types
 #include <cstddef>
-
 //For sort.
 #include <algorithm>
 
@@ -267,7 +266,6 @@ void copyMat3DOmitDims(T * const dest, const size_t * const sourceMatDims, const
         }
     }
 }
-
 
 #endif
 

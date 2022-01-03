@@ -1,6 +1,7 @@
 function b=forwardSubstitution(L,b,algorithm)
 %%FORWARDSUBSTITUTION Given a lower-triangular matrix, use forward
-%       substitution to solve the system L*x=b for x. 
+%       substitution to solve the system L*x=b for x. The mex version of
+%       this is only implemented for real matrices.
 %
 %INPUTS: L An nXn positive-definite lower-triangular matrix.
 %        b An nX1 vector.

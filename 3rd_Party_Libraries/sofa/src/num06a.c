@@ -56,9 +56,9 @@ void iauNum06a(double date1, double date2, double rmatn[3][3])
 **     P. Kenneth Seidelmann (ed), University Science Books (1992),
 **     Section 3.222-3 (p114).
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -75,7 +75,7 @@ void iauNum06a(double date1, double date2, double rmatn[3][3])
 /* Nutation matrix. */
    iauNumat(eps, dp, de, rmatn);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

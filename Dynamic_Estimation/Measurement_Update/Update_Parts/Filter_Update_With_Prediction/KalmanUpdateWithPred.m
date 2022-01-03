@@ -7,7 +7,7 @@ function [xUpdate,PUpdate,innov,Pzz,W]=KalmanUpdateWithPred(z,R,zPred,PzPred,oth
 %           single target prediction more efficient. The full measurement
 %           update function is KalmanUpdate.
 %
-%INPUTS: z The zDimX1 vector measurement.
+%INPUTS: z The zDimX1 measurement vector.
 %        R The zDimXzDim measurement covariance matrix in the native
 %          coordinate system of the measurement.
 %    zPred The zDimXnumComp measurement predictions from the filter.
@@ -22,7 +22,9 @@ function [xUpdate,PUpdate,innov,Pzz,W]=KalmanUpdateWithPred(z,R,zPred,PzPred,oth
 %                 innovation covariance matrices are returned in case one
 %                 wishes to analyze the consistency of the estimator or use
 %                 those values in gating or likelihood evaluation.
-%               W The xDimXzDimXnumComp gains used in the update.
+%               W The xDimXzDimXnumComp gains used in the update. This can
+%                 be useful when gating and using the function
+%                 calcMissedGateCov.
 %
 %See the comments to the function KalmanMeasPred for an example of usage of
 %this function. See the comments to KalmanUpdate for more information on

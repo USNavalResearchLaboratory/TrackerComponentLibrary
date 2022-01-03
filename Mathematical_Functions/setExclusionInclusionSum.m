@@ -18,7 +18,7 @@ function sumVal=setExclusionInclusionSum(A,algorithm)
 %The algorithm of [1] is implemented here. Note that if all of the values
 %in A are probabilities of independent events, then sumVal is the
 %probability of any event occurring which is equivalent to 1-prod(1-A). One
-%notices that this identity applies regarless of the values of A (real or
+%notices that this identity applies regardless of the values of A (real or
 %somplex), which is how we come to algorithm 1 (the default), which can be
 %much faster than algorithm 0 on small problems.
 %

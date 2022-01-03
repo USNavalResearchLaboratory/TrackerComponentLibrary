@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 #include <float.h>
 
 int iauJd2cal(double dj1, double dj2,
@@ -63,9 +64,9 @@ int iauJd2cal(double dj1, double dj2,
 **     Klein, A., A Generalized Kahan-Babuska-Summation-Algorithm.
 **     Computing, 76, 279-293 (2006), Section 3.
 **
-**  This revision:  2020 October 21
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -147,7 +148,10 @@ int iauJd2cal(double dj1, double dj2,
    *iy = (int) (100L * (n - 49L) + i + l);
    *fd = f;
 
+/* Success. */
    return 0;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

@@ -64,9 +64,9 @@ void iauXys00b(double date1, double date2,
 **     McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
 **     IERS Technical Note No. 32, BKG (2004)
 **
-**  This revision:  2020 December 4
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -83,7 +83,7 @@ void iauXys00b(double date1, double date2,
 /* Obtain s. */
    *s = iauS00(date1, date2, *x, *y);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

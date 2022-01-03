@@ -173,7 +173,7 @@ double assign3DBBCPP(ptrdiff_t *minCostTuples, const double *const COrig,const s
             const double param1=1;//gammaParam
             const double param2=0;
             const size_t param3=0;
-                    
+ 
             const ptrdiff_t exitCode=assign3DC(minCostTuples,
                                                        &gain,
                                                           &q,

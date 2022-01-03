@@ -40,7 +40,6 @@ derivVal=0;
 for curLevel=N:-1:1
     derivVal=derivVal*f(curLevel)+fDeriv(curLevel)*fProd(curLevel+1);
 end
-
 end
 
 %LICENSE:

@@ -8,8 +8,7 @@ function z=getUVDirection(zC,zRx,M,includeW)
 %         vector coordinate is not needed. However, with the includeW
 %         option, it can be provided, resulting in r-u-v-w coordinates.
 %
-%INPUT: zC A 3XN matrix of Cartesian points in global [x;y;z] Cartesian
-%          coordinates.
+%INPUT: zC A 3XN matrix of points in global [x;y;z] Cartesian coordinates.
 %      zRx The 3XN [x;y;z] location vectors of the receivers in Cartesian
 %          coordinates.  If this parameter is omitted or an empty matrix is
 %          passed, then the receivers are assumed to be at the origin. If
@@ -22,7 +21,10 @@ function z=getUVDirection(zC,zRx,M,includeW)
 %          or an empty matrix is passed, then it is assumed that the local
 %          coordinate system is aligned with the global and M=eye(3) --the
 %          identity matrix is used. If only a single 3X3 matrix is passed,
-%          then is=t is assumed to be the same for all of the N conversions.
+%          then is=t is assumed to be the same for all of the N
+%          conversions. Typically, if includeW is false, it doesn't make
+%          sense to return the u-v values that are not local, so one will
+%          usually omit M in that instance.
 %  includeW An optional boolean value indicating whether a third direction
 %          cosine component should be included. The u and v direction
 %          cosines are two parts of a 3D unit vector. Generally, one might
@@ -33,7 +35,7 @@ function z=getUVDirection(zC,zRx,M,includeW)
 %          false.
 %
 %OUTPUT: z The 2XN (or 3XN if includeW is true) matrix of direction cosines
-%          of the points in the form [u;v] or [u;v;w].
+%          of the converted points in the form [u;v] or [u;v;w].
 %
 %Details of the conversion are given in [1].
 %

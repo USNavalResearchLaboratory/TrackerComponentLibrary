@@ -13,11 +13,11 @@ function [zPred,PzPred,otherInfo]=KalmanMeasPred(xPred,PPred,H)
 %              zPred will be returned as an empty matrix.
 %        PPred The xDimXxDimXnumComp predicted state covariance matrices.
 %            H The zDimXxDim measurement matrix. The measurement is modeled
-%              as z=H*x+noise and is the same for all components given in
-%              xPred and PPred.
+%              as z=H*x+noise and the model is the same for all components
+%              given in xPred and PPred.
 %
 %OUTPUTS: zPred The zDimXnumComp measurement prediction from the filter or
-%               an empty matrix is xPred was an empty matrix.
+%               an empty matrix if xPred was an empty matrix.
 %        PzPred The zDimXzDimXnumComp covariance matrix associated with
 %               zPred.
 %     otherInfo A structure containing members of intermediate results of

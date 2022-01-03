@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauXy06(double date1, double date2, double *x, double *y)
 /*
@@ -90,9 +91,9 @@ void iauXy06(double date1, double date2, double *x, double *y)
 **
 **     Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 **
-**  This revision:  2019 June 23
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -2708,7 +2709,7 @@ void iauXy06(double date1, double date2, double *x, double *y)
    *x = DAS2R * (xypr[0] + (xyls[0] + xypl[0]) / 1e6);
    *y = DAS2R * (xypr[1] + (xyls[1] + xypl[1]) / 1e6);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

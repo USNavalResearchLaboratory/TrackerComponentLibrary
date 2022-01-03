@@ -4,7 +4,7 @@ function [wRed,muRed,PRed,setParMin]=bruteForceGaussMixRed(w,mu,P,k,sequential)
 %               reduces the number of components in the original mixture
 %               from n to k by computing the ISE of all reduced
 %               distributions obtained by merging components (not by
-%               explicitely optimizing over the final values.
+%               explicitly optimizing over the final values.
 %
 %INPUTS: w An nX1 or 1Xn vector of weights of the components of the
 %          original Gaussian mixture.

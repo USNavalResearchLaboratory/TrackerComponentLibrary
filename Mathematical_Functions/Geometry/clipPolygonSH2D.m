@@ -132,14 +132,14 @@ function clippedPolygon=clipPolygonSH2D(polygon2Clip,convexClipPolygon,makeFirst
 end
 
 function isInsideClipEdge=vertexIsInsideClipEdge(vertex,clipVertex1,clipEdge)
-%Determine whether a vertex is inside of the clipping region given an
-%edge. This relies on the fact that the clipping region is convex and goes
-%in a counterclockwise direction. Thus, the sign of the angle with respect
-%to the clipping edge is used to determine whether it is inside or outside.
-%This could be done by extending the vectors to 3D (padding a zero on the
-%ends) and then using a cross product, whereby the z component would tell
-%us the sign, but the value of the z-component is the same as the
-%determinant value used here.
+%%VERTEXISINSIDECLIPPEDEDGE Determine whether a vertex is inside of the
+%clipping region given an edge. This relies on the fact that the clipping
+%region is convex and goes in a counterclockwise direction. Thus, the sign
+%of the angle with respect to the clipping edge is used to determine
+%whether it is inside or outside. This could be done by extending the
+%vectors to 3D (padding a zero on the ends) and then using a cross
+%product, whereby the z component would tell us the sign, but the value of
+%the z-component is the same as the determinant value used here.
 %
 %INPUTS:  vertex The 2X1 vertex to test whether it is on the correct size
 %                of the edge to be in the clipping region.

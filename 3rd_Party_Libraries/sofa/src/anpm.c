@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 double iauAnpm(double a)
 /*
@@ -19,9 +20,9 @@ double iauAnpm(double a)
 **  Returned (function value):
 **              double     angle in range +/-pi
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -33,6 +34,8 @@ double iauAnpm(double a)
    if (fabs(w) >= DPI) w -= dsign(D2PI, a);
 
    return w;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

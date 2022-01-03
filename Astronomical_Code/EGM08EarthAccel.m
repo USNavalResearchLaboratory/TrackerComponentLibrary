@@ -325,7 +325,8 @@ rSpher=Cart2Sphere(r);
 %Now, if the acceleration is supposed to be in ITRS coordinates, then add
 %the Coriolis terms. Otherwise, rotate it into GCRS coordinates.
 if(accelOptions==3)
-    %The output is in ITRS coordinates, compute the Coriolis terms.
+    %The output is in (approximate) ITRS coordinates, compute the Coriolis
+    %terms.
     v=rVec(4:6,:);%The velocity in ITRS coordinates.
     
     %Get the axis of rotation in ITRS coordinates. This is the z-axis in
@@ -344,7 +345,9 @@ if(accelOptions==3)
     aCentrifugal=-bsxfun(@cross,Omega,bsxfun(@cross,Omega,r));
     accel=accel+aCoriolis+aCentrifugal;
 else
-    %Rotate the output into GCRS coordinates.
+    %Rotate the output into GCRS coordinates. This is just a rotation (as
+    %one would apply to position components). Thus, we do not want to pass
+    %it as if it were a velocity input to this function.
     accel=ITRS2GCRS(accel,TT1,TT2,deltaTTUT1,xpyp,dXdY,LOD);
 end
 

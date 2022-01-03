@@ -11,7 +11,7 @@ function [v,w,sigma2]=scalarGaussMixMomentFitting(x,N,inputType)
 %INPUTS: x This is either a length numSamples set of samples of the
 %          distribution to fit or a length 2*N=1 vector such that x(1)=1,
 %          x(2) is the mean of the distribution, x(3) is the variance of
-%          the distirbution, and x(n+1) is the nth central moment of the
+%          the distribution, and x(n+1) is the nth central moment of the
 %          distribution (obtained, for example, using the
 %          unbiasedMomentCumulant function from samples).
 %        N The number of components in the distribution. This can be form 2
@@ -37,7 +37,7 @@ function [v,w,sigma2]=scalarGaussMixMomentFitting(x,N,inputType)
 %and weights directly via matrix manipulation, since the means and weights
 %are actually quadrature points and weights, the moments23TermRecur
 %function is used with the m_k moments to get the 3-term recursion needed
-%to obtain the cubature poitns and weights directly from the
+%to obtain the cubature points and weights directly from the
 %orthoPolyZerosFromRecur function.
 %
 %EXAMPLE 1:

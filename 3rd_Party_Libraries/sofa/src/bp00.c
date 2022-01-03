@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauBp00(double date1, double date2,
              double rb[3][3], double rp[3][3], double rbp[3][3])
@@ -75,9 +76,9 @@ void iauBp00(double date1, double date2,
 **     n.b. The celestial ephemeris origin (CEO) was renamed "celestial
 **          intermediate origin" (CIO) by IAU 2006 Resolution 2.
 **
-**  This revision:  2013 August 21
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -122,7 +123,7 @@ void iauBp00(double date1, double date2,
 /* Bias-precession matrix: GCRS to mean of date. */
    iauRxr(rp, rbw, rbp);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

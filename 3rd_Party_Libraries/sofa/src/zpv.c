@@ -19,9 +19,9 @@ void iauZpv(double pv[2][3])
 **  Called:
 **     iauZp        zero p-vector
 **
-**  This revision:  2020 August 25
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -29,7 +29,7 @@ void iauZpv(double pv[2][3])
    iauZp(pv[0]);
    iauZp(pv[1]);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

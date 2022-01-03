@@ -7,14 +7,15 @@ function HTotal=uvHessian(xG,lRx,M)
 %           with [x;y;z] components for which gradients are desired.
 %       lRx The 3X1  position vector of the receiver. If omitted, the
 %           receiver is placed at the origin.
-%         M A 3X3 rotation matrix from the global Coordinate system to the
+%         M A 3X3 rotation matrix from the global coordinate system to the
 %           orientation of the coordinate system at the receiver. If
 %           omitted, it is assumed to be the identity matrix.
 %
-%OUTPUTS: HTotal A 3X3X2XN matrix such that HTotal(:,:,1,i) is the Hessian
-%          matrix with respect to the u component and HTotal(:,:,2,i)
-%          is the Hessian matrix with respect to the v component.
-%          The elements in the matrices for each component/ point are
+%OUTPUTS: HTotal A 3X3X2XN matrix such that for the ith measurement,
+%          HTotal(:,:,1,i) is the Hessian matrix with respect to the u
+%          component and HTotal(:,:,2,i) is the Hessian matrix with respect
+%          to the v component. The elements in the matrices for each
+%          component/ point are
 %          ordered [d^2/(dxdx), d^2/(dxdy), d^2/(dxdz);
 %                   d^2/(dydx), d^2/(dydy), d^2/(dydz);
 %                   d^2/(dzdx), d^2/(dzdy), d^2/(dzdz)];

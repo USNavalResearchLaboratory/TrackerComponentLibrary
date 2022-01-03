@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauLtpb(double epj, double rpb[3][3])
 /*
@@ -50,9 +51,9 @@ void iauLtpb(double epj, double rpb[3][3])
 **    expressions, valid for long time intervals (Corrigendum),
 **    Astron.Astrophys. 541, C1
 **
-**  This revision:  2015 December 6
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -75,6 +76,8 @@ void iauLtpb(double epj, double rpb[3][3])
       rpb[i][1] =  rp[i][0]*dr + rp[i][1]    + rp[i][2]*de;
       rpb[i][2] = -rp[i][0]*dx - rp[i][1]*de + rp[i][2];
    }
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

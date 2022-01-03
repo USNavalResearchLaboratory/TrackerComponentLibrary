@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauPmat76(double date1, double date2, double rmatp[3][3])
 /*
@@ -71,9 +72,9 @@ void iauPmat76(double date1, double date2, double rmatp[3][3])
 **
 **     Kaplan,G.H., 1981. USNO circular no. 163, pA2.
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -91,7 +92,7 @@ void iauPmat76(double date1, double date2, double rmatp[3][3])
    iauRz( -z, wmat);
    iauCr( wmat, rmatp);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

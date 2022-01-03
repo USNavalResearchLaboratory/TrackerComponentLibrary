@@ -1,8 +1,8 @@
 function [aVal,aJacob,aHess,papt]=aPoly(x,numDim)
-%%APOLY The drift function for a linear continuous-time motion model with a
+%%APOLY The drift function for a linear continuous-time motion model of a
 %       given order in a specified number of Cartesian dimensions. The
 %       order of the linear filter, that is the number of moments of
-%       position, does not ned to be explicitly specified.
+%       position, does not need to be explicitly specified.
 %
 %INPUTS: x The xDimXN state vector of N targets in the order of
 %          [position;velocity;acceleration;etc] for however many
@@ -15,15 +15,15 @@ function [aVal,aJacob,aHess,papt]=aPoly(x,numDim)
 %OUTPUTS: aVal The xDimXN time-derivative of the N state vectors under the
 %              linear motion model.
 %       aJacob The xDimXxDim Jacobian of aVal (it is the same for all x and
-%              not repeated N times). This is such that aJacob(:,k) is the
-%              partial derivative of aVal with respect to the kth element
-%              of x.
+%              is not repeated N times). This is such that aJacob(:,k) is
+%              the partial derivative of aVal with respect to the kth
+%              element of x.
 %        aHess The xDimXxDimXxDim hypermatrix such that aHess(:,k1,k2) is
 %              the second partial derivative of aVal with respect to
 %              elements k1 and k2 of x (all zero in this instance). It is
 %              the same for all x.
-%         papt The xDimX1 partial derivative of aVal with respect to t (all
-%              zero in this instance). It is the same for all x.
+%         papt The xDimX1 partial derivative of aVal with respect to time
+%              (all zero in this instance). It is the same for all x.
 %
 %The drift function corresponds to the state transition given in
 %discrete-time by the function FPolyKal.

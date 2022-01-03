@@ -59,9 +59,9 @@ void iauEqec06(double date1, double date2, double dr, double dd,
 **     iauAnp       normalize angle into range 0 to 2pi
 **     iauAnpm      normalize angle into range +/- pi
 **
-**  This revision:  2016 February 9
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -84,6 +84,8 @@ void iauEqec06(double date1, double date2, double dr, double dd,
 /* Express in conventional ranges. */
    *dl = iauAnp(a);
    *db = iauAnpm(b);
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

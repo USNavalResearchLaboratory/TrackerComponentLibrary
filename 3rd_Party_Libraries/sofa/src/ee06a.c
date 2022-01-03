@@ -55,9 +55,9 @@ double iauEe06a(double date1, double date2)
 **     McCarthy, D. D., Petit, G. (eds.), 2004, IERS Conventions (2003),
 **     IERS Technical Note No. 32, BKG
 **
-**  This revision:  2008 May 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -73,6 +73,8 @@ double iauEe06a(double date1, double date2)
    ee  = iauAnpm(gst06a - gmst06);
 
    return ee;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

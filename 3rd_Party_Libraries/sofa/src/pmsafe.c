@@ -112,7 +112,7 @@ int iauPmsafe(double ra1, double dec1, double pmr1, double pmd1,
 **
 **  This revision:   2014 July 1
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */

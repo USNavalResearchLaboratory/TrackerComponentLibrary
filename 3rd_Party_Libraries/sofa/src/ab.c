@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauAb(double pnat[3], double v[3], double s, double bm1,
            double ppr[3])
@@ -53,9 +54,9 @@ void iauAb(double pnat[3], double v[3], double s, double bm1,
 **  Called:
 **     iauPdp       scalar product of two p-vectors
 **
-**  This revision:   2013 October 9
+**  This revision:   2021 February 24
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */

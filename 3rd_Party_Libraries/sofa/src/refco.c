@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauRefco(double phpa, double tc, double rh, double wl,
               double *refa, double *refb)
@@ -154,9 +155,9 @@ void iauRefco(double phpa, double tc, double rh, double wl,
 **
 **     Stone, Ronald C., P.A.S.P. 108, 1051-1058, 1996.
 **
-**  This revision:   2020 August 17
+**  This revision:   2021 February 24
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */

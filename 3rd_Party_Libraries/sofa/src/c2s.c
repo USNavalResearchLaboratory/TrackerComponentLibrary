@@ -28,9 +28,9 @@ void iauC2s(double p[3], double *theta, double *phi)
 **
 **  3) At either pole, zero theta is returned.
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -46,7 +46,7 @@ void iauC2s(double p[3], double *theta, double *phi)
    *theta = (d2 == 0.0) ? 0.0 : atan2(y, x);
    *phi = (z == 0.0) ? 0.0 : atan2(z, sqrt(d2));
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

@@ -23,19 +23,9 @@ extern "C"
 #include <stddef.h>
 #include <stdbool.h>
 
-//If using Microsoft Visual Studio
-#if defined(_MSC_VER) || defined(__MINGW32__) || defined(__MINGW64__)
-#ifndef RESTRICT
-#define RESTRICT
-//Microsoft does not support the restrict keyword in C, but it does have
-//its own version.
-#define restrict __restrict
-#endif
-#endif
-
 //Function prototypes.
 size_t assign3DCBufferSize(const size_t *nDims,const int subgradMethod);
-ptrdiff_t assign3DC(ptrdiff_t * restrict tuples,double *restrict fStar, double * restrict qStar,double * restrict u,void *tempSpace,const size_t *nDims,double * restrict C,bool maximize,const int subgradMethod,const size_t maxIter,const double AbsTol,const double RelTol,const double param1,const double param2,const size_t param3);
+ptrdiff_t assign3DC(ptrdiff_t * tuples,double *fStar, double *qStar,double *u,void *tempSpace,const size_t *nDims,double *C,bool maximize,const int subgradMethod,const size_t maxIter,const double AbsTol,const double RelTol,const double param1,const double param2,const size_t param3);
 
 //Bounds
 size_t assign3DLBHungarianBufferSize(const size_t *nVals);

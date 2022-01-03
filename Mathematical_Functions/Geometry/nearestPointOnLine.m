@@ -7,9 +7,9 @@ function [pc,t]=nearestPointOnLine(z,p0,d)
 %       p0 The numDimX1 origin of the parameteric line.
 %        d The numDimX1 direction of the parameteric line.
 %
-%OUTPUTS: pc The numDImX1 point on the line that is closest to z.
+%OUTPUTS: pc The numDimX1 point on the line that is closest to z.
 %          t The value of the parameteric parameter that corresponds to the
-%          point pc on the line.
+%            point pc on the line.
 %
 %The expression for the nearest point on a line is given in Chapter 10.2 of
 %[1].

@@ -69,7 +69,7 @@ function [xUpdate,PUpdate,innov,Pzz,W]=cubKalUpdate(xPred,PPred,z,R,h,xi,w,innov
 %This way, every time cubKalUpdate calls measFunc (via h) with a
 %different x, those two parameters are always passed.
 %
-%The mathematics behind the function cubKalUpdate are described in more
+%The mathematics behind the function cubKalUpdate are described in
 %detail in Section IX of [1] and in [2]. Note that this is essentially the
 %"unscented Kalman filter" with additive noise. One simply has to provide
 %the filter with the appropriate cubature points and weights.
@@ -112,15 +112,15 @@ function [xUpdate,PUpdate,innov,Pzz,W]=cubKalUpdate(xPred,PPred,z,R,h,xi,w,innov
     end
     
     if(nargin<9||isempty(measAvgFun))
-       measAvgFun=@(zPoints,w)calcMixtureMoments(zPoints,w);
+        measAvgFun=@(zPoints,w)calcMixtureMoments(zPoints,w);
     end
     
     if(nargin<10||isempty(stateDiffTrans))
-       stateDiffTrans=@(x)x; 
+        stateDiffTrans=@(x)x; 
     end
     
     if(nargin<11||isempty(stateTrans))
-       stateTrans=@(x)x; 
+        stateTrans=@(x)x; 
     end
     
     zDim=size(z,1);

@@ -64,9 +64,9 @@ void iauXys06a(double date1, double date2,
 **
 **     Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 **
-**  This revision:  2020 December 4
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -83,7 +83,7 @@ void iauXys06a(double date1, double date2,
 /* Obtain s. */
    *s = iauS06(date1, date2, *x, *y);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

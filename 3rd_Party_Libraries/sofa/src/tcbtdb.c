@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 int iauTcbtdb(double tcb1, double tcb2, double *tdb1, double *tdb2)
 /*
@@ -52,9 +53,9 @@ int iauTcbtdb(double tcb1, double tcb2, double *tdb1, double *tdb2)
 **
 **     IAU 2006 Resolution B3
 **
-**  This revision:  2019 June 20
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -83,6 +84,8 @@ int iauTcbtdb(double tcb1, double tcb2, double *tdb1, double *tdb2)
 
 /* Status (always OK). */
    return 0;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

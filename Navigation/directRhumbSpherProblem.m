@@ -23,7 +23,7 @@ function latLonEnd=directRhumbSpherProblem(latLonStart,azimuth,dist,r)
 %                    invalid results will be obtained.
 %                  r The assumed radius of the spherical Earth model. If
 %                    omitted or an empty matrix is passed, the default of
-%                    Constants.WGS84MeanRadius is used.
+%                    osculatingSpher4LatLon(latLonStart) is used.
 %
 %OUTPUTS: latLonPoints A2XN matrix of geocentric latitude and longitudes of
 %                      the final points of the spherical geodesic
@@ -33,9 +33,9 @@ function latLonEnd=directRhumbSpherProblem(latLonStart,azimuth,dist,r)
 %the case where the azimuth is very close to pi/2;
 %
 %EXAMPLE:
-%We show that after solving
-%the indirect rhumb problem, the trajectory obtained leads to the
-%desired enpoint when given to directRhumbSpherProblem.
+%We show that after solving the indirect rhumb problem, the trajectory
+%obtained leads to the desired endpoint when given to
+%directRhumbSpherProblem when using the same Earth radius for both.
 % latStart=degMinSec2Rad(37,47.5);
 % lonStart=degMinSec2Rad(-122,-27.8);
 % latEnd=degMinSec2Rad(-33,-51.7);
@@ -43,8 +43,9 @@ function latLonEnd=directRhumbSpherProblem(latLonStart,azimuth,dist,r)
 % latLonStart=[latStart;lonStart];
 % latLonEnd=[latEnd;lonEnd];
 % 
-% [azStart,dist]=indirectRhumbSpherProblem(latLonStart,latLonEnd);
-% latLonPoint=directRhumbSpherProblem(latLonStart,azStart,dist);
+% r=osculatingSpher4LatLon(latLonStart);
+% [azStart,dist]=indirectRhumbSpherProblem(latLonStart,latLonEnd,r);
+% latLonPoint=directRhumbSpherProblem(latLonStart,azStart,dist,r);
 % max(abs(wrapRange(latLonPoint-latLonEnd,-pi,pi)))
 %The maximum difference is within expected finite precision limits.
 %
@@ -57,7 +58,7 @@ function latLonEnd=directRhumbSpherProblem(latLonStart,azimuth,dist,r)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 if(nargin<4||isempty(r))
-    r=Constants.WGS84MeanRadius;
+    r=osculatingSpher4LatLon(latLonStart);
 end
 dist=dist(:).';
 

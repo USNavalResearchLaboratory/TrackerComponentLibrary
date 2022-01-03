@@ -58,9 +58,9 @@ void iauPnm00a(double date1, double date2, double rbpn[3][3])
 **     24th General Assembly, Manchester, UK.  Resolutions B1.3, B1.6.
 **     (2000)
 **
-**  This revision:  2020 November 27
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -71,7 +71,7 @@ void iauPnm00a(double date1, double date2, double rbpn[3][3])
 /* Obtain the required matrix (discarding other results). */
    iauPn00a(date1, date2, &dpsi, &deps, &epsa, rb, rp, rbp, rn, rbpn);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 int iauUt1utc(double ut11, double ut12, double dut1,
               double *utc1, double *utc2)
@@ -67,9 +68,9 @@ int iauUt1utc(double ut11, double ut12, double dut1,
 **     Explanatory Supplement to the Astronomical Almanac,
 **     P. Kenneth Seidelmann (ed), University Science Books (1992)
 **
-**  This revision:  2020 October 25
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -144,6 +145,8 @@ int iauUt1utc(double ut11, double ut12, double dut1,
 
 /* Status. */
    return js;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

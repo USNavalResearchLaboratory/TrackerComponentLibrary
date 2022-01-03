@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauPmpx(double rc, double dc, double pr, double pd,
              double px, double rv, double pmt, double pob[3],
@@ -17,7 +18,7 @@ void iauPmpx(double rc, double dc, double pr, double pd,
 **
 **  Given:
 **     rc,dc  double     ICRS RA,Dec at catalog epoch (radians)
-**     pr     double     RA proper motion (radians/year; Note 1)
+**     pr     double     RA proper motion (radians/year, Note 1)
 **     pd     double     Dec proper motion (radians/year)
 **     px     double     parallax (arcsec)
 **     rv     double     radial velocity (km/s, +ve if receding)
@@ -51,9 +52,9 @@ void iauPmpx(double rc, double dc, double pr, double pd,
 **     iauPdp       scalar product of two p-vectors
 **     iauPn        decompose p-vector into modulus and direction
 **
-**  This revision:   2013 October 9
+**  This revision:   2021 April 3
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */

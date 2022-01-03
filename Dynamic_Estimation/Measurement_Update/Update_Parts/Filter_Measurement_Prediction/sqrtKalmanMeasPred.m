@@ -11,9 +11,9 @@ function [zPred,PzPred,otherInfo]=sqrtKalmanMeasPred(xPred,SPred,H)
 %INPUTS: xPred The xDimXnumComp set of numComp predicted target states.
 %        SPred The xDimXxDimXnumComp lower-triangular predicted square-root
 %              state covariance matrices.
-%            H The zDimXxDim measurement matrix for a linear measurement
-%              model. That is z=H*x+w, where w is measurement noise having
-%              covariance matrix SR*SR'.
+%            H The zDimXxDim measurement matrix. The measurement is modeled
+%              as z=H*x+noise and the model is the same for all components
+%              given in xPred and SPred.
 %
 %OUTPUTS: zPred The zDimXnumComp measurement predictions from the filter.
 %        PzPred The zDimXzDimXnumComp covariance matrix associated with

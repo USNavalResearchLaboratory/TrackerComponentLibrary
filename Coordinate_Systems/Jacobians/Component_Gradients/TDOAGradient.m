@@ -1,4 +1,4 @@
-function J=TDOAGradient(x,lRx1,lRx2,c)
+function J=TDOAGradient(x,lRef,lRx,c)
 %%TDOAGRADIENT Determine the gradient of a time-delay of arrival (TDOA)
 %           measurement in 1D, 2D, or 3D space with respect to position
 %           (gradient components for velocity etc. are zero and are not
@@ -7,10 +7,10 @@ function J=TDOAGradient(x,lRx1,lRx2,c)
 %
 %INPUTS: x The numPosDimX1 target position vector of the form [x], [x;y] or
 %          [x;y;z].
-% lRx1,lRx2 The numPosDimX1 locations of the receivers. This assumes that
+% lRef,lRx The numPosDimX1 locations of the receivers. This assumes that
 %          the TDOA measurement is taken using the time received at lRx1
 %          as the reference time. Thus, the TDOA is the time at lRx2 minus
-%          the time at lRx1. If either of these are omitted or an empty
+%          the time at lRef. If either of these are omitted or an empty
 %          matrix is passed, then the receiver is placed at the origin.
 %          These cannot be both placed in the same spot.
 %        c The propagation speed in the medium in question. If this
@@ -27,12 +27,12 @@ function J=TDOAGradient(x,lRx1,lRx2,c)
 %EXAMPLE:
 %Here, we validate that the gradient is consistent with the value obtained
 %by numerical differentiation.
-% lRx1=[-3;0];
-% lRx2=[3;0];
+% lRef=[-3;0];
+% lRx=[3;0];
 % c=1;
 % xTrue=[4;4];
-% h=@(x)getTDOA(x,lRx1,lRx2,c);
-% grad=TDOAGradient(xTrue,lRx1,lRx2,c);
+% h=@(x)getTDOA(x,lRef,lRx,c);
+% grad=TDOAGradient(xTrue,lRef,lRx,c);
 % gradNumDiff=numDiff(xTrue,h,1);
 % relErr=(grad-gradNumDiff)./abs(grad)
 %One will see that the relative error is better than 1e-10 in each
@@ -47,16 +47,16 @@ if(nargin<4||isempty(c))
     c=Constants.speedOfLight;
 end
 
-if(nargin<3||isempty(lRx2))
-    lRx2=zeros(numDim,1); 
+if(nargin<3||isempty(lRx))
+    lRx=zeros(numDim,1); 
 end
 
-if(nargin<2||isempty(lRx1))
-    lRx1=zeros(numDim,1); 
+if(nargin<2||isempty(lRef))
+    lRef=zeros(numDim,1); 
 end
 
-deltaRx1=x-lRx1;
-deltaRx2=x-lRx2;
+deltaRx1=x-lRef;
+deltaRx2=x-lRx;
 
 J=(1/c)*(deltaRx2.'/norm(deltaRx2)-deltaRx1.'/norm(deltaRx1));
 

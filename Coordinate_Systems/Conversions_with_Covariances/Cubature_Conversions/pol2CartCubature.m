@@ -121,10 +121,8 @@ function [zCart,RCart]=pol2CartCubature(z,SR,systemType,useHalfRange,zTx,zRx,M,x
         systemType=0; 
     end
     
-    numMeas=size(z,2);
-
     if(size(SR,3)==1)
-        SR=repmat(SR,[1,1,numMeas]);
+        SR=repmat(SR,[1,1,numPoints]);
     end
     
     h=@(z)pol2Cart(z,systemType,useHalfRange,zTx(1:2,:),zRx(1:2,:),M);

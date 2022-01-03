@@ -10,7 +10,8 @@ function [xPred,PPred]=discKalPred(xPrev,PPrev,F,Q,u)
 %            Q The xDimXxDim process noise covariance matrix. This can be
 %              singular or zero.
 %            u An optional xDimX1 vector that is the control input. If
-%              omitted, no control input is used.
+%              omitted or an empty matrix is passed, no control input is
+%              used.
 %
 %OUTPUTS: xPred The xDimX1 predicted state estimate.
 %         PPred The xDimXxDim predicted state covariance matrix.

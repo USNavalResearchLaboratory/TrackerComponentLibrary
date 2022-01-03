@@ -1,4 +1,4 @@
-function [x,exitCode]=eqConstLSSpher(A,b,alpha,varargin)
+function x=eqConstLSSpher(A,b,alpha,epsRed)
 %%EQCONSTLSSPHER Find x to minimize norm(A*x-b,2) under the constraint
 %                that norm(x,2)=alpha. This is essentialy contraining x to
 %                the surface of a sphere of radius alpha. This only solves
@@ -8,42 +8,38 @@ function [x,exitCode]=eqConstLSSpher(A,b,alpha,varargin)
 %        b A real mX1 vector.
 %    alpha The equality constraint value. If this parameter is omitted or
 %          an empty matrix is passed, the default of 1 is used.
-% varargin Any parameters that one might wish to pass to the fzero
-%          function. These are generally comma-separated things, such as
-%          'TolX',1e-12.
+%   epsRed Let xU be the unconstrained solution to the problem. A possible
+%          constrained solutions is considered valid if
+%          abs(norm(x)^2-alpha^2)<=epsRed*abs(norm(xU)^2-alpha^2)
+%          If no such solutions are found, then xU is returned. The default
+%          for this parameter if omitted or an empty matrix is passed is
+%          1e-9. This parameter should be between 0 and 1.
 %
 %OUTPUTS: x The optimal value of x subject to the spherical constraint.
 %    lambda The Lagrangian multiplier used in the optimization. lambda>=0.
 %           If lambda=0, then the constraint on x did not have to be
 %           enforced.
-%  exitFlag The exit flag from the fzero function, which is used as a
-%           subroutine in this function.
 %
 %This implements a modified version of the algorithm of Chapter 6.2.1 of
-%[1]. The zero of the cost function is found usign the fzero function.
-%
-%The algorithm of Chapter 6.2.1 of [1] solves the optimization
+%[1]. The algorithm of Chapter 6.2.1 of [1] solves the optimization
 %constrained such that norm(x,2)<=alpha. We wish to solve the equality
-%constrained problem. When the x returned by the unconstrained optimization
-%is such that norm(x,2)>alpha, we proceed in the same manner as is done in
-%the inequality-constrained implementation in constrainedLSSpher. When
-%norm(x,2)<alpha, we proceed in the same manner: solving a particular
-%equation for the Lagrangian multiplier alpha by using the fzero function.
-%However, the bounds for the search are different. The upper bound is now 0
-%(the unconstrained case). In this instance, we know that the Lagrangian
-%multiplier must be negative. The cost function is a sum of r squared
-%terms. We consider the most negative value of lambda such that a single
-%term in the sum is equal to alpha^2. That forms the lower bound. After
-%that, the fzero function is used.
+%constrained problem. To do so, we always enforce the constraint. An
+%equation has to be solved for scalar zeros over lambda. To do so, we
+%multiply both sids by the denominators resulting in a polynomial system.
+%The system is then solved. However, some solutions might not satisfy the
+%constraint (due to cancellation in denominators). Thus, candidate
+%solutions that do not improve the error in the magnitude by a sufficient
+%amount compared to the unconstrained solution are discarded. If no
+%solutions are left, the the unconstrained solution is used.
 %
 %EXAMPLE:
 %This is a simple example where the x returned by the
-%inequality-constrained algorithm is too small. Thus, we 
+%inequality-constrained algorithm is too small.
 % A=magic(8)+20*eye(8);
 % b=(1:8).';
 % x=inv(A)*b;
 % norm(x)%Norm <1.
-% [xConst,exitCode]=eqConstLSSpher(A,b);
+% xConst=eqConstLSSpher(A,b);
 % norm(xConst)%Norm=1
 % %It is not just normalizing the vector; elements are not scaled by a
 % %constant.
@@ -60,6 +56,10 @@ if(nargin<3||isempty(alpha))
     alpha=1;
 end
 
+if(nargin<4||isempty(epsRed))
+    epsRed=1e-9;
+end
+
 r=rank(A);
 
 [U,Sigma,V]=svd(A,0);
@@ -71,34 +71,77 @@ V=V(:,1:r);
 sigma=sigma(1:r);
 
 bTilde=U'*b;
-x=V*(bTilde./sigma);
+xUnconst=V*(bTilde./sigma);
 
-%We have to zero the objective function as a function of lambda. To use
-%fzero and assure that lambda is positive, we have to bound the value of
-%lambda. It is clear that objFun(0)>0. We just need to find a value of
-%lambda so that objFun(lambda)<0. To do this, we take the largest term
-%in the sum and multiply it by r. Then, we find when the lambda for
-%that to be zero, multiply the result by 2 and we have an upper bound.
-%Of course, we do not know which is the largest term, so we will
-%evaluate all of them and choose the largest. The abs is because there
-%are two solutions and the correct one will be the positive one.
-if(norm(x)>alpha)
-    upperBound=2*max((abs(bTilde.*sigma)*sqrt(r)-alpha*sigma.^2)./alpha);
-    lowerBound=0;
-else
-    upperBound=0;
-    lowerBound=min(-sigma.^2-abs(bTilde.*sigma/alpha));
+alpha2Unconst=abs(norm(xUnconst)^2-alpha^2);
+
+numVal=(sigma.*bTilde).^2;
+denomVal=sigma.^2;
+
+numDim=length(sigma);
+polynoms=[ones(numDim,1),2*denomVal,denomVal.^2];
+
+%Construct the polynomial to solve.
+polyNom=0;
+for k1=1:numDim
+    curPoly=numVal(k1);
+    for k2=1:numDim
+        if(k2==k1)
+            continue;
+        end
+        curPoly=conv(curPoly,polynoms(k2,:));
+    end
+    polyNom=polySum(curPoly,polyNom);
 end
-f=@(lambda)objFun(lambda,alpha,bTilde,sigma);
-[lambda,~,exitCode]=fzero(f,[lowerBound,upperBound],varargin{:});
-x=V*((sigma.*bTilde)./(sigma.^2+lambda));
+
+%The final term
+curPoly=-alpha^2;
+for k2=1:numDim
+    curPoly=conv(curPoly,polynoms(k2,:));
+end
+polyNom=polySum(curPoly,polyNom);
+lambdaVals=roots(polyNom).';
+%Get rid of imaginary solutions.
+lambdaVals=lambdaVals(imag(lambdaVals)==0);
+numSol=length(lambdaVals);
+
+%Due to certain values corresponding to zero denominators, there can be
+%more solutions in lambda than are valid. We must eliminate all solutions
+%that do not produce x values with the correct magnitude. First, get all
+%possibly valid solutions regardless of the magnitude.
+x=zeros(numDim,numSol);
+numKept=0;
+for k=1:numSol
+    xCur=V*((sigma.*bTilde)./(sigma.^2+lambdaVals(k)));
+    normErr=abs(norm(xCur)^2-alpha^2);
+    if(all(isfinite(xCur))&&normErr<=epsRed*alpha2Unconst)
+        numKept=numKept+1;
+        x(:,numKept)=xCur;
+    end
 end
 
-function val=objFun(lambda,alpha,bTilde,sigma)
-%This is the function in Algorithm 6.2.1 that must be zeroed to find the
-%Lagrange multiplier.
+if(numKept==0)
+    %If nothing was kept, then just use the unconstrained solution. 
+    x=xUnconst;
+    return 
+end
+x=x(:,1:numKept);
 
-    val=sum(((sigma.*bTilde)./(sigma.^2+lambda)).^2)-alpha^2;
+%Of all of the solutions kept, take the one that minimizes the original
+%optimization problem.
+if(numKept>1)
+    minCost=norm(A*x(:,1)-b,2);
+    minIdx=1;
+    for k=2:numKept
+       curCost=norm(A*x(:,k)-b,2);
+       
+       if(curCost<minCost)
+           minIdx=k;
+           minCost=curCost;
+       end
+    end
+    x=x(:,minIdx);
+end
 end
 
 %LICENSE:

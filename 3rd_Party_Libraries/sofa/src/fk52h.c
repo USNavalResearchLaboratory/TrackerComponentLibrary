@@ -58,9 +58,9 @@ void iauFk52h(double r5, double d5,
 **
 **     F.Mignard & M.Froeschle, Astron.Astrophys., 354, 732-739 (2000).
 **
-**  This revision:  2017 October 12
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -93,7 +93,7 @@ void iauFk52h(double r5, double d5,
 /* Hipparcos pv-vector to spherical. */
    iauPvstar(pvh, rh, dh, drh, ddh, pxh, rvh);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

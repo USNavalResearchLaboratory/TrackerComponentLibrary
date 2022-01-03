@@ -1,7 +1,7 @@
-function r=getRange(xCart,useHalfRange,lTx,lRx)
+function r=getRange(xCart,useHalfRange,zTx,zRx)
 %%GETRANGE Obtain the bistatic range measurements of targets in the absence
-%             of refraction under non-relativistic mechanics, ignoring
-%             atmospheric effects.
+%          of refraction under non-relativistic mechanics, ignoring
+%          atmospheric effects.
 %
 %INPUTS: xCart The numDimXN set of N target positions. numDim is typically
 %              2 or 3.
@@ -10,12 +10,12 @@ function r=getRange(xCart,useHalfRange,lTx,lRx)
 %             operating in monostatic mode, so that the range reported is
 %             a one-way range. The default if this parameter is not
 %             provided is false.
-%         xTx A numDimXN matrix of the positions of the transmitters . If
+%         zTx A numDimXN matrix of the positions of the transmitters . If
 %             this parameter is omitted, the transmitters are assumed to be
 %             at the origin. If only a single vector is passed, then the
 %             transmitter position is assumed the same for all of the
 %             target states being converted.
-%         xRx A numDimXN matrix of the positions of the receivers . If this
+%         zRx A numDimXN matrix of the positions of the receivers . If this
 %             parameter is omitted, the receivers are assumed to be at the
 %             origin. If only a single vector is passed, then the receiver
 %             position is assumed the same for all of the target states
@@ -36,23 +36,23 @@ function r=getRange(xCart,useHalfRange,lTx,lRx)
 N=size(xCart,2);
 numDim=size(xCart,1);
 
-if(nargin<4||isempty(lRx))
-    lRx=zeros(numDim,N);
-elseif(size(lRx,2)==1)
-    lRx=repmat(lRx,[1,N]);
+if(nargin<4||isempty(zRx))
+    zRx=zeros(numDim,N);
+elseif(size(zRx,2)==1)
+    zRx=repmat(zRx,[1,N]);
 end
 
-if(nargin<3||isempty(lTx))
-    lTx=zeros(numDim,N);
-elseif(size(lTx,2)==1)
-    lTx=repmat(lTx,[1,N]);
+if(nargin<3||isempty(zTx))
+    zTx=zeros(numDim,N);
+elseif(size(zTx,2)==1)
+    zTx=repmat(zTx,[1,N]);
 end
 
 if(nargin<2||isempty(useHalfRange))
     useHalfRange=false;
 end
 
-r=sqrt(sum((xCart-lTx(1:numDim,:)).^2,1))+sqrt(sum((xCart-lRx(1:numDim,:)).^2,1));
+r=sqrt(sum((xCart-zTx(1:numDim,:)).^2,1))+sqrt(sum((xCart-zRx(1:numDim,:)).^2,1));
 
 if(useHalfRange)
    r=r/2; 

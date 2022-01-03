@@ -68,9 +68,9 @@ int iauUtcut1(double utc1, double utc2, double dut1,
 **     iauUtctai    UTC to TAI
 **     iauTaiut1    TAI to UT1
 **
-**  This revision:  2013 August 12
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -98,6 +98,8 @@ int iauUtcut1(double utc1, double utc2, double dut1,
 
 /* Status. */
    return js;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

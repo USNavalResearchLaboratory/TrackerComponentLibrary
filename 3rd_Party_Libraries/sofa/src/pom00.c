@@ -51,9 +51,9 @@ void iauPom00(double xp, double yp, double sp, double rpom[3][3])
 **     McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
 **     IERS Technical Note No. 32, BKG (2004)
 **
-**  This revision:  2020 October 31
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -65,7 +65,7 @@ void iauPom00(double xp, double yp, double sp, double rpom[3][3])
    iauRy(-xp, rpom);
    iauRx(-yp, rpom);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

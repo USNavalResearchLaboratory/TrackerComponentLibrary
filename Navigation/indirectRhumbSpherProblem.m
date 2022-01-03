@@ -19,7 +19,7 @@ function [azimuth,dist]=indirectRhumbSpherProblem(latLonStart,latLonEnd,r)
 %                    radians in the format [latitude;longitude].
 %                  r The assumed radius of the spherical Earth model. If
 %                    omitted or an empty matrix is passed, the default of
-%                    Constants.WGS84MeanRadius is used.
+%                    osculatingSpher4LatLon(latLonStart) is used.
 %
 %OUTPUTS: azimuth The constant heading in radians East of North that one
 %                 must travel to go on a constant-heading course from
@@ -82,7 +82,7 @@ function [azimuth,dist]=indirectRhumbSpherProblem(latLonStart,latLonEnd,r)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 if(nargin<3||isempty(r))
-    r=Constants.WGS84MeanRadius;
+    r=osculatingSpher4LatLon(latLonStart);
 end
 
 lat1=latLonStart(1);

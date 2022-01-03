@@ -1,4 +1,4 @@
-sofa_lib.lis                                             2018 December 7
+sofa_lib.lis                                               2021 April 19
 
                      ----------------------
                      SOFA Astronomy Library
@@ -37,7 +37,8 @@ suitable for convenient direct use by writers of astronomical
 applications.
 
 The astronomy routines call on the SOFA vector/matrix library routines,
-which are separately listed.
+which are separately listed, and described in sofa_vm_f.pdf (Fortran)
+and sofa_vm_c.pdf (C).
 
 The routines are designed to exploit the full floating-point accuracy
 of the machines on which they run, and not to rely on compiler
@@ -94,6 +95,8 @@ ROUTINES
      APER13    update context for Earth rotation
      APIO      prepare for CIRS <-> observed, terrestrial, special
      APIO13    prepare for CIRS <-> observed, terrestrial
+     ATCC13    catalog -> astrometric
+     ATCCQ     quick catalog -> astrometric
      ATCI13    catalog -> CIRS
      ATCIQ     quick ICRS -> CIRS
      ATCIQN    quick ICRS -> CIRS, multiple deflections
@@ -162,6 +165,7 @@ ROUTINES
   Ephemerides (limited precision)
 
      EPV00     Earth position and velocity
+     MOON98    Moon position and velocity
      PLAN94    major-planet position and velocity
 
   Precession, nutation, polar motion
@@ -323,6 +327,8 @@ CALLS: FORTRAN VERSION
   :                  REFA, REFB, ASTROM )
    CALL iau_APIO13 ( UTC1, UTC2, DUT1, ELONG, PHI, HM, XP, YP,
   :                  PHPA, TC, RH, WL, ASTROM, J )
+   CALL iau_ATCC13 ( RC, DC, PR, PD, PX, RV, DATE1, DATE2, RA, DA )
+   CALL iau_ATCCQ  ( RC, DC, PR, PD, PX, RV, ASTROM, RA, DA )
    CALL iau_ATCI13 ( RC, DC, PR, PD, PX, RV, DATE1, DATE2, RI, DI, EO )
    CALL iau_ATCIQ  ( RC, DC, PR, PD, PX, RV, ASTROM, RI, DI )
    CALL iau_ATCIQN ( RC, DC, PR, PD, PX, RV, ASTROM, N, B, RI, DI )
@@ -334,7 +340,7 @@ CALLS: FORTRAN VERSION
    CALL iau_ATICQ  ( RI, DI, ASTROM, RC, DC )
    CALL iau_ATCIQN ( RI, DI, ASTROM, N, B, RC, DC )
    CALL iau_ATIO13 ( RI, DI, UTC1, UTC2, DUT1, ELONG, PHI, HM, XP, YP,
-                     PHPA, TC, RH, WL, AOB, ZOB, HOB, DOB, ROB, J )
+  :                  PHPA, TC, RH, WL, AOB, ZOB, HOB, DOB, ROB, J )
    CALL iau_ATIOQ  ( RI, DI, ASTROM, AOB, ZOB, HOB, DOB, ROB )
    CALL iau_ATOC13 ( TYPE, OB1, OB2, UTC1, UTC2, DUT1,
   :                  ELONG, PHI, HM, XP, YP, PHPA, TC, RH, WL,
@@ -441,6 +447,7 @@ CALLS: FORTRAN VERSION
    CALL iau_LTPB   ( EPJ, RPB )
    CALL iau_LTPECL ( EPJ, VEC )
    CALL iau_LTPEQU ( EPJ, VEQ )
+   CALL iau_MOON98 ( DATE1, DATE2, PV )
    CALL iau_NUM00A ( DATE1, DATE2, RMATN )
    CALL iau_NUM00B ( DATE1, DATE2, RMATN )
    CALL iau_NUM06A ( DATE1, DATE2, RMATN )
@@ -544,6 +551,8 @@ CALLS: C VERSION
                    &astrom );
    i = iauApio13 ( utc1, utc2, dut1, elong, phi, hm, xp, yp,
                    phpa, tc, rh, wl, &astrom );
+       iauAtcc13 ( rc, dc, pr, pd, px, rv, date1, date2, &ra, &da );
+       iauAtccq  ( rc, dc, pr, pd, px, rv, &astrom, &ra, &da );
        iauAtci13 ( rc, dc, pr, pd, px, rv, date1, date2,
                    &ri, &di, &eo );
        iauAtciq  ( rc, dc, pr, pd, px, rv, &astrom, &ri, &di );
@@ -663,6 +672,7 @@ CALLS: C VERSION
        iauLtpb   ( epj,  rpb );
        iauLtpecl ( epj,  vec );
        iauLtpequ ( epj,  veq );
+       iauMoon98 ( date1, date2, pv );
        iauNum00a ( date1, date2, rmatn );
        iauNum00b ( date1, date2, rmatn );
        iauNum06a ( date1, date2, rmatn );

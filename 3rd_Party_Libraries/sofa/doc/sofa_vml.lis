@@ -1,4 +1,4 @@
-sofa_vml.lis                                              2013 October 8
+sofa_vml.lis                                            2020 September 9
 
                    --------------------------
                    SOFA Vector/Matrix Library
@@ -90,7 +90,7 @@ OPERATIONS INVOLVING P-VECTORS AND R-MATRICES
      ZR        initialize r-matrix to null
      IR        initialize r-matrix to identity
 
-  Copy/extend/extract
+  Copy
 
      CP        copy p-vector
      CR        copy r-matrix
@@ -159,7 +159,7 @@ OPERATIONS INVOLVING PV-VECTORS
      S2PV      spherical to pv-vector
      PV2S      pv-vector to spherical
 
-  Operations on vectors
+  Operations on pv-vectors
 
      PVPPV     pv-vector plus pv-vector
      PVMPV     pv-vector minus pv-vector
@@ -179,12 +179,20 @@ OPERATIONS INVOLVING PV-VECTORS
 
 OPERATIONS ON ANGLES
 
+  Wrap
+
      ANP       normalize radians to range 0 to 2pi
      ANPM      normalize radians to range -pi to +pi
+
+  To sexagesimal
+
      A2TF      decompose radians into hours, minutes, seconds
      A2AF      decompose radians into degrees, arcminutes, arcseconds
-     AF2A      degrees, arcminutes, arcseconds to radians
      D2TF      decompose days into hours, minutes, seconds
+
+  From sexagesimal
+
+     AF2A      degrees, arcminutes, arcseconds to radians
      TF2A      hours, minutes, seconds to radians
      TF2D      hours, minutes, seconds to days
 
@@ -250,58 +258,58 @@ CALLS: FORTRAN VERSION
 
 CALLS: C VERSION
 
-        iauA2af  ( ndp, angle, &sign, idmsf );
-        iauA2tf  ( ndp, angle, &sign, ihmsf );
-   i =  iauAf2a  ( s, ideg, iamin, asec, &rad );
-   d =  iauAnp   ( a );
-   d =  iauAnpm  ( a );
-        iauC2s   ( p, &theta, &phi );
-        iauCp    ( p, c );
-        iauCpv   ( pv, c );
-        iauCr    ( r, c );
-        iauD2tf  ( ndp, days, &sign, ihmsf );
-        iauIr    ( r );
-        iauP2pv  ( p, pv );
-        iauP2s   ( p, &theta, &phi, &r );
-   d =  iauPap   ( a, b );
-   d =  iauPas   ( al, ap, bl, bp );
-   d =  iauPdp   ( a, b );
-   d =  iauPm    ( p );
-        iauPmp   ( a, b, amb );
-        iauPn    ( p, &r, u );
-        iauPpp   ( a, b, apb );
-        iauPpsp  ( a, s, b, apsb );
-        iauPv2p  ( pv, p );
-        iauPv2s  ( pv, &theta, &phi, &r, &td, &pd, &rd );
-        iauPvdpv ( a, b, adb );
-        iauPvm   ( pv, &r, &s );
-        iauPvmpv ( a, b, amb );
-        iauPvppv ( a, b, apb );
-        iauPvu   ( dt, pv, upv );
-        iauPvup  ( dt, pv, p );
-        iauPvxpv ( a, b, axb );
-        iauPxp   ( a, b, axb );
-        iauRm2v  ( r, p );
-        iauRv2m  ( p, r );
-        iauRx    ( phi, r );
-        iauRxp   ( r, p, rp );
-        iauRxpv  ( r, pv, rpv );
-        iauRxr   ( a, b, atb );
-        iauRy    ( theta, r );
-        iauRz    ( psi, r );
-        iauS2c   ( theta, phi, c );
-        iauS2p   ( theta, phi, r, p );
-        iauS2pv  ( theta, phi, r, td, pd, rd, pV );
-        iauS2xpv ( s1, s2, pv );
-    d = iauSepp  ( a, b );
-    d = iauSeps  ( al, ap, bl, bp );
-        iauSxp   ( s, p, sp );
-        iauSxpv  ( s, pv, spv );
-    i = iauTf2a  ( s, ihour, imin, sec, &rad );
-    i = iauTf2d  ( s, ihour, imin, sec, &days );
-        iauTr    ( r, rt );
-        iauTrxp  ( r, p, trp );
-        iauTrxpv ( r, pv, trpv );
-        iauZp    ( p );
-        iauZpv   ( pv );
-        iauZr    ( r );
+       iauA2af  ( ndp, angle, &sign, idmsf );
+       iauA2tf  ( ndp, angle, &sign, ihmsf );
+   i = iauAf2a  ( s, ideg, iamin, asec, &rad );
+   d = iauAnp   ( a );
+   d = iauAnpm  ( a );
+       iauC2s   ( p, &theta, &phi );
+       iauCp    ( p, c );
+       iauCpv   ( pv, c );
+       iauCr    ( r, c );
+       iauD2tf  ( ndp, days, &sign, ihmsf );
+       iauIr    ( r );
+       iauP2pv  ( p, pv );
+       iauP2s   ( p, &theta, &phi, &r );
+   d = iauPap   ( a, b );
+   d = iauPas   ( al, ap, bl, bp );
+   d = iauPdp   ( a, b );
+   d = iauPm    ( p );
+       iauPmp   ( a, b, amb );
+       iauPn    ( p, &r, u );
+       iauPpp   ( a, b, apb );
+       iauPpsp  ( a, s, b, apsb );
+       iauPv2p  ( pv, p );
+       iauPv2s  ( pv, &theta, &phi, &r, &td, &pd, &rd );
+       iauPvdpv ( a, b, adb );
+       iauPvm   ( pv, &r, &s );
+       iauPvmpv ( a, b, amb );
+       iauPvppv ( a, b, apb );
+       iauPvu   ( dt, pv, upv );
+       iauPvup  ( dt, pv, p );
+       iauPvxpv ( a, b, axb );
+       iauPxp   ( a, b, axb );
+       iauRm2v  ( r, p );
+       iauRv2m  ( p, r );
+       iauRx    ( phi, r );
+       iauRxp   ( r, p, rp );
+       iauRxpv  ( r, pv, rpv );
+       iauRxr   ( a, b, atb );
+       iauRy    ( theta, r );
+       iauRz    ( psi, r );
+       iauS2c   ( theta, phi, c );
+       iauS2p   ( theta, phi, r, p );
+       iauS2pv  ( theta, phi, r, td, pd, rd, pv );
+       iauS2xpv ( s1, s2, pv );
+   d = iauSepp  ( a, b );
+   d = iauSeps  ( al, ap, bl, bp );
+       iauSxp   ( s, p, sp );
+       iauSxpv  ( s, pv, spv );
+   i = iauTf2a  ( s, ihour, imin, sec, &rad );
+   i = iauTf2d  ( s, ihour, imin, sec, &days );
+       iauTr    ( r, rt );
+       iauTrxp  ( r, p, trp );
+       iauTrxpv ( r, pv, trpv );
+       iauZp    ( p );
+       iauZpv   ( pv );
+       iauZr    ( r );

@@ -57,6 +57,8 @@
 #include "mex.h"
 /*This header is for the SOFA library.*/
 #include "sofa.h"
+//For constants in the SOFA library.
+#include "sofam.h"
 #include <limits.h>
 #include "MexValidation.h"
 

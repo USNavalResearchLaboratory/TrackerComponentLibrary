@@ -3,16 +3,19 @@ function z=mergeSortedArrays(x,y)
 %                  order, merge them into one large array that is in
 %                  ascending order.
 %
-%INPUTS: x,y  Two linear arrays that have been sorted in ascending order.
+%INPUTS: x An xDimX1 or 1XxDim array that has been sorted in ascending
+%          order.
+%        y A yDimX1 or 1XyDim array that has been sorted in ascending
+%          order.
 %
-%OUTPUTS: z An array containing all of the elements of x and y, in
-%           ascending order.
+%OUTPUTS: z An (xDim+yDim)X1 array containing all of the elements of x and
+%           y, in ascending order.
 %
 %The algorthm is taken from Chapter 5.2.4 of [1].
 %
 %REFERENCES:
-%D. Knuth, The Art of Computer Programming: Sorting and Searching, 2nd ed.
-%Reading, MA: Addison-Wesley, 1998, vol. 3.
+%[1] D. Knuth, The Art of Computer Programming: Sorting and Searching, 2nd
+%    ed. Reading, MA: Addison-Wesley, 1998, vol. 3.
 %
 %December 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -52,7 +55,6 @@ while(1)
         end
     end
 end
-
 end
 
 %LICENSE:

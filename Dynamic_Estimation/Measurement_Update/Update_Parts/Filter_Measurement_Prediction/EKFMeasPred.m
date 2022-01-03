@@ -29,9 +29,9 @@ function [zPred,PzPred,otherInfo]=EKFMeasPred(xPred,PPred,zDim,h,HJacob,HHessian
 %              hypermatrices itself. The matrix HHess=HHessian(x) is such
 %              that HHess(i,j,k) is the second derivative of the kth
 %              element of the vector returned by h with respect to the ith
-%              and jth components of x. The Hessian matrix is symmetric. If
-%              this parameter is omitted or an empty matrix is passed, a
-%              first-order EKF update is used.
+%              and jth components of x. For each k, the Hessian matrix is
+%              symmetric. If this parameter is omitted or an empty matrix
+%              is passed, a first-order EKF update is used.
 % measPredTrans An optional function handle that transforms the predicted
 %              measurement into a particular range. The second order EKF
 %              has a linear correction to the prediction of the

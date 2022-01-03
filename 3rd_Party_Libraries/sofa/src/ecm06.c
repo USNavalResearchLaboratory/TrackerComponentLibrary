@@ -64,9 +64,9 @@ void iauEcm06(double date1, double date2, double rm[3][3])
 **     iauRx        rotate around X-axis
 **     iauRxr       product of two r-matrices
 **
-**  This revision:  2015 December 11
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -86,6 +86,8 @@ void iauEcm06(double date1, double date2, double rm[3][3])
 
 /* ICRS to ecliptic coordinates rotation matrix, IAU 2006. */
    iauRxr(e, bp, rm);
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

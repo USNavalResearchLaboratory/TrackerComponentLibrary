@@ -27,9 +27,9 @@ function [xUpdate,PUpdate,innov,Pzz,W]=EKFUpdate(xPred,PPred,z,R,h,HJacob,numIte
 %              xDimXxDimXzDim. The matrix HHess=HHessian(x) is such that
 %              HHess(i,j,k) is the second derivative of the kth element
 %              of the vector returned by h with respect to the ith and jth
-%              components of x. The Hessian matrix is symmetric. If this
-%              parameter is omitted or an empty matrix is passed, a first-
-%              order EKF update is used.
+%              components of x. For each k, the Hessian matrix is
+%              symmetric. If this parameter is omitted or an empty matrix
+%              is passed, a first-order EKF update is used.
 %   innovTrans An optional function handle that computes and optionally
 %              transforms the value of the difference between the
 %              observation and any predicted points. This is called as
@@ -56,7 +56,7 @@ function [xUpdate,PUpdate,innov,Pzz,W]=EKFUpdate(xPred,PPred,z,R,h,HJacob,numIte
 %              containing angular components will generally need to be
 %              transformed so that the difference between the angles is
 %              wrapped to -pi/pi.
-%   stateTrans An optional function that takes a state estimate and
+%   stateTrans An optional function handle that takes a state estimate and
 %              transforms it. This is useful if one wishes the elements of
 %              the state to be bound to a certain domain. For example, if
 %              an element of the state is an angle, one should generally

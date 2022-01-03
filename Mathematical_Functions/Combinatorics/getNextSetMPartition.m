@@ -41,12 +41,11 @@ function [curSetPart,recurSetData]=getNextSetMPartition(param1,m,startIdx)
 %in a handle class, because we cannot directly overwrite the elements of
 %the recurData structure. Rather, being passed by value, copies are made
 %and new copies have to be formed for the next return value.
-
+%
 %This would be more efficient if implement as a class, because we could
 %make an iterator and use pointers rather than copying the data between
 %calls.
-
-
+%
 %This function implements the algorithm of Ehrlich in [1], which is
 %explained in [2]. For the m=2 case, the function genAllBinCombinations is
 %used and a special condition for m=1 has been added. A modification to

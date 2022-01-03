@@ -8,8 +8,8 @@ function [xUpdate,SUpdate,innov,Szz,W]=sqrtCubKalUpdateWithPred(z,SR,zPred,other
 %           prediction more efficient. The full measurement update function
 %           is sqrtCubKalUpdate.
 %
-%INPUTS: z The zDim X 1 vector measurement.
-%       SR The zDim X zDim lower-triangular square root of the measurement
+%INPUTS: z The zDimX1 measurement vector.
+%       SR The zDimXzDim lower-triangular square root of the measurement
 %          covariance matrix in the native coordinate system of the
 %          measurement.
 %    zPred The zDimXnumComp measurement predictions from the filter.

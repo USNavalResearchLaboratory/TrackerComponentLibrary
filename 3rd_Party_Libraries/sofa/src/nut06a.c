@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauNut06a(double date1, double date2, double *dpsi, double *deps)
 /*
@@ -77,9 +78,9 @@ void iauNut06a(double date1, double date2, double *dpsi, double *deps)
 **     Wallace, P.T., "Software for Implementing the IAU 2000
 **     Resolutions", in IERS Workshop 5.1 (2002)
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -100,7 +101,7 @@ void iauNut06a(double date1, double date2, double *dpsi, double *deps)
    *dpsi = dp + dp * (0.4697e-6 + fj2);
    *deps = de + de * fj2;
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

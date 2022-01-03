@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauLtpecl(double epj, double vec[3])
 /*
@@ -41,9 +42,9 @@ void iauLtpecl(double epj, double vec[3])
 **    expressions, valid for long time intervals (Corrigendum),
 **    Astron.Astrophys. 541, C1
 **
-**  This revision:  2016 February 9
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -119,6 +120,8 @@ void iauLtpecl(double epj, double vec[3])
    vec[0] = p;
    vec[1] = - q*c - w*s;
    vec[2] = - q*s + w*c;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

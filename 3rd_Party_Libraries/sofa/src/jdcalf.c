@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 int iauJdcalf(int ndp, double dj1, double dj2, int iymdf[4])
 /*
@@ -61,9 +62,9 @@ int iauJdcalf(int ndp, double dj1, double dj2, int iymdf[4])
 **     P. Kenneth Seidelmann (ed), University Science Books (1992),
 **     Section 12.92 (p604).
 **
-**  This revision:  2020 October 22
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -124,6 +125,8 @@ int iauJdcalf(int ndp, double dj1, double dj2, int iymdf[4])
 
 /* Return the status. */
    return j;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

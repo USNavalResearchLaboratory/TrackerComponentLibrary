@@ -17,18 +17,15 @@ function [azStart,dist,azEnd,latLonWaypoints]=indirectGreatCircleProb(latLonStar
 %                    radians in the format [latitude;longitude].
 %                  r The assumed radius of the spherical Earth model. If
 %                    omitted or an empty matrix is passed, the default of
-%                    Constants.WGS84MeanRadius is used.
+%                    r=osculatingSpher4LatLon(latLonStart) is used.
 %                  N The number of waypoints, besides the initial and final
 %                    points on the trajectory, to produce. The default if
 %                    omitted or an empty matrix is passed is 100.
 %          algorithm An optional parameter selecting the algorithm to use.
 %                    Possible values are:
 %                    0 (The default if omitted or an empty matrix is
-%                      passed) Use a custom algorithm that rotated the
-%                      points onto the equator, solves the problem on the
-%                      equator, and then rotates the solution back. This
-%                      algorithm avoids issues with singularities at the
-%                      poles.
+%                      passed) Use the algorithm of [2], which avoids
+%                      issues with singularities at the poles.
 %                    1 Use the COFI algorithm of [1]. Latitudes within
 %                      2^24*eps(pi/2) of +/-pi/2 (the North and South
 %                      poles) will be clipped to that bound. This avoids a
@@ -69,16 +66,6 @@ function [azStart,dist,azEnd,latLonWaypoints]=indirectGreatCircleProb(latLonStar
 %obtain headings and distances between the reference points using rhumb
 %lines.
 %
-%For algorithm 0, the problem is solved by rotating the starting and
-%stopping point into a new coordinate system such that both are on the
-%equator. In such a system, the trajectory goes either due East or West,
-%whichever direction is the shortest. Having found a direction expressed as
-%a unit vector, the unit vector is rotated back to global Cartesian
-%coordinates and projected into the local East and North axes so that an
-%azimuthal angle can be obtained. Similarly, waypoints between the starting
-%and stopping points and uniformly spaced on the equator and can be rotated
-%back to Cartesian coordinates and converted to spherical coordinates.
-%
 %The azimuthal values returned when one of the points is at the pole
 %depends on the longitude value given for the points. The getENUAxes
 %function can return East-North-Up axes anywhere on the globe (for a
@@ -86,7 +73,7 @@ function [azStart,dist,azEnd,latLonWaypoints]=indirectGreatCircleProb(latLonStar
 %the equivalent one would get by taking a point with the same latitude and
 %with the latitude magnitude a tiny epsilon less than pi/2.
 %
-%the implementation of the COFI algorithm of [1] has been modified so that
+%The implementation of the COFI algorithm of [1] has been modified so that
 %the angular difference D is obtained using the angBetweenVecs given F and
 %T rather than the technique derived from the dot product relation starting
 %in Equation 13 in [1]. This is because the cross product relation used in
@@ -99,9 +86,9 @@ function [azStart,dist,azEnd,latLonWaypoints]=indirectGreatCircleProb(latLonStar
 %international date and and goes from the Northern hemisphere to the
 %southern hemisphere. We also compute the reverse path and show that the
 %start and end azimuth angles produced in each direction are consistent
-%with each other. We then plot the trajectory on an image of the spherical
-%Earth. For better plotting, the radius of the Earth has been normalized to
-%1.
+%with each other (when the same Earth radius is used eahc time). We then
+%plot the trajectory on an image of the spherical Earth. For better
+%plotting, the radius of the Earth has been normalized to 1.
 % N=500;
 % latStart=degMinSec2Rad(37,47.5);
 % lonStart=degMinSec2Rad(-122,-27.8);
@@ -173,6 +160,9 @@ function [azStart,dist,azEnd,latLonWaypoints]=indirectGreatCircleProb(latLonStar
 %[1] C.-L. Chen, P.-F. Liu, and W.-T. Gong, "A simple approach to great
 %    circle sailing: The COFI method," The Journal of Navigation, vol. 67,
 %    no. 3, pp. 403-418, May 2014.
+%[2] D. F. Crouse, "Singularity-free great-circle sailing," Naval Research
+%    Laboratory, Washington, DC, Tech. Rep. NRL/5340/MR–2021/4, 26
+%    Jul. 2021.
 %
 %August 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -194,7 +184,7 @@ if(nargin<4||isempty(N))
 end
 
 if(nargin<3||isempty(r))
-    r=Constants.WGS84MeanRadius;
+    r=osculatingSpher4LatLon(latLonStart);
 end
 
 if(nargout<3)
@@ -387,7 +377,12 @@ end
 
 function [azStart,dist,azEnd,latLonWayPoints]=indirectGreatCircleProbCrouse(latLonStart,latLonEnd,r,N)
 %%INDIRECTGREATCIRCLEPROBCROUSE Solve the indirect great circle problem
-%               using an algorithm by David F. Crouse.
+%               using the algorithm of [1].
+%
+%REFERENCES:
+%[1] D. F. Crouse, "Singularity-free great-circle sailing," Naval Research
+%    Laboratory, Washington, DC, Tech. Rep. NRL/5340/MR–2021/4, 26
+%    Jul. 2021.
 %
 %August 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

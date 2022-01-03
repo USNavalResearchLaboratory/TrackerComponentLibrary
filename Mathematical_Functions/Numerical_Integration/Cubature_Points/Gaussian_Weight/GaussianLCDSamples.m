@@ -1,7 +1,7 @@
 function [xi,w,CvMDistMin,exitCode,sInit]=GaussianLCDSamples(numDim,numSamples,forceCovMatch,LBFGSOptions,numIntOptions,bMax,sInit)
 %%GAUSSIANLCDSAMPLES Generate cubature points for a multidimensional N(0,I)
 %              Gaussian distribution using an optimization over a
-%              Modified Cramér-von Mises (CvM) distance between localized
+%              Modified Cramer-von Mises (CvM) distance between localized
 %              cumulative distributions (LCDs). As opposed to having a
 %              fixed polynomial order, the cubature points are generated as
 %              a best fit (based on the CvM distance) for a fixed number of

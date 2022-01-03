@@ -52,7 +52,7 @@ function F=FPolyKal(T,xDim,order)
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if ~isscalar(xDim)&&isvector(xDim)
+if(~isscalar(xDim)&&isvector(xDim))
     %Backwards compatibility for old version.
     xDim = length(xDim);
 end

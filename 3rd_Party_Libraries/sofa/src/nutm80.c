@@ -50,9 +50,9 @@ void iauNutm80(double date1, double date2, double rmatn[3][3])
 **     iauObl80     mean obliquity, IAU 1980
 **     iauNumat     form nutation matrix
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -67,7 +67,7 @@ void iauNutm80(double date1, double date2, double rmatn[3][3])
 /* Build the rotation matrix. */
    iauNumat(epsa, dpsi, deps, rmatn);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

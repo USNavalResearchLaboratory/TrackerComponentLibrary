@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauLtpequ(double epj, double veq[3])
 /*
@@ -41,9 +42,9 @@ void iauLtpequ(double epj, double veq[3])
 **    expressions, valid for long time intervals (Corrigendum),
 **    Astron.Astrophys. 541, C1
 **
-**  This revision:  2016 February 9
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -119,6 +120,8 @@ void iauLtpequ(double epj, double veq[3])
    veq[1] = y;
    w = 1.0 - x*x - y*y;
    veq[2] = w < 0.0 ? 0.0 : sqrt(w);
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

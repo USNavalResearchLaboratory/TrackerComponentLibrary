@@ -92,7 +92,7 @@ function [yUpdate, PInvUpdate]=infoFilterUpdate(yPred,PInvPred,z,R,H)
 % RMSEMeas=sqrt(RMSEMeas/numRuns)
 % RMSE=sqrt(RMSE/numRuns)
 % NEES=NEES/(xDim*numRuns)
-%One will see that RMSEMeas equal RMSE< because with just two measurements,
+%One will see that RMSEMeas equal RMSE, because with just two measurements,
 %one cannot smmooth the position estimate syet. Additionally, NEES will be
 %close to 1 indicating covariance consistency.
 %

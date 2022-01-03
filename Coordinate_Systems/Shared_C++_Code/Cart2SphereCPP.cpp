@@ -88,7 +88,9 @@ void Cart2SphereGenCPP(double *retData,const double *cartPoints,const size_t sys
         } else {
             retData[1]=atan2(zCL[1],zCL[0]);//Azimuth
         }
-        retData[2]=asin(zCL[2]/r1);//Elevation
+        //The atan2 formulation is numerically more accurate than the asin
+        //asin formulation.
+        retData[2]=atan2(zCL[2],hypot(zCL[0],zCL[1]));//=asin(zCL[2]/r1) Elevation
         
         if(systemType==2) {
             double pi=acos(-1.0);
@@ -100,7 +102,7 @@ void Cart2SphereGenCPP(double *retData,const double *cartPoints,const size_t sys
         } else {
             retData[1]=atan2(zCL[0],zCL[2]);//Azimuth
         }
-        retData[2]=asin(zCL[1]/r1);//Elevation
+        retData[2]=atan2(zCL[1],hypot(zCL[2],zCL[0]));//=asin(zCL[1]/r1) Elevation
     }
 
     if(useHalfRange) {

@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 int iauGc2gd ( int n, double xyz[3],
                double *elong, double *phi, double *height )
@@ -56,9 +57,9 @@ int iauGc2gd ( int n, double xyz[3],
 **     iauEform     Earth reference ellipsoids
 **     iauGc2gde    geocentric to geodetic transformation, general
 **
-**  This revision:  2013 September 1
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -85,6 +86,8 @@ int iauGc2gd ( int n, double xyz[3],
 
 /* Return the status. */
    return j;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

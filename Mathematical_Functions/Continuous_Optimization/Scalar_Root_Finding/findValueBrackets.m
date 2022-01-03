@@ -1,4 +1,4 @@
-function [idxPairs,ySolIdx,xValPairs,yValPairs]=findValueBrackets(xVals,yVals,numSolPerPoint,yDesired,maxNumSol)
+function [idxPairs,ySolIdx,xValPairs,yValPairs]=findValueBrackets(xVals,yVals,numSolPerPoint,yDesired,maxNumSol,oneSided)
 %%FINDVALUEBRACKETS Given a 1D function evaluated at multiple points,
 %       sorted in order of the dependent variable, find all pairs of points
 %       that bracket the value yDesired. This can be useful for bracketing
@@ -35,6 +35,10 @@ function [idxPairs,ySolIdx,xValPairs,yValPairs]=findValueBrackets(xVals,yVals,nu
 %     yDesired The scalar y value that should be bracketed.
 %    maxNumSol The maximum number of solutions to find. The default if
 %              omitted or an empty matrix is passed is 400.
+%     oneSided If yDesired exactly equals y(i), then two brackets are
+%              possible [i-1,i] and [i,i+1]. If this is true, then only a
+%              single bracket will be returned, the [i-1,i] bracket. The
+%              default if omitted or an empty matrix is passed is true.
 %
 %OUTPUTS: idxPairs A 2XnumSol matrix where idxPairs(1,i) and idxPairs(2,i)
 %              are the indices of the values in xVals that bracket a value
@@ -68,6 +72,10 @@ function [idxPairs,ySolIdx,xValPairs,yValPairs]=findValueBrackets(xVals,yVals,nu
 %March 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<6||isempty(oneSided))
+    oneSided=true;
+end
+
 if(isempty(numSolPerPoint))
     numPts=length(yVals);
 else
@@ -92,7 +100,13 @@ if(isempty(numSolPerPoint))
        prevY=yVals(curPoint-1);
        curY=yVals(curPoint);
 
-        if((curY<=yDesired&&prevY>=yDesired)||(curY>=yDesired&&prevY<=yDesired))
+       if(oneSided&&curPoint<numPts)
+           testVal=(curY<yDesired&&prevY>=yDesired)||(curY>yDesired&&prevY<=yDesired);
+       else
+           testVal=(curY<=yDesired&&prevY>=yDesired)||(curY>=yDesired&&prevY<=yDesired);
+       end
+       
+       if(testVal)
             %The first bracketing case is
             %yVals(curPoint-1)>=yDesired>=yVals(curPoint).
             %The second bracketing case is
@@ -117,7 +131,13 @@ else
         curY=yVals(1:numSolPerPoint(curPoint),curPoint);
 
         for curSol=1:min(numSolPerPoint(curPoint-1),numSolPerPoint(curPoint))
-            if((curY(curSol)<=yDesired&&prevY(curSol)>=yDesired)||(curY(curSol)>=yDesired&&prevY(curSol)<=yDesired))
+            if(oneSided&&curPoint<numPts)
+                testVal=(curY(curSol)<yDesired&&prevY(curSol)>=yDesired)||(curY(curSol)>yDesired&&prevY(curSol)<=yDesired);
+            else
+                testVal=(curY(curSol)<=yDesired&&prevY(curSol)>=yDesired)||(curY(curSol)>=yDesired&&prevY(curSol)<=yDesired);
+            end
+
+            if(testVal)
                 %The first bracketing case is
                 %yVals(curPoint-1)>=yDesired>=yVals(curPoint).
                 %The second bracketing case is

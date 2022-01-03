@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 int iauEpv00(double date1, double date2,
              double pvh[2][3], double pvb[2][3])
@@ -99,9 +100,9 @@ int iauEpv00(double date1, double date2,
 **  5) It is permissible to use the same array for pvh and pvb, which
 **     will receive the barycentric values.
 **
-**  This revision:  2019 June 23
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -2540,6 +2541,8 @@ int iauEpv00(double date1, double date2,
 
 /* Return the status. */
    return jstat;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

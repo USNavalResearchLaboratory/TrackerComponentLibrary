@@ -27,9 +27,9 @@ void iauPvup(double dt, double pv[2][3], double p[3])
 **
 **  2) The time units of dt must match those of the velocity.
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -38,7 +38,7 @@ void iauPvup(double dt, double pv[2][3], double p[3])
    p[1] = pv[0][1] + dt * pv[1][1];
    p[2] = pv[0][2] + dt * pv[1][2];
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

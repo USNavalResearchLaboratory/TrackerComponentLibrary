@@ -26,9 +26,9 @@ void iauS2pv(double theta, double phi, double r,
 **  Returned:
 **     pv       double[2][3]    pv-vector
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -53,7 +53,7 @@ void iauS2pv(double theta, double phi, double r,
    pv[1][1] =  x*td - w*st;
    pv[1][2] = rpd*cp + sp*rd;
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

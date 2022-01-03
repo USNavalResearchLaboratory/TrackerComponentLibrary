@@ -12,7 +12,7 @@ function z=Cart2TDOAPolar2D(points,systemType,lRef,lRx,M,c)
 %      lRef The 2X1 location of the reference receiver in global
 %           coordinates.
 %       lRx The 2X1 location of the receiver in global coordinates at which
-%           the direction of arrival in spherical coordiantes is locally
+%           the direction of arrival in spherical coordinates is locally
 %           defined and whose time of arrival (TOA) has the TOA at lRef
 %           subtracted to get the TDOA.
 %         M A 2X2 rotation matrix to go from the alignment of the global

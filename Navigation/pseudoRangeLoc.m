@@ -68,9 +68,9 @@ function [x,b]=pseudoRangeLoc(rPseudo,s,RelDiff)
 %[1] S. Bancroft, "An algebraic solution of the GPS equations," IEEE
 %    Transactions on Aerospace and Electronic Systems, vol. 21, no. 7, pp.
 %    56-59, Jan. 1985.
-%[2] J. Sanz Subirana, J. M. Juan Zornoza, and M. Hern�ndez-Pajarez, "GNSS
+%[2] J. Sanz Subirana, J. M. Juan Zornoza, and M. Hernandez-Pajarez, "GNSS
 %    data processing, Volume I: Fundamentals and algorithms," European
-%    Space Agency, Tech. Rep. ESA TM-23/1, May 2013
+%    Space Agency, Tech. Rep. ESA TM-23/1, May 2013.
 %
 %September 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

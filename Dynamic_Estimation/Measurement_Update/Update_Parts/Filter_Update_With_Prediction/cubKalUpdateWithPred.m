@@ -8,7 +8,7 @@ function [xUpdate,PUpdate,innov,Pzz,W]=cubKalUpdateWithPred(z,R,zPred,PzPred,oth
 %           target prediction more efficient. The full measurement update
 %           function is cubKalUpdate.
 %
-%INPUTS:  z The zDimX1 vector measurement.
+%INPUTS:  z The zDimX1 measurement vector.
 %         R The zDimXzDim measurement covariance matrix in the native
 %           coordinate system of the measurement.
 %     zPred The zDimXnumComp measurement predictions from the filter.

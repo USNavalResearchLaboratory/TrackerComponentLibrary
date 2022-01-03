@@ -1,4 +1,4 @@
-**Tracker Component Library Release 5.0, March 2021**
+**Tracker Component Library Release 5.1, November 2021**
 https://github.com/USNavalResearchLaboratory/TrackerComponentLibrary
 
 A paper describing a number of features of the library is<br>
@@ -6,7 +6,7 @@ D. F. Crouse, "The Tracker Component Library: Free Routines for Rapid
 Prototyping," IEEE Aerospace and Electronic Systems Magazine, vol. 32, no.
 5, pp. 18-27, May. 2017.
 
-These are the release notes for the version 5.0 of the Tracker Component
+These are the release notes for the version 5.1 of the Tracker Component
 Library. The Tracker Component Library is a collection of Matlab routines
 for simulating and tracking targets in various scenarios. Due to the
 complexity of the target tracking problem, a great many routines can find
@@ -22,11 +22,13 @@ Those looking for magnetic field synthesis code might want to look at
 As of version 3.0, the library has been split into two parts. This is the
 publicly available part. Many functions have been placed into a supplement
 that is only available to the U.S. Government Agencies and their
-contractors. The limited distribution supplement can be downloaded by
-authorized individuals from di2e.net at:
+contractors. Until 31 January 2021, the limited distribution supplement can
+be downloaded by authorized individuals from di2e.net at:
 https://bitbucket.di2e.net/projects/TCL
-Note that access to the Bitbucket portion of di2e.net is not automatic and
-has to be requested after logging into di2e.net for the first time.
+After 31 January 2022, di2e will no longer support projects like this and
+as of the time of this release, no suitable replacement repository for the
+limited distribution version of the Tracker Component Library has been
+found.
 
 Those looking to get a quick idea of a very simple end-to-end tracking
 algorithm (track initiation, data association, maintenance, and
@@ -47,36 +49,38 @@ running the CompileCLibraries function. Precompiled code is not distributed
 with the library. Note that a C/C++ compiler supported by Matlab must be
 installed. See below for comments regarding compilation.
 
-NOTABLE CHANGES SINCE VERSION 4.5:
+NOTABLE CHANGES SINCE VERSION 5.0:
 
-- The interfaces of many functions related to state transition matrices and
-  covariance matrices have been updated to remove needless input. For
-  example, the FPolyKal function had previously required a state vector to
-  be passed even though it only used the vector to get its length. Now, one
-  can just pass the length directly.
-- Folder names have been changed to get rid of spaces.
-- A number of new coordinate system conversions have been added including
-  ENU2ECEF, ECEF2ENU, NED2ECEF, ECEF2NED, findRFRTransParam2Tar, and
-  findRFTransParam2TarEllipse, among others.
-- Functions related to copula distributions have been added.
-- A function for merging probability estimates from different sources has
-  been added, fuseIndepProbEsts.
-- A number of new functions related to algebraic geometry have been added,
-  including findConvexHull2DJarvis, drawProjEllipsHull, and
-  nearestPointOnEllipsoid.
-- Constrained optimization on the surface of a sphere via eqConstLSSpher.
-- A new solver for cubic bivariate equations, solveCubicBivarEq.
-- Bug fixes and modifications to a number of functions. For example, the
-  Gaussian mixture reduction algorithm in RunnalsGaussMixRed tends to be
-  much faster than before and its implementation more closely mirrors how
-  one might implement it in C.
+- Bug fixes.
+- New interpolation functions, such as biquadraticInterp,
+  quadraticInterpGrid, quadraticInterpUnif3PtMinMax, cubSplineInterpSimp
+  and others.
+- Various barycentric coordinate systems. These can be used for
+  interpolation between nonuniformly samples points. These include
+  pt2WachspressCoords, pt2MeanValCoords, pt2WachspressCoords3D, and others.
+- More basic geometric functions such as sortTriangFacesAroundVertices,
+  getPolygonNormals, triangleArea, clipLine2ConvexPolygon, and
+  angleBetweenLineAndPlane.
+- Functions for evaluating reflection coefficients 
+- Bivariate and trivariate normal CDFs in bivarNormCDF and trivarNormCDF.
+- More functions related to the complexity of assignment problems including
+  num2DTarMeasHypsWithGating and numJPDAStarTarMeasHyps.
+- Osculating sphere coordinate conversions in osculatingCoords2Ellipse and
+  ellips2OsculatingCoords.
+- Additional coordinate system conversions including for cameras in
+  cameraCoords2UVCoords, cameraCoord2UVCoordsCubature and
+  uvCoords2CameraCoords.
+- A function to make a constant speed non-maneuvering trajectory over a
+  curved Earth in makeConstSpeedLevelCurvedEarthTraj.
+- The line of sight related functions lineOfSightHitsEarth and
+  lineOfSightMinDist2Earth.
 
 COMPILED CODE:
 
-The compilation of the library has been tested under Matlab2020b under
+The compilation of the library has been tested under Matlab2021a under
 Windows 10 using minGW64 and Microsoft Visual C++ 2019. The code will
 probably compiler under Mac OS X and Linux. Precompiled code is not
-distributed with th library.
+distributed with the library.
 
 EXTERNAL SOLVERS:
 
@@ -202,7 +206,7 @@ https://visibleearth.nasa.gov/view.php?id=57735
 Place the file in Misc/data . This is used as the default map to show on
 the Earth given by the plotMapOnEllipsoid function.
 
-March 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.<br>
+November 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.<br>
 (UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 LICENSE:

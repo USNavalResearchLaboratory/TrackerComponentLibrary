@@ -21,7 +21,7 @@ function [latLonPoint,sAX,sCX]=greatCircleIntersect(az1,az2,latLon1,latLon2,r,ge
 %          r The assumed radius of the spherical Earth model. This is
 %            needed for the sAX and sCX outputs to have the proper scale.
 %            If omitted or an empty matrix is passed, the default of
-%            Constants.WGS84MeanRadius is used.
+%            osculatingSpher4LatLon(latLon1) is used.
 %    getBoth By default, the solution returned is the one that is closest
 %            to latLon1. However, an additional solution on the other side
 %            of the Earth exists. If this is true, then both solutions will
@@ -56,6 +56,8 @@ function [latLonPoint,sAX,sCX]=greatCircleIntersect(az1,az2,latLon1,latLon2,r,ge
 %Earth. The ideal spherical model is used to demonstrate that in the ideal,
 %noise-free case, the algorithm produces the correctly localized result.
 %The spherical triangle being solves is also plotted on a spherical Earth.
+%Note that using the same radius for each case is important to get
+%consistent results.
 % N=100;
 % latLonA=[34.685169;139.443632]*(pi/180);
 % latLonC=[-33.8617;151.2117]*(pi/180);
@@ -97,7 +99,7 @@ if(nargin<6||isempty(getBoth))
 end
 
 if(nargin<5||isempty(r))
-    r=Constants.WGS84MeanRadius;
+    r=osculatingSpher4LatLon(latLon1);
 end
 
 %The great circle from latLon1 to latLon2.

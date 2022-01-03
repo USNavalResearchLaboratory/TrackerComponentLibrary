@@ -22,9 +22,9 @@ void iauCpv(double pv[2][3], double c[2][3])
 **  Called:
 **     iauCp        copy p-vector
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -32,7 +32,7 @@ void iauCpv(double pv[2][3], double c[2][3])
    iauCp(pv[0], c[0]);
    iauCp(pv[1], c[1]);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

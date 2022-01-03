@@ -60,9 +60,9 @@ void iauPmat06(double date1, double date2, double rbp[3][3])
 **
 **     Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 **
-**  This revision:  2020 November 24
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -76,7 +76,7 @@ void iauPmat06(double date1, double date2, double rbp[3][3])
 /* Form the matrix. */
    iauFw2m(gamb, phib, psib, epsa, rbp);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

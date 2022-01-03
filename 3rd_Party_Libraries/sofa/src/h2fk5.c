@@ -60,9 +60,9 @@ void iauH2fk5(double rh, double dh,
 **
 **     F.Mignard & M.Froeschle, Astron.Astrophys., 354, 732-739 (2000).
 **
-**  This revision:  2017 October 12
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -98,7 +98,7 @@ void iauH2fk5(double rh, double dh,
 /* FK5 pv-vector to spherical. */
    iauPvstar(pv5, r5, d5, dr5, dd5, px5, rv5);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

@@ -24,9 +24,9 @@ void iauPxp(double a[3], double b[3], double axb[3])
 **     It is permissible to re-use the same array for any of the
 **     arguments.
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -44,7 +44,7 @@ void iauPxp(double a[3], double b[3], double axb[3])
    axb[1] = za*xb - xa*zb;
    axb[2] = xa*yb - ya*xb;
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

@@ -329,7 +329,7 @@ double assign3DLBHungarian(const size_t *nVals,const double *COrig, void *tempSp
         if(curIdx!=2) {
             double minM;
             size_t curRow, curCol;
-            double * restrict MCur;
+            double *MCur;
             //The dual variables returned by assign2D are not the same as
             //as those returned by a true shortest augmenting path
             //algorithm (the Hungarian algorithm), because a preprocessing

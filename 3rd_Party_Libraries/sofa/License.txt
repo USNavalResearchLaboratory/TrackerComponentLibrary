@@ -1,6 +1,6 @@
 Every file in the SOFA Library is marked with a license statement. The statement is reproduced below for convenience.
 
-March 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
+November 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
 /*----------------------------------------------------------------------
 **

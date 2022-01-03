@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauEpj2jd(double epj, double *djm0, double *djm)
 /*
@@ -31,9 +32,9 @@ void iauEpj2jd(double epj, double *djm0, double *djm)
 **
 **     Lieske, J.H., 1979, Astron.Astrophys. 73, 282.
 **
-**  This revision:  2013 August 7
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -41,7 +42,7 @@ void iauEpj2jd(double epj, double *djm0, double *djm)
    *djm0 = DJM0;
    *djm  = DJM00 + (epj - 2000.0) * 365.25;
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

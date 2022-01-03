@@ -33,9 +33,9 @@ void iauPvu(double dt, double pv[2][3], double upv[2][3])
 **     iauPpsp      p-vector plus scaled p-vector
 **     iauCp        copy p-vector
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -43,7 +43,7 @@ void iauPvu(double dt, double pv[2][3], double upv[2][3])
    iauPpsp(pv[0], dt, pv[1], upv[0]);
    iauCp(pv[1], upv[1]);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

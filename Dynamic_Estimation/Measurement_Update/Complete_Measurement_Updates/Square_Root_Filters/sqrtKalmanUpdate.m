@@ -5,7 +5,7 @@ function [xUpdate, SUpdate,innov,Szz,W]=sqrtKalmanUpdate(xPred,SPred,z,SR,H)
 %INPUTS: xPred The xDim X 1 predicted target state.
 %        SPred The xDim X xDim lower-triangular predicted square-root state
 %              covariance matrix.
-%            z The zDim X 1 vector measurement.
+%            z The zDim X 1 measurement vector.
 %           SR The zDim X zDim lower-triangular square root of the
 %              measurement covariance matrix in the native coordinate
 %              system of the measurement.
@@ -25,7 +25,9 @@ function [xUpdate, SUpdate,innov,Szz,W]=sqrtKalmanUpdate(xPred,SPred,z,SR,H)
 %                 calcMissedGateCov.
 %
 %The mathematics behind the specific square root implementation used here
-%are described in Appendix G of [1].
+%are described in Appendix G of [1]. This is algebraically equivalent to
+%KalmanUpdate, but there are benefits of using a square root covarinace
+%representation.
 %
 %REFERENCES
 %[1] David F. Crouse , "Basic tracking using nonlinear 3D monostatic and

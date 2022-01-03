@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauLtecm(double epj, double rm[3][3])
 /*
@@ -61,9 +62,9 @@ void iauLtecm(double epj, double rm[3][3])
 **    expressions, valid for long time intervals (Corrigendum),
 **    Astron.Astrophys. 541, C1
 **
-**  This revision:  2015 December 6
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -99,6 +100,8 @@ void iauLtecm(double epj, double rm[3][3])
    rm[2][0] =   z[0]    - z[1]*dr + z[2]*dx;
    rm[2][1] =   z[0]*dr + z[1]    + z[2]*de;
    rm[2][2] = - z[0]*dx - z[1]*de + z[2];
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

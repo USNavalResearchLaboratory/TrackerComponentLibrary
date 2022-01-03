@@ -1,4 +1,4 @@
-function params = EstAlphaStableParams(x,bins,p)
+function params = estAlphaStableParams(x,bins,p)
 %%ESTALPHASTABLEPARAMS A function to estimate parameters for a symmetric
 %                      alpha-stable distribution (S-alpha-S) which would
 %                      likely  produce the samples in x. The characteristic 
@@ -39,7 +39,7 @@ function params = EstAlphaStableParams(x,bins,p)
 %EXAMPLE 1: Estimating parameters from generated random variables
 % %Sample a standard S-alpha-S distribution (alpha=1.5, gam=1, delta=0)
 % X = SymAlphaStableD.rand([1,1e6],1.5);
-% EstAlphaStableParams(X)
+% estAlphaStableParams(X)
 %
 %REFERENCES:
 %[1] G. A. Tsihrintzis, C. L. Nikias, "Fast estimation of the parameters of

@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 double iauGmst00(double uta, double utb, double tta, double ttb)
 /*
@@ -73,9 +74,9 @@ double iauGmst00(double uta, double utb, double tta, double ttb)
 **     McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
 **     IERS Technical Note No. 32, BKG (2004)
 **
-**  This revision:  2020 November 17
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -96,6 +97,8 @@ double iauGmst00(double uta, double utb, double tta, double ttb)
           * t) * t) * t) * t) * DAS2R);
 
    return gmst;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

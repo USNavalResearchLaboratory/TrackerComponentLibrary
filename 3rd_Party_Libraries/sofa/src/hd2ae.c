@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauHd2ae (double ha, double dec, double phi,
                double *az, double *el)
@@ -61,9 +62,9 @@ void iauHd2ae (double ha, double dec, double phi,
 **  7)  Again for efficiency, no range checking of arguments is carried
 **      out.
 **
-**  Last revision:   2017 September 12
+**  Last revision:   2021 February 24
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */

@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 double iauEqeq94(double date1, double date2)
 /*
@@ -56,9 +57,9 @@ double iauEqeq94(double date1, double date2)
 **     Capitaine, N. & Gontier, A.-M., 1993, Astron.Astrophys., 275,
 **     645-650.
 **
-**  This revision:  2017 October 12
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -83,6 +84,8 @@ double iauEqeq94(double date1, double date2)
    ee = dpsi*cos(eps0) + DAS2R*(0.00264*sin(om) + 0.000063*sin(om+om));
 
    return ee;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

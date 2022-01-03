@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauPfw06(double date1, double date2,
               double *gamb, double *phib, double *psib, double *epsa)
@@ -78,9 +79,9 @@ void iauPfw06(double date1, double date2,
 **  Called:
 **     iauObl06     mean obliquity, IAU 2006
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -115,7 +116,7 @@ void iauPfw06(double date1, double date2,
            * t) * t) * t) * t) * t) * DAS2R;
    *epsa =  iauObl06(date1, date2);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

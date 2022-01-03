@@ -1,6 +1,7 @@
 function vals=randPointInEllipsoid(N,invS,z0,algorithm,gamma)
 %%RANDPOINTINELLIPSOID Generate a random point z uniformly distributed in
-%              an ellipse or ellipsoid such that (z-z0)'*invS*(z-z0)<=gamma
+%              a circle, sphere, ellipse or ellipsoid such that
+%              (z-z0)'*invS*(z-z0)<=gamma
 %
 %INPUTS: N The number of random points in the ellipse to generate.
 %     invS A numDimXnumDim positive definite matrix that specifies the

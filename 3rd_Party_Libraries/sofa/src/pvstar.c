@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 int iauPvstar(double pv[2][3], double *ra, double *dec,
               double *pmr, double *pmd, double *px, double *rv)
@@ -98,9 +99,9 @@ int iauPvstar(double pv[2][3], double *ra, double *dec,
 **
 **     Stumpff, P., 1985, Astron.Astrophys. 144, 232-240.
 **
-**  This revision:  2017 March 16
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -156,8 +157,10 @@ int iauPvstar(double pv[2][3], double *ra, double *dec,
 /* Return radial velocity in km/s. */
    *rv = 1e-3 * rd * DAU / DAYSEC;
 
-/* OK status. */
+/* Success. */
    return 0;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

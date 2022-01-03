@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauApcs(double date1, double date2, double pv[2][3],
              double ebpv[2][3], double ehp[3],
@@ -127,9 +128,9 @@ void iauApcs(double date1, double date2, double pv[2][3],
 **     iauPn        decompose p-vector into modulus and direction
 **     iauIr        initialize r-matrix to identity
 **
-**  This revision:   2017 March 16
+**  This revision:   2021 February 24
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */

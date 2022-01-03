@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauPn06(double date1, double date2, double dpsi, double deps,
              double *epsa,
@@ -98,9 +99,9 @@ void iauPn06(double date1, double date2, double dpsi, double deps,
 **
 **     Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 **
-**  This revision:  2020 November 25
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -137,7 +138,7 @@ void iauPn06(double date1, double date2, double dpsi, double deps,
 /* Obliquity, mean of date. */
    *epsa = eps;
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

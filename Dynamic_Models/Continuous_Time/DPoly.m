@@ -1,4 +1,4 @@
-function [D,DJacob,DHess,pDpt]=DPoly(numD,q0,order,numDim,omitDims)
+function [D,DJacob,DHess,pDpt]=DPoly(N,q0,order,numDim,omitDims)
 %%DPOLY The diffusion matrix for a continuous-time additive noise model in
 %       numDim dimensions of motion with order moments of position whereby
 %       the noise is only added to the highest-order derivatives of
@@ -7,9 +7,9 @@ function [D,DJacob,DHess,pDpt]=DPoly(numD,q0,order,numDim,omitDims)
 %       order=2, this is the continuous Wiener process acceleration model
 %       (CWPA), also known as the white noise jerk model.
 %
-%INPUTS: numD The number of D matrices to be returned (the third
-%          dimension of the D matrix). If an empty matrix is passed, then
-%          it is assumed only one output is desired.
+%INPUTS: N The number of D matrices to be returned (the third dimension of
+%          the D matrix). If an empty matrix is passed, then it is assumed
+%          that only one matrix is desired.
 %       q0 The power spectral density of the noise for each dimension. If
 %          the power spectral density of the noise is the same in all
 %          dimensions, the a scalar q0 can be passed.
@@ -25,20 +25,23 @@ function [D,DJacob,DHess,pDpt]=DPoly(numD,q0,order,numDim,omitDims)
 %          state and one does not want to add noise to the final component,
 %          because the target is constrained to a flat surface.
 %
-%OUTPUTS: D The xDimXnumDimXN diffusion matrix of a continuous-time linear
-%           additive noise model where the noise is only added to the
-%           highest order terms of the state. If the input x has multiple
-%           columns, then the same number of copies of D are returned with
-%           D(:,:,i) being the ith one.
-%   DJacob, DHess The xDimXnumDimXxDim, xDimXnumDimXxDimXxDim matrices of
-%           first and second partial derivatives of the elements of D with
-%           respect to x. These are all zero, since D is a constant. It is
-%           the same for all D and is not repeated N times.
+%OUTPUTS: D The xDimXnumDimXN set of N diffusion matrices of a continuous-
+%           time linear additive noise model where the noise is only added
+%           to the highest order terms of the state. xDim=(order+1)*numDim.
+%           The ith matrix is D(:,:,i) and all numD are the same.
+%    DJacob The xDimXnumDimXxDim matrix of first partial derivatives of the
+%           elements of D with respect to the state. These are all zero,
+%           because D is a constant. It is the same for all D and is not
+%           repeated N times.
+%     DHess The xDimXnumDimXxDimXxDim matrices of second partial
+%           derivatives of the elements of D with respect to the state.
+%           These are all zero, because D is a constant. It is the same for
+%           all D and is not repeated N times.
 %      pDpt The xDimXnumDim partial derivative of D with respect to time.
 %           This is all zeros, because D is a constant.
 %
 %It is assumed that the state is ordered
-%[position;velocity;acceleration;etc] for up to order moments of
+%[position;velocity;acceleration;etc] for up to order moments of the
 %numDim-dimensional position. 
 %
 %Continuous-time additive noise models are discussed in more detail in [1].
@@ -55,8 +58,8 @@ function [D,DJacob,DHess,pDpt]=DPoly(numD,q0,order,numDim,omitDims)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
     %The max allows the user to pass an empty matrix.
-    if(isempty(numD))
-        numD=1;
+    if(isempty(N))
+        N=1;
     end
 
     if(nargin<5||isempty(omitDims))
@@ -86,8 +89,8 @@ function [D,DJacob,DHess,pDpt]=DPoly(numD,q0,order,numDim,omitDims)
         D((xDim-curDim+1-omitDims),numOmitEls-curDim+1)=q0R(numOmitEls-curDim+1);
     end
     
-    if(numD>1)
-       D=repmat(D,[1,1,numD]); 
+    if(N>1)
+       D=repmat(D,[1,1,N]); 
     end
     
     if(nargout>1)

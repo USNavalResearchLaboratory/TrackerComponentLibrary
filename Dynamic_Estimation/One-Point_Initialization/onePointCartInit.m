@@ -20,11 +20,12 @@ function [x,P]=onePointCartInit(zCart,SRCart,higherDerivStdDev,matType)
 %              zCart. If all of the matrices are the same, then a single
 %              zDimXzDim matrix can be passed. If matType=1, then this is a
 %              set of covariance matrices.
-% higherDerivStdDev A numMomentsX1 of 1XnumMoments vector containing the
+% higherDerivStdDev A numMomentsX1 or 1XnumMoments vector containing the
 %              standard deviations to use for each of the moments
 %              (position, velocity, etc) that cannot be estimated from the
-%              data. As mentioned in [1], for velocity, this might be
-%              vMax/sqrt(2) or vMax/sqrt(3).
+%              data. As mentioned in [1] and in and in Chapter 3.2.2
+%              of [2], for velocity, this might be vMax/sqrt(2) or
+%              vMax/sqrt(3).
 %      matType An optional input specifying whether SRCart is a set of
 %              lower-triangular square roots of the covariance matrix, or
 %              whether it is the set of covariance matrices. Possible
@@ -46,7 +47,7 @@ function [x,P]=onePointCartInit(zCart,SRCart,higherDerivStdDev,matType)
 %REFERENCES:
 %[1] Mallick, M., La Scala, B., "Comparison of single-point and two-point
 %    difference track initiation algorithms using position measurements". 
-%    Acta Automatica Sinica, 2008.
+%    Acta Automatica Sinica, vol.34, no. 3, pp 258-265, Mar. 2008.
 %[2] Y. Bar-Shalom, P. K. Willett, and X. Tian, Tracking and Data Fusion.
 %    Storrs, CT: YBS Publishing, 2011.
 %

@@ -9,8 +9,8 @@ function [zPred,PzPred,otherInfo]=sqrtEKFMeasPred(xPred,SPred,zDim,h,HJacob)
 %           update function is sqrtEKFUpdate.
 %
 %INPUTS: xPred The xDimXnumComp predicted target states.
-%        SPred The xDimXxDimXnumComp lower-triangular predicted state
-%              covariance matrices for the components in xPred.
+%        SPred The xDimXxDimXnumComp lower-triangular square root predicted
+%              state covariance matrices for the components in xPred.
 %         zDim The dimensionality of the measurement.
 %            h A function handle for the measurement function that takes
 %              the state as its argument.

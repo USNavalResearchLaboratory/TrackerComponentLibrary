@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauLd(double bm, double p[3], double q[3], double e[3],
            double em, double dlim, double p1[3])
@@ -73,9 +74,9 @@ void iauLd(double bm, double p[3], double q[3], double e[3],
 **     iauPdp       scalar product of two p-vectors
 **     iauPxp       vector product of two p-vectors
 **
-**  This revision:   2013 October 9
+**  This revision:   2021 February 24
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */

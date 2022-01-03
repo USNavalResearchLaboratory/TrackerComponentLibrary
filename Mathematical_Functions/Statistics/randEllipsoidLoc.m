@@ -1,5 +1,5 @@
 function [CartPoint,latLong]=randEllipsoidLoc(N,a,f)
-%%RANDELLIPSOIDLOC  Generate a random point uniformly distributed on the
+%%RANDELLIPSOIDLOC Generate a random point uniformly distributed on the
 %              surface of a reference ellipsoid, such as the WGS-84
 %              reference ellipsoid. The point is provided in Cartesian
 %              coordinates as well as in terms of latitude and longitude.

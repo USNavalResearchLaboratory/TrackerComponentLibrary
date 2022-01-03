@@ -76,9 +76,9 @@ void iauC2ibpn(double date1, double date2, double rbpn[3][3],
 **     McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
 **     IERS Technical Note No. 32, BKG (2004)
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -92,7 +92,7 @@ void iauC2ibpn(double date1, double date2, double rbpn[3][3],
 /* Form the celestial-to-intermediate matrix (n.b. IAU 2000 specific). */
    iauC2ixy(date1, date2, x, y, rc2i);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

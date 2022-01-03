@@ -26,16 +26,16 @@ void iauSxpv(double s, double pv[2][3], double spv[2][3])
 **  Called:
 **     iauS2xpv     multiply pv-vector by two scalars
 **
-**  This revision:  2020 August 25
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    iauS2xpv(s, s, pv, spv);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 int iauStarpm(double ra1, double dec1,
               double pmr1, double pmd1, double px1, double rv1,
@@ -111,9 +112,9 @@ int iauStarpm(double ra1, double dec1,
 **     iauPdp       scalar product of two p-vectors
 **     iauPvstar    space motion pv-vector to star catalog data
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -156,6 +157,8 @@ int iauStarpm(double ra1, double dec1,
    j = (j2 == 0) ? j1 : -1;
 
    return j;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

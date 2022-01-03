@@ -69,9 +69,9 @@ double iauGst06(double uta, double utb, double tta, double ttb,
 **
 **     Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 **
-**  This revision:  2020 November 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -91,6 +91,8 @@ double iauGst06(double uta, double utb, double tta, double ttb,
    gst = iauAnp(era - eors);
 
    return gst;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

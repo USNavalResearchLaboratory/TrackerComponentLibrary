@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauApio(double sp, double theta,
              double elong, double phi, double hm, double xp, double yp,
@@ -122,9 +123,9 @@ void iauApio(double sp, double theta,
 **     iauAnpm      normalize angle into range +/- pi
 **     iauPvtob     position/velocity of terrestrial station
 **
-**  This revision:   2021 January 7
+**  This revision:   2021 February 24
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */

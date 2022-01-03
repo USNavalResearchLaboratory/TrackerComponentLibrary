@@ -22,7 +22,7 @@ function Q=QPolyKal(T,xDim,order,q0)
 %          it is assumed to be the same for all dimensions. Otherwise, a
 %          numDimX1 or 1XnumDim vector should be passed specifying the
 %          power spectral density for each dimension (dimensions of space;
-%          not xDim. Unless order=0, xDim>x). The units are
+%          not xDim. Unless order=0, xDim>numDim). The units are
 %          length^2/time^(2*order+1).
 %
 %OUTPUTS: Q The process noise covariance matrix under a linear dynamic
@@ -56,7 +56,7 @@ function Q=QPolyKal(T,xDim,order,q0)
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if ~isscalar(xDim)&&isvector(xDim)
+if(~isscalar(xDim)&&isvector(xDim))
     %Backwards compatibility for old version.
     xDim = length(xDim);
 end

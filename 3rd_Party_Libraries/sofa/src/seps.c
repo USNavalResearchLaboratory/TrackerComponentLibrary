@@ -26,9 +26,9 @@ double iauSeps(double al, double ap, double bl, double bp)
 **     iauS2c       spherical coordinates to unit vector
 **     iauSepp      angular separation between two p-vectors
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -44,6 +44,8 @@ double iauSeps(double al, double ap, double bl, double bp)
    s = iauSepp(ac, bc);
 
    return s;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

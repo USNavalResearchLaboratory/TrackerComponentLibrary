@@ -20,9 +20,9 @@ double iauPdp(double a[3], double b[3])
 **  Returned (function value):
 **            double        a . b
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -35,6 +35,8 @@ double iauPdp(double a[3], double b[3])
       + a[2] * b[2];
 
    return w;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

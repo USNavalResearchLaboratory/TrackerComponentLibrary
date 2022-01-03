@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 void iauNut80(double date1, double date2, double *dpsi, double *deps)
 /*
@@ -53,9 +54,9 @@ void iauNut80(double date1, double date2, double *dpsi, double *deps)
 **     P. Kenneth Seidelmann (ed), University Science Books (1992),
 **     Section 3.222 (p111).
 **
-**  This revision:  2019 June 23
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -275,7 +276,7 @@ void iauNut80(double date1, double date2, double *dpsi, double *deps)
    *dpsi = dp * U2R;
    *deps = de * U2R;
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

@@ -96,7 +96,7 @@ void iauAper(double theta, iauASTROM *astrom)
 **
 **  This revision:   2013 September 25
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */

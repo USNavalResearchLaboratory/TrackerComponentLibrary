@@ -15,7 +15,7 @@ function [V,C,FCost,exitCode]=jointMatDiagFrob(A,w,maxIter,RelTol,AbsTol)
 %INPUTS: A An NXNXK set of K NXN real, symmetric matrices. This cannot
 %          contain Inf or NaN values. The matrices do not have to be
 %          positive definite.
-%        w If all of the Frobenius norms in the cost function are mean to
+%        w If all of the Frobenius norms in the cost function are meant to
 %          be equally weighted, then an empty matrix can be passed for w
 %          and the fast algorithm of [1] will be used. Otherwise, the
 %          slower algorithm of [2] will be used.
@@ -29,7 +29,7 @@ function [V,C,FCost,exitCode]=jointMatDiagFrob(A,w,maxIter,RelTol,AbsTol)
 %          if E/(N*(N-1))<=AbsTol or if E/(N*(N-1))<D/N*RelTol. The
 %          inclusion of N deals with how many matrix elements are present.
 %          The defaults if omitted or empty matrices are passed are
-%          RelTol=1e-9 and AbsTol=1e-12.
+%          RelTol=eps() and AbsTol=eps().
 %
 %OUTPUTS: V The NXN matrix such that V*A(:,:,k)*V' is approximately
 %           diagonal for all k.
@@ -45,7 +45,7 @@ function [V,C,FCost,exitCode]=jointMatDiagFrob(A,w,maxIter,RelTol,AbsTol)
 %This function is an implementation of the algorithm described in [1].
 %
 %EXAMPLE 1:
-%This is a demonstration given two positive semidefinite matrices. An eact
+%This is a demonstration given two positive semidefinite matrices. An exact
 %solution is found.
 % %C1 is positive semidefinite with one zero eigenvalue.
 % C1=(magic(4)+magic(4)')/2;
@@ -79,7 +79,7 @@ function [V,C,FCost,exitCode]=jointMatDiagFrob(A,w,maxIter,RelTol,AbsTol)
 %matrices. Note, however, that the V obtained is not the same as V1.
 %
 %REFERENCES:
-%[1] A. Ziehe, P. Laskov, G. Nolte, and K.-R. M�ller, "A fast algorithm for
+%[1] A. Ziehe, P. Laskov, G. Nolte, and K.-R. Müller, "A fast algorithm for
 %    joint diagonalization with non-orthogonal transformations and its
 %    application to blind source separation," Journal of Machine Learning,
 %    vol. 5, pp. 777-800, Jul. 2004.
@@ -99,11 +99,11 @@ if(nargin<3||isempty(maxIter))
 end
 
 if(nargin<4||isempty(RelTol))
-    RelTol=1e-9;
+    RelTol=eps();
 end
 
 if(nargin<5||isempty(AbsTol))
-    AbsTol=1e-12;
+    AbsTol=eps();
 end
 
 if(nargin>1&&~isempty(w)&&~all(w(1)==w))
@@ -112,7 +112,6 @@ if(nargin>1&&~isempty(w)&&~all(w(1)==w))
 else
     [V,C,FCost,exitCode]=ZieheAlg(A,maxIter,RelTol,AbsTol);
 end
-
 end
 
 function [V,C,FCost,exitCode]=ZieheAlg(A,maxIter,RelTol,AbsTol)
@@ -120,7 +119,7 @@ function [V,C,FCost,exitCode]=ZieheAlg(A,maxIter,RelTol,AbsTol)
 %          instead of 18.
 %
 %REFERENCES:
-%[1] A. Ziehe, P. Laskov, G. Nolte, and K.-R. M�ller, "A fast algorithm for
+%[1] A. Ziehe, P. Laskov, G. Nolte, and K.-R. Müller, "A fast algorithm for
 %    joint diagonalization with non-orthogonal transformations and its
 %    application to blind source separation," Journal of Machine Learning,
 %    vol. 5, pp. 777-800, Jul. 2004.
@@ -203,7 +202,7 @@ for curIter=1:maxIter
 end
 end
 
-function [W,CD,FCost,exitCode]=VollAlg(C,alphaVals,maxIter,RelTol,AbsTol)
+function [W,CD,FCost,exitCode]=VollAlg(A,alphaVals,maxIter,RelTol,AbsTol)
 %%VOLLALG This function implements the algorithm of [1].
 %
 %REFERENCES:
@@ -213,20 +212,22 @@ function [W,CD,FCost,exitCode]=VollAlg(C,alphaVals,maxIter,RelTol,AbsTol)
 %
 %July 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
-N=size(C,1);
-K=size(C,3);
+N=size(A,1);
+K=size(A,3);
 
 %We just set C0=eye(N,N) and thus P=eye(N,N) so P'*C0*P=eye(N,N);
 %There does not seem to be a reason to randomize the W matrix, so we just
 %set it to eye(N,N) and thus diag(W*C0*W')=1 for all i.
 W=eye(N,N);
-
 M=zeros(N,N);
 for k=1:K
-   M1=C(:,:,k)*W';
-   M2=C(:,:,k)'*W';
+    %W is the identity matrix, so it can be omitted from M1 and M2.
+    M1=A(:,:,k);
+    %M2=A(:,:,k)';
    
-   M=M+alphaVals(k)*(M1*M1'+M2*M2');
+    M1M1p=M1*M1';%M2*M2'=(M1*M1')'
+    
+    M=M+alphaVals(k)*(M1M1p+M1M1p');
 end
 
 diagIdx=diagElIdx(N);
@@ -234,21 +235,23 @@ exitCode=1;
 CD=zeros(N,N,K);
 for curIter=1:maxIter
     for i=1:N
+        wi=W(:,i);
         for k=1:K
-            wi=W(:,i);
-            m1=C(:,:,k)*wi;
-            m2=C(:,:,k)'*wi;
+            m1=A(:,:,k)*wi;
+            m2=A(:,:,k)'*wi;
             M=M-alphaVals(k)*(m1*m1'+m2*m2');
         end
+        
         [V,D]=eig(M);
         d=diag(D);
-        [~,idx]=min(d);
-
+        [~,idx]=min(abs(d));
+        
         W(:,i)=V(:,idx);
+        wi=W(:,i);
+        
         for k=1:K
-            wi=W(:,i);
-            m1=C(:,:,k)*wi;
-            m2=C(:,:,k)'*wi;
+            m1=A(:,:,k)*wi;
+            m2=A(:,:,k)'*wi;
             M=M+alphaVals(k)*(m1*m1'+m2*m2');
         end
     end
@@ -259,7 +262,7 @@ for curIter=1:maxIter
         FCost=0;
         DCost=0;
         for k=1:K
-            CD(:,:,k)=W'*C(:,:,k)*W;
+            CD(:,:,k)=W'*A(:,:,k)*W;
             E=CD(:,:,k);
             d=E(diagIdx);%diagonal elements.
             E(diagIdx)=0;
@@ -272,7 +275,7 @@ for curIter=1:maxIter
         end
         DCost=DCost/N;
         FCost=FCost/(N*(N-1));
-
+        
         if(FCost<=AbsTol||FCost<=RelTol*DCost)
             exitCode=0;
             W=W';
@@ -280,12 +283,11 @@ for curIter=1:maxIter
         end
     end
 end
-W=W';
 
 %Compute an up to date FCost
 FCost=0;
 for k=1:K
-    CD(:,:,k)=W'*C(:,:,k)*W;
+    CD(:,:,k)=W'*A(:,:,k)*W;
     E=CD(:,:,k);
     E(diagIdx)=0;
 
@@ -293,6 +295,8 @@ for k=1:K
     FCost=FCost+alphaVals(k)*norm(E,'fro')^2;
 end
 FCost=FCost/(N*(N-1));
+
+W=W';
 
 end
 

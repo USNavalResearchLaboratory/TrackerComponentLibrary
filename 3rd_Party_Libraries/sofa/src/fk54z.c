@@ -58,7 +58,7 @@ void iauFk54z(double r2000, double d2000, double bepoch,
 **
 **  This revision:   2020 November 19
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */

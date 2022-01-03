@@ -10,10 +10,9 @@ function [r,spherCent]=osculatingSpher4LatLon(latLon,a,f,is2D)
 %           at that point. However, since the ellipsoid has two radii of
 %           curvature, the geometric mean is used (the mean radius of
 %           curvature). On the other hand, if is2D is true, then just the
-%           radius of curvature used will just be the radius of curvature
-%           in the meridian, which is what perfectly matches a cut of the
-%           ellipsoid through the origin and pole (A 2D ellipse in the x-z
-%           plane).
+%           radius of curvature in the meridian will be used, which is what
+%           perfectly matches a cut of the ellipsoid through the origin and
+%           pole (A 2D ellipse in the x-z plane).
 %
 %INPUTS: latLon The 2X1 point of the format [latitude;longitude] in radians
 %               where the osculating sphere should touch the ellipsoid.
@@ -24,7 +23,7 @@ function [r,spherCent]=osculatingSpher4LatLon(latLon,a,f,is2D)
 %               omitted or an empty matrix is passed, the value in
 %               Constants.WGS84Flattening is used.
 %          is2D Indicates whether one just cares about a 2D cut of the
-%               ellipsoid. If so, then the redius used will be the radius
+%               ellipsoid. If so, then the radius used will be the radius
 %               of curvature in the meridian. The default if omitted or an
 %               empty matrix is passed is false.
 %
@@ -118,7 +117,7 @@ else
     r=sqrt(M0*N0);
 end
 
-xCartEllips=ellips2Cart([latLon;0],a,f);
+xCartEllips=ellips2Cart([latLon(1:2);0],a,f);
 xCartSpher=spher2Cart([r;lon;lat]);
 
 spherCent=-(xCartSpher-xCartEllips);

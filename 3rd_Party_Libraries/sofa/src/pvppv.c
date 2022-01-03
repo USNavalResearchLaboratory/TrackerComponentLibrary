@@ -27,9 +27,9 @@ void iauPvppv(double a[2][3], double b[2][3], double apb[2][3])
 **  Called:
 **     iauPpp       p-vector plus p-vector
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -37,7 +37,7 @@ void iauPvppv(double a[2][3], double b[2][3], double apb[2][3])
    iauPpp(a[0], b[0], apb[0]);
    iauPpp(a[1], b[1], apb[1]);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

@@ -84,9 +84,9 @@ void iauC2txy(double tta, double ttb, double uta, double utb,
 **     McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
 **     IERS Technical Note No. 32, BKG (2004)
 **
-**  This revision:  2020 October 31
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -109,7 +109,7 @@ void iauC2txy(double tta, double ttb, double uta, double utb,
 /* Combine to form the celestial-to-terrestrial matrix. */
    iauC2tcio(rc2i, era, rpom, rc2t);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

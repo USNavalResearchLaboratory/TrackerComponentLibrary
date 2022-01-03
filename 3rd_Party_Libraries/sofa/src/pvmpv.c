@@ -27,9 +27,9 @@ void iauPvmpv(double a[2][3], double b[2][3], double amb[2][3])
 **  Called:
 **     iauPmp       p-vector minus p-vector
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -37,7 +37,7 @@ void iauPvmpv(double a[2][3], double b[2][3], double amb[2][3])
    iauPmp(a[0], b[0], amb[0]);
    iauPmp(a[1], b[1], amb[1]);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

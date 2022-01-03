@@ -120,15 +120,15 @@ int iauDat(int iy, int im, int id, double fd, double *deltat)
 **  Called:
 **     iauCal2jd    Gregorian calendar to JD
 **
-**  This revision:  2020 May 31
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
 /* Release year for this version of iauDat */
-   enum { IYV = 2020};
+   enum { IYV = 2021};
 
 /* Reference dates (MJD) and drift rates (s/day), pre leap seconds */
    static const double drift[][2] = {
@@ -248,6 +248,8 @@ int iauDat(int iy, int im, int id, double fd, double *deltat)
 
 /* Return the status. */
    return j;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

@@ -229,11 +229,11 @@ function val=SigmaS(A,r)
     %n-r columns of A that are NOT zero.
     n=size(A,2);
     combLen=n-r;
-    curComb=0:(combLen-1);
+    curComb=1:combLen;
     val=0;
     while(~isempty(curComb))
-        val=val+S(A(:,curComb+1));
-        curComb=getNextCombo(curComb,n);
+        val=val+S(A(:,curComb));
+        curComb=getNextCombo(curComb,n,1);
     end
 end
 

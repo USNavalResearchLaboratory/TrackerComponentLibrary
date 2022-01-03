@@ -1,115 +1,116 @@
-            Updates for SOFA Release 17 : 2021 January 25
-            - - - - - - - - - - - - - - - - - - - - - - -
+ 
+            Updates for SOFA Release 18 : 2021 May 11
+            - - - - - - - - - - - - - - - - - - - - -
 
 Summary of Changes
 ------------------
 The changes fall into the following categories:
 
-(1) Extra defensive precautions when computing atmospheric refraction
-    at low altitudes.
+(1) Introduction of three new support routines.  Two deal with 
+    calculating astrometric places, while the third provides the 
+    approximate lunar position and velocity.  The validation program 
+    has been duly updated.
 
-(2) Application of polar motion handling changed to rigorous. 
-    These improvements may result in differences which will be less
-    than 1 mu arcsecond (0.000 001 arc seconds).
+(2) A rearrangement of the ANSI C header files sofam.h and sofa.h. 
+    The consequence of this is that an explicit #include "sofam.h" 
+    has been added to many of the SOFA functions.  Thus developers 
+    of applications that use constants from sofa.h will now need to 
+    include an explicit #include <sofam.h>.  Further explanation is 
+    given below.
+    
+(3) The year of validity for the leap second (dat) routine has been 
+    extended.
 
-(3) Expanded documentation, including a new cookbook for the SOFA
-    Vector Matrix Library.
-
-(4) Typographical and other minor corrections.
-
-(5) Changes to the test program.
+(4) Typographical and other minor corrections to the documentation. 
+    Those that are purely typographical (e.g. punctuation) are not 
+    listed).
 
 + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 
 FORTRAN 77 Library
 ------------------
 
-(1) iau_ATIOQ    Include a limit in altitude (about 3 degrees) below
-                 which atmospheric refraction is held constant, for
-                 defense and to make it consistent with iau_atoiq.
+iau_ATCC13  New support routine to transform a star's ICRS catalog 
+            entry (epoch J2000.0) into ICRS astrometric place.
+            
+iau_ATCCQ   New support routine; a "quick" transformation of a star's 
+            ICRS catalog entry (epoch J2000.0) into ICRS astrometric 
+            place, given precomputed star-independent astrometry 
+            parameters.
 
-(2) iau_ATIOQ    Application of polar motion calculation 
-    iau_ATOIQ    made rigorous for canonical consistency.
-    iau_APCO
-    iau_APIO
+iau_dat     Year extended to 2021.
 
-(3) The updates in the following routines were documentation
-    corrections/additions:
+iau_G2ICRS  Documentation updated.
+iau_ICRS2G
 
-    iau_EE00B    IERS Conventions reference updated to (2003)
-    iau_GST00B   IERS Conventions reference updated to (2003)
-    iau_PMAT06   IAU reference added
-    iau_PNM06A   Variable renamed to follow SOFA nomenclature
-    iau_PNM80    Date variables now correctly labelled as TT
-    iau_TRXPV    Action corrected to R^T * PV together with additional note
+iau_MOON98  New support routine for calculating approximate geocentric 
+            position and velocity of the Moon.  
+ 
+iau_PLAN94  Documentation updates and corrections.
+ 
+t_sofa_f    The test program has been updated to include the three new 
+            routines.
 
-(4) The updates in the following routines are documentation improvements
-    and typographical corrections:
-
-    iau_AF2A
-    iau_BI00
-    iau_C2I00A  iau_C2T00A  iau_C2T00B  iau_C2T06A  iau_C2TPE  iau_C2TXY
-                iau_CAL2JD
-    iau_EO06A   iau_EORS  iau_EPB2JD  iau_EPJ2JD
-    iau_FAOM03  iau_FW2M
-    iau_GMST00  iau_GMST06  iau_GST00A  iau_GST06  iau_GST06A  iau_GST94
-    iau_JD2CAL  iau_JDCALF
-    iau_NUM00A
-    iau_PMAT00  iau_PNM00A  iau_PNM00B  iau_POM00  iau_PVU
-    iau_REFCO
-    iau_RV2M    iau_RXPV
-    iau_TCGTT   iau_TF2A
-    iau_UT1UTC
-    iau_XYS00B  iau_XYS06A
-    iau_ZP      iau_ZPV
-
-(5) Test program t_sofa_f.f was updated due to items (1) and (2) above.
-
+N.B. Both iau_MOON98 and iau_PLAN94 provide only approximate positions
+     and do not use IAU endorsed theories.
 
 + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 
 ANSI C Library
 --------------
 
-(1) iauAtoiq    Include a limit in altitude (about 3 degrees) below
-                which atmospheric refraction is held constant, for
-                defense and to make it consistent with iauAtioq.
+sofa.h      The information in both these files has been rearranged to
+sofam.h     eliminate problems encountered by C++ developers.  
+            The change has 
+            (i)  moved the structures from sofam.h into sofa.h and
+            (ii) thus eliminated the #include "sofam.h" from sofa.h.
+            The consequence of this change for SOFA functions is that 
+            an explicit #include "sofam.h" has had to be added to some 
+            of them.
 
-(2) iauAtioq    Application of polar motion calculation made rigorous 
-    iauAtoiq    for canonical consistency.
-    iauApco
-    iauApio 
+            Previously, sofam.h contained both structure definitions and
+            constants, and was #included by sofa.h, which was otherwise
+            dedicated to function prototypes.  The difficulty was that 
+            short uppercase names in sofam.h were colliding with 
+            C++ variables. 
 
-(3) The updates in the following functions were documentation corrections:
+            The consequence of the change for developers is that any 
+            application that uses constants from sofa.h will now need an 
+            explicit #include <sofam.h>.  It should, however, be noted 
+            that the contents of sofam.h are not formally part of the 
+            SOFA API, and so such an application is vulnerable to 
+            future changes.  Rather than adding an #include <sofam.h> 
+            to applications, it would be better to replicate the needed 
+            macros in the user code.
 
-    iauEe00b    IERS Conventions reference updated to (2003)
-    iaugst00b   IERS Conventions reference updated to (2003)
-    iauPmat06   IAU reference added
-    iauPnm06a   Variable renamed to follow SOFA nomenclature
-    iauTrxpv    Action corrected to R^T * PV together with additional note
+iauAtcc13   New support function to transform a star's ICRS catalog 
+            entry (epoch J2000.0) into ICRS astrometric place.
 
-(4) The updates in the following functions are documentation improvements
-    and typographical corrections:
+iauAtccq    New support function, a "quick" transformation of a star's
+            ICRS catalog entry (epoch J2000.0) into ICRS astrometric 
+            place, given precomputed star-independent astrometry 
+            parameters.
 
-    iauAtciqn  iauAticqn
-    iauBi00
-    iauC2i00a  iauC2t00a  iauC2t00b  iauC2t06a  iauC2tpe  iauC2txy
-    iauEo06a   iauEors
-    iauFaom03  iauFk45z   iauFk54z  iauFw2m
-    iauGmst00  iauGst00a  iauGst06  iauGst06a  iauGst94
-    iauJd2cal  iauJdcalf
-    iauNum00a
-    iauPmat00  iauPn00a  iauPn00b  iauPn06  iauPnm00a  iauPnm00b
-               iauPnm80  iauPom00
-    iauRefco   iauRv2m   iauRxpv
-    iauS00     iauSxpv
-    iautcgtt
-    iauUt1utc
-    iauXys00b  iauXys06a
-    iauZp      iauZpv
+iauDat      Year extended to 2021.
 
-(5) Test program t_sofa_c.c was updated due to items (1) and (2) above.
+iauG2icrs   Documentation updated.
+iauIcrs2g
 
+makefile    An error has been corrected when using "make check".  The 
+            directory for the include files was incorrect.
+
+iauMoon98   New support function for calculating approximate geocentric 
+            position and velocity of the Moon.  
+
+iauPlan94   Documentation updates and corrections.
+
+t_sofa_c    The test program has been updated to include the three new 
+            functions.
+
+Cosmetic changes to improve consistency have been made to the ANSI C code.
+
+N.B. Both iauMoon98 and iauPlan94 provide only approximate positions 
+     and do not use IAU endorsed theories.
 
 + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 + SOFA thanks all those who have reported the various issues that go
@@ -117,47 +118,5 @@ ANSI C Library
 + relevant.
 +
 + End of updates
-+ 2021 January 08
++ 2021 May 11
 + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
-
-
-            Updates for SOFA Release 17a : 2021 February
-            - - - - - - - - - - - - - - - - - - - - - - -
-
-Summary of Change
------------------
-
-The change for this minor release (17a) relates to dealing with leap 
-seconds during the period 1960 and 1971.
-
-Between the introduction of UTC at the start of 1960 and the first
-leap second at the end of 1971 there were a series of small offsets
-and rate changes with respect to TAI.  The SOFA routine D2DTF takes
-these into account, but a shortcoming in the algorithm meant that
-under certain conditions a leap second could be flagged even though
-none had occurred.  
-
-Such cases were extremely rare, and moreover depended to some extent 
-on compiler behaviour, affecting rounding.
-
-SOFA is grateful to the Astropy group for reporting an instance of
-this bug, which has been corrected.
-
-FORTRAN Routine
-----------------
-
-iau_d2dtf      Format for output a 2-part Julian Date (or in the case 
-               of UTC a quasi-JD form that includes special provision 
-               for leap seconds).
-
-ANSI C:
--------
-
-iauD2dtf       Format for output a 2-part Julian Date (or in the case 
-               of UTC a quasi-JD form that includes special provision 
-               for leap seconds).
-
-+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
-End of Updates
-2021 February 14
-+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +

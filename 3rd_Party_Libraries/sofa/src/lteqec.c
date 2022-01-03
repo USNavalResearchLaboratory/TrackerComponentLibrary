@@ -56,9 +56,9 @@ void iauLteqec(double epj, double dr, double dd, double *dl, double *db)
 **    expressions, valid for long time intervals (Corrigendum),
 **    Astron.Astrophys. 541, C1
 **
-**  This revision:  2016 February 9
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -81,6 +81,8 @@ void iauLteqec(double epj, double dr, double dd, double *dl, double *db)
 /* Express in conventional ranges. */
    *dl = iauAnp(a);
    *db = iauAnpm(b);
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

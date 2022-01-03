@@ -10,7 +10,7 @@ function M=findRFTransParam2TarEllipse(plhRx,plhTar,zRot,a,f)
 %INPUTS: plhRx The [latitude; longitude; height] of the receiver with
 %              respect to the reference ellipsoid. Latitude and longitude
 %              are given in radians.
-%        plhTx The [latitude; longitude; height] of the target with
+%       plhTar The [latitude; longitude; height] of the target with
 %              respect to the reference ellipsoid. Latitude and longitude
 %              are given in radians.
 %         zRot This is an additional (counterclockwise) rotation in

@@ -33,9 +33,9 @@ void iauTrxpv(double r[3][3], double pv[2][3], double trpv[2][3])
 **     iauTr        transpose r-matrix
 **     iauRxpv      product of r-matrix and pv-vector
 **
-**  This revision:  2020 September 26
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -49,7 +49,7 @@ void iauTrxpv(double r[3][3], double pv[2][3], double trpv[2][3])
 /* Matrix tr * vector pv -> vector trpv. */
    iauRxpv(tr, pv, trpv);
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

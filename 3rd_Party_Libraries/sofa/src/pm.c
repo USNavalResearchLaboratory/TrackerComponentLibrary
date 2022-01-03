@@ -19,14 +19,16 @@ double iauPm(double p[3])
 **  Returned (function value):
 **            double        modulus
 **
-**  This revision:  2013 August 7
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 {
    return sqrt( p[0]*p[0] + p[1]*p[1] + p[2]*p[2] );
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

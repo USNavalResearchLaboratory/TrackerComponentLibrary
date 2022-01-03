@@ -149,7 +149,7 @@ function [zConv,RConv]=ruv2RuvCubature(z,SR,useHalfRange,zTx1,zRx1,M1,zTx2,zRx2,
 %    Magazine, vol. 29, no. 8, Part II, pp. 4-53, Aug. 2014.
 %
 %May 2015 David Karnick, with major changes by David F. Crouse February
-%2017,Naval Research Laboratory, Washington D.C.
+%2017, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 numMeas=size(z,2);

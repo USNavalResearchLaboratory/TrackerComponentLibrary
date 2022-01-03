@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 int iauGc2gde ( double a, double f, double xyz[3],
                 double *elong, double *phi, double *height )
@@ -61,9 +62,9 @@ int iauGc2gde ( double a, double f, double xyz[3],
 **     coordinates accelerated by Halley's method", J.Geodesy (2006)
 **     79: 689-693
 **
-**  This revision:  2014 November 7
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -150,6 +151,8 @@ int iauGc2gde ( double a, double f, double xyz[3],
 
 /* OK status. */
    return 0;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

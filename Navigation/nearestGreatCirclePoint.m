@@ -20,7 +20,7 @@ function [latLonX,s1X,s2X]=nearestGreatCirclePoint(az1,latLon1,latLon2,r,getBoth
 %            of the first point is desired.
 %          r The assumed radius of the spherical Earth model. If omitted or
 %            an empty matrix is passed, the default of
-%            Constants.WGS84MeanRadius is used.
+%            osculatingSpher4LatLon(latLon1) is used.
 %    getBoth Specified whether both the near and far solutions are desired.
 %            The default if omitted or an empty matrix is passed is false.
 %
@@ -99,7 +99,7 @@ if(nargin<5||isempty(getBoth))
 end
 
 if(nargin<4||isempty(r))
-    r=Constants.WGS84MeanRadius;
+    r=osculatingSpher4LatLon(latLon1);
 end
 
 %Everything is normalized to the unit sphere until the end.

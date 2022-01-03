@@ -1,7 +1,7 @@
 function [rankVal,V,U,S]=matrixRank(A,algorithm)
-%%MATRIXRANK Determine the rank of a matrix using a chosen algorithm.
+%%MATRIXRANK Determine the rank of a matrix using a chosen criterion.
 %
-%INPUTS: A The matrix whose rank is desired.
+%INPUTS: A The MXN matrix whose rank is desired.
 % algorithm An optional parameter specifying the criterion to use. All
 %          methods compare the singular values to a bound. Possible values
 %          are:
@@ -13,8 +13,9 @@ function [rankVal,V,U,S]=matrixRank(A,algorithm)
 %          3 Use max(size(A))*eps()*max(s).
 %
 %OUTPUTS: rankVal The rank of matrix A.
-%               V The right singular vectors from the SVD used here. Given
-%                 the rank, one can extract a basis or a nullspace.
+%               V The right singular vectors from the SVD used here (The
+%                 SVD is computed with the 'econ' option). Given the rank,
+%                 one can extract a basis or a nullspace.
 %               U The left singular vectors from the SVD.
 %               S A diagonal matrix of singular values from the SVD.
 %
@@ -33,7 +34,7 @@ if(nargin<2||isempty(algorithm))
 end
 
 if(nargout>1)
-    [U,S,V]=svd(A);
+    [U,S,V]=svd(A,'econ');
 else
     [~,S,~]=svd(A,0);
 end

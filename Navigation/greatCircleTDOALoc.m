@@ -18,7 +18,7 @@ function [latLonPoint1,latLonPoint2]=greatCircleTDOALoc(TDOA1,TDOA2,latLonRef,la
 %              reference sphere.
 %            r The assumed radius of the spherical Earth model. If omitted
 %              or an empty matrix is passed, the default of
-%              Constants.WGS84MeanRadius is used.
+%              r=osculatingSpher4LatLon(latLonRef) is used.
 %            c The assumed speed of light. If this value is omitted or an
 %              empty matrix is passed, then the default of
 %              Constants.speedOfLight is used. Note that the speeds of
@@ -189,7 +189,7 @@ if(nargin<7||isempty(c))
 end
 
 if(nargin<6||isempty(r))
-    r=Constants.WGS84MeanRadius;
+    r=osculatingSpher4LatLon(latLonRef); 
 end
 
 %Equation 3.21 in [1].

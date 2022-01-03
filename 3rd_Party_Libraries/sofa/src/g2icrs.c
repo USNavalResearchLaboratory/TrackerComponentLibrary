@@ -1,3 +1,4 @@
+
 #include "sofa.h"
 
 void iauG2icrs ( double dl, double db, double *dr, double *dd )
@@ -66,9 +67,9 @@ void iauG2icrs ( double dl, double db, double *dr, double *dd )
 **     derived from the ESA Hipparcos Space Astrometry Mission.  ESA
 **     Publications Division, Noordwijk, Netherlands.
 **
-**  This revision:   2018 January 2
+**  This revision:   2021 January 25
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -81,8 +82,8 @@ void iauG2icrs ( double dl, double db, double *dr, double *dd )
 **
 **  P = 192.85948    right ascension of the Galactic north pole in ICRS
 **  Q =  27.12825    declination of the Galactic north pole in ICRS
-**  R =  32.93192    longitude of the ascending node of the Galactic
-**                   plane on the ICRS equator
+**  R =  32.93192    Galactic longitude of the ascending node of
+**                   the Galactic equator on the ICRS equator
 **
 **  ICRS to galactic rotation matrix, obtained by computing
 **  R_3(-R) R_1(pi/2-Q) R_3(pi/2+P) to the full precision shown:

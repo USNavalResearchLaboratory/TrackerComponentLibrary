@@ -11,19 +11,47 @@
 **  This file is part of the International Astronomical Union's
 **  SOFA (Standards Of Fundamental Astronomy) software collection.
 **
-**  This revision:   2018 December 5
+**  This revision:   2021 April 18
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
 
-#include "sofam.h"
 #include "math.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/* Star-independent astrometry parameters */
+typedef struct {
+   double pmt;        /* PM time interval (SSB, Julian years) */
+   double eb[3];      /* SSB to observer (vector, au) */
+   double eh[3];      /* Sun to observer (unit vector) */
+   double em;         /* distance from Sun to observer (au) */
+   double v[3];       /* barycentric observer velocity (vector, c) */
+   double bm1;        /* sqrt(1-|v|^2): reciprocal of Lorenz factor */
+   double bpn[3][3];  /* bias-precession-nutation matrix */
+   double along;      /* longitude + s' + dERA(DUT) (radians) */
+   double phi;        /* geodetic latitude (radians) */
+   double xpl;        /* polar motion xp wrt local meridian (radians) */
+   double ypl;        /* polar motion yp wrt local meridian (radians) */
+   double sphi;       /* sine of geodetic latitude */
+   double cphi;       /* cosine of geodetic latitude */
+   double diurab;     /* magnitude of diurnal aberration vector */
+   double eral;       /* "local" Earth rotation angle (radians) */
+   double refa;       /* refraction constant A (radians) */
+   double refb;       /* refraction constant B (radians) */
+} iauASTROM;
+/* (Vectors eb, eh, em and v are all with respect to BCRS axes.) */
+
+/* Body parameters for light deflection */
+typedef struct {
+   double bm;         /* mass of the body (solar masses) */
+   double dl;         /* deflection limiter (radians^2/2) */
+   double pv[2][3];   /* barycentric PV of the body (au, au/day) */
+} iauLDBODY;
 
 /* Astronomy/Calendars */
 int iauCal2jd(int iy, int im, int id, double *djm0, double *djm);
@@ -74,6 +102,13 @@ int iauApio13(double utc1, double utc2, double dut1,
               double elong, double phi, double hm, double xp, double yp,
               double phpa, double tc, double rh, double wl,
               iauASTROM *astrom);
+void iauAtcc13(double rc, double dc,
+               double pr, double pd, double px, double rv,
+               double date1, double date2,
+               double *ra, double *da);
+void iauAtccq(double rc, double dc,
+              double pr, double pd, double px, double rv,
+              iauASTROM *astrom, double *ra, double *da);
 void iauAtci13(double rc, double dc,
                double pr, double pd, double px, double rv,
                double date1, double date2,
@@ -143,6 +178,7 @@ void iauRefco(double phpa, double tc, double rh, double wl,
 /* Astronomy/Ephemerides */
 int iauEpv00(double date1, double date2,
              double pvh[2][3], double pvb[2][3]);
+void iauMoon98(double date1, double date2, double pv[2][3]);
 int iauPlan94(double date1, double date2, int np, double pv[2][3]);
 
 /* Astronomy/FundamentalArgs */

@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 
 double iauFama03(double t)
 /*
@@ -39,9 +40,9 @@ double iauFama03(double t)
 **     Souchay, J., Loysel, B., Kinoshita, H., Folgueira, M. 1999,
 **     Astron.Astrophys.Supp.Ser. 135, 111
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -53,6 +54,8 @@ double iauFama03(double t)
    a = fmod(6.203480913 + 334.0612426700 * t, D2PI);
 
    return a;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

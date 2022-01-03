@@ -3,9 +3,11 @@ Component Library are kept here. In many instances, only a few of the
 routines in the library are used, though with the exception of the SGP4
 library, the entire libraries are provided here. None of the parts of the
 external libraries that are used is subject to copyleft restrictions,
-though they have varying licenses. The Splitting Conic Solver Library can
-use some routines that rely on a library that is under an LGPL (copylefted)
-license. Those routines are not used and have been placed in a zip archive.
+though they have varying licenses. The Splitting Conic Solver Library and
+the Eigen library can use some routines that rely are under an LGPL
+(copylefted) license. Those routines are not used and have been placed in a
+zip archive in the respective folders. The Eigen library is additionally
+compiled with an option that prevents the use of its LGPLd code.
 
 The sources of the external libraries are as follows:
 
@@ -32,5 +34,5 @@ http://www.centerforspace.com/downloads/
    Astronomy Library:
 http://www.iausofa.org/index.html
 
-
-
+8) The Eigen Library:
+https://eigen.tuxfamily.org/

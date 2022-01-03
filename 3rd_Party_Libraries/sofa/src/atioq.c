@@ -102,7 +102,7 @@ void iauAtioq(double ri, double di, iauASTROM *astrom,
 **
 **  This revision:   2020 December 7
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */

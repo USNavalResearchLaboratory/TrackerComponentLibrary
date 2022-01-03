@@ -1,11 +1,11 @@
 function [zCart,RCart]=monostatRuv2CartTaylor(zMeas,R,zRx,M,algorithm)
-%MONOSTATRUV2CARTTAYLOR Approximate the Cartesian moments of a Gaussian
-%                 noise-corrupted measurement in monostatic r-u-v
-%                 coordinates. This function approaches the conversion
-%                 using traditional methods that use Taylor series
-%                 expansions. The function ruv2CartCubature can have better
-%                 performance when the measurement noise is high and it can
-%                 make use of cross terms in the covariance matrix.
+%MONOSTATRUV2CARTTAYLOR Approximate the Cartesian mean and covariance
+%                 matrix of a Gaussian noise-corrupted measurement in
+%                 monostatic r-u-v coordinates. This function approximates
+%                 the conversion using traditional methods that use Taylor
+%                 series expansions. The function ruv2CartCubature can have
+%                 better performance when the measurement noise is high and
+%                 it can make use of cross terms in the covariance matrix.
 %
 %INPUTS: z A 3XnumMeas matrix of numMeas vectors to convert. Each has
 %          elements [r;u;v], where r is the one-way monostatic range from
@@ -45,7 +45,7 @@ function [zCart,RCart]=monostatRuv2CartTaylor(zMeas,R,zRx,M,algorithm)
 %In algorithms 1 and 2, the sign of cz has been corrected compared to [2].
 %
 %EXAMPLE:
-%Here, we compare the NEES of the CM1, CM2, abd CM3 algorithms with
+%Here, we compare the NEES of the CM1, CM2, and CM3 algorithms with
 %cubature integration. One will see that the CM1 algorithm performs poorly
 %whereas the CM2 algorithm is a bit better and the CM3 and cubature
 %integration algorithms have identical NEES performance.
@@ -111,7 +111,7 @@ function [zCart,RCart]=monostatRuv2CartTaylor(zMeas,R,zRx,M,algorithm)
 %[1] X. Tian and Y. Bar-Shalom, "Coordinate conversion and tracking
 %    for very long range radars," IEEE Transactions on Aerospace and
 %    Electronic Systems, vol. 45, no. 3, pp. 1073-1088, Jul. 2009.
-%[2] J. R. Cookson, Z. T. Chance, and L.F. Urbano, "Consistent Estimation
+%[2] J. R. Cookson, Z. T. Chance, and L. F. Urbano, "Consistent Estimation
 %    for Very Long Range Radars," Lincoln Laboratory, Lexington, MA., Tech
 %    Rep. 1184, 1 December 2017.
 %

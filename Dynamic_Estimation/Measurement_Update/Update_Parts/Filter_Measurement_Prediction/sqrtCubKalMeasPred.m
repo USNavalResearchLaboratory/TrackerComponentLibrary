@@ -17,8 +17,8 @@ function [zPred,PzPred,otherInfo]=sqrtCubKalMeasPred(xPred,SPred,zDim,h,xi,w,inn
 %           SR The zDim X zDim lower-triangular square root of the
 %              measurement covariance matrix in the native coordinate
 %              system of the measurement.
-%            h A function handle for the measurement function that the
-%              state as its argument.
+%            h A function handle for the measurement function that takes
+%              the state as its argument.
 %           xi An xDimXnumCubPoints matrix of cubature points. If this
 %              and the next parameter are omitted or empty matrices are
 %              passed, then fifthOrderCubPoints(xDim). It is suggested that

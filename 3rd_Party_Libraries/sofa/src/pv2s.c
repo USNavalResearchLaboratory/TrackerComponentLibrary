@@ -39,9 +39,9 @@ void iauPv2s(double pv[2][3],
 **  2) If the position is a pole, theta, td and pd are indeterminate.
 **     In such cases zeroes are returned for all three.
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -94,7 +94,7 @@ void iauPv2s(double pv[2][3],
    *r = rtrue;
    *rd = (rw != 0.0) ? (xyp + z*zd) / rw : 0.0;
 
-   return;
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **

@@ -1,4 +1,5 @@
 #include "sofa.h"
+#include "sofam.h"
 #include <stdlib.h>
 
 int iauTf2d(char s, int ihour, int imin, double sec, double *days)
@@ -39,9 +40,9 @@ int iauTf2d(char s, int ihour, int imin, double sec, double *days)
 **  3)  If there are multiple errors, the status value reflects only the
 **      first, the smallest taking precedence.
 **
-**  This revision:  2013 June 18
+**  This revision:  2021 May 11
 **
-**  SOFA release 2021-01-25
+**  SOFA release 2021-05-12
 **
 **  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 */
@@ -58,6 +59,8 @@ int iauTf2d(char s, int ihour, int imin, double sec, double *days)
    if ( imin < 0 || imin > 59 ) return 2;
    if ( sec < 0.0 || sec >= 60.0 ) return 3;
    return 0;
+
+/* Finished. */
 
 /*----------------------------------------------------------------------
 **
