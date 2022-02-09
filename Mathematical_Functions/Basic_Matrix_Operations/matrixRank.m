@@ -14,8 +14,8 @@ function [rankVal,V,U,S]=matrixRank(A,algorithm)
 %
 %OUTPUTS: rankVal The rank of matrix A.
 %               V The right singular vectors from the SVD used here (The
-%                 SVD is computed with the 'econ' option). Given the rank,
-%                 one can extract a basis or a nullspace.
+%                 full SVD is computed, not the 'econ' or 0 options). Given
+%                 the rank, one can extract a basis or a nullspace.
 %               U The left singular vectors from the SVD.
 %               S A diagonal matrix of singular values from the SVD.
 %
@@ -34,9 +34,9 @@ if(nargin<2||isempty(algorithm))
 end
 
 if(nargout>1)
-    [U,S,V]=svd(A,'econ');
+    [U,S,V]=svd(A);
 else
-    [~,S,~]=svd(A,0);
+    [~,S,~]=svd(A);
 end
 s=diag(S);
 

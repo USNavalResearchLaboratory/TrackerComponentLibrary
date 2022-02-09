@@ -26,12 +26,12 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         return;
     }
 
-    if(nlhs>1) {
+    if(nlhs>4) {
         mexErrMsgTxt("Invalid number of outputs.");
         return;
     }
     
-    if(nrhs>1) {
+    if(nrhs>1&&!mxIsEmpty(prhs[1])) {
         algorithm=getIntFromMatlab(prhs[1]);
     }
     
@@ -53,6 +53,45 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         Eigen::MatrixXd s;
 
         theRank=matrixRank<Eigen::MatrixXcd>(XEigen, algorithm, U, s, V);
+
+        plhs[0]=sizeTMat2MatlabDoubles(&theRank,1,1);
+        
+        const size_t numRowU=U.rows();
+        const size_t numColU=U.cols();
+        const size_t numRowV=V.rows();
+        const size_t numColV=V.cols();
+        const size_t numElsS=s.size();
+
+        if(nlhs>1) {
+            mxArray *VMat=mxCreateNumericMatrix(numRowV,numColV,mxDOUBLE_CLASS,mxCOMPLEX);
+            std::complex<double> *VData=reinterpret_cast<std::complex<double>*>(mxGetComplexDoubles(VMat));
+            
+            for(size_t i=0;i<numRowV*numColV;i++) {
+                VData[i]=V(i);
+            }
+            plhs[1]=VMat;
+
+            if(nlhs>2) {
+                mxArray *UMat=mxCreateNumericMatrix(numRowU,numColU,mxDOUBLE_CLASS,mxCOMPLEX);
+                std::complex<double> *UData=reinterpret_cast<std::complex<double>*>(mxGetComplexDoubles(UMat));
+
+                for(size_t i=0;i<numRowU*numColU;i++) {
+                    UData[i]=U(i);
+                }
+                plhs[2]=UMat;
+
+                if(nlhs>3) {
+                    mxArray *SMat=mxCreateNumericMatrix(numElsS,numElsS,mxDOUBLE_CLASS,mxREAL);
+                    double *SData=mxGetDoubles(SMat);
+                    memset(SData,0,sizeof(double)*numElsS);
+
+                    for(size_t i=0;i<numElsS;i++) {
+                        SData[i*numElsS+i]=s(i);
+                    }
+                    plhs[3]=SMat;
+                }
+            }
+        }
     } else {
         double *X=mxGetDoubles(prhs[0]);
         const Eigen::Map<Eigen::MatrixXd> XEigen(X,M,N);
@@ -61,9 +100,46 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         Eigen::MatrixXd s;
         
         theRank=matrixRank<Eigen::MatrixXd>(XEigen, algorithm, U, s, V);
+
+        plhs[0]=sizeTMat2MatlabDoubles(&theRank,1,1);
+
+        const size_t numRowU=U.rows();
+        const size_t numColU=U.cols();
+        const size_t numRowV=V.rows();
+        const size_t numColV=V.cols();
+        const size_t numElsS=s.size();
+
+        if(nlhs>1) {
+            mxArray *VMat=mxCreateNumericMatrix(numRowV,numColV,mxDOUBLE_CLASS,mxREAL);
+            double *VData=mxGetDoubles(VMat);
+            
+            for(size_t i=0;i<numRowV*numColV;i++) {
+                VData[i]=V(i);
+            }
+            plhs[1]=VMat;
+
+            if(nlhs>2) {
+                mxArray *UMat=mxCreateNumericMatrix(numRowU,numColU,mxDOUBLE_CLASS,mxREAL);
+                double *UData=mxGetDoubles(UMat);
+
+                for(size_t i=0;i<numRowU*numColU;i++) {
+                    UData[i]=U(i);
+                }
+                plhs[2]=UMat;
+
+                if(nlhs>3) {
+                    mxArray *SMat=mxCreateNumericMatrix(numElsS,numElsS,mxDOUBLE_CLASS,mxREAL);
+                    double *SData=mxGetDoubles(SMat);
+                    memset(SData,0,sizeof(double)*numElsS);
+
+                    for(size_t i=0;i<numElsS;i++) {
+                        SData[i*numElsS+i]=s(i);
+                    }
+                    plhs[3]=SMat;
+                }
+            }
+        }
     }
-    
-    plhs[0]=sizeTMat2MatlabDoubles(&theRank,1,1);
 }
 
 /*LICENSE:

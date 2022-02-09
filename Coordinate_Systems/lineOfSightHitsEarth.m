@@ -146,11 +146,11 @@ elseif(~startIsZero&&endIsZero)
     end
 else
     %Neither the starting nor the ending points are on the ground. 
-    if((t(1)<0||t(1)>1)&&(t(2)<0||t(2)>1))
-        %The line of sight never hits thr ground.
+    if(isempty(t)||(t(1)<0||t(1)>1)&&(t(2)<0||t(2)>1))
+        %The line of sight never hits the ground.
         typeOfHit=0;
     else
-        %The line of sight hits th gorund somewhere.
+        %The line of sight hits the ground somewhere.
         typeOfHit=1;
     end
 end

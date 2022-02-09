@@ -235,7 +235,7 @@ for curDegIncrease=1:maxDegIncreases
     if(useMotzkinNull)
         XY=MotzkinMatrix([N1*Z,N2]);
     else
-        XY=null([N1*Z,N2]);
+        XY=nullspace([N1*Z,N2]);
     end
     numZPrev=size(Z,2);
     X=XY(1:numZPrev,:);

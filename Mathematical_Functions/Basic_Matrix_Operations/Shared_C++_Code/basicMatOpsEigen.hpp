@@ -79,7 +79,8 @@ TEig MatrixOfVal(const TVal val,const size_t numRows, const size_t numCols) {
  *          2 Use std::numeric_limits<double>::epsilon()*norm(A,1).
  *          3 Use max(size(A))*std::numeric_limits<double>::epsilon()*max(s).
  *    U,s,V These are returned as the left (U) and right (V) singular
- *          vectors (computed thin) and a vector of the singular values. 
+ *          vectors (not computed thin) and a vector of the singular
+ *          values. 
  *
  *OUTPUTS: The return value is the rank. The outputs of the SVD performed
  *         in computing the rank are put in U, s, and V for reuse
@@ -114,7 +115,7 @@ size_t matrixRank(const T &X, const int algorithm,T &U, Eigen::MatrixXd &s, T &V
         return 0;
     }
     
-    Eigen::JacobiSVD<T> svdX(X, Eigen::ComputeThinU | Eigen::ComputeThinV);
+    Eigen::JacobiSVD<T> svdX(X, Eigen::ComputeFullU | Eigen::ComputeFullV);
     //The singular values are already sorted in decreasing order.
     s=svdX.singularValues();
     U=svdX.matrixU();
