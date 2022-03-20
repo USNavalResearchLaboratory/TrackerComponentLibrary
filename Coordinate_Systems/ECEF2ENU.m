@@ -79,7 +79,7 @@ xENU(1,:)=sum(bsxfun(@times,uENU(:,1),origShiftPts),1);
 xENU(2,:)=sum(bsxfun(@times,uENU(:,2),origShiftPts),1);
 xENU(3,:)=sum(bsxfun(@times,uENU(:,3),origShiftPts),1);
 
-if(nargin>1)
+if(nargout>1)
     M=uENU';
 end
 end

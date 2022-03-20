@@ -68,7 +68,7 @@ else
     vENU=zeros(3,N);
     vENU(1,:)=sum(bsxfun(@times,vECEF,uENU(:,1)),1);
     vENU(2,:)=sum(bsxfun(@times,vECEF,uENU(:,2)),1);
-    vENU(2,:)=sum(bsxfun(@times,vECEF,uENU(:,3)),1);
+    vENU(3,:)=sum(bsxfun(@times,vECEF,uENU(:,3)),1);
 end
 end
 
