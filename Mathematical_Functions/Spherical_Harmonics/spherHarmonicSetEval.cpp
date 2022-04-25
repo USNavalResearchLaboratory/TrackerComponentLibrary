@@ -101,7 +101,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
 
         curCopyPoint=pointCopy;
         curOrigPoint=point;
-        for(curPoint=1;curPoint<numPoints;curPoint++) {
+        for(curPoint=0;curPoint<numPoints;curPoint++) {
             *(curCopyPoint)=1;
             *(curCopyPoint+1)=*(curOrigPoint);
             *(curCopyPoint+2)=*(curOrigPoint+1);
