@@ -1,7 +1,7 @@
 function [zPred,PzPred,otherInfo]=sqrtCubKalMeasPred(xPred,SPred,zDim,h,xi,w,innovTrans,measAvgFun,stateDiffTrans,stateTrans)
 %%SQRTCUBKALMEASPRED Perform the measurement prediction part of the update
 %           step of the square root cubature Kalman filter with additive
-%           measurement noise. Unlike the non square-root formulation, all
+%           measurement noise. Unlike the non-square-root formulation, all
 %           of the cubature weights must be positive. The function
 %           sqrtCubKalUpdateWithPred can be used to complete the measurement
 %           update. Separating the measurement prediction step from the

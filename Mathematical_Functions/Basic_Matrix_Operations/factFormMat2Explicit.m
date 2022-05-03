@@ -28,10 +28,12 @@ function Q=factFormMat2Explicit(A)
 %For the instance when vFull equals zero, that is when the vi vector above
 %is of the form [zeros(i-1);1;zeros(m-i)], one can look to Algorithm 5.1.1
 %in Chapter 5.1.3 of [1] to see that occurs either when beta=0 or beta=2
-%(correcting using the errata for the book, which listed -2). Well, in
-%almost all cases when one is performing a transformation, it is more
-%desirable to have the beta=0 instance applied. Thus, unlike in Equation
-%5.1.5 of Chapter 5.1.6, we use beta=0 for that instance.
+%(correcting using the errata for the book, which listed -2). However, one
+%doesn't know which branch to take. Here, we assume that the factored form
+%was computed using something like HouseholderVec with forceSign=false.
+%This is because Algorithm 5.1.3 does NOT account for the possible beta=0
+%branch in Algorithm 5.1.1 and just from the factored form, there is no way
+%to know which branch was taken.
 %
 %REFERENCES:
 %[1] G. H. Golub and C. F. Van Loan, Matrix Computations, 4th ed.
@@ -60,13 +62,8 @@ for j=min(n,m-1):-1:1
 
     v(j:m)=[1;AVec];
     normAVec2=AVec'*AVec;
-    
-    %This test is not in the book. If false, we assume it is a beta=0 case.
-    if(normAVec2>0)
-        beta=2/(1+normAVec2);
-        
-        Q(j:m,j:end)=Q(j:m,j:end)-(beta*v(j:m))*(v(j:m)'*Q(j:m,j:end));
-    end
+    beta=2/(1+normAVec2);
+    Q(j:m,j:end)=Q(j:m,j:end)-(beta*v(j:m))*(v(j:m)'*Q(j:m,j:end));
 end
 end
 

@@ -21,6 +21,11 @@ function JTotal=calcSpherInvJacob(z,systemType)
 %          2 This is the same as 0 except instead of being given
 %            elevation, one desires the angle away from the z-axis, which
 %            is (pi/2-elevation).
+%          3 This is the same as 0 except azimuth is measured clockwise
+%            from the y-axis in the x-y plane instead of counterclockwise
+%            from the x-axis. This coordinate system often arises when
+%            given "bearings" in a local East-North-Up coordinate system,
+%            where the bearing directions are measured East of North.
 %
 %OUTPUTS: JTotal A 3X3XN Jacobian matrices where the rows in each matrix
 %           are [x;y;z] in that order and the columns take the derivative
@@ -124,6 +129,25 @@ for curPoint=1:N
             J(2,3)=r*cosEl*sinAz;
             %dz/dEl
             J(3,3)=-r*sinEl;
+        case 3
+            %dx/dr
+            J(1,1)=sinAz*cosEl;
+            %dy/dr
+            J(2,1)=cosAz*cosEl;
+            %dz/dr
+            J(3,1)=sinEl;
+            %dx/dAz
+            J(1,2)=r*cosEl*cosAz;
+            %dy/dAz
+            J(2,2)=-r*sinAz*cosEl;
+            %dz/dAz
+            J(3,2)=0;
+            %dx/dEl
+            J(1,3)=-r*sinAz*sinEl;
+            %dy/dEl
+            J(2,3)=-r*cosAz*sinEl;
+            %dz/dEl
+            J(3,3)=r*cosEl;
         otherwise
             error('Invalid system type specified.')
     end

@@ -19,7 +19,7 @@ function [PPredMissed,PPredObs,gammaVal,PG]=calcMissedGateCov(PPred,Pzz,W,PD,gam
 %INPUTS: PPred The xDimXxDim predicted target state covariance matrix.
 %          Pzz The zDimXzDim innovation covariance matrix.
 %            W The xDimXzDim gain from the linear Kalman filter. This also
-%              arises in the extended kalman filter and the cubature Kalman
+%              arises in the extended Kalman filter and the cubature Kalman
 %              filter.
 %           PD The target detection probability.
 % gammaVal, PG These two values  contain the same information and only one

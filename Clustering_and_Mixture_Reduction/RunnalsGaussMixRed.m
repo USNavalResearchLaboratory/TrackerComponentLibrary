@@ -188,12 +188,12 @@ end
 
 function val=BDist(w1,w2,mu1,mu2,P1,P2,wLogDetP1,wLogDetP2)
 %%BDIST This is the distance measure given in Equation 21 in Section VI-B
-%       in [1]. This is a bound related the Kullback-Leibler divergences.
+%       in [1]. This is a bound related the Kullback-Leibler divergence.
 %
 %REFERENCES:
 %[1] A. R. Runnalls, "Kullback-Leibler approach to Gaussian mixture
-%    reduction," IEEE Trans. Aerosp. Electron. Syst., vol. 43, no. 3, pp.
-%    989-999, Jul. 2007.
+%    reduction," IEEE Transactions on Aerospce and Electronic Systems,
+%    vol. 43, no. 3, pp. 989-999, Jul. 2007.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 

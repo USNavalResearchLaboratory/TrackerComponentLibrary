@@ -25,7 +25,7 @@ function [xECEF,MInv]=ENU2ECEF(plhOrigin,xENU,a,f)
 %
 %OUTPUTS: xECEF A 3XnumPts matrix of the points in xENU converted to ECEF
 %               coordinates.
-%             M A rotation matrix such that rotates a point from ENU to
+%          MInv A rotation matrix such that rotates a point from ENU to
 %               ECEF coordinates.
 %
 %The ENU coordinate system is a common local tangent plane cooridnate

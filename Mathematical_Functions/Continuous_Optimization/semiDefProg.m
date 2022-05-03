@@ -26,7 +26,7 @@ function [X,y,Z,exitCode]=semiDefProg(C,AMats,a,algorithm,initVals,algParams)
 %               corrector rule using tau=0.9.
 %             3 Use the XZ+ZX algorithm of [2] with the basic iteration.
 %               The sigma parameter is computed as in [1] using tau=0.9.
-%             4 Use the function splitingConicSolver to solve the problem.
+%             4 Use the function splittingConicSolver to solve the problem.
 %    initVals An optional structure providing initial values for the
 %             algorithm. If this is omitted or an empty matrix is passed,
 %             then the default values used in Section 5 of [3] are used.
@@ -35,7 +35,7 @@ function [X,y,Z,exitCode]=semiDefProg(C,AMats,a,algorithm,initVals,algParams)
 %             if algorithm=4.
 %   algParams An optional structure containing parameters that affect the
 %             convergence and evaluation of the algorithms. If algorithm=4,
-%             then this is the params structre in the splitingConicSolver
+%             then this is the params structre in the splittingConicSolver
 %             function, except algParams.max_iters=50e3 as the default.
 %             Possible members of the structure for the other algorithms
 %             are
@@ -67,7 +67,7 @@ function [X,y,Z,exitCode]=semiDefProg(C,AMats,a,algorithm,initVals,algParams)
 %         Z The nXn set of dual matrix variables.
 %  exitCode A parameter specifying how the algorithm terminated. If
 %           algorithm=4, then this is the info structure from the
-%           splitingConicSolver algorithm. Otherwise, possible
+%           splittingConicSolver algorithm. Otherwise, possible
 %           values are:
 %           0 The algorithm converged.
 %           1 The maximum number of iterations was reached.
@@ -275,7 +275,7 @@ switch(algorithm)
     case 3%The XZ-ZX method of [2] as a single step.
         C=-C;
         [X,y,Z,exitCode]=semiDefProgZXXZ(C,AMats,a,initVals,usePinv,epsVal1,epsVal2,epsVal3,maxIter,primalInfeasVal,dualInfeasVal);
-    case 4%Use the splitingConicSolver function.
+    case 4%Use the splittingConicSolver function.
         n=size(AMats,1);
         k=size(AMats,3);
         %The number of equality constraints
@@ -295,7 +295,7 @@ switch(algorithm)
         b=[a;zeros(numEls,1)];
         c=-vech(C);%Negative for maximization.
 
-        [x,y,~,info]=splitingConicSolver(ASCS,b,c,cone,algParams);
+        [x,y,~,info]=splittingConicSolver(ASCS,b,c,cone,algParams);
         X=vech2Mat(x,true,1/2);
         Z=vech2Mat(y((k+1):end),true,1/sqrt(2));
         y=y(1:k);

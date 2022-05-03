@@ -20,6 +20,11 @@
 *          2 This is the same as 0 except instead of being given
 *            elevation, one desires the angle away from the z-axis, which
 *            is (pi/2-elevation).
+*          3 This is the same as 0 except azimuth is measured clockwise
+*            from the y-axis in the x-y plane instead of counterclockwise
+*            from the x-axis. This coordinate system often arises when
+*            given "bearings" in a local East-North-Up coordinate system,
+*            where the bearing directions are measured East of North.
 *      lRx The 3X1 position vector of the receiver. If omitted, the
 *          receiver is placed at the origin. All vectors in x are assumed
 *          to be from the same receiver.
@@ -91,7 +96,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     } else {
         systemType=getIntFromMatlab(prhs[1]);
         
-        if(systemType!=0&&systemType!=1&&systemType!=2) {
+        if(systemType!=0&&systemType!=1&&systemType!=2&&systemType!=3) {
             mexErrMsgTxt("Invalid systemType specified.");
         }
     }

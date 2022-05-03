@@ -11,7 +11,7 @@
 %                   found first.
 %
 %The file has been sucessfully run on Windows 10 using MinGW64 and
-%Microsoft Visual C++ 2019 under Matlab 2021a.
+%Microsoft Visual C++ 2022 under Matlab 2021b.
 %
 %November 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

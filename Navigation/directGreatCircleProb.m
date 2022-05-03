@@ -27,24 +27,26 @@ function latLonPoints=directGreatCircleProb(latLonStart,azimuth,dist,r,algorithm
 %                    one should use something like r=h+rEarth.
 %          algorithm An optional parameter selecting the algorithm to use.
 %                    Possible values are:
-%                    0 (The default if omitted or an empty matrix is
-%                      passed if distType=0) Use the algorithm of [2],
-%                      which avoids issues with singularities at the
-%                      geographic poles and is consistent with the
-%                      directions returned by indirectGreatCircleProb at
-%                      the poles.
-%                    1 Use the COFI algorithm of [1]. Latitudes within
-%                      2^24*eps(pi/2) of +/-pi/2 (the North and South
-%                      poles) will be clipped to that bound. This avoids a
-%                      singularity at the poles.
+%                    0 Use the algorithm of [2], which avoids issues with
+%                      singularities at the geographic poles and is
+%                      consistent with the directions returned by
+%                      indirectGreatCircleProb at the poles.
+%                    1 (The default if omitted or an empty matrix is
+%                      passed if distType=1) Use the COFI algorithm of [1].
+%                      Latitudes within 2^24*eps(pi/2) of +/-pi/2 (the
+%                      North and South poles) will be clipped to that
+%                      bound. This avoids a singularity at the poles.
+%                    2 (The default if omitted or an empty matrix is
+%                      passed if distType=0) Use 20-14, 20-15, 20-18 and
+%                      25-15 in Chapter 25 of [3]. 
 %           distType This specifies the format of dist. Possible values
 %                    are:
 %                    0 (The default if omitted or an empty matrix is
 %                      passed) dist holds distances along the sphere.
 %                    1 dist holds offsets in longitude in the form of the
 %                      starting points. If meridional trajectories are
-%                      given, an error will be raised. This cannot be used
-%                      if algorithm=1.
+%                      given, an error will be raised. This can only be
+%                      used if algorithm=011.
 %
 %OUTPUTS: latLonPoints A 2XN matrix of geocentric latitude and longitudes
 %                      of the final points of the spherical geodesic
@@ -106,6 +108,30 @@ function latLonPoints=directGreatCircleProb(latLonStart,azimuth,dist,r,algorithm
 % plotMapOnEllipsoid([],1,0);
 % plot3(xyzPoints(1,:),xyzPoints(2,:),xyzPoints(3,:),'-r','linewidth',4)
 %
+%EXAMPLE 3:
+%This example generates many random pairs of points and then uses
+%indirectGreatCircleProb to get a distance and heading. Then, this function
+%inverts the problem using directGreatCircleProb and the maximum l2 norm of
+%the difference between the computed and original endpoings in latitude and
+%longitude are shown. They should be on the order of 1-12, which is
+%rasonable given finite precision limitiations.
+% numMCRuns=1e4;
+% maxAbsDiff=0;
+% for k=1:numMCRuns
+%     latLonRef=[UniformD.rand(1,[-pi/2;pi/2]);
+%                 UniformD.rand(1,[-pi;pi])];
+%     latLonPt=[UniformD.rand(1,[-pi/2;pi/2]);
+%                 UniformD.rand(1,[-pi;pi])];
+%     rE=osculatingSpher4LatLon(latLonRef);
+%     [azStart,distVal]=indirectGreatCircleProb(latLonRef,latLonPt,rE);
+%     latLonBack=directGreatCircleProb(latLonRef,azStart,distVal,rE);
+%     diffVal=latLonBack-latLonPt;
+%     %Deal with getting possible offsets near 2*pi.
+%     diffVal(2)=wrapRange(diffVal(2),-pi,pi);
+%     maxAbsDiff=max(maxAbsDiff,norm(diffVal));
+% end
+% maxAbsDiff
+%
 %REFERENCES:
 %[1] C.-L. Chen, P.-F. Liu, and W.-T. Gong, "A simple approach to great
 %    circle sailing: The COFI method," The Journal of Navigation, vol. 67,
@@ -113,6 +139,8 @@ function latLonPoints=directGreatCircleProb(latLonStart,azimuth,dist,r,algorithm
 %[2] D. F. Crouse, "Singularity-free great-circle sailing," Naval Research
 %    Laboratory, Washington, DC, Tech. Rep. NRL/5340/MR–2021/4, 26
 %    Jul. 2021.
+%[3] J. P. Snyder, "Map projections- a working manual," U.S. Geological
+%    Survey, Tech. Rep. 1395, 1987.
 %
 %August 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -125,13 +153,15 @@ if(nargin<5||isempty(algorithm))
     if(distType==1)
         algorithm=1;
     else
-        algorithm=0;
+        algorithm=2;
     end
 end
 
 if(nargin<4||isempty(r))
     r=osculatingSpher4LatLon(latLonStart);
 end
+
+dist=dist(:).';
 
 switch(algorithm)
     case 0
@@ -142,9 +172,16 @@ switch(algorithm)
         latLonPoints=directGreatCircleProbCrouse(latLonStart,azimuth,dist,r);
     case 1
         latLonPoints=directGreatCircleProbChen(latLonStart,azimuth,dist,r,distType);
+    case 2
+        latLonPoints=directGreatCircleProbSnyder(latLonStart,azimuth,dist,r);
     otherwise
         error('Unknown algorithm specified.')
 end
+
+%Deal with errors that arise with zero distances.
+sel=(dist==0);
+latLonPoints(:,sel)=latLonStart(:,sel);
+
 end
 
 function latLonPoints=directGreatCircleProbChen(latLonStart,azimuth,dist,r,distType)
@@ -277,6 +314,36 @@ uVecWaypoints=Rxyz'*uVecWaypoints;
 az=atan2(uVecWaypoints(2,:),uVecWaypoints(1,:));
 el=asin(uVecWaypoints(3,:));
 latLonPoints=[el;az];
+
+end
+
+function latLonPoints=directGreatCircleProbSnyder(latLonStart,azimuth,dist,r)
+%%DIRECTGREATCIRCLEPROBSNYDER Solve the direct great circle problem using
+%          the inverse equations for azimuthal equidistant coordinates on a
+%          sphere given in Chapter 25 of of [1].
+%
+%REFERENCES:
+%[3] J. P. Snyder, "Map projections- a working manual," U.S. Geological
+%    Survey, Tech. Rep. 1395, 1987.
+%
+%December 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+phi0=latLonStart(1);
+lambda0=latLonStart(2);
+numDist=length(dist);
+
+xy=pol2Cart([dist;azimuth*ones(1,numDist)],1);
+x=xy(1,:);
+y=xy(2,:);
+rho=sqrt(x.^2+y.^2);
+c=rho./r;
+
+cosC=cos(c);
+sinC=sin(c);
+
+latLonPoints=[asin(cosC.*sin(phi0)+(y.*sinC.*cos(phi0)./rho));
+              lambda0+atan2(x.*sinC,rho.*cos(phi0).*cosC-y.*sin(phi0).*sinC)];
 
 end
 

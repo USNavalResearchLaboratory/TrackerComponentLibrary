@@ -13,11 +13,11 @@ function [x,info]=minLinSysL1Norm(A,b,algorithm,params)
 %          problem. Possible values are:
 %          0 (The default if omitted or an empty matrix is passed) Use the
 %            function secondOrderConeInteriorPoint.
-%          1 Use the function splitingConicSolver.
+%          1 Use the function splittingConicSolver.
 %   params Parameters that affect how the second order cone programming
 %          algorithm works. See the comments to either
 %          secondOrderConeInteriorPoint for algorithm 0 or
-%          splitingConicSolver for algorithm 1 for more details. The
+%          splittingConicSolver for algorithm 1 for more details. The
 %          default values are the same as for those solvers, except the
 %          maximum number of iterations for algorithm 1 is increased to
 %          30e3 due to the slow convergence of that algorithm with moderate
@@ -28,7 +28,7 @@ function [x,info]=minLinSysL1Norm(A,b,algorithm,params)
 %      info The problem is formulated as a second-order cone optimization
 %           problem. This is the information regarding the termination
 %           state. This is either the return value exitCode from
-%           secondOrderConeInteriorPoint or info from splitingConicSolver,
+%           secondOrderConeInteriorPoint or info from splittingConicSolver,
 %           depending on the selected algorithm.
 %
 %As described in [1], the problem can be formulated as a second order cone
@@ -112,7 +112,7 @@ switch(algorithm)
     case 0
         [~,x,~,info]=secondOrderConeInteriorPoint(F',-c,g,cone.q,params);
     case 1
-        [x,~,~,info]=splitingConicSolver(F,g,c,cone,params);
+        [x,~,~,info]=splittingConicSolver(F,g,c,cone,params);
     otherwise
         error('Unknown algorithm specified')
 end

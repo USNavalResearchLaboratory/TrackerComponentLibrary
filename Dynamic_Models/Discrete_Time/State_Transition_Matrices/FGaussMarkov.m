@@ -13,16 +13,14 @@ function F=FGaussMarkov(T,xDim,tau,order)
 %     xDim The dimensionality of the target state. xDim equals
 %          ((order+1)*numDim), where numDim is the number of position
 %          dimensions of space (e.g. 2D or 3D).
-%      tau The time constant of the autocorrelation or the moment of the
+%      tau The time constant of the autocorrelation of the moment of the
 %          given order. For example, if order=2, then tau is the time
 %          constant of the decorrelation time of the acceleration in
 %          seconds. The decorrelation time is approximately 2*tau. As tau
-%          increases, the highest moment of the process process remains
-%          correlated longer. A reasonable range for tau when order=2
-%          (Singer's model) is between 5 and 20 seconds. The time constant
-%          is assumed the same for all dimensions of motion, so this
-%          parameter is scalar. If this parameter is omitted, the default
-%          value of 20 is used.
+%          increases, the highest moment of the process remains correlated
+%          longer. A reasonable range for tau when order=2 (Singer's model)
+%          is between 5 and 20 seconds. The time constant is assumed the
+%          same for all dimensions of motion, so this parameter is scalar.
 %    order The order of the Gauss-Markov process. This is the number of
 %          derivatives of position in the model. Thus, 0=position-only,
 %          1=position and velocity, etc. If this parameter is omitted, the
@@ -57,7 +55,7 @@ function F=FGaussMarkov(T,xDim,tau,order)
 %[1] Y. Bar-Shalom, X. R. Li, and T. Kirubarajan, Estimation with
 %    Applications to Tracking and Navigation. New York: John Wiley and
 %    Sons, Inc, 2001.
-%[2] R. A. Singer,"Estimating optimal tracking filter performance for
+%[2] R. A. Singer, "Estimating optimal tracking filter performance for
 %    manned maneuvering targets," IEEE Transactions on Aerospace and
 %    Electronic Systems, vol. AES-6, no. 4, pp. 473-483, Jul. 1970.
 %[3] L. D. Stone, C. A. Barlow, and T. L. Corwin, Bayesian Multiple Target
@@ -78,6 +76,11 @@ if(nargin<3)
 end
 
 numDim=xDim/(order+1);
+
+if(T==0)
+    F=eye(xDim,xDim);
+    return;
+end
 
 %First, create the matrix for 1D motion.
 F1=zeros(order+1,order+1);

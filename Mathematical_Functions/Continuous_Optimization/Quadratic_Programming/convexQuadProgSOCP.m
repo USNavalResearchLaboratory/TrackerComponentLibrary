@@ -7,7 +7,7 @@ function [x,f,info]=convexQuadProgSOCP(G,a,C,b,numEqConst,params)
 %                      and C(:,(numEqConst+1):end)'*x>=b
 %                Convexity means that G is positive (semi)definite. This
 %                reformulates the problem as a second order cone problem
-%                and then uses splitingConicSolver to solve the problem.
+%                and then uses splittingConicSolver to solve the problem.
 %                Unlike the active set method of [2], this formulation
 %                tends to converge slowly on large problems (large being,
 %                for example, 81 dimensions).             
@@ -21,9 +21,9 @@ function [x,f,info]=convexQuadProgSOCP(G,a,C,b,numEqConst,params)
 % numEqConst The number of constraints in C that are equality constraints
 %          (numEqConst<=m). If this parameter is omitted or an empty matrix
 %          is passed, the default numEqConst=0 is used.
-%   params Parameters that affect how the function splitingConicSolver,
+%   params Parameters that affect how the function splittingConicSolver,
 %          which is used by this function, works. See the comments to
-%          splitingConicSolver for more information.
+%          splittingConicSolver for more information.
 %
 %OUTPUTS: x The nX1 solution to the optimization problem or an empty matrix
 %           if the problem is infeasible or unbounded.
@@ -31,7 +31,7 @@ function [x,f,info]=convexQuadProgSOCP(G,a,C,b,numEqConst,params)
 %           if the problem is infeasible or unbounded.
 %      info The problem is formulated as a second-order cone optimization
 %           problem. This is the information regarding the termination
-%           state returned by the splitingConicSolver function.
+%           state returned by the splittingConicSolver function.
 %
 %As shown in [1], the equivalent second order cone optimization problem is
 %minimize t
@@ -39,7 +39,7 @@ function [x,f,info]=convexQuadProgSOCP(G,a,C,b,numEqConst,params)
 %       and C(:,1:numEqConst)'*x=b(1:numEqConst)
 %       and C(:,(numEqConst+1):end)'*x>=b((numEqConst+1):end)
 %       where SG=sqrtm(G)
-%The function splitingConicSolver is used to solve the problem.
+%The function splittingConicSolver is used to solve the problem.
 %
 %EXAMPLE 1:
 %This is the example worked out step-by-step in [2]:
@@ -132,7 +132,7 @@ F(sel,1:numDim)=-P0Root;
 g(sel)=pinv(P0Root)*q0;
 cone.q=numDim+1;
 
-[x,~,~,info]=splitingConicSolver(F,g,c,cone,params);
+[x,~,~,info]=splittingConicSolver(F,g,c,cone,params);
 
 if(~isempty(x))
     x=x(1:numDim);%Get rid of the auxiliary variable.

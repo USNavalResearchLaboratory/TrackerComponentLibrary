@@ -6,7 +6,7 @@ function zMean=meanDirectionAzEl(zAzEl,systemType,w)
 %
 %INPUTS: zAzEl A 2XnumSample Array of [azimuth;elevation] pairs
 % systemType An optional parameter specifying the axes from which
-%            the angles are measured. Possible vaues are
+%            the angles are measured. Possible values are:
 %            0 (The default if omitted) Azimuth is measured
 %              counterclockwise from the x-axis in the x-y plane.
 %              Elevation is measured up from the x-y plane (towards the
@@ -21,6 +21,11 @@ function zMean=meanDirectionAzEl(zAzEl,systemType,w)
 %            2 This is the same as 0 except instead of being given
 %              elevation, one desires the angle away from the z-axis,
 %              which is (pi/2-elevation).
+%            3 This is the same as 0 except azimuth is measured clockwise
+%              from the y-axis in the x-y plane instead of counterclockwise
+%              from the x-axis. This coordinate system often arises when
+%              given "bearings" in a local East-North-Up coordinate system,
+%              where the bearing directions are measured East of North.
 %          w An optional vector of weights having the same dimensionality
 %            as ang, if a weighted average is desired. The weights do not
 %            have to sum to one. If omitted or an empty matrix is passed,

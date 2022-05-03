@@ -1,4 +1,4 @@
-function azEl=uv2SpherAng(uv,systemType)
+function azEl=uv2SpherAng(uv,systemType,Ms,Muv)
 %%UV2SPHERANG Convert a u-v direction cosine pair into spherical
 %             azimuth and element components in 3D. Direction cosines u and
 %             v are the first two elements of a unit vector in 3D.
@@ -25,6 +25,21 @@ function azEl=uv2SpherAng(uv,systemType)
 %           2 This is the same as 0 except instead of being given
 %             elevation, one is given the angle away from the z-axis, which
 %             is (pi/2-elevation).
+%           3 This is the same as 0 except azimuth is measured clockwise
+%             from the y-axis in the x-y plane instead of counterclockwise
+%             from the x-axis. This coordinate system often arises when
+%             given "bearings" in a local East-North-Up coordinate system,
+%             where the bearing directions are measured East of North.
+%   Ms, Muv If either the spherical coordinate system or the u-v coordinate
+%           system is rotated compared to the global Cartesian coordinate
+%           system, these optional 3X3 matrices provide the rotations. Ms
+%           is a 3X3 matrix to go from the alignment of a global
+%           Cartesian coordinate system to that in which the spherical
+%           coordinates are computed. Similarly, Muv is a rotation matrix
+%           to go from the alignment of a global Cartesian cordinate system
+%           to that in which the u-v(-w) coordinates are computed. If
+%           either of these in omitted or an empty matrix is passed, then
+%           the missing one is replaced with the identity matrix.
 %
 %OUTPUTS: azEl The 2XN set of directions converted into spherical
 %              coordinates. The angles are in radians.
@@ -39,19 +54,30 @@ function azEl=uv2SpherAng(uv,systemType)
 %June 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<4||isempty(Muv))
+    Muv=eye(3,3);
+end
+
+if(nargin<3||isempty(Ms))
+    Ms=eye(3,3);
+end
+
 if(nargin<2||isempty(systemType))
     systemType=0;
 end
 
-u=uv(1,:);
-v=uv(2,:);
-if(size(uv,1)>2)
-    w=uv(3,:);
-else
+if(size(uv,1)<3)
     %The real deals with potential rounding issues pushing the argument of
     %the square root negative.
-    w=real(sqrt(1-u.^2-v.^2));
+    uv=[uv;real(sqrt(1-uv(1,:).^2-uv(2,:).^2))];
 end
+
+%Rotate into the coordinate system of the spherical coordinates.
+uv=Ms*Muv'*uv;
+
+u=uv(1,:);
+v=uv(2,:);
+w=uv(3,:);
 
 numPoints=size(uv,2);
 azEl=zeros(2,numPoints);
@@ -66,6 +92,9 @@ switch(systemType)
     case 2
         azEl(1,:)=atan2(v,u);
         azEl(2,:)=acos(w);%pi/2-asin(w);
+    case 3
+        azEl(1,:)=atan2(u,v);
+        azEl(2,:)=asin(w);
     otherwise
         error('Invalid system type specified.')
 end

@@ -3,13 +3,13 @@
 *             atmospheric effects, when the transmitter, target and
 *             receiver are all moving.
 *
-*INPUTS: xTar The Cartesian state of the targets in 2D or 3D Cartesian
+*INPUTS: xTar The Cartesian state of the targets in 1D, 2D, or 3D Cartesian
 *             space. If 3D, then xTar is a 6XN matrix, (or where the first
 *             3 components are position and the second 3 are velocity.
-*             Otherwise, xTar is a 4XN matrix, where the first two
+*             If, xTar is a 4XN matrix, where the first two
 *             components are position and the second two velocity.
 *             Components are ordered position (x,y,z) and velocity
-*             (xDot,yDot,zDot).
+*             (xDot,yDot,zDot). The same patterns applied in 1D.
 * useHalfRange A boolean value specifying whether the bistatic range value
 *             should be divided by two, which means that the range rate is
 *             divided by two. This normally comes up when operating in
@@ -17,18 +17,17 @@
 *             range. The default if this parameter is not provided is
 *             false.
 *         xTx An xTxDimXN matrix of the states of the transmitters
-*             consisting of stacked 3D position and velocity components.
-*             Other components will be ignored. If this parameter is
-*             omitted, the transmitters are assumed to be stationary at the
-*             origin. If only a single vector is passed, then the
-*             transmitter state is assumed the same for all of the target
-*             states being converted.
+*             consisting of stacked 1D, 2D, or 3D position and velocity
+*             components. If this parameter is omitted, the transmitters
+*             are assumed to be stationary at the origin. If only a single
+*             vector is passed, then the transmitter state is assumed the
+*             same for all of the target states being converted.
 *         xRx An xRxDimXN matrix of the states of the receivers consisting
-*             of stacked 3D position and velocity components. Other
-*             components will be ignored. If this parameter is omitted, the
-*             receivers are assumed to be stationary at the origin. If only
-*             a single vector is passed, then the receiver state is assumed
-*             the same for all of the target states being converted.
+*             of stacked 1D, 2D, or 3D position and velocity components. If
+*             this parameter is omitted, the receivers are assumed to be
+*             stationary at the origin. If only a single vector is passed,
+*             then the receiver state is assumed the same for all of the
+*             target states being converted.
 *
 *OUTPUTS: rr The 1XN bistatic range rates of the targets. If
 *            useHalfRange=true, then the range rate is halved to reflect a
@@ -72,7 +71,6 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     //the single value to be reused. 
     size_t zTxOffset=0;
     size_t zRxOffset=0;
-    size_t xTarOffset;
 
     mxArray *retMat;
     double *retData;
@@ -94,9 +92,9 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     }
     
     N=mxGetN(prhs[0]);
-    xTarOffset=mxGetM(prhs[0]);
+    const size_t xDim=mxGetM(prhs[0]);
 
-    if((mxGetM(prhs[0])!=6&&mxGetM(prhs[0])!=4)||N<1) {
+    if((xDim!=6&&xDim!=4&&xDim!=2)||N<1) {
        mexErrMsgTxt("The points have the wrong dimensionality.");
        return;
     }
@@ -119,7 +117,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         numVecs=mxGetN(prhs[2]);
         numRows=mxGetM(prhs[2]);
 
-        if(numRows<xTarOffset||numVecs<1||(numVecs!=N&&numVecs!=1)) {
+        if(numRows<xDim||numVecs<1||(numVecs!=N&&numVecs!=1)) {
             mexErrMsgTxt("The transmitter locations have the wrong dimensionality.");
             return;
         }
@@ -140,7 +138,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         numVecs=mxGetN(prhs[3]);
         numRows=mxGetM(prhs[3]);
 
-        if(numRows<xTarOffset||numVecs<1||(numVecs!=N&&numVecs!=1)) {
+        if(numRows<xDim||numVecs<1||(numVecs!=N&&numVecs!=1)) {
             mexErrMsgTxt("The transmitter locations have the wrong dimensionality.");
             return;
         }
@@ -156,7 +154,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     retData=mxGetDoubles(retMat);
     
     //Convert each of the measurements
-    if(xTarOffset==4) {//If it is in 2D
+    if(xDim==4) {//If it is in 2D
         for(i=0;i<N;i++) {
             *retData=getRangeRate2DCPP(points,useHalfRange,zTx,zRx);
             retData=retData+1;
@@ -164,7 +162,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             zTx=zTx+zTxOffset;
             zRx=zRx+zRxOffset;
         }
-    } else {//It is in 3D
+    } else if(xDim==6) {//It is in 3D
         for(i=0;i<N;i++) {
             *retData=getRangeRate3DCPP(points,useHalfRange,zTx,zRx);
             retData=retData+1;
@@ -172,6 +170,15 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             zTx=zTx+zTxOffset;
             zRx=zRx+zRxOffset;
         }
+    } else{//xDim=2 -It is 1D.
+        for(i=0;i<N;i++) {
+            *retData=getRangeRate1DCPP(points,useHalfRange,zTx,zRx);
+            retData=retData+1;
+            points=points+6;
+            zTx=zTx+zTxOffset;
+            zRx=zRx+zRxOffset;
+        }
+
     }
 
     plhs[0]=retMat;

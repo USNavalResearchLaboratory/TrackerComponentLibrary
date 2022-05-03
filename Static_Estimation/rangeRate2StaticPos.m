@@ -2,7 +2,7 @@ function [zCart,exitCode]=rangeRate2StaticPos(rr,sRx,AbsTol,RelTol,params)
 %%RANGERATE2STATICPOS Given the minimum number of range rate measurements
 %          for observability (2 in 2D and 3 in 3D) determine the location
 %          of a stationary emitter. The receivers must be moving for the
-%          problem to be observable.  For example, the receiver could be a
+%          problem to be observable. For example, the receiver could be a
 %          drone that is flying around and the emitter a cell phone (which
 %          would have a known broadcast frequency) held by a stationary
 %          person talking on it.

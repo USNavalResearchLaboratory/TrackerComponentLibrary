@@ -25,6 +25,11 @@ function points=Cart2Sphere(cartPoints,systemType,useHalfRange,zTx,zRx,M)
 %           2 This is the same as 0 except instead of being given
 %             elevation, one desires the angle away from the z-axis, which
 %             is (pi/2-elevation).
+%           3 This is the same as 0 except azimuth is measured clockwise
+%             from the y-axis in the x-y plane instead of counterclockwise
+%             from the x-axis. This coordinate system often arises when
+%             given "bearings" in a local East-North-Up coordinate system,
+%             where the bearing directions are measured East of North.
 % useHalfRange An optional boolean value specifying whether the bistatic
 %           (round-trip) range value has been divided by two. This normally
 %           comes up when operating in monostatic mode (the most common
@@ -92,6 +97,9 @@ if(nargin<3)
         case 2
             azimuth=atan2(y,x);
             elevation=pi/2-atan2(z,hypot(x,y));%=asin(x./r)
+        case 3
+            azimuth=atan2(x,y);
+            elevation=atan2(z,hypot(x,y));%=asin(x./r)
         otherwise
             error('Invalid system type specified.')
     end
@@ -163,6 +171,9 @@ for curPoint=1:N
         case 2
             azimuth=atan2(y,x);
             elevation=pi/2-atan2(z,hypot(x,y));%=asin(z./r1);
+        case 3
+            azimuth=atan2(x,y);
+            elevation=atan2(z,hypot(x,y));%=asin(z./r1);
         otherwise
             error('Invalid system type specified')
     end

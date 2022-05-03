@@ -21,6 +21,11 @@ function azEl=getSpherAngle(zC,systemType,zRx,M)
 %          2 This is the same as 0 except instead of being given
 %            elevation, one desires the angle away from the z-axis, which
 %            is (pi/2-elevation).
+%          3 This is the same as 0 except azimuth is measured clockwise
+%            from the y-axis in the x-y plane instead of counterclockwise
+%            from the x-axis. This coordinate system often arises when
+%            given "bearings" in a local East-North-Up coordinate system,
+%            where the bearing directions are measured East of North.
 %      zRx The 3XN [x;y;z] location vectors of the receivers in Cartesian
 %          coordinates.  If this parameter is omitted or an empty matrix is
 %          passed, then the receivers are assumed to be at the origin. If
@@ -89,6 +94,9 @@ for curPoint=1:N
         case 2
             azimuth=atan2(y,x);
             elevation=pi/2-asin(z./r1);
+        case 3
+            azimuth=pi/2-atan2(y,x);
+            elevation=asin(z./r1);
         otherwise
             error('Invalid system type specified')
     end

@@ -20,6 +20,11 @@ function J=spherAngGradient(xG,systemType,lRx,M)
 %          2 This is the same as 0 except instead of being given
 %            elevation, one desires the angle away from the z-axis, which
 %            is (pi/2-elevation).
+%          3 This is the same as 0 except azimuth is measured clockwise
+%            from the y-axis in the x-y plane instead of counterclockwise
+%            from the x-axis. This coordinate system often arises when
+%            given "bearings" in a local East-North-Up coordinate system,
+%            where the bearing directions are measured East of North.
 %      lRx The 3X1 position vector of the receiver. If omitted, the
 %          receiver is placed at the origin. All vectors in x are assumed
 %          to be from the same receiver.
@@ -122,6 +127,18 @@ for curPoint=1:N
             %Derivatives with respect to z.
             J(1,3)=0;
             J(2,3)=-sqrt(x^2+y^2)/r^2;
+        case 3
+            %Derivatives with respect to x.
+            J(1,1)=y/(x^2+y^2);
+            J(2,1)=-x*z/(r^2*sqrt(x^2+y^2));
+
+            %Derivatives with respect to y.
+            J(1,2)=-x/(x^2+y^2);
+            J(2,2)=-y*z/(r^2*sqrt(x^2+y^2));
+
+            %Derivatives with respect to z.
+            J(1,3)=0;
+            J(2,3)=sqrt(x^2+y^2)/r^2;
         otherwise
             error('Invalid system type specified.')
     end

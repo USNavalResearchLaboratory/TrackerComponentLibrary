@@ -1,13 +1,20 @@
-function [v,beta]=HouseholderVec(x)
+function [v,beta]=HouseholderVec(x,forceSign)
 %%HOUSEHOLDERVEC Given an mX1 column vector x, compute mX1 column
 %          vector v and scalar beta such that P=eye(m,m)-beta*v*v' is
-%          orthogonal and P*x=norm(x)*e1 for real x, where e1 is a vector
-%          with a 1 in the first entry and zeros elsewhere. For complex x,  
+%          orthogonal and P*x=(+/-)norm(x)*e1 for real x, where e1 is a
+%          vector with a 1 in the first entry and zeros elsewhere. If
+%          forceSign is true, then it will be such that the + sign is
+%          always chosen. For complex x,
 %          P*x=(+/-)exp(1j*angle(x(1)))*norm(x)*e1, whereby the sign in
 %          front can vary. The v vector is chosen such that v(1)=1. If a
 %          scalar value is provided, then v=1, beta=0 are returned.
 %
 %INPUTS: x An mX1 vector, real or complex.
+% forceSign If true and x is real, then P*x always equals +norm(x)*e1.
+%          Otherwise, it can be + or -. Often, assumptions on recovering
+%          matrices from factored form implicitly assume that
+%          forceSign=false. The default if omitted or an empty matrix is
+%          passed is false.
 %
 %OUTPUTS: v An mX1 vector such that P=eye(m)-beta*v*v' is an orthogonal
 %           matrix and P*x having the only nonzero element be the first
@@ -25,6 +32,10 @@ function [v,beta]=HouseholderVec(x)
 %
 %November 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+if(nargin<2||isempty(forceSign))
+    forceSign=false;
+end
 
 m=length(x);
 
@@ -44,7 +55,12 @@ if(isreal(x))%The real case from Chapter 5.1.3 in [1].
     sigma=x(2:m)'*x(2:m);
     v=[1;x(2:m)];
     if(sigma==0&&x(1)>=0)
-        beta=0;
+        if(forceSign)
+            beta=0;
+        else
+            beta=2;
+        end
+
         return;
     elseif(sigma==0&&x(1)<0)
         beta=2;%Sign corrected from that in the book.

@@ -29,7 +29,8 @@ function Lambda=getMarkovPTransProbMat(A,T)
 %matrix comes from the solution to the Kolmogorov equations given in
 %Chapter 16.2 of the above reference. Specifically, from Equation 16-29.
 %
-%As an example, consider two states. 
+%EXAMPLE:
+%Consider two states. 
 % A=[-0.05, 0.05;
 %     0.1, -0.1];
 % T=1;

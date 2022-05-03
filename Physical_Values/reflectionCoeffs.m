@@ -29,8 +29,8 @@ function [rs,rp]=reflectionCoeffs(e1,e2,thetai,u1,u2)
 %           equals that of free space). That is a reasonable approximation
 %           for air.
 %        u2 The permeability of the lossy medium against which the incoming
-%           ray reflects. medium. This must be a real quantity. If omitted
-%           or an empty matrix is passed, a value of 1 is used. That is a
+%           ray reflects. This must be a real quantity. If omitted or an
+%           empty matrix is passed, a value of 1 is used. That is a
 %           reasonable approximation for water.
 %
 %OUTPUTS: rs The complex reflection coefficient for s-polarized light, also
@@ -40,19 +40,19 @@ function [rs,rp]=reflectionCoeffs(e1,e2,thetai,u1,u2)
 %            tangent-plane polarized light.
 %
 %This function implements Equations 5 and 10 of [1], substituting the
-%complex angle expression in 12. Unlike in [1], we exanded epsilon_1 and
+%complex angle expression in 12. Unlike in [1], we expanded epsilon_1 and
 %mu_1 in terms of a relative permittivity times the permittivity of free
 %space and a relative permeability times the permeability of free space.
 %that allows for cancellation with the expanded form of beta_2 when
 %expressed in such a manner.
 %
 %The results of [1] show that the corrected solution in [2] is equivalent
-%to a previously ad-hoc approach) when using a "complex" angle. The topic
+%to a previously ad-hoc approach when using a "complex" angle. The topic
 %has been somewhat controversial, with additional discussion in [3] and
 %[4].
 %
 %EXAMPLE:
-%We plot the magnitude ang phase of the reflection coefficients between air
+%We plot the magnitude and phase of the reflection coefficients between air
 %and seawater at 13MHz frequency.
 % e1=1;%Assume that the relative permittivity of air is 1.
 % T=20;
@@ -89,7 +89,7 @@ function [rs,rp]=reflectionCoeffs(e1,e2,thetai,u1,u2)
 % legend('s-Polarization','p-Polarization','location','southeast')
 %
 %REFERENCES:
-%[1] I. M. Besieris, "Comment on the “corrected Fresnel coefficients for
+%[1] I. M. Besieris, "Comment on the “Corrected Fresnel coefficients for
 %    lossy materials," IEEE Antennas and Propagation Magazine, vol. 53,
 %    no. 4, pp. 161-164, Aug. 2011.
 %[2] F. X. Canning, "Corrected Fresnel coefficients for lossy materials,"
@@ -100,7 +100,7 @@ function [rs,rp]=reflectionCoeffs(e1,e2,thetai,u1,u2)
 %    Electromagnetic in Advanced Applications, Turin, Italy, 7-1 Sep. 2015,
 %    pp. 165-168.
 %[4] M. Oh, "Complex unit vector for the complex wave constant k in
-%    a lossy medium," IEEE Antennas & Propagation Magazine, vol. 63,
+%    a lossy medium," IEEE Antennas and Propagation Magazine, vol. 63,
 %    no. 1, pp. 117-120, Feb. 2021.
 %
 %July 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.

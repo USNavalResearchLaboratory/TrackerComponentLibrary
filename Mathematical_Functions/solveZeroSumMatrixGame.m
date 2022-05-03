@@ -19,14 +19,21 @@ function [optVal,x,y,exitCodes]=solveZeroSumMatrixGame(A,linProgOpts)
 % linProgOpts Linear programming is used to solve the problem. Thus, this
 %          is an optional structure that passes parameters to the linear
 %          programming algorithm. members of the structure can be:
-%          algorithm This is either 0 or 1. 0 means use
+%          algorithm This is either 0, 1, or 2. 0 means use
 %                    linProgRevisedSimplex to solve the problem; 1 means
-%                    use linProgInteriorPoint. The default is 0.
-%          maxIter, epsilon, alpha These three parameters are the same
-%                    as the inputs in the aforementioned linear
-%                    programming algorithms. See the algorithms for
-%                    details. The defaults if omitted are the defaults of
-%                    the respective linear programming algorithms.
+%                    use linProgInteriorPoint; 2 means use linProgSOCP to
+%                    solve the problem. The default is 0.
+%          maxIter, epsilon, alpha These three parameters are only used if
+%                    algorithm=0 or 1. These are the same as the inputs in
+%                    the aforementioned linear programming algorithms. See
+%                    the comments to those functions for details. The
+%                    defaults if omitted are the defaults of the respective
+%                    linear programming algorithms.
+%             params This parameter is only used if algorithm=2. It
+%                    corresponds to the params input of the linProgSOCP
+%                    function. See the comments to that function for more
+%                    information. The defaults if omitted are the default
+%                    of that function.
 %
 %OUTPUTS: optVal The value of y'*A*x obtained solving the zero-sum matrix
 %           game.
@@ -37,18 +44,20 @@ function [optVal,x,y,exitCodes]=solveZeroSumMatrixGame(A,linProgOpts)
 %         y A numRowsX1 vector solving min_y max_x y'*A*x , which happens
 %           to equal max_x min_y y'*A*x under the same constraints as
 %           given for x above.
-%  exitCode A 2X1 vector of the values of the exitCode parameter from the
-%           chosen linear programming algorithm. See the comments for the
-%           chosen algorithm for more details. The algorithm is run twice
-%           on different problems (once to solve for x, another time to
+%  exitCode If algorithm=0 or 1, this is a 2X1 vector of the values of the
+%           exitCode parameter from the chosen linear programming
+%           algorithm. See the comments for the chosen algorithm for more
+%           details. if algorithm=2, this is a 2X1 cell array holding the
+%           info output of linProgSOCP. The algorithm is run twice on
+%           different problems (once to solve for x, another time to
 %           solve for y given x). Thus, there are two outputs.
 % 
 %The transformation of a zero-sum matrix game into a linear programming
 %problem is given in Chapter 11 of [1].
 %
-%Example 1
+%EXAMPLE 1:
 %An often-used example of a zero-sum game (also given in Chapter 11 of
-%[1]) is rock-paper-scissors. Each player can choose rock paper or
+%[1]) is rock-paper-scissors. Each player can choose rock, paper, or
 %scissors. If they choose the same thing, then it is a draw. For rock
 %versus scissors, scissors lose. For rock versus paper, rock loses. For
 %paper versus scissors, paper loses. Saying player 1 wins has a cost of -1
@@ -62,10 +71,10 @@ function [optVal,x,y,exitCodes]=solveZeroSumMatrixGame(A,linProgOpts)
 %which means to just choose uniformly among rock, paper and scissors.
 %optVal is also 0. 
 %
-%Example 2
-%The French version of rock paper scissors is rock, paper, scissors well,
+%EXAMPLE 2:
+%The French version of rock, paper, scissors is rock, paper, scissors well,
 %where the rock and scissors lose to the well, but the paper wins. The
-%matrix of payofs in such an instance is
+%matrix of payoffs in such an instance is
 % A=[0, 1,-1, 1;
 %   -1, 0, 1,-1;
 %    1,-1, 0, 1;
@@ -73,7 +82,7 @@ function [optVal,x,y,exitCodes]=solveZeroSumMatrixGame(A,linProgOpts)
 % [optVal,x,y,exitCodes]=solveZeroSumMatrixGame(A)
 %Here, the optimal strategy for both players is [0;1/3;1/3;1/3].
 %
-%Example 3
+%EXAMPLE: 3
 %The previous two examples have games that are symmetric (The matrix is
 %square and the off-diagonal elements are the same with flipped signs). An
 %example of an asymmetric game is from Chapter 11 of [1]
@@ -90,7 +99,7 @@ function [optVal,x,y,exitCodes]=solveZeroSumMatrixGame(A,linProgOpts)
 %are not the same as the solution in [1], though optVal=1/18 is the same
 %for both solutions.
 %
-%Example 4
+%EXAMPLE 4:
 %In this example, the convergence of a standard interior point algorithm
 %is rather slow even though the problem is very simple. For small problems,
 %the simplex algorithm (the default) is often the best despite its
@@ -101,7 +110,7 @@ function [optVal,x,y,exitCodes]=solveZeroSumMatrixGame(A,linProgOpts)
 % tic;[optVal,x,y,exitCodes]=solveZeroSumMatrixGame(A);toc
 % linProgOpts.algorithm=1;
 % tic;[optValI,xI,yI,exitCodesI]=solveZeroSumMatrixGame(A,linProgOpts);toc
-%Here, one find the optimal value to be about 30/1375.
+%Here, one find the optimal value to be about 3000/1375.
 %
 %REFERENCES:
 %[1] R. J. Vanderbei, Linear Programming: Foundations and Extensions, 4th
@@ -115,6 +124,7 @@ if(nargin<2)
     maxIter=[];
     epsilon=[];
     alpha=[];
+    params=[];
 else
     if(isfield(linProgOpts,'algorithm'))
         algorithm=linProgOpts.algorithm;
@@ -139,6 +149,12 @@ else
     else
         alpha=[];
     end
+
+    if(isfield(linProgOpts,'params'))
+        params=linProgOpts.params;
+    else
+        params=[];
+    end
 end
 
 numRows=size(A,1);
@@ -152,13 +168,19 @@ AEq=[ones(1,numCols),  0];
 bEq=1;
 maximize=true;
 
-exitCodes=zeros(2,1);
-
 switch(algorithm)
     case 0
+        exitCodes=zeros(2,1);
         [optVal,x,exitCodes(1)]=linProgRevisedSimplex(AEq,bEq,ALeq,bLeq,c,maximize,maxIter,epsilon);
     case 1
+        exitCodes=zeros(2,1);
         [optVal,x,exitCodes(1)]=linProgInteriorPoint(AEq,bEq,ALeq,bLeq,c,maximize,maxIter,epsilon,alpha);
+    case 2
+        exitCodes=cell(2,1);
+        params.alpha=alpha;
+        params.eps=epsilon;
+        params=[];
+        [optVal,x,exitCodes{1}]=linProgSOCP(AEq,bEq,ALeq,bLeq,c,maximize,true,params);
     otherwise
         error('Unknown algorithm specified')
 end
@@ -178,6 +200,8 @@ if(nargout>2)
             [optVal,y,exitCodes(2)]=linProgRevisedSimplex(AEq,bEq,ALeq,bLeq,c,maximize,maxIter,epsilon);
         case 1
             [optVal,y,exitCodes(2)]=linProgInteriorPoint(AEq,bEq,ALeq,bLeq,c,maximize,maxIter,epsilon,alpha);
+        case 2
+            [optVal,y,exitCodes{2}]=linProgSOCP(AEq,bEq,ALeq,bLeq,c,maximize,true,params);
         otherwise
             error('Unknown algorithm specified')
     end

@@ -1,6 +1,6 @@
 function [rs,rp]=reflectionCoeffsVec(e1,e2,k,n,u1,u2)
 %%REFLECTIONCOEFFSVEC Reflection coefficients for the reflection of an
-%           electromagnetic plane wave from a LOSSLESS medium into a LOSSY
+%           electromagnetic plane wave from a LOSSLESS medium off a LOSSY
 %           medium (or another lossless medium) are computed given a vector
 %           in the direction of propagation of the light and a vector
 %           normal to the surface. Both media must have real

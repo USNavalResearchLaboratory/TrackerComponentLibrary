@@ -74,7 +74,7 @@ double getRangeRate3DCPP(const double *xTar,bool useHalfRange,const double *xTx,
  *        into a non-relativistic range rate, ignoring atmospheric effects.
  *
  *INPUTS: xTar The 6X1 Cartesian position and velocity vectors
- *             [x;yz;;xDot;yDot;zDot].
+ *             [x;y;z;xDot;yDot;zDot].
  * useHalfRange A boolean value specifying whether the bistatic (round-
  *             trip) range value (and hence the range rate) has been
  *             divided by two. 
@@ -132,6 +132,42 @@ double getRangeRate3DCPP(const double *xTar,bool useHalfRange,const double *xTx,
         rr=rr/2;
     }
     return rr;
+}
+
+double getRangeRate1DCPP(const double *xTar,bool useHalfRange,const double *xTx,const double *xRx) {
+/*GETRANGERATE3DGENCPP A C++ function to convert a Cartesian state in 1D
+ *        into a non-relativistic range rate, ignoring atmospheric effects.
+ *
+ *INPUTS: xTar The 2X1 Cartesian position and velocity vectors
+ *             [x;xDot].
+ * useHalfRange A boolean value specifying whether the bistatic (round-
+ *             trip) range value (and hence the range rate) has been
+ *             divided by two. 
+ *         xTx The 2X1 [x;xDot] position and velocity vector of the
+ *             transmitter in global Cartesian coordinates.
+ *         xTx The 2X1 [x;xDot] position and velocity vector of the
+ *             receiver in global Cartesian coordinates.
+ *
+ *OUTPUTS: rr The range rate as a double.
+ *
+ *See the comments to the Matlab function getRangeRate for more information
+ *on how this function works.
+ *
+ *March 20122 David F. Crouse, Naval Research Laboratory, Washington D.C.
+ **/
+    const double dtr=xTar[0]-xRx[0];
+    const double dtl=xTar[0]-xTx[0];
+
+    const double dtrRat=dtr/sqrt(dtr*dtr);//Effectively a signum function.
+    const double dtlRat=dtl/sqrt(dtl*dtl);
+
+    double rr=(dtrRat+dtlRat)*xTar[1]-dtrRat*xRx[1]-dtlRat*xTx[1];
+
+    if(useHalfRange) {
+        return rr/2.0;
+    } else {
+        return rr;
+    }
 }
 
 /*LICENSE:

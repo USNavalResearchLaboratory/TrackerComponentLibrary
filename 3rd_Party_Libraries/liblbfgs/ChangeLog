@@ -6,6 +6,7 @@
         - Added checks for MATLAB_MEX_FILE being defined, in which case
           mxMalloc and mxFree are used when dealing with memory allocation and
           deallocation.
+
 2010-xx-xx  Naoaki Okazaki  <okazaki at chokkan org>
 
 	* libLBFGS 1.10:

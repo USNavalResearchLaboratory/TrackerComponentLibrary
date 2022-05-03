@@ -93,7 +93,7 @@ function phi=pt2MeanValCoords3D(x,v,vertInFaces,epsValEq,epsValPi,epsValS)
 %[1] T. Ju, S. Schaefer, and J. Warren, "Mean value coordinates for closed
 %    triangular meshes," in Proceedings of the Special Interest Group
 %    on Computer Graphics and Interactive Techniques Conference, Los
-%    Angles, CA, 31 Jul. - 4 Aug. 2005, pp. 561-566.
+%    Angeles, CA, 31 Jul. - 4 Aug. 2005, pp. 561-566.
 %[2] M. S. Floater, "Generalized barycentric coordinates and applications,"
 %    Acta Numerica, vol. 24, pp. 161-214, 1 May 2015.
 %

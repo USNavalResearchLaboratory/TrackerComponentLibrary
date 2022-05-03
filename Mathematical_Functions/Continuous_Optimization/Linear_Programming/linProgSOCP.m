@@ -7,7 +7,7 @@ function [optCost,xOpt,info]=linProgSOCP(A,b,ALeq,bLeq,c,maximize,nonnegConst,pa
 %                              ALeq*x<=bLeq
 %                                   x>=0 (if nonnegConst is true)
 %            Second order cone programming is a generalization of linear
-%            programming. The function splitingConicSolver is used to
+%            programming. The function splittingConicSolver is used to
 %            perform the optimization.
 %
 %INPUTS: A An mXn matrix of equality constraints. If there are no equality
@@ -27,9 +27,9 @@ function [optCost,xOpt,info]=linProgSOCP(A,b,ALeq,bLeq,c,maximize,nonnegConst,pa
 % nonnegConst A parameter indicating whether the nonegtivity constraint
 %          should be included. The default if omitted or an empty matrix is
 %          passed is true.
-%   params Parameters that affect how the function splitingConicSolver,
+%   params Parameters that affect how the function splittingConicSolver,
 %          which is used by this function, works. See the comments to
-%          splitingConicSolver for more information.
+%          splittingConicSolver for more information.
 %
 %OUTPUTS: optCost The optimal cost when the algorithm successfully
 %                 terminates or when it terminates after having reached the
@@ -44,11 +44,11 @@ function [optCost,xOpt,info]=linProgSOCP(A,b,ALeq,bLeq,c,maximize,nonnegConst,pa
 %                 terminate successfully, then an empty matrix is returned.
 %            info The problem is formulated as a second-order cone
 %                 optimization problem. This is the information regarding
-%                 the termination state returned by the splitingConicSolver
-%                 function.
+%                 the termination state returned by the
+%                 splittingConicSolver function.
 %
 %This just formulates the inputs in an appropriate manner so that the
-%function splitingConicSolver can be used to solve the problem.
+%function splittingConicSolver can be used to solve the problem.
 %
 %EXAMPLE:
 %%Consider the problem
@@ -129,7 +129,7 @@ else
     cone.l=numIneqConst;
 end
 
-[xOpt,~,~,info]=splitingConicSolver(F,g,c,cone,params);
+[xOpt,~,~,info]=splittingConicSolver(F,g,c,cone,params);
 
 optCost=info.pobj;
 

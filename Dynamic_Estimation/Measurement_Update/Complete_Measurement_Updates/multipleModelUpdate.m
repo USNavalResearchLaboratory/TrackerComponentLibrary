@@ -1,14 +1,15 @@
 function [xPostSet,PPostSet,muPost,xMerged,PMerged]=multipleModelUpdate(AlgSel,xPredSet,PPredSet,z,R,measUpdateFuns,muPrev,Lambda,numStateDims,numMixDims)
 %%MULTIPLEMODELUPDATE Given a set of predicted target state estimates and
-%                     covariance matrices under different dynamic models,
+%                     covariance matrices under different models,
 %                     approximate the first two moments of the posterior
 %                     distributions using the selected algorithm for
-%                     handling multiple models. For purposes of computign
+%                     handling multiple models. For purposes of computing
 %                     the necessary likelihoods, it is assumed that the
 %                     target state can be approximated as being jointly
-%                     Gaussian with the measurement. The models can have
-%                     different dimensionalities with only the first few
-%                     states playing a role in the mixing. The function
+%                     Gaussian with the measurement. With the exception of
+%                     the GPB1 algorithm, The models can have different
+%                     dimensionalities with only the first few states
+%                     playing a role in the mixing. The function
 %                     multipleModelPred should be used for predicting the
 %                     models.
 %
@@ -24,8 +25,8 @@ function [xPostSet,PPostSet,muPost,xMerged,PMerged]=multipleModelUpdate(AlgSel,x
 %                      the same as the static model estimator of Chapter
 %                      11.6.2 of [3].
 %               'GPB1' The generalized pseudo-Bayesian estimator 1,
-%                      described in Chapter 11.6.4 of [3]. All models have
-%                      to have the same dimensionality.
+%                      described in Chapter 11.6.4 of [3]. All models must
+%                      have the same dimensionality.
 %               'GPB2' The generalized pseudo-Bayesian estimator 2,
 %                      described in Chapter 11.6.5 of [3], with changes
 %                      similar to that of [1], [2], and [4] to make it work
@@ -50,14 +51,12 @@ function [xPostSet,PPostSet,muPost,xMerged,PMerged]=multipleModelUpdate(AlgSel,x
 %               this is xDimMaxXxDimMaxXnumModelsXnumModels for all
 %               possible combinations of model switches.
 %             z A zDimX1 measurement that will be used to update all of the
-%               models. If using the IMM, an empty matrix can be passed if
-%               one wishes to perform the hypothesis mixing, but not an
-%               update (a missed detection event).
+%               models. If a missed detection event occurred, this should
+%               be an empty matrix.
 %             R A zDimXzDim measurement covariance matrix that will be used
-%               when updating all of the models. If using the IMM, an empty
-%               matrix can be passed if one wishes to perform the
-%               hypothesis mixing, but not an update (a missed detection
-%               event).
+%               when updating all of the models. An empty matrix can be
+%               passed if one wishes to perform the hypothesis mixing but
+%               not an update (a missed detection event).
 % measUpdateFuns A function handle used for updating all of the models or a
 %               numModelsX1 cell array of numModels function handles for
 %               updating each model when differences in the types of states
@@ -67,15 +66,14 @@ function [xPostSet,PPostSet,muPost,xMerged,PMerged]=multipleModelUpdate(AlgSel,x
 %               where the first two outputs are the updated state, and the
 %               second two are the innovation and innovation covariance
 %               matrix. The innovation and innovation covariance matrix are
-%               necessary for the computation of the likelihoods in the
-%               IMM.
+%               necessary for the computation of likelihoods.
 %        muPrev The numModelsX1 set of prior mixing probabilities. 
 %        Lambda When using the GPB1, IMM, and GPB2 algorithms, this is the
 %               numModelsXnumModels matrix of model transition
 %               probabilities. For example, one could use the function call
 %               Lambda=getMarkovPTransProbMat(A,T) to get such a transition
 %               matrix for a particular model. When using the AMM, this
-%               input is not used, and an empty matrix could be passed.
+%               input is not used, and an empty matrix can be passed.
 %  numStateDims An optional numModelsX1 vector that lists the number of
 %               dimensions in the state in each model. This lets the
 %               function be used with models where the states have
@@ -84,18 +82,18 @@ function [xPostSet,PPostSet,muPost,xMerged,PMerged]=multipleModelUpdate(AlgSel,x
 %               parameter should be omitted when using the GPB1 algorithm,
 %               as all dynamic models should have the same dimensionality
 %               and mixing should be over all elements of the state.
-%    numMixDims An optional numModelsX1 vector that lists the number of
-%               dimensions in each state that are involved in mixing. For
-%               example, when designing a model set including a model with
-%               a turn rate and a model without a turn rate, usually the
-%               turn rate will not be included in the mixing. Similarly,
-%               one might mixed models with position and velocity with
-%               those including position velocity and acceleration, but if
-%               there is also a model with position, velocity and drag, the
-%               drag term would not be appropriate to mix with anything
-%               else. If omitted, numMixDims=numStateDims is used. This
-%               parameter is not used and should be omitted when using the
-%               GPB1 algorithm. 
+%    numMixDims An optional numModelsX1 or 1XnumModels vector that lists
+%               the number of dimensions in each state that are involved in
+%               mixing. For example, when designing a model set including a
+%               model with a turn rate and a model without a turn rate,
+%               usually the turn rate will not be included in the mixing.
+%               Similarly, one might mixed models with position and
+%               velocity with those including position velocity and
+%               acceleration, but if there is also a model with position,
+%               velocity and drag, the drag term would not be appropriate
+%               to mix with anything else. If omitted,
+%               numMixDims=numStateDims is used. This parameter is not used
+%               and should be omitted when using the GPB1 algorithm. 
 %  
 %OUTPUTS: xPostSet The updated set of target states for the models. For all
 %                 of the methods except the GPB1, this is xDimMaxXnumModels
@@ -109,11 +107,12 @@ function [xPostSet,PPostSet,muPost,xMerged,PMerged]=multipleModelUpdate(AlgSel,x
 %                 size, except when using the GPB1, in which case it is
 %                 just xDimMaxXxDimMax in size.
 %          muPost The numModelsX1 set of updated model probabilities.
-%         xMerged The state estimate obtained by merging all of the models
-%                 according to the method used in the selected algorithm.
-%                 This is generally what should be used for display to an
-%                 operator. The dimensionality is min(numMixDims)X1
-%         PMerged The covariance matrix associated with xMerged. 
+%         xMerged The min(numMixDims)X1 state estimate obtained by merging
+%                 all of the models according to the method used in the
+%                 selected algorithm. This is generally what might be used
+%                 for display to an operator.
+%         PMerged The min(numMixDims)Xmin(numMixDims) covariance matrix
+%                  associated with xMerged. 
 %
 %Multiple model routines for target tracking are discussed in general in
 %Chapter 11.6 of [3]. The IMM tends to be the most widely used multiple
@@ -131,6 +130,10 @@ function [xPostSet,PPostSet,muPost,xMerged,PMerged]=multipleModelUpdate(AlgSel,x
 %Matlab than using a cell array to store states of the exact sizes of the
 %models.
 %
+%Note that with each of the algorithms, this function can be called with an
+%empty measurement to cause the model mixing to occur without actually
+%performing a measurement update.
+%
 %REFERENCES:
 %[1] J. D. Glass, W. D. Blair, and Y. Bar-Shalom, "IMM estimators with
 %    unbiased mixing for tracking targets performing coordinated turns," in
@@ -139,7 +142,7 @@ function [xPostSet,PPostSet,muPost,xMerged,PMerged]=multipleModelUpdate(AlgSel,x
 %[2] T. Yuan, Y. Bar-Shalom, P. Willett, E. Mozeson, S. Pollak, and D.
 %    Hardiman, "A multiple IMM estimation approach with unbiased mixing for
 %    thrusting projectiles," IEEE Transactions on Aerospace and Electronic
-%    Systems, no. 4, pp. 3250-3267, Oct. 2012.
+%    Systems, vol. 48, no. 4, pp. 3250-3267, Oct. 2012.
 %[3] Y. Bar-Shalom, X. R. Li, and T. Kiruabarajan, Estimation with
 %    Applications to Tracking and Navigation. New York: Wiley Interscience,
 %    2001.
@@ -155,14 +158,14 @@ numModels=size(xPredSet,2);
 
 %If the number of dimensions in the states is omitted, assume all the
 %states are the same size.
-if(nargin<9)
+if(nargin<9||isempty(numStateDims))
 	xDim=size(xPredSet,1);
 	numStateDims=repmat(xDim,[numModels,1]);
 end
 
 %If the number of dimensions involved in mixing is omitted, assume that all
 %of the dimensions in each vector mix.
-if(nargin<10)
+if(nargin<10||isempty(numMixDims))
     numMixDims=numStateDims;
 end
 
@@ -176,14 +179,21 @@ end
 
 switch(AlgSel)
      case 'AMM'%Autonomous multiple model.
-        %Perform mode-matched filtering
-        [xPostSet,PPostSet,likelihoods]=updateModels(xPredSet,PPredSet,measUpdateFuns,z,R,numStateDims);
-        muPost=muPrev.*likelihoods;
-        muPost=muPost/sum(muPost);
-        %Deal with all of the likelihoods being too small by assuming a
-        %uniform distribution if nonfinite numbers arise.
-        if(any(~isfinite(muPost)))
-            muPost=ones(numModels,1)*(1/numModels);
+        if(isempty(z))
+            %Missed detection event.
+            xPostSet=xPredSet;
+            PPostSet=PPredSet;
+            muPost=muPrev;
+        else
+            %Perform mode-matched filtering
+            [xPostSet,PPostSet,likelihoods]=updateModels(xPredSet,PPredSet,measUpdateFuns,z,R,numStateDims);
+            muPost=muPrev.*likelihoods;
+            muPost=muPost/sum(muPost);
+            %Deal with all of the likelihoods being too small by assuming a
+            %uniform distribution if nonfinite numbers arise.
+            if(any(~isfinite(muPost)))
+                muPost=ones(numModels,1)*(1/numModels);
+            end
         end
 
         %The combined output is just the weighted mixture of the
@@ -191,9 +201,17 @@ switch(AlgSel)
         %involved in the update of each filter.
         [xMerged,PMerged]=calcMixtureMoments(xPostSet,muPost,PPostSet,[],[],numMergeDims);
      case 'GPB1'%Generalized pseudo-Bayesian 1
-        %%Perform mode-matched filtering
-        [xPostSet,PPostSet,likelihoods]=updateModels(xPredSet,PPredSet,measUpdateFuns,z,R,numStateDims);
-        
+        if(isempty(z))
+            %If no measurement is provided, but we just want to perform the
+            %mixing.
+            xPostSet=xPredSet;
+            PPostSet=PPredSet;
+            %Uninformative likelihoods.
+            likelihoods=ones(numModels,1);
+        else
+            %%Perform mode-matched filtering
+            [xPostSet,PPostSet,likelihoods]=updateModels(xPredSet,PPredSet,measUpdateFuns,z,R,numStateDims);
+        end
         %%Update the mode probabilities.
         muPost=zeros(numModels,1);
         for curModel=1:numModels
@@ -260,11 +278,20 @@ switch(AlgSel)
         %attempt to apply to the GPB2 estimator the same method of making
         %the IMM less biased when handling states of different
         %dimensionalitites.
-        
+
+        if(isempty(z))
+            %If no measurement is provided, but we just want to perform the
+            %mixing.
+            xPostHyps=xPredSet;
+            PPostHyps=PPredSet;
+            %Uniform likelihoods means uninformative.
+            likelihoods=ones(numModels,numModels);
+        else
         %%%Perform mode-matched filtering for all combinations of prior and
         %%%posterior models.
-        [xPostHyps,PPostHyps,likelihoods]=updateModelsGPB2(xPredSet,PPredSet,measUpdateFuns,z,R,numStateDims);
-       
+            [xPostHyps,PPostHyps,likelihoods]=updateModelsGPB2(xPredSet,PPredSet,measUpdateFuns,z,R,numStateDims);
+        end
+
         %%%Calculation of the merging probabilities.
         muMerge=likelihoods.*Lambda.*repmat(muPrev(:),[1,numModels]);
         cBar=zeros(numModels,1);

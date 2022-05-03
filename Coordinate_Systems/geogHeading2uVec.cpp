@@ -34,11 +34,12 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     checkRealDoubleArray(prhs[1]);
     checkRealDoubleArray(prhs[2]);
     
-    if(mxGetNumberOfElements(prhs[0])!=2&&mxGetNumberOfElements(prhs[0])!=3) {
+    if(mxGetM(prhs[0])!=2&&mxGetM(prhs[0])!=3) {
         mexErrMsgTxt("point has the wrong dimensionality.");
         return;
     }
     const double *point=mxGetDoubles(prhs[0]);
+    const size_t NPts=mxGetN(prhs[0]);
     const size_t NGeo=mxGetNumberOfElements(prhs[1]);
     const size_t NEl=mxGetNumberOfElements(prhs[2]);
     const double *geoEastOfNorth=mxGetDoubles(prhs[1]);
@@ -48,11 +49,21 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         mexErrMsgTxt("The sizes of geoEastOfNorth and angUpFromLevel are inconsistent.");
         return;
     }
-    
-    mxArray *uMATLAB=mxCreateDoubleMatrix(3,std::max(NGeo,NGeo),mxREAL);
+
+    if((NPts!=NEl)&&(NPts!=1)&&(NEl!=1)) {
+        mexErrMsgTxt("The sizes of point and angUpFromLevel are inconsistent.");
+        return;
+    }
+
+    if((NGeo!=NPts)&&(NGeo!=1)&&(NPts!=1)) {
+        mexErrMsgTxt("The sizes of geoEastOfNorth and point are inconsistent.");
+        return;
+    }
+
+    mxArray *uMATLAB=mxCreateDoubleMatrix(3,std::max(NPts,std::max(NGeo,NGeo)),mxREAL);
     double *u=mxGetDoubles(uMATLAB);
 
-    geogHeading2uVecCPP(point, NGeo, geoEastOfNorth, NEl, angUpFromLevel, u);
+    geogHeading2uVecCPP(NPts,point, NGeo, geoEastOfNorth, NEl, angUpFromLevel, u);
 
     plhs[0]=uMATLAB;
 }

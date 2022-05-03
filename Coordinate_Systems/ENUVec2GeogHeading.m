@@ -41,7 +41,7 @@ x=u(1,:);
 y=u(2,:);
 z=u(3,:);
 
-heading=pi/2-atan2(y,x);
+heading=atan2(x,y);
 r=x.^2+y.^2+z.^2;
 angUpFromLevel=asin(z./r);
 

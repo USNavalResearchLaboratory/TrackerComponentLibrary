@@ -1,18 +1,22 @@
 classdef InformationCriteria
-    %%INFORMATIONCRITERIA A collection of static function for computing
-    %                     various information criteria as given in [1].
-    %
-    %Currently implemented criteria are: AIC, AICc, BIC, CLC, AWE, NEC,
-    %                                    KIC, KICc, AKICc
-    %
-    %REFERENCES:
-    %[1] S. Akogul and M. Erisoglu, "A Comparison of Information Criteria in
-    %    Clustering Based on Mixture of Multivariate Normal Distributions,"
-    %    Mathematical and Computational Applications, vol. 21, no. 3, p. 34,
-    %    Aug. 2016.
-    %
-    %August 2021 Codie T. Lewis, Naval Research Laboratory, Washington D.C.
-    %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+%%INFORMATIONCRITERIA A collection of static function for computing
+%                     various information criteria as given in [1].
+%                     Information criteria are useful for determinign the 
+%
+%Currently implemented criteria are: AIC, AICc, BIC, CLC, AWE, NEC,
+%                                    KIC, KICc, AKICc, TIC
+%
+%REFERENCES:
+%[1] S. Akogul and M. Erisoglu, "A Comparison of Information Criteria in
+%    Clustering Based on Mixture of Multivariate Normal Distributions,"
+%    Mathematical and Computational Applications, vol. 21, no. 3, p. 34,
+%    Aug. 2016.
+%[2] M. Dixon and T. Ward, "Information-corrected estimation: A 
+%    generalization error reducing parameter estimation method,"
+%    Entropy, vol. 23, no. 11, p. 1419, 2021.
+%
+%August 2021 Codie T. Lewis, Naval Research Laboratory, Washington D.C.
+%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
     
     methods(Static)
         function val = AIC(LL,paramDim)
@@ -174,6 +178,27 @@ classdef InformationCriteria
             %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
             val = -2*LL+((paramDim+1)*(3*numSamp-paramDim-2)/(numSamp-paramDim-2))...
                        +(paramDim/(numSamp-paramDim));
+        end
+        function val = TIC(LL,J,K)
+            %%TIC Computes the Takeuchi information criterion (TIC).
+            %
+            %INPUTS:
+            % LL: The log-likelihood value.
+            % J: The second vector derivative of log(f) with respect to the
+            %    parameter vector evaluated at the parameters used to
+            %    compute LL. The Fisher information matrix.
+            % K: The first vector derivative of log(f) with respect to the
+            %    parameter vector evaluated at the parameters used to
+            %    compute LL. The expected Hessian.
+            %
+            %OUTPUTS:
+            % val: The criterion value.
+            %
+            %Note: This equals the AIC if J=K.
+            %
+            %January 2022 Codie T. Lewis, Naval Research Laboratory, Washington D.C.
+            %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+            val = -2*LL+2*trace(J\K);
         end
     end
 end

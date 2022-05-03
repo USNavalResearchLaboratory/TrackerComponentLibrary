@@ -21,12 +21,12 @@ function sqrtA=cholSemiDef(A,upperOrLower,method,epsVal)
 %            A=sqrtA*sqrtA'. This method performs an LDL decomposition
 %            using Matlab's ldl function followed by a triangularization
 %            step to assure that the block-diagonal result is actually
-%            diagonal. Chapter 4.2.3 of [1] related the LDL decomposition
+%            diagonal. Chapter 4.2.3 of [1] relates the LDL decomposition
 %            to the Cholesky decomposition. Values in the diagonal matrix D
 %            that are less than epsVal*max(diag(D)) are replaced with
 %            epsVal*max(diag(D)). It is assumed that no negative
 %            eigenvalues are present, otherwise Matlab's function might
-%            return D and a tridiagonal marix. In such an instance, the
+%            return D as a tridiagonal matrix. In such an instance, the
 %            off-diagonal elements are discarded.
 %          1 This is similar to 0, but no triangularization step is
 %            performed. Thus, A=sqrtA*sqrtA' but sqrtA might not be
@@ -36,7 +36,7 @@ function sqrtA=cholSemiDef(A,upperOrLower,method,epsVal)
 %            the algorithm is less than epsVal, replace it with epsVal.
 %          3 Perform an SVD and set the singular values that are less than
 %            epsVal*max(diag(S)) to epsVal*max(diag(S)). U and V from the
-%            svd will be equal when A is postive semidefinite. We average
+%            SVD will be equal when A is postive semidefinite. We average
 %            them and then perform a QR decomposition on sqrt(S)*U'. The
 %            result is Q is a unitary matrix and A=R'*R (because
 %            Q*Q'=identity).
@@ -58,7 +58,7 @@ function sqrtA=cholSemiDef(A,upperOrLower,method,epsVal)
 %symmetric and positive semi-definite. Given a non-positive semi-definite
 %matrix, this function will return a matrix that is "close" to satisfying
 %the equality. Before all the algorithms, symmetry is forced via
-%A=(A+A')/2. This is important for 
+%A=(A+A')/2.
 %
 %This function uses the fact that Matlab's LDL decomposition algorithm can
 %handle positive semi-definite matrices. The algebraic relationship between

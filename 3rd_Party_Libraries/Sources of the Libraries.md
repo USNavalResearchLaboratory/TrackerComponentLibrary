@@ -25,6 +25,9 @@ http://www.chokkan.org/software/liblbfgs/
 http://www.brodo.de/space/nrlmsise/
 
 5) The Splitting Conic Solver:
+The Matlab version (used here ) is from
+https://github.com/bodono/scs-matlab
+but a C version is also available from:
 https://github.com/cvxgrp/scs
 
 6) The implementation of the SGP4 orbital propagator:
@@ -34,5 +37,5 @@ http://www.centerforspace.com/downloads/
    Astronomy Library:
 http://www.iausofa.org/index.html
 
-8) The Eigen Library:
+8) The Eigen Library (Version 3.4.0 is used):
 https://eigen.tuxfamily.org/

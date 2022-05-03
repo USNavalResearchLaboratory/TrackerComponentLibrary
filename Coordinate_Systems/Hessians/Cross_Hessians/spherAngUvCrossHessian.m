@@ -1,4 +1,4 @@
-function HTotal=spherAngUvCrossHessian(uv,systemType)
+function HTotal=spherAngUvCrossHessian(uv,systemType,Ms,Muv)
 %%SPHERANGUVCROSSHESSIAN Determine second partial derivative matrices of 3D
 %               spherical angular components with respect to u-v direction
 %               cosines.
@@ -23,6 +23,16 @@ function HTotal=spherAngUvCrossHessian(uv,systemType)
 %          2 This is the same as 0 except instead of being given
 %            elevation, one desires the angle away from the z-axis, which
 %            is (pi/2-elevation).
+%   Ms,Muv If either the spherical coordinate system or the u-v coordinate
+%          system is rotated compared to the global Cartesian coordinate
+%          system, these optional 3X3 matrices provide the rotations. Ms
+%          is a 3X3 matrix to go from the alignment of a global
+%          Cartesian coordinate system to that in which the spherical
+%          coordinates are computed. Similarly, Muv is a rotation matrix
+%          to go from the alignment of a global Cartesian cordinate system
+%          to that in which the u-v(-w) coordinates are computed. If
+%          either of these in omitted or an empty matrix is passed, then
+%          the missing one is replaced with the identity matrix.
 %
 %OUTPUTS: HTotal A 2X2X2XN matrix of second derivatives where
 %                HTotal(:,:,i,j) is the Hessian matrix of the ith
@@ -70,52 +80,144 @@ function HTotal=spherAngUvCrossHessian(uv,systemType)
 %June 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<4||isempty(Muv))
+    Muv=eye(3,3);
+end
+
+if(nargin<3||isempty(Ms))
+    Ms=eye(3,3);
+end
+
 if(nargin<2||isempty(systemType))
    systemType=0; 
 end
 
 hasW=size(uv,1)>2;
-
 N=size(uv,2);
 
-HTotal=zeros(2,2,2,N);
+M=Ms*Muv';
+m11=M(1,1);
+m12=M(1,2);
+m13=M(1,3);
+m21=M(2,1);
+m22=M(2,2);
+m23=M(2,3);
+m31=M(3,1);
+m32=M(3,2);
+m33=M(3,3);
 
+HTotal=zeros(2,2,2,N);
 for curPoint=1:N
-    u=uv(1,curPoint);
-    v=uv(2,curPoint);
-    
-    if(hasW)
-        w=uv(3,curPoint);
+    if(hasW==false)
+        uvwCur=[uv(:,curPoint);sqrt(1-uv(1,curPoint)^2-uv(2,curPoint)^2)];
     else
-        w=sqrt(1-u^2-v^2);
+        uvwCur=uv(:,curPoint);
     end
+    u=uvwCur(1);
+    v=uvwCur(2);
+    w=uvwCur(3);
+
+    uvwCur=M*uvwCur;
+    u1=uvwCur(1);
+    v1=uvwCur(2);
+    w1=uvwCur(3);
+
+    %First derivatives
+    du1du=m11-m13*u/w;
+    du1dv=m12-m13*v/w;
+    dv1du=m21-m23*u/w;
+    dv1dv=m22-m23*v/w;
+    dw1du=m31-m33*u/w;
+    dw1dv=m32-m33*v/w;
+
+    w3=w^3;
+    %Second derivatives
+    d2u1dudu=m13*(v^2-1)/w3;
+    d2u1dudv=-m13*u*v/w3;
+    d2u1dvdv=m13*(u^2-1)/w3;
+    d2v1dudu=m23*(v^2-1)/w3;
+    d2v1dudv=-m23*u*v/w3;
+    d2v1dvdv=m23*(u^2-1)/w3;
+    d2w1dudu=m33*(v^2-1)/w3;
+    d2w1dudv=-m33*u*v/w3;
+    d2w1dvdv=m33*(u^2-1)/w3;
 
     switch(systemType)
         case 0
-            u2v2=u^2+v^2;
+            denom1=(u1^2+v1^2)^2;
+            denom2=sqrt(1-w1^2)^3;
 
-            dazdu2=(2*u*v)/u2v2^2;
-            dazdudv=(-u^2+v^2)/u2v2^2;
-            dazdv2=-((2*u*v)/u2v2^2);
-            deldu2=-((u^4+v^2-v^4)/(w*sqrt(u2v2))^3);
-            deldudv=-((u*v*(-1+2*u^2+2*v^2))/(w*sqrt(u2v2))^3);
-            deldv2=-((u^2-u^4+v^4)/(w*sqrt(u2v2))^3);
+            dazdu2=(-2*u1*(2*du1du*dv1du*u1-du1du^2*v1+dv1du^2*v1)+(2*du1du*dv1du+d2v1dudu*u1-d2u1dudu*v1)*(u1^2+v1^2))/denom1;
+            dazdudv=(d2v1dudv*u1^3+v1^2*(du1dv*dv1du+du1du*dv1dv-d2u1dudv*v1)-u1^2*(du1dv*dv1du+du1du*dv1dv+d2u1dudv*v1)+u1*v1*(2*du1du*du1dv-2*dv1du*dv1dv+d2v1dudv*v1))/denom1;
+            dazdv2=(-2*u1*(2*du1dv*dv1dv*u1-du1dv^2*v1+dv1dv^2*v1)+(2*du1dv*dv1dv+d2v1dvdv*u1-d2u1dvdv*v1)*(u1^2+v1^2))/denom1;
+            deldu2=(d2w1dudu+dw1du^2*w1-d2w1dudu*w1^2)/denom2;
+            deldudv=(d2w1dudv+dw1du*dw1dv*w1-d2w1dudv*w1^2)/denom2;
+            deldv2=(d2w1dvdv+dw1dv^2*w1-d2w1dvdv*w1^2)/denom2;
+
+%If there were no rotations, it would be:
+%             u2v2=u^2+v^2;
+%             dazdu2=(2*u*v)/u2v2^2;
+%             dazdudv=(-u^2+v^2)/u2v2^2;
+%             dazdv2=-((2*u*v)/u2v2^2);
+%             deldu2=-((u^4+v^2-v^4)/(w*sqrt(u2v2))^3);
+%             deldudv=-((u*v*(-1+2*u^2+2*v^2))/(w*sqrt(u2v2))^3);
+%             deldv2=-((u^2-u^4+v^4)/(w*sqrt(u2v2))^3);
         case 1
-            dazdu2=u/w^3;
-            dazdudv=v/w^3;
-            dazdv2=-((u*(-1+u^2+(-1+u^2)*v^2+2*v^4))/(w^3*(-1+v^2)^2));
-            deldu2=0;
-            deldudv=0;
-            deldv2=v/(1-v^2)^(3/2);
-        case 2
-            u2v2=u^2+v^2;
+            denom1=(u1^2+w1^2)^2;
+            denom2=sqrt(1-v1^2)^3;
 
-            dazdu2=(2*u*v)/u2v2^2;
-            dazdudv=(-u^2+v^2)/u2v2^2;
-            dazdv2=-((2*u*v)/u2v2^2);
-            deldu2=(u^4+v^2-v^4)/(w*sqrt(u2v2))^3;
-            deldudv=(u*v*(-1+2*u^2+2*v^2))/(w*sqrt(u2v2))^3;
-            deldv2=(u^2-u^4+v^4)/(w*sqrt(u2v2))^3;
+            dazdu2=(2*u1*(2*du1du*dw1du*u1-du1du^2*w1+dw1du^2*w1)+(-2*du1du*dw1du-d2w1dudu*u1+d2u1dudu*w1)*(u1^2+w1^2))/denom1;
+            dazdudv=(u1^2*(du1dv*dw1du+du1du*dw1dv-d2w1dudv*u1)+u1*(-2*du1du*du1dv+2*dw1du*dw1dv+d2u1dudv*u1)*w1-(du1dv*dw1du+du1du*dw1dv+d2w1dudv*u1)*w1^2+d2u1dudv*w1^3)/denom1;
+            dazdv2=(2*u1*(2*du1dv*dw1dv*u1-du1dv^2*w1+dw1dv^2*w1)+(-2*du1dv*dw1dv-d2w1dvdv*u1+d2u1dvdv*w1)*(u1^2+w1^2))/denom1;
+            deldu2=(d2v1dudu+dv1du^2*v1-d2v1dudu*v1^2)/denom2;
+            deldudv=(d2v1dudv+dv1du*dv1dv*v1-d2v1dudv*v1^2)/denom2;
+            deldv2=(d2v1dvdv+dv1dv^2*v1-d2v1dvdv*v1^2)/denom2;
+
+%If there were no rotations, it would be:
+%             dazdu2=u/w^3;
+%             dazdudv=v/w^3;
+%             dazdv2=-((u*(-1+u^2+(-1+u^2)*v^2+2*v^4))/(w^3*(-1+v^2)^2));
+%             deldu2=0;
+%             deldudv=0;
+%             deldv2=v/(1-v^2)^(3/2);
+        case 2
+            denom1=(u1^2+v1^2)^2;
+            denom2=sqrt(1-w1^2)^3;
+
+            dazdu2=(-2*u1*(2*du1du*dv1du*u1-du1du^2*v1+dv1du^2*v1)+(2*du1du*dv1du+d2v1dudu*u1-d2u1dudu*v1)*(u1^2+v1^2))/denom1;
+            dazdudv=(d2v1dudv*u1^3+v1^2*(du1dv*dv1du+du1du*dv1dv-d2u1dudv*v1)-u1^2*(du1dv*dv1du+du1du*dv1dv+d2u1dudv*v1)+u1*v1*(2*du1du*du1dv-2*dv1du*dv1dv+d2v1dudv*v1))/denom1;
+            dazdv2=(-2*u1*(2*du1dv*dv1dv*u1-du1dv^2*v1+dv1dv^2*v1)+(2*du1dv*dv1dv+d2v1dvdv*u1-d2u1dvdv*v1)*(u1^2+v1^2))/denom1;
+            deldu2=(-dw1du^2*w1+d2w1dudu*(-1+w1^2))/denom2;
+            deldudv=(-dw1du*dw1dv*w1+d2w1dudv*(-1+w1^2))/denom2;
+            deldv2=(-dw1dv^2*w1+d2w1dvdv*(-1+w1^2))/denom2;
+
+%If there were no rotations, it would be:
+%             u2v2=u^2+v^2;
+%             dazdu2=(2*u*v)/u2v2^2;
+%             dazdudv=(-u^2+v^2)/u2v2^2;
+%             dazdv2=-((2*u*v)/u2v2^2);
+%             deldu2=(u^4+v^2-v^4)/(w*sqrt(u2v2))^3;
+%             deldudv=(u*v*(-1+2*u^2+2*v^2))/(w*sqrt(u2v2))^3;
+%             deldv2=(u^2-u^4+v^4)/(w*sqrt(u2v2))^3;
+        case 3
+            denom1=(u1^2+v1^2)^2;
+            denom2=sqrt(1-w1^2)^3;
+
+            dazdu2=(2*u1*(2*du1du*dv1du*u1-du1du^2*v1+dv1du^2*v1)+(-2*du1du*dv1du-d2v1dudu*u1+d2u1dudu*v1)*(u1^2+v1^2))/denom1;
+            dazdudv=(u1^2*(du1dv*dv1du+du1du*dv1dv-d2v1dudv*u1)+u1*(-2*du1du*du1dv+2*dv1du*dv1dv+d2u1dudv*u1)*v1-(du1dv*dv1du+du1du*dv1dv+d2v1dudv*u1)*v1^2+d2u1dudv*v1^3)/denom1;
+            dazdv2=(2*u1*(2*du1dv*dv1dv*u1-du1dv^2*v1+dv1dv^2*v1)+(-2*du1dv*dv1dv-d2v1dvdv*u1+d2u1dvdv*v1)*(u1^2+v1^2))/denom1;
+            deldu2=(d2w1dudu+dw1du^2*w1-d2w1dudu*w1^2)/denom2;
+            deldudv=(d2w1dudv+dw1du*dw1dv*w1-d2w1dudv*w1^2)/denom2;
+            deldv2=(d2w1dvdv+dw1dv^2*w1-d2w1dvdv*w1^2)/denom2;
+
+%If there were no rotations, it would be:
+%             u2v2=u^2+v^2;
+%             dazdu2=-(2*u*v)/u2v2^2;
+%             dazdudv=(u-v)*(u+v)/u2v2^2;
+%             dazdv2=(2*u*v)/u2v2^2;
+%             deldu2=-((u^4+v^2-v^4)/(w*sqrt(u2v2))^3);
+%             deldudv=-((u*v*(-1+2*u^2+2*v^2))/(w*sqrt(u2v2))^3);
+%             deldv2=-((u^2-u^4+v^4)/(w*sqrt(u2v2))^3);
         otherwise
             error('Invalid system type specified.')
     end

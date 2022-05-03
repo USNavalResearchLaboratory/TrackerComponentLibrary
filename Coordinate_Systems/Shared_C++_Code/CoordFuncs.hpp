@@ -25,7 +25,8 @@ void Cart2EllipsHarmonCPP(double *pointsHarmon,const double *cartPoints, const s
 void ruv2CartGenCPP(double *retData,const double *z,const bool useHalfRange,const double *zTx,const double *zRx,const double *M, bool hasW);
 void Cart2RuvGenCPP(double *retData,const double *points,bool useHalfRange,double *zTx,double *zRx,double *M,bool includeW);
 
-double getRangeRate2DCPP(const double *points,bool useHalfRange,const double *xTx,const double *xRx);
+double getRangeRate1DCPP(const double *xTar,bool useHalfRange,const double *xTx,const double *xRx);
+double getRangeRate2DCPP(const double *xTar,bool useHalfRange,const double *xTx,const double *xRx);
 double getRangeRate3DCPP(const double *xTar,bool useHalfRange,const double *xTx,const double *xRx);
 
 void rangeGradientCPP(const size_t numRows,double *J,double *tempSpace,const double *point,const bool useHalfRange,const double *lTx,const double *lRx);
@@ -242,57 +243,139 @@ void ENU2ECEFCPP(const size_t numPoints, const T *tENU, const T * const plhPoint
 }
 
 template <class T>
-void geogHeading2uVecCPP(const T * const point, const size_t NGeo, const T *const geoEastOfNorth, const size_t NEl, const T * const angUpFromLevel, T *u) {
+void geogHeading2uVecCPP(const size_t NPts, const T * const point, const size_t NGeo, const T *const geoEastOfNorth, const size_t NEl, const T * const angUpFromLevel, T *u) {
     T uLocal[9];
     
-    getENUAxisDirections(uLocal, point,false); 
-    
-    const T *uEast=uLocal;
-    const T *uNorth=uLocal+3;
-    const T *uUp=uLocal+6;
-    
-    if(NEl>1&&NGeo>1) {//Assume both equal NGEo
-        for(size_t i=0;i<NGeo;i++) {
-            const T cosEl=cos(angUpFromLevel[i]);
-            const T sinEl=sin(angUpFromLevel[i]);
-            const T sinGeo=sin(geoEastOfNorth[i]);
-            const T cosGeo=cos(geoEastOfNorth[i]);
-            const T prodE=sinGeo*cosEl;
-            const T prodN=cosGeo*cosEl;
- 
-            u[0]=prodE*uEast[0]+prodN*uNorth[0]+sinEl*uUp[0];
-            u[1]=prodE*uEast[1]+prodN*uNorth[1]+sinEl*uUp[1];
-            u[2]=prodE*uEast[2]+prodN*uNorth[2]+sinEl*uUp[2];
-            u+=3;
-        }
-    } else if(NEl>1) {//NEl>1 and NGeo=1
-        const T sinGeo=sin(geoEastOfNorth[0]);
-        const T cosGeo=cos(geoEastOfNorth[0]);
+    if(NPts==1) {
+        getENUAxisDirections(uLocal, point,false); 
         
-        for(size_t i=0;i<NEl;i++) {
-            const T cosEl=cos(angUpFromLevel[i]);
-            const T sinEl=sin(angUpFromLevel[i]);
-            const T prodE=sinGeo*cosEl;
-            const T prodN=cosGeo*cosEl;
- 
-            u[0]=prodE*uEast[0]+prodN*uNorth[0]+sinEl*uUp[0];
-            u[1]=prodE*uEast[1]+prodN*uNorth[1]+sinEl*uUp[1];
-            u[2]=prodE*uEast[2]+prodN*uNorth[2]+sinEl*uUp[2];
-            u+=3;
+        const T *uEast=uLocal;
+        const T *uNorth=uLocal+3;
+        const T *uUp=uLocal+6;
+        
+        if(NEl>1&&NGeo>1) {//Assume both equal NGEo
+            for(size_t i=0;i<NGeo;i++) {
+                const T cosEl=cos(angUpFromLevel[i]);
+                const T sinEl=sin(angUpFromLevel[i]);
+                const T sinGeo=sin(geoEastOfNorth[i]);
+                const T cosGeo=cos(geoEastOfNorth[i]);
+                const T prodE=sinGeo*cosEl;
+                const T prodN=cosGeo*cosEl;
+     
+                u[0]=prodE*uEast[0]+prodN*uNorth[0]+sinEl*uUp[0];
+                u[1]=prodE*uEast[1]+prodN*uNorth[1]+sinEl*uUp[1];
+                u[2]=prodE*uEast[2]+prodN*uNorth[2]+sinEl*uUp[2];
+                u+=3;
+            }
+        } else if(NEl>1) {//NEl>1 and NGeo=1
+            const T sinGeo=sin(geoEastOfNorth[0]);
+            const T cosGeo=cos(geoEastOfNorth[0]);
+            
+            for(size_t i=0;i<NEl;i++) {
+                const T cosEl=cos(angUpFromLevel[i]);
+                const T sinEl=sin(angUpFromLevel[i]);
+                const T prodE=sinGeo*cosEl;
+                const T prodN=cosGeo*cosEl;
+     
+                u[0]=prodE*uEast[0]+prodN*uNorth[0]+sinEl*uUp[0];
+                u[1]=prodE*uEast[1]+prodN*uNorth[1]+sinEl*uUp[1];
+                u[2]=prodE*uEast[2]+prodN*uNorth[2]+sinEl*uUp[2];
+                u+=3;
+            }
+        } else {//NEl=1 and NGeo>=1
+            const T cosEl=cos(angUpFromLevel[0]);
+            const T sinEl=sin(angUpFromLevel[0]);
+            for(size_t i=0;i<NGeo;i++) {
+                const T sinGeo=sin(geoEastOfNorth[i]);
+                const T cosGeo=cos(geoEastOfNorth[i]);
+                const T prodE=sinGeo*cosEl;
+                const T prodN=cosGeo*cosEl;
+     
+                u[0]=prodE*uEast[0]+prodN*uNorth[0]+sinEl*uUp[0];
+                u[1]=prodE*uEast[1]+prodN*uNorth[1]+sinEl*uUp[1];
+                u[2]=prodE*uEast[2]+prodN*uNorth[2]+sinEl*uUp[2];
+                u+=3;
+            }
         }
-    } else {//NEl=1 and NGeo>=1
-        const T cosEl=cos(angUpFromLevel[0]);
-        const T sinEl=sin(angUpFromLevel[0]);
-        for(size_t i=0;i<NGeo;i++) {
-            const T sinGeo=sin(geoEastOfNorth[i]);
-            const T cosGeo=cos(geoEastOfNorth[i]);
+    } else {
+        if(NEl>1&&NGeo>1) {//Assume both equal NPts
+            for(size_t i=0;i<NPts;i++) {
+                getENUAxisDirections(uLocal, point+3*i,false); 
+                const T *uEast=uLocal;
+                const T *uNorth=uLocal+3;
+                const T *uUp=uLocal+6;
+    
+                const T cosEl=cos(angUpFromLevel[i]);
+                const T sinEl=sin(angUpFromLevel[i]);
+                const T sinGeo=sin(geoEastOfNorth[i]);
+                const T cosGeo=cos(geoEastOfNorth[i]);
+                const T prodE=sinGeo*cosEl;
+                const T prodN=cosGeo*cosEl;
+     
+                u[0]=prodE*uEast[0]+prodN*uNorth[0]+sinEl*uUp[0];
+                u[1]=prodE*uEast[1]+prodN*uNorth[1]+sinEl*uUp[1];
+                u[2]=prodE*uEast[2]+prodN*uNorth[2]+sinEl*uUp[2];
+                u+=3;
+            }
+        } else if(NEl>1) {//NEl>1 and NGeo=1
+            const T sinGeo=sin(geoEastOfNorth[0]);
+            const T cosGeo=cos(geoEastOfNorth[0]);
+
+            for(size_t i=0;i<NPts;i++) {
+                getENUAxisDirections(uLocal, point+3*i,false); 
+                const T *uEast=uLocal;
+                const T *uNorth=uLocal+3;
+                const T *uUp=uLocal+6;
+    
+                const T cosEl=cos(angUpFromLevel[i]);
+                const T sinEl=sin(angUpFromLevel[i]);
+                const T prodE=sinGeo*cosEl;
+                const T prodN=cosGeo*cosEl;
+     
+                u[0]=prodE*uEast[0]+prodN*uNorth[0]+sinEl*uUp[0];
+                u[1]=prodE*uEast[1]+prodN*uNorth[1]+sinEl*uUp[1];
+                u[2]=prodE*uEast[2]+prodN*uNorth[2]+sinEl*uUp[2];
+                u+=3;
+            }
+        } else if(NGeo>1) {
+            const T cosEl=cos(angUpFromLevel[0]);
+            const T sinEl=sin(angUpFromLevel[0]);
+
+            for(size_t i=0;i<NPts;i++) {
+                getENUAxisDirections(uLocal, point+3*i,false); 
+                const T *uEast=uLocal;
+                const T *uNorth=uLocal+3;
+                const T *uUp=uLocal+6;
+ 
+                const T sinGeo=sin(geoEastOfNorth[i]);
+                const T cosGeo=cos(geoEastOfNorth[i]);
+                const T prodE=sinGeo*cosEl;
+                const T prodN=cosGeo*cosEl;
+     
+                u[0]=prodE*uEast[0]+prodN*uNorth[0]+sinEl*uUp[0];
+                u[1]=prodE*uEast[1]+prodN*uNorth[1]+sinEl*uUp[1];
+                u[2]=prodE*uEast[2]+prodN*uNorth[2]+sinEl*uUp[2];
+                u+=3;
+            }
+        } else {//NEl=1 and NGeo=1
+            const T sinGeo=sin(geoEastOfNorth[0]);
+            const T cosGeo=cos(geoEastOfNorth[0]);
+            const T cosEl=cos(angUpFromLevel[0]);
+            const T sinEl=sin(angUpFromLevel[0]);
             const T prodE=sinGeo*cosEl;
             const T prodN=cosGeo*cosEl;
+
+            for(size_t i=0;i<NPts;i++) {
+                getENUAxisDirections(uLocal, point+3*i,false); 
+                const T *uEast=uLocal;
+                const T *uNorth=uLocal+3;
+                const T *uUp=uLocal+6;
  
-            u[0]=prodE*uEast[0]+prodN*uNorth[0]+sinEl*uUp[0];
-            u[1]=prodE*uEast[1]+prodN*uNorth[1]+sinEl*uUp[1];
-            u[2]=prodE*uEast[2]+prodN*uNorth[2]+sinEl*uUp[2];
-            u+=3;
+                u[0]=prodE*uEast[0]+prodN*uNorth[0]+sinEl*uUp[0];
+                u[1]=prodE*uEast[1]+prodN*uNorth[1]+sinEl*uUp[1];
+                u[2]=prodE*uEast[2]+prodN*uNorth[2]+sinEl*uUp[2];
+                u+=3;
+            }
         }
     }
 }

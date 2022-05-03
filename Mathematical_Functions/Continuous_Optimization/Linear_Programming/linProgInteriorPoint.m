@@ -66,8 +66,7 @@ function [optCost,xOpt,exitCode]=linProgInteriorPoint(A,b,ALeq,bLeq,c,maximize,m
 %constraints.
 %
 %The constraints can be redundant. Redundant constraints are not checked
-%for consistency; rather they are simply removed. Thus, solutions might be
-%obtained for infeasible problems.
+%for consistency.
 %
 %The algorithm is the infeasible primal-dual interior point method taken
 %from Chapter 9.5 of [1] and has not been optimized for sparse matrices.
@@ -179,19 +178,21 @@ else
     n=nTotal;
 end
 
-%Before the algorithm, we could get rid of redundant constraints. We will
-%not check that the constraints are consistent. However, we choose not to
-%do so right now.
+%Before the algorithm, we could get rid of redundant constraints. However,
+%doing so would also remove one constraint in a bounded region (unbounding
+%the region). For example, if the constraints were of the form a<x<b, then
+%getting rid of redundant constraints like
 % indepRows=identifyIndepCols(A');
 % if(length(indepRows)~=m)
 %     m=length(indepRows);
 %     A=A(indepRows,:);
 %     b=b(indepRows);
 % end
+%would unbound the region. Consequently, we keep all constraints.
 
 %Step 1 (Initialization): The infeasible primal dual algorithm is used, so
-%the initialization only has to satify a few non-negativity constraints for
-%x and s.
+%the initialization only has to satisfy a few non-negativity constraints
+%for x and s.
 %x>0 is required, so we set it to all ones. This is most likely infeasible.
 x=ones(n,1);
 
@@ -309,10 +310,11 @@ for curIter=1:maxIter
     d2Mag=abs(d2);
     temp=d2.*rh2-sInv.*rh3;
     D2APrime=bsxfun(@times,d2,A');
-    if(min(d2Mag)/max(d2Mag)<4*eps())
-        dp=pinv(A*D2APrime)*(A*temp+rh1);
+    AD2APrime=A*D2APrime;
+    if(min(d2Mag)/max(d2Mag)<4*eps()||rcond(AD2APrime)<eps())
+        dp=pinv(AD2APrime)*(A*temp+rh1);
     else
-        dp=(A*D2APrime)\(A*temp+rh1);
+        dp=(AD2APrime)\(A*temp+rh1);
     end
     dx=D2APrime*dp-temp;
     %xInv is directly used here. Thus, below we limit the minimum value

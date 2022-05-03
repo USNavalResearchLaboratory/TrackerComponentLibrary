@@ -54,7 +54,23 @@ void spherAngGradientGenCPP(double *retMat,const double *xG,const size_t systemT
         //Derivatives with respect to z.
         J[4]=0;
         J[5]=-sqrtVal/r2;
-    } else{//Assume systemType==1
+    } else if (systemType==3) {
+        double r2=x*x+y*y+z*z;
+        double sqrVal=x*x+y*y;
+        double sqrtVal=sqrt(sqrVal);
+        double denom=r2*sqrtVal;
+        //Derivatives with respect to x.
+        J[0]=y/sqrVal;
+        J[1]=-x*z/denom;
+
+        //Derivatives with respect to y.
+        J[2]=-x/sqrVal;
+        J[3]=-y*z/denom;
+
+        //Derivatives with respect to z.
+        J[4]=0;
+        J[5]=sqrtVal/r2;        
+    }else{//Assume systemType==1
         double r2=x*x+y*y+z*z;
         double sqrVal=z*z+x*x;
         double sqrtVal=sqrt(sqrVal);

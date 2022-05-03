@@ -4,13 +4,13 @@ function rr=getRangeRate(xTar,useHalfRange,xTx,xRx)
 %             atmospheric effects, when the transmitter, target and
 %             receiver are all moving.
 %
-%INPUTS: xTar The Cartesian state of the targets in 2D or 3D Cartesian
+%INPUTS: xTar The Cartesian state of the targets in 1D, 2D, or 3D Cartesian
 %             space. If 3D, then xTar is a 6XN matrix, (or where the first
 %             3 components are position and the second 3 are velocity.
-%             Otherwise, xTar is a 4XN matrix, where the first two
+%             If, xTar is a 4XN matrix, where the first two
 %             components are position and the second two velocity.
 %             Components are ordered position (x,y,z) and velocity
-%             (xDot,yDot,zDot).
+%             (xDot,yDot,zDot). The same patterns applied in 1D.
 % useHalfRange A boolean value specifying whether the bistatic range value
 %             should be divided by two, which means that the range rate is
 %             divided by two. This normally comes up when operating in
@@ -18,18 +18,17 @@ function rr=getRangeRate(xTar,useHalfRange,xTx,xRx)
 %             range. The default if this parameter is not provided is
 %             false.
 %         xTx An xTxDimXN matrix of the states of the transmitters
-%             consisting of stacked 3D position and velocity components.
-%             Other components will be ignored. If this parameter is
-%             omitted, the transmitters are assumed to be stationary at the
-%             origin. If only a single vector is passed, then the
-%             transmitter state is assumed the same for all of the target
-%             states being converted.
+%             consisting of stacked 1D, 2D, or 3D position and velocity
+%             components. If this parameter is omitted, the transmitters
+%             are assumed to be stationary at the origin. If only a single
+%             vector is passed, then the transmitter state is assumed the
+%             same for all of the target states being converted.
 %         xRx An xRxDimXN matrix of the states of the receivers consisting
-%             of stacked 3D position and velocity components. Other
-%             components will be ignored. If this parameter is omitted, the
-%             receivers are assumed to be stationary at the origin. If only
-%             a single vector is passed, then the receiver state is assumed
-%             the same for all of the target states being converted.
+%             of stacked 1D, 2D, or 3D position and velocity components. If
+%             this parameter is omitted, the receivers are assumed to be
+%             stationary at the origin. If only a single vector is passed,
+%             then the receiver state is assumed the same for all of the
+%             target states being converted.
 %
 %OUTPUTS: rr The 1XN bistatic range rates of the targets. If
 %            useHalfRange=true, then the range rate is halved to reflect a
@@ -49,11 +48,7 @@ function rr=getRangeRate(xTar,useHalfRange,xTx,xRx)
 %July 2012 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    if(size(xTar,1)<6)
-        numDim=2;
-    else
-        numDim=3;
-    end
+    numDim=size(xTar,1)/2;
 
     N=size(xTar,2);
     
@@ -92,20 +87,24 @@ function rr=getRangeRate(xTar,useHalfRange,xTx,xRx)
     % dtlRat=dtl./sqrt(sum(dtl.*dtl,1));
     % rr=sum((dtrRat+dtlRat).*vt,1)-sum(dtrRat.*vr,1)-sum(dtlRat.*vi,1);
     %However, this appears to be slower than explicitly writing out the
-    %multiplications below.
+    %multiplications, which we do for the 2D and 3D cases.
     if(numDim==2)
         dtrRat=bsxfun(@rdivide,dtr,sqrt(dtr(1,:).*dtr(1,:)+dtr(2,:).*dtr(2,:)));
         dtlRat=bsxfun(@rdivide,dtl,sqrt(dtl(1,:).*dtl(1,:)+dtl(2,:).*dtl(2,:)));
         rr=(dtrRat(1,:)+dtlRat(1,:)).*vt(1,:)+(dtrRat(2,:)+dtlRat(2,:)).*vt(2,:)...
             -dtrRat(1,:).*vr(1,:)-dtrRat(2,:).*vr(2,:)...
             -dtlRat(1,:).*vi(1,:)-dtlRat(2,:).*vi(2,:);
-    else
+    elseif(numDim==3)
         dtrRat=bsxfun(@rdivide,dtr,sqrt(dtr(1,:).*dtr(1,:)+dtr(2,:).*dtr(2,:)+dtr(3,:).*dtr(3,:)));
         dtlRat=bsxfun(@rdivide,dtl,sqrt(dtl(1,:).*dtl(1,:)+dtl(2,:).*dtl(2,:)+dtl(3,:).*dtl(3,:)));
         
         rr=(dtrRat(1,:)+dtlRat(1,:)).*vt(1,:)+(dtrRat(2,:)+dtlRat(2,:)).*vt(2,:)+(dtrRat(3,:)+dtlRat(3,:)).*vt(3,:)...
             -dtrRat(1,:).*vr(1,:)-dtrRat(2,:).*vr(2,:)-dtrRat(3,:).*vr(3,:)...
             -dtlRat(1,:).*vi(1,:)-dtlRat(2,:).*vi(2,:)-dtlRat(3,:).*vi(3,:);
+    else%1D
+        dtrRat=dtr./sqrt(sum(dtr.*dtr,1));
+        dtlRat=dtl./sqrt(sum(dtl.*dtl,1));
+        rr=sum((dtrRat+dtlRat).*vt,1)-sum(dtrRat.*vr,1)-sum(dtlRat.*vi,1);
     end
 
     if(useHalfRange)

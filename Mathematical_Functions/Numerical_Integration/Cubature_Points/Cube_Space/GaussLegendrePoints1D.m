@@ -28,12 +28,12 @@ function [xi,w,theta]=GaussLegendrePoints1D(n)
 %negative of the first half of the points.
 %
 %The algorithm is pretty much summarized in Equations 2.24 and 3.8 of [1],
-%excep approxiamtions (as noted in the paper) are used to evaluate certain
+%except approximations (as noted in the paper) are used to evaluate certain
 %quantities. F_4 and F_5 and W_4 and W_5 are not used in the computation of
-%the points and weights the paper notes that they are not needed for n>100
+%the points and weights. The paper notes that they are not needed for n>100
 %when using double precision arithmetic and lower order points are
 %tabulated. For those wishing to program F_5, Equation A.4 contains an
-%errant undefined LL terms and it is thus necessary to rederive that
+%errant undefined LL term and it is thus necessary to rederive that
 %equation.
 %
 %EXAMPLE:

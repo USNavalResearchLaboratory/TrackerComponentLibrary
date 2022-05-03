@@ -9,7 +9,8 @@ function FIM=observedFisherInfo(z,RInv,h,JacobMat,HessMat)
 %           observed FIM for the fused measurement. The inverse of the FIM
 %           is the Cramér-Rao lower bound (CRLB). If only a single
 %           measurement is considered, and h=z, then h, z, and HessMat can
-%           all be omitted.
+%           all be omitted. Usualy, there is no benefit to including the
+%           terms.
 %
 %INPUTS: z The zDimX1 measurement, or if multiple measurements of the same
 %          time are to the zDimXnumMeas matrix of those measurements. This
@@ -17,24 +18,28 @@ function FIM=observedFisherInfo(z,RInv,h,JacobMat,HessMat)
 %     RInv The zDimXzDim inverse of the covariance matrix associated with
 %          the multivariate Gaussian noise corrupting z, or if multiple
 %          measurements are to be fused AND RInv differs among them, then a
-%          zDimXzDimXnumMeas collection of all of the inverse matrices.
+%          zDimXzDimXnumMeas collection of all of the inverse matrices. If
+%          z is omitted and multiple measurements are fused, then RInv MUST
+%          be specified as a zDimXzDimXnumMeas matrix, not as a single
+%          zDimXzDim matrix.
 %        h The zDimX1 value of the xDimX1 state converted into the
 %          measurement domain. If z is omitted, then this is not needed.
 % JacobMat The zDimXxDim Jacobian matrix of derivatives of the measurement
 %          function h taken with respect to the elements of the target
-%          state.
+%          state. This is assumed the same for all measurements fused by
+%          this function.
 %  HessMat The xDimXxDimXzDim matrix of second derivatives of the
 %          measurement function h with respect to the elements of the state
 %          x. HessMat(i,j,k) is the Hessian for the kth measurement
 %          component with derivatives taken with respect to elements i and
-%          j and the x vector. i and j can be equal. Note that all
+%          j of the x vector. i and j can be equal. Note that all
 %          HessMat(:,:,k) are symmetric matrices. In 3D, the order of the
 %          second derivatives in each submatrix is of the form:
 %                  [d^2/(dxdx), d^2/(dxdy), d^2/(dxdz);
 %                   d^2/(dydx), d^2/(dydy), d^2/(dydz);
 %                   d^2/(dzdx), d^2/(dzdy), d^2/(dzdz)];
 %
-%OUTPUTS: The xDimXxDim observed Fisher information matrix.
+%OUTPUTS: FIM The xDimXxDim observed Fisher information matrix.
 %
 %The FIM and CRLB and in many statistics texts. When considering target
 %tracking, one can look at Chapter 2.7.2 of [1]. Since no expectation is
@@ -137,7 +142,7 @@ function FIM=observedFisherInfo(z,RInv,h,JacobMat,HessMat)
 %    Applications to Tracking and Navigation: Theory, Algorithms and
 %    Software. New York: John Wiley and Sons, 2001.
 %[2] B. Efron and D. Hinkley, "Assessing the accuracy of the maximum
-%    likelihood estimator: Observed versus expected Ffisher information,"
+%    likelihood estimator: Observed versus expected Fisher information,"
 %    Department of Statistics, Stanford, University, Tech. Rep. 108, 8 Mar.
 %    1978.
 %
@@ -167,7 +172,12 @@ if(~isempty(z))
         FIM=FIM+C;
     end
 else
-    FIM=JacobMat'*RInv*JacobMat;
+    numMeas=size(RInv,3);
+    xDim=size(JacobMat,2);
+    FIM=zeros(xDim,xDim);
+    for k=1:numMeas
+        FIM=FIM+JacobMat'*RInv(:,:,k)*JacobMat;
+    end
 end
 end
 

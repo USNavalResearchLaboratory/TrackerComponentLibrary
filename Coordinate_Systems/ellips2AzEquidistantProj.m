@@ -1,13 +1,15 @@
 function xyPts=ellips2AzEquidistantProj(latLonPts,latLonRef,a,f)
-%%ELLIPS2AZEQUIDISTANTPROJ Given points as [latitude;longitude] with
-%       respect to a reference ellipsoid (or sphere), convert them to
-%       2D Cartesian points in an azimuthal equidistant projection about a
-%       specified point.
+%%ELLIPS2AZEQUIDISTANTPROJ Given points as [latitude;longitude] (or
+%       [latitude;longitude;height])with respect to a reference ellipsoid
+%       (or sphere), convert them to 2D (or 3D) points in an azimuthal
+%       equidistant projection about a specified point.
 %
 %INPUTS: latLonPts A 2XN set of [latitude;longitude] points in radians to
-%                  convert.
-%        latLonRef A 2X1 reference point about which the projection is
-%                  taken.
+%                  convert. Alternately, this can be a 3XN set of
+%                  [latitude;longitude;height] points where the height
+%                  remains unchanged after the conversion. 
+%        latLonRef A 2X1 [latitude;longitude] reference point in raidans
+%                  about which the projection is taken.
 %                a The semi-major axis of the reference ellipsoid (in
 %                  meters). If this argument is omitted or an empty matrix
 %                  is passed, the value in Constants.WGS84SemiMajorAxis is
@@ -17,7 +19,9 @@ function xyPts=ellips2AzEquidistantProj(latLonPts,latLonRef,a,f)
 %                  the value in Constants.WGS84Flattening is used.
 %
 %OUTPUTS: xyPts A 2XN set of the points converted to an azimuthal
-%               equidistant projection about latLonRef. 
+%               equidistant projection about latLonRef or if a height was
+%               given in latLonPts, then this is 3XN and the third row is
+%               the same as the third row of latLonPts.
 %
 %The conversion is described in Chapter 25 of [1], where expressions for
 %a spherical Earth are given. This is equivalent to finding the distance
@@ -56,24 +60,32 @@ if(nargin<3||isempty(a))
     a=Constants.WGS84SemiMajorAxis;
 end
 
-if(f==0)
-    %If using a spherical Earth approximation.
-    numPts=size(latLonPts,2);
-    xyPts=zeros(2,numPts);
-    for k=1:numPts
-        [az,distVal]=indirectGreatCircleProb(latLonRef,latLonPts(:,k),a,0);
-        xyPts(:,k)=distVal*[sin(az);
-                            cos(az)];
-    end 
+hasHeight=(size(latLonPts,1)==3);
+numPts=size(latLonPts,2);
+if(hasHeight)
+    xyPts=zeros(3,numPts);
 else
-    %If using an ellipsoidal Earth approximation.
-    numPts=size(latLonPts,2);
     xyPts=zeros(2,numPts);
+end
+
+if(f==0)
+    %If using a spherical Earth approximation.   
     for k=1:numPts
-        [az,distVal]=indirectGeodeticProb(latLonRef,latLonPts(:,k),a,f);
-        xyPts(:,k)=distVal*[sin(az);
+        [az,distVal]=indirectGreatCircleProb(latLonRef,latLonPts(1:2,k),a,0);
+        xyPts(1:2,k)=distVal*[sin(az);
                             cos(az)];
     end
+else
+    %If using an ellipsoidal Earth approximation.
+    for k=1:numPts
+        [az,distVal]=indirectGeodeticProb(latLonRef,latLonPts(1:2,k),a,f);
+        xyPts(1:2,k)=distVal*[sin(az);
+                            cos(az)];
+    end
+end
+
+if(hasHeight)
+    xyPts(3,:)=latLonPts(3,:);
 end
 end
 

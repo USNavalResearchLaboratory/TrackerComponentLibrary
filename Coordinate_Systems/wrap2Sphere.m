@@ -30,6 +30,12 @@ function wrapVals=wrap2Sphere(azEl,systemType)
 %             2 This is the same as 0 except instead of being given
 %               elevation, one is given the angle away from the z-axis,
 %               which is (pi/2-elevation).
+%             3 This is the same as 0 except azimuth is measured clockwise
+%               from the y-axis in the x-y plane instead of
+%               counterclockwise from the x-axis. This coordinate system
+%               often arises when given "bearings" in a local East-North-Up
+%               coordinate system, where the bearing directions are
+%               measured East of North.
 %
 %OUTPUTS: wrapVals Values of azEl that have been wrapped to the sphere in
 %                  radians. azEl(1,:) ranges from -pi to pi (pi not
@@ -75,6 +81,13 @@ switch(systemType)
 
         azimuth=atan2(y,x);
         elevation=pi/2-asin(z);
+    case 3
+        x=cos(pi/2-azimuth).*cos(elevation);
+        y=sin(pi/2-azimuth).*cos(elevation);
+        z=sin(elevation);
+        
+        azimuth=pi/2-atan2(y,x);
+        elevation=asin(z);
     otherwise
         error('Invalid system type specified.')
 end

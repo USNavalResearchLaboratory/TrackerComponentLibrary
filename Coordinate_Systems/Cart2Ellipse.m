@@ -37,8 +37,8 @@ function points=Cart2Ellipse(cartPoints,algorithm,a,f)
 %set to run for a maximum number of 500 iterations. More than 6 iterations
 %can be necessary when a large flattening is used and the point in question
 %is near the center of the Earth. Its accuracy appears to be marginally
-%better than [1] for things not near the surface of the Earth, but it is
-%slower.
+%better than [1] for things not near the surface of the Earth/ reference
+%ellipsoid, but it is slower.
 %
 %REFERENCES:
 %[1] D. K. Olson, "Converting Earth-centered, Earth-fixed coordinates to

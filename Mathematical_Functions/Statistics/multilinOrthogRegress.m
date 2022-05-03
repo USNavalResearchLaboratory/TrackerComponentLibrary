@@ -2,7 +2,7 @@ function [n,a]=multilinOrthogRegress(zSamp)
 %%MULTILINORTHOGREGRESS Perform multilinear regression using orthogonal
 %            distances as the penalties. This is also known as Deming
 %            regression. It is a type of total least squares estimation.
-%            here, the equation for a line/plane/hyperplane/etc. is taken
+%            Here, the equation for a line/plane/hyperplane/etc. is taken
 %            to be dot(n,x-a)=0, where n is a unit vector and x is the free
 %            parameter. This function finds n and a to minimize
 %            sum_{i=1}^numPoints dot(n,zSamp(:,i)-a).

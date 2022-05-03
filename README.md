@@ -1,4 +1,4 @@
-**Tracker Component Library Release 5.1, November 2021**
+**Tracker Component Library Release 5.2, March 2022**
 https://github.com/USNavalResearchLaboratory/TrackerComponentLibrary
 
 A paper describing a number of features of the library is<br>
@@ -6,7 +6,7 @@ D. F. Crouse, "The Tracker Component Library: Free Routines for Rapid
 Prototyping," IEEE Aerospace and Electronic Systems Magazine, vol. 32, no.
 5, pp. 18-27, May. 2017.
 
-These are the release notes for the version 5.1 of the Tracker Component
+These are the release notes for the version 5.2 of the Tracker Component
 Library. The Tracker Component Library is a collection of Matlab routines
 for simulating and tracking targets in various scenarios. Due to the
 complexity of the target tracking problem, a great many routines can find
@@ -22,13 +22,10 @@ Those looking for magnetic field synthesis code might want to look at
 As of version 3.0, the library has been split into two parts. This is the
 publicly available part. Many functions have been placed into a supplement
 that is only available to the U.S. Government Agencies and their
-contractors. Until 31 January 2021, the limited distribution supplement can
-be downloaded by authorized individuals from di2e.net at:
-https://bitbucket.di2e.net/projects/TCL
-After 31 January 2022, di2e will no longer support projects like this and
-as of the time of this release, no suitable replacement repository for the
-limited distribution version of the Tracker Component Library has been
-found.
+contractors. The limited distribution supplement is expected to be made
+available to those with account on Bitbucket within Navy Lift in the near
+future. The Navy Lift Bitbucket is available at
+https://repo.lift.mhpcc.hpc.mil/stash/dashboard
 
 Those looking to get a quick idea of a very simple end-to-end tracking
 algorithm (track initiation, data association, maintenance, and
@@ -49,36 +46,24 @@ running the CompileCLibraries function. Precompiled code is not distributed
 with the library. Note that a C/C++ compiler supported by Matlab must be
 installed. See below for comments regarding compilation.
 
-NOTABLE CHANGES SINCE VERSION 5.0:
+NOTABLE CHANGES SINCE VERSION 5.1:
 
+- A fourth spherical coordiante system was added to most functions that use
+  spherical coordinates.
+- Functions related to polar azimuthal equidistant coordinates and their
+  gradients.
+- The PDF and the CDF of the bivariate empirical copula distribution.
+- Triangular and tetrahedral barycentric coordinates.
+- A new function ellips2SpecOscCoords related to conversions with respect
+  to a reference osculating sphere.
+- Replaced the old default Earth photo in plotMapOnEllipsoid with a higher
+  resolution image.
 - Bug fixes.
-- New interpolation functions, such as biquadraticInterp,
-  quadraticInterpGrid, quadraticInterpUnif3PtMinMax, cubSplineInterpSimp
-  and others.
-- Various barycentric coordinate systems. These can be used for
-  interpolation between nonuniformly samples points. These include
-  pt2WachspressCoords, pt2MeanValCoords, pt2WachspressCoords3D, and others.
-- More basic geometric functions such as sortTriangFacesAroundVertices,
-  getPolygonNormals, triangleArea, clipLine2ConvexPolygon, and
-  angleBetweenLineAndPlane.
-- Functions for evaluating reflection coefficients 
-- Bivariate and trivariate normal CDFs in bivarNormCDF and trivarNormCDF.
-- More functions related to the complexity of assignment problems including
-  num2DTarMeasHypsWithGating and numJPDAStarTarMeasHyps.
-- Osculating sphere coordinate conversions in osculatingCoords2Ellipse and
-  ellips2OsculatingCoords.
-- Additional coordinate system conversions including for cameras in
-  cameraCoords2UVCoords, cameraCoord2UVCoordsCubature and
-  uvCoords2CameraCoords.
-- A function to make a constant speed non-maneuvering trajectory over a
-  curved Earth in makeConstSpeedLevelCurvedEarthTraj.
-- The line of sight related functions lineOfSightHitsEarth and
-  lineOfSightMinDist2Earth.
 
 COMPILED CODE:
 
-The compilation of the library has been tested under Matlab2021a under
-Windows 10 using minGW64 and Microsoft Visual C++ 2019. The code will
+The compilation of the library has been tested under Matlab2021b under
+Windows 10 using minGW64 and Microsoft Visual C++ 2022. The code will
 probably compiler under Mac OS X and Linux. Precompiled code is not
 distributed with the library.
 
@@ -120,7 +105,7 @@ then the relevant data files will have to be downloaded The original
 sources of the data are:
 
 1) Earth2014 terrain model:
-https://geodesy.curtin.edu.au/research/harmonic/
+https://geodesy.curtin.edu.au/research/harmonic-topography/
 The files Earth2014.BED2014.degree2160.bshc,
 Earth2014.ICE2014.degree2160.bshc, Earth2014.RET2014.degree2160.bshc,
 Earth2014.SUR2014.degree2160.bshc, Earth2014.TBI2014.degree2160.bshc should
@@ -200,13 +185,14 @@ The file fes2004_Cnm-Snm.dat should be downloaded and placed in
 http://cdsarc.u-strasbg.fr/viz-bin/Cat?I/311
 Place the file hip2.dat in ./Astronomical Code/data .
 
-15) A low-resolution image of the "Blue Marble" Earth from NASA with land,
-    ocean color, sea ice and clouds.
-https://visibleearth.nasa.gov/view.php?id=57735
-Place the file in Misc/data . This is used as the default map to show on
-the Earth given by the plotMapOnEllipsoid function.
+15) A 5400X2700 image of the Earth. The August, Blue Marble Next Generation
+    with Topography and Bathymetry from NASA:
+https://visibleearth.nasa.gov/images/73776/august-blue-marble-next-generation-w-topography-and-bathymetry
+Name the file NASABlueMarble.jpg and place the file in Misc/data . This is
+used as the default map to show on the Earth given by the
+plotMapOnEllipsoid function.
 
-November 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.<br>
+March 2022 David F. Crouse, Naval Research Laboratory, Washington D.C.<br>
 (UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 LICENSE:

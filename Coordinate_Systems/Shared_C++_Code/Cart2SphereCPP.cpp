@@ -34,6 +34,12 @@ void Cart2SphereGenCPP(double *retData,const double *cartPoints,const size_t sys
  *                2 This is the same as 0 except instead of being given
  *                  elevation, one desires the angle away from the z-axis,
  *                  which is (pi/2-elevation).
+ *                3 This is the same as 0 except azimuth is measured
+ *                  clockwise from the y-axis in the x-y plane instead of
+ *                  counterclockwise from the x-axis. This coordinate
+ *                  system often arises when given "bearings" in a local
+ *                  East-North-Up coordinate system, where the bearing
+ *                  directions are measured East of North.
  *   useHalfRange A boolean value specifying whether the bistatic (round-
  *                trip) range value has been divided by two. 
  *            zTx The 3X1 [x;y;z] location vector of the transmitter in
@@ -80,7 +86,7 @@ void Cart2SphereGenCPP(double *retData,const double *cartPoints,const size_t sys
     r2=sqrt(diff0*diff0+diff1*diff1+diff2*diff2);
     retData[0]=r1+r2;//The bistatic range.
     
-    if(systemType==0||systemType==2) {
+    if(systemType==0||systemType==2||systemType==3) {
         //The special case for two zeros deals with the fact that the
         //standard C++ library will normally throw a domain error.
         if(zCL[1]==0&&zCL[0]==0) {
@@ -95,6 +101,9 @@ void Cart2SphereGenCPP(double *retData,const double *cartPoints,const size_t sys
         if(systemType==2) {
             double pi=acos(-1.0);
             retData[2]=pi/2.0-retData[2];
+        }else if(systemType==3) {
+            double pi=acos(-1.0);
+            retData[1]=pi/2.0-retData[1];
         }
     } else {//Assume systemType=1
         if(zCL[2]==0&&zCL[0]==0) {

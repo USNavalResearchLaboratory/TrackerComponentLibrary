@@ -5,7 +5,7 @@ function z=state2RuvRR(xTar,useHalfRange,xTx,xRx,M,includeW)
 %
 %INPUTS: xTar An xDimXN matrix of N target states consisting of 3D position
 %             and velocity components in the order
-%             xTar=[xPosition;xVelocity] and possible other components,
+%             xTar=[xPosition;xVelocity] and possibly other components,
 %             which will be ignored.
 % useHalfRange A boolean value specifying whether the bistatic range value
 %             should be divided by two. This normally comes up when

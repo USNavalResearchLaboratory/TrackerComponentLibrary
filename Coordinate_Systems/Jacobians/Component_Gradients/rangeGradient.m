@@ -26,7 +26,7 @@ function J=rangeGradient(x,useHalfRange,lTx,lRx)
 %
 %EXAMPLE:
 %Here, we demonstrate that the gradient produced by this function is
-%consistent with what one obtains using numberical differentiation.
+%consistent with what one obtains using numerical differentiation.
 % lRx=[4e3;-6e3;12];
 % lTx=[-12e3;8e3;5e3];
 % t=[-3e3;-2e3;-1e3];

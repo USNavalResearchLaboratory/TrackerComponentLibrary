@@ -10,7 +10,7 @@ function [xi,w]=orthoPolyZerosFromRecur(n,a,b,c,mu0)
 %              the zeros of the nth polynomial given expressions for the
 %              recursion of the polynomials. Parameters for common
 %              orthogonal polynomials are given below. The zeros of such
-%              orthonomal polynomials can be used as quadrature points for
+%              orthonormal polynomials can be used as quadrature points for
 %              1D integration from lowL to upL of all polynomials up to
 %              order 2*n-1 times the weighting function w(x). The
 %              associated quadrature weights for such integrals can also be
@@ -36,7 +36,7 @@ function [xi,w]=orthoPolyZerosFromRecur(n,a,b,c,mu0)
 %
 %OUTPUTS: xi The 1Xn set of zeros of the given set of orthonormal
 %            polynomials.
-%          w The set of cubature weights associated with the orthonormal
+%          w The set of n cubature weights associated with the orthonormal
 %            polynomials. This requires the input mu0 be specified.
 %
 %When xi and w are used for quadrature integration, one can write
@@ -50,14 +50,14 @@ function [xi,w]=orthoPolyZerosFromRecur(n,a,b,c,mu0)
 %the results can be numerically unstable for large n.
 %
 %Examples of values for common polynomials, are given in [2]. Some are:
-%1) Hermite polynomials. These are orthonomal with respect to exp(-x^2)
+%1) Hermite polynomials. These are orthonormal with respect to exp(-x^2)
 %   integrated over (-Inf,Inf). The recursion from [3] is
 % mu0=sqrt(pi);
 % a=@(i)2;
 % b=@(i)0;
 % c=@(i)2*(i-1);
 %
-%2) Legendre polynomials. These are orthonomal with respect to w(x)=1 for
+%2) Legendre polynomials. These are orthonormal with respect to w(x)=1 for
 %   integration over [-1,+1]. The recursion from [3] is
 % mu0=2;
 % a=@(i)(2*(i-1)+1)/i;

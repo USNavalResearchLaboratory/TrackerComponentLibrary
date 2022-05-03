@@ -21,6 +21,11 @@ function HTotal=spherAngHessian(xG,systemType,lRx,M)
 %          2 This is the same as 0 except instead of being given
 %            elevation, one desires the angle away from the z-axis, which
 %            is (pi/2-elevation).
+%          3 This is the same as 0 except azimuth is measured clockwise
+%            from the y-axis in the x-y plane instead of counterclockwise
+%            from the x-axis. This coordinate system often arises when
+%            given "bearings" in a local East-North-Up coordinate system,
+%            where the bearing directions are measured East of North.
 %      lRx The 3X1 position vector of the receiver. If omitted, the
 %          receiver is placed at the origin. All vectors in x are assumed
 %          to be from the same receiver.
@@ -120,7 +125,7 @@ for curPoint=1:N
             H(3,3,1)=0;
             %dAzdxdy
             H(1,2,1)=-(x-y)*(x+y)/r2xy^2;
-            %dAzdydz
+            %dAzdydx
             H(2,1,1)=H(1,2,1);
             %dAzdxdz
             H(1,3,1)=0;
@@ -139,7 +144,7 @@ for curPoint=1:N
             H(3,3,2)=-(2*rxy*z)/r4;
             %dEldxdy
             H(1,2,2)=(x*y*z*(3*r2xy+z^2))/(rxy^3*r4);
-            %dEldydz
+            %dEldydx
             H(2,1,2)=H(1,2,2);
             %dEldxdz
             H(1,3,2)=-((x*(x^2+y^2-z^2))/(rxy*r4));
@@ -162,7 +167,7 @@ for curPoint=1:N
             H(3,3,1)=(2*x*z)/r2xz^2;
             %dAzdxdy
             H(1,2,1)=0;
-            %dAzdydz
+            %dAzdydx
             H(2,1,1)=H(1,2,1);
             %dAzdxdz
             H(1,3,1)=((x-z)*(x+z))/r2xz^2;
@@ -181,7 +186,7 @@ for curPoint=1:N
             H(3,3,2)=-((y*(x^4-2*z^4+x^2*(y-z)*(y+z)))/(rxz^3*r4));
             %dEldxdy
             H(1,2,2)=-((x*(x^2-y^2+z^2))/(rxz*r4));
-            %dEldydz
+            %dEldydx
             H(2,1,2)=H(1,2,2);
             %dEldxdz
             H(1,3,2)=(x*y*z*(3*x^2+y^2+3*z^2))/(rxz^3*r4);
@@ -204,7 +209,7 @@ for curPoint=1:N
             H(3,3,1)=0;
             %dAzdxdy
             H(1,2,1)=-(x-y)*(x+y)/r2xy^2;
-            %dAzdydz
+            %dAzdydx
             H(2,1,1)=H(1,2,1);
             %dAzdxdz
             H(1,3,1)=0;
@@ -215,7 +220,6 @@ for curPoint=1:N
             %dAzdzdy
             H(3,2,1)=H(2,3,1);
 
-
             %dEldxdx
             H(1,1,2)=(z*(-2*x^4-x^2*y^2+y^4+y^2*z^2))/(rxy^3*r4);
             %dEldydy
@@ -224,7 +228,7 @@ for curPoint=1:N
             H(3,3,2)=(2*rxy*z)/r4;
             %dEldxdy
             H(1,2,2)=-((x*y*z*(3*r2xy+z^2))/(rxy^3*r4));
-            %dEldydz
+            %dEldydx
             H(2,1,2)=H(1,2,2);
             %dEldxdz
             H(1,3,2)=(x*(x^2+y^2-z^2))/(rxy*r4);
@@ -232,6 +236,48 @@ for curPoint=1:N
             H(3,1,2)=H(1,3,2);
             %dEldydz
             H(2,3,2)=(y*(x^2+y^2-z^2))/(rxy*r4);
+            %dEldzdy
+            H(3,2,2)=H(2,3,2);
+        case 3
+            r2xy=x^2+y^2;
+            r4=(x^2+y^2+z^2)^2;
+            rxy=sqrt(r2xy);
+
+            %dAzdxdx
+            H(1,1,1)=-(2*x*y)/r2xy^2;
+            %dAzdydy
+            H(2,2,1)=(2*x*y)/r2xy^2;
+            %dAzdzdz
+            H(3,3,1)=0;
+            %dAzdxdy
+            H(1,2,1)=(x-y)*(x+y)/r2xy^2;
+            %dAzdydx
+            H(2,1,1)=H(1,2,1);
+            %dAzdxdz
+            H(1,3,1)=0;
+            %dAzdzdx
+            H(3,1,1)=H(1,3,1);
+            %dAzdydz
+            H(2,3,1)=0;
+            %dAzdzdy
+            H(3,2,1)=H(2,3,1);
+
+            %dEldxdx
+            H(1,1,2)=(z*(2*x^4+x^2*y^2-y^2*(y^2+z^2)))/(rxy^3*r4);
+            %dEldydy
+            H(2,2,2)=-((z*(x^4-2*y^4+x^2*(-y^2+z^2)))/(rxy^3*r4));
+            %dEldzdz
+            H(3,3,2)=-(2*rxy*z)/r4;
+            %dEldxdy
+            H(1,2,2)=(x*y*z*(3*r2xy+z^2))/(rxy^3*r4);
+            %dEldydx
+            H(2,1,2)=H(1,2,2);
+            %dEldxdz
+            H(1,3,2)=-((x*(x^2+y^2-z^2))/(rxy*r4));
+            %dEldzdx
+            H(3,1,2)=H(1,3,2);
+            %dEldydz
+            H(2,3,2)=-((y*(x^2+y^2-z^2))/(rxy*r4));
             %dEldzdy
             H(3,2,2)=H(2,3,2);
         otherwise

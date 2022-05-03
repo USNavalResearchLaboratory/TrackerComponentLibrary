@@ -3,7 +3,7 @@ function u=geogHeading2ENUVec(heading,angUpFromLevel)
 %       and an elevation above the local tangent plane, get a corresponding
 %       unit vector in the specified direction in 3D ENU coordinates.
 %
-%INPUTS: heading A length numPts vector of headings in radians Eath of
+%INPUTS: heading A length numPts vector of headings in radians East of
 %                North.
 % angUpFromLevel A length numPts vector of elevations above the local
 %                tangent plane in radians.

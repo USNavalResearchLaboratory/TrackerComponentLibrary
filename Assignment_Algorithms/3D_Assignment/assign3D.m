@@ -131,7 +131,7 @@ function [tuples,fStar,qStar,u,exitCode]=assign3D(C,maximize,subgradMethod,subgr
 %    Computational Mathematics and Mathematical Physics, vol. 9, no. 3, pp.
 %    14-29, 1969.
 %[3] M. A. Bragin, P. B. Luh, J. H. Yan, N. Yu, and G. A. Stern,
-%    "Convergence of the surrogate Lagrangian relaxation method,? Journal
+%    "Convergence of the surrogate Lagrangian relaxation method," Journal
 %    of Optimization Theory and Applications, vol. 164, no. 1, pp. 173-201,
 %    Jan. 2015.
 %[4] D. P. Bertsekas, Nonlinear Programming, 3rd ed. Belmont, MA: Athena

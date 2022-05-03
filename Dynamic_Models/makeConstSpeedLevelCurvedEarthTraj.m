@@ -12,7 +12,7 @@ function xPosVel=makeConstSpeedLevelCurvedEarthTraj(llhStart,headingStart,speed,
 %                 North.
 %           speed The positive speed of the target. This will typically be
 %                 in meters.
-%     timeOffsets A lngth numPts list of times where the position and
+%     timeOffsets A length numPts list of times where the position and
 %                 velocity of the target should be obtained. This will
 %                 typically be in seconds.
 %        useRhumb If this is true, a rhumb (constant heading) trajectory is
@@ -28,7 +28,7 @@ function xPosVel=makeConstSpeedLevelCurvedEarthTraj(llhStart,headingStart,speed,
 %                   default is Constants.WGS84Flattening.
 %                 useHeightApprox If true, an approximation for targets
 %                   with nonzero height is used that is much faster than a
-%                   numerical integration-based technique. The default if
+%                   numerical integration-based technique. The default is
 %                   true.
 %                 numSteps4Circ If useHeightApprox is false, then numerical
 %                   integration is performed and this is the number of

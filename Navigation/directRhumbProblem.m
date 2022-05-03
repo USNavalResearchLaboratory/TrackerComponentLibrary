@@ -32,7 +32,7 @@ function latLonEnd=directRhumbProblem(latLonStart,azimuth,dist,algorithm,a,f)
 %
 %OUTPUTS: latLonEnd The ellipsoidal latitude and longitude that one will be
 %                    after starting at latLonStart and traveling a distance
-%                    of dist at a constant heading on azimuth.
+%                    of dist at a constant heading of azimuth.
 %
 %Algorithm 0 is taken from [1]. However, a formula using isometric
 %latitudes, which are described in Chapter 3 of [2] to get the azimuth

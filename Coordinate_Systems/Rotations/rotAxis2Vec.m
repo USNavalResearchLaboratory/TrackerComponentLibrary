@@ -101,7 +101,8 @@ function R=rotAxis2Vec(u,axisVal,method)
             permVec(1)=axisVal;
 
             for curVec=1:numVec
-                [v,beta]=HouseholderVec(u(permVec,curVec));
+                %The force sign option is true to make it be positive.
+                [v,beta]=HouseholderVec(u(permVec,curVec),true);
 
                 R(:,:,curVec)=eye(numDim,numDim)-beta*(v*v');
                 R(:,:,curVec)=R(permVec,permVec,curVec);

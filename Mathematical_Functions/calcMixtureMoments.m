@@ -1,7 +1,7 @@
 function [mu,P]=calcMixtureMoments(xi,w,PHyp,muHyp,diffTransFun,numMergeDims)
 %%CALCMIXTUREMOMENTS Given a set of sample vectors xi and associated
-%                    positive weights w, calculate the first two moments of
-%                    the mixture. Those are, the mean mu and the covariance
+%                    weights w, calculate the first two moments of the
+%                    mixture. Those are, the mean mu and the covariance
 %                    matrix P. An additional input can allow the function
 %                    to be used for computing the covariance matrix of a
 %                    Gaussian mixture, when xi is the set of mean vectors,
@@ -11,8 +11,8 @@ function [mu,P]=calcMixtureMoments(xi,w,PHyp,muHyp,diffTransFun,numMergeDims)
 %                    error matrix for an estimate muHyp rather than a
 %                    covariance matrix.
 %
-%INPUTS: xi A numDim X numPoints matrix of column vectors.
-%         w A numPoints X 1 or 1XnumPoints vector of the weights associated
+%INPUTS: xi A numDimXnumPoints matrix of column vectors.
+%         w A numPointsX1 or 1XnumPoints vector of the weights associated
 %           with each of the column vectors. Normally all w>0 to assure
 %           that P is positive definite. It is assumed that the weights sum
 %           to 1 when computing the mu and P. If this parameter is omitted
@@ -24,14 +24,14 @@ function [mu,P]=calcMixtureMoments(xi,w,PHyp,muHyp,diffTransFun,numMergeDims)
 %           means are xi). If omitted or an empty matrix is passed, P will
 %           be computed as the covariance matrix of a bunch of points. If P
 %           is not requested on the output, this argument has no effect.
-%     muHyp An optional input that changes how the covariance matrix is
-%           computed. If something other than an empty matrix is provided,
-%           the output P will not be computed centered about mu (it will
-%           not be the covariance) but will be computed centered around
-%           muHyp, thus making P a mean-squared error matrix. This input
-%           can be useful when using calcMixtureMoments to compute updates
-%           for the nearest neighbor joint probabilistic data association
-%           filter.
+%     muHyp An optional numDimX1 input that changes how the covariance
+%           matrix is computed. If something other than an empty matrix is
+%           provided, the output P will not be computed centered about mu
+%           (it will not be the covariance) but will be computed centered
+%           around muHyp, thus making P a mean-squared error matrix. This
+%           input can be useful when using calcMixtureMoments to compute
+%           updates for the global nearest neighbor joint probabilistic
+%           data association filter.
 % diffTransFun An optional function handle that transforms differences
 %           between values when computing the covariance. Though
 %           calcMixtureMoments is not meant for use with circular data,
@@ -39,12 +39,12 @@ function [mu,P]=calcMixtureMoments(xi,w,PHyp,muHyp,diffTransFun,numMergeDims)
 %           for computing a covariance matrix when using circular data,
 %           such as when dealing with longitudinal values.
 % numMergeDims It is possible that numDim> the number of dimensions that
-%           one actually cares about for the merged. If so, then this is
-%           the number of dimensions that should actually be merged. This
-%           discrepancy can arise when reducting models in an IMM for
-%           display where some models have additional non-mixing
+%           one actually cares about for the merged value mu. If so, then
+%           this is the number of dimensions that should actually be
+%           merged. This discrepancy can arise when reducing models in an
+%           IMM for display where some models have additional non-mixing
 %           components. The default if this parameter is omitted or an
-%           empty matris is passed is numDim.
+%           empty matrix is passed is numDim.
 %
 %OUTPUTS: mu The numMergeDimsX1 mean of the mixture.
 %          P The numMergeDimsXnumMergeDims covariance matrix of the
@@ -60,6 +60,12 @@ function [mu,P]=calcMixtureMoments(xi,w,PHyp,muHyp,diffTransFun,numMergeDims)
 %
 %Equations for computing the moments of mixtures are derived in Chapter
 %1.4.16 of [1].
+%
+%The most common uses of this function are of the form
+%[mu,P]=calcMixtureMoments(xi,w) for computing the mean and covariance
+%matrix of a batch of weighted samples and also of the form 
+%[mu,P]=calcMixtureMoments(xi,w,PHyp) for computing the mean and covariance
+%matrix of a Gaussian mixture distribution.
 %
 %REFERENCES:
 %[1] Y. Bar-Shalom, X. R. Li, and T. Kirubarajan, Estimation with

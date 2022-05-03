@@ -5,7 +5,8 @@ function [latLonPoint,sAX,sCX]=greatCircleIntersect(az1,az2,latLon1,latLon2,r,ge
 %           the latitude and longitude of the target on a spherical Earth.
 %           The sensors cannot be placed at the North or South poles. Note
 %           that the location of a target on a line running directly
-%           between the sensors is unobservable.
+%           between the sensors is unobservable. This type of localization
+%           is also known as a "cross fix" or a "crossfix".
 %
 %INPUTS: az1 The direction of the target in radians East of North as
 %            measured by the first sensor.
@@ -37,14 +38,14 @@ function [latLonPoint,sAX,sCX]=greatCircleIntersect(az1,az2,latLon1,latLon2,r,ge
 %                 sCX The distance from sensor 2 to the target. If getBoth
 %                     is true, this is 1X2 for both solutions.
 %
-%%Great circles are geodesics on a sphere. A geodesic path between two
+%Great circles are geodesics on a sphere. A geodesic path between two
 %points on a sphere is much simpler to determine as compared to an
 %ellipsoid (which is what one gets using the indirectGeodeticProb
 %function). For the spherical model, the latitude is taken as the elevation
 %and the longitude as the azimuth on the sphere (we assume coordinate
 %system 0 in the spher2Cart function).
 %
-%This function implements the algorithm used for initialization givne in
+%This function implements the algorithm used for initialization given in
 %[1]. The A and C angles in the triangle in [1] are computed based on
 %differencing the azimuthal angles toward the target and the azimuthal
 %angles of the great circle route between the sensors. Additionally, under

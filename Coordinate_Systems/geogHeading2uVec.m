@@ -7,12 +7,11 @@ function u=geogHeading2uVec(point,geoEastOfNorth,angUpFromLevel)
 %                 direction of a target when one wishes to simulate its
 %                 motion in a particular direction over a curved Earth.
 %
-%INPUTS: point The 2X1 or 3X1 location of the point in geodetic latitude 
-%              and longitude in radians at which the headings are taken.
-%              The point can be [latitude;longitude] or
+%INPUTS: point The 2XN or 3XN location matrix of the points in geodetic
+%              latitude  and longitude in radians at which the headings are
+%              taken. The point can be [latitude;longitude] or
 %              [latitude;longitude;height]. The height component is ignored
-%              if included since it does not change the result. This is a
-%              2XN or 3XN matrix.
+%              if included because it does not change the result.
 % geoEastOfNorth An NX1 or 1XN array of N geographic headings in radians
 %              clockwise from North that should be turned into ECEF unit
 %              vectors. A geographic heading is a direction in the local
@@ -69,28 +68,37 @@ if(nargin<2||isempty(geoEastOfNorth))
     geoEastOfNorth=0; 
 end
 
+N=size(point,2);
+
+if(isscalar(geoEastOfNorth))
+    geoEastOfNorth=geoEastOfNorth*ones(1,N);
+end
+
+if(isscalar(angUpFromLevel))
+    angUpFromLevel=angUpFromLevel*ones(1,N);
+end
+
+
 %Transpose geoEastOfNorth to make it 1XN in size if it is NX1. This is so
 %that bsxfun can be used to multiply the components with the basis vectors
 %instead of using a loop.
-if(size(geoEastOfNorth,2)==1)
-    geoEastOfNorth=geoEastOfNorth';
-end
+geoEastOfNorth=geoEastOfNorth(:).';
 %The same thing applies to angUpFromLevel
-if(size(angUpFromLevel,2)==1)
-    angUpFromLevel=angUpFromLevel';
+angUpFromLevel=angUpFromLevel(:).';
+
+u=zeros(3,N);
+for k=1:N
+    %Get the unit vectors for East, North, and Up.
+    uLocal=getENUAxes(point(:,k),false);
+    uEast=uLocal(:,1);
+    uNorth=uLocal(:,2);
+    uUp=uLocal(:,3);
+    
+    cosEl=cos(angUpFromLevel(k));
+    sinEl=sin(angUpFromLevel(k));
+    
+    u(:,k)=sin(geoEastOfNorth(k)).*cosEl*uEast+cos(geoEastOfNorth(k))*cosEl*uNorth+sinEl*uUp;
 end
-
-%Get the unit vectors for East, North, and Up.
-uLocal=getENUAxes(point,false);
-uEast=uLocal(:,1);
-uNorth=uLocal(:,2);
-uUp=uLocal(:,3);
-
-cosEl=cos(angUpFromLevel);
-sinEl=sin(angUpFromLevel);
-
-u=bsxfun(@times,sin(geoEastOfNorth).*cosEl,uEast)+bsxfun(@times,cos(geoEastOfNorth).*cosEl,uNorth)+bsxfun(@times,sinEl,uUp);
-
 end
 
 %LICENSE:

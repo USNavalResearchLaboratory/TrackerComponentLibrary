@@ -1,7 +1,7 @@
 function [x,exitCode]=LSEstLMarquardt(fun,x0,hasJacobian,TolG,TolX,delta,deltaAbs,maxIter,maxTries)
 %%LSESTLMARQUARDT Perform minimization of function over x having the
 %           quadratic form F(x)=(1/2)f(x)'*f(x), where x is a vector and
-%           f(x) is a vector function using the Levenberg-Marquardt
+%           f(x) is a vector function, using the Levenberg-Marquardt
 %           algorithm. If no Jacobian for f is available, then a secant
 %           version of the algorithm is used to estimate the Jacobian. This
 %           algorithm is useful for solving least squares problems. The
@@ -31,7 +31,7 @@ function [x,exitCode]=LSEstLMarquardt(fun,x0,hasJacobian,TolG,TolX,delta,deltaAb
 %            default value of 1e-9 is used.
 %      delta This parameter is only used if hasJacobian=false. This is the
 %            relative stepsize used for finite differencing when using the
-%            secand method. The stepsize is chosen such that
+%            secant method. The stepsize is chosen such that
 %            epsilon=max(delta*abs(x),deltaAbs); The deltaAbs limit is for
 %            when elements of x are near zero. If omitted or an empty
 %            matrix is passed, the default value of 1e-7 is used.

@@ -20,6 +20,11 @@
 *          2 This is the same as 0 except instead of being given
 *            elevation, one desires the angle away from the z-axis, which
 *            is (pi/2-elevation).
+*          3 This is the same as 0 except azimuth is measured clockwise
+*            from the y-axis in the x-y plane instead of counterclockwise
+*            from the x-axis. This coordinate system often arises when
+*            given "bearings" in a local East-North-Up coordinate system,
+*            where the bearing directions are measured East of North.
 *
 *OUTPUTS: HTotal The 3X3X3XN set of Hessian matrices, where H(:,:,1,i) is
 *           the Hessian for the x component for the ith point in z,
@@ -34,7 +39,7 @@
 *
 *More details are given in the native Matlab implementation.
 *
-*The algorithm can be compiled for use in Matlab  using the 
+*The algorithm can be compiled for use in Matlab using the 
 * CompileCLibraries function.
 *
 *The algorithm is run in Matlab using the command format
@@ -79,7 +84,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         systemType=0;
     }
 
-    if(systemType!=0&&systemType!=1&&systemType!=2) {
+    if(systemType!=0&&systemType!=1&&systemType!=2&&systemType!=3) {
         mexErrMsgTxt("Unknown system type specified.");
     }
     

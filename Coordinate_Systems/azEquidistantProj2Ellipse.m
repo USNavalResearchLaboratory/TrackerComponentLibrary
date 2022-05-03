@@ -1,11 +1,15 @@
 function latLonPts=azEquidistantProj2Ellipse(xyPts,latLonRef,a,f)
 %%AZEQUIDISTANTPROJ2ELLIPSE Given points as [x;y] values in a azimuthal
 %       equidistant projection, convert the points to latitudes and
-%       longitudes on a reference ellipsoid (or sphere).
+%       longitudes on a reference ellipsoid (or sphere). A third height
+%       coordinate can also be provided, which just gets appended to the
+%       output.
 %
 %INPUTS: xyPts A 2XN set of the azimuthal equidistant projection points
-%              about latLonRef to convert.
-%    latLonRef A 2X1 reference point about which the projection is taken.
+%              about latLonRef to convert. Alternatively, if heights are
+%              given, this can be a 3XN set of points.
+%    latLonRef A 2X1 [latitude;longitude] reference point in radians about
+%              which the projection is taken.
 %            a The semi-major axis of the reference ellipsoid (in meters).
 %              If this argument is omitted or an empty matrix is passed,
 %              the value in Constants.WGS84SemiMajorAxis is used.
@@ -14,14 +18,16 @@ function latLonPts=azEquidistantProj2Ellipse(xyPts,latLonRef,a,f)
 %              in Constants.WGS84Flattening is used.
 %
 %OUTPUTS: latLonPts The 2XN set of converted [latitude;longitude] points in
-%                   radians.
+%                   radians. If heights were given in xyPts, then this is a
+%                   3XN set of converted [latitude;longitude;height] points
+%                   with the third row the same as in xyPts.
 %
 %The conversion is described in Chapter 25 of [1], where expressions for
 %a spherical Earth are given. However, we do not use those formulae. The
 %norm of each xy point corresponds to a distance across the surface of the
 %curved Earth and using the inverse tangent function, one can obtain a
 %launch azimuth in radians East of North. From there, the latitude and
-%logitude of the point can be obtained using the directGreatCircleProb
+%longitude of the point can be obtained using the directGreatCircleProb
 %function for a spherical Earth or the directGeodeticProb for an
 %ellipsoidal Earth.
 %
@@ -40,24 +46,33 @@ if(nargin<3||isempty(a))
     a=Constants.WGS84SemiMajorAxis;
 end
 
+hasHeight=(size(xyPts,1)==3);
 numPts=size(xyPts,2);
-latLonPts=zeros(2,numPts);
+if(hasHeight)
+    latLonPts=zeros(3,numPts);
+else
+    latLonPts=zeros(2,numPts);
+end
 if(f==0)
     %Under a spherical Earth approximation.
     for k=1:numPts
-        distVal=norm(xyPts(:,k));
+        distVal=norm(xyPts(1:2,k));
         az=atan2(xyPts(1,k),xyPts(2,k));
         
-        latLonPts(:,k)=directGreatCircleProb(latLonRef,az,distVal,a);
+        latLonPts(1:2,k)=directGreatCircleProb(latLonRef,az,distVal,a);
     end
 else
     %Under an ellipsoidal Earth approximation.
     for k=1:numPts
-        distVal=norm(xyPts(:,k));
+        distVal=norm(xyPts(1:2,k));
         az=atan2(xyPts(1,k),xyPts(2,k));
         
-        latLonPts(:,k)=directGeodeticProb(latLonRef,az,distVal,a,f);
+        latLonPts(1:2,k)=directGeodeticProb(latLonRef,az,distVal,a,f);
     end
+end
+
+if(hasHeight)
+    latLonPts(3,:)=xyPts(3,:);
 end
 end
 

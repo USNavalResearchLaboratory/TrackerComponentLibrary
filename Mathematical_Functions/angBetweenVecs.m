@@ -2,11 +2,12 @@ function angDiff=angBetweenVecs(v1,v2)
 %%ANGBETWEENVECS Given vector pairs in 2D or higher space, find the angular
 %                distances between them (non-negative values). 
 %
-%INPUTS: v1 A 3XN matrix of N real vectors.
+%INPUTS: v1 A 3XN matrix of N real vectors or a single 3X1 vector is they
+%           are all the same and v2 varies.
 %        v2 A 3XN matrix of N real vectors or a single 3X1 vector if all of
-%           them are the same.
+%           them are the same and v1 varies.
 %
-%OUTPUTS: angDiff An NX1 matrix of the angular differences (in radians)
+%OUTPUTS: angDiff An 1XN matrix of the angular differences (in radians)
 %                 between the vectors in v1 and the correspinding vectors
 %                 in v2. The distances can range from 0 to pi.
 %
@@ -24,15 +25,18 @@ function angDiff=angBetweenVecs(v1,v2)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 %The number of vectors.
-N=size(v1,2);
-
-numDim=size(v1,1);
-
-if(size(v2,2)==1)
+N1=size(v1,2);
+N2=size(v2,2);
+N=max(N1,N2);
+if(N1~=N)
+    v1=repmat(v1,[1,N]); 
+elseif(N2~=N)
     v2=repmat(v2,[1,N]); 
 end
 
-angDiff=zeros(N,1);
+numDim=size(v1,1);
+
+angDiff=zeros(1,N);
 if(numDim==3)
     for curVec=1:N
         angDiff(curVec)=atan2(norm(cross(v1(:,curVec),v2(:,curVec))),dot(v1(:,curVec),v2(:,curVec)));

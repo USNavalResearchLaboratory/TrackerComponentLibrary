@@ -9,44 +9,55 @@ function [azStart,dist,azEnd,latLonWaypoints]=indirectGreatCircleProb(latLonStar
 %                      When used for navigation, it is less accurate than
 %                      an ellipsoidal Earth approximation.
 %
-%INPUTS: latLonStart The 2X1 initial point given in latitude and longitude
-%                    in radians in the format [latitude;longitude]
-%                    (on a reference sphere, latitude is spherical
-%                    elevation; longitude is spherical azimuth).
-%          latLonEnd The 2X1 final point given in latitude and longitude in
-%                    radians in the format [latitude;longitude].
-%                  r The assumed radius of the spherical Earth model. If
-%                    omitted or an empty matrix is passed, the default of
-%                    r=osculatingSpher4LatLon(latLonStart) is used.
-%                  N The number of waypoints, besides the initial and final
-%                    points on the trajectory, to produce. The default if
-%                    omitted or an empty matrix is passed is 100.
-%          algorithm An optional parameter selecting the algorithm to use.
-%                    Possible values are:
-%                    0 (The default if omitted or an empty matrix is
-%                      passed) Use the algorithm of [2], which avoids
-%                      issues with singularities at the poles.
-%                    1 Use the COFI algorithm of [1]. Latitudes within
-%                      2^24*eps(pi/2) of +/-pi/2 (the North and South
-%                      poles) will be clipped to that bound. This avoids a
-%                      singularity at the poles.
-%       waypointType An optional parameter indicating how the waypoints
-%                    will be spaced. Possible values are:
-%                    0 (The default if omitted or an empty matrix is
-%                      passed) Space the N waypoints between the start and
-%                      end uniformly in distance.
-%                    1 Space the N waypoints between the start and end
-%                      uniformly in longitude. This option is only
-%                      available for algorithm 0. If a trajectory is
-%                      meridional, then only the starting and stopping
-%                      points will be returned.
+%INPUTS: latLonStart The 2XnumPts set of numPts initial points given in
+%               latitude and longitude in radians in the format
+%               [latitude;longitude] (on a reference sphere, latitude is
+%               spherical elevation; longitude is spherical azimuth). If
+%               all these points are the same but latLonEnd varies, then a
+%               single 2X1 vector can be passed. Extra rows, if passed,
+%               will be ignored.
+%     latLonEnd The 2XnumPts final points given in latitude and longitude
+%               in adians in the format [latitude;longitude]. If all these
+%               points are the same but latLonStart varies, then a single
+%               2X1 vector can be passed.
+%             r The assumed radius of the spherical Earth model. If omitted
+%               or an empty matrix is passed, the default of
+%               r=osculatingSpher4LatLon(latLonStart) is used.
+%             N The number of waypoints, besides the initial and final
+%               points on the trajectory, to produce. If omitted or an
+%               empty matrix is passed, then no waypoints are generated and
+%               latLonWaypoints is an empty matrix.
+%     algorithm An optional parameter selecting the algorithm to use.
+%               Possible values are:
+%               0 Use the algorithm of [2], which avoids issues with
+%                 singularities at the poles.
+%               1 (The default if omitted or an empty matrix is passed and
+%                 waypointType=1) Use the COFI algorithm of [1]. Latitudes
+%                 within 2^24*eps(pi/2) of +/-pi/2 (the North and South
+%                 poles) will be clipped to that bound. This avoids a
+%                 singularity at the poles.
+%               2 (The default if omitted or an empty matrix is passed and
+%                 waypointType=0) Obtain angles using Equation 5-4b of [3],
+%                 which is stable at the poles. Obtaincthe distance using a
+%                 cross product formula, which is also used in algorithm 1,
+%                 as discussed below.
+%    waypointType An optional parameter indicating how the waypoints will
+%                 be spaced. Possible values are:
+%                 0 (The default if omitted or an empty matrix is passed)
+%                   Space the N waypoints between the start and end
+%                   uniformly in distance.
+%                 1 Space the N waypoints between the start and end
+%                   uniformly in longitude. This option is only available
+%                   for algorithm 0. If a trajectory is meridional, then
+%                   only the starting and stopping points will be returned.
 %
-%OUTPUTS: azStart The scalar forward azimuth at the starting point in
+%OUTPUTS: azStart The 1XnumPts scalar forward azimuths at the starting
+%                 point in radians East of true North on the reference
+%                 sphere.
+%            dist The 1XnumPts distances on the sphere-approximated Earth
+%                 between the starting and stopping points.
+%           azEnd The 1XnumPts forward azimuth at the ending point in
 %                 radians East of true North on the reference sphere.
-%            dist The distance on the sphere-approximated Earth between the
-%                 starting and stopping points.
-%           azEnd The forward azimuth at the ending point in radians East
-%                 of true North on the reference sphere.
 % latLonWaypoints A 2X(N+2) set of waypoints on the trajectory.
 %                 latLonWaypoints(:,i) is the ith points as
 %                 [latitude;longitude] in radians. The first point is
@@ -77,7 +88,8 @@ function [azStart,dist,azEnd,latLonWaypoints]=indirectGreatCircleProb(latLonStar
 %the angular difference D is obtained using the angBetweenVecs given F and
 %T rather than the technique derived from the dot product relation starting
 %in Equation 13 in [1]. This is because the cross product relation used in
-%angBetweenVecs is more accurate. Minor changes had to be made to deal with
+%angBetweenVecs is more accurate. This is also used for the distance in
+%algorithm 2. Minor changes had to be made to algorithm 1 to deal with
 %trajectories going West, since the derivation in [1] is for East-bound
 %trajectories.
 %
@@ -163,6 +175,8 @@ function [azStart,dist,azEnd,latLonWaypoints]=indirectGreatCircleProb(latLonStar
 %[2] D. F. Crouse, "Singularity-free great-circle sailing," Naval Research
 %    Laboratory, Washington, DC, Tech. Rep. NRL/5340/MR–2021/4, 26
 %    Jul. 2021.
+%[3] J. P. Snyder, "Map projections- a working manual," U.S. Geological
+%    Survey, Tech. Rep. 1395, 1987.
 %
 %August 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -175,12 +189,12 @@ if(nargin<5||isempty(algorithm))
     if(waypointType==1)
         algorithm=1;
     else
-        algorithm=0;
+        algorithm=2;
     end
 end
 
-if(nargin<4||isempty(N))
-    N=100;
+if(nargin<4)
+    N=[];%Generate no waypoints.
 end
 
 if(nargin<3||isempty(r))
@@ -191,15 +205,51 @@ if(nargout<3)
     N=[];%Do not generate waypoints.
 end
 
+numPts1=size(latLonStart,2);
+numPts2=size(latLonEnd,2);
+numPts=max(numPts1,numPts2);
+
+if(numPts1>numPts2)
+    latLonEnd=repmat(latLonEnd,[1,numPts]);
+elseif(numPts2>numPts1)
+    latLonStart=repmat(latLonStart,[1,numPts]);
+end
+
+azStart=zeros(1,numPts);
+dist=zeros(1,numPts);
+azEnd=zeros(1,numPts);
+if(~isempty(N))
+    latLonWaypoints=zeros(2,N+2,numPts);
+else
+    latLonWaypoints=[];
+end
+
 switch(algorithm)
     case 0
         if(waypointType~=0)
             error('This algorithm only supports waypointType=0.');
         end
         
-        [azStart,dist,azEnd,latLonWaypoints]=indirectGreatCircleProbCrouse(latLonStart,latLonEnd,r,N);
+        for k=1:numPts
+            [azStart(k),dist(k),azEnd(k),latLonWaypointsCur]=indirectGreatCircleProbCrouse(latLonStart(1:2,k),latLonEnd(1:2,k),r,N);
+            if(~isempty(N))
+                latLonWaypoints(:,:,k)=latLonWaypointsCur;
+            end
+        end
     case 1
-        [azStart,dist,azEnd,latLonWaypoints]=indirectGreatCircleProbChen(latLonStart,latLonEnd,r,N,waypointType);
+        for k=1:numPts
+            [azStart(k),dist(k),azEnd(k),latLonWaypointsCur]=indirectGreatCircleProbChen(latLonStart(1:2,k),latLonEnd(1:2,k),r,N,waypointType);
+            if(~isempty(N))
+                latLonWaypoints(:,:,k)=latLonWaypointsCur;
+            end
+        end
+    case 2
+        for k=1:numPts
+            [azStart(k),dist(k),azEnd(k),latLonWaypointsCur]=indirectGreatCircleProbSnyder(latLonStart(1:2,k),latLonEnd(1:2,k),r,N);
+            if(~isempty(N))
+                latLonWaypoints(:,:,k)=latLonWaypointsCur;
+            end
+        end
     otherwise
         error('Unknown algorithm chosen.')
 end
@@ -392,7 +442,7 @@ u1=spher2Cart([latLonStart(2);latLonStart(1)]);
 u2=spher2Cart([latLonEnd(2);latLonEnd(1)]);
 
 %Rotate the vectors both onto the equator.
-[vec1Rot,vec2Rot,R]=rot2Vecs2CommonAxis(u1,u2);
+[vec1Rot,vec2Rot,R]=rot2Vecs2CommonPlane(u1,u2);
 
 %The geodesic goes along the equator in the rotated coordinate system in
 %the tangent plane. We need to find the shortest direction around the
@@ -438,6 +488,65 @@ azStart=atan2(EProj,NProj);
 EProj=dot(uDir2,uENU2(:,1));
 NProj=dot(uDir2,uENU2(:,2));
 azEnd=atan2(EProj,NProj);
+
+if(~isempty(N))%If waypoints are desired.
+    distPts=linspace(0,dist,N+2);
+    latLonWayPoints=directGreatCircleProb(latLonStart,azStart,distPts,r);
+    %This ensures that the longitudes match even if the starting and/or
+    %stopping points are at the poles.
+    latLonWayPoints(:,1)=latLonStart;
+    latLonWayPoints(:,N+2)=latLonEnd;
+else
+    latLonWayPoints=[];
+end
+end
+
+function [azStart,dist,azEnd,latLonWayPoints]=indirectGreatCircleProbSnyder(latLonStart,latLonEnd,r,N)
+%%INDIRECTGREATCIRCLEPRBSNYDER This function calls greatCircleDistance with
+%   algorithm 0 selected, which should be the most stable solution. Then,
+%   it calls greatCircleAzimuth with algorithm 2 selected, which is the
+%   very simple formula in Equation 5-4b in [1].
+%
+%REFERENCES:
+%[1] J. P. Snyder, "Map projections- a working manual," U.S. Geological
+%    Survey, Tech. Rep. 1395, 1987.
+%
+%December 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+%Latitude at the start.
+phi1=latLonStart(1);
+%Latitude at the destination.
+phi2=latLonEnd(1);
+
+lambda1=latLonStart(2);
+lambda2=latLonEnd(2);
+cosPhi1=cos(phi1);
+sinPhi1=sin(phi1);
+cosPhi2=cos(phi2);
+sinPhi2=sin(phi2);
+
+cosLambda1=cos(lambda1);
+sinLambda1=sin(lambda1);
+cosLambda2=cos(lambda2);
+sinLambda2=sin(lambda2);
+deltaLambda=lambda2-lambda1;
+cosDeltaLambda=cos(deltaLambda);
+sinDeltaLambda=sin(deltaLambda);
+
+%The Cartesian starting point (unit sphere).
+F=[cosLambda1*cosPhi1;
+   sinLambda1*cosPhi1;
+   sinPhi1];
+%The Cartesian ending point (unit sphere).
+T=[cosLambda2*cosPhi2;
+   sinLambda2*cosPhi2;
+   sinPhi2];
+dist=r*angBetweenVecs(F,T);
+
+azStart=atan2(cosPhi2*sinDeltaLambda,cosPhi1*sinPhi2-sinPhi1*cosPhi2*cosDeltaLambda);
+azEnd=atan2(-cosPhi1*sinDeltaLambda,cosPhi2*sinPhi1-sinPhi2*cosPhi1*cosDeltaLambda);
+azEnd=wrapRange(azEnd+pi,-pi,pi);
 
 if(~isempty(N))%If waypoints are desired.
     distPts=linspace(0,dist,N+2);

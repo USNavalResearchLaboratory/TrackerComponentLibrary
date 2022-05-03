@@ -38,7 +38,7 @@ function Q=QPolyKal(T,xDim,order,q0)
 %
 %The state for the 1D case is assumed to be
 %[position;velocity;acceleration;etc] --so in the order of increasing
-%derivatives. in the multidimensional case, the same order is preserved, so
+%derivatives. In the multidimensional case, the same order is preserved, so
 %position becomes numDim-dimensional as do velocity, acceleration, etc.
 %This means that the values for the 1D case just get repeated.
 %

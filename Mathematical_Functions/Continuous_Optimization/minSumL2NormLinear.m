@@ -8,11 +8,11 @@ function [x,info]=minSumL2NormLinear(F,g,algorithm,params)
 %          the problem. The problem is solved as a second order cone
 %          problem. Possible values are:
 %          0 (The default if omitted or an empty matrix is passed) Use the
-%            function splitingConicSolver.
+%            function splittingConicSolver.
 %          1 Use the function secondOrderConeInteriorPoint.
-%   params Parameters that affect how the function splitingConicSolver,
+%   params Parameters that affect how the function splittingConicSolver,
 %          which is used by this function, works. See the comments to
-%          splitingConicSolver for more information
+%          splittingConicSolver for more information
 %
 %OUTPUTS: x The nX1 solution to the problem or an empty matrix is no
 %           solution is possible.
@@ -20,7 +20,7 @@ function [x,info]=minSumL2NormLinear(F,g,algorithm,params)
 %           problem. This is the exitCoe return parameter from
 %           secondOrderConeInteriorPoint if  algorithm=0 and this is the
 %           information regarding the termination state returned by the
-%           splitingConicSolver function if algorithm=1.
+%           splittingConicSolver function if algorithm=1.
 %
 %As described in [1], the problem can be formulated as a second order cone
 %optimization problem.
@@ -105,7 +105,7 @@ cone.q=(m+1)*ones(p,1);
 
 switch(algorithm)
     case 0
-        [x,~,~,info]=splitingConicSolver(A,b,c,cone,params);
+        [x,~,~,info]=splittingConicSolver(A,b,c,cone,params);
     case 1
         [~,x,~,info]=secondOrderConeInteriorPoint(A',-c,b,cone.q,params);
     otherwise

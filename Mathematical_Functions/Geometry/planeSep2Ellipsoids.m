@@ -12,7 +12,7 @@ function [a,b,info]=planeSep2Ellipsoids(xHat,R,params)
 %           R A numDimXnumDimX2 set of real shape matrices of two
 %             ellipsoids.
 %      params An optional parameter. This function uses the
-%             splitingConicSolver function to find a splitting (hyper)plane
+%             splittingConicSolver function to find a splitting (hyper)plane
 %             between two ellipsoids, it if exists.
 %
 %OUTPUTS: a, b The numDimX1 vector a and the scalar b define a hyperplane 
@@ -20,8 +20,8 @@ function [a,b,info]=planeSep2Ellipsoids(xHat,R,params)
 %              is on the other side. If the ellipsoids intersect, then
 %              empty matrices are returned.
 %         info This is the termination status returned by the subroutine
-%              splitingConicSolver. See the comments to splitingConicSolver
-%              for more information.
+%              splittingConicSolver. See the comments to
+%              splittingConicSolver for more information.
 %
 %The form of an ellipsoid used for gating with a Gaussian approximation of
 %a PDF in tracking is (x-xHat)*PInv*(x-xHat)<=gamma, where xHat is the
@@ -63,7 +63,7 @@ function [a,b,info]=planeSep2Ellipsoids(xHat,R,params)
 %             t1>=norm(R1'*a)
 %             t2>=norm(R2'*a)
 %which is a second order cone program, which can be solved using the
-%splitingConicSolver function.
+%splittingConicSolver function.
 %
 %EXAMPLE 1:
 %In this example, we use 2D ellipses. The ellipses are not separable. We
@@ -150,7 +150,7 @@ b=[1;zeros(2*(n+1),1)];
 cone.f=1;
 cone.q=[n+1;n+1];
 
-[x,~,~,info]=splitingConicSolver(A,b,c,cone,params);
+[x,~,~,info]=splittingConicSolver(A,b,c,cone,params);
 
 a=x(1:n);
 

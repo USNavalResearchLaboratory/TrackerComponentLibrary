@@ -19,7 +19,6 @@ void calcSpherInvHessianCPP(double *H,const double *z,const size_t systemType) {
     const double cosEl=cos(z[2]);
 
     if(systemType==0) {
-
         //d2xdrdr, H(1,1,1)
         H[0]=0;
         //d2xdAzdAz, H(2,2,1)
@@ -133,6 +132,63 @@ void calcSpherInvHessianCPP(double *H,const double *z,const size_t systemType) {
         H[25]=r*sinAz*sinEl;
         //d2zdEldAz, H(3,2,3)
         H[23]=H[25];
+    } else if(systemType==3) {
+        //d2xdrdr, H(1,1,1)
+        H[0]=0;
+        //d2xdAzdAz, H(2,2,1)
+        H[4]=-r*sinAz*cosEl;
+        //d2xdEldEl, H(3,3,1)
+        H[8]=-r*sinAz*cosEl;
+        //d2xdrdAz, H(1,2,1)
+        H[3]=cosEl*cosAz;
+        //d2xdAzdr, H(2,1,1)
+        H[1]=H[3];
+        //d2xdrdEl, H(1,3,1)
+        H[6]=-sinAz*sinEl;
+        //d2xdEldr, H(3,1,1)
+        H[2]=H[6];
+        //d2xdAzdEl, H(2,3,1)
+        H[7]=-r*cosAz*sinEl;
+        //d2xdEldAz, H(3,2,1)
+        H[5]=H[7];
+
+        //d2ydrdr, H(1,1,2)
+        H[9]=0;
+        //d2ydAzdAz, H(2,2,2)
+        H[13]=-r*cosEl*cosAz;
+        //d2ydEldEl, H(3,3,2)
+        H[17]=-r*cosEl*cosAz;
+        //d2ydrdAz, H(1,2,2)
+        H[12]=-sinAz*cosEl;
+        //d2ydAzdr, H(2,1,2)
+        H[10]=H[12];
+        //d2ydrdEl, H(1,3,2)
+        H[15]=-cosAz*sinEl;
+        //d2ydEldr, H(3,1,2)
+        H[11]=H[15];
+        //d2ydAzdEl, H(2,3,2)
+        H[16]=r*sinAz*sinEl;
+        //d2ydEldAz, H(3,2,2)
+        H[14]=H[16];
+
+        //d2zdrdr, H(1,1,3)
+        H[18]=0;
+        //d2zdAzdAz, H(2,2,3)
+        H[22]=0;
+        //d2zdEldEl, H(3,3,3)
+        H[26]=-r*sinEl;
+        //d2zdrdAz, H(1,2,3)
+        H[21]=0;
+        //d2zdAzdr, H(2,1,3)
+        H[19]=H[21];
+        //d2zdrdEl, H(1,3,3)
+        H[24]=cosEl;
+        //d2zdEldr, H(3,1,3)
+        H[20]=H[24];
+        //d2zdAzdEl, H(2,3,3)
+        H[25]=0;
+        //d2zdEldAz, H(3,2,3)
+        H[23]=H[25]; 
     } else {//systemType==2
         //d2xdrdr, H(1,1,1)
         H[0]=0;

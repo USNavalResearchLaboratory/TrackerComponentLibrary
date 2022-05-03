@@ -29,12 +29,12 @@ function J=calcCartRRJacob(components,xState,useHalfRange,lTx,lRx)
 %               [x;y;xDot;yDot] components in 2D. If omitted, then a vector
 %               of zeros is used.
 %
-%OUTPUTS: J The (xDim/2+1)XxDim Jacobian matrix. Each row is a components
+%OUTPUTS: J The (xDim/2+1)XxDim Jacobian matrix. Each row is a component
 %           of x-y-z-range rate and each column is the derivative with
 %           respect to x,y,z,xDot,yDot,zDot. If range rate is not desired,
 %           then the matrix is (xDim/2)XxDim in size.
 %
-%The derivatives of the position components with themselves is clear (1
+%The derivatives of the position components with themselves are clear (1
 %for common components and zero for different components). The derivatives
 %of the range rate components are obtained using the rangeRateGradient
 %function.

@@ -16,20 +16,21 @@ function Q=QGaussMarkov(T,xDim,q,tau,order)
 %        q The power spectral density of the noise corrupting the
 %          highest-order moment. q=(sqrt(2/tau)*sigmam)^2 where sigmam^2 is
 %          the instantaneous variance of the highest order moment.
-%      tau The time constant of the autocorrelation or the moment of the
+%      tau The time constant of the autocorrelation of the moment of the
 %          given order. For example, if order=2, then tau is the time
 %          constant of the decorrelation time of the acceleration in
 %          seconds. The decorrelation time is approximately 2*tau. As tau
-%          increases, the highest moment of the process process remains
-%          correlated longer. A reasonable range for tau when order=2
-%          (Singer's model) is between 5 and 20 seconds. The time constant
-%          is assumed the same for all dimensions of motion, so this
-%          parameter is scalar. If this parameter is omitted, the default
-%          value of 20 is used. The use of large values of tau (typically
-%          tau/T ratios of thousands or higher) will lead to finite
-%          precision effects that can be sufficiently severe that the
-%          matrix ends up with negative diagonal values for the low-order
-%          moments.
+%          increases, the highest moment of the process remains correlated
+%          longer. A reasonable range for tau when order=2 (Singer's model)
+%          is between 5 and 20 seconds. The time constant is assumed the
+%          same for all dimensions of motion, so this parameter is scalar.
+%          If this parameter is omitted, the default value of 20 is used.
+%          The use of large values of tau (typically tau/T ratios of
+%          thousands or higher) will lead to finite precision effects that
+%          can be sufficiently severe that the matrix ends up with negative
+%          diagonal values for the low-order moments. Note that this
+%          function will return the correct value if T=0 (which is just an
+%          all-zero matrix) even though tau/T=Inf.
 %    order The order of the Gauss-Markov process. This is the number of
 %          derivatives of position in the model. Thus, 0=position-only,
 %          1=position and velocity, etc. If this parameter is omitted, the
@@ -84,6 +85,12 @@ end
 if(nargin<4)
     tau=20;
 end
+
+if(T==0)
+    Q=zeros(xDim,xDim);
+    return;
+end
+
 
 numDim=xDim/(order+1);
 

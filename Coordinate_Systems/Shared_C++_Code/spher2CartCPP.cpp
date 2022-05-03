@@ -36,6 +36,12 @@ void spher2CartCPP(double *cartPoint,const double *point, size_t systemType) {
  *                   2 This is the same as 0 except instead of being given
  *                     elevation, one is given the angle away from the
  *                     z-axis, which is (pi/2-elevation).
+ *                   3 This is the same as 0 except azimuth is measured
+ *                     clockwise from the y-axis in the x-y plane instead
+ *                     of counterclockwise from the x-axis. This coordinate
+ *                     system often arises when given "bearings" in a local
+ *                     East-North-Up coordinate system, where the bearing
+ *                     directions are measured East of North.
  *
  *OUTPUTS: None. The results are placed in cartPoint.
  *
@@ -51,6 +57,10 @@ void spher2CartCPP(double *cartPoint,const double *point, size_t systemType) {
     if(systemType==2) {
         double pi=acos(-1.0);
         elevation=pi/2.0-elevation;
+        systemType=0;
+    } else if(systemType==3) {
+        double pi=acos(-1.0);
+        azimuth=pi/2.0-azimuth;
         systemType=0;
     }
     
@@ -92,6 +102,12 @@ void spher2CartGenCPP(double *retData,const double *point,size_t systemType,cons
  *                2 This is the same as 0 except instead of being given
  *                  elevation, one is given the angle away from the z-axis,
  *                  which is (pi/2-elevation).
+ *                3 This is the same as 0 except azimuth is measured
+ *                  clockwise from the y-axis in the x-y plane instead of
+ *                  counterclockwise from the x-axis. This coordinate
+ *                  system often arises when given "bearings" in a local
+ *                  East-North-Up coordinate system, where the bearing
+ *                  directions are measured East of North.
  *   useHalfRange A boolean value specifying whether the bistatic (round-
  *                trip) range value has been divided by two. 
  *            zTx The 3X1 [x;y;z] location vector of the transmitter in
@@ -128,6 +144,10 @@ void spher2CartGenCPP(double *retData,const double *point,size_t systemType,cons
     if(systemType==2) {
         double pi=acos(-1.0);
         elevation=pi/2.0-elevation;
+        systemType=0;
+    } else if(systemType==3) {
+        double pi=acos(-1.0);
+        azimuth=pi/2.0-azimuth;
         systemType=0;
     }
     
@@ -200,6 +220,12 @@ void spher2CartNoRangeCPP(double *retData,const double *point,size_t systemType,
  *                2 This is the same as 0 except instead of being given
  *                  elevation, one is given the angle away from the z-axis,
  *                  which is (pi/2-elevation).
+ *                3 This is the same as 0 except azimuth is measured
+ *                  clockwise from the y-axis in the x-y plane instead of
+ *                  counterclockwise from the x-axis. This coordinate
+ *                  system often arises when given "bearings" in a local
+ *                  East-North-Up coordinate system, where the bearing
+ *                  directions are measured East of North.
  *              M A 3X3  rotation matrices to go from the alignment of the
  *                global coordinate system to that at the receiver. It is
  *                stored one columns after the other, consistent with how
@@ -222,6 +248,10 @@ void spher2CartNoRangeCPP(double *retData,const double *point,size_t systemType,
     if(systemType==2) {
         double pi=acos(-1.0);
         elevation=pi/2.0-elevation;
+        systemType=0;
+    } else if(systemType==3) {
+        double pi=acos(-1.0);
+        azimuth=pi/2.0-azimuth;
         systemType=0;
     }
     

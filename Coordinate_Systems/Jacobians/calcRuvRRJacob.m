@@ -1,23 +1,27 @@
 function J=calcRuvRRJacob(x,useHalfRange,xTx,xRx,M)
 %%CALCRUVRRJACOB Calculate the Jacobian of a 3D bistatic r-u-v measurement
 %                with non-relativistic range rate, ignoring atmospheric
-%                effects. The derivatives are taken with respect to
+%                effects. The derivatives are taken with respect to the
 %                Cartesian position and velocity components of the state.
 %
-%%INPUTS: x The 6X1 position and velocity vector of the target in Cartesian
-%           coordinates in the order [x;y;z;xDot;yDot;zDot].
+%INPUTS: x The 6X1 position and velocity vector of the target in Cartesian
+%          coordinates in the order [x;y;z;xDot;yDot;zDot].
 % useHalfRange A boolean value specifying whether the bistatic range value
-%           (and thus the range rate) should be divided by two. This
-%           normally comes up when operating in monostatic mode, so that the
-%           range reported is a one-way range. The default if this parameter
-%           is not provided is false.
-%       xTx The 6X1 position and velocity vector of the transmitter.
-%       xRx The 6X1 position and velocity vector of the receiver.
-%         M A 3X3 rotation matrices to go from the alignment of the global
-%           coordinate system to that at the receiver. If omitted or an
-%           empty matrix is passed, then it is assumed that the local
-%           coordinate system is aligned with the global and M=eye(3) --the
-%           identity matrix is used.
+%          (and thus the range rate) should be divided by two. This
+%          normally comes up when operating in monostatic mode, so that the
+%          range reported is a one-way range. The default if this parameter
+%          is not provided is false.
+%      xTx The 6X1 position and velocity vector of the transmitter. The
+%          default if omitted or an empty matrix is passed is a vector of
+%          all zeros.
+%      xRx The 6X1 position and velocity vector of the receiver. The
+%          default if omitted or an empty matrix is passed is a vector of
+%          all zeros.
+%        M A 3X3 rotation matrices to go from the alignment of the global
+%          coordinate system to that at the receiver. If omitted or an
+%          empty matrix is passed, then it is assumed that the local
+%          coordinate system is aligned with the global and M=eye(3) --the
+%          identity matrix is used.
 %
 %OUTPUTS: J The 4X6 Jacobian matrix with derivatives with respect to
 %           position components and velocity. Each row is a component of

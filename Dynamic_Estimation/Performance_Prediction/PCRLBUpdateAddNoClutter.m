@@ -8,18 +8,21 @@ function JPost=PCRLBUpdateAddNoClutter(JPred,xCur,PCur,R,PD,paramH,xi,w)
 %INPUTS: JPred The xDimXxDim Fisher information matrix predicted forward to
 %              the current time-step. If this is the first step with a
 %              measurement, then JPred should be the xDimXxDim zero matrix.
-%         xCur The (column vector) mean of the distribution of the true
-%              (but unknown to the tracker) possible target location at the
-%              current time. It is assumed that the distribution of the
-%              target locations is Gaussian. This is only needed if paramH
-%              is a function. Otherwise, an empty matrix can be passed.
-%         PCur The covariance of the distribution of the true (but unknown
+%         xCur The xDimX1 mean of the distribution of the true (but unknown
 %              to the tracker) possible target location at the current
-%              time. If the target motion is deterministic but unknown to
-%              the tracker, then PCur is a matrix of zeros. If an empty
-%              matrix is passed, it is assumed that PCur is all zeros.
-%            R The covariance matrix of the additive measurement noise.
-%           PD The detection probability of the target at the current step.
+%              time. It is assumed that the distribution of the target
+%              locations is Gaussian. This is only needed if paramH is a
+%              function. Otherwise, an empty matrix can be passed.
+%         PCur The xDimXxDim covariance of the distribution of the true
+%              (but unknown to the tracker) possible target location at the
+%              current time. If the target motion is deterministic but
+%              unknown to the tracker, then PCur is a matrix of zeros. If
+%              an empty matrix is passed, it is assumed that PCur is all
+%              zeros.
+%            R The zDimXzDim covariance matrix of the additive measurement
+%              noise.
+%           PD The scalar detection probability of the target at the
+%              current step.
 %       paramH Either the fixed measurement matrix H (which is zDimXxDim),
 %              or a function handle HJacob to get the measurement Jacobian,
 %              which is zDimXxDim where each row corresponds to a
@@ -31,12 +34,13 @@ function JPost=PCRLBUpdateAddNoClutter(JPred,xCur,PCur,R,PD,paramH,xi,w)
 %              zero matrix, then cubature points for integration are
 %              needed. xi and w are the cubature points and weights. The
 %              cubature points must be the dimensionality of the state. If
-%              this and the next parameter are omitted or empty matrices
-%              are passed, then fifthOrderCubPoints(xDim) is used. It is 
-%              suggested that xi and w be provided to avoid needless
+%              these parameter are omitted or empty matrices are passed,
+%              then fifthOrderCubPoints(xDim) is used. It is suggested that
+%              xi and w be provided (if needed) to avoid needless
 %              recomputation of the cubature points.
 %
-%OUTPUT: JPost The Fisher information matrix after a measurement update.
+%OUTPUT: JPost The xDimXxDim Fisher information matrix after a measurement
+%              update.
 %
 %A basic description of using cubature integration for evaluating the PCRLB
 %is given in [1], where it is also described how to use a prior
@@ -47,7 +51,7 @@ function JPost=PCRLBUpdateAddNoClutter(JPred,xCur,PCur,R,PD,paramH,xi,w)
 %This function implements the information reduction factor (IRF) form of
 %the PCRLB for possible missed detections, which is described in Section
 %III-A of [2]. The bound from this method is not as tight as the
-%measurement sequence ocnditioned approach, which is also mentioned in [2].
+%measurement sequence conditioned approach, which is also mentioned in [2].
 %
 %If multiple independent measurement are available at a particular time,
 %then this function can be called multiple times to sequentially update the

@@ -45,7 +45,7 @@ function [x,P]=onePointCartInit(zCart,SRCart,higherDerivStdDev,matType)
 %One-point differencing is discussed in [1] and Chapter 3.2.2 of [2].
 %
 %REFERENCES:
-%[1] Mallick, M., La Scala, B., "Comparison of single-point and two-point
+%[1] M. Mallick and B. La Scala, "Comparison of single-point and two-point
 %    difference track initiation algorithms using position measurements". 
 %    Acta Automatica Sinica, vol.34, no. 3, pp 258-265, Mar. 2008.
 %[2] Y. Bar-Shalom, P. K. Willett, and X. Tian, Tracking and Data Fusion.

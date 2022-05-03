@@ -17,7 +17,7 @@ function cartPoints=spher2Cart(points,systemType,useHalfRange,zTx,zRx,M,flipNegR
 %           also known as a colatitude, an inclination angle, a zenith
 %           angle, and a normal angle. systemType=2 supports a polar angle.
 % systemType An optional parameter specifying the axis from which the
-%           angles are measured in radians. Possible values are
+%           angles are measured in radians. Possible values are:
 %           0 (The default if omitted) Azimuth is measured 
 %             counterclockwise from the x-axis in the x-y plane. Elevation
 %             is measured up from the x-y plane (towards the z-axis). This
@@ -32,6 +32,11 @@ function cartPoints=spher2Cart(points,systemType,useHalfRange,zTx,zRx,M,flipNegR
 %           2 This is the same as 0 except instead of being given
 %             elevation, one is given the angle away from the z-axis, which
 %             is (pi/2-elevation).
+%           3 This is the same as 0 except azimuth is measured clockwise
+%             from the y-axis in the x-y plane instead of counterclockwise
+%             from the x-axis. This coordinate system often arises when
+%             given "bearings" in a local East-North-Up coordinate system,
+%             where the bearing directions are measured East of North.
 % useHalfRange An optional boolean value specifying whether the bistatic
 %           (round-trip) range value has been divided by two. This normally
 %           comes up when operating in monostatic mode (the most common
@@ -129,6 +134,9 @@ end
 
 if(systemType==2)
     elevation=pi/2-elevation;
+    systemType=0;
+elseif(systemType==3)
+    azimuth=pi/2-azimuth;
     systemType=0;
 end
 

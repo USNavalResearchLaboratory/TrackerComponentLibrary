@@ -14,20 +14,20 @@ function J=numDiff(x,f,fDim,N,epsilon)
 %     fDim The dimensionality of the output of f.
 %        N An integer >=1 specifying the order of the derivative
 %          approximation. N+1 is the order of the error terms. Thus, N=1
-%          means that the error terms scale as O(N^2). If N and is omitted
+%          means that the error terms scale as O(N^2). If N is omitted
 %          or an empty matrix is passed, then N=2 is assumed. Values for
 %          N=1 through 8 are explicitly coded in. For values 9 and above,
 %          the coefficients of the derivative of the Lagrange interpolating
-%          polynomial are explicitly solved.
+%          polynomial are solved.
 %  epsilon A scalar or xDimX1 vector quantity specifying the finite step
 %          size used for numerical differentiation. If a scalar value is
 %          given, that value is used for differentiating with respect to
-%          elements of xDim. If an xDimX1 value is given, then the
+%          elements of x. If an xDimX1 value is given, then the
 %          corresponding element of epsilon is used to differentiate each
 %          element of x. If epsilon is omitted or an empty matrix is
 %          passed, then epsilon=max(1e-5*x,1e-7); is used.
 %
-%OUTPUTS: J n fDimXxDim Jacobian matrix. Each column is the derivative
+%OUTPUTS: J An fDimXxDim Jacobian matrix. Each column is the derivative
 %           vector of f with respect to the corresponding element of x. If
 %           at any point the function f returned a NaN or an empty matrix,
 %           J will be an empty matrix.

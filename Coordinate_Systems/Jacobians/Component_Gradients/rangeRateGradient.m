@@ -27,6 +27,20 @@ function JTotal=rangeRateGradient(xG,useHalfRange,lTx,lRx)
 %The non-relativistic range-rate approximation is derived in [1], where
 %expressions for the gradient are given in Appendix I.
 %
+%EXAMPLE:
+%Here, we demonstrate that the gradient produced by this function is
+%consistent with what one obtains using numerical differentiation.
+% lRx=[4e3;-6e3;12;-80;-80;2];
+% lTx=[-12e3;8e3;5e3;10;-3;2];
+% t=[-3e3;-2e3;-1e3;300;-100;1];
+% useHalfRange=false;
+% gradVal=rangeRateGradient(t,useHalfRange,lTx,lRx);
+% fun=@(t)getRangeRate(t,useHalfRange,lTx,lRx);
+% gradNumDiff=numDiff(t,fun,1);
+% RelDiff=max(abs((gradNumDiff-gradVal)./gradNumDiff))
+%The relative difference between the values should be less than 1e-8, which
+%indicates good agreement.
+%
 %REFERENCES:
 %[1] D. F. Crouse, "Basic tracking using nonlinear 3D monostatic and
 %    bistatic measurements," IEEE Aerospace and Electronic Systems

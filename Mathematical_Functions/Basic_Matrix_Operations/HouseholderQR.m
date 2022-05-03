@@ -46,7 +46,10 @@ function [QFactForm,R,Q]=HouseholderQR(A)
 [m,n]=size(A);
 
 for j=1:n
-    [v,beta]=HouseholderVec(A(j:m,j));
+    %This must be run with forceSign=false or else factFormMat2Explicit
+    %cannot reconstruct the Q matrix.
+    [v,beta]=HouseholderVec(A(j:m,j),false);
+
     A(j:m,j:n)=A(j:m,j:n)-(beta*v)*(v'*A(j:m,j:n));
     if(j<m)
         A((j+1):m,j)=v(2:(m-j+1));

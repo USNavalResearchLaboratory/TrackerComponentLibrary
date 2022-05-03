@@ -6,7 +6,7 @@ function F=FCoordTurn2D(T,x,turnType,discPoint,tauTurn,tauLinAccel)
 %              Additionally, a linear acceleration can be given. The turn
 %              rate and linear acceleration can optionally have time
 %              constants associated with them, like in the Singer model,
-%              modelling a tendancy to eventually want to return to
+%              modelling a tendency to eventually want to return to
 %              non-accelerating, straight-line motion.
 %
 %INPUTS: T The time-duration of the propagation interval in seconds.
@@ -35,8 +35,7 @@ function F=FCoordTurn2D(T,x,turnType,discPoint,tauTurn,tauLinAccel)
 %                       acceleration.
 % discPoint This optional parameter specified what value of the turn rate
 %          is used for the discretized state prediction. The three
-%          possible values were suggested in Li's paper cited
-%          below. Possible values are
+%          possible values were suggested in [1]. Possible values are:
 %          0 (The default if omitted) use omega=x(5), or the equivalent
 %            value when specifying the turn rate using a transverse
 %            acceleration, from the non-predicted target state for
@@ -46,8 +45,8 @@ function F=FCoordTurn2D(T,x,turnType,discPoint,tauTurn,tauLinAccel)
 %            building the state transition matrix. \bar{\omega}
 %          2 Use the approximate average value of the predicted omega over
 %            the interval T for building the state transition matrix,
-%            \bar{\omega} This is the suggestion of using half the prior
-%            and prediction, as was given in Li's paper. When given a
+%            \bar{\omega}. This is the suggestion of using half the prior
+%            and prediction, as was given in [2]. When given a
 %            transverse acceleration instead of a turn rate, half of the
 %            prior and predicted accelerations is used.
 %          3 Use the forward-predicted omega (or transverse acceleration)
@@ -55,17 +54,18 @@ function F=FCoordTurn2D(T,x,turnType,discPoint,tauTurn,tauLinAccel)
 %  tauTurn The correlation time constant for the turn rate in seconds.
 %          tau must be positive but does not have to be finite. If this
 %          parameter is omitted, then tauTurn is set to infinity.
-%tauLinAccel The correlation time constant for the linear acceleration (if
+% tauLinAccel The correlation time constant for the linear acceleration (if
 %          present) in seconds. This parameter is not needed if there is no
 %          linear acceleration. If a linear acceleration is present and
 %          this parameter is omitted, then tauLinAccel is set to Inf.
 %
-%OUTPUTS: F The state transition matrix under a possibly linearlly
-%           accelerating coordinated turn model where the velocity is a
-%           Cartesian vector.
+%OUTPUTS: F The 5X5 (no linear accelration) or 6X6 (with linear
+%           acceleration) state transition matrix under a possibly
+%           linearly accelerating coordinated turn model where the velocity
+%           is a Cartesian vector.
 %
 %The basic 2D coordinated turn model is described in Section VA of [1]. It
-%is assumed that the continuous-time turn rate model is
+%is assumed that the continuous-time evoluation of the turn rate omega is
 %omegaDot=-(1/tauTurn)*omega+noise, which discretizes to
 %omega[k+1]=exp(-T/tauTurn)*omega[k]+noise.
 %Analogously, the optional linear acceleration discretizes to
@@ -85,9 +85,9 @@ function F=FCoordTurn2D(T,x,turnType,discPoint,tauTurn,tauLinAccel)
 %
 %The average value of the predicted value of omega over the interval that
 %is used when the turn rate is unknown and discPoint=1 is the solution to
-%the integral: (1/T)*int_0^T(omega_0+exp(-t/tauTurn))*dt. The noise term i
-%not present as it is zero mean. Li's approximation is to use
-%0.5*(omega_{k+1}+omega_k)  --that is, the average of the prior and
+%the integral: (1/T)*int_0^T(omega_0+exp(-t/tauTurn))*dt. The noise term is
+%not present as it is assumed to be zero mean. The approximation of [1] is
+%to use 0.5*(omega_{k+1}+omega_k)  --that is, the average of the prior and
 %predicted omega values over the discrete prediction interval. Analogous
 %things can be done in terms of the transverse acceleration.
 %
@@ -111,9 +111,10 @@ function F=FCoordTurn2D(T,x,turnType,discPoint,tauTurn,tauLinAccel)
 %[1] X. R. Li and V. P. Jilkov, "Survey of maneuvering target tracking.
 %    Part I: Dynamic models," IEEE Transactions on Aerospace and Electronic
 %    Systems, vol. 39, no. 4, pp. 1333-1364, Oct. 2003.
-%[2] X. R. Li and V. P. Jilkov, "Survey of maneuvering target tracking.
-%    Part I: Dynamic models," IEEE Transactions on Aerospace and Electronic
-%    Systems, vol. 39, no. 4, pp. 1333-1364, Oct. 2003.
+%[2] P. Vacher, I. Barret, and M. Gauvrit, "Design of a tracking algorithm
+%    for an advanced ATC system," in Multitarget-Multisensor Tracking:
+%    Applications and Advances, Y. Bar-Shalom, Ed. Norwood, MA: Artech
+%    House, 1992, vol. II, ch. 1.
 %[3] H. A. P. Blom, R. A. Hogendoorn, and B. A. van Doorn, "Design of a
 %    multisensor tracking system for advanced air traffic control," in
 %    Multitarget-Multisensor Tracking: Applications and Advances, Y. Bar-

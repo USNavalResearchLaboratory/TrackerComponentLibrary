@@ -22,6 +22,11 @@ function CartPoints=TDOASpher2Cart(points,systemType,lRef,lRx,M,c)
 %           2 This is the same as 0 except instead of being given
 %             elevation, one is given the angle away from the z-axis, which
 %             is (pi/2-elevation).
+%           3 This is the same as 0 except azimuth is measured clockwise
+%             from the y-axis in the x-y plane instead of counterclockwise
+%             from the x-axis. This coordinate system often arises when
+%             given "bearings" in a local East-North-Up coordinate system,
+%             where the bearing directions are measured East of North.
 %      lRef The 3X1 location of the reference receiver in global
 %           coordinates.
 %       lRx The 3X1 location of the receiver in global coordinates at which
@@ -78,6 +83,9 @@ elevation=points(3,:);
 
 if(systemType==2)
     elevation=pi/2-elevation;
+    systemType=0;
+elseif(systemType==3)
+    azimuth=pi/2-azimuth;
     systemType=0;
 end
 

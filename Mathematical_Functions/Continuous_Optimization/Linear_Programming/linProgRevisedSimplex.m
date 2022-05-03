@@ -66,8 +66,7 @@ function [optCost,xOpt,exitCode]=linProgRevisedSimplex(A,b,ALeq,bLeq,c,maximize,
 %constraints.
 %
 %The constraints can be redundant. Redundant constraints are not checked
-%for consistency; rather they are simply removed. Thus, solutions might be
-%obtained for infeasible problems.
+%for consistency.
 %
 %The algorithm is mostly taken from Chapter 3.3 of [1] and has not been
 %optimized for sparse matrices. Thus, on large, sparse problems, the
@@ -185,14 +184,17 @@ else
     n=nTotal;
 end
 
-%Before the algorithm, we will get rid of redundant constraints. We will
-%not check that the constraints are consistent.
-indepRows=identifyIndepCols(A');
-if(length(indepRows)~=m)
-    m=length(indepRows);
-    A=A(indepRows,:);
-    b=b(indepRows);
-end
+%Before the algorithm, we could get rid of redundant constraints. However,
+%doing so would also remove one constraint in a bounded region (unbounding
+%the region). For example, if the constraints were of the form a<x<b, then
+%getting rid of redundant constraints like
+% indepRows=identifyIndepCols(A');
+% if(length(indepRows)~=m)
+%     m=length(indepRows);
+%     A=A(indepRows,:);
+%     b=b(indepRows);
+% end
+%would unbound the region. Consequently, we keep all constraints.
 
 %To meet the requirement in determining the initial basis in Chapter 3.5
 %that all b are positive, we flip the sign of b and the appropriate rows of
@@ -314,7 +316,11 @@ function [x,basisIdx,exitCode,foundSol]=solveSimplexGivenBasis(A,b,c,x,basisIdx,
     n=length(x);
     m=size(A,1);
     
-    BInv=inv(A(:,basisIdx));
+    if(rcond(A(:,basisIdx))<eps())
+        BInv=pinv(A(:,basisIdx));
+    else
+        BInv=inv(A(:,basisIdx));
+    end
     
     exitCode=0;
     foundSol=false;
@@ -374,14 +380,19 @@ function [x,basisIdx,exitCode,foundSol]=solveSimplexGivenBasis(A,b,c,x,basisIdx,
         %updating BInv and x.
         if(mod(curIter,30)==0)
             basisIdx(minIdx)=negRedCostIdx;
-            %We will examine whether duplicate elements exist in basisIdx. if
-            %so, then a numerical error has occurred and the algorithm should
-            %terminate.
+            %We will examine whether duplicate elements exist in basisIdx.
+            %If so, then a numerical error has occurred and the algorithm
+            %should terminate.
             if(length(unique(basisIdx))~=m)
                exitCode=3;
                return 
             end
-            BInv=inv(A(:,basisIdx));
+            if(rcond(A(:,basisIdx))<eps())
+                BInv=pinv(A(:,basisIdx));
+            else
+                BInv=inv(A(:,basisIdx));
+            end
+
             x=zeros(n,1);
             x(basisIdx)=BInv*b;
         else

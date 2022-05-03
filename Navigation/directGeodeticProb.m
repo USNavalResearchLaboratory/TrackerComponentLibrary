@@ -34,9 +34,9 @@ function [latLonEnd,azEnd]=directGeodeticProb(latLonStart,azStart,distVal,a,f)
 %                   reference ellipsoid.
 %
 %The algorithm of [1] is used. In [1], series terms up to order 6 are given
-%for a number of varibles. In this implementation, values to the tenth
-%order are given. Note that values to the 30th order have been posted
-%online at
+%for a number of variables. In this implementation, values to the tenth
+%order are given, though with double precision arithmetic it doesn't make a
+%difference. Note that values to the 30th order have been posted online at
 %https://geographiclib.sourceforge.io/html/geodseries30.html
 %However, there is generally no point in using higher orders unless one
 %uses higher than double-precision floating point arithmetic. The series

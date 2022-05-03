@@ -66,7 +66,7 @@ function procNoiseParam=processNoiseSuggest(algorithm,maxVal,T,sigmaw2,manDur)
 %           maxVal is a maximum acceleration.  If order=2, then maxVal is
 %           a maximum jerk.
 %         T For all of the algorithms except PolyKalDirectDisc-ROT, this
-%           parameter is required and is  the typical time between
+%           parameter is required and is the typical time between
 %           measurements of the target.
 %   sigmaw2 For algorithms CWNA-OptMMSE, DWNA-OptMMSE, CWNA-ConstMeas, and
 %           DWNA-ConstMeas, this parameter is required and is the variance
@@ -82,22 +82,29 @@ function procNoiseParam=processNoiseSuggest(algorithm,maxVal,T,sigmaw2,manDur)
 %                        dynamic model, chosen according to the selected
 %                        ad-hoc parameter.
 %
+%The output of this function goes into functions like QPolyKal. It is meant
+%that one computes the process noise parameter once (for QPolyKal, this
+%would correspond to the q0 parameter), and then one calls the other
+%functions with different samples prediction intervals. This function
+%should not be called to change the process noise parameter as the sampling
+%period changes.
+%
 %All of the rule-of-thumb methods for choosing the process noise values are
-%from Chapter 6.2 and 6.3 of [1] and modified slightly, as descibed in the
+%from Chapter 6.2 and 6.3 of [1] and modified slightly, as described in the
 %comments for the implementation below.
 %
 %The solutions for the ConstMeas and MMSE methods are from [2],
 %which is an extension of the work in [3] and [4].
 %
 %The rule-of thumb parameters might be suitable for other dynamic models.
-%For example, when using the Singer model, given with aSinger and DPoly in
-%continuous-time and with FSinger and QPolySinger in discrete-time, there
-%does not appear to be a clear way to set the scaling value for the process
-%noise in the literature. However, if tau=infinity in the model, then in
-%continuous time, it reduces to the CWPA model. Thus, methods for choosing
-%the process noise parameter in the CWPA and the DCWPA models might be good
-%starting points for setting the process noise parameter in the continuous
-%and discrete Singer models.
+%For example, when using the Singer model, given with aGaussMarkov and
+%DPoly in continuous-time and with FGaussMarkov and QGaussMarkov in
+%discrete-time, there does not appear to be a clear way to set the scaling
+%value for the process noise in the literature. However, if tau=infinity in
+%the model, then in continuous time, it reduces to the CWPA model. Thus,
+%methods for choosing the process noise parameter in the CWPA and the DCWPA
+%models might be good starting points for setting the process noise
+%parameter in the continuous and discrete Singer models.
 %
 %REFERENCES:
 %[1] Y. Bar-Shalom, X. R. Li, and T. Kirubarajan, Estimation with

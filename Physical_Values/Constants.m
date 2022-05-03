@@ -79,14 +79,16 @@ classdef Constants
 %The data for all of the ideal gas specific heats at a constant pressure
 %were taken from [12].
 %
-%The Euler-Mascheroni Constant is as mentioned in [13].
+%The Euler-Mascheroni Constant is as mentioned in [13]. Khinchin's constant
+%is described in [14]. The golden ratio and golden angles are described in
+%[16] and [17].
 %
 %REFERENCES:
 %[1] Department of Defense, "Department of Defense world geodetic system
 %    1984: Its definition and relationships with local geodetic systems,"
 %    National Imagery and Mapping Agency, Tech. Rep. NIMA TR8350.2, Jun.
 %    2004, third Edition, Amendment 2. [Online]. Available:
-%    http://earth- info.nga.mil/GandG/publications/tr8350.2/wgs84fin.pdf
+%    http://earth-info.nga.mil/GandG/publications/tr8350.2/wgs84fin.pdf
 %[2] World Geodetic System Committee, "The Department of Defense world
 %    geodetic system 1972," Defense Mapping Agency, Washington, D.C., Tech.
 %    Rep., May 1974. [Online]. Available:
@@ -131,6 +133,12 @@ classdef Constants
 %[14] H. Mortiz, "Geodetic Reference System 1980," Bulletin G�od�sique,
 %    vol. 54, no. 3, pp. 395-405, Sep. 1980. Given with corrections at
 %    https://geodesy.geology.ohio-state.edu/course/refpapers/00740128.pdf
+%[15] Weisstein, Eric W. "Khinchin's Constant." From MathWorld--A 
+%     Wolfram Web Resource. https://mathworld.wolfram.com/KhinchinsConstant.html
+%[16] Weisstein, Eric W. "Golden Ratio." From MathWorld--A Wolfram Web
+%     Resource. https://mathworld.wolfram.com/GoldenRatio.html
+%[17] Weisstein, Eric W. "Golden Angle." From MathWorld--A Wolfram Web
+%     Resource. https://mathworld.wolfram.com/GoldenAngle.html
 %
 %January 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -317,8 +325,21 @@ properties (Constant)
     GPS2TAIOffset=-19;%seconds
     
     %Misc Constants
-    %The Euler-Mascheroni constant from mathematics to 128 places.
+    %The Euler-Mascheroni constant from mathematics to 128 places. This is
+    %the limiting difference between the harmonic series and the natural
+    %logarithm. That is
+    %EulerMascheroni=lim_{n->Inf}(\sum_{k=1}^n(1/k)-log(n))
     EulerMascheroni=0.57721566490153286060651209008240243104215933593992359880576723488486772677766467093694706329174674951463144724980708248096050401;
+    %The golden ratio. Two quantities a and b are in a golden ratio is
+    %a/b=(a+b)/a. This is that ratio.
+    GoldenRatio=(sqrt(5)+1)/2
+    %The Golden Angle. This is the lesser of the two angles that arise from
+    %sectioning a circle such that the ratio of the length of the smaller
+    %arc to the length of the greater arc is the golden ratio.
+    GoldenAngle=pi*(3-sqrt(5));
+    %Khinchin's constant to 128 places. This the the geometric mean of the
+    %coefficients of almost all continued fractions.
+    Khinchin=2.6854520010653064453097148354817956938203822939944629530511523455572188595371520028011411749318476979951534659052880900828976777;
 end
 
 methods(Static)

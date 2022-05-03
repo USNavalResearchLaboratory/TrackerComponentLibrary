@@ -149,7 +149,7 @@ function [A,xHyp,PHyp,GateMat]=makeStandardLRMatHyps(xPred,SPred,measUpdateFuns,
 %[2] Y. Bar-Shalom, P. K. Willett, and X. Tian, Tracking and Data Fusion.
 %    Storrs, CT: YBS Publishing, 2011.
 %[3] X. R. Li, "Tracking in clutter with strongest neighbor measurements -
-%    Part i: Theoretical analysis," IEEE Transactions on Automatic Control,
+%    Part I: Theoretical analysis," IEEE Transactions on Automatic Control,
 %    vol. 43, no. 11, pp. 1560-1578, Nov. 1998.
 %
 %February 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.

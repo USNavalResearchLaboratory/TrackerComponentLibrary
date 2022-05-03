@@ -81,6 +81,25 @@ void calcSpherConvJacobCPP(double *J, const double *point, const size_t systemTy
         J[6]=z/r;
         J[7]=0;
         J[8]=-xyDist/r2;
+    } else if(systemType==3) {
+        double x2y2Sum,xyDist;
+        x2y2Sum=x*x+y*y;
+        xyDist=sqrt(x2y2Sum);
+        
+        //Derivatives with respect to x.
+        J[0]=x/r;
+        J[1]=y/x2y2Sum;
+        J[2]=-x*z/(r2*xyDist);
+
+        //Derivatives with respect to y.
+        J[3]=y/r;
+        J[4]=-x/x2y2Sum;
+        J[5]=-y*z/(r2*xyDist);
+
+        //Derivatives with respect to z.
+        J[6]=z/r;
+        J[7]=0;
+        J[8]=xyDist/r2;
     } else {//Assume systemType==1
         double z2x2Sum,zxDist;
         z2x2Sum=z*z+x*x;

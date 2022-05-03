@@ -6,11 +6,13 @@ function vECEF=ENUVec2ECEFVec(latLonOrigin,vENU,a,f)
 %           in the local East-North tangent plan with the up component
 %           zero.
 %
-%INPUTS: latLonOrigin The [latitude; longitude] point in radians defining
-%             the local tangent plane with respect to a reference
-%             ellipsoid.
+%INPUTS: latLonOrigin The 2X1 [latitude; longitude] point in radians
+%             defining the local tangent plane with respect to a reference
+%             ellipsoid. If a 3X1 vector is passed, the third row is
+%             ignored (for example, if one were to pass a
+%             [latitude;longitude;height] point.
 %        vENU A 3XN set of [East;North;Up] vectors of a 2XN set of
-%             [East;North] vectors to rotate into the global coordiante
+%             [East;North] vectors to rotate into the global coordinate
 %             system.
 %           a The semi-major axis of the reference ellipsoid. If this
 %             argument is omitted, the value in

@@ -34,8 +34,11 @@ function [phi,dphi]=pt2WachspressCoords3D(x,v,fAdj,numAdj,un)
 %out). Then, we convert the points into 3D Wachpress coordinates and
 %consider the relative error of the reverse conversion. Also, the gradient
 %at those points is evaluated and the absolute error compared to finite
-%differencing is considered. The errors are on the order of what one might
-%expect due to finite precision limitations.
+%differencing is considered. The derivatives of phi with respect to x are
+%considered as well as a second example where once phi have been fit they
+%are used to interpolate with a different basis (here, randomly rotated
+%basis vectors). The errors are on the order of what one might expect due
+%to finite precision limitations.
 %List of vertices.
 % v=[-3,1,1,-3,1,1,-3,-3,1/2;
 %     0,0,0, 0,1,1, 1, 1,1/2;
@@ -101,6 +104,17 @@ function [phi,dphi]=pt2WachspressCoords3D(x,v,fAdj,numAdj,un)
 % dPhiNumDiff(:,:,1)=numDiff(x(:,1),f,numVert);
 % dPhiNumDiff(:,:,2)=numDiff(x(:,2),f,numVert);
 % AbsErrDeriv=max(abs((dPhiNumDiff(:)-dphi(:))))
+%
+% R=randRotMat(3);
+% vAlt=R*v;%A different basis set for which the phi are used to interpolate.
+% h=@(x)barycentricCoords2Pt(pt2WachspressCoords3D(x,v,fAdj,numAdj,un),vAlt);
+% hDeriv=zeros(3,3,2);
+% hDeriv(:,:,1)=barycentricCoords2Pt(dphi(:,:,1),vAlt);
+% hDeriv(:,:,2)=barycentricCoords2Pt(dphi(:,:,2),vAlt);
+% dhNumDiff=zeros(3,3,2);
+% dhNumDiff(:,:,1)=numDiff(x(:,1),h,3);
+% dhNumDiff(:,:,2)=numDiff(x(:,2),h,3);
+% AbsErrDeriv=max(abs((dhNumDiff(:)-hDeriv(:))))
 %
 %REFERENCES:
 %[1] M. S. Floater, A. Gillette, and N. Sukumar, "Gradient bounds for

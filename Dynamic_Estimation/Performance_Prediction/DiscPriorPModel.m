@@ -9,9 +9,10 @@ function [xHat, P]=DiscPriorPModel(k,xInit,param3,param4,mode)
 %
 %INPUTS: k The discrete-time-step at which the prior distribution is
 %          desired.
-%    xInit The target state at time k=0. The PDF at this time is modeled as
+%    xInit The xDimX1 target state at time k=0. The PDF at this time is
+%          modeled as
 %          a delta function. If the mode argument of this function is
-%          omitted or is set to 0 then the dimensionality of xInit xInit
+%          omitted or is set to 0 then the dimensionality of xInit
 %          determines the order of the model used. A 3X1 vector means a
 %          stationary target model; a 6X1 vector means a nearly constant
 %          velocity model (the discretized continuous white noise
@@ -30,6 +31,11 @@ function [xHat, P]=DiscPriorPModel(k,xInit,param3,param4,mode)
 %          covariance matrix in param3 and param4 for an arbitrary
 %          discrete-time model are used.
 %
+%OUTPUTS: xHat The xDimX1 mean of the distribution after the specified
+%              number of steps.
+%            P The xDimXxDim covariance matrix of the distribution after
+%              the specified number of steps.
+%
 %The first and second moments of the prior (i.e. measurement-free)
 %distribution that are computed are useful for evaluating the posterior
 %Cramér-Rao bound (PCRLB) in simulations. The moments are computed at
@@ -41,7 +47,7 @@ function [xHat, P]=DiscPriorPModel(k,xInit,param3,param4,mode)
 %The computation of a prior distribution of a target given its state at
 %time k=0 as a delta function is discussed in Section VI of [1].
 %
-%The polynomial motion models are derived in chapter 6.2 of [2].
+%The polynomial motion models are derived in Chapter 6.2 of [2].
 %
 %REFERENCES:
 %[1] D. F. Crouse, "Basic tracking using nonlinear 3D monostatic and

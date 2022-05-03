@@ -3,8 +3,8 @@ function c=speedOfSoundInAir(algorithm,T,input3,input4,CO2Frac)
 %              using the selected algorithm.
 %
 %INPUTS:    If no inputs are given, then a value for the speed of sound at
-%           standard temperature and pressure is returned. Otherwise the
-%           inputs are:
+%           standard temperature and pressure from [1] is returned.
+%           Otherwise, the inputs are:
 %           algorithm This is a number from 0 to 2 specifying which
 %                     algorithm is to be used. References for the
 %                     algorithms are given below. The algorithms are
@@ -17,13 +17,13 @@ function c=speedOfSoundInAir(algorithm,T,input3,input4,CO2Frac)
 %                     All of the algorithms have limitations on their range
 %                     of validity, as described below.
 %                   T The temperature in degrees Kelvin.
-%              input3 This input dependends on the algorithm chosen. For
+%              input3 This input depends on the algorithm chosen. For
 %                     each algorithm this is respectively:
 %                     0 P The pressure in Pascals (kg/(m*s^2));
 %                     1 relHumid The relative humidity as a value from
 %                        0-1.
 %                     2 P The pressure in Pascals (kg/(m*s^2)).
-%              input4 This input dependends on the algorithm chosen. For
+%              input4 This input depends on the algorithm chosen. For
 %                     each algorithm this is respectively:
 %                     0 gasTable An NX2 cell array where gasTable{i,1} is a
 %                       string describing the ith constituent atmospheric
@@ -55,7 +55,7 @@ function c=speedOfSoundInAir(algorithm,T,input3,input4,CO2Frac)
 %           second.
 %
 %If no inputs are provided, then the value for the speed of sound is the
-%value taken at standard temperature and pressure (0 degrees Centrigrade,
+%value taken at standard temperature and pressure (0 degrees Centigrade,
 %no humidity, 1 atmosphere [101325 Pascals]) as in [1].
 %
 %If algorithm 0 is chosen, then the solution based upon individual gas
@@ -67,7 +67,7 @@ function c=speedOfSoundInAir(algorithm,T,input3,input4,CO2Frac)
 %101325Pa.
 %
 %If algorithm 2 is chosen, then the simple polynomial approximation of the
-%Cramer paper is used.
+%[2] is used.
 %
 %Algorithm 0 is valid for most combinations of parameters, but is limited
 %by the tabulated values of the second virial coefficient and the
@@ -157,7 +157,7 @@ function c=speedOfSoundInAir(algorithm,T,input3,input4,CO2Frac)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 %Use the value for STP from Smith and Harlow if nothing else is provided.
-if(nargin<1||isempty(c))
+if(nargin<1)
     c=331.45;
     return;
 end

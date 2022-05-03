@@ -233,7 +233,7 @@ typedef struct {
      *      (f' - f) / f < \ref delta,
      *  where f' is the objective value of \ref past iterations ago, and f is
      *  the objective value of the current iteration.
-     *  The default value is \c 0.
+     *  The default value is \c 1e-5.
      */
     lbfgsfloatval_t delta;
 
@@ -257,7 +257,7 @@ typedef struct {
     /**
      * The maximum number of trials for the line search.
      *  This parameter controls the number of function and gradients evaluations
-     *  per iteration for the line search routine. The default value is \c 20.
+     *  per iteration for the line search routine. The default value is \c 40.
      */
     int             max_linesearch;
 
@@ -303,7 +303,7 @@ typedef struct {
      *  evaluations are inexpensive with respect to the cost of the
      *  iteration (which is sometimes the case when solving very large
      *  problems) it may be advantageous to set this parameter to a small
-     *  value. A typical small value is \c 0.1. This parameter shuold be
+     *  value. A typical small value is \c 0.1. This parameter should be
      *  greater than the \ref ftol parameter (\c 1e-4) and smaller than
      *  \c 1.0.
      */
@@ -515,12 +515,18 @@ lbfgsfloatval_t* lbfgs_malloc(int n);
  */
 void lbfgs_free(lbfgsfloatval_t *x);
 
+/**
+ * Get string description of an lbfgs() return code.
+ *
+ *  @param err          A value returned by lbfgs().
+ */
+const char* lbfgs_strerror(int err);
+
 /** @} */
 
 #ifdef  __cplusplus
 }
 #endif/*__cplusplus*/
-
 
 struct tag_callback_data {
     int n;
@@ -530,49 +536,47 @@ struct tag_callback_data {
 };
 typedef struct tag_callback_data callback_data_t;
 
-
 int line_search_backtracking(
-                             int n,
-                             lbfgsfloatval_t *x,
-                             lbfgsfloatval_t *f,
-                             lbfgsfloatval_t *g,
-                             lbfgsfloatval_t *s,
-                             lbfgsfloatval_t *stp,
-                             const lbfgsfloatval_t* xp,
-                             const lbfgsfloatval_t* gp,
-                             lbfgsfloatval_t *wa,
-                             callback_data_t *cd,
-                             const lbfgs_parameter_t *param
-                             );
+    int n,
+    lbfgsfloatval_t *x,
+    lbfgsfloatval_t *f,
+    lbfgsfloatval_t *g,
+    lbfgsfloatval_t *s,
+    lbfgsfloatval_t *stp,
+    const lbfgsfloatval_t* xp,
+    const lbfgsfloatval_t* gp,
+    lbfgsfloatval_t *wa,
+    callback_data_t *cd,
+    const lbfgs_parameter_t *param
+    );
 
 int line_search_backtracking_owlqn(
-                                   int n,
-                                   lbfgsfloatval_t *x,
-                                   lbfgsfloatval_t *f,
-                                   lbfgsfloatval_t *g,
-                                   lbfgsfloatval_t *s,
-                                   lbfgsfloatval_t *stp,
-                                   const lbfgsfloatval_t* xp,
-                                   const lbfgsfloatval_t* gp,
-                                   lbfgsfloatval_t *wp,
-                                   callback_data_t *cd,
-                                   const lbfgs_parameter_t *param
-                                   );
+    int n,
+    lbfgsfloatval_t *x,
+    lbfgsfloatval_t *f,
+    lbfgsfloatval_t *g,
+    lbfgsfloatval_t *s,
+    lbfgsfloatval_t *stp,
+    const lbfgsfloatval_t* xp,
+    const lbfgsfloatval_t* gp,
+    lbfgsfloatval_t *wp,
+    callback_data_t *cd,
+    const lbfgs_parameter_t *param
+    );
 
 int line_search_morethuente(
-                            int n,
-                            lbfgsfloatval_t *x,
-                            lbfgsfloatval_t *f,
-                            lbfgsfloatval_t *g,
-                            lbfgsfloatval_t *s,
-                            lbfgsfloatval_t *stp,
-                            const lbfgsfloatval_t* xp,
-                            const lbfgsfloatval_t* gp,
-                            lbfgsfloatval_t *wa,
-                            callback_data_t *cd,
-                            const lbfgs_parameter_t *param
-                            );
-
+    int n,
+    lbfgsfloatval_t *x,
+    lbfgsfloatval_t *f,
+    lbfgsfloatval_t *g,
+    lbfgsfloatval_t *s,
+    lbfgsfloatval_t *stp,
+    const lbfgsfloatval_t* xp,
+    const lbfgsfloatval_t* gp,
+    lbfgsfloatval_t *wa,
+    callback_data_t *cd,
+    const lbfgs_parameter_t *param
+    );
 
 /**
 @mainpage libLBFGS: a library of Limited-memory Broyden-Fletcher-Goldfarb-Shanno (L-BFGS)

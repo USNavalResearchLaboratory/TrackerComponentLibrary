@@ -21,6 +21,11 @@ function HTotal=calcSpherInvHessian(z,systemType)
 %          2 This is the same as 0 except instead of being given
 %            elevation, one desires the angle away from the z-axis, which
 %            is (pi/2-elevation).
+%          3 This is the same as 0 except azimuth is measured clockwise
+%            from the y-axis in the x-y plane instead of counterclockwise
+%            from the x-axis. This coordinate system often arises when
+%            given "bearings" in a local East-North-Up coordinate system,
+%            where the bearing directions are measured East of North.
 %
 %OUTPUTS: HTotal The 3X3X3XN set of Hessian matrices, where H(:,:,1,i) is
 %           the Hessian for the x component for the ith point in z,
@@ -187,7 +192,6 @@ for curPoint=1:N
             H(2,3,3)=0;
             %d2zdEldAz
             H(3,2,3)=H(2,3,3);
-
         case 1
             %d2xdrdr
             H(1,1,1)=0;
@@ -296,6 +300,63 @@ for curPoint=1:N
             H(2,1,3)=H(1,2,3);
             %d2zdrdEl
             H(1,3,3)=-sinEl;
+            %d2zdEldr
+            H(3,1,3)=H(1,3,3);
+            %d2zdAzdEl
+            H(2,3,3)=0;
+            %d2zdEldAz
+            H(3,2,3)=H(2,3,3);
+        case 3
+            %d2xdrdr
+            H(1,1,1)=0;
+            %d2xdAzdAz
+            H(2,2,1)=-r*sinAz*cosEl;
+            %d2xdEldEl
+            H(3,3,1)=-r*sinAz*cosEl;
+            %d2xdrdAz
+            H(1,2,1)=cosEl*cosAz;
+            %d2xdAzdr
+            H(2,1,1)=H(1,2,1);
+            %d2xdrdEl
+            H(1,3,1)=-sinAz*sinEl;
+            %d2xdEldr
+            H(3,1,1)=H(1,3,1);
+            %d2xdAzdEl
+            H(2,3,1)=-r*cosAz*sinEl;
+            %d2xdEldAz
+            H(3,2,1)=H(2,3,1);
+
+            %d2ydrdr
+            H(1,1,2)=0;
+            %d2ydAzdAz
+            H(2,2,2)=-r*cosEl*cosAz;
+            %d2ydEldEl
+            H(3,3,2)=-r*cosEl*cosAz;
+            %d2ydrdAz
+            H(1,2,2)=-sinAz*cosEl;
+            %d2ydAzdr
+            H(2,1,2)=H(1,2,2);
+            %d2ydrdEl
+            H(1,3,2)=-cosAz*sinEl;
+            %d2ydEldr
+            H(3,1,2)=H(1,3,2);
+            %d2ydAzdEl
+            H(2,3,2)=r*sinAz*sinEl;
+            %d2ydEldAz
+            H(3,2,2)=H(2,3,2);
+
+            %d2zdrdr
+            H(1,1,3)=0;
+            %d2zdAzdAz
+            H(2,2,3)=0;
+            %d2zdEldEl
+            H(3,3,3)=-r*sinEl;
+            %d2zdrdAz
+            H(1,2,3)=0;
+            %d2zdAzdr
+            H(2,1,3)=H(1,2,3);
+            %d2zdrdEl
+            H(1,3,3)=cosEl;
             %d2zdEldr
             H(3,1,3)=H(1,3,3);
             %d2zdAzdEl

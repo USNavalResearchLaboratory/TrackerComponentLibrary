@@ -5,7 +5,7 @@ function y=evalClenshawRecurSeries(c,alphaVal,betaVal,F0,F1,method)
 %           F(k+1)=alpha(k)*F(k)+beta(k)*F(k-1)
 %           Clenshaw's method is numerically stabler than directly using
 %           the above recursion and explicitly evaluating the sum.
-%           Examples of functions satifying this type of relation are sine,
+%           Examples of functions satisfying this type of relation are sine,
 %           cosine, Legendre polynomials, and Bessel functions, among
 %           others. This function is more efficient if alpha and beta are
 %           constants.
@@ -17,7 +17,7 @@ function y=evalClenshawRecurSeries(c,alphaVal,betaVal,F0,F1,method)
 %           implied by the functions alpha(k) and beta(k) shown in the
 %           above equation. If function handles, they must return scalar
 %           values. If constants, they can be scalars or vectors. if
-%           vectors, they must be the same dimensionality as F0 and F1 
+%           vectors, they must be the same dimensionality as F0 and F1.
 %    F0, F1 If method=0, then F0=F(0) and F1=F(1). The first two values of
 %           F are needed to start the recursion. On the other hand, if
 %           method=1, then F0=F(N) and F1=F(N-1) as the recursion goes in
@@ -33,7 +33,7 @@ function y=evalClenshawRecurSeries(c,alphaVal,betaVal,F0,F1,method)
 %             F1=F(1).
 %           1 Use the Clenshaw series going forward from 0 such that
 %             F0=F(N) and F1=F(N-1). This method is generally only
-%             beneficial if F(k) is small when k is large and c(k) are
+%             beneficial if F(k) is small when k is large and c(k) is
 %             small when k is small.
 %
 %OUTPUTS: y The value of the sum. This has the same size as F0.

@@ -4,7 +4,7 @@ function [xi,w]=quadraturePoints1D(n,algorithm,c1)
 %           functions. The quadrature points and weights are based off
 %           properties of orthogonal polynomials. The evaluation of a
 %           continuous integral using cubature points is
-%           integral_lowL^upL w(x)*f(x) dx=sum_{i=1}^n w(i)*f(xi(i))
+%           integral_lowL^upL w(x)*f(x) dx=sum_{i=1}^n w_i*f(xi(i))
 %           where the equality holds up for all polynomials up to a
 %           particular degree. For high-order polynomials and other
 %           functions, quadrature integration is just an approximation.
@@ -16,7 +16,7 @@ function [xi,w]=quadraturePoints1D(n,algorithm,c1)
 %          the integral. These points can generally be transformed for
 %          integrals over other regions/ with other parameters. Possible
 %          values are
-%          0 (The default if omittted or an empty matrix is passed) The
+%          0 (The default if omitted or an empty matrix is passed) The
 %            weighting function is w(x)=1/(sqrt(2*pi))*exp(-x^2/2), the
 %            integration interval is (-Inf,Inf). The algorithm of [2] is
 %            used with parameters from Table 22.7 in Ch. 22 of [1].
@@ -76,6 +76,10 @@ function [xi,w]=quadraturePoints1D(n,algorithm,c1)
 %            points. Depending on the algorithm, these may or may not sum
 %            to one.
 %
+%In the algorithms implemented in this function, with the exception of 11
+%and 12, this function obtains points by passing parameters for a three-
+%point recursion to the orthoPolyZerosFromRecur function.
+%
 %Note that the function linCubPoints2MultiDim can be given a handle to this
 %function to produce multi-dimensional cubature formula.
 %
@@ -85,9 +89,6 @@ function [xi,w]=quadraturePoints1D(n,algorithm,c1)
 %    Graphs, and Mathematical Tables, 9th printing. New York: Dover, 1972.
 %[2] G. H. Golub and J. H. Welsh, "Calculation of Gauss quadrature rules,"
 %    Mathematics of Computation, vol. 23, pp. 221-230, 1969.
-%[3] D.B. Hunter, H.V. Smith, A quadrature formula of Clenshaw-Curtis type
-%    for the Gegenbauer weight-function, Journal of Computational and
-%    Applied Mathematics 177 (2005) 389-400.
 %
 %August 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

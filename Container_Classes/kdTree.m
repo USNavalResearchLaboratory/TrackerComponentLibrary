@@ -372,9 +372,9 @@ methods
             idxRange=zeros(m,numPoints);
             distSquared=zeros(m,numPoints);
             for curPoint=1:numPoints
-                %Allocate a priority queue with enough space for the found results.
-                %The value at the start of the queue is the one with the highest
-                %cost.
+                %Allocate a priority queue with enough space for the found
+                %results. The value at the start of the queue is the one
+                %with the highest cost.
                 mBestQueue=BinaryHeap(m);
                 %Start the recursion to fill the queue with the k-best values.
                 theTree.mBestRecur(1,mBestQueue,point(:,curPoint),m);

@@ -74,7 +74,7 @@ void spherAngHessianCPP(double *H,const double *xG,const size_t systemType) {
         H[8]=0;
         //dAzdxdy
         H[3]=(y2-x2)/r4xy;
-        //dAzdydz
+        //dAzdydx
         H[1]=H[3];
         //dAzdxdz
         H[6]=0;
@@ -93,7 +93,7 @@ void spherAngHessianCPP(double *H,const double *xG,const size_t systemType) {
         H[17]=-(2*rxy*z)/r4;
         //dEldxdy
         H[12]=(x*y*z*(3*rxy*rxy+z2))/(rxy3*r4);
-        //dEldydz
+        //dEldydx
         H[10]=H[12];
         //dEldxdz
         H[15]=-((x*(x2+y2-z2))/(rxy*r4));
@@ -123,7 +123,7 @@ void spherAngHessianCPP(double *H,const double *xG,const size_t systemType) {
         H[8]=(2*x*z)/r4xz;
         //dAzdxdy
         H[3]=0;
-        //dAzdydz
+        //dAzdydx
         H[1]=H[3];
         //dAzdxdz
         H[6]=(x2-z2)/r4xz;
@@ -142,7 +142,7 @@ void spherAngHessianCPP(double *H,const double *xG,const size_t systemType) {
         H[17]=-((y*(x4-2*z2*z2+x2*(y-z)*(y+z)))/(rxz3*r4));
         //dEldxdy
         H[12]=-((x*(x2-y2+z2))/(rxz*r4));
-        //dEldydz
+        //dEldydx
         H[10]=H[12];
         //dEldxdz
         H[15]=(x*y*z*(3*x2+y2+3*z2))/(rxz3*r4);
@@ -152,7 +152,54 @@ void spherAngHessianCPP(double *H,const double *xG,const size_t systemType) {
         H[16]=-((z*(x2-y2+z2))/(rxz*r4));
         //dEldzdy
         H[14]=H[16];
-    } else {
+    } else if(systemType==3) {
+        double rxy, r4, r4xy, rxy3;
+        
+        r4xy=x2+y2;
+        rxy=sqrt(r4xy);
+        r4=(r4xy+z2);
+        r4=r4*r4;
+        r4xy=r4xy*r4xy;
+        rxy3=rxy*rxy*rxy;
+
+        //dAzdxdx
+        H[0]=-2*x*y/r4xy;
+        //dAzdydy
+        H[4]=-H[0];
+        //dAzdzdz
+        H[8]=0;
+        //dAzdxdy
+        H[3]=(x-y)*(x+y)/r4xy;
+        //dAzdydz
+        H[1]=H[3];
+        //dAzdxdz
+        H[6]=0;
+        //dAzdzdx
+        H[2]=H[6];
+        //dAzdydz
+        H[7]=0;
+        //dAzdzdy
+        H[5]=H[7];
+
+        //dEldxdx
+        H[9]=(z*(2*x4+x2*y2-y2*(y2+z2)))/(rxy3*r4);
+        //dEldydy
+        H[13]=-((z*(x4-2*y2*y2+x2*(z2-y2)))/(rxy3*r4));
+        //dEldzdz
+        H[17]=-(2*rxy*z)/r4;
+        //dEldxdy
+        H[12]=(x*y*z*(3*rxy*rxy+z2))/(rxy3*r4);
+        //dEldydz
+        H[10]=H[12];
+        //dEldxdz
+        H[15]=-((x*(x2+y2-z2))/(rxy*r4));
+        //dEldzdx
+        H[11]=H[15];
+        //dEldydz
+        H[16]=-((y*(x2+y2-z2))/(rxy*r4));
+        //dEldzdy
+        H[14]=H[16];
+    }else {//systemType==2
         double r4xy, r4, rxy, x4, y4,rxy3;
         
         r4xy=x2+y2;
@@ -173,7 +220,7 @@ void spherAngHessianCPP(double *H,const double *xG,const size_t systemType) {
         H[8]=0;
         //dAzdxdy
         H[3]=(y2-x2)/r4xy;
-        //dAzdydz
+        //dAzdydx
         H[1]=H[3];
         //dAzdxdz
         H[6]=0;
@@ -192,7 +239,7 @@ void spherAngHessianCPP(double *H,const double *xG,const size_t systemType) {
         H[17]=(2*rxy*z)/r4;
         //dEldxdy
         H[12]=-((x*y*z*(3*rxy*rxy+z2))/(rxy3*r4));
-        //dEldydz
+        //dEldydx
         H[10]=H[12];
         //dEldxdz
         H[15]=(x*(x2+y2-z2))/(rxy*r4);

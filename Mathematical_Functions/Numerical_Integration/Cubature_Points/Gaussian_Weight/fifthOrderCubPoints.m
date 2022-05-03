@@ -28,7 +28,7 @@ function [xi,w]=fifthOrderCubPoints(numDim,algorithm,randomize)
 %               4 Formula E_n^{r^2} 5-4 on page 318 of [1], 2^(numDim+1)-1
 %                 points.
 %               5 Formula E_n^{r^2} 5-5 on page 318 of [1], choosing the
-%                 upper signs, numDim*2^(numDim)+1 points
+%                 upper signs, numDim*2^(numDim)+1 points.
 %               6 Formula E_n^{r^2} 5-6 on page 318 of [1],
 %                 2^numDim*(numDim+1) points, numDim>=5.
 %               7 Formula E_2^{r^2} 5-1 on page 324 of [1], 7 points,
@@ -85,7 +85,7 @@ function [xi,w]=fifthOrderCubPoints(numDim,algorithm,randomize)
 %The weights remain unchanged.
 %
 %REFERENCES:
-%[1] A.H. Stroud, Approximate Calculation of Multiple Integrals. Cliffs,
+%[1] A. H. Stroud, Approximate Calculation of Multiple Integrals. Cliffs,
 %    NJ: Prentice-Hall, Inc., 1971.
 %[2] J. Lu and D. L. Darmofal, "Higher-dimensional integration with
 %    Gaussian weight for applications in probabilistic design," SIAM

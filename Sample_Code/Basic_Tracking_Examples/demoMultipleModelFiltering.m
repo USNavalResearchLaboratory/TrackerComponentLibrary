@@ -44,8 +44,11 @@ function demoMultipleModelFiltering()
 %June 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-%This can be changed to try other multiple model algorithms.
-AlgSel='IMM';
+%This can be changed to try other multiple model algorithms. If GPB1 is
+%selected, the multiple model filter using the coordinate dturn model is
+%not used, because the GPB1 requires that all models have the same
+%dimensionality.
+AlgSel='GPB2';
 
 %Interval between samples in seconds.
 T=5;
@@ -240,11 +243,7 @@ Ba=[T^2/2,   0;
 %Track initiation is by one-point differencing using just assumed maximum
 %values as the standard deviations for the velocity covariance matrix. The
 %assumed maximum value is 300m/s.
-xKalman(1:2,1)=z(:,1);
-PKalman(1:2,1:2,1)=R;
-PKalman(3,3,1)=300^2;
-PKalman(4,4,1)=300^2;
-
+[xKalman(:,1),PKalman(:,:,1)]=onePointCartInit(z(:,1),SR,300);
 xKalmanGM(:,1)=xKalman(:,1);
 PKalmanGM(:,1)=PKalman(:,1);
 
@@ -354,27 +353,18 @@ measUpdateFuns=@(x,P,z,R)KalmanUpdate(x,P,z,R,H);
 %to be the same size).
 if(~strcmp(AlgSel,'GPB1'))
     xIMML=zeros(4,2);
-    PIMML=zeros(4,2);
+    PIMML=zeros(4,4,2);
 
     %Initialize the states using one-point differencing. The covariance matrix
     %is set using the assumed velocity for each of the models, which is
     %300m/s^2.
     %The first model.
-    xIMML(1:2,1)=z(:,1);
-    PIMML(1:2,1:2,1)=R;
-    PIMML(3,3,1)=300^2;
-    PIMML(4,4,1)=300^2;
+    [xIMML(:,1),PIMML(:,:,1)]=onePointCartInit(z(:,1),SR,300);
     %The second model has the same initialization.
     xIMML(:,2)=xIMML(:,1);
     PIMML(:,:,2)=PIMML(:,:,1);
 else
-    xIMML=zeros(4,1);
-    PIMML=zeros(4,1);
-
-    xIMML(1:2,1)=z(:,1);
-    PIMML(1:2,1:2,1)=R;
-    PIMML(3,3,1)=300^2;
-    PIMML(4,4,1)=300^2;
+    [xIMML,PIMML]=onePointCartInit(z(:,1),SR,300);
 end
 
 %Allocate space for the states to display. These will be the merged values
@@ -418,7 +408,7 @@ for curSamp=2:numSamples
    [xIMML,PIMML]=multipleModelPred(AlgSel,xIMML,PIMML,transFuns);
    
    %Update the state with a measurement
-   [xIMML,PIMML,muMode(:,curSamp),xIMMLDisp(:,curSamp),PIMMLDisp(:,:,curSamp)]=multipleModelUpdate(AlgSel,xIMML,PIMML,z(:,curSamp),R,measUpdateFuns,muMode(:,curSamp-1),LambdaL);   
+   [xIMML,PIMML,muMode(:,curSamp),xIMMLDisp(:,curSamp),PIMMLDisp(:,:,curSamp)]=multipleModelUpdate(AlgSel,xIMML,PIMML,z(:,curSamp),R,measUpdateFuns,muMode(:,curSamp-1),LambdaL);
    absErrIMML(curSamp)=norm(xIMMLDisp(1:2,curSamp)-xTrue(1:2,curSamp));
 end
 
@@ -430,6 +420,12 @@ plot(muMode(2,:),'-r','linewidth',2)
 
 figure(3)
 plot(absErrIMML,'-r','linewidth',2)
+
+
+if(strcmp(AlgSel,'GPB1'))
+    return
+end
+
 
 %STEP 5: Run the algorithms with the linear and the coordinated turn model.
 disp('Computing the IMM scenario with a linear Kalman filter and an EKF.')

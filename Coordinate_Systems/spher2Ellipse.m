@@ -10,7 +10,7 @@ function points=spher2Ellipse(points,systemType,a,f)
 %INPUTS: points One or more points given in terms of range, azimuth and
 %               elevation, with the angles in radians. To convert N points,
 %               points is a 3XN matrix with each column having the format
-%               [range;azimuth; elevation]. Alternatively, the points can
+%               [range;azimuth;elevation]. Alternatively, the points can
 %               be given just as [azimuth; elevation] pairs or just as
 %               elevations (geocentric latitudes) if systemType==0 or
 %               systemType==2. In such an instance, the elevations are
@@ -32,6 +32,12 @@ function points=spher2Ellipse(points,systemType,a,f)
 %               2 This is the same as 0 except instead of being given
 %                 elevation, one is given the angle away from the z-axis,
 %                 which is (pi/2-elevation).
+%               3 This is the same as 0 except azimuth is measured
+%                 clockwise from the y-axis in the x-y plane instead of
+%                 counterclockwise from the x-axis. This coordinate system
+%                 often arises when given "bearings" in a local East-North-
+%                 Up coordinate system, where the bearing directions are
+%                 measured East of North.
 %             a The semi-major axis of the reference ellipsoid. If this
 %               argument is omitted, the value in
 %               Constants.WGS84SemiMajorAxis is used.
@@ -41,7 +47,7 @@ function points=spher2Ellipse(points,systemType,a,f)
 %
 %OUTPUTS: points A matrix of the converted points. Each column of the
 %                matrix has the format [latitude;longitude;altitude] or
-%                [latitude;longitude] ot just latitude, respectively
+%                [latitude;longitude] or just latitude, respectively
 %                depending on the dimensionality of the input. The angles
 %                are given in radians.
 %
@@ -75,13 +81,16 @@ pDim=size(points,1);
 %reference ellipsoid) are given and the latitude must be converted to
 %geodetic latitude.
 if(pDim<3)
-    if(systemType~=0&&systemType~=2)
+    if(systemType~=0&&systemType~=2&&systemType~=3)
        error('The spherical system type is unsupported for a conversion without range.')
     end
 
     e2=2*f-f^2;%Get the square of the eccentricity of the reference
                %ellipse.
     if(pDim==2)
+        if(systemType==3)
+            points(1,:)=pi/2-points(1,:);%Azimuth
+        end
         geocenLat=points(2,:);
     else%Assume that the points are 1D
         geocenLat=points;

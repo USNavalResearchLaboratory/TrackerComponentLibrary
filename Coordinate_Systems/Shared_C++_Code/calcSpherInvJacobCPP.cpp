@@ -56,6 +56,25 @@ void calcSpherInvJacobCPP(double *J,const double *z,const size_t systemType) {
         J[7]=r*cosEl;
         //dz/dEl, J(3,3)
         J[8]=-r*cosAz*sinEl;
+    } else if (systemType==3) {
+        //dx/dr, J(1,1)
+        J[0]=sinAz*cosEl;
+        //dy/dr, J(2,1)
+        J[1]=cosAz*cosEl;
+        //dz/dr, J(3,1)
+        J[2]=sinEl;
+        //dx/dAz, J(1,2)
+        J[3]=r*cosEl*cosAz;
+        //dy/dAz, J(2,2)
+        J[4]=-r*sinAz*cosEl;
+        //dz/dAz, J(3,2)
+        J[5]=0;
+        //dx/dEl, J(1,3)
+        J[6]=-r*sinAz*sinEl;
+        //dy/dEl, J(2,3)
+        J[7]=-r*cosAz*sinEl;
+        //dz/dEl, J(3,3)
+        J[8]=r*cosEl;
     } else {//systemType==2
         //dx/dr, J(1,1)
         J[0]=cosAz*sinEl;

@@ -1,14 +1,13 @@
 function xn=linEqSolveFirstnRows(A,b,n)
 %%LINEQSOLVEFIRSTNROWS This function solves the problem A*x=b for the first
-%                      n rows of x. The matrix A does CAN be singular as
-%                      long as a unique solution exists for the first n
-%                      rows of x. This function is useful for finding the
-%                      position and/or velocity estimate of an information
-%                      filter even before estimates of all of the other
-%                      target state components have become observable In
-%                      such an instance A is the inverse covariance matrix,
-%                      x is the target state and b is the information
-%                      state.
+%                      n rows of x. The matrix A CAN be singular as long as
+%                      a unique solution exists for the first n rows of x.
+%                      This function is useful for finding the position
+%                      estimate in an information filter state even before
+%                      estimates of all of the other target state
+%                      components have become observable In such an
+%                      instance A is the inverse covariance matrix, x is
+%                      the target state and b is the information state.
 %
 %INPUTS: A The NXN matrix A in the equation A*x=b, where x is unknown. The
 %          matrix can be singular, but the first n rows of x should be

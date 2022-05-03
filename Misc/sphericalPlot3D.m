@@ -29,6 +29,11 @@ function h=sphericalPlot3D(f,azRange,elRange,numPoints,systemType,varargin)
 %           2 This is the same as 0 except instead of being given
 %             elevation, one desires the angle away from the z-axis, which
 %             is (pi/2-elevation).
+%           3 This is the same as 0 except azimuth is measured clockwise
+%             from the y-axis in the x-y plane instead of counterclockwise
+%             from the x-axis. This coordinate system often arises when
+%             given "bearings" in a local East-North-Up coordinate system,
+%             where the bearing directions are measured East of North.
 %  varargin Sets of values that should be passed to the plot function to
 %           format the ellipses or that will be passed to the surf function
 %           to format the surface. For example, one often wants to pass

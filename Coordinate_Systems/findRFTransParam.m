@@ -69,13 +69,13 @@ function M=findRFTransParam(plhPoint,az,el,zRot,a,f,useEUN)
 % %Convert to Cartesian
 % radarCart = ellips2Cart(radarLocRad);
 % targetCart = ellips2Cart(targetLocRad);
-% targetRuv=Cart2Ruv(targetCart,false,radarCart,radarCart,M,true);
-%The last three element of targetRuv are a unit vector in the local
+% targetRuvw=Cart2Ruv(targetCart,false,radarCart,radarCart,M,true)
+%The last three element of targetRuvw are a unit vector in the local
 %coordinate system of the radar. The local coordinate system of the radar
 %has the z-axis pointing East, the y-axis Up, and the x-axis North. The
 %target is South-East. Thus, the unit vector has a negative x-component and
 %positive y and z components. Many folks expect the x component to be
-%positive, because, when standing on the ground  facing in the direction of
+%positive, because, when standing on the ground facing in the direction of
 %the radar, the target will be forward, up and to the right. However, the
 %x-axis is to one's left. To make the x-axis to the right, one should set
 %zRot to pi to make the y axis point down. Thus, using

@@ -8,8 +8,7 @@ function [xUpdate,PUpdate,innov,Pzz,W]=KalmanUpdateWithPred(z,R,zPred,PzPred,oth
 %           update function is KalmanUpdate.
 %
 %INPUTS: z The zDimX1 measurement vector.
-%        R The zDimXzDim measurement covariance matrix in the native
-%          coordinate system of the measurement.
+%        R The zDimXzDim measurement covariance matrix associated with z.
 %    zPred The zDimXnumComp measurement predictions from the filter.
 %   PzPred The zDimXzDimXnumComp covariance matrices associated with zPred.
 % otherInfo The intermediate results returned in the otherInfo output of

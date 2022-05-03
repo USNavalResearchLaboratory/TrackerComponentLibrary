@@ -15,7 +15,7 @@ function r=getRange(xCart,useHalfRange,zTx,zRx)
 %             at the origin. If only a single vector is passed, then the
 %             transmitter position is assumed the same for all of the
 %             target states being converted.
-%         zRx A numDimXN matrix of the positions of the receivers . If this
+%         zRx A numDimXN matrix of the positions of the receivers. If this
 %             parameter is omitted, the receivers are assumed to be at the
 %             origin. If only a single vector is passed, then the receiver
 %             position is assumed the same for all of the target states

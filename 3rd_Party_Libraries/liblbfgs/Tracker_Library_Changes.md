@@ -1,4 +1,4 @@
-The library has been modified by moving line_search_backtracking,
+The library has been modified by making line_search_backtracking,
 line_search_backtracking_owlqn, and line_search_morethuente non-static and
 moved prototypes into lbfgs.h so the line search methods can be used by
 other functions. Also, the declaration of tag_callback_data into lbfgs.h

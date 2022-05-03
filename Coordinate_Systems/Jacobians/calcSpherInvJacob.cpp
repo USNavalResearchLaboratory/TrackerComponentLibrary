@@ -19,7 +19,12 @@
 *            direction of the radar.
 *          2 This is the same as 0 except instead of being given
 *            elevation, one desires the angle away from the z-axis, which
-*            is (pi/2-elevation)
+*            is (pi/2-elevation).
+*          3 This is the same as 0 except azimuth is measured clockwise
+*            from the y-axis in the x-y plane instead of counterclockwise
+*            from the x-axis. This coordinate system often arises when
+*            given "bearings" in a local East-North-Up coordinate system,
+*            where the bearing directions are measured East of North.
 *
 *OUTPUTS: JTotal A 3X3XN Jacobian matrices where the rows in each matrix
 *           are [x;y;z] in that order and the columns take the derivative
@@ -73,7 +78,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         systemType=0;
     }
 
-    if(systemType!=0&&systemType!=1&&systemType!=2) {
+    if(systemType!=0&&systemType!=1&&systemType!=2&&systemType!=3) {
         mexErrMsgTxt("Unknown system type specified.");
     }
     
