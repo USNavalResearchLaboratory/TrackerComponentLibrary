@@ -90,9 +90,9 @@ elseif(q2Max==q2(3))
     q3=(1/(4*q2))*(R23+R32);
 else
     q3=0.5*sqrt(1-R11-R22+R33);
-    q0=(1/(4*q2))*(R12-R21);
-    q1=(1/(4*q2))*(R31+R13);
-    q2=(1/(4*q2))*(R23+R32);
+    q0=(1/(4*q3))*(R12-R21);
+    q1=(1/(4*q3))*(R31+R13);
+    q2=(1/(4*q3))*(R23+R32);
 end
 
 %The above implementation provides a left-handed quaternion, so the sign of

@@ -59,7 +59,7 @@ function [xUpdate,PUpdate,rUpdate,probNonTargetMeas]=singleScanUpdateWithExisten
 %              2) JIPDA*
 %              3) Approximate GNN-JIPDA
 %              4) Approximate JIPDA
-%              5) Naïve nearest neighbor JIPDA.
+%              5) Naive nearest neighbor JIPDA.
 %              6) Approximate naïve nearest neighbor JIPDA.
 %      algSel2 An optional parameter that further specifies the algorithm
 %              used when algSel1=3,4. If omitted but algSel1 is specified,
@@ -224,7 +224,7 @@ probNonTargetMeas=1-sum(betas(:,1:(end-1)),1)';
 %Allocate space for the return variables.
 xUpdate=zeros(xDim,numTar);
 PUpdate=zeros(xDim,xDim,numTar);
-if(algSel1==1||algSel1==3)%If a GNN estimate is used in place of the mean
+if(algSel1==0||algSel1==3)%If a GNN estimate is used in place of the mean
     %Perform 2D assignment
     ALog=log(A);
     tar2Meas=assign2D(ALog,true);

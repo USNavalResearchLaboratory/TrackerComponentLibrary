@@ -8,9 +8,9 @@ function u=geogHeading2ENUVec(heading,angUpFromLevel)
 % angUpFromLevel A length numPts vector of elevations above the local
 %                tangent plane in radians.
 %
-%OUTPUTS:  u A 3XnumPts set of unit vectors in local ENU coordinates
-%            corresponding to the directions given in heading and
-%            angUpFromLevel.
+%OUTPUTS: u A 3XnumPts set of unit vectors in local ENU coordinates
+%           corresponding to the directions given in heading and
+%           angUpFromLevel.
 %
 %The transformation is just a specific definition of the spherical
 %coordinate system. There is no need for information on the shape of the
@@ -36,8 +36,8 @@ heading=heading(:).';
 cosEl=cos(angUpFromLevel);
 sinEl=sin(angUpFromLevel);
 
-u=[cos(heading).*cosEl;
-   sin(heading).*cosEl;
+u=[sin(heading).*cosEl;
+   cos(heading).*cosEl;
    sinEl];
 
 end
