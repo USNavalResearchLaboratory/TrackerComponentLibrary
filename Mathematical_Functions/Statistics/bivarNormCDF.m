@@ -23,16 +23,16 @@ function val=bivarNormCDF(b,mu,R)
 %REFERENCES:
 %[1] A. Genz, "Numerical computation of rectangular bivariate and
 %    trivariate normal and t probabilites," Statistics and Computing, vol.
-%    14, pp. 251–260, 2004.
+%    14, pp. 251-260, 2004.
 %
 %July 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public releas
 
-if(nargin<3||isempty(mu))
+if(nargin<2||isempty(mu))
     mu=[0;0];
 end
 
-if(nargin<4||isempty(R))
+if(nargin<3||isempty(R))
     R=eye(2,2);
 end
 
@@ -48,7 +48,7 @@ h=-b1;
 k=-b2;
 s=2*(rho>=0)-1;
 
-%Points to use for subature integration.
+%Points to use for cubature integration.
 [xi,w]=GaussLegendrePoints1D(20);
 
 if(abs(rho)<0.925)
