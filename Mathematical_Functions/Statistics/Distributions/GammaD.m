@@ -201,8 +201,16 @@ function prob=CDF(x,k,theta,lambda,errTol,maxIter)
 %
 %December 2014 David A. Karnick, Naval Research Laboratory, Washington D.C.
 
+if(nargin<6||isempty(maxIter))
+    maxIter=5000;
+end
+
+if(nargin<5||isempty(errTol))
+    errTol=eps();
+end
+
 if(nargin<4||isempty(lambda))
-   lambda=0; 
+    lambda=0; 
 end
 
 %Clip negative values to zero to ensure convergence.
@@ -211,52 +219,57 @@ x(x<0)=0;
 if(lambda==0)% Central gamma case
     prob=gammainc(x/theta,k);
 else
-    if(nargin<6||isempty(maxIter))
-        maxIter=5000;
-    end
+    prob=zeros(size(x));
+    numX=numel(x);
+    for curX=1:numX
+        xCur=x(curX)/theta;%Divide x by the scale parameter.
+        alpha=k;%The shape parameter.
+        delta=lambda;%The noncentrality parameter.
     
-    if(nargin<5||isempty(errTol))
-        errTol=eps(1);
-    end
-    
-    x = x/theta;
-    m = ceil(lambda);
-    a = k+m;
-    gammap = gammainc(x,a);
-    gammar = gammap;
-    gxr = x.^a.*exp(-x)./gamma(a+1)/theta; % Calculate i=m term
-    gxp = gxr*a./x;
-    gxp(x==0) = 0;
-    pp = exp(-lambda)*lambda.^(m)./gamma(m+1); %i=m Poisson weight
-    pr = pp;
-    remain = 1-pp;
-    ii = 1;
-    cdf = pp*gammap;
-
-    while(1)
-        gxp = gxp.*x./(a+ii-1); %Calculate progressive iteration
-        gammap = gammap-gxp;
-        pp = pp*lambda/(m+ii);
-        cdf = cdf + pp*gammap;
-        err = remain*gammap;
-        remain = remain - pp;
-        if(ii > m)
-            if(max(err)<=errTol||ii>maxIter)
-                break
-            end
-        else
-            gxr = gxr.*(a-ii)./x; %Calculate regressive iteration
-            gammar = gammar + gxr;
-            pr = pr*(m-ii+1)/lambda;
-            cdf = cdf + pr*gammar;
-            remain = remain - pr;
-            if(remain<=errTol||ii>maxIter)
-                break
-            end
+        %Mostly using the notation in Section 7 of the paper.
+        k=ceil(delta/2);
+        a=alpha+k;
+        gammac=gammainc(xCur,a);
+        gammad=gammac;%Used in the regressive sum.
+        gxd=exp(a*log(xCur)-xCur-gammaln(a+1));
+        if(xCur==0)
+            gxc=0;
+        else 
+            gxc=gxd*(a/xCur);
         end
-        ii=ii+1;
+        ppoic=exp(-delta/2+k*log(delta/2)-log(gamma(k+1)));
+        ppoid=ppoic;
+        remain=1-ppoic;
+        cdf=ppoic*gammac;
+        i=1;
+
+        while(1)
+            %The progressive (forward) sum.
+            gxc=gxc*xCur/(a+i-1);
+            gammac=gammac-gxc;
+            ppoic=ppoic*(delta/2)/(k+i);
+            cdf=cdf+ppoic*gammac;
+            error=remain*gammac;
+            remain=remain-ppoic;
+            if(i>k)
+                if((error<=errTol)||(i>maxIter))
+                    break;
+                end
+            else
+                %The regressive sum from k.
+                gxd=gxd*(a+1-i)/xCur;
+                gammad=gammad+gxd;
+                ppoid=ppoid*(k-i+1)/(delta/2);
+                cdf=cdf+ppoid*gammad;
+                remain=remain-ppoid;
+                if((remain<=errTol)||(i>maxIter))
+                    break;
+                end
+            end
+            i=i+1;
+        end
+        prob(curX)=cdf;
     end
-    prob=cdf;%Convergence achieved
 end
 end
 
