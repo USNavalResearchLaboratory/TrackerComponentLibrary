@@ -102,7 +102,7 @@ struct tag_iteration_data {
 };
 typedef struct tag_iteration_data iteration_data_t;
 
-static const lbfgs_parameter_t _defparam = {
+const lbfgs_parameter_t _defparam = {
     6, 1e-5, 0, 1e-5,
     0, LBFGS_LINESEARCH_DEFAULT, 40,
     1e-20, 1e20, 1e-4, 0.9, 0.9, 1.0e-16,
@@ -125,7 +125,7 @@ typedef int (*line_search_proc)(
     const lbfgs_parameter_t *param
     );
     
-static int update_trial_interval(
+int update_trial_interval(
     lbfgsfloatval_t *x,
     lbfgsfloatval_t *fx,
     lbfgsfloatval_t *dx,
@@ -140,13 +140,13 @@ static int update_trial_interval(
     int *brackt
     );
 
-static lbfgsfloatval_t owlqn_x1norm(
+lbfgsfloatval_t owlqn_x1norm(
     const lbfgsfloatval_t* x,
     const int start,
     const int n
     );
 
-static void owlqn_pseudo_gradient(
+void owlqn_pseudo_gradient(
     lbfgsfloatval_t* pg,
     const lbfgsfloatval_t* x,
     const lbfgsfloatval_t* g,
@@ -156,7 +156,7 @@ static void owlqn_pseudo_gradient(
     const int end
     );
 
-static void owlqn_project(
+void owlqn_project(
     lbfgsfloatval_t* d,
     const lbfgsfloatval_t* sign,
     const int start,
@@ -165,7 +165,7 @@ static void owlqn_project(
 
 
 #if     defined(USE_SSE) && (defined(__SSE__) || defined(__SSE2__))
-static int round_out_variables(int n)
+int round_out_variables(int n)
 {
     n += 7;
     n /= 8;
@@ -705,7 +705,7 @@ const char* lbfgs_strerror(int err)
 }
 
 
-static int line_search_backtracking(
+int line_search_backtracking(
     int n,
     lbfgsfloatval_t *x,
     lbfgsfloatval_t *f,
@@ -798,7 +798,7 @@ static int line_search_backtracking(
 
 
 
-static int line_search_backtracking_owlqn(
+int line_search_backtracking_owlqn(
     int n,
     lbfgsfloatval_t *x,
     lbfgsfloatval_t *f,
@@ -872,7 +872,7 @@ static int line_search_backtracking_owlqn(
 
 
 
-static int line_search_morethuente(
+int line_search_morethuente(
     int n,
     lbfgsfloatval_t *x,
     lbfgsfloatval_t *f,
@@ -1185,7 +1185,7 @@ static int line_search_morethuente(
  *      guaranteed sufficient decrease. ACM Transactions on Mathematical
  *      Software (TOMS), Vol 20, No 3, pp. 286-307, 1994.
  */
-static int update_trial_interval(
+int update_trial_interval(
     lbfgsfloatval_t *x,
     lbfgsfloatval_t *fx,
     lbfgsfloatval_t *dx,
@@ -1358,7 +1358,7 @@ static int update_trial_interval(
 
 
 
-static lbfgsfloatval_t owlqn_x1norm(
+lbfgsfloatval_t owlqn_x1norm(
     const lbfgsfloatval_t* x,
     const int start,
     const int n
@@ -1374,7 +1374,7 @@ static lbfgsfloatval_t owlqn_x1norm(
     return norm;
 }
 
-static void owlqn_pseudo_gradient(
+void owlqn_pseudo_gradient(
     lbfgsfloatval_t* pg,
     const lbfgsfloatval_t* x,
     const lbfgsfloatval_t* g,
@@ -1417,7 +1417,7 @@ static void owlqn_pseudo_gradient(
     }
 }
 
-static void owlqn_project(
+void owlqn_project(
     lbfgsfloatval_t* d,
     const lbfgsfloatval_t* sign,
     const int start,
