@@ -1,31 +1,8 @@
 /**RANGEHESSIAN Determine the Hessian matrix (a matrix of second-order
 *          partial derivatives) of a bistatic range rate measurement with
-*         respect to Cartesian position. Atmospheric and other propagation
-*          effects are not taken into account.
-*
-*INPUTS: x A numPosDimXN set of N target position vectors of the form
-*          [x], [x;y] or [x;y;z].
-* useHalfRange A boolean value specifying whether the bistatic range value
-*          should be divided by two. This normally comes up
-*          when operating in monostatic mode, so that the range reported is
-*          a one-way range. The default if this parameter is not provided
-*          is false.
-*      lTx The numPosDimX1 position vector of the transmitter. If this
-*          parameter is omitted or an empty matrix is passed, then the
-*          transmitter is assumed to be at the origin.
-*      lRx The numPosDimX1 position vector of the receiver. If this
-*          parameter is omitted or an empty matrix is passed, then the
-*          receiver is assumed to be at the origin.
-*
-*OUTPUTS: H A numPosDimXnumPosDimXN set of N Hessian matrices, one for each
-*           point in x. The ordering of the derivatives in H(:,:,i) is
-*           [d^2r/(dxdx), d^2r/(dxdy), d^2r/(dxdz);
-*            d^2r/(dydx), d^2r/(dydy), d^2r/(dydz);
-*            d^2r/(dzdx), d^2r/(dzdy), d^2r/(dzdz)];
-*           note that each matrix is symmetric (i.e.
-*           d^2r/(dydx)=d^2r/(dxdy) ).
-*
-*More details are given in the native Matlab implementation.
+*          respect to Cartesian position. Atmospheric and other propagation
+*          effects are not taken into account. More details are given in
+*          the native Matlab implementation.
 *
 *The algorithm can be compiled for use in Matlab  using the 
 * CompileCLibraries function.

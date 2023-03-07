@@ -14,7 +14,7 @@ function [idxPairs,ySolIdx,xValPairs,yValPairs]=findValueBrackets(xVals,yVals,nu
 %              xVals. If numSolPerPoint is given, then there can be more
 %              than one solution for each dependent variable. In such an
 %              instance, this is the maxSolXnumPts matrix of the solutions
-%              for each depdenent variable. The order of the solutions at
+%              for each dependent variable. The order of the solutions at
 %              each dependent variable matters, because bracketing is only
 %              considered if yVals(i,k) and y(i,k+1) bracket the solution.
 %              The number of solutions for each step need not be the same.

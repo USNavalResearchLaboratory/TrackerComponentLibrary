@@ -18,8 +18,9 @@ function [aDeriv,aJacob,aHess,papt]=aCVRuv(x)
 %                elements of the state [r,u,v,rDot,uDot,vDot] selected by
 %                column.
 %
-%The derivation of the model is quite lengthy. A summary is given here. Let
-%rVec be a position vector. We shall use the orthonormal basis vectors:
+%A full derivation of the dynamic model is provided in [1]. Summarizing it
+%here, let rVec be a position vector. We shall use the orthonormal basis
+%vectors:
 %uVec1=[u;v;sqrtw]
 %uVec2=[sqrt(w/(1-v2));0;-u/sqrt(1-v2)]
 %uVec3=[-u*v/sqrt(1-v2);sqrt(1-v2);-v*sqrt(w/(1-v2))];
@@ -66,6 +67,11 @@ function [aDeriv,aJacob,aHess,papt]=aCVRuv(x)
 % max(abs(xEndRuvRK-xEndRuvExact)./xEndRuvExact)
 %One will observe that the error is less than 1e-11, which is a good
 %agreement.
+%
+%REFERENCES:
+%[1] D. F. Crouse, "Basic Linear Dynamic Models in Local Coordinates,"
+%    Naval Research Laboratory, Washington, D.C., Tech. Rep.
+%    NRL/MR/5344--19-9882, 24 Aug. 2019.
 %
 %August 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

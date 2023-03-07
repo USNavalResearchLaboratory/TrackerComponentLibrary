@@ -3,7 +3,7 @@ function [xi,w]=conformMapQuadPts1D(n,mapping,pointType,param)
 %           transformation of either Gauss-Legendre points or
 %           Clenshaw-Curtis points for integration of a function over the
 %           range -1 to 1. n+1 points are returned. Though the conformal
-%           mappins used can sometimes produce worse results, as discussed
+%           mappings used can sometimes produce worse results, as discussed
 %           in [1], there are times when they can produce improved results
 %           too.
 %

@@ -180,8 +180,9 @@ function k=invCDF(probVals,n,p,choice)
 %[1] Weisstein, Eric W. "Binomial Distribution." From MathWorld--A Wolfram
 %    Web Resource. http://mathworld.wolfram.com/BinomialDistribution.html
 %
+%September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
-    if(nargin<3&&~isempty(choice))
+    if(nargin<4||isempty(choice))
         choice=1;
     end
 
@@ -194,7 +195,6 @@ function k=invCDF(probVals,n,p,choice)
     end
 end
 
-    
 function vals=rand(N,n,p)
 %%RAND Generate binomial random variables with a given number of trials and
 %      probability of success.

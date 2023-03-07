@@ -957,7 +957,7 @@ function [P,error,curIter]=integralOverRegion(mu, Sigma,minVals,maxVals,epsVal,a
 %            for the estimate of epsVal used to determine termination to be
 %            correct 99% of the time, one should use 
 %            alpha=GaussianD.invCDF(0.99); If this parameter is omitted or
-%            an empty matrix is passed, the default value of 2.5 is used.
+%            an empty matrix is passed, the default value of 3.5 is used.
 %    maxIter The maximum number of iterations to use. If this parameter is
 %            omitted or an empty matrix is passed, the default value of
 %            1000 is used.
@@ -971,10 +971,21 @@ function [P,error,curIter]=integralOverRegion(mu, Sigma,minVals,maxVals,epsVal,a
 %function to achieve better convergence than when performing typical Monte
 %Carlo integration.
 %
+%EXAMPLE:
+%This is the 3D example in the paper. The probability should be about
+%0.8279.
+% minBounds=[-Inf;-Inf;-Inf];
+% maxBounds=[1;4;2];
+% R=[1,3/5,1/3;
+%    3/5,1,11/15;
+%    1/3,11/15,1];
+% mu=[0;0;0];
+% PApprox=GaussianD.integralOverRegion(mu,R,minBounds,maxBounds)
+%
 %REFERENCES:
 %[1] A.Genz, "Numerical computation of multivariate normal probabilities,"
 %    Journal of Computational and Graphical Statistics, vol. 1, no. 2, pp.
-%    141-149, 1992.
+%    141-149, June 1992.
 %
 %November 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -984,7 +995,7 @@ function [P,error,curIter]=integralOverRegion(mu, Sigma,minVals,maxVals,epsVal,a
     end
     
     if(nargin<6||isempty(alpha))
-       alpha=2.5; 
+       alpha=3.5; 
     end
     
     if(nargin<5||isempty(epsVal))
@@ -1002,7 +1013,7 @@ function [P,error,curIter]=integralOverRegion(mu, Sigma,minVals,maxVals,epsVal,a
     a=minVals(idxSort);
     b=maxVals(idxSort);
     C2=Sigma(idxSort,idxSort);
-    
+
     C=chol(C2,'lower');
 
     numDim=size(C,1);
@@ -1020,7 +1031,7 @@ function [P,error,curIter]=integralOverRegion(mu, Sigma,minVals,maxVals,epsVal,a
     f(1)=e(1)-d(1);
     
     y=zeros(numDim-1,1);%Allocate space.
-    for curIter=1:maxIter
+    for curIter=0:(maxIter-1)
         
         w=rand(numDim-1,1);
         
@@ -1041,10 +1052,12 @@ function [P,error,curIter]=integralOverRegion(mu, Sigma,minVals,maxVals,epsVal,a
             end
             f(i)=(e(i)-d(i))*f(i-1);
         end
+        
+        N=curIter+1;
 
-        delta=(f(numDim)-intSum)/curIter;
+        delta=(f(numDim)-intSum)/N;
         intSum=intSum+delta;
-        varSum=(curIter-2)*varSum/curIter+delta^2;
+        varSum=(N-2)*varSum/N+delta^2;
         error=alpha*sqrt(varSum);
         
         if(error<epsVal)
@@ -1053,7 +1066,7 @@ function [P,error,curIter]=integralOverRegion(mu, Sigma,minVals,maxVals,epsVal,a
     end
     
     %The probability estimate.
-    P=intSum;
+    P=min(1,max(0,intSum));
 end
 
 function entropyVal=entropy(Sigma)

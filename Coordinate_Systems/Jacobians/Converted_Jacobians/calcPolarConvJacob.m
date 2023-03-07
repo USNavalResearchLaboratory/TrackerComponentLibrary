@@ -67,7 +67,7 @@ x=pol2Cart(zPolar,systemType,useHalfRange,lTx,lRx,M);
 
 J=zeros(2,2);
 J(1,:)=rangeGradient(x,useHalfRange,lTx,lRx);
-J(2,:)=polAngGradient(x,systemType,lRx,M);
+J(2,:)=polAngGradient(x,systemType,lRx);
 
 end
 

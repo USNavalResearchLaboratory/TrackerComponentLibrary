@@ -48,9 +48,12 @@ function [xClust,xCov,clusterList]=distBasedClustering(x,threshold,distFunc,merg
 %             computed with respect to the maximum weighted point in each
 %             cluster. This effectively provides a mean squared error
 %             matrix.
+%           5 The points in each cluster are treated as independent
+%             Gaussian sampled and are fused. The weights are not used.
 %     weights An NX1 or 1XN set of positive weights for each vector. if
 %             this parameter is omitted or an empty matrix is passed, then
-%             all ones will be used.
+%             all ones will be used. This is not used if mergeType 5 is
+%             chosen.
 %     covMats This input is only used if distFunc='Mahalanobis' or
 %             mergeType=2 or 4. This is an xDimXxDimXN set of positive
 %             definite covariance matrices, one for each vector.
@@ -78,7 +81,7 @@ function [xClust,xCov,clusterList]=distBasedClustering(x,threshold,distFunc,merg
 %where the muHyp input of the function is used with the maximum weight
 %point in each cluster for the covariance computation.
 %
-%EXAMPLE:
+%EXAMPLE 1:
 %Here we make a range-Doppler plot, detect three targets and then centroid
 %the detections using this function.
 % fc=1e9;%1GHz carrier frequency.
@@ -182,6 +185,65 @@ function [xClust,xCov,clusterList]=distBasedClustering(x,threshold,distFunc,merg
 % set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
 % axis([rangeRate(1), rangeRate(end), range(1), range(end)])
 %
+%EXAMPLE 2:
+%Here, we have two Gaussians. We compare what one obtains using mergeType=1
+%versus mergeType=5. With 1, the uncertainty region tends to encompass each
+%cluster of points. With 5, it tends to represent an uncertianty region for
+%the location of the mean of each Gaussian. The function is not good if the
+%Gaussians are close enough that  measurements from Each will overlap (they
+%will all just be clustered together due to the primitive clustering
+%algorithm).
+% x0=[-20;-20];
+% R0=[4,2;
+%     2,3];
+% x1=[20;20];
+% R1=[1,0;
+%     0,1];
+% S0=chol(R0,'lower');
+% S1=chol(R1,'lower');
+% 
+% num0=100;
+% num1=200;
+% numTotal=num0+num1;
+% x=zeros(2,numTotal);
+% covMats=zeros(2,2,numTotal);
+% 
+% x(:,1:num0)=bsxfun(@plus,x0,S0*randn(2,num0));
+% covMats(:,:,1:num0)=repmat(R0,[1,1,num0]);
+% x(:,(num0+1):numTotal)=bsxfun(@plus,x1,S1*randn(2,num1));
+% covMats(:,:,(num0+1):numTotal)=repmat(R1,[1,1,num1]);
+% 
+% %This is a gating threshold based on a 99.97% confidence region for a 2D
+% %Gaussian PDF.
+% threshold=ChiSquareD.invCDF(0.9997,2);
+% 
+% mergeType=1;
+% [xClust1,xCov1]=distBasedClustering(x,threshold,[],mergeType,[],covMats);
+% mergeType=5;
+% [xClust5,xCov5]=distBasedClustering(x,threshold,[],mergeType,[],covMats);
+% 
+% figure(1)
+% clf
+% subplot(2,1,1)
+% hold on
+% scatter(x(1,:),x(2,:),200,'.k')
+% scatter(xClust1(1,:),xClust1(2,:),400,'xr')
+% numClust=size(xClust1,2);
+% for curClust=1:numClust
+%     drawEllipse(xClust1(:,curClust),inv(xCov1(:,:,curClust)),[],'-b','linewidth',2)
+% end
+% title('Merge Type=1')
+% 
+% subplot(2,1,2)
+% hold on
+% scatter(x(1,:),x(2,:),200,'.k')
+% scatter(xClust5(1,:),xClust5(2,:),400,'xr')
+% numClust=size(xClust5,2);
+% for curClust=1:numClust
+%     drawEllipse(xClust5(:,curClust),inv(xCov5(:,:,curClust)),[],'-b','linewidth',2)
+% end
+% title('Merge Type=5')
+%
 %February 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
@@ -258,13 +320,28 @@ else
                 xClust(:,curClust)=x(:,idxInClust(maxIdx));
                 [~,xCov(:,:,curClust)]=calcMixtureMoments(x(:,idxInClust),weights(idxInClust)/sum(weights(idxInClust)),[],xClust(:,curClust));
             end
-        case 4%Take the point in the cluster with the maximum weight and use
-              %covMats
+        case 4%Take the point in the cluster with the maximum weight and
+              %use covMats
             for curClust=1:numClust
                 idxInClust=clusterList(curClust,:);
                 [~,maxIdx]=max(weights(idxInClust));
                 xClust(:,curClust)=x(:,idxInClust(maxIdx));
                 [~,xCov(:,:,curClust)]=calcMixtureMoments(x(:,idxInClust),weights(idxInClust)/sum(weights(idxInClust)),covMats(:,:,idxInClust),xClust(:,curClust));
+            end
+        case 5%Treat the points as independent samples and merge them.
+               %The weighting is not used.
+            for curClust=1:numClust
+                idxInClust=clusterList(curClust,:);
+                numStates=length(idxInClust);
+                xClustCur=x(:,idxInClust(1));
+                xCovCur=covMats(:,:,idxInClust(1));
+                
+                for curMeas=2:numStates
+                    [xClustCur,xCovCur]=KalmanUpdate(xClustCur,xCovCur,x(:,idxInClust(curMeas)),covMats(:,:,idxInClust(curMeas)),eye(xDim));
+                end
+
+                xClust(:,curClust)=xClustCur;
+                xCov(:,:,curClust)=xCovCur;
             end
         otherwise
             error('Unknown centroid type specified')

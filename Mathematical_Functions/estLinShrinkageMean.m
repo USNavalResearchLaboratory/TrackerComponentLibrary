@@ -1,5 +1,5 @@
 function [xEst,PML]=estLinShrinkageMean(z,H,R,scaleUnknown)
-%%ESTLINSHRINKAGEMEAN  Estimate the unknown mean of a batch of linear
+%%ESTLINSHRINKAGEMEAN Estimate the unknown mean of a batch of linear
 %                  measurements of a multivariate state with additive
 %                  Gaussian noise using an estimator that beats the
 %                  expected value in mean-squared error if the

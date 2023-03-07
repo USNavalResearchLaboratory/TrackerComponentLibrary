@@ -10,7 +10,7 @@ function [fAdj,numAdj]=sortTriangFacesAroundVertices(vertInFaces,fAdj,numAdj)
 %                    triangles in the polyhedron (all faces are triangles).
 %                    The vertex locations do not need to be provided; just
 %                    the indices of the triangles.
-%       fAdj, numAdj If available, this is a maxAdjFacesXnumFaces matrix,
+%       fAdj, numAdj If available, fAdj is a maxAdjFacesXnumVert matrix,
 %                    where for the kth vertex, fAdj(1:numAdj(k),k) is the
 %                    set of indices of the faces that are adjacent to that
 %                    vertex. It effectively selects a column of
@@ -60,7 +60,7 @@ function [fAdj,numAdj]=sortTriangFacesAroundVertices(vertInFaces,fAdj,numAdj)
 %[1] M. S. Floater, "Generalized barycentric coordinates and applications,"
 %    Acta Numerica, vol. 24, pp. 161-214, 1 May 2015.
 %
-%September 2021 David F.Crouse, Naval Research Laboratory, Washington D.C.
+%September 2022 David F.Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 numVert=max(vertInFaces(:));

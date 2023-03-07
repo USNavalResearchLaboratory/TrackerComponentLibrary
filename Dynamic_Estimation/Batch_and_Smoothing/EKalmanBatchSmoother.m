@@ -74,8 +74,8 @@ function [xSmooth,PSmooth,xUpd,PUpd]=EKalmanBatchSmoother(xInit,PInit,z,h,HJacob
 %[1] Y. Bar-Shalom, X. R. Li, and T. Kirubarajan, Estimation with
 %    Applications to Tracking and Navigation. New York: John Wiley and
 %    Sons, Inc, 2001.
-%[2] L. A. Johnston and V. Krishnamurthy, “Derivation of a sawtooth
-%    iterated extended Kalman smoother via the AECM algorithm,” IEEE
+%[2] L. A. Johnston and V. Krishnamurthy, "Derivation of a sawtooth
+%    iterated extended Kalman smoother via the AECM algorithm," IEEE
 %    Transactions on Signal Processing, vol. 49, no. 9, pp. 1899-1909,
 %    2001.
 %

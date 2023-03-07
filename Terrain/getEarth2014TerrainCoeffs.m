@@ -60,7 +60,7 @@ function [C,S]=getEarth2014TerrainCoeffs(M,coeffType)
 % terHeight=spherHarmonicEval(C,S,azElSphere);
 % %Add the ellipsoidal radius of the GRS80 reference ellipsoid at the
 % %point. Note that this actually changes the ellipsoidal latitude
-% slightly.
+% %slightly.
 % a=Constants.GRS80SemiMajorAxis;
 % f=Constants.GRS80Flattening;
 % terRad=terHeight+ellipsoidalRadius(latSpher,0,a,f);

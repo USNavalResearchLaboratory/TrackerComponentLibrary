@@ -2,7 +2,8 @@ function ab=mapSquare2Disc(ab)
 %%MAPSQUARE2DISC Given points in a Cartesian space, map the points onto a
 %           disc using the transformation of [1]. This is a bijective area-
 %           preserving transformation. Points in a square having side-
-%           length 2*L is mapped to a circle of radius 4*L^2/pi.
+%           length 2*L is mapped to a circle of radius 4*L^2/pi (The areas
+%           are equal).
 %
 %INPUTS: ab A 2XnumPts list of real 2D points to transform.
 %

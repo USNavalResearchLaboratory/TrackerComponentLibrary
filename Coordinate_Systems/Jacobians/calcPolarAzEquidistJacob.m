@@ -15,7 +15,7 @@ function J=calcPolarAzEquidistJacob(xCartLoc,latLonRef,rE)
 %OUTPUTS: J The Jacobian matrix with derivatives with respect to Cartesian
 %           position components. Each row is a component polar azimuthal
 %           equidistant range, angle and height in that order with
-%           derivatives of x,y, and z given across columns in that order.
+%           derivatives of x, y, and z given across columns in that order.
 %
 %EXAMPLE:
 %Here, the gradient obtained by this function is compared to that obtained

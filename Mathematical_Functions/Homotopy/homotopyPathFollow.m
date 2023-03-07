@@ -21,7 +21,7 @@ function [xEst,exitCode,path]=homotopyPathFollow(x0,f,df,homF,dHomF,errorTols,st
 % homF,dHomF Optional parameters allowing the user to specify the homotopy
 %           to be used. If omitted or empty matrices are passed, then the
 %           homotopy 0=f(x)+(lambda-1)*f(x0) is used. This works well with
-%           a wide variety of functions, but is not necessarily fo the form
+%           a wide variety of functions, but is not necessarily of the form
 %           to guarantee a solution for arbitrary inputs to any particular
 %           function. If provided, these have the input formats
 %           homF(y,fx,x0,f0) and dHomF(y,fx,dfx,x0,f0), where y=[lambda;x]

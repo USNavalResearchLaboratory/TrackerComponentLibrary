@@ -49,7 +49,7 @@ function [xAL,xBL,doesClip]=clipLine2ConvexPolygon(xAL,xBL,v)
 %
 %REFERENCES:
 %[1] V. Skala, "An efficient algorithm for line clipping by convex
-%    polygon," Computer and Graphics, vol. 17, no. 4, pp. 417–421, 1993.
+%    polygon," Computer and Graphics, vol. 17, no. 4, pp. 417-421, 1993.
 %
 %September 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

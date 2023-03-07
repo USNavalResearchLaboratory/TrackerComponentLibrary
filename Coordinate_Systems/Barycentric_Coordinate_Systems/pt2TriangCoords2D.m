@@ -9,7 +9,9 @@ function [phi,dphi]=pt2TriangCoords2D(x,v)
 %          coordinates.
 %        v The 2X3 set of vertices of the triangle.
 %
-%OUTPUTS: phi A 3XnumPts set of the coordinates in the triangle.
+%OUTPUTS: phi A 3XnumPts set of the coordinates in the triangle. The
+%             coordinates sum to 1, but the magnitudes of the individual
+%             elements can be over 1.
 %        dphi A 3X2XnumPts set of derivatives of the elements of phi
 %             (rows) taken with respect to the elements of x (columns) for
 %             each input measurement (3rd dimension).
@@ -55,7 +57,7 @@ numX=size(x,2);
 phi=zeros(3,numX);
 dphi=zeros(3,2,numX);
 for curX=1:numX
-    %The phi values will b negative or positive depending on the ordering
+    %The phi values will be negative or positive depending on the ordering
     %of the vertices.
     [phi1,dphi1]=triangleArea(x(:,curX),v(:,2),v(:,3));
     [phi2,dphi2]=triangleArea(x(:,curX),v(:,3),v(:,1));

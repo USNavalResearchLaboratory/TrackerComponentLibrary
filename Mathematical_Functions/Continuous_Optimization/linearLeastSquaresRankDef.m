@@ -1,4 +1,4 @@
-function x=linearLeastSquaresRankDef(A,b,algorithm,rankAlg)
+function [x,M]=linearLeastSquaresRankDef(A,b,algorithm,rankAlg)
 %%LINEARLEASTSQUARESRANKDEF Solve the problem arg min_x norm(A*x-b) where A
 %           can be square or rectangular (overdetermined or
 %           underdetermined), and can be rank deficient.
@@ -18,6 +18,13 @@ function x=linearLeastSquaresRankDef(A,b,algorithm,rankAlg)
 %
 %OUTPUTS: x The chosen nXnumCol minimum l2 norm solutions, one for each
 %           column of b.
+%         M If x is the minimum norm solution, then one can obtain any
+%           other solution using x+M*y, where y is any vector.
+%
+%To obtain M, one considers that norm(A*x-b)^2 is the same cost function as
+%an unconstrained quadratic programming problem. Consequently, the relation
+%between the minimum norm solution and any other solution in Equation 3.2
+%of [2] can be used to get M.
 %
 %EXAMPLE: 
 %In this example, we have a rank deficient matrix A and we choose x to have
@@ -45,6 +52,9 @@ function x=linearLeastSquaresRankDef(A,b,algorithm,rankAlg)
 %REFERENCES:
 %[1] G. H. Golub and C. F. Van Loan, Matrix Computations, 4th ed.
 %    Baltimore: Johns Hopkins University Press, 2013.
+%[2] D. L. Nelson, "Quadratic programming techniques using matrix
+%    pseudoinverses," Ph.D. dissertation, Texas Tech University, Lubbock,
+%    TX, Dec. 1969.
 %
 %September 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -95,7 +105,14 @@ switch(algorithm)
         % 
         % x=V*[T11\c;zeros(n-rankVal,1)];
     otherwise
-        error('Unknown algorithmspecified.')
+        error('Unknown algorithm specified.')
+end
+
+if(nargout>1)
+    B=A'*A;
+    pinvB=pseudoInverse(B);
+    %As in Equation 3.2 in [2].
+    M=eye(n,n)-pinvB*B;
 end
 end
 

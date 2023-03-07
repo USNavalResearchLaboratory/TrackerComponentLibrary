@@ -3,14 +3,14 @@ classdef Gaussian2C
 %            The bivariate log-normal and Gaussian copulae have been proven
 %            equivalent due to the monotonic relationship between the two
 %            distributions [2].
-%            Implemented functions include: PDF, CDF, tau.
+%            Implemented functions include: PDF, CDF, tau, tau2CorrMat.
 %
 %REFERENCES:
 %[1] H. Joe and D. Kurowicka, Dependence Modeling: Vine Copula Handbook.
 %    World Scientific, 2011.
-%[2] X. Zeng, J. Ren, Z. Wang, S. Marshall, and T. Durrani, “Copulas for
+%[2] X. Zeng, J. Ren, Z. Wang, S. Marshall, and T. Durrani, "Copulas for
 %    statistical signal processing (part i): Extensions and
-%    generalization,” Signal Processing, vol. 94, pp. 691–702, 2014,
+%    generalization," Signal Processing, vol. 94, pp. 691-702, 2014,
 %    ISSN: 0165-1684. DOI: https://doi.org/10.1016/j.sigpro.2013.07.009.
 %    [Online]. Available: http://www.sciencedirect.com/science/article/pii/S0165168413002880.
 %
@@ -97,7 +97,7 @@ classdef Gaussian2C
             
         end
         
-        function jdist = CDF(u,R,llim)
+        function jdist = CDF(u,R)
             %CDF Generates a joint distribution for column vector u or
             %    a row vector of joint probabilities for matrix u
             %    with each column as the input vector.
@@ -108,8 +108,6 @@ classdef Gaussian2C
             %    random vectors. Entries must be in [0,1].
             % R: A 2-by-2 correlation matrix, or a scalar which is the
             %    correlation.
-            % llim: The lower limit used for integrating the densities.
-            %       Defaults to -1e6.
             %
             %OUTPUTS: jprob: A 1-by-n vector of joint distribution values.
             %
@@ -118,15 +116,15 @@ classdef Gaussian2C
             %      the examples below.
             %
             %EXAMPLE 1: Make a contour plot of the distribution.
-            %x = linspace(0,1,1e2);
-            %[X,Y] = meshgrid(x);
-            %Z = zeros(length(X),length(Y));
-            %for idx = 1:length(X)
-            %    for iidx = 1:length(Y)
-            %        Z(idx,iidx) = Gaussian2C.CDF([X(idx,iidx);Y(idx,iidx)],0.65);
-            %    end
-            %end
-            %contourf(X,Y,Z)
+            % x = linspace(0,1,1e2);
+            % [X,Y] = meshgrid(x);
+            % Z = zeros(length(X),length(Y));
+            % for idx = 1:length(X)
+            %     for iidx = 1:length(Y)
+            %         Z(idx,iidx) = Gaussian2C.CDF([X(idx,iidx);Y(idx,iidx)],0.65);
+            %     end
+            % end
+            % contourf(X,Y,Z)
             %
             %EXAMPLE 2: Generate an exact joint distribution plot.
             % x = linspace(0,1,1e2);
@@ -169,25 +167,18 @@ classdef Gaussian2C
             else
                 rho = R;
             end
-            if ~exist('llim','var') || isempty(llim)
-                llim = -1e2;
-            end
+             
+            R = [1,rho;rho,1]^2;
             
             a = sqrt(2)*erfinv(2*u(1,:)-1);
             b = sqrt(2)*erfinv(2*u(2,:)-1);
-            
-            R = [1,rho;rho,1]^2;
-            
-            jdist = arrayfun(@(ele1,ele2)GaussianD.integralOverRegion([0;0],R,[llim;llim],[ele1;ele2]),a,b);
-            
-            %Eliminate negative results (occasionally happen with Monte
-            %Carlo)
-            jdist(jdist<0) = 0;
-            
-            %Replace NaNs with 0s.
-            nanIdxs = isnan(jdist);
-            jdist(nanIdxs) = 0;
-            
+
+            %Though this approximation could be used, the function
+            %bivarGaussRectangleCDF produces a more exact result. Moreover,
+            %it can handle -Inf lower bound, whereas the approximation
+            %would have to set some arbitrary llim as the lower bound.
+            %  jdist = arrayfun(@(ele1,ele2)GaussianD.integralOverRegion([0;0],R,[llim;llim],[ele1;ele2]),a,b);
+            jdist = arrayfun(@(ele1,ele2)bivarGaussRectangleCDF([-Inf;-Inf],[ele1;ele2],[0;0],R),a,b);
         end
         
         function t = tau(R)
@@ -200,6 +191,23 @@ classdef Gaussian2C
             %OUTPUTS:
             % t: The scalar value of Kendall's tau.
             %
+            %EXAMPLE: Shows Gaussian distribution of independent
+            %         correlation parameter estimates using Kendall's
+            %         tau.
+            % for idx = 1:1e3
+            %    x = GaussianD.rand(1e3,[0;0],[1,0.3;0.3,1]);
+            %    u = GaussianD.CDF(x);
+            %    s1 = GammaD.invCDF(u(1,:),2,1);
+            %    s2 = GammaD.invCDF(u(2,:),4,4);
+            %    tauEst(idx) = corr(s1',s2','Type','Kendall');
+            % end
+            % histogram(tauEst)
+            % mu = mean(tauEst);
+            % sigma = std(tauEst);
+            % xline(mu,'k','LineWidth',2,'Label','\mu');
+            % xline(mu-sigma,'r--','LineWidth',2,'Label','\mu-\sigma');
+            % xline(mu+sigma,'r--','LineWidth',2,'Label','\mu+\sigma');
+            %
             %October 2020 Codie T. Lewis, Naval Research Laboratory, Washington D.C.
             %
             if ~exist('R','var') || isempty(R)
@@ -211,6 +219,51 @@ classdef Gaussian2C
             end
             
             t = 2*arcsin(rho)/pi;
+        end
+        
+        function R = tau2corrMat(t)
+            %%TAU2CORRMAT Compute a 2-by-2 correlation matrix estimate
+            %             from Kendall's tau.
+            %
+            %INPUTS:
+            % t: Kendall's tau
+            %
+            %OUTPUTS:
+            % R: A 2-by-2 correlation matrix
+            %
+            %EXAMPLE 1: Generates Gamma distributed marginals correlated
+            %           via a Gaussian copula and estimates the correlation
+            %           matrix.
+            % x = GaussianD.rand(1e4,[0;0],[1,0.3;0.3,1]);
+            % u = GaussianD.CDF(x);
+            % s1 = GammaD.invCDF(u(1,:),2,1);
+            % s2 = GammaD.invCDF(u(2,:),4,4);
+            % tau = corr(s1',s2','Type','Kendall');
+            % Gaussian2C.tau2corrMat(tau)
+            %
+            %EXAMPLE 2: Shows Gaussian distribution of independent
+            %           correlation parameter estimates using Kendall's
+            %           tau.
+            % for idx = 1:1e3
+            %    x = GaussianD.rand(1e3,[0;0],[1,0.3;0.3,1]);
+            %    u = GaussianD.CDF(x);
+            %    s1 = GammaD.invCDF(u(1,:),2,1);
+            %    s2 = GammaD.invCDF(u(2,:),4,4);
+            %    tauEst(idx) = corr(s1',s2','Type','Kendall');
+            %    rho = Gaussian2C.tau2corrMat(tauEst(idx));
+            %    theta(idx) = rho(1,2);
+            % end
+            % histogram(theta)
+            % mu = mean(theta);
+            % sigma = std(theta);
+            % xline(mu,'k','LineWidth',2,'Label','\mu');
+            % xline(mu-sigma,'r--','LineWidth',2,'Label','\mu-\sigma');
+            % xline(mu+sigma,'r--','LineWidth',2,'Label','\mu+\sigma');
+            %
+            %April 2022 Codie T. Lewis, Naval Research Laboratory, Washington D.C.
+            %
+            rho = sin(t*pi/2);
+            R = [1,rho;rho,1];
         end
     end
 end

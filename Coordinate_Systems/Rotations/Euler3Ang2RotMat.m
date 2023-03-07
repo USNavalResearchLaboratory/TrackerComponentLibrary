@@ -36,7 +36,7 @@ function M=Euler3Ang2RotMat(theta1,theta2,theta3,series,handed)
 %
 %EXAMPLE:
 %Here, we rotate by some arbitrary angles and one can see that the
-%rotations from this functions are equal to sunsequently appending the
+%rotations from this functions are equal to subsequently appending the
 %rotations.
 % theta1=2*pi*rand();
 % theta2=2*pi*rand();
@@ -118,9 +118,9 @@ switch(series)
            c1*c3*s2+s1*s3,	c1*c2,	-c3*s1+c1*s2*s3;
            c3*s1*s2-c1*s3,	c2*s1,	c1*c3+s1*s2*s3];
     case 'xyz'
-        M=[c2*c3,           -c2*s3          s2;
-           c3*s1*s2+c1*s3,	c1*c3-s1*s2*s3	-c2*s1;
-           -c1*c3*s2+s1*s3,	c3*s1+c1*s2*s3	c1*c2];
+        M=[c2*c3,           -c2*s3,         s2;
+           c3*s1*s2+c1*s3,	c1*c3-s1*s2*s3,	-c2*s1;
+           -c1*c3*s2+s1*s3,	c3*s1+c1*s2*s3,	c1*c2];
     case 'yxz'
         M=[c1*c3+s1*s2*s3,	c3*s1*s2-c1*s3,	c2*s1;
            c2*s3,           c2*c3,          -s2;

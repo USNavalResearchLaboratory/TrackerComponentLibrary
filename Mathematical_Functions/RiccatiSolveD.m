@@ -16,7 +16,9 @@ function X=RiccatiSolveD(A,B,Q,R,S,E)
 %This function finds the nonnegative definite solution to the discrete-time
 %Ricatti equation having the form
 %E'*X*E=A'*X*A-(A'*X*B+S)*inv(B'*X*B+R)*(A'*X*B+S)'+Q
-%The algorithm of [1] is used.
+%The algorithm of [1], which uses a qz decomposition, is used. Note that
+%another explicit solution that uses an eigenvalue decomposition is given
+%in [3].
 %
 %The discrete-time Ricatti equation arises when solving for the  steady-
 %state covariance of a continuous-time linear Kalman filter, as described
@@ -29,6 +31,9 @@ function X=RiccatiSolveD(A,B,Q,R,S,E)
 %[2] Y. Bar-Shalom, X. R. Li, and T. Kirubarajan, Estimation with
 %    Applications to Tracking and Navigation. New York: John Wiley and
 %    Sons, Inc, 2001.
+%[3] D. R. Vaughan, "A nonrecursive algebraic solution for the discrete
+%    Riccati equation," IEEE Transactions on Automatic Control, vol. 15,
+%    no. 5, pp. 597-599, Oct. 1970.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -51,7 +56,9 @@ M=[A,  zeros(n,n),  B;
    -Q, E',         -S;
    S', zeros(m,n), R];
 
-[MHat,LHat,V,U]=qz(M,L,'real');
+%We use complex for stability (otherwise ordqz can sometimes fail), but we
+%have to use a "real" on the final solution, because it should be real.
+[MHat,LHat,V,U]=qz(M,L,'complex');
 [~,~,~,U]=ordqz(MHat,LHat,V,U,'udi');
 
 W=[E,           zeros(n,n),zeros(n,m);
@@ -61,7 +68,7 @@ W11=W(1:n,1:n);
 W21=W((n+1):(2*n),1:n);
 
 %W21/W11; Use a pseudoinverse for stability.
-X=W21*pinv(W11);
+X=real(W21*pinv(W11));
 
 end
 

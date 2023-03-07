@@ -1,13 +1,13 @@
 function [x,f,exitCode]=convexQuadProg(G,a,C,b,numEqConst,epsVal,maxIter)
-%%CONVEXQUADPROG Perform quadratic programming on a convex problem.
-%                Specifically, this algorithm solves the optimization
-%                problem 
+%%CONVEXQUADPROG Perform quadratic programming on a convex problem with
+%                equality and inequality constraints. Specifically, this
+%                algorithm solves the optimization problem: 
 %                minimize_x a'*x+(1/2)*x'*G*x
 %                such that C(:,1:numEqConst)'*x=b(1:numEqConst)
 %                     and C(:,(numEqConst+1):end)'*x>=b((numEqConst+1):end)
 %                A dual active set algorithm for strictly convex problems
 %                is used. Strict convexity means that G is positive
-%                definite. The algorithm is robust to poorly considitioned
+%                definite. The algorithm is robust to poorly conditioned
 %                matrices. Thus, to handle the semidefinite case,
 %                eigenvalue thresholding is applied prior to running the
 %                algorithm.

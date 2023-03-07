@@ -18,7 +18,7 @@ function rCond=invCondNumberApprox(X)
 %[1] J. Higham, Nicholas, "FORTRAN codes for estimating the one-norm
 %    of a real or complex matrix with applications to condition
 %    estimation," ACM Transactions on Mathematical Software, vol. 14, no.
-%    4, pp. 381–396, Dec. 1988.
+%    4, pp. 381-396, Dec. 1988.
 %
 %June 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -56,7 +56,7 @@ function [gammaVal,v]=approxInvMat1Norm(A)
 %[1] J. Higham, Nicholas, "FORTRAN codes for estimating the one-norm
 %    of a real or complex matrix with applications to condition
 %    estimation," ACM Transactions on Mathematical Software, vol. 14, no.
-%    4, pp. 381–396, Dec. 1988.
+%    4, pp. 381-396, Dec. 1988.
 %
 %June 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

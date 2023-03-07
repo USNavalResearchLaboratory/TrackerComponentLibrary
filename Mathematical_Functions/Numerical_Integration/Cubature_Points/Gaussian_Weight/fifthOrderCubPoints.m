@@ -163,7 +163,7 @@ function [xi,w]=fifthOrderCubPoints(numDim,algorithm,randomize)
 
             %Now, go through all of the positions of s.
             s=sqrt((n+2)/(n-2));
-            xi=[xi PMCombos(ones(n,1)*s,0)];
+            xi=[xi, PMCombos(ones(n,1)*s,0)];
         case 1
             if(n<4)
                 error('This algorithm requires numDim>=4.')

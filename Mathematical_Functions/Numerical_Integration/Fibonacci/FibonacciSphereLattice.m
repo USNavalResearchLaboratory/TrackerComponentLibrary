@@ -20,16 +20,17 @@ function lattice = FibonacciSphereLattice(N)
 % trisurf(convhull(lat(1,:),lat(2,:),lat(3,:)),lat(1,:),lat(2,:),lat(3,:))
 %
 %REFERENCES:
-%[1] B. Keinert, M. Innmann, M. Sänger, and M. Stamminger, "Spherical
-%    fibonacci mapping," ACM Trans. Graph., vol. 34, no. 6, 2015,
+%[1] B. Keinert, M. Innmann, M. Sainger, and M. Stamminger, "Spherical
+%    Fibonacci mapping," ACM Trans. Graph., vol. 34, no. 6, 2015,
 %    issn: 0730-0301. doi: 10.1145/2816795.2818131. [Online].
 %    Available: https://doi.org/10.1145/2816795.2818131.
-%[2] Á. González, "Measurement of areas on a sphere using fibonacci and
-%    latitude–longitude lattices," Mathematical Geosciences, vol. 42,
-%    no. 1, pp. 49–64, 2010.
+%[2] A. Gonzalez, "Measurement of areas on a sphere using Fibonacci and
+%    latitude-longitude lattices," Mathematical Geosciences, vol. 42,
+%    no. 1, pp. 49-64, 2010.
 %
 %March 2022 Codie T. Lewis, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
 lattice = zeros(3,N);
 gratio = (1+sqrt(5))/2;
 for idx = 0:N-1

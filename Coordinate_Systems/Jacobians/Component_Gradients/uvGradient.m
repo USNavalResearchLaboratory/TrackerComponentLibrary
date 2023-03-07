@@ -10,14 +10,6 @@ function J=uvGradient(xG,lRx,M,includeW)
 %         M A 3X3 rotation matrix from the global Coordinate system to the
 %           orientation of the coordinate system at the receiver. If
 %           omitted, it is assumed to be the identity matrix.
-%  includeW An optional boolean value indicating whether a third direction
-%           cosine component should be included. The u and v direction
-%           cosines are two parts of a 3D unit vector. Generally, one might
-%           assume that the target is in front of the sensor, so the third
-%           component would be positive and is not needed. However, the
-%           third component can be included if ambiguity exists. The default
-%           if this parameter is omitted or an empty matrix is passed is 
-%           false.
 %
 %OUTPUTS: J A 2X3XN set of N Jacobian matrices where the rows are [u;v] in
 %           that order and the columns take the partial derivative of the

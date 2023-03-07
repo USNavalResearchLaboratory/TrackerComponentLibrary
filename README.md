@@ -1,4 +1,4 @@
-**Tracker Component Library Release 5.2, March 2022**
+**Tracker Component Library Release 5.3, February 2023**
 https://github.com/USNavalResearchLaboratory/TrackerComponentLibrary
 
 A paper describing a number of features of the library is<br>
@@ -6,7 +6,7 @@ D. F. Crouse, "The Tracker Component Library: Free Routines for Rapid
 Prototyping," IEEE Aerospace and Electronic Systems Magazine, vol. 32, no.
 5, pp. 18-27, May. 2017.
 
-These are the release notes for the version 5.2 of the Tracker Component
+These are the release notes for the version 5.3 of the Tracker Component
 Library. The Tracker Component Library is a collection of Matlab routines
 for simulating and tracking targets in various scenarios. Due to the
 complexity of the target tracking problem, a great many routines can find
@@ -19,13 +19,10 @@ https://sourcecode.cio.gov/
 Those looking for magnetic field synthesis code might want to look at
 ./Sample Code/Magnetic Models/ .
 
-As of version 3.0, the library has been split into two parts. This is the
-publicly available part. Many functions have been placed into a supplement
-that is only available to the U.S. Government Agencies and their
-contractors. The limited distribution supplement is expected to be made
-available to those with account on Bitbucket within Navy Lift in the near
-future. The Navy Lift Bitbucket is available at
-https://repo.lift.mhpcc.hpc.mil/stash/dashboard
+WHen released, a limited distribution version of this library will be made
+available on Navy Lift to Department of Defense employees and contractors
+at:
+https://repo.lift.mhpcc.hpc.mil/stash/projects/TCL/repos/tracker-component-library/
 
 Those looking to get a quick idea of a very simple end-to-end tracking
 algorithm (track initiation, data association, maintenance, and
@@ -46,19 +43,25 @@ running the CompileCLibraries function. Precompiled code is not distributed
 with the library. Note that a C/C++ compiler supported by Matlab must be
 installed. See below for comments regarding compilation.
 
-NOTABLE CHANGES SINCE VERSION 5.1:
-
-- A fourth spherical coordiante system was added to most functions that use
-  spherical coordinates.
-- Functions related to polar azimuthal equidistant coordinates and their
-  gradients.
-- The PDF and the CDF of the bivariate empirical copula distribution.
-- Triangular and tetrahedral barycentric coordinates.
-- A new function ellips2SpecOscCoords related to conversions with respect
-  to a reference osculating sphere.
-- Replaced the old default Earth photo in plotMapOnEllipsoid with a higher
-  resolution image.
+SOME OF THE CHANGES SINCE VERSION 5.2:
 - Bug fixes.
+- Many new functions related to cubature integration over triangles,
+  tetrahedra, cubes, pyramids, and prisms.
+- Functions for unconstrained and equality constrained semidefinite
+  quadratic programming allowing one to get various solutions with 
+  semidefQuadProgUnconst and semidefQuadProgEqConst.
+- 2D integer quadratic programming both unconstrained and with non-
+  negativity constraints in convexQuadProgIntegerNoConst2D.
+- Functions related to triangles on a sphere and in Euclidean geometry
+  including spherTriangArea4Angles, spherTriangArea4Sides,
+  triangleArea4Sides,spherTriSides4Angles, sideAngles2SpherTriangArea and
+  others.
+- The function bivarGaussRectangleCDF for computing the integral of the PDF
+  of a bivariate Gaussian distribution over a rectangular region.
+- The function fitHypersphere2SurfPoints to fit a sphere to given points.
+- The chain rule for multivariate second derivatives is in
+  HessianChainRule.
+- Functions for bivariate Gaussian copula in Gaussian2C.
 
 COMPILED CODE:
 
@@ -192,7 +195,7 @@ Name the file NASABlueMarble.jpg and place the file in Misc/data . This is
 used as the default map to show on the Earth given by the
 plotMapOnEllipsoid function.
 
-March 2022 David F. Crouse, Naval Research Laboratory, Washington D.C.<br>
+February 2023 David F. Crouse, Naval Research Laboratory, Washington D.C.<br>
 (UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 LICENSE:

@@ -81,7 +81,7 @@ function [R,Q]=ICMCovEst(z,H,F,u,params2Est,num2Skip,maxLag,xInit,RInit,QInit,nu
 %gain depends on the asymptotic state prediction covariance matrix and is
 %obatained by solving the Riccatti equation. To get rid of the reliance of
 %the estimates on the initial estimate x, an option has been made to
-%iterate the estimator: After estimating R and Q, a Fisher- Potter
+%iterate the estimator: After estimating R and Q, a Fisher-Potter
 %information filter smoother is used to get an improved initial estimate of
 %x and a new gain is computed using the estimates of R and Q. Also, since
 %the results of [1] are only asymptotically valid, an option num2Skip is

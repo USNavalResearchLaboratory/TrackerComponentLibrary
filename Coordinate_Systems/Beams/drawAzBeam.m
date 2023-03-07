@@ -1,13 +1,14 @@
 function drawAzBeam(azCenter,beamHalfwidth,range,systemType,lRx,M,closeEnds,varargin)
-%%DRAWANGLEBEAM Draw the outline of a polar beam in a particular direction.
-%           This does not shape the beam based upon gain or anything. It
-%           just outlines a region, drawing a curve on the end. This can be
-%           useful for determining whether plotted targets are near various
-%           beams in 2D.
+%%DRAWANGLEBEAM Draw the outline in 2D Cartesian coordinates of a polar
+%           beam in a particular direction. This does not shape the beam
+%           based upon gain. It just outlines a region, drawing a curve on
+%           the end at a constant range, if desired. This can be useful for
+%           determining whether plotted targets are near various beams in
+%           2D.
 %
 %INPUTS: azCenter The scalar center angle of the beam in radians.
 %   beamHalfwidth The distance from the center of the beam to one side of
-%                 the beam in radians. 
+%                 the beam in radians. This must be >0.
 %           range This can be a scalar or a length-2 vector. If a scalar,
 %                 it is the maximum extent of the range to which the beam
 %                 is drawn. If this is a length-2 vector, then range(1) is
@@ -18,9 +19,9 @@ function drawAzBeam(azCenter,beamHalfwidth,range,systemType,lRx,M,closeEnds,vara
 %                 0 (The default if omitted or an empty matrix is passed)
 %                   The azimuth angle is counterclockwise from the x axis.
 %                 1 The azimuth angle is measured clockwise from the y axis.
-%             zRx The 2X1 [x;y] location vector of the receiver in
+%             lRx The 2X1 [x;y] location vector of the receiver in
 %                 Cartesian coordinates.  If this parameter is omitted or
-%                 an empty matrix is passed, then the receivers are assumed
+%                 an empty matrix is passed, then the receiver is assumed
 %                 to be at the origin.
 %               M A 2X2 rotation matrices to go from the alignment of the
 %                 global coordinate system to that at the receiver. If
@@ -47,7 +48,7 @@ function drawAzBeam(azCenter,beamHalfwidth,range,systemType,lRx,M,closeEnds,vara
 % azCenter=-pi/2;
 % drawAzBeam(azCenter,beamHalfwidth,range,[],[],[],[],'-k','linewidth',2)
 %
-%December 2020 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%January 2023 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 if(nargin<4||isempty(systemType))
@@ -77,8 +78,12 @@ if(systemType==1)
     azCenter=pi/2-azCenter;
 end
 
+if(beamHalfwidth<=0)
+    error('beamHalfwidth must be positive.')
+end
+
 %Save the value of hold on the plot so that it can be reset to its previous
-%state after plotting possibly two ellipses.
+%state after plotting multiple lines.
 holdVal=ishold();
 
 systemType=0;
@@ -120,7 +125,7 @@ if(range(1)~=0)
     ang=flip(ang);
     zPts(:,(numPts+1):(2*numPts))=pol2Cart([range(1)*ones(1,numPts);ang],systemType,useHalfRange,lRx,lRx,M);
 else
-    zPts(:,numPts+1)=[0;0];    
+    zPts(:,numPts+1)=lRx;    
 end
 zPts(:,totalNumPoints)=zPts(:,1);   
 plot(zPts(1,:),zPts(2,:),varargin{:})

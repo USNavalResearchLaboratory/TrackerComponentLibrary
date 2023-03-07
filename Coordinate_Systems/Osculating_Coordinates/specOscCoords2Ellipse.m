@@ -36,6 +36,7 @@ function latLonHEllipse=specOscCoords2Ellipse(latLonHSpherPts,rOsc,spherCent,aEl
 %    Nov. 2003.
 %
 %December 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
     if(nargin<5||isempty(fEllips))
         fEllips=Constants.WGS84Flattening;

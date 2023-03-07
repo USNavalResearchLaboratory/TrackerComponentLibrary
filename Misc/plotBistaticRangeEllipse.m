@@ -65,7 +65,7 @@ function plotBistaticRangeEllipse(rMeas,sigmaR2,lRx,lTx,lRef,MRef,refPoint,refTy
 %OUTPUTS: None.
 %
 %The function puts the bistatic ellipse parameters into centered quadratic
-%form. using getBistaticEllipse. The cut with the x-y plane is performed
+%form using getBistaticEllipse. The cut with the x-y plane is performed
 %using the projEllipse2ZPlane function. Plotting is then done using the 
 %drawEllipse function.
 %

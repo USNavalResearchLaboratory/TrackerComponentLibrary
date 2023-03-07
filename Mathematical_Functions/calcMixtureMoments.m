@@ -1,4 +1,4 @@
-function [mu,P]=calcMixtureMoments(xi,w,PHyp,muHyp,diffTransFun,numMergeDims)
+function [mu,P]=calcMixtureMoments(xi,w,PHyp,muHyp,diffTransFun,numMergeDims,omitSpreadTerms)
 %%CALCMIXTUREMOMENTS Given a set of sample vectors xi and associated
 %                    weights w, calculate the first two moments of the
 %                    mixture. Those are, the mean mu and the covariance
@@ -45,6 +45,12 @@ function [mu,P]=calcMixtureMoments(xi,w,PHyp,muHyp,diffTransFun,numMergeDims)
 %           IMM for display where some models have additional non-mixing
 %           components. The default if this parameter is omitted or an
 %           empty matrix is passed is numDim.
+% omitSpreadTerms An optional term that if ture makes P the average of PHyp
+%           rather than the true covariance matrix of the mixture. The
+%           default if omitted or an empty matrix is passed is false. As in
+%           Chapter 1.4.16 of [1], the covariance matrix computation
+%           includes a spread of the means term. If this is true, then that
+%           term is omitted.
 %
 %OUTPUTS: mu The numMergeDimsX1 mean of the mixture.
 %          P The numMergeDimsXnumMergeDims covariance matrix of the
@@ -75,6 +81,10 @@ function [mu,P]=calcMixtureMoments(xi,w,PHyp,muHyp,diffTransFun,numMergeDims)
 %March 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<7||isempty(omitSpreadTerms))
+    omitSpreadTerms=false;
+end
+
 if(nargin<6||isempty(numMergeDims))
     numMergeDims=size(xi,1);
 end
@@ -94,11 +104,11 @@ end
 numPoints=size(xi,2);
 
 if(nargin<2||isempty(w))
-    w=(1/numPoints)*ones(numPoints,1);
+    w=ones(numPoints,1);
 end
 
-%Make sure that w is a column vector
-w=w(:);
+%Make sure that w is a normalized column vector
+w=w(:)/sum(w(:));
 
 mu=sum(bsxfun(@times,xi(1:numMergeDims,:),w.'),2);%The mean
 
@@ -109,19 +119,29 @@ if(nargout>1)
         mean2Use=mu;
     end
     
-    if(~isempty(diffTransFun))
-        diff=diffTransFun(bsxfun(@minus,xi(1:numMergeDims,:),mean2Use));
-    else
-        diff=bsxfun(@minus,xi(1:numMergeDims,:),mean2Use);
-    end
     P=zeros(numMergeDims,numMergeDims);
-    if(~isempty(PHyp))%If covariance matrices are provided.
-        for curPoint=1:numPoints
-            P=P+w(curPoint)*(PHyp(1:numMergeDims,1:numMergeDims,curPoint)+diff(:,curPoint)*diff(:,curPoint)');
+
+    if(omitSpreadTerms==false)
+        if(~isempty(diffTransFun))
+            diff=diffTransFun(bsxfun(@minus,xi(1:numMergeDims,:),mean2Use));
+        else
+            diff=bsxfun(@minus,xi(1:numMergeDims,:),mean2Use);
         end
-    else
+    
+        if(~isempty(PHyp))%If covariance matrices are provided.
+            for curPoint=1:numPoints
+                P=P+w(curPoint)*(PHyp(1:numMergeDims,1:numMergeDims,curPoint)+diff(:,curPoint)*diff(:,curPoint)');
+            end
+        else
+            for curPoint=1:numPoints
+                P=P+w(curPoint)*(diff(:,curPoint)*diff(:,curPoint)');
+            end
+        end
+    elseif(~isempty(PHyp))
+        %If covariance matrices are provided and we are not including the
+        %spread terms (A solution that is generally incorrect).
         for curPoint=1:numPoints
-            P=P+w(curPoint)*(diff(:,curPoint)*diff(:,curPoint)');
+            P=P+w(curPoint)*PHyp(1:numMergeDims,1:numMergeDims,curPoint);
         end
     end
 end

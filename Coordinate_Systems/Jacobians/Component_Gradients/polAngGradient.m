@@ -1,4 +1,4 @@
-function JTotal=polAngGradient(xG,systemType,lRx,M)
+function JTotal=polAngGradient(xG,systemType,lRx)
 %%POLANGGRADIENT Determine the gradient of the angle of a 2D polar
 %           measurement with respect to position (gradient components for
 %           velocity etc. are zero and are not provided).Atmospheric and
@@ -17,10 +17,6 @@ function JTotal=polAngGradient(xG,systemType,lRx,M)
 %      lRx The 2X1 [x;y] location vector of the receiver in Cartesian
 %          coordinates. If this parameter is omitted or an empty matrix is
 %          passed, then the receiver is assumed to be at the origin.
-%        M A 2X2 rotation matrix to go from the alignment of the global
-%          coordinate system to that at the receiver. As noted below, this
-%          can be omitted or an empty matrix passed, because  M does not
-%          actually matter.
 %
 %OUTPUTS: JTotal A 1X2XN set of gradient matrices of the polar angle taken
 %           with respect to the components [x,y] in 2D in that order for
@@ -40,13 +36,11 @@ function JTotal=polAngGradient(xG,systemType,lRx,M)
 %Say that M=[m11,m12;m21,m22] is a rotation matrix. Then, the partial
 %derivative with respect to x is explicitly: 
 %((m12*m21-m11*m22)*y)/((m11^2+m21^2)*x^2+2*(m11*m12+m21*m22)*x*y+(m12^2+m22^2)*y^2)
-%However, one will see that because M is a roation matrix and M*M'=eye(2)
+%However, one will see that because M is a rotation matrix and M*M'=eye(2)
 %then m12*m21-m11*m22=-1, m11^2+m21^2=m12^2+m22^2=1, and m11*m12+m21*m22=0,
 %which is the same as if no rotation matrix were present. Basically, all M
 %does is add a constant to the direction angle; it does not change any of
-%the derivatives. Thus, M does not matter for the Jacobian. We just include
-%it as an input so that one is aware that the function will work with
-%rotated measurement systems.
+%the derivatives. Thus, M does not matter for the Jacobian.
 %
 %EXAMPLE:
 %Here, we verify that a numerically differentiated Jacobian is consistent
@@ -56,7 +50,7 @@ function JTotal=polAngGradient(xG,systemType,lRx,M)
 % epsVal=1e-5;
 % systemType=0;
 % M=randRotMat(2);
-% J=polAngGradient(x,systemType,lRx,M);
+% J=polAngGradient(x,systemType,lRx);
 % 
 % theta=getPolAngle(x,systemType,lRx,M);
 % thetadX=getPolAngle(x+[epsVal;0],systemType,lRx,M);

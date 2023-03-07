@@ -3,12 +3,13 @@ function sols=solveQuadBivarEq(coeffsA,coeffsB,AbsTol)
 %                  equations. This assumes that the systems are well
 %                  defined so there exists a finite number of solutions.
 %
-%INPUTS: coeffsA, coeffsB Hypermatrices of the coefficients for the
+%INPUTS: coeffsA, coeffsB 3X3 matrices of the coefficients for the
 %               multivariate polynomials whose zeros are desired. These are
 %               arranged such that coeffsA(a1,a2) corresponds to the
 %               coefficient of an x1^(a1-1)*x2^(a2-1) term in the first
 %               polynomial. Entries corresponding to degrees higher than
-%               two are ignored. For example coeffsA(3+1,3+1) is ignored.
+%               two are ignored. For example coeffsA(3+1,3+1) is ignored if
+%               a matrix larger than 3X3 is passed.
 %        AbsTol A tolerance value for determining whether the sum of the
 %               magnitudes of the two equations is zero. If omitted or an
 %               empty matrix is passed, the default of 1e-7 is used. There
@@ -18,7 +19,8 @@ function sols=solveQuadBivarEq(coeffsA,coeffsB,AbsTol)
 %              solutions; sols(2,:) are the corresponding y solutions.
 %              There can be up to four solutions.
 %
-%The problem is solved by eliminating one variable resulting in a quartic
+%The basic idea behind this function is discussed in Appendix A of [1]. The
+%problem is solved by eliminating one variable resulting in a quartic
 %equation that can be easily solved. Given the solution to the quartic, the
 %results can be substituted back into the quadratic equations. However, the
 %quadratics produce extra solutions. Normally, one would just choose the
@@ -27,12 +29,13 @@ function sols=solveQuadBivarEq(coeffsA,coeffsB,AbsTol)
 %AbsTol in agreement, but we can only return four solutions, because
 %Bézout's number is four. Thus, if more than four solutions are saved, we
 %take the lowest-cost solution and then sequentially take the others such
-%that they maximize the minimum distance to previous solutions. In the end,
-%however, finite precision issues can occasionally cause problems when
-%repeated roots are present.
+%that they maximize the minimum distance to previous solutions (This
+%heuristic helps avoid near-duplicate solutions). In the end, however,
+%finite precision issues can occasionally cause problems when repeated
+%roots are present.
 %
 %EXAMPLE 1:
-%Consider the system
+%Consider the system:
 %0=-x1^2+2*x1*x2+x2^2+5*x1-3*x2-4
 %0=x1^2+2*x1*x2+x2^2-1
 % coeffsA=zeros(2+1,2+1);
@@ -83,7 +86,13 @@ function sols=solveQuadBivarEq(coeffsA,coeffsB,AbsTol)
 % coeffsB(2+1,0+1)=1;
 % sols=solveQuadBivarEq(coeffsA,coeffsB)
 %Here, one can see that there is a slight loss of precision and the results
-%veer slightly complex.
+%veer slightly complex. Of course, if one knows that only real solutions
+%should exist, one can simple discard the imaginary component.
+%
+%REFERENCES:
+%[1] D. F. Crouse, "General multivariate polynomial target localization and
+%    initial estimation," Journal of Advances in Infromation Fusion, vol.
+%    13, no. 1, pp. 68-91, Jun. 2018.
 %
 %April 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

@@ -1,4 +1,4 @@
-function [azStart,dist,azEnd,latLonWaypoints]=indirectGreatCircleProb(latLonStart,latLonEnd,r,N,algorithm,waypointType)
+function [azStart,dist,azEnd,latLonWaypoints]=indirectGreatCircleProb(latLonStart,latLonEnd,r,N,algorithm,waypointType,noJumps)
 %%INDIRECTGREATCIRCLEPROB Solve the indirect great circle problem. That is,
 %                      given two points on a spherical Earth, find the
 %                      initial bearing and distance one must travel to
@@ -61,10 +61,13 @@ function [azStart,dist,azEnd,latLonWaypoints]=indirectGreatCircleProb(latLonStar
 % latLonWaypoints A 2X(N+2) set of waypoints on the trajectory.
 %                 latLonWaypoints(:,i) is the ith points as
 %                 [latitude;longitude] in radians. The first point is
-%                 latLonStart and the final points is latLonEnd. The other
-%                 points are equally spaced along the trajectory. If the
-%                 trajectory is meridional and waypointType=1, then only
-%                 the starting and ending points will be returned.
+%                 latLonStart and the final points is latLonEnd, though the
+%                 points are made to avoid jumps of 2*pi in longitude,
+%                 which can mean that the last point in this can be off
+%                 from the provided last point by a factor of 2*pi. The
+%                 other points are equally spaced along the trajectory. If
+%                 the trajectory is meridional and waypointType=1, then
+%                 only the starting and ending points will be returned.
 %
 %Great circles are geodesics on a sphere. A geodesic path between two
 %points on a sphere is much simpler to determine as compared to an
@@ -173,13 +176,17 @@ function [azStart,dist,azEnd,latLonWaypoints]=indirectGreatCircleProb(latLonStar
 %    circle sailing: The COFI method," The Journal of Navigation, vol. 67,
 %    no. 3, pp. 403-418, May 2014.
 %[2] D. F. Crouse, "Singularity-free great-circle sailing," Naval Research
-%    Laboratory, Washington, DC, Tech. Rep. NRL/5340/MR–2021/4, 26
+%    Laboratory, Washington, DC, Tech. Rep. NRL/5340/MR-2021/4, 26
 %    Jul. 2021.
-%[3] J. P. Snyder, "Map projections- a working manual," U.S. Geological
+%[3] J. P. Snyder, "Map projections-a working manual," U.S. Geological
 %    Survey, Tech. Rep. 1395, 1987.
 %
 %August 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+if(nargin<7||isempty(noJumps))
+    noJumps=true;
+end
 
 if(nargin<6||isempty(waypointType))
     waypointType=0;
@@ -254,6 +261,20 @@ switch(algorithm)
         error('Unknown algorithm chosen.')
 end
 
+if(~isempty(N)&&noJumps&&N>0)
+    cumOffset=0;
+    for k=1:numPts
+        for j=2:(N+2)
+            diffVal=latLonWaypoints(2,j)+cumOffset-latLonWaypoints(2,j-1);
+            if(diffVal>pi)
+                cumOffset=cumOffset-2*pi;
+            elseif(diffVal<-pi)
+                cumOffset=cumOffset+2*pi;
+            end
+            latLonWaypoints(2,j)=latLonWaypoints(2,j)+cumOffset;
+        end
+    end
+end
 end
 
 function [azStart,dist,azEnd,latLonWayPoints]=indirectGreatCircleProbChen(latLonStart,latLonEnd,r,N,waypointType)
@@ -431,7 +452,7 @@ function [azStart,dist,azEnd,latLonWayPoints]=indirectGreatCircleProbCrouse(latL
 %
 %REFERENCES:
 %[1] D. F. Crouse, "Singularity-free great-circle sailing," Naval Research
-%    Laboratory, Washington, DC, Tech. Rep. NRL/5340/MR–2021/4, 26
+%    Laboratory, Washington, DC, Tech. Rep. NRL/5340/MR-2021/4, 26
 %    Jul. 2021.
 %
 %August 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
@@ -508,7 +529,7 @@ function [azStart,dist,azEnd,latLonWayPoints]=indirectGreatCircleProbSnyder(latL
 %   very simple formula in Equation 5-4b in [1].
 %
 %REFERENCES:
-%[1] J. P. Snyder, "Map projections- a working manual," U.S. Geological
+%[1] J. P. Snyder, "Map projections-a working manual," U.S. Geological
 %    Survey, Tech. Rep. 1395, 1987.
 %
 %December 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.

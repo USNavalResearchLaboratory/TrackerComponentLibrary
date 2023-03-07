@@ -3,7 +3,8 @@ function JTotal=rangeRateGradient(xG,useHalfRange,lTx,lRx)
 %          rate measurement with respect to the position and velocity
 %          components of a target state. Higher order gradient terms are
 %          not provided and are zero. Relativity and atmospheric effects
-%          are not taken into account.
+%          are not taken into account. If the target and transmitter are
+%          collocated, the target is assumed to be the transmitter.
 %
 %INPUTS: xG The (2*numDims)XN target state vectors with components of
 %          position and velocity for numDims in {1,2,3}. For example, in
@@ -27,7 +28,7 @@ function JTotal=rangeRateGradient(xG,useHalfRange,lTx,lRx)
 %The non-relativistic range-rate approximation is derived in [1], where
 %expressions for the gradient are given in Appendix I.
 %
-%EXAMPLE:
+%EXAMPLE 1:
 %Here, we demonstrate that the gradient produced by this function is
 %consistent with what one obtains using numerical differentiation.
 % lRx=[4e3;-6e3;12;-80;-80;2];
@@ -39,6 +40,18 @@ function JTotal=rangeRateGradient(xG,useHalfRange,lTx,lRx)
 % gradNumDiff=numDiff(t,fun,1);
 % RelDiff=max(abs((gradNumDiff-gradVal)./gradNumDiff))
 %The relative difference between the values should be less than 1e-8, which
+%indicates good agreement.
+%
+%EXAMPLE 2:
+%This is similar to example 1, exept the target is the transmitter.
+% lRx=[4e3;-6e3;12;-80;-80;2];
+% t=[-3e3;-2e3;-1e3;300;-100;1];
+% useHalfRange=false;
+% gradVal=rangeRateGradient(t,useHalfRange,t,lRx);
+% fun=@(t)getRangeRate(t,useHalfRange,t,lRx);
+% gradNumDiff=numDiff(t,fun,1);
+% RelDiff=max(abs((gradNumDiff-gradVal)./gradNumDiff))
+%The relative difference between the values should be around 1e-8, which
 %indicates good agreement.
 %
 %REFERENCES:
@@ -75,24 +88,31 @@ for curPoint=1:N
             dtr=x(1)-lRx(1);
             dtl=x(1)-lTx(1);
 
-            %The position derivaties.
+            %The position derivatives.
             J(1)=0;
 
             %The velocity derivatives.
-            J(2)=dtr/norm(dtr)+dtl/norm(dtl);
+            J(2)=dtr/norm(dtr);
+
+            if(dtl~=0)
+                J(2)=J(2)+dtl/norm(dtl);
+            end
         case 2
             J=zeros(1,4);
 
             dtr=x(1:2)-lRx(1:2);
             dtl=x(1:2)-lTx(1:2);
-
-            drB=dtr/norm(dtr)+dtl/norm(dtl);
-
             dvr=x(3:4)-lRx(3:4);
             dvl=x(3:4)-lTx(3:4);
 
-            %The position derivaties.
-            J(1:2)=A2(dtr)*dvr/norm(dtr)^3+A2(dtl)*dvl/norm(dtl)^3;
+            drB=dtr/norm(dtr);
+            %The position derivatives.
+            J(1:2)=A2(dtr)*dvr/norm(dtr)^3;
+
+            if(any(dtl~=0))
+                drB=drB+dtl/norm(dtl);
+                J(1:2)=vec(J(1:2))+A2(dtl)*dvl/norm(dtl)^3;
+            end
 
             %The velocity derivatives.
             J(3:4)=drB;
@@ -101,14 +121,17 @@ for curPoint=1:N
 
             dtr=x(1:3)-lRx(1:3);
             dtl=x(1:3)-lTx(1:3);
-
-            drB=dtr/norm(dtr)+dtl/norm(dtl);
-
             dvr=x(4:6)-lRx(4:6);
             dvl=x(4:6)-lTx(4:6);
 
-            %The position derivaties.
-            J(1:3)=A(dtr)*dvr/norm(dtr)^3+A(dtl)*dvl/norm(dtl)^3;
+            drB=dtr/norm(dtr);
+            %The position derivatives.
+            J(1:3)=A(dtr)*dvr/norm(dtr)^3;
+
+            if(any(dtl~=0))
+                drB=drB+dtl/norm(dtl);
+                J(1:3)=vec(J(1:3))+A(dtl)*dvl/norm(dtl)^3;
+            end
 
             %The velocity derivatives.
             J(4:6)=drB;

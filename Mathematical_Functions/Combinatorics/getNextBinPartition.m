@@ -4,16 +4,16 @@ function [pPart,cPart,recurData]=getNextBinPartition(param1)
 %           powers of 2 and cPart are integer coefficients >=1.
 %
 %INPUTS: param1 To get the first partition in the sequence, run this
-%               function with param1=n, the integer>=1 to be partiioned. TO
-%               get subsequent values, use param1=recurData.
+%               function with param1=n, the integer>=1 to be partitioned.
+%               To get subsequent values, use param1=recurData.
 %
 %OUTPUTS: pPart, cPart The numPartX1 vectors expressing the current
 %               partition with n=sum(pPart.*cPart), pPart being powers of 2
 %               and cPart being integers>=1. The number of parts will vary.
 %               When the final binary partition has been passed, empty
 %               matrices will be returned.
-%     recurData A data structure that can be passed back to this function to
-%               get subsequent binary partitions.
+%     recurData A data structure that can be passed back to this function
+%               to get subsequent binary partitions.
 %
 %This function implements Problem 62 of Section 7.2.1.4 of [1].
 %

@@ -20,8 +20,9 @@ function [aVal,aJacob,aHess,papt]=aCVPolar(x)
 %         papt The 4X1  partial derivative with resect to time of aVal.
 %              This is all zeros, because the model is time invariant.
 %
-%A derivation of the dynamic model is provided here. Let rVec be a position
-%vector. We shall use the orthonormal basis vectors
+%A full derivation of the dynamic model is provided in [1]. Summarizing it
+%here, let rVec be a position vector. We shall use the orthonormal basis
+%vectors
 %u_r=[cos(theta);sin(theta)] and u_theta=[-sin(theta);cos(theta)]
 %if one is measuring theta from the x axis counter clockwise and 
 %u_r=[sin(theta);cos(theta)] and u_theta=[cos(theta);-sin(theta)]
@@ -74,6 +75,11 @@ function [aVal,aJacob,aHess,papt]=aCVPolar(x)
 % max(abs(err(:)))
 %One will see that the maximum error is on the order of 1.6e-11, indicating
 %good agreement.
+%
+%REFERENCES:
+%[1] D. F. Crouse, "Basic Linear Dynamic Models in Local Coordinates,"
+%    Naval Research Laboratory, Washington, D.C., Tech. Rep.
+%    NRL/MR/5344--19-9882, 24 Aug. 2019.
 %
 %August 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

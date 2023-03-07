@@ -90,16 +90,16 @@ if(nargin<3)
             azimuth=atan2(y,x);
             %The atan2 formulation is numerically more accurate than the
             %asin formulation.
-            elevation=atan2(z,hypot(x,y));%=asin(x./r)
+            elevation=atan2(z,hypot(x,y));%=asin(z./r)
         case 1
             azimuth=atan2(x,z);
             elevation=atan2(y,hypot(z,x));%=asin(y./r);
         case 2
             azimuth=atan2(y,x);
-            elevation=pi/2-atan2(z,hypot(x,y));%=asin(x./r)
+            elevation=pi/2-atan2(z,hypot(x,y));%=asin(z./r)
         case 3
             azimuth=atan2(x,y);
-            elevation=atan2(z,hypot(x,y));%=asin(x./r)
+            elevation=atan2(z,hypot(x,y));%=asin(z./r)
         otherwise
             error('Invalid system type specified.')
     end

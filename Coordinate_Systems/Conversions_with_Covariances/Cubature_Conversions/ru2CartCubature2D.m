@@ -1,5 +1,5 @@
-function [zCart,RCart]=ru2Cart2DCubature(z,SR,useHalfRange,zTx,zRx,M,xi,w)
-%%RU2CART2DCUBATURE Use cubature integration to approximate the moments of
+function [zCart,RCart]=ru2CartCubature2D(z,SR,useHalfRange,zTx,zRx,M,xi,w)
+%%RU2CARTCUBATURE2D Use cubature integration to approximate the moments of
 %         a  noise-corrupted bistatic r-u (or r-u-w) location into 2D
 %         Cartesian coordinates. If r-u coordinates are used, the target
 %         is assumed to be in front of the receiver (local y coordinate is

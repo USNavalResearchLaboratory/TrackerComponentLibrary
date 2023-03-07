@@ -1,4 +1,4 @@
-function [zCart,RCart]=monostatRuv2CartTaylor(zMeas,R,zRx,M,algorithm)
+function [zCart,RCart]=monostatRuv2CartTaylor(zMeas,R,useHalfRange,zRx,M,algorithm)
 %MONOSTATRUV2CARTTAYLOR Approximate the Cartesian mean and covariance
 %                 matrix of a Gaussian noise-corrupted measurement in
 %                 monostatic r-u-v coordinates. This function approximates
@@ -13,6 +13,10 @@ function [zCart,RCart]=monostatRuv2CartTaylor(zMeas,R,zRx,M,algorithm)
 %        R The 3X3XnumMeas measurement covariance matrices for the
 %          measurements. If all of the matrices are the same, then this can
 %          just be a single 3X3 matrix.
+% useHalfRange A boolean value specifying whether the bistatic range value
+%          has been divided by two. This normally comes up when operating
+%          in monostatic mode, so that the range reported is a one-way
+%          range. The default if this parameter is not provided is false.
 %      zRx The 3XN [x;y;z] location vector of the receivers in Cartesian
 %          coordinates. If this parameter is omitted, then the receivers
 %          are assumed to be at the origin. If only a single vector is
@@ -52,7 +56,8 @@ function [zCart,RCart]=monostatRuv2CartTaylor(zMeas,R,zRx,M,algorithm)
 % numMCRuns=5000;
 % numUVals=10;
 % 
-% r=100e3;%True range.
+% r=100e3;%True one-way range.
+% useHalfRange=true;%Indicated one-way range.
 % v=0;%True V value.
 % sigmaR=1;
 % sigmaU=1e-3;
@@ -74,14 +79,14 @@ function [zCart,RCart]=monostatRuv2CartTaylor(zMeas,R,zRx,M,algorithm)
 % for curU=1:numUVals
 %     u=uVals(curU);
 %     zTrue=[r;u;v];
-%     zCartTrue(:,curU)=ruv2Cart(zTrue,true);
+%     zCartTrue(:,curU)=ruv2Cart(zTrue,useHalfRange);
 %     for curRun=1:numMCRuns
 %         z=zTrue+SR*randn(3,1);
 %         
-%         [zCart1(:,curU,curRun),RCart1(:,:,curU,curRun)]=monostatRuv2CartTaylor(z,R,[],[],0);
-%         [zCart2(:,curU,curRun),RCart2(:,:,curU,curRun)]=monostatRuv2CartTaylor(z,R,[],[],1);
-%         [zCart3(:,curU,curRun),RCart3(:,:,curU,curRun)]=monostatRuv2CartTaylor(z,R,[],[],2);
-%         [zCart4(:,curU,curRun),RCart4(:,:,curU,curRun)]=ruv2CartCubature(z,SR,true);
+%         [zCart1(:,curU,curRun),RCart1(:,:,curU,curRun)]=monostatRuv2CartTaylor(z,R,useHalfRange,[],[],0);
+%         [zCart2(:,curU,curRun),RCart2(:,:,curU,curRun)]=monostatRuv2CartTaylor(z,R,useHalfRange,[],[],1);
+%         [zCart3(:,curU,curRun),RCart3(:,:,curU,curRun)]=monostatRuv2CartTaylor(z,R,useHalfRange,[],[],2);
+%         [zCart4(:,curU,curRun),RCart4(:,:,curU,curRun)]=ruv2CartCubature(z,SR,useHalfRange);
 %     end
 % end
 % NEES1=calcNEES(zCartTrue,zCart1,RCart1,true);
@@ -120,16 +125,20 @@ function [zCart,RCart]=monostatRuv2CartTaylor(zMeas,R,zRx,M,algorithm)
 
 numMeas=size(zMeas,2);
 
-if(nargin<5||isempty(algorithm))
+if(nargin<6||isempty(algorithm))
     algorithm=1;
 end
 
-if(nargin<4||isempty(M))
+if(nargin<5||isempty(M))
     M=eye(3);
 end
 
-if(nargin<3||isempty(zRx))
+if(nargin<4||isempty(zRx))
     zRx=zeros(3,1);
+end
+
+if(nargin<3||isempty(useHalfRange))
+    useHalfRange=false;
 end
 
 if(size(R,3)==1)
@@ -142,6 +151,14 @@ end
 
 if(size(zRx,2)==1)
     zRx=repmat(zRx,[1,numMeas]);
+end
+
+if(useHalfRange==false)
+    zMeas(1)=zMeas(1)/2;
+    D=diag([1/2;1;1]);
+    for curMeas=1:numMeas
+        R(:,:,curMeas)=D*R(:,:,curMeas)*D';
+    end
 end
 
 zCart=zeros(3,numMeas);

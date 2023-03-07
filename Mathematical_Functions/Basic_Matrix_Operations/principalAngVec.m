@@ -3,7 +3,7 @@ function [d,F,G]=principalAngVec(A,B)
 %           the principal angles and vectors between the matrices. This can
 %           be used in canonical correlation analysis to find combinations
 %           of variables with maximum correlation between each other.
-%           Specifically, th e principle angles are defined recursively by
+%           Specifically, the principle angles are defined recursively by
 %           d(k)=cos(theta_k)=F(:,k)'*G(:,k)=
 %               max_{F(:,k)} max_{G(:,k)} F(:,k)'*G(:,k)
 %           where in the optimization F(:,k)  is a unit vector in the space

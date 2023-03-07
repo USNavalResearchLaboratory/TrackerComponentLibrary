@@ -1,9 +1,9 @@
 function HTotal=uHessian3D(xG,lRx,M)
 %%UHESSIAN3D Determine the Hessian matrix (second derivative matrix) of a
-%           range and a single direction cosine u component in 3D with
-%           respect to 3D position. Relativity and atmospheric effects are
-%           not taken into account. This function is essentially the same
-%           as uvHessian without the v component.
+%           a single direction cosine u component in 3D with respect to 3D
+%           position. Relativity and atmospheric effects are not taken into
+%           account. This function is essentially the same as uvHessian
+%           without the v component.
 %
 %INPUTS: xG The 3XN target position vectors in the global coordinate system
 %           with [x;y;z] components for which gradients are desired.

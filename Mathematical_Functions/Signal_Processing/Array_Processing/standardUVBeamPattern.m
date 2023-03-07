@@ -67,7 +67,7 @@ function [Rsp,U,V]=standardUVBeamPattern(T,xyPoints,normVals,Sigma,lineParams,bo
 %             U and V values U(i,j) and V(i,j). For a 1D response for a
 %             linear array, Rsp(i) corresponds to U(i) and if xyPoints is
 %             2XnumDims, V(i) is the corresponding v value. The value of
-%             Rsp for points outside of the visible region (u^2+v^2>1) will
+%             Rsp for points outside of the visible region (u^2+v^2>1)
 %             is set to zero.
 %           U A matrix of points corresponding to the u values of the
 %             responses in Rsp.

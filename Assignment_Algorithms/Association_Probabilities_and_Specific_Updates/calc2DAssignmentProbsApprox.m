@@ -22,7 +22,7 @@ function beta=calc2DAssignmentProbsApprox(A,approxType,diagAugment,delta,maxIter
 % approxType An optional parameter specifying the type of approximation to
 %          use. The default if omitted is 0. Possible values are
 %          0 The sum-product belief propagation algorithm of [6].
-%          1 The Cheap JPDA of [1].
+%          1 The cheap JPDA of [1].
 %          2 The modified cheap JPDAF of [2].
 %          3 The algorithm of [3].
 %          4 The matrix permanent approximation algorithm of [7], which

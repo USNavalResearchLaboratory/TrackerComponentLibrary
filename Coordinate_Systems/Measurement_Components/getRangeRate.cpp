@@ -1,41 +1,8 @@
 /*GETRANGERATE Obtain the bistatic range rates of targets in the absence
 *             of refraction under non-relativistic mechanics, ignoring
 *             atmospheric effects, when the transmitter, target and
-*             receiver are all moving.
-*
-*INPUTS: xTar The Cartesian state of the targets in 1D, 2D, or 3D Cartesian
-*             space. If 3D, then xTar is a 6XN matrix, (or where the first
-*             3 components are position and the second 3 are velocity.
-*             If, xTar is a 4XN matrix, where the first two
-*             components are position and the second two velocity.
-*             Components are ordered position (x,y,z) and velocity
-*             (xDot,yDot,zDot). The same patterns applied in 1D.
-* useHalfRange A boolean value specifying whether the bistatic range value
-*             should be divided by two, which means that the range rate is
-*             divided by two. This normally comes up when operating in
-*             monostatic mode, so that the range reported is a one-way
-*             range. The default if this parameter is not provided is
-*             false.
-*         xTx An xTxDimXN matrix of the states of the transmitters
-*             consisting of stacked 1D, 2D, or 3D position and velocity
-*             components. If this parameter is omitted, the transmitters
-*             are assumed to be stationary at the origin. If only a single
-*             vector is passed, then the transmitter state is assumed the
-*             same for all of the target states being converted.
-*         xRx An xRxDimXN matrix of the states of the receivers consisting
-*             of stacked 1D, 2D, or 3D position and velocity components. If
-*             this parameter is omitted, the receivers are assumed to be
-*             stationary at the origin. If only a single vector is passed,
-*             then the receiver state is assumed the same for all of the
-*             target states being converted.
-*
-*OUTPUTS: rr The 1XN bistatic range rates of the targets. If
-*            useHalfRange=true, then the range rate is halved to reflect a
-*            halved range.
-*
-*This assumes that the target state that is provided has the same
-*dimensionality as the states of the transmitter and receiver and that all
-*of the states are in Cartesian coordinates.
+*             receiver are all moving. See the comments to the Matlab
+*             native implementation for more details.
 *
 *A derivation of this non-relativistic approximation is given in [1].
 *

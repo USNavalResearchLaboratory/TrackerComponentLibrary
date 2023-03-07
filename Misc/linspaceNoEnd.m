@@ -19,7 +19,7 @@ function vals=linspaceNoEnd(minVal,maxVal,numPoints,bothEnds)
 %OUTPUTS: vals A 1XnumPoints vector of equispaced points.
 %
 %This function can be useful if one wishes to generates uniform angles
-%since linspaceNoEnd(0,2*pi,numPoints) will generate numpoints uniformely
+%since linspaceNoEnd(0,2*pi,numPoints) will generate numPoints uniformly
 %spaced points without including 2*pi, which simply aliased back to 0.
 %
 %June 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.

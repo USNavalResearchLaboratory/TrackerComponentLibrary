@@ -60,7 +60,7 @@ if(nargin==2)
     %Special case.
     if(k==0)
         i=n+1;
-        curCombo=g;
+        curCombo=g(1:n);
         recurData.g=g;
         recurData.tau=tau;
         recurData.t=t;

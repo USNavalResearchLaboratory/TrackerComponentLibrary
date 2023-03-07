@@ -1,4 +1,4 @@
-function zCart=ruv2CartStdRefrac(zRUVBiased,useHalfRange,zTx,zRx,M,Ns,ce,ellipsOpts,xMax)
+function zCart=ruv2CartStdRefrac(zRUVBiased,useHalfRange,zTx,zRx,M,Ns,ce,rE,spherCent,xMax)
 %%RUV2CARTSTDREFRAC Convert points in refraction-corrupted bistatic r-u-v
 %         (or r-u-v-w) coordinates into Cartesian coordinates using a
 %         standard exponential atmospheric model.  If r-u-v coordinates are
@@ -42,11 +42,11 @@ function zCart=ruv2CartStdRefrac(zRUVBiased,useHalfRange,zTx,zRx,M,Ns,ce,ellipsO
 %          vector of the local coordinate system of the receiver is the
 %          pointing direction of the receiver. If this matrix is omitted,
 %          then the identity matrix is used.
-%       Ns The atmospheric refractivity reduced to the WGS-84 reference
-%          ellipsoid. Note that the refractivity is (n-1)*1e6, where n is
-%          the index of refraction. The function reduceStdRefrac2Spher can
-%          be used to reduce a refractivity to the ellipsoidal surface.
-%          This function does not allowe different refractivities to be
+%       Ns The atmospheric refractivity reduced to the reference sphere.
+%          Note that the refractivity is (n-1)*1e6, where n is the index of
+%          refraction. The function reduceStdRefrac2Spher can be used to
+%          reduce a refractivity to the surface of a reference ellipsoid.
+%          This function does not allow different refractivities to be
 %          used as the transmitter and receiver. If this parameter is
 %          omitted or an empty matrix is passed, a default value of 313 is
 %          used.
@@ -62,11 +62,15 @@ function zCart=ruv2CartStdRefrac(zRUVBiased,useHalfRange,zTx,zRx,M,Ns,ce,ellipsO
 %          values for the two constants are expConst=0.005577; and
 %          multConst=7.32; If ce is omitted or an empty matrix is passed,
 %          the value based on the standard model is used.
-% ellipOpts Optioanlly, a structure that contains elements changing the
-%          reference ellipsoid used. Possible entries are a for the
-%          semi-major axis and f for the flattening factor. If this
-%          parameter is omitted or an empty matrix is passed, then
-%          a=Constants.WGS84SemiMajorAxis and f=Constants.WGS84Flattening.
+% rE,spherCent The radius of the Earth to use for the spherical Earth
+%           approximation used in the model and also the offset between the
+%           global model and the local spherical model. It is assumed that
+%           zC,zTx,and zRx are all given in the global model and will need
+%           to be transformed to the local model to the used. If rE is
+%           omitted or an empty matrix is passed, then the default of
+%           [rE,spherCent]=osculatingSpher4LatLon(Cart2Ellipse(zRx)) is
+%           used. The defaults here mean that a WGS-84 reference ellipsoid
+%           is approximated by the local osculating sphere.
 %     xMax This function traces the ray to a maximum displacement in the
 %          local tangent plane prior (or vertically for nearly vertical
 %          directions) to attempting to find a particular range. This is an
@@ -100,11 +104,11 @@ function zCart=ruv2CartStdRefrac(zRUVBiased,useHalfRange,zTx,zRx,M,Ns,ce,ellipsO
 %In an example near Hawaii, we will convert a position into bistatic r-u-v
 %coordinates using Cart2RuvStdRefrac and then we will convert it back using
 %this function.
-% latLonRx=[20.269202;-155.852051]*(pi/180);%Degrees converted to radians.
+% latLonRx=deg2rad([20.269202;-155.852051]);%Degrees converted to radians.
 % AltRx=0;
-% latLonTx=[20.724568;-155.978394]*(pi/180);
+% latLonTx=deg2rad([20.724568;-155.978394]);
 % AltTx=0;
-% latLonTar=[20.835390;-155.313721]*(pi/180);
+% latLonTar=deg2rad([20.835390;-155.313721]);
 % AltTar=8e3;%8km target altitude.
 % %Convert locations to Cartesian.
 % zRx=ellips2Cart([latLonRx;AltRx]);
@@ -113,7 +117,7 @@ function zCart=ruv2CartStdRefrac(zRUVBiased,useHalfRange,zTx,zRx,M,Ns,ce,ellipsO
 % 
 % %The receiver faces 45 degrees East of North and 15 degrees up from the
 % %local ellipsoidal level.
-% M=findRFTransParam([latLonRx;AltRx],45*(pi/180),15*(pi/180));
+% M=findRFTransParam([latLonRx;AltRx],deg2rad(45),deg2rad(15));
 % Ns=350;%Assumed refractivity at the sea surface.
 % useHalfRange=false;
 % includeW=true;%Include third dimension of unit vector.
@@ -137,9 +141,23 @@ function zCart=ruv2CartStdRefrac(zRUVBiased,useHalfRange,zTx,zRx,M,Ns,ce,ellipsO
 %June 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<9||isempty(xMax))
+if(nargin<10||isempty(xMax))
     xMax=1000e3;%1000 kilometer assumed maximum x displacement.
 end
+
+if(nargin<8||isempty(rE))
+    %Use the radius of the Earth that is the radius of the osculating
+    %sphere at the location of the observed. This will be the radius used
+    %in the local spherical Earth approximation for computing atmospheric
+    %refraction. This uses the WGS-84 reference ellipsoid.
+    [rE,spherCent]=osculatingSpher4LatLon(Cart2Ellipse(zRx));
+end
+
+%Transform the sensor locations and use spherCent=0 in the following
+%computation. In the end, we will have to transform the target location
+%back to the global sphere.
+zRx=zRx-spherCent;
+zTx=zTx-spherCent;
 
 numMeas=size(zRUVBiased,2);
 
@@ -173,31 +191,10 @@ if(nargin<7||isempty(ce))
     ce=log(Ns/(Ns+DeltaN))/1000;%Units of inverse meters.
 end
 
-%Default parameters for the reference ellipsoid.
-a=Constants.WGS84SemiMajorAxis;
-f=Constants.WGS84Flattening;
-if(nargin>7&&~isempty(ellipsOpts))
-   if(isfield(ellipsOpts,'a'))
-      a=ellipsOpts.a;
-   end
-   
-   if(isfield(ellipsOpts,'f'))
-      f=ellipsOpts.f; 
-   end
-end
-
 if(useHalfRange)
     zRUVBiased(1,:)=2*zRUVBiased(1,:);
     useHalfRange=false;
 end
-
-%The location of the observer in ellipsoidal coordinates.
-plhPoint=Cart2Ellipse(zRx,[],a,f);
-
-%Find the radius of the Earth at the location of the observer. Use the
-%ellipsoidal Earth approximation. This will be the radius used in the local
-%spherical Earth approximation for computing atmospheric refraction.
-r0=norm(proj2Ellips(zRx,a,f));
 
 %If it is monostatic, then the extra boundary value problem for the
 %target-transmitter path need not be solved.
@@ -214,10 +211,10 @@ end
 %vector common to both coordinate systems in the local up vector, which
 %will be the local y axis. The second vector common to both will be the
 %local x vector, which will be the projection of xObj-xObs onto the local
-%tangent plane. Here, the vertical is the WGS-84 vertical, since the
-%precision of the model is low enough that the difference between the
-%WGS-84 vertical and the gravitational vertical should not matter.
-uENU=getENUAxes(plhPoint);
+%tangent plane. Here, the vertical is the spherical model vertical. Since
+%the precision of the model is low enough that the difference between the
+%spherical and gravitational verticals shouldn't matter.
+uENU=getENUAxes(Cart2Ellipse(zRx,[],rE,0));
 uVertGlobal=uENU(:,3);
 uVertLocal=[0;1;0];
 
@@ -271,10 +268,10 @@ for curMeas=1:numMeas
             zMeas=zRUVBiased(:,curMeas);
         end
 
-        yTrue=fminbnd(@(y)rangeCostVertical(y,y0Init,isMonostatic,zTx,zMeas,Ns,r0,ce,a,f),y0Init,y0Init+xMax,newOpts);
+        yTrue=fminbnd(@(y)rangeCostVertical(y,y0Init,isMonostatic,zTx,zMeas,Ns,rE,ce),y0Init,y0Init+xMax,newOpts);
 
         %Convert back into ECEF.
-        zCart(:,curMeas)=ECEF2LocalRot'*[0;yTrue-y0Init;0]+zRx;
+        zCart(:,curMeas)=ECEF2LocalRot'*[0;yTrue-y0Init;0]+zRx+spherCent;
         return;
     end
 
@@ -286,30 +283,29 @@ for curMeas=1:numMeas
     %Up the accuracy
     oldOpts=odeset();
     newOpts=odeset(oldOpts,'RelTol',1e-12,'AbsTol',1e-12,'Jacobian',@odefunJacob);
-    sol=ode45(@(x,y)expDiffEq(x,y,Ns,r0,ce),xSpan,initialCond,newOpts);
+    sol=ode45(@(x,y)expDiffEq(x,y,Ns,rE,ce),xSpan,initialCond,newOpts);
     %The solution sol is the monostatic traced path. We must find the value of
     %x such that the desired range is acquired after integrating over the path.
 
     oldOpts=optimset();
     newOpts=optimset(oldOpts,'TolX',1e-8);
-    xTrue=fminbnd(@(x)rangeCost(x,isMonostatic,sol,zTx,zRx,ECEF2LocalRot,y0Init,Ns,r0,ce,zRUVBiased(1,curMeas),a,f),0,xMax,newOpts);
+    xTrue=fminbnd(@(x)rangeCost(x,isMonostatic,sol,zTx,zRx,ECEF2LocalRot,y0Init,Ns,rE,ce,zRUVBiased(1,curMeas)),0,xMax,newOpts);
 
     yTrue=deval(sol,xTrue);
     yTrue=yTrue(1);%yTrue(1) is the position.
 
     %Convert back into ECEF.
-    zCart(:,curMeas)=ECEF2LocalRot'*[xTrue;yTrue-y0Init;0]+zRx;
+    zCart(:,curMeas)=ECEF2LocalRot'*[xTrue;yTrue-y0Init;0]+zRx+spherCent;
+end
 end
 
-end
-
-function val=rangeCost(x,isMonostatic,sol,zTx,zRx,ECEF2LocalRot,y0Init,Ns,r0,ce,biasedRange,a,f)
+function val=rangeCost(x,isMonostatic,sol,zTx,zRx,ECEF2LocalRot,y0Init,Ns,rE,ce,biasedRange)
 %The standard bistatic cost function for determining the range along the
 %line of sight when the line of sight is not (almost) directly above the
 %receiver.
 
     %Evaluate the range integral from the receiver to the target.
-    rRx=integral(@(x)pathFun2D(x,sol,Ns,r0,ce),0,x,'RelTol',1e-10,'AbsTol',1e-10);
+    rRx=integral(@(x)pathFun2D(x,sol,Ns,rE,ce),0,x,'RelTol',1e-10,'AbsTol',1e-10);
 
     if(isMonostatic==true)
         rTx=rRx;%No need to do the extra ray tracing in the monostatic case.
@@ -325,10 +321,7 @@ function val=rangeCost(x,isMonostatic,sol,zTx,zRx,ECEF2LocalRot,y0Init,Ns,r0,ce,
         
         %Now, solve for the apparent one-way range between the target and 
         %the transmitter.
-        ellipsOpts.a=a;
-        ellipsOpts.f=f;
-        
-        z=Cart2RuvStdRefrac(tarLocGlobalCur,true,zTx,zTx,[],Ns,[],ce,ellipsOpts);
+        z=Cart2RuvStdRefrac(tarLocGlobalCur,true,zTx,zTx,[],Ns,[],ce,rE,0);
         rTx=z(1);
     end
     %Return the squared difference between the integrated value and the
@@ -337,8 +330,8 @@ function val=rangeCost(x,isMonostatic,sol,zTx,zRx,ECEF2LocalRot,y0Init,Ns,r0,ce,
     val=val^2;
 end
 
-function val=rangeCostVertical(yMax,y0Init,isMonostatic,zTx,zMeas,Ns,r0,ce,a,f)
-    rRx=((exp(ce*(r0-y0Init))-exp(ce*(r0-yMax)))*Ns)/(1e6*ce)+yMax-y0Init;    
+function val=rangeCostVertical(yMax,y0Init,isMonostatic,zTx,zMeas,Ns,rE,ce)
+    rRx=((exp(ce*(rE-y0Init))-exp(ce*(rE-yMax)))*Ns)/(1e6*ce)+yMax-y0Init;    
 
     if(isMonostatic==true)
         rTx=rRx;%No need to do the extra ray tracing in the monostatic case.
@@ -350,10 +343,7 @@ function val=rangeCostVertical(yMax,y0Init,isMonostatic,zTx,zMeas,Ns,r0,ce,a,f)
         
         %Now, solve for the apparent one-way range between the target and 
         %the transmitter.
-        ellipsOpts.a=a;
-        ellipsOpts.f=f;
-        
-        z=Cart2RuvStdRefrac(tarLocGlobalCur,true,zTx,zTx,[],Ns,[],ce,ellipsOpts);
+        z=Cart2RuvStdRefrac(tarLocGlobalCur,true,zTx,zTx,[],Ns,[],ce,rE,0);
         rTx=z(1);
     end
     %Return the squared difference between the integrated value and the
@@ -363,16 +353,16 @@ function val=rangeCostVertical(yMax,y0Init,isMonostatic,zTx,zMeas,Ns,r0,ce,a,f)
 end
 
 
-function val=pathFun2D(x,sol,Ns,r0,ce)
+function val=pathFun2D(x,sol,Ns,rE,ce)
     %This function is used to integrate the time taken
     y=deval(x,sol);
-    val=(1+NRefracExp(x,y(1,:),Ns,r0,ce)).*sqrt(1+y(2,:).^2);
+    val=(1+NRefracExp(x,y(1,:),Ns,rE,ce)).*sqrt(1+y(2,:).^2);
 end
 
-function J=odefunJacob(x,y,Ns,r0,ce)
+function J=odefunJacob(x,y,Ns,rE,ce)
     %The Jacobian of the differential equation for raytracing the 2D
     %exponential atmospheric model.
-    expVal=NRefracExp(x,y(1),Ns,r0,ce);
+    expVal=NRefracExp(x,y(1),Ns,rE,ce);
 
     J=zeros(2,2);
     J(1,2)=1;
@@ -380,17 +370,17 @@ function J=odefunJacob(x,y,Ns,r0,ce)
     J(2,2)=ce*(x-2*y(1)*y(2)+3*x*y(2)^2)*expVal/((expVal+1)*sqrt(x^2+y(1)^2));
 end
 
-function dxdy=expDiffEq(x,y,Ns,r0,ce)
+function dxdy=expDiffEq(x,y,Ns,rE,ce)
     %Find the refractivity at location (x,y).
-    expVal=NRefracExp(x,y(1),Ns,r0,ce);
+    expVal=NRefracExp(x,y(1),Ns,rE,ce);
 
     dxdy=[y(2)
           ce*(1+y(2)^2)*(x*y(2)-y(1))*expVal/((expVal+1)*sqrt(x^2+y(1)^2))];
 end
 
-function [nRefrac,ce]=NRefracExp(x,y,Ns,r0,ce)
+function [nRefrac,ce]=NRefracExp(x,y,Ns,rE,ce)
     %The refractivity. This is 10^6*(index of refraction-1)
-    nRefrac=1e-6*Ns*exp(-ce*(sqrt(x.^2+y.^2)-r0));
+    nRefrac=1e-6*Ns*exp(-ce*(sqrt(x.^2+y.^2)-rE));
 end
 
 %LICENSE:

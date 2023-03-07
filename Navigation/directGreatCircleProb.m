@@ -137,9 +137,9 @@ function latLonPoints=directGreatCircleProb(latLonStart,azimuth,dist,r,algorithm
 %    circle sailing: The COFI method," The Journal of Navigation, vol. 67,
 %    no. 3, pp. 403-418, May 2014.
 %[2] D. F. Crouse, "Singularity-free great-circle sailing," Naval Research
-%    Laboratory, Washington, DC, Tech. Rep. NRL/5340/MR–2021/4, 26
+%    Laboratory, Washington, DC, Tech. Rep. NRL/5340/MR-2021/4, 26
 %    Jul. 2021.
-%[3] J. P. Snyder, "Map projections- a working manual," U.S. Geological
+%[3] J. P. Snyder, "Map projections-a working manual," U.S. Geological
 %    Survey, Tech. Rep. 1395, 1987.
 %
 %August 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
@@ -267,7 +267,7 @@ function latLonPoints=directGreatCircleProbCrouse(latLonStart,azimuth,dist,r)
 %
 %REFERENCES:
 %[1] D. F. Crouse, "Singularity-free great-circle sailing," Naval Research
-%    Laboratory, Washington, DC, Tech. Rep. NRL/5340/MR–2021/4, 26
+%    Laboratory, Washington, DC, Tech. Rep. NRL/5340/MR-2021/4, 26
 %    Jul. 2021.
 %
 %August 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
@@ -323,7 +323,7 @@ function latLonPoints=directGreatCircleProbSnyder(latLonStart,azimuth,dist,r)
 %          sphere given in Chapter 25 of of [1].
 %
 %REFERENCES:
-%[3] J. P. Snyder, "Map projections- a working manual," U.S. Geological
+%[3] J. P. Snyder, "Map projections-a working manual," U.S. Geological
 %    Survey, Tech. Rep. 1395, 1987.
 %
 %December 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
@@ -336,7 +336,8 @@ numDist=length(dist);
 xy=pol2Cart([dist;azimuth*ones(1,numDist)],1);
 x=xy(1,:);
 y=xy(2,:);
-rho=sqrt(x.^2+y.^2);
+%The max should deal with finite precision limitations.
+rho=sqrt(max(x.^2+y.^2,0));
 c=rho./r;
 
 cosC=cos(c);

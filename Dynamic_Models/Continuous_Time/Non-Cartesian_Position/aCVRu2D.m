@@ -21,8 +21,9 @@ function [aVal,aJacob,aHess,papt]=aCVRu2D(x)
 %         papt The 4X1 partial derivative with resect to time of aVal. This
 %              is all zeros, because the model is time invariant.
 %
-%A derivation of the dynamic model is provided here. Let rVec be a position
-%vector. We shall use the orthonormal basis vectors:
+%A full derivation of the dynamic model is provided in [1]. Summarizing it
+%here, let rVec be a position vector. We shall use the orthonormal basis
+%vectors:
 %uVec_r=[u;sqrt(1-u2)]; and uVec_u=[sqrt(1-u2);-u];
 %Note that d/du uVec_r=(1/sqrt(1-u2))*uvec_u,
 %the time derivative of uVec_r is
@@ -69,6 +70,11 @@ function [aVal,aJacob,aHess,papt]=aCVRu2D(x)
 % max(abs(err(:)))
 %One will see that the maximum error is on the order of 1e-9, indicating
 %good agreement.
+%
+%REFERENCES:
+%[1] D. F. Crouse, "Basic Linear Dynamic Models in Local Coordinates,"
+%    Naval Research Laboratory, Washington, D.C., Tech. Rep.
+%    NRL/MR/5344--19-9882, 24 Aug. 2019.
 %
 %August 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

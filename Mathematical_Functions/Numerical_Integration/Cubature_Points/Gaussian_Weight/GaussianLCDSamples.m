@@ -104,8 +104,8 @@ function [xi,w,CvMDistMin,exitCode,sInit]=GaussianLCDSamples(numDim,numSamples,f
 %
 %The function is generally too slow to use to find approximations of
 %Gaussian distributions in most real-time systems. However, one can
-%precompute points of the desired dimensionalitites and create a library
-%that can then be called in liue of using this function.
+%precompute points of the desired dimensionalities and create a library
+%that can then be called in lieue of using this function.
 %
 %REFERENCES:
 %[1] J. Steinbring, M. Pander, and U. D. Hanebeck, "The smart sampling

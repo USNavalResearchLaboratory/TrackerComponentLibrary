@@ -95,7 +95,7 @@ for curPoint=1:N
             azimuth=atan2(y,x);
             elevation=pi/2-asin(z./r1);
         case 3
-            azimuth=pi/2-atan2(y,x);
+            azimuth=atan2(x,y);
             elevation=asin(z./r1);
         otherwise
             error('Invalid system type specified')

@@ -1,4 +1,4 @@
-function [zCart,RCart]=ruv2CartStdRefracCubature(zRUVBiased,SR,useHalfRange,zTx,zRx,M,Ns,xi,w,ce,ellipsOpts,xMax)
+function [zCart,RCart]=ruv2CartStdRefracCubature(zRUVBiased,SR,useHalfRange,zTx,zRx,M,Ns,xi,w,ce,rE,spherCent,xMax)
 %%RUV@CARTSTDREFRACCUBATURE Use cubature integration to approximate the 
 %              moments of measurements converted from refraction-corrupted
 %              bistatic r-u-v coordinates into Cartesian coordinates using
@@ -29,14 +29,14 @@ function [zCart,RCart]=ruv2CartStdRefracCubature(zRUVBiased,SR,useHalfRange,zTx,
 %          vector of the local coordinate system of the receiver is the
 %          pointing direction of the receiver. If this matrix is omitted,
 %          then the identity matrix is used.
-%       Ns The atmospheric refractivity reduced to the WGS-84 reference
-%          ellipsoid. Note that the refractivity is (n-1)*1e6, where n is
-%          the index of refraction. The function reduceStdRefrac2Spher can
-%          be used to reduce a refractivity to the ellipsoidal surface.
-%          This function does not allowe different refractivities to be
-%          used as the transmitter and receiver. If this parameter is
-%          omitted or an empty matrix is passed, a default value of 313 is
-%          used.
+%       Ns The atmospheric refractivity reduced to the reference sphere.
+%          Note that the refractivity is (n-1)*1e6, where n is the index
+%          of refraction. The function reduceStdRefrac2Spher can be used
+%          to reduce a refractivity to the surface of a reference
+%          ellipsoid. This function does not allow different
+%          refractivities to be used as the transmitter and receiver. If
+%          this parameter is omitted or an empty matrix is passed, a
+%          default value of 313 is used.
 %       xi A 3 X numCubaturePoints matrix of cubature points for the
 %          numeric integration. If this and the next parameter are omitted
 %          or empty matrices are passed, then fifthOrderCubPoints is used
@@ -55,11 +55,15 @@ function [zCart,RCart]=ruv2CartStdRefracCubature(zRUVBiased,SR,useHalfRange,zTx,
 %          values for the two constants are expConst=0.005577; and
 %          multConst=7.32; If ce is omitted or an empty matrix is passed,
 %          the value based on the standard model is used.
-% ellipOpts Optioanlly, a structure that contains elements changing the
-%          reference ellipsoid used. Possible entries are a for the
-%          semi-major axis and f for the flattening factor. If this
-%          parameter is omitted or an empty matrix is passed, then
-%          a=Constants.WGS84SemiMajorAxis and f=Constants.WGS84Flattening.
+% rE,spherCent The radius of the Earth to use for the spherical Earth
+%           approximation used in the model and also the offset between the
+%           global model and the local spherical model. It is assumed that
+%           zC,zTx,and zRx are all given in the global model and will need
+%           to be transformed to the local model to the used. If rE is
+%           omitted or an empty matrix is passed, then the default of
+%           [rE,spherCent]=osculatingSpher4LatLon(Cart2Ellipse(zRx)) is
+%           used. The defaults here mean that a WGS-84 reference ellipsoid
+%           is approximated by the local osculating sphere.
 %     xMax This function traces the ray to a maximum displacement in the
 %          local tangent plane prior (or vertically for nearly vertical
 %          directions) to attempting to find a particular range. This is an
@@ -76,7 +80,7 @@ function [zCart,RCart]=ruv2CartStdRefracCubature(zRUVBiased,SR,useHalfRange,zTx,
 %
 %The basic cubature conversion approach is detailed in [1] and [2]. The
 %standard exponential measurement model is from [3] and the model is
-%discussed in more detail in the comments to Ruv2CartStdRefrac.
+%discussed in more detail in the comments to ruv2CartStdRefrac.
 %
 %REFERENCES:
 %[1] D. F. Crouse, "Basic tracking using 3D monostatic and bistatic
@@ -130,12 +134,15 @@ if(nargin<10||isempty(ce))
     ce=log(Ns/(Ns+DeltaN))/1000;%Units of inverse meters.
 end
 
-if(nargin<11)
-    %Use the defaults in the function Cart2RuvStdRefrac.
-    ellipsOpts=[];
+if(nargin<11||isempty(rE))
+    %Use the radius of the Earth that is the radius of the osculating
+    %sphere at the location of the observed. This will be the radius used
+    %in the local spherical Earth approximation for computing atmospheric
+    %refraction. This uses the WGS-84 reference ellipsoid.
+    [rE,spherCent]=osculatingSpher4LatLon(Cart2Ellipse(zRx));
 end
 
-if(nargin<12||isempty(xMax))
+if(nargin<13||isempty(xMax))
     xMax=1000e3;%1000 kilometer assumed maximum x displacement.
 end
 
@@ -150,7 +157,7 @@ for curMeas=1:numMeas
     cubPoints=transformCubPoints(xi,zRUVBiased(:,curMeas),SR(:,:,curMeas));
 
     %Convert all of the points into Cartesian space
-    cubPoints=ruv2CartStdRefrac(cubPoints,useHalfRange,zTx,zRx,M,Ns,ce,ellipsOpts,xMax);
+    cubPoints=ruv2CartStdRefrac(cubPoints,useHalfRange,zTx,zRx,M,Ns,ce,rE,spherCent,xMax);
 
     %Extract the first two moments of the transformed points.
     [zCart(:,curMeas),RCart(:,:,curMeas)]=calcMixtureMoments(cubPoints,w);

@@ -85,6 +85,7 @@ function [Q,q,exitCode]=ellipsOfEllipsSum(Q1,Q2,q1,q2,algorithm,AbsErr,RelErr,ma
 %    Processing, vol. 59, no. 4, pp. 1409-1420, Apr. 2011.
 %
 %April 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
+%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 if(nargin<8||isempty(maxIter))
     maxIter=100;

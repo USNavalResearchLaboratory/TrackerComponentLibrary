@@ -1,6 +1,6 @@
 function aList=genAllBinCombinations(n,t,algorithm)
 %%GENALLBINARYCOMBINATIONS Generate all combinations of t items chosen from
-%              a set pf n items, presenting the results as binary strings.
+%              a set of n items, presenting the results as binary strings.
 %
 %INPUTS: n The number of items from which t items are chosen .
 %        t The number of items chosen, t<=n.

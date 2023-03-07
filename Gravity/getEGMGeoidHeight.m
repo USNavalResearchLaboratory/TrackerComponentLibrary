@@ -51,6 +51,9 @@ function [geoidHeight,coeffData]=getEGMGeoidHeight(latLon,tideSys,useNGAApprox,m
 %           coeffData The coeffData coefficients that can be passed to
 %                     another call of getEGMGeoidHeight to make it faster.
 %
+%Note that this function will be very slow if one hasn't called
+%CompileCLibraries to compile the spherical harmonic synthesis functions.
+%
 %The geoid is a theoretical surface of constant gravitational potential.
 %The potential used for the geoid is that implied on 
 %http://earth-info.nga.mil/GandG/wgs84/gravitymod/egm2008/egm08_wgs84.html

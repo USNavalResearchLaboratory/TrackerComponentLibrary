@@ -27,7 +27,7 @@ function [a,c,xRange]=findHermiteInterpPolySet(x,y,numDims,groupSize)
 %          be [x;y;z;xDot;yDot;zDot]. Note that even if one is only
 %          interested in interpoalting position values, passing known
 %          moments (velocity, acceleration, jerk, etc.) will improve the
-%          interpolation of the poistion values.
+%          interpolation of the position values.
 %  numDims The scalar number of dimensions present. This will typically be
 %          2 or 3 when dealing with target states. If this parameter is
 %          omitted or an empty matrix is passed, then numDims=1 is used.
@@ -72,7 +72,7 @@ function [a,c,xRange]=findHermiteInterpPolySet(x,y,numDims,groupSize)
 %plotted. One will see that the interpolation error is quite low
 %considering the scale of the values.
 %
-%The following are all parameters for the dynamic model.
+% %The following are all parameters for the dynamic model.
 % Nw=4;
 % betaVal=0.5;
 % t0=0;
@@ -91,9 +91,9 @@ function [a,c,xRange]=findHermiteInterpPolySet(x,y,numDims,groupSize)
 % t=t0:deltaT:tEnd;%Times of the refined estimates
 % %The true state will have the acceleration from the model in it (which we
 % %are appending here). However, we will not give this information to the
-% %interpolation algorithm. This is just recorded to demonstrate how well the
-% %interpolation algorithm can interpolate moments higher than the given
-% %data.
+% %interpolation algorithm. This is just recorded to demonstrate how well
+% %the interpolation algorithm can interpolate moments higher than the
+% %given data.
 % xTrueAug=zeros(9,numSteps+1);
 % xTrueAug(1:6,:)=xTrue;
 % for curStep=1:(numSteps+1)
@@ -184,12 +184,10 @@ end
 Np=length(x);
 stateSize=size(y,1);
 
-groupSize=min(groupSize,Np-1);
-
 numMatch=stateSize/numDims;
 
 deltaStart=floor((groupSize-1)/2);
-deltaEnd=ceil((groupSize-1)/2);
+deltaEnd=max(1,ceil((groupSize-1)/2));
 
 xRangeMin=deltaStart+1;
 xRangeMax=Np-deltaEnd+1;

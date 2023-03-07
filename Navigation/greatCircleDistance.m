@@ -67,7 +67,7 @@ cosPhi1=cos(phi1);
 cosPhi2=cos(phi2);
 
 if(formula2Use==0)
-    %Use the distance btween vectors method.
+    %Use the distance between vectors method.
     
     %The Cartesian starting point (unit sphere).
     F=[cos(lambda1).*cosPhi1;

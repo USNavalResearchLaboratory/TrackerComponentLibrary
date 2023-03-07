@@ -1,7 +1,11 @@
 function HTotal=calcSpherInvHessian(z,systemType)
 %%SPHERANGINVHESSIAN Determine the Hessian matrix (a matrix of second
-%           partial derivatives) of a 3D Cartesian point with respect to
-%           monostatic spherical range, azimuth, and elevation components.
+%          partial derivatives) of a 3D Cartesian point with respect to
+%          monostatic spherical range, azimuth, and elevation components.
+%          This produces second derivatives of (x,y,z) with respect to
+%          (r,Az,El). The function calcRuvHessian produces second
+%          derivatives of (r,Az,El) with respect to (x,y,z) in a more
+%          general context.
 %
 %INPUTS: z The 3XN position vectors in the global spherical coordinate
 %          system, each with [range;Az;El] components.
@@ -28,13 +32,13 @@ function HTotal=calcSpherInvHessian(z,systemType)
 %            where the bearing directions are measured East of North.
 %
 %OUTPUTS: HTotal The 3X3X3XN set of Hessian matrices, where H(:,:,1,i) is
-%           the Hessian for the x component for the ith point in z,
+%           the Hessian for the x component for the ith point,
 %           H(:,:,2) is the Hessian for the y component, and H(:,:,3) is
 %           the Hessian for the z component. The ordering of the
 %           derivatives in each matrix is:
 %                  [d^2/(drdr),  d^2/(drdAz),  d^2/(drdEl);
 %                   d^2/(dAzdr), d^2/(dAzdAz), d^2/(dAzdEl);
-%                   d^2/(dEldr), d^2/(dEldAz), d^2/(dEldE;)];
+%                   d^2/(dEldr), d^2/(dEldAz), d^2/(dEldEl)];
 %           note that each matrix is symmetric (i.e. 
 %           d^2/(dAzdr)=d^2/(drdAz) ).
 %

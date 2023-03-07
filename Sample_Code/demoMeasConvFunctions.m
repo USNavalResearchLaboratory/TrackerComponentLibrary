@@ -251,8 +251,9 @@ disp('Example 3: Monostatic r-u-v Measurement Conversion')
 numPoints=50;
 numRuns=200;
 
-%10 meter range standard deviation
+%10 meter range standard deviation (one-way)
 sigmaR=10;
+useHalfRange=true;
 %Direction cosine standard deviations
 sigmaU=5e-3;
 sigmaV=5e-3;
@@ -287,17 +288,17 @@ for curPoint=1:numPoints
     for curRun=1:numRuns 
         zMeas=z+SR*randn(3,1);
 
-        [zCart,RCart]=monostatRuv2CartTaylor(zMeas,R,[],[],0);
+        [zCart,RCart]=monostatRuv2CartTaylor(zMeas,R,useHalfRange,[],[],0);
         diff=zCartTrue-zCart;
         MSECur(1)=MSECur(1)+diff'*diff;
         NEESCur(1)=NEESCur(1)+diff'*inv(RCart)*diff;
         
-        [zCart,RCart]=monostatRuv2CartTaylor(zMeas,R,[],[],1);
+        [zCart,RCart]=monostatRuv2CartTaylor(zMeas,R,useHalfRange,[],[],1);
         diff=zCartTrue-zCart;
         MSECur(2)=MSECur(2)+diff'*diff;
         NEESCur(2)=NEESCur(2)+diff'*inv(RCart)*diff;
         
-        [zCart,RCart]=ruv2CartCubature(zMeas,SR,true,[],[],[],xi,w);
+        [zCart,RCart]=ruv2CartCubature(zMeas,SR,useHalfRange,[],[],[],xi,w);
         diff=zCartTrue-zCart;
         MSECur(3)=MSECur(3)+diff'*diff;
         NEESCur(3)=NEESCur(3)+diff'*inv(RCart)*diff;

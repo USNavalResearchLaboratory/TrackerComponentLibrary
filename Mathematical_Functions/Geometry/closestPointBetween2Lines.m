@@ -1,12 +1,12 @@
 function [midpoint,minDist,t]=closestPointBetween2Lines(a1,b1,a2,b2)
-%%CLOSESTPOINTBETWEEN2LINES Given two non-parallel lines in 3D that do not
-%                           necessarily intersect, find the point closest
-%                           to both lines. This is done by finding the
-%                           point on each line that is closest to the other
-%                           line, and then averaging the points (get the
-%                           point halfway between the lines).
+%%CLOSESTPOINTBETWEEN2LINES Given two non-parallel lines in numDim
+%              dimensions that do not necessarily intersect, find the point
+%              closest to both lines. This is done by finding the point on
+%              each line that is closest to the other line, and then
+%              averaging the points (get the point halfway between the
+%              lines).
 %
-%INPUTS: a1,b1 numDim XN matrix of parameters for the first line in N pairs
+%INPUTS: a1,b1 numDimXN matrix of parameters for the first line in N pairs
 %              of lines, the closes point between each being desired. The
 %              ith line is represented in parametic form as
 %              r=a1(:,i)*t+b1(:,i), where t is a scalar parameter and p is

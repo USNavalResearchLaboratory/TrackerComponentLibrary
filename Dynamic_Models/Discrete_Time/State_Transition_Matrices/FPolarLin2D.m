@@ -28,10 +28,10 @@ function F=FPolarLin2D(T,x,qTheta)
 %           heading, speed, and optionally, linear acceleration.
 %
 %The state transition matrix without acceleration is the same as the matrix
-%for the turning model as taken from the unnumered transition equation after
-%equation 1b in [1], which comes from the initial derivation in [2], where
-%a different definition of heading direction is used. The expression comes
-%from the limit of a turning model as the turn rates goes to zero.
+%for the turning model as taken from the unnumered transition equation
+%after equation 1b in [1], which comes from the initial derivation in [2],
+%where a different definition of heading direction is used. The expression
+%comes from the limit of a turning model as the turn rates goes to zero.
 %
 %However, the discretized model can be derived from first principles based
 %on the principles in Chapter 6 of [3], where a matrix exponential is used.

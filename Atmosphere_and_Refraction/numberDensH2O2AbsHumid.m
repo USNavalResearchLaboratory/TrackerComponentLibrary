@@ -14,7 +14,7 @@ function absHumid=numberDensH2O2AbsHumid(numberDensity)
 %get kilograms per cubic meter.
 %
 %September 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
-%(UNCLASSIFIED) DISTRIBUTION STATEMENT
+%(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 %The atomic weight of water.
 AMUH20=Constants.gasProp('H2O');

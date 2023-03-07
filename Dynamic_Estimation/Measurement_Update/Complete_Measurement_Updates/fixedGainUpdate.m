@@ -12,10 +12,10 @@ function [xUpdate,innov,PUpdate]=fixedGainUpdate(W,xPred,z,H,PPred,R)
 %        z The zDim X 1 vector measurement.
 %        H The zDim X xDim measurement matrix for a linear measurement
 %          model. That is z=H*x.
-% PPred, R If provided, these will be used to obtain PUpdate using the Joseph's
-%          form of the Kalman filter covariance update equation, which can
-%          handle suboptimal gains. If these are omitted, then PUpdate will not
-%          be returned.
+% PPred, R If provided, these will be used to obtain PUpdate using the
+%          Joseph's form of the Kalman filter covariance update equation,
+%          which can handle suboptimal gains. If these are omitted, then
+%          PUpdate will not be returned.
 %
 %OUTPUTS: xUpdate The xDim X 1 updated state vector.
 %           innov The zDimX1 innovation of the filter. This is sometimes

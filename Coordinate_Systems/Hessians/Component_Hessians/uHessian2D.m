@@ -1,9 +1,9 @@
-function HTotal=uHessian2D(xG,lRx,M)
+function H=uHessian2D(xG,lRx,M,includeV)
 %%UHESSIAN2D Determine the Hessian (a matrix of second derivatives) of a
 %          direction cosine in 2D with respect to 2D position. Relativity
 %          and atmospheric effects are not taken into account.
 %
-%INPUTS: xG The 2XN set of target position vectors in the global coordinate
+%INPUTS: xG The 2X1 target position vector in the global coordinate
 %          system with [x;y] components for which a Hessian matrix is
 %          desired.
 %      lRx The 2X1 position vector of the receiver. If omitted, the
@@ -11,37 +11,45 @@ function HTotal=uHessian2D(xG,lRx,M)
 %        M A 2X2 rotation matrix from the global Coordinate system to the
 %          orientation of the coordinate system at the receiver. If
 %          omitted, it is assumed to be the identity matrix.
+% includeV An optional boolean value indicating whether a second direction
+%          cosine component should be included. The u direction cosine is
+%          one parts of a 2D unit vector. The default if this parameter is
+%          omitted or an empty matrix is passed is false.
 %
-%OUTPUTS: HTotal A 2X2XN set of Hessian matrices, one for each value in xG.
-%                The partial derivatives for each i of HTotal(:,:,i) are
-%                ordered:  [d2/(dxdx), d2/(dxdy);
-%                           d2/(dydx), d2/(dyd)];
-%                The matrix is symmetric, because d2/(dydx)=d2/(dxdy).
+%OUTPUTS: H A 2X2X1 (or 2X2X2 is includeV is true) set of Hessian matrices.
+%           The partial derivatives for each i of H(:,:,i) are ordered: 
+%           [d2/(dxdx), d2/(dxdy);
+%           d2/(dydx), d2/(dyd)];
+%           where H(:,:,1) hold partial derivatives of u and H(:,:,2)
+%           partial derivatives of v. Each matrix is symmetric, because
+%           d2/(dydx)=d2/(dxdy).
 %
-%A derivation of the components of the Jacobian of a 3D u-v measurement is
-%given in [1]. The results here are similar and are simply one derivative
-%higher.
+%A derivation of the components of the Jacobian of a 2D u measurement is
+%given in [1] (remove a component form the 3D measurement). The results
+%here are similar and are simply one derivative higher.
 %
 %EXAMPLE:
 %Here, we verify that a numerically differentiated Hessian is consistent
 %with the analytic one produced by this function.
 % x=[100;-1000];
 % lRx=[500;20;];
-% epsVal=1e-6;
+% epsVal=1e-5;
 % M=randRotMat(2);
+% includeV=true;
 % 
-% H=uHessian2D(x,lRx,M);
-% J=uGradient2D(x,lRx,M);
-% JdX=uGradient2D(x+[epsVal;0],lRx,M);
-% JdY=uGradient2D(x+[0;epsVal],lRx,M);
-% HNumDiff=zeros(2,2);
-% HNumDiff(1,1)=(JdX(1)-J(1))/epsVal;
-% HNumDiff(2,2)=(JdY(2)-J(2))/epsVal;
-% HNumDiff(1,2)=(JdX(2)-J(2))/epsVal;
-% HNumDiff(2,1)=HNumDiff(1,2);
-% 
+% H=uHessian2D(x,lRx,M,includeV);
+% J=uGradient2D(x,lRx,M,includeV);
+% JdX=uGradient2D(x+[epsVal;0],lRx,M,includeV);
+% JdY=uGradient2D(x+[0;epsVal],lRx,M,includeV);
+% HNumDiff=zeros(2,2,1+includeV);
+% for k=1:(1+includeV)
+%     HNumDiff(1,1,k)=(JdX(k,1)-J(k,1))/epsVal;
+%     HNumDiff(2,2,k)=(JdY(k,2)-J(k,2))/epsVal;
+%     HNumDiff(1,2,k)=(JdX(k,2)-J(k,2))/epsVal;
+%     HNumDiff(2,1,k)=HNumDiff(1,2,k);
+% end
 % max(abs((H(:)-HNumDiff(:))./H(:)))
-%The relative error will be on the order of 5e-7, indicating good
+%The relative error will tend to be on the order of 1e-8, indicating good
 %agreement between the numerical Hessian matrix and the actual Hessian
 %matrix.
 %
@@ -53,33 +61,42 @@ function HTotal=uHessian2D(xG,lRx,M)
 %June 2017 David F.Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-N=size(xG,2);
+if(nargin<4||isempty(includeV))
+    includeV=false;
+end
 
 if(nargin<3||isempty(M))
-   M=eye(2,2); 
+    M=eye(2,2); 
 end
 
 if(nargin<2||isempty(lRx))
-   lRx=zeros(2,1); 
+    lRx=zeros(2,1); 
 end
 
-HTotal=zeros(2,2,N);
-for curPoint=1:N
-    %Convert the state into the local coordinate system.
-    xLocal=M*(xG(1:2,curPoint)-lRx(1:2));
+%Convert the state into the local coordinate system.
+xLocal=M*(xG(1:2)-lRx(1:2));
 
-    r5=norm(xLocal)^5;
-    x=xLocal(1);
-    y=xLocal(2);
+r5=norm(xLocal)^5;
+x=xLocal(1);
+y=xLocal(2);
     
-    H=zeros(2,2);
-    H(1,1)=-((3*x*y^2)/r5);
-    H(2,2)=-((x*(x^2-2*y^2))/r5);
-    H(1,2)=-((y*(-2*x^2+y^2))/r5);
-    H(2,1)=H(1,2);
-    
+H=zeros(2,2,1+includeV);
+
+%Fill in the Hessian for the u component.
+H(1,1,1)=-((3*x*y^2)/r5);
+H(1,2,1)=-((y*(-2*x^2+y^2))/r5);
+H(2,1,1)=H(1,2,1);
+H(2,2,1)=-((x*(x^2-2*y^2))/r5);
+%Convert back to global coordinates.
+H(:,:,1)=M'*H(:,:,1)*M;
+
+if(includeV)
+    H(1,1,2)=-y*(-2*x^2+y^2)/r5;
+    H(1,2,2)=-x*(x^2-2*y^2)/r5;
+    H(2,1,2)=H(1,2,2);
+    H(2,2,2)=-3*x^2*y/r5;
     %Convert back to global coordinates.
-    HTotal(:,:,curPoint)=M'*H*M;
+    H(:,:,2)=M'*H(:,:,2)*M;
 end
 end
 

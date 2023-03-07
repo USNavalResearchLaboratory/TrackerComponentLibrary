@@ -89,8 +89,8 @@ function [rs,rp]=reflectionCoeffs(e1,e2,thetai,u1,u2)
 % legend('s-Polarization','p-Polarization','location','southeast')
 %
 %REFERENCES:
-%[1] I. M. Besieris, "Comment on the “Corrected Fresnel coefficients for
-%    lossy materials," IEEE Antennas and Propagation Magazine, vol. 53,
+%[1] I. M. Besieris, "Comment on the "Corrected Fresnel coefficients for
+%    lossy materials,"" IEEE Antennas and Propagation Magazine, vol. 53,
 %    no. 4, pp. 161-164, Aug. 2011.
 %[2] F. X. Canning, "Corrected Fresnel coefficients for lossy materials,"
 %    in Proceedings of the IEEE Interntional Symposium on Antennas and

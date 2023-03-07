@@ -1,25 +1,6 @@
 /**RANGEGRADIENT Determine the gradient of a 2D or 3D bistatic range
-*           measurement with respect to position (gradient components for
-*           velocity etc. are zero and are not provided).Atmospheric and
-*           other propagation effects are not taken into account.
-*
-*INPUTS: x A numPosDimXN set of N target position vectors of the form
-*          [x;y] or [x;y;z].
-* useHalfRange A boolean value specifying whether the bistatic range value
-*          should be divided by two. This normally comes up when operating
-*          in monostatic mode, so that the range reported is
-*          a one-way range. The default if this parameter is not provided
-*          is false.
-*      lTx The 3X1 (in 3D) or 2X1 (in 2D) position vector of the
-*          transmitter. If this parameter is omitted or an empty matrix is
-*          passed, then the transmitter is assumed to be at the origin.
-*      lRx The 3X1 (in 3D) or 2X1 (in 2D) position vector of the receiver.
-*          If this parameter is omitted or an empty matrix is passed, then
-*          the receiver is assumed to be at the origin.
-*
-*OUTPUTS: J A 1XnumPosDimXN set of gradients of the bistatic range with
-*           derivatives taken with respect to components [x,y,z] in 3D or
-*           [x,y] in 2D in that order for each point in x
+*           measurement with respect to position. See the comments ot the
+*           Matlab version for more details.
 *
 *Gradients with respect to bistatic range are discussed in [1].
 *

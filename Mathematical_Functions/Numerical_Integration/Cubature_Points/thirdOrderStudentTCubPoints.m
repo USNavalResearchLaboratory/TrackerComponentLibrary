@@ -2,7 +2,7 @@ function [xi,w]=thirdOrderStudentTCubPoints(mu,SR,nu)
 %%THIRDORDERSTUDENTTCUBPOINTS Generate third order cubature points for
 %          integration involving a multidimensional Student-t distribution.
 %
-%INPUTS: mu The numDImX1 mean of the distribution.
+%INPUTS: mu The numDimX1 mean of the distribution.
 %        SR The lower-triangular square root of the numDimXnumDim positive
 %           definite scale matrix of the distribution.
 %        nu The scalar number of degrees of freedom of the distribution

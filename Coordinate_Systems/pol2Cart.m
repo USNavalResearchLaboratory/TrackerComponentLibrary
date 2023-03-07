@@ -6,7 +6,9 @@ function cartPoints=pol2Cart(z,systemType,useHalfRange,zTx,zRx,M)
 %
 %INPUTS: z A 2XN matrix of points in polar coordinates. Each column of the
 %          matrix has the format [r;azimuth], with azimuth given in
-%          radians.
+%          radians. Alternatively, if one just wishes to have unit vectors
+%          returned, this can be a 1XN matrix of just azimuthal angles, in
+%          which case the useHalfRange, zTx,and zRx inputs are ignored.
 % systemType An optional parameter specifying the axis from which the
 %          angles are measured. Possible values are:
 %          0 (The default if omitted or an empty matrix is passed) The
@@ -91,8 +93,30 @@ if(nargin<2||isempty(systemType))
 end
 
 %Extract the components.
-rB=z(1,:);
-azimuth=z(2,:);
+if(size(z,1)==1)
+    %No ranges, so just get unit vectors.
+    cartPoints=zeros(2,N);
+    switch(systemType)
+        case 0
+            cartPoints(1,:)=cos(z);
+            cartPoints(2,:)=sin(z);
+        case 1
+            cartPoints(1,:)=sin(z);
+            cartPoints(2,:)=cos(z);
+        otherwise
+            error('Invalid system type specified.')
+    end
+    
+    %Rotate the unit vectors into the global coordinate system.
+    for k=1:N
+        %Convert to global Cartesian coordinates.
+        cartPoints(:,k)=M(:,:,k)\cartPoints(:,k);
+    end
+    return;
+else
+    rB=z(1,:);
+    azimuth=z(2,:);
+end
 
 %The bistatic range is used in the conversions below.
 if(useHalfRange)

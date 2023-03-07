@@ -11,7 +11,9 @@ function u=geogHeading2uVec(point,geoEastOfNorth,angUpFromLevel)
 %              latitude  and longitude in radians at which the headings are
 %              taken. The point can be [latitude;longitude] or
 %              [latitude;longitude;height]. The height component is ignored
-%              if included because it does not change the result.
+%              if included because it does not change the result. If all of
+%              the points are the same, then a single 2X1 or 3X1 vector can
+%              be passed.
 % geoEastOfNorth An NX1 or 1XN array of N geographic headings in radians
 %              clockwise from North that should be turned into ECEF unit
 %              vectors. A geographic heading is a direction in the local
@@ -68,7 +70,12 @@ if(nargin<2||isempty(geoEastOfNorth))
     geoEastOfNorth=0; 
 end
 
-N=size(point,2);
+Np=size(point,2);
+N=max([length(geoEastOfNorth);length(angUpFromLevel);Np]);
+
+if(Np==1)
+    point=repmat(point,[1,N]);
+end
 
 if(isscalar(geoEastOfNorth))
     geoEastOfNorth=geoEastOfNorth*ones(1,N);
@@ -77,7 +84,6 @@ end
 if(isscalar(angUpFromLevel))
     angUpFromLevel=angUpFromLevel*ones(1,N);
 end
-
 
 %Transpose geoEastOfNorth to make it 1XN in size if it is NX1. This is so
 %that bsxfun can be used to multiply the components with the basis vectors

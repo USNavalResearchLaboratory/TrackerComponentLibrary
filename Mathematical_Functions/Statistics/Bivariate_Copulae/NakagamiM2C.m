@@ -6,9 +6,9 @@ classdef NakagamiM2C
 %REFERENCES:
 %[1] H. Joe and D. Kurowicka, Dependence Modeling: Vine Copula Handbook.
 %    World Scientific, 2011.
-%[2] X. Zeng, J. Ren, Z. Wang, S. Marshall, and T. Durrani, “Copulas for
+%[2] X. Zeng, J. Ren, Z. Wang, S. Marshall, and T. Durrani, "Copulas for
 %    statistical signal processing (part i): Extensions and
-%    generalization,” Signal Processing, vol. 94, pp. 691–702, 2014,
+%    generalization," Signal Processing, vol. 94, pp. 691-702, 2014,
 %    ISSN: 0165-1684. DOI: https://doi.org/10.1016/j.sigpro.2013.07.009.
 %    [Online]. Available: http://www.sciencedirect.com/science/article/pii/S0165168413002880.
 %

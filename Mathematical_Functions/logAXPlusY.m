@@ -7,7 +7,7 @@ function val=logAXPlusY(logA,logX,logY)
 %             e^(log(Y)) all would overflow.
 %
 %INPUTS: logA, logX, logY The real natural logarithms of the non-zero
-%                         a,x, and y that one want in the evaluation of
+%                         a, x, and y that one want in the evaluation of
 %                         log(a.*x+y). They can be scalars or vectors/
 %                         matrices. The logarithms are element-by element,
 %                         not matrix.

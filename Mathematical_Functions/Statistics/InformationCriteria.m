@@ -1,7 +1,6 @@
 classdef InformationCriteria
 %%INFORMATIONCRITERIA A collection of static function for computing
-%                     various information criteria as given in [1].
-%                     Information criteria are useful for determinign the 
+%                     various information criteria as given in [1]. 
 %
 %Currently implemented criteria are: AIC, AICc, BIC, CLC, AWE, NEC,
 %                                    KIC, KICc, AKICc, TIC

@@ -84,14 +84,14 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     dims=mxGetDoubles(prhs[0]);
     indicesIn=mxGetDoubles(prhs[1]);
 
-    multIdx=reinterpret_cast<double*>(mxMalloc(numDim*sizeof(double)));
+    multIdx=reinterpret_cast<double*>(mxMalloc(numDim1*sizeof(double)));
     multIdx[0]=1;
     if(dimIsScalar==true) {
-        for(i=1;i<numDim;i++) {
+        for(i=1;i<numDim1;i++) {
             multIdx[i]=multIdx[i-1]*dims[0];
         }
     } else {
-        for(i=1;i<numDim;i++) {
+        for(i=1;i<numDim1;i++) {
             multIdx[i]=multIdx[i-1]*dims[i-1];
         }
     }
@@ -105,7 +105,8 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
                 indicesCopy[i+numDim*j]=1;
             }
         }
-        
+
+        numDim1=numDim;
         indices=indicesCopy;
     } else{
         indices=indicesIn;     
@@ -117,8 +118,8 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     for(j=0;j<numIdx;j++) {
         idx[j]=1;
         
-        for(i=0;i<numDim;i++) {
-            idx[j]+=(indices[i+numDim*j]-1)*multIdx[i];
+        for(i=0;i<numDim1;i++) {
+            idx[j]+=(indices[i+numDim1*j]-1)*multIdx[i];
         }
     }
 

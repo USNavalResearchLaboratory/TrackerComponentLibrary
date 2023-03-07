@@ -25,7 +25,8 @@ function [xi,w]=fourteenthOrderCubPoints(numDim,beta,randomize)
 %
 %This function gets fourteenth-order spherical surface points using
 %fourteenthOrderSpherSurfCubPoints
-%and then transforms them to work with a multidimensional gausian PDF using
+%and then transforms them to work with a multidimensional Gaussian PDF
+%using
 %spherSurfPoints2GaussPoints.
 %
 %REFERENCES:

@@ -12,7 +12,7 @@ function AInterior=ellipsInsideConcEllips(A1,A2,gammaVal)
 %           this parameter is omitted or an empty matrix is passed, the
 %           default value of 1 is used.
 %
-%OUTPUTS: AInterior A numDimXnumDIm symmetric, positive definite matrix
+%OUTPUTS: AInterior A numDimXnumDim symmetric, positive definite matrix
 %            that specifies the size and shape of the largest ellipse that
 %            is within both of the ellipses.  
 %

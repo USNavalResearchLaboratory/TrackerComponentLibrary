@@ -1,4 +1,4 @@
-function [z,uTx,uTarRx,uTarTx]=Cart2RuvStdRefrac(zC,useHalfRange,zTx,zRx,M,Ns,includeW,ce,ellipsOpts)
+function [z,uTx,uTarRx,uTarTx]=Cart2RuvStdRefrac(zC,useHalfRange,zTx,zRx,M,Ns,includeW,ce,rE,spherCent)
 %%CART2RUVSTDREFRAC Convert points in Cartesian coordinates (either the
 %         global system or a local system at the receiver) into local
 %         bistatic r-u-v coordinates of the receiver, accounting for how a
@@ -34,14 +34,14 @@ function [z,uTx,uTarRx,uTarTx]=Cart2RuvStdRefrac(zC,useHalfRange,zTx,zRx,M,Ns,in
 %           vector of the local coordinate system of the receiver is the
 %           pointing direction of the receiver. If this matrix is omitted,
 %           then the identity matrix is used.
-%        Ns The atmospheric refractivity reduced to the WGS-84 reference
-%           ellipsoid. Note that the refractivity is (n-1)*1e6, where n is
-%           the index of refraction. The function reduceStdRefrac2Spher can
-%           be used to reduce a refractivity to the ellipsoidal surface.
-%           This function does not allowe different refractivities to be
-%           used as the transmitter and receiver. If this parameter is
-%           omitted or an empty matrix is passed, a default value of 313 is
-%           used.
+%        Ns The atmospheric refractivity reduced to the reference sphere.
+%           Note that the refractivity is (n-1)*1e6, where n is the index
+%           of refraction. The function reduceStdRefrac2Spher can be used
+%           to reduce a refractivity to the surface of a reference
+%           ellipsoid. This function does not allow different
+%           refractivities to be used as the transmitter and receiver. If
+%           this parameter is omitted or an empty matrix is passed, a
+%           default value of 313 is used.
 %  includeW An optional boolean value indicating whether a third direction
 %           cosine component should be included. The u and v direction
 %           cosines are two parts of a 3D unit vector. Generally, one might
@@ -62,11 +62,15 @@ function [z,uTx,uTarRx,uTarTx]=Cart2RuvStdRefrac(zC,useHalfRange,zTx,zRx,M,Ns,in
 %           values for the two constants are expConst=0.005577; and
 %           multConst=7.32; If ce is omitted or an empty matrix is passed,
 %           the value based on the standard model is used.
-% ellipOpts Optioanlly, a structure that contains elements changing the
-%           reference ellipsoid used. Possible entries are a for the
-%           semi-major axis and f for the flattening factor. If this
-%           parameter is omitted or an empty matrix is passed, then
-%           a=Constants.WGS84SemiMajorAxis and f=Constants.WGS84Flattening.
+% rE,spherCent The radius of the Earth to use for the spherical Earth
+%           approximation used in the model and also the offset between the
+%           global model and the local spherical model. It is assumed that
+%           zC,zTx,and zRx are all given in the global model and will need
+%           to be transformed to the local model to the used. If rE is
+%           omitted or an empty matrix is passed, then the default of
+%           [rE,spherCent]=osculatingSpher4LatLon(Cart2Ellipse(zRx)) is
+%           used. The defaults here mean that a WGS-84 reference ellipsoid
+%           is approximated by the local osculating sphere.
 %
 %OUTPUTS: z The 3XN (or 4XN if includeW is true) matrix of location vectors
 %           of the points in bistatic [r;u;v] coordinates. If
@@ -107,11 +111,11 @@ function [z,uTx,uTarRx,uTarTx]=Cart2RuvStdRefrac(zC,useHalfRange,zTx,zRx,M,Ns,in
 %
 %EXAMPLE:
 %Here, we have two radars and one target near Hawaii.
-% latLonRx=[20.269202;-155.852051]*(pi/180);%Degrees converted to radians.
+% latLonRx=deg2rad([20.269202;-155.852051]);
 % AltRx=0;
-% latLonTx=[20.724568;-155.978394]*(pi/180);
+% latLonTx=deg2rad([20.724568;-155.978394]);
 % AltTx=0;
-% latLonTar=[20.835390;-155.313721]*(pi/180);
+% latLonTar=deg2rad([20.835390;-155.313721]);
 % AltTar=8e3;%8km target altitude.
 % %Convert locations to Cartesian.
 % zRx=ellips2Cart([latLonRx;AltRx]);
@@ -120,15 +124,15 @@ function [z,uTx,uTarRx,uTarTx]=Cart2RuvStdRefrac(zC,useHalfRange,zTx,zRx,M,Ns,in
 % 
 % %The receiver faces 45 degrees East of North and 15 degrees up from the
 % %local ellipsoidal level.
-% M=findRFTransParam([latLonRx;AltRx],45*(pi/180),15*(pi/180));
+% M=findRFTransParam([latLonRx;AltRx],deg2rad(45),deg2rad(15));
 % Ns=350;%Assumed refractivity at the sea surface.
 % useHalfRange=false;
 % includeW=true;%Include third dimension of unit vector.
-% [z,uTx,uTarRx,uTarTx]=Cart2RuvStdRefrac(zTar,useHalfRange,zTx,zRx,M,Ns,includeW)
-% zNoRefrac=Cart2Ruv(zTar,useHalfRange,zTx,zRx,M,includeW)
-% %One will see that the bistatic range differs by z(1)-zNoRefrac(1)=31.0806
-% %meters and the direction differs by  
-% %angBetweenVecs(z(2:end),zNoRefrac(2:end))*(180/pi)=0.0927 degrees.
+% [z,uTx,uTarRx,uTarTx]=Cart2RuvStdRefrac(zTar,useHalfRange,zTx,zRx,M,Ns,includeW);
+% zNoRefrac=Cart2Ruv(zTar,useHalfRange,zTx,zRx,M,includeW);
+% z(1)-zNoRefrac(1)%Bistatic range difference of 31.0813 meters
+% %Direction difference of 0.0927 degrees
+% rad2deg(angBetweenVecs(z(2:end),zNoRefrac(2:end)))
 %
 %REFERENCES:
 %[1] D. F. Crouse, "Basic tracking using 3D monostatic and bistatic
@@ -180,18 +184,18 @@ if(nargin<8||isempty(ce))
     ce=log(Ns/(Ns+DeltaN))/1000;%Units of inverse meters.
 end
 
-%Default parameters for the reference ellipsoid.
-a=Constants.WGS84SemiMajorAxis;
-f=Constants.WGS84Flattening;
-if(nargin>8&&~isempty(ellipsOpts))
-    if(isfield(ellipsOpts,'a'))
-        a=ellipsOpts.a;
-    end
-
-    if(isfield(ellipsOpts,'f'))
-        f=ellipsOpts.f; 
-    end
+if(nargin<9||isempty(rE))
+    %Use the radius of the Earth that is the radius of the osculating
+    %sphere at the location of the observed. This will be the radius used
+    %in the local spherical Earth approximation for computing atmospheric
+    %refraction. This uses the WGS-84 reference ellipsoid.
+    [rE,spherCent]=osculatingSpher4LatLon(Cart2Ellipse(zRx));
 end
+
+%Adjust all the Cartesian values based on the osculating sphere.
+zC=zC-spherCent;
+zTx=zTx-spherCent;
+zRx=zRx-spherCent;
 
 %Allocate space
 if(includeW)
@@ -205,8 +209,9 @@ uTarRx=zeros(3,numMeas);
 
 if(any(zRx~=zTx))%If the scenario is bistatic
     for curMeas=1:numMeas
-        [r1,uTx(:,curMeas),uTarTx(:,curMeas)]=atmosRefracMeas(zTx,zC(:,curMeas),Ns,ce,a,f);
-        [r2,uArrive,uTarRx(:,curMeas)]=atmosRefracMeas(zRx,zC(:,curMeas),Ns,ce,a,f);
+        [r2,uArrive,uTarRx(:,curMeas)]=atmosRefracMeas(zRx,zC(:,curMeas),Ns,ce,rE);
+        [r1,uTx(:,curMeas),uTarTx(:,curMeas)]=atmosRefracMeas(zTx,zC(:,curMeas),Ns,ce,rE);
+
         r=(r1+r2);
         u=M*uArrive;
         
@@ -224,7 +229,7 @@ if(any(zRx~=zTx))%If the scenario is bistatic
     end
 else%The scenario is monostatic.
     for curMeas=1:numMeas
-        [range,uArrive,uTarRx(:,curMeas)]=atmosRefracMeas(zTx,zC(:,curMeas),Ns,ce,a,f);
+        [range,uArrive,uTarRx(:,curMeas)]=atmosRefracMeas(zTx,zC(:,curMeas),Ns,ce,rE);
         uTx=uArrive;
         r=2*range;%Round-trip range.
         u=M*uArrive;
@@ -247,7 +252,7 @@ else%The scenario is monostatic.
 end
 end
 
-function [range,uArrive,uDepart]=atmosRefracMeas(xObs,xObj,Ns,ce,a,f)
+function [range,uArrive,uDepart]=atmosRefracMeas(xObs,xObj,Ns,ce,rE)
 %%ATMOSREFRACMEAS  Given the location of an observer and an object in the
 %                  atmosphere of the Earth, find the delay and angle of
 %                  arrival of a signal from the object to the observer,
@@ -267,8 +272,9 @@ function [range,uArrive,uDepart]=atmosRefracMeas(xObs,xObj,Ns,ce,a,f)
 %             increasing the height by 1km, the model is that the
 %             refractivity changes by deltaN=-multConst*exp(expConst*N).
 %             deltaN cannot be negative.
-%         a,f The semi-major axis and the flattening factor of the
-%             reference ellipsoid to use.
+%          rE The radius of the Earth to use in the spherical Earth
+%             approximation. An osculating sphere near a sensor is
+%             suggested.
 %
 %OUTPUTS: range  The apparent one-way range (in meters) of the signal from
 %                the transmitter to the target and back to the receiver.
@@ -295,14 +301,6 @@ function [range,uArrive,uDepart]=atmosRefracMeas(xObs,xObj,Ns,ce,a,f)
 %May 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-%The location of the observer in ellipsoidal coordinates.
-plhPoint=Cart2Ellipse(xObs,[],a,f);
-
-%Find the radius of the Earth at the location of the observer. Use the
-%ellipsoidal Earth approximation. This will be the radius used in the local
-%spherical Earth approximation for computing atmospheric refraction.
-r0=norm(proj2Ellips(xObs,a,f));
-
 %We need the conversion from the 3D coordinate system of the observer and
 %object into the 2D coordinate system used for raytracing. The 2D
 %coordinate system has the center of the Earth as its origin and the x-y
@@ -310,10 +308,10 @@ r0=norm(proj2Ellips(xObs,a,f));
 %vector common to both coordinate systems in the local up vector, which
 %will be the local y axis. The second vector common to both will be the
 %local x vector, which will be the projection of xObj-xObs onto the local
-%tangent plane. Here, the vertical is the WGS-84 vertical, since the
-%precision of the model is low enough that the difference between the
-%WGS-84 vertical and the gravitational vertical should not matter.
-uENU=getENUAxes(plhPoint);
+%tangent plane. Here, the vertical is the spherical model vertical. Since
+%the precision of the model is low enough that the difference between the
+%spherical and gravitational verticals shouldn't matter.
+uENU=getENUAxes(Cart2Ellipse(xObs,[],rE,0));
 uVertGlobal=uENU(:,3);
 uVertLocal=[0;1;0];
 
@@ -356,7 +354,7 @@ if(norm(uHorizGlobalOrig)<1e-3)
     %refraction is not a constant 1.
     yMax=norm([x1Init;y1Init]);
    
-    range=((exp(ce*(r0-y0Init))-exp(ce*(r0-yMax)))*Ns)/(1e6*ce)+yMax-y0Init;
+    range=((exp(ce*(rE-y0Init))-exp(ce*(rE-yMax)))*Ns)/(1e6*ce)+yMax-y0Init;
 
     uArrive=vec2TarGlobal/norm(vec2TarGlobal);
     uDepart=-uArrive;
@@ -369,7 +367,7 @@ end
 %The initial guess is just the linear solution. The solver requires a fixed
 %number of steps. 20 is probably sufficient for things near the Earth. that
 %is, up to distances of, say 400km. We can scale the number of steps as 20
-%for every 400 kilometers with a minum of, say 10.
+%for every 400 kilometers with a minimum of, say 10.
 %Things outside of the atmosphere should use the astronomical refraction
 %routines.
 numSteps=max(20,ceil(20*norm(vec2TarLocal)/400e3));
@@ -381,12 +379,12 @@ solInit=bvpinit(x,@(x)[x*slope+b;slope]);
 
 %Now, solve the differential equation.
 oldOpts=bvpset();
-newOpts=bvpset(oldOpts,'RelTol',1e-8,'AbsTol',1e-8,'FJacobian',@(x,y)odefunJacob(x,y,Ns,r0,ce),'BCJacobian',@bcfunJacob);%Increase the accuracy.
-sol=bvp5c(@(x,y)expDiffEq(x,y,Ns,r0,ce),@(y0,y1)bcfun(y0,y1,y0Init,y1Init),solInit,newOpts);
+newOpts=bvpset(oldOpts,'RelTol',1e-8,'AbsTol',1e-8,'FJacobian',@(x,y)odefunJacob(x,y,Ns,rE,ce),'BCJacobian',@bcfunJacob);%Increase the accuracy.
+sol=bvp5c(@(x,y)expDiffEq(x,y,Ns,rE,ce),@(y0,y1)bcfun(y0,y1,y0Init,y1Init),solInit,newOpts);
 
 %Get the refraction-corrupted range measurement for a signal traveling from
 %the object to the observer. 
-range=integral(@(x)pathFun2D(x,sol,Ns,r0,ce),x0Init,x1Init,'AbsTol',eps(1),'RelTol',1e-15);
+range=integral(@(x)pathFun2D(x,sol,Ns,rE,ce),x0Init,x1Init,'AbsTol',eps(1),'RelTol',1e-15);
 
 if(nargout>1)
     %Get the angle of arrival for a signal traveling from the object to the
@@ -406,10 +404,10 @@ if(nargout>1)
 end
 end
 
-function val=pathFun2D(x,sol,Ns,r0,ce)
+function val=pathFun2D(x,sol,Ns,rE,ce)
     %This function is used to integrate the time taken
     y=deval(x,sol);
-    val=(1+NRefracExp(x,y(1,:),Ns,r0,ce)).*sqrt(1+y(2,:).^2);
+    val=(1+NRefracExp(x,y(1,:),Ns,rE,ce)).*sqrt(1+y(2,:).^2);
 end
 
 function res=bcfun(y0,y1,y0Init,y1Init)
@@ -430,10 +428,10 @@ function [dbcy0,dbcy1]=bcfunJacob(~,~)
            1 0];
 end
 
-function J=odefunJacob(x,y,Ns,r0,ce)
+function J=odefunJacob(x,y,Ns,rE,ce)
     %The Jacobian of the differential equation for raytracing the 2D
     %exponential atmospheric model.
-    expVal=NRefracExp(x,y(1),Ns,r0,ce);
+    expVal=NRefracExp(x,y(1),Ns,rE,ce);
 
     J=zeros(2,2);
     J(1,2)=1;
@@ -441,17 +439,17 @@ function J=odefunJacob(x,y,Ns,r0,ce)
     J(2,2)=ce*(x-2*y(1)*y(2)+3*x*y(2)^2)*expVal/((expVal+1)*sqrt(x^2+y(1)^2));
 end
 
-function dxdy=expDiffEq(x,y,Ns,r0,ce)
+function dxdy=expDiffEq(x,y,Ns,rE,ce)
     %Find the refractivity at location (x,y).
-    expVal=NRefracExp(x,y(1),Ns,r0,ce);
+    expVal=NRefracExp(x,y(1),Ns,rE,ce);
 
     dxdy=[y(2)
           ce*(1+y(2)^2)*(x*y(2)-y(1))*expVal/((expVal+1)*sqrt(x^2+y(1)^2))];
 end
 
-function nRefrac=NRefracExp(x,y,Ns,r0,ce)
+function nRefrac=NRefracExp(x,y,Ns,rE,ce)
     %The refractivity. This is 10^6*(index of refraction-1)
-    nRefrac=1e-6*Ns*exp(-ce*(sqrt(x.^2+y.^2)-r0));
+    nRefrac=1e-6*Ns*exp(-ce*(sqrt(x.^2+y.^2)-rE));
 end
 
 %LICENSE:

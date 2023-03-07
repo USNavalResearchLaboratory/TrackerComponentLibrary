@@ -36,9 +36,9 @@ function [aVal,aJacob,aHess,papt]=aCVSpherical(x,systemType)
 %         papt The 6X1  partial derivative with resect to time of aVal.
 %              This is all zeros, because the model is time invariant.
 %
-%A derivation of the dynamic model is provided here for systemType=0. The
-%derivations for the other system types are very similar. Let rVec be a
-%position vector. We shall use the orthonormal basis vectors:
+%A full derivation of the dynamic model is provided in [1]. Summarizing it
+%here for systemType=0, let rVec be a position vector. We shall use the
+%orthonormal basis vectors:
 %u_r=[cos(theta)cos(phi);sin(theta)*cos(phi);sin(phi)]
 %u_theta=[-sin(theta);cos(theta);0]
 %u_phi=[-cos(theta)*sin(phi);-sin(theta)*sin(phi);cos(phi)];
@@ -52,7 +52,7 @@ function [aVal,aJacob,aHess,papt]=aCVSpherical(x,systemType)
 %uDot_phi=-phiDot*u_r-thetaDot*sin(phi)*u_theta
 %The position vector is just
 %rVec=r*u_r
-%The velocity vector is the derivative of the psition vector and is
+%The velocity vector is the derivative of the position vector and is
 %rVecDot=rDot*u_r+r*uDot_r=rDot*u_r+r*thetaDot*cos(phi)*u_theta+r*phiDot*u_phi
 %The acceleration vector is the derivative of the velocity vector and
 %simplifies to
@@ -94,6 +94,11 @@ function [aVal,aJacob,aHess,papt]=aCVSpherical(x,systemType)
 % max(abs(err(:)))
 %One will see that the maximum error is on the order of 2.4940e-10,
 %indicating good agreement.
+%
+%REFERENCES:
+%[1] D. F. Crouse, "Basic Linear Dynamic Models in Local Coordinates,"
+%    Naval Research Laboratory, Washington, D.C., Tech. Rep.
+%    NRL/MR/5344--19-9882, 24 Aug. 2019.
 %
 %August 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

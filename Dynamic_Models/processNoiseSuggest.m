@@ -76,7 +76,8 @@ function procNoiseParam=processNoiseSuggest(algorithm,maxVal,T,sigmaw2,manDur)
 %           DWNA-ConstMeas, this parameter is required and is the
 %           maximum number of samples of duration T that a maximum
 %           acceleration maneuver is expected to take. This can take
-%           values, 3, 4, 5, 6 and infinity.
+%           values, 3, 4, 5, 6 and infinity. The default if omitted or an
+%           empty matrix is passed is Inf.
 %
 %OUTPUTS: procNoiseParam The value of q0 or sigmaV2 for the specified
 %                        dynamic model, chosen according to the selected
@@ -93,8 +94,8 @@ function procNoiseParam=processNoiseSuggest(algorithm,maxVal,T,sigmaw2,manDur)
 %from Chapter 6.2 and 6.3 of [1] and modified slightly, as described in the
 %comments for the implementation below.
 %
-%The solutions for the ConstMeas and MMSE methods are from [2],
-%which is an extension of the work in [3] and [4].
+%The solutions for the ConstMeas and MMSE methods are from [2], which is an
+%extension of the work in [3] and [4].
 %
 %The rule-of thumb parameters might be suitable for other dynamic models.
 %For example, when using the Singer model, given with aGaussMarkov and
@@ -123,6 +124,10 @@ function procNoiseParam=processNoiseSuggest(algorithm,maxVal,T,sigmaw2,manDur)
 %
 %April 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+if(nargin<5||isempty(manDur))
+    manDur=Inf;
+end
 
 switch(algorithm)
     case 'PolyKal-ROT'
@@ -178,7 +183,6 @@ switch(algorithm)
     otherwise
         error('Unknown algorithm chosen')
 end
-
 
 %Equation 3, the deterministic maneuvering index.
 GammaD=maxVal*T^2/sqrt(sigmaw2);
@@ -249,7 +253,8 @@ a4=k1CoeffTable(curRow,5);
 a5=k1CoeffTable(curRow,6);
 
 %Equations 6 and 7. The mean command is for averaging if one wanted a
-%length 5 maneuver.
+%length 5 maneuver. Note that equation 6 has a repeated cubed term. That
+%appears to be a mistake.
 k1=mean(a0+logVal*(a1+logVal*(a2+logVal*(a3+logVal*(a4+a5*logVal)))));
 
 if(isDiscrete)%Discrete-time

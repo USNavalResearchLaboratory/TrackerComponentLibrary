@@ -57,8 +57,8 @@ function cartPoints=spher2Cart(points,systemType,useHalfRange,zTx,zRx,M,flipNegR
 %           are assumed to be at the origin. If only a single vector is
 %           passed, then the receiver location is assumed the same for all
 %           of the target states being converted. zRx can have more than 3
-%           rows; additional rows are ignored. If monostatic or no range
-%           values are provided, an empty matrix can be passed.
+%           rows; additional rows are ignored. If no range values are
+%           provided, an empty matrix can be passed.
 %         M A 3X3XN hypermatrix of the rotation matrices to go from the
 %           alignment of the global coordinate system to that at the
 %           receiver. If omitted, then it is assumed that the local
@@ -219,7 +219,7 @@ for curPoint=1:N
     uVec=uVecL(:,curPoint);
     
     %The transmitter location in the receiver's local coordinate system.
-    zTxL=M(:,:,curPoint)*(zTx(:,curPoint)-zRx(:,curPoint));
+    zTxL=M(:,:,curPoint)*(zTx(1:3,curPoint)-zRx(1:3,curPoint));
 
     %The range from the transmitter to the target.
     r1=(r(curPoint)^2-norm(zTxL)^2)/(2*(r(curPoint)-dot(uVec,zTxL)));
@@ -229,7 +229,7 @@ for curPoint=1:N
     zL=r1*uVec;
     %Convert to global Cartesian coordinates. The transpose of a rotation
     %matrix is its inverse.
-    cartPoints(:,curPoint)=M(:,:,curPoint)'*zL+zRx(:,curPoint);
+    cartPoints(:,curPoint)=M(:,:,curPoint)'*zL+zRx(1:3,curPoint);
 end
 end
 

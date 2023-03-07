@@ -29,11 +29,18 @@ void rangeHessianGenCPP(const size_t numDim,double *H,const double *x,const bool
         const double normDeltTx=sqrt(deltaTxx2+deltaTxy2);
         const double normDeltTx3=normDeltTx*normDeltTx*normDeltTx;
         
-        H[0]=-deltaRxx2/normDeltRx3+1/normDeltRx-deltaTxx2/normDeltTx3+1/normDeltTx;
-        H[1]=-deltaRxx*deltaRxy/normDeltRx3-deltaTxx*deltaTxy/normDeltTx3;
-        H[2]=H[1];
-        H[3]=-deltaRxy2/normDeltRx3+1/normDeltRx-deltaTxy2/normDeltTx3+1/normDeltTx;
+        H[0]=-deltaRxx2/normDeltRx3+1/normDeltRx;
+        H[1]=-deltaRxx*deltaRxy/normDeltRx3;
+        H[3]=-deltaRxy2/normDeltRx3+1/normDeltRx;
         
+        if(normDeltTx!=0) {
+            //When the transmitter is the target.
+            H[0]+= -deltaTxx2/normDeltTx3+1/normDeltTx;
+            H[1]+= -deltaTxx*deltaTxy/normDeltTx3;
+            H[3]+= -deltaTxy2/normDeltTx3+1/normDeltTx;
+        }
+        H[2]=H[1];
+
         if(useHalfRange) {
             size_t i;
             
@@ -60,24 +67,33 @@ void rangeHessianGenCPP(const size_t numDim,double *H,const double *x,const bool
         const double normDeltTx3=normDeltTx*normDeltTx*normDeltTx;
     
         //H(1,1) in Matlab
-        H[0]=-deltaRxx2/normDeltRx3+1/normDeltRx-deltaTxx2/normDeltTx3+1/normDeltTx;
+        H[0]=-deltaRxx2/normDeltRx3+1/normDeltRx;
         //H(2,1) in Matlab
-        H[1]=-deltaRxx*deltaRxy/normDeltRx3-deltaTxx*deltaTxy/normDeltTx3;
+        H[1]=-deltaRxx*deltaRxy/normDeltRx3;
         //H(3,1) in Matlab
-        H[2]=-deltaRxx*deltaRxz/normDeltRx3-deltaTxx*deltaTxz/normDeltTx3;
+        H[2]=-deltaRxx*deltaRxz/normDeltRx3;
+        //H(2,2)
+        H[4]=-deltaRxy2/normDeltRx3+1/normDeltRx;
+        //H(3,2)
+        H[5]=-deltaRxy*deltaRxz/normDeltRx3;
+        //H(3,3)
+        H[8]=-deltaRxz2/normDeltRx3+1/normDeltRx;
+        
+        if(normDeltTx!=0) {
+            H[0]+= -deltaTxx2/normDeltTx3+1/normDeltTx;
+            H[1]+= -deltaTxx*deltaTxy/normDeltTx3;
+            H[2]+= -deltaTxx*deltaTxz/normDeltTx3;
+            H[4]+= -deltaTxy2/normDeltTx3+1/normDeltTx;
+            H[5]+= -deltaTxy*deltaTxz/normDeltTx3;
+            H[8]+= -deltaTxz2/normDeltTx3+1/normDeltTx;
+        }
         //H(1,2)
         H[3]=H[1];
-        //H(2,2)
-        H[4]=-deltaRxy2/normDeltRx3+1/normDeltRx-deltaTxy2/normDeltTx3+1/normDeltTx;
-        //H(3,2)
-        H[5]=-deltaRxy*deltaRxz/normDeltRx3-deltaTxy*deltaTxz/normDeltTx3;
         //H(1,3)
         H[6]=H[2];
         //H(2,3)
         H[7]=H[5];
-        //H(3,3)
-        H[8]=-deltaRxz2/normDeltRx3+1/normDeltRx-deltaTxz2/normDeltTx3+1/normDeltTx;
-        
+
         if(useHalfRange) {
             size_t i;
             
@@ -89,7 +105,8 @@ void rangeHessianGenCPP(const size_t numDim,double *H,const double *x,const bool
 }
 
 void rangeHessianCPP(const size_t numDim,double *H,const double *x,const bool useHalfRange) {
-//numDim can be 1,2, or 3. This function is monostatic-only.
+//numDim can be 1,2, or 3. This function is monostatic-only. In this
+//instance, the target and the transmitter are not collocated.
 
     if(numDim==1) {
         H[0]=0;

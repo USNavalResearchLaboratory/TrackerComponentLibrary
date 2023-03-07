@@ -9,11 +9,16 @@
 
 void rangeGradientCPP(const size_t numRows,double *J,double *tempSpace,const double *point,const bool useHalfRange,const double *lTx,const double *lRx) {
     size_t i;
-    double normVal;    
+    double normVal;
+    //This keeps track of whether or not eh transmitter is collocated with
+    //the target.
+    bool transmitterNotWithTarget=false;
 
     //deltaTx=x-lTx;
     for(i=0;i<numRows;i++) {
         tempSpace[i]=point[i]-lTx[i];
+
+        transmitterNotWithTarget=transmitterNotWithTarget||tempSpace[i];
     }
 
     normVal=0;
@@ -23,8 +28,14 @@ void rangeGradientCPP(const size_t numRows,double *J,double *tempSpace,const dou
     normVal=sqrt(normVal);
 
     //deltaTx.'/norm(deltaTx)
-    for(i=0;i<numRows;i++) {
-        J[i]=tempSpace[i]/normVal;
+    if(transmitterNotWithTarget) {
+        for(i=0;i<numRows;i++) {
+            J[i]=tempSpace[i]/normVal;
+        }
+    } else {
+        for(i=0;i<numRows;i++) {
+            J[i]=0.0;
+        }
     }
 
     //deltaRx=x-lRx;
@@ -38,7 +49,6 @@ void rangeGradientCPP(const size_t numRows,double *J,double *tempSpace,const dou
     }  
     normVal=sqrt(normVal);
 
-    //deltaTx=x-lTx;
     for(i=0;i<numRows;i++) {
         J[i]=J[i]+tempSpace[i]/normVal;
     }

@@ -80,7 +80,7 @@ function e=freshwaterRelPermittivity(T,v,algorithm)
 %    response of triply-distilled water," in Proceedings of the 4th Ultra-
 %    Wideband Short Pulse Electromagnetic Conference, Tel-Aviv, Israel,
 %    14-19 Jun. 1999, pp. 243-264.
-%[4] F. Shubitidze and U. Österberg, "Phenomenological model to fit
+%[4] F. Shubitidze and U. Osterberg, "Phenomenological model to fit
 %    complex permittivity data of water from radio to optical frequencies,"
 %    Physical Review E, vol. 75, no. 4, Apr. 2007.
 %
@@ -320,7 +320,7 @@ function e=ShubitidzeSol(T,f)
 %       equations that they used differ from the paper and are commented.
 %
 %REFERENCES:
-%[1] F. Shubitidze and U. Österberg, "Phenomenological model to fit
+%[1] F. Shubitidze and U. Osterberg, "Phenomenological model to fit
 %    complex permittivity data of water from radio to optical frequencies,"
 %    Physical Review E, vol. 75, no. 4, Apr. 2007.
 %

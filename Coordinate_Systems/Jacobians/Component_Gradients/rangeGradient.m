@@ -2,7 +2,9 @@ function J=rangeGradient(x,useHalfRange,lTx,lRx)
 %%RANGEGRADIENT Determine the gradient of a bistatic range measurement (in
 %           1D, 2D, 3D) with respect to Cartesian position (gradient
 %           components for velocity etc. are not provided). Atmospheric and
-%           other propagation effects are not taken into account.
+%           other propagation effects are not taken into account. The
+%           transmitter can be collocated with the target (in which case it
+%           is assumed they move together).
 %
 %INPUTS: x A numPosDimXN set of N target position vectors of the form
 %          [x], [x;y] or [x;y;z].
@@ -22,9 +24,11 @@ function J=rangeGradient(x,useHalfRange,lTx,lRx)
 %           range with respect to components [x,y,z] in 3D, [x,y] in 2D, or
 %           [x] in 1D  in that order for each point in x.
 %
-%Gradients with respect to bistatic range are discussed in [1].
+%Gradients with respect to bistatic range are discussed in [1]. If the
+%transmitter is collocated with the target, it is assumed to move with the
+%target.
 %
-%EXAMPLE:
+%EXAMPLE 1:
 %Here, we demonstrate that the gradient produced by this function is
 %consistent with what one obtains using numerical differentiation.
 % lRx=[4e3;-6e3;12];
@@ -38,6 +42,20 @@ function J=rangeGradient(x,useHalfRange,lTx,lRx)
 %The relative difference between the values should be less than 1e-9, which
 %indicates good agreement.
 %
+%EXAMPLE 2:
+%In this example, we also verify that the results agree with finite
+%differencing, but here the transmitter is collocated with the target (and
+%thus is assumed to move with the target).
+% lRx=[4e3;-6e3;12];
+% t=[-3e3;-2e3;-1e3];
+% useHalfRange=false;
+% gradVal=rangeGradient(t,useHalfRange,t,lRx);
+% fun=@(t)getRange(t,useHalfRange,t,lRx);
+% gradNumDiff=numDiff(t,fun,1);
+% RelDiff=max(abs((gradNumDiff-gradVal)./gradNumDiff))
+%The relative difference between the values should again be less than 1e-9,
+%which indicates good agreement.
+%
 %REFERENCES:
 %[1] D. F. Crouse, "Basic tracking using nonlinear 3D monostatic and
 %    bistatic measurements," IEEE Aerospace and Electronic Systems
@@ -47,6 +65,7 @@ function J=rangeGradient(x,useHalfRange,lTx,lRx)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 numDim=size(x,1);
+N=size(x,2);
 
 if(nargin<2||isempty(useHalfRange))
     useHalfRange=false; 
@@ -60,14 +79,17 @@ if(nargin<3||isempty(lTx))
     lTx=zeros(numDim,1); 
 end
 
-N=size(x,2);
-
 J=zeros(1,numDim,N);
 for curX=1:N
     deltaRx=x(:,curX)-lRx;
     deltaTx=x(:,curX)-lTx;
 
-    J(1,:,curX)=deltaRx.'/norm(deltaRx)+deltaTx.'/norm(deltaTx);
+    if(all(deltaTx==0))
+        %If the transmitter is collocated with the target.
+        J(1,:,curX)=deltaRx.'/norm(deltaRx);
+    else
+        J(1,:,curX)=deltaRx.'/norm(deltaRx)+deltaTx.'/norm(deltaTx);
+    end
 end
 
 if(useHalfRange)

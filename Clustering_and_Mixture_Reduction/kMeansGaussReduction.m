@@ -89,7 +89,7 @@ function [wRed,xRed,PRed,exitCode]=kMeansGaussReduction(wOrig,xOrig,POrig,param4
 %    clustering," in Proceedings of the 12th International Conference on
 %    Information Fusion, Seattle, WA, 6-9 Jul. 2009, pp. 1536-1543.
 %[2] A. Nikseresht and M. Gelgon, "Gossip-based computation of a Gaussian
-%    mixture model for distributed multimedia indexing,” IEEE Transactions
+%    mixture model for distributed multimedia indexing," IEEE Transactions
 %    on Multimedia, vol. 10, no. 3, pp. 385-392, Apr. 2008.
 %[3] D. F. Crouse, P. Willett, K. Pattipati, and L. Svensson, "A look at
 %    Gaussian mixture reduction algorithms," in Proceedings of the 14th

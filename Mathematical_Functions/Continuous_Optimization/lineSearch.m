@@ -18,7 +18,7 @@ function [xMin,fMin,fGradMin,gMin,alpha,exitCode]=lineSearch(func,x,d,fInit,fGra
 %          these are omitted or empty matrices are, then func is
 %          called to obtain these values.
 % lineSearchParams A structure whose members determine the accuracy and
-%          performance of the algorithms. Possible mebers names
+%          performance of the algorithms. Possible members names
 %          (used, for example, as linSearchParams.fTol) are:
 %          algorithm A parameter specifying the line search algorithm to use.
 %             Possible values are:
@@ -34,7 +34,7 @@ function [xMin,fMin,fGradMin,gMin,alpha,exitCode]=lineSearch(func,x,d,fInit,fGra
 %               conditions are satisfied.
 %             1) Use a backtracking algorithm to just satisfy Armijo's
 %               rule. Armijo's rule is originally from [2] and in places
-%               such at Chapter 1.2 of [5], the expression fo the rule
+%               such at Chapter 1.2 of [5], the expression of the rule
 %               implies the backtracking algorithm. The input stepSize is
 %               the maximum and initial step size tested. 
 %             2) Assume that stepSize is the upper bound on the step and

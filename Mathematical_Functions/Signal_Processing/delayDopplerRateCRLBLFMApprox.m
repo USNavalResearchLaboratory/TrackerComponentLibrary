@@ -15,7 +15,7 @@ function CRLB=delayDopplerRateCRLBLFMApprox(B,T,P,TR,SNRIn,c,fc)
 %    SNRIn The unitless ratio of the instantaneous signal power to average
 %          noise power ratio of each sample. For a signal
 %          x(t)=A*exp(1i*f(t))+w(t) where w(t) is noise, this is
-%          A^2/E(w(t)^2). it is assumes that the noise is not correlated
+%          A^2/E(w(t)^2). It is assumed that the noise is not correlated
 %          over time.
 %     c,fc These two optional parameters are only provided if one wishes to
 %          have the results given in terms of range and range rate. c is

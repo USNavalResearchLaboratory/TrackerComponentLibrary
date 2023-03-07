@@ -77,15 +77,7 @@ classdef Interval < matlab.mixin.CustomDisplay
                 assert(all(isnan(newInt.lb(:))|newInt.lb(:)<=newInt.ub(:)));
             end
         end
-        
-
-
-        
-  
-
-        
-
-
+       
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Numeric functions of intervals of Chapter 9.2 of the     %%%
 %%% IEEE Std 1788-2015                                       %%%

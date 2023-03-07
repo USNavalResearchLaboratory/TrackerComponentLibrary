@@ -7,8 +7,8 @@ function [xEst,PEst,logLikes]=singleScanUpdate(xHyp,PHyp,A,algSel1,algSel2,param
 %                  global nearest neighbor (GNN) update, a joint
 %                  probabilistic data association (JPDA) update, a JPDA*
 %                  update, a GNN-JPDA update, or approximate JPDA and
-%                  GNN-JPDA updates as well as a na�ve nearest neighbor
-%                  algorithm. In all instances except for the na�ve nearest
+%                  GNN-JPDA updates as well as a naive nearest neighbor
+%                  algorithm. In all instances except for the naive nearest
 %                  neighbor algorithm, it is assumed that each measurement
 %                  can be assigned to at most one target, and each target
 %                  can be assigned to at most one measurement.
@@ -41,13 +41,13 @@ function [xEst,PEst,logLikes]=singleScanUpdate(xHyp,PHyp,A,algSel1,algSel2,param
 %             1) JPDA
 %             2) GNN
 %             3) Parallel single-target PDAs
-%             4) Na�ve nearest neighbor
+%             4) Naive nearest neighbor
 %             5) JPDA*
 %             6) Approximate GNN-JPDA
 %             7) Approximate JPDA 
 %             8) Set JPDA
-%             9) Na�ve nearest neighbor JPDA
-%             10) Approximate na�ve nearest neighbor JPDA
+%             9) Naive nearest neighbor JPDA
+%             10) Approximate naive nearest neighbor JPDA
 %     algSel2 An optional parameter that further specifies the algorithm
 %             used when algSel1=6-7. If omitted but algSel1 is specified, a
 %             default value of 0 is used. If both algSel1 and algSel2
@@ -94,7 +94,7 @@ function [xEst,PEst,logLikes]=singleScanUpdate(xHyp,PHyp,A,algSel1,algSel2,param
 %association probabilities are computed. They are described in the comments
 %to the function calc2DAssignmentProbsApprox.
 %
-%Na�ve nearest neighbor association consists of just choosing the most
+%Naive nearest neighbor association consists of just choosing the most
 %likely assignment of a target to a measurement or missed detection without
 %regard to whether one measurmeent is assigned to multiple targets.
 %

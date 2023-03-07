@@ -25,7 +25,7 @@ function numHyps=numJPDAStarTarMeasHyps(numTar,numMeas)
 %REFERENCES:
 %[1] H. A. P. Blom, E. A. Bloem, and D. Musicki, "JIPDA*: Automatic
 %    target tracking avoiding track coalescence," IEEE Transactions on
-%    Aerospace and Electronic Systems, vol. 51, no. 2, pp. 962–974, Apr.
+%    Aerospace and Electronic Systems, vol. 51, no. 2, pp. 962-974, Apr.
 %    2015.
 %[2] D. F. Crouse, Y. Bar-Shalom, P. Willett, and L. Svensson, "The JPDAF
 %    in practical systems: Computation and snake oil," in Proceedings of

@@ -1,31 +1,31 @@
- /*MINMATOVERDIMC A set of C-only implementations of a function to obtain
-  *             the hypermatrix that is result of minimizing a larger
-  *             hypermatrix over a particular dimension. This is
-  *             essentially min(C,[],minIdx) in matlab. The bulk of the
-  *             code for the function is written as a macro that is filled
-  *             in with the specific data type of the hypermatrix being
-  *             minimized. See the Matlab function minMatOverDim for
-  *             details.
-  *
-  *Each of the functions, such as heapSortVecCIdxSizeT, has the same
-  *inputs. The difference is only in the type of the inputs M and C, which
-  *are specified by the name of the function. The inputs to the functions
-  *have the following meaning:
-  * S The number of dimensions of matrix C and the number of elements in
-  *   nDims. S>1.
-  * nVals A length-S array where nVals[i] is the size of the ith dimension
-  *   of the hypermatrix C.
-  * M The matrix M into which the results of the minimization are placed.
-  *   This cannot be the same as C. The number of elements is the product
-  *   of everything in nVals except nVals[minIdx]. Values are stored by
-  *   column, not row. If minIdx>=S, then C will just be copied into M.
-  * C The original hypermatrix on which the minimization will be performed.
-  *   Values are stored by column, as in Fortran and Matlab.
-  * minIdx The dimension over which the minimization will be performed.
-  *    minIdx.=0.
-  *March 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
-  */
- /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
+/*MINMATOVERDIMC A set of C-only implementations of a function to obtain
+*                the hypermatrix that is result of minimizing a larger
+*                hypermatrix over a particular dimension. This is
+*                essentially min(C,[],minIdx) in matlab. The bulk of the
+*                code for the function is written as a macro that is filled
+*                in with the specific data type of the hypermatrix being
+*                minimized. See the Matlab function minMatOverDim for
+*                details.
+*
+*Each of the functions, such as heapSortVecCIdxSizeT, has the same
+*inputs. The difference is only in the type of the inputs M and C, which
+*are specified by the name of the function. The inputs to the functions
+*have the following meaning:
+* S The number of dimensions of matrix C and the number of elements in
+*   nDims. S>1.
+* nVals A length-S array where nVals[i] is the size of the ith dimension
+*   of the hypermatrix C.
+* M The matrix M into which the results of the minimization are placed.
+*   This cannot be the same as C. The number of elements is the product
+*   of everything in nVals except nVals[minIdx]. Values are stored by
+*   column, not row. If minIdx>=S, then C will just be copied into M.
+* C The original hypermatrix on which the minimization will be performed.
+*   Values are stored by column, as in Fortran and Matlab.
+* minIdx The dimension over which the minimization will be performed.
+*    minIdx.=0.
+*March 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
+*/
+/*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
 #include "basicMatOps.h"
 

@@ -56,8 +56,14 @@ double getRangeRate2DCPP(const double *xTar,bool useHalfRange,const double *xTx,
     dtl[1]=xTar[1]-xTx[1];
     //Normalize
     magVal=sqrt(dtl[0]*dtl[0]+dtl[1]*dtl[1]);
-    dtl[0]/=magVal;
-    dtl[1]/=magVal;
+
+    if(magVal==0) {
+        dtl[0]=0;
+        dtl[1]=0;
+    } else {
+        dtl[0]/=magVal;
+        dtl[1]/=magVal;
+    }
     
     rr=(dtr[0]+dtl[0])*vt[0]+(dtr[1]+dtl[1])*vt[1]
             -dtr[0]*vr[0]-dtr[1]*vr[1]
@@ -80,7 +86,7 @@ double getRangeRate3DCPP(const double *xTar,bool useHalfRange,const double *xTx,
  *             divided by two. 
  *         xTx The 6X1 [x;y;z;xDot;yDot;zDot] position and velocity
  *             vector of the transmitter in global Cartesian coordinates.
- *         xTx The 6X1 [x;y;z;xDot;yDot;zDot] position and velocity
+ *         xRx The 6X1 [x;y;z;xDot;yDot;zDot] position and velocity
  *             vector of the receiver in global Cartesian coordinates.
  *
  *OUTPUTS: rr The range rate as a double.
@@ -120,9 +126,15 @@ double getRangeRate3DCPP(const double *xTar,bool useHalfRange,const double *xTx,
     dtl[2]=xTar[2]-xTx[2];
     //Normalize
     magVal=sqrt(dtl[0]*dtl[0]+dtl[1]*dtl[1]+dtl[2]*dtl[2]);
-    dtl[0]/=magVal;
-    dtl[1]/=magVal;
-    dtl[2]/=magVal;
+    if(magVal==0) {
+        dtl[0]=0;
+        dtl[1]=0;
+        dtl[2]=0;
+    } else {
+        dtl[0]/=magVal;
+        dtl[1]/=magVal;
+        dtl[2]/=magVal;
+    }
     
     rr= (dtr[0]+dtl[0])*vt[0]+(dtr[1]+dtl[1])*vt[1]+(dtr[2]+dtl[2])*vt[2]
             -dtr[0]*vr[0]-dtr[1]*vr[1]-dtr[2]*vr[2]
@@ -159,7 +171,13 @@ double getRangeRate1DCPP(const double *xTar,bool useHalfRange,const double *xTx,
     const double dtl=xTar[0]-xTx[0];
 
     const double dtrRat=dtr/sqrt(dtr*dtr);//Effectively a signum function.
-    const double dtlRat=dtl/sqrt(dtl*dtl);
+    double dtlRat;
+    
+    if(dtl==0) {
+        dtlRat=0;
+    } else {
+        dtlRat=dtl/sqrt(dtl*dtl);
+    }
 
     double rr=(dtrRat+dtlRat)*xTar[1]-dtrRat*xRx[1]-dtlRat*xTx[1];
 

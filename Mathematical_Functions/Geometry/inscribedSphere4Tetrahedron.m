@@ -36,8 +36,8 @@ function [zCent,r]=inscribedSphere4Tetrahedron(v)
 %
 %REFERENCES:
 %[1] P. P. Klein, "The insphere of a tetrahedron," Applied Mathematics,
-%    vol. 11, no. 7, pp. 601–612, Jul. 2020.
-%[2] J. Burkardt, “Computational geometry lab: TETRAHEDRONS,”
+%    vol. 11, no. 7, pp. 601-612, Jul. 2020.
+%[2] J. Burkardt, "Computational geometry lab: TETRAHEDRONS,"
 %    Virginia Tech, Tech. Rep., 23 Dec. 2010. [Online]. Available:
 %    https://people.sc.fsu.edu/~jburkardt/classes/cg_2007/cg_lab_tetrahedrons.pdf
 %[3] M. Pollicott, "Limit points for tetrahedra and inscribed spheres,"

@@ -1,4 +1,4 @@
-function J=calcPolarRRJacob(x,systemType,useHalfRange,lTx,lRx,M)
+function J=calcPolarRRJacob(x,systemType,useHalfRange,lTx,lRx)
 %%CALCPOLARRRJACOB Calculate the Jacobian of a 2D polar measurement,
 %                  with non-relativistic range rate, ignoring atmospheric
 %                  effects. The derivatives are taken with respect to
@@ -18,11 +18,6 @@ function J=calcPolarRRJacob(x,systemType,useHalfRange,lTx,lRx,M)
 %          is not provided is false.
 %      lTx The 4X1 position and velocity vector of the transmitter.
 %      lRx The 4X1 position and velocity vector of the receiver.
-%        M A 2X2 rotation matrices to go from the alignment of the global
-%          coordinate system to that at the receiver. If omitted or an
-%          empty matrix is passed, then it is assumed that the local
-%          coordinate system is aligned with the global and M=eye(2) --the
-%          identity matrix is used.
 %
 %OUTPUTS: J The 2X4 Jacobian matrix with derivatives with respect to
 %           position components and velocity. Each row is a component of
@@ -30,14 +25,11 @@ function J=calcPolarRRJacob(x,systemType,useHalfRange,lTx,lRx,M)
 %           with respect to [x,y,xDot,yDot] across columns.
 %
 %This function just calls the functions rangeGradient, polAngGradient and
-%rangeRateGradient.
+%rangeRateGradient. The rotation of the angular reference point does not
+%matter (i.e. the definition of the local x direction).
 %
 %February 2017 David F.Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
-
-if(nargin<6||isempty(M))
-	M=eye(2,2); 
-end
 
 if(nargin<5||isempty(lRx))
 	lRx=zeros(4,1); 
@@ -57,7 +49,7 @@ end
 
 J=zeros(2,4);
 J(1,1:2)=rangeGradient(x(1:2),useHalfRange,lTx(1:2),lRx(1:2));
-J(2,1:2)=polAngGradient(x(1:2),systemType,lRx(1:2),M);
+J(2,1:2)=polAngGradient(x(1:2),systemType,lRx(1:2));
 J(3,:)=rangeRateGradient(x,useHalfRange,lTx,lRx);
 end
 

@@ -18,7 +18,7 @@ function vals=chirpZTrans(x,M,W,A)
 %          the value is different for each column or 1X1 if it is the same
 %          for all columns of x. If x is a gpuArray then this should be one
 %          too.
-%        A The base for another exponential term fo the transform. if this
+%        A The base for another exponential term of the transform. if this
 %          parameter is omitted or an empty matrix is passed, the default
 %          of A=1 is used. This can be complex. This is numSeqX1 or
 %          1XnumSeq if the value is different for each column or 1X1 if it

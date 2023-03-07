@@ -14,10 +14,10 @@ function [phi,dphi]=pt2TetrahedronCoords3D(x,v)
 %             (rows) taken with respect to the elements of x (columns) for
 %             each input measurement (3rd dimension).
 %
-%In [1], the coordinates are defined as the ratio of th volume of a number
+%In [1], the coordinates are defined as the ratio of the volume of a number
 %of sub-tetrahedra (with x as a vertex) and the tetrahedron given in v.
 %Here, things differ a little bit in that signed tetrahedral volumes are
-%using with a very specific ordering. This allows this function to work
+%used with a very specific ordering. This allows this function to work
 %with points inside the tetrahedron (with all positive weights) as well as
 %with points outside the tetrahdron (with some negative weights).
 %
@@ -59,8 +59,6 @@ b=v(:,2);
 c=v(:,3);
 d=v(:,4);
 
-V=tetrahedronVolume(v,false);
-
 numX=size(x,2);
 phi=zeros(4,numX);
 dphi=zeros(4,3,numX);
@@ -70,7 +68,14 @@ for curX=1:numX
     [Vc,dVc]=tetrahedronVolume([a,x(:,curX),d,b],false,2);
     [Vd,dVd]=tetrahedronVolume([a,x(:,curX),b,c],false,2);
 
+    %Nominally, V=tetrahedronVolume(v,false); should equal Va+Vb+Vc+Vd.
+    %However, to ensure that phi is normalized to more significant digits,
+    %we compute V directly from the sum rather than computing it once
+    %outside this loop and reusing it.
+    V=Va+Vb+Vc+Vd;
+
     phi(:,curX)=[Va;Vb;Vc;Vd]/V;
+
     dphi(:,:,curX)=[dVa;
                     dVb;
                     dVc;

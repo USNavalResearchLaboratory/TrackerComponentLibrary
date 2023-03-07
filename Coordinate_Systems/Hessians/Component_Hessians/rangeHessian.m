@@ -2,7 +2,9 @@ function H=rangeHessian(x,useHalfRange,lTx,lRx)
 %%RANGEHESSIAN Determine the Hessian matrix (a matrix of second-order
 %          partial derivatives) of a bistatic range rate measurement with
 %          respect to Cartesian position. Atmospheric and other propagation
-%          effects are not taken into account.
+%          effects are not taken into account. The transmitter can be
+%          collocated with the target  (in which case it is assumed that
+%          they move together).
 %
 %INPUTS: x A numPosDimXN set of N target position vectors of the form
 %          [x], [x;y] or [x;y;z].
@@ -28,7 +30,7 @@ function H=rangeHessian(x,useHalfRange,lTx,lRx)
 %Expressions for bistatic range are given in [1]. The Hessian comes from
 %simple differentiation of the expression.
 %
-%EXAMPLE:
+%EXAMPLE 1:
 %Here, we verify that a numerically differentiated Hessian is consistent
 %with the analytic one produced by this function.
 % x=[100;-1000;500];
@@ -57,6 +59,35 @@ function H=rangeHessian(x,useHalfRange,lTx,lRx)
 % max(abs((H(:)-HNumDiff(:))./H(:)))
 %The relative error will be on the order of 9e-7, indicating good agreement
 %between the numerical Hessian matrix and the actual Hessian matrix.
+%
+%EXAMPLE 2:
+%This example is similar to the first one, except the transmitter is on the
+%target.
+% x=[100;-1000;500];
+% lRx=[500;20;-400];
+% useHalfRange=false;
+% epsVal=1e-4;
+% 
+% gradVal=rangeGradient(x,useHalfRange,x,lRx);
+% gradValdX=rangeGradient(x+[epsVal;0;0],useHalfRange,x+[epsVal;0;0],lRx);
+% gradValdY=rangeGradient(x+[0;epsVal;0],useHalfRange,x+[0;epsVal;0],lRx);
+% gradValdZ=rangeGradient(x+[0;0;epsVal],useHalfRange,x+[0;0;epsVal],lRx);
+% HNumDiff=zeros(3,3);
+% HNumDiff(1,1)=(gradValdX(1)-gradVal(1))/epsVal;
+% HNumDiff(1,2)=(gradValdX(2)-gradVal(2))/epsVal;
+% HNumDiff(2,1)=HNumDiff(1,2);
+% HNumDiff(1,3)=(gradValdX(3)-gradVal(3))/epsVal;
+% HNumDiff(3,1)=HNumDiff(1,3);
+% HNumDiff(2,2)=(gradValdY(2)-gradVal(2))/epsVal;
+% HNumDiff(2,3)=(gradValdY(3)-gradVal(3))/epsVal;
+% HNumDiff(3,2)=HNumDiff(2,3);
+% HNumDiff(3,3)=(gradValdZ(3)-gradVal(3))/epsVal;
+% 
+% H=rangeHessian(x,useHalfRange,x,lRx);
+% max(abs((H(:)-HNumDiff(:))./H(:)))
+%The relative error will be on the order of 9.5e-8, indicating good
+%agreement between the numerical Hessian matrix and the actual Hessian
+%matrix.
 %
 %REFERENCES:
 %[1] D. F. Crouse, "Basic tracking using nonlinear 3D monostatic and
@@ -88,18 +119,36 @@ for curX=1:N
     deltaTx=x(:,curX)-lTx;
     normDeltTx=norm(deltaTx);
     
-    H(1,1,curX)=-deltaRx(1)^2/normDeltRx^3+1/normDeltRx-deltaTx(1)^2/normDeltTx^3+1/normDeltTx;
+    H(1,1,curX)=-deltaRx(1)^2/normDeltRx^3+1/normDeltRx;
+
+    if(normDeltTx~=0)
+        %If the target is not collocated with the transmitter.
+        H(1,1,curX)=H(1,1,curX)-deltaTx(1)^2/normDeltTx^3+1/normDeltTx;
+    end
     
     if(numDim>1)
-        H(2,2,curX)=-deltaRx(2)^2/normDeltRx^3+1/normDeltRx-deltaTx(2)^2/normDeltTx^3+1/normDeltTx;
-        H(1,2,curX)=-deltaRx(1)*deltaRx(2)/normDeltRx^3-deltaTx(1)*deltaTx(2)/normDeltTx^3;
+        H(2,2,curX)=-deltaRx(2)^2/normDeltRx^3+1/normDeltRx;
+        H(1,2,curX)=-deltaRx(1)*deltaRx(2)/normDeltRx^3;
+
+        if(normDeltTx~=0)
+            H(2,2,curX)=H(2,2,curX)-deltaTx(2)^2/normDeltTx^3+1/normDeltTx;
+            H(1,2,curX)=H(1,2,curX)-deltaTx(1)*deltaTx(2)/normDeltTx^3;
+        end
+
         H(2,1,curX)=H(1,2,curX);
 
         if(numDim>2)
-            H(3,3,curX)=-deltaRx(3)^2/normDeltRx^3+1/normDeltRx-deltaTx(3)^2/normDeltTx^3+1/normDeltTx;
-            H(1,3,curX)=-deltaRx(1)*deltaRx(3)/normDeltRx^3-deltaTx(1)*deltaTx(3)/normDeltTx^3;
+            H(3,3,curX)=-deltaRx(3)^2/normDeltRx^3+1/normDeltRx;
+            H(1,3,curX)=-deltaRx(1)*deltaRx(3)/normDeltRx^3;
+            H(2,3,curX)=-deltaRx(2)*deltaRx(3)/normDeltRx^3;
+
+            if(normDeltTx~=0)
+                H(3,3,curX)=H(3,3,curX)-deltaTx(3)^2/normDeltTx^3+1/normDeltTx;
+                H(1,3,curX)=H(1,3,curX)-deltaTx(1)*deltaTx(3)/normDeltTx^3;
+                H(2,3,curX)=H(2,3,curX)-deltaTx(2)*deltaTx(3)/normDeltTx^3;
+            end
+
             H(3,1,curX)=H(1,3,curX);
-            H(2,3,curX)=-deltaRx(2)*deltaRx(3)/normDeltRx^3-deltaTx(2)*deltaTx(3)/normDeltTx^3;
             H(3,2,curX)=H(2,3,curX);
         end
     end

@@ -1,7 +1,6 @@
 function J=calcSpherJacob(x,systemType,useHalfRange,lTx,lRx,M)
 %%CALCSPHERJACOB Calculate the Jacobian for a monostatic or bistatic
 %           spherical measurement with respect to 3D Cartesian position.
-%           Atmospheric effects are ignored.
 %
 %INPUTS: x The 3X1 position of the target in Cartesian coordinates in the
 %          order [x;y;z].
@@ -76,7 +75,8 @@ if(nargin<2||isempty(systemType))
     systemType=0;
 end
 
-J=[rangeGradient(x(1:3,:),useHalfRange,lTx(1:3),lRx(1:3));spherAngGradient(x(1:3,:),systemType,lRx(1:3),M)];
+J=[rangeGradient(x(1:3,:),useHalfRange,lTx(1:3),lRx(1:3));
+   spherAngGradient(x(1:3,:),systemType,lRx(1:3),M)];
 end
 
 %LICENSE:

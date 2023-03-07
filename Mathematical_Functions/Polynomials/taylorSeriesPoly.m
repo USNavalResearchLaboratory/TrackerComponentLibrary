@@ -82,21 +82,21 @@ function polyMat=taylorSeriesPoly(a,multiVarDerivs,order)
 %     end
 % end
 %
-% %Given the above function, we create the function hanel to pass the
+% %Given the above function, we create the function handle to pass the
 % multiVarDerivs function as
 % a=zeros(2,1);
 % a(1)=2;
 % a(2)=3;
 % multiVarDerivs=@(deg)testDerivs(deg,a(1),a(2));
-% %Next, we  create the interpolating polynmials from first to fourth order
-% %as
+% %Next, we  create the interpolating polynomials from first to fourth
+% %order as
 % polyMat1=taylorSeriesPoly(a,multiVarDerivs,1);
 % polyMat2=taylorSeriesPoly(a,multiVarDerivs,2);
 % polyMat3=taylorSeriesPoly(a,multiVarDerivs,3);
 % polyMat4=taylorSeriesPoly(a,multiVarDerivs,4);
 %
 % %We would like to demonstrate that near x1=2, x2=3, the approximation
-% %becomes bettwe with increasing polynomial order. Thus, we look at the
+% %becomes better with increasing polynomial order. Thus, we look at the
 % %magnitudes of the differences between the estimates and the true value
 % %at the point x1=2.01, x2=3.01
 % x=zeros(2,1);

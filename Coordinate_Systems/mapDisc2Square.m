@@ -1,7 +1,7 @@
 function ab=mapDisc2Square(ab)
-%%MAPDISC2SQUARE Given points in Mat Cartesian points from a space on a
+%%MAPDISC2SQUARE Given Cartesian points, map them from a space on a 2D
 %           disc onto a square space using the transformation of [1]. This
-%           is a bijective area- preserving transformation. This function
+%           is a bijective area-preserving transformation. This function
 %           is the inverse of mapSquare2Disc.
 %
 %INPUTS: ab A 2XnumPts list of real 2D points to transform.

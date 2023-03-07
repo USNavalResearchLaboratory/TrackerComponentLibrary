@@ -46,8 +46,8 @@ function pazPts=Cart2PolarAzEquidistProj(zCart,latLonRef,a,f,algSel)
 % RelErr=max(max(abs((xCartBack-xCart)./xCart)))
 %
 %REFERENCES:
-%[1] J. P. Snyder, Map Projection – A Working Manual. Washington, D.C.:
-%    U.S. Geological Survey, 1987, professional Paper 1395.
+%[1] J. P. Snyder, Map Projection - A Working Manual. Washington, D.C.:
+%    U.S. Geological Survey, 1987, Professional Paper 1395.
 %
 %January 2022 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

@@ -39,6 +39,9 @@ function [ellipsPoints,coeffData]=MSL2EllipseHelmert(points,useNGAApprox,modelTy
 %                   another call of ellips2MSLHelmert or MSL2EllipseHelmert
 %                   to make it faster.
 %
+%Note that this function will be very slow if one hasn't called
+%CompileCLibraries to compile the spherical harmonic synthesis functions.
+%
 %As described in Chapter 5.5 of [1], the MSL height using Helmert's
 %projection is just the ellipsoidal height minus the geoid height. This
 %function just calls getEGMGeoidHeight to get the geoidal height and

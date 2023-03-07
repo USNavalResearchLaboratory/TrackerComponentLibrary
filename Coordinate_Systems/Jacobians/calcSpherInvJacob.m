@@ -1,7 +1,10 @@
 function JTotal=calcSpherInvJacob(z,systemType)
 %%SPHERINVJACOB Calculate the Jacobian for a 3D Cartesian position with
 %          respect to monostatic spherical range, azimuth, and elevation
-%          components.
+%          components. This produces derivatives of (x,y,z) with respect to
+%          (range,Az,El). The function calcSpherJacob produces derivatives
+%          of (range,Az,El) with respect to (x,y,z) in the more general
+%          bistatic case.
 %
 %INPUTS: z The 3XN position vectors in the global spherical coordinate
 %          system, each with [range;Az;El] components.
@@ -32,7 +35,7 @@ function JTotal=calcSpherInvJacob(z,systemType)
 %           of the row component with respect to [r,azimuth,elevation] in
 %           that order.
 %
-%This function evaluates analytic expressions for the Hessian matrix that
+%This function evaluates analytic expressions for the Jacobian matrix that
 %were derived by differentiating standard equations for the spherical
 %coordinate systems.
 %

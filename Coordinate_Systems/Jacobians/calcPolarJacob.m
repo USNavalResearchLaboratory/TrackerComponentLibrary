@@ -1,4 +1,4 @@
-function J=calcPolarJacob(x,systemType,useHalfRange,lTx,lRx,M)
+function J=calcPolarJacob(x,systemType,useHalfRange,lTx,lRx)
 %%CALCPOLARJACOB Calculate the Jacobian for a 2D polar measurement,
 %                ignoring atmospheric effects with respect to Cartesian
 %                position.
@@ -23,28 +23,18 @@ function J=calcPolarJacob(x,systemType,useHalfRange,lTx,lRx,M)
 %          Cartesian coordinates. If this parameter is omitted or an
 %          empty matrix is passed, then the receiver is assumed to be at
 %          the origin.
-%        M A 2X2 rotation matrices to go from the alignment of the global
-%          coordinate system to that at the receiver. As noted below, this
-%          can be omitted or an empty matrix passed, because M does not
-%          actually matter.
 %
 %OUTPUTS: J The 2X2XnumPoints set of Jacobian matrices, one for each point
 %           in x, with derivatives with respect to position components.
 %           Each row is a component of range and azimuth in that order with
 %           derivatives taken with respect to [x,y] across columns.
 %
-%This function just calls rangeGradient and polAngGradient. The rotation of
-%the coordinate system by M does not affect the moments, because all it
-%effectively does is add a constant value to the angle. The matrix M is
-%just included to indicate that the function will work with differently
-%rotated coordinate systems.
+%This function just calls rangeGradient and polAngGradient. A rotation of
+%the angular coordinate system by M does not affect the moments, so no
+%rotation matrix is needed
 %
 %February 2017 David F.Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
-
-if(nargin<6||isempty(M))
-	M=eye(2,2); 
-end
 
 if(nargin<5||isempty(lRx))
 	lRx=zeros(2,1); 
@@ -62,7 +52,7 @@ if(nargin<2||isempty(systemType))
 	systemType=0; 
 end
 
-J=[rangeGradient(x(1:2,:),useHalfRange,lTx(1:2),lRx(1:2));polAngGradient(x(1:2,:),systemType,lRx(1:2),M)];
+J=[rangeGradient(x(1:2,:),useHalfRange,lTx(1:2),lRx(1:2));polAngGradient(x(1:2,:),systemType,lRx(1:2))];
 
 end
 

@@ -1,4 +1,4 @@
-function HTotal=uvHessian(xG,lRx,M)
+function HTotal=uvHessian(xG,lRx,M,includeW)
 %%UVHESSIAN Determine the Hessian matrix (second derivative matrix) of a
 %           direction cosine measurement with respect to 3D position.
 %           Relativity and atmospheric effects are not taken into account.
@@ -10,12 +10,21 @@ function HTotal=uvHessian(xG,lRx,M)
 %         M A 3X3 rotation matrix from the global coordinate system to the
 %           orientation of the coordinate system at the receiver. If
 %           omitted, it is assumed to be the identity matrix.
+%  includeW An optional boolean value indicating whether a third direction
+%           cosine component should be included. The u and v direction
+%           cosines are two parts of a 3D unit vector. Generally, one might
+%           assume that the target is in front of the sensor, so the third
+%           component would be positive and is not needed. However, the
+%           third component can be included if ambiguity exists. The
+%           default if this parameter is omitted or an empty matrix is
+%           passed is false.
 %
-%OUTPUTS: HTotal A 3X3X2XN matrix such that for the ith measurement,
+%OUTPUTS: HTotal A 3X3X(2+includeW)XN matrix such that for the ith measurement,
 %          HTotal(:,:,1,i) is the Hessian matrix with respect to the u
 %          component and HTotal(:,:,2,i) is the Hessian matrix with respect
-%          to the v component. The elements in the matrices for each
-%          component/ point are
+%          to the v component and, if included, HTotal(:,:,3,i) is the
+%          Hessian matrix with respect to the w component. The elements in
+%          the matrices for each component/ point are
 %          ordered [d^2/(dxdx), d^2/(dxdy), d^2/(dxdz);
 %                   d^2/(dydx), d^2/(dydy), d^2/(dydz);
 %                   d^2/(dzdx), d^2/(dzdy), d^2/(dzdz)];
@@ -30,36 +39,27 @@ function HTotal=uvHessian(xG,lRx,M)
 %with the analytic one produced by this function.
 % xG=[100;-1000;500];
 % lRx=[500;20;-400];
-% epsVal=1e-5;
+% epsVal=1e-6;
 % M=randRotMat(3);
+% includeW=true;
 % 
-% H=uvHessian(xG,lRx,M);
-% 
-% J=uvGradient(xG,lRx,M);
-% JdX=uvGradient(xG+[epsVal;0;0],lRx,M);
-% JdY=uvGradient(xG+[0;epsVal;0],lRx,M);
-% JdZ=uvGradient(xG+[0;0;epsVal],lRx,M);
+% H=uvHessian(xG,lRx,M,includeW);
+% J=uvGradient(xG,lRx,M,includeW);
+% JdX=uvGradient(xG+[epsVal;0;0],lRx,M,includeW);
+% JdY=uvGradient(xG+[0;epsVal;0],lRx,M,includeW);
+% JdZ=uvGradient(xG+[0;0;epsVal],lRx,M,includeW);
 % HNumDiff=zeros(3,3,2);
-% HNumDiff(1,1,1)=(JdX(1,1)-J(1,1))/epsVal;
-% HNumDiff(1,2,1)=(JdX(1,2)-J(1,2))/epsVal;
-% HNumDiff(2,1,1)=HNumDiff(1,2,1);
-% HNumDiff(1,3,1)=(JdX(1,3)-J(1,3))/epsVal;
-% HNumDiff(3,1,1)=HNumDiff(1,3,1);
-% HNumDiff(2,2,1)=(JdY(1,2)-J(1,2))/epsVal;
-% HNumDiff(2,3,1)=(JdY(1,3)-J(1,3))/epsVal;
-% HNumDiff(3,2,1)=HNumDiff(2,3,1);
-% HNumDiff(3,3,1)=(JdZ(1,3)-J(1,3))/epsVal;
-% 
-% HNumDiff(1,1,2)=(JdX(2,1)-J(2,1))/epsVal;
-% HNumDiff(1,2,2)=(JdX(2,2)-J(2,2))/epsVal;
-% HNumDiff(2,1,2)=HNumDiff(1,2,2);
-% HNumDiff(1,3,2)=(JdX(2,3)-J(2,3))/epsVal;
-% HNumDiff(3,1,2)=HNumDiff(1,3,2);
-% HNumDiff(2,2,2)=(JdY(2,2)-J(2,2))/epsVal;
-% HNumDiff(2,3,2)=(JdY(2,3)-J(2,3))/epsVal;
-% HNumDiff(3,2,2)=HNumDiff(2,3,2);
-% HNumDiff(3,3,2)=(JdZ(2,3)-J(2,3))/epsVal;
-% 
+% for k=1:(2+includeW)
+%     HNumDiff(1,1,k)=(JdX(k,1)-J(k,1))/epsVal;
+%     HNumDiff(1,2,k)=(JdX(k,2)-J(k,2))/epsVal;
+%     HNumDiff(2,1,k)=HNumDiff(1,2,k);
+%     HNumDiff(1,3,k)=(JdX(k,3)-J(k,3))/epsVal;
+%     HNumDiff(3,1,k)=HNumDiff(1,3,k);
+%     HNumDiff(2,2,k)=(JdY(k,2)-J(k,2))/epsVal;
+%     HNumDiff(2,3,k)=(JdY(k,3)-J(k,3))/epsVal;
+%     HNumDiff(3,2,k)=HNumDiff(2,3,k);
+%     HNumDiff(3,3,k)=(JdZ(k,3)-J(k,3))/epsVal;
+% end
 % max(abs((H(:)-HNumDiff(:))./H(:)))
 %The relative error will be on the order of 1e-6 or better, indicating good
 %agreement between the numerical Hessian matrix and the actual Hessian
@@ -73,16 +73,20 @@ function HTotal=uvHessian(xG,lRx,M)
 %June 2017 David F.Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<4||isempty(includeW))
+    includeW=false;
+end
+
 if(nargin<3||isempty(M))
-   M=eye(3,3); 
+    M=eye(3,3); 
 end
 
 if(nargin<2||isempty(lRx))
-   lRx=zeros(3,1); 
+    lRx=zeros(3,1); 
 end
 
 N=size(xG,2);
-HTotal=zeros(3,3,2,N);
+HTotal=zeros(3,3,2+includeW,N);
 for curPoint=1:N
     %Convert the state into the local coordinate system.
     xLocal=M*(xG(1:3)-lRx(1:3));
@@ -90,6 +94,10 @@ for curPoint=1:N
     x=xLocal(1);
     y=xLocal(2);
     z=xLocal(3);
+
+    x2=x*x;
+    y2=y*y;
+    z2=z*z;
     
     r5=norm(xLocal)^5;
 
@@ -97,17 +105,17 @@ for curPoint=1:N
 
     %u Hessian values
     %du/(dxdx)
-    H(1,1,1)=-((3*x*(y^2+z^2))/r5);
+    H(1,1,1)=-((3*x*(y2+z2))/r5);
     %du/(dydy)
-    H(2,2,1)=-((x*(x^2-2*y^2+z^2))/r5);
+    H(2,2,1)=-((x*(x2-2*y2+z2))/r5);
     %du/(dzdz)
-    H(3,3,1)=-((x*(x^2+y^2-2*z^2))/r5);
+    H(3,3,1)=-((x*(x2+y2-2*z2))/r5);
     %du/(dxdy)
-    H(1,2,1)=-((y*(-2*x^2+y^2+z^2))/r5);
+    H(1,2,1)=-((y*(-2*x2+y2+z2))/r5);
     %du/(dydx)
     H(2,1,1)=H(1,2,1);
     %du/(dxdz)
-    H(1,3,1)=-((z*(-2*x^2+y^2+z^2))/r5);
+    H(1,3,1)=-((z*(-2*x2+y2+z2))/r5);
     %du/(dzdx)
     H(3,1,1)=H(1,3,1);
     %du/(dydz)
@@ -117,13 +125,13 @@ for curPoint=1:N
 
     %v Hessian values
     %dv/(dxdx)
-    H(1,1,2)=-((y*(-2*x^2+y^2+z^2))/r5);
+    H(1,1,2)=-((y*(-2*x2+y2+z2))/r5);
     %dv/(dydy)
-    H(2,2,2)=-((3*y*(x^2+z^2))/r5);
+    H(2,2,2)=-((3*y*(x2+z2))/r5);
     %dv/(dzdz)
-    H(3,3,2)=-((y*(x^2+y^2-2*z^2))/r5);
+    H(3,3,2)=-((y*(x2+y2-2*z2))/r5);
     %dv/(dxdy)
-    H(1,2,2)=-((x*(x^2-2*y^2+z^2))/r5);
+    H(1,2,2)=-((x*(x2-2*y2+z2))/r5);
     %dv/(dydx)
     H(2,1,2)=H(1,2,2);
     %dv/(dxdz)
@@ -131,13 +139,37 @@ for curPoint=1:N
     %dv/(dzdx)
     H(3,1,2)=H(1,3,2);
     %dv/(dydz)
-    H(2,3,2)=-((z*(x^2-2*y^2+z^2))/r5);
+    H(2,3,2)=-((z*(x2-2*y2+z2))/r5);
     %dv/(dzdy)
     H(3,2,2)=H(2,3,2);
-    
+
     %Rotate the values back into global coordinates
     HTotal(:,:,1,curPoint)=M'*H(:,:,1)*M;
     HTotal(:,:,2,curPoint)=M'*H(:,:,2)*M;
+
+    %w Hessian values
+    if(includeW)
+        %dw/(dxdx)
+        H(1,1,3)=-z*(-2*x2+y2+z2)/r5;
+        %dw/(dydy)
+        H(2,2,3)=-z*(x2-2*y2+z2)/r5;
+        %dw/(dzdz)
+        H(3,3,3)=-3*(x2+y2)*z/r5;
+        %dw/(dxdy)
+        H(1,2,3)=3*x*y*z/r5;
+        %dw/(dydx)
+        H(2,1,3)=H(1,2,3);
+        %dw/(dxdz)
+        H(1,3,3)=-x*(x2+y2-2*z2)/r5;
+        %dw/(dzdx)
+        H(3,1,3)=H(1,3,3);
+        %dw/(dydz)
+        H(2,3,3)=-y*(x2+y2-2*z2)/r5;
+        %dw/(dzdy)
+        H(3,2,3)=H(2,3,3);
+
+        HTotal(:,:,3,curPoint)=M'*H(:,:,3)*M;
+    end
 end
 end
 

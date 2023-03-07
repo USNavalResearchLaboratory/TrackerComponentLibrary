@@ -52,7 +52,7 @@ function [W,PPostAsymp]=findAsymptoticGain(H,F,R,Q)
 %Riccatti equation.
 PPostAsymp=RiccatiPostNoClutter(H,F,R,Q);
 %Next, find the corresponding Kalman filter gain.
-W=PPostAsymp*H'*pinv(R);
+W=PPostAsymp*H'/R;
 
 end
 

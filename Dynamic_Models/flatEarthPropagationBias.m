@@ -20,7 +20,7 @@ function vertBias=flatEarthPropagationBias(predDist,r)
 %REFERENCES:
 %[1] D. F. Crouse, "Basic tracking using nonlinear 3D monostatic and
 %    bistatic measurements," IEEE Aerospace and Electronic Systems
-%    Magazine, vol. 29, no. 8, pp. 4–53, Aug. 2014.
+%    Magazine, vol. 29, no. 8, pp. 4-53, Aug. 2014.
 %
 %May 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

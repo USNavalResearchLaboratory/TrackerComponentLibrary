@@ -1,8 +1,9 @@
-function [phi,dphi]=pt2WachspressCoords3D(x,v,fAdj,numAdj,un)
+function [phi,dphi]=pt2WachspressCoords3D(x,v,fAdj,numAdj,un,normalize)
 %%PT2WACHSPRESSCOORDS3D Convert a point in a convex polyhedron to 3D
 %       Wachspress coordinates. This is a type of barycentric coordinate
-%       system that is described in [1] and [2]. These coordinates can be
-%       useful for Barycentric  mapping and for interpolation.
+%       system that is described in [1] and in the 3D case in Section 8.1
+%       in [2]. These coordinates can be useful for Barycentric mapping and
+%       for interpolation.
 %
 %INPUTS: x The 3XN set of points to convert to 3D Wachspress coordinates.
 %        v The 3XnumVert set of vertices in the polyhedron.
@@ -11,12 +12,16 @@ function [phi,dphi]=pt2WachspressCoords3D(x,v,fAdj,numAdj,un)
 %          the the numAdj input. The faces for each vertex should be in
 %          some type of counterclockwise order when looking at the vertex
 %          from outside the polyhedron. For triangular faces, the
-%          sortTriangFacesAroundVertices function can be usd to get this
+%          sortTriangFacesAroundVertices function can be used to get this
 %          input and the next input in the correct order.
 %   numAdj A numVertX1 list of the number of adjacent faces for each
 %          vertex (the number of things in each row of fAdj).
 %       un A 3XnumFaces set of unit normals to each face in the polyhedron.
 %          The indices in fAdj select the normal for each face.
+% normalize If true, an intermediate normalization step is performed. This
+%          can reduce finite precision errors when handling badly scaled
+%          data, but it also slows things down. The default if omitted or
+%          an empty matrix is passed is false.
 %
 %OUTPUTS: phi A numVertXN set of points converted into 3D Wachspress
 %             coordinates. These are typically only valid for points inside
@@ -126,9 +131,25 @@ function [phi,dphi]=pt2WachspressCoords3D(x,v,fAdj,numAdj,un)
 %September 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<6||isempty(normalize))
+    normalize=false;
+end
+
 numPts=size(x,2);
 numVert=size(v,2);
 maxFaces=size(fAdj,1);
+
+if(normalize)
+    %Normalize to improve finite precision accuracy.
+    minVals=min(v,[],2);
+    maxVals=max(v,[],2);
+    spanVals=maxVals-minVals;
+    v=bsxfun(@rdivide,v-minVals,spanVals);
+    x=bsxfun(@rdivide,x-minVals,spanVals);
+    un=bsxfun(@times,un,spanVals);
+    %Renormalize the scaled normal vectors.
+    un=bsxfun(@rdivide,un,sqrt(sum(un.*un,1)));
+end
 
 %Temporary space used in the loops.
 wiv=zeros(numVert-2,1);
@@ -152,13 +173,25 @@ for curPt=1:numPts
             Rl(:,k)=p(:,k)+p(:,k+1)+p(:,numFacesCur);
         end
         
-        phi(curVert,curPt)=sum(wiv(1:(numFacesCur-2)));
-        R(curVert,:)=(Rl(:,1:(numFacesCur-2))*wiv(1:(numFacesCur-2)))'/phi(curVert,curPt);
+        if(numFacesCur==3)
+            %Triangular face. This formulation gets rid of a possible 0/0
+            %issue if one of the weights is small.
+            phi(curVert,curPt)=wiv(1);
+            R(curVert,:)=Rl(:,1)';
+        else
+            phi(curVert,curPt)=sum(wiv(1:(numFacesCur-2)));
+            R(curVert,:)=(Rl(:,1:(numFacesCur-2))*wiv(1:(numFacesCur-2)))'/phi(curVert,curPt);
+        end
     end
     phi(:,curPt)=phi(:,curPt)/sum(phi(:,curPt));
     
     phiRSum=sum(bsxfun(@times,phi(:,curPt),R),1);
     dphi(:,:,curPt)=phi(:,curPt).*bsxfun(@minus,R,phiRSum);
+
+    if(normalize)
+        %Undo the normalization
+        dphi(:,:,curPt)=bsxfun(@rdivide,dphi(:,:,curPt),spanVals');
+    end
 end
 end
 

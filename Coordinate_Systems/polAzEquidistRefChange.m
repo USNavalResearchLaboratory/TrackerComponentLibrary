@@ -1,4 +1,4 @@
-function pAzPts=polAzEquidistRefChange(pAzPts,latLonRefOld,latLonRefNew,a,f,algorithm)
+function pAzPts=polAzEquidistRefChange(pAzPts,latLonRefOld,latLonRefNew,a,f,algorithm,desAngSpan)
 %%POLAZEQUIDISTREFCHANGE Points given in polar azimuthal equidistant
 %   coordinates are defined with respect to a particular reference location
 %   on the surface of the reference ellipsoid or sphere. Here, given one
@@ -25,7 +25,16 @@ function pAzPts=polAzEquidistRefChange(pAzPts,latLonRefOld,latLonRefNew,a,f,algo
 %              then this parameter selects the algorithm to use. Possible
 %              values are:
 %              0 (The default if omitted or an empty matrix is used) Use a
-%                formula specific for the 
+%                formula specific for the transformation on a sphere.
+%              1 Call the polarAzEquidistProj2Ellipse function and then the
+%                ellips2PolarAzEquidistProj function.
+%   desAngSpan A 2X1 range of angular values [min Val;max Val] in which it
+%              is desired that the converted azimuthal values should
+%              attempt to be kept (by adding or subtracing either 0 or 2*pi
+%              [but not a multiple thereof] to the converted value to get
+%              it as close as possible to the span). If omitted or an empty
+%              matrix is passed, no attempt is made to keep the azimuth
+%              within any particular bounds.
 %
 %OUTPUTS: pAzPts A 2XN (or 3XN) set of [ground distance;heading;(height)]
 %                points in polar azimuthal equidistant coordinates taken
@@ -81,6 +90,10 @@ function pAzPts=polAzEquidistRefChange(pAzPts,latLonRefOld,latLonRefNew,a,f,algo
 %December 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<7)
+    desAngSpan=[];
+end
+
 if(nargin<6||isempty(algorithm))
     algorithm=0;
 end
@@ -118,6 +131,36 @@ else
     convLatLon=polarAzEquidistProj2Ellipse(pAzPts,latLonRefOld,a,f);
     pAzPts=ellips2PolarAzEquidistProj(convLatLon,latLonRefNew,a,f);
 end
+
+if(~isempty(desAngSpan))
+    N=size(pAzPts,2);
+    
+    minVal=desAngSpan(1);
+    maxVal=desAngSpan(2);
+
+    for k=1:N
+        curAz=pAzPts(2,k);
+
+        if(minVal>curAz)
+            %See if adding 2*pi places it closer to the span.
+            azTest=curAz+2*pi;
+            offsetOld=minVal-curAz;
+        elseif(maxVal<curAz)
+            %See if subtracting 2*pi places it closer to the span.
+            azTest=curAz-2*pi;
+            offsetOld=curAz-maxVal;
+        else
+            %It is in the span.
+            continue;
+        end
+
+        %If it is closer to the span than before
+        offsetNew=min(abs(minVal-azTest),abs(maxVal-azTest));
+
+        if(offsetNew<offsetOld)
+            pAzPts(2,k)=azTest;
+        end
+    end
 end
 
 %LICENSE:

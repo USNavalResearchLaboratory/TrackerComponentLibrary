@@ -130,8 +130,8 @@ function [A,idxList]=selectionSort(A,byCol,gtCompareFunc)
         for j=numPoints:-1:2
             %Find the maximum value entry in the range 1:j.
             maxIdx=[];
-            maxVal=-Inf;
-            for i=j:-1:1
+            maxVal=A{j};
+            for i=(j-1):-1:1
                 if(~gtCompareFunc(maxVal,A{i}))
                     maxVal=A{i};
                     maxIdx=i;

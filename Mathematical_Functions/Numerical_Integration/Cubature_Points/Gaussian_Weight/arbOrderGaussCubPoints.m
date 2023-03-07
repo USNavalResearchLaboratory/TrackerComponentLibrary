@@ -4,7 +4,8 @@ function [xi,w]=arbOrderGaussCubPoints(numDim,n,beta,algorithm,randomize)
 %               PDF times |x|^beta. That is,
 %               w(x)=1/(2*pi)^(numDim/2)*norm(x)^beta*exp(-x'*x/2).
 %               For beta=0, the weighting function is just the standard
-%               normal PDF.
+%               normal PDF. For 1D points, one should just use the
+%               quadraturePoints1D function.
 %
 %INPUTS: numDim An integer specifying the dimensionality of the points to
 %               be generated. numDim>1.

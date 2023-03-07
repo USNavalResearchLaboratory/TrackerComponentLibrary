@@ -3,9 +3,11 @@ function H=HessianOfAffineTransFun(H,M)
 %           function h(x). That is a 3D matrix of second derivatives of the
 %           function h such with respect to the elements of x. This takes H
 %           and returns H transformed such that it is the Hessian matrix of
-%           M*h(x) instead of M*h(x). That is, obtain the Hessian of an
+%           M*h(x) instead of h(x). That is, obtain the Hessian of an
 %           arbitrary affine transformation of the original function (e.g.
-%           M*h(x)+c, where c can be any constant vector).
+%           M*h(x)+c, where c can be any constant vector). Note that if one
+%           wants the Hessian of h(M*x+c) as opposed to of M*h(x)+c, then
+%           one should use the function HessianChainRule.
 %
 %INPUTS: H An xDimXxDimXhDim hypermatrix such that H(:,:,1) is the Hessian
 %          matrix for the first component of h(x), H(:,:,2) is the Hessian
@@ -46,7 +48,8 @@ function H=HessianOfAffineTransFun(H,M)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
     H=permute(H,[3,2,1]);
-    for k=1:3
+    numK=size(H,3);
+    for k=1:numK
         H(:,:,k)=M*H(:,:,k);
     end
     H=permute(H,[3,2,1]); 

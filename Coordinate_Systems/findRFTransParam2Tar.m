@@ -1,8 +1,8 @@
 function M=findRFTransParam2Tar(lRx,lTar,zRot)
-%%FINDRFTRANSPARAM2TAR Find the transformation matrix needed to rotate a
+%%FINDRFTRANSPARAM2TAR Find the rotation matrix needed to rotate a
 %            Cartesian vector to local radar-facing coordinates such
 %            that a specified target is on the boresight of the radar. This
-%            makes the local z-axis of the radar points at the target.
+%            makes the local z-axis of the radar point at the target.
 %
 %INPUTS: lRx The 3X1 Cartesian location of the receiver.
 %       lTar The 3X1 Cartesian location of the target.
@@ -13,10 +13,10 @@ function M=findRFTransParam2Tar(lRx,lTar,zRot)
 %            plane, then zRot=0 means that the local y-axis points in the
 %            direction of the global z-axis.
 %
-%OUTPUTS: M A rotation matrix for the transformation from global Cartesian
-%           coordinates to local radar-facing coordinates. The z axis
-%           represents the pointing direction of the radar. This can be
-%           directly fed into the RUV coordinate transform functions.
+%OUTPUTS: M A 3X3 rotation matrix for the transformation from global 
+%           Cartesian coordinates to local radar-facing coordinates. The z-
+%           axis represents the pointing direction of the radar. This can
+%           be directly fed into the RUV coordinate transform functions.
 %
 %EXAMPLE:
 % lRx=[10e3;-15e3;4e3];

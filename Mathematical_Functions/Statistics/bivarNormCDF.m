@@ -80,7 +80,7 @@ else
     %The value of the first integral in Equation 6 in [1] with the higher-
     %order Taylor series expansion of Section 2.4. This is just another way
     %of writing the solution given in the unnumbered equation after Eq. 6.
-    a=sqrt(1-rho^2);
+    a=sqrt(max(0,1-rho^2));%The max helps with finite precision issues.
     b=abs(h-s*k);
     c=(4-s*h*k)/8;
     d=(12-s*h*k)/16;
@@ -94,7 +94,7 @@ else
     %Numeric integration of the second integral in Equation 6 in [1] with
     %the higher- order Taylor series expansion of Section 2.4. The integral
     %is from 0 to asin(rho), so the points must first be transformed.
-    xi=(xi+1)*sqrt(1-rho^2)/2;
+    xi=(xi+1)*sqrt(max(0,1-rho^2))/2;%Max to avoid finite precision issues.
     %The integral in equation 6 (with the extra terms). The multiplying
     %term outside the sum deals with the change of variables.
     intVal2=(a/2)*sum(bsxfun(@times,w(:).',exp(-b^2./(2*xi.^2)).*(exp(-s*h*k./(1+sqrt(1-xi.^2)))./sqrt(1-xi.^2)-coeff.*(1+c.*xi.^2.*(1+d.*xi.^2)))));    

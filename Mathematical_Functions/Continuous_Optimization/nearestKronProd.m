@@ -12,8 +12,8 @@ function [B,C]=nearestKronProd(A,m1,m2,n1,n2)
 % m1,m2,n1,n2 The dimensions specifying A and its submatrices as described
 %          above. These specify the dimensions of B and C.
 %
-%OUTPUTS: B The m1Xn1 left matrix in the kronecker product.
-%         C The m2Xn2 right matrix in the kronecker product.
+%OUTPUTS: B The m1Xn1 left matrix in the Kronecker product.
+%         C The m2Xn2 right matrix in the Kronecker product.
 %
 %This function implements the algorithm described in Section 12.3.6 of [1].
 %
@@ -33,7 +33,6 @@ function [B,C]=nearestKronProd(A,m1,m2,n1,n2)
 % [BK,CK]=nearestKronProd(A,m1,m2,n1,n2);
 % norm(A-kron(BK,CK),'fro')%The error will be close to 0.
 %
-%
 %REFERENCES:
 %[1] G. H. Golub and C. F. Van Loan, Matrix Computations, 4th ed.
 %    Baltimore: Johns Hopkins University Press, 2013.
@@ -41,7 +40,7 @@ function [B,C]=nearestKronProd(A,m1,m2,n1,n2)
 %September 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-[U,sigma,V]=KronProdSVD(A,m1,m2,n1,n2);
+[sigma,U,V]=KroneckerProdSVD(A,m1,n1,m2,n2);
 
 sqrtSigma1=sqrt(sigma(1));
 

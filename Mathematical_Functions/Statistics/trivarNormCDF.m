@@ -20,7 +20,7 @@ function probVal=trivarNormCDF(b,mu,R)
 %REFERENCES:
 %[1] A. Genz, "Numerical computation of rectangular bivariate and
 %    trivariate normal and t probabilites," Statistics and Computing, vol.
-%    14, pp. 251–260, 2004.
+%    14, pp. 251-260, 2004.
 %
 %July 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public releas
@@ -91,7 +91,6 @@ R2D=[1,  p32;
      p32,1];
 %The first term in Equation 14 in 1.
 term1=GaussianD.CDF(b1)*bivarNormCDF([b2;b3],[],R2D);
-
 f=@(t)costFun(t,b1,b2,b3,p21,p31,p32);
 
 RelTol=1e-18;
@@ -107,9 +106,10 @@ end
 function val=costFun(t,b1,b2,b3,p21,p31,p32)
 
 t2=t.^2;
-denomCommon=(1+(2*p31*p21*p32-p31^2-p21^2).*t2);
-u2Hat=(b2*(1-p31^2*t2)-b1*t*(p21-p31*p32)-b3*(p32-p31*p21*t2))./sqrt((1-p31^2.*t2).*denomCommon);
-u3Hat=(b3*(1-p21^2*t2)-b1*t*(p31-p21*p32)-b2*(p32-p31*p21*t2))./sqrt((1-p21^2.*t2).*denomCommon);
+denomTerm2=1-p31^2*t2-p21^2*t2-p32^2+2*t2*p31*p21*p32;
+denomTerm3=1-p21^2*t2-p31^2*t2-p32^2+2*t2*p31*p21*p32;
+u2Hat=(b2*(1-p31^2*t2)-b1*t*(p21-p31*p32)-b3*(p32-p31*p21*t2))./sqrt((1-p31^2.*t2).*denomTerm2);
+u3Hat=(b3*(1-p21^2*t2)-b1*t*(p31-p21*p32)-b2*(p32-p31*p21*t2))./sqrt((1-p21^2.*t2).*denomTerm3);
 
 r=p31*t;
 f2=(b1^2+b3^2-2*r*b1*b3)./(1-r.^2);

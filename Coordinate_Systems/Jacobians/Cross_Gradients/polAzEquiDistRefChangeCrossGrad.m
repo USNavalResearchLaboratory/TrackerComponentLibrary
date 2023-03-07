@@ -27,8 +27,8 @@ function J=polAzEquiDistRefChangeCrossGrad(pAzPt,latLonRefOld,latLonRefNew,rE)
 %            dAz1dp, dAz1dAz, dAz1dh;
 %            dh1dp,   dh1dAz,  dh1dh];          
 % 
-%The gradient is given in "Measurement Simulation and Performance Analysis
-%of Multistatic OTHR" by David F. Crouse. Due to a singularity, the
+%The gradient is the analytic gradient of the spherical Earth conversion
+%given in the function polAzEquidistRefChange. Due to a singularity, the
 %gradient is not valid if the target is exactly on the opposite side of the
 %Earth from the first sensor.
 %
@@ -60,8 +60,8 @@ numPoints=size(pAzPt,2);
 if(all(latLonRefOld==latLonRefNew))
     %For the special case of no change, force the result to be exact (avoid
     %finite precision issues).
-    
-    J=repmat(eye(3,3),[1,1,numPoints]);
+    numDim=size(pAzPt,1);%2 or 3.
+    J=repmat(eye(numDim,numDim),[1,1,numPoints]);
     return;
 end
 

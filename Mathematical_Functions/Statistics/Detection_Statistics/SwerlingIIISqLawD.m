@@ -334,7 +334,7 @@ function PD=PD4Threshold(avgSNR,thresh,N,method)
             % term1=exp(-((2*Y)/(2+N*xBar)))*1/(N*xBar)^(N-1)*(2+N*xBar)^(-3+N)*(8+N*(-4+xBar*(N*(-2+xBar)+2*(3+Y))));
             %Using the exponent of the sums of logarithms, helps avoid overflow
             %problems.
-            term1=exp(-((2*Y)/(2+N*xBar))-(N-1)*log(N*xBar)+(N-3)*log(2+N*xBar))*(8+N*(-4+xBar*(N*(-2+xBar)+2*(3+Y))));
+            term1=exp(-((2*Y)/(2+N*xBar))-(N-1)*log(N*xBar)+(N-3)*log(2+N*xBar)).*(8+N*(-4+xBar*(N*(-2+xBar)+2*(3+Y))));
 
             term2=gammainc(Y,N,'upper');
             %term3=-(exp(-Y)*(4+N*(xBar-2))*Y^(N-1))/((2+N*xBar)*gamma(N));
@@ -343,9 +343,9 @@ function PD=PD4Threshold(avgSNR,thresh,N,method)
             term3=-(4+N*(xBar-2))*exp(-Y+(N-1)*log(Y)-log((2+N*xBar))-gammaln(N));
             
             %This can be numerically unstable for very small avgSNR values.
-            PD=term1*(1-gammainc(((N*xBar*Y)/(2+N*xBar)),N-1,'upper'))+(term2+term3);
+            PD=term1.*(1-gammainc(((N*xBar*Y)/(2+N*xBar)),N-1,'upper'))+(term2+term3);
             
-            if(any(PD>1|PD<0|~isfinite(PD))||2^5*eps(abs(term1))>abs(term2))
+            if(any(PD>1|PD<0|~isfinite(PD))||any(2^5*eps(abs(term1))>abs(term2)))
                 warning('Finite precision errors detected.')
             end
             

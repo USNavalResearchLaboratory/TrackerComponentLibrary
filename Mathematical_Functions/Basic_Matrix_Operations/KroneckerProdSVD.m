@@ -10,7 +10,7 @@ function [sigma,B,C]=KroneckerProdSVD(A,m1,n1,m2,n2)
 %         This function is only implemented for real matrices.
 %
 %INPUTS: A A real m1*m2Xn1*n2 block matrix consisting of m1Xn1 blocks of
-%          sizem2Xn2. A must be real.
+%          size m2Xn2. A must be real.
 % m1,n1,m2,n2 The integer sizes making up the dimensions of A.
 %
 %OUTPUTS: sigma An rX1 vector of the Kronecker singular values, 
@@ -21,7 +21,7 @@ function [sigma,B,C]=KroneckerProdSVD(A,m1,n1,m2,n2)
 %The Kronecker product singular value decomposition is described in Chapter
 %12.3.6 of [1]. The algorithm is taken from Theorem 12.3.1 of that chapter.
 %
-%Example:
+%EXAMPLE 1:
 % B=magic(3);
 % m1=size(B,1);
 % n1=size(B,2);
@@ -36,6 +36,22 @@ function [sigma,B,C]=KroneckerProdSVD(A,m1,n1,m2,n2)
 %because A has Kronecker rank-1. Thus, using only the first term, one can
 %reconstruct A within expected finite precision limitations. However,
 %BKSVD(:,:,1) does not equal B and CKSVD(:,:,1) does not equal C.
+
+%EXAMPLE:
+%Here, we show that A can be reconstructed using U, sigma V and Kronecker
+%products.
+% m1=2;
+% m2=3;
+% n1=3;
+% n2=4;
+% A=randn(m1*m2,n1*n2);
+% [sigma,U,V]=KroneckerProdSVD(A,m1,m2,n1,n2);
+% r=min(m1*n1,m2*n2);
+% AK=zeros(m1*m2,n1*n2);
+% for k=1:r
+%     AK=AK+sigma(k)*kron(U(:,:,k),V(:,:,k));
+% end
+% RelErr=max(abs((AK(:)-A(:))./A(:)))
 %
 %REFERENCES:
 %[1] G. H. Golub and C. F. Van Loan, Matrix Computations, 4th ed.
@@ -86,7 +102,7 @@ RA =zeros(m1*n1,m2*n2);
 curRow=1;
 for j=1:n1
     for i=1:m1
-        Aij = A(1+(i-1)*m2:i*m2,1+(j-1)*n2:j*n2);
+        Aij=A(1+(i-1)*m2:i*m2,1+(j-1)*n2:j*n2);
         RA(curRow,:)= Aij(:).';
         curRow=curRow+1;
     end

@@ -122,7 +122,7 @@ function [t,exitCode]=directionOnlyStaticLocEst(u,lRx,algorithm,params1,params2,
 %algorithm is used, then the condition that all r(i)>=0 is enforced. The
 %constrained algorithm uses the convexQuadProg function.
 %
-%EXAMPLES:
+%EXAMPLE 1:
 %As an example, consider 4 sensors  and one target. The sensor take
 %measurements in a local u-v coordinate system The results must be
 %augmented to become full unit vectors and rotated into the global
@@ -187,6 +187,28 @@ function [t,exitCode]=directionOnlyStaticLocEst(u,lRx,algorithm,params1,params2,
 % end
 % [t,exitCode]=directionOnlyStaticLocEst(uMeas,lRx,0);
 % estError=norm(t-targetLoc)%The estimation error.
+%
+%EXAMPLE 2:
+%When this function is called with params2=[];, params2.numIter=0; the
+%output is the same as if one were to call closestPointBetween2Lines to
+%just find the closest point between lines going out from each receiver. We
+%show this by showing that the difference between the results is zero.
+% l1=[0;0;0];
+% l2=[100;0;0];
+% tarLoc=[200;100;50];
+% u1=(tarLoc-l1)./norm(tarLoc-l1);
+% u2=(tarLoc-l2)./norm(tarLoc-l2);
+% %Add some noise so there isn't a perfect intersection.
+% u1=u1+randn(3,1);
+% u1=u1/norm(u1);
+% u2=u2+randn(3,1);
+% u2=u2/norm(u2);
+% 
+% params2=[];
+% params2.numIter=0;
+% tLocEst=directionOnlyStaticLocEst([u1,u2],[l1,l2],0,[],params2);
+% pointBetweenLines=closestPointBetween2Lines(u1,l1,u2,l2);
+% AbsDiff=tLocEst-pointBetweenLines
 %
 %REFERENCES:
 %[1] D. F. Crouse, "Bearings-Only Localization Using Direction Cosines," in

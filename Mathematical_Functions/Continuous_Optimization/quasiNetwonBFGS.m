@@ -195,7 +195,6 @@ for curIter=1:maxIter
     end
 
     %After taking the step, update the inverse Hessian approximation.
-
     D=updateHessianApprox(D,xCur,xPrev,gradFCur,gradFPrev,scaleD);
 
     xPrev=xCur;

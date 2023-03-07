@@ -16,7 +16,8 @@ function doesIntersect=rectsIntersect(rectMin1,rectMax1,rectMin2,rectMax2,contai
 % containedIntersects An optional boolean parameter. If false, then two
 %                 hyperrectangles where one is completely contained in
 %                 another are not considered to intersect. Otherwise, they
-%                 are considered to intersect.
+%                 are considered to intersect. The default if omitted or an
+%                 empty matrix is passed is false;
 %
 %OUTPUTS: doesIntersect A boolean value that is true if the hyperrectangles
 %                       intersect and false otherwise.

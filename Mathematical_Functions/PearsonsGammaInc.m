@@ -37,7 +37,7 @@ elseif(~isscalar(u)&&isscalar(p))
     p=p*ones(size(u));
 end
 
-val=gammainc(sqrt(1+p)*u,1+p);
+val=gammainc(sqrt(1+p).*u,1+p);
 
 end
 

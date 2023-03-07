@@ -54,7 +54,7 @@ function [p,exitInfo]=fuseIndepProbEsts(pEsts,algorithm,maxIter,epsilon,alpha)
 %REFERENCES:
 %[1] S. Tsavachidis, "Eliminating incoherence from subjective estimates of
 %    chance," Master's thesis, Rice University, Houston, TX, Feb. 2003.
-%[2] R. Haenni, "Shedding light on Zadeh’s criticism of Dempster’s rule of
+%[2] R. Haenni, "Shedding light on Zadeh's criticism of Dempster's rule of
 %    combination," in Proceedings of the 7th International Conference on
 %    Information Fusion, Philadelphia, PA, 25-28 Jul. 2005.
 %
