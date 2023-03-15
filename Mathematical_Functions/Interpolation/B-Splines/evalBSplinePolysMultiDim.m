@@ -41,7 +41,7 @@ function B=evalBSplinePolysMultiDim(t,tLength,x,k,idx)
 %B-spline polynomials are discussed in detail in Chapter IX of [1]. Tensor
 %product splines are discussed in Chapter 17. This function creates the
 %matrix by calling evalBSplinePolys in each dimension and combining the
-%outputs with repeated calls to outerProduct.
+%outputs with repeated calls to outerProductTensor.
 %
 %REFERENCES:
 %[1] C. de Boor, A Practical Guide to Splines. New York: Springer-Verlag,
@@ -61,7 +61,7 @@ end
 B=evalBSplinePolys(t(1:tLength(1),1),x(1),k(1),idx(1));
 for curDim=2:numDim
     BCur=evalBSplinePolys(t(1:tLength(curDim),curDim),x(curDim),k(curDim),idx(curDim));
-    B=outerProduct(B,BCur);
+    B=outerProductTensor(B,BCur);
 end
 end
 
