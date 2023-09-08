@@ -102,7 +102,7 @@ else
     end
 end
 
-[~,gradV]=spherHarmonicEval(C,S,ellips2Sphere(points,a,f),aH,cH,true);
+[~,gradV]=spherHarmonicEval(C,S,ellips2Sphere(points,a,f),aH,cH);
 B=-gradV;
 %B is now a matrix of vectors of the magnetic flux of the Earth's field at
 %the points. The direction of B in the local tangent plane to the reference
@@ -127,7 +127,6 @@ for curPoint=1:numPoints
     %Find the angle East of North.
     geoEastOfNorth(curPoint)=atan2(vEast,vNorth);
 end
-
 end
 
 %LICENSE:
