@@ -4,28 +4,29 @@ function vGlobal=getGlobalVectors(vLocal,uList)
 %                  the components of the vectors by the corresponding
 %                  coordinate axis vectors.
 %
-%INPUTS: vLocal A numDimsXN matrix of N local vectors that are to be
+%INPUTS: vLocal A numDimsVXN matrix of N local vectors that are to be
 %               converted.              
-%         uList A numDimsXnumDimsXN matrix of orthonormal unit coordinate
+%         uList A numDimsXnumDimsVXN matrix of orthonormal unit coordinate
 %               axes that are associated with the local coordinate system
 %               in which the vectors are expressed. If all N vectors use
 %               the same local coordinate system, then a numDimsxnumDimsx1
 %               matrix can be passed instead.
 %
-%OUTPUTS:  vGlobal The vectors in the global coordinate system.
+%OUTPUTS:  vGlobal The numDimsXN vectors in the global coordinate system.
 %
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    numVel=size(vLocal,2);
+    uDims=size(uList,1);
+    numV=size(vLocal,2);
     
     if(size(uList,3)==1)
-        uList=repmat(uList,[1,1,numVel]);
+        uList=repmat(uList,[1,1,numV]);
     end
     
     numDims=size(vLocal,1);
-    vGlobal=zeros(numDims,numVel);
-    for curVel=1:numVel
+    vGlobal=zeros(uDims,numV);
+    for curVel=1:numV
         for curDim=1:numDims
             vGlobal(:,curVel)=vGlobal(:,curVel)+vLocal(curDim,curVel)*uList(:,curDim,curVel);
         end

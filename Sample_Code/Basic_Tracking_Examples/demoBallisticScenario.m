@@ -89,6 +89,8 @@ function demoBallisticScenario()
 %June 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+%#ok<*ASGLU,*UNRCH,*NOPRT,*NASGU>
+
 disp('An example of simple nonlinear filtering and data association for a ballistic model') 
 
 %%%SETUP THE MODEL

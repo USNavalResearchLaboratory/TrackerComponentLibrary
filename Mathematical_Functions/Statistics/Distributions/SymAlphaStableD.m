@@ -27,15 +27,18 @@ methods(Static)
     %     the scaling parameter of both distributions are equal as
     %     shown in example 2.
     %
-    %INPUTS: X A vector of points at which the pdf should be evaluated.
-    %    alpha The scalar characteristic parameter of the pdf.
-    %      gam The scalar dispersion parameter of the pdf.
-    %    delta The scalar location parameter of the pdf (also the
-    %           mode of the distribution).
+    %INPUTS:
+    % X: A vector of points at which the pdf should be evaluated.
+    % alpha: The scalar characteristic parameter of the cdf.
+    % gam: The scalar dispersion parameter of the cdf. The default if
+    %      omitted or empty is 1.
+    % delta: The scalar location parameter of the cdf. The default if
+    %        omitted or empty is 0.
     %
-    %OUTPUTS: pdf A vector of the same size as X which contains the
-    %             corresponding pdf values for a S-alpha-S distribution
-    %             with parameters alpha, gam, and delta.
+    %OUTPUTS: 
+    % pdf: A vector of the same size as X which contains the
+    %      corresponding pdf values for a S-alpha-S distribution with
+    %      parameters alpha, gam, and delta.
     %
     %EXAMPLE 1: Comparing Gaussian pdf to alpha=2 S-alpha-S pdf
     % x = linspace(-10,10);
@@ -50,8 +53,8 @@ methods(Static)
     % plot(x,cpdf,x,pdf)
     %
     %REFERENCES:
-    %[1] Guillermo Juli�n-Moreno, Jorge E. L�pez De Vergara, Iv�n
-    %    Gonz�lez, Luis Pedro, Javier Royuela-Del-Val, and Federico 
+    %[1] Guillermo Julián-Moreno, Jorge E. López De Vergara, Iván
+    %    González, Luis Pedro, Javier Royuela-Del-Val, and Federico 
     %    Simmross-Wattenberg, "Fast parallel alpha-stable distribution
     %    function evaluation and parameter estimation using OpenCL in 
     %    GPGPUs," Statistics and Computing 27 (2017), no. 5, 1365-1382.
@@ -62,11 +65,10 @@ methods(Static)
         if(nargin<2)
             error('Must specify the characteristic parameter alpha.')
         end
-        if(nargin<3)
+        if(nargin<3||isempty(gam))
             gam = 1;
-            delta = 0;
         end
-        if(nargin<4)
+        if(nargin<4||isempty(delta))
             delta = 0;
         end
         if(alpha>2||alpha<=0)
@@ -112,15 +114,18 @@ methods(Static)
     %     the scaling parameter of both distributions are equal as
     %     shown in example 2.
     %
-    %INPUTS: X A vector of points at which the cdf should be evaluated.
-    %    alpha The scalar characteristic parameter of the cdf.
-    %      gam The scalar dispersion parameter of the cdf.
-    %    delta The scalar location parameter of the cdf (also the
-    %          mode of the distribution).
+    %INPUTS:
+    % X: A vector of points at which the pdf should be evaluated.
+    % alpha: The scalar characteristic parameter of the cdf.
+    % gam: The scalar dispersion parameter of the cdf. The default if
+    %      omitted or empty is 1.
+    % delta: The scalar location parameter of the cdf. The default if
+    %        omitted or empty is 0.
     %
-    %OUTPUTS: cdf A vector of the same size as X which contains the
-    %             corresponding cdf values for a S-alpha-S distribution
-    %             with parameters alpha, gam, and delta.
+    %OUTPUTS: 
+    % cdf A vector of the same size as X which contains the
+    %     corresponding cdf values for a S-alpha-S distribution with
+    %     parameters alpha, gam, and delta.
     %
     %EXAMPLE 1: Comparing Gaussian cdf to alpha=2 S-alpha-S pdf
     % x = linspace(-10,10);
@@ -135,23 +140,22 @@ methods(Static)
     % plot(x,ccdf,x,cdf)
     %
     %REFERENCES:
-    %[1] Guillermo Juli�n-Moreno, Jorge E. L�pez De Vergara, Iv�n
-    %    Gonz�lez, Luis Pedro, Javier Royuela-Del-Val, and Federico 
+    %[1] Guillermo Julián-Moreno, Jorge E. López De Vergara, Iván
+    %    González, Luis Pedro, Javier Royuela-Del-Val, and Federico 
     %    Simmross-Wattenberg, "Fast parallel alpha-stable distribution
     %    function evaluation and parameter estimation using OpenCL in 
     %    GPGPUs," Statistics and Computing 27 (2017), no. 5, 1365-1382.
     %
     %August 2019 Codie T. Lewis, Naval Research Laboratory, Washington D.C.
         
-        %Default to standard SαS
+        %Default to standard S-alpha-S
         if(nargin<2)
             error('Must specify the characteristic parameter alpha.')
         end
-        if(nargin<3)
+        if(nargin<3||isempty(gam))
             gam = 1;
-            delta = 0;
         end
-        if(nargin<4)
+        if(nargin<4||isempty(delta))
             delta = 0;
         end
         if(alpha>2||alpha<=0)
@@ -199,19 +203,16 @@ methods(Static)
     %             random samples from the distribution.
     %
     %EXAMPLE 1: Comparing a histogram of the generated values to the
-    %           exact pdf.
+    %           exact pdf. We want to see the central mass of the
+    %           histogram. This will introduce some nonnegligible
+    %           overestimation of the pdf near the mode of the
+    %           distribution.
     % values = SymAlphaStableD.rand([1,1e6],1.5);
-    %
-    % % We want to see the central mass of the histogram.
-    % % This will introduce some nonnegligible overestimation of the
-    % % pdf near the mode of the distribution.
     % D = 10 % Trim to (-10,10)
     % trimmed = values(values>=-D);
     % trimmed = trimmed(trimmed<=D);
-    % 
     % x = linspace(-D,D,1000);
     % pdf = SymAlphaStableD.PDF(x,1.5,1,0);
-    % 
     % histogram(trimmed,'Normalization','pdf')
     % hold on
     % plot(x,pdf,'LineWidth',5)

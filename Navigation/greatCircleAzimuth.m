@@ -41,6 +41,13 @@ if(nargin<3||isempty(algorithm))
     algorithm=2;
 end
 
+if(all(latLonStart==latLonEnd))
+    %Deal with no motion explicitly.
+    azStart=0;
+    azEnd=0;
+    return;
+end
+
 if(algorithm==0||algorithm==1)
     [azStart,~,azEnd]=indirectGreatCircleProb(latLonStart,latLonEnd,[],[],algorithm);
 elseif(algorithm==2)%Use a simple formula.

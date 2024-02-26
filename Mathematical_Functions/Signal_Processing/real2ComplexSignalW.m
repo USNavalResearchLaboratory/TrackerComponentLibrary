@@ -3,7 +3,7 @@ function z=real2ComplexSignalW(s,returnPadded)
 %          function returns a complex signal with in-phase and quadrature
 %          parts. Unlike the function real2ComplexSignal, this function
 %          uses the algorithm of [1] to produces an analytic signal that
-%          has properties that help avoid alising issues when using the
+%          has properties that help avoid aliasing issues when using the
 %          Wigner-Ville transform.
 %
 %INPUTS: s The NX1 or 1XN real signal.

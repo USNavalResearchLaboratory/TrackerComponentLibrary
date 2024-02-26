@@ -73,7 +73,7 @@ function [zPred,PzPred,otherInfo]=EKFMeasPred(xPred,PPred,zDim,h,HJacob,HHessian
 % [xUpdate,PUpdate,innov,Pzz,W]=EKFUpdate(xPred,PPred,z,R,h,HJacob,numIter);
 % %The update in two steps.
 % [zPred,PzPred,otherInfo]=EKFMeasPred(xPred,PPred,zDim,h,HJacob);
-% [xUpdate1,PUpdate1,innov1,Pzz1,W1]=EKFUpdateWithPred(z,R,zPred,PzPred,otherInfo,numIter);
+% [xUpdate1,PUpdate1,innov1,Pzz1,W1]=EKFUpdateWithPred(z,R,otherInfo,numIter);
 % %One will see that the one and two step updates agree.
 % max(abs([xUpdate1-xUpdate;PUpdate1(:)-PUpdate(:);innov1(:)-innov;Pzz1(:)-Pzz(:);W1(:)-W(:)]))
 %
@@ -151,6 +151,8 @@ otherInfo.measPredTrans=measPredTrans;
 otherInfo.H=H;
 otherInfo.xPred=xPred;
 otherInfo.PPred=PPred;
+otherInfo.zPred=zPred;
+otherInfo.PzPred=PzPred;
 
 end
 

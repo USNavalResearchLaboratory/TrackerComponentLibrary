@@ -24,7 +24,8 @@ function [xi,w]=secondOrderCubPointsBingham(A,lambda)
 %REFERENCES:
 %[1] I. Gilitschenski, G. Kurz, S. J. Julier, and U. D. Hanebeck,
 %    "Unscented orientation estimation based on the Bingham distribution,"
-%    IEEE Transactions on Automatic Control, accepted 2015.
+%    IEEE Transactions on Automatic Control, vol. 61, no. 1, pp. 172-177,
+%    Jan. 2016.
 %   
 %September 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

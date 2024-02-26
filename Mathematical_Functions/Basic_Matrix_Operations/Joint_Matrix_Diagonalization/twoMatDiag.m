@@ -95,7 +95,8 @@ switch(algorithm)
     case 1
         %Use the eigenvalue-based algorithm.
         [V1,E1]=eig(C1);
-        T1=inv(V1*diag(sqrt(diag(E1))));
+        T1=V1*diag(sqrt(diag(E1)));
+        T1=T1\eye(size(T1));
         C2p=T1*C2*T1';
         [V2p,~]=eig(C2p);
 

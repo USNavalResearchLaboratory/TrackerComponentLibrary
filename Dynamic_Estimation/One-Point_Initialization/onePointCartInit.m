@@ -1,4 +1,4 @@
-function [x,P]=onePointCartInit(zCart,SRCart,higherDerivStdDev,matType)
+function [x,P,w]=onePointCartInit(zCart,SRCart,higherDerivStdDev,matType)
 %%ONEPOINTCARTINIT This function implements single-point initialization for
 %              target states that consist of components of position,
 %              velocity, acceleration, etc. This function initializes
@@ -41,6 +41,9 @@ function [x,P]=onePointCartInit(zCart,SRCart,higherDerivStdDev,matType)
 %           For example, [x;y;z;xDot;yDot;zDot].
 %         P The xDimXxDimXnumMeas set of initial target state covariance
 %           matrices associated with x.
+%         w This is always 1. This output is essentially meant as a weight
+%           in a Gaussian mixture and this function always returns only 1
+%           component.
 %
 %One-point differencing is discussed in [1] and Chapter 3.2.2 of [2].
 %
@@ -87,6 +90,7 @@ end
 
 sel=(zDim+1):xDim;
 P(sel,sel,:)=repmat(kron(diag(higherDerivStdDev(:).^2),eye(zDim,zDim)),1,1,numMeas);
+w=1;
 end
 
 %LICENSE:

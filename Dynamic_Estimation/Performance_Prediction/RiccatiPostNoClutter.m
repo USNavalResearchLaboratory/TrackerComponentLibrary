@@ -95,7 +95,7 @@ if(PD~=1)
     %Frobenis norm or until a maximum number of iterations has occurred.
     curIter=0;
     while(curIter<maxIter)
-        P=F*PPrev*F'+Q-PD*(F*PPrev*F'*H'+Q*H')*inv(H*F*PPrev*F'*H'+H*Q*H'+R)*(F*PPrev*F'*H'+Q*H')';
+        P=F*PPrev*F'+Q-PD*(F*PPrev*F'*H'+Q*H')*((H*F*PPrev*F'*H'+H*Q*H'+R)\(F*PPrev*F'*H'+Q*H')');
         %Ensure symmetry is preserved.
         P=(P+P')/2;
         

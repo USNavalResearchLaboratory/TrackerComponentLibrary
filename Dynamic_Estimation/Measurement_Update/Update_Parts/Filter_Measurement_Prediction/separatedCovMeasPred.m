@@ -50,7 +50,7 @@ function [zPred,PzPred,otherInfo]=separatedCovMeasPred(xPred,TPred,H)
 % [xUpdate,LUpdate,PUpdate,innov,Pzz,W]=separatedCovUpdate(xPred,LPred,TPred,z,R,H,c);
 % %The update in two steps.
 % [zPred,PzPred,otherInfo]=separatedCovMeasPred(xPred,TPred,H);
-% [xUpdate1,LUpdate1,PUpdate1,innov1,Pzz1,W1]=separatedCovUpdateWithPred(z,R,zPred,PzPred,otherInfo,LPred,c);
+% [xUpdate1,LUpdate1,PUpdate1,innov1,Pzz1,W1]=separatedCovUpdateWithPred(z,R,otherInfo,LPred,c);
 % %One will see that the one and two step updates agree.
 % max(abs([xUpdate1-xUpdate;LUpdate1(:)-LUpdate(:);PUpdate1(:)-PUpdate(:);innov1(:)-innov;Pzz1(:)-Pzz(:);W1(:)-W(:)]))
 %
@@ -85,6 +85,8 @@ otherInfo.H=H;
 otherInfo.Pxz=Pxz;
 otherInfo.TPred=TPred;
 otherInfo.xPred=xPred;
+otherInfo.zPred=zPred;
+otherInfo.PzPred=PzPred;
 end
 
 %LICENSE:

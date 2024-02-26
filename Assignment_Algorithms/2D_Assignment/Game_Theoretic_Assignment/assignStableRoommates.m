@@ -195,7 +195,7 @@ function [cycle,firstInCycle,lastInCycle,firstUnmatched,second,tail]=seekCycle(p
             
             if(ranking(nextChoice,person)<=rightmost(nextChoice))
                break;
-            end; 
+            end
         end
         
         second(person)=posInList-1;

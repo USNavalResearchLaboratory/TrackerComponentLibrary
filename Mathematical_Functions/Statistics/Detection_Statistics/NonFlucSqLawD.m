@@ -22,14 +22,15 @@ classdef NonFlucSqLawD
 %developed in Chapter 9 of [1]. The model comes from taking a sample of a
 %complex amplitude coming from a filter. The squared real amplitude is
 %r^2_i=y_{I,i}^2+y_{Q,i}^2 where y_{I,i} and y_{Q,i} are the in-phase and
-%quadrature components of the filter output. Defining Rp=2*avgSNR as in
-%Equation 9.2-34, the value y=y_{I,i}+sqrt(-1)*y_{Q,i} is modeled as being
-%distributed circularly complex Gaussian with mean sqrt(Rp) and variance
-%2. (See, Equation 9.3-35a in [1]). The variance being 2 simply reflects
-%having normalized the variance on the I and Q components each to 1. 
-%As in Equation 10.4-13, the distribution of Y=y/2 is noncentral
-%chi-squared with a change of variables. The value y is noncentral chi-
-%squared with nu=2*N degrees of freedom and lambda=N*Rp as the
+%quadrature components of the filter output. Defining the peak power of the
+%signal as Rp=2*avgSNR as in Equation 9.2-34, the value
+%y=y_{I,i}+sqrt(-1)*y_{Q,i} is modeled as being distributed circularly
+%complex Gaussian with mean sqrt(Rp)*exp(1j*phi), where phi is a random
+%phase, and variance 2. (See, Equation 9.3-35a in [1]). The variance being
+%2 simply reflects having normalized the variance on the I and Q components
+%each to 1. As in Equation 10.4-13, the distribution of Y=y/2 is noncentral
+%chi-squared with a change of variables. The value y is noncentral
+%chi-squared with nu=2*N degrees of freedom and lambda=N*Rp as the
 %noncentrality parameter.
 %
 %Under this model, for a given average power SNR value, one can generate a

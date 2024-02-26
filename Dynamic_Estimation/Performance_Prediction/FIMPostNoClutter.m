@@ -92,9 +92,9 @@ if(rcond(Q)<1e-15)
     %number of iterations has occurred.
     curIter=0;
     JPrev=eye(size(F));
-    Jz=PD*H'*inv(R)*H;
+    Jz=PD*H'*(R\H);
     while(curIter<maxIter)
-        J=inv(Q+F*inv(JPrev)*F')+Jz;
+        J=inv(Q+F*(JPrev\F'))+Jz;
         %Ensure symmetry is preserved.
         J=(J+J')/2;
         
@@ -107,12 +107,12 @@ if(rcond(Q)<1e-15)
     end
     warning('Max (5000) Iterations Reached Without Convergence.')
 else
-    QInv=inv(Q);
+    QInv=Q\eye(size(Q));
     D11=F'*QInv*F;
     D12=-F'/Q;
-    D22=QInv+PD*(H'*inv(R)*H);
+    D22=QInv+PD*(H'*(R\H));
 
-    J=RiccatiSolveD(D11\D12,eye(n,n),D22-D12'*inv(D11)*D12,D11);
+    J=RiccatiSolveD(D11\D12,eye(n,n),D22-D12'*(D11\D12),D11);
 end
 
 end

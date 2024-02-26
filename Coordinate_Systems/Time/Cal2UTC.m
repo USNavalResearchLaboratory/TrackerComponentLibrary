@@ -1,4 +1,4 @@
-function [Jul1,Jul2]=Cal2UTC(year,month,day,hour,minute,second)
+function [Jul1,Jul2]=Cal2UTC(year,month,day,hour,minute,second) %#ok<STOUT,INUSD>
 %%CAL2UTC Convert dates in terms of the Gregorian calendar in years,
 %         months, days, hours, minutes and seconds with the time in
 %         universal coordinated time (UTC) to a two-part pseudo-Julian

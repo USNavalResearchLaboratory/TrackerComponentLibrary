@@ -27,11 +27,16 @@ function P=clipCovMat(P,minVals,maxVals,isSqrt)
 %   isSqrt A boolean value indicating whether P holds square root
 %          covariance matrices or lower-triangular square root matrices (as
 %          one might get with chol using the 'lower' option). The default
-%          if omitted or an empty matrix is passed is false.
+%          if omitted or an empty matrix is passed is false. If this is
+%          true, then the returned P will also be lower-trinagular square
+%          root.
 %
 %OUTPUTS: P The NXNXnumMats set of matrices after scaling so the diagonal
-%           elements are no larger than the values in maxVals and no
-%           smaller than the values in minVals.
+%           elements of a full covariance matrix are no larger than the
+%           values in maxVals and no smaller than the values in minVals. If
+%           isSqrt is false, then this is a covariance matrix. If
+%           SPred(:,:,curAlg) is true, then this is a lower-triangular
+%           covariance matrix.
 %
 %The diagonal elements of a covariance matrix are related to the largest
 %rectangle that a certain uncertainty ellipsoid can be placed in. This is

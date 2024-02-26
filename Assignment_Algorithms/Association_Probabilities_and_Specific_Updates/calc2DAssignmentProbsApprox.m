@@ -30,6 +30,9 @@ function beta=calc2DAssignmentProbsApprox(A,approxType,diagAugment,delta,maxIter
 %          5 The matrix permanent approximation algorithm of [4], which
 %            uses the permUBound function to approximate the permanent.
 %            This tends to be rather slow.
+%          6 Just compute the values for each target as if it were the only
+%            target present. Thus, as if one were running independent
+%            PDAFs.
 % diagAugment A boolean variable indicating whether the probabilties
 %          should be found for a general assignment problem or assuming A
 %          ends with a diagonal submatrix of missed detection
@@ -218,6 +221,11 @@ switch(approxType)
     case 5%Uhlmann's algorithm using approximate matrix permanents.
         permFun=@(A)permUBound(A,delta);
         beta=UhlmannsAlg(A,diagAugment,permFun);
+    case 6
+        for curTar=1:numTar
+            ACur=[A(curTar,1:numMeas),A(curTar,numMeas+curTar)];
+            beta(curTar,:)=calc2DAssignmentProbs(ACur,true);
+        end
     otherwise
         error('Invalid Approximation Specified')
 end

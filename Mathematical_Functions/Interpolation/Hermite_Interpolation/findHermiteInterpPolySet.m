@@ -18,7 +18,7 @@ function [a,c,xRange]=findHermiteInterpPolySet(x,y,numDims,groupSize)
 %
 %INPUTS: x An NpX1 or 1XNp vector of real, scalar values at which the
 %          function y and its derivative are given. The values are assumed
-%          to be given in increasing order. Np>=2.
+%          to be given in increasing order without duplicates. Np>=2.
 %        y A (numMoments*numDims)XNp matrix of values of the
 %          multidimensional function y(x) and its derivatives evaluated at
 %          the points in x. All values for a particular derivative are

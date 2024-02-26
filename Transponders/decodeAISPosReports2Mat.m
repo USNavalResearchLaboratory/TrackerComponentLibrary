@@ -1,4 +1,4 @@
-function [decodedMsgs,epochTimes]=decodeAISPosReports2Mat(NMEAStrings,convert2Metric)
+function [decodedMsgs,epochTimes]=decodeAISPosReports2Mat(NMEAStrings,convert2Metric) %#ok<STOUT,INUSD>
 %%DECODEAISPOSREPORTS2MAT Given a matrix of Automatic Identification
 %                 System (AIS) messages (or a cell array of AIS messages)
 %                 given as National Marine Electronics Association (NMEA)

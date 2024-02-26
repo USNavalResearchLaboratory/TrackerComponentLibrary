@@ -1,4 +1,4 @@
-function vDefl=lightDeflectCorr(vObsSource,posObs,MSolar,xBody,deflecLimit)
+function vDefl=lightDeflectCorr(vObsSource,posObs,MSolar,xBody,deflecLimit) %#ok<STOUT,INUSD>
 %%LIGHTDEFLECTCORR Rotate vectors to account for light-deflection due to
 %             one or more solar system bodies using an approximate formula
 %             to deal with the light-time problem without resorting to ray

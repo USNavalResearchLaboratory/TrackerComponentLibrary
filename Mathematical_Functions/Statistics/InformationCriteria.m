@@ -13,6 +13,9 @@ classdef InformationCriteria
 %[2] M. Dixon and T. Ward, "Information-corrected estimation: A 
 %    generalization error reducing parameter estimation method,"
 %    Entropy, vol. 23, no. 11, p. 1419, 2021.
+%[3] C. Biernacki, G. Celeux, and G. Govaert, "An improvement of the NEC
+%    criterion for assessing the number of clusters in a mixture model,"
+%    Pattern Recognition Letters, vol. 20, no. 3, pp. 267-272, 1999.
 %
 %August 2021 Codie T. Lewis, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -121,11 +124,18 @@ classdef InformationCriteria
             % val: The criterion value.
             %
             %Note that a negative sign was changed from [1] so that the
-            %entropy ENtau would be positive.
+            %entropy ENtau would be positive. For LL=LL1, which is always
+            %the case where one is choosing a single component, this
+            %function returns 1, as suggested for the unit cardinality case
+            %in [3].
             %
             %August 2021 Codie T. Lewis, Naval Research Laboratory, Washington D.C.
             %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
-            val = -ENtau/(LL-LL1);
+            if(LL==LL1)
+                val = 1;
+            else
+                val = -ENtau/(LL-LL1);
+            end
         end
         function val = KIC(LL,paramDim)
             %%KIC Computes the Kullback information criterion (KIC).

@@ -1,73 +1,69 @@
-function CRLB=delayDopplerRateCRLBLFMApprox(B,T,P,TR,SNRIn,c,fc)
+function CRLB=delayDopplerRateCRLBLFMApprox(B,T,P,TR,SNRIn,returnFIM,c,fc,useHalfRange)
 %DELAYDOPPLERRATECRLBLFMAPPROX Determine an approximate Cramér-Rao lower
-%               bound matrix for estimating the delay and Doppler rate when
-%               receiving a chain of identical linearly frequency modulated
-%               (LFM) chirps. 
+%      bound matrix for estimating the delay and Doppler rate when
+%      receiving a chain of identical linearly frequency modulated
+%      (LFM) chirps. Whether they are up or down chirps is
+%      determined by the sign of the bandwidth. This uses a narrowband
+%      approximation.
 %
-%INPUTS: B The bandwidth of each chirp, usually in Hertz. This is defined
-%          to be the absolute value of the difference of the starting
-%          instantaneous frequency and the ending instantaneous frequency
-%          of the chirps, as used in the function LFMChirp.
+%INPUTS: B The _signed_ bandwidth of the chirp. If this is positive, then
+%          this is an upchirp. If this is negative, then this is a
+%          downchirp.
 %        T The duration of the chirp in each pulse, usually in seconds.
 %        P The integer number of pulses in the train; P>1.
 %       TR The duration of each pulse in the pulse train, usually in
-%          seconds.
-%    SNRIn The unitless ratio of the instantaneous signal power to average
-%          noise power ratio of each sample. For a signal
-%          x(t)=A*exp(1i*f(t))+w(t) where w(t) is noise, this is
-%          A^2/E(w(t)^2). It is assumed that the noise is not correlated
-%          over time.
-%     c,fc These two optional parameters are only provided if one wishes to
-%          have the results given in terms of range and range rate. c is
-%          the propagation speed of the medium (e.g.
-%          Constants.speedOfLight) and fc is the center frequency of the
-%          transmission.
+%          seconds. TR>=T.
+%    SNRIn The SNR of the fully integrated signal (NOT in dB). How this
+%          relates to other parameters is discussed below. This is a power
+%          SNR (not a voltage SNR).
+% returnFIM If this is true, the Fisher information matrix (FIM) is
+%          returned instead of the CRLB. The default if omitted or an empty
+%          matrix is passed is false.
+%    c, fc These two optional parameters are only provided if one wishes to
+%          have the results given in terms of round trip range and
+%          approximate range rate. c is the propagation speed of the medium
+%          (e.g. Constants.speedOfLight) and fc is the center frequency of
+%          the transmission. The range rate conversion is only approximate
+%          as a more precise conversion requires the true range rate as can
+%          be inferred from [2]. If one doesn't wish to convert the units
+%          of the output, these can be omitted or empty matrices can be
+%          passed.
+% useHalfRange If and fc and c are provided, so that the CRLB is for
+%          outputs are range and approximate range rate instead of delay
+%          and Doppler shift, then if this is true, the outputs are divided
+%          by 2. This can be useful when dealing with a monostatic system
+%          where one wants the one-way range and range rate. The default if
+%          omitted or an empty matrix is passed is false.
 %
 %OUTPUTS: CRLB The 2X2 Cramér-Rao lower bound for a vector [delay;Doppler
-%              rate]. The delay is usually given in units of seconds and
-%              the Doppler rate in radians per second. The example below
-%              shows how to turn these quantities into range and velocity.
-%              However, if one provides c and fc, to this function, then
-%              the function will provide the outputs as range and range
-%              rate.
+%              rate] (or the FIM if returnFIM is true. The delay is
+%              usually given in units of seconds and the Doppler rate in
+%              Hertz.
 %
 %This function implements the approximation that is given in Equation 3.16
-%of [1]. The approximations assumes that the time-bandwidth prodict (B*T)
-%of each chirp is much greater than 1 so that the spectrum of each chirp is
-%essentially a rectangle. It also assumes that the noise is not correlated
-%over time.
+%of [1]. The sign of m12 has been flipped as compared ot the paper, as the
+%sign of it appears to be wrong in the paper. The approximations assumes
+%that the time-bandwidth prodict (B*T) of each chirp is much greater than 1
+%so that the spectrum of each chirp is essentially a rectangle. It also
+%assumes that the noise is not correlated over time. Also, Equation 3.15
+%for the chirp in [1] is the complex envelope of the chirp, not the actual
+%chirp, so if one plots the real part, it looks like a downchirp followed
+%by an upchirp. However, that is not the case if one shifts the frequency
+%to passband (multiplies by exp(1j*2*pi*fc) to get it up to a high center
+%frequency of fc).
 %
-%EXAMPLE:
-% B=10e6;%10Mhz bandwidth.
-% T=250e-6;%Chirp duration in seconds.
-% P=16;%Number of pulses used.
-% TR=1e-3;%The pulse repetition interval.
-% %-10dB per pulse, so this is the equivalent SNRIn
-% SNRIn=10^(-10/10)/T;
-% CRLB=delayDopplerRateCRLBLFMApprox(B,T,P,TR,SNRIn);
-% 
-% %Rather than having a standard deviation for delay, we would rather use
-% %range. Delay times the speed of light equals round-trip range. Thus, we
-% %multiple the delay components in the CRLB by the speed of light (for the
-% %cross term) or the square of the speed of light
-% c=Constants.speedOfLight;
-% %Cross terms
-% CRLB(1,2)=CRLB(1,2)*c;
-% CRLB(2,1)=CRLB(1,2);
-% CRLB(1,1)=CRLB(1,1)*c^2;
-% %Next, we want to convert the Doppler rate into a range rate with units
-% %of meters per second. This requires the carrier frequency fc and the
-% %propagation speed c. We will use 2GHz as the carrier frequency.
-% fc=2e9;
-% scal=-c/(2*pi*fc);
-% CRLB(2,2)=CRLB(2,2)*scal^2;
-% CRLB(1,2)=CRLB(1,2)*scal;
-% CRLB(2,1)=CRLB(1,2);
-% CRLB
-% %One will see that the CRLB is around what one might expect. Ignoring the
-% %cross terms, one can take the square roots of the entries to get a
-% %standard deviation in range of about 9.2408 meters and in range rate of
-% %about 2.8931 meters per second.
+%Given a discrete baseband sampled complex signal model
+%y[n]=A*exp(j*omegaD*n)*s[n]+w[n], where exp(j*omegaD*n) provides the
+%effects of the carrier frequency at discrete sampled time n, s[n] is the
+%complex envelope of the signal, A is the complex amplitude, and w[n] is
+%additive noise with variance sigma2, the SNR is related to the signal
+%amplitude as
+%A=sqrt(SNR*NSigma/epsilon)
+%Where epsilon is the integral of the magnitude squared of s(t) (when
+%considering the contuuous time signal) over the entire integration period.
+%If s(t) is 1 over the pulselength and the pulselength is T seconds and
+%there are NB pulses, then epsilon=T*NB. The value NSigma is sigma2*T0,
+%where T0 is the sampling period. These relations are from [1].
 %
 %REFERENCES:
 %[1] A. Dogandzic and A. Nehorai, "Cramér Rao bounds for estimating range,
@@ -77,24 +73,67 @@ function CRLB=delayDopplerRateCRLBLFMApprox(B,T,P,TR,SNRIn,c,fc)
 %November 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-%Equation 3.17.
-SNR1=SNRIn*T;
+if(nargin<9||isempty(useHalfRange))
+    useHalfRange=false;
+end
 
-%Equation 3.16 with the matrix inverted with the range accuracy in the
-%upper left.
-CRLB=1/(2*P*SNR1)*[3*(T^2+(P^2-1)*TR^2)/(B^2*(P^2-1)*pi^2*TR^2), 6*T/(B*(P^2-1)*pi*TR^2);
-                   6*T/(B*(P^2-1)*pi*TR^2),                      12/(TR^2*(P^2-1))];
-               
-if(nargin>5&&~isempty(c))
-    CRLB(1,2)=CRLB(1,2)*c;
-    CRLB(2,1)=CRLB(1,2);
-    CRLB(1,1)=CRLB(1,1)*c^2;
-    
-    scal=-c/(2*pi*fc);
-    CRLB(2,2)=CRLB(2,2)*scal^2;
-    CRLB(1,2)=CRLB(1,2)*scal;
-    CRLB(2,1)=CRLB(1,2);
-end         
+if(nargin<6||isempty(returnFIM))
+    returnFIM=false;
+end
+
+if(TR<T)
+    error('The pulse repetition interval TR cannot be less than than the duration of the chirp in each pulse T.')
+end
+
+SNR1=SNRIn/P;
+
+%The terms in the matrix in Equation 3.16.
+m11=(1/12)*T^2*(1+(TR/T)^2*(P^2-1));
+%Corrected sign as compared to the paper.
+m12=(1/6)*pi*B*T;
+m22=(1/3)*pi^2*B^2;
+
+if(returnFIM)
+    %The inverse of Equation 3.16, but with the delay component in the
+    %upper left. This is the Fisher Information matrix, not the CRLB.
+    CRLB=(2*P*SNR1)*[m22, m12;
+                     m12, m11];
+    D=[1,0;
+       0,2*pi];
+    CRLB=D*CRLB*D;
+else
+    %Equation 3.16 with the matrix inverted with the delay accuracy
+    %component in the upper left.
+    denom=(2*P*SNR1)*(m11*m22-m12^2);
+    CRLB=[m11,-m12;
+         -m12, m22]/denom;
+    D=[1,0;
+       0,1/(2*pi)];
+    CRLB=D*CRLB*D;
+end
+
+if(nargin>6&&~isempty(c))
+    if(returnFIM)
+        D=[1/c, 0;
+             0,-(fc)/c];
+        CRLB=D*CRLB*D;
+        if(useHalfRange)
+            D=[2,0;
+                0,2];
+            CRLB=D*CRLB*D;
+        end
+    else
+        D=[c, 0;
+           0,-c/(fc)];
+        CRLB=D*CRLB*D;
+
+        if(useHalfRange)
+            D=[1/2,0;
+                0,1/2];
+            CRLB=D*CRLB*D;
+        end
+    end
+end        
 end
 
 %LICENSE:

@@ -92,7 +92,7 @@ end
 J=zeros(zDim*numSteps,xDim);
 zPredStacked=zeros(zDim*numSteps,1);
 
-RStackedInv=inv(blkDiagRep(R));
+RStackedInv=blkDiagRep(R)\eye(size(blkDiagRep(R)));
 for curIter=1:numIter
     minIdx=1;
     for curStep=1:numSteps

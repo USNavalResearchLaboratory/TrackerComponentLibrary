@@ -361,7 +361,6 @@ function Do2=computeDo2Simp(s,bMax,AbsTol,RelTol)
 %Compute the D2 term for an odd dimensionality using the formula on page
 %10. The constant term involving numerical integration is omitted.
 
-N=size(s,1);%Dimensionality of the samples.
 L=size(s,2);%Number of Dirac samples.
 
 %Evaluate the integral to 14 places and add the even term.

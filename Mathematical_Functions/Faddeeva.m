@@ -1,7 +1,7 @@
 function wz=Faddeeva(z)
 %%FADDEEVA Compute the Faddeeva function (also known as the Kramp function)
 %          of the possibly complex argument z. This is a scaled
-%          complementary error function. It equals exp(-z^2)*(1-erf(z))
+%          complementary error function. It equals exp(-z^2)*erfc(-1j*z)
 %          However, Matlab's built-in erf function cannot handle complex
 %          numbers. This function implements the algorithm described in
 %          [1].
@@ -14,8 +14,11 @@ function wz=Faddeeva(z)
 %
 %The Faddeeva arises in a number of physics problems involving waves. It is
 %also related to the complex error function, Fresnel integrals. The
-%algorithm of [1] is used. It is a modification of the algorithm of [2].
-
+%algorithm of [1], which is a modification of [2], is used except. Because
+%[1] is used, the modification of [2] that is described in [3] to improve
+%the accuracy when near the real axis does not appear to be necessary and
+%is not used here.
+%
 %REFERENCES:
 %[1] G. P. M. Poppe and C. M. J. Wijers, "More efficient computation of the
 %    complex error function," ACM Transactions on Mathematical Software,
@@ -23,6 +26,10 @@ function wz=Faddeeva(z)
 %[2] W. Gautschi, "Efficient computation of the complex error function,"
 %    SIAM Journal on Numerical Analysis, vol. 7, no. 1, pp. 187-198, Mar.
 %    1970.
+%[3] M. R. Zaghloul, "Remark on 'algorithm 680: Evaluation of the complex
+%    error function': Cause and remedy for the loss of accuracy near the
+%    real axis," ACM Transactions on Mathematical Software, vol. 45,
+%    no. 2, pp. 24:1-24:3, Apr. 2019.
 %
 %November 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -42,8 +49,6 @@ for curZ=1:numVals
     x=abs(xOrig);
     y=abs(yOrig);
     z=x+1i*y;
-
-    %Evaluates exp(-z^2)*erfc(-1i*z);
 
     %The choice of v, x0,and y0 as in Section 2.2
     x0=6.3;

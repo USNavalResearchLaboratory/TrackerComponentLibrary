@@ -1,10 +1,10 @@
 function [wRed,muRed,PRed,setParMin]=bruteForceGaussMixRed(w,mu,P,k,sequential)
 %%BRUTEFORCEGAUSSMIXRED Perform brute-force Gaussian mixture reduction to
-%               minize the integrated squared error (ISE). This function
+%               minimize the integrated squared error (ISE). This function
 %               reduces the number of components in the original mixture
 %               from n to k by computing the ISE of all reduced
 %               distributions obtained by merging components (not by
-%               explicitly optimizing over the final values.
+%               explicitly optimizing over the final values).
 %
 %INPUTS: w An nX1 or 1Xn vector of weights of the components of the
 %          original Gaussian mixture.
@@ -40,7 +40,7 @@ function [wRed,muRed,PRed,setParMin]=bruteForceGaussMixRed(w,mu,P,k,sequential)
 %the implementation does not currently precompute merged components nor
 %does it precompute PDF values in the ISE cost. However, this could offer a
 %substational speed improvement at the expense of a very large increase in
-%memory usinge. Most execution time is currently spent in the function
+%memory usage. Most execution time is currently spent in the function
 %computeGaussMixISE computing the costs.
 %
 %EXAMPLE:

@@ -125,7 +125,7 @@ for curMeas=1:numMeas
     bigH(idxMin:idxMax,:)=HMats(:,:,curMeas)*transMats(:,:,curMeas,kD);
 end
 
-WInv=inv(WMat);
+WInv=WMat\eye(size(WMat));
 PEstInv=bigH'*WInv*bigH;
 PEst=inv(PEstInv);
 if(isempty(z))

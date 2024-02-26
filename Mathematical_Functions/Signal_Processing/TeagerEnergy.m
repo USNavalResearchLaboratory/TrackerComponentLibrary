@@ -29,8 +29,8 @@ function E=TeagerEnergy(x,dim)
 % N=T/T0;
 % 
 % %Make a chirp up and then a chirp down
-% [x1,t]=LFMChirp(T,fStart,fEnd,T0);
-% x2=LFMChirp(T,fEnd,fStart,T0);
+% [x1,t]=LFMChirp(T,fStart,fEnd,{T0});
+% x2=LFMChirp(T,fEnd,fStart,{T0});
 % x=real([x1(:);x2(:)]);
 % t=[t(:);t(end)+t(2)-t(1)+t(:)];
 % 

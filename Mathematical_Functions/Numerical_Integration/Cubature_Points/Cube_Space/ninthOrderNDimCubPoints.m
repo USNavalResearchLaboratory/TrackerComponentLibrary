@@ -128,7 +128,7 @@ switch(algorithm)
     case 1%Cn 9-1 in [1], pg. 236,
           %4*(numDim^4-5*numDim^3+14*numDim^2-7*numDim+3)/3 points, variant
           %2
-                  if(numDim<4)
+        if(numDim<4)
            error('This formula is for numDim>=4') 
         end
         

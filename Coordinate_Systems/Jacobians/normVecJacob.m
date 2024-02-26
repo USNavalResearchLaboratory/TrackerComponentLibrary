@@ -1,7 +1,7 @@
 function J=normVecJacob(x)
 %%NORVECJACOB Consider a unit vector created as u=x/norm(x). This function
 %         returns the partial derivatives of u with respect to the elements
-%         of x. This partial derivative 
+%         of x. In other words, this is the gradient of a unit vector.
 %
 %INPUTS: x A real NX1 vector.
 %

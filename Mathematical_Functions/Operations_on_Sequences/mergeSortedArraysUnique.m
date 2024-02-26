@@ -1,4 +1,4 @@
-function [z,idxX,idxY]=mergeSortedArraysUnique(x,y)
+function z=mergeSortedArraysUnique(x,y)
 %MERGESORTEDARRAYSUNIQUE Given two arrays that are each sorted in ascending
 %           order, merge them into one large array that is in ascending
 %           order, removing duplicates.

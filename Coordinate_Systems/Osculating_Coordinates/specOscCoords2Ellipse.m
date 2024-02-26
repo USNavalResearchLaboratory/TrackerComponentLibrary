@@ -46,6 +46,11 @@ function latLonHEllipse=specOscCoords2Ellipse(latLonHSpherPts,rOsc,spherCent,aEl
         aEllips=Constants.WGS84SemiMajorAxis;
     end
 
+    if(isempty(latLonHSpherPts))
+        latLonHEllipse=[];
+        return;
+    end
+
     ptsCartSpher=ellips2Cart(latLonHSpherPts,rOsc,0);
     ptsCartEllips=bsxfun(@plus,ptsCartSpher,spherCent);
     latLonHEllipse=Cart2Ellipse(ptsCartEllips,[],aEllips,fEllips);

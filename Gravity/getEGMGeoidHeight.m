@@ -9,16 +9,15 @@ function [geoidHeight,coeffData]=getEGMGeoidHeight(latLon,tideSys,useNGAApprox,m
 %                  undulation.
 %
 %INPUTS: latLon A 2XN matrix of N points of the form [latitude;longitude]
-%               given with respect to the WGS-84 reference ellipsoid where
-%               the geoid height is to be evaluated. If a batch of points
-%               on a grid is evaluated, the algorithm is significantly
-%               faster if points having the same latitudes are grouped
-%               together.
-%       tideSys A number indicating the tide system in use. The values are
-%               0: Conventional tide free. (The default if this parameter
-%                  is omitted.)
-%               1: Mean tide
-%               2: Zero tide
+%              given with respect to the WGS-84 reference ellipsoid where
+%              the geoid height is to be evaluated. If a batch of points on
+%              a grid is evaluated, the algorithm is significantly faster
+%              if points having the same latitudes are grouped together.
+%      tideSys A number indicating the tide system in use. The values are
+%              0: Conventional tide free (The default if this parameter is
+%                 omitted).
+%              1: Mean tide
+%              2: Zero tide
 % useNGAApprox As opposed to computing the zeroth order term of the
 %              disturbing potential T and the term -(W0-U0)/gamma using the
 %              gamma (magnitude of the acceleration due to gravity) that is
@@ -175,17 +174,17 @@ function [geoidHeight,coeffData]=getEGMGeoidHeight(latLon,tideSys,useNGAApprox,m
 %January 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<2)
+if(nargin<2||isempty(tideSys))
     tideSys=0;
 end
 
-if(nargin<3)
+if(nargin<3||isempty(useNGAApprox))
     useNGAApprox=false;
 end
 
 numPoints=size(latLon,2);
 
-if(nargin<4)
+if(nargin<4||isempty(modelType))
     modelType=0;%EGM2008 Model
 end
 
@@ -200,7 +199,7 @@ fEllipse=Constants.WGS84Flattening;
 GMPotential=Constants.EGM2008GM;
 aPotential=Constants.EGM2008SemiMajorAxis;
 
-if(nargin<5)
+if(nargin<5||isempty(coeffData))
     %Get the coefficients for the disturbing potential
     [C,S]=getEGMWGS84TCoeffs([],useNGAApprox,modelType);    
     coeffData.C=C;

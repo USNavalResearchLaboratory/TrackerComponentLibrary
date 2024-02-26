@@ -81,7 +81,7 @@ function [val,t,f]=WignerVilleDist(s,a,freqSamps)
 % T=10e-3;%Chirp duration in seconds.
 % 
 % %Generate the analytic signal, here a chirp.
-% xSig=LFMChirp(T,fStart,fEnd,T0);
+% xSig=LFMChirp(T,fStart,fEnd,{T0});
 % 
 % G=WignerVilleDist(xSig);
 % signalEnergy=2*T0*sum(sum(abs(G).^2))

@@ -1,4 +1,4 @@
-function [xRot,rotMat]=TOD2GCRS(xVec,TT1,TT2,dXdY)
+function [xRot,rotMat]=TOD2GCRS(xVec,TT1,TT2,dXdY) %#ok<STOUT,INUSD>
 %%TOD2GCRS Rotate a vector from the true equator and equinox of date
 %          coordinate system (TOD) using the IAU 2006/2000A model, where a
 %          location is known as an "apparent place", to the geocentric

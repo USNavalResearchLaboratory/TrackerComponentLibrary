@@ -1,11 +1,11 @@
 function y=upsampleZero(x,P)
 %%UPSAMPLEZERO Increase the sampling rate of a signal by inserting zeros
-%               in the new samples. This is often used as a first step in
-%               interpolatory filters. Adding zeros between samples causes
-%               the frequency response of the fft to be aliased. One can
-%               then apply a window in the frequency domain and take the
-%               ifft to get an interpolated signal. Just adding zeros
-%               results in an interpolation with a lot of Gibbs phenomenon.
+%              in the new samples. This is often used as a first step in
+%              interpolatory filters. Adding zeros between samples causes
+%              the frequency response of the fft to be aliased. One can
+%              then apply a window in the frequency domain and take the
+%              ifft to get an interpolated signal. Just adding zeros
+%              results in an interpolation with a lot of Gibbs phenomenon.
 %
 %INPUTS: x An NX1 or 1XN vector or an NXnumVec matrix to upsample. If it is
 %          a matrix, then the values are taken per column to upsample. If
@@ -15,12 +15,12 @@ function y=upsampleZero(x,P)
 %          signal. 
 %
 %OUTPUTS: y The upsampled signal. If x is a vector, it will be (N*P)X1 or
-%           1X(N*P), matcghing the input orientation. If a matrix, it will
+%           1X(N*P), matching the input orientation. If a matrix, it will
 %           be (N*P)XnumVec in size.
 %
 %EXAMPLE:
 % x=1:5;
-% P=3;%So there will be two zeros between each number.y=
+% P=3;%So there will be two zeros between each number.
 % y=upsampleZero(x,P)
 %
 %December 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.

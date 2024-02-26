@@ -151,10 +151,6 @@ term11=C2*(x2-x1)+S2*(y1-y2);
 term12=C1*(x2-x1)+S1*(y1-y2);
 denom=S1*C2-S2*C1;
 
-%The k=0 case.
-r1=(term11)/denom;
-r2=(term12)/denom;
-
 Deltax=a*2*pi;
 k2=[-1;0;1];
     

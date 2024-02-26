@@ -1,4 +1,4 @@
-function [year,month,day,hour,minute,second]=UTC2Cal(Jul1,Jul2,giveDayFrac)
+function [year,month,day,hour,minute,second]=UTC2Cal(Jul1,Jul2,giveDayFrac) %#ok<STOUT,INUSD>
 %%UTC2Cal Convert universal coordinated times (UTC) given as a
 %         two-part pseudo-Julian dates to a date in terms of the Gregorian
 %         calendar in years, months, days, hours, minutes and seconds or

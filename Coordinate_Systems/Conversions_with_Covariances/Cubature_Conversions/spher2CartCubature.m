@@ -153,7 +153,7 @@ function [zCart,RCart]=spher2CartCubature(spherPoint,SR,systemType,useHalfRange,
     end
 
     if(nargin<7||isempty(M))
-        M=[]; 
+        M=eye(3,3); 
     end
     
     if(isempty(zTx)&&(nargin<4||isempty(useHalfRange)))
@@ -161,13 +161,16 @@ function [zCart,RCart]=spher2CartCubature(spherPoint,SR,systemType,useHalfRange,
     elseif(~isempty(zTx)&&(nargin<4||isempty(useHalfRange)))
         useHalfRange=false;
     end
-    
-    h=@(x)spher2Cart(x,systemType,useHalfRange,zTx,zRx,M);
-    
+
+    if(size(M,3)==1)
+        M=repmat(M,1,1,numPoints);
+    end
+
     %Allocate space for the return variables.
     zCart=zeros(numDim,numPoints);
     RCart=zeros(numDim,numDim,numPoints);
     for curPoint=1:numPoints
+        h=@(x)spher2Cart(x,systemType,useHalfRange,zTx,zRx,M(:,:,curPoint));
         [zCart(:,curPoint),RCart(:,:,curPoint)]=calcCubPointMoments(spherPoint(:,curPoint),SR(:,:,curPoint),h,xi,w);
     end
 end

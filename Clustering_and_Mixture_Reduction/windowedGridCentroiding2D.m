@@ -50,7 +50,7 @@ function centIdxVals=windowedGridCentroiding2D(index2D,weights,centroidWinLen)
 % Ns=fix(TB/T0);
 % 
 % %Generate the reference signal. This is an up-chirp.
-% x=LFMChirp(T,fStart,fEnd,T0);
+% x=LFMChirp(T,fStart,fEnd,{T0});
 % x=x(:);
 % 
 % %We will use 64 pulse repetition intervals.
@@ -134,7 +134,7 @@ function centIdxVals=windowedGridCentroiding2D(index2D,weights,centroidWinLen)
 % set(gca,'FontSize',14,'FontWeight','bold','FontName','Times')
 % set(h1,'FontSize',14,'FontWeight','bold','FontName','Times')
 % set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
-% axis([rangeRate(1), rangeRate(end), range(1), range(end)])
+% axis([rangeRate(end), rangeRate(1), range(1), range(end)])
 %
 %January 2017 Thomas Higgins, modified extensively by Daniel Scholnick and
 %David F. Crouse, Naval Research Laboratory, Washington D.C.

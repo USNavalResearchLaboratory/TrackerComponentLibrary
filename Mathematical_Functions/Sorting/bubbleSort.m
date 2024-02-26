@@ -24,7 +24,7 @@ function [A,idxList]=bubbleSort(A,byCol,gtCompareFunc)
 %           (an empty matrix can be passed for this) as only linear cell
 %           arrays are supported, so no ambiguity between 1D and 2D inputs
 %           would exist.
-%gtCompareFunc  A function handle that performs a greather-than comparison
+% gtCompareFunc  A function handle that performs a greather-than comparison
 %           of two entries in A. This lets one define custom comparison
 %           operations. Providing a less-than comparison for this will
 %           cause the list to be sorted in descending order rather than

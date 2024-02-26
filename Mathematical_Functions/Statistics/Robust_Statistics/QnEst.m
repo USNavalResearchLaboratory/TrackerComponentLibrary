@@ -178,7 +178,6 @@ switch(algorithm)
         %We only want half of the matrix without the main diagonal.
         theVec=vech(costs,1,true);
         Qn=kthOrderStat(theVec,k);
-        test=1
     otherwise
         error('Unknown algorithm specified.')
 end

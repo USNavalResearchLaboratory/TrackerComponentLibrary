@@ -1,12 +1,12 @@
 function y=solveYuleWalker(r,b)
 %%SOLVEYULEWALKER Solve the Yule-Walker equation (for real values) as
-%          formulated using
-%          correlation coefficients or the general Yule-Walker
-%          equation. For the Yule-Walker equation, given a real positive
-%          definite Topeplitz matrix T=toeplitz([r(1:(n-1))]), solve the
-%          system T*y=-r(2:n). For the general Yule-Walker equation,
-%          given a real Toeplitz matrix T=toeplitz(r(1:(n-1))), solve
-%          the system T*y=b.
+%          formulated using correlation coefficients or the general Yule-
+%          Walker equation. For the Yule-Walker equation, given a real
+%          positive definite Topeplitz matrix T=toeplitz([r(1:(n-1))]),
+%          solve the system T*y=-r(2:n). For the general Yule-Walker
+%          equation, given a real Toeplitz matrix T=toeplitz(r(1:(n-1))),
+%          solve the system T*y=b. This function scales better for large
+%          matrices than does matrix inversion.
 %
 %INPUTS: r When solving the Yule-Walker equation, r is a real nX1 or 1Xn
 %          vector defining a Toeplitz matrix such that
@@ -32,6 +32,16 @@ function y=solveYuleWalker(r,b)
 %example in Chapter 3.3. of [2]. For a parameterization in terms of raw
 %data and not correlation coefficients, consider the function
 %solveAutoRegressiveSys.
+%
+%EXAMPLE:
+%This demonstrates that the results are consistent with building the full
+%Toeplitz matrix and using a matrix inverse to solve the problem. The
+%relative error for this small problem is on the order of finite precision
+%limitations.
+% r=[11;0.8;0.7;0.5;-0.1];
+% y1=solveYuleWalker(r);
+% y2=-toeplitz([r(1:(end-1))])\r(2:end);
+% RelErr=max(abs((y1-y2)./abs(y2)))
 %
 %REFERENCES:
 %[1] G. H. Golub and C. F. Van Loan, Matrix Computations, 4th ed.

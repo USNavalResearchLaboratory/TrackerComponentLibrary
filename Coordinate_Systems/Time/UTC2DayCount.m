@@ -1,4 +1,4 @@
-function [year,dayCount,second]=UTC2DayCount(Jul1,Jul2)
+function [year,dayCount,second]=UTC2DayCount(Jul1,Jul2) %#ok<STOUT,INUSD>
 %%UTC2DAYCOUNT A function for converting a universal coordinated time
 %              (UTC) given as a two-part pseudo-Julian to a date in terms
 %              of the year, day number and second in the day.

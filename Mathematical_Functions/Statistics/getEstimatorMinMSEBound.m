@@ -177,7 +177,7 @@ if(checkPosDef)
     end
 end
 
-CRLB=(statJacob+biasJacob)*inv(J)*(statJacob+biasJacob)'+biasVec*biasVec';
+CRLB=(statJacob+biasJacob)*(J\(statJacob+biasJacob)')+biasVec*biasVec';
 
 end
 

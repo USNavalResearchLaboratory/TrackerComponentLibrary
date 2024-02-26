@@ -1,24 +1,29 @@
-function x=eqConstLSSpher(A,b,alpha,epsRed)
-%%EQCONSTLSSPHER Find x to minimize norm(A*x-b,2) under the constraint
-%                that norm(x,2)=alpha. This is essentialy contraining x to
-%                the surface of a sphere of radius alpha. This only solves
-%                real systems.
+function x=eqConstLSSpher(A,b,alpha,epsRed,maximize,epsAlpha)
+%%EQCONSTLSSPHER Find x to minimize (or maximize) norm(A*x-b,2) under the
+%                constraint that norm(x,2)=alpha. This is essentialy
+%                constraining x to the surface of a sphere of radius alpha.
+%                This only solves real systems.
 %
 %INPUTS: A A real mXn matrix with m>=n.
 %        b A real mX1 vector.
 %    alpha The equality constraint value. If this parameter is omitted or
 %          an empty matrix is passed, the default of 1 is used.
-%   epsRed Let xU be the unconstrained solution to the problem. A possible
-%          constrained solutions is considered valid if
-%          abs(norm(x)^2-alpha^2)<=epsRed*abs(norm(xU)^2-alpha^2)
+%   epsRed Let xU be the unconstrained solution to the problem. When
+%          minimizing or when maximizing and the unconstrained solution is
+%          not on the ellipsoid, a possible constrained solution is
+%          considered valid if
+%          abs(norm(x)^2-alpha^2)<=max(epsAlpha,epsRed*alpha2Unconst)
 %          If no such solutions are found, then xU is returned. The default
 %          for this parameter if omitted or an empty matrix is passed is
 %          1e-9. This parameter should be between 0 and 1.
+% maximize If this is true, the problem being solved is a maximization
+%          problem instead of a minimization problem. The default if this
+%          is omitted or an empty matrix is passed is false.
+% epsAlpha This is a criterion only used during maximization for
+%          determining whether points are on the ellipsoid. The default if
+%          omitted or an empty matrix is passed is 10^6*eps(alpha).
 %
 %OUTPUTS: x The optimal value of x subject to the spherical constraint.
-%    lambda The Lagrangian multiplier used in the optimization. lambda>=0.
-%           If lambda=0, then the constraint on x did not have to be
-%           enforced.
 %
 %This implements a modified version of the algorithm of Chapter 6.2.1 of
 %[1]. The algorithm of Chapter 6.2.1 of [1] solves the optimization
@@ -28,9 +33,20 @@ function x=eqConstLSSpher(A,b,alpha,epsRed)
 %multiply both sids by the denominators resulting in a polynomial system.
 %The system is then solved. However, some solutions might not satisfy the
 %constraint (due to cancellation in denominators). Thus, candidate
-%solutions that do not improve the error in the magnitude by a sufficient
-%amount compared to the unconstrained solution are discarded. If no
-%solutions are left, the the unconstrained solution is used.
+%solutions that do not improve the constraint error (or worsen the error if
+%maximize is true) in the magnitude by a sufficient amount compared to the
+%unconstrained solution are discarded. If no solutions are left, then the
+%unconstrained solution is used.
+%
+%In the special case where b=0 and maximization is being performed, then
+%solutions are scaled eigenvectors. This just chooses the first eigenvector
+%and scales it.
+% 
+%Note that when maximizing, if one does not know a priori that the
+%unconstrained solution will be on the ellipsoid, undesirable (e.g. not
+%satisfying the constraint) solutions can be returned by setting epsRed>1.
+%The edge case of a point that may or may not be on the ellipsoid is not
+%adaquately addressed.
 %
 %EXAMPLE:
 %This is a simple example where the x returned by the
@@ -52,16 +68,30 @@ function x=eqConstLSSpher(A,b,alpha,epsRed)
 %December 2020 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<3||isempty(alpha))
-    alpha=1;
+if(nargin<5||isempty(maximize))
+    maximize=false;
 end
 
 if(nargin<4||isempty(epsRed))
     epsRed=1e-9;
 end
 
-r=rank(A);
+if(nargin<3||isempty(alpha))
+    alpha=1;
+end
 
+if(nargin<6||isempty(epsAlpha))
+    epsAlpha=eps(alpha)*10^6;
+end
+
+if(all(b==0)&&maximize)
+    %Special case.
+    [V,D]=eig(A);
+    x=V(:,1)*alpha;
+    return
+end
+
+r=rank(A);
 [U,Sigma,V]=svd(A,0);
 sigma=diag(Sigma);
 
@@ -114,7 +144,8 @@ numKept=0;
 for k=1:numSol
     xCur=V*((sigma.*bTilde)./(sigma.^2+lambdaVals(k)));
     normErr=abs(norm(xCur)^2-alpha^2);
-    if(all(isfinite(xCur))&&normErr<=epsRed*alpha2Unconst)
+    
+    if(all(isfinite(xCur))&&normErr<=max(epsAlpha,epsRed*alpha2Unconst))
         numKept=numKept+1;
         x(:,numKept)=xCur;
     end
@@ -127,17 +158,24 @@ if(numKept==0)
 end
 x=x(:,1:numKept);
 
-%Of all of the solutions kept, take the one that minimizes the original
-%optimization problem.
+%Of all of the solutions kept, take the one that minimizes (or maximizes)
+%the original optimization problem.
 if(numKept>1)
-    minCost=norm(A*x(:,1)-b,2);
+    minCost=norm(A*x(:,1)-b,2);%Will be max cost if maximizing.
     minIdx=1;
     for k=2:numKept
        curCost=norm(A*x(:,k)-b,2);
        
-       if(curCost<minCost)
-           minIdx=k;
-           minCost=curCost;
+       if(maximize)
+           if(curCost>minCost)
+               minIdx=k;
+               minCost=curCost;
+           end
+       else
+           if(curCost<minCost)
+               minIdx=k;
+               minCost=curCost;
+           end
        end
     end
     x=x(:,minIdx);

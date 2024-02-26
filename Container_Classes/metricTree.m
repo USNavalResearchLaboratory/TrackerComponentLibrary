@@ -157,25 +157,12 @@ classdef metricTree < handle
             end
         end
         
-        function display(theTree)
-        %%DISPLAY Display information about the tree, including whether the
-        %         C++ implementation (wrapped by a Matlab class) or the
-        %         Matlab-only implementation is being used.
-    
-            if(exist('metricTreeCPPInt','file'))
-                display('A metric tree as implemented via a mex wrapper around a C++ class.')
-            else
-                display('A metric tree as implemented as a Matlab class.')
-            end
-            theTree.disp();
-        end
-        
         function copyDataFromCPP(theTree)
-    %%COPYDATAFROMCPP Copy the data that makes up the structure of the tree
-    %                 out of C++ into the variables in the Matlab kdTree
-    %                 class. This can be useful when debugging the C++
-    %                 implementation. This function just raises an error
-    %                 when executed when using the Matlab implementation.
+        %%COPYDATAFROMCPP Copy the data that makes up the structure of the tree
+        %                 out of C++ into the variables in the Matlab kdTree
+        %                 class. This can be useful when debugging the C++
+        %                 implementation. This function just raises an error
+        %                 when executed when using the Matlab implementation.
         
             if(exist('metricTreeCPPInt','file'))
                 [theTree.DATAIDX,theTree.innerChild,theTree.outerChild,theTree.innerRadii,theTree.outerRadii,theTree.data]=metricTreeCPPInt('getAllData',theTree.CPPData);
@@ -191,6 +178,22 @@ classdef metricTree < handle
 
             if(exist('metricTreeCPPInt','file'))
                 metricTreeCPPInt('~metricTreeCPP',theTree.CPPData);
+            end
+        end
+    end
+
+    methods(Static)
+        function whichImplementation() 
+        %%WHICHIMPLEMENTATION Display information about whether the C++
+        %         implementation (wrapped by a Matlab class) or the Matlab-only
+        %         implementation is being used.
+        %
+        %December 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
+        
+            if(exist('metricTreeCPPInt','file'))
+                disp('A metric tree as implemented via a mex wrapper around a C++ class.')
+            else
+                disp('A metric tree as implemented as a Matlab class.')
             end
         end
     end

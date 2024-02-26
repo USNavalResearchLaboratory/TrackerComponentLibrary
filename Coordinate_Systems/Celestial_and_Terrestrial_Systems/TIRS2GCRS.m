@@ -1,4 +1,4 @@
-function [vec,rotMat]=TIRS2GCRS(x,Jul1,Jul2,deltaTTUT1,dXdY,LOD)
+function [vec,rotMat]=TIRS2GCRS(x,Jul1,Jul2,deltaTTUT1,dXdY,LOD) %#ok<STOUT,INUSD>
 %%TIRS2GCRS Convert vectors of position and possibly velocity from the
 %           Terrestrial Intermediate Reference System  (TIRS), a type of
 %           Earth-Centered Earth-Fixed (ECEF)  coordinate system that

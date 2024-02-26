@@ -3530,14 +3530,14 @@ classdef Interval < matlab.mixin.CustomDisplay
             
             if(nargin==1)
                 y=a;
-                numEl=prod(size(y));
+                numEl=numel(y);
                 x=1:numEl;
                 xWd=zeros(size(x));
                 yWd=Interval.widthS(y);
             else
                 x=a;
                 y=b;
-                numEl=prod(size(x));
+                numEl=numel(x);
                 xWd=Interval.widthS(a);
                 yWd=Interval.widthS(y);
             end
@@ -3853,8 +3853,7 @@ classdef Interval < matlab.mixin.CustomDisplay
             dimstr=matlab.mixin.CustomDisplay.convertDimensionsToString(a);
             className = matlab.mixin.CustomDisplay.getClassNameForHeader(a);
             emptyHeader = [dimstr,' empty ',className];
-            header = sprintf('%s\n',emptyHeader);
-            disp(header)
+            fprintf('%s\n\n',emptyHeader);
         end
     end
 end

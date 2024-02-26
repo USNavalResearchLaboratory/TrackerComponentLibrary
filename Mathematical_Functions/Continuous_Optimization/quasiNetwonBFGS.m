@@ -65,7 +65,7 @@ function [xMin,fMin,exitCode]=quasiNetwonBFGS(f,x0,D0,epsilon,deltaTestDist,delt
 %              and correspond to the exitCode returned by the lineSearch
 %              function. 
 %
-%The algorithm is implemented based on the description in Chapter 1.7 of
+%The algorithm is implemented based on the description in Chapter 2.2 of
 %[1] with the function lineSearch used to perform the line search.
 %
 %EXAMPLE 1:
@@ -117,8 +117,8 @@ function [xMin,fMin,exitCode]=quasiNetwonBFGS(f,x0,D0,epsilon,deltaTestDist,delt
 %library in C.
 %
 %REFERENCES:
-%[1] D. P. Bertsekas, Nonlinear Programming, 2nd ed. Belmont, MA: Athena
-%    Science, 1999.
+%[1] D. P. Bertsekas, Nonlinear Programming, 3rd ed. Belmont, MA: Athena
+%    Scientific, 2016.
 %
 %July 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

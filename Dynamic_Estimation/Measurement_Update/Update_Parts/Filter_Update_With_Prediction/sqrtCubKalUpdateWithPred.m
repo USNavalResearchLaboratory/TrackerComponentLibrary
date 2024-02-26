@@ -1,4 +1,4 @@
-function [xUpdate,SUpdate,innov,Szz,W]=sqrtCubKalUpdateWithPred(z,SR,zPred,otherInfo)
+function [xUpdate,SUpdate,innov,Szz,W]=sqrtCubKalUpdateWithPred(z,SR,otherInfo)
 %%SQRTCUBKALUPDATEWITHPRED Given the output of the measurement prediction
 %           step from sqrtCubKalMeasPred and a measurement, complete the
 %           measurement update step of the square root cubature Kalman
@@ -12,7 +12,6 @@ function [xUpdate,SUpdate,innov,Szz,W]=sqrtCubKalUpdateWithPred(z,SR,zPred,other
 %       SR The zDimXzDim lower-triangular square root of the measurement
 %          covariance matrix in the native coordinate system of the
 %          measurement.
-%    zPred The zDimXnumComp measurement predictions from the filter.
 % otherInfo The intermediate results returned in the otherInfo output of
 %          the sqrtCubKalMeasPred function.
 %
@@ -40,6 +39,7 @@ function [xUpdate,SUpdate,innov,Szz,W]=sqrtCubKalUpdateWithPred(z,SR,zPred,other
     stateTrans=otherInfo.stateTrans;
     zPredCenPoints=otherInfo.zPredCenPoints;
     Pxz=otherInfo.Pxz;
+    zPred=otherInfo.zPred;
 
     xDim=size(xPred,1);
     numComp=size(xPred,2);

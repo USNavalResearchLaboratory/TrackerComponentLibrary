@@ -10,7 +10,7 @@ function [a,c]=HermiteInterpPoly(x,y)
 %
 %INPUTS: x An NpX1 or 1XNp vector of values at which the function y and its
 %          derivative are given. The values are assumed to be given in
-%          increasing order.
+%          increasing order without duplicates.
 %        y A numMatchXNp matrix of values of the function y(x) and its
 %          derivatives evaluated at values of the points in x. y(row,col)
 %          corresponds to the row-1 derivative of y evaluated at x(col).

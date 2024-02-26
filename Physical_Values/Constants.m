@@ -130,7 +130,7 @@ classdef Constants
 %    IFI/Plenum, 1970, vol. 6.
 %[13] Weisstein, Eric W. "Euler-Mascheroni Constant." From MathWorld--A
 %    Wolfram Web Resource. http://mathworld.wolfram.com/Euler-MascheroniConstant.html
-%[14] H. Mortiz, "Geodetic Reference System 1980," Bulletin G�od�sique,
+%[14] H. Mortiz, "Geodetic Reference System 1980," Bulletin Géodésique,
 %    vol. 54, no. 3, pp. 395-405, Sep. 1980. Given with corrections at
 %    https://geodesy.geology.ohio-state.edu/course/refpapers/00740128.pdf
 %[15] Weisstein, Eric W. "Khinchin's Constant." From MathWorld--A 

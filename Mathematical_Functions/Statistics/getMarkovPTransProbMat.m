@@ -48,6 +48,7 @@ function Lambda=getMarkovPTransProbMat(A,T)
 
     %Equation 16-27.
     Lambda=expm(A*T);
+    Lambda=Lambda./sum(Lambda,2);
 end
 
 %LICENSE:

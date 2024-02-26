@@ -9,6 +9,8 @@ function demoIntervalArithmetic()
 %November 2015 David Karnick, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+%#ok<*ASGLU,*UNRCH,*NOPRT,*NASGU>
+
 disp('An example of how to use the Interval class for interval arithmetic') 
 
 %%Creating variables
@@ -40,7 +42,7 @@ disp('1/[-1,5] with one output')
 1./a
 %If two outputs are provided, then both Intervals are returned
 disp('1/[-1 5] with two outputs')
-[c,d]=1./a
+[c,d]=1./a %#ok<RHSFN> 
 
 %% Other mathematical functions
 disp('Power and trig functions')

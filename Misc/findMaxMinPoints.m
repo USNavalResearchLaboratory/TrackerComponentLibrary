@@ -19,6 +19,9 @@ function [peakVals,isMax,peakIdx]=findMaxMinPoints(data)
 %          peakIdx A numValsX1 vector of indices of the peaks such that
 %                  data(peakIdx(i)) provides the ith peak value.
 %
+%With noisy or poorly discretized functions, one is going to want a more
+%robust peak finding algorithm.
+%
 %EXAMPLE:
 %This function is useful for finding maxima and minima of cost functions.
 %Here, we find all maxima and minima of a surface.
@@ -31,7 +34,7 @@ function [peakVals,isMax,peakIdx]=findMaxMinPoints(data)
 % clf
 % surface(X,Y,Z,'EdgeColor','None')
 % [peakVals,isMax,peakIdx]=findMaxMinPoints(Z)
-%One sees that all 13 of the maxma and minima (-1 and 1)  that are found.
+%One sees that all 13 of the maxima and minima (-1 and 1)  that are found.
 %Values on the edge are not counted for maxma or minima.
 %
 %October 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.

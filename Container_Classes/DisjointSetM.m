@@ -103,7 +103,9 @@ methods
     %       binMat A numTarXnumMeas binary matrix where numTar is the
     %              same as the length of setArray in DSObj and numMeas
     %              is the number of measurements with which the
-    %              DisjointSet object was created.
+    %              DisjointSet object was created. If an empty matrix is
+    %              passed, this function just returns without doing
+    %              anything.
     %
     %The measurement number is assumed from the column index when
     %clustering. This function should not be called multiple times with
@@ -113,9 +115,14 @@ methods
     %
     %November 2013 David F. Crouse, Naval Research Laboratory, Washington
     %D.C.
+    
+        if(isempty(binMat))
+            return;
+        end
 
         numTar=size(binMat,1);
         numMeas=size(binMat,2);
+
 
         %Check for input validity
         assert(numTar==length(DSObj.setArray))

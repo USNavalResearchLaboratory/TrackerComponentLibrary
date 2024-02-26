@@ -56,9 +56,9 @@ function PV=readJPLEphem(TDB1,TDB2,objectNumber,centerNumber,units,ephemerisPath
 % ephemerisPath This is a character string of the path to the ephemeris
 %             file. The formatting is the same as used by the fopen
 %             function. If this parameter is omitted or an empty matrix is
-%             passed, it is assumed that the DE430t ephemeris is given in a
+%             passed, it is assumed that the DE440t ephemeris is given in a
 %             data folder that is in the same folder as this function and
-%             the file is named linux_p1550p2650.430t.
+%             the file is named linux_p1550p2650.440t.
 %
 %OUTPUTS: PV If The relative location and velocity between two solar system
 %            objects is requested, then this is a 6X1 vector in the format
@@ -67,18 +67,14 @@ function PV=readJPLEphem(TDB1,TDB2,objectNumber,centerNumber,units,ephemerisPath
 %            units depend on the units input.
 %
 %Ephemerides that can be read by this function can be downloaded from
-%ftp://ssd.jpl.nasa.gov/pub/eph/planets/Linux
-%Only the binary file is needed. For example, when considering the DE430
-%ephemerides, the file that should be used is called linux_p1550p2650.430.
-%Accompanying files that are not needed include testpo.430 and
-%header.430_572. The file header.430_572 is an ASCII test version of the
-%header and testpo.430 is an ASCII text file containing parameters related
-%to testing the algorithm.
+%https://ssd.jpl.nasa.gov/ftp/eph/planets/Linux/
+%Only the binary file is needed. For example, when considering the DE440t
+%ephemerides, the file that should be used is called linux_p1550p2650.440t.
 %
 %This file is loosely based on the Fortran routine called testeph1.f that
 %was created by the California Institute of Technology (CIT) under a U.S.
 %government contract with NASA and is available for download in the folder
-%ftp://ssd.jpl.nasa.gov/pub/eph/planets/
+%https://ssd.jpl.nasa.gov/ftp/eph/planets/fortran/
 %
 %EXAMPLE:
 %Find the position and velocity of the Earth with respect to the Sun with
@@ -107,7 +103,7 @@ if(nargin<6||isempty(ephemerisPath))
 %Get the path to this file.
     ScriptPath=mfilename('fullpath');
     ScriptFolder=fileparts(ScriptPath);
-    ephemerisPath=[ScriptFolder,'/data/linux_p1550p2650.430t'];
+    ephemerisPath=[ScriptFolder,'/data/linux_p1550p2650.440t'];
 end
 
 if(nargin<5||isempty(units))
@@ -139,6 +135,7 @@ end
 %%%Read the header information of the ephemerides.
 %%%%%
 [~,~,kSize,ss,ipt,au_km,EarthMoonRatio]=readJPLEphemHeader(ephemerisPath);
+
 %The number of Chebyshev coefficients per record.
 numCoeffs=kSize/2;
 
@@ -320,7 +317,7 @@ if(objectNumber==17)
 end
 
 %%%%
-%%Consider lookups for ceklestial bodies, which use the centerNumber input.
+%%Consider lookups for celestial bodies, which use the centerNumber input.
 %%%%
 
 %If the object is the Moon and the center is the Earth

@@ -1,17 +1,17 @@
 function v=headingSpeed2Vel(plhPoint,speed,geoEastOfNorth,angUpFromLevel)
-%%HEADINGSPEED2VEL Given a target location in latitude and logitude a
+%%HEADINGSPEED2VEL Given a target location in latitude and longitude a
 %    target speed, the heading East of North and any angle it is making up
-%    from level flight, obtain a 3D velocity vector. This function can be
-%    useful for parameterizing 
+%    from level flight, obtain a 3D velocity vector. This function is the
+%    inverse of vel2HeadingSpeed.
 %
 %INPUTS: plhPoint The 2XN or 3XN location matrix of the points in geodetic
 %              latitude  and longitude in radians at which the headings are
 %              taken. The point can be [latitude;longitude] or
 %              [latitude;longitude;height]. The height component is ignored
 %              if included because it does not change the result.
-%        speed An NX1 or 1XN array of the speed of the target associated
-%              with each point. If a single scalar is passed, then the
-%              speed is assumed to be the same for all targets.
+%        speed An NX1 or 1XN array of the positive speed of the target
+%              associated with each point. If a single scalar is passed,
+%              then the speed is assumed to be the same for all targets.
 % geoEastOfNorth An NX1 or 1XN array of N geographic headings in radians
 %              clockwise from North that should be turned into ECEF unit
 %              vectors. A geographic heading is a direction in the local
@@ -20,15 +20,15 @@ function v=headingSpeed2Vel(plhPoint,speed,geoEastOfNorth,angUpFromLevel)
 %              are the same (but the angles up from level vary), then this
 %              can be a scalar value. If this parameter is omitted or an
 %              empty matrix is passed, then the default of 0 is used.
-% angUpFromLevel An NX1 or 1XN array of N angles of the trajectory above
-%              the local tangent plane to the reference ellipsoid. If all
-%              elevations are the same (but geographic headings might vary),
-%              then this can be a scalar value. If this parameter is
-%              omitted or an empty matrix is passed, then the default of 0
-%              is used.
+% angUpFromLevel An NX1 or 1XN array of N angles in radians of the
+%              trajectory above the local tangent plane to the reference
+%              ellipsoid. If all elevations are the same (but geographic
+%              headings might vary), then this can be a scalar value. If
+%              this parameter is omitted or an empty matrix is passed, then
+%              the default of 0 is used.
 %
-%OUTPUTS: v A 3XN matrix of velocity vectors. The units are the same as the
-%           units of the speed input.
+%OUTPUTS: v A 3XN matrix of velocity vectors in ECEF coordinates. The units
+%           are the same as the units of the speed input.
 %
 %This function just calls geogHeading2uVec and multiplies the result by
 %speed.

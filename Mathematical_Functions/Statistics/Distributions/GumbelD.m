@@ -168,7 +168,7 @@ function x=invCDF(prob,mu,betaVal)
 %
 %April 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
-    x=mu+betaVal*log(1./log(1./prob));
+    x=mu-betaVal*log(-log(prob));
 end
 
 function x=rand(N,mu,betaVal)

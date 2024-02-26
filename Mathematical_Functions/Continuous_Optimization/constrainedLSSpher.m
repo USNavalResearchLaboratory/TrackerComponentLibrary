@@ -1,6 +1,6 @@
 function [x,lambda,exitFlag]=constrainedLSSpher(A,b,alpha,varargin)
 %%CONSTRAINEDLSSPHER Find x to minimize norm(A*x-b,2) under the constraint
-%                    that norm(x,2)<=alpha. This is essentialy contraining
+%                    that norm(x,2)<=alpha. This is essentialy constraining
 %                    x to a sphere of radius alpha. This only solves real
 %                    systems.
 %
@@ -49,7 +49,6 @@ end
 if(nargin<3||isempty(alpha))
     alpha=1;
 end
-
 
 r=rank(A);
 

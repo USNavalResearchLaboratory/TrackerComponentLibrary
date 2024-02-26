@@ -1,4 +1,4 @@
-function [xUpdate,SUpdate,innov,Szz,W]=sqrtEKFUpdateWithPred(z,SR,zPred,otherInfo,innovTrans,stateTrans)
+function [xUpdate,SUpdate,innov,Szz,W]=sqrtEKFUpdateWithPred(z,SR,otherInfo,innovTrans,stateTrans)
 %%SQRTEKFUPDATEWITHPRED Given the output of the measurement prediction step
 %           from sqrtEKFMeasPred and a measurement, complete the measurement
 %           update step of the first-order square root extended Kalman
@@ -12,7 +12,6 @@ function [xUpdate,SUpdate,innov,Szz,W]=sqrtEKFUpdateWithPred(z,SR,zPred,otherInf
 %       SR The zDimXzDim lower-triangular square root of the measurement
 %          covariance matrix in the native coordinate system of the
 %          measurement.
-%    zPred The zDimXnumComp measurement prediction from the filter.
 % otherInfo The intermediate results returned in the otherInfo output of
 %          the sqrtEKFMeasPred function.
 % innovTrans An optional function handle that computes and optionally
@@ -64,6 +63,7 @@ H=otherInfo.H;
 Pxz=otherInfo.Pxz;
 xPred=otherInfo.xPred;
 SPred=otherInfo.SPred;
+zPred=otherInfo.zPred;
 
 xDim=size(xPred,1);
 numComp=size(xPred,2);

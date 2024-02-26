@@ -193,7 +193,6 @@ c2=U'*(x0-xc);
 %Transform back to x
 x=bsxfun(@plus,U*y,xc);
 xL=bsxfun(@plus,x0,bsxfun(@times,s,t));
-
 end
 
 function [x,t]=solveDiagA(A,a,b,epsConst)

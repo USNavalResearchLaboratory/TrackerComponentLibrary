@@ -399,7 +399,6 @@ for l=1:fix(N/2)
         varMin=varCur;
         wMin=w;
         xiMin=xi;
-        lMin=l;
     end
 end
 end

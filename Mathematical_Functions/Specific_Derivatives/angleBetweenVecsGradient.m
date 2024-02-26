@@ -1,7 +1,7 @@
 function J=angleBetweenVecsGradient(a,s,whichVector)
 %%ANGLEBETWEENVECSGRADIENT Given 3X1 vectors a and s, this finds the
 %           gradient of the angle between the vectors with respect to the
-%           elements of either a or s. This is the graident of the function
+%           elements of either a or s. This is the gradient of the function
 %           angBetweenVecs.
 %
 %INPUTS: a A real 3X1 vector.
@@ -12,7 +12,7 @@ function J=angleBetweenVecsGradient(a,s,whichVector)
 %          matrix is passed is 1.
 %
 %OUTPUTS: J A 1X3 vector where J(i) is the derivative of the angle with
-%           respect to the its element of the selected vector (a or s).
+%           respect to the ith element of the selected vector (a or s).
 %
 %This implements the gradient of the cross-product relation used in
 %the angBetweenVecs function.

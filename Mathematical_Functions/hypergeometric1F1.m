@@ -1,9 +1,12 @@
-function val=hypergeometric1F1(a,b,z)
+function val=hypergeometric1F1(a,b,z,nMax)
 %HYPERGEOMETRIC1F1 Evaluate the regular confluent hypergeometric function
 %                  1F1(a;b;z) (the Kummer confluent hypergeometric
 %                  function).
 %
 %INPUTS: a,b,z Three real or complex scalar numbers.
+%         nMax The maximum number of iterations to perform to try to
+%              achieve convergence. The default if omitted or an empty
+%              matrix is passed is 50.
 %
 %OUTPUTS: val The scalar value of 1F1(a;b;z). 
 %
@@ -19,7 +22,9 @@ function val=hypergeometric1F1(a,b,z)
 %October 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-nMax=50;
+if(nargin<4||isempty(nMax))
+    nMax=50;
+end
 
 t=z*(a-b/2);
 
@@ -38,7 +43,7 @@ for n=1:nMax
 end
 
 if(didConverge==false)
-   warning('Convergence of hypergeometric1F1 not achieved.') 
+    warning('Convergence of hypergeometric1F1 not achieved.') 
 end
 val=exp(z/2)*sumVal;
 

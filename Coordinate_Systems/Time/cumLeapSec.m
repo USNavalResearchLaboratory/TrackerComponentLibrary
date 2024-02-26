@@ -1,4 +1,4 @@
-function numSec=cumLeapSec(year,month,day,dayFrac)
+function numSec=cumLeapSec(year,month,day,dayFrac) %#ok<STOUT,INUSD>
 %%CUMLEAPSEC Get the cumulative number of leap seconds up to a given date
 %            for one or more dates given in matrices. The result is the
 %            difference between atomic international time (TAI) and

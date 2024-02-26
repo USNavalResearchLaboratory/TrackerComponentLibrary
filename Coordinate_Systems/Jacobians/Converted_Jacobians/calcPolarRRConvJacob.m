@@ -50,15 +50,15 @@ function J=calcPolarRRConvJacob(zPolarRR,systemType,useHalfRange,lTx,lRx,M)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 if(nargin<6||isempty(M))
-   M=eye(2,2); 
+    M=eye(2,2); 
 end
 
 if(nargin<5||isempty(lRx))
-   lRx=zeros(2,1); 
+    lRx=zeros(2,1); 
 end
 
 if(nargin<4||isempty(lTx))
-   lTx=zeros(2,1); 
+    lTx=zeros(2,1); 
 end
 
 if(nargin<3||isempty(useHalfRange))

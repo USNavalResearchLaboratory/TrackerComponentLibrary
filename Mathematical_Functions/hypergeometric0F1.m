@@ -32,8 +32,8 @@ S=A;
 
 epsVal=Inf;
 k=0;
-while(epsVal>eps(S))
-    A=A*(1/(a+k))*(z/(k+1));
+while(any(epsVal>eps(S)))
+    A=A*(1/(a+k)).*(z/(k+1));
     S=S+A;
     
     epsVal=abs(A);

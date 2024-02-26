@@ -81,7 +81,7 @@ classdef ClusterSet < handle
         
         function val=getEl(CSObj,clusterIdx,itemIdx)
         %%GETEL This is the same as calling the subsref function, which has
-        %       the syntax theSet(clusterIdx,itemIdx), to get a signle
+        %       the syntax theSet(clusterIdx,itemIdx), to get a single
         %       element. This function has the syntax
         %       theSet.getEl(clusterIdx,itemIdx). The advantage to using
         %       this function is that it is faster. The subsref function

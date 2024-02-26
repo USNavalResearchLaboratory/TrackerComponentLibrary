@@ -1,4 +1,4 @@
-function [altitude,gasTable,t,d]=NRLMSISE00Alt4Pres(dayOfYear,secondOfTheDay,pressure,latLon,AP,F107,F107A)
+function [altitude,gasTable,t,d]=NRLMSISE00Alt4Pres(dayOfYear,secondOfTheDay,pressure,latLon,AP,F107,F107A) %#ok<STOUT,INUSD>
 %%NRLMSISE00ALT4PRES Given the pressure at a particular latitude and
 %                   longitude and time, obtain the approximate ellipsoidal
 %                   height using the NRLMSISE-00 atmospheric model. This

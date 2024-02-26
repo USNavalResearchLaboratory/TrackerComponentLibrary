@@ -1,7 +1,7 @@
 function [X,y,Z,exitCode]=semiDefProg(C,AMats,a,algorithm,initVals,algParams)
-%%SEMIDEFPROG Perform semidefinite programming in the real
-%             domain with equality constraints using one of a number of
-%             algorithms. This solves the optimization problem:
+%%SEMIDEFPROG Perform semidefinite programming in the real domain with
+%             equality constraints using one of a number of algorithms.
+%             This solves the optimization problem:
 %                 maximize C(:)'*X(:)
 %               subject to sum(sum(AMats(:,:,k).*X))=a(k) for all k
 %                      and X is positive semidefinite.

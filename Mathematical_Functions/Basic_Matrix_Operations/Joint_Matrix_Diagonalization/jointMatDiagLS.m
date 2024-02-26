@@ -226,7 +226,7 @@ function [B,Lambda,CLS,exitCode]=jointMatDiagLS(A,w,maxIter,CLSTol,RelTol,AbsTol
                 
                 diff=abs(theta-thetaPrev);
                 if(all((diff<=AbsTol)|diff<=RelTol*abs(theta)))
-                    exigtCode=-1;
+                    exitCode=-1;
                     break;
                 end
             end

@@ -41,7 +41,7 @@ function [xUpdate,PUpdate,innov,Pzz,W]=KalmanUpdate(xPred,PPred,z,R,H,condIssue)
 %
 %EXAMPLE:
 %This example simulates a linear dynamic process that extracts Cartesian
-%measurements. it then looks at the measurement error reduction factor
+%measurements. It then looks at the measurement error reduction factor
 %(MERF), and the normalized estimation error squared (NEES). The MERF
 %should be less than 1 or else there is no point in using the filter-
 %connecting the dots works better. The NEES should be close to 1 to

@@ -167,7 +167,7 @@ d=zeros(n,1);
 switch(version)
     case 1%Algorithm 2, version 1
         [xBar, S]=calcMixtureMoments(x);
-        SInv=inv(S);
+        SInv=S\eye(size(S));
         for i=1:n
             diff=x(:,i)-xBar;
             %Mahalanobis distances
@@ -199,7 +199,7 @@ while(numMin~=numMinOld&&curIter<maxIter)
     
     %Algorithm 3, step 2.
     [xb, Rb]=calcMixtureMoments(x(:,minIdx));
-    RbInv=inv(Rb);
+    RbInv=Rb\eye(size(Rb));
     for i=1:n
         diff=x(:,i)-xb;
         d(i)=sqrt(diff'*RbInv*diff);  

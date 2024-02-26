@@ -232,7 +232,7 @@ for curTar=1:numTar
         innov=zCart(:,curMeas)-zPred;
         
         Pzz=PzPred+(SRCart(:,:,curMeas)*SRCart(:,:,curMeas)');
-        mahabDist=innov'*inv(Pzz)*innov;
+        mahabDist=innov'*(Pzz\innov);
         if(mahabDist>gammaVal)
             %If it does not gate, then assign a zero likelihood ratio.
             A(curTar,curMeas)=0;

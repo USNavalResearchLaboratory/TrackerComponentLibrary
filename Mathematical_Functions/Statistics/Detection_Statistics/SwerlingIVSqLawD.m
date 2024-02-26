@@ -14,7 +14,7 @@ classdef SwerlingIVSqLawD
 %fluctuates from pulse to pulse, and that a square law detector is used to
 %incoherently integrate multiple pulses The difference from a Swerling III
 %model is the target amplitude fluctuations from pulse to pulse.
-
+%
 %The square law detector for N samples is
 %y=sum_{i=1}^N r_i^2
 %where r_i is the ith real amplitude. The model for the amplitude given a
@@ -149,7 +149,7 @@ function val=var(avgSNR,N)
     val=4*N*(1+avgSNR.*(2+avgSNR/2));
 end
     
-function val=PDF(x,avgSNR,N)
+function val=PDF(x,avgSNR,N,algorithm)
 %%PDF Evaluate the scalar probability density function (PDF) of the
 %     distribution of the detection power (normalized to a noise variance
 %     of 1) under a Swerling IV model in a square-law detector.
@@ -162,15 +162,24 @@ function val=PDF(x,avgSNR,N)
 %          different realization of the target power is used across each
 %          pulse and the noise corrupting the pulses varies. If this
 %          parameter is omitted or an empty matrix is passed, N=1 is used.
+% algorithm This selects the algorithm to use. Possible values are:
+%          0 (The default if omitted or an empty matrix is passed). Invert
+%            the characteristic function in [3] using a partial fraction
+%            expansion and an inverse Laplace transform. This is only
+%            implemented here for the case where all pulses have the same
+%            SNR.
+%          1 Use an algorthm that makes use of the hypergeometric1F1
+%            function. This method is slow and can be inaccurate if the
+%            hypergeometric1F1 does not converge.
 %
 %OUTPUTS: val The values of the PDF evaluated at the given points.
 %
-%The PDF is given in Equation 11.5-14 where equation 11.4-8 relates the
-%parameterization used there to an average squared amplitude. To relate the
-%average squared amplitude ABar^2 to avgSNR as used in [2], we use
-%avgSNR=ABar^2/2. However the PDF is derived is based on a scaled
-%square-law detector, as in Equation 10.4-4 in [1]. Thus, in implementing
-%the PDF, the scaling is removed.
+%For algorithm 1, the PDF is given in Equation 11.5-14 where equation
+%11.4-8 relates the parameterization used there to an average squared
+%amplitude. To relate the average squared amplitude ABar^2 to avgSNR as
+%used in [2], we use avgSNR=ABar^2/2. However the PDF is derived is based
+%on a scaled square-law detector, as in Equation 10.4-4 in [1]. Thus, in
+%implementing the PDF, the scaling is removed.
 %
 %EXAMPLE:
 %Here, we validate the PDF by generating random samples and comparing the
@@ -199,8 +208,16 @@ function val=PDF(x,avgSNR,N)
 %    Inc., Rayliegh, NC: 2004.
 %[2] P. Swerling, "Probability of detection for fluctuating targets," The
 %    RAND Corporation, Santa Monica, CA, Tech. Rep. RM-1217, 1954.
+%[3] R. Kassab, T. Boutin, and C. Adnet, "Probability of detection for
+%    Swerling model fluctuating targets with a square-law detector and
+%    different signal to noise ratios," in 22nd International Microwave and
+%    Radar Conference, Poznan, Poland, 14-17 May 2018, pp. 131-132.
 %
 %March 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    if(nargin<4||isempty(algorithm))
+        algorithm=0;
+    end
 
     if(nargin<3||isempty(N))
         N=1;
@@ -214,16 +231,44 @@ function val=PDF(x,avgSNR,N)
     val=zeros(size(x));
     numEls=numel(x);
 
-    for curEl=1:numEls
-        v=x(curEl);
+    switch(algorithm)
+        case 0%Invert the characteristic function.
+            numReps=2*N;%All denominators are squared.
+            bInv=1./(1+avgSNR/2);
+            scaleFactor=bInv.^(numReps);
+            numPoly=1;
+            for k=1:N
+                numPoly=conv(numPoly,[1,1]);
+            end
+            [coeffs,poles]=partialFracKnownPoleDenom(-bInv,numReps,numPoly);
+            coeffs=coeffs*scaleFactor;
+            
+            for k=1:numReps
+                curPole=-poles(k);
 
-        if(v>0)
-            val(curEl)=exp((N-1)*log(v)-v/(1+xBar2)-2*N*log(1+xBar2)-gammaln(N))*hypergeometric1F1(-N,N,-xBar2/(1+xBar2)*v);
-        elseif(v==0&&N==1)
-            val(curEl)=1/((1+xBar2)^(2*N)*factorial(N-1));
-        end
+                if(k==1)
+                    val=val+coeffs(k)*exp(-curPole*x);
+                else
+                    val=val+coeffs(k)*(x.^(k-1)/factorial(k-1)).*exp(-curPole*x);
+                end
+            end
+
+            val(x<0)=0;
+            %If finite precision errors push values below zero.
+            val(val<0)=0;
+        case 1%Use the solution in terms of hypergeometric1F1.
+            for curEl=1:numEls
+                v=x(curEl);
+        
+                if(v>0)
+                    val(curEl)=exp((N-1)*log(v)-v/(1+xBar2)-2*N*log(1+xBar2)-gammaln(N))*hypergeometric1F1(-N,N,-xBar2/(1+xBar2)*v);
+                elseif(v==0&&N==1)
+                    val(curEl)=1/((1+xBar2)^(2*N)*factorial(N-1));
+                end
+            end
+        otherwise
+            error('Unknown Algorithm Chosen.')
     end
-    
     %Adjust for the change of variable to undo the scaling from Equation
     %10.4-4 in [1].
     val=val/2;

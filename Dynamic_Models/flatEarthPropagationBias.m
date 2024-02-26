@@ -14,7 +14,7 @@ function vertBias=flatEarthPropagationBias(predDist,r)
 %                 Constants.WGS84MeanRadius is used.
 %
 %OUTPUTS: vertBias The magnitude of the vertical elevation bias. 
-
+%
 %This implements Equation 58 in [1].
 %
 %REFERENCES:

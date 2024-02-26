@@ -1,4 +1,4 @@
-function [decodedMessage,reportName,reportDescription,fieldDescriptions]=decodeAISString(NMEAStrings)
+function [decodedMessage,reportName,reportDescription,fieldDescriptions]=decodeAISString(NMEAStrings) %#ok<STOUT,INUSD>
 %%DECODEAISSTRING Decode one or more Automatic Identification System (AIS)
 %                 messages given a full National Marine Electronics
 %                 Association (NMEA) formatted ASCII text messages.

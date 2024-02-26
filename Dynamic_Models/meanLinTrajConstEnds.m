@@ -128,7 +128,7 @@ for curPoint=1:N
     Pzz=F1*Q1*F1'+Q2;
     x1Pred=F0*x(:,curPoint);
     x2Pred=F1*F0*x(:,curPoint);
-    x1Mean=x1Pred+Pxz*inv(Pzz)*(x2-x2Pred);
+    x1Mean=x1Pred+Pxz*(Pzz\(x2-x2Pred));
 
     x(:,curPoint+1)=x1Mean;
 end

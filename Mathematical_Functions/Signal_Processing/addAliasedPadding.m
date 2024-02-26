@@ -1,4 +1,4 @@
-function XPadded=addAliasedPadding(X,numPad,dim)
+function XPadded=addAliasedPadding(X,numPad,dim,type)
 %%ADDALIASEDPADDING Increase the size of the one-dimensional array or two-
 %           dimensional matrix X by padding. For a matrix, pad numPad(1)
 %           elements before the rows start and after they end and numPad(2)
@@ -6,7 +6,8 @@ function XPadded=addAliasedPadding(X,numPad,dim)
 %           Alternatively only rows or only columns can be padded. This
 %           padding is filled with the values of X aliased back on itself.
 %           This type of padding can be useful when performing cell
-%           averaging CFAR or when centroiding.
+%           averaging CFAR or when centroiding. In the range dimension, the
+%           edge elements can optionally be repeated instead of aliasing.
 %
 %INPUTS: X The numRowsXnumColsXnumX set of numX matrices to which aliased
 %          padding should be added.
@@ -25,6 +26,11 @@ function XPadded=addAliasedPadding(X,numPad,dim)
 %          omitted or an empty matrix is passed is dim=0, unless X is a
 %          vector in which case the non-singletom dimension is the one that
 %          is padded.
+%     type This is either 'wrap' or 'ext' and specifies if the padded data
+%          is wrapped or extended in the dimension of the rows (assumed to
+%          be the range dimension). Being extended means that the edge
+%          elements are repeated. The default if omitted or an empty matrix
+%          is passed is 'wrap').
 %
 %OUTPUTS: XPadded The (numRows+2*numPad(1))X(numRows+2*numPad(2))XnumX set
 %                 of numX matrix where the central portion is X and all of
@@ -41,6 +47,9 @@ function XPadded=addAliasedPadding(X,numPad,dim)
 numRows=size(X,1);
 numCols=size(X,2);
 numX=size(X,3);
+if(~exist('type','var')||isempty(type))
+    type='wrap';%Default
+end
 
 if(nargin<3||isempty(dim))
     if(numRows>1&&numCols>1||numRows==1&&numCols==1)
@@ -67,23 +76,35 @@ switch(dim)
         outerRowsD=(numPad(1)+numRows+1):(numRows+2*numPad(1));
         outerColsL=1:numPad(2);
         outerColsR=(numPad(2)+numCols+1):(numCols+2*numPad(2));
-
+        
         %Indices of elements that will be selected in X.
         rowPadU=(numRows-numPad(1)+1):numRows;
         rowPadD=1:numPad(1);
         colPadL=(numCols-numPad(2)+1):numCols;
         colPadR=1:numPad(2);
-
+        
         %Fill in each section of XPadded.
         XPadded(innerRows,innerCols,:)=X;
         XPadded(innerRows,outerColsL,:)=X(:,colPadL,:);
         XPadded(innerRows,outerColsR,:)=X(:,colPadR,:);
-        XPadded(outerRowsU,innerCols,:)=X(rowPadU,:,:);
-        XPadded(outerRowsD,innerCols,:)=X(rowPadD,:,:);
-        XPadded(outerRowsU,outerColsL,:)=X(rowPadU,colPadL,:);
-        XPadded(outerRowsD,outerColsL,:)=X(rowPadD,colPadL,:);
-        XPadded(outerRowsD,outerColsR,:)=X(rowPadD,colPadR,:);
-        XPadded(outerRowsU,outerColsR,:)=X(rowPadU,colPadR,:);
+        switch(type)
+            case 'ext'
+                XPadded(outerRowsU,innerCols,:)=X(rowPadD,:,:);
+                XPadded(outerRowsD,innerCols,:)=X(rowPadU,:,:);
+                XPadded(outerRowsU,outerColsL,:)=X(rowPadD,colPadL,:);
+                XPadded(outerRowsD,outerColsL,:)=X(rowPadU,colPadL,:);
+                XPadded(outerRowsD,outerColsR,:)=X(rowPadU,colPadR,:);
+                XPadded(outerRowsU,outerColsR,:)=X(rowPadD,colPadR,:);
+                
+            otherwise
+                XPadded(outerRowsU,innerCols,:)=X(rowPadU,:,:);
+                XPadded(outerRowsD,innerCols,:)=X(rowPadD,:,:);
+                XPadded(outerRowsU,outerColsL,:)=X(rowPadU,colPadL,:);
+                XPadded(outerRowsD,outerColsL,:)=X(rowPadD,colPadL,:);
+                XPadded(outerRowsD,outerColsR,:)=X(rowPadD,colPadR,:);
+                XPadded(outerRowsU,outerColsR,:)=X(rowPadU,colPadR,:);
+        end
+        
     case 1%Pad the rows
         XPadded=zeros(numRows+2*numPad(1),numCols,numX);
         
@@ -95,8 +116,15 @@ switch(dim)
         rowPadD=1:numPad(1);
         
         XPadded(innerRows,:,:)=X;
-        XPadded(outerRowsU,:,:)=X(rowPadU,:,:);
-        XPadded(outerRowsD,:,:)=X(rowPadD,:,:);
+        switch(type)
+            case 'ext'
+                XPadded(outerRowsU,:,:)=X(rowPadD,:,:);
+                XPadded(outerRowsD,:,:)=X(rowPadU,:,:);
+            otherwise
+                XPadded(outerRowsU,:,:)=X(rowPadU,:,:);
+                XPadded(outerRowsD,:,:)=X(rowPadD,:,:);
+        end
+        
     case 2%Pad the columns
         XPadded=zeros(numRows,numCols+2*numPad(2),numX);
         
@@ -113,7 +141,6 @@ switch(dim)
     otherwise
         error('Invalid value of dim specified')
 end
-
 end
 
 %LICENSE:

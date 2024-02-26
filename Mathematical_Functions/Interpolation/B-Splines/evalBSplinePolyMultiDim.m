@@ -33,7 +33,7 @@ function val=evalBSplinePolyMultiDim(t,tLength,x,k,idx)
 %             the points in x. This has the same number of columns as x.
 %
 %Chapter 17 of [1] discusses tensor product splines. This function just
-%takes the product of the output fo the evalBSplinePoly(t,x,k,idx) across
+%takes the product of the output of the evalBSplinePoly(t,x,k,idx) across
 %multiple dimensions.
 %
 %EXAMPLE:

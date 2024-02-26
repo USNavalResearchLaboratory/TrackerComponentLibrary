@@ -1,4 +1,4 @@
-function [xUpdate,PUpdate,innov,Pzz,W]=EKFUpdateWithPred(z,R,zPred,PzPred,otherInfo,numIter,innovTrans,stateDiffTrans,stateTrans)
+function [xUpdate,PUpdate,innov,Pzz,W]=EKFUpdateWithPred(z,R,otherInfo,numIter,innovTrans,stateDiffTrans,stateTrans)
 %%EKFUPDATEWITHPRED Given the output of the measurement prediction step
 %           from EKFMeasPred and a measurement, complete the measurement
 %           update step of the first or second order Extended Kalman Filter
@@ -11,8 +11,6 @@ function [xUpdate,PUpdate,innov,Pzz,W]=EKFUpdateWithPred(z,R,zPred,PzPred,otherI
 %INPUTS: z The zDimX1 measurement vector.
 %        R The zDimXzDim measurement covariance matrix in the native
 %          coordinate system of the measurement.
-%    zPred The zDimXnumComp measurement predictions from the filter.
-%   PzPred The zDimXzDimXnumComp covariance matrices associated with zPred.
 % otherInfo The intermediate results returned in the otherInfo output of
 %          the EKFMeasPred function.
 %  numIter The number of iterations to perform if an iterated EKF is
@@ -61,20 +59,20 @@ function [xUpdate,PUpdate,innov,Pzz,W]=EKFUpdateWithPred(z,R,zPred,PzPred,otherI
 
 zDim=size(z,1);
 
-if(nargin<6||isempty(numIter))
+if(nargin<4||isempty(numIter))
     numIter=0;
 end
 
-if(nargin<7||isempty(innovTrans))
+if(nargin<5||isempty(innovTrans))
     %The function just returns the input.
     innovTrans=@(a,b)bsxfun(@minus,a,b);
 end
 
-if(nargin<8||isempty(stateDiffTrans))
+if(nargin<6||isempty(stateDiffTrans))
     stateDiffTrans=@(x)x;
 end
 
-if(nargin<9||isempty(stateTrans))
+if(nargin<7||isempty(stateTrans))
     stateTrans=@(x)x;
 end
 
@@ -86,6 +84,8 @@ h=otherInfo.h;
 H=otherInfo.H;
 xPred=otherInfo.xPred;
 PPred=otherInfo.PPred;
+zPred=otherInfo.zPred;
+PzPred=otherInfo.PzPred;
 
 xDim=size(xPred,1);
 numComp=size(xPred,2);

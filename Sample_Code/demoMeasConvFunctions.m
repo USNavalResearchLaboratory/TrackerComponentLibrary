@@ -78,27 +78,27 @@ for curPoint=1:numPoints
         [zCart,RCart]=pol2CartTaylor(zMeas,R,[],[],0);
         diff=zCartTrue-zCart;
         MSECur(1)=MSECur(1)+diff'*diff;
-        NEESCur(1)=NEESCur(1)+diff'*inv(RCart)*diff;
+        NEESCur(1)=NEESCur(1)+diff'*(RCart\diff);
         
         [zCart,RCart]=pol2CartTaylor(zMeas,R,[],[],1);
         diff=zCartTrue-zCart;
         MSECur(2)=MSECur(2)+diff'*diff;
-        NEESCur(2)=NEESCur(2)+diff'*inv(RCart)*diff;
+        NEESCur(2)=NEESCur(2)+diff'*(RCart\diff);
         
         [zCart,RCart]=pol2CartTaylor(zMeas,R,[],[],2);
         diff=zCartTrue-zCart;
         MSECur(3)=MSECur(3)+diff'*diff;
-        NEESCur(3)=NEESCur(3)+diff'*inv(RCart)*diff;
+        NEESCur(3)=NEESCur(3)+diff'*(RCart\diff);
         
         [zCart,RCart]=pol2CartTaylor(zMeas,R,[],[],3);
         diff=zCartTrue-zCart;
         MSECur(4)=MSECur(4)+diff'*diff;
-        NEESCur(4)=NEESCur(4)+diff'*inv(RCart)*diff;
+        NEESCur(4)=NEESCur(4)+diff'*(RCart\diff);
         
         [zCart,RCart]=pol2CartCubature(zMeas,SR,[],[],[],[],[],xi,w);
         diff=zCartTrue-zCart;
         MSECur(5)=MSECur(5)+diff'*diff;
-        NEESCur(5)=NEESCur(5)+diff'*inv(RCart)*diff;
+        NEESCur(5)=NEESCur(5)+diff'*(RCart\diff);
     end
     RMSE(curPoint,:)=sqrt(MSECur/numRuns);
     NEES(curPoint,:)=NEESCur/(numRuns*2);
@@ -188,17 +188,17 @@ for curPoint=1:numPoints
         [zCart,RCart]=spher2CartTaylor(zMeas,R,[],[],0);
         diff=zCartTrue-zCart;
         MSECur(1)=MSECur(1)+diff'*diff;
-        NEESCur(1)=NEESCur(1)+diff'*inv(RCart)*diff;
+        NEESCur(1)=NEESCur(1)+diff'*(RCart\diff);
         
         [zCart,RCart]=spher2CartTaylor(zMeas,R,[],[],1);
         diff=zCartTrue-zCart;
         MSECur(2)=MSECur(2)+diff'*diff;
-        NEESCur(2)=NEESCur(2)+diff'*inv(RCart)*diff;
+        NEESCur(2)=NEESCur(2)+diff'*(RCart\diff);
         
         [zCart,RCart]=spher2CartCubature(zMeas,SR,0,true,[],[],[],xi,w);
         diff=zCartTrue-zCart;
         MSECur(3)=MSECur(3)+diff'*diff;
-        NEESCur(3)=NEESCur(3)+diff'*inv(RCart)*diff;
+        NEESCur(3)=NEESCur(3)+diff'*(RCart\diff);
     end
     RMSE(curPoint,:)=sqrt(MSECur/numRuns);
     NEES(curPoint,:)=NEESCur/(numRuns*3);
@@ -291,17 +291,17 @@ for curPoint=1:numPoints
         [zCart,RCart]=monostatRuv2CartTaylor(zMeas,R,useHalfRange,[],[],0);
         diff=zCartTrue-zCart;
         MSECur(1)=MSECur(1)+diff'*diff;
-        NEESCur(1)=NEESCur(1)+diff'*inv(RCart)*diff;
+        NEESCur(1)=NEESCur(1)+diff'*(RCart\diff);
         
         [zCart,RCart]=monostatRuv2CartTaylor(zMeas,R,useHalfRange,[],[],1);
         diff=zCartTrue-zCart;
         MSECur(2)=MSECur(2)+diff'*diff;
-        NEESCur(2)=NEESCur(2)+diff'*inv(RCart)*diff;
+        NEESCur(2)=NEESCur(2)+diff'*(RCart\diff);
         
         [zCart,RCart]=ruv2CartCubature(zMeas,SR,useHalfRange,[],[],[],xi,w);
         diff=zCartTrue-zCart;
         MSECur(3)=MSECur(3)+diff'*diff;
-        NEESCur(3)=NEESCur(3)+diff'*inv(RCart)*diff;
+        NEESCur(3)=NEESCur(3)+diff'*(RCart\diff);
     end
     RMSE(curPoint,:)=sqrt(MSECur/numRuns);
     NEES(curPoint,:)=NEESCur/(numRuns*3);

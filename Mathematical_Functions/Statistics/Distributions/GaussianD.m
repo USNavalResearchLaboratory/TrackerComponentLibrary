@@ -452,7 +452,7 @@ CDetRoot=1/sqrt(det(C*C'));
 %derivatives corresponding to the diagonals are non-zero.
 CDetGrad=vech(diag(-CDetRoot./diag(C)));
 
-CInv=inv(C);
+CInv=C\eye(size(C));
 
 %The exponential term
 expTerm=exp(-0.5*invSymQuadForm(x,C,1));

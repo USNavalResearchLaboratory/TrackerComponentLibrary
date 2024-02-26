@@ -1,4 +1,4 @@
-function [xHelio,xBary,exitFlag]=approxSolarSysVec(Jul1,Jul2,solarBody)
+function [xHelio,xBary,exitFlag]=approxSolarSysVec(Jul1,Jul2,solarBody) %#ok<STOUT,INUSD>
 %%APPROXSOLARSYSVEC Get the approximate position and velocity vector of
 %                 the Earth or of the planets in coordinates aligned with
 %                 the International Celestial Reference System (ICRS).

@@ -4,16 +4,16 @@ function varargout=dealRobust(varargin)
 %            function is useful when creating anonymous functions to pass
 %            to other functions. However, the deal function will throw an
 %            error if the function calling the anonymous function asks for
-%            fewer outputs than are passed. For example, this mgiht arise
+%            fewer outputs than are passed. For example, this might arise
 %            if a routine wants a passed function handle to return a value
 %            and its derivative, but the calling function does not need the
 %            derivative at some point and only requests the value. This
-%            function is the same as matlab's deal function, except it does
+%            function is the same as Matlab's deal function, except it does
 %            not throw an error if fewer outputs are requested than inputs
 %            passed.
 %
 %INPUTS: A variable number of items that must be at least as large as the
-%       number of outputs requested.
+%        number of outputs requested.
 %
 %OUTPUTS: The outputs are the same as the inputs.
 %

@@ -1,4 +1,4 @@
-function [xRot,rotMat]=GCRS2TOD(xVec,TT1,TT2,dXdY)
+function [xRot,rotMat]=GCRS2TOD(xVec,TT1,TT2,dXdY) %#ok<STOUT,INUSD>
 %%GCRS2TOD Rotate a vector from the geocentric celestial reference system
 %          (GCRS) to the true equator and equinox of date coordinate
 %          system (TOD) using the IAU 2006/2000A model, where a location

@@ -116,7 +116,7 @@ else
 end
 end
 
-function numSquares=calcExactNumLatinSquares(n)
+function numSquares=calcExactNumLatinSquares(n) %#ok<DEFNU> 
 %%CALCEXACTNUMLATINSQUARES This function implements the algorithm of [1]
 %               for exactly computing the number of latin squares. However,
 %               the computational complexity of the algorithm increases so

@@ -14,8 +14,7 @@ function [rGCRS,rITRS]=solarBodyVec(Jul1,Jul2,timeCoordSys,objectNumber,obsState
 %              date given by Jul1,Jul2. Possible values are
 %              'UTC' Universal coordinated time.
 %              'TT'  Terrestrial time.
-%              'TDB' Barycentric dynamical time (can only be used if
-%                    algorithm =0 or 1)
+%              'TDB' Barycentric dynamical time.
 %              'TAI' International atomic time.
 %              'TCG' Geocentric coordinate time.
 %              'GPS' GPS time.

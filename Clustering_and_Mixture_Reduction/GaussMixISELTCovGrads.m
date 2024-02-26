@@ -163,7 +163,7 @@ for j=1:Nr
     for i=1:Nh
         diff=mu1(:,i)-mu2(:,j);
         PSum=P1(:,:,i)+P2(:,:,j);
-        PSumInv=inv(PSum);
+        PSumInv=PSum\eye(size(PSum));
         
         gradJhr(:,:,j)=gradJhr(:,:,j)+w1(i)*PDFVals12(i,j)*PSumInv*(diff*diff'-PSum)*PSumInv*L2(:,:,j);
     end
@@ -174,7 +174,7 @@ for j=1:Nr
     for i=1:Nr
         diff=mu2(:,i)-mu2(:,j);
         PSum=P2(:,:,i)+P2(:,:,j);
-        PSumInv=inv(PSum);
+        PSumInv=PSum\eye(size(PSum));
         
         gradJrr(:,:,j)=gradJrr(:,:,j)+w2(i)*PDFVals22(i,j)*PSumInv*(diff*diff'-PSum)*PSumInv*L2(:,:,j);
     end

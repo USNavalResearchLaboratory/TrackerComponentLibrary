@@ -146,10 +146,10 @@ function Ht=calcHTilde(w,mu,Sigma,numTar,xDim,i,j)
             munj=mu(idxJ,n);
             Sigmanj=Sigma(idxJ,idxJ,n);
 
-            SigmamiInv=inv(Sigmami);
-            SigmanjInv=inv(Sigmanj);
+            SigmamiInv=Sigmami\eye(size(Sigmami));
+            SigmanjInv=Sigmanj\eye(size(Sigmanj));
             
-            Sigmamnij=inv(SigmamiInv+SigmanjInv);
+            Sigmamnij=(SigmamiInv+SigmanjInv)\eye(size(SigmamiInv));
             mumnij=Sigmamnij*(SigmamiInv*mumi+SigmanjInv*munj);
 
             val=0;

@@ -1,7 +1,7 @@
 function vUnique=uniqueVec(v)
 %%UNIQUEVEC This function takes an mXn matrix of n m-dimensional vectors
 %           and returns only the vectors that are unique. This is currently
-%           suited for a small to moderate  numbers of vectors, because a
+%           suited for a small to moderate numbers of vectors, because a
 %           brute-force comparison algorithm is used (rather than a
 %           sorting-based approach that might lessen the number of
 %           comparisons).

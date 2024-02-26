@@ -11,7 +11,7 @@ function val=erfComplex(z)
 %             of the scaled error function are computed for the values in
 %             z.
 %
-%For values of abs(z)<0.08, six terms of the maclaurin series in [1] are
+%For values of abs(z)<0.08, six terms of the Maclaurin series in [1] are
 %used. These should be sufficient for convergence. For larger values, the
 %Faddeeva function is used through the relation 
 %erf(z)=1-exp(-z^2)*Faddeeva(1i*z);

@@ -1,31 +1,28 @@
-/**ASSIGN2DBYCOL          A C-code (for Matlab) implementation of the
- *                        shortest path assignment algorithm to solve the
- *                        two-dimensional assignment problem with a
- *                        rectangular cost matrix C. This implementation
- *                        scans the cost matrix by column.
+/**ASSIGN2DBYCOL A C-code (for Matlab) implementation of the shortest path
+ *               assignment algorithm to solve the two-dimensional
+ *               assignment problem with a rectangular cost matrix C. This
+ *               implementation scans the cost matrix by column.
  *
- *INPUTS:   C           A numRowXnumCol cost matrix that does not contain
- *                      any NaNs and where the largest finite element minus
- *                      the smallest element is a finite quantity (does not
- *                      overflow) when performing minimization and where
- *                      the smallest finite element minus the largest
- *                      element is finite when performing maximization. 
- *                      Forbidden assignments can be given costs of +Inf
- *                      for minimization and -Inf for maximization.
- *          maximize    If true, the minimization problem is transformed
- *                      into a maximization problem. The default if this
- *                      parameter is omitted is false.
+ *INPUTS: C A numRowXnumCol cost matrix that does not contain any NaNs and
+ *          where the largest finite element minus the smallest element is
+ *          a finite quantity (does not overflow) when performing
+ *          minimization and where the smallest finite element minus the
+ *          largest element is finite when performing maximization. 
+ *          Forbidden assignments can be given costs of +Inf for
+ *          minimization and -Inf for maximization.
+ * maximize If true, the minimization problem is transformed into a
+ *          maximization problem. The default if this parameter is omitted
+ *          is false.
  *
- *OUTPUTS:  col4row     A numRowX1 Matlab vector where the entry in each
- *                      element is an assignment of the element in that row
- *                      to a column. 0 entries signify unassigned rows.
- *          row4col     A numColX1 vector where the entry in each element
- *                      is an assignment of the element in that column to a
- *                      row. 0 entries signify unassigned columns.
- *          gain        The sum of the values of the assigned elements in
- *                      C.
- *          u           The dual variable for the rows.
- *          v           The dual variable for the columns.
+ *OUTPUTS: col4row A numRowX1 Matlab vector where the entry in each element
+ *                 is an assignment of the element in that row to a column.
+ *                 0 entries signify unassigned rows.
+ *         row4col A numColX1 vector where the entry in each element is an
+ *                 assignment of the element in that column to a row. 0
+ *                 entries signify unassigned columns.
+ *            gain The sum of the values of the assigned elements in C.
+ *               u The dual variable for the rows.
+ *               v The dual variable for the columns.
  *
  *DEPENDENCIES: string.h
  *              math.h
@@ -35,28 +32,29 @@
  *              mex.h
  *              MexValidation.h
  *
- * Note that the dual variables produced by a shortest path assignment
- * algorithm that scans by column are not interchangeable with those of a
- * shortest path assignment algorithm that scans by row. Matlab stores
- * matrices row-wise. A shortest path assignment algorithm that scans by
- * row is faster.
+ *Note that the dual variables produced by a shortest path assignment
+ *algorithm that scans by column are not interchangeable with those of a
+ *shortest path assignment algorithm that scans by row. Matlab stores
+ *matrices row-wise. A shortest path assignment algorithm that scans by
+ *row is faster.
  *
- * The algorithm is described in detail in [1] and [2].
+ *The algorithm is described in detail in [1] and [2].
  *
- * The algorithm can be compiled for use in Matlab  using the 
- * CompileCLibraries function.
+ *The algorithm can be compiled for use in Matlab  using the 
+ *CompileCLibraries function.
  *
- * The algorithm is run in Matlab using the command format
- * [col4row,row4col,gain,u,v]=assign2DByCol(C,maximize)
+ *The algorithm is run in Matlab using the command format
+ *[col4row,row4col,gain,u,v]=assign2DByCol(C,maximize)
  *
  *REFERENCES:
- *[1] D. F. Crouse, "On implementing 2D rectangular assignment algorithms,"
- *    IEEE Transactions on Aerospace and Electronic Systems, accepted 2016.
+ *[1] D. F. Crouse, "On Implementing 2D Rectangular Assignment Algorithms,"
+ *    IEEE Transactions on Aerospace and Electronic Systems, vol. 52, no. 4,
+ *    pp. 1679-1696, Aug. 2016.
  *[2] D. F. Crouse, "Advances in displaying uncertain estimates of multiple
  *    targets," in Proceedings of SPIE: Signal Processing, Sensor Fusion,
- *   and Target Recognition XXII, vol. 8745, Baltimore, MD, Apr. 2013.
+ *    and Target Recognition XXII, vol. 8745, Baltimore, MD, Apr. 2013.
  *
- * October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
+ *October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 

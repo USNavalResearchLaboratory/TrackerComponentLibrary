@@ -49,7 +49,7 @@ function [Q,q,exitCode]=ellipsOfEllipsSum(Q1,Q2,q1,q2,algorithm,AbsErr,RelErr,ma
 %           then this is always 0. If algorithm=1, then this is the exit
 %           code of the goldenSectionSearch function. If algorithm=0, then
 %           possible values are:
-%           0 The stepsize become too small accoridng to AbsTol or RelTol.
+%           0 The stepsize become too small according to AbsTol or RelTol.
 %           1 The maximum number of iterations elapsed.
 %
 %Extended target racking algorithms, such as in [2], represent

@@ -38,7 +38,7 @@ function [azStart,dist,azEnd,latLonWaypoints]=indirectGreatCircleProb(latLonStar
 %                 singularity at the poles.
 %               2 (The default if omitted or an empty matrix is passed and
 %                 waypointType=0) Obtain angles using Equation 5-4b of [3],
-%                 which is stable at the poles. Obtaincthe distance using a
+%                 which is stable at the poles. Obtain the distance using a
 %                 cross product formula, which is also used in algorithm 1,
 %                 as discussed below.
 %    waypointType An optional parameter indicating how the waypoints will
@@ -50,6 +50,9 @@ function [azStart,dist,azEnd,latLonWaypoints]=indirectGreatCircleProb(latLonStar
 %                   uniformly in longitude. This option is only available
 %                   for algorithm 0. If a trajectory is meridional, then
 %                   only the starting and stopping points will be returned.
+%        noJumps If this is true, then this ensures that there are no jumps
+%                in logitude when creating waypoints (for example between
+%                -pi and pi).
 %
 %OUTPUTS: azStart The 1XnumPts scalar forward azimuths at the starting
 %                 point in radians East of true North on the reference
@@ -253,6 +256,7 @@ switch(algorithm)
     case 2
         for k=1:numPts
             [azStart(k),dist(k),azEnd(k),latLonWaypointsCur]=indirectGreatCircleProbSnyder(latLonStart(1:2,k),latLonEnd(1:2,k),r,N);
+
             if(~isempty(N))
                 latLonWaypoints(:,:,k)=latLonWaypointsCur;
             end

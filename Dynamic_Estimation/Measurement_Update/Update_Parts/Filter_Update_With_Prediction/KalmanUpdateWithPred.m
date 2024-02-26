@@ -1,4 +1,4 @@
-function [xUpdate,PUpdate,innov,Pzz,W]=KalmanUpdateWithPred(z,R,zPred,PzPred,otherInfo)
+function [xUpdate,PUpdate,innov,Pzz,W]=KalmanUpdateWithPred(z,R,otherInfo)
 %%KALMANUPDATEWITHPRED Given the output of the measurement prediction step
 %           from KalmanMeasPred and a measurement, complete the measurement
 %           update step of the Kalman filter. Separating the measurement
@@ -9,8 +9,6 @@ function [xUpdate,PUpdate,innov,Pzz,W]=KalmanUpdateWithPred(z,R,zPred,PzPred,oth
 %
 %INPUTS: z The zDimX1 measurement vector.
 %        R The zDimXzDim measurement covariance matrix associated with z.
-%    zPred The zDimXnumComp measurement predictions from the filter.
-%   PzPred The zDimXzDimXnumComp covariance matrices associated with zPred.
 % otherInfo The intermediate results returned in the otherInfo output of
 %          the KalmanMeasPred function.
 %
@@ -36,6 +34,8 @@ xPred=otherInfo.xPred;
 PPred=otherInfo.PPred;
 Pxz=otherInfo.Pxz;
 H=otherInfo.H;
+PzPred=otherInfo.PzPred;
+zPred=otherInfo.zPred;
 
 zDim=size(z,1);
 xDim=size(xPred,1);

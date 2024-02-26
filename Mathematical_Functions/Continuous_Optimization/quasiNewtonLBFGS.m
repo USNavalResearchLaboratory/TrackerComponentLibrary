@@ -1,4 +1,4 @@
-function [xMin,fMin,exitCode]=quasiNewtonLBFGS(f,x0,numCorr,epsilon,deltaTestDist,delta,lineSearchParams,maxIterations,progressCallback)
+function [xMin,fMin,exitCode]=quasiNewtonLBFGS(f,x0,numCorr,epsilon,deltaTestDist,delta,lineSearchParams,maxIterations,progressCallback) %#ok<STOUT,INUSD>
 %%QUASINEWTONLBFGS Perform unconstrained nonlinear optimization using the
 %                  limited-memory Broyden-Fletcher-Goldfarb-Shanno (BFGS)
 %                  algorithm. The algorithm performs unconstrained

@@ -482,7 +482,8 @@ if(useConstAlg==false)
     A=zeros(n,n);
     b=zeros(n,1);
     
-    WSumInv=inv(sum(W,3));
+    WSumInv=sum(W,3);
+    WSumInv=WSumInv\eye(size(WSumInv));
     WLSum=zeros(numDim,1);
     for i=1:n
         WLSum=WLSum+W(:,:,i)*lRx(:,i);

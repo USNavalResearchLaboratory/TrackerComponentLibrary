@@ -3,8 +3,6 @@ classdef AlphaStableD
 %Implemented methods are: PDF,CDF,rand (all for univariate case)
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
-
-
 methods(Static)
     function pdf = PDF(X,alpha,beta,gam,delta)
     %%PDF Obtain values of the alpha-stable probability density
@@ -27,40 +25,42 @@ methods(Static)
     %     the scaling parameter of both distributions are equal as
     %     shown in example 2.
     %
-    %INPUTS: X: A vector of points at which the pdf should be 
-    %           evaluated.
-    %    alpha: The scalar characteristic parameter of the pdf.
-    %     beta: The scalar skewness parameter of the pdf.
-    %      gam: The scalar dispersion parameter of the pdf.
-    %    delta: The scalar location parameter of the pdf (also the
-    %           mode of the distribution).
+    %INPUTS: 
+    % X: A vector of points at which the pdf should be evaluated.
+    % alpha: The scalar characteristic parameter of the pdf.
+    % beta: The scalar skewness parameter of the cdf. The default if
+    %       omitted or empty is 0.
+    % gam: The scalar dispersion parameter of the cdf. The default if
+    %      omitted or empty is 1.
+    % delta: The scalar location parameter of the cdf. The default if
+    %        omitted or empty is 0.
     %
-    %OUTPUTS: pdf: A vector of the same size as X which contains the
-    %              corresponding pdf values for a S-alpha-S
-    %              distribution with parameters alpha, beta, gam, and
-    %              delta.
+    %OUTPUTS: 
+    % pdf: A vector of the same size as X which contains the corresponding
+    %      pdf values for a stable distribution with parameters alpha,
+    %      beta, gam, and delta.
     %
-    %EXAMPLE 1: Comparing Gaussian pdf to alpha=2 S-alpha-S pdf
+    %EXAMPLE 1: Comparing Gaussian pdf to alpha=2 stable pdf
     % x = linspace(-10,10);
     % gpdf = GaussianD.PDF(x,0,3);
     % pdf = AlphaStableD.PDF(x,2,0,sqrt(3/2),1);
     % plot(x,gpdf,x,pdf)
     %
-    %EXAMPLE 2: Comparing Cauchy pdf to alpha=1 S-alpha-S pdf
+    %EXAMPLE 2: Comparing Cauchy pdf to alpha=1 stable pdf
     % x = linspace(-10,10);
     % cpdf = CauchyD.PDF(x,0,2);
     % pdf = AlphaStableD.PDF(x,1,0,2,1);
     % plot(x,cpdf,x,pdf)
     %
-    %EXAMPLE 3: Comparing LÈvy pdf to alpha=0.5, beta=1 stable pdf
+    %EXAMPLE 3: Comparing L√©vy pdf to alpha=0.5, beta=1 stable pdf
     % x = linspace(-10,10,200);
     % lpdf = LevyD.PDF(x,0,2);
     % pdf = AlphaStableD.PDF(x,0.5,1,2,1);
     % plot(x,lpdf,x,pdf)
     %
     %REFERENCES:
-    %[1] Guillermo Juli·n-Moreno, Jorge E. LÛpez De Vergara, Iv·n
-    %    Gonz·lez, Luis Pedro, Javier Royuela-Del-Val, and Federico 
+    %[1] Guillermo Juli√°n-Moreno, Jorge E. L√≥pez De Vergara, Iv√°n
+    %    Gonz√°lez, Luis Pedro, Javier Royuela-Del-Val, and Federico 
     %    Simmross-Wattenberg, "Fast parallel alpha-stable distribution
     %    function evaluation and parameter estimation using OpenCL in 
     %    GPGPUs," Statistics and Computing 27 (2017), no. 5, 1365-1382.
@@ -71,16 +71,13 @@ methods(Static)
         if(nargin<2)
             error('Must specify the characteristic parameter alpha.')
         end
-        if(nargin<3)
+        if(nargin<3||isempty(beta))
             beta = 0;
-            gam = 1;
-            delta = 0;
         end
-        if(nargin<4)
+        if(nargin<4||isempty(gam))
             gam = 1;
-            delta = 0;
         end
-        if(nargin<5)
+        if(nargin<5||isempty(delta))
             delta = 0;
         end
         if(alpha>2||alpha<=0)
@@ -155,15 +152,20 @@ methods(Static)
     %     In the cdf formula given by [1], there is a missing factor of
     %     1/pi for the case where alpha=1 and beta>0.
     %
-    %INPUTS: X A vector of points at which the cdf should be evaluated.
-    %    alpha The scalar characteristic parameter of the cdf.
-    %      gam The scalar dispersion parameter of the cdf.
-    %    delta The scalar location parameter of the cdf (also the
-    %          mode of the distribution).
+    %INPUTS: 
+    % X: A vector of points at which the cdf should be evaluated.
+    % alpha: The scalar characteristic parameter of the pdf.
+    % beta: The scalar skewness parameter of the cdf. The default if
+    %       omitted or empty is 0.
+    % gam: The scalar dispersion parameter of the cdf. The default if
+    %      omitted or empty is 1.
+    % delta: The scalar location parameter of the cdf. The default if
+    %        omitted or empty is 0.
     %
-    %OUTPUTS: cdf A vector of the same size as X which contains the
-    %             corresponding cdf values for a S-alpha-S distribution
-    %             with parameters alpha, beta, gam, and delta.
+    %OUTPUTS: 
+    % cdf: A vector of the same size as X which contains the corresponding
+    %      cdf values for a S-alpha-S distribution with parameters alpha,
+    %      beta, gam, and delta.
     %
     %EXAMPLE 1: Comparing Gaussian pdf to alpha=2 S-alpha-S pdf
     % x = linspace(-10,10);
@@ -177,15 +179,15 @@ methods(Static)
     % cdf = AlphaStableD.CDF(x,1,0,2,1);
     % plot(x,ccdf,x,cdf)
     %
-    %EXAMPLE 3: Comparing LÈvy pdf to alpha=0.5, beta=1 stable pdf
+    %EXAMPLE 3: Comparing L√©vy pdf to alpha=0.5, beta=1 stable pdf
     % x = linspace(0,10,200);
     % lcdf = LevyD.CDF(x,0,2);
     % cdf = AlphaStableD.CDF(x,0.5,1,2,1);
     % plot(x,lcdf,x,cdf)
     %
     %REFERENCES:
-    %[1] Guillermo Juli·n-Moreno, Jorge E. LÛpez De Vergara, Iv·n
-    %    Gonz·lez, Luis Pedro, Javier Royuela-Del-Val, and Federico 
+    %[1] Guillermo Juli√°n-Moreno, Jorge E. L√≥pez De Vergara, Iv√°n
+    %    Gonz√°lez, Luis Pedro, Javier Royuela-Del-Val, and Federico 
     %    Simmross-Wattenberg, "Fast parallel alpha-stable distribution
     %    function evaluation and parameter estimation using OpenCL in 
     %    GPGPUs," Statistics and Computing 27 (2017), no. 5, 1365-1382.
@@ -198,12 +200,9 @@ methods(Static)
         end
         if(nargin<3)
             beta = 0;
-            gam = 1;
-            delta = 0;
         end
         if(nargin<4)
             gam = 1;
-            delta = 0;
         end
         if(nargin<5)
             delta = 0;
@@ -277,42 +276,43 @@ methods(Static)
     %%RAND Obtains an N-dimensional random sample of independent
     %      stable random variables using the formula provided in [1].
     %
-    %INPUTS: N: A 1X2 vector or a scalar. If a vector [m,n], the
-    %           output will be an mXn matrix with mn iid random
-    %           samples. If a scalar, then the returned matrix will be
-    %           NXN and contain N^2 iid random samples.
-    %    alpha: The scalar shape parameter of the distribution to be
-    %           sampled.
-    %     beta: The scalar skewness parameter of the distribution to be
-    %           sampled.
-    %      gam: The scalar scale parameter of the distribution to be
-    %           sampled.
-    %    delta: The scalar location parameter of the distribution to be
-    %           sampled.
+    %INPUTS: 
+    % N: A 1X2 vector or a scalar. If a vector [m,n], the output will be
+    %    an mXn matrix with mn iid random samples. If a scalar, then the
+    %    returned matrix will be NXN and contain N^2 iid random samples.
+    % alpha: The scalar characteristic parameter of the pdf.
+    % beta: The scalar skewness parameter of the cdf. The default if
+    %       omitted or empty is 0.
+    % gam: The scalar dispersion parameter of the cdf. The default if
+    %      omitted or empty is 1.
+    % delta: The scalar location parameter of the cdf. The default if
+    %        omitted or empty is 0.
     %
-    %OUTPUTS: val: A matrix of size given by input N which contains iid
-    %             random samples from the distribution.
+    %OUTPUTS: 
+    % val: A matrix of size given by input N which contains iid random
+    %      samples from the distribution.
     %
-    %EXAMPLE 1: Comparing a histogram of the generated values to the
-    %           exact pdf.
-    % values = AlphaStableD.rand([1,1e6],0.5,1);
-    %
-    % % We want to see the central mass of the histogram.
-    % % This will introduce some nonnegligible overestimation of the
-    % % pdf near the mode of the distribution. For this reason, if you
-    % % try to look at a fit to the cdf, the histogram bins to the
-    % % right of the mode will be disproportionately large. More care
-    % % is needed for such a plot to be accurate.
-    % D = 100 % Trim to (0,100)
-    % trimmed = values(values<=D);
-    % 
-    % x = linspace(0,D,1000);
-    % pdf = AlphaStableD.PDF(x,0.5,1);
-    % 
-    % histogram(trimmed,'Normalization','pdf')
+    %EXAMPLE 1: Comparing a histogram of the generated values to the exact
+    %           pdf. We want to see the central mass of the histogram.
+    %           This will introduce some nonnegligible overestimation of
+    %           the pdf near the mode of the distribution. For this
+    %           reason, if you try to look at a fit to the cdf, the
+    %           histogram bins to the right of the mode will be
+    %           disproportionately large. More care is needed for such a
+    %           plot to be accurate.
+    % values = AlphaStableD.rand([1,1e6],1.2,0.5);
+    % alpha = 1.2;
+    % gam = 0.7;
+    % values = AlphaStableD.rand([1,1e6],alpha,gam);
+    % D = 50 % Trim to (0,100)
+    % trimmed = values(values<=D|values>=-D);
+    % x = linspace(-D,D,1000);
+    % pdf = AlphaStableD.PDF(x,alpha,gam);
+    % histogram(trimmed,'Normalization','pdf','BinWidth',1)
     % hold on
     % plot(x,pdf,'LineWidth',5)
     % hold off
+    % xlim([-D,D])
     %
     %REFERENCES:
     %[1] Weron, R. (1996). "On the Chambers-Mallows-Stuck method for
@@ -325,16 +325,13 @@ methods(Static)
         if(nargin<2)
             error('Must specify the characteristic parameter alpha.')
         end
-        if(nargin<3)
+        if(nargin<3||isempty(beta))
             beta = 0;
-            gam = 1;
-            delta = 0;
         end
-        if(nargin<4)
+        if(nargin<4||isempty(gam))
             gam = 1;
-            delta = 0;
         end
-        if(nargin<5)
+        if(nargin<5||isempty(delta))
             delta = 0;
         end
         if(alpha>2||alpha<=0)
@@ -360,7 +357,7 @@ methods(Static)
         W = ExponentialD.rand(N,1);
         if(alpha~=1)
             Balbe = atan(beta*tan(pi*alpha/2))/alpha;
-            Salbe = (1+beta^2*tan(pi*alpha/2))^(1/(2*alpha));
+            Salbe = (1+beta^2*tan(pi*alpha/2)^2)^(1/(2*alpha));
             val = Salbe*(sin(alpha*(V+Balbe))./cos(V).^(1/alpha))...
                     .*(cos(V-alpha*(V+Balbe))./W).^((1-alpha)/alpha);
             val = val*gam+delta;
@@ -371,7 +368,6 @@ methods(Static)
     end
 end
 end
-
 %LICENSE:
 %
 %The source code is in the public domain and not licensed or under

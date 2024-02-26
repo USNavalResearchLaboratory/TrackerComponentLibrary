@@ -1,4 +1,4 @@
-function z=nearestPointOnEllipsoid(zIn,A,pIn,gammaVal,epsRed)
+function z=nearestPointOnEllipsoid(zIn,A,pIn,gammaVal,epsRed,epsAlpha)
 %%NEARESTPOINTONELLIPSOID Given an ellipsoid in an arbitrary number of
 %        dimensions such that a point zp on the surface of the ellipsoid
 %        satisfies the equation (zIn-zp)'*A*(zIn-zp)=gammaVal find the
@@ -14,11 +14,11 @@ function z=nearestPointOnEllipsoid(zIn,A,pIn,gammaVal,epsRed)
 %   gammaVal The threshold for declaring a point to be on the ellipsoid. If
 %            this parameter is omitted or an empty matrix is passed, the
 %            default value of 1 is used.
-%     epsRed This function uses the eqConstLSSpher function to solve an
-%            optimziation. This input corresponds to the same-named input
-%            of eqConstLSSpher and is a tolerance for declaring a solution
-%            to be valid. The default if omitted or an empty matrix is
-%            passed is 1e-9.
+% epsRed,epsApha This function uses the eqConstLSSpher function to solve an
+%            optimziation. This input corresponds to the same-named inputs
+%            of eqConstLSSpher and are tolerance for declaring a solution
+%            to be valid. The defaults if omitted or empty matrices are
+%            passed are 1e-9 and 10^4*eps(sqrt(gammaVal)).
 %
 %OUTPUTS: z The numDimX1 point on the ellipse that is closest to p. When
 %           multiple solutions exist, only one is chosen.
@@ -73,17 +73,22 @@ function z=nearestPointOnEllipsoid(zIn,A,pIn,gammaVal,epsRed)
 %December 2020 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<5||isempty(epsRed))
-   epsRed=1e-9; 
-end
-
 if(nargin<4||isempty(gammaVal))
     gammaVal=1;
 end
 
+if(nargin<5||isempty(epsRed))
+    epsRed=1e-9; 
+end
+
+if(nargin<6||isempty(epsAlpha))
+    epsAlpha=10^4*eps(sqrt(gammaVal)); 
+end
+
 S=chol(A,'upper');
 pInTilde=pIn-zIn;
-zTilde=eqConstLSSpher(inv(S),pInTilde,sqrt(gammaVal),epsRed);
+maximize=false;
+zTilde=eqConstLSSpher(inv(S),pInTilde,sqrt(gammaVal),epsRed,maximize,epsAlpha);
 z=S\zTilde+zIn;
 
 end

@@ -79,7 +79,7 @@ function [zPred, PzPred,otherInfo]=cubKalMeasPred(xPred,PPred,zDim,h,xi,w,innovT
 % [xUpdate,PUpdate,innov,Pzz,W]=cubKalUpdate(xPred,PPred,z,R,h);
 % %The update in two steps.
 % [zPred, PzPred,otherInfo]=cubKalMeasPred(xPred,PPred,zDim,h);
-% [xUpdate1,PUpdate1,innov1,Pzz1,W1]=cubKalUpdateWithPred(z,R,zPred,PzPred,otherInfo);
+% [xUpdate1,PUpdate1,innov1,Pzz1,W1]=cubKalUpdateWithPred(z,R,otherInfo);
 % %One will see that the one and two step updates agree.
 % max(abs([xUpdate1-xUpdate;PUpdate1(:)-PUpdate(:);innov1(:)-innov;Pzz1(:)-Pzz(:);W1(:)-W(:)]))
 %
@@ -164,6 +164,8 @@ function [zPred, PzPred,otherInfo]=cubKalMeasPred(xPred,PPred,zDim,h,xi,w,innovT
     otherInfo.xPred=xPred;
     otherInfo.w=w;
     otherInfo.Pxz=Pxz;
+    otherInfo.zPred=zPred;
+    otherInfo.PzPred=PzPred;
 end
 
 %LICENSE:

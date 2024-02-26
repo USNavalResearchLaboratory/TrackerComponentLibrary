@@ -1,7 +1,7 @@
 function azEqPts=Cart2AzEquidistantProj(xCart,latLonRef,a,f)
 %%CART2AZEQUIDISTANTPROJ Given points in 3D East centered-Earth fixed
 %       coordinates convert them to 3D points in an azimuthal equidistant
-%       projection about a specified point.
+%       projection (with height) about a specified point.
 %
 %INPUTS: xCarts A 3XN set of N 3D Cartesian points to convert into azimuthal
 %               equidistant coordinates.
@@ -16,7 +16,7 @@ function azEqPts=Cart2AzEquidistantProj(xCart,latLonRef,a,f)
 %               the value in Constants.WGS84Flattening is used.
 %
 %OUTPUTS: azEqPoints A 3XN set of the points converted to an azimuthal
-%                   equidistant projection about latLonRef.
+%                   equidistant projection (with height) about latLonRef.
 %
 %This function just calls Cart2Ellipse and then ellips2AzEquidistantProj.
 %

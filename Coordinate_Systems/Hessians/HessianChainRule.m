@@ -16,7 +16,7 @@ function HTrans=HessianChainRule(Hf,Hg,Jf,Jg)
 %              d^2/(dzdx), d^2/(dzdy), d^2/(dzdz)];
 %        Hg An xDimXxDimXxDim matrix of second derivatives of the function
 %           g evaluated at x. Hg(:,:,i) is the second derivative matrix for
-%           the ith element of g. the ordering of the secon deriavtives is
+%           the ith element of g. the ordering of the second derivatives is
 %           the same as in Hf.
 %        Jf An fDimXxDim matrix of first derivatives of the f function
 %           evaluated at g(x). The rows are the elements of f and the
@@ -28,7 +28,7 @@ function HTrans=HessianChainRule(Hf,Hg,Jf,Jg)
 %           the derivative is taken.
 %
 %OUTPUTS: HTrans The matrix of second derivatives of the function
-%           f(g(x)) evaluated at x. The ordering of the elements if the
+%           f(g(x)) evaluated at x. The ordering of the elements is the
 %           same is an Hf.
 %
 %This function is implemented using the identities in [1].
@@ -54,10 +54,10 @@ function HTrans=HessianChainRule(Hf,Hg,Jf,Jg)
 % RelErr=max(abs((HTrans(:)-HTrue(:))./HTrue(:)))
 %
 %EXAMPLE 2:
-%Here, we use the example of a transofrmation of Rosenbrack;'s function
+%Here, we use the example of a transformation of Rosenbrack's function
 %from [1] and show that we get the correct result. It is a bivariate
 %polynomial function, so an explicit solution for compairson is easily
-%obtained. The asbolute difference in this case between the exact and the
+%obtained. The absolute difference in this case between the exact and the
 %transformed solution is zero.
 %f(x,y)=(1-x)^2+100*(x^2-y)^2;
 %We use the transformation.
@@ -78,7 +78,7 @@ function HTrans=HessianChainRule(Hf,Hg,Jf,Jg)
 %
 %REFERENCES:
 %[1] M. Skorski, "Chain rules for Hessian and higher derivatives made
-%    easy by tensor calculus,"" arXiv, 29 Nov. 2019. [Online]. Available:
+%    easy by tensor calculus," arXiv, 29 Nov. 2019. [Online]. Available:
 %    https://arxiv.org/abs/1911.13292
 %
 %May 2022 David F.Crouse, Naval Research Laboratory, Washington D.C.

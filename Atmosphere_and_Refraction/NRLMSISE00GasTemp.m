@@ -1,4 +1,4 @@
-function [gasTable,t,d]=NRLMSISE00GasTemp(dayOfYear,secondOfTheDay,latLonAlt,AP,F107,F107A)
+function [gasTable,t,d]=NRLMSISE00GasTemp(dayOfYear,secondOfTheDay,latLonAlt,AP,F107,F107A) %#ok<STOUT,INUSD>
 %%NRLMSISE00GASTEMP  Obtain the gas constituents and temperature
 %                    parameters of the atmosphere at a particular location
 %                    and time using the NRLMSISE-00 atmospheric model for

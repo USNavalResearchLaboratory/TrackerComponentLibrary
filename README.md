@@ -1,4 +1,4 @@
-**Tracker Component Library Release 5.3, February 2023**
+**Tracker Component Library Release 6.0, January 2024**
 https://github.com/USNavalResearchLaboratory/TrackerComponentLibrary
 
 A paper describing a number of features of the library is<br>
@@ -6,7 +6,7 @@ D. F. Crouse, "The Tracker Component Library: Free Routines for Rapid
 Prototyping," IEEE Aerospace and Electronic Systems Magazine, vol. 32, no.
 5, pp. 18-27, May. 2017.
 
-These are the release notes for the version 5.3 of the Tracker Component
+These are the release notes for the version 6.0 of the Tracker Component
 Library. The Tracker Component Library is a collection of Matlab routines
 for simulating and tracking targets in various scenarios. Due to the
 complexity of the target tracking problem, a great many routines can find
@@ -18,11 +18,6 @@ https://sourcecode.cio.gov/
 
 Those looking for magnetic field synthesis code might want to look at
 ./Sample Code/Magnetic Models/ .
-
-WHen released, a limited distribution version of this library will be made
-available on Navy Lift to Department of Defense employees and contractors
-at:
-https://repo.lift.mhpcc.hpc.mil/stash/projects/TCL/repos/tracker-component-library/
 
 Those looking to get a quick idea of a very simple end-to-end tracking
 algorithm (track initiation, data association, maintenance, and
@@ -43,29 +38,31 @@ running the CompileCLibraries function. Precompiled code is not distributed
 with the library. Note that a C/C++ compiler supported by Matlab must be
 installed. See below for comments regarding compilation.
 
-SOME OF THE CHANGES SINCE VERSION 5.2:
-- Bug fixes.
-- Many new functions related to cubature integration over triangles,
-  tetrahedra, cubes, pyramids, and prisms.
-- Functions for unconstrained and equality constrained semidefinite
-  quadratic programming allowing one to get various solutions with 
-  semidefQuadProgUnconst and semidefQuadProgEqConst.
-- 2D integer quadratic programming both unconstrained and with non-
-  negativity constraints in convexQuadProgIntegerNoConst2D.
-- Functions related to triangles on a sphere and in Euclidean geometry
-  including spherTriangArea4Angles, spherTriangArea4Sides,
-  triangleArea4Sides,spherTriSides4Angles, sideAngles2SpherTriangArea and
-  others.
-- The function bivarGaussRectangleCDF for computing the integral of the PDF
-  of a bivariate Gaussian distribution over a rectangular region.
-- The function fitHypersphere2SurfPoints to fit a sphere to given points.
-- The chain rule for multivariate second derivatives is in
-  HessianChainRule.
-- Functions for bivariate Gaussian copula in Gaussian2C.
+SOME OF THE CHANGES SINCE VERSION 5.3:
+- There are 19 new functions.
+- Bug fixes and also stability improvements to some numeric functions.
+- The interface to some functions has changed, which might break some
+  previous uses of the library.
+- The ability to take partial derivatives of a pseudoinverse has been
+  been implemented in pseudoInverseDerivative.
+- The ephemerides supported are now NASA's DE440t ephemerides instead of
+  the DE430t. The files readJPLEphem and readJPLEphemHeader have been
+  updated to read them properly. However, the ephemerides are too large to
+  push to GitHub, so one must download them from
+  https://ssd.jpl.nasa.gov/ftp/eph/planets/Linux/de440t/
+  and the file linux_p1550p2650.440t should be placed in 
+  ./Astronomical Code/data
+- Optimal 2D minimum mean optimal subpattern assignment (MOSPA)
+  optimization in MMOSPA2Tar2D by Marcus Baum has been added.
+- partialFracKnownPoleDenom lets one perform a partial fraction
+  decomposition when the poles in the denominator are known. This is more
+  numerically stable than when the poles need to be determined.
+- posDefComboOfSymMatrices lets one find a linear combination of symmetric
+  matrices such that the result is positive definite.
 
 COMPILED CODE:
 
-The compilation of the library has been tested under Matlab2021b under
+The compilation of the library has been tested under Matlab2023b under
 Windows 10 using minGW64 and Microsoft Visual C++ 2022. The code will
 probably compiler under Mac OS X and Linux. Precompiled code is not
 distributed with the library.
@@ -168,12 +165,12 @@ downloaded, ungzipped and placed in ./Gravity/data .
 http://earth-info.nga.mil/GandG/wgs84/gravitymod/egm96/egm96.html
 The file corrcoef.z should be decompressed and placed in ./Gravity/data .
 
-10) NASA JPL's DE430t planetary/solar/lunar ephemerides
-ftp://ssd.jpl.nasa.gov/pub/eph/planets/Linux/de430t
-The file linux_p1550p2650.430t should be downloaded and placed in 
+10) NASA JPL's DE440t planetary/solar/lunar ephemerides
+https://ssd.jpl.nasa.gov/ftp/eph/planets/Linux/de440t/
+The file linux_p1550p2650.440t should be downloaded and placed in 
 ./Astronomical Code/data
 for use by the readJPLEphem function. The readJPLEphem function can read
-other NASA ephemerides, but the DE430t set are the default.
+other NASA ephemerides, but the DE440t set are the default.
 
 11) NASA JPL's GL0900C gravitational model of the Moon
 http://pds-geosciences.wustl.edu/missions/grail/default.htm
@@ -195,8 +192,8 @@ Name the file NASABlueMarble.jpg and place the file in Misc/data . This is
 used as the default map to show on the Earth given by the
 plotMapOnEllipsoid function.
 
-February 2023 David F. Crouse, Naval Research Laboratory, Washington D.C.<br>
-(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+January 2024 David F. Crouse, Naval Research Laboratory, Washington D.C.<br>
+(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release. Distribution is unlimited.
 
 LICENSE:
 

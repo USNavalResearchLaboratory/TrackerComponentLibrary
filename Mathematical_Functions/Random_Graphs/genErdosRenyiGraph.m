@@ -1,20 +1,55 @@
-function A = genErdosRenyiGraph(N,pConnect)
+function A = genErdosRenyiGraph(N,pConnect,isDirected,maxInDegree,maxOutDegree)
 %%GENERDOSRENYIGRAPH Generates an instance of the Erdös-Renyi model
 %                    described in [1-3].
 %
 %INPUT:
 % N: The number of nodes used for generating the graph.
 % pConnect: The probability of any chosen edge being realized.
+% isDirected: A boolean indicating whether the graph to be generated should
+%             be directed or undirected. Undirected only checks for
+%             connections between nodes once. Directed checks for both the
+%             incoming connection and the outgoing connection on all nodes.
+%             The default if omitted or an empty array is passed is false.
+% maxInDegree: A non-negative integer specifying the maximum number of
+%              allowed incoming edges for each node. For an undirected
+%              graph, this is used as the degree and maxOutDegree is
+%              ignored. The default if omitted or an empty array is passed
+%              is Inf.
+% maxOutDegree: A non-negative integer specifying the maximum number of
+%               allowed incoming edges for each node. For an undirected
+%               graph, this parameter is ignored. The default if omitted or
+%               an empty array is passed is Inf.
 %
 %OUTPUT:
 % A: The adjacency matrix for the final graph.
 %
-%EXAMPLE: Generates an instance of the Erdös-Renyi model.
+%EXAMPLE 1: Generates an instance of the conventional Erdös-Renyi model.
 % N = 30;
 % pConnect = 0.3;
-% A = genErdosRenyiGraph(N,rewireProb);
+% A = genErdosRenyiGraph(N,pConnect);
 % g = graph(A);
-% plot(g,"MarkerSize",degree(g))
+% plot(g,"NodeCData",degree(g))
+% colorbar
+% title("Degree of Nodes in Erdos-Renyi Model")
+%
+%EXAMPLE 2: Generates an instance of the Erdös-Renyi digraph model.
+% N = 30;
+% pConnect = 0.1;
+% A = genErdosRenyiGraph(N,pConnect,true);
+% g = digraph(A);
+% plot(g,"NodeCData",indegree(g))
+% colorbar
+% title("Indegree of Nodes in Directed Erdos-Renyi Model")
+%
+%EXAMPLE 3: Generates an instance of the restricted, directed Erös-Renyi
+%           model.
+% N = 30;
+% pConnect = 0.3;
+% A = genErdosRenyiGraph(N,pConnect,true,5,2);
+% g = digraph(A);
+% plot(g,"NodeCData",indegree(g))
+% colorbar
+% title("Indegree of Nodes in Restricted, Directed Erdos-Renyi Model")
 %
 %REFERENCES:
 %[1] P. Erdos, A. Renyi, et al., "On the evolution of random graphs,"
@@ -27,13 +62,52 @@ function A = genErdosRenyiGraph(N,pConnect)
 %August 2022 Codie T. Lewis, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-A = zeros(N);
-for i = 1:N-1
-    for j = i+1:N
-        A(i,j) = rand()<pConnect;
-    end
+if pConnect>1 || pConnect<0
+    error('pConnect must be in the interval [0,1]')
 end
-A = A+A';
+if nargin<3 || isempty(isDirected)
+    isDirected = false;
+end
+if nargin<4 || isempty(maxInDegree)
+    maxInDegree = Inf;
+elseif maxInDegree<0
+    error("maxInDegree must be nonnegative.")
+end
+if nargin<5 || isempty(maxOutDegree)
+    maxOutDegree = Inf;
+elseif maxOutDegree<0
+    error("maxOutDegree must be nonnegative.")
+end
+if ~isDirected
+    maxOutDegree = maxInDegree;
+end
+
+A = zeros(N);
+if ~isDirected
+    rows = 1:N-1;
+    rows = rows(randperm(length(rows)));
+    for i = rows
+        cols = i+1:N;
+        cols = cols(randperm(length(cols)));
+        for j = cols
+            if sum(A(i,:),2)<maxOutDegree && sum(A(:,j),1)<maxInDegree
+                A(i,j) = rand()<pConnect;
+            end
+        end
+    end
+    A = A+A';
+else
+    rows = 1:N;
+    rows = rows(randperm(length(rows)));
+    for i = rows
+        cols = setdiff(1:N,i);
+        cols = cols(randperm(length(cols)));
+        for j = cols
+            if sum(A(i,:),2)<maxOutDegree && sum(A(:,j),1)<maxInDegree
+                A(i,j) = rand()<pConnect;
+            end
+        end
+    end
 end
 
 %LICENSE:

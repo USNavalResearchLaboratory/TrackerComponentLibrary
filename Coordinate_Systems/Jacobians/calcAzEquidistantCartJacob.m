@@ -1,24 +1,25 @@
 function J=calcAzEquidistantCartJacob(latLonPt,latLonRef,rE)
 %%CALCAZEQUIDISTANTCARTJACOB Find the gradient of an azimuthal equidistance
-%           projection of points on a spherical Earth with respect to the 
-%           Cartesian [x;y;z] components.
+%           projection of points (optionally with height) on a spherical
+%           Earth with respect to the Cartesian [x;y;z] components.
 %
 %INPUTS: latLonPt A 2X1 [latitude;longitude] point in radians at which
 %                 the gradient should be evaluated. If a 3X1 vector is
-%                 passed, then it is assumed that it is a height abov the
+%                 passed, then it is assumed that it is a height above the
 %                 reference sphere and a third row will be present in the
 %                 output.
-%       latLonRef A 2X1 reference point about which the projection is
-%                 taken. Note that latLonRef shouldn't coincide with
-%                 latLonPt, because a singularity exists at that point.
+%       latLonRef A 2X1 [latitude;longitude] reference point about which
+%                 the projection is taken. Note that latLonRef shouldn't
+%                 coincide with latLonPt, because a singularity exists at
+%                 that point.
 %              rE The radius of the reference sphere. If this is omitted
 %                 or an empty matrix is passed, then
 %                 osculatingSpher4LatLon(latLonRef) is used.
 %
 %OUTPUTS: J The 2X3 or 3X3 Jacobian matrix with derivatives with respect to
 %           Cartesian position components. Each row is a component of
-%           azimuthal equidistant x and y (and height iflatLonPt is 3X1) in
-%           that order with derivaties of x, y, and z given across the
+%           azimuthal equidistant x and y (and height if latLonPt is 3X1)
+%           in that order with derivatives of x, y, and z given across the
 %           columns in that order.
 %
 %Starting with the conversion in Chapter 25 of [1], substitute in

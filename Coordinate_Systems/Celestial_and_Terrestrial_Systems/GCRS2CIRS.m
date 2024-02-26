@@ -1,4 +1,4 @@
-function [vec,rotMat]=GCRS2CIRS(x,Jul1,Jul2,dXdY)
+function [vec,rotMat]=GCRS2CIRS(x,Jul1,Jul2,dXdY) %#ok<STOUT,INUSD>
 %%GCRS2CIRS Convert vectors of position and possibly velocity from the
 %           Geocentric Celestrial Reference System (GCRS), a type of
 %           Earth-Centered Inertial (ECI) coordinate system, to the

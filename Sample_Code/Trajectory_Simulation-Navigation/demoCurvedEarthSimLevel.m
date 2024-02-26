@@ -14,10 +14,12 @@ function demoCurvedEarthSimLevel()
 %September 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-%Simulate level-flight from Hilo Hawaii to F�ssen, Germany at a constant
+%#ok<*ASGLU,*UNRCH,*NOPRT,*NASGU>
+
+%Simulate level-flight from Hilo Hawaii to Fussen, Germany at a constant
 %altitude on an ellipsoidal Earth, traveling at a constant speed.
 
-disp('Level Flight from Hilo, Hawaii to F�ssen, Germany at 8km (ellipsoidal) Altitude and Mach 1')
+disp('Level Flight from Hilo, Hawaii to Fussen, Germany at 8km (ellipsoidal) Altitude and Mach 1')
 ellipsAlt=8e3;%8km ellipsoidal altitude.
 
 %The target should be traveling at Mach 1-> the speed of sound. The speed
@@ -68,7 +70,7 @@ tic;%False means use the exact iteration for non-zero altitude flight.
 time2=toc;
 disp(['Using an exact algorithm to handle the non-zero altitude took ', num2str(time2), ' seconds.'])
 
-disp(['The difference in distance computed between the approximation and the exact algorithms'])
+disp('The difference in distance computed between the approximation and the exact algorithms')
 disp(['is only ', num2str(abs(distE-distF)), ' meters.'])
 
 disp(['The difference in distance computed between zero and exact non-zero altitudes is ',num2str(abs(distE-dist0)), ' meters'])

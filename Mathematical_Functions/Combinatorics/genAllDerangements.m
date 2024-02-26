@@ -46,7 +46,7 @@ while(curLevel<=n)
         p(jVec(m))=p(m);
         p(m)=temp;
         jVec(m)=jVec(m)-1;
-        if(jVec(m)<1);
+        if(jVec(m)<1)
             %Keep going up
             curLevel=curLevel+1;
         else

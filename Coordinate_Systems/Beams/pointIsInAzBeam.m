@@ -25,6 +25,11 @@ function boolVal=pointIsInAzBeam(points,azBounds,boundType)
 %                 true if the corresponding entry in the input is in the
 %                 beam and false if it is not in the beam. 
 %
+%For the case where boundType is 0 and beamHalfwidth is pi, the function
+%has a special test to take the entire circle as true. For the case where
+%boundType is 1, if azBounds(2)-azBounds(1) is 2*pi, then again the entire
+%circle is taken.
+%
 %EXAMPLE:
 %This takes all the angles on the unit circle and plots them. It also forms
 %a beam and plots just the points in the beam. Points are determined to be
@@ -73,8 +78,14 @@ else
     az2=azBounds(2);
 end
 %Rotate everything so that az1=0. Everything is considered in terms of
-%increasing angle from 0.
-az2=wrapRange(az2-az1,0,2*pi);
+%increasing angle from 0.We have a special test for regions that span 2*pi,
+%so that we take the entire circle.
+if((boundType==0&&beamHalfwidth==pi)||az2-az1==2*pi)
+    az2=2*pi;
+else
+    az2=wrapRange(az2-az1,0,2*pi);
+end
+
 points=wrapRange(points-az1,0,2*pi);
 
 %Test whether the angles are in or on the edge of the beam.

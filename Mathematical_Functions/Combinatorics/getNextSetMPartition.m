@@ -46,11 +46,6 @@ function [curSetPart,recurSetData]=getNextSetMPartition(param1,m,startIdx)
 %make an iterator and use pointers rather than copying the data between
 %calls.
 %
-%This function implements the algorithm of Ehrlich in [1], which is
-%explained in [2]. For the m=2 case, the function genAllBinCombinations is
-%used and a special condition for m=1 has been added. A modification to
-%the algorithm to avoid negative indexation has been made.
-%
 %EXAMPLE:
 %Here, we show that this produces the same results as the equivalent
 %algorithm in genAllSetMPartitions.
@@ -110,8 +105,6 @@ if(nargin>1)
 else
     %Get the recursion set data that does not change.
     recurSetData=param1;
-    n=recurSetData.n;
-    m=recurSetData.m;
     startIdx=recurSetData.startIdx;
     
     %Get the recursion set data that changes.
@@ -141,12 +134,12 @@ while(1)
         end
         
         %curPartition contains values in decreasing order. Starting at the
-        %largest partition and going to the smallest, we form all combinations
-        %of assigning indices to the partitions. Partitions are numbered from
-        %1.
+        %largest partition and going to the smallest, we form all
+        %combinations of assigning indices to the partitions. Partitions
+        %are numbered from 1.
 
-        %First, we get the unique partition sizes and the number of repeated
-        %partition sizes. 
+        %First, we get the unique partition sizes and the number of
+        %repeated partition sizes. 
         [partSizes,numReps]=runLenEncode(curPartition);
         numUniqueParts=length(partSizes);
 
@@ -156,7 +149,6 @@ while(1)
         %assigning the n elements to the repeated partitions. 
         curPartSet=1;
         backtracking=false;
-        skipOuterLoop=true;
     end
     while(curPartSet>0)
         if(backtracking==false)%If we just entered this level.

@@ -1,4 +1,4 @@
-function [Jul1,Jul2]=UTC2TAI(Jul1,Jul2)
+function [Jul1,Jul2]=UTC2TAI(Jul1,Jul2) %#ok<INUSD>
 %%UTC2TAI Convert from universal coordinated time (UTC) given as a two-
 %         part pseudo-Julian date to international atomic time (TAI),
 %         represented as a two-part pseudo-Julian date.

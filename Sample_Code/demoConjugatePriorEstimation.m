@@ -13,6 +13,8 @@
 %November 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+%#ok<*ASGLU,*UNRCH,*NOPRT,*NASGU,*NOPTS>
+
 %The number of samples to use for the estimation problems.
 numSamp=5000;
 disp('DISTRIBUTION I: GAMMA')
@@ -35,7 +37,7 @@ disp('Updating the uninformative conjugate prior using the measurements.')
 [kEst,betaEst]=gammaScaleLikeInvGammaConjUpdate(xMeas,kMeas,kEst,betaEst);
 
 disp('The mean of the estimated scale parameter is')
-thetaEst=InverseGammaD.mean(kEst,betaEst)
+thetaEst=InverseGammaD.mean(kEst,betaEst) 
 disp('The variance of the estimate is')
 thetaVar=InverseGammaD.var(kEst,betaEst)
 

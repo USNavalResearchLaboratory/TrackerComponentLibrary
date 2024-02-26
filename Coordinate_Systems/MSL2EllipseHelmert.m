@@ -1,4 +1,4 @@
-function [ellipsPoints,coeffData]=MSL2EllipseHelmert(points,useNGAApprox,modelType,coeffData)
+function [ellipsPoints,coeffData]=MSL2EllipseHelmert(points,tideSys,useNGAApprox,modelType,coeffData)
 %%MSL2ELLIPSEHELMERT Given a point whose latitude and longitude are in 
 %                    WGS-84 ellipsoidal coordinates, but whose height is a
 %                    height above mean-sea level (MSL) (assuming a Helmert
@@ -14,6 +14,10 @@ function [ellipsPoints,coeffData]=MSL2EllipseHelmert(points,useNGAApprox,modelTy
 %               (in meters) for the specified latitude and longitude. To
 %               convert N points, points is a 3XN matrix with each column
 %               having the format [latitude;longitude; MSLheight].
+%       tideSys A number indicating the tide system in use. The values are
+%               0: Conventional tide free. 
+%               1: Mean tide (The default if this parameter is omitted).
+%               2: Zero tide.
 %  useNGAApprox If one wishes the intermediate tide-free geoid computation
 %               to match the results of the National Geospatial
 %               Intelligence Agency's code to three digits after the
@@ -65,18 +69,22 @@ function [ellipsPoints,coeffData]=MSL2EllipseHelmert(points,useNGAApprox,modelTy
 %January 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<2||isempty(useNGAApprox))
+if(nargin<2||isempty(tideSys))
+    tideSys=1;%Mean tide.
+end
+
+if(nargin<3||isempty(useNGAApprox))
     useNGAApprox=false;
 end
 
-if(nargin<3||isempty(modelType))
+if(nargin<4||isempty(modelType))
     modelType=0; 
 end
 
-if(nargin>3)
-    [geoidHeight,coeffData]=getEGMGeoidHeight(points(1:2,:),1,useNGAApprox,modelType,coeffData);
+if(nargin>4)
+    [geoidHeight,coeffData]=getEGMGeoidHeight(points(1:2,:),tideSys,useNGAApprox,modelType,coeffData);
 else
-    [geoidHeight,coeffData]=getEGMGeoidHeight(points(1:2,:),1,useNGAApprox,modelType);
+    [geoidHeight,coeffData]=getEGMGeoidHeight(points(1:2,:),tideSys,useNGAApprox,modelType);
 end
 
 ellipsHeight=points(3,:)+geoidHeight';

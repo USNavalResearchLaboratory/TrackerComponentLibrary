@@ -89,6 +89,7 @@ for numTargetsObserved=1:min(numTar,numMeas)
                 if(obsTarIdx<=numTargetsObserved&&obsTar(obsTarIdx)+1==curTar)
                     %A target observed hypothesis for this target.
                     measSel=tarMeas(maxLikeIdx(obsTarIdx))+1;
+
                     beta(curTar,measSel)=beta(curTar,measSel)+maxLike;
                     obsTarIdx=obsTarIdx+1;
                 else

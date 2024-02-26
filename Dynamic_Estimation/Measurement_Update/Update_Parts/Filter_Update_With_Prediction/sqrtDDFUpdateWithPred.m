@@ -1,4 +1,4 @@
-function [xUpdate,SUpdate,innov,Szz,W]=sqrtDDFUpdateWithPred(z,SR,zPred,otherInfo,innovTrans)
+function [xUpdate,SUpdate,innov,Szz,W]=sqrtDDFUpdateWithPred(z,SR,otherInfo,innovTrans)
 %%SQRTDDFUPDATEWITHPRED Given the output of the measurement prediction step
 %           from sqrtDDFMeasPred and a measurement, complete the
 %           measurement update step of the square-root version of the
@@ -14,7 +14,6 @@ function [xUpdate,SUpdate,innov,Szz,W]=sqrtDDFUpdateWithPred(z,SR,zPred,otherInf
 %       SR The zDimXzDim lower-triangular square root of the measurement
 %          covariance matrix in the native coordinate system of the
 %          measurement.
-%    zPred The zDimXnumComp measurement predictions from the filter.
 % otherInfo The intermediate results returned in the otherInfo output of
 %          the sqrtDDFMeasPred function.
 % innovTrans An optional function handle that computes and optionally
@@ -60,6 +59,7 @@ Pxz=otherInfo.Pxz;
 Szx=otherInfo.Szx;
 Szx2=otherInfo.Szx2;
 xPred=otherInfo.xPred;
+zPred=otherInfo.zPred;
 
 xDim=size(SPred,1);
 numComp=size(SPred,3);

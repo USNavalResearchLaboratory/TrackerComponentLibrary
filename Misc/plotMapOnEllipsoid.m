@@ -137,16 +137,16 @@ z=reshape(cartPoints(3,:),numLat,numLon);
 %Plot the image
 if(~isempty(theImage))
     if(~isempty(hAxes))
-        h=surf(hAxes,x,y,z,'CData',theImage,'EdgeColor','none','CDataMapping','direct');
+        h=surf(hAxes,x,y,z,'CData',theImage,'EdgeColor','none','CDataMapping','direct','Clipping','off');
     else
-        h=surf(x,y,z,'CData',theImage,'EdgeColor','none','CDataMapping','direct');
+        h=surf(x,y,z,'CData',theImage,'EdgeColor','none','CDataMapping','direct','Clipping','off');
         hAxes=gca;
     end
 else
     if(~isempty(hAxes))
-        h=surf(hAxes,x,y,z,'EdgeColor','black');
+        h=surf(hAxes,x,y,z,'EdgeColor','black','Clipping','off');
     else
-        h=surf(x,y,z,'EdgeColor','black');
+        h=surf(x,y,z,'EdgeColor','black','Clipping','off');
         hAxes=gca;
     end
     colormap(hAxes,gray);

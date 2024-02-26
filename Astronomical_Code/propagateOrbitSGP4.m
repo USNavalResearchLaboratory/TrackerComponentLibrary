@@ -1,4 +1,4 @@
-function [xState,errorState]=propagateOrbitSGP4(SGP4Elements,deltaT,TTEpoch1,TTEpoch2,opsMode,gravityModel)
+function [xState,errorState]=propagateOrbitSGP4(SGP4Elements,deltaT,TTEpoch1,TTEpoch2,opsMode,gravityModel) %#ok<STOUT,INUSD>
 %%PROPAGATEORBITSGP4 Use the SGP4/SDP4 propagator to obtain the position
 %                    and velocity of a non-maneuvering Earth-orbiting
 %                    satellite after a given time offset. The SGP4
@@ -6,7 +6,7 @@ function [xState,errorState]=propagateOrbitSGP4(SGP4Elements,deltaT,TTEpoch1,TTE
 %                    Equinox (TEME) of date coordinate system as is the
 %                    result. The propagator is of interest,
 %                    because two-line element (TLE) sets, which are sets
-%                    of satellite ephemerides published by the U. S. Air
+%                    of satellite ephemerides published by the U. S. Space
 %                    Force are given in terms of SGP4 orbital elements.
 %                    The function TLE2SGP4OrbEls  can be used to
 %                    get orbital elements for this function from a TLE.
@@ -103,10 +103,11 @@ function [xState,errorState]=propagateOrbitSGP4(SGP4Elements,deltaT,TTEpoch1,TTE
 %as an external library for performing the key propagation step.
 %
 %Note that this is NOT the official SGP4 orbital propagator used by the
-%U.S. Air Force and cannot be assumed to be as reliable or produce
-%identical results to the official propagator. Information on obtaining
-%the U.S. Air Force's official propagator is given at
-%http://www.afspc.af.mil/units/ASDA/
+%U.S. Space Force (and previously by the U.S. Air Force) and cannot be
+%assumed to be as reliable or produce identical results to the official
+%propagator. Information on obtaining Space Force's official propagator
+%appears to be given at
+%https://www.astrodynamicstandards.com/sgp4/
 %
 %The algorithm can be compiled for use in Matlab  using the
 %CompileCLibraries function.

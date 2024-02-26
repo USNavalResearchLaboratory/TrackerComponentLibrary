@@ -44,7 +44,7 @@ function [zPred,PzPred,otherInfo]=sqrtKalmanMeasPred(xPred,SPred,H)
 % [xUpdate,SUpdate,innov,Szz,W]=sqrtKalmanUpdate(xPred,SPred,z,SR,H);
 % %The update in two steps.
 % [zPred,PzPred,otherInfo]=sqrtKalmanMeasPred(xPred,SPred,H);
-% [xUpdate1,SUpdate1,innov1,Szz1,W1]=sqrtKalmanUpdateWithPred(z,SR,zPred,otherInfo);
+% [xUpdate1,SUpdate1,innov1,Szz1,W1]=sqrtKalmanUpdateWithPred(z,SR,otherInfo);
 % %One will see that the one and two step updates agree.
 % max(abs([xUpdate1-xUpdate;SUpdate1(:)-SUpdate(:);innov1(:)-innov;Szz1(:)-Szz(:);W1(:)-W(:)]))
 %
@@ -77,6 +77,7 @@ otherInfo.xPred=xPred;
 otherInfo.SPred=SPred;
 otherInfo.Pxz=Pxz;
 otherInfo.H=H;
+otherInfo.zPred=zPred;
 
 end
 

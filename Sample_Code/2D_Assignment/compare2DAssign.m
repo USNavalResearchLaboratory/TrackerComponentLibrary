@@ -31,8 +31,9 @@
 %stopping times.
 %
 %REFERENCES:
-%[1] D. F. Crouse, "On implementing 2D rectangular assignment algorithms,"
-%    IEEE Transactions on Aerospace and Electronic Systems, accepted 2016.
+%[1] D. F. Crouse, "On Implementing 2D Rectangular Assignment Algorithms,"
+%    IEEE Transactions on Aerospace and Electronic Systems, vol. 52, no. 4,
+%    pp. 1679-1696, Aug. 2016.
 %[2] D. F. Crouse, "Advances in displaying uncertain estimates of multiple
 %    targets," in Proceedings of SPIE: Signal Processing, Sensor Fusion, 
 %    and Target Recognition XXII, Baltimore, MD, Apr. 2013.
@@ -75,12 +76,12 @@ MatlabByCol500=zeros(numRuns,1);
 MatlabByCol500b1000=zeros(numRuns,1);
 MatlabByCol3000=zeros(numRuns,1);
 for curRun=1:numRuns
-    curRun
+    curRun %#ok<*NOPTS> 
     %100X100 Matrix
     C=rand(100,100);
     %Matlab Implementation, where the inner loop scans by row.
     ticLoc=tic;
-    [col4row,row4col,gain]=assign2D(C,false);
+    [col4row,row4col,gain]=assign2D(C,false); %#ok<*ASGLU> 
     MatlabByRow100(curRun)=toc(ticLoc);
     %Matlab implementation where the inner loop scans by column.
     ticLoc=tic;

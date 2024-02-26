@@ -55,7 +55,7 @@ function [zPred,PzPred,otherInfo]=sqrtDDFMeasPred(xPred,SPred,zDim,h,algorithm)
 % [xUpdate,SUpdate,innov,Szz,W]=sqrtDDFUpdate(xPred,SPred,z,SR,h,algorithm);
 % %The update in two steps.
 % [zPred,PzPred,otherInfo]=sqrtDDFMeasPred(xPred,SPred,zDim,h,algorithm);
-% [xUpdate1,SUpdate1,innov1,Szz1,W1]=sqrtDDFUpdateWithPred(z,SR,zPred,otherInfo);
+% [xUpdate1,SUpdate1,innov1,Szz1,W1]=sqrtDDFUpdateWithPred(z,SR,otherInfo);
 % %One will see that the one and two step updates agree.
 % max(abs([xUpdate1(:)-xUpdate(:);SUpdate1(:)-SUpdate(:);innov1(:)-innov(:);Szz1(:)-Szz(:);W1(:)-W(:)]))
 %
@@ -149,6 +149,7 @@ otherInfo.Pxz=Pxz;
 otherInfo.Szx=Szx;
 otherInfo.Szx2=Szx2;
 otherInfo.xPred=xPred;
+otherInfo.zPred=zPred;
 
 end
 

@@ -10,6 +10,8 @@ function demoStarTrails()
 %October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+%#ok<*ASGLU,*UNRCH,*NOPRT,*NASGU>
+
 %The location of the observer on the surface of the Earth in ellipsoidal
 %coordinates.
 obsLoc=[-pi/8;pi-pi/8+pi/8;0];

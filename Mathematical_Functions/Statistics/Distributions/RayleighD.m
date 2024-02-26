@@ -174,26 +174,52 @@ function val=invCDF(prob,sigma)
     val=sigma*sqrt(-2*log(1-prob));
 end
 
-function vals=rand(N,sigma)
+function vals=rand(N,sigma,method)
 %%RAND Generate Rayleigh random variables with a given parameter sigma.
 %
 %INPUTS: N If N is a scalar, then rand returns an NXN matrix of random
 %          variables. If N=[M,N1] is a two-element row vector, then rand
 %          returns an MXN1 matrix of  random variables.
 %    sigma The parameter of the Rayleigh distribution.
+%   method An optional parameter specifying how the random varibales are
+%          generated. Possible values are:
+%          0 (The default if omitted or an empty matrix is passed) Generate
+%            Rayleigh random variables by transforming uniform random
+%            variables, as discussed in [1].
+%          1 Generate Rayleigh random variables from normal random
+%            variables, as discussed in Chapter 2.1.4 of [2].
 %
 %OUTPUTS: vals A matrix whose dimensions are determined by N of the
 %              generated Rayleigh random variables.
 %
-%This generates Rayleigh distributed random variables by transforming 
-%normally distributed random variables using the identity given in
-%Chapter 2.1.4 of [1].
+%EXAMPLE:
+%In this example, random variables are generated using each of the methods
+%and histograms are formed to approximate the PDFs. The histograms are
+%overlaid and one can see that the distributions agree, so both methods are
+%equivalent in distribution.
+% sigma=12;
+% N=[1e5,1];
+% vals0=RayleighD.rand(N,sigma,0);
+% vals1=RayleighD.rand(N,sigma,1);
+% 
+% figure(1)
+% clf
+% histogram(vals0,'normalization','pdf','edgecolor','none')
+% hold on
+% histogram(vals1,'normalization','pdf','edgecolor','none')
+% legend('Method 0', 'Method 1')
 %
 %REFERENCES:
-%[1] J. G. Proakis, Digital Communication. Ed. 4, Boston, MA: McGraw Hill,
+%[1] J. E. Gentle, Random Number Generation and Monte Carlo Methods, 2nd
+%    ed. (Springer, New York, 2003.)
+%[2] J. G. Proakis, Digital Communication. Ed. 4, Boston, MA: McGraw Hill,
 %    2001.
 %
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    if(nargin<3||isempty(method))
+        method=0;
+    end
 
     if(isscalar(N))
         dims=[N N];
@@ -201,10 +227,17 @@ function vals=rand(N,sigma)
         dims=N;
     end
 
-    X=sigma*randn(dims);
-    Y=sigma*randn(dims);
+    switch(method)
+        case 0
+            vals=sqrt(-2*sigma^2*log(rand(dims)));
+        case 1
+            X=sigma*randn(dims);
+            Y=sigma*randn(dims);
 
-    vals=sqrt(X.^2+Y.^2);
+            vals=sqrt(X.^2+Y.^2);
+        otherwise
+            error('Unknown method specified.');
+    end
 end
 
 function momentVal=momentGenFun(sigma,numDerivs,t)

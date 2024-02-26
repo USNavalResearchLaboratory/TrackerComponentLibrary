@@ -1,4 +1,4 @@
-function eclipVec=ICRS2Eliptic(vec,TT1,TT2,method)
+function eclipVec=ICRS2Eliptic(vec,TT1,TT2,method) %#ok<STOUT,INUSD>
 %%ICRS2ECLIPTIC Convert a location vector from the International
 %               Celestial Reference System (ICRS) to eliptic coordinates
 %               either using the IAU 2006 precession model or the Vondrak

@@ -1,4 +1,4 @@
-function [xUpdate,LUpdate,PUpdate,innov,Pzz,W]=separatedCovUpdateWithPred(z,R,zPred,PzPred,otherInfo,LPred,c)
+function [xUpdate,LUpdate,PUpdate,innov,Pzz,W]=separatedCovUpdateWithPred(z,R,otherInfo,LPred,c)
 %%SEPARATEDCOVUPDATEWITHPRED Given the output of the measurement prediction
 %           step from separatedCovMeasPred and a measurement, complete the
 %           measurement update step of the separated covariance filter.
@@ -11,8 +11,6 @@ function [xUpdate,LUpdate,PUpdate,innov,Pzz,W]=separatedCovUpdateWithPred(z,R,zP
 %INPUTS: z The zDimX1 vector measurement.
 %        R The zDimXzDim measurement covariance matrix in the native
 %          coordinate system of the measurement.
-%    zPred The zDimXnumComp measurement predictions from the filter.
-%   PzPred The zDimXzDimXnumComp covariance matrices associated with zPred.
 % otherInfo The intermediate results returned in the otherInfo output of
 %          the separatedCovMeasPred function.
 %    LPred The xDimXzDimXnumComp predicted delay vectors (defined before
@@ -46,7 +44,7 @@ function [xUpdate,LUpdate,PUpdate,innov,Pzz,W]=separatedCovUpdateWithPred(z,R,zP
 %June 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<7||isempty(c))
+if(nargin<5||isempty(c))
     c=0.99; 
 end
 
@@ -54,6 +52,8 @@ H=otherInfo.H;
 TPred=otherInfo.TPred;
 xPred=otherInfo.xPred;
 Pxz=otherInfo.Pxz;
+zPred=otherInfo.zPred;
+PzPred=otherInfo.PzPred;
 
 xDim=size(xPred,1);
 numComp=size(xPred,2);

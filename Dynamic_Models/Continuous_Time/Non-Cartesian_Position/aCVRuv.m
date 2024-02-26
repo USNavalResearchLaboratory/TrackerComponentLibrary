@@ -91,10 +91,8 @@ w2=max(0,1-u2-v2);
 w=sqrt(w2);
 
 diffV2=1-v2;
-diffV=sqrt(diffV2);
 
 diffU2=1-u2;
-diffU=sqrt(diffU2);
 
 uDot2=uDot.*uDot;
 vDot2=vDot.*vDot;

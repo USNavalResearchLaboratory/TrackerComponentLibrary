@@ -61,7 +61,6 @@ function [rho,P,T,Te]=jacchiaAtmosParam(Jul1,Jul2,point,F10,F10b,Kp)
 
 %%% Define constants
 lat=point(1);
-lon=point(2);
 Z=point(3)/1000;
 
 cn=[28.82678,-7.40066e-2,-1.19407e-2,4.51103e-4,-8.21895e-6,1.07561e-5,-6.97444e-7];%m-profile coefficients

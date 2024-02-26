@@ -151,10 +151,10 @@ for curStep=(N-1):-1:1
     for curIter=1:numIter
         F=FJacob{curStep}(xSmooth(:,curStep));
         H=HJacob{curStep}(xSmooth(:,curStep));
-        B=pinv(pinv(PUpd(:,:,curStep))+H'*inv(R(:,:,curStep))*H+F'*inv(Q(:,:,curStep))*F);
+        B=pinv(pinv(PUpd(:,:,curStep))+H'*(R(:,:,curStep)\H)+F'*(Q(:,:,curStep)\F));
         xSmooth(:,curStep)=xUpd(:,curStep)+B*(...
-            H'*inv(R(:,:,curStep))*(z(:,curStep)-h{curStep}(xPred(:,curStep))-H*(xPred(:,curStep)-xSmooth(:,curStep)))...
-            +F'*inv(Q(:,:,curStep))*(xSmooth(:,curStep+1)-xPred(:,curStep+1)));
+            H'*(R(:,:,curStep)\(z(:,curStep)-h{curStep}(xPred(:,curStep))-H*(xPred(:,curStep)-xSmooth(:,curStep))))...
+            +F'*(Q(:,:,curStep)\(xSmooth(:,curStep+1)-xPred(:,curStep+1))));
     end
 end
 

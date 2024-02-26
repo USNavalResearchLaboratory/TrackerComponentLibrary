@@ -9,8 +9,8 @@ function val=risingFactorial(x,n,algorithm)
 %
 %OUTPUTS: x A scalar or matrix of first values in the product series of
 %           x*(x+1)*...*(x+n-1). x must be real.
-%         n The scalar or matrix n value in the product series of
-%           x*(x+1)*...*(x+n-1). n must be real.
+%         n The n value in the product series of x*(x+1)*...*(x+n-1). n
+%           must be real.
 % algorithm Optionally, one can specify the algorithm to use. If this
 %           parameter is omitted, then algorithm 0 is used for positive
 %           integer values of n, then algorithm 1 if x>0 and x+n>0,

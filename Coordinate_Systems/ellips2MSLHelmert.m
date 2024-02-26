@@ -1,4 +1,4 @@
-function [MSLPoints,coeffData]=ellips2MSLHelmert(points,useNGAApprox,modelType,coeffData)
+function [MSLPoints,coeffData]=ellips2MSLHelmert(points,tideSys,useNGAApprox,modelType,coeffData)
 %%ELLIPS2MSLHELMERT  Given points in WGS-84 ellipsoidal coordinates,
 %                    convert the ellipsoidal height components of the
 %                    points into heights above mean-sea level (MSL)
@@ -13,6 +13,10 @@ function [MSLPoints,coeffData]=ellips2MSLHelmert(points,useNGAApprox,modelType,c
 %               corresponding MSL heights are desired. To convert N points,
 %               points is a 3XN matrix with each column having the format
 %               [latitude;longitude; height].
+%       tideSys A number indicating the tide system in use. The values are
+%               0: Conventional tide free. 
+%               1: Mean tide (The default if this parameter is omitted).
+%               2: Zero tide.
 %  useNGAApprox If one wishes the intermediate tide-free geoid computation
 %               to match the results of the National Geospatial
 %               Intelligence Agency's code to three digits after the
@@ -64,18 +68,22 @@ function [MSLPoints,coeffData]=ellips2MSLHelmert(points,useNGAApprox,modelType,c
 %January 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<2||isempty(useNGAApprox))
+if(nargin<2||isempty(tideSys))
+    tideSys=1;
+end
+
+if(nargin<4||isempty(useNGAApprox))
     useNGAApprox=false;
 end
 
-if(nargin<3||isempty(modelType))
+if(nargin<4||isempty(modelType))
     modelType=0; 
 end
 
-if(nargin>3)
-    [geoidHeight,coeffData]=getEGMGeoidHeight(points(1:2,:),1,useNGAApprox,modelType,coeffData);
+if(nargin>4)
+    [geoidHeight,coeffData]=getEGMGeoidHeight(points(1:2,:),tideSys,useNGAApprox,modelType,coeffData);
 else
-    [geoidHeight,coeffData]=getEGMGeoidHeight(points(1:2,:),1,useNGAApprox,modelType);
+    [geoidHeight,coeffData]=getEGMGeoidHeight(points(1:2,:),tideSys,useNGAApprox,modelType);
 end
 
 MSLHeight=points(3,:)-geoidHeight';

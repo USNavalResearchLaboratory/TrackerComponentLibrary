@@ -91,7 +91,7 @@ Cm=2^(m-1)*pi^((m-1)/2)*gammaRatio;
 
 %Initial information matrix is based on a measurement without any
 %misassociation error.
-PInv=PInvInit+H'*inv(R)*H;
+PInv=PInvInit+H'*R\H;
 
 Pc=0;
 for k=1:K
@@ -101,7 +101,7 @@ for k=1:K
     
     %We initially compute innovation covariance matrix Sk (its determinant
     %is sigmak^(2*m) assuming correct association.
-    Qk=H*inv(PInv)*H';
+    Qk=H*(PInv\H');
     Sk=R+Qk;
     
     %Next, we use the computed value of sigmak to compute a modified R
@@ -119,7 +119,7 @@ for k=1:K
     Pc=Pc+exp(-Cm*beta*sqrt(det(Sk)));
     
     %Perform the measurement update
-    PInv=PInv+H'*inv(RCur)*H;
+    PInv=PInv+H'*(RCur\H);
 end
 Pc=Pc/K;
 end

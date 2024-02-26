@@ -13,9 +13,10 @@ function angAvg=meanAng(ang,w,dim)
 %            have to sum to one. If omitted or an empty matrix is passed,
 %            all angles are treated as having the same weight.
 %        dim An optional parameter specifying the dimension over which
-%            averaging is performed. This can be 0 (average averything) 1,
+%            averaging is performed. This can be 0 (average everything) 1,
 %            average across rows, 2, average across columns, or higher
-%            numbers to average across higher indices of hypermatrices.
+%            numbers to average across higher indices of hypermatrices. The
+%            default if omitted or an empty matrix is passed is 0.
 %
 %OUTPUTS: angAvg The average in radians of the angles in ang, taken
 %                across dimensions dim (0 for all), weighted by
@@ -41,7 +42,7 @@ function angAvg=meanAng(ang,w,dim)
 %September 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<3)
+if(nargin<3||isempty(dim))
     dim=0;
 end
 

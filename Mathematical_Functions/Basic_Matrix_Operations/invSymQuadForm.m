@@ -53,6 +53,7 @@ function dist=invSymQuadForm(x,M,matType)
             C=cholSemiDef(M,'lower');
         case 1
             C=M;
+
         otherwise
             error('Invalid matrix type specified');
     end

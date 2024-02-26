@@ -20,14 +20,15 @@ function NEES=calcNEES(xTrue,xEst,PEst,is3D)
 %              covariance matrix is supposed to be the same for all
 %              estimates, then PEst is just xDimXxDim. These should not be
 %              singular.
-%         is3D An optional indicating that xEst is 3D. This is only used if
-%              xEst is a matrix. In such an instance, there is an ambiguity
-%              whether xEst is truly 2D, so N=1, or whether numSamples=1
-%              and xEst is 3D with the third dimension being 1. If this
-%              parameter is omitted or an empty matrix is passed, it is
-%              assumed that N=1.
+%         is3D An optional input indicating that xEst is 3D. This is only
+%              used if xEst is a matrix. In such an instance, there is an
+%              ambiguity whether xEst is truly 2D, so N=1, or whether
+%              numSamples=1 and xEst is 3D with the third dimension being
+%              1. If this parameter is omitted or an empty matrix is
+%              passed, it is assumed that N=1.
 %
-%OUTPUTS: NEES The normalized estimation error squared of the estimates.
+%OUTPUTS: NEES The 1XN normalized estimation error squared of the
+%              estimates at al N steps.
 %
 %The NEES is a measure of how well the provided by an estimator matches the
 %actual accuracy of the estimates. The concept of the NEES is discussed in 

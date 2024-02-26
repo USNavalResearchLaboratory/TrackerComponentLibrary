@@ -1,4 +1,4 @@
-function [Jul1,Jul2]=TAI2UT1(Jul1,Jul2)
+function [Jul1,Jul2]=TAI2UT1(Jul1,Jul2) %#ok<INUSD>
 %%TAI2UT1 Convert from international atomic time (TAI) to UT1, which is a
 %        nonuniform timescale based on the rotation rate of the Earth.
 %

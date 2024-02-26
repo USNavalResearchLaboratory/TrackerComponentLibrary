@@ -83,7 +83,7 @@ if(formula2Use==0)
 else
     %Use the cosine formula.
     angArg=sin(phi1).*sin(phi2)+cos(phi1).*cos(phi2).*cos(lambda2-lambda1);
-    %Avoid invalid values due to finite precision limitiations.
+    %Avoid invalid values due to finite precision limitations.
     angArg=min(1,max(-1,angArg));
     distVal=rE.*acos(angArg);
 end

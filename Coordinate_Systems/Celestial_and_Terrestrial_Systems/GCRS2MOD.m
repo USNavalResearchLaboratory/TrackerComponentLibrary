@@ -1,4 +1,4 @@
-function [xRot,rotMat]=GCRS2MOD(xVec,TT1,TT2)
+function [xRot,rotMat]=GCRS2MOD(xVec,TT1,TT2) %#ok<STOUT,INUSD>
 %%GCRS2MOD Rotate a vector from the geocentric celestial reference system
 %          (GCRS) to the mean of date (MOD) coordinate system, which is
 %          the coordinate system using the mean equinox and

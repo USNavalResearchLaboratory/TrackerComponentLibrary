@@ -267,7 +267,6 @@ end
 
 if(effectsToInclude(5)~=false)
     [deltaC{curDelta},deltaS{curDelta}]=gravOceanTideOffset(TT1,TT2);
-    curDelta=curDelta+1;
 end
 
 %Find out the total number of coefficients in C and S that need to be

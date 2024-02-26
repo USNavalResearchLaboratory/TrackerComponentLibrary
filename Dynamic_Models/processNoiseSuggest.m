@@ -138,12 +138,12 @@ switch(algorithm)
         %velocity over a sampling interval. In other words, it is the
         %average acceleration. It might be more useful to express things in
         %terms of a maximum acceleration, though. In Chapter 6.3.2 for the
-        %DWNA model, it is suggested that  0.5*aMax<=sigmaV<=aMax. Using a
-        %similar logic, one might try  0.5*aMax<=sqrt(q0*T)<=aMax. Using
+        %DWNA model, it is suggested that 0.5*aMax<=sigmaV<=aMax. Using a
+        %similar logic, one might try 0.5*aMax<=sqrt(q0*T)<=aMax. Using
         %the same logic for the CWPA and DCWPA models of Chapter 6.2.3, one
         %might choose q0 such that  0.5*jerkMax<=sqrt(q0*T)<=jerkMax, where
         %jerkMax is the maximum possible jerk (derivative of acceleration).
-        %This function generalizes the rule  to any order and chooses the
+        %This function generalizes the rule to any order and chooses the
         %point midway in that specified range.
         
         procNoiseParam=(0.75*maxVal)^2/T;

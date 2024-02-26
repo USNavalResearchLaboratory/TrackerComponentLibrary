@@ -1,4 +1,4 @@
-function [vec,rotMat]=TIRS2CIRS(x,Jul1,Jul2,deltaTTUT1,LOD)
+function [vec,rotMat]=TIRS2CIRS(x,Jul1,Jul2,deltaTTUT1,LOD) %#ok<STOUT,INUSD>
 %%TIRS2CIRS Convert vectors of position and possibly velocity from the
 %           Terrestrial Intermediate Reference System (TIRS) to the
 %           Celestial Intermediate Reference System (CIRS).

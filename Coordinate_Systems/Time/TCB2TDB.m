@@ -1,4 +1,4 @@
-function [Jul1,Jul2]=TCB2TDB(Jul1,Jul2)
+function [Jul1,Jul2]=TCB2TDB(Jul1,Jul2) %#ok<INUSD>
 %%TCB2TDB Convert from  barycentric coordinate time (TCB) to barycentric
 %         dynamical time (TDB), both represented as two-part Julian dates.
 %

@@ -1,7 +1,7 @@
 function [ab,PInv]=linearRegression(t,z,W)
 %%LINEARREGRESSION Given a dependent variable t and a set of points z,
 %           which can be multidimensional, find the parameters of a least-
-%           squares fit of a line fo the form z=a*t+b, where z,a, and b can
+%           squares fit of a line of the form z=a*t+b, where z,a, and b can
 %           be vectors. a and b are returned as [a,b] and thus polyValVec
 %           can be used to evaluate arbitrary points on the line. This
 %           function minimizes the quadratic cost (with optional weight W)
@@ -26,6 +26,7 @@ function [ab,PInv]=linearRegression(t,z,W)
 %OUTPUTS: ab This is zDimX2 vector where ab(:,1)=a and ab(:,2)=b for the
 %            equation of a line. ab can be passed directly to the
 %            polyValVec function.
+%       PInv A (2*zDim)X(2*zDim) inverse covariance matrix for ab(:). 
 %
 %Determining an optimal least squares fit of points to a line is a special
 %case of the batch least squares estimation of Chapter 3.4 of [1]. The

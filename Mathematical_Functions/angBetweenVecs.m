@@ -8,7 +8,7 @@ function angDiff=angBetweenVecs(v1,v2)
 %           them are the same and v1 varies.
 %
 %OUTPUTS: angDiff An 1XN matrix of the angular differences (in radians)
-%                 between the vectors in v1 and the correspinding vectors
+%                 between the vectors in v1 and the corresponding vectors
 %                 in v2. The distances can range from 0 to pi.
 %
 %In 3D, a cross-product formula is used instead of the more logical dot-

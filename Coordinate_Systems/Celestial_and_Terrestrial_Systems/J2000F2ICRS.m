@@ -1,4 +1,4 @@
-function retVec=J2000F2ICRS(vec,TT1,TT2)
+function retVec=J2000F2ICRS(vec,TT1,TT2) %#ok<STOUT,INUSD>
 %%J2000F2ICRS Convert vectors from the J2000.0 dynamical frame to the
 %            International Celestial Reference System (ICRS). This
 %            involves applying a frame bias rotation.

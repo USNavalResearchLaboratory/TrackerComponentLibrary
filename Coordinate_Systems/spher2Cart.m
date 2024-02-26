@@ -208,7 +208,7 @@ elseif(size(zTx,2)==1)
 end
 
 %The bistatic range is used in the conversions below. If the range provided
-%to the function was divided by two, multiple it by two to geth the
+%to the function was divided by two, multiple it by two to get the
 %round-trip range.
 if(useHalfRange)
    r=2*r; 

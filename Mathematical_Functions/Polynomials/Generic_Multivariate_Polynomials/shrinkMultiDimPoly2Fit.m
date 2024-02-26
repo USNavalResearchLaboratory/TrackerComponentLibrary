@@ -56,7 +56,7 @@ for curIdx=1:numIdx
         %actually copying the elements into els just to use the any
         %function is very inefficient.
         els=coeffs(idxVec{:});
-        if(any(els(:))~=0)
+        if any(els(:))
             maxIdx=i;
         end
         

@@ -686,7 +686,7 @@ for curSol=1:numSol
     r1r2=r12Transform*rEst(:,curSol);
     
     %Only positive ranges are valid.
-    if(all(r1r2)>0)    
+    if(all(r1r2>0))    
         r=[r1r2;rEst(:,curSol)];
 
         %Equation 8

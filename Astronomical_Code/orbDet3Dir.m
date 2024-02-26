@@ -204,9 +204,9 @@ function [knownSols,targetStates,exitFlag]=orbDet3Dir(numHalfRevs,obsLocs,unitDi
 %    0.066613740678771
 %    0.095173924103870
 %
-%This is a 20 helf-revolution solution, so a solution coud potentiall have
-%existed with solSel=0. However, had that been tried in this example, no
-%solutions would have been found.
+%This is a 20 half-revolution solution, so a solution could potentially
+%have existed with solSel=0. However, had that been tried in this example,
+%no solutions would have been found.
 %
 %REFERENCES:
 %[1] R. H. Gooding, "A new procedure for the solution of the classical

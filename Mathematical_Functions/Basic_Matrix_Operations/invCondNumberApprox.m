@@ -61,7 +61,7 @@ function [gammaVal,v]=approxInvMat1Norm(A)
 %June 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-[L,U,P]=lu(A);
+[L,U,~]=lu(A);
 %L must be lower triangular and U upper triangular The permutation in P can
 %be ignored, because it does not change the result.
 

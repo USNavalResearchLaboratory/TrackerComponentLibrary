@@ -1,4 +1,4 @@
-function catData=changeEpoch(catData,Jul1,Jul2,Jul3,Jul4)
+function catData=changeEpoch(catData,Jul1,Jul2,Jul3,Jul4) %#ok<INUSD>
 %%CHANGEEPOCH Given star catalog data for a particular epoch, change it to
 %             a new epoch. This function is useful for transforming data
 %             in star catalogs to the J2000.0 epoch so that the function

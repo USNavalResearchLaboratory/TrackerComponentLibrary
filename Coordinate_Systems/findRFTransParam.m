@@ -33,7 +33,10 @@ function M=findRFTransParam(plhPoint,az,el,zRot,a,f,useEUN)
 %               passed is zero.
 %             a The semi-major axis of the reference ellipsoid. If this
 %               argument is omitted, the value in
-%               Constants.WGS84SemiMajorAxis is used.
+%               Constants.WGS84SemiMajorAxis is used. Note that if f=0,
+%               then a can be any positive value (the actual value doesn't
+%               matter), so one can just use a=1 for a generic Earth
+%               radius.
 %             f The flattening factor of the reference ellipsoid. If this
 %               argument is omitted, the value in Constants.WGS84Flattening
 %               is used.

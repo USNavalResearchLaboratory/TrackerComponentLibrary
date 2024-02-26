@@ -1,4 +1,4 @@
-function GMST=TT2GMST(Jul1,Jul2,version,deltaT)
+function GMST=TT2GMST(Jul1,Jul2,version,deltaT) %#ok<STOUT,INUSD>
 %%TT2GMST Convert from terrestrial time (TT) to Greenwhich mean sidereal
 %         time (GMST), which is a measure of the rotational direction of
 %         the Earth.

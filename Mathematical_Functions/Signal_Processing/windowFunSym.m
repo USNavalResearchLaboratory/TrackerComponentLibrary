@@ -1,10 +1,12 @@
-function w=windowFunSym(N,algorithm,alpha,beta)
+function [w,dwdnFrac]=windowFunSym(N,algorithm,alpha,beta,nFrac)
 %%WINDOWFUNSYM This produces one of a large number of symmetric window
 %              functions. Windows functions are used to adjust the
 %              sidelobes and Gibbs phenomenon associated with Fourier
-%              transforms of signals.
+%              transforms of signals. This either produces all N samples of
+%              the filter, or individual points of the filter (including
+%              fractional points) if nFrac is provided. 
 %
-%INPUTS:  N The integer length of the transformation.
+%INPUTS:  N The integer length of the transformation. This is 
 % algorithm The algorithm to use to generate the window. Some algorithms
 %           take an additional parameter, which can be given in alpha.
 %           Possible values are:
@@ -114,7 +116,9 @@ function w=windowFunSym(N,algorithm,alpha,beta)
 %           'Kaiser' Section VI. The Kaiser-Bessel window. This takes an
 %                  input parameter alpha. The end points are not zero.
 %           'Fejer-2' %This is the second-order Fejer filter of Chapter
-%                   2.1.5 of [2]. The endpoints are not zero.
+%                   2.1.5 of [2]. The endpoints are not zero. Note that
+%                   this window does not support the use of the nFrac
+%                   input nor the dwdnFrac output.
 %           'Nuttall'Section C7 of [3]. These are Nuttall windows. The
 %                   parameter alpha selects the window. Possible values
 %                   are:
@@ -149,26 +153,37 @@ function w=windowFunSym(N,algorithm,alpha,beta)
 %            'Chebyshev' This is the Chebyshev window. Alpha is the number
 %                   of decibels down the sidelobe should be and must be
 %                   negative. This just calls the ChebyshevTapering
-%                   function.
+%                   function. Note that this window does not support the
+%                   use of the nFrac input nor the dwdnFrac output.
 %            'Taylor' The Taylor window. This type of window is most
 %                   commonly used with antenna arrays. The input alpha is
 %                   the number of sidelobes to push down and the input beta
 %                   is a negative number indicating the number of decibels
 %                   they should try to be pushed down. Taylor tapering
 %                   samples a continuous tapering. This just calls the
-%                   function TaylorTapering.
+%                   function TaylorTapering. This window does not support
+%                   the dwdnFrac output.
 % alpha, beta These inputs are parameters for the various algorithms. The
 %             descriptions of the algorithms specifies when these are
-%             necessary.          
+%             necessary.
+%       nFrac If this is omitted or an empty matrix is passed, then the
+%             values for the windows are produced at N uniformly spaced
+%             points. On the other hand, if one wishes for the window
+%             values to be obtained at arbitrary times, this is a numValX1
+%             or 1XnumVal vector of values ranging from 0 to 1 that
+%             specifies how far along the length of the window the point is
+%             desired.
 %
-%OUTPUTS: w This is an NX1 real vector containing the weights of the
-%           window.
+%OUTPUTS: w This is an NX1 (or numValX1 if nFrac is provided) real vector
+%           containing the weights of the window.
+%  dwdnFrac This is the derivative of the elements of w with respect to
+%           nFrac.
 %
-%EXAMPLE:
+%EXAMPLE 1:
 %Here we show how the FFT of a Fejer-2 window has no sidelobes, whereas
 %that of a rectangular windows has many sidelobes. We zero-pad the end of
 %the signal before the FFT to interpolate in the Fourier domain. The
-%zero-freuqnecy is in the center.
+%zero-frequency is in the center.
 % N=100;
 % padding=1000;
 % wRect=windowFunSym(N,'rectangular');
@@ -189,6 +204,32 @@ function w=windowFunSym(N,algorithm,alpha,beta)
 % legend('Rectangular','Fejer')
 % axis([0, N+padding, -50, 0])
 %
+%EXAMPLE 2:
+%In this example, we plot all the points of a Blackman filter of length 50.
+%Then, we make use of the nFrac input to plot a finer set of points.
+% N=50;
+% wFejer=windowFunSym(N,'Blackman',1);
+% fracOversample=linspace(0,1,100*N);
+% wFejerOversamp=windowFunSym(N,'Blackman',1,[],fracOversample);
+% 
+% figure(1)
+% clf
+% hold on
+% frac=linspace(0,1,N);
+% scatter(frac,wFejer,500,'.k')
+% scatter(fracOversample,wFejerOversamp,100,'.r')
+% legend('Window Points', 'Higher Resolution Window Points')
+%
+%EXAMPLE:
+%This example shows that the derivative returned by the function matches
+%what one expects from numeric differentiation here to over 10 digits.
+% N=50;
+% f=@(nFrac)windowFunSym(N,'FlatTop',16,[],nFrac);
+% nFrac=[0.67;0.8];
+% [~,dwdnFrac]=f(nFrac);
+% dwdnFracNumDiff=diag(numDiff(nFrac,f,2,2));
+% RelErr=max(abs((dwdnFracNumDiff-dwdnFrac)./dwdnFracNumDiff))
+%
 %REFERENCES:
 %[1] F. J. Harris, "On the use of windows for harmonic analysis with the
 %    discrete Fourier transform," Proceedings of the IEEE, vol. 66, no. 1,
@@ -204,35 +245,57 @@ function w=windowFunSym(N,algorithm,alpha,beta)
 %December 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<5)
+    nFrac=[];
+end
+
 if(nargin<3||isempty(alpha))
     alpha=2;%0.75;
 end
 
 if(nargin<2||isempty(algorithm))
-   algorithm='triangular'; 
+    algorithm='triangular'; 
 end
 
 if(mod(N,2))%If odd
-    n=(-(N-1)/2):((N-1)/2);
+    if(~isempty(nFrac))
+        n=(-(N-1)/2)+N*nFrac(:).';
+        numVal=length(nFrac);
+    else
+        n=(-(N-1)/2):((N-1)/2);
+        numVal=N;
+    end
+    derivCoeff=N;
 else%If even
-    n=(-N/2):(N/2-1);
-    n=n+1/2;
+    if(~isempty(nFrac))
+        n=(-N/2+1/2)+(N-1)*nFrac(:).';
+        numVal=length(nFrac);
+    else
+        n=(-N/2):(N/2-1);
+        n=n+1/2;
+        numVal=N;
+    end
+    derivCoeff=(N-1);
 end
 
 switch(algorithm)
     case 'rectangular'%Section VA of [1].
-        w=ones(N,1);
+        w=ones(numVal,1);
     case 'triangular'%Section VB of [1].
         switch(alpha)
             case 0
                 w=1-abs(n)/((N-1)/2);
+                dwdnFrac=-((2*sign(n))/(N-1));
             case 1
                 w=1-abs(n)/(N/2);
+                dwdnFrac=-((2*sign(n))/N);
             case 2
                 if(mod(N,2))
                     w=1-abs(n)/((N+1)/2); 
+                    dwdnFrac=-((2*sign(n))/(1+N));
                 else
                     w=1-abs(n)/(N/2);
+                    dwdnFrac=-((2*sign(n))/N);
                 end
             otherwise
                 error('Unknown option specified')
@@ -241,10 +304,13 @@ switch(algorithm)
         switch(beta)
             case 0
                 w=cos(pi*n/(N-1)).^alpha;
+                dwdnFrac=-((alpha*pi*cos((n*pi)/(N-1)).^(alpha-1).*sin((n*pi)/(N-1)))/(N-1));
             case 1
                 w=cos(pi*n/N).^alpha;
+                dwdnFrac=-((alpha*pi*cos((n*pi)/N).^(alpha-1).*sin((n*pi)/N))/N);
             case 2
                 w=cos(pi*n/(N+1)).^alpha;
+                dwdnFrac=-((alpha*pi*cos((n*pi)/(1+N)).^(alpha-1).*sin((n*pi)/(1+N)))/(1+N));
             otherwise
                 error('Unknown option specified')
         end
@@ -252,23 +318,28 @@ switch(algorithm)
         switch(alpha)
             case 0
                 w=0.54+0.46*cos(2*pi*n/(N-1));
+                dwdnFrac=-((0.92*pi*sin((2*n*pi)/(N-1)))/(N-1));
             case 1
                 a=25/46;
                 w=a+(1-a)*cos(2*pi*n/(N-1));
+                dwdnFrac=(2*(a-1)*pi*sin((2*n*pi)/(N-1)))/(N-1);
             otherwise
                 error('Unknown option specified')
         end        
     case 'GenHamming'%Section VD of [1].
         w=alpha+(1-alpha)*cos(2*pi*n/(N-1));
+        dwdnFrac=(2*(alpha-1)*pi*sin((2*n*pi)/(N-1)))/(N-1);
     case 'Blackman'%Section VE of [1].
                    switch(alpha)
                        case 0%Approximate coefficients
                             w=0.42+0.5*cos(2*pi/(N-1)*n)+0.08*cos(2*pi/(N-1)*2*n);
+                            dwdnFrac=(-pi*sin((2*n*pi)/(N-1))-0.32*pi*sin((4*n*pi)/(N-1)))/(N-1);
                        case 1%Exact coefficients
                             a0=7938/18608;
                             a1=9240/18608;
                             a2=1430/18608;
                             w=a0+a1*cos(2*pi/(N-1)*n)+a2*cos(2*pi/(N-1)*2*n);
+                            dwdnFrac=-((2*pi*(a1+4*a2*cos((2*n*pi)/(N-1))).*sin((2*n*pi)/(N-1)))/(N-1));
                        otherwise
                            error('Unknown option specified')
                    end
@@ -299,12 +370,15 @@ switch(algorithm)
         end
         
         w=a0+a1*cos(2*pi/(N-1)*n)+a2*cos(2*pi/(N-1)*2*n)+a3*cos(2*pi/(N-1)*3*n);
+        dwdnFrac=-((2*pi*(a1*sin((2*n*pi)/(N-1))+2*a2*sin((4*n*pi)/(N-1))+3*a3*sin((6*n*pi)/(N-1))))/(N-1));
     case 'Riesz'%Section VF1 of [1].
         switch(alpha)
             case 0
                 w=1-(n/((N-1)/2)).^2;
+                dwdnFrac=-((8*n)/(N-1)^2);
             case 1
                 w=1-(n/(N/2)).^2;
+                dwdnFrac=-((8*n)/N^2);
             otherwise
                 error('Unknown option specified')
         end
@@ -312,8 +386,10 @@ switch(algorithm)
         switch(alpha)
             case 0
                 w=sincFun(2*n/(N-1));
+                dwdnFrac=(2*n*cos((2*n)/(N-1))-(N-1)*sin((2*n)/(N-1)))./(2*n.^2);
             case 1
-                w=sincFun(2*n/(N)); 
+                w=sincFun(2*n/(N));
+                dwdnFrac=(2*n*cos((2*n)/N)-N*sin((2*n)/N))./(2*n.^2);
             otherwise
                 error('Unknown option specified')
         end  
@@ -324,11 +400,17 @@ switch(algorithm)
                 w=zeros(N,1);
                 w(sel)=1-6*(n(sel)/((N-1)/2)).^2.*(1-abs(n(sel))/((N-1)/2));
                 w(~sel)=2*(1-abs(n(~sel))/((N-1)/2)).^3;
+                dwdnFrac=zeros(N,1);
+                dwdnFrac(sel)=-((48*n(sel).*(N-1-3*abs(n(sel))))/(N-1)^3);
+                dwdnFrac(~sel)=-((12*n(~sel).*(N-1-2*abs(n(~sel)))^2)./((N-1)^3*abs(n(~sel))));
             case 1
                 sel=abs(n)<=((N)/4);
                 w=zeros(N,1);
                 w(sel)=1-6*(n(sel)/(N/2)).^2.*(1-abs(n(sel))/(N/2));
                 w(~sel)=2*(1-abs(n(~sel))/(N/2)).^3;
+                dwdnFrac=zeros(N,1);
+                dwdnFrac(sel)=-((48*n(sel).*(N-3*abs(n(sel))))/N^3);
+                dwdnFrac(~sel)=-((12*n(~sel).*(N-2*abs(n(~sel)))^2)./(N^3*abs(n(~sel))));
             otherwise
                 error('Unknown option specified')
         end
@@ -337,13 +419,19 @@ switch(algorithm)
              case 0
                 w=ones(N,1);
                 sel=abs(n)>alpha*(N-1)/2;
-
-                w(sel)=(1/2)*(1+cos(2*pi*(abs(n(sel))-alpha*(N-1)/2)/(2*(1-alpha)*(N-1)/2)));
+                
+                nSel=n(sel);
+                w(sel)=(1/2)*(1+cos(2*pi*(abs(nSel)-alpha*(N-1)/2)/(2*(1-alpha)*(N-1)/2)));
+                dwdnFrac=ones(N,1);
+                dwdnFrac(sel)=(nSel*pi.*sin((pi*(alpha*(N-1)-2*abs(nSel)))/((alpha-1)*(N-1))))./((alpha-1)*(N-1)*abs(nSel));
              case 1
                 w=ones(N,1);
                 sel=abs(n)>alpha*N/2;
 
-                w(sel)=(1/2)*(1+cos(2*pi*(abs(n(sel))-alpha*N/2)/(2*(1-alpha)*N/2)));
+                nSel=n(sel);
+                w(sel)=(1/2)*(1+cos(2*pi*(abs(nSel)-alpha*N/2)/(2*(1-alpha)*N/2)));
+                dwdnFrac=ones(N,1);
+                dwdnFrac(sel)=n*pi*Sin((pi*(alpha*N-2*nSel)/((alpha-1)*N)))./((alpha-1)*N*nSel);
              otherwise
                 error('Unknown option specified')
          end
@@ -351,41 +439,58 @@ switch(algorithm)
         switch(alpha)
             case 0
                 w=(1-abs(n)/((N-1)/2)).*cos(pi*abs(n)/((N-1)/2))+(1/pi)*sin(pi*abs(n)/((N-1)/2));
+                dwdnFrac=-((2*pi*(N-1-2*abs(n)).*sin((2*n*pi)/(N-1)))/(N-1)^2);
             case 1
                 w=(1-abs(n)/(N/2)).*cos(pi*abs(n)/(N/2))+(1/pi)*sin(pi*abs(n)/(N/2));
+                dwdnFrac=-((2*pi*(N-2*abs(n)).*sin((2*n*pi)/N))/N^2);
             otherwise
                 error('Unknown option specified')
         end
     case 'Poisson'%Section VF6 of [1].
         w=exp(-alpha*abs(n)/((N-1)/2));
+        dwdnFrac=-((2*alpha*exp((2*alpha*n)./(((1-N)*sign(n)))).*sign(n))/(N-1));
     case 'Hanning-Poisson'%Section VF7 of [1].
         switch(beta)
             case 0
                 w=(1/2)*(1+cos(pi*n/((N-1)/2))).*exp(-alpha*abs(n)/((N-1)/2));
+                dwdnFrac=-((exp((2*alpha*n)./((1-N)*sign(n))).*(2*alpha*cos((n*pi)/(N-1)).^2.*sign(n)+pi*sin((2*n*pi)/(N-1))))/(N-1));
             case 1
                 w=(1/2)*(1+cos(pi*n/(N/2))).*exp(-alpha*abs(n)/(N/2));
+                dwdnFrac=-((2*exp(-((2*alpha*n)./(N*sign(n)))).*cos((n*pi)/N).^2.*(alpha*sign(n)+pi*tan((n*pi)/N)))/N);
             otherwise
                 error('Unknown option specified')
         end
     case 'Cauchy'%Section VF8 of [1].
         w=1./(1+(alpha*n/((N-1)/2)).^2);
+        dwdnFrac=-((8*alpha^2*n*(N-1)^2)./(4*alpha^2*n.^2+(N-1)^2)^2);
     case 'Gaussian'%Section VG of [1].
         w=exp(-(1/2)*(alpha*n/((N-1)/2)).^2);
+        dwdnFrac=-((4*alpha^2*exp(-((2*alpha^2*n.^2)./(N-1)^2)).*n)/(N-1)^2);
     case 'Kaiser'%Section VI of [1].
         val=alpha*sqrt(1-(n/((N-1)/2)).^2);
         w=besseli(0,val)/besseli(0,alpha);
+        dwdnFrac=-((2*alpha^2*n.*hypergeometric0F1(2,1/4*alpha^2*(1-(4*n.^2)/(N-1)^2)))./((N-1)^2*besseli(0,alpha)));
     case 'Fejer-2'%This is the second-order Fejer filter of Chapter 2.1.5
         %of [2]. The endpoints are not zero.
 
+        if(~isempty(nFrac))
+            error('This window is only implemented for the case of nFrac not being provided.')
+        end
+
         M=(N-1)/2;
 
-        w=zeros(N,1);
-        for idx=1:N
+        w=zeros(numVal,1);
+        for idx=1:numVal
             k=n(idx);
             
             nList=1:fix(M-abs(k)+1);
             w(idx)=(1/(M+1))*sum(nList./(abs(k)+nList));
         end
+
+        if(nargout>1)
+            error('dwdnFrac is not available for the this window option.')
+        end
+        dwdnFrac=[];
     case 'Nuttall'%Section C7 of [3]. The Nuttall windows. The signs of the
         %terms have been corrected.
         switch(alpha)
@@ -428,6 +533,7 @@ switch(algorithm)
                 error('Unknown type of Nuttall window selected')
         end
         w=c0+c1*cos(2*pi*n/N)+c2*cos(4*pi*n/N)+c3*cos(6*pi*n/N);
+        dwdnFrac=-((2*pi*(c1*sin((2*n*pi)/N)+2*c2*sin((4*n*pi)/N)+3*c3*sin((6*n*pi)/N)))/N);
     case 'FlatTop'%Section D1-D3 of [3]. The symmetric flat-top window. The
         %signs of the coefficients in the report were not all correct; they
         %have been corrected.
@@ -565,16 +671,29 @@ switch(algorithm)
         
         x=n/N;
         w=c0+c1*cos(2*pi*x)+c2*cos(4*pi*x)+c3*cos(6*pi*x)+c4*cos(8*pi*x)+c5*cos(10*pi*x)+c6*cos(12*pi*x)+c7*cos(14*pi*x)+c8*cos(16*pi*x)+c9*cos(18*pi*x)+c10*cos(20*pi*x);
+        dwdnFrac=-(1/N)*2*pi*(c1*sin(2*pi*x)+2*c2*sin(4*pi*x)+3*c3*sin(6*pi*x)+4*c4*sin(8*pi*x)+5*c5*sin(10*pi*x)+6*c6*sin(12*pi*x)+7*c7*sin(14*pi*x)+8*c8*sin(16*pi*x)+9*c9*sin(18*pi*x)+10*c10*sin(20*pi*x));
     case 'Chebyshev'
+        if(~isempty(nFrac))
+            error('This window is only implemented for the case of nFrac not being provided.')
+        end
+
         w=ChebyshevTapering(N,alpha);
+        if(nargout>1)
+            error('dwdnFrac is not available for the this window option.')
+        end
+        dwdnFrac=[];
     case 'Taylor'
         w=TaylorTapering(alpha,beta,n/2);
+        if(nargout>1)
+            error('dwdnFrac is not available for the this window option.')
+        end
+        dwdnFrac=[];
     otherwise
         error('Unknown window selected')
 end
 
 w=w(:);%Make it a column vector.
-
+dwdnFrac=dwdnFrac(:)*derivCoeff;
 end
 
 %LICENSE:

@@ -1,4 +1,4 @@
-function [Jul1,Jul2]=TAI2TT(Jul1,Jul2)
+function [Jul1,Jul2]=TAI2TT(Jul1,Jul2) %#ok<INUSD>
 %%TAI2TT Convert from international atomic time (TAI) given as a two-part
 %        Julian date to terrestrial time (TT), represented as a two-part
 %        Julian date.

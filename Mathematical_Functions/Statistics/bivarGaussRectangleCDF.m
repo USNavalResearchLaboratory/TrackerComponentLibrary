@@ -78,7 +78,7 @@ Pr2=bivarNormCDF(p2,mu,R);
 Pr3=bivarNormCDF(p3,mu,R);
 Pr4=bivarNormCDF(p4,mu,R);
 
-%The min and max is just to handle finite precision effects making the
+%The min and max are just to handle finite precision effects making the
 %result slightly invalid.
 probVal=min(1,max(0,-Pr1+Pr2+Pr3-Pr4));
 

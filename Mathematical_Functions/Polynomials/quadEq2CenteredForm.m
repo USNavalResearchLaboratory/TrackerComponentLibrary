@@ -37,7 +37,7 @@ function [kVec,cNew]=quadEq2CenteredForm(A,bVec,c)
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 kVec=-(1/2)*(A\bVec);
-cNew=bVec.'*inv(A)*bVec/4-c;
+cNew=bVec.'*(A\bVec)/4-c;
 end
 
 %LICENSE:

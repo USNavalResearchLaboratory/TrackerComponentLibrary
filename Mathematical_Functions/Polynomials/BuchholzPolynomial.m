@@ -1,5 +1,5 @@
 function p=BuchholzPolynomial(n,b,z)
-%%BUCHHOLZPOLYNOMIAL Compute the value of a Buchhols polynomial of a given
+%%BUCHHOLZPOLYNOMIAL Compute the value of a Buchholz polynomial of a given
 %             order with the specified parameters. The Buchholz polynomial
 %             p_n(b,z) arises when dealing with hypergeometric functions as
 %             in [1].

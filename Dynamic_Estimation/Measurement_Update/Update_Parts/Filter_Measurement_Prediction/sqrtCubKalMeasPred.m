@@ -85,7 +85,7 @@ function [zPred,PzPred,otherInfo]=sqrtCubKalMeasPred(xPred,SPred,zDim,h,xi,w,inn
 % [xUpdate,SUpdate,innov,Szz,W]=sqrtCubKalUpdate(xPred,SPred,z,SR,h);
 % %The update in two steps.
 % [zPred,~,otherInfo]=sqrtCubKalMeasPred(xPred,SPred,zDim,h);
-% [xUpdate1,SUpdate1,innov1,Szz1,W1]=sqrtCubKalUpdateWithPred(z,SR,zPred,otherInfo);
+% [xUpdate1,SUpdate1,innov1,Szz1,W1]=sqrtCubKalUpdateWithPred(z,SR,otherInfo);
 % %One will see that the one and two step updates agree.
 % max(abs([xUpdate1-xUpdate;SUpdate1(:)-SUpdate(:);innov1(:)-innov;Szz1(:)-Szz(:);W1(:)-W(:)]))
 %
@@ -170,6 +170,7 @@ function [zPred,PzPred,otherInfo]=sqrtCubKalMeasPred(xPred,SPred,zDim,h,xi,w,inn
     otherInfo.stateTrans=stateTrans;
     otherInfo.stateDiffTrans=stateDiffTrans;
     otherInfo.innovTrans=innovTrans;
+    otherInfo.zPred=zPred;
 end
 
 %LICENSE:

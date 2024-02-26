@@ -183,7 +183,8 @@ function prob=CDF(x,k,theta,lambda,errTol,maxIter)
 %          empty matrix is passed, then a default value of 5000 is used.
 %
 %OUTPUTS: prob The value(s) of the CDF of the noncentral gamma distribution
-%              with parameters k and theta evaluated at x.
+%              with parameters k and theta evaluated at x. This has the
+%              same shape as x.
 %
 %This is an implementation of the distribution computations from [1]. The
 %work in [1] concerns algorithms that implement the distribution

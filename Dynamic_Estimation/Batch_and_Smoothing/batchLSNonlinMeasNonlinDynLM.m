@@ -157,7 +157,7 @@ if(nargout>1)
         HJacob=repmat({HJacob},[numSteps,1]);
     end
     
-    RStackedInv=inv(blkDiagRep(SR));
+    RStackedInv=blkDiagRep(SR)\eye(size(blkDiagRep(SR)));
     minInd=1;
     for cStep=1:numSteps
         maxInd=minInd+zDim-1;

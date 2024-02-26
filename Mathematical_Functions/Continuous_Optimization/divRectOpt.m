@@ -1,4 +1,4 @@
-function [x,fVal,exitCode]=divRectOpt(f,lowerBounds,upperBounds,options)
+function [x,fVal,exitCode]=divRectOpt(f,lowerBounds,upperBounds,options) %#ok<STOUT,INUSD>
 %%DIVRECTOPT The dividing rectangles optimization algorithm. This is a
 %           derivative-free global optimization algorithm where the
 %           multidimensional search space can be bounded. This algorithm

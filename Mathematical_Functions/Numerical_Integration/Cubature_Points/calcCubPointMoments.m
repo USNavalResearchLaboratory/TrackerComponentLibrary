@@ -1,4 +1,4 @@
-function [mu,P]=calcCubPointMoments(z,S,h,xi,w)
+function [mu,P]=calcCubPointMoments(z,S,h,xi,w,diffTransFun)
 %%CALCCUBPOINTMOMENTS Using cubature integration with specified cubature
 %                     points and weights, determine the first two moments
 %                     of a transformation of a value x that is corrupted
@@ -11,7 +11,7 @@ function [mu,P]=calcCubPointMoments(z,S,h,xi,w)
 %
 %INPUTS: z The numDimX1 value added to the zero-mean Gaussian noise with
 %          covariance R that is driving the system.
-%        S The numDimXnumDim lower-triangular square rootcovariance matrix
+%        S The numDimXnumDim lower-triangular square root covariance matrix
 %          of the zero-mean Gaussian noise driving the system. If R is the
 %          covariance matrix of the noise, then S=cholSemiDef(R,'lower');
 %        h A function handle for how the vector z is transformed. This
@@ -21,15 +21,22 @@ function [mu,P]=calcCubPointMoments(z,S,h,xi,w)
 %          calcCubPointMoments function are the mean and covariance matrix
 %          of h(x), where x is Gaussian noise with covariance matrix S*S'
 %          and mean z.
-%       xi An optional numDim X numPoints matrix of cubature points for
+%       xi An optional numDimXnumPoints matrix of cubature points for
 %          normal 0-I distribution. If this and w are omitted, then a
 %          default (probably inefficient) set of cubature points and
 %          weights is generated using fifthOrderCubPoints.
-%        w A numPoints X 1 vector of the weights associated with each of
+%        w A numPointsX1 vector of the weights associated with each of
 %          the cubature points in xi. Note that all w>=0 and normally
 %          sum(w)=1. If this and xi are omitted, then a default (probably
 %          inefficient) set of cubature points and weights is generated
 %          using fifthOrderCubPoints.
+% diffTransFun An optional function handle that transforms differences
+%           between values when computing the covariance. Though
+%           calcCubPointMoments is not meant for use with circular data,
+%           passing a function to wrap data can be used as an ad-hoc fix
+%           for computing a covariance matrix when using circular data,
+%           such as when dealing with longitudinal values. THis should be
+%           omitted if not needed.
 %
 %OUTPUTS: mu The mean of h(x) found using cubature integration.
 %          P The covariance matrix of h(x) found using cubature
@@ -39,19 +46,24 @@ function [mu,P]=calcCubPointMoments(z,S,h,xi,w)
 %points is linear. For example, if the transformation results in an
 %angle from -pi to pi, then angles near +/-pi might get averaged to zero,
 %producing very bad results. In such an instance, the relevant components
-%of the mixture should be averaged using meanAng.
+%of the mixture should be averaged using meanAng or one should pass a
+%function for diffTransFun.
 %
 %September 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 numDim=size(z,1);
 
-if(nargin<4)
+if(nargin<4||isempty(xi))
     [xi,w]=fifthOrderCubPoints(numDim);
 end
 
+if(nargin<6)
+    diffTransFun=[];
+end
+
 xi=h(transformCubPoints(xi,z,S));
-[mu, P]=calcMixtureMoments(xi,w);
+[mu, P]=calcMixtureMoments(xi,w,[],[],diffTransFun);
 end
 
 %LICENSE:

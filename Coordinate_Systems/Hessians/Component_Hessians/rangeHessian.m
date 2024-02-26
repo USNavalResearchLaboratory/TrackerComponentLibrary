@@ -55,8 +55,7 @@ function H=rangeHessian(x,useHalfRange,lTx,lRx)
 % HNumDiff(3,3)=(gradValdZ(3)-gradVal(3))/epsVal;
 % 
 % H=rangeHessian(x,useHalfRange,lTx,lRx);
-% 
-% max(abs((H(:)-HNumDiff(:))./H(:)))
+% RelError=max(abs((H(:)-HNumDiff(:))./H(:)))
 %The relative error will be on the order of 9e-7, indicating good agreement
 %between the numerical Hessian matrix and the actual Hessian matrix.
 %

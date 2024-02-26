@@ -1,4 +1,4 @@
-function [xUpdate,PUpdate,innov,Pzz,W]=QMCKalUpdateWithPred(z,R,zPred,PzPred,otherInfo)
+function [xUpdate,PUpdate,innov,Pzz,W]=QMCKalUpdateWithPred(z,R,otherInfo)
 %%QMCKALUPDATEWITHPRED Given the output of the measurement prediction step
 %           from QMCKalMeasPred and a measurement, complete the measurement
 %           update step of the quasi-Monte Carlo Kalman filter with
@@ -11,8 +11,6 @@ function [xUpdate,PUpdate,innov,Pzz,W]=QMCKalUpdateWithPred(z,R,zPred,PzPred,oth
 %INPUTS: z The zDimX1 vector measurement.
 %        R The zDim X zDim measurement covariance matrix in the native
 %          coordinate system of the measurement.
-%    zPred The zDimXnumComp measurement predictions from the filter.
-%   PzPred The zDimXzDimXnumComp covariance matrices associated with zPred.
 % otherInfo The intermediate results returned in the otherInfo output of
 %          the QMCKalMeasPred function.
 %
@@ -37,6 +35,8 @@ stateTrans=otherInfo.stateTrans;
 xPred=otherInfo.xPred;
 PPred=otherInfo.PPred;
 Pxz=otherInfo.Pxz;
+zPred=otherInfo.zPred;
+PzPred=otherInfo.PzPred;
 
 xDim=size(xPred,1);
 numComp=size(xPred,2);

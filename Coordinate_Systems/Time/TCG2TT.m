@@ -1,4 +1,4 @@
-function [Jul1,Jul2]=TCG2TT(Jul1,Jul2)
+function [Jul1,Jul2]=TCG2TT(Jul1,Jul2) %#ok<INUSD>
 %%TCG2TT Convert from geocentric coordinate time (TCG) given as a two-part
 %        Julian date to terrestrial time (TT) represented as a two-part
 %        Julian date.

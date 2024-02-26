@@ -1,4 +1,4 @@
-function [vITRS,rotMat]=ITRS2TIRS(vTIRS,TT1,TT2,xpyp)
+function [vITRS,rotMat]=ITRS2TIRS(vTIRS,TT1,TT2,xpyp) %#ok<STOUT,INUSD>
 %%ITRS2TIRS Rotate vectors from the International terrestrial Reference
 %            System (ITRS) into the  Terrestrial Intermediate Reference
 %            System (TIRS). The ITRS is essentially the WGS-84 coordinate

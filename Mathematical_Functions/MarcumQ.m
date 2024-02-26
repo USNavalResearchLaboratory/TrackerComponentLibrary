@@ -97,10 +97,10 @@ end
     Q=1-GammaD.CDF(beta.^2,mu,2,alpha^2);
 end
 
-function Q=AlgorithmSchnidman(mu,alpha,beta)
+function Q=AlgorithmSchnidman(mu,alpha,beta) %#ok<DEFNU> 
 %This implements the algorithm of [1] but with the improved exponential
 %term of [2].
-
+%
 %To determine whether to compute Q or 1-Q, the decision criterion used in
 %[3] is employed here.
 %
@@ -234,7 +234,7 @@ function Q=AlgorithmSchnidman(mu,alpha,beta)
     end
 end
 
-function Q=AlgorithmDing(mu,alpha,beta)
+function Q=AlgorithmDing(mu,alpha,beta) %#ok<DEFNU> 
 %This is the algorithm of [1]. This will work for small values of alpha and
 %values of mu that are either integers or an integer+0.5. However, if mu is
 %large, then this algorithm can be slow or suffer from overflow/underflow
@@ -384,7 +384,7 @@ Q=max(1-P,0);
 Q=min(Q,1);
 end
 
-function Q=AlgorithmAnnamalai(mu,alpha,beta)
+function Q=AlgorithmAnnamalai(mu,alpha,beta) %#ok<DEFNU> 
 %This function implements the algorithm of [1]., which will work with
 %non-integer values of mu, but which will produce bad results if
 %(alpha/beta)^(1-mu) is large. The same algorithm is also presented in [2].
@@ -444,7 +444,7 @@ function Q=AlgorithmAnnamalai(mu,alpha,beta)
 end
 
 
-function Q=AlgorithmRoss(mu,alpha,beta)
+function Q=AlgorithmRoss(mu,alpha,beta) %#ok<DEFNU> 
 %This function implements the algorithm of [1] to solve the MarcumQ
 %function for values of mu>=1.5 that are integers or integers +0.5. Due to
 %the precision limitations, the algorithm should not be used if

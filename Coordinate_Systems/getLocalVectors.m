@@ -9,13 +9,13 @@ function vLocal=getLocalVectors(vGlobal,uList)
 %
 %INPUTS: vGlobal A numDimsXN matrix of N global vectors that are to be
 %                converted.              
-%          uList A numDimsXnumDimsXN matrix of orthonormal unit coordinate
+%          uList A numDimsXnumDimsVXN matrix of orthonormal unit coordinate
 %                axes that are associated with the local coordinate system
 %                in which the vectors are expressed. If all N vectors use
 %                the same local coordinate system, then a numDimsxnumDimsx1
 %                matrix can be passed instead.
 %
-%OUTPUTS: vLocal The vectors in the local coordinate system.
+%OUTPUTS: vLocal The numDImsVXN vectors in the local coordinate system.
 %
 %January 2015 David Karnick, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -26,8 +26,10 @@ function vLocal=getLocalVectors(vGlobal,uList)
         uList=repmat(uList,[1,1,numVel]);
     end
     
+    numDimsV=size(uList,2);
+
     numDims=size(vGlobal,1);
-    vLocal=zeros(numDims,numVel);
+    vLocal=zeros(numDimsV,numVel);
     for curVel=1:numVel
         uTemp=uList(:,:,curVel).';
         for curDim=1:numDims

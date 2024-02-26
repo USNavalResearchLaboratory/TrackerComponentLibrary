@@ -2,7 +2,7 @@ function J=polAzEquiDistRefChangeCrossGrad(pAzPt,latLonRefOld,latLonRefNew,rE)
 %%POLAZEQUIDISTREFCHANGECROSSGRAD Given a point in polar azimuthal
 %      coordinates with respect to a reference position on a spherical
 %      Earth, find the gradient of the point in a polar azimuthal
-%      coordinate system with a difference reference point taken with
+%      coordinate system with a different reference point taken with
 %      respect to the point in the original system. This is the gradient of
 %      the polAzEquidistRefChange function.
 %

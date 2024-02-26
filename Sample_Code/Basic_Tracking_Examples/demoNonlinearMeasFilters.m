@@ -190,7 +190,7 @@ SEKF=chol(PInit,'lower');
 
 %The extended square root information filter
 xEstESRIF=zeros(4,numSteps);
-PInvSqrtESRIF=inv(chol(PInit,'lower'));
+PInvSqrtESRIF=chol(PInit,'lower')\eye(size(PInit));
 yEstESRIF=PInvSqrtESRIF*xInit;
 xEstESRIF(:,1)=xInit;
 
@@ -219,13 +219,13 @@ PGPF=PInit;
 %The cubature information filter (CIF)
 xEstCIF=zeros(4,numSteps);
 xEstCIF(:,1)=xInit;
-PInvCIF=inv(PInit);
+PInvCIF=PInit\eye(size(PInit));
 yEstCIF=PInvCIF*xEstCIF(:,1);
 
 %The extended information filter (EIF)
 xEstEIF=zeros(4,numSteps);
 xEstEIF(:,1)=xInit;
-PInvEIF=inv(PInit);
+PInvEIF=PInit\eye(size(PInit));
 yEstEIF=PInvEIF*xEstEIF(:,1);
 
 %The first-order square-root divided difference filter

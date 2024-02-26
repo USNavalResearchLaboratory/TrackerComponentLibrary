@@ -1,5 +1,10 @@
 function [fracVal,E]=fracFourier(f,a,order)
-%%FRACFOURIER Compute the discrete fractional Fourier transform.
+%%FRACFOURIER Compute the discrete fractional Fourier transform. If ones
+%       write the Fourier transform of f in matrix form as xDFT=F*x, then
+%       the fractional Fourier transform of this function is xFrac=F^a*x.
+%       This is NOT the same definition as the fractional FFT, which is
+%       implemented in interpFFTSubset and which is used for spectral
+%       interpolation.
 %
 %INPUTS: f The NXnumEls matrix of real or complex sequences over which the
 %          fractional Fourier transform is desired. The transform is
@@ -7,12 +12,13 @@ function [fracVal,E]=fracFourier(f,a,order)
 %          will occur in the computation of the fractional Fourier
 %          transform matrix.
 %        a The order of the fractional Fourier transform.
-%    order This parameter is only used if algorithm 0 is selected. This is
-%          the order used when computing the Fourier transform matrix. It
-%          can be from 0 to N-1. The default if omitted or an empty matrix
-%          is passed is N/2. Alternatively the E output of this function
-%          can be passed into order to speed up repeated calls to algorithm
-%          0 for sequences x having the same length.
+%    order This is the order used when computing the Fourier transform
+%          matrix (This is related to the number of terms in an expansion
+%          to approximate the eigenvector matrix E). It can be from 0 to
+%          N-1. The default if omitted or an empty matrix is passed is N/2.
+%          Alternatively the E output of this function can be passed into
+%          order to speed up repeated calls for sequences x having the same
+%          length.
 %
 %OUTPUTS: fracVal The NXnumEls values of the fractional Fourier transform
 %                 over each column of f. 
@@ -72,7 +78,6 @@ if(nargin<3||isempty(order))
 end
 
 fracVal=zeros(N,numEls);
-
 [fracVal(:,1),E]=discFracFourier(f(:,1),a,order);
 
 for curEl=2:numEls

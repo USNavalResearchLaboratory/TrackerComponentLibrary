@@ -100,7 +100,7 @@ function [xClust,xCov,clusterList]=distBasedClustering(x,threshold,distFunc,merg
 % Ns=fix(TB/T0);
 % 
 % %Generate the reference signal. This is an up-chirp.
-% x=LFMChirp(T,fStart,fEnd,T0);
+% x=LFMChirp(T,fStart,fEnd,{T0});
 % x=x(:);
 % 
 % %We will use 64 pulse repetition intervals.
@@ -351,7 +351,7 @@ end
 
 function val=MahalanobisDist(x,y,Sigma)
     diff=x-y;
-    val=diff'*inv(Sigma)*diff;
+    val=diff'*(Sigma\diff);
 end
 
 %LICENSE:

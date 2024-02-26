@@ -1,4 +1,4 @@
-function [xUpdate,MUpdate,DUpdate,innov,Pzz,W]=reducedStateMeasUpdateWithPred(z,R,zPred,PzPred,otherInfo,MPred,DPred)
+function [xUpdate,MUpdate,DUpdate,innov,Pzz,W]=reducedStateMeasUpdateWithPred(z,R,otherInfo,MPred,DPred)
 %%REDUCEDSTATEMEASUPDATEWITHPRED Given the output of the measurement
 %           prediction step from reducedStateMeasPred and a measurement,
 %           complete the measurement update step of the reduced state
@@ -11,12 +11,11 @@ function [xUpdate,MUpdate,DUpdate,innov,Pzz,W]=reducedStateMeasUpdateWithPred(z,
 %INPUTS: z The zDimX1 vector measurement.
 %        R The zDimXzDim measurement covariance matrix in the native
 %          coordinate system of the measurement.
-%    zPred The zDimXnumComp measurement predictions from the filter.
-%   PzPred The zDimXzDimXnumComp covariance matrices associated with zPred.
 % otherInfo The intermediate results returned in the otherInfo output of
 %          the KalmanMeasPred function.
-%    MPred The xDimXxDimXnumComp matrices contributing to the total predicted
-%          state covariance matrix based solely on measurement errors.
+%    MPred The xDimXxDimXnumComp matrices contributing to the total
+%          predicted state covariance matrix based solely on measurement
+%          errors.
 %    DPred The xDimXzDimXnumComp matrices of bias coefficients that are
 %          supposed to relate target state errors to dynamic model
 %          parameter uncertainty.
@@ -44,6 +43,8 @@ function [xUpdate,MUpdate,DUpdate,innov,Pzz,W]=reducedStateMeasUpdateWithPred(z,
 
 xPred=otherInfo.xPred;
 PPred=otherInfo.PPred;
+zPred=otherInfo.zPred;
+PzPred=otherInfo.PzPred;
 H=otherInfo.H;
 xDim=size(xPred,1);
 numComp=size(xPred,2);

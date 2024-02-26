@@ -100,13 +100,12 @@ function vals=PDF(z,mu,Sigma)
        Sigma=eye(numDim,numDim); 
     end
     
-    
     for curPoint=1:numPoints
         diffVal=z(:,curPoint)-mu;
         %The determinant of a Hermitian matrix is real. Also, the quadratic
         %argument of the exponent function is real. The real commands just
         %get rid of issues due to finite precision errors.
-        vals(curPoint)=(real(det(pi*Sigma)))^(-1)*exp(-real(diffVal'*inv(Sigma)*diffVal));
+        vals(curPoint)=(real(det(pi*Sigma)))^(-1)*exp(-real(diffVal'*(Sigma\diffVal)));
     end
 end
 

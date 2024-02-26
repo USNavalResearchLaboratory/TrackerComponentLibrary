@@ -1,4 +1,4 @@
-function [xUpdate, SUpdate,innov,Szz,W]=sqrtKalmanUpdateWithPred(z,SR,zPred,otherInfo)
+function [xUpdate, SUpdate,innov,Szz,W]=sqrtKalmanUpdateWithPred(z,SR,otherInfo)
 %%SQRTKALMANUPDATEWITHPRED Given the output of the measurement prediction
 %           step from sqrtKalmanMeasPred and a measurement, complete the
 %           measurement update step of the square-root Kalman filter.
@@ -12,8 +12,6 @@ function [xUpdate, SUpdate,innov,Szz,W]=sqrtKalmanUpdateWithPred(z,SR,zPred,othe
 %       SR The zDimXzDim lower-triangular square root of the measurement
 %          covariance matrix in the native coordinate system of the
 %          measurement.
-%    zPred The zDimXnumComp measurement predictions from the filter.
-%   PzPred The zDimXzDimXnumComp covariance matrices associated with zPred.
 % otherInfo The intermediate results returned in the otherInfo output of
 %          the sqrtKalmanMeasPred function.
 %
@@ -40,6 +38,7 @@ xPred=otherInfo.xPred;
 SPred=otherInfo.SPred;
 Pxz=otherInfo.Pxz;
 H=otherInfo.H;
+zPred=otherInfo.zPred;
 
 xDim=size(xPred,1);
 numComp=size(xPred,2);

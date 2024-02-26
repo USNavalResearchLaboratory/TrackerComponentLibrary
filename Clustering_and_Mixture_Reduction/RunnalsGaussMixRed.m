@@ -1,12 +1,13 @@
-function [w,mu,P]=RunnalsGaussMixRed(w,mu,P,K,gammaBound,KMax)
+function [w,mu,P,numPerCluster,clusterInfo,minCostClustPartition,wAll,muAll,PAll,clusterInfoAll,numPerClusterAll]=RunnalsGaussMixRed(w,mu,P,K,gammaBound,KMax)
 %%RUNNALSGAUSSMIXRED Perform Gaussian mixture reduction using the greedy
 %                    merging algorithm by Runnals in [1].
 %
 %INPUTS: w An NX1 or 1XN vector of weights of the components of the
-%          original Gaussian mixture.
+%          original Gaussian mixture. If all the weights are the same, then
+%          an empty matrix can be passed.
 %       mu An xDimXN matrix of the means of the vector components of the
 %          original Gaussian mixture.
-%        P An xDim XxDim XN hypermatrix of the covariance matrices for the
+%        P An xDimXxDimXN hypermatrix of the covariance matrices for the
 %          components of the original Gaussian mixture.
 %        K The minimum desired number of components desired in the mixture
 %          after reduction. This will be always achieved unless gammaBound
@@ -21,12 +22,30 @@ function [w,mu,P]=RunnalsGaussMixRed(w,mu,P,K,gammaBound,KMax)
 %          more than KMax components are present. The default if omitted or
 %          an empty matrix is passed is Inf.
 %
-%OUTPUTS: w The length K vector of weights of the mixture after reduction.
-%           (the length can be less than K if the input mixture had fewer
-%           than K components).
-%        mu The xDimXK means of the mixture after reduction.
-%         P The xDimXxDimXK covariance matrices of the mixture after
+%OUTPUTS: w The length KRed vector of weights of the mixture after
+%           reduction. KRed is between K and KMax unless the input mixture
+%           has fewer than K components (N<K), in which case KRed=N and the
+%           input mixture is returned.
+%        mu The xDimXKRed means of the mixture after reduction.
+%         P The xDimXxDimXKRed covariance matrices of the mixture after
 %           reduction.
+% numPerCluster A KRedX1 matrix indicating how many components of the
+%           original mixture went into each component of the reduced
+%           mixture.
+% clusterInfo A maxCompXKRed matrix where clusterInfo(1:numPerCluster(k),k)
+%           hold the indices of the measurements that went into the kth
+%           component of the reduced mixture.
+% minCostClustPartition An NX1 vector holding the index of each cluster
+%           (from 1 to KRed) to which each measurement is assigned.
+% wAll, muAll, PAll, clusterInfoAll,numPerClusterAll These holds all of the
+%           intermediate mixtures starting with maxComp=min(KMax,N) and
+%           going down to KRed components. Thus, there are
+%           numAll=maxComp-kRed+1 results in here. wAll is maxCompXnumAll,
+%           muAll is xDimXmaxCompXnumAll, PAll is xDimXxDimXmaxCompXnumAll,
+%           clusterInfoAll is maxCompXmaxCompXnumAll and numClusterAll is
+%           maxCompXnumAll. Having all of the intermediate mixtures can be
+%           useful for some algorithms that try to determine the ideal
+%           number of components to keep.
 %
 %This implements the suboptimal Gaussian mixture reduction algorithm of
 %[1]. Care is taken in the implementation to avoid copies and reallocations
@@ -45,7 +64,7 @@ function [w,mu,P]=RunnalsGaussMixRed(w,mu,P,K,gammaBound,KMax)
 % 
 % K=6;
 % %Runnals' cost function.
-% [wRed,muRed,PRed]=RunnalsGaussMixRed(w,mu,P,K,[],[],0);
+% [wRed,muRed,PRed]=RunnalsGaussMixRed(w,mu,P,K);
 % %Sequential brute-force reduction.
 % [wRedBF,muRedBF,PRedBF]=bruteForceGaussMixRed(w,mu,P,K,true);
 % numPoints=500;
@@ -63,7 +82,7 @@ function [w,mu,P]=RunnalsGaussMixRed(w,mu,P,K,gammaBound,KMax)
 % set(gca,'FontSize',14,'FontWeight','bold','FontName','Times')
 %
 %EXAMPLE 2:
-%This is similar to example 1, but we only consider Runnal's cost function
+%This is similar to example 1, but we only consider Runnalls' cost function
 %and we set K=1 and use gammaVal to control how many elements it ultimately
 %has in the end. In this example, it reduced to from 10 to KNew=6
 %components.
@@ -103,87 +122,187 @@ function [w,mu,P]=RunnalsGaussMixRed(w,mu,P,K,gammaBound,KMax)
     if(nargin<6||isempty(KMax))
         KMax=Inf;
     end
+
+    %If all intermediate reduced steps should be returned from the minimum
+    %number of components it stops at up to the maximum allowed (KMax) or
+    %the maximum actually present.
+    returnAll=(nargout>6);
     
-    N=length(w);
-    
+    %The number of components actually present.
+    N=size(mu,2);
+
+    if(isempty(w))
+        w=ones(N,1)/N;
+    end
+
     %If no reduction is necessary.
     if(N<=K)
-        return;
-    end
+        numPerCluster=ones(N,1);
+        clusterInfo=1:N;
+        KCur=N;
 
-    %We will only be using one triangular of this matrix.
-    M=Inf*ones(N,N);%This is the cost matrix.
-    wLogDetPVals=zeros(N,1);
-    for k=1:N
-        wLogDetPVals(k)=w(k)*log(det(P(:,:,k)));
-    end
-    
-    %We shall fill the cost matrix with the cost of all pairs.
-    for cur1=1:(N-1)
-        for cur2=(cur1+1):N
-            M(cur1,cur2)=BDist(w(cur1),w(cur2),mu(:,cur1),mu(:,cur2),P(:,:,cur1),P(:,:,cur2),wLogDetPVals(cur1),wLogDetPVals(cur2));
+        if(returnAll)
+            wAll=w;
+            muAll=mu;
+            PAll=P;
+            totalRedHyps=1;
+            curAllIdx=1;
+            clusterInfoAll=1:N;
+            numPerClusterAll=ones(N,1);
         end
-    end
-    
-    KCur=N;
-    selIdxPresent=true(N,1);
-    for mergeRound=1:(N-K)
-        [Mm,minRows]=min(M);%Minimize over the rows
-        [minVal,minCol]=min(Mm);%Minimize over the columns.
-        minRow=minRows(minCol);
-        
-        if(minVal>gammaBound&&KCur<=KMax)
-            %If the distribution has been sufficiently reduced in terms of
-            %cost.
-            break;
-        end
+    else
+        if(returnAll)
+            %K is the minimum number of components.
+            maxComp=min(KMax,N);
+            totalRedHyps=maxComp-K+1;
+            muDim=size(mu,1);
 
-        %Now we know which two hypotheses to merge: The ones with indices
-        %minRow and minCol. We will merge those hypotheses and put the
-        %results in minRow.
-        wSum=w(minRow)+w(minCol);
-        w1=w(minRow)/wSum;
-        w2=w(minCol)/wSum;
-        muMerged=w1*mu(:,minRow)+w2*mu(:,minCol);
-        diff1=mu(:,minRow)-muMerged;
-        diff2=mu(:,minCol)-muMerged;
-        PMerged=w1*(P(:,:,minRow)+diff1*diff1')+w2*(P(:,:,minCol)+diff2*diff2');
-        w(minRow)=wSum;
-        mu(:,minRow)=muMerged;
-        P(:,:,minRow)=PMerged;
-        wLogDetPVals(minRow)=wSum*log(det(PMerged));
-        
-        %The column is removed.
-        selIdxPresent(minCol)=false;
-        
-        %Make all the costs Inf so that nothing will be assigned to the
-        %removed column.
-        M(minCol,:)=Inf;
-        M(:,minCol)=Inf;
-        
-        %We must now fill in the costs for the merged estimate, which is in
-        %minRow. We shall fill the cost matrix with the cost of all pairs.           
-        for cur1=1:(minRow-1)
-            if(selIdxPresent(cur1))
-                M(cur1,minRow)=BDist(w(cur1),w(minRow),mu(:,cur1),mu(:,minRow),P(:,:,cur1),P(:,:,minRow),wLogDetPVals(cur1),wLogDetPVals(minRow));
+            wAll=zeros(maxComp,totalRedHyps);
+            muAll=zeros(muDim,maxComp,totalRedHyps);
+            PAll=zeros(muDim,muDim,maxComp,totalRedHyps);
+
+            clusterInfoAll=zeros(N,maxComp,totalRedHyps);
+            numPerClusterAll=zeros(N,totalRedHyps);
+            
+            curAllIdx=0;
+            %If the inital mixture should be saved.
+            if(N==maxComp)
+                curAllIdx=curAllIdx+1;
+                wAll(:,curAllIdx)=w;
+                muAll(:,:,curAllIdx)=mu;
+                PAll(:,:,:,curAllIdx)=P;
+                clusterInfoAll(1,:,1)=1:N;
+                numPerClusterAll(:,1)=1;
             end
         end
 
-        for cur2=(minRow+1):N
-            if(selIdxPresent(cur2))
-                M(minRow,cur2)=BDist(w(minRow),w(cur2),mu(:,minRow),mu(:,cur2),P(:,:,minRow),P(:,:,cur2),wLogDetPVals(minRow),wLogDetPVals(cur2));
+        %We will only be using one triangle of this matrix.
+        M=Inf*ones(N,N);%This is the cost matrix.
+        wLogDetPVals=zeros(N,1);
+        for k=1:N
+            wLogDetPVals(k)=w(k)*log(det(P(:,:,k)));
+        end
+        
+        %Fill the cost matrix with the cost of all pairs.
+        for cur1=1:(N-1)
+            for cur2=(cur1+1):N
+                M(cur1,cur2)=BDist(w(cur1),w(cur2),mu(:,cur1),mu(:,cur2),P(:,:,cur1),P(:,:,cur2),wLogDetPVals(cur1),wLogDetPVals(cur2));
             end
         end
-
-        KCur=KCur-1;
-    end
+        
+        numPerCluster=ones(N,1);
+        clusterInfo=zeros(N,N);
+        clusterInfo(1,:)=1:N;
     
-    %The merged items are marked with selIdxPresent and can now be all
-    %grouped together to be returned.
-    w=w(selIdxPresent);
-    w=w/sum(w);%Guarantee continued normalization.
-    mu=mu(:,selIdxPresent);
-    P=P(:,:,selIdxPresent);
+        KCur=N;
+        selIdxPresent=true(N,1);
+        for mergeRound=1:(N-K)
+            [Mm,minRows]=min(M);%Minimize over the rows
+            [minVal,minCol]=min(Mm);%Minimize over the columns.
+            minRow=minRows(minCol);
+            
+            if(minVal>gammaBound&&KCur<=KMax)
+                %If the distribution has been sufficiently reduced in terms
+                %of cost.
+                break;
+            end
+    
+            %Now we know which two hypotheses to merge: The ones with
+            %indices minRow and minCol. We will merge those hypotheses and
+            %put the results in minRow.
+            wSum=w(minRow)+w(minCol);
+            w1=w(minRow)/wSum;
+            w2=w(minCol)/wSum;
+            muMerged=w1*mu(:,minRow)+w2*mu(:,minCol);
+            diff1=mu(:,minRow)-muMerged;
+            diff2=mu(:,minCol)-muMerged;
+            PMerged=w1*(P(:,:,minRow)+diff1*diff1')+w2*(P(:,:,minCol)+diff2*diff2');
+            w(minRow)=wSum;
+            mu(:,minRow)=muMerged;
+            P(:,:,minRow)=PMerged;
+            wLogDetPVals(minRow)=wSum*log(det(PMerged));    
+    
+            %Update the cluster information.
+            numInRow=numPerCluster(minRow);
+            numInCol=numPerCluster(minCol);
+            numTotal=numInRow+numInCol;
+            clusterInfo(1:numTotal,minRow)=[clusterInfo(1:numInRow,minRow);clusterInfo(1:numInCol,minCol)];
+            numPerCluster(minCol)=0;
+            numPerCluster(minRow)=numTotal;
+    
+            %The column is removed.
+            selIdxPresent(minCol)=false;
+            
+            %Make all the costs Inf so that nothing will be assigned to the
+            %removed column.
+            M(minCol,:)=Inf;
+            M(:,minCol)=Inf;
+            
+            %We must now fill in the costs for the merged estimate, which
+            %is in minRow. We shall fill the cost matrix with the cost of
+            %all pairs.           
+            for cur1=1:(minRow-1)
+                if(selIdxPresent(cur1))
+                    M(cur1,minRow)=BDist(w(cur1),w(minRow),mu(:,cur1),mu(:,minRow),P(:,:,cur1),P(:,:,minRow),wLogDetPVals(cur1),wLogDetPVals(minRow));
+                end
+            end
+    
+            for cur2=(minRow+1):N
+                if(selIdxPresent(cur2))
+                    M(minRow,cur2)=BDist(w(minRow),w(cur2),mu(:,minRow),mu(:,cur2),P(:,:,minRow),P(:,:,cur2),wLogDetPVals(minRow),wLogDetPVals(cur2));
+                end
+            end
+    
+            KCur=KCur-1;
+            
+            %KCur is now the number of components left (The number of ones
+            %in selIdxPresent).
+            if(returnAll)
+                if(KCur<=maxComp)
+                    curAllIdx=curAllIdx+1;
+                    sel=1:KCur;
+                    wAll(sel,curAllIdx)=w(selIdxPresent);
+                    muAll(:,sel,curAllIdx)=mu(:,selIdxPresent);
+                    PAll(:,:,sel,curAllIdx)=P(:,:,selIdxPresent);
+                    clusterInfoAll(:,1:KCur,curAllIdx)=clusterInfo(:,selIdxPresent);
+                    numPerClusterAll(1:KCur,curAllIdx)=numPerCluster(selIdxPresent);
+                end
+            end
+        end
+        
+        %The merged items are marked with selIdxPresent and can now be all
+        %grouped together to be returned.
+        w=w(selIdxPresent);
+        w=w/sum(w);%Guarantee continued normalization.
+        mu=mu(:,selIdxPresent);
+        P=P(:,:,selIdxPresent);
+        numPerCluster=numPerCluster(selIdxPresent);
+        maxInClust=max(numPerCluster);
+        clusterInfo=clusterInfo(1:maxInClust,selIdxPresent);
+        if(returnAll)
+            clusterInfoAll=clusterInfoAll(1:maxInClust,:,:);
+        end
+    end
+
+    if(returnAll&&curAllIdx<totalRedHyps)
+        %If the mixture reduction stopped before hitting K components, size
+        %to fit.
+        sel=1:curAllIdx;
+        wAll=wAll(:,sel);
+        muAll=muAll(:,:,sel);
+        PAll=PAll(:,:,:,sel);
+        clusterInfoAll=clusterInfoAll(:,:,sel);
+        numPerClusterAll=numPerClusterAll(:,sel);
+    end
+
+    if(nargout>5)
+        minCostClustPartition=zeros(N,1);
+        for curCluster=1:KCur
+            numCur=numPerCluster(curCluster);
+            measIdx=clusterInfo(1:numCur,curCluster);
+            minCostClustPartition(measIdx)=curCluster;
+        end
+    end
 end
 
 function val=BDist(w1,w2,mu1,mu2,P1,P2,wLogDetP1,wLogDetP2)
@@ -202,7 +321,7 @@ function val=BDist(w1,w2,mu1,mu2,P1,P2,wLogDetP1,wLogDetP2)
     w2m=w2/wSum;
     
     %In [1], there is a constant factor of (1/2) out front, but since all
-    %components have it, we omit it here. Also, the dterminant is a slow
+    %components have it, we omit it here. Also, the determinant is a slow
     %step, so we put in explicit determinants for things less than 4D.
     switch(size(mu1,1))
         case 1

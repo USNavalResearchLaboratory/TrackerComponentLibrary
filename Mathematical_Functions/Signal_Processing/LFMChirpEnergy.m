@@ -28,7 +28,25 @@ function val=LFMChirpEnergy(T,fStart,fEnd,phi)
 %case is used for when alpha is negative so as to avoid taking the square
 %roots of negative numbers.
 %
-%EXAMPLE:
+%EXAMPLE 1:
+%This example computes the energy a a chirp using this function and also
+%computes a chirp using the LFMChirp function and this function
+%approximates the energy using a Riemann sum. The answers are consistent
+%with each other.
+% B=20e3;%20kHz
+% fStart=-(B/2);
+% fEnd=(B/2);
+% T=2e-3;%Chirp duration in seconds.
+% chirpEnergy=LFMChirpEnergy(T,fStart,fEnd,0)
+% 
+% NyquistFreq=2*B;
+% %Take samples high above the Nyquist rate for perfomring a Riemann sum.
+% TSamp=1/(1000*NyquistFreq);
+% [s,t]=LFMChirp(T,fStart,fEnd,{TSamp},0);
+% deltaT=t(2)-t(1);
+% RiemannSumApprox=sum(real(s).^2)*deltaT
+%
+%EXAMPLE 2:
 %Here, we find the energy in a 1ms chirp going from 1MHz to 10MHz with a
 %phase offset of pi/2.
 % T=1e-3;

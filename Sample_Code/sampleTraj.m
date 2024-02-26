@@ -94,6 +94,10 @@ switch choice
             idx = idx+1;
             tar(1:4,idx) = FCV*tar(1:4,idx-1);
         end
+        if idx<length(times)
+            idx = idx+1;
+            tar(1:4,idx) = FCV*tar(1:4,idx-1);
+        end
         featureNames = {'xpos','ypos','xvel','yvel','turnrate'};
         traj = table(tar(1,:)',tar(2,:)',tar(3,:)',tar(4,:)',tar(5,:)',...
                      'VariableNames',featureNames,'RowNames',string(times),...
@@ -133,6 +137,10 @@ switch choice
         end
         tar(5,idx) = 0;
         for t = TM2+dt:dt:T
+            idx = idx+1;
+            tar(1:4,idx) = FCV*tar(1:4,idx-1);
+        end
+        if idx<length(times)
             idx = idx+1;
             tar(1:4,idx) = FCV*tar(1:4,idx-1);
         end
@@ -212,7 +220,10 @@ switch choice
             idx = idx+1;
             tar(1:4,idx) = FCV*tar(1:4,idx-1);
         end
-        
+        if idx<length(times)
+            idx = idx+1;
+            tar(1:4,idx) = FCV*tar(1:4,idx-1);
+        end
         featureNames = {'xpos','ypos','xvel','yvel','turnrate'};
         traj = table(tar(1,:)',tar(2,:)',tar(3,:)',tar(4,:)',tar(5,:)',...
                      'VariableNames',featureNames,'RowNames',string(times),...
@@ -265,7 +276,10 @@ switch choice
             idx = idx+1;
             tar(1:4,idx) = FCV*tar(1:4,idx-1);
         end
-        
+        if idx<length(times)
+            idx = idx+1;
+            tar(1:4,idx) = FCV*tar(1:4,idx-1);
+        end
         featureNames = {'xpos','ypos','xvel','yvel','turnrate'};
         traj = table(tar(1,:)',tar(2,:)',tar(3,:)',tar(4,:)',tar(5,:)',...
                      'VariableNames',featureNames,'RowNames',string(times),...
@@ -313,7 +327,10 @@ switch choice
             idx = idx+1;
             tar(1:4,idx) = FCV*tar(1:4,idx-1);
         end
-        
+        if idx<length(times)
+            idx = idx+1;
+            tar(1:4,idx) = FCV*tar(1:4,idx-1);
+        end
         featureNames = {'xpos','ypos','xvel','yvel','turnrate'};
         traj = table(tar(1,:)',tar(2,:)',tar(3,:)',tar(4,:)',tar(5,:)',...
                      'VariableNames',featureNames,'RowNames',string(times),...

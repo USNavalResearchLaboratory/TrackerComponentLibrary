@@ -1,4 +1,4 @@
-function [zPred,Pzz,otherInfo]=QMCKalMeasPred(xPred,PPred,zDim,h,numSamples,innovTrans,measAvgFun,stateDiffTrans,stateTrans)
+function [zPred,PzPred,otherInfo]=QMCKalMeasPred(xPred,PPred,zDim,h,numSamples,innovTrans,measAvgFun,stateDiffTrans,stateTrans)
 %%QMCKALMEASPRED Perform the measurement prediction part of the measurement
 %           update step of the quasi-Monte Carlo Kalman filter with
 %           additive measurement noise, as described in Section III of [1],
@@ -82,7 +82,7 @@ function [zPred,Pzz,otherInfo]=QMCKalMeasPred(xPred,PPred,zDim,h,numSamples,inno
 % rng(1);
 % %The update in two steps.
 % [zPred,PzPred,otherInfo]=QMCKalMeasPred(xPred,PPred,zDim,h);
-% [xUpdate1,PUpdate1,innov1,Pzz1,W1]=QMCKalUpdateWithPred(z,R,zPred,PzPred,otherInfo);
+% [xUpdate1,PUpdate1,innov1,Pzz1,W1]=QMCKalUpdateWithPred(z,R,otherInfo);
 % %One will see that the one and two step updates agree.
 % max(abs([xUpdate1(:)-xUpdate(:);PUpdate1(:)-PUpdate(:);innov1(:)-innov(:);Pzz1(:)-Pzz(:);W1(:)-W(:)]))
 %
@@ -119,7 +119,7 @@ xDim=size(xPred,1);
 numComp=size(xPred,2);
 
 zPred=zeros(zDim,numComp);
-Pzz=zeros(zDim,zDim,numComp);
+PzPred=zeros(zDim,zDim,numComp);
 Pxz=zeros(xDim,zDim,numComp);
 for k=1:numComp
     %Generate the samples from the prediction.
@@ -139,11 +139,9 @@ for k=1:numComp
     %necessary to keep the values within a desired range.
     zPredCenPoints=innovTrans(zPredPoints,zPred(:,k));
 
-    %Here, R is included in Pzz, rather than having to be added separately as
-    %in Equation 19.
     for curP=1:numSamples
         diff=zPredCenPoints(:,curP);
-        Pzz(:,:,k)=Pzz(:,:,k)+w*(diff*diff');
+        PzPred(:,:,k)=PzPred(:,:,k)+w*(diff*diff');
         Pxz(:,:,k)=Pxz(:,:,k)+w*stateDiffTrans(xSamples(:,curP)-xPred(:,k))*diff';
     end
     %Pxz is not needed for the measurement prediction, but we compute it
@@ -155,7 +153,8 @@ otherInfo.stateTrans=stateTrans;
 otherInfo.xPred=xPred;
 otherInfo.PPred=PPred;
 otherInfo.Pxz=Pxz;
-
+otherInfo.zPred=zPred;
+otherInfo.PzPred=PzPred;
 end
 
 %LICENSE:

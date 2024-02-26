@@ -46,7 +46,7 @@ classdef kdTree < handle
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
 properties(Access=public)
-   data%A matrix of the data points.
+    data%A matrix of the data points.
 end
 
 properties(Access=private)
@@ -54,7 +54,9 @@ properties(Access=private)
    HISON%Lists the index of the next higher node.
    DATAIDX%The index of the data at a node.
    DISC%The discriminating dimension index at the node.
-   subtreeSizes%Holds the size of all of the nodes in the subtree from a given node (including the given node).
+   %Holds the size of all of the nodes in the subtree from a given node
+   %(including the given node).
+   subtreeSizes
    BMin%An array of bounds of the children of each node for a given level.
    BMax
    
@@ -102,7 +104,7 @@ methods
     %                  kd tree. k is the dimensionality of the points and N
     %                  is the number of points.
     %
-    %The tree is generally constructed as described in [1]. with all of the
+    %The tree is generally constructed as described in [1] with all of the
     %nodes stored in array, but with a few changes.
     %
     %Specifically, the array subtreeSizes is added, which makes the
@@ -392,21 +394,6 @@ methods
         end
     end
     
-    function display(theTree)
-    %%DISPLAY Display information about the tree, including whether the C++
-    %         implementation (wrapped by a Matlab class) or the Matlab-only
-    %         implementation is being used.
-    %
-    %December 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
-    
-        if(exist('kdTreeCPPInt','file'))
-            display('A kdTree as implemented via a mex wrapper around a C++ class.')
-        else
-            display('A kdTree as implemented as a Matlab class.')
-        end
-        theTree.disp();
-    end
-    
     function copyDataFromCPP(theTree)
     %%COPYDATAFROMCPP Copy the data that makes up the structure of the tree
     %                 out of C++ into the variables in the Matlab kdTree
@@ -432,6 +419,22 @@ methods
         
         if(exist('kdTreeCPPInt','file'))
             kdTreeCPPInt('~kdTreeCPP',theTree.CPPData);
+        end
+    end
+end
+
+methods(Static)
+    function whichImplementation() 
+    %%WHICHIMPLEMENTATION Display information about whether the C++
+    %         implementation (wrapped by a Matlab class) or the Matlab-only
+    %         implementation is being used.
+    %
+    %December 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
+    
+        if(exist('kdTreeCPPInt','file'))
+            disp('A kdTree as implemented via a mex wrapper around a C++ class.')
+        else
+            disp('A kdTree as implemented as a Matlab class.')
         end
     end
 end

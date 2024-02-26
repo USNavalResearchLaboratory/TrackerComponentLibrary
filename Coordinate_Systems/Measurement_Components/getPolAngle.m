@@ -1,5 +1,5 @@
 function theta=getPolAngle(zC,systemType,zRx,M)
-%%GETPOLANGLE Convert positions into local polar angles in radians.
+%%GETPOLANGLE Convert positions in 2D into local polar angles in radians.
 %
 %INPUTS: z A 2XN matrix of Cartesian points whoe polar angles are desired.
 %          Each column of cartPoints is of the format [x;y].

@@ -27,16 +27,16 @@ classdef SwerlingIISqLawD
 %target in the Swerling II model is a different random value for each
 %pulse. The sample power SNR is sampPowSNR=ExponentialD.rand(1,1/avgSNR)
 %as mentioned in [1]. The value y=y_{I,i}+sqrt(-1)*y_{Q,i} conditioned on
-%the sampled power SNR is modeled as being distributed circularly complex
-%Gaussian with mean sqrt(Rp) and variance 2. (See, Equation 9.3-35a in
-%[2]). The variance being 2 simply reflects having normalized the variance
-%on the I and Q components each to 1.  As in Equation 10.4-13 of [2], the
-%distribution of Y=y/2 conditioned on the target SNR values is noncentral
-%chi-squared with a change of variables. The value y conditioned on the
-%target SNR values is noncentral chi-squared with nu=2*N degrees of freedom
-%and lambda=N*Rp as the noncentrality parameter. The expressions in [1] and
-%[2] are in terms of Y and not y, so a transformation has to be performed
-%to make things in terms of y.
+%the sampled power SNR and a phase phi is modeled as being distributed
+%circularly complex Gaussian with mean sqrt(Rp)*exp(1j*phi) and variance 2.
+%(See, Equation 9.3-35a in [2]). The variance being 2 simply reflects
+%having normalized the variance on the I and Q components each to 1.  As in
+%Equation 10.4-13 of [2], the distribution of Y=y/2 conditioned on the
+%target SNR values is noncentral chi-squared with a change of variables.
+%The value y conditioned on the target SNR values is noncentral chi-squared
+%with nu=2*N degrees of freedom and lambda=N*Rp as the noncentrality
+%parameter. The expressions in [1] and [2] are in terms of Y and not y, so
+%a transformation has to be performed to make things in terms of y.
 %
 %Under this model, for a given average power SNR value, one can generate a
 %random sample from the distribution as
@@ -364,7 +364,7 @@ function avgSNR=avgSNR4PDThresh(PD,thresh,N)
 %However, the expressions used are derived based on a scaled square-law
 %detector, as in Equation 10.4-4 in [2], which is the same definition used
 %in [1]. Thus, the threshold in this function is scaled appropriately.
-
+%
 %EXAMPLE:
 %Here, we show that the results are consistent.
 % N=4;

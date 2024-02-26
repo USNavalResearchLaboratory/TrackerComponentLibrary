@@ -1,4 +1,4 @@
-function GAST=TT2GAST(Jul1,Jul2,version,deltaT)
+function GAST=TT2GAST(Jul1,Jul2,version,deltaT) %#ok<STOUT,INUSD>
 %%TT2GAST Convert from terrestrial time (TT) to Greenwhich apparent 
 %         sidereal time (GMST), which is a measure of the rotational
 %         direction of the Earth.

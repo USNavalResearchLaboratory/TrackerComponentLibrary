@@ -133,7 +133,7 @@ classdef DisjointSet < handle
             
             %Next, sort the root nodes by their index, so that children can
             %be efficiently assigned to them.
-            [rootIdxList,idx] = sort(rootIdxList,1,'ascend');
+            [rootIdxList,idx]=sort(rootIdxList,1,'ascend');
             rootRankList=rootRankList(idx);
             
             %rootRankList currently holds all of the ranks of the root

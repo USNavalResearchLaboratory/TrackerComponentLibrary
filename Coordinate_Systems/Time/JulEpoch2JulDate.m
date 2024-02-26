@@ -1,4 +1,4 @@
-function [Jul1,Jul2]=JulEpoch2JulDate(epochJ)
+function [Jul1,Jul2]=JulEpoch2JulDate(epochJ) %#ok<STOUT,INUSD>
 %%JULEPOCH2JULDATE Convert a Julian epoch to a Julian Date in the same
 %                  timescale. For example, an epoch given in terrestrial
 %                  time (TT) will be a Julian Date in TT. The timescale

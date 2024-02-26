@@ -97,12 +97,12 @@ d=diag(A*C2*A');
 dBar=1./d;
 dTilde=dBar./(1-dBar);
 
-invC1=inv(C1);
-invC2=inv(C2);
+I = eye(size(C1));
+invC1=C1\I;
+invC2=C2\I;
 
-%Determinant minimization
 switch(optCrit)
-    case 'det'
+    case 'det'%Determinant minimization
         if(n==1)
             if(C1<C2)
                 omega=1;
@@ -192,8 +192,10 @@ switch(optCrit)
         %per Algorithm 1 in [1]. Some of the solutions might be slightly
         %imaginary due to finite precision errors. We will just discard the
         %imaginary parts. This does not affect the choice of the optimal
-        %solution.
-            omega=[real(omega);0;1];
+        %solution. We also include 1/2, since it can be the correct
+        %solution when some finite precision issues force the above results
+        %to be non-finite.
+            omega=[real(omega);1/2;0;1];
             numHyp=length(omega);
 
             minCost=Inf;
@@ -223,7 +225,7 @@ switch(optCrit)
                 omega=0;
             end
         elseif(n==2)
-            invA=inv(A);
+            invA=A\I;
             a=diag(invA'*invA);
             
             denom=a(1)*(1+dTilde(1))+a(2)*(1+dTilde(2));
@@ -236,7 +238,7 @@ switch(optCrit)
         else%for n>=3
             %Use convolutions to build up the polynomial in Equation 17 in
             %[1].
-            invA=inv(A);
+            invA=A\I;
             a=diag(invA'*invA);
             
             %The polynomial is degree 2*(n-1).
@@ -268,16 +270,18 @@ switch(optCrit)
         %per Algorithm 1 in [1]. Some of the solutions might be slightly
         %imaginary due to finite precision errors. We will just discard the
         %imaginary parts. This does not affect the choice of the optimal
-        %solution.
+        %solution. We also include 1/2, since it can be the correct
+        %solution when some finite precision issues force the above results
+        %to be non-finite.
         if(n>1)
-            omega=[real(omega);0;1];
+            omega=[real(omega);1/2;0;1];
             numHyp=length(omega);
 
             minCost=Inf;
             minOmega=[];
             for curHyp=1:numHyp
                 if(omega(curHyp)>=0&&omega(curHyp)<=1)
-                    cost=trace(inv(omega(curHyp)*invC1+(1-omega(curHyp))*invC2));
+                    cost=trace((omega(curHyp)*invC1+(1-omega(curHyp))*invC2)\I);
 
                     if(cost<minCost)
                        minCost=cost;
@@ -293,10 +297,16 @@ switch(optCrit)
 end
 
 CMergedInv=omega*invC1+(1-omega)*invC2;
-CMerged=inv(CMergedInv);
+CMerged=CMergedInv\I;
 
 if(nargout>2)
-    xMerged=CMergedInv\(omega*invC1*x1+(1-omega)*invC2*x2);
+    if omega==0 && strcmp(optCrit,'det') && isinf(dTilde(1))
+        xMerged=CMerged*(invC1*x1);
+    elseif strcmp(optCrit,'trace') && any(isinf(dTilde))
+        xMerged=CMerged*(0.5*invC1*x1+0.5*invC2*x2);
+    else
+        xMerged=CMerged*(omega*invC1*x1+(1-omega)*invC2*x2);
+    end     
 end
 end
 

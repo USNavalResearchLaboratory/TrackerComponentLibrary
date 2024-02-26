@@ -2,7 +2,7 @@ function convVal=circConv(x,y,period)
 %%CIRCONV Take the circular convolution of sequences x and y. If x is the
 %         same length as y and that length is l, the nth element of the
 %         output is
-%          convVal(n)=sum_{m=0}^l x(mod(m,period)+1)*y(mod(n-m,period)+1)
+%          convVal(n)=sum_{m=0}^(l-1) x(mod(m,period)+1)*y(mod(n-m,period)+1)
 %         For sequences of different lengths and period not equaling the
 %         length of any sequence, x and y are first aliased to be length
 %         period (possibly with zero padding) and then the circular

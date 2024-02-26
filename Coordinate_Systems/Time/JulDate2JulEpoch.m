@@ -1,4 +1,4 @@
-function epochJ=JulDate2JulEpoch(Jul1,Jul2)
+function epochJ=JulDate2JulEpoch(Jul1,Jul2) %#ok<STOUT,INUSD>
 %%JULDATE2JULEPOCH Convert two-part Julian dates given in a uniform
 %                  timescale, such as terrestrial time (TT) date to a
 %                  Julian epoch in the same scale. The timescale

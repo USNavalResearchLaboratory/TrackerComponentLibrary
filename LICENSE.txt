@@ -1,4 +1,4 @@
-LICENSE for the Tracker Component Library, Version 5.3
+LICENSE for the Tracker Component Library, Version 6.0
 
 All of the data included is in the public domain and was obtained from U.S
 Government servers, with the exceptions of the Hipparcos 2 Catalog and the
@@ -11,7 +11,8 @@ The catalog forms the basis of a number of international standards and is
 in the public domain, as verified by the Hipparcos helpdesk, whose contact
 information is available at the aforementioned web site.
 
-The source code, except for the code in the 3rd_Party_Libraries folder, is
+The source code, except for the code in the 3rd_Party_Libraries folder and
+the MMOSPA2Tar2D function is
 in the public domain and not licensed or under copyright and was produced
 at the U.S. Naval Research Laboratory. The information and software may be
 used freely by the public. As required by 17 U.S.C. 403, third parties
@@ -27,3 +28,26 @@ RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF THE
 SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY THE NAVAL
 RESEARCH LABORATORY FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE ACTIONS
 OF RECIPIENT IN THE USE OF THE SOFTWARE.
+
+The MMOSPA2Tar2D function is under the MIT license, which is given as
+follows:
+%The MIT License:
+Copyright 2023, Marcus Baum (University of Göttingen)
+ 
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the “Software”),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+ 
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.

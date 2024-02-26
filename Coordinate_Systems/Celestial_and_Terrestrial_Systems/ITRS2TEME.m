@@ -1,4 +1,4 @@
-function [vec,rotMat]=ITRS2TEME(x,Jul1,Jul2,deltaTTUT1,xpyp,LOD)
+function [vec,rotMat]=ITRS2TEME(x,Jul1,Jul2,deltaTTUT1,xpyp,LOD) %#ok<STOUT,INUSD>
 %%ITRS2TEME Convert from the International Terrestrial Reference
 %          System (ITRS) into the True Equator Mean Equinox (TEME) of date 
 %          coordinate system. The TEME system is non-standard and is

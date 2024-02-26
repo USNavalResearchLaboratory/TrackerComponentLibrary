@@ -82,6 +82,7 @@ function [P,Gamma,x,gammaVec]=ellipsoidIntersect(Pi,Pj,xi,xj,zeta)
 
 %Equation numbers are taken from [1].
 xDim=size(Pi,1);
+I = eye(xDim);
 
 %Equation 12a
 [Si,Di]=eig(Pi);
@@ -89,7 +90,7 @@ di=diag(Di);
 diRoot=sqrt(di);
 DiRoot=diag(diRoot);
 DiRootInv=diag(1./diRoot);
-[Sj,Dj]=eig(DiRootInv*Si\Pj*Si*DiRootInv);
+[Sj,Dj]=eig(DiRootInv*(Si\I)*Pj*Si*DiRootInv);
 dj=diag(Dj);
 
 %Equation 12b
@@ -134,8 +135,8 @@ end
 Wi=Wi+eta*eye(xDim,xDim);
 Wj=Wj+eta*eye(xDim,xDim);
 
-%Equation 8. We using pinv for better numerical stability.
-P=pinv(inv(Pi)+inv(Pj)-inv(Gamma));
+%Equation 8.
+P=((Pi\I)+(Pj\I)-(Gamma\I))\I;
 
 if(nargout>2)
     %Equation 13

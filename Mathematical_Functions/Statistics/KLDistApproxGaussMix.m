@@ -491,7 +491,7 @@ switch(algorithm)
         for a=1:n1
             for ap=a:n1
                 diff=mu1(:,a)-mu1(:,ap);
-                Sigmad=inv(P1Inv(:,:,a)+P1Inv(:,:,ap));
+                Sigmad=(P1Inv(:,:,a)+P1Inv(:,:,ap))\eye(size(P1Inv(:,:,a)));
                 const=sqrt(det(2*pi*Sigmad))/(sqrt(det(2*pi*P1(:,:,a))*det(2*pi*P1(:,:,ap))));
                 
                 B=P1Inv(:,:,a)*Sigmad*P1Inv(:,:,ap);
@@ -501,7 +501,7 @@ switch(algorithm)
 
             for b=1:n2
                 diff=mu1(:,a)-mu2(:,b);
-                Sigmad=inv(P1Inv(:,:,a)+P2Inv(:,:,b));
+                Sigmad=(P1Inv(:,:,a)+P2Inv(:,:,b))\eye(size(P1Inv(:,:,a)));
                 const=sqrt(det(2*pi*Sigmad))/(sqrt(det(2*pi*P1(:,:,a))*det(2*pi*P2(:,:,b))));
                 
                 B=P1Inv(:,:,a)*Sigmad*P2Inv(:,:,b);

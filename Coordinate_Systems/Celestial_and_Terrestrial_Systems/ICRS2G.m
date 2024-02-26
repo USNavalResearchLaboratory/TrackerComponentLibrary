@@ -1,4 +1,4 @@
-function xG=ICRS2G(x,Jul1,Jul2)
+function xG=ICRS2G(x,Jul1,Jul2) %#ok<STOUT,INUSD>
 %%ICRS2G Rotate vectors from the orientation of the International
 %        Celestial Reference System (ICRS) to that of the International
 %        Astronomical Union's (IAU's) 1958 system of galactic coordinates.

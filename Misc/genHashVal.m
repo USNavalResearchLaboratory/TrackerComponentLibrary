@@ -8,7 +8,7 @@ function [hashVal,hexVal]=genHashVal(inputArray,algorithm)
 %             hexadecimal strings.
 %
 %INPUTS: inputArray A 1-dimensional string of characters or array of
-%                   integer values from 0 to 255 for which one desired a
+%                   integer values from 0 to 255 for which one desires a
 %                   hash code.
 %        algorithm  An optional  string specifying the algorithm to use to
 %                   generate the hash. Possible values are
@@ -35,7 +35,7 @@ function [hashVal,hexVal]=genHashVal(inputArray,algorithm)
 %
 %OUTPUTS: hashVal  If algorithmis 'simple', then this is an integer hash
 %                  code for the given input. Otherwise, it is an array of
-%                  bytes representign the has value.
+%                  bytes representing the hash value.
 %         hexVal   A hexidecimal string representing the hash value. 
 %
 %The simple algorithm is executed using the hashCode method in Java's

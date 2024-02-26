@@ -1,4 +1,4 @@
-function [val, idx]=binSearchDoubles(vec,key,choice)
+function [val, idx]=binSearchDoubles(vec,key,choice) %#ok<STOUT,INUSD>
 %%BINSEARCHDOUBLES A C-code implementation for performing  a binary search
 %             for the value key in the vector vec, which is a vector of
 %             double-precision floating point numbers that has been sorted

@@ -669,7 +669,7 @@ for curMeas=1:numMeas
             
             %The constant term.
             constTerm=-delta^2*(dot(u,u)+dot(v,v))+delta^4+(u'*v)^2;
-            if(constTerm~=0);
+            if(constTerm~=0)
                 termMat(1,curTerm)=constTerm;
                 termMat(2:end,curTerm)=zeros(xDim,1);
                 curTerm=curTerm+1;

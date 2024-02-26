@@ -46,7 +46,7 @@ function latLonPoints=directGreatCircleProb(latLonStart,azimuth,dist,r,algorithm
 %                    1 dist holds offsets in longitude in the form of the
 %                      starting points. If meridional trajectories are
 %                      given, an error will be raised. This can only be
-%                      used if algorithm=011.
+%                      used if algorithm=1.
 %
 %OUTPUTS: latLonPoints A 2XN matrix of geocentric latitude and longitudes
 %                      of the final points of the spherical geodesic
@@ -173,6 +173,9 @@ switch(algorithm)
     case 1
         latLonPoints=directGreatCircleProbChen(latLonStart,azimuth,dist,r,distType);
     case 2
+        if(distType==1)
+            error('This algorithm only supports distances, not offsets in latitude.')
+        end
         latLonPoints=directGreatCircleProbSnyder(latLonStart,azimuth,dist,r);
     otherwise
         error('Unknown algorithm specified.')
@@ -180,7 +183,7 @@ end
 
 %Deal with errors that arise with zero distances.
 sel=(dist==0);
-latLonPoints(:,sel)=latLonStart(:,sel);
+latLonPoints(:,sel)=latLonStart(1:2,sel);
 
 end
 

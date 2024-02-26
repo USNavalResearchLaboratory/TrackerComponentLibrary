@@ -1,4 +1,4 @@
-function [delayDopPlot,Doppler,delay]=delayDopplerPlotNBPulseDop(x,y,M1,M2,wDoppler,T0)
+function [delayDopPlot,Doppler,delay]=delayDopplerPlotNBPulseDop(x,y,M1,M2,wDoppler,T0,rangeIdxSpan)
 %%DELAYDOPPLERPLOTNBPULSEDOP This function produces the complex
 %               delay-Doppler plot for a narrowband signal assuming that
 %               the same waveform is repeated every single pulse or that
@@ -40,13 +40,17 @@ function [delayDopPlot,Doppler,delay]=delayDopplerPlotNBPulseDop(x,y,M1,M2,wDopp
 %              Doppler An (M2*NB)X1 vector holding the values of the
 %                      Doppler shifts used for each row on delayDopPlot.
 %                      This requires that T0 be passed. These are positive
-%                      and negative. These values are inverse seconds and
-%                      when multiplied by the propagation speed (e.g. c=
-%                      Constants.speedOfLight) divided by the carrier
-%                      frequency fc will provide the range rate. If seconds
-%                      are used for time and meters for distance, when
-%                      multiplied by c/fc one gets range rate in meters per
-%                      second. Positive is going away from the sensor.
+%                      and negative. These values are inverse time (e.g.
+%                      seconds). When divided by -fc, this is how much the
+%                      delay drifts per unit time due to the motion of the
+%                      target. The relation between Doppler shift and range
+%                      rate is discussed in [2]. A simple approximation for
+%                      the range rate is to multiply by the propagation
+%                      speed (e.g. c=Constants.speedOfLight) divided by the
+%                      carrier frequency fc. Even under Newtonian
+%                      mechanics, that is an approximation. Negative is
+%                      going away from the sensor (red shifted because the
+%                      frequency is reduced).
 %                delay An (M1*Ns)X1 vector holding the values of the delays
 %                      used for each columns on delayDopPlot. This requires
 %                      that T0 be passed. These are all non-negative.
@@ -68,10 +72,10 @@ function [delayDopPlot,Doppler,delay]=delayDopplerPlotNBPulseDop(x,y,M1,M2,wDopp
 %The delayed and Doppler-shifted passband signal is
 %y_p(t)=real(A*exp(1j*2*pi*fc*(t-tau-a*t)*x(t-tau-a*t))
 %where tau is the delay measured from the time the pulse begins
-%broadcasting, a is a Doppler shift, and A is a complex amplitude. This
-%assumes a target with a constant range rate (constant Doppler frequency).
-%For targets accelerating in range, additional terms are needed. The
-%complex baseband received signal is thus
+%broadcasting, a is the negative Doppler shift divided by fc, and A is a
+%complex amplitude. This assumes a target with a constant Doppler shift.
+%For targets accelerating in range, additional terms would be needed and
+%are not considered here. The complex baseband received signal is thus
 %y(t)=A*exp(-1j*2*pi*fc*(tau+a*t))*x(t-tau-a*t)
 %
 %The range-Doppler map is just a matched filter. A matched filter
@@ -80,7 +84,7 @@ function [delayDopPlot,Doppler,delay]=delayDopplerPlotNBPulseDop(x,y,M1,M2,wDopp
 %T is:
 %integral_0^T exp(1j*2*pi*fc*(tau+a*t))*conj(x(t-tau-a*t))*y(t) dt
 %In the problem at hand, the signal is approximated as a set of NB blocks
-%or pulses of duration TB. Thus, T=NB*T. To simplify the signal
+%or pulses of duration TB. Thus, T=NB*TB. To simplify the signal
 %processing, we assume either that all blocks have the same waveform or
 %that each block ends with a period of no broadcasting (<100% duty cycle)
 %and the maximum delay does not exceed that period. Additionally, the
@@ -88,20 +92,20 @@ function [delayDopPlot,Doppler,delay]=delayDopplerPlotNBPulseDop(x,y,M1,M2,wDopp
 %constant over each block. All together, this makes the use of circular
 %convolutions (and hence FFTs in the signal processing) possible.
 %The matched filter under such a model is
-%integral_0^T sum_{i=0}^{N_B-1} exp(1j*2*pi*fc*(tau+a*i*TB))*conj(x_i(t-tau-a*i*TB))*y_i(t) dt
+%integral_0^TB sum_{i=0}^{N_B-1} exp(1j*2*pi*fc*(tau+a*i*TB))*conj(x_i(t-tau-a*i*TB))*y_i(t) dt
 %where x_i and y_i are the signals from the ith block. It is assumed that
-%outside of a time windows of length T_B each of those signals is zero.
+%outside of a time windows of length TB each of those signals is zero.
 %To further simplify the signal processing, we assume that the Doppler
 %shift delay in the x term is not significant (related to a narrowband
 %approximation). Thus, the signal processing model for the matched filter
 %is 
-%exp(1j*2*pi*fc*tau)*sum_{i=0}^{N_B-1}exp(1j*2*pi*fc*a*i*TB)*integral_0^T conj(x_i(t-tau))*y_i(t) dt
+%exp(1j*2*pi*fc*tau)*sum_{i=0}^{N_B-1}exp(1j*2*pi*fc*a*i*TB)*integral_0^TB conj(x_i(t-tau))*y_i(t) dt
 %As the signal y_i is sampled, we will approximate the integral in time
-%using a Riemann sum. We will also say that tauHat=tau*T0 (T0 is the sample
+%using a Riemann sum. We will also say that tau=tauHat*T0 (T0 is the sample
 %period) where tauHat is an integer >=0 for the discrete delay. Also, we
 %will throw out the phase constant of exp(1j*2*pi*fc*tau) in front. The
-%result is thus:
-%sum_{i=0}^{N_B-1}exp(1j*2*pi*fc*a*i*TB)*sum_{k=0}^{Ns-1} conj(x(k-tauHat))*y(i,k) 
+%result (discarding a T0 term) is thus:
+%sum_{i=0}^{N_B-1}exp(1j*2*pi*fc*a*i*TB)*sum_{k=0}^{Ns-1} conj(x(k-tauHat))*y(i,k)
 %Thus, the integral has turned into a discrete sum over the samples in each
 %block (the arguments of x and y access the discrete elements). There is no
 %block marking on x, because it is assumed to be the same for all blocks.
@@ -123,47 +127,49 @@ function [delayDopPlot,Doppler,delay]=delayDopplerPlotNBPulseDop(x,y,M1,M2,wDopp
 %and aHat perfectly match the original signal AND the original signal was
 %generated using the various narrowband simplications mentioned, then we
 %have to multiply the result by 1/(x'*x). This is what is done below.
-%However, opne must realize that the various approximations means that the
-%amplitude estimates can still be biased. This is demonstrated in the
-%example below.
+%However, one must realize that the various approximations means that the
+%amplitude estimates can still be biased.
 %
 %Often, the sidelobes of the signal in Doppler might be high. Thus, the
 %input wDoppler can be used to apply tapering across each bin before the
 %final ifft of the algorithm.
 %
-%The final thing to note is that the above method describes only processing
-%for positive Doppler values. Due to the aliasing of large values to
-%negative values with circular convolutions and FFTs, we use fftshift to
-%get positive and negative values in the unambiguous Doppler region.
+%When M1 is not 1, the function sinCosResample is called the resample x and
+%y, which effectively interpolates in rangespace. When M2 is >1,
+%interpolation across Doppler is performed by zero-padding before taking
+%the final ifft across Doppler.
+%
+%The above method describes only processing for positive Doppler values.
+%Due to the aliasing of large values to negative values with circular
+%convolutions and FFTs, we use fftshift to get positive and negative values
+%in the unambiguous Doppler region.
 %
 %Note that TB*c gives the maximum unambiguous range, where c is the speed
 %of propagation in the medium, for example c=Constants.speedOfLight.
 %Note that c/(2*fc*TB) is the magnitude of the maximum unambiguous range
 %rate. One can get those as
 % range=c*delay;
-% rangeRate=Doppler*(c/fc);
+% rangeRate=-2*c*Doppler./(Doppler+2*fc);
+%Where the range rate conversion is from [2] and is only exact in the
+%monostatic case. The above range rate expression is approximately equal to
+%Doppler*(-c/fc) unless c is small or Doppler is large.
 %
 %EXAMPLE:
 %Our signal is a up-chirp. Here, we create the time-delayed Doppler shifted
-%signal at baseband. The target signal is generated in two ways: Once
-%including all of the phase shifts associated with range migration, and
-%once with the ideal signal processing model that is used to derive the
-%range-Doppler map using Fourier transforms to make it fast. We choose the
-%target location to be EXACTLY on a delay-Doppler bin. It will be seen
-%that the complex amplitude obtained using the ideal model matches the
-%complex amplitude used in generating the signal (no noise is added).
-%However, the complex amplitude obtained when using the more realistic
-%model for the signal, including all range migration, is biased. This
-%highlights how the lack of migration compensation biases complex amplitude
-%determination. The range-Doppler plot of the realistic signal is
-%displayed.
+%signal at baseband. The target signal is generated ignoring range
+%migration, which makes it agree with the model used to derive the matched
+%filter here using FFTs to make it fast. The target location is chosen
+%exactly on a delay-Doppler bin. It will be seen that the complex amplitude
+%obtained matches the complex amplitude used in generating the signal (no
+%noise is added). Only a zoomed-in plot around the target range is
+%generated.
 % fc=1e9;%1GHz carrier frequency.
 % B=2e6;%2Mhz bandwidth.
 % %Baseband start and end frequencies.
 % fStart=-B/2;
 % fEnd=B/2;
 % %Sampling rate is two times the Nyquist rate.
-% T0=1/(2*2*fEnd);%Sampling period in seconds.
+% T0=1/(4*B);%Sampling period in seconds.
 % T=2e-5;%Chirp duration in seconds.
 % 
 % PRF=2000;%Pulse repetition frequency (Hertz)
@@ -173,7 +179,7 @@ function [delayDopPlot,Doppler,delay]=delayDopplerPlotNBPulseDop(x,y,M1,M2,wDopp
 % Ns=fix(TB/T0);
 % 
 % %Generate the reference signal. This is an up-chirp.
-% x=LFMChirp(T,fStart,fEnd,T0);
+% x=LFMChirp(T,fStart,fEnd,{T0});
 % x=x(:);
 % 
 % %We will use 64 pulse repetition intervals.
@@ -181,16 +187,17 @@ function [delayDopPlot,Doppler,delay]=delayDopplerPlotNBPulseDop(x,y,M1,M2,wDopp
 % 
 % %True target parameters
 % c=Constants.speedOfLight;
-% rTrue=512*c*T0;%Target placed on
+% rTrue=512*c*T0;%Target placed on a range bin.
 % tau=rTrue/c;%The true delay (s).
 % 
 % %The true range rate (m/s).
-% rrTrue=6/NB*(c/(fc*TB));
-% a=rrTrue/c;
+% rrTrue=30/NB*(c/(fc*TB));
+% %Approximate conversion to Doppler shift/fc in the monostatic case
+% %(approximation of [2]).
+% a=-rrTrue/c;
 % 
 % %Allocate space for the received signal. The first dimensions is "fast
-% %time"; the second dimension if "slow time".
-% yReal=zeros(Ns,NB);
+% %time"; the second dimension is "slow time".
 % yIdeal=zeros(Ns,NB);
 % 
 % %Create the received signal, properly delayed and Doppler shifted for
@@ -198,10 +205,7 @@ function [delayDopPlot,Doppler,delay]=delayDopplerPlotNBPulseDop(x,y,M1,M2,wDopp
 % t=0:T0:((Ns-1)*T0);%Sample times
 % for i=0:(NB-1)
 %     %The subtraction of i*TB deals with the start time of this pulse if
-%     %it is not time zero.
-%     tCur=t-a*t-tau-i*TB;
-%     yReal(:,i+1)=512*exp(-1j*2*pi*fc*(tau+a*t)).*LFMChirp(T,fStart,fEnd,tCur);
-%     
+%     %it is not time zero. This does NOT model range migration.
 %     tCur=t-tau-i*TB;
 %     yIdeal(:,i+1)=512*exp(-1j*2*pi*fc*(tau+a*i*TB)).*LFMChirp(T,fStart,fEnd,tCur);
 %     
@@ -214,62 +218,85 @@ function [delayDopPlot,Doppler,delay]=delayDopplerPlotNBPulseDop(x,y,M1,M2,wDopp
 % %by using wDoppler=windowFunSym(NB,'Blackman',1); Here, we choose to use
 % %no window (same as a rectangular window).
 % wDoppler=[];
-% valsReal=delayDopplerPlotNBPulseDop(x,yReal,M1,M2,wDoppler,T0);
-% [valsIdeal,Doppler,delay]=delayDopplerPlotNBPulseDop(x,yIdeal,M1,M2,wDoppler,T0);
+% rangeIdxSpan=M1*[300,750];
+% [valsIdeal,Doppler,delay]=delayDopplerPlotNBPulseDop(x,yIdeal,M1,M2,wDoppler,T0,rangeIdxSpan);
 % 
 % %Note that the amplitude of the ideal signal matches the true amplitude
-% %used, but that of the real signal (with range migration) is biased.
-% [magReal,idxReal]=max(abs(valsReal(:)));
+% %used. In reality, range migration will bias it.
 % [magIdeal,idxIdeal]=max(abs(valsIdeal(:)));
-% amplitudeMagReal=magReal
 % amplitudeMagIdeal=magIdeal
 % 
 % range=c*delay;
-% rangeRate=Doppler*(c/fc);
+% rangeRate=Doppler*(c/fc);%Approximate monostatic conversion.
 % 
 % %We will make sure that the maximum point on the plots matches the true
-% %inputs, since the true inputs were made to align with range-Doppler cells.
-% [idxR,idxRR]=ind2sub(size(valsReal),idxReal);
-% rDiffReal=range(idxR)-rTrue
-% rrDiffReal=rangeRate(idxRR)-rrTrue
-% 
+% %inputs, since the true inputs were made to align with range-Doppler
+% %cells.
 % [idxR,idxRR]=ind2sub(size(valsIdeal),idxIdeal);
 % rDiffIdeal=range(idxR)-rTrue
 % rrDiffIdeal=rangeRate(idxRR)-rrTrue
 % 
 % figure(1)
 % clf
-% imagesc([rangeRate(1),rangeRate(end)],[range(1), range(end)]/1e3,10*log10(abs(valsReal)));
+% imagesc([rangeRate(1),rangeRate(end)],[range(1), range(end)]/1e3,10*log10(abs(valsIdeal)));
 % set(gca,'YDir','normal')
-% caxis([-30 27])
+% clim([-30 27])
 % colormap(jet(256))
 % h1=xlabel('Range Rate (m/s)');
 % h2=ylabel('Range (km)');
 % set(gca,'FontSize',14,'FontWeight','bold','FontName','Times')
 % set(h1,'FontSize',14,'FontWeight','bold','FontName','Times')
 % set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
+% title('Simulated without Range Migration')
 %
 %REFERENCES:
 %[1] S. K. Mitra, Digital Signal Processing: A Computer-Based Approach,
 %    3rd ed. Boston: McGraw Hill, 2006.
+%[2] (No author listed) "The Doppler equation in range and range-rate
+%    measurement," National Aeronautics and Space Administration, Goddard
+%    Space Flight Center, Greenbelt, MD, Tech. Rep. X-507-65-385, 8 Oct.
+%    1965.
 %
 %November 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+if(nargin<7)
+    rangeIdxSpan=[];
+end
 
 if(nargin<3||isempty(M1))
     M1=1;
 end
 
 if(nargin<4||isempty(M2))
-   M2=1; 
+    M2=1; 
 end
 
 NB=size(y,2);
 Ns=size(y,1);
 
+if(M1~=1)
+    xLen=length(x);
+    if(M1*xLen~=fix(M1*xLen)||M1*Ns~=fix(M1*Ns))
+        error('If M1 is not an integer, M1*length(x) and M1*size(y,1) must both be integers.')
+    end
+
+    %Resample x and y.
+    x=sinCosResample(x(:),M1*xLen);
+    y=sinCosResample(y,M1*Ns);
+    Ns=M1*Ns;
+    T0=T0/M1;
+end
+
 %The extra circshift aligns the zero-Doppler point to the position assumed
 %in the delay output.
-rangePlots=circshift(circConv(flipud([conj(x);zeros(Ns-length(x),1)]),y,Ns),1);
+xRef=circshift(flipud([conj(x);zeros(Ns-length(x),1)]),1);
+rangePlots=circConv(xRef,y,Ns);
+
+if(~isempty(rangeIdxSpan))
+    %Discard range bins that we do not care about.
+    rangePlots=rangePlots(rangeIdxSpan(1):rangeIdxSpan(2),:);
+end
 
 if(nargin>4&&~isempty(wDoppler))
     %Perform windowing to lower Doppler sidelobes.
@@ -280,19 +307,24 @@ delayDopPlot=ifftshift(ifft(rangePlots,NB*M2,2),2);
 
 %Remove the scaling at the matched points so that we can get the true
 %complex amplitude back.
-delayDopPlot=M1*M2*delayDopPlot/(x'*x);
+delayDopPlot=M2*delayDopPlot/(x(:)'*x(:));
 
 if(nargout>1)
     %T0 must be provided for these outputs.
+    if(isempty(rangeIdxSpan))
+        delay=T0*((0:((Ns-1)))).';
+    else
+        delay=T0*((rangeIdxSpan(1)-1):(rangeIdxSpan(2)-1)).';
+    end
     
-    delay=(0:(T0/M1):((T0/M1)*(M1*Ns-1))).';
     %The pulse repetition interval.
     TB=Ns*T0;
 
     numNeg=(NB*M2-1)-ceil((NB*M2-1)/2)+1;
-    Doppler=([(-numNeg):1:-1,0:(floor((NB*M2-1)/2)-1)].'/(NB*M2))*(1/TB);
+    %The negative is because the relation between "a" as used above and the
+    %Doppler shift is backwards.
+    Doppler=-([(-numNeg):1:-1,0:(-numNeg+NB*M2-1)].'/(NB*M2))*(1/TB);
 end
-
 end
 
 %LICENSE:

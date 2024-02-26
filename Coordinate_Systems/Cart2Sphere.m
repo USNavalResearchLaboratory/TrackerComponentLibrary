@@ -96,7 +96,7 @@ if(nargin<3)
             elevation=atan2(y,hypot(z,x));%=asin(y./r);
         case 2
             azimuth=atan2(y,x);
-            elevation=pi/2-atan2(z,hypot(x,y));%=asin(z./r)
+            elevation=pi/2-atan2(z,hypot(x,y));%=pi/2-asin(z./r)
         case 3
             azimuth=atan2(x,y);
             elevation=atan2(z,hypot(x,y));%=asin(z./r)

@@ -96,7 +96,7 @@ if(numHyp>0)
         P0=P0+PInvHyp(:,:,curHyp);
     end
     P0Inv=P0;
-    P0=inv(P0);
+    P0=P0\size(P0);
 
     S0=chol(P0,'lower');
 

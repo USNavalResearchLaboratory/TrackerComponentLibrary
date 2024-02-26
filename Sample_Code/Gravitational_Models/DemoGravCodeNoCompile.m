@@ -20,6 +20,8 @@
 %February 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+%#ok<*ASGLU,*UNRCH,*NOPRT,*NASGU,*NOPTS>
+
 M=50;%The maximum degree and order of the model.
 %Generate coefficients for an ellipsoidal Earth model.
 [C,S,a,c]=ellipsGravCoeffs(M);
@@ -62,7 +64,7 @@ g
 
 disp('The percent error in the potential from the spherical harmonic')
 disp('approximation and from the explicit solution is')
-percentErrorPotential=100*(U-U0)/U0
+percentErrorPotential=100*(U-U0)/U0 
 
 disp('The percent error in the gravitational acceleration magnitude from')
 disp('the spherical harmonic approximation and from the explicit solution is')

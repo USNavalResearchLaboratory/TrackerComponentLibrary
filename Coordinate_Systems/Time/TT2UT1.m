@@ -1,4 +1,4 @@
-function [Jul1,Jul2]=TT2UT1(Jul1,Jul2,deltaT)
+function [Jul1,Jul2]=TT2UT1(Jul1,Jul2,deltaT) %#ok<INUSD>
 %%TT2UT1 Convert from terrestrial time (TT) to UT1, which is a nonuniform
 %        timescale based on the rotation rate of the Earth.
 %

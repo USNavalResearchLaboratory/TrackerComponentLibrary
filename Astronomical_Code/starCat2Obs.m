@@ -1,8 +1,8 @@
-function [zObs,uObs]=starCat2Obs(catData,Jul1,Jul2,zObs,P,T,R,wl,dut1,xpyp)
+function [zObs,uObs]=starCat2Obs(catData,Jul1,Jul2,zObs,P,T,R,wl,dut1,xpyp) %#ok<STOUT,INUSD>
 %%STARCAT2OBS Convert data for the location of stars as typically
 %             supplied by a star catalog, such as the Hipparcos catalog,
 %             to local ENU observed coordinates at the receiver,
-%             including corrections for parallax, aberation,
+%             including corrections for parallax, aberration,
 %             gravitational deflection by the sun and a low-fidelity
 %             refraction model. The catalog data is assumed to be at the
 %             J2000 epoch.

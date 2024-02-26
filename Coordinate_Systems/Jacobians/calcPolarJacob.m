@@ -52,7 +52,8 @@ if(nargin<2||isempty(systemType))
 	systemType=0; 
 end
 
-J=[rangeGradient(x(1:2,:),useHalfRange,lTx(1:2),lRx(1:2));polAngGradient(x(1:2,:),systemType,lRx(1:2))];
+J=[rangeGradient(x(1:2,:),useHalfRange,lTx(1:2),lRx(1:2));
+   polAngGradient(x(1:2,:),systemType,lRx(1:2))];
 
 end
 

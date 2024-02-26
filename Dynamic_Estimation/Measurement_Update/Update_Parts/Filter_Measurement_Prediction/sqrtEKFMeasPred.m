@@ -52,7 +52,7 @@ function [zPred,PzPred,otherInfo]=sqrtEKFMeasPred(xPred,SPred,zDim,h,HJacob)
 % [xUpdate,SUpdate,innov,Szz,W]=sqrtEKFUpdate(xPred,SPred,z,SR,h,HJacob);
 % %The update in two steps.
 % [zPred,PzPred,otherInfo]=sqrtEKFMeasPred(xPred,SPred,zDim,h,HJacob);
-% [xUpdate1,SUpdate1,innov1,Szz1,W1]=sqrtEKFUpdateWithPred(z,SR,zPred,otherInfo);
+% [xUpdate1,SUpdate1,innov1,Szz1,W1]=sqrtEKFUpdateWithPred(z,SR,otherInfo);
 % %One will see that the one and two step updates agree.
 % max(abs([xUpdate1-xUpdate;SUpdate1(:)-SUpdate(:);innov1(:)-innov;Szz1(:)-Szz(:);W1(:)-W(:)]))
 %
@@ -96,6 +96,7 @@ otherInfo.H=H;
 otherInfo.Pxz=Pxz;
 otherInfo.xPred=xPred;
 otherInfo.SPred=SPred;
+otherInfo.zPred=zPred;
 end
 
 %LICENSE:

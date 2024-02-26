@@ -43,7 +43,7 @@ function [setStartList,setLengths,setIdxList,subgraphList]=findStronglyConnected
 %         Inf, Inf,   1,      Inf,    1,      Inf;
 %         Inf, 1,     Inf,    Inf,    Inf,    1;
 %         Inf, Inf,   1,      1,      Inf,    Inf];
-% [setStartList,setLengths,setIdxList]=findStronglyConnectedSubgraphs1(adjMat)
+% [setStartList,setLengths,setIdxList]=findStronglyConnectedSubgraphs(adjMat)
 %The results are setStartList=[1;2;6], setLengths=[1;4;1], and
 %setIdxList =[3;2;6;5;4;1]; This corresponds to three stringly connected
 %subgraphs. One is just vertex 3, another is just vertex 1, and the last
@@ -113,7 +113,7 @@ if(nargout>3)%If desired, actually return the subgraphs.
         baseIdx=setStartList(curSubgraph);
         subGraphIdx=setIdxList(baseIdx:(baseIdx+numSubgraphNodes-1));
         for v=1:numSubgraphNodes
-            for w=1:numSubgraphNodes
+            for w=1:numSubgraphNodes %#ok<FXUP> 
                 adjSubMat(v,w)=adjMat(subGraphIdx(v),subGraphIdx(w));
             end
         end
@@ -137,7 +137,7 @@ function depthFirstSearch(v)
     roots(numInRoots)=v;
 
     %Go through all of the edges involving v
-    for w=1:numVertices
+    for w=1:numVertices %#ok<FXUP> 
         %If no edge exists.
         if(adjMat(v,w)==Inf)
             continue;

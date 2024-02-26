@@ -1,17 +1,21 @@
-function [fInterp,c]=sinCosInterp(f,tList,deltaT,algorithm,numDeriv)
-%%SINCOSINTERP Given uninformely spaced samples of a function, interpolate
+function fInterp=sinCosInterp(f,tList,deltaT,algorithm,numDeriv)
+%%SINCOSINTERP Given uninformly spaced samples of a function, interpolate
 %              the values of a function or the values of the first
 %              derivative of a function over a desired region.
 %              Trigonometric interpolation using sinusoid or cosine
 %              formulas is used.
 %
 %INPUT: f An NX1 or 1XN vector of points that are uniformly spaced in the
-%         independent variable.
-%   tList The NX1 or 1XN set of values of the independent variable at which
-%         the function or its derivative should be interpolated. This
-%         function assumes that the first element in f is evaluated at t=0
-%         and subsequent elements are spaced deltaT apart. Interpolated
-%         points outside of the values given as references tend to be bad.
+%         independent variable. These can be real or complex. N>2. If a
+%         scalar value is passed, then the scalar value is assumed to be N
+%         in which case the return value of this function is the set of
+%         coefficients needed for the interpolation of each point.
+%   tList The numPtsX1 or 1XnumPts set of values of the independent
+%         variable at which the function or its derivative should be
+%         interpolated. This function assumes that the first element in f
+%         is evaluated at t=0 and subsequent elements are spaced deltaT
+%         apart. Interpolated points outside of the values given as
+%         references tend to be bad.
 %  deltaT The spacing of the samples in f in terms of the independent
 %         variable t. If this parameter is omitted or an empty matrix is
 %         passed, the default of 1 is used.
@@ -22,10 +26,13 @@ function [fInterp,c]=sinCosInterp(f,tList,deltaT,algorithm,numDeriv)
 %           default if this parameter is omitted or an empty matrix is
 %           passed.
 % numDeriv This can be 0 or 1. This is the number of derivatives to take.
+%         The default if omitted or an empty matrix is passed is 0.
 %
-%OUTPUTS: fInterp The interpolated function values of the derivatives
-%                 corresponding to the values in tList. This has the same
-%                 dimensions as tList.
+%OUTPUTS: fInterp If f is a length N vector with N>1, this is a numPtsX1
+%                 vector that holds the interpolated function values or the
+%                 derivatives corresponding to the values in tList.
+%                 However, if f was a scalar, then this is a numPtsXN
+%                 matrix C such that fInterp=C*f.
 %
 %This implements the sinusoid interpolation algorithm in Equation 2.74 of
 %Chapter 2.1.8 and the cosine interpolation algorithm in Equation 2.83 of
@@ -97,7 +104,11 @@ function [fInterp,c]=sinCosInterp(f,tList,deltaT,algorithm,numDeriv)
 %November 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-N=length(f);
+if(isscalar(f))
+    N=f;
+else
+    N=length(f);
+end
 
 if(nargin<3||isempty(deltaT))
    deltaT=1; 
@@ -112,8 +123,8 @@ if(nargin<5||isempty(numDeriv))
 end
 
 numT=length(tList);
-fInterp=zeros(size(tList));
 
+C=zeros(numT,N);
 switch(numDeriv)
     case 0%Evaluate the functions directly.
         switch(algorithm)
@@ -121,27 +132,27 @@ switch(numDeriv)
                 l=0:(N-1);
                 for tCur=1:numT
                     t=tList(tCur);
-                    c=sin(pi*(t/deltaT-l))./(N*sin(pi/N*(t/deltaT-l)));
+                    C(tCur,:)=sin(pi*(t/deltaT-l))./(N*sin(pi/N*(t/deltaT-l)));
                     %Assume that any NaN values are due to t/deltaT=l. In
                     %such an instance, we insert the limit:
-                    c(isnan(c))=1;
-                    fInterp(tCur)=sum(c(:).*f(:));
+                    sel=~isfinite(C(tCur,:));
+                    C(tCur,sel)=1;
                 end
             case 1
                 %Cosine interpolation as Equation 2.82
-                m=(0:(N-1)).';
+                m=(0:(N-1));
                 %epsilon_m, eM, is defined before Equation 2.61 in Section
                 %2.1.7. This is the epsilon_m/2 term from Equation 2.82.
-                eM2=ones(N,1);
+                eM2=ones(1,N);
                 eM2(1)=1/2;
                 coeff=1/(N-1/2);
                 for tCur=1:numT
                     t=tList(tCur);
 
-                    fInterp(tCur)=sum(coeff*eM2.*f(:).*(1+kM(t/deltaT-m,N)+kM(t/deltaT+m,N)));
+                    C(tCur,:)=coeff*eM2.*(1+kM(t/deltaT-m,N)+kM(t/deltaT+m,N));
                 end
             otherwise
-                error('Unknown algorithm selected')
+                error('Unknown algorithm selected.')
         end
     case 1%Interpolate the first derivative.
         switch(algorithm)
@@ -150,30 +161,35 @@ switch(numDeriv)
                 for tCur=1:numT
                     t=tList(tCur);
                     x=t/deltaT-l;
-                    c=(pi*csc((pi*x)/N).*(N*cos(pi*(-x))+cot((pi*x)/N).*sin(pi*(-x))))/(N^2*deltaT);
+                    C(tCur,:)=(pi*csc((pi*x)/N).*(N*cos(pi*(-x))+cot((pi*x)/N).*sin(pi*(-x))))/(N^2*deltaT);
                     %Assume that any non-finite values are due to
                     %t/deltaT=l. In such an instance, we insert the limit:
-                    c(~isfinite(c))=0;
-                    fInterp(tCur)=sum(c(:).*f(:));
+                    sel=~isfinite(C(tCur,:));
+                    C(tCur,sel)=0;
                 end
             case 1
                 %Cosine interpolation as Equation 2.82
-                m=(0:(N-1)).';
+                m=(0:(N-1));
                 %epsilon_m, eM, is defined before Equation 2.61 in Section
                 %2.1.7. This is the epsilon_m/2 term from Equation 2.82.
-                eM2=ones(N,1);
+                eM2=ones(1,N);
                 eM2(1)=1/2;
                 coeff=1/(deltaT*(N-1/2));
                 for tCur=1:numT
                     t=tList(tCur);
-
-                    fInterp(tCur)=sum(coeff*eM2.*f(:).*(kMDeriv(t/deltaT-m,N)+kMDeriv(t/deltaT+m,N)));
+                    C(tCur,:)=coeff*eM2.*(kMDeriv(t/deltaT-m,N)+kMDeriv(t/deltaT+m,N));
                 end
             otherwise
                 error('Unknown algorithm selected')
         end
     otherwise
         error('Unsupported derivative requested')
+end
+
+if(isscalar(f))
+    fInterp=C;
+else
+    fInterp=C*f;
 end
 end
 

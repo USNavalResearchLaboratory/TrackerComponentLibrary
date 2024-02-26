@@ -88,7 +88,7 @@ if(PD~=1)
     %has occurred.
     curIter=0;
     while(curIter<maxIter)
-        P=F*PPrev*F'-PD*F*PPrev*H'*inv(H*PPrev*H'+R)*H*PPrev*F'+Q;
+        P=F*PPrev*F'-PD*F*PPrev*H'*((H*PPrev*H'+R)\H)*PPrev*F'+Q;
         
         diffMag=abs(P-PPrev);
         if(all((diffMag(:)<=RelTol*abs(P(:)))|(diffMag(:)<=AbsTol)))

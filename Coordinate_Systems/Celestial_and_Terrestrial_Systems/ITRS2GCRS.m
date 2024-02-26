@@ -1,4 +1,4 @@
-function [vec,rotMat]=ITRS2GCRS(x,Jul1,Jul2,deltaTTUT1,xpyp,dXdY,LOD)
+function [vec,rotMat]=ITRS2GCRS(x,Jul1,Jul2,deltaTTUT1,xpyp,dXdY,LOD) %#ok<STOUT,INUSD>
 %%ITRS2GCRS Convert vectors of position and possibly velocity from the
 %           International Terrestrial Reference System  (ITRS), a type of
 %           Earth-Centered Earth-Fixed (ECEF)  coordinate system, to the

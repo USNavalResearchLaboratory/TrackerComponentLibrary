@@ -48,7 +48,7 @@ function DetectionList=OSCFAR(data2D,numGuardCells,numAvgCells,k,PFA)
 % Ns=fix(TB/T0);
 % 
 % %Generate the reference signal. This is an up-chirp.
-% x=LFMChirp(T,fStart,fEnd,T0);
+% x=LFMChirp(T,fStart,fEnd,{T0});
 % x=x(:);
 % 
 % %We will use 64 pulse repetition intervals.
@@ -136,7 +136,7 @@ function DetectionList=OSCFAR(data2D,numGuardCells,numAvgCells,k,PFA)
 % set(gca,'FontSize',14,'FontWeight','bold','FontName','Times')
 % set(h1,'FontSize',14,'FontWeight','bold','FontName','Times')
 % set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
-% axis([rangeRate(1), rangeRate(end), range(1), range(end)])
+% axis([rangeRate(end), rangeRate(1), range(1), range(end)])
 %
 %REFERENCES
 %[1] P. P. Gandhi and S. A. Kassam, "Analysis of CFAR processors in

@@ -37,12 +37,12 @@ function J=FIMPredNoClutter(H,F,R,Q,PD)
 JPost=FIMPostNoClutter(H,F,R,Q,PD);
 
 if(rcond(Q)<1e-15)
-    J=inv(Q+F*inv(JPost)*F');
+    J=inv(Q+F*(JPost\F'));
 else
-    QInv=inv(Q);
+    QInv=Q\eye(size(Q));
     D11=F'*QInv*F;
     D12=-F'/Q;
-    J=QInv-D12'*inv(JPost+D11)*D12;
+    J=QInv-D12'*((JPost+D11)\D12);
 end
 %Ensure symmetry is preserved.
 J=(J+J')/2;

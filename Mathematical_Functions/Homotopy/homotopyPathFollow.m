@@ -576,7 +576,7 @@ function yp=getTangent(y,ypPrev,DH,f,df)
     end
 end
 
-function val=homotopyF(y,fy,x0,f0)
+function val=homotopyF(y,fy,~,f0)
 %%HOMOTOPYF The function for the homotopy 0=f(x)+(lambda-1)*f(x0).
 %
 %October 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
@@ -586,7 +586,7 @@ lambda=y(1);
 val=fy+(lambda-1)*f0;
 end
 
-function val=homotopyFJacob(y,fy,dfy,x0,f0)
+function val=homotopyFJacob(~,~,dfy,~,f0)
 %%HOMOTOPYFJACOB The Jacobian for the homotopy 0=f(x)+(lambda-1)*f(x0).
 %
 %October 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.

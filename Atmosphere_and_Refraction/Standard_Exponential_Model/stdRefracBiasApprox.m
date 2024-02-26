@@ -161,6 +161,10 @@ if(nargin<6||isempty(rE))
     rE=Constants.WGS84MeanRadius;
 end
 
+if(nargin<4||isempty(Ns))
+    Ns=313;
+end
+
 if(nargin<5||isempty(ce))
     expConst=0.005577;
     multConst=7.32;
@@ -169,10 +173,6 @@ if(nargin<5||isempty(ce))
     %refractivity on the surface of the Earth.
     DeltaN=-multConst*exp(expConst*Ns);
     ce=log(Ns/(Ns+DeltaN))/1000;%Units of inverse meters.
-end
-
-if(nargin<4||isempty(Ns))
-    Ns=313;
 end
 
 RRadar=rE+radarHeight;
@@ -294,7 +294,7 @@ function dxdy=expDiffEq(x,y,Ns,rE,ce)
     %Find the refractivity at location (x,y).
     expVal=NRefracExp(x,y(1),Ns,rE,ce);
 
-    dxdy=[y(2)
+    dxdy=[y(2);
           ce*(1+y(2)^2)*(x*y(2)-y(1))*expVal/((expVal+1)*sqrt(x^2+y(1)^2))];
 end
 

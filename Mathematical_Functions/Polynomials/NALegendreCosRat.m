@@ -151,7 +151,6 @@ function [PBarUVals,dPBarUValsdTheta,d2PBarUValsdTheta2]=NALegendreCosRat(theta,
         
         if(M>0)
             m=1;
-            n=1;
             %From Equation 30 in the first Holmes and Featherstone paper. This
             %is the seed value from which other values will be computed.
             dPBarUValsdTheta(1+1,1+1)=m*(t/u)*PBarUVals(1+1,1+1);

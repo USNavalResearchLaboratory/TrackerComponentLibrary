@@ -192,7 +192,8 @@ sigmam=sqrt(sigmam2);
 selSet=false(n,1);
 selSet(idxVals)=true;
 
-RxInv=inv(Xm*Xm');
+RxInv=Xm*Xm';
+RxInv=RxInv\eye(size(RxInv));
 
 tAbs=zeros(n,1);
 for i=1:n

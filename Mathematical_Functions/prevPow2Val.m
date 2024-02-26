@@ -33,7 +33,7 @@ else
     absN=abs(n);
 
     x=bitshift(absN,-1);
-    while(any(x(:))~=0)
+    while(any(x(:)))
         vals=vals+sign(x);
         x=bitshift(x,-1);
     end

@@ -1,4 +1,4 @@
-function [A,B]=simpAstroRefParam(R,P,T,wl)
+function [A,B]=simpAstroRefParam(R,P,T,wl) %#ok<STOUT,INUSD>
 %%SIMPASTROREFPARAM Obtain the parameters A and B for a very simple
 %                    astronomical refraction model of the form:
 %                    DeltaZ=A*tan(zetaObs)+B*tan(zetaObs)^3, where zetasObs

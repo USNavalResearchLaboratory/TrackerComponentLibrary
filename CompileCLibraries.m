@@ -23,7 +23,7 @@ function CompileCLibraries()
 %again, then one might get the error 
 %LINK : fatal error LNK1104: cannot open file
 %if one does not run the clear mex command before trying to compile.
-clear mex
+clear mex %#ok<CLMEX> 
 
 %Get the path to this file. It should be root level in the tracker library.
 ScriptPath=mfilename('fullpath');
@@ -578,8 +578,8 @@ if(ispc())
             %with a % sign in front like %PATH%, so we can split on that
             %and just take the first part.
             settingString=strsplit(commandString,'%');
-            envVars{numSet+1}=envVar;
-            origEnvVals{numSet+1}=getenv(envVar);
+            envVars{numSet+1}=envVar; %#ok<AGROW> 
+            origEnvVals{numSet+1}=getenv(envVar); %#ok<AGROW> 
 
             %The mex compile program must be in the path for anyting to
             %compile that wishes to externally call the matlab mex

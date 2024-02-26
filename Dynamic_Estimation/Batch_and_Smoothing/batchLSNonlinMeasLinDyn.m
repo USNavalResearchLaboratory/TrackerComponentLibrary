@@ -101,7 +101,7 @@ end
 J=zeros(zDim*numSteps,xDim);
 zPredStacked=zeros(zDim*numSteps,1);
 
-RStackedInv=inv(blkDiagRep(R));
+RStackedInv=blkDiagRep(R)\eye(size(blkDiagRep(R)));
 
 if(size(F,3)==1)
     F=repmat(F,[1,1,numSteps-1]);

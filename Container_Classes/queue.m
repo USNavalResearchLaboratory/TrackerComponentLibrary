@@ -1,7 +1,7 @@
 classdef queue < handle
-%%QUEUE   A queue class. it manages a linked list implemented using the
-%         dlNode class. Items from the top and bottom of the queue can be
-%         directly accessed. 
+%%QUEUE A queue class. it manages a linked list implemented using the
+%       dlNode class. Items from the top and bottom of the queue can be
+%       directly accessed. 
 %
 %The concept of an queue is described in many introductory computer science
 %texts, such as Chapter 5.4 of [1]. The implementation is generic and uses

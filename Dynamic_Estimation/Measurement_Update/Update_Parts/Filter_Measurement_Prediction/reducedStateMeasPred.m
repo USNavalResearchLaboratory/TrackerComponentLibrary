@@ -50,7 +50,7 @@ function [zPred,PzPred,otherInfo]=reducedStateMeasPred(xPred,PPred,H)
 % [xUpdate,MUpdate,DUpdate,innov,Pzz,W]=reducedStateUpdate(xPred,PPred,MPred,DPred,z,R,H);
 % %The update in two steps.
 % [zPred,PzPred,otherInfo]=reducedStateMeasPred(xPred,PPred,H);
-% [xUpdate1,MUpdate1,DUpdate1,innov1,Pzz1,W1]=reducedStateMeasUpdateWithPred(z,R,zPred,PzPred,otherInfo,MPred,DPred);
+% [xUpdate1,MUpdate1,DUpdate1,innov1,Pzz1,W1]=reducedStateMeasUpdateWithPred(z,R,otherInfo,MPred,DPred);
 % %One will see that the one and two step updates agree.
 % max(abs([xUpdate1-xUpdate;MUpdate1(:)-MUpdate(:);DUpdate1(:)-DUpdate(:);innov1(:)-innov;Pzz1(:)-Pzz(:);W1(:)-W(:)]))
 %

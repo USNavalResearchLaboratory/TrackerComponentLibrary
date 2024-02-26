@@ -1,4 +1,4 @@
-function [xUpdate,PUpdate,innov,Pzz,W]=cubKalUpdateWithPred(z,R,zPred,PzPred,otherInfo)
+function [xUpdate,PUpdate,innov,Pzz,W]=cubKalUpdateWithPred(z,R,otherInfo)
 %%CUBKALUPDATEWITHPRED Given the output of the measurement prediction step
 %           from cubKalMeasPred and a measurement, complete the measurement
 %           update step of the cubature Kalman filter with additive
@@ -11,9 +11,6 @@ function [xUpdate,PUpdate,innov,Pzz,W]=cubKalUpdateWithPred(z,R,zPred,PzPred,oth
 %INPUTS:  z The zDimX1 measurement vector.
 %         R The zDimXzDim measurement covariance matrix in the native
 %           coordinate system of the measurement.
-%     zPred The zDimXnumComp measurement predictions from the filter.
-%    PzPred The zDimXzDimXnumComp covariance matrices associated with
-%           zPred.
 % otherInfo The intermediate results returned in the otherInfo output of
 %           the cubKalMeasPred function.
 %
@@ -40,6 +37,8 @@ function [xUpdate,PUpdate,innov,Pzz,W]=cubKalUpdateWithPred(z,R,zPred,PzPred,oth
     xPred=otherInfo.xPred;
     w=otherInfo.w;
     Pxz=otherInfo.Pxz;
+    zPred=otherInfo.zPred;
+    PzPred=otherInfo.PzPred;
     
     numCubPoints=length(w);
     xDim=size(xPred,1);

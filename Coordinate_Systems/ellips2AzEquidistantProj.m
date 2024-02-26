@@ -1,6 +1,6 @@
 function xyPts=ellips2AzEquidistantProj(latLonPts,latLonRef,a,f)
 %%ELLIPS2AZEQUIDISTANTPROJ Given points as [latitude;longitude] (or
-%       [latitude;longitude;height])with respect to a reference ellipsoid
+%       [latitude;longitude;height]) with respect to a reference ellipsoid
 %       (or sphere), convert them to 2D (or 3D) points in an azimuthal
 %       equidistant projection about a specified point.
 %
@@ -8,7 +8,7 @@ function xyPts=ellips2AzEquidistantProj(latLonPts,latLonRef,a,f)
 %                  convert. Alternately, this can be a 3XN set of
 %                  [latitude;longitude;height] points where the height
 %                  remains unchanged after the conversion. 
-%        latLonRef A 2X1 [latitude;longitude] reference point in raidans
+%        latLonRef A 2X1 [latitude;longitude] reference point in radians
 %                  about which the projection is taken.
 %                a The semi-major axis of the reference ellipsoid (in
 %                  meters). If this argument is omitted or an empty matrix

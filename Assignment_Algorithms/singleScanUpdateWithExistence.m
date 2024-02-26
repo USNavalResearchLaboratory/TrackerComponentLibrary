@@ -1,4 +1,4 @@
-function [xUpdate,PUpdate,rUpdate,probNonTargetMeas]=singleScanUpdateWithExistence(xHyp,PHyp,PD,rPred,A,algSel1,algSel2,param3)
+function [xUpdate,PUpdate,rUpdate,probNonTargetMeas,dominantMeasIdx]=singleScanUpdateWithExistence(xHyp,PHyp,PD,rPred,A,algSel1,algSel2,param3)
 %%SINGLESCANUPDATEWITHEXISTENCE Perform the measurement update step in a
 %                  single-scan tracking algorithm that uses Gaussian  
 %                  approximations to represent the target state before and
@@ -32,7 +32,7 @@ function [xUpdate,PUpdate,rUpdate,probNonTargetMeas]=singleScanUpdateWithExisten
 %        rPred A numTarX1 vector of the predicted probabilities of target
 %              existence.
 %           A  A matrix of positive likelihoods or likelihood ratios (NOT
-%              log-likelihood ratios). A is a numTar X (numMeas+numTar)
+%              log-likelihood ratios). A is a numTarX(numMeas+numTar)
 %              matrix of all-positive likelihoods or likelihood ratios for
 %              assigning the target specified by the row to the measurement
 %              specified by the column. Columns > numMeas hold
@@ -82,6 +82,12 @@ function [xUpdate,PUpdate,rUpdate,probNonTargetMeas]=singleScanUpdateWithExisten
 % probNonTargetMeas A numMeasX1 set of posterior probabilities that the
 %                 measurements do not come from any of the known targets.
 %                 These probabilities play a role in track initiation.
+% dominantMeasIdx A numTarX1 vector which indicates the index of the
+%                 dominant measurement updating each target. Zero is used
+%                 for the missed detection hypothesis. For hard assignment
+%                 algorithms, this is the measurement assigned. For soft
+%                 assignment algorithms, this is the highest probability
+%                 measurement for each target.
 %
 %This function basically implements the measurement update step for the
 %JIPDAF (and related filters), updating the known targets, their existence
@@ -185,7 +191,7 @@ if(nargin<6||isempty(algSel1))
     end
 end
 
-if(nargin==5||isempty(algSel2))%If only algSel2 was omitted.
+if(nargin==6||isempty(algSel2))%If only algSel2 was omitted.
     algSel2=0;
 end
 
@@ -232,6 +238,8 @@ if(algSel1==0||algSel1==3)%If a GNN estimate is used in place of the mean
     for curTar=1:numTar
         logLikes(curTar)=ALog(curTar,tar2Meas(curTar));
     end
+    dominantMeasIdx=tar2Meas;
+    dominantMeasIdx(dominantMeasIdx>numMeas)=0;
 
     %Adjust for the index of the missed detection hypothesis.
     sel=tar2Meas>numMeas;
@@ -254,12 +262,15 @@ elseif(algSel1==5||algSel1==6)%If a naïve nearest neighbor estimate is used
                    %in place of the mean.
     %The assignment for each target
     logLikes=zeros(numTar,1);
+    dominantMeasIdx=zeros(numTar,1);
     for curTar=1:numTar
         [maxVal,maxIdx]=max(A(curTar,:));
-
         %If the missed detection hypothesis is the most likely.
         if(maxIdx>numMeas)
+            dominantMeasIdx(curTar)=0;
             maxIdx=numMeas+1;
+        else
+            dominantMeasIdx(curTar)=maxIdx;
         end
 
         xUpdate(:,curTar)=xHyp(:,curTar,maxIdx);
@@ -281,6 +292,9 @@ else%JIPDAF/JIPDAF*/approximate JIPDAF
         P=reshape(PHyp(:,:,curTar,:),[xDim,xDim,numHyp]);
         [xUpdate(:,curTar),PUpdate(:,:,curTar)]=calcMixtureMoments(x,betas(curTar,:),P);
     end
+
+    [~,dominantMeasIdx]=max(betas,[],2);
+    dominantMeasIdx(dominantMeasIdx>numMeas)=0;
 end
 end
 

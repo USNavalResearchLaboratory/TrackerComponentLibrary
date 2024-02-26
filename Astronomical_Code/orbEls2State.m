@@ -78,19 +78,19 @@ function stateVec=orbEls2State(orbEls,deltaT,elType,GM,epsVal)
 %January 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<5)
+if(nargin<5||isempty(epsVal))
     epsVal=eps;
 end
 
-if(nargin<4)
+if(nargin<4||isempty(GM))
    GM=Constants.WGS84GMWithAtmosphere; 
 end
 
-if(nargin<3)
+if(nargin<3||isempty(elType))
     elType=0;
 end
 
-if(nargin<2)
+if(nargin<2||isempty(deltaT))
     deltaT=0;
 end
 

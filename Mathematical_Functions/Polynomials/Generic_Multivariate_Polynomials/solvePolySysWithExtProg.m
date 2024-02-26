@@ -706,8 +706,9 @@ id = fopen(outfileName, 'rt');
 solText = fread(id,'*char');
 fclose(id);
 
-ii=1i;%Necessary so that complex numbers are properly identified in the
-%eval statement below as the output uses ii for complex numbers.
+ii=1i; %#ok<NASGU> %Necessary so that complex numbers are properly
+%identified in the eval statement below as the output uses ii for complex
+%numbers.
 solCells=eval(solText);
 numSol=length(solCells);
 
