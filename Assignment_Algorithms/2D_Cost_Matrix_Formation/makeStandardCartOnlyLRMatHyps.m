@@ -243,7 +243,7 @@ for curTar=1:numTar
         GateMat(curTar,curMeas)=true;
         
         %Perform the measurement update.
-        [xUpdate, SUpdate,innov,Szz]=sqrtKalmanUpdateWithPred(zCart(:,curMeas),SRCart(:,:,curMeas),zPred,otherInfo);
+        [xUpdate, SUpdate,innov,Szz]=sqrtKalmanUpdateWithPred(zCart(:,curMeas),SRCart(:,:,curMeas),otherInfo);
  
         xHyp(:,curTar,curMeas)=xUpdate;
         PHyp(:,:,curTar,curMeas)=SUpdate*SUpdate';
