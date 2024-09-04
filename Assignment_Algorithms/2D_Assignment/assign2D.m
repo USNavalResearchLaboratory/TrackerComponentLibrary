@@ -263,7 +263,7 @@ end
 function [sink, pred, u, v]=ShortestPath(curUnassCol,u,v,C,col4row,row4col)
     numRow=size(C,1);
     numCol=size(C,2);
-    pred=zeros(numCol,1);
+    pred=zeros(numRow,1);
     
     %Initially, none of the rows and columns have been scanned.
     %This will store a 1 in every column that has been scanned.

@@ -6,7 +6,7 @@ function [tuples,gain]=assign2DFreeCol(C,maximize)
 %          subject to 
 %          \sum_{j=1}^{numCol}x_{i,j} =1 for all i
 %          x_{i,j}=0 or 1
-%          This problem is just a naïve nearest neighbor assignment; one
+%          This problem is just a naive nearest neighbor assignment; one
 %          simply assigns each row to the column with the smallest (or
 %          largest) value.
 %

@@ -249,12 +249,12 @@ function [sink, pred, u, v]=ShortestPath(curUnassCol,u,v,C,col4row,row4col)
     %This assumes that unassigned columns go from 1:numUnassigned
     numRowsTrue=size(C,1);
     numCol=size(C,2);
-    pred=zeros(numCol,1);
     
     %The first row is the row containing missed detection costs for all of
     %the columns and thus is not counted. We then add numCol virtual rows
     %to the end that are the missed detection costs.
     numRow=numRowsTrue-1+numCol;
+    pred=zeros(numRow,1);
     
     %Initially, none of the rows and columns have been scanned.
     %This will store a 1 in every column that has been scanned.

@@ -494,7 +494,7 @@ function [sink, pred, u, v]=ShortestPath(curUnassCol,u,v,C,col4row,row4col,zeroO
     numRow=(numRowTrue-1)+(numColTrue-1);
     numCol=numRow;
     
-    pred=zeros(numCol,1);
+    pred=zeros(numRow,1);
     
     %Initially, none of the rows and columns have been scanned.
     %This will store a 1 in every column that has been scanned.
