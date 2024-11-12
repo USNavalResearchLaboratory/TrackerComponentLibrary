@@ -87,8 +87,9 @@ void iauAtioq(double ri, double di, iauASTROM *astrom,
 **     then adjusting for refraction.  The HA,Dec is obtained by
 **     rotating back into equatorial coordinates, and is the position
 **     that would be seen by a perfect equatorial with its polar axis
-**     aligned to the Earth's axis of rotation.  Finally, the RA is
-**     obtained by subtracting the HA from the local ERA.
+**     aligned to the Earth's axis of rotation.  Finally, the
+**     (CIO-based) RA is obtained by subtracting the HA from the local
+**     ERA.
 **
 **  6) The star-independent CIRS-to-observed-place parameters in ASTROM
 **     may be computed with iauApio[13] or iauApco[13].  If nothing has
@@ -100,11 +101,11 @@ void iauAtioq(double ri, double di, iauASTROM *astrom,
 **     iauC2s       p-vector to spherical
 **     iauAnp       normalize angle into range 0 to 2pi
 **
-**  This revision:   2020 December 7
+**  This revision:   2022 August 30
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
 /* Minimum cos(alt) and sin(alt) for refraction purposes */
@@ -192,8 +193,8 @@ void iauAtioq(double ri, double di, iauASTROM *astrom,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

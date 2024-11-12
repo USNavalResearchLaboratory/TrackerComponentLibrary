@@ -9,7 +9,7 @@ void iauTr(double r[3][3], double rt[3][3])
 **  Transpose an r-matrix.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -27,9 +27,9 @@ void iauTr(double r[3][3], double rt[3][3])
 **
 **  This revision:  2021 May 11
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    double wm[3][3];
@@ -47,8 +47,8 @@ void iauTr(double r[3][3], double rt[3][3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

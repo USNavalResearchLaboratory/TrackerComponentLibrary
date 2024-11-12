@@ -42,9 +42,9 @@ int iauTf2a(char s, int ihour, int imin, double sec, double *rad)
 **
 **  This revision:  2021 May 11
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
 
@@ -64,8 +64,8 @@ int iauTf2a(char s, int ihour, int imin, double sec, double *rad)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

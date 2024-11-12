@@ -3,7 +3,7 @@ function HTotal=calcSpherInvHessian(z,systemType)
 %          partial derivatives) of a 3D Cartesian point with respect to
 %          monostatic spherical range, azimuth, and elevation components.
 %          This produces second derivatives of (x,y,z) with respect to
-%          (r,Az,El). The function calcRuvHessian produces second
+%          (r,Az,El). The function calcSpherHessian produces second
 %          derivatives of (r,Az,El) with respect to (x,y,z) in a more
 %          general context.
 %

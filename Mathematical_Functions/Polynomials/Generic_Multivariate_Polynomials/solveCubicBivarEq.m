@@ -25,7 +25,7 @@ function sols=solveCubicBivarEq(coeffsA,coeffsB,AbsTol)
 %produce extra solutions. Normally, one would just choose the solutions
 %that agrees with both cubic equations. However, that is problematic if
 %there are has repeated roots. Thus, we save all solutions below AbsTol in
-%agreement, but we can only return nine solutions, because Bézout's number
+%agreement, but we can only return nine solutions, because Bezout's number
 %is nine. Thus, if more than nine solutions are saved, we take the lowest-
 %cost solution and then sequentially take the others such that they
 %maximize the minimum distance to previous solutions. In the end, however,

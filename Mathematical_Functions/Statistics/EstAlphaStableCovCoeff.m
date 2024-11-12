@@ -122,7 +122,7 @@ function cc = estAlphaStableCovCoeff(x,y,algorithm,p,c1,c2,warn)
 %              (abs(b1)^alpha+abs(b2)^alpha);
 % gam = abs(b1)^alpha+abs(b2)^alpha;
 % 
-% %Computeapproximate and exact covariation [X,Y]_α and print
+% %Compute approximate and exact covariation [X,Y]_alpha and print
 % exact = lambdaTrue*gam;
 % approx = avgSCR*avggam;
 % 

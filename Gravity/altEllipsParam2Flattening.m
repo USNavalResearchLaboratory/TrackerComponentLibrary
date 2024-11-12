@@ -23,7 +23,7 @@ function f=altEllipsParam2Flattening(omega,a,C20Bar,GM)
 %The conversion is an iterative method taken from [1].
 %
 %REFERENCES:
-%[1] H. Moritz, "Geodetic reference system 1980," Bulletin géodésique,
+%[1] H. Moritz, "Geodetic reference system 1980," Bulletin geodesique,
 %    vol. 54, no. 3, pp. 395-405, 1980.
 %
 %January 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.

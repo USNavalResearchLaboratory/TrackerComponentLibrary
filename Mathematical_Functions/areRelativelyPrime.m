@@ -13,9 +13,9 @@ function areRPrime=areRelativelyPrime(a)
 %                   numbers in each set are coprime.
 %
 %Coprime numbers arise in a number of areas, such as in the Chinese
-%remainder theorem. This function jst goes through all pairs of numbers and
-%uses the gcd function to see whether the greatest common divisor between
-%all pairs is 1.
+%remainder theorem. This function just goes through all pairs of numbers
+%and uses the gcd function to see whether the greatest common divisor
+%between all pairs is 1.
 %
 %EXAMPLE:
 % a=zeros(3,2);

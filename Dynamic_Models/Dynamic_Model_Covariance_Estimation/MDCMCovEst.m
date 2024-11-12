@@ -91,11 +91,11 @@ function [R,Q]=MDCMCovEst(z,H,F,u,maxLag)
 %algorithm is bad when dealing with very small process noises.
 %
 %REFERENCES:
-%[1] J. Duník, O. Straka, and O. Kost, "Measurement difference
+%[1] J. Dunik, O. Straka, and O. Kost, "Measurement difference
 %    autocovariance method for noise covariance matrices estimation," in
 %    Proceedings of the IEEE 55th Conference on Decision and Control, Las
 %    Vegas, NV, 12-14 Dec. 2016, pp. 365-370.
-%[2] J. Duník, O. Straka, O. Kost, and J. Havlík, "Noise covariance
+%[2] J. Dunik, O. Straka, O. Kost, and J. Havlik, "Noise covariance
 %    matrices in state-space models: A survey and comparison of estimation
 %    methods-part I," International Journal of Adaptive Control and Signal
 %    Processing, vol. 31, no. 11, pp. 1505-1543, Nov. 2017.

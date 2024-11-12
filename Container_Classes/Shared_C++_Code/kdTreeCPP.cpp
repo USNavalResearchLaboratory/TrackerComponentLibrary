@@ -10,7 +10,6 @@
 
 #include "mex.h"
 
-
 using namespace std;
 
 //Prototypes for functions not declared in external headers.

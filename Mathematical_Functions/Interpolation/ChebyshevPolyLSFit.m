@@ -26,7 +26,7 @@ function a=ChebyshevPolyLSFit(tauList,n,fList,dfList,w)
 %OUTPUTS: a A set of weights that can be used with the function
 %           ChebyshevPolySynth(tau,a,tauStart,tauEnd) to interpolate a
 %           point tau, where tauStart=tauList(1) and tauEnd=tauList(end)
-%           and the points tau is within the starting and ening  bounds.
+%           and the points tau is within the starting and ending bounds.
 %
 %The algorithm implemented is taken from [1]. There it is suggested that
 %when performing least squares Chebyshev polynomial fitting with

@@ -58,7 +58,7 @@ function fracVal=fracFourierApprox(f,a)
 % legend('Discrete Transform','Approximate Transform')
 %
 %REFERENCES:
-%[1] J. García, D. Mas, and R. G. Dorsch, "Fractional-Fourier-transform
+%[1] J. Garcia, D. Mas, and R. G. Dorsch, "Fractional-Fourier-transform
 %   calculation through the fast-Fourier-transform algorithm," Applied
 %   Optics, vol. 35, no. 35, pp. 7013-7018, 10 Dec. 1996.
 %

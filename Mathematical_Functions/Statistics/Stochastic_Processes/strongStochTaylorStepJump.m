@@ -1,6 +1,6 @@
 function [approx,drivers]=strongStochTaylorStepJump(y,aCur,BCur,cCur,lambda,deltaT,algorithm,pBpy,pcpy,deltaP,W,Ts)
 %%STRONGSTOCHTAYLORSTEPJUMP Perform a step of an explicit strong 
-%           Itô-Taylor expansion for a Lévy process. This integrates a 
+%           Ito-Taylor expansion for a Levy process. This integrates a 
 %           d-dimensional stochastic differential equation of the form:
 %           dy=a(y,t)*dt+B(y,t)*dW+c(y)*dP
 %           where dW is the differential of an m-dimensional Wiener

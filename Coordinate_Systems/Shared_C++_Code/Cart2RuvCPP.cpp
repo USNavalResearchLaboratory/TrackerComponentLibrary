@@ -40,7 +40,7 @@ void Cart2RuvGenCPP(double *retData,const double *zC,bool useHalfRange,double *z
  *April 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
  **/
 
-    double zCL[3],zTxL[3];
+    double zCL[3];
     double r1,r2;
     double diff0,diff1,diff2;
  
@@ -52,20 +52,11 @@ void Cart2RuvGenCPP(double *retData,const double *zC,bool useHalfRange,double *z
     zCL[1]=M[1]*diff0+M[4]*diff1+M[7]*diff2;
     zCL[2]=M[2]*diff0+M[5]*diff1+M[8]*diff2;
 
-    //Compute the transmitter location in the receiver's local coordinate
-    //system.
-    diff0=zTx[0]-zRx[0];
-    diff1=zTx[1]-zRx[1];
-    diff2=zTx[2]-zRx[2];
-    zTxL[0]=M[0]*diff0+M[3]*diff1+M[6]*diff2;
-    zTxL[1]=M[1]*diff0+M[4]*diff1+M[7]*diff2;
-    zTxL[2]=M[2]*diff0+M[5]*diff1+M[8]*diff2;
-
-    r1=sqrt(zCL[0]*zCL[0]+zCL[1]*zCL[1]+zCL[2]*zCL[2]);//Receiver to target.
-
-    diff0=zCL[0]-zTxL[0];
-    diff1=zCL[1]-zTxL[1];
-    diff2=zCL[2]-zTxL[2];
+    r1=sqrt(diff0*diff0+diff1*diff1+diff2*diff2);//Receiver to target.
+    
+    diff0=zC[0]-zTx[0];
+    diff1=zC[1]-zTx[1];
+    diff2=zC[2]-zTx[2];
     r2=sqrt(diff0*diff0+diff1*diff1+diff2*diff2);//Target to transmitter.   
 
     retData[0]=r1+r2;

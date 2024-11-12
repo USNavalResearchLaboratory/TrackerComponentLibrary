@@ -59,7 +59,7 @@ function [mu,P,w,cost,minCostClustPartition,minCostClustSizes,clusterInfo]=kMean
 %    seeding," in Proceedings of the Eighteenth Annual ACM-SIAM Symposium
 %    on Discrete Algorithms, New Orleans, LA, Jan. 2007, pp. 1027-1035.
 %[2] M. Kumar and N. R. Patel, "Clustering data with measurement errors,"
-%    Computational Statistics and Data Analysis, vol. 51, pp. 6084–6101,
+%    Computational Statistics and Data Analysis, vol. 51, pp. 6084-6101,
 %    2007.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.

@@ -5,7 +5,7 @@
 *         except all of the minus signs are replaced with plus signs.
 *
 *The functions are described in more detail in the Matlab file perm.m and
-*the interface to tese functions, perm.cpp.
+*the interface to these functions, perm.cpp.
 *
 *The functions in the file are:
 *double permSquareCPP(const double *A, const size_t n,double *buffer)

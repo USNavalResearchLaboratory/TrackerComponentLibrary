@@ -1,5 +1,5 @@
 function A = genErdosRenyiGraph(N,pConnect,isDirected,maxInDegree,maxOutDegree)
-%%GENERDOSRENYIGRAPH Generates an instance of the Erdös-Renyi model
+%%GENERDOSRENYIGRAPH Generates an instance of the Erdos-Renyi model
 %                    described in [1-3].
 %
 %INPUT:
@@ -23,7 +23,7 @@ function A = genErdosRenyiGraph(N,pConnect,isDirected,maxInDegree,maxOutDegree)
 %OUTPUT:
 % A: The adjacency matrix for the final graph.
 %
-%EXAMPLE 1: Generates an instance of the conventional Erdös-Renyi model.
+%EXAMPLE 1: Generates an instance of the conventional Erdos-Renyi model.
 % N = 30;
 % pConnect = 0.3;
 % A = genErdosRenyiGraph(N,pConnect);
@@ -32,7 +32,7 @@ function A = genErdosRenyiGraph(N,pConnect,isDirected,maxInDegree,maxOutDegree)
 % colorbar
 % title("Degree of Nodes in Erdos-Renyi Model")
 %
-%EXAMPLE 2: Generates an instance of the Erdös-Renyi digraph model.
+%EXAMPLE 2: Generates an instance of the Erdos-Renyi digraph model.
 % N = 30;
 % pConnect = 0.1;
 % A = genErdosRenyiGraph(N,pConnect,true);
@@ -41,7 +41,7 @@ function A = genErdosRenyiGraph(N,pConnect,isDirected,maxInDegree,maxOutDegree)
 % colorbar
 % title("Indegree of Nodes in Directed Erdos-Renyi Model")
 %
-%EXAMPLE 3: Generates an instance of the restricted, directed Erös-Renyi
+%EXAMPLE 3: Generates an instance of the restricted, directed Eros-Renyi
 %           model.
 % N = 30;
 % pConnect = 0.3;

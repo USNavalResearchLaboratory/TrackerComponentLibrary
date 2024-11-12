@@ -45,11 +45,11 @@ static const uint64_t infVal=0x7ff0000000000000;
     }
 #endif
 
-void permuteRowsPtrDiffT(const size_t n1,const size_t n2,ptrdiff_t *  XPerm,const ptrdiff_t *  XOrig,const size_t *rowOrder) {
-/**PERMUTEROWSPTRDIFFT Given an n1Xn2 matrix of ptrdiff_t values stored by
- *              column in XOrig, permute the rows of the matrix according
- *              to the ordering in rowOrder (a permutation of 0 to (n-1))
- *              and store the result in XPerm.
+void invPermuteRowsPtrDiffT(const size_t n1,const size_t n2,ptrdiff_t *  XPerm,const ptrdiff_t *  XOrig,const size_t *rowOrder) {
+/**INVPERMUTEROWSPTRDIFFT Given an n1Xn2 matrix of ptrdiff_t values stored
+ *              by column in XOrig, perform the inverse permutation of the
+ *              rows of the matrix according to the ordering in rowOrder (a
+ *              permutation of 0 to (n-1)) and store the result in XPerm.
  *
  *February 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
  */

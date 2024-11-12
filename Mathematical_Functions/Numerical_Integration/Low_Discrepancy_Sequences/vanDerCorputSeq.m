@@ -55,7 +55,7 @@ function points=vanDerCorputSeq(N,skipFirst,stepSize,base,sigma)
 %
 %REFERENCES:
 %[1] H. Faure, "Good permutations for extreme discrepancy," Journal of
-%    Number Theory, vol. 42, no. 1, pp. 47?56, Sep. 1992.
+%    Number Theory, vol. 42, no. 1, pp. 47-56, Sep. 1992.
 %
 %January 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -112,10 +112,10 @@ function sigma=makeFaurePerm(b)
 %
 %REFERENCES:
 %[1] H. Faure, "Good permutations for extreme discrepancy," Journal of
-%    Number Theory, vol. 42, no. 1, pp. 47?56, Sep. 1992.
+%    Number Theory, vol. 42, no. 1, pp. 47-56, Sep. 1992.
 %[2] B. Vandewoestyne and R. Cools, "Good permutations for deterministic
 %    scrambled Halton sequences in terms of L2-discrepancy," Journal of
-%    Computational and Applied Mathematics, vol. 189, no. 1?2, pp. 341-361,
+%    Computational and Applied Mathematics, vol. 189, no. 1-2, pp. 341-361,
 %    May 2006.
 %
 %January 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.

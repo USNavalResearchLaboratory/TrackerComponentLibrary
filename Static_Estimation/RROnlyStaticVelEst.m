@@ -1,4 +1,4 @@
-function vEst=RROnlyStaticVelEst(rr,xTx,xRx,zTar)
+function vEst=RROnlyStaticVelEst(rr,xTx,xRx,zTar,useHalfRange)
 %%RRONLYSTATICVELEST Perform unweighted least-squares estimation of a
 %           target velocity vector given only range rate measurements from
 %           different bistatic channels (or from multiple receivers if the
@@ -26,13 +26,18 @@ function vEst=RROnlyStaticVelEst(rr,xTx,xRx,zTar)
 %           a single 6X1 or 4X1 vector can be passed.
 %      zTar The 3X1 (in 3D) or 2X1 (in 2D) Cartesian position of the
 %           target.
+% useHalfRange A boolean value specifying whether the bistatic range value
+%           should be divided by two, which means that the range rate is
+%           divided by two. This normally comes up when operating in
+%           monostatic mode, so that the range reported is a one-way
+%           range. The default if an empty matrix is passed is false.
 %
 %OUTPUTS: vEst The 3X1 (in 3D) or 2X1 (in 2D) least squares Cartesian
 %              velocity estimate of the target.
 %
 %This implements the least squares velocity vector estimation procedure of
 %Equation 41 in Section IV E of [1]. The case of the transmitter being the
-%target is handled specially (to get rid fo the singulaity).
+%target is handled specially (to get rid of the singulaity).
 %
 %EXAMPLE 1:
 %This is just a simple example showing that for three range rate values,
@@ -58,7 +63,7 @@ function vEst=RROnlyStaticVelEst(rr,xTx,xRx,zTar)
 % rr(2)=getRangeRate(xTar,useHalfRange,xTx2,xRx2);
 % rr(3)=getRangeRate(xTar,useHalfRange,xTx3,xRx3);
 % 
-% vEst=RROnlyStaticVelEst(rr,states1,states2,zTar)
+% vEst=RROnlyStaticVelEst(rr,states1,states2,zTar,useHalfRange)
 %One will see that vEst=vzTar.
 %
 %EXAMPLE 2:
@@ -85,7 +90,7 @@ function vEst=RROnlyStaticVelEst(rr,xTx,xRx,zTar)
 % rr(2)=getRangeRate(xTar,useHalfRange,xTx2,xRx2);
 % rr(3)=getRangeRate(xTar,useHalfRange,xTx3,xRx3);
 % 
-% vEst=RROnlyStaticVelEst(rr,states1,states2,zTar)
+% vEst=RROnlyStaticVelEst(rr,states1,states2,zTar,useHalfRange)
 %One will see that vEst=vzTar.
 %
 %EXAMPLE 3:
@@ -102,7 +107,7 @@ function vEst=RROnlyStaticVelEst(rr,xTx,xRx,zTar)
 % for k=1:numMeas
 %     rr(k)=getRangeRate(xTar,useHalfRange,xTar,xRx(:,k));
 % end
-% vEst=RROnlyStaticVelEst(rr,[],xRx,zTar);
+% vEst=RROnlyStaticVelEst(rr,[],xRx,zTar,useHalfRange);
 % RelErr=max(abs((vTar-vEst)./vTar))
 %
 %REFERENCES:
@@ -112,6 +117,14 @@ function vEst=RROnlyStaticVelEst(rr,xTx,xRx,zTar)
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+if(nargin<5||isempty(useHalfRange))
+    useHalfRange=false;
+end
+
+if(useHalfRange)
+    rr=2*rr;
+end
 
 numMeas=length(rr);
 rr=rr(:);

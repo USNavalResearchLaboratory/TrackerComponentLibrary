@@ -47,9 +47,9 @@ function [u,c]=getENUAxes(plhPoint,justVertical,a,f)
 %[1] D. F. Crouse, "Simulating Aerial Targets in 3D Accouting for the
 %    Earth's Curvature," Journal of Advances in Information Fusion, vol.
 %    10, no. 1, pp. 31-57, Jun 2015.
-%[2] M. S. Grewal, R. Weill, Lawrence, and A. P. Andrews, Global
-%    Positioning Systems, Inertial Navigation, and Integration, 2nd ed.
-%    Hoboken: Wiley-Interscience, 2007.
+%[2] M. S. Grewal, L. R. Weill, and A. P. Andrews, Global Positioning
+%    Systems, Inertial Navigation, and Integration, 2nd ed. Hoboken:
+%    Wiley-Interscience, 2007.
 %
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

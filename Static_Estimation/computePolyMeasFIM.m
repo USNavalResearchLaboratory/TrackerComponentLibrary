@@ -4,7 +4,7 @@ function FIM=computePolyMeasFIM(x,sigma2List,fTx,measTypes,sensorIdxLists,sensor
 %           from an assumed stationary emitter (given moving sensors),
 %           and/ or the received frequency of measurements from
 %           multiple sensors (assuming a stationary target and moving
-%           sensors), determine the inverse Cramér-Rao lower bound (CRLB)
+%           sensors), determine the inverse Cramer-Rao lower bound (CRLB)
 %           (the Fisher information matrix) for an estimate of the location
 %           of the target assuming measurements are corrupted with Gaussian
 %           noise. Cubature integration is used for evaluation of the

@@ -70,8 +70,8 @@ function e=freshwaterRelPermittivity(T,v,algorithm)
 %REFERENCES:
 %[1] W. J. Ellison, "Permittivity of pure water, at standard atmospheric
 %    pressure, over the frequency range 0-25 THz and the temperature range
-%    0-100 °C," Journal of Physical and Chemical Reference Data, vol. 36,
-%    no. 1, Mar. 2007.
+%    0-100 degrees Celsius," Journal of Physical and Chemical Reference
+%    Data, vol. 36, no. 1, Mar. 2007.
 %[2] T. Meissner and F. J. Wentz, "The complex dielectric constant of pure
 %    water from microwave satellite observations," IEEE Transactions on
 %    Geoscience and Remote Sensing, vol. 42, no. 9, pp. 1836-1849, Sep.
@@ -177,8 +177,8 @@ function e=EllisonSol(t,v)
 %REFERENCES:
 %[1] W. J. Ellison, "Permittivity of pure water, at standard atmospheric
 %    pressure, over the frequency range 0-25 thz and the temperature range
-%    0-100 °C," Journal of Physical and Chemical Reference Data, vol. 36,
-%    no. 1, Mar. 2007.
+%    0-100 degrees Celsius," Journal of Physical and Chemical Reference
+%    Data, vol. 36, no. 1, Mar. 2007.
 %
 %July 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
 

@@ -1,10 +1,10 @@
 function [I1Idx,I2Idx]=sampleItoIntegrals(m,deltaT,p,algorithm,deltaW,deltaP,Wj)
-%%SAMPLEITOINTEGRALS Return a random samples of Itô integrals with 1 and 2
-%          subscripts. These are multiple Itô integrals of 1 (not of a
+%%SAMPLEITOINTEGRALS Return a random samples of Ito integrals with 1 and 2
+%          subscripts. These are multiple Ito integrals of 1 (not of a
 %          general function). The assumed Wiener process can be
 %          multidimensional, in which case this function returns the
 %          necessary cross terms too. All values are generated with the
-%          same assumed Wiener process. These are useful in Itô-Taylor
+%          same assumed Wiener process. These are useful in Ito-Taylor
 %          expansions of stochastic differential equations. Integrals of a
 %          jump-diffusion process with specified jumps can also be
 %          approximated using algorithm 0.
@@ -23,10 +23,10 @@ function [I1Idx,I2Idx]=sampleItoIntegrals(m,deltaT,p,algorithm,deltaW,deltaP,Wj)
 %            pages 263-264 along with modifications to account for jump 
 %            process terms. If deltaW is given, the integral is computed 
 %            using that Wiener process difference. If deltaP and W are 
-%            given, the Itô integrals involving Poisson measures with mark 
+%            given, the Ito integrals involving Poisson measures with mark 
 %            independent jump coefficients are also calculated.
 %          1 Simulate discrete steps in the underlying Wiener process
-%            and use the defintion of the Itô integral to approximate the
+%            and use the defintion of the Ito integral to approximate the
 %            values using multiple sums.
 %          2 Use the algorithm described in [2]. This has better asymptotic
 %            convergence as a function of p than 0. However, it is slower
@@ -48,7 +48,7 @@ function [I1Idx,I2Idx]=sampleItoIntegrals(m,deltaT,p,algorithm,deltaW,deltaP,Wj)
 %          process values at the jump times, not the process values at the
 %          beginning and end of the time interval.
 %
-%OUTPUTS: I1Idx A structure whose members are all Itô integrals with 1
+%OUTPUTS: I1Idx A structure whose members are all Ito integrals with 1
 %               subscript. Members are:
 %               I0 for I_0 (scalar) This is the deterministic integral of
 %                                   the region 0->deltaT.
@@ -56,7 +56,7 @@ function [I1Idx,I2Idx]=sampleItoIntegrals(m,deltaT,p,algorithm,deltaW,deltaP,Wj)
 %               Im1 for I_{-1} (scalar) This is the number of Poissonian
 %                                       jumps which occurred over the time
 %                                       interval.
-%         I2Idx A structure whose members are all Itô integrals with 2
+%         I2Idx A structure whose members are all Ito integrals with 2
 %               subscripts. Members are:
 %               I00 for I_{0,0} (scalar) This is the deterministic second
 %                                        integral of the region 0->deltaT.
@@ -67,16 +67,16 @@ function [I1Idx,I2Idx]=sampleItoIntegrals(m,deltaT,p,algorithm,deltaW,deltaP,Wj)
 %               Im1j1 for I_{-1,j1} (mX1)
 %               Im1m1 for I_{-1,-1} (scalar)
 %
-%For algorithm 1, the Itô integral is defined in a manner similar to a
+%For algorithm 1, the Ito integral is defined in a manner similar to a
 %Riemann-Stieljes integral. That is, the integral of some function f(x),
 %when taking N discrete steps, is
 %sum_{j=0}^{N-1} f(t_j)*(W_{t_{j+1}}-W_{t_j})
 %where W_{t_j} is the value of a Wiener process at discrete time t_j. The
-%integral comes as the number of steps goes to Inf. Note that the Itô
+%integral comes as the number of steps goes to Inf. Note that the Ito
 %integral evaluates the function at the beginning of the interval. f could
 %also be another integral.
 %
-%A single Itô integral of a the vector Wiener process with m dimensions is:
+%A single Ito integral of a the vector Wiener process with m dimensions is:
 %I_{j}=sum(deltaW(j,:))
 %where j is the selected dimension, deltaW is a vector of the discrete
 %steps (W_{t_{j+1}}-W_{t_j}). Next, when doing a double integral where the
@@ -116,7 +116,7 @@ function [I1Idx,I2Idx]=sampleItoIntegrals(m,deltaT,p,algorithm,deltaW,deltaP,Wj)
 %[1] P. E. Kloeden and E. Platen, Numerical Solution of Stochastic
 %    Differential Equations. Berlin: Springer, 1999.
 %[2] M. Wiktorsson, "Joint characteristic function and simultaneous
-%    simulation of iterated Itô integrals for multiple independent Brownian
+%    simulation of iterated Ito integrals for multiple independent Brownian
 %    motions," The Annals of Applied Probability, vol. 11, no. 2, pp.
 %    470-487, May 2001.
 %[3] Platen, Eckhard, and Nicola Bruti-Liberati. Numerical solution of 

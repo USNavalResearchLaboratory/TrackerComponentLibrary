@@ -39,7 +39,7 @@ function [xEst,PTaylor,PCRLB]=rangeOnlyStaticLocEstNP(rBi,zLoc1,zLoc2,method,RCo
 %              dimension selecting the solution for which the covariance
 %              matrix is valid.
 %        PCRLB A covariance matrix (or matrices for two solutions) for the
-%              estimates) based on the Cramér-Rao lower bound.
+%              estimates based on the Cramer-Rao lower bound.
 %
 %The target localization algorithm is based on the spherical intersection
 %method of [1], where the Taylor series expansion covariance matrix for the

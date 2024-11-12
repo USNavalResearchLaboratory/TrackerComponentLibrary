@@ -40,7 +40,7 @@ function dS=cholDeriv(SQ,dQ,Q,upperOrLower,algorithm)
 % dSNumDiff=(SQ1-SQ)/epsVal
 %
 %REFERENCES:
-%[1] S. Särkkä, Bayesian Filtering and Smoothing. Cambridge: Cambridge
+%[1] S. Sarkka, Bayesian Filtering and Smoothing. Cambridge: Cambridge
 %    University Press, 2013.
 %
 %November 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.

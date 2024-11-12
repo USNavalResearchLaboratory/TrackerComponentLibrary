@@ -44,9 +44,9 @@ function NsVals=reduceStdRefrac2Spher(NMeas,height,expConst,multConst,varargin)
 %
 %REFERENCES:
 %[1] B. R. Bean and G. D. Thayer, CRPL Exponential Reference Atmosphere.
-%     Washington, D.C.: U. S. Department of Commerce, National Bureau of
-%     Standards, Oct. 1959. [Online]. Available:
-%     http://digicoll.manoa.hawaii.edu/techreports/PDF/NBS4.pdf
+%    Washington, D.C.: U. S. Department of Commerce, National Bureau of
+%    Standards, Oct. 1959. [Online]. Available:
+%    https://nvlpubs.nist.gov/nistpubs/Legacy/MONO/nbsmonograph4.pdf
 %[2] D. F. Crouse, "Basic tracking using 3D monostatic and bistatic
 %    measurements in refractive environments," IEEE Aerospace and
 %    Electronic Systems Magazine, vol. 29, no. 8, Part II, pp. 54-75, Aug.

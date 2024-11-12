@@ -47,7 +47,7 @@ function p=dewPointPres4Temp(T,algChoice)
 %[1] D. Koutsoyiannis, "Clausius-Clapeyron equation and saturation vapour
 %    pressure: simple theory reconcided with practice," European Journal of
 %    Physics, vol. 33, no. 2, pp. 295-305, Mar. 2012.
-%[2] T. López-Arias, "Comment on 'Clausius-Clapeyron equation and
+%[2] T. Lopez-Arias, "Comment on 'Clausius-Clapeyron equation and
 %    saturation vapour pressure: simple theory reconcided with practice',"
 %    European Journal of Physics, vol. 33, no. 3, pp. L11-L12, May 2012.
 %[3] D. Koutsoyiannis, "Reply to 'Comment on "Clausius-Clapeyron equation

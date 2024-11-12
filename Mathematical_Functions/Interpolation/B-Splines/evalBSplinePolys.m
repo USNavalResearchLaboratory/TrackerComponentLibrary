@@ -78,8 +78,8 @@ end
 %This is doing if(any(x<t(idx)|x>t(idx+1)) However, finite precision errors
 %can make things slightly off and create unnecessary warnings, so the
 %comparisons with a tolerance help to avoid that.
-epsMult=4;
-if(any(-(x-t(idx))>epsMult*eps(x)|(x-t(idx+1))>epsMult*eps(x)))
+epsMult=10;
+if(any(-(x-t(idx))>epsMult*max(eps(),eps(x))|(x-t(idx+1))>epsMult*max(eps(),eps(x))))
     warning('Points are outside of the valid region implied by iIdx. Function results can be inaccurate.')
 end
 

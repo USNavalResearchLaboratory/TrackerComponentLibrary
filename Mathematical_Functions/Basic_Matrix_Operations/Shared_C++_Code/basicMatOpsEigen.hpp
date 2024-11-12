@@ -383,7 +383,7 @@ void backSubstitutionByCol(const T &U, T &b) {
  *The algorithm of [1] is used.
  *
  *REFERENCES:
- *[1] J. Nygårds, V. Deleskog, and G. Hendeby, "Safe fusion compared to
+ *[1] J. Nygards, V. Deleskog, and G. Hendeby, "Safe fusion compared to
  *    established distributed fusion methods," in IEEE International
  *    Conference on Multisensor Fusion and Integration for Intelligent
  *    Systems, Baden-Baden, Germany, 19-21 Sep. 2016, pp. 265-271.
@@ -640,7 +640,7 @@ static void computeFAndDCosts(const std::vector<Eigen::MatrixXd> &CVec,double &D
 *         not . The results are put into V, CVec, and FCost.
 *
 *REFERENCES:
-*[1] A. Ziehe, P. Laskov, G. Nolte, and K.-R. Müller, "A fast algorithm for
+*[1] A. Ziehe, P. Laskov, G. Nolte, and K.-R. Muller, "A fast algorithm for
 *    joint diagonalization with non-orthogonal transformations and its
 *    application to blind source separation," Journal of Machine Learning,
 *    vol. 5, pp. 777-800, Jul. 2004.

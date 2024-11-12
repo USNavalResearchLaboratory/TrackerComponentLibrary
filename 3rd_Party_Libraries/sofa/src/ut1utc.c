@@ -68,11 +68,11 @@ int iauUt1utc(double ut11, double ut12, double dut1,
 **     Explanatory Supplement to the Astronomical Almanac,
 **     P. Kenneth Seidelmann (ed), University Science Books (1992)
 **
-**  This revision:  2021 May 11
+**  This revision:  2023 May 6
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    int big1;
@@ -106,7 +106,7 @@ int iauUt1utc(double ut11, double ut12, double dut1,
       if ( fabs(ddats) >= 0.5 ) {
 
       /* Yes, leap second nearby: ensure UT1-UTC is "before" value. */
-         if ( ddats * duts >= 0 ) duts -= ddats;
+         if ( ddats*duts >= 0.0 ) duts -= ddats;
 
       /* UT1 for the start of the UTC day that ends in a leap. */
          if ( iauCal2jd(iy, im, id, &d1, &d2) ) return -1;
@@ -116,7 +116,7 @@ int iauUt1utc(double ut11, double ut12, double dut1,
       /* Is the UT1 after this point? */
          du = u1 - us1;
          du += u2 - us2;
-         if ( du > 0 ) {
+         if ( du > 0.0 ) {
 
          /* Yes:  fraction of the current UTC day that has elapsed. */
             fd = du * DAYSEC / ( DAYSEC + ddats );
@@ -150,8 +150,8 @@ int iauUt1utc(double ut11, double ut12, double dut1,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

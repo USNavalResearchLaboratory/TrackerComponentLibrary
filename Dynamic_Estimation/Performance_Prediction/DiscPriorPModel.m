@@ -38,7 +38,7 @@ function [xHat, P]=DiscPriorPModel(k,xInit,param3,param4,mode)
 %
 %The first and second moments of the prior (i.e. measurement-free)
 %distribution that are computed are useful for evaluating the posterior
-%Cramér-Rao bound (PCRLB) in simulations. The moments are computed at
+%Cramer-Rao bound (PCRLB) in simulations. The moments are computed at
 %time-step k, where at time step 0, the distribution is given by a delta
 %function at xInit. The assumes dynamic model has the form
 %x(k)=F*x(k-1)+noise

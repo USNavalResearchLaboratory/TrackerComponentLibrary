@@ -17,7 +17,7 @@ function [wAbs,wOrd,col4row]=lexBottleneckAssign(C)
 %
 %INPUTS: C An nXn cost matrix that does not contain any NaNs.
 %
-%OUTPUTS: wAbs The lexicographically minimal w vector. the elements are in
+%OUTPUTS: wAbs The lexicographically minimal w vector. The elements are in
 %              descending order.
 %         wOrd The lexicographically minimal w vector given in terms of the
 %              order statistics of the elements in C by magnitude. Thus, 0

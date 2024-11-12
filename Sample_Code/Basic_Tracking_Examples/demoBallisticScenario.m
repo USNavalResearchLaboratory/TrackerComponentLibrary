@@ -5,7 +5,7 @@ function demoBallisticScenario()
 %             with the possibility of missed detections and false alarms.
 %             Track initiation and termination are not considered. This
 %             function demonstrates how nonlinear filtering algorithms can
-%             be used with the JPDAF/ GNN-JPDAF. Clistering is not
+%             be used with the JPDAF/ GNN-JPDAF. Clustering is not
 %             performed.
 %
 %A simple scenario of a ballistic target going from the Sea of Japan to

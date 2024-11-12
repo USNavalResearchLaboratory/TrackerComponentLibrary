@@ -1,7 +1,7 @@
 function [xVecVals,tVals,d2xdt2Vals,exitCode,numRejections]=RKNAdaptiveOverRange(xVecStart,tSpan,df,probIsGeneral,numRefinedSteps,initStepSize,order,solutionChoice,RelTol,AbsTol,maxSteps)
 %%RKNADAPTIVEOVERRANGE Perform explicit general or special Runge-Kutta-
-%                      Nyström integration over a given range of values
-%                      using an adaptive stepsize. Runge-Kutta Nyström
+%                      Nystrom integration over a given range of values
+%                      using an adaptive stepsize. Runge-Kutta Nystrom
 %                      methods are derivative-free techniques for
 %                      integrating second order differential equations. The
 %                      general formulation allows the integration of
@@ -9,7 +9,7 @@ function [xVecVals,tVals,d2xdt2Vals,exitCode,numRejections]=RKNAdaptiveOverRange
 %                      xVec consists of the stacked values x and dxdt. In
 %                      the special formulation d^2xdt^2=df(x,t), where no
 %                      first derivative values are passed. More information
-%                      on Runge-Kutta-Nyström integration is given in the
+%                      on Runge-Kutta-Nystrom integration is given in the
 %                      comments to the functions RungeKNystroemGStep and
 %                      RungeKNystroemSStep.
 %
@@ -40,7 +40,7 @@ function [xVecVals,tVals,d2xdt2Vals,exitCode,numRejections]=RKNAdaptiveOverRange
 %                nicer. If omitted or an empty matrix is passed, the
 %                default value of 0 (no extra/ interpolated steps) is used.
 %                Interpolation is done at an order that ranges between the
-%                main and subsidiary orders of the Runge-Kutta-Nyström
+%                main and subsidiary orders of the Runge-Kutta-Nystrom
 %                method.
 %   initStepSize An optional initial step size (in t) to use for the
 %                integration. If omitted or an empty matrix is passed, an
@@ -68,7 +68,7 @@ function [xVecVals,tVals,d2xdt2Vals,exitCode,numRejections]=RKNAdaptiveOverRange
 %OUTPUTS: xVecVals The NXnumSteps set of values of x along the path.
 %                  xVecVals(:,1) is xVecStart and xVecVals(:,end) is the
 %                  value at the final time tSpan(2). If the Runge-Kutta-
-%                  Nyström integration fails, e.g. due to encountering a
+%                  Nystrom integration fails, e.g. due to encountering a
 %                  NaN or being unable to get a sufficient step size, an
 %                  empty matrix is returned.
 %            tVals A numStepsX1 vector of values of t corresponding to
@@ -90,7 +90,7 @@ function [xVecVals,tVals,d2xdt2Vals,exitCode,numRejections]=RKNAdaptiveOverRange
 %    numRejections The number of times a stepsize hypothesis was rejected.
 %
 %The basic idea behind adaptive stepsize control for general
-%Runge-Kutta-Nyström algorithms is essentially the same as that behind the
+%Runge-Kutta-Nystrom algorithms is essentially the same as that behind the
 %control for standard explicit Runge-Kutta methods. However, the error
 %control value used can either be the entire (2N)X1 vector of values and
 %their derivatives (position and velocity), or just the NX1 vector of the

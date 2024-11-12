@@ -34,7 +34,7 @@ function val=convertTimeUnits(val,unitOrig,unitDest)
 %duration of a year is not  a constant number of seconds.
 %
 %REFERENCES:
-%[1] Le Système international d'unités The International System of Units,
+%[1] Le Systeme international d'unites The International System of Units,
 %    Bureau international des points et mesures Std., 2006.
 %    [Online]. Available: http://www.bipm.org/en/si/si brochure/
 %

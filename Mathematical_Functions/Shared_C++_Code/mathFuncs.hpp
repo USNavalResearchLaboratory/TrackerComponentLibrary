@@ -13,6 +13,19 @@
 #include "CountingClusterSetCPP.hpp"
 #include <complex>
 
+/**FACTORIALLOOKUP Given an array of sorted vector of values in increasing
+*              order, which might be full of duplicates, find the first
+*              occurrence of the maximum value.
+*
+*INPUTS: x A scalar double value.
+*
+*OUTPUTS: The return value is the factorial of x or a NaN if x is negative
+*         or not an integer.
+*
+*September 2024 David F. Crouse, Naval Research Laboratory, Washington D.C.
+*/
+double factorialLookupCPP(const double x);
+
 /**FINDFIRSTMAXCPP Given an array of sorted vector of values in increasing
 *              order, which might be full of duplicates, find the first
 *              occurrence of the maximum value.
@@ -87,7 +100,7 @@ T1 polyValGenCPP(const size_t numP, const T2 *p, const T3 x, const bool firstTer
             y=x*y+p[k];
         }
     }
-    
+    WR
     return y;
 }
 

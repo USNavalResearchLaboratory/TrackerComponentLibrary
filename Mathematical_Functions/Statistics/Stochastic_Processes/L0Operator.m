@@ -2,7 +2,7 @@ function L0=L0Operator(a,b,pfpt,pfpx,p2fpxpx)
 %%L0OPERATOR This function implements the L0 operation that is used in
 %         Chapter 10 of [1] as applied to a single vector or matrix
 %         argument and is defined in Chapter 5.3 of [1]. This is a
-%         differential operator under Itô calculus. It is:
+%         differential operator under Ito calculus. It is:
 %         L^0=partial/(partial t)+sum_{k=1}^d a(k)*partial/(partialx(k))+
 %             (1/2)*sum_{k=1}^d sum_{l=1}^d sum_{j=1}^m
 %                       b(k,j)*b(l,k)*partial^2/(partial x(k)*partial x(l)

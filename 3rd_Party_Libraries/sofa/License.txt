@@ -1,11 +1,12 @@
-Every file in the SOFA Library is marked with a license statement. The statement is reproduced below for convenience.
+Every file in the SOFA Library is marked with a license statement. The
+statement is reproduced below for convenience.
 
-November 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
+September 2024 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

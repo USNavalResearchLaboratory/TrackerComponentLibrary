@@ -8,12 +8,14 @@ function vertBias=flatEarthPropagationBias(predDist,r)
 %
 %INPUTS: predDist The distance forward in the local tangent plant that one
 %                 wishes to travel without compensating for the Earth's
-%                 curvature.
+%                 curvature. This can be a vector or matrix if one wishes
+%                 to find the bias at multiple distances at once.
 %               r The radius of the spherical Earth. If this parameter is
 %                 omitted or an empty matrix is passed, then the default of
 %                 Constants.WGS84MeanRadius is used.
 %
-%OUTPUTS: vertBias The magnitude of the vertical elevation bias. 
+%OUTPUTS: vertBias The magnitude of the vertical height bias. THis is the
+%                  same size as predDist.
 %
 %This implements Equation 58 in [1].
 %
@@ -29,8 +31,8 @@ if(nargin<2||isempty(r))
     r=Constants.WGS84MeanRadius; 
 end
 
-Lr=predDist/r;
-vertBias=sqrt(r^2*(1-cos(Lr))^2+(predDist-r*sin(Lr))^2);
+Lr=predDist./r;
+vertBias=sqrt(r^2*(1-cos(Lr)).^2+(predDist-r*sin(Lr)).^2);
 
 end
 

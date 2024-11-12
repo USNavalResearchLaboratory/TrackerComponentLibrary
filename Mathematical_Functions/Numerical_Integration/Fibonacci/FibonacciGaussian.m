@@ -46,6 +46,11 @@ function [points,weights] = FibonacciGaussian(N,mu,P)
 %
 %December 2022 Codie T. Lewis, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+if N==1
+    points = mu;
+    weights = 1;
+    return
+end
 D = size(mu,1);
 points = FibonacciGrid(N,D);
 points = sqrt(2)*erfinv(2*points-1);
@@ -56,6 +61,7 @@ end
 [V,E] = eig(P);
 points = V*sqrt(abs(E))*points+mu;
 weights = GaussianD.PDF(points,mu,P);
+weights = weights/sum(weights);
 end
 %LICENSE:
 %

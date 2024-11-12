@@ -7,7 +7,7 @@ function F=expMat(A,algorithm)
 %INPUTS: A An nXn real or complex matrix.
 % algorithm An optional parameter specifying how to compute the matrix
 %          exponential. Possible values are:
-%          0 Use Algorithm 9.3.1 or Chapter 9.3.1 of [1]. This is the Padé
+%          0 Use Algorithm 9.3.1 or Chapter 9.3.1 of [1]. This is the Pade
 %            approximation method.
 %          1 (The default if omitted or an empty matrix is passed) Use the
 %            Schur-Parlett method from Chapter 9.3.1 of [1] method via the

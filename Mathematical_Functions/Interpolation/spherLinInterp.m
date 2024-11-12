@@ -68,7 +68,7 @@ sinTheta=sin(theta);
 u=u(:)';%Make it a row vector.
 if(sinTheta==0)
     %Deal with parallel vectors by inserting the limit as theta->0. From
-    %l'Hôpital's rule, this is just linear interpolation.
+    %l'Hopital's rule, this is just linear interpolation.
     pInterp=bsxfun(@times,(1-u),p1)+bsxfun(@times,u,p2);
 else
     pInterp=bsxfun(@times,(sin((1-u)*theta)/sinTheta),p1)+bsxfun(@times,(sin(u*theta)/sinTheta),p2);

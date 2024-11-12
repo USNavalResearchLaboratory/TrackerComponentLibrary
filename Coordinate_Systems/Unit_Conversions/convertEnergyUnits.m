@@ -1,6 +1,6 @@
 function val=convertEnergyUnits(val,unitOrig,unitDest)
 %%CONVERTENERGYUNITS Convert values of energy from one set of units to
-%                    another. Note that multiple definitions for BTUs cand
+%                    another. Note that multiple definitions for BTUs and
 %                    calories exist.
 %
 %INPUTS: val The matrix or vector of values that are to be converted.
@@ -68,7 +68,7 @@ function val=convertEnergyUnits(val,unitOrig,unitDest)
 %The value for the electron volt is taken from the Constants class.
 %
 %REFERENCES:
-%[1] Le Système international d'unités The International System of Units,
+%[1] Le Systeme international d'unites The International System of Units,
 %    Bureau international des points et mesures Std., 2006.
 %    [Online]. Available: http://www.bipm.org/en/si/si brochure/
 %[2] "The Units of Measurement Regulations 1995, 1995 No. 1804" 

@@ -110,11 +110,11 @@ void iauFk524(double r2000, double d2000,
 **     from FK4 B1950.0 to FK5 J2000.0 using matrices in 6-space".
 **     Astron.J. 97, 274.
 **
-**  This revision:   2021 February 24
+**  This revision:   2023 March 20
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
 /* Radians per year to arcsec per century */
@@ -134,7 +134,7 @@ void iauFk524(double r2000, double d2000,
 ** CANONICAL CONSTANTS (Seidelmann 1992)
 */
 
-/* Km per sec to AU per tropical century */
+/* Km per sec to au per tropical century */
 /* = 86400 * 36524.2198782 / 149597870.7 */
    const double VF = 21.095;
 
@@ -238,8 +238,8 @@ void iauFk524(double r2000, double d2000,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

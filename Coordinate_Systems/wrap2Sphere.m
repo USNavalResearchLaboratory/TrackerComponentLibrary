@@ -1,7 +1,7 @@
 function wrapVals=wrap2Sphere(azEl,systemType)
 %%WRAP2SPHERE Given azimuth-elevation directions in spherical coordinates
 %             that might be outside of the standard range of -pi to pi for
-%             azimuth and -pi/2 to pi/2 for evevation, wrap the points to
+%             azimuth and -pi/2 to pi/2 for elevation, wrap the points to
 %             the sphere. This function is useful when offsets (like
 %             simulated noise) are added to spherical coordinates or if
 %             one is performing Newton's method in spherical coordinates

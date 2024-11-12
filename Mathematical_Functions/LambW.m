@@ -24,7 +24,7 @@ function w=LambW(z,k)
 %values greater than or equal to 1.1, the first two perms of Equation 4.18
 %are used. This same initialization (taking advantage of absolute values)
 %is used for negative values on the k-1 branch. This differs from the
-%suggested method in the paper in that a Padé approximation is not used for
+%suggested method in the paper in that a Pade approximation is not used for
 %terms near zero. Rather, a constant initial estimate of 0 is used. 15
 %iterations are performed, which should be more than enough to converge.
 %

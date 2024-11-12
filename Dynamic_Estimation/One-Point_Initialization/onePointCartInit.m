@@ -1,4 +1,4 @@
-function [x,P,w]=onePointCartInit(zCart,SRCart,higherDerivStdDev,matType)
+function [x,P,w]=onePointCartInit(zCart,SRCart,higherDerivStdDev,matType,higherDevIsAll)
 %%ONEPOINTCARTINIT This function implements single-point initialization for
 %              target states that consist of components of position,
 %              velocity, acceleration, etc. This function initializes
@@ -25,7 +25,16 @@ function [x,P,w]=onePointCartInit(zCart,SRCart,higherDerivStdDev,matType)
 %              (position, velocity, etc) that cannot be estimated from the
 %              data. As mentioned in [1] and in and in Chapter 3.2.2
 %              of [2], for velocity, this might be vMax/sqrt(2) or
-%              vMax/sqrt(3).
+%              vMax/sqrt(3). If higherDevIsAll is true, then this is taken
+%              to be the square root of the covariance matrix of all of the
+%              missing elements so the state dimensionality is
+%              zDim+numMoments+1. If higherDevIsAll is false (the default),
+%              then it is assumed that xDim=zDim*(numMoments+1) and the
+%              meazurement only provides information of the first few
+%              moments with the rest given by this. So, that means that
+%              this might hold a constant value for the standard deviation
+%              of velocity, acceleration, etc. However, it would not hold
+%              values for every element of it if higherDevIsAll is false.
 %      matType An optional input specifying whether SRCart is a set of
 %              lower-triangular square roots of the covariance matrix, or
 %              whether it is the set of covariance matrices. Possible
@@ -34,6 +43,14 @@ function [x,P,w]=onePointCartInit(zCart,SRCart,higherDerivStdDev,matType)
 %                SRCart holds lower-triangular square root covariance
 %                matrices.
 %              1 SRCart holds covariance matrices.
+% higherDevIsAll If this is true, then higherDerivStdDev holds standard
+%              deviations for all moments. If this is false, then
+%              higherDerivStdDev only holds one value for each missing
+%              moment. The default if omitted or an empty matrix is passd
+%              is false. A motivation for making it true can be if tracking
+%              in the measurement coordinate system. One might measure
+%              r-Az-rDot but have a state of r-Az-rDot-azDot and thus have
+%              part of the first moment, but not all of it.
 %
 %OUTPUTS: x The xDimXnumMeas set of target state estimates. All
 %           non-position components are zero. xDim=zDim*(numMoments+1). The
@@ -57,6 +74,10 @@ function [x,P,w]=onePointCartInit(zCart,SRCart,higherDerivStdDev,matType)
 %November 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<5||isempty(higherDevIsAll))
+    higherDevIsAll=false;
+end
+
 if(nargin<4||isempty(matType))
     matType=0; 
 end
@@ -69,7 +90,11 @@ if(size(SRCart,3)==1)
 end
 
 numMoments=length(higherDerivStdDev);
-xDim=zDim*(numMoments+1);
+if(higherDevIsAll)
+    xDim=zDim+numMoments;
+else
+    xDim=zDim*(numMoments+1);
+end
 
 x=zeros(xDim,numMeas);
 P=zeros(xDim,xDim,numMeas);
@@ -89,7 +114,11 @@ switch(matType)
 end
 
 sel=(zDim+1):xDim;
-P(sel,sel,:)=repmat(kron(diag(higherDerivStdDev(:).^2),eye(zDim,zDim)),1,1,numMeas);
+if(higherDevIsAll)
+    P(sel,sel,:)=repmat(diag(higherDerivStdDev(:).^2),1,1,numMeas);
+else
+    P(sel,sel,:)=repmat(kron(diag(higherDerivStdDev(:).^2),eye(zDim,zDim)),1,1,numMeas);
+end
 w=1;
 end
 

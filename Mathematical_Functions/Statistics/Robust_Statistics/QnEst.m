@@ -62,7 +62,7 @@ function Qn=QnEst(x,scaleType,k,algorithm)
 %    highly robust estimators of scale," in Computational Statistics.
 %    Berlin: Springer-Verlag, Aug. 1992, vol. 1: Proceedings of the 10th
 %    Symposium on Computational Statistics, pp. 411-428, conference
-%    location: Neuchâtel, Switzerland.
+%    location: Neuchatel, Switzerland.
 %
 %August 2018 David Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

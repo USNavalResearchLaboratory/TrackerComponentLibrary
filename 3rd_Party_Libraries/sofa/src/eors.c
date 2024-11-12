@@ -10,7 +10,7 @@ double iauEors(double rnpb[3][3], double s)
 **  quantity s.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -38,11 +38,11 @@ double iauEors(double rnpb[3][3], double s)
 **
 **     Wallace, P. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 **
-**  This revision:  2021 May 11
+**  This revision:  2023 May 6
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    double x, ax, xs, ys, zs, p, q, eo;
@@ -56,7 +56,7 @@ double iauEors(double rnpb[3][3], double s)
    zs = -x;
    p = rnpb[0][0] * xs + rnpb[0][1] * ys + rnpb[0][2] * zs;
    q = rnpb[1][0] * xs + rnpb[1][1] * ys + rnpb[1][2] * zs;
-   eo = ((p != 0) || (q != 0)) ? s - atan2(q, p) : s;
+   eo = ((p != 0.0) || (q != 0.0)) ? s - atan2(q, p) : s;
 
    return eo;
 
@@ -64,8 +64,8 @@ double iauEors(double rnpb[3][3], double s)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

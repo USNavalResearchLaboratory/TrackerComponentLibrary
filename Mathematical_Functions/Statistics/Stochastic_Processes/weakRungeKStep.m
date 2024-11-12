@@ -1,6 +1,6 @@
 function [y,fixedTerm]=weakRungeKStep(y,t,a,B,deltaT,algorithm,aCur,BCur,useGaussian)
 %%WEAKRUNGEKSTEP Perform a single step of an explicit weak stochastic
-%           Runge-Kutta method under It� calculus. This integrates a d-
+%           Runge-Kutta method under Ito calculus. This integrates a d-
 %           dimensional stochastic differential equation of the form:
 %           dy=a(y,t)*dt+B(y,t)*dW
 %           where dW is the differential of an m-dimensional Wiener

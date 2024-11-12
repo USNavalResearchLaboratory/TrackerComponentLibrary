@@ -1,14 +1,14 @@
 function [yNext,didConverge]=implicitWeakTaylorStep(y,curT,a,B,deltaT,algorithm,givenVals,useNewton,maxIter,thetaVals,RelTol,AbsTol)
 %%IMPLICITWEAKTAYLORSTEP Perform a single step of an implicit or
-%           semi-implicit weak -Itô-Taylor expansion to integrate a d-
+%           semi-implicit weak Ito-Taylor expansion to integrate a d-
 %           dimensional stochastic differential equation of the form:
 %           dy=a(y,t)*dt+B(y,t)*dW
 %           where dW is the differential of an m-dimensional Wiener
 %           process and t is time. As noted in Chapter 9.8 of [1], fully
-%           implicit strong Itô-Taylor expansion expansions are unstable,
+%           implicit strong Ito-Taylor expansion expansions are unstable,
 %           because particular values of the noise process can make them
 %           diverge. However, this issue can often be avoided with weak
-%           Itô-Taylor expansions. As the stepsize used decreases, weak
+%           Ito-Taylor expansions. As the stepsize used decreases, weak
 %           methods converge such that integrals with the random process
 %           are a measure are correct (for example, to determine moments).
 %           However, they do not converge to the optimal path, unlike

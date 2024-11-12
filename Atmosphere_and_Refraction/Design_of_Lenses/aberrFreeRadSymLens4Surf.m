@@ -104,7 +104,7 @@ function [rb,zb,ra,za,hb,tb]=aberrFreeRadSymLens4Surf(zaFun,hbFun,tbFun,rSpan,n,
 % set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
 %
 %REFERENCES:
-%[1] R. G. González-Acuña, M.Avendaño-Alejo,and J. C. Gutiérrez-Vega,
+%[1] R. G. Gonzalez-Acuna, M.Avendano-Alejo,and J. C. Gutierrez-Vega,
 %    "Singlet lens for generating aberration-free patterns on deformed
 %    surfaces," Journal of the Optical Society of America A, vol. 36, no.
 %    5, pp. 925-929, May 2019.
@@ -150,7 +150,7 @@ function [rb,zb]=aberrFreeRadSymLens4SurfExplicit(ra,za,dzadra,n,t,ta,hb,tb,s1)
 %               given ra, za and its derivative, dza, as well as hb and tb.
 %
 %REFERENCES:
-%[1] R. G. González-Acuña, M.Avendaño-Alejo,and J. C. Gutiérrez-Vega,
+%[1] R. G. Gonzalez-Acuna, M.Avendano-Alejo,and J. C. Gutierrez-Vega,
 %    "Singlet lens for generating aberration-free patterns on deformed
 %    surfaces," Journal of the Optical Society of America A, vol. 36, no.
 %    5, pp. 925-929, May 2019.

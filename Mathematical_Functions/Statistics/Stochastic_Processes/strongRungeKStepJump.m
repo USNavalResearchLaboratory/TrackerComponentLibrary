@@ -1,6 +1,6 @@
 function [approx,drivers]=strongRungeKStepJump(y,aCur,BCur,cCur,lambda,deltaT,algorithm,deltaP,W,Ts)
 %%STRONGRUNGEKSTEPJUMP Perform a step of an explicit strong stochastic
-%           Runge-Kutta method under Itô calculus for Lévy processes. This 
+%           Runge-Kutta method under Ito calculus for Levy processes. This 
 %           integrates a d-dimensional stochastic differential equation of 
 %           the form
 %           dy=a(y)*dt+B(y)*dW+c(y)*dP
@@ -24,7 +24,7 @@ function [approx,drivers]=strongRungeKStepJump(y,aCur,BCur,cCur,lambda,deltaT,al
 %           these assumptions can result in significant computation time 
 %           savings (in Example 3 below, the saved time in choosing method 
 %           3 over method 2 is roughly 55% of the time taken to run the 
-%           example using method 3. All methods below assume the jump 
+%           example using method 3). All methods below assume the jump 
 %           coefficient is mark independent. This means that the value of 
 %           the coefficient does not change based on how many jumps occur 
 %           in a given time step (essentially imposing a piecewise constant

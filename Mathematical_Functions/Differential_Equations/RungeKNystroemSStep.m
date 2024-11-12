@@ -1,10 +1,10 @@
 function [xPredMain,xPredSubsid,g,orders,isFSAL,subsidType]=RungeKNystroemSStep(xVec,t,df,deltaT,dfCur,order,solutionChoice)
 %%RUNGEKNYSTROMSSTEP Perform one step of a special (non-general) explicit
-%                   Runge-Kutta Nyström method. Such methods are used to
+%                   Runge-Kutta Nystrom method. Such methods are used to
 %                   efficiently implement second order differential
 %                   equations of the form d^2xdt^2=df(x,t), where the
 %                   function df does not depend on dxdt. Runge-Kutta- 
-%                   Nyström methods can be made to a higher order than
+%                   Nystrom methods can be made to a higher order than
 %                   general Runge-Kutta methods while having the same
 %                   number of stages. All of the methods implemented here
 %                   are embedded methods, meaning that a secondary result
@@ -19,7 +19,7 @@ function [xPredMain,xPredSubsid,g,orders,isFSAL,subsidType]=RungeKNystroemSStep(
 %INPUTS: The function can either be called with two inputs as
 %        [orders,isFSAL,subsidType]=RungeKNystroemSStep(order,solutionChoice)
 %        to just get the orders of a particular general embedded Runge-
-%        Kutta-Nyström method, to figure out whether g(:end) can be
+%        Kutta-Nystrom method, to figure out whether g(:end) can be
 %        passed in place of dfCur during a subsequent step, and to figure
 %        out what type of information is contained in xPredSubsid, or it
 %        can be run as
@@ -38,7 +38,7 @@ function [xPredMain,xPredSubsid,g,orders,isFSAL,subsidType]=RungeKNystroemSStep(
 %                just the first half of xVec, not all of xVec as df is not
 %                supposed to depend on the derivative components.
 %         deltaT The size of the single (time) step over which the 
-%                Runge-Kutta-Nyström integration is performed.
+%                Runge-Kutta-Nystrom integration is performed.
 %          dfCur The value df(xVal,t). This is requested so that
 %                methods that are FSAL can pass g(:,end) on subsequent
 %                steps instead of having to perform a redundant
@@ -167,27 +167,27 @@ function [xPredMain,xPredSubsid,g,orders,isFSAL,subsidType]=RungeKNystroemSStep(
 %whether it is FSAL.
 %
 %REFERENCES:
-%[0] S. Filippi and J. Gräf, "Ein Runge-Kutta-Nyström Formelpaar der
-%    Ordnung 11(12) für Differentialgleichungen der Form y'' = f(x,y),"
+%[0] S. Filippi and J. Graf, "Ein Runge-Kutta-Nystrom Formelpaar der
+%    Ordnung 11(12) fur Differentialgleichungen der Form y'' = f(x,y),"
 %    Computing, vol. 34, no. 3, pp. 271-282, 1985.
 %[1] E. Fehlberg, "Classical eighth- and lower order Runge-Kutta-Nystrom
 %    formulas with stepsize control for special second-order differential
 %    equations," National Aeronautics and Space Administration, Marshall Space
 %    Flight Center, AL, Tech. Rep. NASA TR R-381, Mar. 1972.
-%[2] E. Fehlberg, "Classical eighth- and lower-order Runge-Kuttta-Nyström
+%[2] E. Fehlberg, "Classical eighth- and lower-order Runge-Kuttta-Nystrom
 %    formulas with a new stepsize control procedure for special second-order
 %    differential equations," National Aeronautics and Space Administration,
 %    Marshall Space Flight Center, AL, Tech. Rep. NASA TR R-410, Jun. 1973.
-%[3] D. G.Bettis, "A Runge-Kutta Nyström Algorithm," Celestial Mechanics, 
+%[3] D. G.Bettis, "A Runge-Kutta Nystrom Algorithm," Celestial Mechanics, 
 %    vol. 8, no. 2, pp. 229-233, Sep. 1973.
 %[4] J. R. Dormand and P. J. Prince, "New Runge-Kutta algorithms for
 %    numerical simulation in dynamical astronomy," Celestial Mechanics,
 %    vol. 18, no. 3, pp. 223-232, Oct. 1978.
-%[5] E. Fehlberg, S. Filippi, and J. Gräf "Ein Runge-Kutta-Nyström-
-%    Formelpaar der Ordnung 10(11) für Differentialgleichungen der Form
-%    y''= f(x,y)," Zeitschrift für Angewandte Mathematik und Mechanik, 
+%[5] E. Fehlberg, S. Filippi, and J. Graf "Ein Runge-Kutta-Nystrom-
+%    Formelpaar der Ordnung 10(11) fur Differentialgleichungen der Form
+%    y''= f(x,y)," Zeitschrift fur Angewandte Mathematik und Mechanik, 
 %    vol. 66, no. 7, pp. 265-270, 1986.
-%[6] S. Filippi and J. Gräf "New Runge-Kutta-Nyström formula-pairs of
+%[6] S. Filippi and J. Graf "New Runge-Kutta-Nystrom formula-pairs of
 %     order 8(7), 9(8), 10(9) and 11(10) for differential equations of the
 %     form y'' = f (x, y)," Journal of Computational and Applied
 %     Mathematics, vol. 14, no. 3, pp. 361-370, Mar. 1986.
@@ -201,16 +201,16 @@ function [xPredMain,xPredSubsid,g,orders,isFSAL,subsidType]=RungeKNystroemSStep(
 %    embedded Runge-Kutta-Nystrom formulae," IMA Journal of Numerical
 %    Analysis, vol. 7, no. 2, pp. 423-430, Apr. 1987.
 %[10] R. W. Brankin, I. Gladwell, J. R. Dormand, P. J. Prince, and W. L.
-%     Seward, "Algorithm 670: A Runge-Kutta-Nyström code," ACM Transactions
+%     Seward, "Algorithm 670: A Runge-Kutta-Nystrom code," ACM Transactions
 %     on Mathematical Software, vol. 15, no. 1, pp. 31-40, Mar. 1989.
 %[11] J. R. Dormand, M. E. A. El-Mikkawy, and P. J. Prince,
 %     "Corrigendum: High-order embedded Runge-Kutta-Nystrom formulae," IMA
 %     Journal of Numerical Analysis, vol. 11, no. 2, p. 297, Apr. 1991.
-%[12] J. Gräf. (2006, 15 Jan.) Bäume, RKN-type methods by Filippi and Gräf
+%[12] J. Graf. (2006, 15 Jan.) Baume, RKN-type methods by Filippi and Graf
 %     (www.josef-graef.de)" [Online]. Available:
 %     http://www.josef-graef.de/baeume/rkni.html
 %[13] M. Mohamad, N. Senu, M. Suleiman,and F. Ismail,"An embedded 5(4)
-%     explicit Runge-Kutta-Nyström method with dissipation of high order,"
+%     explicit Runge-Kutta-Nystrom method with dissipation of high order,"
 %     in Proceedings of the 20th National Symposium on Mathematical
 %     Sciences, vol. 1522, Putrajaya, Malaysia, 18-20 Dec. 2012.
 %[14] J. R. Dormand, Numerical Methods for Differential Equations.

@@ -9,7 +9,7 @@ void iauRv2m(double w[3], double r[3][3])
 **  Form the r-matrix corresponding to a given r-vector.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -33,9 +33,9 @@ void iauRv2m(double w[3], double r[3][3])
 **
 **  This revision:  2021 May 11
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    double x, y, z, phi, s, c, f;
@@ -72,8 +72,8 @@ void iauRv2m(double w[3], double r[3][3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

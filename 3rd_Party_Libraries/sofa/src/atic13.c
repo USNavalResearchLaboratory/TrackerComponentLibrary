@@ -21,7 +21,7 @@ void iauAtic13(double ri, double di, double date1, double date2,
 **
 **  Returned:
 **     rc,dc  double  ICRS astrometric RA,Dec (radians)
-**     eo     double  equation of the origins (ERA-GST, Note 4)
+**     eo     double  equation of the origins (ERA-GST, radians, Note 4)
 **
 **  Notes:
 **
@@ -76,11 +76,11 @@ void iauAtic13(double ri, double di, double date1, double date2,
 **     iauApci13    astrometry parameters, ICRS-CIRS, 2013
 **     iauAticq     quick CIRS to ICRS astrometric
 **
-**  This revision:   2013 October 9
+**  This revision:   2022 May 3
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
 /* Star-independent astrometry parameters */
@@ -97,8 +97,8 @@ void iauAtic13(double ri, double di, double date1, double date2,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

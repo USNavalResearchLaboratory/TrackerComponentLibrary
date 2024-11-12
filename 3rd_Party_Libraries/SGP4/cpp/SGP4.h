@@ -11,9 +11,11 @@
 *    and kelso.
 *
 *    current :
+*              12 mar 20  david vallado
+*                           chg satnum to string for alpha 5 or 9-digit
+*    changes :
 *               7 dec 15  david vallado
 *                           fix jd, jdfrac
-*    changes :
 *               3 nov 14  david vallado
 *                           update to msvs2013 c++
 *              30 Dec 11  david vallado
@@ -53,7 +55,7 @@
 #include <string.h>
 #include <iostream>
 
-#define SGP4Version  "SGP4 Version 2016-03-09"
+#define SGP4Version  "SGP4 Version 2020-07-13"
 
 // -------------------------- structure declarations ----------------------------
 typedef enum
@@ -65,7 +67,7 @@ typedef enum
 
 typedef struct elsetrec
 {
-  long int  satnum;
+  char      satnum[6];
   int       epochyr, epochtynumrev;
   int       error;
   char      operationmode;
@@ -99,7 +101,7 @@ typedef struct elsetrec
   // sgp4fix add singly averaged variables
   double am     , em     , im     , Om       , om     , mm      , nm;
   // sgp4fix add constant parameters to eliminate mutliple calls during execution
-  double tumin, mu, radiusearthkm, xke, j2, j3, j4, j3oj2;
+  double tumin, mus, radiusearthkm, xke, j2, j3, j4, j3oj2;
 
   //       Additional elements to capture relevant TLE and object information:       
   long dia_mm; // RSO dia in mm
@@ -119,7 +121,7 @@ namespace SGP4Funcs
 
 	bool sgp4init
 		(
-		gravconsttype whichconst, char opsmode, const int satn, const double epoch,
+		gravconsttype whichconst, char opsmode, const char satn[9], const double epoch,
 		const double xbstar, const double xndot, const double xnddot, const double xecco, const double xargpo,
 		const double xinclo, const double xmo, const double xno,
 		const double xnodeo, elsetrec& satrec
@@ -136,7 +138,7 @@ namespace SGP4Funcs
 		(
 		gravconsttype whichconst,
 		double& tumin,
-		double& mu,
+		double& mus,
 		double& radiusearthkm,
 		double& xke,
 		double& j2,
@@ -156,68 +158,68 @@ namespace SGP4Funcs
 		);
 
 	// older sgp4ext methods
-	double  gstime
+	double  gstime_SGP4
 		(
 		double jdut1
 		);
 
-	double  sgn
+	double  sgn_SGP4
 		(
 		double x
 		);
 
-	double  mag
+	double  mag_SGP4
 		(
 		double x[3]
 		);
 
-	void    cross
+	void    cross_SGP4
 		(
 		double vec1[3], double vec2[3], double outvec[3]
 		);
 
-	double  dot
+	double  dot_SGP4
 		(
 		double x[3], double y[3]
 		);
 
-	double  angle
+	double  angle_SGP4
 		(
 		double vec1[3],
 		double vec2[3]
 		);
 
-	void    newtonnu
+	void    newtonnu_SGP4
 		(
 		double ecc, double nu,
 		double& e0, double& m
 		);
 
-	double  asinh
+	double  asinh_SGP4
 		(
 		double xval
 		);
 
-	void    rv2coe
+	void    rv2coe_SGP4
 		(
-		double r[3], double v[3], const double mu,
+		double r[3], double v[3], double mus,
 		double& p, double& a, double& ecc, double& incl, double& omega, double& argp,
 		double& nu, double& m, double& arglat, double& truelon, double& lonper
 		);
 
-	void    jday
+	void    jday_SGP4
 		(
 		int year, int mon, int day, int hr, int minute, double sec,
 		double& jd, double& jdFrac
 		);
 
-	void    days2mdhms
+	void    days2mdhms_SGP4
 		(
 		int year, double days,
 		int& mon, int& day, int& hr, int& minute, double& sec
 		);
 
-	void    invjday
+	void    invjday_SGP4
 		(
 		double jd, double jdFrac,
 		int& year, int& mon, int& day,

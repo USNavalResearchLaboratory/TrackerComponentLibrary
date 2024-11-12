@@ -1,4 +1,4 @@
-function K = validateScsCone(K)
+function K = validate_scs_cone(K)
 if (~isfield(K, 'f'))
     K.f = 0;
 end

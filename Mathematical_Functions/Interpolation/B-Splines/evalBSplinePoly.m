@@ -18,7 +18,8 @@ function val=evalBSplinePoly(t,x,k,idx)
 %          number of knots.
 %      idx This input specifies where in terms of the knots the B-spline
 %          polynomials are centered. This is an integer value from 1 to
-%          numKnots-k.
+%          numKnots-k. The default if omitted or an empty matrix is passed
+%          is k-1. 
 %
 %OUTPUTS: val The value of the b-spline B_{idx,k}(x) evaluated at all of
 %             the points in x. This has the same size as x.
@@ -59,6 +60,14 @@ function val=evalBSplinePoly(t,x,k,idx)
 %
 %April 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+if(nargin<3||isempty(k))
+    k=fix(length(t)/2)+1;
+end
+
+if(nargin<4||isempty(idx))
+    idx=k-1;
+end
 
 val=zeros(size(x));
 numEls=numel(x);

@@ -46,25 +46,23 @@ void iauAtoiq(const char *type,
 **
 **  Notes:
 **
-**  1) "Observed" Az,El means the position that would be seen by a
+**  1) "Observed" Az,ZD means the position that would be seen by a
 **     perfect geodetically aligned theodolite.  This is related to
 **     the observed HA,Dec via the standard rotation, using the geodetic
 **     latitude (corrected for polar motion), while the observed HA and
-**     RA are related simply through the Earth rotation angle and the
-**     site longitude.  "Observed" RA,Dec or HA,Dec thus means the
-**     position that would be seen by a perfect equatorial with its
-**     polar axis aligned to the Earth's axis of rotation.  By removing
-**     from the observed place the effects of atmospheric refraction and
-**     diurnal aberration, the CIRS RA,Dec is obtained.
+**     (CIO-based) RA are related simply through the Earth rotation
+**     angle and the site longitude.  "Observed" RA,Dec or HA,Dec thus
+**     means the position that would be seen by a perfect equatorial
+**     with its polar axis aligned to the Earth's axis of rotation.
 **
 **  2) Only the first character of the type argument is significant.
 **     "R" or "r" indicates that ob1 and ob2 are the observed right
-**     ascension and declination;  "H" or "h" indicates that they are
-**     hour angle (west +ve) and declination;  anything else ("A" or
-**     "a" is recommended) indicates that ob1 and ob2 are azimuth (north
-**     zero, east 90 deg) and zenith distance.  (Zenith distance is used
-**     rather than altitude in order to reflect the fact that no
-**     allowance is made for depression of the horizon.)
+**     ascension (CIO-based) and declination;  "H" or "h" indicates that
+**     they are hour angle (west +ve) and declination;  anything else
+**     ("A" or "a" is recommended) indicates that ob1 and ob2 are
+**     azimuth (north zero, east 90 deg) and zenith distance.  (Zenith
+**     distance is used rather than altitude in order to reflect the
+**     fact that no allowance is made for depression of the horizon.)
 **
 **  3) The accuracy of the result is limited by the corrections for
 **     refraction, which use a simple A*tan(z) + B*tan^3(z) model.
@@ -90,11 +88,11 @@ void iauAtoiq(const char *type,
 **     iauC2s       p-vector to spherical
 **     iauAnp       normalize angle into range 0 to 2pi
 **
-**  This revision:   2020 December 7
+**  This revision:   2022 August 30
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
 /* Minimum sin(alt) for refraction purposes */
@@ -206,8 +204,8 @@ void iauAtoiq(const char *type,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

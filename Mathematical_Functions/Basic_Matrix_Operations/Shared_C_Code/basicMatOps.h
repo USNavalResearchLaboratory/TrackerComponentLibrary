@@ -48,7 +48,7 @@ void minMatOverDimCUInt64T(const size_t S,const size_t *nVals,uint64_t *  M,cons
 //basic matrix operations that are simple to perform in Matlab, but that
 //can be tedious when programming in C. There are no Matlab interfaces for
 //these functions.
-void permuteRowsPtrDiffT(const size_t n1,const size_t n2,ptrdiff_t *  XPerm,const ptrdiff_t *  XOrig,const size_t *rowOrder);
+void invPermuteRowsPtrDiffT(const size_t n1,const size_t n2,ptrdiff_t *  XPerm,const ptrdiff_t *  XOrig,const size_t *rowOrder);
 void identMatD(const size_t numDims, double *  I);
 double vecMinD(const double*vec, const size_t numEls);
 double sumVectorD(const double *vector, const size_t numEls);

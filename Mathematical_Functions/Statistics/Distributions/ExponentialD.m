@@ -63,7 +63,7 @@ function val=PDF(x,lambda)
 %%PDF Evaluate the PDF of the exponential probability distribution function
 %     at one or more desired points.
 %
-%INPUTS: x The point(s) at which the expoenntial distribution is to be 
+%INPUTS: x The point(s) at which the exponential distribution is to be 
 %          evaluated.
 %   lambda The rate parameter of the distribution. lambda>0.
 %
@@ -111,7 +111,7 @@ function val=CDF(x,lambda)
 %          Note that x>=0.
 %   lambda The rate parameter of the distribution. lambda>0.
 %
-%OUTPUTS: prob The value(s) of the expoenntial CDF with given rate
+%OUTPUTS: prob The value(s) of the exponential CDF with given rate
 %              parameter evaluated at x.
 %
 %The CDF of the exponential distribution is given in Chapter 2.9 of [1].
@@ -233,8 +233,8 @@ function cumVal=cumGenFun(lambda,numDerivs,t)
 %E(exp(t*x))=lambda/(lambda-t)
 %Thus, the cumulant generating function is just
 %log(lambda)-log(lambda-t)
-%The first derivative is thus 1/(lambda-t) and it is not dificult to deriva
-%a general expression fro the nth derivative.
+%The first derivative is thus 1/(lambda-t) and it is not difficult to
+%derive a general expression for the nth derivative.
 %
 %September 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 

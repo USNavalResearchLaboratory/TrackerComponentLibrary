@@ -99,7 +99,7 @@ function [rb,zb,ra,za]=aberrFreeRadSymLensShape(zaFun,rSpan,n,t,ta,tb,numPoints)
 % set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
 %
 %REFERENCES:
-%[1] R. G. González-Acuña and H. A. Chaparro-Romo, "General formula for bi-
+%[1] R. G. Gonzalez-Acuna and H. A. Chaparro-Romo, "General formula for bi-
 %    aspheric singlet lens design free of spherical aberration," Applied
 %    Optics, vol. 57, no. 31, pp. 9341-9345, 1 Nov. 2018.
 %
@@ -139,7 +139,7 @@ function [rb,zb]=aberrFreeLensSurfExplicit(ra,za,dza,n,t,ta,tb,s1)
 %               given ra, za and its derivative, dza. 
 %
 %REFERENCES:
-%[1] González-Acuña and H. A. Chaparro-Romo, "General formula for bi-
+%[1] Gonzalez-Acuna and H. A. Chaparro-Romo, "General formula for bi-
 %    aspheric singlet lens design free of spherical aberration," Applied
 %    Optics, vol. 57, no. 31, pp. 9341-9345, 1 Nov. 2018.
 %

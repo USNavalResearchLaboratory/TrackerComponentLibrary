@@ -62,7 +62,7 @@ function W=twoMatDiag(C1,C2,algorithm)
 %around what one would expect with finite precision errors.
 %
 %REFERENCES:
-%[1] J. Nygårds, V. Deleskog, and G. Hendeby, "Safe fusion compared to
+%[1] J. Nygards, V. Deleskog, and G. Hendeby, "Safe fusion compared to
 %    established distributed fusion methods," in IEEE International
 %    Conference on Multisensor Fusion and Integration for Intelligent
 %    Systems, Baden-Baden, Germany, 19-21 Sep. 2016, pp. 265-271.

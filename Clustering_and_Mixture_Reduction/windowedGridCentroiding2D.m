@@ -20,7 +20,7 @@ function centIdxVals=windowedGridCentroiding2D(index2D,weights,centroidWinLen)
 %This function can be useful for centroiding detections from a range-
 %Doppler plot.
 %
-%The algorithm creates a 2D mask of ondes of size 2*centroidWinLen(:).'+1.
+%The algorithm creates a 2D mask of ones of size 2*centroidWinLen(:).'+1.
 %The mask is then convoluted with a sparse array containing all of the
 %weights in the detection locations, as well as arrays containing the
 %weights times the first and second indices. This means that each point is
@@ -154,7 +154,7 @@ indexD=indexD-minD+1;
 numRows=max(indexR);
 numCols=max(indexD);
 
-if(length(centroidWinLen)==1)
+if(isscalar(centroidWinLen))
    centroidWinLen=[centroidWinLen;centroidWinLen];
 end
 

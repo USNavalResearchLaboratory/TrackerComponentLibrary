@@ -41,7 +41,7 @@ int iauDat(int iy, int im, int id, double fd, double *deltat)
 **     :__________________________________________:
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  user-replaceable support function.
 **
@@ -120,15 +120,15 @@ int iauDat(int iy, int im, int id, double fd, double *deltat)
 **  Called:
 **     iauCal2jd    Gregorian calendar to JD
 **
-**  This revision:  2021 May 11
+**  This revision:  2023 January 17
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
 /* Release year for this version of iauDat */
-   enum { IYV = 2021};
+   enum { IYV = 2023};
 
 /* Reference dates (MJD) and drift rates (s/day), pre leap seconds */
    static const double drift[][2] = {
@@ -253,8 +253,8 @@ int iauDat(int iy, int im, int id, double fd, double *deltat)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2018
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================
@@ -350,5 +350,4 @@ int iauDat(int iy, int im, int id, double fd, double *deltat)
 **                 United Kingdom
 **
 **--------------------------------------------------------------------*/
-
 }

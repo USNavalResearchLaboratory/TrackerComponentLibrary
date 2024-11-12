@@ -1,7 +1,7 @@
 function maxBound=numPolySolBoundBezout(termMats,method)
 %%NUMPOLYSOLBOUNDBEZOUT Compute an upper bound on the number of solutions
 %            to a system of n polynomial equations in n unknowns using one
-%            of two types of Bézout bounds. Note that the bounds only
+%            of two types of Bezout bounds. Note that the bounds only
 %            applies to systems that have a finite number of solutions
 %            (non-degenerate systems).
 %
@@ -17,16 +17,16 @@ function maxBound=numPolySolBoundBezout(termMats,method)
 %       method An optional parameter indicating the method to use to
 %           determine the upper bound. Possible values are:
 %           0 (The default if omitted or an empty matrix is passed).
-%             Compute the bound from Bézout's theorem. That is, compute the
+%             Compute the bound from Bezout's theorem. That is, compute the
 %             total degree of the polynomials. This upper bound is equal to
 %             the number of solutions of a homogenized system, but
 %             generally greatly overestimates the number of solutions of
 %             more common sparse systems. This bound is easy to compute.
-%           1 Compute the multihomogenerous Bézout bound using brute force
+%           1 Compute the multihomogenerous Bezout bound using brute force
 %             to find the optiomal partition. This is significantly more
 %             computationally intensive than 0. However, it is also
 %             significantly better.
-%           2 Compute an approximate multihomogeneous Bézout bound using a
+%           2 Compute an approximate multihomogeneous Bezout bound using a
 %             method similar to that described in Section 3.4.2 of [1].
 %
 %OUTPUTS: maxBound The upper bound on the maximum number of solutions of
@@ -36,15 +36,15 @@ function maxBound=numPolySolBoundBezout(termMats,method)
 %heuristic algorithm in Section 3.4.3 of [1]. However, the description in
 %[1] is inconsistent. Rather than going through all popssible partitions
 %for finding the one that produces the minimum permanent of the degree
-%matrix, as in the true multihomogenous Bézout bound, this function starts
+%matrix, as in the true multihomogenous Bezout bound, this function starts
 %with everything in one partition and goes through the variables
 %sequentially. A variable is either kept in the initial partition, moved
 %to its own partition or put in another partition, depending on which has
 %the least cost. This is a greedy algorithm.
 %
 %Though there may exist more efficient methods of computing the
-%multihomogenous Bézout bound, it is shown in [2] that the multihomogeneous
-%Bézout bound cannot be computed in polynomial time unlesss P=NP.
+%multihomogenous Bezout bound, it is shown in [2] that the multihomogeneous
+%Bezout bound cannot be computed in polynomial time unlesss P=NP.
 %
 %EXAMPLE 1:
 %The example here is that used in [1]. We have a system of eight equations.
@@ -67,17 +67,17 @@ function maxBound=numPolySolBoundBezout(termMats,method)
 % theEq='-0.7623*x1+0.2238*x2+0.3461';
 % termMats{8}=string2Terms(theEq,8);
 % maxBound=numPolySolBoundBezout(termMats,0)
-% %Using the bound from Bézout's theorem, one gets 128, which is much
+% %Using the bound from Bezout's theorem, one gets 128, which is much
 % %higher than the actual number of solutions.
 % maxBound=numPolySolBoundBezout(termMats,1)
-% %Though much slower, when using the multihomogenerous Bézout bound, one
+% %Though much slower, when using the multihomogenerous Bezout bound, one
 % %gets a solution of 16, which coincides with the actual number of
 % %solutions to the system.
 % maxBound=numPolySolBoundBezout(termMats,2)
-% %The approximate multihomogeneous Bézout bound gives 64, which is better
-% %than the bound from Bézout's theorem, but is worse than the true
-% multihomogeneous Bézout bound. On the other hand, the approximation is
-% significantly faster than the exact multihomogeneous Bézout bound.
+% %The approximate multihomogeneous Bezout bound gives 64, which is better
+% %than the bound from Bezout's theorem, but is worse than the true
+% multihomogeneous Bezout bound. On the other hand, the approximation is
+% significantly faster than the exact multihomogeneous Bezout bound.
 %
 %EXAMPLE 2:
 %This is the equation in example 2.3 of [1] with a=1.
@@ -92,14 +92,14 @@ function maxBound=numPolySolBoundBezout(termMats,method)
 % maxBound1=numPolySolBoundBezout(termMats,1)
 % maxBound2=numPolySolBoundBezout(termMats,2)
 %In this example, maxBound0 is 125, maxBound1 is 35, and maxBound2 is also
-%35. In this instance, the approximate multihomogeneous Bézout bound equals
+%35. In this instance, the approximate multihomogeneous Bezout bound equals
 %the exact one.
 %
 %REFERENCES:
 %[1] J. Verschelde, "Homotopy continuation methods for solving polynomial
 %    systems," Ph.D. dissertation, Katholieke Universiteit Leuven, Leuven,
 %    Belgium, May 1996.
-%[2] G. Malajovich and K. Meer, "Computing multi-homogeneous B´ezout
+%[2] G. Malajovich and K. Meer, "Computing multi-homogeneous Bezout
 %    numbers is hard," in Proceedings of the 22nd Annual Symposium on
 %    Theoretical Aspects of Computer Science, Stuttgart, Germany, 24-26
 %    Feb. 2005, pp. 244-255.

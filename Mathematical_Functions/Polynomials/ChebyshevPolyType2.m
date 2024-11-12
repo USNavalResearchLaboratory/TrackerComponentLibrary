@@ -25,7 +25,7 @@ function U=ChebyshevPolyType2(tau,n,tauStart,tauEnd)
 %I.
 %
 %REFERENCES:
-%[1] A. Sommariva, "Fast construction of Fejér and Clenshaw-Curtis rule for
+%[1] A. Sommariva, "Fast construction of Fejer and Clenshaw-Curtis rule for
 %    general weight functions," Computers and Mathematics with
 %    Applications, vol. 65, no. 4, pp. 682-693, Feb. 2013.
 %

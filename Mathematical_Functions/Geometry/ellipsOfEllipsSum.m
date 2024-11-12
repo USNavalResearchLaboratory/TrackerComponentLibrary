@@ -9,7 +9,7 @@ function [Q,q,exitCode]=ellipsOfEllipsSum(Q1,Q2,q1,q2,algorithm,AbsErr,RelErr,ma
 %               points x such that x=x1+x2, where x1 is a point in the
 %               first ellipsoids and x2 is a point in the second ellipsoid.
 %               A name for the minimum volume ellipsoid that encompasses
-%               the Minkowsi sum of the two ellipsoids is the Löwner-John
+%               the Minkowsi sum of the two ellipsoids is the Lowner-John
 %               ellipsoid. This function can alternatively return the
 %               parameters for the ellipsoid with the minimum squared semi-
 %               axis lengths that encloses the Minkowski sum.
@@ -80,7 +80,7 @@ function [Q,q,exitCode]=ellipsOfEllipsSum(Q1,Q2,q1,q2,algorithm,AbsErr,RelErr,ma
 %    ellipsoid of Minkowski sum of ellipsoids," in Proceedings of the IEEE
 %    Conference on Decision and Control, Miami Beach, FL, 17-19 Dec. 2018,
 %    pp. 4040-4045.
-%[2] M. Feldmann, D. Fränken, and W. Koch, "Tracking of extended objects
+%[2] M. Feldmann, D. Franken, and W. Koch, "Tracking of extended objects
 %    and group targets using random matrices," IEEE Transactions on Signal
 %    Processing, vol. 59, no. 4, pp. 1409-1420, Apr. 2011.
 %

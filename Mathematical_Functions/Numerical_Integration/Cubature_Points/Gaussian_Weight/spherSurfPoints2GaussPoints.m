@@ -46,11 +46,11 @@ function [xi,w]=spherSurfPoints2GaussPoints(xiSurf,wSurf,order,beta,randomize)
 %REFERENCES:
 %[1] A.H. Stroud, Approximate Calculation of Multiple Integrals. Cliffs,
 %    NJ: Prentice-Hall, Inc., 1971.
-%[2] O. Straka, D. Duník, and M. Simandl, "Randomized unscented Kalman
+%[2] O. Straka, D. Dunik, and M. Simandl, "Randomized unscented Kalman
 %    filter in tracking," in Proceedings of the 15th International
 %    Conference on Information Fusion, Singapore, 9-12 Jul. 2012, pp.
 %    503-510.
-%[3] J. Duník, O. Straka, and M. Simandl, "The development of a randomised
+%[3] J. Dunik, O. Straka, and M. Simandl, "The development of a randomised
 %    unscented Kalman filter," in Proceedings of the 18th World Congress,
 %    The International Federation of Automatic Control, Milan, Italy, 28
 %    Aug. - 2 Sep. 2011, pp. 8-13.

@@ -15,6 +15,15 @@ function val=mean(s,sigma)
 %
 %OUTPUTS: val The mean of the Rice distribution.
 %
+%EXAMPLE:
+%We verify the computed mean by comparing it to the sample mean.
+% s=3;
+% sigma=6;
+% meanVal=RiceD.mean(s,sigma)
+% numSamp=1e6;
+% sampMeanVal=mean(RiceD.rand([numSamp,1],s,sigma))
+%One will find both values are about close.
+%
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
     
     param=-s^2/(2*sigma^2);
@@ -29,6 +38,15 @@ function val=var(s,sigma)
 %    sigma The scale parameter of the distribution.
 %
 %OUTPUTS: val The variance of the Rice distribution.
+
+%EXAMPLE:
+%We verify the computed variance by comparing it to the sample variance.
+% s=3;
+% sigma=5;
+% varVal=RiceD.var(s,sigma)
+% numSamp=1e6;
+% sampVarVal=var(RiceD.rand([numSamp,1],s,sigma))
+%One will find both values are relatively close.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
     
@@ -51,6 +69,27 @@ function val=PDF(x,s,sigma)
 %
 %The PDF of the Rice distribution is given in Chapter 2.1.4 of [1].
 %
+%EXAMPLE:
+%Here, we validate the PDF by generating random samples and comparing the
+%PDF plot with a histogram of the random samples.
+% s=6;
+% sigma=4;
+% numSamples=1e5;
+% figure(1)
+% clf
+% histogram(RiceD.rand([numSamples,1],s,sigma),'Normalization','pdf')
+% hold on
+% numPoints=1000;
+% x=linspace(0,20,numPoints);
+% vals=RiceD.PDF(x,s,sigma);
+% plot(x,vals,'linewidth',2)
+% h1=xlabel('x');
+% h2=ylabel('PDF(x)');
+% set(gca,'FontSize',14,'FontWeight','bold','FontName','Times')
+% set(h1,'FontSize',14,'FontWeight','bold','FontName','Times')
+% set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
+%One will see that the histogram matches well with the plot.
+%
 %REFERENCES:
 %[1] J. G. Proakis, Digital Communications. Ed. 4, Boston, MA:
 %    McGraw Hill, 2001.
@@ -60,7 +99,7 @@ function val=PDF(x,s,sigma)
     %We are evaluating 
     %val=(x/sigma^2).*exp(-(x.^2+s^2)/(2*sigma^2)).*besseli(0,x*s/sigma^2);
     %However, if x*s/sigma^2 is large, then this function could return
-    %NaNs. large doesn't have to be all that large. For example, s=30,
+    %NaNs. Large doesn't have to be all that large. For example, s=30,
     %sigma=1, x=100. means that ratio is 3000. Thus, we use besseli with
     %the third argument to get a scaled value, then take the logarithm, do
     %everything else in the logarithmic domain and take the exponent to
@@ -85,11 +124,38 @@ function val=CDF(x,s,sigma)
 %The CDF of the Rice distribution can be expressed in terms of Marcum's Q
 %function as shown in Chapter 2.1.4 of [1].
 %
+%EXAMPLE:
+%Here, we validate the CDF by generating random samples and comparing the
+%empricial CDF with the CDF of this function.
+% s=3;
+% sigma=6;
+% numSamples=1e5;
+% numPoints=1000;
+% x=linspace(0,30,numPoints);
+% samples=RiceD.rand([numSamples,1],s,sigma);
+% CDFEmp=EmpiricalD.CDF(x,samples);
+% CDF=RiceD.CDF(x,s,sigma);
+% 
+% figure(1)
+% clf
+% plot(x,CDFEmp,'-k','linewidth',4)
+% hold on
+% plot(x,CDF,'-r','linewidth',2)
+% h1=xlabel('x');
+% h2=ylabel('CDF(x)');
+% legend('Empirical CDF','CDF');
+% set(gca,'FontSize',14,'FontWeight','bold','FontName','Times')
+% set(h1,'FontSize',14,'FontWeight','bold','FontName','Times')
+% set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
+%One will see that the empirical CDF matches well with the CDF of this
+%function.
+%
 %REFERENCES:
 %[1] J. G. Proakis, Digital Communications. Ed. 4, Boston, MA:
 %    McGraw Hill, 2001.
 %
 %February 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
     numPoints=length(x(:));
     val=zeros(size(x));
     
@@ -97,7 +163,6 @@ function val=CDF(x,s,sigma)
         val(curPoint)=1-MarcumQ(1,s/sigma,x(curPoint)/sigma);
     end
 end
-
 
 function vals=rand(N,s,sigma)
 %%RAND Generate Rice-distributed random variables with the given

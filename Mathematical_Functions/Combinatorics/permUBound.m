@@ -17,7 +17,7 @@ function retVal=permUBound(A,algorithm)
 %            [1].
 %          1 Use the Hadamard-type bound that is given in Lemma 4.1a in
 %            [2].
-%          2 Use the Brégman-Minc bound that is given in Lemma 4.1b in [2].
+%          2 Use the Bregman-Minc bound that is given in Lemma 4.1b in [2].
 %            This bound is only valid if A has binary elements.
 %
 %OUTPUTS: val An approxmation of the matrix permanent of A.

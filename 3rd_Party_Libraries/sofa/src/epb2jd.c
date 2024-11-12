@@ -10,7 +10,7 @@ void iauEpb2jd(double epb, double *djm0, double *djm)
 **  Besselian Epoch to Julian Date.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -34,9 +34,9 @@ void iauEpb2jd(double epb, double *djm0, double *djm)
 **
 **  This revision:  2021 May 11
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    *djm0 = DJM0;
@@ -46,8 +46,8 @@ void iauEpb2jd(double epb, double *djm0, double *djm)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

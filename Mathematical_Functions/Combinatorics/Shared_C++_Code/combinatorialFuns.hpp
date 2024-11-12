@@ -8,6 +8,7 @@
 #ifndef COMBINATORIALFUNS
 #define COMBINATORIALFUNS
 
+#include <cstdint>
 //Defines the size_t type
 #include <stddef.h>
 //For floor.
@@ -17,6 +18,16 @@
 double permSquareCPP(const double *A, const size_t n, double *buffer);
 double permCPP(const double *A, const size_t numRow, const size_t numCol, size_t *buffer);
 double permCPPSkip(const double *A, const size_t numRowsTotal,const size_t * rows2Keep, const size_t *cols2Keep, const size_t numRowsKept, const size_t numColsKept,size_t *buffer);
+//This function only works for 0<=n<=67 and 0<=k<=n. Inputs outside of that
+//range will make it read beyond the end of an array! This function looks
+//up the value of the binomial function from a table.
+uint64_t binomialFromTableCPP(const size_t n, const size_t k);
+double binomialCPP(const size_t n, const size_t k);
+
+//Prototypes of functions for computing inverse permutations.
+void inversePermutationI(ptrdiff_t *xPerm,const size_t N,const bool startAt1);
+void inversePermutationJ(ptrdiff_t *xPerm,const size_t N,const bool startAt1);
+void inversePermutationExpl(ptrdiff_t *xInvPerm, const ptrdiff_t *xPerm,const size_t N,const bool startAt1);
 
 /**GETNEXTCOMBOCPP Get the next combination in lexicographic order given
  *             the current combination. If the final combination in the

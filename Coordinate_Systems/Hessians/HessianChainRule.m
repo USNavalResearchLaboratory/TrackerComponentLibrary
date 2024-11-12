@@ -16,7 +16,7 @@ function HTrans=HessianChainRule(Hf,Hg,Jf,Jg)
 %              d^2/(dzdx), d^2/(dzdy), d^2/(dzdz)];
 %        Hg An xDimXxDimXxDim matrix of second derivatives of the function
 %           g evaluated at x. Hg(:,:,i) is the second derivative matrix for
-%           the ith element of g. the ordering of the second derivatives is
+%           the ith element of g. The ordering of the second derivatives is
 %           the same as in Hf.
 %        Jf An fDimXxDim matrix of first derivatives of the f function
 %           evaluated at g(x). The rows are the elements of f and the

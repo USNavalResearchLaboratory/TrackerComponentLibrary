@@ -108,7 +108,7 @@ function val=rand(alph)
     numVals=length(alph);
     gVals=zeros(numVals,1);
     for curVal=1:numVals
-       gVals(curVal)=randGamma(1,alph(curVal),1);
+       gVals(curVal)=GammaD.rand(1,alph(curVal),1);
     end
     
     val=gVals/sum(gVals);

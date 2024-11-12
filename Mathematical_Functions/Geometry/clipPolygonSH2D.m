@@ -18,7 +18,7 @@ function clippedPolygon=clipPolygonSH2D(polygon2Clip,convexClipPolygon,makeFirst
 %  makeFirstEqualLast If this is true, then the last element in the clipped
 %                     polygon will be guaranteed to equal the first
 %                     element, thus fully closing the polygon. The default
-%                     if omitted or an empty matrix is passed is false.
+%                     if omitted or an empty matrix is passed is true.
 %
 %OUTPUTS: clippedPolygon The polygon polygon2Clip clipped to the convex
 %                        region specified by convexClipPolygon. If
@@ -93,7 +93,6 @@ function clippedPolygon=clipPolygonSH2D(polygon2Clip,convexClipPolygon,makeFirst
                 if(~vertexIsInsideClipEdge(prevVertex,prevClipVertex,curClipEdge))
                     numVerticesNew=numVerticesNew+1;
                     clippedPolygonNew(:,numVerticesNew)=twoLineIntersectionPoint2D([prevVertex,curVertex],[curClipVertex,prevClipVertex]);
-
                 end
                 
                 numVerticesNew=numVerticesNew+1;
@@ -110,8 +109,7 @@ function clippedPolygon=clipPolygonSH2D(polygon2Clip,convexClipPolygon,makeFirst
         end
         
         %Resize to fit.
-        clippedPolygonNew=clippedPolygonNew(:,1:numVerticesNew);
-        curPolygon=clippedPolygonNew;
+        curPolygon=clippedPolygonNew(:,1:numVerticesNew);
         
         %The object is not in the viewing area at all.
         if(isempty(curPolygon))

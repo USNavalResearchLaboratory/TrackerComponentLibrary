@@ -1,5 +1,5 @@
 function An=menageNumber(n)
-%%MENAGENUMBER Get the nth ménage number. This is the number of ways that n
+%%MENAGENUMBER Get the nth menage number. This is the number of ways that n
 %       married couples can be seated around a circular table such that
 %       there is always one man between two women and no man is next to his
 %       own wife.
@@ -13,7 +13,7 @@ function An=menageNumber(n)
 %in Chapter 8 of [1].
 %
 %REFERENCES:
-%[1] H. Dörrie, 100 Great Problems of Elementary Mathematics: Their History
+%[1] H. Dorrie, 100 Great Problems of Elementary Mathematics: Their History
 %    and Solution. New York: Dover Publications, Inc., 1965.
 %
 %April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.

@@ -52,22 +52,16 @@ function JTotal=uvSpherAngCrossGrad(azEl,systemType,includeW,Ms,Muv)
 %EXAMPLE:
 %Here, we verify that the partial derivatives returned by this function are
 %about equal to those returned via numeric differentiation (forward
-%differencing).
+%differencing). The relative error implies more than 8 digits of agreement.
 % points=[[0.1;0.2],[0.1;0.1],[0;0]];%AzEl points
-% epsVal=1e-9;
-% systemType=2;
-% 
-% uv=spherAng2Uv(points,systemType);
-% uv1=spherAng2Uv(bsxfun(@plus,points,[epsVal;0]),systemType);
-% numDiffAz=(uv1-uv)/epsVal;
-% uv1=spherAng2Uv(bsxfun(@plus,points,[0;epsVal]),systemType);
-% numDiffEl=(uv1-uv)/epsVal;
-% gradVal=uvSpherAngCrossGrad(points,systemType);
-% 
-% max(abs(numDiffAz(:)-vec(gradVal(:,1,:))))
-% max(abs(numDiffEl(:)-vec(gradVal(:,2,:))))
-%One will see that both numeric differences are on the order of 9e-9 and
-%1.5e-7, which is a good amount of agreement.
+% Ms=randRotMat(3);
+% Muv=randRotMat(3);
+% systemType=0;
+% includeW=true;
+% f=@(x)spherAng2Uv(x,systemType,includeW,Ms,Muv);
+% JNumDiff=cat(3,numDiff(points(:,1),f,3),numDiff(points(:,2),f,3),numDiff(points(:,3),f,3));
+% gradVal=uvSpherAngCrossGrad(points,systemType,includeW,Ms,Muv);
+% RelErr=max(abs((gradVal(:)-JNumDiff(:))./JNumDiff(:)))
 %
 %June 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

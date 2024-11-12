@@ -1,23 +1,23 @@
 function [xi,w]=FejerPoints1D(n,rule)
-%%FEJERPOINTS1D Compute one of two types of Fejér quadrature points and
+%%FEJERPOINTS1D Compute one of two types of Fejer quadrature points and
 %          weights for integrating polynomials (or approximating integrals
-%          of non-polynomials) over the range -1 to 1. Fejér's first rule
+%          of non-polynomials) over the range -1 to 1. Fejer's first rule
 %          produces points n points allowing for an order n-1 quadrature
-%          rule and Fejér's second rules produces n-1 points allowing for
+%          rule and Fejer's second rules produces n-1 points allowing for
 %          an order n-2 quadrature rule. Contrast with with
 %          GaussLegendrePoints1D, where  n+1 points can integration all
-%          polynomials up to order 2*n+1 using n points. However, the Fejér
+%          polynomials up to order 2*n+1 using n points. However, the Fejer
 %          points perform well with non-polynomial functions, so they are
 %          not necessarily worse than Gauss-Legendre points.
 %
 %INPUTS: n The parameter related to the number of points produced. For
 %          rule=1, n points are produced and for rule=2, n-1 points are
 %          produced.
-%     rule A parameter specifying the Fejér interpolation rule to use.
+%     rule A parameter specifying the Fejer interpolation rule to use.
 %          The rules are described in [1]. Possible values are:
 %          1 (The default if omitted or an empty matrix is passed) Use
-%             Fejér's first rule.
-%          2 Use Fejér's second rule.
+%             Fejer's first rule.
+%          2 Use Fejer's second rule.
 %
 %%OUTPUTS: xi A 1XnumPoints vector containing the quadrature points.
 %          w A numPointsX1 vector of the weights associated with the
@@ -27,7 +27,7 @@ function [xi,w]=FejerPoints1D(n,rule)
 %The algorithms of [1] are implemented.
 %
 %EXAMPLE:
-%Here, we integrate x.^2.*exp(-x.^2-x/2) from -1 to 1 using the Fejér
+%Here, we integrate x.^2.*exp(-x.^2-x/2) from -1 to 1 using the Fejer
 %quadrature points. We then compare the result to an analytic solution.
 % [xi,w]=FejerPoints1D(30);
 % f=@(x)(x.^2.*exp(-x.^2-x/2));
@@ -39,7 +39,7 @@ function [xi,w]=FejerPoints1D(n,rule)
 %analytic and quadrature solutions agree well.
 %
 %REFERENCES:
-%[1] J. Waldvogel, "Fast construction of the Féjer and Clenshaw-Curtis
+%[1] J. Waldvogel, "Fast construction of the Fejer and Clenshaw-Curtis
 %    quadrature rules," BIT Numerical Mathematics, vol. 46, no. 1, pp. 195-
 %    202, Mar. 2006.
 %

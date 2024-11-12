@@ -57,7 +57,7 @@ function [fracVal,E]=fracFourier(f,a,order)
 % set(gca,'FontSize',14,'FontWeight','bold','FontName','Times')
 %
 %REFERENCES:
-%[1] A. Bultheel and H. E. Martínez Sulbaran, "Computation of the
+%[1] A. Bultheel and H. E. Martinez Sulbaran, "Computation of the
 %    fractional Fourier transform," Applied and Computational Harmonic
 %    Analysis, vol. 16, no. 3, pp. 182-202, May 2004.
 %
@@ -90,7 +90,7 @@ function [fracVal,E,lambda]=discFracFourier(f,a,order)
 %                 transformation described in Section 6 of [1].
 %
 %REFERENCES:
-%[0] A. Bultheel and H. E. Martínez Sulbaran, "Computation of the
+%[0] A. Bultheel and H. E. Martinez Sulbaran, "Computation of the
 %    fractional Fourier transform," Applied and Computational Harmonic
 %    Analysis, vol. 16, no. 3, pp. 182-202, May 2004.
 %

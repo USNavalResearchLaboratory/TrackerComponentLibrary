@@ -44,16 +44,68 @@ function val=mean(mu,delta,normConst,varargin)
 %   
 %October 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
-if(nargin<4||isempty(normConst))
+if(nargin<3||isempty(normConst))
     normConst=GammaConjugateID.normConst(mu,delta);
 end
 
-%PDFScaled is the PDF, but with substitution so that the bounds of the
-%integral can be from 0 to 1 instead of from 0 to Inf.
+%The integral is performed not directly with the PDF, but with a
+%substitution so that the bounds of the integral can be from 0 to 1 instead
+%of from 0 to Inf.
 val=integral(@(y)fun2IntScaled(y,delta,mu,normConst),0,1,varargin{:});
 function vals=fun2IntScaled(y,delta,mu,normConst)
     %This is equivalent to vals=normConst*gamma(y./(1-y)).^(-delta).*mu.^(delta*y./(1-y)).*(y./(1-y).^3);
     vals=exp(log(normConst)-delta*gammaln(y./(1-y))+(delta*y./(1-y))*log(mu)+log((y./(1-y).^3)));
+end
+end
+
+function val=var(mu,delta,normConst,varargin)
+%%VAR Evaluate the variance of the gamma conjugate type I distribution for
+%     a given set of parameters.
+%
+%INPUTS:    mu The parameter of the distribution that is raised to delta*x;
+%              mu>0.
+%        delta The parameter of the distribution that is the exponent of
+%              gamma(x); delta>0. If delta is large (a few hundred), then
+%              finite precision errors are likely to cause problems with
+%              the numeric integration.
+%    normConst Optionally the normalizing constant of the distribution can 
+%              be provided. If omitted or an empty matrix is passed,
+%              the function GamconID.normConst is used to obtain it. This
+%              is offered as an option, because the computation of the
+%              normalizing constant requires numerical integration and can
+%              be slow.
+%     varargin Any parameters that should be passed to Matlab's integral
+%              function to control the precision. This is generally a
+%              series of text strings followed by values.
+%
+%OUTPUTS: val The variance of the gamma conjugate type I distribution.
+%
+%The distribution is described in [1]. However, there is no closed-form
+%solution for the mean. Thus, the variance is computed using numerical
+%integration via Matlab's integral function.
+%
+%REFERENCES:
+%[1] E. Damsleth, "Conjugate classes for gamma distributions," Scandinavian
+%    Journal of Statistics, vol. 2, no. 2, pp. 80-84, 1975.  
+%
+%September 2024 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+if(nargin<3||isempty(normConst))
+    normConst=GammaConjugateID.normConst(mu,delta);
+end
+
+meanVal=GammaConjugateID.mean(mu,delta,normConst,varargin{:});
+%The integral is performed not directly with the PDF, but with a
+%substitution so that the bounds of the integral can be from 0 to 1 instead
+%of from 0 to Inf.
+moment2Val=integral(@(y)fun2IntScaled(y,delta,mu,normConst),0,1,varargin{:});
+val=moment2Val-meanVal^2;
+
+function vals=fun2IntScaled(y,delta,mu,normConst)
+    x=y./(1-y);
+    dx=1./(1-y)+y./(1-y).^2;
+    %Equivalent to normConst*x.^2.*gamma(x).^(-delta).*mu.^(delta*x).*dx;
+    vals=exp(log(normConst)+2*log(x)-delta*gammaln(x)+delta*x*log(mu)+log(dx));
 end
 end
 

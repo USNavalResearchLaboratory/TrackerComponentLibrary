@@ -14,7 +14,7 @@ function [muEst,deltaEst]=gammaShapeLikeGammaConjIConjUpdate(xMeas,thetaMeas,muE
 %    thetaMeas The known scale parameter of the likelihood of the
 %              measurements; thetaMeas>0.
 %        muEst The parameter of the prior distribution (gamma conjugate
-%              type I)that is raised to delta*x; mu>0.
+%              type I) that is raised to delta*x; mu>0.
 %     deltaEst The parameter of the prior distribution that is the exponent
 %              of gamma(x); delta>0.
 %
@@ -30,6 +30,31 @@ function [muEst,deltaEst]=gammaShapeLikeGammaConjIConjUpdate(xMeas,thetaMeas,muE
 %
 %The conjugate prior relation for the gamma distribution with known scale
 %parameter is given in Theorem 1 in [1].
+%
+%EXAMPLE:
+%Here we show how estimation when given a few samples leads to consistent
+%results. The prior distribution before any measurements  uses mu=1 and
+%delta=0, and this is rather uninformative.
+% numMCRuns=1e4;
+% k=3.3;
+% theta=12;
+% %A rather uninformative prior
+% muInit=1;
+% deltaInit=0;
+% numMeas=3;
+% NEES=0;
+% for curMCRun=1:numMCRuns
+%     muEst=muInit;
+%     deltaEst=deltaInit;
+%     for curMeas=1:numMeas
+%         xMeas=GammaD.rand(1,k,theta);
+%         [muEst,deltaEst]=gammaShapeLikeGammaConjIConjUpdate(xMeas,theta,muEst,deltaEst);
+%     end
+%     estMean=GammaConjugateID.mean(muEst,deltaEst);
+%     estVar=GammaConjugateID.var(muEst,deltaEst);
+%     NEES=NEES+(estMean-k)^2/estVar;
+% end
+% NEES=NEES/numMCRuns
 %
 %REFERENCES:
 %[1] E. Damsleth, "Conjugate classes for gamma distributions," Scandinavian

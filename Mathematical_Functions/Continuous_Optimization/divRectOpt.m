@@ -145,7 +145,7 @@ function [x,fVal,exitCode]=divRectOpt(f,lowerBounds,upperBounds,options) %#ok<ST
 %[2] J. M. Gablonsky and C. T. Kelley, "A locally-biased form of the
 %    DIRECT algorithm," Journal of Global Optimization, vol. 21, no. 1,
 %    pp. 27-37, Sep. 2001.
-%[3] M. Bj�kman and K. Holmstr�m, "Global optimization using the DIRECT
+%[3] M. Bjorkman and K. Holmstrom, "Global optimization using the DIRECT
 %    algorithm in Matlab," The Electronic International Journal Advanced
 %    Modeling and Optimization, vol. 1, no. 2, pp. 17-37, 1999.
 %    [Online]. Available: http://camo.ici.ro/journal/v1n2.htm

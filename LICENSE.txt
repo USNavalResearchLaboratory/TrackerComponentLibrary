@@ -1,25 +1,30 @@
-LICENSE for the Tracker Component Library, Version 6.0
+LICENSE for the Tracker Component Library, Version 6.1
 
 All of the data included is in the public domain and was obtained from U.S
-Government servers, with the exceptions of the Hipparcos 2 Catalog and the
-Earth2014 model. The Earth2014 model was produced by researchers at Curtin
-University in Australia. The file "./Terrain/data/Earth2014 License.txt"
-shows the statement provided declaring it to be in the public domain. The
-Hipparcos 2 catalog is maintained by the European Space Agency at
+Government servers, with the exceptions of the Hipparcos 2 Catalog, the
+Earth2014 model, and the GSHHG model. The Earth2014 model was produced by
+researchers at Curtin University in Australia. The file
+"./Terrain/data/Earth2014 License.txt" shows the statement provided
+declaring it to be in the public domain. The Hipparcos 2 catalog is
+maintained by the European Space Agency at
 http://www.cosmos.esa.int/web/hipparcos/home
 The catalog forms the basis of a number of international standards and is
 in the public domain, as verified by the Hipparcos helpdesk, whose contact
-information is available at the aforementioned web site.
+information is available at the aforementioned web site. Data for the GSHHG
+model is generally not distributed with the library and is under a license
+with a weak copyleft, as noted on
+https://www.ngdc.noaa.gov/mgg/shorelines/
 
-The source code, except for the code in the 3rd_Party_Libraries folder and
-the MMOSPA2Tar2D function is
-in the public domain and not licensed or under copyright and was produced
-at the U.S. Naval Research Laboratory. The information and software may be
-used freely by the public. As required by 17 U.S.C. 403, third parties
-producing copyrighted works consisting predominantly of the material
-produced by U.S. Government agencies must provide notice with such work(s)
-identifying the U.S. Government material incorporated and stating that such
-material is not subject to copyright protection.
+All of the source code in the 3rd_Party_Libraries folder has copyleft-free
+licenses, which are included with the code. The other source code, except
+for the MMOSPA2Tar2D function is in the public domain and not licensed or
+under copyright and was produced at the U.S. Naval Research Laboratory. The
+information and software may be used freely by the public. As required by
+17 U.S.C. 403, third parties producing copyrighted works consisting
+predominantly of the material produced by U.S. Government agencies must
+provide notice with such work(s) identifying the U.S. Government material
+incorporated and stating that such material is not subject to copyright
+protection.
 
 Derived works shall not identify themselves in a manner that implies an
 endorsement by or an affiliation with the Naval Research Laboratory.
@@ -29,9 +34,10 @@ SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY THE NAVAL
 RESEARCH LABORATORY FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE ACTIONS
 OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
+
 The MMOSPA2Tar2D function is under the MIT license, which is given as
 follows:
-%The MIT License:
+The MIT License:
 Copyright 2023, Marcus Baum (University of Göttingen)
  
 Permission is hereby granted, free of charge, to any person obtaining a

@@ -11,7 +11,7 @@ int iauJdcalf(int ndp, double dj1, double dj2, int iymdf[4])
 **  for formatting messages:  rounded to a specified precision.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -27,7 +27,7 @@ int iauJdcalf(int ndp, double dj1, double dj2, int iymdf[4])
 **               int      status:
 **                          -1 = date out of range
 **                           0 = OK
-**                          +1 = NDP not 0-9 (interpreted as 0)
+**                          +1 = ndp not 0-9 (interpreted as 0)
 **
 **  Notes:
 **
@@ -62,11 +62,11 @@ int iauJdcalf(int ndp, double dj1, double dj2, int iymdf[4])
 **     P. Kenneth Seidelmann (ed), University Science Books (1992),
 **     Section 12.92 (p604).
 **
-**  This revision:  2021 May 11
+**  This revision:  2023 January 16
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    int j, js;
@@ -130,8 +130,8 @@ int iauJdcalf(int ndp, double dj1, double dj2, int iymdf[4])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

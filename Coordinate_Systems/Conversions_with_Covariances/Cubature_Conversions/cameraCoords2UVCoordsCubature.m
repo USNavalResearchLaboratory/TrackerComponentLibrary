@@ -55,7 +55,7 @@ function [zUV,RUV]=cameraCoords2UVCoordsCubature(zCam,SR,A,xi,w)
 %[1] David F. Crouse , "Basic tracking using nonlinear 3D monostatic and
 %    bistatic measurements," IEEE Aerospace and Electronic Systems 
 %    Magazine, vol. 29, no. 8, Part II, pp. 4-53, Aug. 2014.
-%[2] J. Kannala, J. Heikkilä, and S. S. Brandt, "Geometric camera
+%[2] J. Kannala, J. Heikkila, and S. S. Brandt, "Geometric camera
 %    calibration," in Wiley Encyclopedia of Computer Science and
 %    Engineering, B. W. Wah, Ed., 2007, vol. 1.
 %

@@ -6,9 +6,8 @@ void iauLteqec(double epj, double dr, double dd, double *dl, double *db)
 **   i a u L t e q e c
 **  - - - - - - - - - -
 **
-**  Transformation from ICRS equatorial coordinates to ecliptic
-**  coordinates (mean equinox and ecliptic of date) using a long-term
-**  precession model.
+**  Transformation from ICRS RA,Dec to ecliptic coordinates (mean equinox
+**  and ecliptic of date), using a long-term precession model.
 **
 **  This function is part of the International Astronomical Union's
 **  SOFA (Standards of Fundamental Astronomy) software collection.
@@ -56,11 +55,11 @@ void iauLteqec(double epj, double dr, double dd, double *dl, double *db)
 **    expressions, valid for long time intervals (Corrigendum),
 **    Astron.Astrophys. 541, C1
 **
-**  This revision:  2021 May 11
+**  This revision:  2023 March 18
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    double rm[3][3], v1[3], v2[3], a, b;
@@ -86,8 +85,8 @@ void iauLteqec(double epj, double dr, double dd, double *dl, double *db)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

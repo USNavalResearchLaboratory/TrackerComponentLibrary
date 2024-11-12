@@ -6,7 +6,7 @@ function Q=QPolarLin2D(T,x,qTheta,param4,type)
 %             speed. Optionally, a speed derivative component can be given
 %             to model possible linear target acceleration. The matrix can
 %             be obtained from a linearization or from a second-order weak
-%             Itô-Taylor expansion.
+%             ItÃ´-Taylor expansion.
 %
 %INPUTS: T The time-duration of the propagation interval in seconds.
 %        x The 4X1 or 5X1 target state vector in 2D space in the order of
@@ -29,7 +29,7 @@ function Q=QPolarLin2D(T,x,qTheta,param4,type)
 %                       terms in the drift matrix as constant and solve
 %                       for the state transition equation. Note that Q is
 %                       always singular when using the discretized model.
-%          'ItoTaylorO2Weak' Use an order 2.0 weak Itô Taylor expansion.
+%          'ItoTaylorO2Weak' Use an order 2.0 weak Ito Taylor expansion.
 %                       This provides better results than the simple
 %                       linear expansion. Note that Q is singular when
 %                       using the weak Ito-Taylor expansion with linear
@@ -39,7 +39,7 @@ function Q=QPolarLin2D(T,x,qTheta,param4,type)
 %OUTPUT: Q The process noise covariance matrix under a linear dynamic
 %          model, possibly with linear acceleration.
 %
-%The solution using a second-order weak Itô-Taylor expansion is taken from
+%The solution using a second-order weak Ito-Taylor expansion is taken from
 %[1].
 %
 %The discretized model is inspired from a discussion in [2], where a

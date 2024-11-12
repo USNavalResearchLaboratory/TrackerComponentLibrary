@@ -35,7 +35,7 @@ function [xi,w]=ClenshawCurtisPoints1D(n)
 %errors.
 %
 %REFERENCES:
-%[1] J. Waldvogel, "Fast construction of the Féjer and Clenshaw-Curtis
+%[1] J. Waldvogel, "Fast construction of the Fejer and Clenshaw-Curtis
 %    quadrature rules," BIT Numerical Mathematics, vol. 46, no. 1, pp. 195-
 %    202, Mar. 2006.
 %

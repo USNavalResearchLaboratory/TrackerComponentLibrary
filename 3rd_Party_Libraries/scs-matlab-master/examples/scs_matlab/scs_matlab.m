@@ -269,7 +269,7 @@ if (normalize)
 end
 
 %%
-if use_indirect;
+if use_indirect
     %fprintf('mean cg its: %4f\n', mean(cg_its));
 end
 
@@ -284,7 +284,7 @@ if gen_plots
     legend('|u-uprev|','|u-ut|')
     figure();semilogy(pathol(:,1));hold on;semilogy(pathol(:,2),'r');
     legend('unb','inf');
-    if use_indirect;
+    if use_indirect
         figure();plot(cg_its);xlabel('k');ylabel('Conjugate Gradient Iterations');
         figure();semilogy(cumsum(mults),nms(:,1), 'b');hold on;semilogy(cumsum(mults),nms(:,2),'r');semilogy(cumsum(mults),nms(:,3),'g');
         legend('pri resid','dual resid','gap');

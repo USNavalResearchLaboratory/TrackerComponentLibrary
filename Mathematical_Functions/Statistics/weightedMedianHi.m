@@ -36,7 +36,7 @@ function aHiMed=weightedMedianHi(a,w,algorithm)
 %    highly robust estimators of scale," in Computational Statistics.
 %    Berlin: Springer-Verlag, Aug. 1992, vol. 1: Proceedings of the 10th
 %    Symposium on Computational Statistics, pp. 411-428, Conference
-%    Location: Neuchâtel, Switzerland.
+%    Location: Neuchatel, Switzerland.
 %
 %August 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

@@ -86,9 +86,9 @@ void iauLdn(int n, iauLDBODY b[], double ob[3], double sc[3],
 **
 **  This revision:   2021 February 24
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
 /* Light time for 1 au (days) */
@@ -129,8 +129,8 @@ void iauLdn(int n, iauLDBODY b[], double ob[3], double sc[3],
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

@@ -18,7 +18,7 @@ function J=JacobPolarLin2D(T,x,qTheta)
 %           zero), then x is 4X1.
 %        T  The time-duration of the propagation interval in seconds.
 %    qTheta If the transition function from a second-order weak
-%           Itô-Taylor expansion is desired, then qTheta must be provided.
+%           Ito-Taylor expansion is desired, then qTheta must be provided.
 %           qTheta is the power spectral density of the process noise
 %           corrupting the angular component of the state, having units of
 %           radians^2/s. If qTheta is omitted, then the transition function

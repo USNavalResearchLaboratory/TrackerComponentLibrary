@@ -20,6 +20,17 @@ function val=mean(k, beta)
 %The distribution arises when estimating radar cross sections in Ch.
 %10.3.2 of [1].
 %
+%EXAMPLE:
+%Here, the mean is compared to the sample mean. They tend to agree
+%within 3 or 4 digits.
+% k=3;
+% beta=1/100;
+% N=1e7;
+% x=InverseGammaD.rand([N,1],k,beta);
+% trueMean=InverseGammaD.mean(k,beta);
+% sampleMean=mean(x);
+% RelErr=(sampleMean-trueMean)./trueMean
+%
 %REFERENCES:
 %[1] W. Koch, Tracking and Sensor Fusion: Methodological Framework and
 %    Selected Applications. Berlin, Germany: Springer, 2014.
@@ -46,6 +57,17 @@ function val=var(k,beta)
 %
 %The distribution arises when estimating radar cross sections in Ch.
 %10.3.2 of [1].
+%
+%EXAMPLE:
+%Here, the variance is compared to the sample variance. They tend to agree
+%within 3 or 4 digits.
+% k=20;
+% beta=1/100;
+% N=1e7;
+% x=InverseGammaD.rand([N,1],k,beta);
+% trueVar=InverseGammaD.var(k,beta);
+% sampleVar=var(x);
+% RelErr=(sampleVar-trueVar)./trueVar
 %
 %REFERENCES:
 %[1] W. Koch, Tracking and Sensor Fusion: Methodological Framework and
@@ -133,7 +155,7 @@ function vals=rand(N,k,beta)
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
-    vals=1./randGamma(N,k,1/beta);
+    vals=1./GammaD.rand(N,k,1/beta);
 end
 
 function entropyVal=entropy(k,beta)

@@ -61,6 +61,10 @@ function [grid,transMat]=createGridFromCovMat(mat,numPts,center,gamma)
 % view(25,7)
 % grid on
 %
+%REFERENCES:
+%[1] P. Jackel, "A note on multivariate gauss-hermite quadrature," London:
+%    ABN-Amro. Re, 2005.
+%
 %August 2021 Codie T. Lewis, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 

@@ -48,7 +48,7 @@ function [weightVal,jobsSelected]=scheduleWeightedIntervals(intervals,weights)
 %These are the same intervals selected in the  first example.
 %
 %REFERENCES:
-%[1] J. Kleinberg and É. Tardos, Algorithm Design, 1st ed. Pearson, 2005.
+%[1] J. Kleinberg and E. Tardos, Algorithm Design, 1st ed. Pearson, 2005.
 %
 %October 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

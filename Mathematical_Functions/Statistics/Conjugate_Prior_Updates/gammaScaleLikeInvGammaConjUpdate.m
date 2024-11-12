@@ -29,6 +29,34 @@ function [kEst,betaEst]=gammaScaleLikeInvGammaConjUpdate(xMeas,kMeas,kEst,betaEs
 %The conjugate prior relation for the gamma distribution with known shape
 %parameter is given in [1].
 %
+%EXAMPLE:
+%The function needs a prior distribution to work. Here, we show how
+%estimation when given an uninformative prior yields consistent estimates
+%when given a few measurements. The estimates are consistent in terms fo
+%the normalized estimation error squared (NEES) of the distribution implied
+%by the outputs of this function.
+% numMCRuns=1e5;
+% k=3.3;
+% theta=12;
+% %Uninformative prior
+% kEstInit=0;
+% betaEstInit=0;
+% 
+% numMeas=10;
+% NEES=0;
+% for curMCRun=1:numMCRuns
+%     kEst=kEstInit;
+%     betaEst=betaEstInit;
+%     for curMeas=1:numMeas
+%         xMeas=GammaD.rand(1,k,theta);
+%         [kEst,betaEst]=gammaScaleLikeInvGammaConjUpdate(xMeas,k,kEst,betaEst);
+%     end
+%     estMean=InverseGammaD.mean(kEst,betaEst);
+%     estVar=InverseGammaD.var(kEst,betaEst);
+%     NEES=NEES+(estMean-theta)^2/estVar;
+% end
+% NEES=NEES/numMCRuns
+%
 %REFERENCES:
 %[1] D. Fink, "A compendium of conjugate priors," Montana State University,
 %    Department of Biology, Environmental Statistics Group, Tech. Rep., May

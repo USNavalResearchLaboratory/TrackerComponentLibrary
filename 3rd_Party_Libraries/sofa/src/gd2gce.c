@@ -17,9 +17,9 @@ int iauGd2gce ( double a, double f, double elong, double phi,
 **  Status:  support function.
 **
 **  Given:
-**     a       double     equatorial radius (Notes 1,4)
+**     a       double     equatorial radius (Notes 1,3,4)
 **     f       double     flattening (Notes 2,4)
-**     elong   double     longitude (radians, east +ve)
+**     elong   double     longitude (radians, east +ve, Note 4)
 **     phi     double     latitude (geodetic, radians, Note 4)
 **     height  double     height above ellipsoid (geodetic, Notes 3,4)
 **
@@ -61,11 +61,11 @@ int iauGd2gce ( double a, double f, double elong, double phi,
 **     P. Kenneth Seidelmann (ed), University Science Books (1992),
 **     Section 4.22, p202.
 **
-**  This revision:  2021 May 11
+**  This revision:  2023 March 10
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    double sp, cp, w, d, ac, as, r;
@@ -94,8 +94,8 @@ int iauGd2gce ( double a, double f, double elong, double phi,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

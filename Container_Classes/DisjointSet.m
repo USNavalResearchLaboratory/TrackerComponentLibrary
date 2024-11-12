@@ -3,7 +3,8 @@ classdef DisjointSet < handle
 %             general set. It can be used to cluster targets given
 %             measurements. If one also wishes to keep track of which
 %             measurements are associated with which target clusters, then
-%             the subclass DisjointSetM should be used.
+%             the subclass DisjointSetM should be used. This is also
+%             referred to as a union-find or merge-find data structure.
 %
 %Disjoint sets are described in Chapter 8 of [1], in Chapter 21 of [2], and
 %Chapter 12.4 of [3].

@@ -283,7 +283,7 @@ for curPoint=1:N
         otherwise
             error('Invalid system type specified.')
     end
-    %Adjust for the rotated cordinate system.
+    %Adjust for the rotated coordinate system.
     HTotal(:,:,1,curPoint)=M'*H(:,:,1)*M;
     HTotal(:,:,2,curPoint)=M'*H(:,:,2)*M;
 end

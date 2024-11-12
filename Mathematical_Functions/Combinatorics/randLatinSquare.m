@@ -36,7 +36,7 @@ function LatinSquare=randLatinSquare(n,method,numProperMoves)
 %    6, pp. 405-437, 1996.
 %[2] G. Sagastume, Ignacio, "Generation of random latin squares step by
 %    step graphically," in XX Congreso Argentino de Ciencias de la
-%    Computación, Buenos Aires, 20-24 Oct. 2014.
+%    Computacion, Buenos Aires, 20-24 Oct. 2014.
 %
 %October 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

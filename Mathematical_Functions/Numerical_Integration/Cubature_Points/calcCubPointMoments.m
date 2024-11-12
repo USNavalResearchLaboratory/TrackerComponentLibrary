@@ -1,4 +1,4 @@
-function [mu,P]=calcCubPointMoments(z,S,h,xi,w,diffTransFun)
+function [mu,P]=calcCubPointMoments(z,S,h,xi,w,innovTrans,meanFun)
 %%CALCCUBPOINTMOMENTS Using cubature integration with specified cubature
 %                     points and weights, determine the first two moments
 %                     of a transformation of a value x that is corrupted
@@ -30,24 +30,23 @@ function [mu,P]=calcCubPointMoments(z,S,h,xi,w,diffTransFun)
 %          sum(w)=1. If this and xi are omitted, then a default (probably
 %          inefficient) set of cubature points and weights is generated
 %          using fifthOrderCubPoints.
-% diffTransFun An optional function handle that transforms differences
-%           between values when computing the covariance. Though
-%           calcCubPointMoments is not meant for use with circular data,
-%           passing a function to wrap data can be used as an ad-hoc fix
-%           for computing a covariance matrix when using circular data,
-%           such as when dealing with longitudinal values. THis should be
-%           omitted if not needed.
+% innovTrans An optional function handle that computes differences
+%          between converted values. This can be useful for example, when
+%           taking the difference of circular data, since the difference
+%          between, for example, pi and -pi should be 0, not 2*pi. This is
+%          called as innovTrans(a,b) and the default if omitted or an empty
+%          matrix is passed is @(a,b)bsxfun(@minus,a,b); This function
+%          must be able to handle multiple values of a at once.
+%  meanFun An optional function handle that, when given N values with
+%          weights, produces the weighted average. this is called as
+%          meanFun(x,w), where w are the weights. This function only has to
+%          be provided if the domain of the converted values is not linear.
+%          For example, when averaging angular values, then the function
+%          meanAng should be used.
 %
 %OUTPUTS: mu The mean of h(x) found using cubature integration.
 %          P The covariance matrix of h(x) found using cubature
 %            integration.
-%
-%This function is only appropriate when the domain of the transformed
-%points is linear. For example, if the transformation results in an
-%angle from -pi to pi, then angles near +/-pi might get averaged to zero,
-%producing very bad results. In such an instance, the relevant components
-%of the mixture should be averaged using meanAng or one should pass a
-%function for diffTransFun.
 %
 %September 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -58,12 +57,25 @@ if(nargin<4||isempty(xi))
     [xi,w]=fifthOrderCubPoints(numDim);
 end
 
-if(nargin<6)
-    diffTransFun=[];
+if(nargin<6||isempty(innovTrans))
+    innovTrans=@(a,b)bsxfun(@minus,a,b);
 end
 
 xi=h(transformCubPoints(xi,z,S));
-[mu, P]=calcMixtureMoments(xi,w,[],[],diffTransFun);
+if(nargin<7||isempty(meanFun))
+    mu=sum(bsxfun(@times,xi,w(:).'),2);%The mean
+else
+    mu=meanFun(xi,w(:).');
+end
+
+diffVal=innovTrans(xi,mu);
+
+xDim=size(xi,1);
+numCubPts=size(xi,2);
+P=zeros(xDim,xDim);
+for curPoint=1:numCubPts
+    P=P+w(curPoint)*(diffVal(:,curPoint)*diffVal(:,curPoint)');
+end
 end
 
 %LICENSE:

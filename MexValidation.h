@@ -25,7 +25,7 @@
  *convert2DReal2DoubleMat   Convert a Matlab matrix of real values for
  *                          various Matlab data types to a Matlab matrix of
  *                          doubles. The returned Matrix should be freed
- *                          with mxDestroyArray. the input matrix is not
+ *                          with mxDestroyArray. The input matrix is not
  *                          modified.
  *convert2DReal2SignedIntMat Convert a Matlab matrix of real values for
  *                          various Matlab data types to a Matlab matrix of

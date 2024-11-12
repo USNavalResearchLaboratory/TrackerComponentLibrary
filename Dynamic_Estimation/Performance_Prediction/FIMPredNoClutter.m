@@ -22,7 +22,7 @@ function J=FIMPredNoClutter(H,F,R,Q,PD)
 %OUTPUTS: J The asymptotic prior Fisher information matrix.
 %
 %The inverse of the Fisher information matrix for a dynamic system is the 
-%posterior Cramér-Rao lower bound (PCRLB). This finds the asymptotic value
+%posterior Cramer-Rao lower bound (PCRLB). This finds the asymptotic value
 %BEFORE a measurement update by predicting forward the posterior FIM from
 %FIMPostNoClutter.
 %

@@ -257,7 +257,7 @@ function [cor_x,cor_y,cor_ut1,cor_lod]=PMUT1_OCEANS(rjd)
 %http://hpiers.obspm.fr/eop-pc/models/models_ru.html
 %
 %REFERENCES:
-%[1] J. L. Simon, P. Bretagnon, J. Chapront, M. Chapront-Touz�, G. Francou,
+%[1] J. L. Simon, P. Bretagnon, J. Chapront, M. Chapront-Touze, G. Francou,
 %    and J. Laskar, "Numerical expressions for precession formulae and mean
 %    elements for the moon and the planets," Astronomy and Astrophysics,
 %    vol. 282, no. 2, pp. 663?683, 1994.
@@ -472,7 +472,7 @@ function [cor_x,cor_y]=PM_GRAVI (rjd)
 %on [1] to match the values in [2].
 %
 %REFERENCES:
-%[1] J. L. Simon, P. Bretagnon, J. Chapront, M. Chapront-Touz�, G. Francou,
+%[1] J. L. Simon, P. Bretagnon, J. Chapront, M. Chapront-Touze, G. Francou,
 %    and J. Laskar, "Numerical expressions for precession formulae and mean
 %    elements for the moon and the planets," Astronomy and Astrophysics,
 %    vol. 282, no. 2, pp. 663?683, 1994.

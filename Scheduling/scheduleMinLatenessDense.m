@@ -34,7 +34,7 @@ function [jobs,tStarts]=scheduleMinLatenessDense(deadlines,durations,tStart)
 %times are [0;3;5;6;10;13].
 %
 %REFERENCES:
-%[1] J. Kleinberg and É. Tardos, Algorithm Design, 1st ed. Pearson, 2005.
+%[1] J. Kleinberg and E. Tardos, Algorithm Design, 1st ed. Pearson, 2005.
 %
 %October 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

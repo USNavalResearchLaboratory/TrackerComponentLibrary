@@ -1,7 +1,7 @@
 function [yHat,Sigma]=strongTaylorStepMeanCov(y,aCur,BCur,deltaT,algorithm,pBpy,p2Bpypy,papy,p2apypy,papt,pBpt,getSqrtCov)
 %%STRONGTAYLORSTEPMEANCOV Determine the mean and covariance matrix of a
-%           single step of a strong Itô-Taylor expansion of a stochastic
-%           differential equation under Itô calculus, such as one could
+%           single step of a strong Ito-Taylor expansion of a stochastic
+%           differential equation under Ito calculus, such as one could
 %           take using the strongStochTaylorStep function. The stochastic
 %           differential equations under consideration take the form:
 %           dy=a(y,t)*dt+B(y,t)*dW
@@ -13,7 +13,7 @@ function [yHat,Sigma]=strongTaylorStepMeanCov(y,aCur,BCur,deltaT,algorithm,pBpy,
 %          current time.
 %     BCur The value of the diffusion matrix function B at B(y,t).
 %   deltaT The time increment over which the step is taken.
-% algorithm A parameter specifying the type of explicit strong Itô-Taylor
+% algorithm A parameter specifying the type of explicit strong Ito-Taylor
 %          step to take. Possible values are:
 %          0 Use the Euler-Maruyama method from Equation 2.4 in Chapter
 %            10.2 of [1]. This is an order 0.5 method. The other algorithms
@@ -30,7 +30,7 @@ function [yHat,Sigma]=strongTaylorStepMeanCov(y,aCur,BCur,deltaT,algorithm,pBpy,
 %          4 Use the Milstein scheme (order 1.0) for commutative noise.
 %            Equation 3.16 of Chapter 10.3 of [1] provides the solution
 %            under Stratonovich calculus. However, one can modify Equation
-%            3.3 in the same manner to obtain a solution under Itô
+%            3.3 in the same manner to obtain a solution under Ito
 %            calculus, which is what is done here. This requires pBpy and
 %            that d=m. Given diagonal noise, the result should be the same
 %            as algorithm 3.
@@ -79,15 +79,15 @@ function [yHat,Sigma]=strongTaylorStepMeanCov(y,aCur,BCur,deltaT,algorithm,pBpy,
 %exception of algorithm=2, all of the noise terms in the expressions are
 %Gaussian (sometimes correlated) and thus, with some algebra and the known
 %central moments of the Gaussian distribution, one can compute the mean and
-%covariance matrix of the stochastic Itô-Taylor expansions. Specific
+%covariance matrix of the stochastic Ito-Taylor expansions. Specific
 %derivations are given in [2].
 %
-%For algorithm 2, there are double Itô stochastic integral terms. To
+%For algorithm 2, there are double Ito stochastic integral terms. To
 %expand the cross product of the Wiener process and the double stochastic
 %integral, Equation 2.16 in Chapter 5.2 of [1] is used. To take the
 %expected value of that expression (which is zero), Lemma 5.7.1 in Chapter
 %5.7 of [1] is used. Lemma 5.7.2 in Chapter 5.7 of [1] also provides the
-%second noncentral moment of the double Itô stochasic integrals.
+%second noncentral moment of the double Ito stochasic integrals.
 %
 %EXAMPLE 1:
 %The values of a, B and their derivatives are just constants in this
@@ -147,13 +147,13 @@ function [yHat,Sigma]=strongTaylorStepMeanCov(y,aCur,BCur,deltaT,algorithm,pBpy,
 % norm(SigmaMC-Sigma,'fro')/norm(Sigma,'fro')%Relative error of the covariance.
 %The relative errors in the mean and covariance matrix will tend to be
 %around 1-3%. Increasing numMC and increasing the number of the terms used
-%in the approximation of the Itô integral in strongStochTaylorStep (the p
+%in the approximation of the Ito integral in strongStochTaylorStep (the p
 %input) can improve the estimates.
 %
 %REFERENCES:
 %[1] P. E. Kloeden and E. Platen, Numerical Solution of Stochastic
 %    Differential Equations. Berlin: Springer, 1999.
-%[2] D. F. Crouse, "Itô-Taylor expansion moments for continuous-time state
+%[2] D. F. Crouse, "Ito-Taylor expansion moments for continuous-time state
 %    propagation," NRL Memo, 2019.
 %
 %December 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
@@ -196,7 +196,7 @@ if(algorithm==2||algorithm==4)
     %Algorithm 4 is the Milstein scheme for commutative noise; Equation
     %3.16 of Chapter 10.3 of [1] provides the solution under Stratonovich
     %calculus. However, one can modify Equation 3.3 in the same manner to
-    %obtain a solution under Itô calculus.
+    %obtain a solution under Ito calculus.
     
     if(algorithm==4)
         if(d~=m)

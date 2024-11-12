@@ -14,13 +14,15 @@ function M=Euler3Ang2RotMat(theta1,theta2,theta3,series,handed)
 %              theta1.
 %       series A character string specifying the series of axes about which
 %              the three rotations are taken. All possible combinations of
-%              axes without repeating an axis are valid. For example, 'xyz'
-%              means rotate theta3 about the z axis, then rotate theta2
-%              about the rotated y axis, then rotate theta1 about the
-%              rotated x axis. All possible combinations of values are:
+%              axes without repeating the same axis twice in a row are
+%              valid (e.g. rotating about the x axis twice and then the y
+%              axis). For example, 'xyz' means rotate theta3 about the z
+%              axis, then rotate theta2 about the rotated y axis, then
+%              rotate theta1 about the rotated x axis. All possible
+%              combinations of values are:
 %              'xzx', 'xyz', 'yxy', 'yzy', 'zyz', 'zxz', 'xzy', 'xyz',
 %              'yxz', 'yzx', 'zyx', and 'zxy'.
-%       handed The handedness of the rotation angle. If omitted, it is
+%       handed The handedness of the rotation angles. If omitted, it is
 %              assumed that the rotation is right-handed (the standard).
 %              Possible values are:
 %              'right' The default if omitted. The rotation is right-
@@ -140,7 +142,6 @@ switch(series)
     otherwise
         error('Invalid rotation series provided.')
 end
-
 end
 
 %LICENSE:

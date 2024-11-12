@@ -43,7 +43,7 @@ void iauApci13(double date1, double date2,
 **      eral   double       unchanged
 **      refa   double       unchanged
 **      refb   double       unchanged
-**     eo     double*     equation of the origins (ERA-GST)
+**     eo     double*     equation of the origins (ERA-GST, radians)
 **
 **  Notes:
 **
@@ -115,11 +115,11 @@ void iauApci13(double date1, double date2,
 **     iauApci      astrometry parameters, ICRS-CIRS
 **     iauEors      equation of the origins, given NPB matrix and s
 **
-**  This revision:   2013 October 9
+**  This revision:   2022 May 3
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    double ehpv[2][3], ebpv[2][3], r[3][3], x, y, s;
@@ -147,8 +147,8 @@ void iauApci13(double date1, double date2,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

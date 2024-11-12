@@ -30,7 +30,7 @@ function demoNonlinearMeasFilters()
 %[1] Y. Bar-Shalom, X. R. Li, and T. Kiruabarajan, Estimation with
 %    Applications to Tracking and Navigation. New York: Wiley Interscience,
 %    2001.
-%[2] O. Straka, J. Duník, and M. Simandl, "Design of pure propagation
+%[2] O. Straka, J. Dunik, and M. Simandl, "Design of pure propagation
 %    unscented Kalman filter," in Proceedings of the 19th World Congress of
 %    The International Federation of Automatic Control, Cape Town,
 %    South Africa, 24-29 Aug. 2014, pp. 5399-5938.

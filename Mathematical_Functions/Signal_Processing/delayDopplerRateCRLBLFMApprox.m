@@ -1,5 +1,5 @@
 function CRLB=delayDopplerRateCRLBLFMApprox(B,T,P,TR,SNRIn,returnFIM,c,fc,useHalfRange)
-%DELAYDOPPLERRATECRLBLFMAPPROX Determine an approximate Cramér-Rao lower
+%DELAYDOPPLERRATECRLBLFMAPPROX Determine an approximate Cramer-Rao lower
 %      bound matrix for estimating the delay and Doppler rate when
 %      receiving a chain of identical linearly frequency modulated
 %      (LFM) chirps. Whether they are up or down chirps is
@@ -35,7 +35,7 @@ function CRLB=delayDopplerRateCRLBLFMApprox(B,T,P,TR,SNRIn,returnFIM,c,fc,useHal
 %          where one wants the one-way range and range rate. The default if
 %          omitted or an empty matrix is passed is false.
 %
-%OUTPUTS: CRLB The 2X2 Cramér-Rao lower bound for a vector [delay;Doppler
+%OUTPUTS: CRLB The 2X2 Cramer-Rao lower bound for a vector [delay;Doppler
 %              rate] (or the FIM if returnFIM is true. The delay is
 %              usually given in units of seconds and the Doppler rate in
 %              Hertz.
@@ -66,7 +66,7 @@ function CRLB=delayDopplerRateCRLBLFMApprox(B,T,P,TR,SNRIn,returnFIM,c,fc,useHal
 %where T0 is the sampling period. These relations are from [1].
 %
 %REFERENCES:
-%[1] A. Dogandzic and A. Nehorai, "Cramér Rao bounds for estimating range,
+%[1] A. Dogandzic and A. Nehorai, "Cramer Rao bounds for estimating range,
 %    velocity, and direction with an active array," IEEE Transactions on
 %    Signal Processing, vol. 49, no. 6, pp. 1122-1137, Jun. 2001.
 %

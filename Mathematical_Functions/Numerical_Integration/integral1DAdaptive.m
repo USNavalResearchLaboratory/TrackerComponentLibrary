@@ -14,7 +14,7 @@ function [intEst,totalError,exitCode]=integral1DAdaptive(f,bounds,n,algorithm,c1
 %          return the scalar value of the function at all of the points.
 %          The output should be the same size as the input.
 %   bounds A 2X1 or 1X2 vector such that bounds(1) is the lower bound of
-%          integration and bounds(2) is the upper bound of integration. it
+%          integration and bounds(2) is the upper bound of integration. It
 %          is not required that bounds(2)>bounds(1). Integration bounds
 %          must be finite.
 %        n An optional input specifying the number of points to use in the

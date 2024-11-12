@@ -23,7 +23,7 @@ function J=FIMPostNoClutter(H,F,R,Q,PD)
 %OUTPUTS: J The asymptotic posterior Fisher information matrix.
 %
 %The inverse of the Fisher information matrix for a dynamic system is the 
-%posterior Cramér-Rao lower bound (PCRLB). This finds the asymptotic value
+%posterior Cramer-Rao lower bound (PCRLB). This finds the asymptotic value
 %AFTER a measurement update. For the asymptotic value BEFORE  a measurement
 %update, see FIMPredNoClutter.
 %
@@ -55,17 +55,17 @@ function J=FIMPostNoClutter(H,F,R,Q,PD)
 %
 %REFERENCES:
 %[1] Y. Bar-Shalom, X. Zhang, and P. Willett, "Simplification of the
-%    dynamic Cramér-Rao bound for target tracking in clutter," IEEE
+%    dynamic Cramer-Rao bound for target tracking in clutter," IEEE
 %    Transactions on Aerospace and Electronic Systems, vol. 47, no. 2, pp.
 %    1481-1482, Apr. 2011.
-%[2] X. Zhang, P. Willett, and Y. Bar-Shalom, "Dynamic Cramér-Rao bound for
+%[2] X. Zhang, P. Willett, and Y. Bar-Shalom, "Dynamic Cramer-Rao bound for
 %    target tracking in clutter," IEEE Transactions on Aerospace and
 %    Electronic Systems, vol. 41, no. 4, pp. 1154-1167, Oct. 2005.
-%[3] P. Stinco, M. S. Greco, F. Gini,and A.Farina, "Posterior Cramér-Rao
+%[3] P. Stinco, M. S. Greco, F. Gini,and A.Farina, "Posterior Cramer-Rao
 %    lower bounds for passive bistatic radar tracking with uncertain target
 %    measurements," Signal Processing, vol. 93, no. 12, pp. 3528-3540,
 %    Dec. 2013.
-%[4] P. Tichavský, C. H. Muravchik, and A. Nehorai, "Posterior Cramér-Rao
+%[4] P. Tichavsky, C. H. Muravchik, and A. Nehorai, "Posterior Cramer-Rao
 %    bounds for discrete-time nonlinear filtering," IEEE Transactions on
 %    Signal Processing, vol. 46, no. 5, pp. 1386-1396, May 1998.
 %

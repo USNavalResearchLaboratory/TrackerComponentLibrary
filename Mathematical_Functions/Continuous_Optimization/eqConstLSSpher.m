@@ -86,7 +86,7 @@ end
 
 if(all(b==0)&&maximize)
     %Special case.
-    [V,D]=eig(A);
+    [V,~]=eig(A);
     x=V(:,1)*alpha;
     return
 end

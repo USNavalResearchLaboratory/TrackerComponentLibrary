@@ -1,4 +1,4 @@
-function J=calcRuvRRJacob(x,useHalfRange,xTx,xRx,M)
+function J=calcRuvRRJacob(x,useHalfRange,xTx,xRx,M,includeW)
 %%CALCRUVRRJACOB Calculate the Jacobian of a 3D bistatic r-u-v measurement
 %                with non-relativistic range rate, ignoring atmospheric
 %                effects. The derivatives are taken with respect to the
@@ -22,17 +22,27 @@ function J=calcRuvRRJacob(x,useHalfRange,xTx,xRx,M)
 %          empty matrix is passed, then it is assumed that the local
 %          coordinate system is aligned with the global and M=eye(3) --the
 %          identity matrix is used.
+% includeW An optional boolean value indicating whether the derivative
+%          of a third direction cosine component should be included. The u
+%          and v direction cosines are two parts of a 3D unit vector. The
+%          default if this parameter is omitted or an empty matrix is
+%          passed is false.
 %
-%OUTPUTS: J The 4X6 Jacobian matrix with derivatives with respect to
-%           position components and velocity. Each row is a component of
-%           [range;u;v;range rate] in that order with derivatives taken
-%           with respect to [x,y,z,xDot,yDot,zDot] across columns.
+%OUTPUTS: J The 4X6 (or 5X5 if includeW is true) Jacobian matrix with
+%           derivatives with respect to position components and velocity.
+%           Each row is a component of [range;u;v;range rate] in that order
+%           with derivatives taken with respect to [x,y,z,xDot,yDot,zDot]
+%           across columns.
 %
 %This function just calls the functions rangeGradient, uvGradient, and
 %rangeRateGradient.
 %
 %February 2017 David F.Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+if(nargin<6||isempty(includeW))
+    includeW=false;
+end
 
 if(nargin<5||isempty(M))
 	M=eye(3,3); 
@@ -52,8 +62,8 @@ end
 
 J=zeros(4,6);
 J(1,1:3)=rangeGradient(x(1:3),useHalfRange,xTx(1:3),xRx(1:3));
-J(2:3,1:3)=uvGradient(x(1:3),xRx(1:3),M);
-J(4,:)=rangeRateGradient(x(1:6),useHalfRange,xTx,xRx);
+J(2:(3+includeW),1:3)=uvGradient(x(1:3),xRx(1:3),M,includeW);
+J(4+includeW,:)=rangeRateGradient(x(1:6),useHalfRange,xTx,xRx);
 
 end
 

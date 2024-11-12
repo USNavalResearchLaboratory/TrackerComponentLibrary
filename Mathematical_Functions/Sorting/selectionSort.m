@@ -48,7 +48,7 @@ function [A,idxList]=selectionSort(A,byCol,gtCompareFunc)
 %
 %Note that sorting large matrices can be slow as each element (so an entire
 %row/ column) is copied during the search. Thus, if one is just sorting
-%according to a particular row, it makes sense ot get the idxList for that
+%according to a particular row, it makes sense to get the idxList for that
 %one row and then use it to sort everything else.
 %
 %REFERENCES:

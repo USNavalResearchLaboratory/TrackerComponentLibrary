@@ -53,8 +53,8 @@ methods(Static)
     % plot(x,cpdf,x,pdf)
     %
     %REFERENCES:
-    %[1] Guillermo Julián-Moreno, Jorge E. López De Vergara, Iván
-    %    González, Luis Pedro, Javier Royuela-Del-Val, and Federico 
+    %[1] Guillermo Julian-Moreno, Jorge E. Lopez De Vergara, Ivan
+    %    Gonzalez, Luis Pedro, Javier Royuela-Del-Val, and Federico 
     %    Simmross-Wattenberg, "Fast parallel alpha-stable distribution
     %    function evaluation and parameter estimation using OpenCL in 
     %    GPGPUs," Statistics and Computing 27 (2017), no. 5, 1365-1382.
@@ -140,8 +140,8 @@ methods(Static)
     % plot(x,ccdf,x,cdf)
     %
     %REFERENCES:
-    %[1] Guillermo Julián-Moreno, Jorge E. López De Vergara, Iván
-    %    González, Luis Pedro, Javier Royuela-Del-Val, and Federico 
+    %[1] Guillermo Julian-Moreno, Jorge E. Lopez De Vergara, Ivan
+    %    Gonzalez, Luis Pedro, Javier Royuela-Del-Val, and Federico 
     %    Simmross-Wattenberg, "Fast parallel alpha-stable distribution
     %    function evaluation and parameter estimation using OpenCL in 
     %    GPGPUs," Statistics and Computing 27 (2017), no. 5, 1365-1382.

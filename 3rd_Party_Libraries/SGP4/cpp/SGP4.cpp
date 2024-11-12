@@ -16,9 +16,11 @@
 *     (w) 719-573-2600, email dvallado@agi.com, davallado@gmail.com
 *
 *    current :
+*              12 mar 20  david vallado
+*                           chg satnum to string for alpha 5 or 9-digit
+*    changes :
 *               7 dec 15  david vallado
 *                           fix jd, jdfrac
-*    changes :
 *               3 nov 14  david vallado
 *                           update to msvs2013 c++
 *              30 aug 10  david vallado
@@ -334,13 +336,11 @@ namespace SGP4Funcs
 				// nodep used without a trigonometric function ahead
 				if ((nodep < 0.0) && (opsmode == 'a'))
 					nodep = nodep + twopi;
-				if (fabs(xnoh - nodep) > pi) {
-					if (nodep < xnoh) {
+				if (fabs(xnoh - nodep) > pi)
+					if (nodep < xnoh)
 						nodep = nodep + twopi;
-                    } else {
+					else
 						nodep = nodep - twopi;
-                    }
-                }
 				mp = mp + pl;
 				argpp = xls - mp - cosip * nodep;
 			}
@@ -1270,7 +1270,7 @@ namespace SGP4Funcs
 			gsto1 = gsto1 + twopi;
 		//    }
 		//    else
-		gsto = gstime(epoch + 2433281.5);
+		gsto = gstime_SGP4(epoch + 2433281.5);
 
 		//#include "debug5.cpp"
 	}  // initl
@@ -1359,7 +1359,7 @@ namespace SGP4Funcs
 
 	bool sgp4init
 		(
-		gravconsttype whichconst, char opsmode, const int satn, const double epoch,
+		gravconsttype whichconst, char opsmode, const char satn[5], const double epoch,
 		const double xbstar, const double xndot, const double xnddot, const double xecco, const double xargpo,
 		const double xinclo, const double xmo, const double xno_kozai,
 		const double xnodeo, elsetrec& satrec
@@ -1423,14 +1423,19 @@ namespace SGP4Funcs
 		/* ------------------------ earth constants ----------------------- */
 		// sgp4fix identify constants and allow alternate values
 		// this is now the only call for the constants
-		getgravconst(whichconst, satrec.tumin, satrec.mu, satrec.radiusearthkm, satrec.xke,
+		getgravconst(whichconst, satrec.tumin, satrec.mus, satrec.radiusearthkm, satrec.xke,
 			satrec.j2, satrec.j3, satrec.j4, satrec.j3oj2);
 
 		//-------------------------------------------------------------------------
 
 		satrec.error = 0;
 		satrec.operationmode = opsmode;
-		satrec.satnum = satn;
+		// new alpha5 or 9-digit number
+		#ifdef _MSC_VER
+						   strcpy_s(satrec.satnum, 6 * sizeof(char), satn);
+		#else
+						   strcpy(satrec.satnum, satn);
+		#endif
 
 		// sgp4fix - note the following variables are also passed directly via satrec.
 		// it is possible to streamline the sgp4init call by deleting the "x"
@@ -2071,7 +2076,7 @@ namespace SGP4Funcs
 		(
 		gravconsttype whichconst,
 		double& tumin,
-		double& mu,
+		double& mus,
 		double& radiusearthkm,
 		double& xke,
 		double& j2,
@@ -2085,7 +2090,7 @@ namespace SGP4Funcs
 		{
 			// -- wgs-72 low precision str#3 constants --
 		case wgs72old:
-			mu = 398600.79964;        // in km3 / s2
+			mus = 398600.79964;        // in km3 / s2
 			radiusearthkm = 6378.135;     // km
 			xke = 0.0743669161;        // reciprocal of tumin
 			tumin = 1.0 / xke;
@@ -2096,9 +2101,9 @@ namespace SGP4Funcs
 			break;
 			// ------------ wgs-72 constants ------------
 		case wgs72:
-			mu = 398600.8;            // in km3 / s2
+			mus = 398600.8;            // in km3 / s2
 			radiusearthkm = 6378.135;     // km
-			xke = 60.0 / sqrt(radiusearthkm*radiusearthkm*radiusearthkm / mu);
+			xke = 60.0 / sqrt(radiusearthkm*radiusearthkm*radiusearthkm / mus);
 			tumin = 1.0 / xke;
 			j2 = 0.001082616;
 			j3 = -0.00000253881;
@@ -2107,9 +2112,9 @@ namespace SGP4Funcs
 			break;
 		case wgs84:
 			// ------------ wgs-84 constants ------------
-			mu = 398600.5;            // in km3 / s2
+			mus = 398600.5;            // in km3 / s2
 			radiusearthkm = 6378.137;     // km
-			xke = 60.0 / sqrt(radiusearthkm*radiusearthkm*radiusearthkm / mu);
+			xke = 60.0 / sqrt(radiusearthkm*radiusearthkm*radiusearthkm / mus);
 			tumin = 1.0 / xke;
 			j2 = 0.00108262998905;
 			j3 = -0.00000253215306;
@@ -2138,6 +2143,7 @@ namespace SGP4Funcs
 	*    included at the end of the second line of data. this only works with the
 	*    verification mode. the catalog mode simply propagates from -1440 to 1440 min
 	*    from epoch and is useful when performing entire catalog runs.
+	*    update for alpha 5 numbering system. 4 mar 2021.
 	*
 	*  author        : david vallado                  719-573-2600    1 mar 2001
 	*
@@ -2222,11 +2228,11 @@ namespace SGP4Funcs
 		if (longstr1[68] == ' ')
 			longstr1[68] = '0';
 #ifdef _MSC_VER // chk if compiling in MSVS c++
-		sscanf_s(longstr1, "%2d %5ld %1c %10s %2d %12lf %11lf %7lf %2d %7lf %2d %2d %6ld ",
-			&cardnumb, &satrec.satnum, &satrec.classification, sizeof(char), &satrec.intldesg, 11 * sizeof(char), &satrec.epochyr,
+		sscanf_s(longstr1, "%2d %5s %1c %10s %2d %12lf %11lf %7lf %2d %7lf %2d %2d %6ld ",
+			&cardnumb, &satrec.satnum, 6 * sizeof(char), &satrec.classification, sizeof(char), &satrec.intldesg, 11 * sizeof(char), &satrec.epochyr,
 			&satrec.epochdays, &satrec.ndot, &satrec.nddot, &nexp, &satrec.bstar, &ibexp, &satrec.ephtype, &satrec.elnum);
 #else
-		sscanf(longstr1, "%2d %5ld %1c %10s %2d %12lf %11lf %7lf %2d %7lf %2d %2d %6ld ",
+		sscanf(longstr1, "%2d %5s %1c %10s %2d %12lf %11lf %7lf %2d %7lf %2d %2d %6ld ",
 			&cardnumb, &satrec.satnum, &satrec.classification, &satrec.intldesg, &satrec.epochyr,
 			&satrec.epochdays, &satrec.ndot, &satrec.nddot, &nexp, &satrec.bstar,
 			&ibexp, &satrec.ephtype, &satrec.elnum);
@@ -2236,12 +2242,12 @@ namespace SGP4Funcs
 			if (longstr2[52] == ' ')
 			{
 #ifdef _MSC_VER
-				sscanf_s(longstr2, "%2d %5ld %9lf %9lf %8lf %9lf %9lf %10lf %6ld %lf %lf %lf \n",
-					&cardnumb, &satrec.satnum, &satrec.inclo,
+				sscanf_s(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %10lf %6ld %lf %lf %lf \n",
+					&cardnumb, &satrec.satnum, 6 * sizeof(char), &satrec.inclo,
 					&satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
 					&satrec.revnum, &startmfe, &stopmfe, &deltamin);
 #else
-				sscanf(longstr2, "%2d %5ld %9lf %9lf %8lf %9lf %9lf %10lf %6ld %lf %lf %lf \n",
+				sscanf(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %10lf %6ld %lf %lf %lf \n",
 					&cardnumb, &satrec.satnum, &satrec.inclo,
 					&satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
 					&satrec.revnum, &startmfe, &stopmfe, &deltamin);
@@ -2250,12 +2256,12 @@ namespace SGP4Funcs
 			else
 			{
 #ifdef _MSC_VER
-				sscanf_s(longstr2, "%2d %5ld %9lf %9lf %8lf %9lf %9lf %11lf %6ld %lf %lf %lf \n",
-					&cardnumb, &satrec.satnum, &satrec.inclo,
+				sscanf_s(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %11lf %6ld %lf %lf %lf \n",
+					&cardnumb, &satrec.satnum, 6 * sizeof(char), &satrec.inclo,
 					&satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
 					&satrec.revnum, &startmfe, &stopmfe, &deltamin);
 #else
-				sscanf(longstr2, "%2d %5ld %9lf %9lf %8lf %9lf %9lf %11lf %6ld %lf %lf %lf \n",
+				sscanf(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %11lf %6ld %lf %lf %lf \n",
 					&cardnumb, &satrec.satnum, &satrec.inclo,
 					&satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
 					&satrec.revnum, &startmfe, &stopmfe, &deltamin);
@@ -2267,12 +2273,12 @@ namespace SGP4Funcs
 			if (longstr2[52] == ' ')
 			{
 #ifdef _MSC_VER
-				sscanf_s(longstr2, "%2d %5ld %9lf %9lf %8lf %9lf %9lf %10lf %6ld \n",
-					&cardnumb, &satrec.satnum, &satrec.inclo,
+				sscanf_s(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %10lf %6ld \n",
+					&cardnumb, &satrec.satnum, 6 * sizeof(char), &satrec.inclo,
 					&satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
 					&satrec.revnum);
 #else
-				sscanf(longstr2, "%2d %5ld %9lf %9lf %8lf %9lf %9lf %10lf %6ld \n",
+				sscanf(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %10lf %6ld \n",
 					&cardnumb, &satrec.satnum, &satrec.inclo,
 					&satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
 					&satrec.revnum);
@@ -2281,12 +2287,12 @@ namespace SGP4Funcs
 			else
 			{
 #ifdef _MSC_VER
-				sscanf_s(longstr2, "%2d %5ld %9lf %9lf %8lf %9lf %9lf %11lf %6ld \n",
-					&cardnumb, &satrec.satnum, &satrec.inclo,
+				sscanf_s(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %11lf %6ld \n",
+					&cardnumb, &satrec.satnum, 6 * sizeof(char), &satrec.inclo,
 					&satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
 					&satrec.revnum);
 #else
-				sscanf(longstr2, "%2d %5ld %9lf %9lf %8lf %9lf %9lf %11lf %6ld \n",
+				sscanf(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %11lf %6ld \n",
 					&cardnumb, &satrec.satnum, &satrec.inclo,
 					&satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
 					&satrec.revnum);
@@ -2297,6 +2303,7 @@ namespace SGP4Funcs
 		// ---- find no, ndot, nddot ----
 		satrec.no_kozai = satrec.no_kozai / xpdotp; //* rad/min
 		satrec.nddot = satrec.nddot * pow(10.0, nexp);
+		// could multiply by 0.00001, but implied decimal is set in the longstr1 above
 		satrec.bstar = satrec.bstar * pow(10.0, ibexp);
 
 		// ---- convert to sgp4 units ----
@@ -2327,8 +2334,8 @@ namespace SGP4Funcs
 		else
 			year = satrec.epochyr + 1900;
 
-		days2mdhms(year, satrec.epochdays, mon, day, hr, minute, sec);
-		jday(year, mon, day, hr, minute, sec, satrec.jdsatepoch, satrec.jdsatepochF);
+		days2mdhms_SGP4(year, satrec.epochdays, mon, day, hr, minute, sec);
+		jday_SGP4(year, mon, day, hr, minute, sec, satrec.jdsatepoch, satrec.jdsatepochF);
 
 		// ---- input start stop times manually
 		if ((typerun != 'v') && (typerun != 'c'))
@@ -2344,7 +2351,7 @@ namespace SGP4Funcs
 				scanf("%i %i %i %i %i %lf", &startyear, &startmon, &startday, &starthr, &startmin, &startsec);
 #endif
 				fflush(stdin);
-				jday(startyear, startmon, startday, starthr, startmin, startsec, jdstart, jdstartF);
+				jday_SGP4(startyear, startmon, startday, starthr, startmin, startsec, jdstart, jdstartF);
 
 				printf("input stop prop year mon day hr min sec \n");
 #ifdef _MSC_VER
@@ -2353,7 +2360,7 @@ namespace SGP4Funcs
 				scanf("%i %i %i %i %i %lf", &stopyear, &stopmon, &stopday, &stophr, &stopmin, &stopsec);
 #endif
 				fflush(stdin);
-				jday(stopyear, stopmon, stopday, stophr, stopmin, stopsec, jdstop, jdstopF);
+				jday_SGP4(stopyear, stopmon, stopday, stophr, stopmin, stopsec, jdstop, jdstopF);
 
 				startmfe = (jdstart - satrec.jdsatepoch) * 1440.0 + (jdstartF - satrec.jdsatepochF) * 1440.0;
 				stopmfe = (jdstop - satrec.jdsatepoch) * 1440.0 + (jdstopF - satrec.jdsatepochF) * 1440.0;
@@ -2381,10 +2388,10 @@ namespace SGP4Funcs
 				scanf("%i %lf", &stopyear, &stopdayofyr);
 #endif
 
-				days2mdhms(startyear, startdayofyr, mon, day, hr, minute, sec);
-				jday(startyear, mon, day, hr, minute, sec, jdstart, jdstartF);
-				days2mdhms(stopyear, stopdayofyr, mon, day, hr, minute, sec);
-				jday(stopyear, mon, day, hr, minute, sec, jdstop, jdstopF);
+				days2mdhms_SGP4(startyear, startdayofyr, mon, day, hr, minute, sec);
+				jday_SGP4(startyear, mon, day, hr, minute, sec, jdstart, jdstartF);
+				days2mdhms_SGP4(stopyear, stopdayofyr, mon, day, hr, minute, sec);
+				jday_SGP4(stopyear, mon, day, hr, minute, sec, jdstop, jdstopF);
 
 				startmfe = (jdstart - satrec.jdsatepoch) * 1440.0 + (jdstartF - satrec.jdsatepochF) * 1440.0;
 				stopmfe = (jdstop - satrec.jdsatepoch) * 1440.0 + (jdstopF - satrec.jdsatepochF) * 1440.0;
@@ -2436,7 +2443,7 @@ namespace SGP4Funcs
 	// older sgp4ext methods
 	/* -----------------------------------------------------------------------------
 	*
-	*                           function gstime
+	*                           function gstime_SGP4
 	*
 	*  this function finds the greenwich sidereal time.
 	*
@@ -2460,7 +2467,7 @@ namespace SGP4Funcs
 	*    vallado       2013, 187, eq 3-45
 	* --------------------------------------------------------------------------- */
 
-	double  gstime
+	double  gstime_SGP4
 		(
 		double jdut1
 		)
@@ -2481,7 +2488,7 @@ namespace SGP4Funcs
 		return temp;
 	}  // gstime
 
-	double  sgn
+	double  sgn_SGP4
 		(
 		double x
 		)
@@ -2499,7 +2506,7 @@ namespace SGP4Funcs
 
 	/* -----------------------------------------------------------------------------
 	*
-	*                           function mag
+	*                           function mag_SGP4
 	*
 	*  this procedure finds the magnitude of a vector.  
 	*
@@ -2518,7 +2525,7 @@ namespace SGP4Funcs
 	*    none.
 	* --------------------------------------------------------------------------- */
 
-	double  mag
+	double  mag_SGP4
 		(
 		double x[3]
 		)
@@ -2528,7 +2535,7 @@ namespace SGP4Funcs
 
 	/* -----------------------------------------------------------------------------
 	*
-	*                           procedure cross
+	*                           procedure cross_SGP4
 	*
 	*  this procedure crosses two vectors.
 	*
@@ -2548,7 +2555,7 @@ namespace SGP4Funcs
 	*    mag           magnitude of a vector
 	---------------------------------------------------------------------------- */
 
-	void    cross
+	void    cross_SGP4
 		(
 		double vec1[3], double vec2[3], double outvec[3]
 		)
@@ -2561,7 +2568,7 @@ namespace SGP4Funcs
 
 	/* -----------------------------------------------------------------------------
 	*
-	*                           function dot
+	*                           function dot_SGP4
 	*
 	*  this function finds the dot product of two vectors.
 	*
@@ -2581,7 +2588,7 @@ namespace SGP4Funcs
 	*    none.
 	* --------------------------------------------------------------------------- */
 
-	double  dot
+	double  dot_SGP4
 		(
 		double x[3], double y[3]
 		)
@@ -2591,7 +2598,7 @@ namespace SGP4Funcs
 
 	/* -----------------------------------------------------------------------------
 	*
-	*                           procedure angle
+	*                           procedure angle_SGP4
 	*
 	*  this procedure calculates the angle between two vectors.  the output is
 	*    set to 999999.1 to indicate an undefined value.  be sure to check for
@@ -2613,7 +2620,7 @@ namespace SGP4Funcs
 	*    dot           dot product of two vectors
 	* --------------------------------------------------------------------------- */
 
-	double  angle
+	double  angle_SGP4
 		(
 		double vec1[3],
 		double vec2[3]
@@ -2623,14 +2630,14 @@ namespace SGP4Funcs
 		small = 0.00000001;
 		undefined = 999999.1;
 
-		magv1 = mag(vec1);
-		magv2 = mag(vec2);
+		magv1 = mag_SGP4(vec1);
+		magv2 = mag_SGP4(vec2);
 
 		if (magv1*magv2 > small*small)
 		{
-			temp = dot(vec1, vec2) / (magv1*magv2);
+			temp = dot_SGP4(vec1, vec2) / (magv1*magv2);
 			if (fabs(temp) > 1.0)
-				temp = sgn(temp) * 1.0;
+				temp = sgn_SGP4(temp) * 1.0;
 			return acos(temp);
 		}
 		else
@@ -2640,7 +2647,7 @@ namespace SGP4Funcs
 
 	/* -----------------------------------------------------------------------------
 	*
-	*                           function asinh
+	*                           function asinh_SGP4
 	*
 	*  this function evaluates the inverse hyperbolic sine function.
 	*
@@ -2659,7 +2666,7 @@ namespace SGP4Funcs
 	*    none.
 	* --------------------------------------------------------------------------- */
 
-	double  asinh
+	double  asinh_SGP4
 		(
 		double xval
 		)
@@ -2670,7 +2677,7 @@ namespace SGP4Funcs
 
 	/* -----------------------------------------------------------------------------
 	*
-	*                           function newtonnu
+	*                           function newtonnu_SGP4
 	*
 	*  this function solves keplers equation when the true anomaly is known.
 	*    the mean and eccentric, parabolic, or hyperbolic anomaly is also found.
@@ -2703,7 +2710,7 @@ namespace SGP4Funcs
 	*    vallado       2013, 77, alg 5
 	* --------------------------------------------------------------------------- */
 
-	void newtonnu
+	void newtonnu_SGP4
 		(
 		double ecc, double nu,
 		double& e0, double& m
@@ -2738,7 +2745,7 @@ namespace SGP4Funcs
 			if ((ecc > 1.0) && (fabs(nu) + 0.00001 < pi - acos(1.0 / ecc)))
 			{
 				sine = (sqrt(ecc*ecc - 1.0) * sin(nu)) / (1.0 + ecc*cos(nu));
-				e0 = asinh(sine);
+				e0 = asinh_SGP4(sine);
 				m = ecc*sinh(e0) - e0;
 			}
 				}
@@ -2762,7 +2769,7 @@ namespace SGP4Funcs
 
 	/* -----------------------------------------------------------------------------
 	*
-	*                           function rv2coe
+	*                           function rv2coe_SGP4
 	*
 	*  this function finds the classical orbital elements given the geocentric
 	*    equatorial position and velocity vectors.
@@ -2817,9 +2824,9 @@ namespace SGP4Funcs
 	*    vallado       2013, 113, alg 9, ex 2-5
 	* --------------------------------------------------------------------------- */
 
-	void rv2coe
+	void rv2coe_SGP4
 		(
-		double r[3], double v[3], const double mu,
+		double r[3], double v[3], double mus,
 		double& p, double& a, double& ecc, double& incl, double& omega, double& argp,
 		double& nu, double& m, double& arglat, double& truelon, double& lonper
 		)
@@ -2844,31 +2851,31 @@ namespace SGP4Funcs
 		infinite = 999999.9;
 
 		// -------------------------  implementation   -----------------
-		magr = mag(r);
-		magv = mag(v);
+		magr = mag_SGP4(r);
+		magv = mag_SGP4(v);
 
 		// ------------------  find h n and e vectors   ----------------
-		cross(r, v, hbar);
-		magh = mag(hbar);
+		cross_SGP4(r, v, hbar);
+		magh = mag_SGP4(hbar);
 		if (magh > small)
 		{
 			nbar[0] = -hbar[1];
 			nbar[1] = hbar[0];
 			nbar[2] = 0.0;
-			magn = mag(nbar);
-			c1 = magv*magv - mu / magr;
-			rdotv = dot(r, v);
+			magn = mag_SGP4(nbar);
+			c1 = magv*magv - mus / magr;
+			rdotv = dot_SGP4(r, v);
 			for (i = 0; i <= 2; i++)
-				ebar[i] = (c1*r[i] - rdotv*v[i]) / mu;
-			ecc = mag(ebar);
+				ebar[i] = (c1*r[i] - rdotv*v[i]) / mus;
+			ecc = mag_SGP4(ebar);
 
 			// ------------  find a e and semi-latus rectum   ----------
-			sme = (magv*magv*0.5) - (mu / magr);
+			sme = (magv*magv*0.5) - (mus / magr);
 			if (fabs(sme) > small)
-				a = -mu / (2.0 *sme);
+				a = -mus / (2.0 *sme);
 			else
 				a = infinite;
-			p = magh*magh / mu;
+			p = magh*magh / mus;
 
 			// -----------------  find inclination   -------------------
 			hk = hbar[2] / magh;
@@ -2924,7 +2931,7 @@ namespace SGP4Funcs
 			{
 				temp = nbar[0] / magn;
 				if (fabs(temp) > 1.0)
-					temp = sgn(temp);
+					temp = sgn_SGP4(temp);
 				omega = acos(temp);
 				if (nbar[1] < 0.0)
 					omega = twopi - omega;
@@ -2936,7 +2943,7 @@ namespace SGP4Funcs
 			//if (strcmp(typeorbit, "ei") == 0)
 			if (typeorbit == 1)
 			{
-				argp = angle(nbar, ebar);
+				argp = angle_SGP4(nbar, ebar);
 				if (ebar[2] < 0.0)
 					argp = twopi - argp;
 			}
@@ -2947,7 +2954,7 @@ namespace SGP4Funcs
 			//if (typeorbit[0] == 'e')
 			if ((typeorbit == 1) || (typeorbit == 4))
 			{
-				nu = angle(ebar, r);
+				nu = angle_SGP4(ebar, r);
 				if (rdotv < 0.0)
 					nu = twopi - nu;
 			}
@@ -2958,7 +2965,7 @@ namespace SGP4Funcs
 			//if (strcmp(typeorbit, "ci") == 0)
 			if (typeorbit == 3)
 			{
-				arglat = angle(nbar, r);
+				arglat = angle_SGP4(nbar, r);
 				if (r[2] < 0.0)
 					arglat = twopi - arglat;
 				m = arglat;
@@ -2972,7 +2979,7 @@ namespace SGP4Funcs
 			{
 				temp = ebar[0] / ecc;
 				if (fabs(temp) > 1.0)
-					temp = sgn(temp);
+					temp = sgn_SGP4(temp);
 				lonper = acos(temp);
 				if (ebar[1] < 0.0)
 					lonper = twopi - lonper;
@@ -2988,7 +2995,7 @@ namespace SGP4Funcs
 			{
 				temp = r[0] / magr;
 				if (fabs(temp) > 1.0)
-					temp = sgn(temp);
+					temp = sgn_SGP4(temp);
 				truelon = acos(temp);
 				if (r[1] < 0.0)
 					truelon = twopi - truelon;
@@ -3002,7 +3009,7 @@ namespace SGP4Funcs
 			// ------------ find mean anomaly for all orbits -----------
 			//if (typeorbit[0] == 'e')
 			if ((typeorbit == 1) || (typeorbit == 4))
-				newtonnu(ecc, nu, e, m);
+				newtonnu_SGP4(ecc, nu, e, m);
 		}
 		else
 		{
@@ -3023,7 +3030,7 @@ namespace SGP4Funcs
 
 	/* -----------------------------------------------------------------------------
 	*
-	*                           procedure jday
+	*                           procedure jday_SGP4
 	*
 	*  this procedure finds the julian date given the year, month, day, and time.
 	*    the julian date is defined by each elapsed day since noon, jan 1, 4713 bc.
@@ -3054,7 +3061,7 @@ namespace SGP4Funcs
 	*    vallado       2013, 183, alg 14, ex 3-4
 	* --------------------------------------------------------------------------- */
 
-	void    jday
+	void    jday_SGP4
 		(
 		int year, int mon, int day, int hr, int minute, double sec,
 		double& jd, double& jdFrac
@@ -3080,7 +3087,7 @@ namespace SGP4Funcs
 
 	/* -----------------------------------------------------------------------------
 	*
-	*                           procedure days2mdhms
+	*                           procedure days2mdhms_SGP4
 	*
 	*  this procedure converts the day of the year, days, to the equivalent month
 	*    day, hour, minute and second.
@@ -3115,7 +3122,7 @@ namespace SGP4Funcs
 	*    none.
 	* --------------------------------------------------------------------------- */
 
-	void    days2mdhms
+	void    days2mdhms_SGP4
 		(
 		int year, double days,
 		int& mon, int& day, int& hr, int& minute, double& sec
@@ -3150,7 +3157,7 @@ namespace SGP4Funcs
 
 	/* -----------------------------------------------------------------------------
 	*
-	*                           procedure invjday
+	*                           procedure invjday_SGP4
 	*
 	*  this procedure finds the year, month, day, hour, minute and second
 	*  given the julian date. tu can be ut1, tdt, tdb, etc.
@@ -3189,7 +3196,7 @@ namespace SGP4Funcs
 	*    vallado       2013, 203, alg 22, ex 3-13
 	* --------------------------------------------------------------------------- */
 
-	void    invjday
+	void    invjday_SGP4
 		(
 		double jd, double jdfrac,
 		int& year, int& mon, int& day,
@@ -3231,7 +3238,7 @@ namespace SGP4Funcs
 		}
 
 		/* ----------------- find remaining data  ------------------------- */
-		days2mdhms(year, days + jdfrac, mon, day, hr, minute, sec);
+		days2mdhms_SGP4(year, days + jdfrac, mon, day, hr, minute, sec);
 	}  // invjday
 
 

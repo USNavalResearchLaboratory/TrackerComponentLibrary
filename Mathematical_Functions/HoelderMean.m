@@ -1,31 +1,31 @@
 function val=HoelderMean(x,p,dim)
-%%HOELDERMEAN Compute the Hölder mean (the generalized mean, also known as
-%             the power mean) of a set of numbers. The Hölder mean of n
+%%HOELDERMEAN Compute the Holder mean (the generalized mean, also known as
+%             the power mean) of a set of numbers. The Holder mean of n
 %             numbers equals
 %             ((1/n)*sum_{=1}^n x_i)^(1/p)
 %             Special cases are p=-Inf (minimum), p=Inf (maximum), p=-1
 %             (harmonic mean), p=0 (geometric mean), p=1 (arithmetic mean)
 %             and p=2 (root mean squared).
 %
-%INPUTS: x The set of samples over which the Hölder mean is to be found.
+%INPUTS: x The set of samples over which the Holder mean is to be found.
 %          How the function handles vectors and matrices is determined by
 %          the parameter dim.
 %        p The positive or negative exponent of the mean as described
 %          above. If this parameter is omitted or an empty matrix is
 %          passed, p=1 is used.
 %      dim An optional parameter specifying over which dimension of x the
-%          Hölder mean is to be taken. If dim is omitted or an empty
-%          matrix is passsed, then if x is a vector, the Hölder mean is
+%          Holder mean is to be taken. If dim is omitted or an empty
+%          matrix is passsed, then if x is a vector, the Holder mean is
 %          found over all elements of the vector. If x is a matrix, then
 %          the mean is found over the columns of the matrix (resulting in a
 %          row vector), and if x is an n-dimensional (n>2) matrix, then the
-%          Hölder mean is found over the first non-singleton dimension
+%          Holder mean is found over the first non-singleton dimension
 %          of the matrix.
 %
-%OUTPUT: val The Hölder mean of x taken over the appropriate dimension with
+%OUTPUT: val The Holder mean of x taken over the appropriate dimension with
 %            the exponent p.
 %
-%The Hölder mean is described in [1]. For the case of n=0, the function
+%The Holder mean is described in [1]. For the case of n=0, the function
 %geometricMean is called.
 %
 %REFERENCES:

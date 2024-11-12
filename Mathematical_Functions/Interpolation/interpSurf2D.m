@@ -6,7 +6,7 @@ function [zInterp,gradInterp,gradDerivMatInterp]=interpSurf2D(xyPoints,xyPointsR
 %              interpolated gradient at the points. For large numbers of
 %              points, b-splines will be more efficient than this approach.
 %
-%INPUTS: xyPoints A 2XN set of N 2D (x,y) points at which interplation and
+%INPUTS: xyPoints A 2XN set of N 2D (x,y) points at which interpolation and
 %                 gradients are desired.
 %     xyPointsRef The 2XnumRef set of numRef (x,y) points in two-dimensions
 %                 that define the locations at which the zPointsRef

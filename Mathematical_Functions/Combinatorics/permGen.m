@@ -9,7 +9,7 @@ function permVal=permGen(A,p)
 %         rows). No row is chosen twice. All chosen values are multiplied
 %         together and then summed over all possible choices. The
 %         generalized matrix permanent arises when computing
-%         multihomogenerous Bézout bounds.
+%         multihomogenerous Bezout bounds.
 %
 %INPUTS: A An nXm matrix with m>=n.
 %        p A mX1 vector of positive integer values such that each p(i)>=1
@@ -19,13 +19,13 @@ function permVal=permGen(A,p)
 %OUTPUTS: permVal The value of the generalized matrix permanent.
 %
 %The generalized permanent of a rectangular matrix arises in the
-%computation of the multihomogenerous Bézout bound in Chapter 3 of [1].
+%computation of the multihomogenerous Bezout bound in Chapter 3 of [1].
 %Unlike the standard permanent, there does not appear to be a particularly
 %efficient algorithm in the literature. Thus, this function is just a
 %brute-force implementation, generating every term of the sum.
 %
 %EXAMPLE:
-%As in the multihomogenerous Bézout bound in Section 2.2. of [1], we have
+%As in the multihomogenerous Bezout bound in Section 2.2. of [1], we have
 % A=[2,0,0;
 %    0,2,0;
 %    0,0,2;

@@ -17,18 +17,18 @@ void iauAtci13(double rc, double dc,
 **  Status:  support function.
 **
 **  Given:
-**     rc     double   ICRS right ascension at J2000.0 (radians, Note 1)
-**     dc     double   ICRS declination at J2000.0 (radians, Note 1)
-**     pr     double   RA proper motion (radians/year, Note 2)
-**     pd     double   Dec proper motion (radians/year)
-**     px     double   parallax (arcsec)
-**     rv     double   radial velocity (km/s, +ve if receding)
-**     date1  double   TDB as a 2-part...
-**     date2  double   ...Julian Date (Note 3)
+**     rc     double  ICRS right ascension at J2000.0 (radians, Note 1)
+**     dc     double  ICRS declination at J2000.0 (radians, Note 1)
+**     pr     double  RA proper motion (radians/year, Note 2)
+**     pd     double  Dec proper motion (radians/year)
+**     px     double  parallax (arcsec)
+**     rv     double  radial velocity (km/s, +ve if receding)
+**     date1  double  TDB as a 2-part...
+**     date2  double  ...Julian Date (Note 3)
 **
 **  Returned:
-**     ri,di  double*  CIRS geocentric RA,Dec (radians)
-**     eo     double*  equation of the origins (ERA-GST, Note 5)
+**     ri,di  double* CIRS geocentric RA,Dec (radians)
+**     eo     double* equation of the origins (ERA-GST, radians, Note 5)
 **
 **  Notes:
 **
@@ -83,11 +83,11 @@ void iauAtci13(double rc, double dc,
 **     iauApci13    astrometry parameters, ICRS-CIRS, 2013
 **     iauAtciq     quick ICRS to CIRS
 **
-**  This revision:   2021 April 3
+**  This revision:   2022 May 3
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
 /* Star-independent astrometry parameters */
@@ -104,8 +104,8 @@ void iauAtci13(double rc, double dc,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

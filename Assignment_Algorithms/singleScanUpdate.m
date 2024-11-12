@@ -209,7 +209,7 @@ function [xEst,PEst,logLikes]=singleScanUpdate(xHyp,PHyp,A,algSel1,algSel2,param
                 xEst(:,curTar)=xHyp(:,curTar,maxIdx);
                 PEst(:,:,curTar)=PHyp(:,:,curTar,maxIdx);
             end
-        case 3%Paralle single-target PDAs
+        case 3%Parallel single-target PDAs
             %This is just a bunch of independent PDAFs for each target.
             beta=zeros(numTar,numHyp);
             for curTar=1:numTar
@@ -224,7 +224,7 @@ function [xEst,PEst,logLikes]=singleScanUpdate(xHyp,PHyp,A,algSel1,algSel2,param
             if(nargout>2)
                 logLikes=logLikefromABeta(A,beta);
             end
-        case 4%Na�ve nearest neighbor
+        case 4%Naive nearest neighbor
             %The assignment for each target
             logLikes=zeros(numTar,1);
             for curTar=1:numTar
@@ -314,7 +314,7 @@ function [xEst,PEst,logLikes]=singleScanUpdate(xHyp,PHyp,A,algSel1,algSel2,param
             if(nargout>2)
                 logLikes=[];
             end
-        case 9%Na�ve nearest neighbor-JPDA
+        case 9%Naive nearest neighbor-JPDA
             %The assignment for each target
             logLikes=zeros(numTar,1);
             for curTar=1:numTar
@@ -339,8 +339,8 @@ function [xEst,PEst,logLikes]=singleScanUpdate(xHyp,PHyp,A,algSel1,algSel2,param
                 P=reshape(PHyp(:,:,curTar,:),[xDim,xDim,numHyp]);
                 [~,PEst(:,:,curTar)]=calcMixtureMoments(x,beta(curTar,:),P,xEst(:,curTar));
             end
-        case 10%Approxmate na�ve nearest neighbor-JPDA
-            %This is the same as the na�ve nearest neighbor-JPDA, except
+        case 10%Approxmate naive nearest neighbor-JPDA
+            %This is the same as the naive nearest neighbor-JPDA, except
             %the method for computing the betas is different.
             
             %The assignment for each target

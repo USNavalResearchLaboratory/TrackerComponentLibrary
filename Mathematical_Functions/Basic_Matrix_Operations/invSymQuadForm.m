@@ -1,4 +1,4 @@
-function dist=invSymQuadForm(x,M,matType)
+function dist=invSymQuadForm(x,M,matType,useCholSemi)
 %%INVSYMQUADFORM Compute the quadratic form x'*inv(R)*x in a manner that
 %                should be more numerically stable than directly evaluating
 %                the matrix inverse, where R is a symmetric, positive
@@ -19,6 +19,11 @@ function dist=invSymQuadForm(x,M,matType)
 %          0 (The default if omitted or an empty matrix is passed) M is the
 %            matrix R in the form x'*inv(R)*x.
 %          1 M is the lower-triangular square root of the matrix R.
+% useCholSemi If this is true, then if matType=1, a lower triangular square
+%          root is taken using cholSemiDef. Otherwise, chol is used.
+%          cholSemiDef can handle matrices that are more poorly
+%          conditioned. The default if omitted or an empty matrix is passed
+%          is false, which is faster.
 %
 %OUTPUTS: dist A 1XN vector of the values of x*inv(R)*x for every vector in
 %              the matrix x.
@@ -44,16 +49,23 @@ function dist=invSymQuadForm(x,M,matType)
 %August 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+    if(nargin<4||isempty(useCholSemi))
+        useCholSemi=false;
+    end
+
     if(nargin<3||isempty(matType))
         matType=0;
     end
     
     switch(matType)
         case 0
-            C=cholSemiDef(M,'lower');
+            if(useCholSemi)
+                C=cholSemiDef(M,'lower');
+            else
+                C=chol(M,'lower');
+            end
         case 1
             C=M;
-
         otherwise
             error('Invalid matrix type specified');
     end

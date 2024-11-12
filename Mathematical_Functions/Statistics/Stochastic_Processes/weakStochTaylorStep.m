@@ -1,5 +1,5 @@
 function [y,fixedTerm]=weakStochTaylorStep(y,aCur,BCur,deltaT,algorithm,simplified,pBpy,p2Bpypy,papy,p2apypy,papt,pBpt,p,ItoAlg)
-%%WEAKSTOCHTAYLORSTEP Perform a single step of an explicit weak Itô-
+%%WEAKSTOCHTAYLORSTEP Perform a single step of an explicit weak Ito-
 %           Taylor expansion. This integrates a d-dimensional stochastic
 %           differential equation of the form:
 %           dy=a(y,t)*dt+B(y,t)*dW

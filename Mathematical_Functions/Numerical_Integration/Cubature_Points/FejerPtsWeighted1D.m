@@ -1,5 +1,5 @@
 function [xi,w]=FejerPtsWeighted1D(moments,rule)
-%%FEJERPTSWEIGHTED1D Compute one of two types of Fejér quadrature points
+%%FEJERPTSWEIGHTED1D Compute one of two types of Fejer quadrature points
 %          and weights for integrating polynomials (or approximating
 %          integrals of non-polynomials) over the range -1 to 1 times a
 %          weighting function w(x) whose moments are given with respect to
@@ -11,11 +11,11 @@ function [xi,w]=FejerPtsWeighted1D(moments,rule)
 %                int_{-1}^1 T_k(x) w(xx) dx for k=0 to n, where w(x) is the
 %                weighting function over which integration using these
 %                quadrature points should be performed.
-%           rule A parameter specifying the Fejér interpolation rule to use.
+%           rule A parameter specifying the Fejer interpolation rule to use.
 %                The rules are described in [1]. Possible values are:
 %                1 (The default if omitted or an empty matrix is passed)
-%                  Use Fejér's first rule.
-%                2 Use Fejér's second rule.
+%                  Use Fejer's first rule.
+%                2 Use Fejer's second rule.
 %
 %OUTPUTS: xi A 1XnumPoints vector containing the quadrature points.
 %          w A numPointsX1 vector of the weights associated with the
@@ -42,7 +42,7 @@ function [xi,w]=FejerPtsWeighted1D(moments,rule)
 %is a very good integral approximation.
 %
 %REFERENCES:
-%[1] A. Sommariva, "Fast construction of Fejér and Clenshaw-Curtis rule for
+%[1] A. Sommariva, "Fast construction of Fejer and Clenshaw-Curtis rule for
 %    general weight functions," Computers and Mathematics with
 %    Applications, vol. 65, no. 4, pp. 682-693, Feb. 2013.
 %

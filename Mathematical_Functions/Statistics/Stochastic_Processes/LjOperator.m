@@ -2,7 +2,7 @@ function Lj=LjOperator(b,pfpx)
 %%LJOPERATOR This function implements the Lj operation that is used in
 %            Chapter 10 of [1] as applied to a single vector or matrix
 %            argument and is defined in Chapter 5.3 of [1]. This is a
-%            differential operator under Itô calculus. It is:
+%            differential operator under Ito calculus. It is:
 %            L^j=sum_{k=1}^d b(k,j) partial/(partial x_k)
 %            where partial is the nabla (partial derivative) operator. This
 %            does not implement multiple Lj operators, that is L^{j1}L^{j2}

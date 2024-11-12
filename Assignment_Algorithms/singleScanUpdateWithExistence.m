@@ -60,7 +60,7 @@ function [xUpdate,PUpdate,rUpdate,probNonTargetMeas,dominantMeasIdx]=singleScanU
 %              3) Approximate GNN-JIPDA
 %              4) Approximate JIPDA
 %              5) Naive nearest neighbor JIPDA.
-%              6) Approximate naïve nearest neighbor JIPDA.
+%              6) Approximate naive nearest neighbor JIPDA.
 %      algSel2 An optional parameter that further specifies the algorithm
 %              used when algSel1=3,4. If omitted but algSel1 is specified,
 %              a default value of 0 is used. If both algSel1 and algSel2
@@ -210,9 +210,9 @@ switch(algSel1)
         betas=calc2DAssignmentProbsApprox(A,algSel2,true,param3);
     case 4%Approximate JIPDAF
         betas=calc2DAssignmentProbsApprox(A,algSel2,true,param3);
-    case 5%Naïve nearest neighbor JIPDA
+    case 5%Naive nearest neighbor JIPDA
         betas=calc2DAssignmentProbs(A,true);
-    case 6%Approximate naïve nearest neighbor JIPDA
+    case 6%Approximate naive nearest neighbor JIPDA
         betas=calc2DAssignmentProbsApprox(A,algSel2,true,param3);
     otherwise
         error('Unknown algorithm selected')
@@ -258,7 +258,7 @@ if(algSel1==0||algSel1==3)%If a GNN estimate is used in place of the mean
         P=reshape(PHyp(:,:,curTar,:),[xDim,xDim,numHyp]);
         [~,PUpdate(:,:,curTar)]=calcMixtureMoments(x,betas(curTar,:),P,xUpdate(:,curTar));
     end
-elseif(algSel1==5||algSel1==6)%If a naïve nearest neighbor estimate is used
+elseif(algSel1==5||algSel1==6)%If a naive nearest neighbor estimate is used
                    %in place of the mean.
     %The assignment for each target
     logLikes=zeros(numTar,1);

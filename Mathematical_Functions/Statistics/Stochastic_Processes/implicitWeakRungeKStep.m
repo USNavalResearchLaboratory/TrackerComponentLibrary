@@ -1,6 +1,6 @@
 function [yNext,didConverge]=implicitWeakRungeKStep(y,t,a,B,deltaT,algorithm,aCur,BCur,useNewton,useGaussian,maxIter,RelTol,AbsTol)
 %%IMPLICITWEAKRUNGEKSTEP Perform a single step of an implicit weak
-%           stochastic Runge-Kutta method under It� calculus. This
+%           stochastic Runge-Kutta method under Ito calculus. This
 %           integrates d-dimensional stochastic differential equation of
 %           the form:
 %           dy=a(y,t)*dt+B(y,t)*dW

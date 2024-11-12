@@ -1,9 +1,9 @@
 function [xPredMain,xPredSubsid,g,orders,isFSAL,subsidType]=RungeKNystroemGStep(xVec,t,df,deltaT,dfCur,order,solutionChoice)
 %%RUNGEKNYSTROEMGSTEP Perform one step of a general explicit Runge-Kutta-
-%                     Nyström method. Such methods are used to efficiently
+%                     Nystrom method. Such methods are used to efficiently
 %                     implement second order differential equations of the
 %                     form d^2xdt^2=df(xVec,t), where xVec consists of the
-%                     stacked values x and dxdt. Runge-Kutta-Nyström
+%                     stacked values x and dxdt. Runge-Kutta-Nystrom
 %                     methods can be made to a higher order than general
 %                     Runge-Kutta methods while having the same number of
 %                     stages. All of the methods implemented here are
@@ -19,7 +19,7 @@ function [xPredMain,xPredSubsid,g,orders,isFSAL,subsidType]=RungeKNystroemGStep(
 %INPUTS: The function can either be called with two inputs as
 %        [orders,isFSAL,subsidType]=RungeKNystroemGStep(order,solutionChoice)
 %        to just get the orders of a particular general embedded Runge-
-%        Kutta-Nyström method and to figure out whether g(:end) can be
+%        Kutta-Nystrom method and to figure out whether g(:end) can be
 %        passed in place of dfCur during a subsequent step, and to figure
 %        out what type of information is contained in xPredSubsid, or it
 %        can be run as
@@ -37,7 +37,7 @@ function [xPredMain,xPredSubsid,g,orders,isFSAL,subsidType]=RungeKNystroemGStep(
 %                with respect to time taken at time t. The output is half
 %                the dimensionality of xVec.
 %         deltaT The size of the single (time) step over which the 
-%                Runge-Kutta-Nyström integration is performed.
+%                Runge-Kutta-Nystrom integration is performed.
 %          dfCur The value df(xVal,t). This is requested so that
 %                methods that are FSAL can pass g(:,end) on subsequent
 %                steps instead of having to perform a redundant
@@ -120,7 +120,7 @@ function [xPredMain,xPredSubsid,g,orders,isFSAL,subsidType]=RungeKNystroemGStep(
 %
 %REFERENCES:
 %[1] E. Fehlberg, "Classical seventh-, sixth-, and fifth-order Runge-Kutta-
-%    Nyström formulas with stepsize control for general second-order
+%    Nystrom formulas with stepsize control for general second-order
 %    differential equations," National Aeronautics and Space
 %    Administration, Marshall Space Flight Center, AL, Tech. Rep. NASA TR
 %    R-432, Oct. 1974.

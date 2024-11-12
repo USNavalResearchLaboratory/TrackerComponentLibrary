@@ -40,9 +40,9 @@ void iauLdsun(double p[3], double e[3], double em, double p1[3])
 **
 **  This revision:   2016 June 16
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    double em2, dlim;
@@ -60,8 +60,8 @@ void iauLdsun(double p[3], double e[3], double em, double p1[3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

@@ -7,7 +7,7 @@ function [traj,times,mT,mTi] = sampleTraj(dt,choice)
 %INPUT:
 % dt: The scalar time step to use for sampling the chosen trajectory.
 % choice: A nonnegative integer indicating which trajectory to generate.
-%         There are five test trajectories, all for 2D motion. POssible
+%         There are five test trajectories, all for 2D motion. Possible
 %         values are:
 %         0 Scenario 1 in Section 10.8.3 of [1]. This is non-maneuvering
 %           flight, a 2G turn, and then non-maneuvering flight.

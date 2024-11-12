@@ -59,7 +59,7 @@ else
             angDiff(curVec)=0;
         else
             argVal=dot(v1(:,curVec),v2(:,curVec))/(norm1*norm2);
-            %Clip to the vlaid range to deal with finite precision issues.
+            %Clip to the valid range to deal with finite precision issues.
             argVal=max(min(argVal,1),-1);
             angDiff(curVec)=acos(argVal);
         end

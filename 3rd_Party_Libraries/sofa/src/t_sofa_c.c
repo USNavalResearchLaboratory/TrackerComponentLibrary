@@ -18,11 +18,11 @@ static int verbose = 0;
 **
 **  All messages go to stdout.
 **
-**  This revision:  2021 April 18
+**  This revision:  2021 July 29
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 
 static void viv(int ival, int ivalok,
@@ -1193,9 +1193,9 @@ static void t_atccq(int *status)
 **  Returned:
 **     status    int         FALSE = success, TRUE = fail
 **
-**  Called:  iauApcc13, iauAtccq, vvd
+**  Called:  iauApci13, iauAtccq, vvd
 **
-**  This revision:  2021 April 18
+**  This revision:  2021 July 29
 */
 {
    double date1, date2, eo, rc, dc, pr, pd, px, rv, ra, da;
@@ -10268,11 +10268,11 @@ int main(int argc, char *argv[])
       printf("t_sofa_c validation successful\n");
    }
    return status;
-}
+
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================
@@ -10364,3 +10364,4 @@ int main(int argc, char *argv[])
 **                 United Kingdom
 **
 **--------------------------------------------------------------------*/
+}

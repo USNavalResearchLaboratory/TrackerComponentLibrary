@@ -1,13 +1,13 @@
 /*MINMATOVERDIMC A set of C-only implementations of a function to obtain
 *                the hypermatrix that is result of minimizing a larger
 *                hypermatrix over a particular dimension. This is
-*                essentially min(C,[],minIdx) in matlab. The bulk of the
+*                essentially min(C,[],minIdx) in Matlab. The bulk of the
 *                code for the function is written as a macro that is filled
 *                in with the specific data type of the hypermatrix being
 *                minimized. See the Matlab function minMatOverDim for
 *                details.
 *
-*Each of the functions, such as heapSortVecCIdxSizeT, has the same
+*Each of the functions, such as minMatOverDimCDouble, has the same
 *inputs. The difference is only in the type of the inputs M and C, which
 *are specified by the name of the function. The inputs to the functions
 *have the following meaning:

@@ -161,7 +161,7 @@ function [w,mu,P,numPerCluster,clusterInfo,minCostClustPartition,wAll,muAll,PAll
             muAll=zeros(muDim,maxComp,totalRedHyps);
             PAll=zeros(muDim,muDim,maxComp,totalRedHyps);
 
-            clusterInfoAll=zeros(N,maxComp,totalRedHyps);
+            clusterInfoAll=Inf(N,maxComp,totalRedHyps);
             numPerClusterAll=zeros(N,totalRedHyps);
             
             curAllIdx=0;
@@ -171,8 +171,8 @@ function [w,mu,P,numPerCluster,clusterInfo,minCostClustPartition,wAll,muAll,PAll
                 wAll(:,curAllIdx)=w;
                 muAll(:,:,curAllIdx)=mu;
                 PAll(:,:,:,curAllIdx)=P;
-                clusterInfoAll(1,:,1)=1:N;
-                numPerClusterAll(:,1)=1;
+                clusterInfoAll(1,:,curAllIdx)=1:N;
+                numPerClusterAll(:,curAllIdx)=1;
             end
         end
 
@@ -191,16 +191,17 @@ function [w,mu,P,numPerCluster,clusterInfo,minCostClustPartition,wAll,muAll,PAll
         end
         
         numPerCluster=ones(N,1);
-        clusterInfo=zeros(N,N);
+        clusterInfo=Inf(N,N);
         clusterInfo(1,:)=1:N;
     
         KCur=N;
         selIdxPresent=true(N,1);
         for mergeRound=1:(N-K)
-            [Mm,minRows]=min(M);%Minimize over the rows
-            [minVal,minCol]=min(Mm);%Minimize over the columns.
-            minRow=minRows(minCol);
-            
+            %Minimize over the rows and columns.
+            [minVal,minIdx]=min(M(:));
+            minCol=fix((minIdx-1)/N)+1;
+            minRow=mod((minIdx-1),N)+1;
+
             if(minVal>gammaBound&&KCur<=KMax)
                 %If the distribution has been sufficiently reduced in terms
                 %of cost.
@@ -226,7 +227,9 @@ function [w,mu,P,numPerCluster,clusterInfo,minCostClustPartition,wAll,muAll,PAll
             numInRow=numPerCluster(minRow);
             numInCol=numPerCluster(minCol);
             numTotal=numInRow+numInCol;
-            clusterInfo(1:numTotal,minRow)=[clusterInfo(1:numInRow,minRow);clusterInfo(1:numInCol,minCol)];
+            %The following line is equivalent to this line:
+            % clusterInfo(1:numTotal,minRow)=[clusterInfo(1:numInRow,minRow);clusterInfo(1:numInCol,minCol)];
+            clusterInfo((numInRow+1):numTotal,minRow)=clusterInfo(1:numInCol,minCol);
             numPerCluster(minCol)=0;
             numPerCluster(minRow)=numTotal;
     
@@ -246,7 +249,7 @@ function [w,mu,P,numPerCluster,clusterInfo,minCostClustPartition,wAll,muAll,PAll
                     M(cur1,minRow)=BDist(w(cur1),w(minRow),mu(:,cur1),mu(:,minRow),P(:,:,cur1),P(:,:,minRow),wLogDetPVals(cur1),wLogDetPVals(minRow));
                 end
             end
-    
+
             for cur2=(minRow+1):N
                 if(selIdxPresent(cur2))
                     M(minRow,cur2)=BDist(w(minRow),w(cur2),mu(:,minRow),mu(:,cur2),P(:,:,minRow),P(:,:,cur2),wLogDetPVals(minRow),wLogDetPVals(cur2));
@@ -279,9 +282,6 @@ function [w,mu,P,numPerCluster,clusterInfo,minCostClustPartition,wAll,muAll,PAll
         numPerCluster=numPerCluster(selIdxPresent);
         maxInClust=max(numPerCluster);
         clusterInfo=clusterInfo(1:maxInClust,selIdxPresent);
-        if(returnAll)
-            clusterInfoAll=clusterInfoAll(1:maxInClust,:,:);
-        end
     end
 
     if(returnAll&&curAllIdx<totalRedHyps)

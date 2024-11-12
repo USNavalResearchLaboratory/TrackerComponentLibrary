@@ -22,6 +22,8 @@ function [zPred,PzPred,otherInfo]=EKFMeasPred(xPred,PPred,zDim,h,HJacob,HHessian
 %              element of x. If not supplied or an empty matrix is passed,
 %              then HJacob will be found using numerical differentiation
 %              via the numDiff function with default parameters.
+%              Alternatively, a zDimXxDim jacobian matrix can be directly
+%              provided.
 %     HHessian This parameter is only provided if a second-order EKF is
 %              desired. This is either a function handle for the
 %              xDimXxDimXzDim measurement Hessian hypermatrix, or it is the

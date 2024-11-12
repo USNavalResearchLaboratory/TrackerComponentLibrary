@@ -13,7 +13,7 @@ function xPerm=inversePermutation(xPerm,algorithm)
 %                inversion.
 %              1 Use algorithm J from Chapter 1.3.3 of [1]. This is an
 %                in-place inversion.
-%              3 Explicitely create the inversion as xInvPerm(xPerm(k))=k
+%              2 Explicitly create the inversion as xInvPerm(xPerm(k))=k
 %                for k=1:N. This is not an in-place inversion.
 %
 %OUTPUTS: xInvPerm The NX1 or 1XN (matching the input) inverse of the

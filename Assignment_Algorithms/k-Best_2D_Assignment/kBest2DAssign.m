@@ -137,7 +137,7 @@ function [col4rowBest,row4colBest,gainBest]=kBest2DAssign(C,k,maximize)
     row4colBest(:,1)=LCHyp.row4colLCFull;
     gainBest(1)=LCHyp.gainFull;
     
-    HypList=BinaryHeap(10,false);
+    HypList=BinaryHeap(k*max(numRow,numCol),false);
     HypList.insert(LCHyp,[]);
     for curSweep=2:k
         %We have to successively split the LC hypothesis either k times or

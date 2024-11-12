@@ -112,7 +112,7 @@ function [zTrue,deltaZ]=removeAstroRefrac(algorithm,plhObs,z0,Rh,P,T,wl)
 %    Hydrographic Office, HM Nautical Almanac, Tech. Rep. 63, Apr. 1985.
 %    http://astro.ukho.gov.uk/data/tn/naotn63.pdf
 %[3] J. Saastamoinen, "Introduction to the practical computation of
-%    astronomical refraction," Bulletin Géodésique, vol. 106, no. 1,
+%    astronomical refraction," Bulletin Geodesique, vol. 106, no. 1,
 %    pp. 383-397, Dec. 1972.
 %
 %April 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.

@@ -37,17 +37,40 @@
 template<typename T>
 class ClusterSetCPP {
 private:
-    char *buffer;
+    char *buffer = nullptr;
 public:
-    size_t numClust;
-    size_t totalNumEl;
-    T *clusterEls;
-    size_t *offsetArray;
-    size_t *clusterSizes;
+    size_t numClust = 0;
+    size_t totalNumEl = 0;
+    T *clusterEls = nullptr;
+    size_t *offsetArray = nullptr;
+    size_t *clusterSizes = nullptr;
     
     ClusterSetCPP<T>() {
         numClust=0;
-        buffer=NULL;
+        totalNumEl=0;
+    }
+    ClusterSetCPP<T>(T* newClusterEls, size_t numClusters){
+        clusterEls = new T[numClusters];
+        std::memcpy(clusterEls, newClusterEls, numClusters * sizeof(T));
+        numClust=numClusters;
+    }
+    ClusterSetCPP<T>(T* newClusterEls, size_t numClusters, size_t* newClusterSizes, size_t numClusterSizes){
+        clusterEls = new T[numClusters];
+        std::memcpy(clusterEls, newClusterEls, numClusters * sizeof(T));
+        numClust=numClusters;
+        clusterSizes = new size_t[numClusterSizes];
+        std::memcpy(clusterSizes, newClusterSizes, numClusterSizes * sizeof(size_t));
+        totalNumEl=std::accumulate(clusterSizes,clusterSizes+numClusters,static_cast<size_t>(0));
+    }
+    ClusterSetCPP<T>(T* newClusterEls, size_t numClusters, size_t* newClusterSizes, size_t numClusterSizes, size_t* newOffsetArray, size_t numOffsetArray){
+        clusterEls = new T[numClusters];
+        std::memcpy(clusterEls, newClusterEls, numClusters * sizeof(T));
+        numClust=numClusters;
+        clusterSizes = new size_t[numClusterSizes];
+        std::memcpy(clusterSizes, newClusterSizes, numClusterSizes * sizeof(size_t));
+        offsetArray = new size_t[numOffsetArray];
+        std::memcpy(offsetArray, newOffsetArray, numOffsetArray * sizeof(size_t));
+        totalNumEl=std::accumulate(clusterSizes,clusterSizes+numClusters,static_cast<size_t>(0));
     }
 
     void initWithClusterSizes(const size_t *clustSizes,const size_t numClusters) {

@@ -1,6 +1,6 @@
 function [interpPolyA,interpPolyC]=RKNInterpPolys(x0,t0,x1,t1,df,probIsGeneral,order,solutionChoice,g,interpMainOrder)
 %%RKNINTERPPOLYS Get polynomials to interpolate between two steps of a
-%                general or special Runge-Kutta Nyström method. Depending
+%                general or special Runge-Kutta Nystrom method. Depending
 %                on the method used, either a low-computational complexity
 %                explicit solution from a direct formula is used, or a
 %                Hermite interpolation polynomial is obtained by taking a
@@ -23,7 +23,7 @@ function [interpPolyA,interpPolyC]=RKNInterpPolys(x0,t0,x1,t1,df,probIsGeneral,o
 %               derivatives. The default if omitted or am empty matrix is
 %               passed is true.
 % order,solutionChoice  A pair of optional parameters that specify the
-%               highest order of the embedded Runge-Kutta-Nyström pair
+%               highest order of the embedded Runge-Kutta-Nystrom pair
 %               (special or general) to use as well as the specific
 %               algorithm that was used to get x1 and t1. Details are given
 %               in the comments to the RungeKNystroemGStep function, for
@@ -375,7 +375,7 @@ function [interpPolyA,interpPolyC]=RKNStepsForHermite(x0,t0,x1,t1,df,probIsGener
 %%RKNSTEPSFORHERMITE Given estimates x0 and x1 at times t0 and t1, create a
 %                   set of interpolating polynomials for each of the
 %                   dimensions of x across the timespan by performing a
-%                   series of fixed-length Runge-Kutta Nyström steps to get
+%                   series of fixed-length Runge-Kutta Nystrom steps to get
 %                   enough
 %                   estimates of x and its derivative at different times t
 %                   so that the interpolating polynomial has order order.
@@ -416,7 +416,7 @@ function [interpPolyA,interpPolyC]=RKNStepsForHermite(x0,t0,x1,t1,df,probIsGener
 %               for interpolation in each dimension in the range (t0,t1). 
 %
 %The function just performs an appropriate number of uniform
-%Runge-Kutta-Nyström steps using the appropriate method (general or
+%Runge-Kutta-Nystrom steps using the appropriate method (general or
 %special) between t0 and t1 so that the function HermiteInterpPoly can be
 %used to get an interpolating polynomial.
 %
@@ -452,11 +452,11 @@ x(:,1)=x0;
 x(:,end)=x1;
 dfCur=g(:,1);
 %The first half of the derivative of the state vector at a particular point
-%is the second half of the state--from the definition of the Nyström
+%is the second half of the state--from the definition of the Nystrom
 %problem.
 dxVecdt(:,1)=[x0((xPosDim+1):end); dfCur];
 
-%Fill in the intermediate values using short Runge-Kutta Nyström steps.
+%Fill in the intermediate values using short Runge-Kutta Nystrom steps.
 curT=t0;
 for curStep=2:(numPoints-1)
     if(probIsGeneral)

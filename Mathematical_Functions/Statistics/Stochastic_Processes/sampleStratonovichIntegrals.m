@@ -41,7 +41,7 @@ function [J1Idx,J2Idx]=sampleStratonovichIntegrals(m,deltaT,p)
 %Here, we demonstrate how some of the second moments, when converted to the
 %equivalent Ito formulation, match the value given by ItoIntegral2ndMoment.
 %The formula of Equation 2.36 in Chapter 5.2 of [1] is used to convert
-%Jj1j2 into the equivalent Itô form.
+%Jj1j2 into the equivalent Ito form.
 % m=2;
 % deltaT=2;
 % p=50;

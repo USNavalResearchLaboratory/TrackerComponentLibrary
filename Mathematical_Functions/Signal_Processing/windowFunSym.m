@@ -77,7 +77,7 @@ function [w,dwdnFrac]=windowFunSym(N,algorithm,alpha,beta,nFrac)
 %                  version as in Section VF2 is used and the endpoints are
 %                  zero. For alpha=1, a version with a modified denominator
 %                  is used so that the endpoints are not zero.
-%           'Poussin' Section VF3. This is the de la Vallé-Poussin window.
+%           'Poussin' Section VF3. This is the de la Valle-Poussin window.
 %                  For alpha=0, the algorithm of Section VF3 is sued and
 %                  the endpoints are zero. For alpha=1, the denominators
 %                  are modified so that the endpoints are not zero.
@@ -236,11 +236,11 @@ function [w,dwdnFrac]=windowFunSym(N,algorithm,alpha,beta,nFrac)
 %    pp. 172-204, Jan. 1978.
 %[2] W. Wasylkiwskyj, Signal and Transforms in Linear Systems Analysis.
 %    Heidelberg: Springer, 2013.
-%[3] G. Heinzel, A. Rüdinger, and R. Schilliung, "Spectrum and spectral
+%[3] G. Heinzel, A. Rudinger, and R. Schilliung, "Spectrum and spectral
 %    density estimation by the discrete fourier transform (DFT), including
 %    a comprehensive list of window functions and some new flat-top
-%    windows," Max-Planck-Institut für Gravitationsphysik (Albert Einstein
-%    Institut)), Hanover, Germany, Tech. Rep., 15 Feb. 2002.
+%    windows," Max-Planck-Institut fur Gravitationsphysik (Albert Einstein
+%    Institut), Hanover, Germany, Tech. Rep., 15 Feb. 2002.
 %
 %December 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

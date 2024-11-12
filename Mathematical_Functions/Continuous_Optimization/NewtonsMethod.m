@@ -189,6 +189,7 @@ function [xMin,fMin,exitCode]=NewtonsMethod(f,fHess,x0,epsilon,deltaTestDist,del
     end
     
     xPrev=x0;
+    xCur=x0;
     if(isempty(fHess))
         [fValPrev,gradFPrev,fHessVal]=f(x0);
     else

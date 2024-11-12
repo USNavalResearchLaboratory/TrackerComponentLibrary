@@ -22,7 +22,7 @@ function Sn=SnEst(x,scaleType,algorithm)
 %           this gives the same result as option 1.
 % algorithm An optional parameter specifying the algorithm used. Possible
 %         values are:
-%         0 Use the naïve algorithm mentioned in [2].
+%         0 Use the naÃ¯ve algorithm mentioned in [2].
 %         1 (The default if omitted or an empty matrix is passed) Use the
 %           efficient algorithm of [2].
 %
@@ -57,7 +57,7 @@ function Sn=SnEst(x,scaleType,algorithm)
 %    highly robust estimators of scale," in Computational Statistics.
 %    Berlin: Springer-Verlag, Aug. 1992, vol. 1: Proceedings of the 10th
 %    Symposium on Computational Statistics, pp. 411-428, conference
-%    location: Neuchâtel, Switzerland.
+%    location: Neuchatel, Switzerland.
 %
 %August 2018 David Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -81,7 +81,7 @@ n2=fix(n/2);
 n12=fix((n+1)/2);
 
 switch(algorithm)
-    case 0%The naïve brute-force approach in [1].
+    case 0%The naive brute-force approach in [1].
         lowmed=n12;
         himed=n2+1;
 

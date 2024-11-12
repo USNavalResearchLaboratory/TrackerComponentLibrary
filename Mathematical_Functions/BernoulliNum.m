@@ -2,7 +2,7 @@ function retVals=BernoulliNum(n)
 %%BERNOULLINUM Obtain the nth Bernoulli number. Bernoulli numbers play a
 %           role in Bernoulli polynomials, which play a role in the
 %           development of lattice rules for numerical integration.
-%           Bernoulli numbers also appear in formula for the explixit
+%           Bernoulli numbers also appear in formula for the explicit
 %           expression of the sum of powers of the first n positive
 %           integers. The definition for BernoulliNum(1) used here is -1/2;
 %           some authors use the opposite sign.
@@ -23,10 +23,10 @@ function retVals=BernoulliNum(n)
 %table is represented as an exact fraction.
 %
 %An expression for the 2n-th Bernoulli number that is good for use with
-%algorithms for symbolic solvers is Algorithm 2 in [1]. As noted ion the
+%algorithms for symbolic solvers is Algorithm 2 in [1]. As noted in the
 %paper -2*nzeta(2*n+1) given the 2*n-th Bernoulli number. Algorithm 2 in
 %the paper when run with 2*n terms provides the exact solution.
-
+%
 %REFERENCE:
 %[1] P. Borwein, "An efficient algorithm for the Riemann zeta function," in
 %    Canadian Mathematical Society Conference Proceedings, vol. 27, 2000.

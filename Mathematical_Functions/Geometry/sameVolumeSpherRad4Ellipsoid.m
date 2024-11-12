@@ -15,7 +15,7 @@ function rVol=sameVolumeSpherRad4Ellipsoid(a,f)
 %An expression for ther same-volume sphere is given in [1].
 %
 %REFERENCES:
-%[1] H. Mortiz, "Geodetic Reference System 1980," Bulletin Géodésique,
+%[1] H. Mortiz, "Geodetic Reference System 1980," Bulletin Geodesique,
 %    vol. 54, no. 3, pp. 395-405, Sep. 1980. Given with corrections at
 %    https://geodesy.geology.ohio-state.edu/course/refpapers/00740128.pdf
 %

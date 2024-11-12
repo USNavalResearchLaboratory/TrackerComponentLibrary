@@ -94,7 +94,7 @@ function [xb,yb,zb,za]=aberrFreeLensShape(zaFun,xa,ya,n,T,fa,fb)
 % set(h3,'FontSize',14,'FontWeight','bold','FontName','Times')
 %
 %REFERENCES:
-%[1] R. G. González-Acuña, H. A. Chaparro-Romo, and J. C. Gutiérrez-Vega,
+%[1] R. G. Gonzalez-Acuna, H. A. Chaparro-Romo, and J. C. Gutierrez-Vega,
 %    "General formula to design a freeform singlet free of spherical
 %    aberration and astigmatism," Applied Optics, vol. 58, no. 4, pp. 1010-
 %    1015, 1 Feb. 2019.

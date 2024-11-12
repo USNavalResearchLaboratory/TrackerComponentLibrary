@@ -6,7 +6,7 @@ function demoCurvedEarthSimSpiral()
 %                 trajectories, see the example demoCurvedEarthSimLevel.
 %
 %The spiraling dynamic model chosen is one where it is easy to determine
-%which direction the overall flightpath will take when designing a
+%which direction the overall flight path will take when designing a
 %trajectory.
 %
 %October 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.

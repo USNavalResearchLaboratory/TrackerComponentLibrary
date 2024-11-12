@@ -25,7 +25,7 @@ function [termMats,alreadyHomogenized]=homogenizeMultiDimPolys(termMats,makeProj
 %           of the variables. As noted in Section 8 of [1], for a system of
 %           n simultaneous polynomial equations in n unknowns, the
 %           homogenized system/ projective transform system has a number of
-%           solutions exactly equal to the B�zout bound and has no
+%           solutions exactly equal to the Bezout bound and has no
 %           solutions at infinity. If omitted or an empty matrix is passed,
 %           the default is false.
 %

@@ -79,7 +79,7 @@ function [R,Q]=ICMCovEst(z,H,F,u,params2Est,num2Skip,maxLag,xInit,RInit,QInit,nu
 %To avoid this and to always get a stable gain, a nominal R and Q are used
 %to get the optimal Kalman filter gain for a specific filter. The filter
 %gain depends on the asymptotic state prediction covariance matrix and is
-%obatained by solving the Riccatti equation. To get rid of the reliance of
+%obtained by solving the Riccatti equation. To get rid of the reliance of
 %the estimates on the initial estimate x, an option has been made to
 %iterate the estimator: After estimating R and Q, a Fisher-Potter
 %information filter smoother is used to get an improved initial estimate of
@@ -137,7 +137,7 @@ function [R,Q]=ICMCovEst(z,H,F,u,params2Est,num2Skip,maxLag,xInit,RInit,QInit,nu
 %[1] R. K. Mehra, "On the identification of variances and adaptive Kalman
 %    filtering," IEEE Transactions on Automatic Control, vol. 15, no. 2,
 %    pp. 175-184, Apr. 1972.
-%[2] J. Duník, O. Straka, O. Kost, and J. Havlík, "Noise covariance
+%[2] J. Dunik, O. Straka, O. Kost, and J. Havlik, "Noise covariance
 %    matrices in state-space models: A survey and comparison of estimation
 %    methods-part I," International Journal of Adaptive Control and Signal
 %    Processing, vol. 31, no. 11, pp. 1505-1543, Nov. 2017.
@@ -330,7 +330,7 @@ function innov=getInnovSequence(x0,z,H,F,K,u,num2Skip)
 %               time givena fixed Kalman gain.
 %
 %REFERENCES:
-%[2] J. Duník, O. Straka, O. Kost, and J. Havlík, "Noise covariance
+%[2] J. Dunik, O. Straka, O. Kost, and J. Havlik, "Noise covariance
 %    matrices in state-space models: A survey and comparison of estimation
 %    methods-part I," International Journal of Adaptive Control and Signal
 %    Processing, vol. 31, no. 11, pp. 1505-1543, Nov. 2017.

@@ -167,9 +167,9 @@ void iauApco(double date1, double date2,
 **
 **  This revision:   2021 February 24
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    double r[3][3], a, b, eral, c, pvc[2][3], pv[2][3];
@@ -229,8 +229,8 @@ void iauApco(double date1, double date2,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

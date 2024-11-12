@@ -7,7 +7,7 @@ function FIM=observedFisherInfo(z,RInv,h,JacobMat,HessMat)
 %           observed FIM. Summing the FIMs from multiple simultaneous
 %           independent measurements or measurement components returns the
 %           observed FIM for the fused measurement. The inverse of the FIM
-%           is the Cramér-Rao lower bound (CRLB). If only a single
+%           is the Cramer-Rao lower bound (CRLB). If only a single
 %           measurement is considered, and h=z, then h, z, and HessMat can
 %           all be omitted. Usualy, there is no benefit to including the
 %           terms.

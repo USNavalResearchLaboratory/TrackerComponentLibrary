@@ -19,37 +19,37 @@ int iauPmsafe(double ra1, double dec1, double pmr1, double pmd1,
 **  Status:  support function.
 **
 **  Given:
-**     ra1    double      right ascension (radians), before
-**     dec1   double      declination (radians), before
-**     pmr1   double      RA proper motion (radians/year), before
-**     pmd1   double      Dec proper motion (radians/year), before
-**     px1    double      parallax (arcseconds), before
-**     rv1    double      radial velocity (km/s, +ve = receding), before
-**     ep1a   double      "before" epoch, part A (Note 1)
-**     ep1b   double      "before" epoch, part B (Note 1)
-**     ep2a   double      "after" epoch, part A (Note 1)
-**     ep2b   double      "after" epoch, part B (Note 1)
+**     ra1    double     right ascension (radians), before
+**     dec1   double     declination (radians), before
+**     pmr1   double     RA proper motion (radians/year), before
+**     pmd1   double     Dec proper motion (radians/year), before
+**     px1    double     parallax (arcseconds), before
+**     rv1    double     radial velocity (km/s, +ve = receding), before
+**     ep1a   double     "before" epoch, part A (Note 1)
+**     ep1b   double     "before" epoch, part B (Note 1)
+**     ep2a   double     "after" epoch, part A (Note 1)
+**     ep2b   double     "after" epoch, part B (Note 1)
 **
 **  Returned:
-**     ra2    double      right ascension (radians), after
-**     dec2   double      declination (radians), after
-**     pmr2   double      RA proper motion (radians/year), after
-**     pmd2   double      Dec proper motion (radians/year), after
-**     px2    double      parallax (arcseconds), after
-**     rv2    double      radial velocity (km/s, +ve = receding), after
+**     ra2    double     right ascension (radians), after
+**     dec2   double     declination (radians), after
+**     pmr2   double     RA proper motion (radians/year), after
+**     pmd2   double     Dec proper motion (radians/year), after
+**     px2    double     parallax (arcseconds), after
+**     rv2    double     radial velocity (km/s, +ve = receding), after
 **
 **  Returned (function value):
-**            int         status:
-**                         -1 = system error (should not occur)
-**                          0 = no warnings or errors
-**                          1 = distance overridden (Note 6)
-**                          2 = excessive velocity (Note 7)
-**                          4 = solution didn't converge (Note 8)
-**                       else = binary logical OR of the above warnings
+**            int        status:
+**                          -1 = system error (should not occur)
+**                           0 = no warnings or errors
+**                           1 = distance overridden (Note 6)
+**                           2 = excessive velocity (Note 7)
+**                           4 = solution didn't converge (Note 8)
+**                        else = binary logical OR of the above warnings
 **
 **  Notes:
 **
-**  1) The starting and ending TDB epochs ep1a+ep1b and ep2a+ep2b are
+**  1) The starting and ending TDB dates ep1a+ep1b and ep2a+ep2b are
 **     Julian Dates, apportioned in any convenient way between the two
 **     parts (A and B).  For example, JD(TDB)=2450123.7 could be
 **     expressed in any of these ways, among others:
@@ -110,11 +110,11 @@ int iauPmsafe(double ra1, double dec1, double pmr1, double pmd1,
 **     iauSeps      angle between two points
 **     iauStarpm    update star catalog data for space motion
 **
-**  This revision:   2014 July 1
+**  This revision:   2023 April 7
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
 
@@ -151,8 +151,8 @@ int iauPmsafe(double ra1, double dec1, double pmr1, double pmd1,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

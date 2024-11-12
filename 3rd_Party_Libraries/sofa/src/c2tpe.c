@@ -12,7 +12,7 @@ void iauC2tpe(double tta, double ttb, double uta, double utb,
 **  the nutation and the polar motion.  IAU 2000.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -90,9 +90,9 @@ void iauC2tpe(double tta, double ttb, double uta, double utb,
 **
 **  This revision:  2021 May 11
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    double epsa, rb[3][3], rp[3][3], rbp[3][3], rn[3][3],
@@ -121,8 +121,8 @@ void iauC2tpe(double tta, double ttb, double uta, double utb,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

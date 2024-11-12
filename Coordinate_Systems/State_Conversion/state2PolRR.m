@@ -26,13 +26,12 @@ function z=state2PolRR(xTar,systemType,useHalfRange,zTx,zRx,M,stateType)
 %          range. The default if this parameter is not provided (or an
 %          empty matrix is provided) is true.
 %      zTx The 4XN [x;y;xDot;yDot] position and velocity vectors of the
-%          transmitters in global
-%          Cartesian coordinates. If this parameter is omitted or an
-%          empty matrix is passed, then the transmitters are assumed to be
-%          at the origin. If only a single vector is passed, then the
-%          transmitter location is assumed the same for all of the target
-%          states being converted.
-%      zRx The 2XN [x;y;xDot;yDot] position and velocity vectors of the
+%          transmitters in global Cartesian coordinates. If this parameter
+%          is omitted or an empty matrix is passed, then the transmitters
+%          are assumed to be at the origin. If only a single vector is
+%          passed, then the transmitter location is assumed the same for
+%          all of the target states being converted.
+%      zRx The 4XN [x;y;xDot;yDot] position and velocity vectors of the
 %          receivers in Cartesian coordinates. If this parameter is omitted
 %          or an empty matrix is passed, then the receivers are assumed to
 %          be at the origin. If only a single vector is passed, then the
@@ -56,7 +55,7 @@ function z=state2PolRR(xTar,systemType,useHalfRange,zTx,zRx,M,stateType)
 %             is measured in the same system as the measurement, given by
 %             the next parameter. Other state components are ignored.
 %
-%OUPUTS: z If stateType!=-1, z is a 3XN matrix of the target states in xTar
+%OUTPUTS: z If stateType!=-1, z is a 3XN matrix of the target states in xTar
 %          converted into 2D polar coordinates consisting of range,
 %          azimuthal angle, and range rate. Otherwise, if stateType==-1,
 %          then z is a 2XN matrix of the position components of the target

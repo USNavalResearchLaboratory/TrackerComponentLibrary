@@ -18,7 +18,7 @@ function yInterp=quadraticInterpUnifGrid(xDes,x0,deltaX,yPts)
 %OUTPUTS: yInterp The interpolated values. This matrix has the same
 %                 dimensions as xDes.
 %
-%This function finds brackets the region .for each points using binSearch
+%This function finds brackets the region for each point using binSearch
 %and then performs interpolation using quadraticInterpUnif3Pt.
 %
 %EXAMPLE:

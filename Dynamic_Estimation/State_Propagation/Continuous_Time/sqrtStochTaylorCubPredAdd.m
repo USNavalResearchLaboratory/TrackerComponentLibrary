@@ -1,14 +1,14 @@
 function [xPred,SPred]=sqrtStochTaylorCubPredAdd(xPrev,SPrev,a,BVal,deltaT,numSteps,algorithm,xi,w)
 %%SQRTSTOCHTAYLORCUBPREDADD Given a Gaussian prior distribution with mean
 %           xPrev and lower-triangular square root covariance matrix SPrev
-%           under a continuous time, autonomous dynamic model under Itô
+%           under a continuous time, autonomous dynamic model under Ito
 %           calculus with additive noise of the form:
 %           dx=a(x)dt+BVal*dw
 %           where dw is the differential of a Wiener process and BVal is
 %           constant matrix, approximate the mean and lower-triangular
 %           square root covariance matrix of the distribution predicted
 %           forward deltaT. This is done by computing the moments of a
-%           stochastic Itô-Taylor expansion, possibly taking more than one
+%           stochastic Ito-Taylor expansion, possibly taking more than one
 %           step (using the previous expansion as the prior to the next
 %           step).
 %
@@ -27,7 +27,7 @@ function [xPred,SPred]=sqrtStochTaylorCubPredAdd(xPrev,SPrev,a,BVal,deltaT,numSt
 %              place.
 %     numSteps The number of steps to take for the prediction. The default
 %              if omitted or an empty matrix is passed is 1.
-%    algorithm A value specifying the type of stochastic Itô Taylor
+%    algorithm A value specifying the type of stochastic Ito Taylor
 %              expansion to use for the prediction. Possible values are:
 %              0 Use the Euler-Maruyama method (order 0.5).
 %              1 Use the order 1.5 Taylor expansion, as used in [1]. When
@@ -91,13 +91,13 @@ function [xPred,SPred]=sqrtStochTaylorCubPredAdd(xPrev,SPrev,a,BVal,deltaT,numSt
 % norm(xPred00-xPred0)
 % norm(SPred00*SPred00'-PPred0,'fro')/norm(PPred0,'fro')
 % 
-% disp('Order 1.5 Itô-Taylor with constant higher-order terms.')
+% disp('Order 1.5 Ito-Taylor with constant higher-order terms.')
 % [xPred1,PPred1]=stochTaylorCubPredAdd(xInit,PInit,aFun,BVal,deltaT,numSteps,1);
 % [xPred11,SPred11]=sqrtStochTaylorCubPredAdd(xInit,SInit,aFun,BVal,deltaT,numSteps,1);
 % norm(xPred11-xPred1)
 % norm(SPred11*SPred11'-PPred1,'fro')/norm(PPred1,'fro')
 % 
-% disp('Order 1.5 Itô-Taylor')
+% disp('Order 1.5 Ito-Taylor')
 % [xPred2,PPred2]=stochTaylorCubPredAdd(xInit,PInit,aFun,BVal,deltaT,numSteps,2);
 % [xPred22,SPred22]=sqrtStochTaylorCubPredAdd(xInit,SInit,aFun,BVal,deltaT,numSteps,2);
 % norm(xPred22-xPred2)
@@ -110,7 +110,7 @@ function [xPred,SPred]=sqrtStochTaylorCubPredAdd(xPrev,SPrev,a,BVal,deltaT,numSt
 %    for continous-discrete systems: Theory and simulations," IEEE
 %    Transactions on Signal Processing, vol. 58, no. 10, pp. 4977-4993,
 %    Oct. 2010.
-%[2] D. F. Crouse, "Itô-Taylor expansion moments for continuous-time state
+%[2] D. F. Crouse, "Ito-Taylor expansion moments for continuous-time state
 %    propagation," NRL Memo, 2019.
 %
 %December 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.

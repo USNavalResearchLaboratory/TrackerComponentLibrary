@@ -9,7 +9,7 @@ function [zeroVal,exitFlag]=BrentRootFind(f,xSpan,AbsTol,maxIter)
 %          is called as f(x), where x is a scalar value.
 %    xSpan A 2X1 or 1X2 vector such that
 %          sign(f(xSpan(1)))~=sign(f(xSpan(2)))
-%   AbsTol The absolute tolerance on the value of f for converence, as
+%   AbsTol The absolute tolerance on the value of f for convergence, as
 %          defined in [1]. The default if omitted or an empty matrix is
 %          passed is eps().
 %  maxIter The maximum number of ierations to perform. The default if

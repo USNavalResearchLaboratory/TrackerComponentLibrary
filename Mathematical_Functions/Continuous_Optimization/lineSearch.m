@@ -23,7 +23,7 @@ function [xMin,fMin,fGradMin,gMin,alpha,exitCode]=lineSearch(func,x,d,fInit,fGra
 %          algorithm A parameter specifying the line search algorithm to
 %             use. Possible values are:
 %             0) (The default if omitted or an empty matrix is passed) Use
-%               the algorithm proposed by Moré and Thuente in [1] (modified 
+%               the algorithm proposed by More and Thuente in [1] (modified 
 %               as described below). Unless one sets
 %               lineSearchParams.maxStepSize=stepSize, this assumes that
 %               one has not obtained initial bounds on the stepsize search 
@@ -126,7 +126,7 @@ function [xMin,fMin,fGradMin,gMin,alpha,exitCode]=lineSearch(func,x,d,fInit,fGra
 %many objective function, one can often use an initial step size of 1 as
 %the maximum step size and then find the minimum over the bounded line.
 %
-%The implementation fo the Moré-Thuente algorithm (algorithm 0) here
+%The implementation fo the More-Thuente algorithm (algorithm 0) here
 %differs from the description in [1] in that it forces a bisection step
 %after only a single failure to decrease the step size. The paper did not
 %give a pseudocode listing, so a number of trivial details were filled in
@@ -190,7 +190,7 @@ function [xMin,fMin,fGradMin,gMin,alpha,exitCode]=lineSearch(func,x,d,fInit,fGra
 %the initial step given, because it could never find anything better.
 %
 %REFERENCES:
-%[1] J. J. Moré and D. J. Thuente, "Line search algorithms with
+%[1] J. J. More and D. J. Thuente, "Line search algorithms with
 %    guaranteed sufficient decrease," ACM Transactions on Mathematical
 %    Software, vol. 20, no. 3, pp. 286-307, Sep. 1994.
 %[2] L. Armijo, "Minimization of functions having Lipschitz continuous
@@ -409,11 +409,11 @@ end
 end
 
 function [xL,fL,fGradL,gL,alphaL,exitCode]=lineSearchMoreThuente(x,func,fInit,fGradInit,s,stepSize,RelTolAlpha,fTol,wolfeTol,conditionType,maxIter, minStepSize,maxStepSize,initStepMult)
-%%LINESEARCHMORETHUENTE This function implements the Moré-Thuente algorithm
+%%LINESEARCHMORETHUENTE This function implements the More-Thuente algorithm
 %               of [1].
 %
 %REFERENCES:
-%[1] J. J. Moré and D. J. Thuente, "Line search algorithms with
+%[1] J. J. More and D. J. Thuente, "Line search algorithms with
 %    guaranteed sufficient decrease," ACM Transactions on Mathematical
 %    Software, vol. 20, no. 3, pp. 286-307, Sep. 1994.
 %
@@ -649,7 +649,7 @@ function [alphaTNew,alphaLNew,alphaUNew,xLNew,fLNew,fUNew,gLNew,gUNew,fGradLNew,
 %           first transformed.
 %
 %REFERENCES:
-%[1] J. J. Moré and D. J. Thuente, "Line search algorithms with
+%[1] J. J. More and D. J. Thuente, "Line search algorithms with
 %    guaranteed sufficient decrease," ACM Transactions on Mathematical
 %    Software, vol. 20, no. 3, pp. 286-307, Sep. 1994.
 %
@@ -832,13 +832,13 @@ end
 end
 
 function [xL,fL,fGradL,gL,alphaL,exitCode]=lineSearchBisection(x,func,fInit,fGradInit,s,maxStepSize,RelTolAlpha,fTol,wolfeTol,conditionType,maxIter,minStepSize)
-%%LINESEARCHBISECTION This function implements the Moré-Thuente algorithm
+%%LINESEARCHBISECTION This function implements the More-Thuente algorithm
 %               of [1], but assumes that stepSize is an upper bound that is
 %               provided and only performs bisection of the uncertainty
 %               region, rather than the interpolation used in [1].
 %
 %REFERENCES:
-%[1] J. J. Moré and D. J. Thuente, "Line search algorithms with
+%[1] J. J. More and D. J. Thuente, "Line search algorithms with
 %    guaranteed sufficient decrease," ACM Transactions on Mathematical
 %    Software, vol. 20, no. 3, pp. 286-307, Sep. 1994.
 %
@@ -1109,7 +1109,7 @@ function [alphaTNew,alphaLNew,alphaUNew,xLNew,fLNew,fUNew,gLNew,gUNew,fGradLNew,
 %               uses bisection to get a new test point alphaTNew.
 %
 %REFERENCES:
-%[1] J. J. Moré and D. J. Thuente, "Line search algorithms with
+%[1] J. J. More and D. J. Thuente, "Line search algorithms with
 %    guaranteed sufficient decrease," ACM Transactions on Mathematical
 %    Software, vol. 20, no. 3, pp. 286-307, Sep. 1994.
 %

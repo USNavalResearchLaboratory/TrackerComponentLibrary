@@ -18,7 +18,7 @@ int iauGd2gc ( int n, double elong, double phi, double height,
 **
 **  Given:
 **     n       int        ellipsoid identifier (Note 1)
-**     elong   double     longitude (radians, east +ve)
+**     elong   double     longitude (radians, east +ve, Note 3)
 **     phi     double     latitude (geodetic, radians, Note 3)
 **     height  double     height above ellipsoid (geodetic, Notes 2,3)
 **
@@ -60,11 +60,11 @@ int iauGd2gc ( int n, double elong, double phi, double height,
 **     iauGd2gce    geodetic to geocentric transformation, general
 **     iauZp        zero p-vector
 **
-**  This revision:  2021 May 11
+**  This revision:  2023 March 9
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    int j;
@@ -90,8 +90,8 @@ int iauGd2gc ( int n, double elong, double phi, double height,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

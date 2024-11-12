@@ -9,7 +9,7 @@ function dirVecs=cameraCoords2UVCoords(zCam,A,M,includeW)
 %   the camera (probably measured as pixels on a charged coupled device
 %   [CCD] and converted into distances across th CCD), this function 
 %   converts that point into a uv direction cosines or a full 3D unit
-%   vector. It can be givn in local camera coordinates or rotated into
+%   vector. It can be given in local camera coordinates or rotated into
 %   global coordinates.
 %
 %INPUTS: zCam A 2XnumPts set of [x;y] coordinates on the CCD of the camera
@@ -85,7 +85,7 @@ function dirVecs=cameraCoords2UVCoords(zCam,A,M,includeW)
 % AbsErr=max(max(abs(uvBack-uv)))
 %
 %REFERENCES:
-%[1] J. Kannala, J. Heikkilä, and S. S. Brandt, "Geometric camera
+%[1] J. Kannala, J. Heikkila, and S. S. Brandt, "Geometric camera
 %    calibration," in Wiley Encyclopedia of Computer Science and
 %    Engineering, B. W. Wah, Ed., 2007, vol. 1.
 %

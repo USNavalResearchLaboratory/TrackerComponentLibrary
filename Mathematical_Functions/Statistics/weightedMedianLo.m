@@ -36,7 +36,7 @@ function aLoMed=weightedMedianLo(a,w,algorithm)
 %    highly robust estimators of scale," in Computational Statistics.
 %    Berlin: Springer-Verlag, Aug. 1992, vol. 1: Proceedings of the 10th
 %    Symposium on Computational Statistics, pp. 411-428, Conference
-%    Location: Neuchâtel, Switzerland.
+%    Location: Neuchatel, Switzerland.
 %[2] T. H. Cormen, C. E. Leiserson, R. L. Rivest, and C. Stein,
 %    Introduction to Algorithms, 2nd ed. Cambridge, MA: The MIT Press,
 %    2001.

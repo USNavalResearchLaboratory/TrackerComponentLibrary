@@ -30,7 +30,7 @@ function val=ItoIntegral2ndMoment(alphaIdx,betaIdx,deltaT)
 %
 %EXAMPLE:
 %Here, we compare the value obtained by this function to an exact solution
-%for a particular Itô Integral. In Chapter 10.4, an explicit expression for
+%for a particular Ito Integral. In Chapter 10.4, an explicit expression for
 %I_{j,j,j} is given. It is 
 %I_{j,j,j}=(1/2)*((1/3)*(sqrt(deltaT)*xi)^2-deltaT)*sqrt(deltaT)*xi
 %where xi is a normal random variable with zero mean and unit variance.

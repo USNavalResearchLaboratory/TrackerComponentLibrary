@@ -22,7 +22,7 @@ function val=convertLengthUnits(val,unitOrig,unitDest)
 %            'pt'   points             'pica'picas (1/6 inch)
 %            'ftm'  fathoms            'AU'  astronomical units
 %            'ly'   light-years        'pc'  parsec
-%            'Ang'  Angströms          'mil' mils (1/1000 inches)
+%            'Ang'  Angstroms          'mil' mils (1/1000 inches)
 %            'cbl'  Cable length (0.1nml) Note that many other definitions
 %                   of a cable length exist.                
 %            'USft' US survey feet     'USmi' US survey miles
@@ -50,7 +50,7 @@ function val=convertLengthUnits(val,unitOrig,unitDest)
 %For metric conversions, [1] was used.
 %
 %REFERENCES:
-%[1] Le Système international d'unités The International System of Units,
+%[1] Le Systeme international d'unites The International System of Units,
 %    Bureau international des points et mesures Std., 2006.
 %    [Online]. Available: http://www.bipm.org/en/si/si brochure/
 %

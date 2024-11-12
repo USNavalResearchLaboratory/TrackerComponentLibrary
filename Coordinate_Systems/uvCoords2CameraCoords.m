@@ -33,7 +33,7 @@ function [zCam,isBehind]=uvCoords2CameraCoords(uv,A,M)
 %for an example conversion.
 %
 %REFERENCES:
-%[1] J. Kannala, J. Heikkilä, and S. S. Brandt, "Geometric camera
+%[1] J. Kannala, J. Heikkila, and S. S. Brandt, "Geometric camera
 %    calibration," in Wiley Encyclopedia of Computer Science and
 %    Engineering, B. W. Wah, Ed., 2007, vol. 1.
 %

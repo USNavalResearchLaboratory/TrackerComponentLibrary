@@ -1,4 +1,4 @@
-function Q=MarcumQ(mu,alpha,beta)
+function Q=MarcumQ(mu,alpha,beta,returnOneMinus)
 %%MARCUMQ  Evaluate the generalized Marcum Q function of a desired order,
 %          Q_M(alpha,beta) including when the order is not an integer.
 %
@@ -7,6 +7,9 @@ function Q=MarcumQ(mu,alpha,beta)
 %           not an integer.
 %     alpha The scalar first parameter of the Q function (alpha>=0).
 %      beta The scalar second parameter of the Q function (beta>=0).
+% returnOneMinus If this is true 1 minus the value  of the Marcum Q
+%           function is returned instead of the Marcum Q function itself.
+%           The default if omitted or an empty matrix is passed is false.
 %
 %OUTPUTS: Q The value of the generalized Marcum Q function with the given
 %           parameters.
@@ -71,6 +74,10 @@ function Q=MarcumQ(mu,alpha,beta)
 %December 2014 David A. Karnick, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<4||isempty(returnOneMinus))
+    returnOneMinus=false;
+end
+
 if(mu<=0||alpha<0||beta<0||~isreal(mu)||~isreal(alpha)||~isreal(beta))
     error('Invalid Inputs');
 end
@@ -79,7 +86,11 @@ end
 if(alpha==0)
 %If alpha is zero, the MarcumQ function reduces to a regularized gamma
 %function. This identity is programmed into Mathematica.
-    Q=1-gammainc(beta^2/2,mu);
+    if(returnOneMinus)
+        Q=gammainc(beta^2/2,mu,'lower');
+    else
+        Q=gammainc(beta^2/2,mu,'upper');
+    end
     return
 end
 
@@ -87,14 +98,18 @@ end
 %bounds are satisfied.
 diff=mu-fix(mu);
 if((diff==0.5)||(diff==0))
-    Q=AlgorithmBenton(mu,alpha,beta);
+    Q=AlgorithmBenton(mu,alpha,beta,returnOneMinus);
     return
 end
 
 %If mu is not a multiple of 0.5, then use equivalency of the Marcum Q
 % function with the noncentral chi square CDF and therefore the noncentral
 % gamma CDF to compute the result.
-    Q=1-GammaD.CDF(beta.^2,mu,2,alpha^2);
+    if(returnOneMinus)
+        Q=GammaD.CDF(beta.^2,mu,2,alpha^2);
+    else
+        Q=1-GammaD.CDF(beta.^2,mu,2,alpha^2);
+    end
 end
 
 function Q=AlgorithmSchnidman(mu,alpha,beta) %#ok<DEFNU> 
@@ -281,7 +296,7 @@ function Q=AlgorithmDing(mu,alpha,beta) %#ok<DEFNU>
     Q=1-P;
 end
 
-function Q=AlgorithmBenton(mu,alpha,beta)
+function Q=AlgorithmBenton(mu,alpha,beta,returnOneMinus)
 %This function implements the algorithm of [1], whose code is given in
 %Section 7.3 as Algorithm 7.3. Some of the comments
 %are taken from the paper. The algorithm will evaluate the MarcumQ
@@ -322,9 +337,13 @@ gamkf=gammainc(x,a);
 gamkb=gamkf;
 
 if(lambda==0)
-   P=gamkf;
-   Q=1-P;
-   return
+    P=gamkf;
+    if(returnOneMinus)
+        Q=P;
+    else
+        Q=1-P;
+    end
+    return
 end
 
 %Compute the Poisson probability at (k; del) and assign it to "poikf" and 
@@ -379,7 +398,11 @@ end
 
 P=sumVal;
 %The max deals with negative values within precision bounds.
-Q=max(1-P,0);
+if(returnOneMinus)
+    Q=max(P,0);
+else
+    Q=max(1-P,0);
+end
 %The min deals with positive values within precision bounds.
 Q=min(Q,1);
 end

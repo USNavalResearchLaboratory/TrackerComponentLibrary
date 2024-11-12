@@ -79,7 +79,7 @@ function [V,C,FCost,exitCode]=jointMatDiagFrob(A,w,maxIter,RelTol,AbsTol)
 %matrices. Note, however, that the V obtained is not the same as V1.
 %
 %REFERENCES:
-%[1] A. Ziehe, P. Laskov, G. Nolte, and K.-R. Müller, "A fast algorithm for
+%[1] A. Ziehe, P. Laskov, G. Nolte, and K.-R. Muller, "A fast algorithm for
 %    joint diagonalization with non-orthogonal transformations and its
 %    application to blind source separation," Journal of Machine Learning,
 %    vol. 5, pp. 777-800, Jul. 2004.
@@ -119,7 +119,7 @@ function [V,C,FCost,exitCode]=ZieheAlg(A,maxIter,RelTol,AbsTol)
 %          instead of 18.
 %
 %REFERENCES:
-%[1] A. Ziehe, P. Laskov, G. Nolte, and K.-R. Müller, "A fast algorithm for
+%[1] A. Ziehe, P. Laskov, G. Nolte, and K.-R. Muller, "A fast algorithm for
 %    joint diagonalization with non-orthogonal transformations and its
 %    application to blind source separation," Journal of Machine Learning,
 %    vol. 5, pp. 777-800, Jul. 2004.

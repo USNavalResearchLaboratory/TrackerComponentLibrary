@@ -1,7 +1,9 @@
 classdef DisjointSetM < DisjointSet
 %%DISJOINTSETM A disjoint set class that can be used to partition a set of
 %              targets into clusters while keeping track of which
-%              measurements are associated with which cluster.
+%              measurements are associated with which cluster. The
+%              disjoint set data structure is also referred to as a
+%              union-find or merge-find data structure.
 %
 %This subclass generalizes the DisjointSet class to keep track of which
 %measurements caused the partitioning of the targets. The set size is the

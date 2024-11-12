@@ -10,7 +10,7 @@ void iauA2af(int ndp, double angle, char *sign, int idmsf[4])
 **  Decompose radians into degrees, arcminutes, arcseconds, fraction.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -59,9 +59,9 @@ void iauA2af(int ndp, double angle, char *sign, int idmsf[4])
 **
 **  This revision:  2021 May 11
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
 /* Hours to degrees * radians to turns */
@@ -75,8 +75,8 @@ void iauA2af(int ndp, double angle, char *sign, int idmsf[4])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

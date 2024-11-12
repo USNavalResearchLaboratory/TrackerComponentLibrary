@@ -47,7 +47,7 @@ function [xi,w,CvMDistMin,exitCode,sInit]=GaussianLCDSamples(numDim,numSamples,f
 %               AbsTol The absolute error tolerance. Between a value x and
 %                      its estimate xHat, this is abs(x-xHat).
 %               RelTol The relative error tolerance. Between a value x and
-%                      its esitimate xHat, this is
+%                      its estimate xHat, this is
 %                      abs(x-xHat)/min(abs(x),abs(xHat))
 %               The default values are both 1e-14. If this parameter is
 %               omitted or an empty matrix is passed, the default values
@@ -69,7 +69,7 @@ function [xi,w,CvMDistMin,exitCode,sInit]=GaussianLCDSamples(numDim,numSamples,f
 %          w The numDimX1 set of weights associated with the cubature
 %            points. These are all just 1/numSamples. If the exit code is
 %            not positive, then an empty matrix is returned.
-% CvMDistMin The minimum Cramér-von Mises distance between the LCD of the
+% CvMDistMin The minimum Cramer-von Mises distance between the LCD of the
 %            points and a standard multivariate gaussian distribution.
 %   exitCode A number indicating the termination state of the algorithm.
 %            A zero or positive number indicates success. Possible values
@@ -99,7 +99,7 @@ function [xi,w,CvMDistMin,exitCode,sInit]=GaussianLCDSamples(numDim,numSamples,f
 %          2.7292   -1.3199    1.4371    0.6611   -0.5000    0.0540];
 % [xi,w,CvMDistMin,exitCode,sInit]=GaussianLCDSamples(4,13,true,[],[],[],sInit)
 %Using sInit as the random seed for the initialization, one obtains points
-%with a minimum Cramér-von Mises distance of CvMDistMin=0.0183. The first
+%with a minimum Cramer-von Mises distance of CvMDistMin=0.0183. The first
 %point is at the origin, because an odd number of points was requested.
 %
 %The function is generally too slow to use to find approximations of
@@ -244,7 +244,7 @@ w=w*ones(numSamples,1);
 end
 
 function D=modCvMDist(s,bMax,isEven,AbsTol,RelTol,sDims)
-%Compute the modified Cramér-von Mises distance between the localized
+%Compute the modified Cramer-von Mises distance between the localized
 %cumulative distribution (LCD) of a Gaussian and the LCD of a Dirac
 %mixture as discussed in Section 3.2. The input s is stacked and must be
 %reshaped. This modified version of the cost function omits the constant D1

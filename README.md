@@ -1,4 +1,4 @@
-**Tracker Component Library Release 6.0, January 2024**
+**Tracker Component Library Release 6.1, September 2024**
 https://github.com/USNavalResearchLaboratory/TrackerComponentLibrary
 
 A paper describing a number of features of the library is<br>
@@ -6,18 +6,19 @@ D. F. Crouse, "The Tracker Component Library: Free Routines for Rapid
 Prototyping," IEEE Aerospace and Electronic Systems Magazine, vol. 32, no.
 5, pp. 18-27, May. 2017.
 
-These are the release notes for the version 6.0 of the Tracker Component
+Those looking for magnetic field synthesis code might want to look at
+./Sample Code/Magnetic Models/ .
+
+These are the release notes for the version 6.1 of the Tracker Component
 Library. The Tracker Component Library is a collection of Matlab routines
 for simulating and tracking targets in various scenarios. Due to the
 complexity of the target tracking problem, a great many routines can find
 use in other areas including combinatorics, astronomy, and statistics.
 
-Making this code available and open source is in the spirit of OMB M-16-21,
-which can be viewed online at:
-https://sourcecode.cio.gov/
-
-Those looking for magnetic field synthesis code might want to look at
-./Sample Code/Magnetic Models/ .
+Making this code available and open source is in the spirit of the Federal
+Source Code Policy, which is OMB M-16-21, which is given in
+https://www.whitehouse.gov/wp-content/uploads/legacy_drupal_files/omb/memoranda/2016/m_16_21.pdf 
+https://code.gov/
 
 Those looking to get a quick idea of a very simple end-to-end tracking
 algorithm (track initiation, data association, maintenance, and
@@ -38,33 +39,49 @@ running the CompileCLibraries function. Precompiled code is not distributed
 with the library. Note that a C/C++ compiler supported by Matlab must be
 installed. See below for comments regarding compilation.
 
-SOME OF THE CHANGES SINCE VERSION 5.3:
-- There are 19 new functions.
-- Bug fixes and also stability improvements to some numeric functions.
-- The interface to some functions has changed, which might break some
-  previous uses of the library.
-- The ability to take partial derivatives of a pseudoinverse has been
-  been implemented in pseudoInverseDerivative.
-- The ephemerides supported are now NASA's DE440t ephemerides instead of
-  the DE430t. The files readJPLEphem and readJPLEphemHeader have been
-  updated to read them properly. However, the ephemerides are too large to
-  push to GitHub, so one must download them from
-  https://ssd.jpl.nasa.gov/ftp/eph/planets/Linux/de440t/
-  and the file linux_p1550p2650.440t should be placed in 
-  ./Astronomical Code/data
-- Optimal 2D minimum mean optimal subpattern assignment (MOSPA)
-  optimization in MMOSPA2Tar2D by Marcus Baum has been added.
-- partialFracKnownPoleDenom lets one perform a partial fraction
-  decomposition when the poles in the denominator are known. This is more
-  numerically stable than when the poles need to be determined.
-- posDefComboOfSymMatrices lets one find a linear combination of symmetric
-  matrices such that the result is positive definite.
+Note that NASA's ephemerides are nolonger distributed with the library on
+GitHub due to the file size. Additionally, the GSHHG data for plotting maps
+and determining if a point is on land is not distributed with the library.
+See below for where to download these free datasets.
+
+SOME OF THE CHANGES SINCE VERSION 6.0:
+- Bug fixes, notably the CDF in the chi squared distribution now works over
+  a much wider range of values of the noncentrality parameter. Previously,
+  values as low as 500 were problematic.
+- All of the detection statistics classes and related functions have been
+  redone to handle a more common normalization and have better comments.
+  One can now choose the normalization to use. Also, SwerlingISqLawD now
+  has new methods for the first and second derivative of the PDF with
+  respect to the average SNR.
+- extractSubPlots To let one to pull sub plots out of figures in Matlab
+  that have already been plotted with suplots.
+- Added functions for displaying maps and for determining whether a point
+  is on land or not. For example, run the sample code in the comments to
+  pointIsOnLand. Note that these functions rely on the data from the GSHHG,
+  which is not provided, but which can be downloaded from
+  https://www.ngdc.noaa.gov/mgg/shorelines/ . The binary archive
+  gshhg-bin.zip should be placed in Misc/Maps/data.
+- Added an example to the comments of expRateLikeGammaConjUpdate on how to
+  use the function.
+- The inputs and outputs of pseudoInverseDerivative have been reformulated
+  to be more useful.
+- Added the Erlang distribution in ErlangD and a distribution for a
+  weighted sum of noncentral chi squared random variables plus an optional
+  normal in ChiSquaredSumD.
+- New Lorentz transformation functions along with gradients and Hessians.
+- New functions related to simple refraction models. Specifically,
+  atmosExpDecayConst4Refrac and approxRefractivity.
+- Combinatorial functions for involutions: genAllInvolutions,
+  numPureInvolutions, numFixedPointInvolutions, isPureInvolution, and 
+  genAllPureInvolutions.
+- The C implementation of clipPolygonSH2D was buggy and was removed.
+- In all, 55 new functions (not all in unique files) added and one removed.
 
 COMPILED CODE:
 
-The compilation of the library has been tested under Matlab2023b under
+The compilation of the library has been tested under Matlab2024a under
 Windows 10 using minGW64 and Microsoft Visual C++ 2022. The code will
-probably compiler under Mac OS X and Linux. Precompiled code is not
+probably compile under Mac OS X and Linux. Precompiled code is not
 distributed with the library.
 
 EXTERNAL SOLVERS:
@@ -91,7 +108,7 @@ http://homepages.math.uic.edu/~jan/download.html
 Bertini (version 1.5) for Mac OS X and Linux and Windows, only with Cygwin:
 https://bertini.nd.edu/download.html
 Macaulay2 for Mac OS X, Linux, and Windows:
-http://www.math.uiuc.edu/Macaulay2/
+https://www.macaulay2.com/
 
 For the external solvers to work, they need to be added to the search path
 used in Matlab so that the phs/bertini/m2 commands can be called using the
@@ -192,7 +209,14 @@ Name the file NASABlueMarble.jpg and place the file in Misc/data . This is
 used as the default map to show on the Earth given by the
 plotMapOnEllipsoid function.
 
-January 2024 David F. Crouse, Naval Research Laboratory, Washington D.C.<br>
+16) The Global Self-consistent, Hierarchical, High-resolution Geography
+    Database
+https://www.ngdc.noaa.gov/mgg/shorelines/
+Download the zipped binary formatted archive. The file is
+gshhg-bin-2.3.7.zip. It should be renamed to gshhg-bin.zip and be placed in
+Misc/Maps/data. Note that the claims a weak copyleft license.
+
+September 2024 David F. Crouse, Naval Research Laboratory, Washington D.C.<br>
 (UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release. Distribution is unlimited.
 
 LICENSE:
@@ -212,3 +236,5 @@ RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF THE
 SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY THE NAVAL
 RESEARCH LABORATORY FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE ACTIONS
 OF RECIPIENT IN THE USE OF THE SOFTWARE.
+
+

@@ -12,7 +12,7 @@ int iauEpv00(double date1, double date2,
 **  respect to the Barycentric Celestial Reference System.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -71,8 +71,8 @@ int iauEpv00(double date1, double date2,
 **        pvb[1][1]  ydot    } barycentric velocity, au/d
 **        pvb[1][2]  zdot    }
 **
-**     The vectors are with respect to the Barycentric Celestial
-**     Reference System.  The time unit is one day in TDB.
+**     The vectors are oriented with respect to the BCRS.  The time unit
+**     is one day in TDB.
 **
 **  3) The function is a SIMPLIFIED SOLUTION from the planetary theory
 **     VSOP2000 (X. Moisson, P. Bretagnon, 2001, Celes. Mechanics &
@@ -100,11 +100,11 @@ int iauEpv00(double date1, double date2,
 **  5) It is permissible to use the same array for pvh and pvb, which
 **     will receive the barycentric values.
 **
-**  This revision:  2021 May 11
+**  This revision:  2023 March 1
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
 /*
@@ -2546,8 +2546,8 @@ int iauEpv00(double date1, double date2,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

@@ -10,7 +10,7 @@ void iauFw2m(double gamb, double phib, double psi, double eps,
 **  Form rotation matrix given the Fukushima-Williams angles.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -77,9 +77,9 @@ void iauFw2m(double gamb, double phib, double psi, double eps,
 **
 **  This revision:  2021 May 11
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
 /* Construct the matrix. */
@@ -93,8 +93,8 @@ void iauFw2m(double gamb, double phib, double psi, double eps,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

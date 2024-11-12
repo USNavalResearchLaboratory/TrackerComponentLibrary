@@ -571,7 +571,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -602,7 +602,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -649,7 +649,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -700,7 +700,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -898,7 +898,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -942,7 +942,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -1029,7 +1029,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -1055,7 +1055,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -1081,7 +1081,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -1111,7 +1111,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -1146,7 +1146,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -1181,7 +1181,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -1211,7 +1211,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -1273,7 +1273,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -1328,7 +1328,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -1371,7 +1371,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -1404,7 +1404,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -1436,7 +1436,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -1649,7 +1649,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -1675,7 +1675,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -1714,7 +1714,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -1742,7 +1742,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -1772,7 +1772,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -1807,7 +1807,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -1951,7 +1951,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -2092,7 +2092,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -2119,7 +2119,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -2146,7 +2146,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -2174,7 +2174,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -2214,7 +2214,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -2247,7 +2247,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -2277,7 +2277,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -2604,7 +2604,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -2635,7 +2635,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -2667,7 +2667,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -2706,7 +2706,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -2744,7 +2744,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -2781,7 +2781,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -2821,7 +2821,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -2856,7 +2856,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -2897,7 +2897,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %REFERENCES:
         %[1] IEEE Standard for Interval Arithmetic," in IEEE Std 1788-2015,
         %    pp.1-97, June 30 2015.
-        %[2] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[2] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009
@@ -3815,7 +3815,7 @@ classdef Interval < matlab.mixin.CustomDisplay
         %more complicated method in [1].
         %
         %REFERENCES
-        %[1] M. Daumas, D. Lester, C. Muñoz, "Verified Real Number
+        %[1] M. Daumas, D. Lester, C. Munoz, "Verified Real Number
         %    Calculations: A Library for Interval Arithmetic", IEEE
         %    Transactions on Computers, vol.58, no. 2, pp. 226-237,
         %    Feb. 2009

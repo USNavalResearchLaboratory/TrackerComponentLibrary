@@ -10,7 +10,7 @@ void iauFk5hip(double r5h[3][3], double s5h[3])
 **  FK5 to Hipparcos rotation and spin.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -21,8 +21,8 @@ void iauFk5hip(double r5h[3][3], double s5h[3])
 **  Notes:
 **
 **  1) This function models the FK5 to Hipparcos transformation as a
-**     pure rotation and spin;  zonal errors in the FK5 catalogue are
-**     not taken into account.
+**     pure rotation and spin;  zonal errors in the FK5 catalog are not
+**     taken into account.
 **
 **  2) The r-matrix r5h operates in the sense:
 **
@@ -42,11 +42,11 @@ void iauFk5hip(double r5h[3][3], double s5h[3])
 **
 **     F.Mignard & M.Froeschle, Astron.Astrophys., 354, 732-739 (2000).
 **
-**  This revision:  2021 May 11
+**  This revision:  2023 March 6
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    double v[3];
@@ -81,8 +81,8 @@ void iauFk5hip(double r5h[3][3], double s5h[3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

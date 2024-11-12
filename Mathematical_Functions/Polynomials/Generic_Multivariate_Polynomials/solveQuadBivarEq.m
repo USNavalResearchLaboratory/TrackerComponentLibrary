@@ -27,7 +27,7 @@ function sols=solveQuadBivarEq(coeffsA,coeffsB,AbsTol)
 %solutions that agrees with both quadratic equations. However, that is
 %problematic if y has repeated roots. Thus, we save all solutions below
 %AbsTol in agreement, but we can only return four solutions, because
-%Bézout's number is four. Thus, if more than four solutions are saved, we
+%Bezout's number is four. Thus, if more than four solutions are saved, we
 %take the lowest-cost solution and then sequentially take the others such
 %that they maximize the minimum distance to previous solutions (This
 %heuristic helps avoid near-duplicate solutions). In the end, however,

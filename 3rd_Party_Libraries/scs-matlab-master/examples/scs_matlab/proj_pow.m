@@ -6,14 +6,14 @@ CONE_TOL = 1e-8;
 iter = 0;
 x = in(1); y = in(2); z = in(3);
 % v in cl(K_a)
-if(x >=0 && y>=0 && (x^a) * (y^(1-a)) >= abs(z));
+if(x >=0 && y>=0 && (x^a) * (y^(1-a)) >= abs(z))
     x = in;
     return
 end
 
 % -v in K_a^*
 u = -in(1); v = -in(2); w = -in(3);
-if (u>=0 && v>=0 && (u^a) * (v^(1-a)) >= abs(w) * (a^a) * ((1-a)^(1-a)));
+if (u>=0 && v>=0 && (u^a) * (v^(1-a)) >= abs(w) * (a^a) * ((1-a)^(1-a)))
     x = zeros(3,1);
     return
 end
@@ -23,7 +23,7 @@ yh = in(2);
 zh = in(3);
 rh = abs(zh);
 r = rh / 2;
-for iter=1:CONE_MAX_ITERS;
+for iter=1:CONE_MAX_ITERS
     x = calcX(r, xh, rh, a);
     y = calcX(r, yh, rh, 1-a);
     

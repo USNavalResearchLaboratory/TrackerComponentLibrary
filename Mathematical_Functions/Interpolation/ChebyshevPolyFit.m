@@ -13,7 +13,7 @@ function a=ChebyshevPolyFit(f,n,tauStart,tauEnd)
 %          vectors of points at which it is to be evaluated for
 %          interpolation. The function will not be evaluated at the
 %          endpoints.
-%        n The maximum order of the polynoimals to generate. There will be
+%        n The maximum order of the polynomials to generate. There will be
 %          n+1 returned coefficients, because there is a 0 order
 %          polynomial.
 % tauStart,tauEnd The range of the f over which fiting for interpolation is

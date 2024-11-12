@@ -52,7 +52,7 @@ function C=autocorrMats(x,maxLag,scaling)
 % [conj(c1(end:-1:2));c1(:)]
 %
 %REFERENCES:
-%[1] J. Duník, O. Straka, O. Kost, and J. Havlík, "Noise covariance
+%[1] J. Dunik, O. Straka, O. Kost, and J. Havlik, "Noise covariance
 %    matrices in state-space models: A survey and comparison of estimation
 %    methods-part I," International Journal of Adaptive Control and Signal
 %    Processing, vol. 31, no. 11, pp. 1505-1543, Nov. 2017.

@@ -56,11 +56,11 @@ function [xi, w]=thirdOrderCubPoints(numDim,algorithm,w0,randomize)
 %    NJ: Prentice-Hall, Inc., 1971.
 %[4] B. Jia, M. Xin, and Y. Cheng, "High-degree cubature Kalman filter,"
 %    Automatica, vol. 49, no. 2, pp. 510-518, Feb. 2013.
-%[5] O. Straka, D. Duník, and M. Simandl, "Randomized unscented Kalman
+%[5] O. Straka, D. Dunik, and M. Simandl, "Randomized unscented Kalman
 %    filter in tracking," in Proceedings of the 15th International
 %    Conference on Information Fusion, Singapore, 9-12 Jul. 2012, pp.
 %    503-510.
-%[6] J. Duník, O. Straka, and M. Simandl, "The development of a randomised
+%[6] J. Dunik, O. Straka, and M. Simandl, "The development of a randomised
 %    unscented Kalman filter," in Proceedings of the 18th World Congress,
 %    The International Federation of Automatic Control, Milan, Italy, 28
 %    Aug. - 2 Sep. 2011, pp. 8-13.

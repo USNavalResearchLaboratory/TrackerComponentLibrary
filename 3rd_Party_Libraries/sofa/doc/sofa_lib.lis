@@ -1,4 +1,4 @@
-sofa_lib.lis                                               2021 April 19
+sofa_lib.lis                                               2022 April 15
 
                      ----------------------
                      SOFA Astronomy Library
@@ -104,7 +104,7 @@ ROUTINES
      ATCO13    ICRS -> observed
      ATIC13    CIRS -> ICRS
      ATICQ     quick CIRS -> ICRS
-     ATCIQN    quick CIRS -> ICRS, multiple deflections
+     ATICQN    quick CIRS -> ICRS, multiple deflections
      ATIO13    CIRS -> observed
      ATIOQ     quick CIRS -> observed
      ATOC13    observed -> astrometric ICRS
@@ -338,7 +338,7 @@ CALLS: FORTRAN VERSION
   :                  AOB, ZOB, HOB, DOB, ROB, EO, J )
    CALL iau_ATIC13 ( RI, DI, DATE1, DATE2, RC, DC, EO )
    CALL iau_ATICQ  ( RI, DI, ASTROM, RC, DC )
-   CALL iau_ATCIQN ( RI, DI, ASTROM, N, B, RC, DC )
+   CALL iau_ATICQN ( RI, DI, ASTROM, N, B, RC, DC )
    CALL iau_ATIO13 ( RI, DI, UTC1, UTC2, DUT1, ELONG, PHI, HM, XP, YP,
   :                  PHPA, TC, RH, WL, AOB, ZOB, HOB, DOB, ROB, J )
    CALL iau_ATIOQ  ( RI, DI, ASTROM, AOB, ZOB, HOB, DOB, ROB )
@@ -563,7 +563,7 @@ CALLS: C VERSION
                    aob, zob, hob, dob, rob, eo );
        iauAtic13 ( ri, di, date1, date2, &rc, &dc, &eo );
        iauAticq  ( ri, di, &astrom, &rc, &dc );
-       iauAtciqn ( ri, di, astrom, n, b, &rc, &dc );
+       iauAticqn ( ri, di, astrom, n, b, &rc, &dc );
    i = iauAtio13 ( ri, di, utc1, utc2, dut1, elong, phi, hm, xp, yp,
                    phpa, tc, rh, wl, aob, zob, hob, dob, rob );
        iauAtioq  ( ri, di, &astrom, &aob, &zob, &hob, &dob, &rob );

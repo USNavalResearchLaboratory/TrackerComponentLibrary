@@ -3,7 +3,8 @@ classdef SwerlingIIISqLawD
 %                statistics related to the Swerling III target model when
 %                used with a square law detector. All methods are static
 %                (the class holds no information and does not need to be
-%                instantiated).
+%                instantiated). All values are with respect to a normalized
+%                noise model, of which two normalization are available.
 %
 %Implemented methods are: mean, var, PDF, CDF, PD4Threshold, PD4PFA,
 %                         thresh4AvgSNRPD, rand
@@ -17,34 +18,24 @@ classdef SwerlingIIISqLawD
 %Swerling IV model is the target amplitude does not fluctuate from pulse to
 %pulse.
 %
-%The square law detector for N samples is
-%y=sum_{i=1}^N r_i^2
-%where r_i is the ith real amplitude. The model for the amplitude given a
-%target amplitude or power is developed in Chapter 9 of [2]. The squared
-%real amplitude is r^2_i=y_{I,i}^2+y_{Q,i}^2 where y_{I,i} and y_{Q,i} are
-%the in-phase and quadrature components of the filter output. Define
-%Rp=2*sampPowSNR, as in Equation 9.2-34. The sampled power SNR of the
-%target in the Swerling III model is the same random value for each pulse.
-%The sample power SNR is sampPowSNR=GammaD.rand(1,2,avgSNR/2) as
-%mentioned in [1]. The value y=y_{I,i}+sqrt(-1)*y_{Q,i} conditioned on the
-%sampled power SNR is modeled as being distributed circularly complex
-%Gaussian with mean sqrt(Rp) and variance 2. (See, Equation 9.3-35a in
-%[2]). The variance being 2 simply reflects having normalized the variance
-%on the I and Q components each to 1.  As in Equation 10.4-13 of [2], the
-%distribution of Y=y/2 conditioned on the target SNR value is noncentral
-%chi-squared with a change of variables. The value y conditioned on the
-%target SNR value is noncentral chi-squared with nu=2*N degrees of freedom
-%and lambda=N*Rp as the noncentrality parameter. The expressions in [1] and
-%[2] are in terms of Y and not y, so a transformation has to be performed
-%to make things in terms of y.
-%
-%Under this model, for a given average power SNR value, one can generate a
-%random sample from the distribution as
-% sampPowSNR=GammaD.rand(1,2,avgSNR/2);
-% Rp=2*sampPowSNR;%The peak power of the signal from the SNR, Equation
-%             %9.4-8 in [2].
-% A=sqrt(Rp);%Equation 9.4-8, the amplitude of the signal
-% sample=sum(abs(ComplexGaussianD.rand(N,A,2)).^2);
+%The square law detector is explained in the comments to the NonFlucSqLawD
+%class. The square law detector for N samples is
+% y=sum_{i=1}^N abs(r_i)^2
+%where r_i is the ith complex sampled value (including a signal and
+%noise as described below) and y can be compared to a threshold. Two
+%normalization are available. These are
+%Definition 1:
+%A is the SNR and the signal and noise model for a signle pulse is
+% zSignal=sqrt(A)*exp(1j*2*pi*rand(1)) 
+% zNoise=(randn(1)+1j*randn(1))/sqrt(2)
+% r=zSigma+zNoise.
+%so the noise is circularly symmetric complex Gaussian with variance 1.
+%Definition 0:
+%The model for a single pulse is now
+% zSignal=sqrt(2*A)*exp(1j*2*pi*rand(1))
+% zNoise=randn(1)+1j*randn(1)
+% % r=zSigma+zNoise.
+%So the amplitude squared of the noise is now 2, not 1.
 %
 %REFERENCES:
 %[1] P. Swerling, "Probability of detection for fluctuating targets," The
@@ -57,17 +48,23 @@ classdef SwerlingIIISqLawD
     
 methods(Static)
 
-function val=mean(avgSNR,N)
+function val=mean(avgSNR,N,ampDef)
 %%MEAN Obtain the mean of the distribution of the detection power
 %      (normalized to a noise variance of 1) under a Swerling III model in
 %      a square-law detector.
 %
-%INPUTS:avgSNR The average power signal to noise ratio of the target.
+%INPUTS: avgSNR The average power signal to noise ratio of the target.
 %        N The number of pulses that are to be incoherently added for
 %          detection (in a square-law detector). In a Swerling III model, a
 %          single realization of the target power is used across all
 %          pulses, but the noise corrupting the pulses varies. If this
 %          parameter is omitted or an empty matrix is passed, N=1 is used.
+%   ampDef This specified normalization (see help SwerlingIIISqLawD).
+%          Possible values are:
+%          0 The expected value of the squared magnitude of the noise is 2.
+%          1 (The default if omitted or an empty matrix is passed) The
+%            expected value of the squared magnitude of the noise is 1.
+%            (A more common definition). 
 %
 %OUTPUTS: val The value of the mean for the given parameters.
 %
@@ -83,9 +80,10 @@ function val=mean(avgSNR,N)
 %computed mean to the sample mean.
 % avgSNR=2;
 % N=4;
+% ampDef=1;
 % numSamples=1e5;
-% meanVal=SwerlingIIISqLawD.mean(avgSNR,N)
-% meanSampVal=mean(SwerlingIIISqLawD.rand([numSamples,1],avgSNR,N))
+% meanVal=SwerlingIIISqLawD.mean(avgSNR,N,ampDef)
+% meanSampVal=mean(SwerlingIIISqLawD.rand([numSamples,1],avgSNR,N,ampDef))
 %One will see that both mean values are about 24.
 %
 %REFERENCES:
@@ -96,14 +94,22 @@ function val=mean(avgSNR,N)
 %
 %March 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
+    if(nargin<3||isempty(ampDef))
+        ampDef=1;
+    end
+
     if(nargin<2||isempty(N))
         N=1;
     end
     
-    val=2*N*(1+avgSNR);
+    if(ampDef==0)
+        val=2*N*(1+avgSNR);
+    else
+        val=N*(1+avgSNR);
+    end
 end
 
-function val=var(avgSNR,N)
+function val=var(avgSNR,N,ampDef)
 %%VAR Obtain the variance of the distribution of the detection power
 %     (normalized to a noise variance of 1) under a Swerling III model in a
 %     square-law detector.
@@ -114,6 +120,12 @@ function val=var(avgSNR,N)
 %          single realization of the target power is used across all
 %          pulses, but the noise corrupting the pulses varies. If this
 %          parameter is omitted or an empty matrix is passed, N=1 is used.
+%   ampDef This specified normalization (see help SwerlingIIISqLawD).
+%          Possible values are:
+%          0 The expected value of the squared magnitude of the noise is 2.
+%          1 (The default if omitted or an empty matrix is passed) The
+%            expected value of the squared magnitude of the noise is 1.
+%            (A more common definition). 
 %
 %OUTPUTS: val The value of the variance for the given parameters.
 %  
@@ -132,9 +144,10 @@ function val=var(avgSNR,N)
 %the computed variance to the sample variance.
 % avgSNR=2;
 % N=4;
+% ampDef=0;
 % numSamples=1e5;
-% varVal=SwerlingIIISqLawD.var(avgSNR,N)
-% varSampVal=var(SwerlingIIISqLawD.rand([numSamples,1],avgSNR,N))
+% varVal=SwerlingIIISqLawD.var(avgSNR,N,ampDef)
+% varSampVal=var(SwerlingIIISqLawD.rand([numSamples,1],avgSNR,N,ampDef))
 %One will see that both variance values are about 208.
 %
 %REFERENCES:
@@ -143,14 +156,22 @@ function val=var(avgSNR,N)
 %
 %March 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
+    if(nargin<3||isempty(ampDef))
+        ampDef=1;
+    end
+
     if(nargin<2||isempty(N))
         N=1;
     end
     
-    val=4*(1/2)*N*(2+avgSNR.*(4+N*avgSNR));
+    if(ampDef==0)
+        val=4*(1/2)*N*(2+avgSNR.*(4+N*avgSNR));
+    else
+        val=(1/2)*N*(2+avgSNR.*(4+N*avgSNR));
+    end
 end
 
-function val=PDF(x,avgSNR,N)
+function val=PDF(x,avgSNR,N,ampDef)
 %%PDF Evaluate the scalar probability density function (PDF) of the
 %     distribution of the detection power (normalized to a noise variance
 %     of 1) under a Swerling III model in a square-law detector.
@@ -163,13 +184,17 @@ function val=PDF(x,avgSNR,N)
 %          single realization of the target power is used across all
 %          pulses, but the noise corrupting the pulses varies. If this
 %          parameter is omitted or an empty matrix is passed, N=1 is used.
+%   ampDef This specified normalization (see help SwerlingIIISqLawD).
+%          Possible values are:
+%          0 The expected value of the squared magnitude of the noise is 2.
+%          1 (The default if omitted or an empty matrix is passed) The
+%            expected value of the squared magnitude of the noise is 1.
+%            (A more common definition). 
 %
 %OUTPUTS: val The values of the PDF evaluated at the given points.
 %
 %The PDF is taken from Equation III.16 of [1]. However, a clearer
-%derivation is given in Chapter 11 of [2]. In both instances, the PDF
-%derived is based on a scaled square-law detector, as in Equation 10.4-4 in
-%[2]. Thus, in implementing the PDF, the scaling is removed.
+%derivation is given in Chapter 11 of [2].
 %
 %EXAMPLE:
 %Here, we validate the PDF by generating random samples and comparing the
@@ -177,14 +202,15 @@ function val=PDF(x,avgSNR,N)
 % avgSNR=2;
 % N=4;
 % numSamples=1e4;
+% ampDef=0;
 % 
 % figure(1)
 % clf
-% histogram(SwerlingIIISqLawD.rand([numSamples,1],avgSNR,N),'Normalization','pdf')
+% histogram(SwerlingIIISqLawD.rand([numSamples,1],avgSNR,N,ampDef),'Normalization','pdf')
 % hold on
 % numPoints=1000;
 % x=linspace(0,80,numPoints);
-% vals=SwerlingIIISqLawD.PDF(x,avgSNR,N);
+% vals=SwerlingIIISqLawD.PDF(x,avgSNR,N,ampDef);
 % plot(x,vals,'linewidth',2)
 % h1=xlabel('x');
 % h2=ylabel('PDF(x)');
@@ -201,9 +227,19 @@ function val=PDF(x,avgSNR,N)
 %
 %March 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
+    if(nargin<4||isempty(ampDef))
+        ampDef=1;
+    end
+
+    if(nargin<3||isempty(N))
+        N=1;
+    end
+
     %Initial change of variable to undo the scaling from Equation 10.4-4 in
     %[2].
-    x=x/2;
+    if(ampDef==0)
+        x=x/2;
+    end
 
     numEls=numel(x);
     val=zeros(size(x));
@@ -218,10 +254,12 @@ function val=PDF(x,avgSNR,N)
     
     %Adjust for the change of variable to undo the scaling from Equation
     %10.4-4 in [2].
-    val=val/2;
+    if(ampDef==0)
+        val=val/2;
+    end
 end
 
-function val=CDF(v,avgSNR,N)
+function val=CDF(v,avgSNR,N,ampDef)
 %%CDF Evaluate the scalar cumulative distribution function (CDF) of the
 %     distribution of the detection power (normalized to a noise variance
 %     of 1) under a Swerling III model in a square-law detector.
@@ -234,12 +272,37 @@ function val=CDF(v,avgSNR,N)
 %          single realization of the target power is used across all
 %          pulses, but the noise corrupting the pulses varies. If this
 %          parameter is omitted or an empty matrix is passed, N=1 is used.
+%   ampDef This specified normalization (see help SwerlingIIISqLawD).
+%          Possible values are:
+%          0 The expected value of the squared magnitude of the noise is 2.
+%          1 (The default if omitted or an empty matrix is passed) The
+%            expected value of the squared magnitude of the noise is 1.
+%            (A more common definition). 
 %
 %OUTPUTS: val The values of the CDF evaluated at the given points.
 %
 %The derivation of the detection probability in [1] is as 1-the value of
-%the CDF. Thus, this function just evaluated 
-%1-SwerlingIIISqLawD.PD4Threshold(avgSNR,v,N).
+%the CDF. Thus, this function just evaluates 
+%1-SwerlingIIISqLawD.PD4Threshold(avgSNR,v,N,ampDef).
+%
+%EXAMPLE:
+%Here, the CDF returned by this function is plotted along with an empirical
+%CDF constructed from random samples of this distribution. They agree well.
+% avgSNR=5;
+% N=4;
+% ampDef=0;
+% numSamples=1e5;
+% samples=SwerlingIIISqLawD.rand([numSamples,1],avgSNR,N,ampDef);
+% numPts=1000;
+% x=linspace(0,80,numPts);
+% CDFEmp=EmpiricalD.CDF(x,samples);
+% CDF=SwerlingIIISqLawD.CDF(x,avgSNR,N,ampDef);
+% figure(1)
+% clf
+% hold on
+% plot(x,CDFEmp,'linewidth',4);
+% plot(x,CDF,'linewidth',2);
+% legend('Empirical CDF','Theoretical CDF')
 %
 %REFERENCES:
 %[1] P. Swerling, "Probability of detection for fluctuating targets," The
@@ -247,44 +310,52 @@ function val=CDF(v,avgSNR,N)
 %
 %March 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
+    if(nargin<4||isempty(ampDef))
+        ampDef=1;
+    end
+
     if(nargin<3||isempty(N))
         N=1; 
     end
 
-    val=1-SwerlingIIISqLawD.PD4Threshold(avgSNR,v,N);
+    val=1-SwerlingIIISqLawD.PD4Threshold(avgSNR,v,N,[],ampDef);
     val(v<=0)=0;
 end
 
-function PD=PD4Threshold(avgSNR,thresh,N,method)
+function PD=PD4Threshold(avgSNR,thresh,N,method,ampDef)
 %%PD4THRESHOLD Determine the detection probability of a Swerling III target
 %           given it's signal to noise ratio and the value of the
 %           detection threshold, assuming that a square-law detector is
-%           used. The noise in each sample is assumed to be Gaussian with
-%           variance 1 (normalized noise power).
+%           used.
 %
 %INPUTS: avgSNR A vector or matrix of average power signal to noise ratios
-%               of the target at which one wishes to evaluate the detection
-%               probability.
-%        thresh The scalar normalized detection threshold to use. This is
-%               the threshold to use if the noise variance is 1.
-%             N The number of pulses that are to be incoherently added for
-%               detection (in a square-law detector). In a Swerling III
-%               model, a single realization of the target power is used
-%               across all pulses, but the noise corrupting the pulses
-%               varies. If this parameter is omitted or an empty matrix is
-%               passed, N=1 is used.
-%        method This specified whether an exact method or an approximation
-%               should be used. For N=1 and N=2, the exact method equals
-%               the approximation. Possible values are
-%               0 (The default if omitted or an empty matrix is passed) Use
-%                 the exact solution. This is obtained by integrating
-%                 Equation III.16 in [1], which is the saem as Equation
-%                 11.4-18 in p2]. An explicit form in terms of incomplete
-%                 gamma functions was obtained by evaluating the integral
-%                 in Mathematica and has been implemented here.
-%               1 Use the approximate solution of Equation II.14 of [1].
-%                 This is only valid if N*avgSNR>2 or if N=1,2. This is an
-%                 exact solution if N=1,2.
+%          of the target at which one wishes to evaluate the detection
+%          probability.
+%   thresh The scalar normalized detection threshold to use. This is the
+%          threshold to use if the noise variance is 1.
+%        N The number of pulses that are to be incoherently added for
+%          detection (in a square-law detector). In a Swerling III model, a
+%          single realization of the target power is used across all
+%          pulses, but the noise corrupting the pulses varies. If this
+%          parameter is omitted or an empty matrix is passed, N=1 is used.
+%   method This specified whether an exact method or an approximation
+%          should be used. For N=1 and N=2, the exact method equals the
+%          approximation. Possible values are
+%          0 (The default if omitted or an empty matrix is passed) Use the
+%            exact solution. This is obtained by integrating Equation
+%            III.16 in [1], which is the saem as Equation 11.4-18 in p2].
+%            An explicit form in terms of incomplete gamma functions was
+%            obtained by evaluating the integral in Mathematica and has
+%            been implemented here.
+%          1 Use the approximate solution of Equation II.14 of [1]. This is
+%            only valid if N*avgSNR>2 or if N=1,2. This is an exact
+%            solution if N=1,2.
+%   ampDef This specified normalization (see help SwerlingIIISqLawD).
+%          Possible values are:
+%          0 The expected value of the squared magnitude of the noise is 2.
+%          1 (The default if omitted or an empty matrix is passed) The
+%            expected value of the squared magnitude of the noise is 1.
+%            (A more common definition). 
 %
 %OUTPUTS: PD The detection probability of the target.
 %
@@ -302,10 +373,11 @@ function PD=PD4Threshold(avgSNR,thresh,N,method)
 %the PD computed using random samples.
 % avgSNR=2;
 % thresh=30;
+% ampDef=0;
 % N=4;
-% PD=SwerlingIIISqLawD.PD4Threshold(avgSNR,thresh,N)
+% PD=SwerlingIIISqLawD.PD4Threshold(avgSNR,thresh,N,[],ampDef)
 % numSamples=1e5;
-% PDSamp=mean(SwerlingIIISqLawD.rand([numSamples,1],avgSNR,N)>=thresh)
+% PDSamp=mean(SwerlingIIISqLawD.rand([numSamples,1],avgSNR,N,ampDef)>=thresh)
 %One will see that both PD values are about 0.272.
 %
 %REFERENCES:
@@ -316,15 +388,21 @@ function PD=PD4Threshold(avgSNR,thresh,N,method)
 %
 %March 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.  
 
-    if(nargin<3||isempty(N))
-       N=1; 
+    if(nargin<5||isempty(ampDef))
+        ampDef=1;
     end
 
     if(nargin<4||isempty(method))
        method=0; 
     end
-    
-    thresh=thresh/2;
+
+    if(nargin<3||isempty(N))
+       N=1; 
+    end
+
+    if(ampDef==0)
+        thresh=thresh/2;
+    end
     
     switch(method)
         case 0%The exact solution
@@ -345,7 +423,7 @@ function PD=PD4Threshold(avgSNR,thresh,N,method)
             %This can be numerically unstable for very small avgSNR values.
             PD=term1.*(1-gammainc(((N*xBar*Y)/(2+N*xBar)),N-1,'upper'))+(term2+term3);
             
-            if(any(PD>1|PD<0|~isfinite(PD))||any(2^5*eps(abs(term1))>abs(term2)))
+            if(any(PD>1|PD<0|~isfinite(PD)))%||any(2^5*eps(abs(term1))>abs(term2)))
                 warning('Finite precision errors detected.')
             end
             
@@ -364,40 +442,45 @@ function PD=PD4Threshold(avgSNR,thresh,N,method)
     end
 end
 
-function PD=PD4PFA(avgSNR,PFA,N,method)
+function PD=PD4PFA(avgSNR,PFA,N,method,ampDef)
 %%PD4PFA Determine the detection probability of a Swerling III target given
 %        its signal to noise ratio and the probability of false alarm
 %        implied by a particular unspecified detection threshold, assuming
 %        that a square law detector is used.
 %
 %INPUTS: avgSNR A vector or matrix of average power signal to noise ratios
-%               of the target at which one wishes to evaluate the detection
-%               probability.
-%           PFA The probability of false alarm, 0<=PFA<1.
-%             N The number of pulses that are to be incoherently added for
-%               detection (in a square-law detector). In a Swerling III
-%               model, the same realization of the target power is used
-%               across each pulse and the noise corrupting the pulses
-%               varies. If this parameter is omitted or an empty matrix is
-%               passed, N=1 is used.
-%        method This specified whether an exact method or an approximation
-%               should be used. For N=1 and N=2, the exact method equals
-%               the approximation. Possible values are
-%               0 (The default if omitted or an empty matrix is passed) Use
-%                 the exact solution. This is obtained by integrating
-%                 Equation III.16 in [1], which is the saem as Equation
-%                 11.4-18 in p2]. An explicit form in terms of incomplete
-%                 gamma functions was obtained by evaluating the integral
-%                 in Mathematica and has been implemented here.
-%               1 Use the approximate solution of Equation II.14 of [1].
-%                 This is only valid if N*avgSNR>2 or if N=1,2. This is an
-%                 exact solution if N=1,2.
+%          of the target at which one wishes to evaluate the detection
+%          probability.
+%      PFA The probability of false alarm, 0<=PFA<1.
+%        N The number of pulses that are to be incoherently added for
+%          detection (in a square-law detector). In a Swerling III model, a
+%          single realization of the target power is used across all
+%          pulses, but the noise corrupting the pulses varies. If this
+%          parameter is omitted or an empty matrix is passed, N=1 is used.
+%   method This specified whether an exact method or an approximation
+%          should be used. For N=1 and N=2, the exact method equals the
+%          approximation. Possible values are
+%          0 (The default if omitted or an empty matrix is passed) Use the
+%            exact solution. This is obtained by integrating Equation
+%            III.16 in [1], which is the saem as Equation 11.4-18 in p2].
+%            An explicit form in terms of incomplete gamma functions was
+%            obtained by evaluating the integral in Mathematica and has
+%            been implemented here.
+%          1 Use the approximate solution of Equation II.14 of [1]. This is
+%            only valid if N*avgSNR>2 or if N=1,2. This is an exact
+%            solution if N=1,2.
+%   ampDef This specified normalization (see help SwerlingIIISqLawD).
+%          Possible values are:
+%          0 The expected value of the squared magnitude of the noise is 2.
+%          1 (The default if omitted or an empty matrix is passed) The
+%            expected value of the squared magnitude of the noise is 1.
+%            (A more common definition). 
 %
 %OUTPUTS: PD The detection probability of the target, 0<=PD<=1.
 %
 %This function just calls PFA2SquareLawThreshold to convert the false alarm
 %rate into a normalized detection threshold after which it calls
-%SwerlingIIIModel.PD4Threshold.
+%SwerlingIIISqLawD.PD4Threshold.
 %
 %REFERENCES:
 %[1] P. Swerling, "Probability of detection for fluctuating targets," The
@@ -407,19 +490,23 @@ function PD=PD4PFA(avgSNR,PFA,N,method)
 %
 %March 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.    
 
+    if(nargin<5||isempty(ampDef))
+        ampDef=1;
+    end
+
     if(nargin<4||isempty(method))
-       method=0; 
+        method=0; 
     end
 
     if(nargin<3||isempty(N))
        N=1; 
     end
 
-    thresh=PFA2SquareLawThreshold(PFA,N);
-    PD=SwerlingIIIModel.PD4Threshold(avgSNR,thresh,N,method);
+    thresh=PFA2SquareLawThreshold(PFA,N,ampDef);
+    PD=SwerlingIIISqLawD.PD4Threshold(avgSNR,thresh,N,method,ampDef);
 end
 
-function thresh=thresh4AvgSNRPD(PD,avgSNR,N)
+function thresh=thresh4AvgSNRPD(PD,avgSNR,N,ampDef)
 %%THRESH4AVGSNRPD Given a detection probability and the average power
 %           signal to noise ratio (SNR), determine the threshold needed
 %           under a Swerling III model. This solution is only available for
@@ -434,6 +521,12 @@ function thresh=thresh4AvgSNRPD(PD,avgSNR,N)
 %           across each pulse and the noise corrupting the pulses
 %           varies. If this parameter is omitted or an empty matrix is
 %           passed, N=1 is used. This function only supports N=1 and N=2.
+%   ampDef This specified normalization (see help SwerlingIIISqLawD).
+%          Possible values are:
+%          0 The expected value of the squared magnitude of the noise is 2.
+%          1 (The default if omitted or an empty matrix is passed) The
+%            expected value of the squared magnitude of the noise is 1.
+%            (A more common definition). 
 %
 %OUTPUTS: thresh The normnalized detection threshold(s) (assuming the noise
 %                variance is 1).
@@ -446,16 +539,17 @@ function thresh=thresh4AvgSNRPD(PD,avgSNR,N)
 %However, the expressions used are derived based on a scaled square-law
 %detector, as in Equation 10.4-4 in [2], which is the same model as in [1].
 %Thus, the threshold in this function is scaled appropriately.
-
+%
 %EXAMPLE:
 %Here, we show that the results are consistent.
 % N=4;
-% PD=0.5;
+% PD=0.6;
 % avgSNR=2;
-% thresh=SwerlingIIISqLawD.thresh4AvgSNRPD(PD,avgSNR,N);
-% PDBack=SwerlingIIISqLawD.PD4Threshold(avgSNR,thresh,N)
+% ampDef=0;
+% thresh=SwerlingIIISqLawD.thresh4AvgSNRPD(PD,avgSNR,N,ampDef);
+% PDBack=SwerlingIIISqLawD.PD4Threshold(avgSNR,thresh,N,[],ampDef)
 % numSamples=1e5;
-% PDSamp=mean(SwerlingIIISqLawD.rand([numSamples,1],avgSNR,N)>=thresh)
+% PDSamp=mean(SwerlingIIISqLawD.rand([numSamples,1],avgSNR,N,ampDef)>=thresh)
 %One will see that PDBack=0.5 and PDSamp is about the same.
 %
 %REFERENCES:
@@ -465,6 +559,10 @@ function thresh=thresh4AvgSNRPD(PD,avgSNR,N)
 %    Inc., Rayliegh, NC: 2004.
 %
 %March 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    if(nargin<4||isempty(ampDef))
+        ampDef=1;
+    end
 
     if(nargin<3||isempty(N))
         N=1;
@@ -476,10 +574,12 @@ function thresh=thresh4AvgSNRPD(PD,avgSNR,N)
     thresh=-((2+N*xBar)./(2*N*xBar)).*(4+N*(xBar-2)+N*xBar.*LambW(LambWArg,-1));
     
     %The multiplication by 2 deals with the scaling in Equation 10.4-4.
-    thresh=thresh*2;
+    if(ampDef==0)
+        thresh=thresh*2;
+    end
 end
 
-function vals=rand(NDims,avgSNR,N)
+function vals=rand(NDims,avgSNR,N,ampDef)
 %%RAND Generate random variables representing a target whose sampled signal
 %      to average noise power ratio is generated according to a Swerling
 %      III model detected by a square-law detector.
@@ -493,6 +593,12 @@ function vals=rand(NDims,avgSNR,N)
 %          the same realization of the target power is used across each
 %          pulse and the noise corrupting the pulses varies. If this
 %          parameter is omitted or an empty matrix is passed, N=1 is used.
+%   ampDef This specified normalization (see help SwerlingIIISqLawD).
+%          Possible values are:
+%          0 The expected value of the squared magnitude of the noise is 2.
+%          1 (The default if omitted or an empty matrix is passed) The
+%            expected value of the squared magnitude of the noise is 1.
+%            (A more common definition). 
 %
 %OUTPUTS: vals A matrix whose dimensions are determined by N of the
 %              generated random variables.
@@ -507,6 +613,10 @@ function vals=rand(NDims,avgSNR,N)
 %    RAND Corporation, Santa Monica, CA, Tech. Rep. RM-1217, 1954.
 %
 %March 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+    if(nargin<4||isempty(ampDef))
+        ampDef=1;
+    end
 
     if(nargin<3||isempty(N))
        N=1; 
@@ -525,7 +635,7 @@ function vals=rand(NDims,avgSNR,N)
         %Equation I.2 for  the input signal-to-noise power ratio. It will
         %be the same for all N samples that are accumulated.
         curSNR=GammaD.rand(1,2,avgSNR/2);
-        vals(curEl)=NonFlucSqLawD.rand(1,curSNR,N);
+        vals(curEl)=NonFlucSqLawD.rand(1,curSNR,N,ampDef);
     end
 end
 end

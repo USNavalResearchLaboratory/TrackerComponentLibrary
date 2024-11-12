@@ -9,13 +9,13 @@
 **  Prototype function declarations for SOFA library.
 **
 **  This file is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
-**  This revision:   2021 April 18
+**  This revision:   2023 April 16
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 
 #include "math.h"
@@ -332,7 +332,6 @@ int iauStarpv(double ra, double dec,
               double pv[2][3]);
 
 /* Astronomy/StarCatalogs */
-
 void iauFk425(double r1950, double d1950,
               double dr1950, double dd1950,
               double p1950, double v1950,
@@ -533,8 +532,8 @@ void iauSxpv(double s, double pv[2][3], double spv[2][3]);
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

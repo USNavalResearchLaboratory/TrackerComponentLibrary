@@ -4,7 +4,7 @@ function [c,E,exitVal]=minimaxPolyFit(f,xSpan,n,RelTol,maxIter)
 %               range [xSpan(1);xSpan(2)]. The Remez algorithm is used.
 %                
 %INPUTS: f A handle to the function that is to be approximated. The use
-%          y=f(x) take a scalar x and returns a value y.
+%          y=f(x) takes a scalar x and returns a value y.
 %    xSpan The range of inputs of x over which a minimax interpolating
 %          polynomial is desired. The format is [xMin;xMax]. If this is
 %          omitted or an empty matrix is passed, the values [-1;1] are

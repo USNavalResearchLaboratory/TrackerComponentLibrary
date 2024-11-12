@@ -21,10 +21,10 @@ function [deltaROneWay,deltaTheta]=stdRefracBiasApprox(L,thetaEl,radarHeight,Ns,
 %          default value of 313 is used.
 %       ce The optional decay constant of the exponential model. The
 %          refractivity N at height h is N=Ns*exp(-ce*(h-h0)) where h0 is
-%          the reference height (in this function, the height of the
-%          reference ellipsoid surface is used). ce is related to the
-%          change in refractivity at an elevation of 1km based on the
-%          refractivity at sea level as
+%          the reference height (If Ns was measured on the surface of the
+%          reference sphere, the h0 is 0). ce is related to the change in
+%          refractivity at an elevation of 1km based on the refractivity at
+%          sea level as
 %          ce=log(Ns/(Ns+DeltaN))/1000;%Units of inverse meters.
 %          where the change in refractivity for a change in elevation of
 %          1km is DeltaN=-multConst*exp(expConst*Ns); In [1], standard
@@ -45,7 +45,10 @@ function [deltaROneWay,deltaTheta]=stdRefracBiasApprox(L,thetaEl,radarHeight,Ns,
 %            value problem and performing numerical integration.
 %
 %OUTPUTS: deltaROneWay The one-way range bias from the sensor to the
-%                      target.
+%                      target. This approximates rMeasured-rOneWay, where
+%                      rMeasured is measuredTimeDelay*c, where c is the
+%                      speed of light in a vacuum and rOneWay is the
+%                      geometric distance between the points.
 %           deltaTheta The elevation angle bias (with elevation measured
 %                      above the local tangent plane in the spherical Earth
 %                      approximation) of the measurement.
@@ -53,11 +56,23 @@ function [deltaROneWay,deltaTheta]=stdRefracBiasApprox(L,thetaEl,radarHeight,Ns,
 %The use of an exponential atmospheric model is often not the most advanced
 %refraction model, but it is simple.
 %
+%The parameterization of this model differs from that used by the ITU in
+%[3]. However, it is the same model. Here, the refractivity scales as
+%N=Ns*exp(-ce*(h-h0)). In [3], it scales as N=Ns*exp(-h/hRef), where h is
+%the height above the surface of the reference sphere (taken as sea level)
+%and hRef is a reference height. Thus, taking h0 to be 0 (Ns is taken on
+%the reference sphere), then ce=1/hRef. If the refractivity is measured
+%above the surface of the reference sphere, then one can use the same
+%formula to approximate the refractivity at sea level/ on the reference
+%sphere of the Earth Ns=N*exp(h/hRef), where h is the height above sea
+%level. If one wishes to use the global averages mentioned in [3], then
+%Ns=315 and ce=1/7.35e3 (units of inverse meters).
+%
 %Above 10 degrees elevation angle an approximation for the difference of
 %the error functions in [1] is used if algorthm 0 is chosen. However, the
 %approximation given in the paper does not work. Instead, the error
 %function is treated as 1-the complementary error function and the first
-%term in an asymptotic expansion (a Poincaré expansion) of the
+%term in an asymptotic expansion (a Poincare expansion) of the
 %complementary error function is used. Thus
 %erfc(x)=(approx)1/(x*sqrt(pi))*exp(-x^2)
 %
@@ -149,6 +164,9 @@ function [deltaROneWay,deltaTheta]=stdRefracBiasApprox(L,thetaEl,radarHeight,Ns,
 %    measurements in refractive environments," IEEE Aerospace and
 %    Electronic Systems Magazine, vol. 29, no. 8, Part II, pp. 54-75, Aug.
 %    2014.
+%[3] International Telecommunication Union, "Recommendation ITU-R
+%    P.453-11: The radio refractive index: Its formula and refractivity
+%    data," Tech. Rep., Jul. 2015.
 %
 %November 2022 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -195,11 +213,11 @@ else
     y0Init=RRadar;
     y1Init=RRadar+sin(thetaEl)*L;
 
-    %If the two points are nearly vertical, then the ray tracing algorithm will
-    %fail. For nearly vertical points, the bending due to refraction in the
-    %model should be negligible, so we can perform an integral in the y
-    %direction to solve for the excess range instead of having to solve the
-    %more complicated general bistatic problem.
+    %If the two points are nearly vertical, then the ray tracing algorithm
+    %will fail. For nearly vertical points, the bending due to refraction
+    %in the model should be negligible, so we can perform an integral in
+    %the y direction to solve for the excess range instead of having to
+    %solve the more complicated general bistatic problem.
     if(abs(pi/2-thetaEl)<1e-3)
         yMax=RRadar+L;
         deltaROneWay=((exp(ce*(rE-y0Init))-exp(ce*(rE-yMax)))*Ns)/(1e6*ce);
@@ -207,12 +225,12 @@ else
         return;
     end
 
-    %The initial guess is just the linear solution. The solver requires a fixed
-    %number of steps. 20 is probably sufficient for things near the Earth. that
-    %is, up to distances of, say 400km. We can scale the number of steps as 20
-    %for every 400 kilometers with a minum of, say 10.
-    %Things outside of the atmosphere should use the astronomical refraction
-    %routines.
+    %The initial guess is just the linear solution. The solver requires a
+    %fixed number of steps. 20 is probably sufficient for things near the
+    %Earth. That is, up to distances of, say 400km. We can scale the number
+    %of steps as 20 for every 400 kilometers with a minum of, say 10.
+    %Things outside of the atmosphere should use the astronomical
+    %refraction routines.
     numSteps=max(20,ceil(20*L/400e3));
     x=linspace(x0Init,x1Init,numSteps);
     b=y1Init-slope*x1Init;%The y-intercept.
@@ -223,8 +241,8 @@ else
     oldOpts=bvpset();
     newOpts=bvpset(oldOpts,'RelTol',1e-8,'AbsTol',1e-8,'FJacobian',@(x,y)odefunJacob(x,y,Ns,rE,ce),'BCJacobian',@bcfunJacob);%Increase the accuracy.
     sol=bvp5c(@(x,y)expDiffEq(x,y,Ns,rE,ce),@(y0,y1)bcfun(y0,y1,y0Init,y1Init),solInit,newOpts);
-    %Get the refraction-corrupted range measurement for a signal traveling from
-    %the object to the observer. 
+    %Get the refraction-corrupted range measurement for a signal traveling
+    %from the object to the observer. 
     range=integral(@(x)pathFun2D(x,sol,Ns,rE,ce),x0Init,x1Init,'AbsTol',eps(1),'RelTol',1e-15);
     deltaROneWay=range-L;
     deltaTheta=atan(sol.y(2,1))-thetaEl;

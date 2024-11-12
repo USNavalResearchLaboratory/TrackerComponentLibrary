@@ -49,7 +49,7 @@ function PDFVals=GramCharlierAPDFApprox(xVals,quasiMomentMat,muN,SigmaN)
 %    functions in the theory of random processes," Theory of Probability 
 %    and its Applications, vol. V, no. 1, pp. 80-97, 1960.
 %[2] H. Singer, "Generalized Gauss-Hermite filtering for multivariate
-%    diffusion processes," FernUniversität Hagen, Tech. Rep., 2006.
+%    diffusion processes," FernUniversitat Hagen, Tech. Rep., 2006.
 %    [Online]. Available: http://deposit.fernuni-hagen.de/87/
 %[3] H. Singer, "Generalized Gauss-Hermite filtering," AStA Advances in
 %    Statistical Analysis, vol. 92, no. 2, pp. 179-195, May 2008.

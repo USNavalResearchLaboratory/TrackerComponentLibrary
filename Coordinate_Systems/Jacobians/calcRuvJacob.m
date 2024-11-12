@@ -1,4 +1,4 @@
-function J=calcRuvJacob(x,useHalfRange,lTx,lRx,M)
+function J=calcRuvJacob(x,useHalfRange,lTx,lRx,M,includeW)
 %%CALCRUVJACOB Calculate the Jacobian for a monostatic or bistatic r-u-v
 %           measurement with respect to 3D Cartesian position. Atmospheric
 %           effects are ignored.
@@ -19,6 +19,14 @@ function J=calcRuvJacob(x,useHalfRange,lTx,lRx,M)
 %          orientation of the coordinate system at the receiver. This is
 %          only necessary if u-v direction components are desired. If
 %          omitted, it is assumed to be the identity matrix.
+% includeW An optional boolean value indicating whether a third direction
+%          cosine component should be included. The u and v direction
+%          cosines are two parts of a 3D unit vector. Generally, one might
+%          assume that the target is in front of the sensor, so the third
+%          component would be positive and is not needed. However, the
+%          third component can be included if ambiguity exists. The default
+%          if this parameter is omitted or an empty matrix is passed is
+%          false.
 %
 %OUTPUTS: J The 3X3 Jacobian matrix with derivatives with respect to
 %           position components. Each row is a component of bistatic range,
@@ -29,6 +37,10 @@ function J=calcRuvJacob(x,useHalfRange,lTx,lRx,M)
 %
 %February 2017 David F.Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+if(nargin<6||isempty(includeW))
+    includeW=false;
+end
 
 if(nargin<5||isempty(M))
 	M=eye(3,3); 
@@ -46,9 +58,9 @@ if(nargin<2||isempty(useHalfRange))
 	useHalfRange=false; 
 end
 
-J=zeros(3,3);
+J=zeros(3+includeW,3);
 J(1,:)=rangeGradient(x(1:3),useHalfRange,lTx(1:3),lRx(1:3));
-J(2:3,:)=uvGradient(x(1:3),lRx(1:3),M);
+J(2:end,:)=uvGradient(x(1:3),lRx(1:3),M,includeW);
 
 end
 

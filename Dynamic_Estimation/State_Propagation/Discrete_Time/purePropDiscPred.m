@@ -25,7 +25,7 @@ function [xi,xPred,PPred]=purePropDiscPred(xi,w,f,Q,stateDiffTrans,stateTrans)
 % stateDiffTrans An optional function handle that takes an xDimXN matrix
 %                of N differences between states estimates and
 %                transforms them however might be necessary. For
-%                example, a state continaing angular components will
+%                example, a state containing angular components will
 %                generally need differences between angular components
 %                wrapped to the range +/-pi.
 % stateTrans An optional function that takes a state estimate and
@@ -72,7 +72,7 @@ function [xi,xPred,PPred]=purePropDiscPred(xi,w,f,Q,stateDiffTrans,stateTrans)
 %problems with nearly singular matrices.
 %
 %REFERENCES:
-%[1] O. Straka, J. Duník, and M. Simandl, "Design of pure propagation
+%[1] O. Straka, J. Dunik, and M. Simandl, "Design of pure propagation
 %    unscented Kalman filter," in Proceedings of the 19th World Congress of
 %    The International Federation of Automatic Control, Cape Town, South
 %    Africa, 24-29 Aug. 2014, pp. 5399-5938.

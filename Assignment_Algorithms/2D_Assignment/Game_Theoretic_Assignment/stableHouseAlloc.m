@@ -103,7 +103,7 @@ function [house4Agent,agent4House]=stableHouseAlloc(prefLists,houseList)
 %must go to the first agent due to seniority, so they get nothing.
 %
 %REFERENCES:
-%[1] A. Abdulkadiro?lu�lu and T S�nmez, "House Allocation with Existing
+%[1] A. Abdulkadiroglu and T Sonmez, "House Allocation with Existing
 %    Tenants," Journal of Economic Theory, vol. 88, no. 2, pp. 233-260,
 %    Oct. 1999.
 %

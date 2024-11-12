@@ -1,5 +1,5 @@
 classdef LevyD
-%%LEVYD Functions to handle the Lévy distribution. This is a one-sided
+%%LEVYD Functions to handle the Levy distribution. This is a one-sided
 %       distribution with a very long tail. It arises when considering the
 %       amount of time it takes a Brownian motion drift to hit a
 %       particular point.
@@ -10,17 +10,17 @@ classdef LevyD
 methods(Static)
     
 function val=PDF(x,mu,c)
-%%PDF Evaluate the probability density function (PDF) of the Lévy
+%%PDF Evaluate the probability density function (PDF) of the Levy
 %     distribution.
 %
-%INPUTS: x The point or a matrix of points at which the PDF of the Lévy
+%INPUTS: x The point or a matrix of points at which the PDF of the Levy
 %          distribution should be evaluated. x>=mu for nonzero values.
 %       mu The location parameter of the distribution.
 %        c The scale parameter of the distribution.
 %
 %OUTPUTS: val The value(s) of the PDF evaluated at the point(s) in x.
 %
-%The Lévy distribution is presented in Section 2.1 of [1]. The version
+%The Levy distribution is presented in Section 2.1 of [1]. The version
 %implemented here allows the zero point to be shifted with the location
 %parameter mu.
 %
@@ -47,9 +47,9 @@ function val=PDF(x,mu,c)
 %One will see that the histogram matches well with the plot.
 %
 %REFERENCES:
-%[1] W. A. Woyczynski, "Lévy Processes in the Physical Sciences," in Levy
+%[1] W. A. Woyczynski, "Levy Processes in the Physical Sciences," in Levy
 %    Processes: Theory and Applications, O. E. Barndorff-Nielson, T. 
-%    Mikosch, and S. I. Resnick, Eds. Boston: Birkhäuser, 2001.
+%    Mikosch, and S. I. Resnick, Eds. Boston: Birkhauser, 2001.
 %
 %March 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
@@ -58,18 +58,18 @@ function val=PDF(x,mu,c)
 end
     
 function prob=CDF(x,mu,c)
-%%CDF Evaluate the cumulative distribution function (CDF) of the Lévy
+%%CDF Evaluate the cumulative distribution function (CDF) of the Levy
 %     distribution.
 %
-%INPUTS: x The point or a matrix of points at which the CDF of the Lévy
+%INPUTS: x The point or a matrix of points at which the CDF of the Levy
 %          distribution should be evaluated.x>mu for nonzero values.
 %       mu The location parameter of the distribution.
 %        c The scale parameter of the distribution.
 %
-%OUTPUTS: prob The value(s) of the CDF of the Lévy distribution evaluated
+%OUTPUTS: prob The value(s) of the CDF of the Levy distribution evaluated
 %              at x.
 %
-%The Lévy distribution is presented in Section 2.1 of [1]. The version
+%The Levy distribution is presented in Section 2.1 of [1]. The version
 %implemented here allows the zero point to be shifted with the location
 %parameter mu. The CDF was just obtained from the integral of the PDF.
 %
@@ -85,9 +85,9 @@ function prob=CDF(x,mu,c)
 %One will see that both values are about 0.7518.
 %
 %REFERENCES:
-%[1] W. A. Woyczynski, "Lévy Processes in the Physical Sciences," in Levy
+%[1] W. A. Woyczynski, "Levy Processes in the Physical Sciences," in Levy
 %    Processes: Theory and Applications, O. E. Barndorff-Nielson, T. 
-%    Mikosch, and S. I. Resnick, Eds. Boston: Birkhäuser, 2001.
+%    Mikosch, and S. I. Resnick, Eds. Boston: Birkhauser, 2001.
 %
 %March 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
@@ -97,7 +97,7 @@ end
 
 function x=invCDF(prob,mu,c)
 %%INVCDF Evaluate the inverse of the cumulative distribution function (CDF)
-%        of the Lévy distribution.
+%        of the Levy distribution.
 %
 %INPUTS: prob The probability or probabilities (0<=prob<=1) at which the 
 %             argument of the CDF is desired.
@@ -107,7 +107,7 @@ function x=invCDF(prob,mu,c)
 %OUTPUTS: x The argument(s) of the CDF that would give the probability or
 %           probabilities in prob.
 %
-%The Lévy distribution is presented in Section 2.1 of [1]. The version
+%The Levy distribution is presented in Section 2.1 of [1]. The version
 %implemented here allows the zero point to be shifted with the location
 %parameter mu. The CDF was just obtained from the integral of the PDF and
 %is in terms of an error function. Thus, the inverse error function
@@ -123,9 +123,9 @@ function x=invCDF(prob,mu,c)
 %One will see that xBack is the same as x.
 %
 %REFERENCES:
-%[1] W. A. Woyczynski, "Lévy Processes in the Physical Sciences," in Levy
+%[1] W. A. Woyczynski, "Levy Processes in the Physical Sciences," in Levy
 %    Processes: Theory and Applications, O. E. Barndorff-Nielson, T. 
-%    Mikosch, and S. I. Resnick, Eds. Boston: Birkhäuser, 2001.
+%    Mikosch, and S. I. Resnick, Eds. Boston: Birkhauser, 2001.
 %
 %March 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
@@ -133,7 +133,7 @@ function x=invCDF(prob,mu,c)
 end
 
 function x=rand(N,mu,c)
-%%RAND Generate Lévy distributed random variables.
+%%RAND Generate Levy distributed random variables.
 %
 %INPUTS: N If N is a scalar, then rand returns an NXN matrix of random
 %          variables. If N=[M,N1] is a two-element row vector, then rand
@@ -142,7 +142,7 @@ function x=rand(N,mu,c)
 %        c The scale parameter of the distribution.
 %
 %OUTPUTS: vals A matrix whose dimensions are determined by N of the
-%              generated Lévy random variables.
+%              generated Levy random variables.
 %
 %This function implements the inverse transformation method of Chapter 5.1
 %of [1].
@@ -163,7 +163,7 @@ function x=rand(N,mu,c)
 end
 
 function entropyVal=entropy(c)
-%%ENTROPY Obtain the differential entropy of the Lévy distribution given in
+%%ENTROPY Obtain the differential entropy of the Levy distribution given in
 %         nats. The differential entropy of a continuous distribution is
 %         entropy=-int_x p(x)*log(p(x)) dx where the integral is over all
 %         values of x. Units of nats mean that the natural logarithm is

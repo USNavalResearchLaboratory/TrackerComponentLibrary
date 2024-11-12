@@ -11,7 +11,7 @@ void iauMoon98 ( double date1, double date2, double pv[2][3] )
 **  Approximate geocentric position and velocity of the Moon.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -22,7 +22,7 @@ void iauMoon98 ( double date1, double date2, double pv[2][3] )
 **     date2  double         TT date part B (Notes 1,4)
 **
 **  Returned:
-**     pv     double[2][3]   Moon p,v, GCRS (AU, AU/d, Note 5)
+**     pv     double[2][3]   Moon p,v, GCRS (au, au/d, Note 5)
 **
 **  Notes:
 **
@@ -100,11 +100,11 @@ void iauMoon98 ( double date1, double date2, double pv[2][3] )
 **     iauRx        rotate around X-axis
 **     iauRxpv      product of r-matrix and pv-vector
 **
-**  This revision:  2021 May 11
+**  This revision:  2023 March 20
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
 /*
@@ -539,7 +539,7 @@ static struct termb tb[] = {{0,  0,  0,  1,  5.128122},
 /* Transformation into final form */
 /* ------------------------------ */
 
-/* Longitude, latitude to x, y, z (AU). */
+/* Longitude, latitude to x, y, z (au). */
    iauS2pv ( el, b, r, del, db, dr, pv );
 
 /* IAU 2006 Fukushima-Williams bias+precession angles. */
@@ -558,8 +558,8 @@ static struct termb tb[] = {{0,  0,  0,  1,  5.128122},
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

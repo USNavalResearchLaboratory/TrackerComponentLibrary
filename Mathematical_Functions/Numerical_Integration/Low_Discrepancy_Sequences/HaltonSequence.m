@@ -75,17 +75,17 @@ function points=HaltonSequence(numDim,numPoints,algorithm,skipFirst,stepSize)
 %
 %REFERENCES:
 %[1] H. Faure, "Good permutations for extreme discrepancy," Journal of
-%    Number Theory, vol. 42, no. 1, pp. 47?56, Sep. 1992.
+%    Number Theory, vol. 42, no. 1, pp. 47-56, Sep. 1992.
 %[2] H. Chi, M. Mascagni, and T. Warnock, "On the optimal Halton sequence,"
 %    Mathematics and Computers in Science, vol. 70, no. 1, pp. 9-21, 1 Sep.
 %   2005.
 %[3] B. Vandewoestyne and R. Cools, "Good permutations for deterministic
 %    scrambled Halton sequences in terms of L2-discrepancy," Journal of
-%    Computational and Applied Mathematics, vol. 189, no. 1?2, pp. 341-361,
+%    Computational and Applied Mathematics, vol. 189, no. 1-2, pp. 341-361,
 %    May 2006.
 %[4] E. Braaten and G. Weller, "An improved low-discrepancy sequence for
 %    multidimensional quasi-monte carlo integration," Journal of
-%    Computational Physics, vol. 33, pp. 249?258, Nov. 1979.
+%    Computational Physics, vol. 33, pp. 249-258, Nov. 1979.
 %
 %January 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

@@ -9,12 +9,12 @@ classdef StdWishartEigenvalueD
 %Implemented methods are: PDF, maxMinEigRegion2D, CDF2DMax
 %
 %REFERENCES:
-%[1] M. Feldmann, D. Fränken, and W. Koch, "Tracking of extended objects
+%[1] M. Feldmann, D. Franken, and W. Koch, "Tracking of extended objects
 %    and group targets using random matrices," IEEE Transactions on Signal
 %    Processing, vol. 59, no. 4, pp. 1409-1420, Apr. 2011.
 %[2] M. Feldmann, "Tracking von Objektgruppen und ausgedehnten
-%    Zielobjekten," Ph.D. dissertation, KIT-Fakultät für Informatik des
-%    Karlsruher Instituts für Technologie, Karlsruhe, Germany, 30 Nov.
+%    Zielobjekten," Ph.D. dissertation, KIT-Fakultat fur Informatik des
+%    Karlsruher Instituts fur Technologie, Karlsruhe, Germany, 30 Nov.
 %    2018.
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -52,12 +52,12 @@ function vals=PDF(wVals,nu,lambda)
 %[2] A. T. James, "Distributions of matrix variates and latent roots
 %    derived from normal samples," Annals of Mathematical Statistics, vol.
 %    35, no. 2, pp. 475-501, Jun. 1964.
-%[3] M. Feldmann, D. Fränken, and W. Koch, "Tracking of extended objects
+%[3] M. Feldmann, D. Franken, and W. Koch, "Tracking of extended objects
 %    and group targets using random matrices," IEEE Transactions on Signal
 %    Processing, vol. 59, no. 4, pp. 1409-1420, Apr. 2011.
 %[4] M. Feldmann, "Tracking von Objektgruppen und ausgedehnten
-%    Zielobjekten," Ph.D. dissertation, KIT-Fakultät für Informatik des
-%    Karlsruher Instituts für Technologie, Karlsruhe, Germany, 30 Nov.
+%    Zielobjekten," Ph.D. dissertation, KIT-Fakultat fur Informatik des
+%    Karlsruher Instituts fur Technologie, Karlsruhe, Germany, 30 Nov.
 %    2018.
 %
 %April 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.   
@@ -154,8 +154,8 @@ function val=maxMinEigRegion2D(lMin,lMax,nu,lambda)
 %
 %REFERENCES:
 %[1] M. Feldmann, "Tracking von Objektgruppen und ausgedehnten
-%    Zielobjekten," Ph.D. dissertation, KIT-Fakultät für Informatik des
-%    Karlsruher Instituts für Technologie, Karlsruhe, Germany, 30 Nov.
+%    Zielobjekten," Ph.D. dissertation, KIT-Fakultat fur Informatik des
+%    Karlsruher Instituts fur Technologie, Karlsruhe, Germany, 30 Nov.
 %    2018.
 %[2] R. J. Muirhead, Aspects of Multivariate Statistical Theory. Hoboken:
 %    John Wiley & Sons, 2005.
@@ -236,8 +236,8 @@ function vals=CDF2DMax(x,nu,lambda)
 %
 %REFERENCES:
 %[1] M. Feldmann, "Tracking von Objektgruppen und ausgedehnten
-%    Zielobjekten," Ph.D. dissertation, KIT-Fakultät für Informatik des
-%    Karlsruher Instituts für Technologie, Karlsruhe, Germany, 30 Nov.
+%    Zielobjekten," Ph.D. dissertation, KIT-Fakultat fur Informatik des
+%    Karlsruher Instituts fur Technologie, Karlsruhe, Germany, 30 Nov.
 %    2018.
 %[2] R. J. Muirhead, Aspects of Multivariate Statistical Theory. Hoboken:
 %    John Wiley & Sons, 2005.

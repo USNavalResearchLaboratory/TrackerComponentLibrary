@@ -136,7 +136,7 @@ function zCart=ruv2CartStdRefrac(zRUVBiased,useHalfRange,zTx,zRx,M,Ns,ce,rE,sphe
 %[1] B. R. Bean and G. D. Thayer, CRPL Exponential Reference Atmosphere.
 %    Washington, D.C.: U. S. Department of Commerce, National Bureau of
 %    Standards, Oct. 1959. [Online]. Available:
-%    http://digicoll.manoa.hawaii.edu/techreports/PDF/NBS4.pdf
+%    https://nvlpubs.nist.gov/nistpubs/Legacy/MONO/nbsmonograph4.pdf
 %
 %June 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

@@ -27,7 +27,7 @@ void iauLtp(double epj, double rp[3][3])
 **
 **     where P_J2000 is a vector with respect to the J2000.0 mean
 **     equator and equinox and P_date is the same vector with respect to
-**     the equator and equinox of epoch epj.
+**     the mean equator and equinox of epoch epj.
 **
 **  2) The Vondrak et al. (2011, 2012) 400 millennia precession model
 **     agrees with the IAU 2006 precession at J2000.0 and stays within
@@ -52,11 +52,11 @@ void iauLtp(double epj, double rp[3][3])
 **    expressions, valid for long time intervals (Corrigendum),
 **    Astron.Astrophys. 541, C1
 **
-**  This revision:  2021 May 11
+**  This revision:  2023 March 19
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    int i;
@@ -87,8 +87,8 @@ void iauLtp(double epj, double rp[3][3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

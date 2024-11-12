@@ -38,7 +38,7 @@ function s=accurateSum(a,algorithm,sortVals)
 %
 %REFERENCES
 %[1] A. Neumaier, "Rundungsfehleranalyse einiger Verfahren zur Summation
-%    endlicher Summen," Zeitschrift für angewandte Mathematik und Mechanik,
+%    endlicher Summen," Zeitschrift fur angewandte Mathematik und Mechanik,
 %    vol. 54, no. 1, 1974, pp. 39-51.
 %
 %November 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.

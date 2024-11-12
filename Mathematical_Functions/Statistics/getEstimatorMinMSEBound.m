@@ -120,7 +120,7 @@ function [CRLB,J]=getEstimatorMinMSEBound(RInv,stateJacob,statJacob,biasVec,bias
 %    of statistical parameters," Bulletin of the Calcutta Mathematical
 %    Society, vol. 37, no. 3, pp. 81-91, 1945.
 %[3] P. Stoica and R. L. Moses, "On biased estimators and the unbiased
-%    Cramér-Rao lower bound," Signal Processing, vol. 21, no. 4, pp. 349-
+%    Cramer-Rao lower bound," Signal Processing, vol. 21, no. 4, pp. 349-
 %    350, Dec. 1990.
 %
 %November 2022 David F.Crouse, Naval Research Laboratory, Washington D.C.

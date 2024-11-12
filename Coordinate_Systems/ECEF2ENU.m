@@ -71,13 +71,14 @@ originCart=ellips2Cart(plhOrigin,a,f);
 %Make the reference point the origin.
 origShiftPts=bsxfun(@minus,xECEF,originCart);
 
-numPts=size(xECEF,2);
-xENU=zeros(3,numPts);
 %Extract the components of the points in ENU coordinates with the reference
 %point at the new origin.
-xENU(1,:)=sum(bsxfun(@times,uENU(:,1),origShiftPts),1);
-xENU(2,:)=sum(bsxfun(@times,uENU(:,2),origShiftPts),1);
-xENU(3,:)=sum(bsxfun(@times,uENU(:,3),origShiftPts),1);
+%numPts=size(xECEF,2);
+%xENU=zeros(3,numPts);
+% xENU(1,:)=sum(bsxfun(@times,uENU(:,1),origShiftPts),1);
+% xENU(2,:)=sum(bsxfun(@times,uENU(:,2),origShiftPts),1);
+% xENU(3,:)=sum(bsxfun(@times,uENU(:,3),origShiftPts),1);
+xENU=uENU'*origShiftPts;
 
 if(nargout>1)
     M=uENU';

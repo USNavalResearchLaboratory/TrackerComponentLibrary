@@ -18,7 +18,7 @@ void iauLtpb(double epj, double rpb[3][3])
 **     epj     double         Julian epoch (TT)
 **
 **  Returned:
-**     rpb     double[3][3]   precession-bias matrix, J2000.0 to date
+**     rpb     double[3][3]   precession+bias matrix, J2000.0 to date
 **
 **  Notes:
 **
@@ -51,11 +51,11 @@ void iauLtpb(double epj, double rpb[3][3])
 **    expressions, valid for long time intervals (Corrigendum),
 **    Astron.Astrophys. 541, C1
 **
-**  This revision:  2021 May 11
+**  This revision:  2023 March 20
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
 /* Frame bias (IERS Conventions 2010, Eqs. 5.21 and 5.33) */
@@ -81,8 +81,8 @@ void iauLtpb(double epj, double rpb[3][3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

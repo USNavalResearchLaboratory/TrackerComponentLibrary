@@ -1,4 +1,4 @@
-intro.lis                                                  2021 April 19
+intro.lis                                                  2023 April 17
 
 
                   -------------------------------
@@ -6,7 +6,7 @@ intro.lis                                                  2021 April 19
                   -------------------------------
 
 
-  SOFA stands for "Standards Of Fundamental Astronomy".  The SOFA
+  SOFA stands for "Standards of Fundamental Astronomy".  The SOFA
   software libraries are a collection of subprograms, in source-
   code form, which implement official IAU algorithms for fundamental-
   astronomy computations.   The subprograms at present comprise 192

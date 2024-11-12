@@ -100,7 +100,7 @@ function [xi,xUpdate,PUpdate,Pzz,innovPoints]=purePropUpdate(xi,w,z,R,h,innovTra
 %measurements.
 %
 %REFERENCES:
-%[1] O. Straka, J. Duník, and M. Simandl, "Design of pure propagation
+%[1] O. Straka, J. Dunik, and M. Simandl, "Design of pure propagation
 %    unscented Kalman filter," in Proceedings of the 19th World Congress of
 %    The International Federation of Automatic Control, Cape Town,
 %    South Africa, 24-29 Aug. 2014, pp. 5399-5938.

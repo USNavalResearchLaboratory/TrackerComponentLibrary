@@ -22,7 +22,7 @@ function demoCurvedEarthSimLevel()
 disp('Level Flight from Hilo, Hawaii to Fussen, Germany at 8km (ellipsoidal) Altitude and Mach 1')
 ellipsAlt=8e3;%8km ellipsoidal altitude.
 
-%The target should be traveling at Mach 1-> the speed of sound. The speed
+%The target should be traveling at Mach 1, the speed of sound. The speed
 %of sound in air depends on the temperature, humidity, pressure, and
 %composition of the air. If one were to use
 cSoundSTP=speedOfSoundInAir();
@@ -38,15 +38,15 @@ phi=19.823*pi/180;%North latitude in radians.
 lambda=-155.470*pi/180;%East longitude in radians.
 latLonStart=[phi;lambda];
 
-%The approximate latitude and longitude of Neuschwanstein Castle in F�ssen,
+%The approximate latitude and longitude of Neuschwanstein Castle in Fussen,
 %Germany.
 phi=47.5575*pi/180;%North latitude
 lambda=10.7500*pi/180;%East longitude
 latLonEnd=[phi;lambda];
 
-disp('1) Computing the initial heading and distance to navigate on a geodesic curve from Hilo to F�ssen')
+disp('1) Computing the initial heading and distance to navigate on a geodesic curve from Hilo to Fussen')
 %The initial heading (in local East-North-Up coordinate) and distance
-%traveled to get from Hilo, Hawaii to F�ssen, Germany is the solution to
+%traveled to get from Hilo, Hawaii to Fussen, Germany is the solution to
 %the indirect geodetic problem. When the altitude is not zero, traditional
 %indirect geodetic problem solution methods will report a distance that is
 %too small, since they assume altitude==0. Here, we will compare the
@@ -78,7 +78,7 @@ disp(['out of a total transit distance of ', num2str(distE), ' meters.'])
 
 disp(' ')%Insert line break
 disp('2) Computing the heading and distance to navigate on a rhumb line (constant-heading trajectory)')
-disp('from Hilo to F�ssen')
+disp('from Hilo to Fussen')
 tic;
 [azimuthRhumb0, distRhumb0]=indirectRhumbProblem(latLonStart,latLonEnd);
 time0=toc;

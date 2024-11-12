@@ -101,13 +101,10 @@ function z=Cart2Ruv(zC,useHalfRange,zTx,zRx,M,includeW)
     for curPoint=1:N
         %The target location in the receiver's coordinate system.
         zCL=M(:,:,curPoint)*(zC(1:3,curPoint)-zRx(1:3,curPoint));
-        %The transmitter location in the receiver's local coordinate
-        %system.
-        zTxL=M(:,:,curPoint)*(zTx(1:3,curPoint)-zRx(1:3,curPoint));
 
-    %Perform the conversion.
-        r1=norm(zCL);%Receiver to target.
-        r2=norm(zCL-zTxL);%Target to transmitter.
+        %The ranges do not depend on the rotation.
+        r1=norm(zC(1:3,curPoint)-zRx(1:3,curPoint));
+        r2=norm(zC(1:3,curPoint)-zTx(1:3,curPoint));
 
         r=r1+r2;
 

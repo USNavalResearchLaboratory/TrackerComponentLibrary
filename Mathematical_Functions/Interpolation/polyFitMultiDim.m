@@ -2,7 +2,7 @@ function [coeffs,termMat]=polyFitMultiDim(varVals,funVals,degree)
 %%POLYFITMULTIDIM Obtain a least-squares multivariate polynomial fit of a
 %                 specified order to a given set of data.
 %
-%INPUTS: varVals This is a numDimXnumPoints set oif dtapoints where the
+%INPUTS: varVals This is a numDimXnumPoints set of data points where the
 %                function was evaluated.
 %        funVals This is a numPointsX1 or 1XnumPoints vector of the values
 %                of the functions at the specified data points.
@@ -34,7 +34,7 @@ function [coeffs,termMat]=polyFitMultiDim(varVals,funVals,degree)
 %coefficients of the monomials. This function evaluates the monomial terms
 %and build a matrix with all of the monomial term values for all of the
 %equations. The solution to the coefficient values is thus the solution to
-%a linear system of equations. The 
+%a linear system of equations.  
 %
 %EXAMPLE:
 %Here, we have a two-dimensional function evaluated at a number of random
@@ -48,8 +48,8 @@ function [coeffs,termMat]=polyFitMultiDim(varVals,funVals,degree)
 % degree=5;
 % [~,termMat]=polyFitMultiDim(varVals,funVals,degree);
 % %One will get coefficients that are almost exact. Given that we know that
-% %the coefficients are integers, we can eliminate all small coefficients by
-% %rounding.
+% %the coefficients are integers, we can eliminate all small coefficients
+% %by rounding.
 % termMat=round(termMat);
 % %Get rid of terms that are numerically zero.
 % sel=termMat(1,:)~=0;

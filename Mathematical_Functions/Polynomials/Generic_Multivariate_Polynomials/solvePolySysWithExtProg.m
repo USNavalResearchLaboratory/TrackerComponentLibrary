@@ -121,7 +121,7 @@ function [xSol,otherInfo]=solvePolySysWithExtProg(polyStrings,varNames,algorithm
 %[2] J. Verschelde, "Algorithm 795: PHCpack: A general-purpose solver for
 %    polynomial systems by homotopy continuation," ACM Transactions on
 %    Mathematical Software, vol. 25, no. 2, pp. 251-276, Jun. 1999.
-%[3] C. Beltrán and A. Leykin, "Certified numerical homotopy tracking,"
+%[3] C. Beltran and A. Leykin, "Certified numerical homotopy tracking,"
 %    Experimental Mathematics, vol. 21, no. 1, 2012.
 %
 %May 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
@@ -650,7 +650,7 @@ function xSol=solvePolySysUsingMacaulay2(polyStrings,varNames,scratchFolderPath,
 % %One should get the solutions (0,-1), (1,0), (3,-2), and (4,-5).
 %
 %REFERENCES:
-%[1] C. Beltrán and A. Leykin, "Certified numerical homotopy tracking,"
+%[1] C. Beltran and A. Leykin, "Certified numerical homotopy tracking,"
 %    Experimental Mathematics, vol. 21, no. 1, 2012.
 %
 %March 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.

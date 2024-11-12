@@ -9,7 +9,7 @@ void iauNutm80(double date1, double date2, double rmatn[3][3])
 **  Form the matrix of nutation for a given date, IAU 1980 model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -52,9 +52,9 @@ void iauNutm80(double date1, double date2, double rmatn[3][3])
 **
 **  This revision:  2021 May 11
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    double dpsi, deps, epsa;
@@ -71,8 +71,8 @@ void iauNutm80(double date1, double date2, double rmatn[3][3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

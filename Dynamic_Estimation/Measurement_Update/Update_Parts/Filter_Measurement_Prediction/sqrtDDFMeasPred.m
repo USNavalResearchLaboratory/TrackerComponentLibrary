@@ -60,7 +60,7 @@ function [zPred,PzPred,otherInfo]=sqrtDDFMeasPred(xPred,SPred,zDim,h,algorithm)
 % max(abs([xUpdate1(:)-xUpdate(:);SUpdate1(:)-SUpdate(:);innov1(:)-innov(:);Szz1(:)-Szz(:);W1(:)-W(:)]))
 %
 %REFERENCES:
-%[1] M. Nørgaard, N. K. Poulsen, and O. Ravn, "New developments in state
+%[1] M. Norgaard, N. K. Poulsen, and O. Ravn, "New developments in state
 %    estimation for nonlinear systems," Automatica, vol. 36, no. 11, pp.
 %    1627-1638, Nov. 2000.
 %[2] T. S. Schei, "A finite-difference method for linearization in

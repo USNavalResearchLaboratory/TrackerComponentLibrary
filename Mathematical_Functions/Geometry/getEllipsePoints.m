@@ -103,8 +103,8 @@ for curEllips=1:N
     [~,idx]=sort(diag(D),'ascend');
     V=V(idx,idx);
     D=D(idx,idx);
-    a=D(1,1);
-    b=D(2,2);
+    a=abs(D(1,1));
+    b=abs(D(2,2));
 
     xBound=sqrt(gammaVal/a);
     x=linspace(-xBound,xBound,numPoints);

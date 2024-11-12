@@ -3,7 +3,7 @@ classdef GammaD
 %        distributions.
 %Methods implemented for both central and noncentral distributions are:
 %        PDF, CDF
-%Methods only implemented for the central distribution are: mean, var,
+%Methods only implemented for the central distribution are: mean, var
 %                                                           invCDF, rand,
 %                                                           entropy
 %
@@ -98,7 +98,7 @@ function val=PDF(x,k,theta,lambda,errTol,maxIter)
 %[1] I.R.C. de Oliveria and D.F. Ferreira, "Computing the noncentral gamma
 %    distribution, its inverse and the noncentrality parameter," 
 %    Computational Statistics, vol. 28, no. 4, pp.1663-1680, 01 Aug 2013.
-%[2] L. Knüsel and B. Bablok, "Computation of the noncentral gamma
+%[2] L. Knusel and B. Bablok, "Computation of the noncentral gamma
 %    distribution," SIAM Journal on Scientific Computing, vol. 17, no. 5,
 %    pp.1224-1231, Sep. 1996.
 %
@@ -174,7 +174,9 @@ function prob=CDF(x,k,theta,lambda,errTol,maxIter)
 %    theta The scale parameter of the distribution; theta>0.
 %   lambda The noncentrality parameter of the distribution. If this
 %          parameter is omitted or an empty matrix is passed, a value of 0,
-%          indicating the central gamma distribution, is used.
+%          indicating the central gamma distribution, is used. Note that
+%          finite precision limitations can lead to incorrect results if
+%          lambda is very big.
 %   errTol Error tolerance for determining convergence of the algorithm
 %          when lambda~=0. If this parameter is omitted or an empty matrix
 %          is passed, the default of eps(1) is used.
@@ -196,7 +198,7 @@ function prob=CDF(x,k,theta,lambda,errTol,maxIter)
 %[1] I. R. C. de Oliveria and D. F. Ferreira, "Computing the noncentral
 %    gamma distribution, its inverse and the noncentrality parameter," 
 %    Computational Statistics, vol. 28, no. 4, pp.1663-1680, 01 Aug 2013.
-%[2] L. Knüsel and B. Bablok, "Computation of the noncentral gamma
+%[2] L. Knusel and B. Bablok, "Computation of the noncentral gamma
 %    distribution," SIAM Journal on Scientific Computing, vol. 17, no. 5,
 %    pp.1224-1231, Sep. 1996.
 %
@@ -222,14 +224,21 @@ if(lambda==0)% Central gamma case
 else
     prob=zeros(size(x));
     numX=numel(x);
+    kOrig=k;
+    alpha=kOrig;%The shape parameter.
+    delta=lambda;%The noncentrality parameter.
+    %Mostly using the notation in Section 7 of the paper.
+    k=ceil(delta/2);
+    a=alpha+k;
+    ppoicInit=exp(-delta/2+k*log(delta/2)-log(gamma(k+1)));
+
+    if(delta~=0&&ppoicInit==0)
+        warning('A loss of precision might have caused an incorrect CDF evaluation.')
+    end
+
     for curX=1:numX
         xCur=x(curX)/theta;%Divide x by the scale parameter.
-        alpha=k;%The shape parameter.
-        delta=lambda;%The noncentrality parameter.
-    
-        %Mostly using the notation in Section 7 of the paper.
-        k=ceil(delta/2);
-        a=alpha+k;
+       
         gammac=gammainc(xCur,a);
         gammad=gammac;%Used in the regressive sum.
         gxd=exp(a*log(xCur)-xCur-gammaln(a+1));
@@ -238,7 +247,7 @@ else
         else 
             gxc=gxd*(a/xCur);
         end
-        ppoic=exp(-delta/2+k*log(delta/2)-log(gamma(k+1)));
+        ppoic=ppoicInit;
         ppoid=ppoic;
         remain=1-ppoic;
         cdf=ppoic*gammac;

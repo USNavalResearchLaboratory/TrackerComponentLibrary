@@ -40,7 +40,7 @@ void iauEcm06(double date1, double date2, double rm[3][3])
 **     optimum resolution.  The MJD method and the date & time methods
 **     are both good compromises between resolution and convenience.
 **
-**  1) The matrix is in the sense
+**  2) The matrix is in the sense
 **
 **        E_ep = rm x P_ICRS,
 **
@@ -48,7 +48,7 @@ void iauEcm06(double date1, double date2, double rm[3][3])
 **     and declination axes and E_ep is the same vector with respect to
 **     the (inertial) ecliptic and equinox of date.
 **
-**  2) P_ICRS is a free vector, merely a direction, typically of unit
+**     P_ICRS is a free vector, merely a direction, typically of unit
 **     magnitude, and not bound to any particular spatial origin, such
 **     as the Earth, Sun or SSB.  No assumptions are made about whether
 **     it represents starlight and embodies astrometric effects such as
@@ -64,11 +64,11 @@ void iauEcm06(double date1, double date2, double rm[3][3])
 **     iauRx        rotate around X-axis
 **     iauRxr       product of two r-matrices
 **
-**  This revision:  2021 May 11
+**  This revision:  2023 February 26
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    double ob, bp[3][3], e[3][3];
@@ -91,8 +91,8 @@ void iauEcm06(double date1, double date2, double rm[3][3])
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

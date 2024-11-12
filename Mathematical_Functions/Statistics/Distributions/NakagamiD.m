@@ -102,7 +102,7 @@ function prob=CDF(x,m,Omega)
 %function is built into Matlab without the use of any toolboxes.
 %
 %REFERENCES:
-%[1] %M. Pätzold, Mobile Radio Channels, Ed. 2, Wiley, 2012, pg. 30.
+%[1] %M. Patzold, Mobile Radio Channels, Ed. 2, Wiley, 2012, pg. 30.
 %
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
@@ -130,7 +130,7 @@ function val=invCDF(prob,m,Omega)
 %thus is called here.
 %
 %REFERENCES:
-%[1] %M. Pätzold, Mobile Radio Channels, Ed. 2, Wiley, 2012, pg. 30.
+%[1] %M. Patzold, Mobile Radio Channels, Ed. 2, Wiley, 2012, pg. 30.
 %
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 

@@ -162,7 +162,7 @@ function [d,w]=params4TrigMoment(rhoList,numComp,lambda)
 %    "Methods for deterministic approximation of circular densities,"
 %    Journal of Advances in Information Fusion, vol. 11, no. 2, pp.
 %    138-156, Dec. 2016.
-%[3] G. Nævdal, "On a generalization of the trigonometric moment
+%[3] G. Naevdal, "On a generalization of the trigonometric moment
 %    problem," Linear Algebra and Its Applications, vol. 258, pp. 1-18,
 %    Jun. 1997.
 %

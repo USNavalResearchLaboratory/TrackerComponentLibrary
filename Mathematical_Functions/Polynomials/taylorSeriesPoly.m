@@ -113,7 +113,7 @@ function polyMat=taylorSeriesPoly(a,multiVarDerivs,order)
 %improve estimation accuracy.
 %
 %REFERENCES:
-%[1] K. Königsberger, Analysis 2, 5th ed. Berlin: Springer, 2004, (In
+%[1] K. Konigsberger, Analysis 2, 5th ed. Berlin: Springer, 2004, (In
 %    German).
 %
 %September 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.

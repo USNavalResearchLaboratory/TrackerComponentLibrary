@@ -162,7 +162,7 @@ function [geoidHeight,coeffData]=getEGMGeoidHeight(latLon,tideSys,useNGAApprox,m
 %[3] B. Hofmann-Wellenhof and H. Moritz, Physical Geodesy, 2nd ed. 
 %    SpringerWienNewYork, 2006.
 %[4] M. Ekman, "Impacts of geodynamic phenomena on systems for height
-%    and gravity," Bulletin Géodésique, vol. 63, no. 3, pp. 281-296, 1996.
+%    and gravity," Bulletin Geodesique, vol. 63, no. 3, pp. 281-296, 1996.
 %[5] G. Petit and B. Luzum, IERS Conventions (2010), International Earth
 %    Rotation and Reference Systems Service Std. 36, 2010.
 %[6] F. G. Lemoine, S. Kenyon, J. Factor, R. G. Trimmer, N. K. Pavlis, and

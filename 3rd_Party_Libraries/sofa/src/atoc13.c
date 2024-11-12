@@ -52,17 +52,18 @@ int iauAtoc13(const char *type, double ob1, double ob2,
 **      allowance is made for depression of the horizon.)  This is
 **      related to the observed HA,Dec via the standard rotation, using
 **      the geodetic latitude (corrected for polar motion), while the
-**      observed HA and RA are related simply through the Earth rotation
-**      angle and the site longitude.  "Observed" RA,Dec or HA,Dec thus
-**      means the position that would be seen by a perfect equatorial
-**      with its polar axis aligned to the Earth's axis of rotation.
+**      observed HA and (CIO-based) RA are related simply through the
+**      Earth rotation angle and the site longitude.  "Observed" RA,Dec
+**      or HA,Dec thus means the position that would be seen by a
+**      perfect equatorial with its polar axis aligned to the Earth's
+**      axis of rotation.
 **
 **  2)  Only the first character of the type argument is significant.
 **      "R" or "r" indicates that ob1 and ob2 are the observed right
-**      ascension and declination;  "H" or "h" indicates that they are
-**      hour angle (west +ve) and declination;  anything else ("A" or
-**      "a" is recommended) indicates that ob1 and ob2 are azimuth
-**      (north zero, east 90 deg) and zenith distance.
+**      ascension (CIO-based) and declination;  "H" or "h" indicates
+**      that they are hour angle (west +ve) and declination;  anything
+**      else ("A" or "a" is recommended) indicates that ob1 and ob2 are
+**      azimuth (north zero, east 90 deg) and zenith distance.
 **
 **  3)  utc1+utc2 is quasi Julian Date (see Note 2), apportioned in any
 **      convenient way between the two arguments, for example where utc1
@@ -147,11 +148,11 @@ int iauAtoc13(const char *type, double ob1, double ob2,
 **     iauAtoiq     quick observed to CIRS
 **     iauAticq     quick CIRS to ICRS
 **
-**  This revision:   2021 February 24
+**  This revision:   2022 August 30
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    int j;
@@ -179,8 +180,8 @@ int iauAtoc13(const char *type, double ob1, double ob2,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

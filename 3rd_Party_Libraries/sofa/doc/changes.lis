@@ -1,122 +1,131 @@
+
+This is the list of updates and changes that are actual errors.  
+Additions, such as including the units "radians", and/or typographical 
+alterations are not listed.  They include changing capitalisation, e.g.  
+AU -> au and Of -> of, and consistent spelling i.e. catalogue -> catalog.
+
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+Corrections to Code
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+Fortran
+
+STARPV, PVSTAR Code changes to make better use of machine precision
+
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+ANSI C
+
+Starpv, Pvstar 
+
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+Updated parameters
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+Fortran 
+
+DAT
+       PARAMETER ( IYV = 2023 )
+
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+ANSI C
+
+Dat
+    enum { IYV = 2023};
+
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+Changes to comments
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+Fortran
+
+A2TF, D2TF  Notes: 3, last line
+
+*     by testing for IHMSF(1)=24 and setting IHMSF(2-4) to zero.
+
+
+ATOIQ  Notes: 1, first line 
+
+*  1) "Observed" Az,ZD means ...
+
+
+C2T06A  Notes: 1, 2nd line, i.e. the end of the first sentence is
+
+*     apportioned in any convenient way between the two arguments. 
+
+
+FK45Z  Notes: 4, last sentence
+
+ *     stars, whether polar or not.  At epoch J2000.0,  ...
+
+FK54Z Notes 3, first line is
+
+ 3) Conversion from J2000.0 FK5 to B1950.0 FK4 only is provided for.
+
+
+HFK5Z  Notes: 6, first line
+
+ 6) See also iau_FK52H, iau_H2FK5, iau_FK5HZ.
+
+
+LTPB  Notes: 1, line 3
+
+*     where P_ICRS is a vector in the International Celestial Reference
+
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+ANSI C
+
+
+A2tf  Note 3, last line 
+
+**     by testing for ihmsf[0]=24 and setting ihmsf[1-3] to zero.
+
+
+Atoiq  Notes: 1, first line 
+
+**  1) "Observed" Az,ZD means ...
+
+
+C2t06a  Notes: 1, 2nd line, i.e. the end of the first sentence is
+
+< **     apportioned in any convenient way between the two arguments. 
+
+
+Fk45z  Notes: 4, last sentence
+
+**     motions for all stars, whether polar or not.  At epoch J2000.0,
+
+
+Fk54z Notes 3, first line is
+
+**  3) Conversion from J2000.0 FK5 to B1950.0 FK4 only is provided for.
+
+
+Hfk5z  Notes: 6, first line
+
+ **  6) See also iauFk52h, iauH2fk5, iauFk5hz.
  
-            Updates for SOFA Release 18 : 2021 May 11
-            - - - - - - - - - - - - - - - - - - - - -
-
-Summary of Changes
-------------------
-The changes fall into the following categories:
-
-(1) Introduction of three new support routines.  Two deal with 
-    calculating astrometric places, while the third provides the 
-    approximate lunar position and velocity.  The validation program 
-    has been duly updated.
-
-(2) A rearrangement of the ANSI C header files sofam.h and sofa.h. 
-    The consequence of this is that an explicit #include "sofam.h" 
-    has been added to many of the SOFA functions.  Thus developers 
-    of applications that use constants from sofa.h will now need to 
-    include an explicit #include <sofam.h>.  Further explanation is 
-    given below.
-    
-(3) The year of validity for the leap second (dat) routine has been 
-    extended.
-
-(4) Typographical and other minor corrections to the documentation. 
-    Those that are purely typographical (e.g. punctuation) are not 
-    listed).
-
-+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
-
-FORTRAN 77 Library
-------------------
-
-iau_ATCC13  New support routine to transform a star's ICRS catalog 
-            entry (epoch J2000.0) into ICRS astrometric place.
-            
-iau_ATCCQ   New support routine; a "quick" transformation of a star's 
-            ICRS catalog entry (epoch J2000.0) into ICRS astrometric 
-            place, given precomputed star-independent astrometry 
-            parameters.
-
-iau_dat     Year extended to 2021.
-
-iau_G2ICRS  Documentation updated.
-iau_ICRS2G
-
-iau_MOON98  New support routine for calculating approximate geocentric 
-            position and velocity of the Moon.  
  
-iau_PLAN94  Documentation updates and corrections.
- 
-t_sofa_f    The test program has been updated to include the three new 
-            routines.
+t_sofa_c.c  The test program.  In the routine t_atccq the list of 
+                               called routines is
+ **  Called:  iauApci13, iauAtccq, vvd
 
-N.B. Both iau_MOON98 and iau_PLAN94 provide only approximate positions
-     and do not use IAU endorsed theories.
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+Additions to Cookbooks
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 
-+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+Forty SOFA routines are not mentioned in the existing cookbooks; in
+some cases simply because the routine was developed after the relevant
+cookbook had been written. To address this deficiency, enhancements
+have been drafted to two of the existing cookbooks (those on astrometry
+and Earth attitude) and a new one (on miscellaneous topics) has been
+written. This new cookbook is available for each distribution i.e.
+sofa_misc_f.pdf for Fortran and sofa_misc_c.pdf for ANSI C. Topics
+include ecliptic and galactic coordinates, Hipparcos/FK5 and FK4/FK5
+transformations, geodesy and solar-system ephemerides. 
 
-ANSI C Library
---------------
-
-sofa.h      The information in both these files has been rearranged to
-sofam.h     eliminate problems encountered by C++ developers.  
-            The change has 
-            (i)  moved the structures from sofam.h into sofa.h and
-            (ii) thus eliminated the #include "sofam.h" from sofa.h.
-            The consequence of this change for SOFA functions is that 
-            an explicit #include "sofam.h" has had to be added to some 
-            of them.
-
-            Previously, sofam.h contained both structure definitions and
-            constants, and was #included by sofa.h, which was otherwise
-            dedicated to function prototypes.  The difficulty was that 
-            short uppercase names in sofam.h were colliding with 
-            C++ variables. 
-
-            The consequence of the change for developers is that any 
-            application that uses constants from sofa.h will now need an 
-            explicit #include <sofam.h>.  It should, however, be noted 
-            that the contents of sofam.h are not formally part of the 
-            SOFA API, and so such an application is vulnerable to 
-            future changes.  Rather than adding an #include <sofam.h> 
-            to applications, it would be better to replicate the needed 
-            macros in the user code.
-
-iauAtcc13   New support function to transform a star's ICRS catalog 
-            entry (epoch J2000.0) into ICRS astrometric place.
-
-iauAtccq    New support function, a "quick" transformation of a star's
-            ICRS catalog entry (epoch J2000.0) into ICRS astrometric 
-            place, given precomputed star-independent astrometry 
-            parameters.
-
-iauDat      Year extended to 2021.
-
-iauG2icrs   Documentation updated.
-iauIcrs2g
-
-makefile    An error has been corrected when using "make check".  The 
-            directory for the include files was incorrect.
-
-iauMoon98   New support function for calculating approximate geocentric 
-            position and velocity of the Moon.  
-
-iauPlan94   Documentation updates and corrections.
-
-t_sofa_c    The test program has been updated to include the three new 
-            functions.
-
-Cosmetic changes to improve consistency have been made to the ANSI C code.
-
-N.B. Both iauMoon98 and iauPlan94 provide only approximate positions 
-     and do not use IAU endorsed theories.
-
-+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
-+ SOFA thanks all those who have reported the various issues that go
-+ to ensuring the libraries and documentation are kept up-to-date and
-+ relevant.
-+
-+ End of updates
-+ 2021 May 11
-+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+2023 May 31
+* + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +

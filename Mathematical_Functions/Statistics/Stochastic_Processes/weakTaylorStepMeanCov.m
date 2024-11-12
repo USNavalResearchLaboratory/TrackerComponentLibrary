@@ -1,7 +1,7 @@
 function [yHat,Sigma]=weakTaylorStepMeanCov(y,aCur,BCur,deltaT,algorithm,simplified,pBpy,p2Bpypy,papy,p2apypy,papt,pBpt,getSqrtCov)
 %%WEAKTAYLORSTEPMEANCOV Determine the mean and covariance matrix of a
-%           single step of a weak It�-Taylor expansion of a stochastic
-%           differential equation under It� calculus, such as one could
+%           single step of a weak Ito-Taylor expansion of a stochastic
+%           differential equation under Ito calculus, such as one could
 %           take using the weakStochTaylorStep function. The stochastic
 %           differential equations under consideration take the form:
 %           dy=a(y,t)*dt+B(y,t)*dW
@@ -13,7 +13,7 @@ function [yHat,Sigma]=weakTaylorStepMeanCov(y,aCur,BCur,deltaT,algorithm,simplif
 %          current time.
 %     BCur The value of the diffusion matrix function B at B(y,t).
 %   deltaT The time increment over which the step is taken.
-% algorithm A parameter specifying the type of explicit weak It�-Taylor
+% algorithm A parameter specifying the type of explicit weak Ito-Taylor
 %          step to take. Possible values are:
 %          0 Use the order 1.0 simplified weak Euler scheme from Equation
 %            1.2 in Chapter 14.1 of [1] for the simplified scheme; the
@@ -68,10 +68,10 @@ function [yHat,Sigma]=weakTaylorStepMeanCov(y,aCur,BCur,deltaT,algorithm,simplif
 %              Cholesky-style decompostion of the covariance matrix.
 %
 %The derivation of the moments proceeds using a number of identities
-%involving the products of It� stochastic integrals and the products of the
-%Wiener process and an It� stochastic integral. This includes Equation
+%involving the products of Ito stochastic integrals and the products of the
+%Wiener process and an Ito stochastic integral. This includes Equation
 %2.160 in Chapter 5.2 of [1] for the product of the Wiener process and the
-%It� stochastic integral, Lemma 5.7.1 for the expected value of such
+%Ito stochastic integral, Lemma 5.7.1 for the expected value of such
 %integrals and Lemma 5.7.2 in Chapter 5.7 for the second noncentral moment
 %of such integrals. Also, Corollary 5.2.4 in Chapter 5.2 is used to
 %evaluate I_{0,0} when necessary. Specific derivations are given in [2].
@@ -140,7 +140,7 @@ function [yHat,Sigma]=weakTaylorStepMeanCov(y,aCur,BCur,deltaT,algorithm,simplif
 %REFERENCES:
 %[1] P. E. Kloeden and E. Platen, Numerical Solution of Stochastic
 %    Differential Equations. Berlin: Springer, 1999.
-%[2] D. F. Crouse, "It�-Taylor Expansion Moments for Continuous-Time State
+%[2] D. F. Crouse, "Ito-Taylor Expansion Moments for Continuous-Time State
 %    Propagation," Naval Research Laboratory: Washington, DC., No.
 %    NRL/MR/5344--19-9881, 20 Aug. 2019.
 %

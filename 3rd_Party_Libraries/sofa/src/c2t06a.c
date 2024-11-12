@@ -12,7 +12,7 @@ void iauC2t06a(double tta, double ttb, double uta, double utb,
 **  model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -27,8 +27,8 @@ void iauC2t06a(double tta, double ttb, double uta, double utb,
 **  Notes:
 **
 **  1) The TT and UT1 dates tta+ttb and uta+utb are Julian Dates,
-**     apportioned in any convenient way between the arguments uta and
-**     utb.  For example, JD(UT1)=2450123.7 could be expressed in any of
+**     apportioned in any convenient way between the two arguments.  For
+**     example, JD(UT1)=2450123.7 could be expressed in any of
 **     these ways, among others:
 **
 **             uta            utb
@@ -77,11 +77,11 @@ void iauC2t06a(double tta, double ttb, double uta, double utb,
 **     McCarthy, D. D., Petit, G. (eds.), 2004, IERS Conventions (2003),
 **     IERS Technical Note No. 32, BKG
 **
-**  This revision:  2021 May 11
+**  This revision:  2023 January 18
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    double rc2i[3][3], era, sp, rpom[3][3];
@@ -106,8 +106,8 @@ void iauC2t06a(double tta, double ttb, double uta, double utb,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

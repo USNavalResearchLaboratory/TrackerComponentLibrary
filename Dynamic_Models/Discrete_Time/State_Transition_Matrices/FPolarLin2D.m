@@ -6,7 +6,7 @@ function F=FPolarLin2D(T,x,qTheta)
 %             Optionally, a speed derivative component can be given to
 %             model possible linear target acceleration. The matrix can be
 %             obtained from a linearization or from a second-order weak
-%             Itô-Taylor expansion.
+%             Ito-Taylor expansion.
 %
 %INPUTS: T  The time-duration of the propagation interval in seconds.
 %        x  The 4X1 or 5X1 target state vector in 2D space in the order of
@@ -16,7 +16,7 @@ function F=FPolarLin2D(T,x,qTheta)
 %           a speed derivative is not given (is assumed zero), then x is
 %           4X1.
 %    qTheta If the state transition matrix from a second-order weak
-%           Itô-Taylor expansion is desired, then qTheta must be provided.
+%           Ito-Taylor expansion is desired, then qTheta must be provided.
 %           qTheta is the power spectral density of the process noise
 %           corrupting the angular component of the state, having units of
 %           radians^2/s. If qTheta is omitted, then the discrete-time state
@@ -36,7 +36,7 @@ function F=FPolarLin2D(T,x,qTheta)
 %However, the discretized model can be derived from first principles based
 %on the principles in Chapter 6 of [3], where a matrix exponential is used.
 %
-%The solution using a second-order weak Itô-Taylor expansion is taken from
+%The solution using a second-order weak Ito-Taylor expansion is taken from
 %[4].
 %
 %The associated state prediction covariance matrix can be obtained using

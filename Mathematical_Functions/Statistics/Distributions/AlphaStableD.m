@@ -52,15 +52,15 @@ methods(Static)
     % pdf = AlphaStableD.PDF(x,1,0,2,1);
     % plot(x,cpdf,x,pdf)
     %
-    %EXAMPLE 3: Comparing Lévy pdf to alpha=0.5, beta=1 stable pdf
+    %EXAMPLE 3: Comparing Levy pdf to alpha=0.5, beta=1 stable pdf
     % x = linspace(-10,10,200);
     % lpdf = LevyD.PDF(x,0,2);
     % pdf = AlphaStableD.PDF(x,0.5,1,2,1);
     % plot(x,lpdf,x,pdf)
     %
     %REFERENCES:
-    %[1] Guillermo Julián-Moreno, Jorge E. López De Vergara, Iván
-    %    González, Luis Pedro, Javier Royuela-Del-Val, and Federico 
+    %[1] Guillermo Julian-Moreno, Jorge E. Lopez De Vergara, Ivan
+    %    Gonzalez, Luis Pedro, Javier Royuela-Del-Val, and Federico 
     %    Simmross-Wattenberg, "Fast parallel alpha-stable distribution
     %    function evaluation and parameter estimation using OpenCL in 
     %    GPGPUs," Statistics and Computing 27 (2017), no. 5, 1365-1382.
@@ -179,15 +179,15 @@ methods(Static)
     % cdf = AlphaStableD.CDF(x,1,0,2,1);
     % plot(x,ccdf,x,cdf)
     %
-    %EXAMPLE 3: Comparing Lévy pdf to alpha=0.5, beta=1 stable pdf
+    %EXAMPLE 3: Comparing Levy pdf to alpha=0.5, beta=1 stable pdf
     % x = linspace(0,10,200);
     % lcdf = LevyD.CDF(x,0,2);
     % cdf = AlphaStableD.CDF(x,0.5,1,2,1);
     % plot(x,lcdf,x,cdf)
     %
     %REFERENCES:
-    %[1] Guillermo Julián-Moreno, Jorge E. López De Vergara, Iván
-    %    González, Luis Pedro, Javier Royuela-Del-Val, and Federico 
+    %[1] Guillermo Julian-Moreno, Jorge E. Lopez De Vergara, Ivan
+    %    Gonzalez, Luis Pedro, Javier Royuela-Del-Val, and Federico 
     %    Simmross-Wattenberg, "Fast parallel alpha-stable distribution
     %    function evaluation and parameter estimation using OpenCL in 
     %    GPGPUs," Statistics and Computing 27 (2017), no. 5, 1365-1382.

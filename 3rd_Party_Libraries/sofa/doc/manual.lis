@@ -47,15 +47,15 @@
                    Division A: Fundamental Astronomy
 
 
-                Standards Of Fundamental Astronomy Board
+                Standards of Fundamental Astronomy Board
 
 
 
 
 
-                               Release 18
+                               Release 19
 
-                              2021 April 12
+                            2023 October 11
 
 contents.lis                                             2018 January 26
 
@@ -83,7 +83,7 @@ contents.lis                                             2018 January 26
 
                  A3   SOFA Board membership
 
-intro.lis                                                  2021 April 19
+intro.lis                                                  2023 April 17
 
 
                   -------------------------------
@@ -91,7 +91,7 @@ intro.lis                                                  2021 April 19
                   -------------------------------
 
 
-  SOFA stands for "Standards Of Fundamental Astronomy".  The SOFA
+  SOFA stands for "Standards of Fundamental Astronomy".  The SOFA
   software libraries are a collection of subprograms, in source-
   code form, which implement official IAU algorithms for fundamental-
   astronomy computations.   The subprograms at present comprise 192
@@ -300,7 +300,7 @@ Resources for operating the SOFA Center are provided by Her Majesty's
 Nautical Almanac Office, operated by the United Kingdom Hydrographic
 Office.
 
-sofa_lib.lis                                               2021 April 19
+sofa_lib.lis                                               2022 April 15
 
                      ----------------------
                      SOFA Astronomy Library
@@ -406,7 +406,7 @@ ROUTINES
      ATCO13    ICRS -> observed
      ATIC13    CIRS -> ICRS
      ATICQ     quick CIRS -> ICRS
-     ATCIQN    quick CIRS -> ICRS, multiple deflections
+     ATICQN    quick CIRS -> ICRS, multiple deflections
      ATIO13    CIRS -> observed
      ATIOQ     quick CIRS -> observed
      ATOC13    observed -> astrometric ICRS
@@ -640,7 +640,7 @@ CALLS: FORTRAN VERSION
   :                  AOB, ZOB, HOB, DOB, ROB, EO, J )
    CALL iau_ATIC13 ( RI, DI, DATE1, DATE2, RC, DC, EO )
    CALL iau_ATICQ  ( RI, DI, ASTROM, RC, DC )
-   CALL iau_ATCIQN ( RI, DI, ASTROM, N, B, RC, DC )
+   CALL iau_ATICQN ( RI, DI, ASTROM, N, B, RC, DC )
    CALL iau_ATIO13 ( RI, DI, UTC1, UTC2, DUT1, ELONG, PHI, HM, XP, YP,
   :                  PHPA, TC, RH, WL, AOB, ZOB, HOB, DOB, ROB, J )
    CALL iau_ATIOQ  ( RI, DI, ASTROM, AOB, ZOB, HOB, DOB, ROB )
@@ -865,7 +865,7 @@ CALLS: C VERSION
                    aob, zob, hob, dob, rob, eo );
        iauAtic13 ( ri, di, date1, date2, &rc, &dc, &eo );
        iauAticq  ( ri, di, &astrom, &rc, &dc );
-       iauAtciqn ( ri, di, astrom, n, b, &rc, &dc );
+       iauAticqn ( ri, di, astrom, n, b, &rc, &dc );
    i = iauAtio13 ( ri, di, utc1, utc2, dut1, elong, phi, hm, xp, yp,
                    phpa, tc, rh, wl, aob, zob, hob, dob, rob );
        iauAtioq  ( ri, di, &astrom, &aob, &zob, &hob, &dob, &rob );
@@ -1389,7 +1389,7 @@ void iauA2af(int ndp, double angle, char *sign, int idmsf[4])
 **  Decompose radians into degrees, arcminutes, arcseconds, fraction.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -1449,7 +1449,7 @@ void iauA2tf(int ndp, double angle, char *sign, int ihmsf[4])
 **  Decompose radians into hours, minutes, seconds, fraction.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -1616,9 +1616,9 @@ void iauAe2hd (double az, double el, double phi,
 **
 **  Last revision:   2017 September 12
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    double sa, ca, se, ce, sp, cp, x, y, z, r;
@@ -1646,8 +1646,8 @@ void iauAe2hd (double az, double el, double phi,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================
@@ -1794,7 +1794,7 @@ double iauAnp(double a)
 **  Normalize angle into the range 0 <= a < 2pi.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -1817,7 +1817,7 @@ double iauAnpm(double a)
 **  Normalize angle into the range -pi <= a < +pi.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -2219,7 +2219,7 @@ void iauApci13(double date1, double date2,
 **      eral   double       unchanged
 **      refa   double       unchanged
 **      refb   double       unchanged
-**     eo     double*     equation of the origins (ERA-GST)
+**     eo     double*     equation of the origins (ERA-GST, radians)
 **
 **  Notes:
 **
@@ -2518,7 +2518,7 @@ int iauApco13(double utc1, double utc2, double dut1,
 **      eral   double       "local" Earth rotation angle (radians)
 **      refa   double       refraction constant A (radians)
 **      refb   double       refraction constant B (radians)
-**     eo     double*    equation of the origins (ERA-GST)
+**     eo     double*    equation of the origins (ERA-GST, radians)
 **
 **  Returned (function value):
 **            int        status: +1 = dubious year (Note 2)
@@ -3566,18 +3566,18 @@ void iauAtci13(double rc, double dc,
 **  Status:  support function.
 **
 **  Given:
-**     rc     double   ICRS right ascension at J2000.0 (radians, Note 1)
-**     dc     double   ICRS declination at J2000.0 (radians, Note 1)
-**     pr     double   RA proper motion (radians/year, Note 2)
-**     pd     double   Dec proper motion (radians/year)
-**     px     double   parallax (arcsec)
-**     rv     double   radial velocity (km/s, +ve if receding)
-**     date1  double   TDB as a 2-part...
-**     date2  double   ...Julian Date (Note 3)
+**     rc     double  ICRS right ascension at J2000.0 (radians, Note 1)
+**     dc     double  ICRS declination at J2000.0 (radians, Note 1)
+**     pr     double  RA proper motion (radians/year, Note 2)
+**     pd     double  Dec proper motion (radians/year)
+**     px     double  parallax (arcsec)
+**     rv     double  radial velocity (km/s, +ve if receding)
+**     date1  double  TDB as a 2-part...
+**     date2  double  ...Julian Date (Note 3)
 **
 **  Returned:
-**     ri,di  double*  CIRS geocentric RA,Dec (radians)
-**     eo     double*  equation of the origins (ERA-GST, Note 5)
+**     ri,di  double* CIRS geocentric RA,Dec (radians)
+**     eo     double* equation of the origins (ERA-GST, radians, Note 5)
 **
 **  Notes:
 **
@@ -3936,7 +3936,7 @@ int iauAtco13(double rc, double dc,
 **     hob    double*  observed hour angle (radians)
 **     dob    double*  observed declination (radians)
 **     rob    double*  observed right ascension (CIO-based, radians)
-**     eo     double*  equation of the origins (ERA-GST)
+**     eo     double*  equation of the origins (ERA-GST, radians)
 **
 **  Returned (function value):
 **            int      status: +1 = dubious year (Note 4)
@@ -4070,7 +4070,7 @@ void iauAtic13(double ri, double di, double date1, double date2,
 **
 **  Returned:
 **     rc,dc  double  ICRS astrometric RA,Dec (radians)
-**     eo     double  equation of the origins (ERA-GST, Note 4)
+**     eo     double  equation of the origins (ERA-GST, radians, Note 4)
 **
 **  Notes:
 **
@@ -4533,8 +4533,9 @@ void iauAtioq(double ri, double di, iauASTROM *astrom,
 **     then adjusting for refraction.  The HA,Dec is obtained by
 **     rotating back into equatorial coordinates, and is the position
 **     that would be seen by a perfect equatorial with its polar axis
-**     aligned to the Earth's axis of rotation.  Finally, the RA is
-**     obtained by subtracting the HA from the local ERA.
+**     aligned to the Earth's axis of rotation.  Finally, the
+**     (CIO-based) RA is obtained by subtracting the HA from the local
+**     ERA.
 **
 **  6) The star-independent CIRS-to-observed-place parameters in ASTROM
 **     may be computed with iauApio[13] or iauApco[13].  If nothing has
@@ -4601,17 +4602,18 @@ int iauAtoc13(const char *type, double ob1, double ob2,
 **      allowance is made for depression of the horizon.)  This is
 **      related to the observed HA,Dec via the standard rotation, using
 **      the geodetic latitude (corrected for polar motion), while the
-**      observed HA and RA are related simply through the Earth rotation
-**      angle and the site longitude.  "Observed" RA,Dec or HA,Dec thus
-**      means the position that would be seen by a perfect equatorial
-**      with its polar axis aligned to the Earth's axis of rotation.
+**      observed HA and (CIO-based) RA are related simply through the
+**      Earth rotation angle and the site longitude.  "Observed" RA,Dec
+**      or HA,Dec thus means the position that would be seen by a
+**      perfect equatorial with its polar axis aligned to the Earth's
+**      axis of rotation.
 **
 **  2)  Only the first character of the type argument is significant.
 **      "R" or "r" indicates that ob1 and ob2 are the observed right
-**      ascension and declination;  "H" or "h" indicates that they are
-**      hour angle (west +ve) and declination;  anything else ("A" or
-**      "a" is recommended) indicates that ob1 and ob2 are azimuth
-**      (north zero, east 90 deg) and zenith distance.
+**      ascension (CIO-based) and declination;  "H" or "h" indicates
+**      that they are hour angle (west +ve) and declination;  anything
+**      else ("A" or "a" is recommended) indicates that ob1 and ob2 are
+**      azimuth (north zero, east 90 deg) and zenith distance.
 **
 **  3)  utc1+utc2 is quasi Julian Date (see Note 2), apportioned in any
 **      convenient way between the two arguments, for example where utc1
@@ -4751,10 +4753,11 @@ int iauAtoi13(const char *type, double ob1, double ob2,
 **      allowance is made for depression of the horizon.)  This is
 **      related to the observed HA,Dec via the standard rotation, using
 **      the geodetic latitude (corrected for polar motion), while the
-**      observed HA and RA are related simply through the Earth rotation
-**      angle and the site longitude.  "Observed" RA,Dec or HA,Dec thus
-**      means the position that would be seen by a perfect equatorial
-**      with its polar axis aligned to the Earth's axis of rotation.
+**      observed HA and (CIO-based) RA are related simply through the
+**      Earth rotation angle and the site longitude.  "Observed" RA,Dec
+**      or HA,Dec thus means the position that would be seen by a
+**      perfect equatorial with its polar axis aligned to the Earth's
+**      axis of rotation.
 **
 **  2)  Only the first character of the type argument is significant.
 **      "R" or "r" indicates that ob1 and ob2 are the observed right
@@ -4895,25 +4898,23 @@ void iauAtoiq(const char *type,
 **
 **  Notes:
 **
-**  1) "Observed" Az,El means the position that would be seen by a
+**  1) "Observed" Az,ZD means the position that would be seen by a
 **     perfect geodetically aligned theodolite.  This is related to
 **     the observed HA,Dec via the standard rotation, using the geodetic
 **     latitude (corrected for polar motion), while the observed HA and
-**     RA are related simply through the Earth rotation angle and the
-**     site longitude.  "Observed" RA,Dec or HA,Dec thus means the
-**     position that would be seen by a perfect equatorial with its
-**     polar axis aligned to the Earth's axis of rotation.  By removing
-**     from the observed place the effects of atmospheric refraction and
-**     diurnal aberration, the CIRS RA,Dec is obtained.
+**     (CIO-based) RA are related simply through the Earth rotation
+**     angle and the site longitude.  "Observed" RA,Dec or HA,Dec thus
+**     means the position that would be seen by a perfect equatorial
+**     with its polar axis aligned to the Earth's axis of rotation.
 **
 **  2) Only the first character of the type argument is significant.
 **     "R" or "r" indicates that ob1 and ob2 are the observed right
-**     ascension and declination;  "H" or "h" indicates that they are
-**     hour angle (west +ve) and declination;  anything else ("A" or
-**     "a" is recommended) indicates that ob1 and ob2 are azimuth (north
-**     zero, east 90 deg) and zenith distance.  (Zenith distance is used
-**     rather than altitude in order to reflect the fact that no
-**     allowance is made for depression of the horizon.)
+**     ascension (CIO-based) and declination;  "H" or "h" indicates that
+**     they are hour angle (west +ve) and declination;  anything else
+**     ("A" or "a" is recommended) indicates that ob1 and ob2 are
+**     azimuth (north zero, east 90 deg) and zenith distance.  (Zenith
+**     distance is used rather than altitude in order to reflect the
+**     fact that no allowance is made for depression of the horizon.)
 **
 **  3) The accuracy of the result is limited by the corrections for
 **     refraction, which use a simple A*tan(z) + B*tan^3(z) model.
@@ -4954,7 +4955,7 @@ void iauBi00(double *dpsibi, double *depsbi, double *dra)
 **  additions.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -5004,7 +5005,7 @@ void iauBp00(double date1, double date2,
 **  Frame bias and precession, IAU 2000.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -5083,7 +5084,7 @@ void iauBp06(double date1, double date2,
 **  Frame bias and precession, IAU 2006.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -5156,7 +5157,7 @@ void iauBpn2xy(double rbpn[3][3], double *x, double *y)
 **  of the Celestial Intermediate Pole.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -5199,7 +5200,7 @@ void iauC2i00a(double date1, double date2, double rc2i[3][3])
 **  IAU 2000A precession-nutation model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -5276,7 +5277,7 @@ void iauC2i00b(double date1, double date2, double rc2i[3][3])
 **  IAU 2000B precession-nutation model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -5353,7 +5354,7 @@ void iauC2i06a(double date1, double date2, double rc2i[3][3])
 **  IAU 2006 precession and IAU 2000A nutation models.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -5422,7 +5423,7 @@ void iauC2ibpn(double date1, double date2, double rbpn[3][3],
 **  the bias-precession-nutation matrix.  IAU 2000.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -5502,7 +5503,7 @@ void iauC2ixy(double date1, double date2, double x, double y,
 **  date when the CIP X,Y coordinates are known.  IAU 2000.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -5575,7 +5576,7 @@ void iauC2ixys(double x, double y, double s, double rc2i[3][3])
 **  X,Y and the CIO locator s.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -5630,7 +5631,7 @@ void iauC2s(double p[3], double *theta, double *phi)
 **  P-vector to spherical coordinates.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -5664,7 +5665,7 @@ void iauC2t00a(double tta, double ttb, double uta, double utb,
 **  the polar motion, using the IAU 2000A precession-nutation model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -5747,7 +5748,7 @@ void iauC2t00b(double tta, double ttb, double uta, double utb,
 **  the polar motion, using the IAU 2000B precession-nutation model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -5830,7 +5831,7 @@ void iauC2t06a(double tta, double ttb, double uta, double utb,
 **  model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -5845,8 +5846,8 @@ void iauC2t06a(double tta, double ttb, double uta, double utb,
 **  Notes:
 **
 **  1) The TT and UT1 dates tta+ttb and uta+utb are Julian Dates,
-**     apportioned in any convenient way between the arguments uta and
-**     utb.  For example, JD(UT1)=2450123.7 could be expressed in any of
+**     apportioned in any convenient way between the two arguments.  For
+**     example, JD(UT1)=2450123.7 could be expressed in any of
 **     these ways, among others:
 **
 **             uta            utb
@@ -5911,7 +5912,7 @@ void iauC2tcio(double rc2i[3][3], double era, double rpom[3][3],
 **  Angle and the polar motion matrix).
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -5972,7 +5973,7 @@ void iauC2teqx(double rbpn[3][3], double gst, double rpom[3][3],
 **  Sidereal Time and the polar motion matrix).
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -6033,7 +6034,7 @@ void iauC2tpe(double tta, double ttb, double uta, double utb,
 **  the nutation and the polar motion.  IAU 2000.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -6125,7 +6126,7 @@ void iauC2txy(double tta, double ttb, double uta, double utb,
 **  the CIP coordinates and the polar motion.  IAU 2000.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -6210,7 +6211,7 @@ int iauCal2jd(int iy, int im, int id, double *djm0, double *djm)
 **  Gregorian Calendar to Julian Date.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -6262,7 +6263,7 @@ void iauCp(double p[3], double c[3])
 **  Copy a p-vector.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -6285,7 +6286,7 @@ void iauCpv(double pv[2][3], double c[2][3])
 **  Copy a position/velocity vector.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -6311,7 +6312,7 @@ void iauCr(double r[3][3], double c[3][3])
 **  Copy an r-matrix.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -6416,7 +6417,7 @@ void iauD2tf(int ndp, double days, char *sign, int ihmsf[4])
 **  Decompose days to hours, minutes, seconds, fraction.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -6505,7 +6506,7 @@ int iauDat(int iy, int im, int id, double fd, double *deltat)
 **     :__________________________________________:
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  user-replaceable support function.
 **
@@ -6629,7 +6630,7 @@ double iauDtdb(double date1, double date2,
 **  Conventions (McCarthy & Petit 2003).
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -6939,7 +6940,7 @@ void iauEcm06(double date1, double date2, double rm[3][3])
 **     optimum resolution.  The MJD method and the date & time methods
 **     are both good compromises between resolution and convenience.
 **
-**  1) The matrix is in the sense
+**  2) The matrix is in the sense
 **
 **        E_ep = rm x P_ICRS,
 **
@@ -6947,7 +6948,7 @@ void iauEcm06(double date1, double date2, double rm[3][3])
 **     and declination axes and E_ep is the same vector with respect to
 **     the (inertial) ecliptic and equinox of date.
 **
-**  2) P_ICRS is a free vector, merely a direction, typically of unit
+**     P_ICRS is a free vector, merely a direction, typically of unit
 **     magnitude, and not bound to any particular spatial origin, such
 **     as the Earth, Sun or SSB.  No assumptions are made about whether
 **     it represents starlight and embodies astrometric effects such as
@@ -6977,7 +6978,7 @@ double iauEe00(double date1, double date2, double epsa, double dpsi)
 **  given the nutation in longitude and the mean obliquity.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -7045,7 +7046,7 @@ double iauEe00a(double date1, double date2)
 **  Equation of the equinoxes, compatible with IAU 2000 resolutions.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -7113,7 +7114,7 @@ double iauEe00b(double date1, double date2)
 **  using the truncated nutation model IAU 2000B.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -7186,7 +7187,7 @@ double iauEe06a(double date1, double date2)
 **  IAU 2006/2000A precession-nutation.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -7245,7 +7246,7 @@ double iauEect00(double date1, double date2)
 **  IAU 2000 resolutions.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -7408,7 +7409,7 @@ double iauEo06a(double date1, double date2)
 **  Equation of the origins, IAU 2006 precession and IAU 2000A nutation.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -7472,7 +7473,7 @@ double iauEors(double rnpb[3][3], double s)
 **  quantity s.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -7513,19 +7514,33 @@ double iauEpb(double dj1, double dj2)
 **  Julian Date to Besselian Epoch.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
 **  Given:
-**     dj1,dj2    double     Julian Date (see note)
+**     dj1,dj2    double     Julian Date (Notes 3,4)
 **
 **  Returned (function value):
 **                double     Besselian Epoch.
 **
-**  Note:
+**  Notes:
 **
-**     The Julian Date is supplied in two pieces, in the usual SOFA
+**  1) Besselian Epoch is a method of expressing a moment in time as a
+**     year plus fraction.  It was superseded by Julian Year (see the
+**     function iauEpj).
+**
+**  2) The start of a Besselian year is when the right ascension of
+**     the fictitious mean Sun is 18h 40m, and the unit is the tropical
+**     year.  The conventional definition (see Lieske 1979) is that
+**     Besselian Epoch B1900.0 is JD 2415020.31352 and the length of the
+**     year is 365.242198781 days.
+**
+**  3) The time scale for the JD, originally Ephemeris Time, is TDB,
+**     which for all practical purposes in the present context is
+**     indistinguishable from TT.
+**
+**  4) The Julian Date is supplied in two pieces, in the usual SOFA
 **     manner, which is designed to preserve time resolution.  The
 **     Julian Date is available as a single number by adding dj1 and
 **     dj2.  The maximum resolution is achieved if dj1 is 2451545.0
@@ -7548,7 +7563,7 @@ void iauEpb2jd(double epb, double *djm0, double *djm)
 **  Besselian Epoch to Julian Date.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -7583,19 +7598,33 @@ double iauEpj(double dj1, double dj2)
 **  Julian Date to Julian Epoch.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
 **  Given:
-**     dj1,dj2    double     Julian Date (see note)
+**     dj1,dj2    double     Julian Date (Note 4)
 **
 **  Returned (function value):
 **                double     Julian Epoch
 **
-**  Note:
+**  Notes:
 **
-**     The Julian Date is supplied in two pieces, in the usual SOFA
+**  1) Julian Epoch is a method of expressing a moment in time as a
+**     year plus fraction.
+**
+**  2) Julian Epoch J2000.0 is 2000 Jan 1.5, and the length of the year
+**     is 365.25 days.
+**
+**  3) For historical reasons, the time scale formally associated with
+**     Julian Epoch is TDB (or TT, near enough).  However, Julian Epoch
+**     can be used more generally as a calendrical convention to
+**     represent other time scales such as TAI and TCB.  This is
+**     analogous to Julian Date, which was originally defined
+**     specifically as a way of representing Universal Times but is now
+**     routinely used for any of the regular time scales.
+**
+**  4) The Julian Date is supplied in two pieces, in the usual SOFA
 **     manner, which is designed to preserve time resolution.  The
 **     Julian Date is available as a single number by adding dj1 and
 **     dj2.  The maximum resolution is achieved if dj1 is 2451545.0
@@ -7618,7 +7647,7 @@ void iauEpj2jd(double epj, double *djm0, double *djm)
 **  Julian Epoch to Julian Date.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -7655,7 +7684,7 @@ int iauEpv00(double date1, double date2,
 **  respect to the Barycentric Celestial Reference System.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -7714,8 +7743,8 @@ int iauEpv00(double date1, double date2,
 **        pvb[1][1]  ydot    } barycentric velocity, au/d
 **        pvb[1][2]  zdot    }
 **
-**     The vectors are with respect to the Barycentric Celestial
-**     Reference System.  The time unit is one day in TDB.
+**     The vectors are oriented with respect to the BCRS.  The time unit
+**     is one day in TDB.
 **
 **  3) The function is a SIMPLIFIED SOLUTION from the planetary theory
 **     VSOP2000 (X. Moisson, P. Bretagnon, 2001, Celes. Mechanics &
@@ -7819,7 +7848,7 @@ double iauEqeq94(double date1, double date2)
 **  Equation of the equinoxes, IAU 1994 model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -7879,7 +7908,7 @@ double iauEra00(double dj1, double dj2)
 **  Earth rotation angle (IAU 2000 model).
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -7943,7 +7972,7 @@ double iauFad03(double t)
 **  mean elongation of the Moon from the Sun.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -7983,7 +8012,7 @@ double iauFae03(double t)
 **  mean longitude of Earth.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -8027,7 +8056,7 @@ double iauFaf03(double t)
 **  node.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -8067,7 +8096,7 @@ double iauFaju03(double t)
 **  mean longitude of Jupiter.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -8110,7 +8139,7 @@ double iauFal03(double t)
 **  mean anomaly of the Moon.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -8150,7 +8179,7 @@ double iauFalp03(double t)
 **  mean anomaly of the Sun.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -8190,7 +8219,7 @@ double iauFama03(double t)
 **  mean longitude of Mars.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -8233,7 +8262,7 @@ double iauFame03(double t)
 **  mean longitude of Mercury.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -8276,7 +8305,7 @@ double iauFane03(double t)
 **  mean longitude of Neptune.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -8316,7 +8345,7 @@ double iauFaom03(double t)
 **  mean longitude of the Moon's ascending node.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -8356,7 +8385,7 @@ double iauFapa03(double t)
 **  general accumulated precession in longitude.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -8400,7 +8429,7 @@ double iauFasa03(double t)
 **  mean longitude of Saturn.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -8443,7 +8472,7 @@ double iauFaur03(double t)
 **  mean longitude of Uranus.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -8483,7 +8512,7 @@ double iauFave03(double t)
 **  mean longitude of Venus.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -8535,7 +8564,7 @@ void iauFk425(double r1950, double d1950,
 **  Status:  support function.
 **
 **  This function converts a star's catalog data from the old FK4
-** (Bessel-Newcomb) system to the later IAU 1976 FK5 (Fricke) system.
+**  (Bessel-Newcomb) system to the later IAU 1976 FK5 (Fricke) system.
 **
 **  Given: (all B1950.0, FK4)
 **     r1950,d1950    double   B1950.0 RA,Dec (rad)
@@ -8691,7 +8720,7 @@ void iauFk45z(double r1950, double d1950, double bepoch,
 **     in past astrometry, and the undesirability of a discontinuity in
 **     the algorithm, the decision has been made in this SOFA algorithm
 **     to include the effects of differential E-terms on the proper
-**     motions for all stars, whether polar or not.  At epoch 2000.0,
+**     motions for all stars, whether polar or not.  At epoch J2000.0,
 **     and measuring "on the sky" rather than in terms of RA change, the
 **     errors resulting from this simplification are less than
 **     1 milliarcsecond in position and 1 milliarcsecond per century in
@@ -8847,7 +8876,7 @@ void iauFk52h(double r5, double d5,
 **  Transform FK5 (J2000.0) star data into the Hipparcos system.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -8934,13 +8963,13 @@ void iauFk54z(double r2000, double d2000, double bepoch,
 **     in FK4, and the present function returns those fictitious proper
 **     motions.
 **
-**  3) Conversion from B1950.0 FK4 to J2000.0 FK5 only is provided for.
+**  3) Conversion from J2000.0 FK5 to B1950.0 FK4 only is provided for.
 **     Conversions involving other equinoxes would require additional
 **     treatment for precession.
 **
 **  4) The position returned by this function is in the B1950.0 FK4
-**     reference system but at Besselian epoch BEPOCH.  For comparison
-**     with catalogs the BEPOCH argument will frequently be 1950.0. (In
+**     reference system but at Besselian epoch bepoch.  For comparison
+**     with catalogs the bepoch argument will frequently be 1950.0. (In
 **     this context the distinction between Besselian and Julian epoch
 **     is insignificant.)
 **
@@ -8966,7 +8995,7 @@ void iauFk5hip(double r5h[3][3], double s5h[3])
 **  FK5 to Hipparcos rotation and spin.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -8977,8 +9006,8 @@ void iauFk5hip(double r5h[3][3], double s5h[3])
 **  Notes:
 **
 **  1) This function models the FK5 to Hipparcos transformation as a
-**     pure rotation and spin;  zonal errors in the FK5 catalogue are
-**     not taken into account.
+**     pure rotation and spin;  zonal errors in the FK5 catalog are not
+**     taken into account.
 **
 **  2) The r-matrix r5h operates in the sense:
 **
@@ -9010,10 +9039,10 @@ void iauFk5hz(double r5, double d5, double date1, double date2,
 **  - - - - - - - - -
 **
 **  Transform an FK5 (J2000.0) star position into the system of the
-**  Hipparcos catalogue, assuming zero Hipparcos proper motion.
+**  Hipparcos catalog, assuming zero Hipparcos proper motion.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -9054,7 +9083,7 @@ void iauFk5hz(double r5, double d5, double date1, double date2,
 **     are both good compromises between resolution and convenience.
 **
 **  3) The FK5 to Hipparcos transformation is modeled as a pure
-**     rotation and spin;  zonal errors in the FK5 catalogue are not
+**     rotation and spin;  zonal errors in the FK5 catalog are not
 **     taken into account.
 **
 **  4) The position returned by this function is in the Hipparcos
@@ -9090,7 +9119,7 @@ void iauFw2m(double gamb, double phib, double psi, double eps,
 **  Form rotation matrix given the Fukushima-Williams angles.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -9169,7 +9198,7 @@ void iauFw2xy(double gamb, double phib, double psi, double eps,
 **  CIP X,Y given Fukushima-Williams bias-precession-nutation angles.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -9225,7 +9254,7 @@ void iauG2icrs ( double dl, double db, double *dr, double *dd )
 **   i a u G 2 i c r s
 **  - - - - - - - - - -
 **
-**  Transformation from Galactic Coordinates to ICRS.
+**  Transformation from Galactic coordinates to ICRS.
 **
 **  This function is part of the International Astronomical Union's
 **  SOFA (Standards of Fundamental Astronomy) software collection.
@@ -9233,8 +9262,8 @@ void iauG2icrs ( double dl, double db, double *dr, double *dd )
 **  Status:  support function.
 **
 **  Given:
-**     dl     double      galactic longitude (radians)
-**     db     double      galactic latitude (radians)
+**     dl     double      Galactic longitude (radians)
+**     db     double      Galactic latitude (radians)
 **
 **  Returned:
 **     dr     double      ICRS right ascension (radians)
@@ -9262,7 +9291,7 @@ void iauG2icrs ( double dl, double db, double *dr, double *dd )
 **     coordinates with the above factors taken into account.  The
 **     matrix is derived from three angles, namely the ICRS coordinates
 **     of the Galactic pole and the longitude of the ascending node of
-**     the galactic equator on the ICRS equator.  They are given in
+**     the Galactic equator on the ICRS equator.  They are given in
 **     degrees to five decimal places and for canonical purposes are
 **     regarded as exact.  In the Hipparcos Catalogue the matrix
 **     elements are given to 10 decimal places (about 20 microarcsec).
@@ -9431,7 +9460,7 @@ int iauGd2gc ( int n, double elong, double phi, double height,
 **
 **  Given:
 **     n       int        ellipsoid identifier (Note 1)
-**     elong   double     longitude (radians, east +ve)
+**     elong   double     longitude (radians, east +ve, Note 3)
 **     phi     double     latitude (geodetic, radians, Note 3)
 **     height  double     height above ellipsoid (geodetic, Notes 2,3)
 **
@@ -9493,9 +9522,9 @@ int iauGd2gce ( double a, double f, double elong, double phi,
 **  Status:  support function.
 **
 **  Given:
-**     a       double     equatorial radius (Notes 1,4)
+**     a       double     equatorial radius (Notes 1,3,4)
 **     f       double     flattening (Notes 2,4)
-**     elong   double     longitude (radians, east +ve)
+**     elong   double     longitude (radians, east +ve, Note 4)
 **     phi     double     latitude (geodetic, radians, Note 4)
 **     height  double     height above ellipsoid (geodetic, Notes 3,4)
 **
@@ -9551,7 +9580,7 @@ double iauGmst00(double uta, double utb, double tta, double ttb)
 **  resolutions).
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -9627,7 +9656,7 @@ double iauGmst06(double uta, double utb, double tta, double ttb)
 **  Greenwich mean sidereal time (consistent with IAU 2006 precession).
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -9694,7 +9723,7 @@ double iauGmst82(double dj1, double dj2)
 **  Universal Time to Greenwich mean sidereal time (IAU 1982 model).
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -9764,7 +9793,7 @@ double iauGst00a(double uta, double utb, double tta, double ttb)
 **  resolutions).
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -9842,7 +9871,7 @@ double iauGst00b(double uta, double utb)
 **  resolutions but using the truncated nutation model IAU 2000B).
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -9928,7 +9957,7 @@ double iauGst06(double uta, double utb, double tta, double ttb,
 **  Greenwich apparent sidereal time, IAU 2006, given the NPB matrix.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -10001,7 +10030,7 @@ double iauGst06a(double uta, double utb, double tta, double ttb)
 **  resolutions).
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -10070,7 +10099,7 @@ double iauGst94(double uta, double utb)
 **  resolutions).
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -10143,7 +10172,7 @@ void iauH2fk5(double rh, double dh,
 **  Transform Hipparcos star data into the FK5 (J2000.0) system.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -10258,9 +10287,9 @@ void iauHd2ae (double ha, double dec, double phi,
 **
 **  Last revision:   2021 February 24
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    double sh, ch, sd, cd, sp, cp, x, y, z, r, a;
@@ -10289,8 +10318,8 @@ void iauHd2ae (double ha, double dec, double phi,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================
@@ -10437,9 +10466,9 @@ double iauHd2pa (double ha, double dec, double phi)
 **
 **  Last revision:   2017 September 12
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
    double cp, cqsz, sqsz;
@@ -10454,8 +10483,8 @@ double iauHd2pa (double ha, double dec, double phi)
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================
@@ -10562,7 +10591,7 @@ void iauHfk5z(double rh, double dh, double date1, double date2,
 **  zero Hipparcos proper motion.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -10574,7 +10603,7 @@ void iauHfk5z(double rh, double dh, double date1, double date2,
 **  Returned (all FK5, equinox J2000.0, date date1+date2):
 **     r5            double    RA (radians)
 **     d5            double    Dec (radians)
-**     dr5           double    FK5 RA proper motion (rad/year, Note 4)
+**     dr5           double    RA proper motion (rad/year, Note 4)
 **     dd5           double    Dec proper motion (rad/year, Note 4)
 **
 **  Notes:
@@ -10601,7 +10630,7 @@ void iauHfk5z(double rh, double dh, double date1, double date2,
 **  2) The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
 **
 **  3) The FK5 to Hipparcos transformation is modeled as a pure rotation
-**     and spin;  zonal errors in the FK5 catalogue are not taken into
+**     and spin;  zonal errors in the FK5 catalog are not taken into
 **     account.
 **
 **  4) It was the intention that Hipparcos should be a close
@@ -10613,7 +10642,7 @@ void iauHfk5z(double rh, double dh, double date1, double date2,
 **  5) The position returned by this function is in the FK5 J2000.0
 **     reference system but at date date1+date2.
 **
-**  6) See also iauFk52h, iauH2fk5, iauFk5zhz.
+**  6) See also iauFk52h, iauH2fk5, iauFk5hz.
 **
 **  Called:
 **     iauS2c       spherical coordinates to unit vector
@@ -10640,7 +10669,7 @@ void iauIcrs2g ( double dr, double dd, double *dl, double *db )
 **   i a u I c r s 2 g
 **  - - - - - - - - - -
 **
-**  Transformation from ICRS to Galactic Coordinates.
+**  Transformation from ICRS to Galactic coordinates.
 **
 **  This function is part of the International Astronomical Union's
 **  SOFA (Standards of Fundamental Astronomy) software collection.
@@ -10652,8 +10681,8 @@ void iauIcrs2g ( double dr, double dd, double *dl, double *db )
 **     dd     double      ICRS declination (radians)
 **
 **  Returned:
-**     dl     double      galactic longitude (radians)
-**     db     double      galactic latitude (radians)
+**     dl     double      Galactic longitude (radians)
+**     db     double      Galactic latitude (radians)
 **
 **  Notes:
 **
@@ -10677,7 +10706,7 @@ void iauIcrs2g ( double dr, double dd, double *dl, double *db )
 **     coordinates with the above factors taken into account.  The
 **     matrix is derived from three angles, namely the ICRS coordinates
 **     of the Galactic pole and the longitude of the ascending node of
-**     the galactic equator on the ICRS equator.  They are given in
+**     the Galactic equator on the ICRS equator.  They are given in
 **     degrees to five decimal places and for canonical purposes are
 **     regarded as exact.  In the Hipparcos Catalogue the matrix
 **     elements are given to 10 decimal places (about 20 microarcsec).
@@ -10713,7 +10742,7 @@ void iauIr(double r[3][3])
 **  Initialize an r-matrix to the identity matrix.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -10734,7 +10763,7 @@ int iauJd2cal(double dj1, double dj2,
 **  Julian Date to Gregorian year, month, day, and fraction of a day.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -10800,7 +10829,7 @@ int iauJdcalf(int ndp, double dj1, double dj2, int iymdf[4])
 **  for formatting messages:  rounded to a specified precision.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -10816,7 +10845,7 @@ int iauJdcalf(int ndp, double dj1, double dj2, int iymdf[4])
 **               int      status:
 **                          -1 = date out of range
 **                           0 = OK
-**                          +1 = NDP not 0-9 (interpreted as 0)
+**                          +1 = ndp not 0-9 (interpreted as 0)
 **
 **  Notes:
 **
@@ -11191,9 +11220,8 @@ void iauLteqec(double epj, double dr, double dd, double *dl, double *db)
 **   i a u L t e q e c
 **  - - - - - - - - - -
 **
-**  Transformation from ICRS equatorial coordinates to ecliptic
-**  coordinates (mean equinox and ecliptic of date) using a long-term
-**  precession model.
+**  Transformation from ICRS RA,Dec to ecliptic coordinates (mean equinox
+**  and ecliptic of date), using a long-term precession model.
 **
 **  This function is part of the International Astronomical Union's
 **  SOFA (Standards of Fundamental Astronomy) software collection.
@@ -11272,7 +11300,7 @@ void iauLtp(double epj, double rp[3][3])
 **
 **     where P_J2000 is a vector with respect to the J2000.0 mean
 **     equator and equinox and P_date is the same vector with respect to
-**     the equator and equinox of epoch epj.
+**     the mean equator and equinox of epoch epj.
 **
 **  2) The Vondrak et al. (2011, 2012) 400 millennia precession model
 **     agrees with the IAU 2006 precession at J2000.0 and stays within
@@ -11318,7 +11346,7 @@ void iauLtpb(double epj, double rpb[3][3])
 **     epj     double         Julian epoch (TT)
 **
 **  Returned:
-**     rpb     double[3][3]   precession-bias matrix, J2000.0 to date
+**     rpb     double[3][3]   precession+bias matrix, J2000.0 to date
 **
 **  Notes:
 **
@@ -11454,7 +11482,7 @@ void iauMoon98 ( double date1, double date2, double pv[2][3] )
 **  Approximate geocentric position and velocity of the Moon.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -11465,7 +11493,7 @@ void iauMoon98 ( double date1, double date2, double pv[2][3] )
 **     date2  double         TT date part B (Notes 1,4)
 **
 **  Returned:
-**     pv     double[2][3]   Moon p,v, GCRS (AU, AU/d, Note 5)
+**     pv     double[2][3]   Moon p,v, GCRS (au, au/d, Note 5)
 **
 **  Notes:
 **
@@ -11556,7 +11584,7 @@ void iauNum00a(double date1, double date2, double rmatn[3][3])
 **  Form the matrix of nutation for a given date, IAU 2000A model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -11617,7 +11645,7 @@ void iauNum00b(double date1, double date2, double rmatn[3][3])
 **  Form the matrix of nutation for a given date, IAU 2000B model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -11678,7 +11706,7 @@ void iauNum06a(double date1, double date2, double rmatn[3][3])
 **  Form the matrix of nutation for a given date, IAU 2006/2000A model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -11738,7 +11766,7 @@ void iauNumat(double epsa, double dpsi, double deps, double rmatn[3][3])
 **  Form the matrix of nutation.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -11789,7 +11817,7 @@ void iauNut00a(double date1, double date2, double *dpsi, double *deps)
 **  with free core nutation omitted).
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -11945,7 +11973,7 @@ void iauNut00b(double date1, double date2, double *dpsi, double *deps)
 **  Nutation, IAU 2000B model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -12151,7 +12179,7 @@ void iauNut80(double date1, double date2, double *dpsi, double *deps)
 **  Nutation, IAU 1980 model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -12208,7 +12236,7 @@ void iauNutm80(double date1, double date2, double rmatn[3][3])
 **  Form the matrix of nutation for a given date, IAU 1980 model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -12262,7 +12290,7 @@ double iauObl06(double date1, double date2)
 **  Mean obliquity of the ecliptic, IAU 2006 precession model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -12313,7 +12341,7 @@ double iauObl80(double date1, double date2)
 **  Mean obliquity of the ecliptic, IAU 1980 model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -12371,7 +12399,7 @@ void iauP06e(double date1, double date2,
 **  Precession angles, IAU 2006, equinox based.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical models.
 **
@@ -12502,7 +12530,7 @@ void iauP2pv(double p[3], double pv[2][3])
 **  Extend a p-vector to a pv-vector by appending a zero velocity.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -12529,7 +12557,7 @@ void iauP2s(double p[3], double *theta, double *phi, double *r)
 **  P-vector to spherical polar coordinates.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -12564,7 +12592,7 @@ double iauPap(double a[3], double b[3])
 **  Position-angle from two p-vectors.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -12610,7 +12638,7 @@ double iauPas(double al, double ap, double bl, double bp)
 **  Position-angle from spherical coordinates.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -12648,7 +12676,7 @@ void iauPb06(double date1, double date2,
 **  bias (the offset between ICRS and mean J2000.0) is included.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -12717,7 +12745,7 @@ double iauPdp(double a[3], double b[3])
 **  p-vector inner (=scalar=dot) product.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -12742,7 +12770,7 @@ void iauPfw06(double date1, double date2,
 **  Precession angles, IAU 2006 (Fukushima-Williams 4-angle formulation).
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -12820,12 +12848,12 @@ int iauPlan94(double date1, double date2, int np, double pv[2][3])
 **   i a u P l a n 9 4
 **  - - - - - - - - - -
 **
-**  Approximate heliocentric position and velocity of a nominated major
+**  Approximate heliocentric position and velocity of a nominated
 **  planet:  Mercury, Venus, EMB, Mars, Jupiter, Saturn, Uranus or
 **  Neptune (but not the Earth itself).
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -12872,9 +12900,9 @@ int iauPlan94(double date1, double date2, int np, double pv[2][3])
 **  2) If an np value outside the range 1-8 is supplied, an error status
 **     (function value -1) is returned and the pv vector set to zeroes.
 **
-**  3) For np=3 the result is for the Earth-Moon Barycenter.  To obtain
-**     the heliocentric position and velocity of the Earth, use instead
-**     the SOFA function iauEpv00.
+**  3) For np=3 the result is for the Earth-Moon barycenter (EMB).  To
+**     obtain the heliocentric position and velocity of the Earth, use
+**     instead the SOFA function iauEpv00.
 **
 **  4) On successful return, the array pv contains the following:
 **
@@ -12925,8 +12953,8 @@ int iauPlan94(double date1, double date2, int np, double pv[2][3])
 **        Neptune         158000              14.4
 **
 **     Comparisons against DE200 over the interval 1800-2100 gave the
-**     following maximum absolute differences.  (The results using
-**     DE406 were essentially the same.)
+**     following maximum absolute differences (the results using
+**     DE406 were essentially the same):
 **
 **                   L (arcsec)   B (arcsec)     R (km)   Rdot (m/s)
 **
@@ -12991,7 +13019,7 @@ double iauPm(double p[3])
 **  Modulus of p-vector.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -13015,7 +13043,7 @@ void iauPmat00(double date1, double date2, double rbp[3][3])
 **  date, IAU 2000 model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -13074,7 +13102,7 @@ void iauPmat06(double date1, double date2, double rbp[3][3])
 **  date, IAU 2006 model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -13137,7 +13165,7 @@ void iauPmat76(double date1, double date2, double rmatp[3][3])
 **  Precession matrix from J2000.0 to a specified date, IAU 1976 model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -13212,7 +13240,7 @@ void iauPmp(double a[3], double b[3], double amb[3])
 **  P-vector subtraction.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -13305,37 +13333,37 @@ int iauPmsafe(double ra1, double dec1, double pmr1, double pmd1,
 **  Status:  support function.
 **
 **  Given:
-**     ra1    double      right ascension (radians), before
-**     dec1   double      declination (radians), before
-**     pmr1   double      RA proper motion (radians/year), before
-**     pmd1   double      Dec proper motion (radians/year), before
-**     px1    double      parallax (arcseconds), before
-**     rv1    double      radial velocity (km/s, +ve = receding), before
-**     ep1a   double      "before" epoch, part A (Note 1)
-**     ep1b   double      "before" epoch, part B (Note 1)
-**     ep2a   double      "after" epoch, part A (Note 1)
-**     ep2b   double      "after" epoch, part B (Note 1)
+**     ra1    double     right ascension (radians), before
+**     dec1   double     declination (radians), before
+**     pmr1   double     RA proper motion (radians/year), before
+**     pmd1   double     Dec proper motion (radians/year), before
+**     px1    double     parallax (arcseconds), before
+**     rv1    double     radial velocity (km/s, +ve = receding), before
+**     ep1a   double     "before" epoch, part A (Note 1)
+**     ep1b   double     "before" epoch, part B (Note 1)
+**     ep2a   double     "after" epoch, part A (Note 1)
+**     ep2b   double     "after" epoch, part B (Note 1)
 **
 **  Returned:
-**     ra2    double      right ascension (radians), after
-**     dec2   double      declination (radians), after
-**     pmr2   double      RA proper motion (radians/year), after
-**     pmd2   double      Dec proper motion (radians/year), after
-**     px2    double      parallax (arcseconds), after
-**     rv2    double      radial velocity (km/s, +ve = receding), after
+**     ra2    double     right ascension (radians), after
+**     dec2   double     declination (radians), after
+**     pmr2   double     RA proper motion (radians/year), after
+**     pmd2   double     Dec proper motion (radians/year), after
+**     px2    double     parallax (arcseconds), after
+**     rv2    double     radial velocity (km/s, +ve = receding), after
 **
 **  Returned (function value):
-**            int         status:
-**                         -1 = system error (should not occur)
-**                          0 = no warnings or errors
-**                          1 = distance overridden (Note 6)
-**                          2 = excessive velocity (Note 7)
-**                          4 = solution didn't converge (Note 8)
-**                       else = binary logical OR of the above warnings
+**            int        status:
+**                          -1 = system error (should not occur)
+**                           0 = no warnings or errors
+**                           1 = distance overridden (Note 6)
+**                           2 = excessive velocity (Note 7)
+**                           4 = solution didn't converge (Note 8)
+**                        else = binary logical OR of the above warnings
 **
 **  Notes:
 **
-**  1) The starting and ending TDB epochs ep1a+ep1b and ep2a+ep2b are
+**  1) The starting and ending TDB dates ep1a+ep1b and ep2a+ep2b are
 **     Julian Dates, apportioned in any convenient way between the two
 **     parts (A and B).  For example, JD(TDB)=2450123.7 could be
 **     expressed in any of these ways, among others:
@@ -13409,7 +13437,7 @@ void iauPn(double p[3], double *r, double u[3])
 **  Convert a p-vector into modulus and unit vector.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -13451,7 +13479,7 @@ void iauPn00(double date1, double date2, double dpsi, double deps,
 **  use indirectly.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -13555,7 +13583,7 @@ void iauPn00a(double date1, double date2,
 **  use indirectly.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -13659,7 +13687,7 @@ void iauPn00b(double date1, double date2,
 **  use indirectly.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -13763,7 +13791,7 @@ void iauPn06(double date1, double date2, double dpsi, double deps,
 **  indirectly.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -13865,7 +13893,7 @@ void iauPn06a(double date1, double date2,
 **  indirectly.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -13955,7 +13983,7 @@ void iauPnm00a(double date1, double date2, double rbpn[3][3])
 **  frame bias), equinox based, IAU 2000A model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -14017,7 +14045,7 @@ void iauPnm00b(double date1, double date2, double rbpn[3][3])
 **  frame bias), equinox-based, IAU 2000B model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -14080,7 +14108,7 @@ void iauPnm06a(double date1, double date2, double rbpn[3][3])
 **  nutation models.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -14139,7 +14167,7 @@ void iauPnm80(double date1, double date2, double rmatpn[3][3])
 **  precession model, IAU 1980 nutation model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -14199,7 +14227,7 @@ void iauPom00(double xp, double yp, double sp, double rpom[3][3])
 **  Form the matrix of polar motion for a given date, IAU 2000.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -14254,7 +14282,7 @@ void iauPpp(double a[3], double b[3], double apb[3])
 **  P-vector addition.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -14282,7 +14310,7 @@ void iauPpsp(double a[3], double s, double b[3], double apsb[3])
 **  P-vector plus scaled p-vector.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -14315,7 +14343,7 @@ void iauPr00(double date1, double date2, double *dpsipr, double *depspr)
 **  (part of MHB2000).
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -14394,7 +14422,7 @@ void iauPrec76(double date01, double date02, double date11, double date12,
 **  FK5 catalog).
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -14464,7 +14492,7 @@ void iauPv2p(double pv[2][3], double p[3])
 **  Discard velocity component of a pv-vector.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -14492,7 +14520,7 @@ void iauPv2s(double pv[2][3],
 **  Convert position/velocity from Cartesian to spherical coordinates.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -14533,7 +14561,7 @@ void iauPvdpv(double a[2][3], double b[2][3], double adb[2])
 **  Inner (=scalar=dot) product of two pv-vectors.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -14567,7 +14595,7 @@ void iauPvm(double pv[2][3], double *r, double *s)
 **  Modulus of pv-vector.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -14594,7 +14622,7 @@ void iauPvmpv(double a[2][3], double b[2][3], double amb[2][3])
 **  Subtract one pv-vector from another.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -14625,7 +14653,7 @@ void iauPvppv(double a[2][3], double b[2][3], double apb[2][3])
 **  Add one pv-vector to another.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -14657,7 +14685,7 @@ int iauPvstar(double pv[2][3], double *ra, double *dec,
 **  Convert star position+velocity vector to catalog coordinates.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -14828,7 +14856,7 @@ void iauPvu(double dt, double pv[2][3], double upv[2][3])
 **  Update a pv-vector.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -14865,7 +14893,7 @@ void iauPvup(double dt, double pv[2][3], double p[3])
 **  Update a pv-vector, discarding the velocity component.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -14896,7 +14924,7 @@ void iauPvxpv(double a[2][3], double b[2][3], double axb[2][3])
 **  Outer (=vector=cross) product of two pv-vectors.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -14935,7 +14963,7 @@ void iauPxp(double a[3], double b[3], double axb[3])
 **  p-vector outer (=vector=cross) product.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -15121,7 +15149,7 @@ void iauRm2v(double r[3][3], double w[3])
 **  Express an r-matrix as an r-vector.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -15159,7 +15187,7 @@ void iauRv2m(double w[3], double r[3][3])
 **  Form the r-matrix corresponding to a given r-vector.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -15194,7 +15222,7 @@ void iauRx(double phi, double r[3][3])
 **  Rotate an r-matrix about the x-axis.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -15231,7 +15259,7 @@ void iauRxp(double r[3][3], double p[3], double rp[3])
 **  Multiply a p-vector by an r-matrix.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -15261,7 +15289,7 @@ void iauRxpv(double r[3][3], double pv[2][3], double rpv[2][3])
 **  Multiply a pv-vector by an r-matrix.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -15297,7 +15325,7 @@ void iauRxr(double a[3][3], double b[3][3], double atb[3][3])
 **  Multiply two r-matrices.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -15328,7 +15356,7 @@ void iauRy(double theta, double r[3][3])
 **  Rotate an r-matrix about the y-axis.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -15365,7 +15393,7 @@ void iauRz(double psi, double r[3][3])
 **  Rotate an r-matrix about the z-axis.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -15404,7 +15432,7 @@ double iauS00(double date1, double date2, double x, double y)
 **  coordinates.  Compatible with IAU 2000A precession-nutation.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -15489,7 +15517,7 @@ double iauS00a(double date1, double date2)
 **  precession-nutation model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -15567,7 +15595,7 @@ double iauS00b(double date1, double date2)
 **  precession-nutation model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -15645,7 +15673,7 @@ double iauS06(double date1, double date2, double x, double y)
 **  coordinates.  Compatible with IAU 2006/2000A precession-nutation.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -15727,7 +15755,7 @@ double iauS06a(double date1, double date2)
 **  precession and IAU 2000A nutation models.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -15805,7 +15833,7 @@ void iauS2c(double theta, double phi, double c[3])
 **  Convert spherical coordinates to Cartesian.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -15829,7 +15857,7 @@ void iauS2p(double theta, double phi, double r, double p[3])
 **  Convert spherical polar coordinates to p-vector.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -15860,7 +15888,7 @@ void iauS2pv(double theta, double phi, double r,
 **  Convert position/velocity from spherical to Cartesian coordinates.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -15888,7 +15916,7 @@ void iauS2xpv(double s1, double s2, double pv[2][3], double spv[2][3])
 **  Multiply a pv-vector by two scalars.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -15919,7 +15947,7 @@ double iauSepp(double a[3], double b[3])
 **  Angular separation between two p-vectors.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -15958,7 +15986,7 @@ double iauSeps(double al, double ap, double bl, double bp)
 **  Angular separation between two sets of spherical coordinates.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -15989,7 +16017,7 @@ double iauSp00(double date1, double date2)
 **  on the equator of the Celestial Intermediate Pole.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -16048,7 +16076,7 @@ int iauStarpm(double ra1, double dec1,
 **  Star proper motion:  update star catalog data for space motion.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -16088,19 +16116,19 @@ int iauStarpm(double ra1, double dec1,
 **     parts (A and B).  For example, JD(TDB)=2450123.7 could be
 **     expressed in any of these ways, among others:
 **
-**             epna          epnb
+**            epNa            epNb
 **
 **         2450123.7           0.0       (JD method)
 **         2451545.0       -1421.3       (J2000 method)
 **         2400000.5       50123.2       (MJD method)
 **         2450123.5           0.2       (date & time method)
 **
-**     The JD method is the most natural and convenient to use in
-**     cases where the loss of several decimal digits of resolution
-**     is acceptable.  The J2000 method is best matched to the way
-**     the argument is handled internally and will deliver the
-**     optimum resolution.  The MJD method and the date & time methods
-**     are both good compromises between resolution and convenience.
+**     The JD method is the most natural and convenient to use in cases
+**     where the loss of several decimal digits of resolution is
+**     acceptable.  The J2000 method is best matched to the way the
+**     argument is handled internally and will deliver the optimum
+**     resolution.  The MJD method and the date & time methods are both
+**     good compromises between resolution and convenience.
 **
 **  2) In accordance with normal star-catalog conventions, the object's
 **     right ascension and declination are freed from the effects of
@@ -16161,7 +16189,7 @@ int iauStarpv(double ra, double dec,
 **  Convert star catalog coordinates to position+velocity vector.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -16281,7 +16309,7 @@ void iauSxp(double s, double p[3], double sp[3])
 **  Multiply a p-vector by a scalar.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -16308,7 +16336,7 @@ void iauSxpv(double s, double pv[2][3], double spv[2][3])
 **  Multiply a pv-vector by a scalar.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -17223,7 +17251,7 @@ void iauTr(double r[3][3], double rt[3][3])
 **  Transpose an r-matrix.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -17252,7 +17280,7 @@ void iauTrxp(double r[3][3], double p[3], double trp[3])
 **  Multiply a p-vector by the transpose of an r-matrix.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -17283,7 +17311,7 @@ void iauTrxpv(double r[3][3], double pv[2][3], double trpv[2][3])
 **  Multiply a pv-vector by the transpose of an r-matrix.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -17798,7 +17826,7 @@ void iauXy06(double date1, double date2, double *x, double *y)
 **  on IAU 2006 precession and IAU 2000A nutation.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  canonical model.
 **
@@ -17894,7 +17922,7 @@ void iauXys00a(double date1, double date2,
 **  precession-nutation model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -17962,7 +17990,7 @@ void iauXys00b(double date1, double date2,
 **  precession-nutation model.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -18030,7 +18058,7 @@ void iauXys06a(double date1, double date2,
 **  precession and IAU 2000A nutation models.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  support function.
 **
@@ -18095,7 +18123,7 @@ void iauZp(double p[3])
 **  Zero a p-vector.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -18115,7 +18143,7 @@ void iauZpv(double pv[2][3])
 **  Zero a pv-vector.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -18138,7 +18166,7 @@ void iauZr(double r[3][3])
 **  Initialize an r-matrix to the null matrix.
 **
 **  This function is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Status:  vector/matrix support function.
 **
@@ -18147,7 +18175,7 @@ void iauZr(double r[3][3])
 **
 */
 
-copyr.lis                                                    2021 April 12
+copyr.lis                                                    2023 April 17
 
 
 COPYRIGHT NOTICE
@@ -18165,8 +18193,8 @@ second updates with no need to download new SOFA code.
 
 *+----------------------------------------------------------------------
 *
-*  Copyright (C) 2021
-*  Standards Of Fundamental Astronomy Board
+*  Copyright (C) 2023
+*  Standards of Fundamental Astronomy Board
 *  of the International Astronomical Union.
 *
 *  =====================
@@ -18325,13 +18353,13 @@ file sofam.h.
 **  Prototype function declarations for SOFA library.
 **
 **  This file is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
-**  This revision:   2021 April 18
+**  This revision:   2023 April 16
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 
 #include "math.h"
@@ -18648,7 +18676,6 @@ int iauStarpv(double ra, double dec,
               double pv[2][3]);
 
 /* Astronomy/StarCatalogs */
-
 void iauFk425(double r1950, double d1950,
               double dr1950, double dd1950,
               double p1950, double v1950,
@@ -18849,8 +18876,8 @@ void iauSxpv(double s, double pv[2][3], double spv[2][3]);
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================
@@ -18954,7 +18981,7 @@ void iauSxpv(double s, double pv[2][3], double spv[2][3]);
 **  Macros used by SOFA library.
 **
 **  This file is part of the International Astronomical Union's
-**  SOFA (Standards Of Fundamental Astronomy) software collection.
+**  SOFA (Standards of Fundamental Astronomy) software collection.
 **
 **  Please note that the constants defined below are to be used only in
 **  the context of the SOFA software, and have no other official IAU
@@ -18962,9 +18989,9 @@ void iauSxpv(double s, double pv[2][3], double spv[2][3]);
 **
 **  This revision:   2021 February 24
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 
 /* Pi */
@@ -19072,8 +19099,8 @@ void iauSxpv(double s, double pv[2][3], double spv[2][3]);
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================
@@ -19166,7 +19193,7 @@ void iauSxpv(double s, double pv[2][3], double spv[2][3]);
 **
 **--------------------------------------------------------------------*/
 
-board.lis                                                  2021 April 16
+board.lis                                                    2023 May 31
 
 
 
@@ -19176,7 +19203,7 @@ IAU STANDARDS OF FUNDAMENTAL ASTRONOMY BOARD
 Current Membership
 
    John Bangert - United States Naval Observatory, retired
-   Steven Bell - Her Majesty's Nautical Almanac Office (HMNAO)
+   Steven Bell - His Majesty's Nautical Almanac Office (HMNAO)
    Nicole Capitaine - Paris Observatory
    Maria Davis - United States Naval Observatory (IERS)
    Mickael Gastineau - Paris Observatory, IMCCE
@@ -19188,7 +19215,7 @@ Current Membership
    Scott Ransom - National Radio Astronomy Observatory
    Nick Stamatakos - United States Naval Observatory
    Patrick Wallace - RAL Space, retired
-   Toni Wilmot -  Her Majesty's Nautical Almanac Office (Trainee)
+   Toni Wilmot -  His Majesty's Nautical Almanac Office
 
 
 Past Members

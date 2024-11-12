@@ -1,12 +1,12 @@
 function [yNext,didConverge]=semiImplicitStrongRungeKStep(y,t,a,B,deltaT,algorithm,aCur,BCur,useNewton,maxIter,theta,RelTol,AbsTol,p,ItoAlg)
 %%SEMIIMPLICITSTRINGRUNGEKSTEP Perform a single step of a semi-implicit
-%           strong stochastic Runge-Kutta method under Itô calculus. This
+%           strong stochastic Runge-Kutta method under Ito calculus. This
 %           integrates a d-dimensional stochastic differential equation of
 %           the form
 %           dy=a(y,t)*dt+B(y,t)*dW
 %           where dW is the differential of an m-dimensional Wiener
 %           process. As noted in Chapter 9.8 of [1], fully implicit strong
-%           Itô-Taylor expansions are unstable. Thus, fully
+%           Ito-Taylor expansions are unstable. Thus, fully
 %           implicit strong stochastic Runge Kutta methods would also be
 %           unstable. Thus, semi-implicit techniques are typically used.
 %           Strong methods converge to an optimal path as the stepsize

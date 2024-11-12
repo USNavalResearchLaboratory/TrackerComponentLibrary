@@ -16,7 +16,7 @@ function xPred=fTransPolarLin2D(T,x,qTheta)
 %           acceleration. If a speed derivative is not given (is assumed
 %           zero), then x is 4XN.
 %   qTheta  If the transition function from a second-order weak
-%           Itô-Taylor expansion is desired, then qTheta must be provided.
+%           Ito-Taylor expansion is desired, then qTheta must be provided.
 %           qTheta is the power spectral density of the process noise
 %           corrupting the angular component of the state, having units of
 %           radians^2/s. If qTheta is omitted, then the transition function
@@ -27,7 +27,7 @@ function xPred=fTransPolarLin2D(T,x,qTheta)
 %               forward a duration of T in time using the method depending
 %               on whether qTheta is provided.
 %
-%The solution using a second-order weak Itô-Taylor expansion is taken from
+%The solution using a second-order weak Ito-Taylor expansion is taken from
 %[1].
 %
 %The discretized model is inspired from a discussion in [2], where a

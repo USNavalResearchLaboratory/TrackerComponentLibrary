@@ -2,8 +2,8 @@ function val=numInvolutions(n)
 %%NUMINVOLUTIONS Determine the number of involutions of length n. An
 %                involution is a permution of items 1:n such that the
 %                permutation is its own inverse. The number of involutions
-%                also equals the number of possible Young tableau having n
-%                cells.
+%                also equals the number of possible standard Young tableau
+%                having n cells.
 %
 %INPUTS: n A positive integer >=0.
 %

@@ -1,8 +1,8 @@
 function [A,availableNodes] = genBianconiBarabasiGraph(finalN,initN,addedEdgesPerNode,fitness,initA,omitSelfLoops,omitMultiLoops,delProb,isDirected,maxInDegree,maxOutDegree)
 %%GENBIANCONIBARABASIGRAPH Generates a random instance of the
-%                          Bianconi-Barabási model using the linearized
+%                          Bianconi-Barabasi model using the linearized
 %                          chord diagram assumptions given in [1]. Note the
-%                          Barabási-Albert model of [2] can be generated
+%                          Barabasi-Albert model of [2] can be generated
 %                          as a special case of this function.
 %
 %INPUT:
@@ -18,7 +18,7 @@ function [A,availableNodes] = genBianconiBarabasiGraph(finalN,initN,addedEdgesPe
 % fitness: An optional length finalN vector indicating relative fitness
 %          between the nodes in terms of favorability for receiving edges
 %          from new nodes. If omitted or an empty vector is given, this
-%          is a vector of ones, resulting in the Barabási-Albert model.
+%          is a vector of ones, resulting in the Barabasi-Albert model.
 % initA: An optional initN-by-initN weighted adjacency matrix which is used
 %        to initialize edges between the first initN nodes. If omitted, the
 %        implementation is equivalent to passing 2*eye(initN) if
@@ -27,12 +27,12 @@ function [A,availableNodes] = genBianconiBarabasiGraph(finalN,initN,addedEdgesPe
 %        used.
 % omitSelfLoops: A boolean which, if true, will cause the generated graph
 %                to ignore self-loops. The default if omitted or empty is
-%                false, consistent with the original Bianconi-Barabási
+%                false, consistent with the original Bianconi-Barabasi
 %                model. Note this does not modify initA.
 % omitMultiLoops: A boolean which if true, will prevent multiple loops the
 %                 undirected case (this is impossible in the directed
 %                 case). The default if omitted or empty is false,
-%                 consistent with the original Bianconi-Barabási model.
+%                 consistent with the original Bianconi-Barabasi model.
 % delProb: A number between [0,1] determining the frequency with which a
 %          random node is deleted from the network on average. The default
 %          if omitted or empty is to never delete nodes.
@@ -66,7 +66,7 @@ function [A,availableNodes] = genBianconiBarabasiGraph(finalN,initN,addedEdgesPe
 %      between two distinct nodes split that weight between the (i,j) and
 %      (j,i) elements of A, each gaining a weight of 1.
 %
-%EXAMPLE 1: Generate a Barabási-Albert model using the default fitness and
+%EXAMPLE 1: Generate a Barabasi-Albert model using the default fitness and
 %           initialized graph.
 % finalN = 30;
 % initN = 3;
@@ -75,9 +75,9 @@ function [A,availableNodes] = genBianconiBarabasiGraph(finalN,initN,addedEdgesPe
 % g = graph(A);
 % plot(g,"NodeCData",degree(g))
 % colorbar
-% title("Degree of Nodes in Bianconi-Barabási Model")
+% title("Degree of Nodes in Bianconi-Barabasi Model")
 %
-%EXAMPLE 2: Generate a Bianconi-Barabási model using a specified fitness
+%EXAMPLE 2: Generate a Bianconi-Barabasi model using a specified fitness
 %           vector which only allows connections to odd nodes.
 % finalN = 30;
 % initN = 3;
@@ -88,9 +88,9 @@ function [A,availableNodes] = genBianconiBarabasiGraph(finalN,initN,addedEdgesPe
 % g = graph(A);
 % plot(g,"NodeCData",degree(g))
 % colorbar
-% title("Degree of Nodes in Bianconi-Barabási Model")
+% title("Degree of Nodes in Bianconi-Barabasi Model")
 %
-%EXAMPLE 3: Generate a Bianconi-Barabási model using a specified fitness
+%EXAMPLE 3: Generate a Bianconi-Barabasi model using a specified fitness
 %           vector which only allows connections to odd nodes and a
 %           complete graph on the set of initialized nodes.
 % finalN = 30;
@@ -108,7 +108,7 @@ function [A,availableNodes] = genBianconiBarabasiGraph(finalN,initN,addedEdgesPe
 % figure(2)
 % plot(g,"NodeCData",degree(g))
 % colorbar
-% title("Degree of Nodes in Bianconi-Barabási Model")
+% title("Degree of Nodes in Bianconi-Barabasi Model")
 %
 %EXAMPLE 4: Similar to example 3, but this time including a nonzero
 %           probability of deleting nodes. Note that modifying the number
@@ -132,7 +132,7 @@ function [A,availableNodes] = genBianconiBarabasiGraph(finalN,initN,addedEdgesPe
 % markerscaling = 2e2;
 % plot(g,"NodeCData",degree(g),"Layout","force")
 % colorbar
-% title("Degree of Nodes in Bianconi-Barabási Model")
+% title("Degree of Nodes in Bianconi-Barabasi Model")
 % figure(3)
 % [GC,GV] = groupcounts(degree(g));
 % semilogy(GV,GC,'bo',"MarkerFaceColor",'b')
@@ -140,7 +140,7 @@ function [A,availableNodes] = genBianconiBarabasiGraph(finalN,initN,addedEdgesPe
 % ylabel("# of Nodes (log scale)")
 % title("Number of Nodes with a Given Degree")
 %
-%EXAMPLE 5: An instance of the restricted, directed Bianconi-Barabási model
+%EXAMPLE 5: An instance of the restricted, directed Bianconi-Barabasi model
 %           is generated using an initial graph of 3 nodes which have
 %           self-loops and 2 edges each. The remaining nodes are added
 %           without self-loops and with a maximum of 1 outgoing edge. A
@@ -164,7 +164,7 @@ function [A,availableNodes] = genBianconiBarabasiGraph(finalN,initN,addedEdgesPe
 % figure(2)
 % plot(g,"NodeCData",indegree(g))
 % colorbar
-% title("Indegree of Nodes in Restricted, Directed Bianconi-Barabási Model")
+% title("Indegree of Nodes in Restricted, Directed Bianconi-Barabasi Model")
 %
 %REFERENCES:
 %[1] G. Bianconi and A.-L Barabasi, "Competition and multiscaling in

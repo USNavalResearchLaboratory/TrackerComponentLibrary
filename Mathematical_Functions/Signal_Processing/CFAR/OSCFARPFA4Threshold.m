@@ -1,8 +1,8 @@
 function PFA=OSCFARPFA4Threshold(T,N,k)
 %%OSCFARPFA4THRESHOLD Determine the probability of false alarm in uniform
 %           clutter when using the order-statistics constant false alarm
-%           (OS-CFAR) detector with a simple exponential noise model as used
-%           in [1].
+%           (OS-CFAR) detector with a simple exponential noise model as
+%           used in [1].
 %
 %INPUTS: T The positive threshold to use for the CFAR detector. A matrix
 %          of values can be passed in which case the output is a matrix

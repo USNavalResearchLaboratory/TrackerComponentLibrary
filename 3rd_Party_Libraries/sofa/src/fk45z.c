@@ -57,7 +57,7 @@ void iauFk45z(double r1950, double d1950, double bepoch,
 **     in past astrometry, and the undesirability of a discontinuity in
 **     the algorithm, the decision has been made in this SOFA algorithm
 **     to include the effects of differential E-terms on the proper
-**     motions for all stars, whether polar or not.  At epoch 2000.0,
+**     motions for all stars, whether polar or not.  At epoch J2000.0,
 **     and measuring "on the sky" rather than in terms of RA change, the
 **     errors resulting from this simplification are less than
 **     1 milliarcsecond in position and 1 milliarcsecond per century in
@@ -84,11 +84,11 @@ void iauFk45z(double r1950, double d1950, double bepoch,
 **     iauPvu       update a pv-vector
 **     iauS2c       spherical to p-vector
 **
-**  This revision:   2021 February 24
+**  This revision:   2023 March 4
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
 /* Radians per year to arcsec per century */
@@ -156,8 +156,8 @@ void iauFk45z(double r1950, double d1950, double bepoch,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

@@ -5,7 +5,7 @@ classdef NormInvGaussD
 %Implemented methods are: mean, cov, PDF, rand
 %
 %REFERENCES:
-%[1] T. A. Øigård, A. Hanssen, and R. E. Hansen, "The multivariate normal
+%[1] T. A. Oigard, A. Hanssen, and R. E. Hansen, "The multivariate normal
 %    inverse Gaussian distribution: EM-estimation and analysis of synthetic
 %    aperture sonar data," in Proceedings of the 12th European Signal
 %    Processing Conference, Vienna, Austria, 6-10 Sep. 2004, pp. 1433-1436.
@@ -32,10 +32,10 @@ methods(Static)
     %The mean of the distribution is Equation 3 in [1].
     %
     %REFERENCES:
-    %[1] T. A. Øigård and A. Hanssen, "The multivariate normal inverse
+    %[1] T. A. Oigard and A. Hanssen, "The multivariate normal inverse
     %    Gaussian heavy-tailed distribution: Simulation and estimation,"
     %    in Proceedings of the IEEE International Conference on Acoustics,
-    %    Speech, and Signal Processing, vol. 2, Orlando¡ FL, 13-17 May
+    %    Speech, and Signal Processing, vol. 2, Orlando FL, 13-17 May
     %    2002, pp. 1489-1492.
     %
     %June 2016 David F. Crouse, Naval Research Laboratory, Washington D.C. 
@@ -61,10 +61,10 @@ methods(Static)
     %OUTPUTS: val The numDimXnumDim covariance matrix of the distribution.
     %
     %REFERENCES:
-    %[1] T. A. Øigård and A. Hanssen, "The multivariate normal inverse
+    %[1] T. A. Oigard and A. Hanssen, "The multivariate normal inverse
     %    Gaussian heavy-tailed distribution: Simulation and estimation,"
     %    in Proceedings of the IEEE International Conference on Acoustics,
-    %    Speech, and Signal Processing, vol. 2, Orlando¡ FL, 13-17 May
+    %    Speech, and Signal Processing, vol. 2, Orlando FL, 13-17 May
     %    2002, pp. 1489-1492.
     %
     %June 2016 David F. Crouse, Naval Research Laboratory, Washington D.C. 
@@ -97,10 +97,10 @@ methods(Static)
     %The PDF is given in Equation 1 in [1].
     %   
     %REFERENCES:
-    %[1] T. A. Øigård and A. Hanssen, "The multivariate normal inverse
+    %[1] T. A. Oigard and A. Hanssen, "The multivariate normal inverse
     %    Gaussian heavy-tailed distribution: Simulation and estimation,"
     %    in Proceedings of the IEEE International Conference on Acoustics,
-    %    Speech, and Signal Processing, vol. 2, Orlando¡ FL, 13-17 May
+    %    Speech, and Signal Processing, vol. 2, Orlando FL, 13-17 May
     %    2002, pp. 1489-1492.
     %
     %June 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.  
@@ -190,7 +190,7 @@ methods(Static)
     % view(45,45)
     %
     %REFERENCES:
-    %[1] T. A. Øigård, A. Hanssen, and R. E. Hansen, "The multivariate
+    %[1] T. A. Oigard, A. Hanssen, and R. E. Hansen, "The multivariate
     %    normal inverse Gaussian distribution: EM-estimation and analysis
     %    of synthetic aperture sonar data," in Proceedings of the XII.
     %    European Signal Processing Conference, Vienna, Austria, 6-10 Sep.

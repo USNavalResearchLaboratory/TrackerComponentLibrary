@@ -1,5 +1,5 @@
 function [y,fixedTerm,randTerms]=strongStochTaylorStep(y,aCur,BCur,deltaT,algorithm,pBpy,p2Bpypy,papy,p2apypy,papt,pBpt,p,ItoAlg)
-%%STRONGSTOCHTAYLORSTEP Perform a single step of an explicit strong Itô-
+%%STRONGSTOCHTAYLORSTEP Perform a single step of an explicit strong Ito-
 %           Taylor expansion. This integrates a d-dimensional stochastic
 %           differential equation of the form:
 %           dy=a(y,t)*dt+B(y,t)*dW
@@ -31,7 +31,7 @@ function [y,fixedTerm,randTerms]=strongStochTaylorStep(y,aCur,BCur,deltaT,algori
 %          4 Use the Milstein scheme (order 1.0) for commutative noise.
 %            Equation 3.16 of Chapter 10.3 of [1] provides the solution
 %            under Stratonovich calculus. However, one can modify Equation
-%            3.3 in the same manner to obtain a solution under Itô
+%            3.3 in the same manner to obtain a solution under Ito
 %            calculus, which is what is done here. This requires pBpy and
 %            that d=m. Given diagonal noise, the result should be the same
 %            as algorithm 3.
@@ -87,8 +87,8 @@ function [y,fixedTerm,randTerms]=strongStochTaylorStep(y,aCur,BCur,deltaT,algori
 %           the approximation. These elements are typically deltaW, the
 %           change in the Wiener process over time deltaT, and sometimes
 %           deltaZ, which is correlated with deltaW and is an approximation
-%           of I_{1,0} (a multiple Itô integral as used in [1]) and Ij1j2,
-%           which is a matrix of approximations of double Itô integrals.
+%           of I_{1,0} (a multiple Ito integral as used in [1]) and Ij1j2,
+%           which is a matrix of approximations of double Ito integrals.
 %           These values can be useful when this function is used to take
 %           an explicit step for an initial estimate in an implicit
 %           strong Taylor algorithm.
@@ -289,7 +289,7 @@ switch(algorithm)
     case 4%The Milstein scheme for commutative noise; Equation 3.16 of
         %Chapter 10.3 of [1] provides the solution under Stratonovich
         %calculus. However, one can modify Equation 3.3 in the same manner
-        %to obtain a solution under Itô calculus.
+        %to obtain a solution under Ito calculus.
           
         if(d~=m)
             error('This algorithm is only valid for d=m.') 

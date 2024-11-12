@@ -20,7 +20,7 @@ void iauFk425(double r1950, double d1950,
 **  Status:  support function.
 **
 **  This function converts a star's catalog data from the old FK4
-** (Bessel-Newcomb) system to the later IAU 1976 FK5 (Fricke) system.
+**  (Bessel-Newcomb) system to the later IAU 1976 FK5 (Fricke) system.
 **
 **  Given: (all B1950.0, FK4)
 **     r1950,d1950    double   B1950.0 RA,Dec (rad)
@@ -116,11 +116,11 @@ void iauFk425(double r1950, double d1950,
 **     from FK4 B1950.0 to FK5 J2000.0 using matrices in 6-space".
 **     Astron.J. 97, 274.
 **
-**  This revision:   2021 February 24
+**  This revision:   2023 March 20
 **
-**  SOFA release 2021-05-12
+**  SOFA release 2023-10-11
 **
-**  Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+**  Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 */
 {
 /* Radians per year to arcsec per century */
@@ -140,7 +140,7 @@ void iauFk425(double r1950, double d1950,
 ** CANONICAL CONSTANTS (Seidelmann 1992)
 */
 
-/* Km per sec to AU per tropical century */
+/* Km per sec to au per tropical century */
 /* = 86400 * 36524.2198782 / 149597870.7 */
    const double VF = 21.095;
 
@@ -226,8 +226,8 @@ void iauFk425(double r1950, double d1950,
 
 /*----------------------------------------------------------------------
 **
-**  Copyright (C) 2021
-**  Standards Of Fundamental Astronomy Board
+**  Copyright (C) 2023
+**  Standards of Fundamental Astronomy Board
 **  of the International Astronomical Union.
 **
 **  =====================

@@ -36,10 +36,10 @@ function [xPred,SPred]=sqrtDDFDiscNonAdditivePred(xPrev,SPrev,f,SQ,algorithm)
 %different distance for the finite differences.
 %
 %REFERENCES:
-%[1] M. Nørgaard, N. K. Poulsen, and O. Ravn, "New developments in state
+%[1] M. Norgaard, N. K. Poulsen, and O. Ravn, "New developments in state
 %    estimation for nonlinear systems," Automatica, vol. 36, no. 11, pp.
 %    1627-1638, Nov. 2000.
-%[2] M. Nørgaard, N. K. Poulsen, and O. Ravn, "Advances in derivative-free
+%[2] M. Norgaard, N. K. Poulsen, and O. Ravn, "Advances in derivative-free
 %    state estimation for nonlinear systems (revised edition)," Department
 %    of Informatics and Mathematical Modelling, Technical University of
 %    Denmark, Tech. Rep. IMM-REP-1998-15, 29 Oct. 2004. [Online].

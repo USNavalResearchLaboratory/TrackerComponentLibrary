@@ -65,7 +65,7 @@ function [A,CB,exitCode]=jointEig(M,maxIter)
 % inv(A)*C2*A
 %
 %REFERENCES:
-%[1] R. André, T. Trainini, X. Luciani, and E. Moreau, "A fast algorithm
+%[1] R. Andre, T. Trainini, X. Luciani, and E. Moreau, "A fast algorithm
 %    for joint eigenvalue decomposition of real matrices," in Proceedings
 %    of the 23rd European Signal Processing Conference, Nice, France, 31
 %    Aug.-4Sep.2015,pp.1316-1320.

@@ -34,7 +34,7 @@ function [E,lambda,Fa]=FourierTransMatEig(N,order,a)
 %[E,Lambda]=eig(Fa) will be less accurate. 
 %
 %REFERENCES:
-%[1] A. Bultheel and H. E. Martínez Sulbaran, "Computation of the
+%[1] A. Bultheel and H. E. Martinez Sulbaran, "Computation of the
 %    fractional Fourier transform," Applied and Computational Harmonic
 %    Analysis, vol. 16, no. 3, pp. 182-202, May 2004.
 %

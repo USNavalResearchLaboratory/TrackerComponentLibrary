@@ -46,7 +46,7 @@ function tuples=genAllTCompositions(n,t,algorithm)
 %    Algorithms, Part I, Boston: Addison-Wesley, 2011.
 %[2] T. Gerster, "Sparse grid quadrature methods for computational
 %    finance," 2007, Habilitationsschrift, Rheinischen Friedrich-Wilhelms-
-%    Universität Bonn (Germany).
+%    Universitat Bonn (Germany).
 %    [Online]. Available: http://wissrech.ins.uni-bonn.de/research/pub/gerstner/gerstner_habil.pdf
 %[3] V. Kaarnioja, "Smolyak quadrature," Master's thesis, University of
 %    Helsinki, Department of Mathematics and Statistics, Helsinki, Finland,
@@ -144,7 +144,7 @@ function tuples=genAllTCompositions1(sumVal,d)
 %REFERENCES
 %[1] T. Gerster, "Sparse grid quadrature methods for computational
 %    finance," 2007, Habilitationsschrift, Rheinischen Friedrich-Wilhelms-
-%    Universität Bonn (Germany).
+%    Universitat Bonn (Germany).
 %    [Online]. Available: http://wissrech.ins.uni-bonn.de/research/pub/gerstner/gerstner_habil.pdf
 %[2] V. Kaarnioja, "Smolyak quadrature," Master's thesis, University of
 %    Helsinki, Department of Mathematics and Statistics, Helsinki, Finland,

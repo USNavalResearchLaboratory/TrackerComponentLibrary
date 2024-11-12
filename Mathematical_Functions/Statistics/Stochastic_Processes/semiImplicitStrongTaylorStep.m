@@ -1,13 +1,13 @@
 function [yNext,didConverge]=semiImplicitStrongTaylorStep(y,curT,a,B,deltaT,algorithm,givenVals,useNewton,maxIter,thetaVals,RelTol,AbsTol,p,ItoAlg)
 %%SEMIIMPLICITSTRONGTAYLORSTEP Perform a single step of a semi-implicit
-%           strong Itô-Taylor expansion to integrate a d-dimensional
+%           strong Ito-Taylor expansion to integrate a d-dimensional
 %           stochastic differential equation of the form:
 %           dy=a(y,t)*dt+B(y,t)*dW
 %           where dW is the differential of an m-dimensional Wiener
 %           process and t is time. Semi-implicit techniques are slower, but
 %           typically have better stability compared to explicit
 %           algorithms. As noted in Chapter 9.8 of [1], fully implicit
-%           strong Itô-Taylor expansion expansions are unstable, because
+%           strong Ito-Taylor expansion expansions are unstable, because
 %           particular values of the noise process can make them diverge.
 %           Thus, one typically uses semi-implicit methods, as discussed in
 %           Chapter 12 of [1]. Strong methods converge to an optimal path
@@ -72,7 +72,7 @@ function [yNext,didConverge]=semiImplicitStrongTaylorStep(y,curT,a,B,deltaT,algo
 %          4 Use the semi-implicit Milstein scheme for commutative noise;
 %            Equation 2.11 in Chapter 12.2. of [1]. This is the semi-
 %            implicit form of Equation 3.16 of Chapter 10.3 of [1]
-%            (modified Itô rather than Stratonovich). The equation has
+%            (modified Ito rather than Stratonovich). The equation has
 %            been generalized to support theta1 values other than one,
 %            analogously to Equation 2.13 in Chapter 12.2. of [1]. This
 %            requires pBpy and that d=m.
