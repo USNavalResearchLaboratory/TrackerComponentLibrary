@@ -14,9 +14,9 @@ function [isOnLand,vertexIdx]=pointIsOnLand(latLonPointDeg,mapData)
 %                getGSHHGBoundaryData function; see the comments to that
 %                function for more details on the format. This function
 %                supports dataType=0 maps from that function for
-%                determinign if a popints is on land, or assuming the
-%                points is on land, one can pass dataType=1 data to
-%                determine whether or not the point is on a navigabel river
+%                determining if a point is on land, or assuming the
+%                point is on land, one can pass dataType=1 data to
+%                determine whether or not the point is on a navigable river
 %                (so isOnLand=false) or is not on the river
 %                (isOnLand=true).
 %
@@ -40,7 +40,7 @@ function [isOnLand,vertexIdx]=pointIsOnLand(latLonPointDeg,mapData)
 %searched to determine whether it is one land, in a lake, etc.
 %
 %EXAMPLE 1:
-%This initial example plots Eurpe without lakes and tests a grid of points
+%This initial example plots Europe without lakes and tests a grid of points
 %for being on land or not. Those points that are on land are displayed in
 %magents and those in the water are cyan.
 % latLonRecDeg=[30;60;-30;30];

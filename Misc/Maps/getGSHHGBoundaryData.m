@@ -521,9 +521,7 @@ function mapData=getGSHHGBoundaryData(latLonRecDeg,dataType,resolutionLevel,excl
     vertices=vertices(1:numPolyTaken);
 
     mapData.latLonRecDeg=latLonRecDeg;
-    mapData.vertices=vertices;
-    mapData.headerInfo=headerInfo;
-    mapData.shapeInfo=shapeInfo;
+
 
     %Sort the vertices and First sort by level number. Levels 1, 5,and 6
     %stay at the top, then levels 2 and 3.
@@ -606,6 +604,10 @@ function mapData=getGSHHGBoundaryData(latLonRecDeg,dataType,resolutionLevel,excl
             firstChildIdx=[];
         end
         
+        mapData.vertices=vertices;
+        mapData.headerInfo=headerInfo;
+        mapData.shapeInfo=shapeInfo;
+
         %Fill the structure to return.
         childStructureInfo.numRootParents=int32(numRootParents);
         childStructureInfo.maxChildLevel=int32(maxChildLevel);
