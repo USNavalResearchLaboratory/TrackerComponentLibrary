@@ -34,8 +34,8 @@
     tempP=a[idxP];\
     tempIdxPerc=idxListHS[idxP];\
     if(direction==0) {\
-        while(2*idxP<numInHeap) {\
-            size_t child=2*idxP;\
+        while(2*idxP+1<numInHeap) {\
+            size_t child=2*idxP+1;\
 \
             if(child!=(numInHeap-1)&&a[child+1]>a[child]) {\
                 child++;\
@@ -51,8 +51,8 @@
             idxP=child;\
         }\
     } else {\
-        while(2*idxP<numInHeap) {\
-            size_t child=2*idxP;\
+        while(2*idxP+1<numInHeap) {\
+            size_t child=2*idxP+1;\
 \
             if(child!=(numInHeap-1)&&a[child+1]<a[child]) {\
                 child++;\
@@ -107,8 +107,8 @@
 \
     tempP=a[idxP];\
     if(direction==0) {\
-        while(2*idxP<numInHeap) {\
-            size_t child=2*idxP;\
+        while(2*idxP+1<numInHeap) {\
+            size_t child=2*idxP+1;\
 \
             if(child!=(numInHeap-1)&&a[child+1]>a[child]) {\
                 child++;\
@@ -123,8 +123,8 @@
             idxP=child;\
         }\
     } else {\
-        while(2*idxP<numInHeap) {\
-            size_t child=2*idxP;\
+        while(2*idxP+1<numInHeap) {\
+            size_t child=2*idxP+1;\
 \
             if(child!=(numInHeap-1)&&a[child+1]<a[child]) {\
                 child++;\
