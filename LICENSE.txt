@@ -1,4 +1,4 @@
-LICENSE for the Tracker Component Library, Version 6.11
+LICENSE for the Tracker Component Library, Version 6.1.1
 
 All of the data included is in the public domain and was obtained from U.S
 Government servers, with the exceptions of the Hipparcos 2 Catalog, the

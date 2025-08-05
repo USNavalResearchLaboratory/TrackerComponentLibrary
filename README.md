@@ -1,4 +1,4 @@
-**Tracker Component Library Release 6.11, June 2025**
+**Tracker Component Library Release 6.1.1, June 2025**
 https://github.com/USNavalResearchLaboratory/TrackerComponentLibrary
 
 A paper describing a number of features of the library is<br>
