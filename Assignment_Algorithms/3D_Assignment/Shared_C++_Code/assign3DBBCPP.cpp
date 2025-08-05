@@ -10,6 +10,12 @@
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+//Get rid of a Visual Studio warning about Spectre mitigation and one
+//about inlining 
+#ifdef _MSC_VER
+#pragma warning(disable : 5045 4711)
+#endif
+
 #include "assignAlgs3DCPP.hpp"
 
 //For generating and counting tuples.
@@ -116,7 +122,7 @@ double assign3DBBCPP(ptrdiff_t *minCostTuples, const double *const COrig,const s
     double *C=reinterpret_cast<double*>(curBuffPtr);
     curBuffPtr+=n1*n2*n3*sizeof(double);
            
-    if(maximize==true) {
+    if(maximize) {
         //CDelta=max(C(:));
         CDelta=COrig[0];
         for(size_t i=1;i<numEls;i++) {
@@ -169,7 +175,7 @@ double assign3DBBCPP(ptrdiff_t *minCostTuples, const double *const COrig,const s
             
             std::copy(C,C+n1*n2*n3,CCopy);
             
-            const bool maximize=false;
+            const bool maximizeL=false;
             const double param1=1;//gammaParam
             const double param2=0;
             const size_t param3=0;
@@ -181,7 +187,7 @@ double assign3DBBCPP(ptrdiff_t *minCostTuples, const double *const COrig,const s
                                                    tempSpace,
                                                        nDims,
                                                        CCopy,
-                                                    maximize,
+                                                    maximizeL,
                                                subgradMethod,
                                                      maxIter,
                                                       epsVal,
@@ -412,9 +418,9 @@ double assign3DBBCPP(ptrdiff_t *minCostTuples, const double *const COrig,const s
                     //i=1;
                     const size_t i=0;
                     //j=freeTuples(1,curTuple,curLevel);
-                    const size_t j=freeTuples[sub2Idx3D(0,curTuple,curLevel,2,maxTuplesPerLevel)];
+                    const size_t j=freeTuples[sub2Idx3D(0,curTuple,static_cast<size_t>(curLevel),2,maxTuplesPerLevel)];
                     //k=freeTuples(2,curTuple,curLevel);
-                    const size_t k=freeTuples[sub2Idx3D(1,curTuple,curLevel,2,maxTuplesPerLevel)];
+                    const size_t k=freeTuples[sub2Idx3D(1,curTuple,static_cast<size_t>(curLevel),2,maxTuplesPerLevel)];
                     //The index within the cost matrix at the current level.
                     //idx=sub2ind(dims,i,j,k);
                     const size_t idx=sub2Idx3D(i,j,k,n1-curLevel,n2-curLevel);
@@ -434,15 +440,15 @@ double assign3DBBCPP(ptrdiff_t *minCostTuples, const double *const COrig,const s
                     gain=minVal;
                     
                     //assignedTupleOrigIdx(curLevel)=freeTupleOrigIdx(minIdx,curLevel);
-                    assignedTupleOrigIdx[curLevel]=freeTupleOrigIdx[sub2Idx2D(minIdx,curLevel,maxTuplesPerLevel)];
+                    assignedTupleOrigIdx[curLevel]=freeTupleOrigIdx[sub2Idx2D(minIdx,static_cast<size_t>(curLevel),maxTuplesPerLevel)];
                     
                     for(size_t i=0;i<numLevels;i++) {
                         ptrdiff_t * const curMinCostTuple=minCostTuples+i*3;
                         const size_t * const curOrigFreeTup=origFreeTuples+assignedTupleOrigIdx[i]*2;
                         //minCostTuples(:,i)=[i;origFreeTuples(:,assignedTupleOrigIdx(i))];
-                        curMinCostTuple[0]=i;
-                        curMinCostTuple[1]=curOrigFreeTup[0];
-                        curMinCostTuple[2]=curOrigFreeTup[1];
+                        curMinCostTuple[0]=static_cast<ptrdiff_t>(i);
+                        curMinCostTuple[1]=static_cast<ptrdiff_t>(curOrigFreeTup[0]);
+                        curMinCostTuple[2]=static_cast<ptrdiff_t>(curOrigFreeTup[1]);
                     }
                 }
                 
@@ -458,9 +464,9 @@ double assign3DBBCPP(ptrdiff_t *minCostTuples, const double *const COrig,const s
                     //i=1;
                     const size_t i=0;
                     //j=freeTuples(1,curTuple,curLevel);
-                    const size_t j=freeTuples[sub2Idx3D(0,curTuple,curLevel,2,maxTuplesPerLevel)];
+                    const size_t j=freeTuples[sub2Idx3D(0,curTuple,static_cast<size_t>(curLevel),2,maxTuplesPerLevel)];
                     //k=freeTuples(2,curTuple,curLevel);
-                    const size_t k=freeTuples[sub2Idx3D(1,curTuple,curLevel,2,maxTuplesPerLevel)];
+                    const size_t k=freeTuples[sub2Idx3D(1,curTuple,static_cast<size_t>(curLevel),2,maxTuplesPerLevel)];
                                         
                     //The i,j,k indices of the tuple are with respect to
                     //indices in the shrunken cost matrix
@@ -518,7 +524,7 @@ double assign3DBBCPP(ptrdiff_t *minCostTuples, const double *const COrig,const s
                             newBoundVal=curCost+curBoundVal;
                         }
 
-                        boundVals[sub2Idx2D(curTuple,curLevel,maxTuplesPerLevel)]=newBoundVal;
+                        boundVals[sub2Idx2D(curTuple,static_cast<size_t>(curLevel),maxTuplesPerLevel)]=newBoundVal;
                     }
 
                     //If the bound is no better than the current best
@@ -530,12 +536,12 @@ double assign3DBBCPP(ptrdiff_t *minCostTuples, const double *const COrig,const s
                     if(newBoundVal>=gain) {
                         CostMatCur[costMatCurStartIdx[curLevel]+idx]=std::numeric_limits<double>::infinity();
                         //freeTuples(:,curTuple,curLevel)=freeTuples(:,numFreeTuples(curLevel),curLevel);
-                        const size_t *freeTupSource=freeTuples+sub2Idx3D(0,numFreeTuples[curLevel]-1,curLevel,2,maxTuplesPerLevel);
-                        size_t *const freeTupDest=freeTuples+sub2Idx3D(0,curTuple,curLevel,2,maxTuplesPerLevel);
+                        const size_t *freeTupSource=freeTuples+sub2Idx3D(0,numFreeTuples[curLevel]-1,static_cast<size_t>(curLevel),2,maxTuplesPerLevel);
+                        size_t *const freeTupDest=freeTuples+sub2Idx3D(0,curTuple,static_cast<size_t>(curLevel),2,maxTuplesPerLevel);
                         std::copy(freeTupSource,freeTupSource+2,freeTupDest);
                         
                         //freeTupleOrigIdx(curTuple,curLevel)=freeTupleOrigIdx(numFreeTuples(curLevel),curLevel);
-                        freeTupleOrigIdx[sub2Idx2D(curTuple,curLevel,maxTuplesPerLevel)]=freeTupleOrigIdx[sub2Idx2D(numFreeTuples[curLevel]-1,curLevel,maxTuplesPerLevel)];
+                        freeTupleOrigIdx[sub2Idx2D(curTuple,static_cast<size_t>(curLevel),maxTuplesPerLevel)]=freeTupleOrigIdx[sub2Idx2D(numFreeTuples[curLevel]-1,static_cast<size_t>(curLevel),maxTuplesPerLevel)];
                         
                         numFreeTuples[curLevel]--;
                     } else {
@@ -574,9 +580,9 @@ double assign3DBBCPP(ptrdiff_t *minCostTuples, const double *const COrig,const s
                 //i=1;
                 const size_t i=0;
                 //j=assignedTuples(1,curLevel);
-                const size_t j=assignedTuples[sub2Idx2D(0,curLevel,2)];
+                const size_t j=assignedTuples[sub2Idx2D(0,static_cast<size_t>(curLevel),2)];
                 //k=assignedTuples(2,curLevel);
-                const size_t k=assignedTuples[sub2Idx2D(1,curLevel,2)];
+                const size_t k=assignedTuples[sub2Idx2D(1,static_cast<size_t>(curLevel),2)];
 
                 //The index within the cost matrix at the current
                 //level.
@@ -613,29 +619,29 @@ double assign3DBBCPP(ptrdiff_t *minCostTuples, const double *const COrig,const s
                     //we have to find the first index where the bound is
                     //<gain.
                     //idx=find(boundVals(1:numFreeTuples(curLevel),curLevel)<gain,1);
-                    size_t idx=0;
+                    size_t idxC=0;
                     double *curBoundVal=boundVals+curLevel*maxTuplesPerLevel;
-                    for(idx=0;idx<numFreeTuples[curLevel];idx++) {
-                        if(curBoundVal[idx]<gain) {
+                    for(idxC=0;idx<numFreeTuples[curLevel];idxC++) {
+                        if(curBoundVal[idxC]<gain) {
                             break;
                         }
                     }
 
                     //If this gets rid of all tuples.
                     //if(isempty(idx))
-                    if(idx==numFreeTuples[curLevel]) {
+                    if(idxC==numFreeTuples[curLevel]) {
                         curLevel--;
                         continue;
-                    } else if(idx>0) {
+                    } else if(idxC>0) {
                         //If here, remove the tuples with bounds that are
                         //too large.
-                        //sel1=1:(numFreeTuples(curLevel)-idx+1);
+                        //sel1=1:(numFreeTuples(curLevel)-idxC+1);
                         //sel2=idx:numFreeTuples(curLevel);
                         //boundVals(sel1,curLevel)=boundVals(sel2,curLevel);
                         {
-                            const double *startIdx=boundVals+sub2Idx2D(idx,curLevel,maxTuplesPerLevel);
-                            const double *endIdx=boundVals+sub2Idx2D(numFreeTuples[curLevel],curLevel,maxTuplesPerLevel);
-                            double *destIdx=boundVals+sub2Idx2D(0,curLevel,maxTuplesPerLevel);
+                            const double *startIdx=boundVals+sub2Idx2D(idxC,static_cast<size_t>(curLevel),maxTuplesPerLevel);
+                            const double *endIdx=boundVals+sub2Idx2D(numFreeTuples[curLevel],static_cast<size_t>(curLevel),maxTuplesPerLevel);
+                            double *destIdx=boundVals+sub2Idx2D(0,static_cast<size_t>(curLevel),maxTuplesPerLevel);
                             std::copy(startIdx,endIdx,destIdx);
                         }
 
@@ -645,42 +651,42 @@ double assign3DBBCPP(ptrdiff_t *minCostTuples, const double *const COrig,const s
                         //for curTuple=1:(idx-1)
                         for(size_t curTuple=0;curTuple<idx-1;curTuple++) {
                             //i=1;
-                            const size_t i=0;
+                            const size_t iL=0;
                             //j=freeTuples(1,curTuple,curLevel);
-                            const size_t j=freeTuples[sub2Idx3D(0,curTuple,curLevel,2,maxTuplesPerLevel)];
+                            const size_t jL=freeTuples[sub2Idx3D(0,curTuple,static_cast<size_t>(curLevel),2,maxTuplesPerLevel)];
                             //k=freeTuples(2,curTuple,curLevel);
-                            const size_t k=freeTuples[sub2Idx3D(1,curTuple,curLevel,2,maxTuplesPerLevel)];
+                            const size_t kL=freeTuples[sub2Idx3D(1,curTuple,static_cast<size_t>(curLevel),2,maxTuplesPerLevel)];
 
                             //The dimensionality of the cost matrix at the
                             //current level is
                             //(n1-curLevel)X(n2-curLevel)X(n3-curLevel)
                             //The index within the cost matrix at the
                             //current level.
-                            const size_t idx=sub2Idx3D(i,j,k,n1-curLevel,n2-curLevel);
-                            CostMatCur[costMatCurStartIdx[curLevel]+idx]=std::numeric_limits<double>::infinity();
+                            const size_t idxL=sub2Idx3D(iL,jL,kL,n1-curLevel,n2-curLevel);
+                            CostMatCur[costMatCurStartIdx[curLevel]+idxL]=std::numeric_limits<double>::infinity();
                         }
 
-                        //sel1=1:(numFreeTuples(curLevel)-idx+1);
-                        //sel2=idx:numFreeTuples(curLevel);
+                        //sel1=1:(numFreeTuples(curLevel)-idxC+1);
+                        //sel2=idxC:numFreeTuples(curLevel);
                         //freeTuples(:,sel1,curLevel)=freeTuples(:,sel2,curLevel);
                         {
-                           const size_t *startIdx=freeTuples+sub2Idx3D(0,idx,curLevel,2,maxTuplesPerLevel);
-                           const size_t *endIdx=freeTuples+sub2Idx3D(0,numFreeTuples[curLevel],curLevel,2,maxTuplesPerLevel);
-                           size_t *destIdx=freeTuples+sub2Idx3D(0,0,curLevel,2,maxTuplesPerLevel);
+                           const size_t *startIdx=freeTuples+sub2Idx3D(0,idxC,static_cast<size_t>(curLevel),2,maxTuplesPerLevel);
+                           const size_t *endIdx=freeTuples+sub2Idx3D(0,numFreeTuples[curLevel],static_cast<size_t>(curLevel),2,maxTuplesPerLevel);
+                           size_t *destIdx=freeTuples+sub2Idx3D(0,0,static_cast<size_t>(curLevel),2,maxTuplesPerLevel);
                            std::copy(startIdx,endIdx,destIdx);
                         }
                         
-                        //sel1=1:(numFreeTuples(curLevel)-idx+1);
+                        //sel1=1:(numFreeTuples(curLevel)-idxC+1);
                         //sel2=idx:numFreeTuples(curLevel);
                         //freeTupleOrigIdx(sel1,curLevel)=freeTupleOrigIdx(sel2,curLevel);
                         {
-                            const size_t *startIdx=freeTupleOrigIdx+sub2Idx2D(idx,curLevel,maxTuplesPerLevel);
-                            const size_t *endIdx=freeTupleOrigIdx+sub2Idx2D(numFreeTuples[curLevel],curLevel,maxTuplesPerLevel);
-                            size_t *destIdx=freeTupleOrigIdx+sub2Idx2D(0,curLevel,maxTuplesPerLevel);
+                            const size_t *startIdx=freeTupleOrigIdx+sub2Idx2D(idxC,static_cast<size_t>(curLevel),maxTuplesPerLevel);
+                            const size_t *endIdx=freeTupleOrigIdx+sub2Idx2D(numFreeTuples[curLevel],static_cast<size_t>(curLevel),maxTuplesPerLevel);
+                            size_t *destIdx=freeTupleOrigIdx+sub2Idx2D(0,static_cast<size_t>(curLevel),maxTuplesPerLevel);
                             std::copy(startIdx,endIdx,destIdx);
                         }
 
-                        numFreeTuples[curLevel]-=idx;
+                        numFreeTuples[curLevel]-=idxC;
                     }
                 }
 
@@ -691,23 +697,23 @@ double assign3DBBCPP(ptrdiff_t *minCostTuples, const double *const COrig,const s
             //Assign the tuple in this current level.
             //assignedTuples(:,curLevel)=freeTuples(:,numFreeTuples(curLevel),curLevel);
             {
-                const size_t *const sourceIdx=freeTuples+sub2Idx3D(0,numFreeTuples[curLevel]-1,curLevel,2,maxTuplesPerLevel);
-                size_t *const destIdx=assignedTuples+sub2Idx2D(0,curLevel,2);
+                const size_t *const sourceIdx=freeTuples+sub2Idx3D(0,numFreeTuples[curLevel]-1,static_cast<size_t>(curLevel),2,maxTuplesPerLevel);
+                size_t *const destIdx=assignedTuples+sub2Idx2D(0,static_cast<size_t>(curLevel),2);
                 destIdx[0]=sourceIdx[0];
                 destIdx[1]=sourceIdx[1];
             }
         
             //assignedTupleOrigIdx(curLevel)=freeTupleOrigIdx(numFreeTuples(curLevel),curLevel);
-            assignedTupleOrigIdx[curLevel]=freeTupleOrigIdx[sub2Idx2D(numFreeTuples[curLevel]-1,curLevel,maxTuplesPerLevel)];
+            assignedTupleOrigIdx[curLevel]=freeTupleOrigIdx[sub2Idx2D(numFreeTuples[curLevel]-1,static_cast<size_t>(curLevel),maxTuplesPerLevel)];
  
             //Add the cost of the assigned tuple to the cumulative assigned
             //cost.
             //i=1;
             const size_t i=0;
             //j=assignedTuples(1,curLevel);
-            const size_t j=assignedTuples[sub2Idx2D(0,curLevel,2)];
+            const size_t j=assignedTuples[sub2Idx2D(0,static_cast<size_t>(curLevel),2)];
             //k=assignedTuples(2,curLevel);
-            const size_t k=assignedTuples[sub2Idx2D(1,curLevel,2)];
+            const size_t k=assignedTuples[sub2Idx2D(1,static_cast<size_t>(curLevel),2)];
                        
             //The dimensionality of the cost matrix at the current
             //level is (n1-curLevel)X(n2-curLevel)X(n3-curLevel)
@@ -751,7 +757,7 @@ double assign3DBBCPP(ptrdiff_t *minCostTuples, const double *const COrig,const s
             //for curTuple=1:numFreeTuplesEntering(curLevel)
             for(size_t curTuple=0;curTuple<numFreeTuplesEntering[curLevel];curTuple++) {
                 //if(any(freeTuplesEntering(:,curTuple,curLevel)==assignedTuples(:,curLevel)))
-                if(anyArralElsEqual(freeTuplesEntering+sub2Idx3D(0,curTuple,curLevel,2,maxTuplesPerLevel), assignedTuples+curLevel*2,2)) {
+                if(anyArralElsEqual(freeTuplesEntering+sub2Idx3D(0,curTuple,static_cast<size_t>(curLevel),2,maxTuplesPerLevel), assignedTuples+curLevel*2,2)) {
                     continue;
                 } else {
                     numFreeTuples[curLevel+1]++;
@@ -762,17 +768,17 @@ double assign3DBBCPP(ptrdiff_t *minCostTuples, const double *const COrig,const s
                     //must be subtracted.
                     //freeTuples(:,numFreeTuples(curLevel+1),curLevel+1)=freeTuplesEntering(:,curTuple,curLevel)-(freeTuplesEntering(:,curTuple,curLevel)>assignedTuples(:,curLevel));
                     {
-                        const size_t *sourcePtr=freeTuplesEntering+sub2Idx3D(0,curTuple,curLevel,2,maxTuplesPerLevel);
-                        size_t *destPtr=freeTuples+sub2Idx3D(0,numFreeTuples[curLevel+1]-1,curLevel+1,2,maxTuplesPerLevel);
-                        const bool boolVal1=sourcePtr[0]>assignedTuples[sub2Idx2D(0,curLevel,2)];
-                        const bool boolVal2=sourcePtr[1]>assignedTuples[sub2Idx2D(1,curLevel,2)];
+                        const size_t *sourcePtr=freeTuplesEntering+sub2Idx3D(0,curTuple,static_cast<size_t>(curLevel),2,maxTuplesPerLevel);
+                        size_t *destPtr=freeTuples+sub2Idx3D(0,numFreeTuples[curLevel+1]-1,static_cast<size_t>(curLevel)+1,2,maxTuplesPerLevel);
+                        const bool boolVal1=sourcePtr[0]>assignedTuples[sub2Idx2D(0,static_cast<size_t>(curLevel),2)];
+                        const bool boolVal2=sourcePtr[1]>assignedTuples[sub2Idx2D(1,static_cast<size_t>(curLevel),2)];
    
                         destPtr[0]=sourcePtr[0]-boolVal1;
                         destPtr[1]=sourcePtr[1]-boolVal2;
                     }
 
                     //freeTupleOrigIdx(numFreeTuples(curLevel+1),curLevel+1)=freeTuplesEnteringOrigIdx(curTuple,curLevel);
-                    freeTupleOrigIdx[sub2Idx2D(numFreeTuples[curLevel+1]-1,curLevel+1,maxTuplesPerLevel)]=freeTuplesEnteringOrigIdx[sub2Idx2D(curTuple,curLevel,maxTuplesPerLevel)];
+                    freeTupleOrigIdx[sub2Idx2D(numFreeTuples[curLevel+1]-1,static_cast<size_t>(curLevel)+1,maxTuplesPerLevel)]=freeTuplesEnteringOrigIdx[sub2Idx2D(curTuple,static_cast<size_t>(curLevel),maxTuplesPerLevel)];
                 }
             }
 
@@ -781,10 +787,10 @@ double assign3DBBCPP(ptrdiff_t *minCostTuples, const double *const COrig,const s
            //freeTuplesEntering(:,1:numFreeTuples(curLevel+1),curLevel+1)=freeTuples(:,1:numFreeTuples(curLevel+1),curLevel+1);
            //freeTuplesEnteringOrigIdx(1:numFreeTuples(curLevel+1),curLevel+1)=freeTupleOrigIdx(1:numFreeTuples(curLevel+1),curLevel+1);
             {
-                const size_t *sourceTup=freeTuples+sub2Idx3D(0,0,curLevel+1,2,maxTuplesPerLevel);
-                size_t *destTup=freeTuplesEntering+sub2Idx3D(0,0,curLevel+1,2,maxTuplesPerLevel);
-                const size_t * const sourceIdx=freeTupleOrigIdx+sub2Idx2D(0,curLevel+1,maxTuplesPerLevel);
-                size_t * const destIdx=freeTuplesEnteringOrigIdx+sub2Idx2D(0,curLevel+1,maxTuplesPerLevel);
+                const size_t *sourceTup=freeTuples+sub2Idx3D(0,0,static_cast<size_t>(curLevel)+1,2,maxTuplesPerLevel);
+                size_t *destTup=freeTuplesEntering+sub2Idx3D(0,0,static_cast<size_t>(curLevel)+1,2,maxTuplesPerLevel);
+                const size_t * const sourceIdx=freeTupleOrigIdx+sub2Idx2D(0,static_cast<size_t>(curLevel)+1,maxTuplesPerLevel);
+                size_t * const destIdx=freeTuplesEnteringOrigIdx+sub2Idx2D(0,static_cast<size_t>(curLevel)+1,maxTuplesPerLevel);
                         
                 for(size_t curFreeTuple=0;curFreeTuple<numFreeTuples[curLevel+1];curFreeTuple++ ) {
                     destTup[0]=sourceTup[0];
@@ -802,10 +808,10 @@ double assign3DBBCPP(ptrdiff_t *minCostTuples, const double *const COrig,const s
     }
 
     //Adjust the gain for the initial offset of the cost matrix.
-    if(maximize==true) {
-        gain=-gain+CDelta*n1;
+    if(maximize) {
+        gain=-gain+CDelta*static_cast<double>(n1);
     } else {
-        gain=gain+CDelta*n1;
+        gain=gain+CDelta*static_cast<double>(n1);
     }
     
     return gain;

@@ -41,7 +41,7 @@ function val=var(sigma)
 %
 %OUTPUTS:  val The variance of the Rayleigh distribution.
 %
-%The variance of the Rayligh distribution is given on the inside cover of
+%The variance of the Rayleigh distribution is given on the inside cover of
 %[1].
 %
 %EXAMPLE:
@@ -65,7 +65,7 @@ function val=PDF(x,sigma)
 %%PDF Evaluate the Rayleigh probability distribution function (PDF) at one
 %     or more desired points.
 %
-%INPUTS: x The point(s) at which the Rayleigh PDF is to be  evaluated.
+%INPUTS: x The point(s) at which the Rayleigh PDF is to be evaluated.
 %    sigma The parameter of the Rayleigh distribution.
 %
 %OUTPUTS: val The value(s) of the Rayleigh PDF with parameter sigma
@@ -179,7 +179,7 @@ function vals=rand(N,sigma,method)
 %
 %INPUTS: N If N is a scalar, then rand returns an NXN matrix of random
 %          variables. If N=[M,N1] is a two-element row vector, then rand
-%          returns an MXN1 matrix of  random variables.
+%          returns an MXN1 matrix of random variables.
 %    sigma The parameter of the Rayleigh distribution.
 %   method An optional parameter specifying how the random varibales are
 %          generated. Possible values are:

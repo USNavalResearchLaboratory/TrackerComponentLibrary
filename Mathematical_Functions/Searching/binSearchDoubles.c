@@ -50,6 +50,11 @@
 */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+#ifdef _MSC_VER
+//Get rid of a warning about a conditional expression being constant.
+#pragma warning( disable : 4127 )
+#endif
+
 #include "matrix.h"
 /*This is needed for fabs*/
 #include <math.h>

@@ -27,7 +27,7 @@
     doublereal d__1;
 
     /* Local variables */
-    integer i__, j, helppoint, pos, kret;
+    integer i__, j, helppoint, pos, kret=-1;//Initialize kret to get rid of a warning.
 
     (void) logfile; (void) free; (void) maxfunc; (void) maxdeep; (void) oops;
     (void) delta; (void) sample;

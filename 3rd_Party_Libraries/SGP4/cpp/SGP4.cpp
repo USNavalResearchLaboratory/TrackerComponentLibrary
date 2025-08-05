@@ -55,7 +55,20 @@
 *                           original baseline
 *       ----------------------------------------------------------------      */
 
+//Suppress warnings about padding being added, DFC, 2025
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4820 )
+#endif
 #include "SGP4.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+//Get rid of inlining warnings and Spectre mitigation warnings. Also, there
+//are warnings about inclo on line 246 and opsmode on line 1222 not being
+//used. We suppress those rather than altering the function. DFC 2025.
+#pragma warning( disable : 4711 4710 5045 4100)
+#endif
 
 #define pi 3.14159265358979323846
 
@@ -65,92 +78,94 @@ char help = 'n';
 FILE *dbgfile;
 
 /* ----------- local functions - only ever used internally by sgp4 ---------- */
-static void dpper
-(
-double e3, double ee2, double peo, double pgho, double pho,
-double pinco, double plo, double se2, double se3, double sgh2,
-double sgh3, double sgh4, double sh2, double sh3, double si2,
-double si3, double sl2, double sl3, double sl4, double t,
-double xgh2, double xgh3, double xgh4, double xh2, double xh3,
-double xi2, double xi3, double xl2, double xl3, double xl4,
-double zmol, double zmos, double inclo,
-char init,
-double& ep, double& inclp, double& nodep, double& argpp, double& mp,
-char opsmode
-);
+//All these are not neeeded and are commanted out, DFC 2025.
 
-static void dscom
-(
-double epoch, double ep, double argpp, double tc, double inclp,
-double nodep, double np,
-double& snodm, double& cnodm, double& sinim, double& cosim, double& sinomm,
-double& cosomm, double& day, double& e3, double& ee2, double& em,
-double& emsq, double& gam, double& peo, double& pgho, double& pho,
-double& pinco, double& plo, double& rtemsq, double& se2, double& se3,
-double& sgh2, double& sgh3, double& sgh4, double& sh2, double& sh3,
-double& si2, double& si3, double& sl2, double& sl3, double& sl4,
-double& s1, double& s2, double& s3, double& s4, double& s5,
-double& s6, double& s7, double& ss1, double& ss2, double& ss3,
-double& ss4, double& ss5, double& ss6, double& ss7, double& sz1,
-double& sz2, double& sz3, double& sz11, double& sz12, double& sz13,
-double& sz21, double& sz22, double& sz23, double& sz31, double& sz32,
-double& sz33, double& xgh2, double& xgh3, double& xgh4, double& xh2,
-double& xh3, double& xi2, double& xi3, double& xl2, double& xl3,
-double& xl4, double& nm, double& z1, double& z2, double& z3,
-double& z11, double& z12, double& z13, double& z21, double& z22,
-double& z23, double& z31, double& z32, double& z33, double& zmol,
-double& zmos
-);
+// static void dpper
+// (
+// double e3, double ee2, double peo, double pgho, double pho,
+// double pinco, double plo, double se2, double se3, double sgh2,
+// double sgh3, double sgh4, double sh2, double sh3, double si2,
+// double si3, double sl2, double sl3, double sl4, double t,
+// double xgh2, double xgh3, double xgh4, double xh2, double xh3,
+// double xi2, double xi3, double xl2, double xl3, double xl4,
+// double zmol, double zmos, double inclo,
+// char init,
+// double& ep, double& inclp, double& nodep, double& argpp, double& mp,
+// char opsmode
+// );
 
-static void dsinit
-(
-//sgp4fix no longer needed pass in xke
-//gravconsttype whichconst,
-double xke,
-double cosim, double emsq, double argpo, double s1, double s2,
-double s3, double s4, double s5, double sinim, double ss1,
-double ss2, double ss3, double ss4, double ss5, double sz1,
-double sz3, double sz11, double sz13, double sz21, double sz23,
-double sz31, double sz33, double t, double tc, double gsto,
-double mo, double mdot, double no, double nodeo, double nodedot,
-double xpidot, double z1, double z3, double z11, double z13,
-double z21, double z23, double z31, double z33, double ecco,
-double eccsq, double& em, double& argpm, double& inclm, double& mm,
-double& nm, double& nodem,
-int& irez,
-double& atime, double& d2201, double& d2211, double& d3210, double& d3222,
-double& d4410, double& d4422, double& d5220, double& d5232, double& d5421,
-double& d5433, double& dedt, double& didt, double& dmdt, double& dndt,
-double& dnodt, double& domdt, double& del1, double& del2, double& del3,
-double& xfact, double& xlamo, double& xli, double& xni
-);
+// static void dscom
+// (
+// double epoch, double ep, double argpp, double tc, double inclp,
+// double nodep, double np,
+// double& snodm, double& cnodm, double& sinim, double& cosim, double& sinomm,
+// double& cosomm, double& day, double& e3, double& ee2, double& em,
+// double& emsq, double& gam, double& peo, double& pgho, double& pho,
+// double& pinco, double& plo, double& rtemsq, double& se2, double& se3,
+// double& sgh2, double& sgh3, double& sgh4, double& sh2, double& sh3,
+// double& si2, double& si3, double& sl2, double& sl3, double& sl4,
+// double& s1, double& s2, double& s3, double& s4, double& s5,
+// double& s6, double& s7, double& ss1, double& ss2, double& ss3,
+// double& ss4, double& ss5, double& ss6, double& ss7, double& sz1,
+// double& sz2, double& sz3, double& sz11, double& sz12, double& sz13,
+// double& sz21, double& sz22, double& sz23, double& sz31, double& sz32,
+// double& sz33, double& xgh2, double& xgh3, double& xgh4, double& xh2,
+// double& xh3, double& xi2, double& xi3, double& xl2, double& xl3,
+// double& xl4, double& nm, double& z1, double& z2, double& z3,
+// double& z11, double& z12, double& z13, double& z21, double& z22,
+// double& z23, double& z31, double& z32, double& z33, double& zmol,
+// double& zmos
+// );
 
-static void dspace
-(
-int irez,
-double d2201, double d2211, double d3210, double d3222, double d4410,
-double d4422, double d5220, double d5232, double d5421, double d5433,
-double dedt, double del1, double del2, double del3, double didt,
-double dmdt, double dnodt, double domdt, double argpo, double argpdot,
-double t, double tc, double gsto, double xfact, double xlamo,
-double no,
-double& atime, double& em, double& argpm, double& inclm, double& xli,
-double& mm, double& xni, double& nodem, double& dndt, double& nm
-);
+// static void dsinit
+// (
+// //sgp4fix no longer needed pass in xke
+// //gravconsttype whichconst,
+// double xke,
+// double cosim, double emsq, double argpo, double s1, double s2,
+// double s3, double s4, double s5, double sinim, double ss1,
+// double ss2, double ss3, double ss4, double ss5, double sz1,
+// double sz3, double sz11, double sz13, double sz21, double sz23,
+// double sz31, double sz33, double t, double tc, double gsto,
+// double mo, double mdot, double no, double nodeo, double nodedot,
+// double xpidot, double z1, double z3, double z11, double z13,
+// double z21, double z23, double z31, double z33, double ecco,
+// double eccsq, double& em, double& argpm, double& inclm, double& mm,
+// double& nm, double& nodem,
+// int& irez,
+// double& atime, double& d2201, double& d2211, double& d3210, double& d3222,
+// double& d4410, double& d4422, double& d5220, double& d5232, double& d5421,
+// double& d5433, double& dedt, double& didt, double& dmdt, double& dndt,
+// double& dnodt, double& domdt, double& del1, double& del2, double& del3,
+// double& xfact, double& xlamo, double& xli, double& xni
+// );
 
-static void initl
-(
-// not needeed. included in satrec if needed later 
-// int satn,      
-// sgp4fix assin xke and j2
-// gravconsttype whichconst,
-double xke, double j2,
-double ecco, double epoch, double inclo, double& no,
-char& method,
-double& ainv, double& ao, double& con41, double& con42, double& cosio,
-double& cosio2, double& eccsq, double& omeosq, double& posq,
-double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
-);
+// static void dspace
+// (
+// int irez,
+// double d2201, double d2211, double d3210, double d3222, double d4410,
+// double d4422, double d5220, double d5232, double d5421, double d5433,
+// double dedt, double del1, double del2, double del3, double didt,
+// double dmdt, double dnodt, double domdt, double argpo, double argpdot,
+// double t, double tc, double gsto, double xfact, double xlamo,
+// double no,
+// double& atime, double& em, double& argpm, double& inclm, double& xli,
+// double& mm, double& xni, double& nodem, double& dndt, double& nm
+// );
+// 
+// static void initl
+// (
+// // not needeed. included in satrec if needed later 
+// // int satn,      
+// // sgp4fix assin xke and j2
+// // gravconsttype whichconst,
+// double xke, double j2,
+// double ecco, double epoch, double inclo, double& no,
+// char& method,
+// double& ainv, double& ao, double& con41, double& con42, double& cosio,
+// double& cosio2, double& eccsq, double& omeosq, double& posq,
+// double& rp, double& rteosq, double& sinio, double& gsto, char opsmode
+// );
 
 namespace SGP4Funcs
 {
@@ -334,13 +349,15 @@ namespace SGP4Funcs
 				nodep = atan2(alfdp, betdp);
 				//  sgp4fix for afspc written intrinsic functions
 				// nodep used without a trigonometric function ahead
-				if ((nodep < 0.0) && (opsmode == 'a'))
+				if ((nodep < 0.0) && (opsmode == 'a')) {
 					nodep = nodep + twopi;
-				if (fabs(xnoh - nodep) > pi)
+                }
+				if (fabs(xnoh - nodep) > pi) {
 					if (nodep < xnoh)
 						nodep = nodep + twopi;
 					else
 						nodep = nodep - twopi;
+                }
 				mp = mp + pl;
 				argpp = xls - mp - cosip * nodep;
 			}
@@ -1011,7 +1028,7 @@ namespace SGP4Funcs
 		)
 	{
 		const double twopi = 2.0 * pi;
-		int iretn, iret;
+		int iretn;
 		double delt, ft, theta, x2li, x2omi, xl, xldot, xnddt, xndt, xomi, g22, g32,
 			g44, g52, g54, fasx2, fasx4, fasx6, rptim, step2, stepn, stepp;
 
@@ -1071,7 +1088,6 @@ namespace SGP4Funcs
 				delt = stepn;
 
 			iretn = 381; // added for do loop
-			iret = 0; // added for loop
 			while (iretn == 381)
 			{
 				/* ------------------- dot terms calculated ------------- */
@@ -1111,7 +1127,6 @@ namespace SGP4Funcs
 				// sgp4fix move end checks to end of routine
 				if (fabs(t - atime) >= stepp)
 				{
-					iret = 0;
 					iretn = 381;
 				}
 				else // exit here
@@ -1373,9 +1388,9 @@ namespace SGP4Funcs
 			em, emsq, eeta, etasq, gam, argpm, nodem,
 			inclm, mm, nm, perige, pinvsq, psisq, qzms24,
 			rtemsq, s1, s2, s3, s4, s5, s6,
-			s7, sfour, ss1, ss2, ss3, ss4, ss5,
-			ss6, ss7, sz1, sz2, sz3, sz11, sz12,
-			sz13, sz21, sz22, sz23, sz31, sz32, sz33,
+			s7, sfour, ss1=0, ss2=0, ss3=0, ss4=0, ss5=0,//Set to 0 to get rid of compiler waranings about initialization.
+			ss6, ss7, sz1=0, sz2, sz3=0, sz11=0, sz12,
+			sz13=0, sz21=0, sz22, sz23=0, sz31=0, sz32, sz33=0,
 			tc, temp, temp1, temp2, temp3, tsi, xpidot,
 			xhdot1, z1, z2, z3, z11, z12, z13,
 			z21, z22, z23, z31, z32, z33,
@@ -1431,11 +1446,11 @@ namespace SGP4Funcs
 		satrec.error = 0;
 		satrec.operationmode = opsmode;
 		// new alpha5 or 9-digit number
-		#ifdef _MSC_VER
+		// #ifdef _MSC_VER
 						   strcpy_s(satrec.satnum, 6 * sizeof(char), satn);
-		#else
-						   strcpy(satrec.satnum, satn);
-		#endif
+		// #else
+		// 				   strcpy(satrec.satnum, satn);
+		// #endif
 
 		// sgp4fix - note the following variables are also passed directly via satrec.
 		// it is possible to streamline the sgp4init call by deleting the "x"
@@ -1480,7 +1495,7 @@ namespace SGP4Funcs
 
 		// sgp4fix remove this check as it is unnecessary
 		// the mrt check in sgp4 handles decaying satellite cases even if the starting
-		// condition is below the surface of te earth
+		// condition is below the surface of the earth
 		//     if (rp < 1.0)
 		//       {
 		//         printf("# *** satn%d epoch elts sub-orbital ***\n", satn);
@@ -1750,12 +1765,12 @@ namespace SGP4Funcs
 		)
 	{
 		double am, axnl, aynl, betal, cosim, cnod,
-			cos2u, coseo1, cosi, cosip, cosisq, cossu, cosu,
-			delm, delomg, em, emsq, ecose, el2, eo1,
+			cos2u, cosi, cosip, cosisq, cossu, cosu, coseo1=1.0;//Initializing to get rid of a warning. DFC 2025
+		double delm, delomg, em, emsq, ecose, el2, eo1,
 			ep, esine, argpm, argpp, argpdf, pl, mrt = 0.0,
 			mvt, rdotl, rl, rvdot, rvdotl, sinim,
-			sin2u, sineo1, sini, sinip, sinsu, sinu,
-			snod, su, t2, t3, t4, tem5, temp,
+			sin2u, sini, sinip, sinsu, sinu, sineo1=0.0;//Initializing to get rid of a warning. DFC 2025
+	    double snod, su, t2, t3, t4, tem5, temp,
 			temp1, temp2, tempa, tempe, templ, u, ux,
 			uy, uz, vx, vy, vz, inclm, mm,
 			nm, nodem, xinc, xincp, xl, xlm, mp,
@@ -2227,76 +2242,76 @@ namespace SGP4Funcs
 			longstr1[62] = '0';
 		if (longstr1[68] == ' ')
 			longstr1[68] = '0';
-#ifdef _MSC_VER // chk if compiling in MSVS c++
+// #ifdef _MSC_VER // chk if compiling in MSVS c++
 		sscanf_s(longstr1, "%2d %5s %1c %10s %2d %12lf %11lf %7lf %2d %7lf %2d %2d %6ld ",
-			&cardnumb, &satrec.satnum, 6 * sizeof(char), &satrec.classification, sizeof(char), &satrec.intldesg, 11 * sizeof(char), &satrec.epochyr,
+			&cardnumb, &satrec.satnum, static_cast<unsigned int>(6 * sizeof(char)), &satrec.classification, static_cast<unsigned int>(sizeof(char)), &satrec.intldesg, static_cast<unsigned int>(11 * sizeof(char)), &satrec.epochyr,
 			&satrec.epochdays, &satrec.ndot, &satrec.nddot, &nexp, &satrec.bstar, &ibexp, &satrec.ephtype, &satrec.elnum);
-#else
-		sscanf(longstr1, "%2d %5s %1c %10s %2d %12lf %11lf %7lf %2d %7lf %2d %2d %6ld ",
-			&cardnumb, &satrec.satnum, &satrec.classification, &satrec.intldesg, &satrec.epochyr,
-			&satrec.epochdays, &satrec.ndot, &satrec.nddot, &nexp, &satrec.bstar,
-			&ibexp, &satrec.ephtype, &satrec.elnum);
-#endif
+// #else
+// 		sscanf(longstr1, "%2d %5s %1c %10s %2d %12lf %11lf %7lf %2d %7lf %2d %2d %6ld ",
+// 			&cardnumb, &satrec.satnum, &satrec.classification, &satrec.intldesg, &satrec.epochyr,
+// 			&satrec.epochdays, &satrec.ndot, &satrec.nddot, &nexp, &satrec.bstar,
+// 			&ibexp, &satrec.ephtype, &satrec.elnum);
+// #endif
 		if (typerun == 'v')  // run for specified times from the file
 		{
 			if (longstr2[52] == ' ')
 			{
-#ifdef _MSC_VER
+// #ifdef _MSC_VER
 				sscanf_s(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %10lf %6ld %lf %lf %lf \n",
-					&cardnumb, &satrec.satnum, 6 * sizeof(char), &satrec.inclo,
+					&cardnumb, &satrec.satnum, static_cast<unsigned int>(6 * sizeof(char)), &satrec.inclo,
 					&satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
 					&satrec.revnum, &startmfe, &stopmfe, &deltamin);
-#else
-				sscanf(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %10lf %6ld %lf %lf %lf \n",
-					&cardnumb, &satrec.satnum, &satrec.inclo,
-					&satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
-					&satrec.revnum, &startmfe, &stopmfe, &deltamin);
-#endif
+// #else
+// 				sscanf(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %10lf %6ld %lf %lf %lf \n",
+// 					&cardnumb, &satrec.satnum, &satrec.inclo,
+// 					&satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
+// 					&satrec.revnum, &startmfe, &stopmfe, &deltamin);
+// #endif
 			}
 			else
 			{
-#ifdef _MSC_VER
+// #ifdef _MSC_VER
 				sscanf_s(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %11lf %6ld %lf %lf %lf \n",
-					&cardnumb, &satrec.satnum, 6 * sizeof(char), &satrec.inclo,
+					&cardnumb, &satrec.satnum, static_cast<unsigned int>(6 * sizeof(char)), &satrec.inclo,
 					&satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
 					&satrec.revnum, &startmfe, &stopmfe, &deltamin);
-#else
-				sscanf(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %11lf %6ld %lf %lf %lf \n",
-					&cardnumb, &satrec.satnum, &satrec.inclo,
-					&satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
-					&satrec.revnum, &startmfe, &stopmfe, &deltamin);
-#endif
+// #else
+// 				sscanf(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %11lf %6ld %lf %lf %lf \n",
+// 					&cardnumb, &satrec.satnum, &satrec.inclo,
+// 					&satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
+// 					&satrec.revnum, &startmfe, &stopmfe, &deltamin);
+// #endif
 			}
 		}
 		else  // simply run -1 day to +1 day or user input times
 		{
 			if (longstr2[52] == ' ')
 			{
-#ifdef _MSC_VER
+// #ifdef _MSC_VER
 				sscanf_s(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %10lf %6ld \n",
-					&cardnumb, &satrec.satnum, 6 * sizeof(char), &satrec.inclo,
+					&cardnumb, &satrec.satnum, static_cast<unsigned int>(6 * sizeof(char)), &satrec.inclo,
 					&satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
 					&satrec.revnum);
-#else
-				sscanf(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %10lf %6ld \n",
-					&cardnumb, &satrec.satnum, &satrec.inclo,
-					&satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
-					&satrec.revnum);
-#endif
+// #else
+// 				sscanf(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %10lf %6ld \n",
+// 					&cardnumb, &satrec.satnum, &satrec.inclo,
+// 					&satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
+// 					&satrec.revnum);
+// #endif
 			}
 			else
 			{
-#ifdef _MSC_VER
+// #ifdef _MSC_VER
 				sscanf_s(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %11lf %6ld \n",
-					&cardnumb, &satrec.satnum, 6 * sizeof(char), &satrec.inclo,
+					&cardnumb, &satrec.satnum, static_cast<unsigned int>(6 * sizeof(char)), &satrec.inclo,
 					&satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
 					&satrec.revnum);
-#else
-				sscanf(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %11lf %6ld \n",
-					&cardnumb, &satrec.satnum, &satrec.inclo,
-					&satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
-					&satrec.revnum);
-#endif
+// #else
+// 				sscanf(longstr2, "%2d %5s %9lf %9lf %8lf %9lf %9lf %11lf %6ld \n",
+// 					&cardnumb, &satrec.satnum, &satrec.inclo,
+// 					&satrec.nodeo, &satrec.ecco, &satrec.argpo, &satrec.mo, &satrec.no_kozai,
+// 					&satrec.revnum);
+// #endif
 			}
 		}
 

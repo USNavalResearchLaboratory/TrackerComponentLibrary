@@ -20,7 +20,16 @@
 */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4514 )
+#endif
+
 #include "mex.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
 
 /* This header validates inputs and includes a header needed to handle
  * Matlab matrices.*/
@@ -137,8 +146,9 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     AVec.resize(K);
     //Put all of the slices of A into AVec.
     const size_t N2=N*N;
+    const auto NL=static_cast<Eigen::EigenBase<Eigen::MatrixXd>::Index>(N);
     for(size_t k=0;k<K;k++) {
-        Eigen::Map<Eigen::MatrixXd> CurASlice(A+N2*k,N,N);
+        Eigen::Map<Eigen::MatrixXd> CurASlice(A+N2*k,NL,NL);
         AVec[k]=CurASlice;
     }
 
@@ -158,7 +168,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
            wSum+=w[k];
         }
         for(size_t k=0;k<K;k++) {
-           wEigen(k)=w[k]/wSum;
+           wEigen(static_cast<Eigen::EigenBase<Eigen::MatrixXd>::Index>(k))=w[k]/wSum;
         }
  
         *exitCode=static_cast<double>(JointMatDiagFrobVollAlg(AVec, wEigen, maxIter, RelTol, AbsTol,  W, CVec, *FCost));
@@ -166,7 +176,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
 
     //Copy the results into the return values.
     for(size_t i=0;i<N2;i++) {
-        V[i]=W(i);
+        V[i]=W(static_cast<Eigen::EigenBase<Eigen::MatrixXd>::Index>(i));
     }
     
     if(nlhs>1) {
@@ -175,7 +185,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
             const size_t startIdx=N2*k;
             
             for(size_t i=0;i<N2;i++) {
-                C[i+startIdx]=curSlice(i);
+                C[i+startIdx]=curSlice(static_cast<Eigen::EigenBase<Eigen::MatrixXd>::Index>(i));
             }
         }
     }

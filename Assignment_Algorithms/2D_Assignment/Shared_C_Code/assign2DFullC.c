@@ -15,6 +15,11 @@
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+//Get rid of useless Spectre mitigation warnings from Visual Studio.
+#ifdef _MSC_VER
+#pragma warning(disable : 5045)
+#endif
+
 #include "assignAlgs2D.h"
 
 /*string.h is needed for the memset and memcpy functions.*/
@@ -96,7 +101,8 @@ bool assign2DFullC(const bool maximize, double *  C, double *  gain, ptrdiff_t *
  *                 assign2DFullCBufferSize(numRowsTrue, numColsTrue) bytes
  *                 in size.
  *            u, v Pointers to arrays of doubles that are each at least
- *                 augmentedSize long and can hold the dual variables.
+ *                 augmentedSize=maxTuples-1 long and can hold the dual
+ *                 variables.
  * numRowsTrue, numColsTrue The number of rows and columns in the matrix C.
  *
  *OUTPUTS: The outputs are placed in gain, tuples, u, and v. The return
@@ -157,10 +163,10 @@ bool assign2DFullC(const bool maximize, double *  C, double *  gain, ptrdiff_t *
             C[i]=C[i]+zeroOffset;
         }
     }
-    
+
     //Run the assignment algorithm (minimization)
     (*gain)=assign2DFullCBasic(C,tuples,numTuples,tempBuffer,u,v,hasUnconstTuple,zeroOffset,numRowsTrue,numColsTrue);
-    
+
     if((*gain)<0) {
         //If the problem is infeasible.
         return true;
@@ -209,7 +215,8 @@ double assign2DFullCBasic(const double *C,ptrdiff_t *  tuples, size_t *  numTupl
  *           assign2DFullCBufferSize(numRowsTrue, numColsTrue) bytes in
  *           size.
  *      u, v Pointers to arrays of doubles that are each at least
- *           augmentedSize long and can hold the dual variables.
+ *           augmentedSize=maxTuples-1 long and can hold the dual
+ *           variables.
  * hasUnconstTuple A boolean variable indicating whether the unconstrained
  *           tuple C[0] (tuple (0,0)) should be assigned. This is present
  *           rather than just checking whether C[0]>0 to account for the
@@ -240,7 +247,7 @@ double assign2DFullCBasic(const double *C,ptrdiff_t *  tuples, size_t *  numTupl
     //This holds 1's and 0's for which columns were scanned.
     bool *ScannedRows;
     double *shortestPathCost;
-    size_t curRow,curCol,curUnassignedCol;
+    size_t curCol,curUnassignedCol;
             
     //Make sure that the u and v buffers are all zeros.
     memset(u,0,sizeof(double)*augmentedSize);
@@ -268,7 +275,7 @@ double assign2DFullCBasic(const double *C,ptrdiff_t *  tuples, size_t *  numTupl
      * row4col array does not need to be initialized, because columns will
      * be assigned from the minimum index up, so one always knows which
      * columns are unassigned.*/
-    for(curRow=0;curRow<augmentedSize;curRow++){
+    for(size_t curRow=0;curRow<augmentedSize;curRow++){
         col4row[curRow]=-1;
     }
 
@@ -284,7 +291,7 @@ double assign2DFullCBasic(const double *C,ptrdiff_t *  tuples, size_t *  numTupl
         numColsScanned=0;
         memset(ScannedRows,0,sizeof(bool)*augmentedSize);
 
-        for(curRow=0;curRow<augmentedSize;curRow++){
+        for(size_t curRow=0;curRow<augmentedSize;curRow++){
             Row2Scan[curRow]=curRow;
             /* Initially, the cost of the shortest path to each column is
              * not known and will be made infinite.*/
@@ -305,17 +312,17 @@ double assign2DFullCBasic(const double *C,ptrdiff_t *  tuples, size_t *  numTupl
             double minVal;
             //The initialization is just to silence a warning if compiling
             //using -Wconditional-uninitialized.
-            size_t curRowScan,closestRow,closestRowScan=0;
+            size_t closestRowScan=0;
             /*Mark the current column as having been visited.*/
             ScannedColIdx[numColsScanned]=curCol;
             numColsScanned++;
             
             /*Scan all of the rows that have not already been scanned.*/
             minVal=(double)INFINITY;
-            for(curRowScan=0;curRowScan<numRow2Scan;curRowScan++) {
+            for(size_t curRowScan=0;curRowScan<numRow2Scan;curRowScan++) {
                 double reducedCost;
                 
-                curRow=Row2Scan[curRowScan];
+                const size_t curRow=Row2Scan[curRowScan];
                 //If scanning past the end of the real rows.
                 if(curRow>=numRowsTrue-1) {
                     if(curCol>=numColsTrue-1) {
@@ -359,12 +366,13 @@ double assign2DFullCBasic(const double *C,ptrdiff_t *  tuples, size_t *  numTupl
             if(minVal==(double)INFINITY) {
                /* If the minimum cost row is not finite, then the
                 * problem is not feasible.*/
+                (*numTuples)=0;
                 return -1;
             }
 
             /* Change the index from the relative row index to the
              * absolute row index.*/
-            closestRow=Row2Scan[closestRowScan];
+            const size_t closestRow=Row2Scan[closestRowScan];
 
             /* Add the closest row to the list of scanned rows and
              * delete it from the list of rows to scan by shifting all
@@ -373,9 +381,10 @@ double assign2DFullCBasic(const double *C,ptrdiff_t *  tuples, size_t *  numTupl
             ScannedRows[closestRow]=true;
             
             numRow2Scan--;//One fewer row to scan.
-            for(curRow=closestRowScan;curRow<numRow2Scan;curRow++){
+            for(size_t curRow=closestRowScan;curRow<numRow2Scan;curRow++){
                 Row2Scan[curRow]=Row2Scan[curRow+1];
             }
+            
             delta=shortestPathCost[closestRow];
             //If we have reached an unassigned column.
             if(col4row[closestRow]==-1) {
@@ -398,14 +407,14 @@ double assign2DFullCBasic(const double *C,ptrdiff_t *  tuples, size_t *  numTupl
         }
 
         //Update the rows in the augmenting path.
-        for(curRow=0;curRow<augmentedSize;curRow++){
+        for(size_t curRow=0;curRow<augmentedSize;curRow++){
             if(ScannedRows[curRow]==true){
                 v[curRow]+=-delta+shortestPathCost[curRow];
             }
         }
 
         //Remove the current node from those that must be assigned.
-        curRow=(size_t)sink;
+        size_t curRow=(size_t)sink;
         do{
             ptrdiff_t h;
             curCol=pred[curRow];
@@ -418,13 +427,14 @@ double assign2DFullCBasic(const double *C,ptrdiff_t *  tuples, size_t *  numTupl
 
     //Next, fill in the tuples.  
     (*numTuples)=0;
+
     if(hasUnconstTuple) {
         tuples[0]=0;
         tuples[1]=0;
         (*numTuples)++;
     }
     
-    for(curRow=0;curRow<numRowsTrue-1;curRow++) {
+    for(size_t curRow=0;curRow<numRowsTrue-1;curRow++) {
         const size_t idx=2*(*numTuples);
         curCol=(size_t)(col4row[curRow]+1);
 
@@ -440,7 +450,7 @@ double assign2DFullCBasic(const double *C,ptrdiff_t *  tuples, size_t *  numTupl
     }
 
     for(curCol=0;curCol<numColsTrue-1;curCol++) {
-         curRow=(size_t)(row4col[curCol]+1);
+         const size_t curRow=(size_t)(row4col[curCol]+1);
 
         if(curRow>=numRowsTrue) {
             size_t idx=2*(*numTuples);
@@ -458,10 +468,9 @@ double assign2DFullCBasic(const double *C,ptrdiff_t *  tuples, size_t *  numTupl
         size_t curTuple;
         const size_t tupleNum=*numTuples;
         
-        gain=0;
         for(curTuple=0;curTuple<tupleNum;curTuple++){
             const size_t idx=2*curTuple;
-            curRow=(size_t)tuples[idx];
+            const size_t curRow=(size_t)tuples[idx];
             curCol=(size_t)tuples[idx+1];
             
             gain+=C[curCol*numRowsTrue+curRow];
@@ -537,7 +546,7 @@ bool assign2DFullCAlt(const bool maximize, const double *C, double *  gain, ptrd
 
     size_t numConstRow=numRow-1;
     size_t numConstCol=numCol-1;
-    size_t curRow,curCol;
+    size_t curCol;
     bool hasUnconstTuple, isInfeasible, didFlip;
     size_t numAssignedRows,numUnconstRow,curTotalTuple;
     
@@ -596,10 +605,10 @@ bool assign2DFullCAlt(const bool maximize, const double *C, double *  gain, ptrd
 
             //Copy the elements in prhs[0] into C in a transposed order.
             for(curCol=0;curCol<numCol;curCol++) {
-                size_t colOffset=numRow*curCol;
+                const size_t colOffset=numRow*curCol;
 
-                for(curRow=0;curRow<numRow;curRow++) {
-                    size_t rowOffset=numCol*curRow;
+                for(size_t curRow=0;curRow<numRow;curRow++) {
+                    const size_t rowOffset=numCol*curRow;
                     CMod[curCol+rowOffset]=C[curRow+colOffset];                    
                 }
             }
@@ -638,7 +647,7 @@ bool assign2DFullCAlt(const bool maximize, const double *C, double *  gain, ptrd
             double *CRow=CMod;
             
             //Nothing is subtracted from the first row.
-            for(curRow=1;curRow<numRow;curRow++) {
+            for(size_t curRow=1;curRow<numRow;curRow++) {
                 CModCur++;
                 CRow++;
 
@@ -655,7 +664,7 @@ bool assign2DFullCAlt(const bool maximize, const double *C, double *  gain, ptrd
  *Here, we have to give the proper offset to skip the first column of CMod.
  */
     if(numConstCol==0) {
-        for(curRow=0;curRow<numRow-1;curRow++) {
+        for(size_t curRow=0;curRow<numRow-1;curRow++) {
             v[curRow]=0;
         }
 
@@ -674,7 +683,7 @@ bool assign2DFullCAlt(const bool maximize, const double *C, double *  gain, ptrd
     //on C. v=v+C(2:numRow,1);
     {
         double *CCur=CMod+1;
-        for(curRow=0;curRow<numRow-1;curRow++) {
+        for(size_t curRow=0;curRow<numRow-1;curRow++) {
             v[curRow]+=(*CCur);
             CCur++;
         }

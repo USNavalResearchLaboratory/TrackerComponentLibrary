@@ -110,7 +110,7 @@ function [xMin,fMin,exitCode]=steepestDescent(f,x0,epsilon,deltaTestDist,delta,l
         pastFVals(1)=fValCur;
     end
 
-    for cutIter=1:maxIter
+    for curIter=1:maxIter
          %Steepest descent direction.
          d=-gradF;
 

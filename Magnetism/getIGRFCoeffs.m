@@ -1,6 +1,6 @@
 function [C,S,a,c]=getIGRFCoeffs(year,fullyNormalize)
 %%GETIGRFCOEFFS Obtain spherical harmonic coefficients for the
-%               13th generation International Geomagnetic Reference Field
+%               14th generation International Geomagnetic Reference Field
 %               (IGRF) at a particular time or at the latest reference
 %               epoch. Note that the coefficients must be adjusted for
 %               local magnetization effects (buildings, cars, power lines,
@@ -13,7 +13,7 @@ function [C,S,a,c]=getIGRFCoeffs(year,fullyNormalize)
 %             represented as 2013.5. The precision of the model is not
 %             sufficiently fine that leap seconds matter. If this parameter
 %             is omitted or an empty matrix is passed, then the reference
-%             year of the IGRF model is used. In this instance, 2020.0. For
+%             year of the IGRF model is used. In this instance, 2025.0. For
 %             predicting the magnetic field into the future, it is
 %             suggested that one use the World Magnetic Model (WMM) not the
 %             IGRF.
@@ -45,14 +45,12 @@ function [C,S,a,c]=getIGRFCoeffs(year,fullyNormalize)
 %Documentation for the IGRF model is given in [1] and information on
 %Schmidt semi-normalized Legendre functions is given in [2]. The
 %coefficients originate from
-%http://www.ngdc.noaa.gov/IAGA/vmod/igrf.html
+%https://www.ncei.noaa.gov/products/international-geomagnetic-reference-field
 %and being created by the government are not subject to copyright
 %protection.
 %
 %Note that the IGRF is not a crustal magnetic model; it is just the main
-%field of the Earth. The Enhanced Magnetic Model (EMM) from the National
-%Oceanic and Atmospheric Administration's (NOAA's) National Geophysical
-%Data Center is a complete magnetic model.
+%field of the Earth.
 %
 %REFERENCES:
 %[1] International Association of Geomagnetism and Aeronomy, Working
@@ -71,7 +69,7 @@ function [C,S,a,c]=getIGRFCoeffs(year,fullyNormalize)
 ScriptPath=mfilename('fullpath');
 ScriptFolder = fileparts(ScriptPath);
 
-fileID=fopen([ScriptFolder,'/data/igrf13coeffs.txt']);
+fileID=fopen([ScriptFolder,'/data/igrf14coeffs.txt']);
 data=textscan(fileID,'%s','CommentStyle','#','whitespace',' ','delimiter','\n');
 fclose(fileID);
 data=data{1};

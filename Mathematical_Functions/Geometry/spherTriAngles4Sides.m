@@ -2,7 +2,7 @@ function [A,B,C]=spherTriAngles4Sides(a,b,c,r)
 %%SPHERTRIANGLES4SIDES Given the lengths of the sides of a spherical
 %       triangle, find the angles of the triangle. Note that the angles of
 %       a spherical triangle do not sum to pi. This is just an application
-%       of the spherical law of cosines. Note that unlike with a EUclidean
+%       of the spherical law of cosines. Note that unlike with a Euclidean
 %       triangle, one cannot just enter arbitrary distances for a, b, and c
 %       (even if much smaller than the circumference of the sphere),
 %       because certain distance relations are not possible and will result

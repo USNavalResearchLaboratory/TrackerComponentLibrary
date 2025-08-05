@@ -79,7 +79,7 @@ function val=perm(A,boolRowsSkip,boolColsSkip)
         %Empty matrices have a permanent of 1 by definition.
         val=1;
         return;
-    elseif(numel(A)==1)
+    elseif(isscalar(A))
         %Scalar values have a permanent equal to that value.
         val=A;
         return;

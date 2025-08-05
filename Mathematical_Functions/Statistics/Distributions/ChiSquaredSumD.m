@@ -353,7 +353,7 @@ function vals=PDF(x,w,k,lambda,s,m,AbsTol,RelTol)
 %          passed, 0 is used.
 % AbsTol, RelTol Absolute and relative tolerances to use in the integral
 %          function. The defaults if omitted or empty matrices are passed
-%          are 1e-11 and 1e-8.
+%          are eps() and eps().
 %
 %OUTPUTS: vals A matrix the same size as x holding values of the PDF
 %              evaluated at x.
@@ -391,11 +391,11 @@ function vals=PDF(x,w,k,lambda,s,m,AbsTol,RelTol)
 %September 2024 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
 if(nargin<8||isempty(RelTol))
-    RelTol=1e-8;
+    RelTol=eps();
 end
 
 if(nargin<7||isempty(AbsTol))
-    AbsTol=1e-11;
+    AbsTol=eps();
 end
 
 if(nargin<6||isempty(m))
@@ -430,7 +430,7 @@ end
 warning(warnStruct);
 
 function val=costFun(u,x,w,k,lambda,s,m)
-    %The equations for theta are rho are given before Equation 3.3 in [1].
+    %The equations for theta and rho are given before Equation 3.3 in [1].
     %Note the offset due to m shifting the mean.
     theta=sum(k.*atan(w*u)+(lambda.*(w*u))./(1+w.^2*u.^2),1)/2-u*(x-m)/2;
     %Note that this has an extra product term at the end as compared to

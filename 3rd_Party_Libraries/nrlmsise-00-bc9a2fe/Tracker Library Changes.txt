@@ -3,6 +3,7 @@ was the case in the original Fortran code.
 
 The code has been modified to use mxMalloc and mxFree, which are preferred
 in Matlab over malloc and free. Also, printf statements have been replaced
-with the appropriate native. Matlab functions.
+with the appropriate native. Matlab functions, and some variables were
+renamed to get rid of warnings about shadowing global variables.
 
-June 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
+May 2025 David F. Crouse, Naval Research Laboratory, Washington D.C.

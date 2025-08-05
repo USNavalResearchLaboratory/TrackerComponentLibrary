@@ -34,7 +34,8 @@ function MDot=Euler3Ang2RotMatDeriv(thetaState1,thetaState2,thetaState3,series,h
 %                      clockwise when one is looking into the rotation
 %                      axis.
 %
-%OUTPUTS: MDot The 3X3 derivative of the rotation matrix.
+%OUTPUTS: MDot The 3X3 derivative of the rotation matrix with respect to
+%              time.
 %
 %This function hold analytic derivatives of the expressions given in
 %Euler3Ang2RotMat.

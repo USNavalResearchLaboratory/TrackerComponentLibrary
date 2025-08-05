@@ -50,8 +50,17 @@
 */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
-#include "matrix.h"
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4514 )
+#endif
+
 #include "mex.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
+
 /* This header validates inputs and includes a header needed to handle
  * Matlab matrices.*/
 #include "MexValidation.h"
@@ -113,7 +122,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     isInPolygonMatlab=mxCreateLogicalMatrix(numPoints,1);
     isInPolygon=mxGetLogicals(isInPolygonMatlab);
     
-    if(sizeof(ptrdiff_t)==4) {//32 bit
+    if constexpr(sizeof(ptrdiff_t)==4) {//32 bit
         omegas=reinterpret_cast<ptrdiff_t*>(mxGetInt32s(omegasMatlab));
     } else {//64 bit
         omegas=reinterpret_cast<ptrdiff_t*>(mxGetInt64s(omegasMatlab));

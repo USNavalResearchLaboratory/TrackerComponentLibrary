@@ -1,4 +1,4 @@
-function u=polAng2U2D(azimuth,systemType,includeV)
+function u=polAng2U2D(azimuth,systemType,MP,MU,includeV)
 %%POLANG2U2D Convert 2D polar angles into equivalent direction cosine
 %            values. The "direction cosine" u is just the x coordinate of a
 %            unit vector from the receiver to the target in the coordinate
@@ -11,6 +11,15 @@ function u=polAng2U2D(azimuth,systemType,includeV)
 %                0 (The default if omitted or an empty matrix is passed)
 %                  The azimuth angle is counterclockwise from the x axis.
 %                1 The azimuth angle is measured clockwise from the y axis.
+%             MP Optionally, the rotation matrix that would rotate a vector
+%                in global coordinates into the local coordinate system
+%                defining polar coordinates. If omitted or an empty matrix
+%                is passed, it is assumed there is no rotation.
+%             MU Optionally, the rotation matrix that would rotate a vector
+%                in global coordinates into the local coordinate system
+%                into which the u coordinate is computed. If omitted or an
+%                empty matrix is passed, it is assumed there is no
+%                rotation.
 %       includeV An optional boolean value indicating whether a second
 %                direction cosine component should be included. The u
 %                direction cosine is one parts of a 2D unit vector.
@@ -21,14 +30,60 @@ function u=polAng2U2D(azimuth,systemType,includeV)
 %                parameter is omitted or an empty matrix is passed is
 %                false.
 %
-%OUTPUTS: u A 1XN (without v) or 2XN( with v) set of direction cosines in
+%OUTPUTS: u A 1XN (without v) or 2XN (with v) set of direction cosines in
 %           2D corresponding to the specified azimuthal values.
+%
+%EXAMPLE 1:
+%This shows that the value of the converted component is consistent with
+%what one would get when considering a Cartesian location in both
+%coordinate systems.
+% %This angle specifies the rotation of the polar coordinate system
+% thetaP=2*pi*rand(1);
+% MP=rotMat2D(thetaP);
+% %This angle specifies the rotation of the u coordinate system.
+% thetaU=2*pi*rand(1);
+% MU=rotMat2D(thetaU);
+% systemType=0;
+% thetaPol=deg2rad(35);%The polar angle
+% zRx=[100;40];
+% xCart=pol2Cart([1;thetaPol],systemType,true,zRx,zRx,MP);
+% includeV=true;
+% u=getUDirection2D(xCart,zRx,MU,includeV);
+% uAlt=polAng2U2D(thetaPol,systemType,MP,MU,includeV);
+% RelErr=(uAlt-u)./u
+%
+%EXAMPLE 2:
+%This is the same type of consistency check as the first example, but just
+%done in a different manner. The relative error is on the order of finite
+%precision limitations.
+% tarLoc=[13e3;26e3];
+% lRx=[12e3;4e3];
+% systemType=0;
+% includeV=true;
+% Mu=randRotMat(2);
+% MAz=randRotMat(2);
+% uv=getUDirection2D(tarLoc,lRx,Mu,includeV);
+% AzVal=getPolAngle(tarLoc,systemType,lRx,MAz);
+% uvConv=polAng2U2D(AzVal,systemType,MAz,Mu,includeV);
+% RelErr=max(abs((uvConv-uv)./uv))
 %
 %June 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<3||isempty(includeV))
+if(nargin<5||isempty(includeV))
    includeV=false; 
+end
+
+if(nargin<4||isempty(MU))
+    thetaU=0;
+else
+    thetaU=rotMat2D2Angle(MU);
+end
+
+if(nargin<3||isempty(MP))
+    thetaP=0;
+else
+    thetaP=rotMat2D2Angle(MP);
 end
 
 if(nargin<2||isempty(systemType))
@@ -40,12 +95,16 @@ azimuth=azimuth(:).';
 
 switch(systemType)
     case 0
+        azimuth=azimuth-thetaP+thetaU;
+
         if(includeV)
             u=[cos(azimuth);sin(azimuth)];
         else
             u=cos(azimuth);
         end
     case 1
+        azimuth=azimuth+thetaP-thetaU;
+
         if(includeV)
             u=[sin(azimuth);cos(azimuth)];
         else

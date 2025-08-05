@@ -63,6 +63,11 @@
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+#ifdef _MSC_VER
+//Get rid of inlining warnings.
+#pragma warning( disable : 4711 )
+#endif
+
 /*This header is required by Matlab*/
 #include "mex.h"
 /*This is needed for copy and swap*/
@@ -135,12 +140,12 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     
     /*The assignment algorithm returns a nonzero value if no valid
      * solutions exist.*/    
-    isFeasible=assign2D(numRow,
+    isFeasible=static_cast<bool>(assign2D(numRow,
              numCol,
              maximize,
              mxGetDoubles(CMat),
              workMem,
-             problemSol);
+             problemSol));
    
     mxDestroyArray(CMat);
 
@@ -183,7 +188,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     for_each(problemSol->col4row, problemSol->col4row+numRow, increment<ptrdiff_t>);
     
     /*Copy the results into the return variables*/
-    if(sizeof(ptrdiff_t)==4) {//32 bits
+    if constexpr(sizeof(ptrdiff_t)==4) {//32 bits
         copy(problemSol->row4col,problemSol->row4col+numCol,reinterpret_cast<ptrdiff_t*>(mxGetInt32s(row4colMATLAB)));
         copy(problemSol->col4row,problemSol->col4row+numRow,reinterpret_cast<ptrdiff_t*>(mxGetInt32s(col4rowMATLAB)));
     } else {//64 bits

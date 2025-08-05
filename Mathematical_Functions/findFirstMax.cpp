@@ -26,7 +26,17 @@
 */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4514 )
+#endif
+
 #include "matrix.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
+
 /*This header is required by Matlab.*/
 #include "mex.h"
 #include "MexValidation.h"
@@ -71,7 +81,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     
     //Set the return value
     retIdx=allocUnsignedSizeMatInMatlab(1,1);
-    if(sizeof(size_t)==4) {//32 bit
+    if constexpr(sizeof(size_t)==4) {//32 bit
         *reinterpret_cast<size_t *>(mxGetUint32s(retIdx))=foundIdx+1;
     } else {//64 bit
         *reinterpret_cast<size_t *>(mxGetUint64s(retIdx))=foundIdx+1;

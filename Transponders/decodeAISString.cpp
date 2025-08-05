@@ -139,12 +139,31 @@
 #define NDEBUG
 #endif
 
-/*This header is required by Matlab.*/
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4514 )
+#endif
+
 #include "mex.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
+
+//Suppress warnings about padding and unused functions in the AIS headers
+//and also warnings about inlining.
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4820 4514 4710 4711 )
+#endif
 
 //The AISLib headers
 #include "ais.h"
 #include "vdm.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
 
 //For fabs
 #include<cmath>
@@ -152,7 +171,6 @@
 //Functions for parsing some parts of the strings that is not handled by
 //AISLib.
 #include "AISFuncs.hpp"
-
 #include "MexValidation.h"
 
 //This is for parsing the input into strings that can be provided to the
@@ -160,6 +178,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+
 //For count
 #include <algorithm>
 
@@ -311,13 +330,16 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         std::string allMsg(msgChars);
         //This will stitch together a set of messages.
         libais::VdmStream decodedAISData;
-        mxArray *decodedMessageCell, *reportNameCell, *reportDescriptionCell, *fieldDescriptionsCell;
+        mxArray *decodedMessageCell;
+        mxArray *reportNameCell=NULL;
+        mxArray *reportDescriptionCell=NULL;
+        mxArray *fieldDescriptionsCell=NULL;
         std::string curMsg;
         
         mxFree(msgChars);
         
         //The maximum possible number of messages to decode.
-        maxNumMessages=std::count(allMsg.begin(),allMsg.end(),'\n')+1;
+        maxNumMessages=static_cast<size_t>(std::count(allMsg.begin(),allMsg.end(),'\n'))+1;
      
         //Alocate space for the return variables.
         decodedMessageCell=mxCreateCellMatrix(maxNumMessages,1);
@@ -338,7 +360,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         ss=std::istringstream(allMsg);//To extract one string at a time.
         //Go through all of the strings.
         while(std::getline(ss, curMsg,'\n')) {
-            const size_t numBeforeAdd=decodedAISData.size();
+            const size_t numBeforeAdd=static_cast<size_t>(decodedAISData.size());
             std::string dataPayload, endPart;
             bool pushSucceeded;
             
@@ -351,8 +373,9 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 
             //If a complete message was successfully decoded, then decode
             //the message.
-            if(pushSucceeded&&numBeforeAdd!=decodedAISData.size()) {
-                mxArray *decodedMessage, *fieldDescriptions;
+            if(pushSucceeded&&numBeforeAdd!=static_cast<size_t>(decodedAISData.size())) {
+                mxArray *decodedMessage;
+                mxArray *fieldDescriptions=NULL;
                 std::unique_ptr<libais::AisMsg> curAisMsg=decodedAISData.PopOldestMessage();
                 bool decodeSuccessful;
                 
@@ -418,7 +441,7 @@ bool extractAISMessageData(std::unique_ptr<libais::AisMsg> &aisMsg,mxArray **dec
         case 2://Position report, Class A, assigned.
         case 3://Position report, Class A, interrogated.
         {
-            libais::Ais1_2_3 *msg=reinterpret_cast<libais::Ais1_2_3*>(aisMsg.get());
+            libais::Ais1_2_3 *msg=dynamic_cast<libais::Ais1_2_3*>(aisMsg.get());
             
             AIS_1_2_3_ToMatlab(msg,decodedMessage,fieldDescriptions);
             return true;
@@ -426,26 +449,26 @@ bool extractAISMessageData(std::unique_ptr<libais::AisMsg> &aisMsg,mxArray **dec
         case 4://Base station report.
         case 11://UTC/ date response.
         {
-            libais::Ais4_11 *msg=reinterpret_cast<libais::Ais4_11*>(aisMsg.get());
+            libais::Ais4_11 *msg=dynamic_cast<libais::Ais4_11*>(aisMsg.get());
             
             AIS_4_11_ToMatlab(msg,decodedMessage,fieldDescriptions);
             return true;
         }
         case 5://Static and voyage related data.
         {
-            libais::Ais5 *msg=reinterpret_cast<libais::Ais5*>(aisMsg.get());
+            libais::Ais5 *msg=dynamic_cast<libais::Ais5*>(aisMsg.get());
             
             AIS_5_ToMatlab(msg,decodedMessage,fieldDescriptions);
             return true;
         }
         case 6://Binary addressed message
         {
-            libais::Ais6 *msg=reinterpret_cast<libais::Ais6*>(aisMsg.get());
+            libais::Ais6 *msg=dynamic_cast<libais::Ais6*>(aisMsg.get());
 
             switch(msg->dac) {
                 case libais::AIS_DAC_0_TEST:
                     if(msg->fi==0) {//Zeni Lite Buoy Co., Ltd buoy status.
-                        AIS_6_0_0_ToMatlab(reinterpret_cast<libais::Ais6_0_0*>(msg),decodedMessage,fieldDescriptions);
+                        AIS_6_0_0_ToMatlab(dynamic_cast<libais::Ais6_0_0*>(msg),decodedMessage,fieldDescriptions);
                         return true;
                     } else {
                         return false;
@@ -453,43 +476,43 @@ bool extractAISMessageData(std::unique_ptr<libais::AisMsg> &aisMsg,mxArray **dec
                 case libais::AIS_DAC_1_INTERNATIONAL:
                     switch(msg->fi) {
                         case 0:// Text message.  ITU 1371-1
-                            AIS_6_1_0_ToMatlab(reinterpret_cast<libais::Ais6_1_0*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_6_1_0_ToMatlab(dynamic_cast<libais::Ais6_1_0*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 1:// Application ack.  ITU 1371-1
-                            AIS_6_1_1_ToMatlab(reinterpret_cast<libais::Ais6_1_1*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_6_1_1_ToMatlab(dynamic_cast<libais::Ais6_1_1*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 2:// Interrogation for a DAC/FI.  ITU 1371-1
-                            AIS_6_1_2_ToMatlab(reinterpret_cast<libais::Ais6_1_2*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_6_1_2_ToMatlab(dynamic_cast<libais::Ais6_1_2*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 3:// Capability interogation.  ITU 1371-1
-                            AIS_6_1_3_ToMatlab(reinterpret_cast<libais::Ais6_1_3*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_6_1_3_ToMatlab(dynamic_cast<libais::Ais6_1_3*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 4:// Capability interogation reply.  ITU 1371-1
-                            AIS_6_1_4_ToMatlab(reinterpret_cast<libais::Ais6_1_4*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_6_1_4_ToMatlab(dynamic_cast<libais::Ais6_1_4*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 5:// International function message 5: Application ack to addr binary message.
-                            AIS_6_1_5_ToMatlab(reinterpret_cast<libais::Ais6_1_5*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_6_1_5_ToMatlab(dynamic_cast<libais::Ais6_1_5*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 12:// IMO Circ 236 Dangerous cargo indication
-                            AIS_6_1_12_ToMatlab(reinterpret_cast<libais::Ais6_1_12*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_6_1_12_ToMatlab(dynamic_cast<libais::Ais6_1_12*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 14:// IMO Circ 236 Tidal window
-                            AIS_6_1_14_ToMatlab(reinterpret_cast<libais::Ais6_1_14*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_6_1_14_ToMatlab(dynamic_cast<libais::Ais6_1_14*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 18:// IMO Circ 289 Clearance time to enter port
-                            AIS_6_1_18_ToMatlab(reinterpret_cast<libais::Ais6_1_18*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_6_1_18_ToMatlab(dynamic_cast<libais::Ais6_1_18*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 20:// IMO Circ 289 Berthing data
-                            AIS_6_1_20_ToMatlab(reinterpret_cast<libais::Ais6_1_20*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_6_1_20_ToMatlab(dynamic_cast<libais::Ais6_1_20*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 25:// IMO Circ 289 Dangerous cargo indication 2
-                            AIS_6_1_25_ToMatlab(reinterpret_cast<libais::Ais6_1_25*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_6_1_25_ToMatlab(dynamic_cast<libais::Ais6_1_25*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 32:// IMO Circ 289 Tidal window
-                            AIS_6_1_32_ToMatlab(reinterpret_cast<libais::Ais6_1_32*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_6_1_32_ToMatlab(dynamic_cast<libais::Ais6_1_32*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 40:// Number of persons on board.  ITU 1371-1
-                            AIS_6_1_40_ToMatlab(reinterpret_cast<libais::Ais6_1_40*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_6_1_40_ToMatlab(dynamic_cast<libais::Ais6_1_40*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         default:
                             return false;
@@ -501,64 +524,64 @@ bool extractAISMessageData(std::unique_ptr<libais::AisMsg> &aisMsg,mxArray **dec
         case 7://Binary acknowledgement
         case 13://Message 13: Safety related acknowledge
         {
-            libais::Ais7_13 *msg=reinterpret_cast<libais::Ais7_13*>(aisMsg.get());
+            libais::Ais7_13 *msg=dynamic_cast<libais::Ais7_13*>(aisMsg.get());
             
             AIS_7_13_ToMatlab(msg,decodedMessage,fieldDescriptions);
             return true;
         }
         case 8://Binary broadcast message
         {
-            libais::Ais8 *msg=reinterpret_cast<libais::Ais8*>(aisMsg.get());
+            libais::Ais8 *msg=dynamic_cast<libais::Ais8*>(aisMsg.get());
             
             switch(msg->dac) {
                 case libais::AIS_DAC_1_INTERNATIONAL:
                     switch(msg->fi) {
                         case 0:// Text telegram ITU 1371-1
-                            AIS_8_1_0_ToMatlab(reinterpret_cast<libais::Ais8_1_0*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_8_1_0_ToMatlab(dynamic_cast<libais::Ais8_1_0*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 11:// IMO Circ 289 met hydro
-                            AIS_8_1_11_ToMatlab(reinterpret_cast<libais::Ais8_1_11*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_8_1_11_ToMatlab(dynamic_cast<libais::Ais8_1_11*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 13:// IMO Circ 236 Fairway closed
-                            AIS_8_1_13_ToMatlab(reinterpret_cast<libais::Ais8_1_13*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_8_1_13_ToMatlab(dynamic_cast<libais::Ais8_1_13*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 15:// IMO Circ 236 Extended ship static and
                                 //voyage data
-                            AIS_8_1_15_ToMatlab(reinterpret_cast<libais::Ais8_1_15*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_8_1_15_ToMatlab(dynamic_cast<libais::Ais8_1_15*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 16:// IMO Circ 236 Number of persons on board
-                            AIS_8_1_16_ToMatlab(reinterpret_cast<libais::Ais8_1_16*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_8_1_16_ToMatlab(dynamic_cast<libais::Ais8_1_16*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 17:// IMO Circ 236 VTS Generated/synthetic
                                 //targets
-                            AIS_8_1_17_ToMatlab(reinterpret_cast<libais::Ais8_1_17*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_8_1_17_ToMatlab(dynamic_cast<libais::Ais8_1_17*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 19:// IMO Circ 289 Marine traffic signal
-                            AIS_8_1_19_ToMatlab(reinterpret_cast<libais::Ais8_1_19*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_8_1_19_ToMatlab(dynamic_cast<libais::Ais8_1_19*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 21:// IMO Circ 289 Weather observation report
                                 //from ship
-                            AIS_8_1_21_ToMatlab(reinterpret_cast<libais::Ais8_1_21*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_8_1_21_ToMatlab(dynamic_cast<libais::Ais8_1_21*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 22:// Area notice
-                            AIS_8_1_22_ToMatlab(reinterpret_cast<libais::Ais8_1_22*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_8_1_22_ToMatlab(dynamic_cast<libais::Ais8_1_22*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 24:// IMO Circ 289 Extended ship static and
                                 //voyage-related
-                            AIS_8_1_24_ToMatlab(reinterpret_cast<libais::Ais8_1_24*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_8_1_24_ToMatlab(dynamic_cast<libais::Ais8_1_24*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 26:// IMO Circ 289 Environmental
-                            AIS_8_1_26_ToMatlab(reinterpret_cast<libais::Ais8_1_26*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_8_1_26_ToMatlab(dynamic_cast<libais::Ais8_1_26*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 27:// IMO Circ 289 Route information
-                            AIS_8_1_27_ToMatlab(reinterpret_cast<libais::Ais8_1_27*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_8_1_27_ToMatlab(dynamic_cast<libais::Ais8_1_27*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 29:// IMO Circ 289 Text description
-                            AIS_8_1_29_ToMatlab(reinterpret_cast<libais::Ais8_1_29*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_8_1_29_ToMatlab(dynamic_cast<libais::Ais8_1_29*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 31:// IMO Circ 289 Meteorological and
                                 //Hydrographic data
-                            AIS_8_1_31_ToMatlab(reinterpret_cast<libais::Ais8_1_31*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_8_1_31_ToMatlab(dynamic_cast<libais::Ais8_1_31*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         default:
                             return false;
@@ -568,23 +591,23 @@ bool extractAISMessageData(std::unique_ptr<libais::AisMsg> &aisMsg,mxArray **dec
                         case 10:// ECE-TRANS-SC3-2006-10e-RIS.pdf
                                 //River Information System, inland ship
                                 //static and voyage related data
-                            AIS_8_200_10_ToMatlab(reinterpret_cast<libais::Ais8_200_10*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_8_200_10_ToMatlab(dynamic_cast<libais::Ais8_200_10*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 23://ECE-TRANS-SC3-2006-10e-RIS.pdf 
                                 //River Information System
-                            AIS_8_200_23_ToMatlab(reinterpret_cast<libais::Ais8_200_23*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_8_200_23_ToMatlab(dynamic_cast<libais::Ais8_200_23*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 24://ECE-TRANS-SC3-2006-10e-RIS.pdf River
                                 //Information System: Water Level
-                            AIS_8_200_24_ToMatlab(reinterpret_cast<libais::Ais8_200_24*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_8_200_24_ToMatlab(dynamic_cast<libais::Ais8_200_24*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 40://ECE-TRANS-SC3-2006-10e-RIS.pdf 
                                 //River Information System
-                            AIS_8_200_40_ToMatlab(reinterpret_cast<libais::Ais8_200_40*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_8_200_40_ToMatlab(dynamic_cast<libais::Ais8_200_40*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         case 55://ECE-TRANS-SC3-2006-10e-RIS.pdf 
                                 //River Information System
-                            AIS_8_200_55_ToMatlab(reinterpret_cast<libais::Ais8_200_55*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_8_200_55_ToMatlab(dynamic_cast<libais::Ais8_200_55*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         default:
                             return false;
@@ -592,7 +615,7 @@ bool extractAISMessageData(std::unique_ptr<libais::AisMsg> &aisMsg,mxArray **dec
                 case libais::AIS_DAC_366_UNITED_STATES_OF_AMERICA:
                     switch(msg->fi){
                         case 56:// USCG Blue Force encrypted message.
-                            AIS_8_366_56_ToMatlab(reinterpret_cast<libais::Ais8_366_56*>(msg),decodedMessage,fieldDescriptions);
+                            AIS_8_366_56_ToMatlab(dynamic_cast<libais::Ais8_366_56*>(msg),decodedMessage,fieldDescriptions);
                             return true;
                         default:
                             return false;
@@ -603,119 +626,119 @@ bool extractAISMessageData(std::unique_ptr<libais::AisMsg> &aisMsg,mxArray **dec
         }
         case 9:
         {
-            libais::Ais9 *msg=reinterpret_cast<libais::Ais9*>(aisMsg.get());
+            libais::Ais9 *msg=dynamic_cast<libais::Ais9*>(aisMsg.get());
             
             AIS_9_ToMatlab(msg,decodedMessage,fieldDescriptions);
             return true;
         }
         case 10:
         {
-            libais::Ais10 *msg=reinterpret_cast<libais::Ais10*>(aisMsg.get());
+            libais::Ais10 *msg=dynamic_cast<libais::Ais10*>(aisMsg.get());
             
             AIS_10_ToMatlab(msg,decodedMessage,fieldDescriptions);
             return true;
         }
         case 12:
         {
-            libais::Ais12 *msg=reinterpret_cast<libais::Ais12*>(aisMsg.get());
+            libais::Ais12 *msg=dynamic_cast<libais::Ais12*>(aisMsg.get());
             
             AIS_12_ToMatlab(msg,decodedMessage,fieldDescriptions);
             return true;
         }
         case 14:
         {
-            libais::Ais14 *msg=reinterpret_cast<libais::Ais14*>(aisMsg.get());
+            libais::Ais14 *msg=dynamic_cast<libais::Ais14*>(aisMsg.get());
             
             AIS_14_ToMatlab(msg,decodedMessage,fieldDescriptions);
             return true;
         }
         case 15:
         {
-            libais::Ais15 *msg=reinterpret_cast<libais::Ais15*>(aisMsg.get());
+            libais::Ais15 *msg=dynamic_cast<libais::Ais15*>(aisMsg.get());
             
             AIS_15_ToMatlab(msg,decodedMessage,fieldDescriptions);
             return true;
         }
         case 16:
         {
-            libais::Ais16 *msg=reinterpret_cast<libais::Ais16*>(aisMsg.get());
+            libais::Ais16 *msg=dynamic_cast<libais::Ais16*>(aisMsg.get());
             
             AIS_16_ToMatlab(msg,decodedMessage,fieldDescriptions);
             return true;
         }
         case 17:
         {
-            libais::Ais17 *msg=reinterpret_cast<libais::Ais17*>(aisMsg.get());
+            libais::Ais17 *msg=dynamic_cast<libais::Ais17*>(aisMsg.get());
             
             AIS_17_ToMatlab(msg,decodedMessage,fieldDescriptions);
             return true;
         }
         case 18:
         {
-            libais::Ais18 *msg=reinterpret_cast<libais::Ais18*>(aisMsg.get());
+            libais::Ais18 *msg=dynamic_cast<libais::Ais18*>(aisMsg.get());
             
             AIS_18_ToMatlab(msg,decodedMessage,fieldDescriptions);
             return true;
         }
         case 19:
         {
-            libais::Ais19 *msg=reinterpret_cast<libais::Ais19*>(aisMsg.get());
+            libais::Ais19 *msg=dynamic_cast<libais::Ais19*>(aisMsg.get());
             
             AIS_19_ToMatlab(msg,decodedMessage,fieldDescriptions);
             return true;
         }
         case 20:
         {
-            libais::Ais20 *msg=reinterpret_cast<libais::Ais20*>(aisMsg.get());
+            libais::Ais20 *msg=dynamic_cast<libais::Ais20*>(aisMsg.get());
             
             AIS_20_ToMatlab(msg,decodedMessage,fieldDescriptions);
             return true;
         }
         case 21:
         {
-            libais::Ais21 *msg=reinterpret_cast<libais::Ais21*>(aisMsg.get());
+            libais::Ais21 *msg=dynamic_cast<libais::Ais21*>(aisMsg.get());
             
             AIS_21_ToMatlab(msg,decodedMessage,fieldDescriptions);
             return true;
         }
         case 22:
         {
-            libais::Ais22 *msg=reinterpret_cast<libais::Ais22*>(aisMsg.get());
+            libais::Ais22 *msg=dynamic_cast<libais::Ais22*>(aisMsg.get());
             
             AIS_22_ToMatlab(msg,decodedMessage,fieldDescriptions);
             return true;
         }
         case 23:
         {
-            libais::Ais23 *msg=reinterpret_cast<libais::Ais23*>(aisMsg.get());
+            libais::Ais23 *msg=dynamic_cast<libais::Ais23*>(aisMsg.get());
             
             AIS_23_ToMatlab(msg,decodedMessage,fieldDescriptions);
             return true;
         }
         case 24:
         {
-            libais::Ais24 *msg=reinterpret_cast<libais::Ais24*>(aisMsg.get());
+            libais::Ais24 *msg=dynamic_cast<libais::Ais24*>(aisMsg.get());
             
             AIS_24_ToMatlab(msg,decodedMessage,fieldDescriptions);
             return true;
         }
         case 25:
         {
-            libais::Ais25 *msg=reinterpret_cast<libais::Ais25*>(aisMsg.get());
+            libais::Ais25 *msg=dynamic_cast<libais::Ais25*>(aisMsg.get());
             
             AIS_25_ToMatlab(msg,decodedMessage,fieldDescriptions);
             return true;
         }
         case 26:
         {
-            libais::Ais26 *msg=reinterpret_cast<libais::Ais26*>(aisMsg.get());
+            libais::Ais26 *msg=dynamic_cast<libais::Ais26*>(aisMsg.get());
             
             AIS_26_ToMatlab(msg,decodedMessage,fieldDescriptions);
             return true;
         }
         case 27:
         {
-            libais::Ais27 *msg=reinterpret_cast<libais::Ais27*>(aisMsg.get());
+            libais::Ais27 *msg=dynamic_cast<libais::Ais27*>(aisMsg.get());
             
             AIS_27_ToMatlab(msg,decodedMessage,fieldDescriptions);
             return true;
@@ -3538,7 +3561,7 @@ void AIS_6_1_14_ToMatlab(libais::Ais6_1_14 *msg, mxArray **decodedMessage,mxArra
 
     windowDims[0]=msg->windows.size();
     windowDims[1]=1;
-    windowArray=mxCreateStructArray(2, dims, numberOfWindowFields, windowFieldNames);
+    windowArray=mxCreateStructArray(2, windowDims, numberOfWindowFields, windowFieldNames);
     mxSetFieldByNumber(theStruct,0,11,windowArray);
 
     for (curWindow = 0; curWindow < msg->windows.size(); curWindow++) {
@@ -3927,7 +3950,7 @@ void AIS_6_1_25_ToMatlab(libais::Ais6_1_25 *msg, mxArray **decodedMessage,mxArra
 
     cargoDims[0]=msg->cargos.size();
     cargoDims[1]=1;
-    cargoArray=mxCreateStructArray(2, dims, numberOfCargoFields, cargoFieldNames);
+    cargoArray=mxCreateStructArray(2, cargoDims, numberOfCargoFields, cargoFieldNames);
     mxSetFieldByNumber(theStruct,0,11,cargoArray);
     
     for (curCargo= 0; curCargo < msg->cargos.size(); curCargo++) {
@@ -4047,7 +4070,7 @@ void AIS_6_1_32_ToMatlab(libais::Ais6_1_32 *msg, mxArray **decodedMessage,mxArra
 
     windowDims[0]=msg->windows.size();
     windowDims[1]=1;
-    windowArray=mxCreateStructArray(2, dims, numberOfWindowFields, windowFieldNames);
+    windowArray=mxCreateStructArray(2, windowDims, numberOfWindowFields, windowFieldNames);
     mxSetFieldByNumber(theStruct,0,11,windowArray);
 
     for (curWindow = 0; curWindow < msg->windows.size(); curWindow++) {
@@ -4808,7 +4831,7 @@ void AIS_8_1_17_ToMatlab(libais::Ais8_1_17 *msg, mxArray **decodedMessage,mxArra
     //Fields specific to the Ais8_1_17 type.
     targetDims[0]=msg->targets.size();
     targetDims[1]=1;
-    targetArray=mxCreateStructArray(2, dims, numberOfTargetFields, targetFieldNames);
+    targetArray=mxCreateStructArray(2, targetDims, numberOfTargetFields, targetFieldNames);
     mxSetFieldByNumber(theStruct,0,6,targetArray);
     for (curTarget = 0; curTarget < msg->targets.size(); curTarget++) {
         mxSetFieldByNumber(targetArray,curTarget,0,intMat2MatlabDoubles(&msg->targets[curTarget].type,1,1));
@@ -5587,7 +5610,7 @@ void AIS_8_1_22_ToMatlab(libais::Ais8_1_22 *msg, mxArray **decodedMessage,mxArra
                 const char *reportFieldNames[numReportFields]={"area_shape",
                 "lon", "lat", "precision", "radius_m", "spare"};                      
                 mxArray *reportStruct;
-                libais::Ais8_1_22_Circle *c =reinterpret_cast<libais::Ais8_1_22_Circle*>(msg->sub_areas[curSubarea]);
+                libais::Ais8_1_22_Circle *c =dynamic_cast<libais::Ais8_1_22_Circle*>(msg->sub_areas[curSubarea]);
                 
                 //Create the Matlab structure array.
                 reportStruct=mxCreateStructArray(2, reportDims, numReportFields, reportFieldNames);
@@ -5620,7 +5643,7 @@ void AIS_8_1_22_ToMatlab(libais::Ais8_1_22 *msg, mxArray **decodedMessage,mxArra
                 "lon", "lat", "precision", "e_dim_m", "n_dim_m", "orient_deg",
                 "spare"};                      
                 mxArray *reportStruct;
-                libais::Ais8_1_22_Rect *c =reinterpret_cast<libais::Ais8_1_22_Rect*>(msg->sub_areas[curSubarea]);
+                libais::Ais8_1_22_Rect *c =dynamic_cast<libais::Ais8_1_22_Rect*>(msg->sub_areas[curSubarea]);
                 
                 //Create the Matlab structure array.
                 reportStruct=mxCreateStructArray(2, reportDims, numReportFields, reportFieldNames);
@@ -5655,7 +5678,7 @@ void AIS_8_1_22_ToMatlab(libais::Ais8_1_22 *msg, mxArray **decodedMessage,mxArra
                 "lon", "lat", "precision", "radius_m", "left_bound_deg",
                 "right_bound_deg"};                      
                 mxArray *reportStruct;
-                libais::Ais8_1_22_Sector *c =reinterpret_cast<libais::Ais8_1_22_Sector*>(msg->sub_areas[curSubarea]);
+                libais::Ais8_1_22_Sector *c =dynamic_cast<libais::Ais8_1_22_Sector*>(msg->sub_areas[curSubarea]);
                 
                 //Create the Matlab structure array.
                 reportStruct=mxCreateStructArray(2, reportDims, numReportFields, reportFieldNames);
@@ -5688,7 +5711,7 @@ void AIS_8_1_22_ToMatlab(libais::Ais8_1_22 *msg, mxArray **decodedMessage,mxArra
                 const char *reportFieldNames[numReportFields]={"area_shape",
                 "angles", "dists_m", "spare"};                      
                 mxArray *reportStruct, *angleArray, *distArray;
-                libais::Ais8_1_22_Polyline *c =reinterpret_cast<libais::Ais8_1_22_Polyline*>(msg->sub_areas[curSubarea]);
+                libais::Ais8_1_22_Polyline *c =dynamic_cast<libais::Ais8_1_22_Polyline*>(msg->sub_areas[curSubarea]);
                 size_t curItem;
                 double *data;
                 
@@ -5724,7 +5747,7 @@ void AIS_8_1_22_ToMatlab(libais::Ais8_1_22 *msg, mxArray **decodedMessage,mxArra
                 const char *reportFieldNames[numReportFields]={"area_shape",
                 "angles", "dists_m", "spare"};                      
                 mxArray *reportStruct,*angleArray, *distArray;
-                libais::Ais8_1_22_Polygon *c =reinterpret_cast<libais::Ais8_1_22_Polygon*>(msg->sub_areas[curSubarea]);
+                libais::Ais8_1_22_Polygon *c =dynamic_cast<libais::Ais8_1_22_Polygon*>(msg->sub_areas[curSubarea]);
                 size_t curItem;
                 double *data;
                 
@@ -5761,7 +5784,7 @@ void AIS_8_1_22_ToMatlab(libais::Ais8_1_22 *msg, mxArray **decodedMessage,mxArra
                 const char *reportFieldNames[numReportFields]={"area_shape",
                 "text"};                      
                 mxArray *reportStruct;
-                libais::Ais8_1_22_Text *c =reinterpret_cast<libais::Ais8_1_22_Text*>(msg->sub_areas[curSubarea]);
+                libais::Ais8_1_22_Text *c =dynamic_cast<libais::Ais8_1_22_Text*>(msg->sub_areas[curSubarea]);
 
                 //Create the Matlab structure array.
                 reportStruct=mxCreateStructArray(2, reportDims, numReportFields, reportFieldNames);
@@ -6011,7 +6034,7 @@ void AIS_8_1_26_ToMatlab(libais::Ais8_1_26 *msg, mxArray **decodedMessage,mxArra
                 const char *reportFieldNames[numReportFields]={"report_type",
                 "utc_day", "utc_hr", "utc_min", "site_id", "lon", "lat", "z",
                 "owner", "timeout", "spare"};                      
-                libais::Ais8_1_26_Location *rpt = reinterpret_cast<libais::Ais8_1_26_Location *>(msg->reports[curReport]);
+                libais::Ais8_1_26_Location *rpt = dynamic_cast<libais::Ais8_1_26_Location *>(msg->reports[curReport]);
                 mxArray *reportStruct;
                 
                 //Create the Matlab structure array.
@@ -6068,7 +6091,7 @@ void AIS_8_1_26_ToMatlab(libais::Ais8_1_26 *msg, mxArray **decodedMessage,mxArra
                 const mwSize reportDims[2] = {1, 1};
                 const char *reportFieldNames[numReportFields]={"report_type",
                 "utc_day", "utc_hr", "utc_min", "site_id", "name", "spare"};                      
-                libais::Ais8_1_26_Station *rpt = reinterpret_cast<libais::Ais8_1_26_Station *>(msg->reports[curReport]);
+                libais::Ais8_1_26_Station *rpt = dynamic_cast<libais::Ais8_1_26_Station *>(msg->reports[curReport]);
                 mxArray *reportStruct;
                 
                 //Create the Matlab structure array.
@@ -6114,7 +6137,7 @@ void AIS_8_1_26_ToMatlab(libais::Ais8_1_26 *msg, mxArray **decodedMessage,mxArra
                 "wind_forecast", "wind_gust_forecast", "wind_dir_forecast",
                 "utc_day_forecast", "utc_hour_forecast",
                 "utc_min_forecast", "duration", "spare"};                      
-                libais::Ais8_1_26_Wind *rpt = reinterpret_cast<libais::Ais8_1_26_Wind *>(msg->reports[curReport]);
+                libais::Ais8_1_26_Wind *rpt = dynamic_cast<libais::Ais8_1_26_Wind *>(msg->reports[curReport]);
                 mxArray *reportStruct;
                 
                 //Create the Matlab structure array.
@@ -6210,7 +6233,7 @@ void AIS_8_1_26_ToMatlab(libais::Ais8_1_26 *msg, mxArray **decodedMessage,mxArra
                 "trend", "vdatum", "sensor_type", "forecast_type",
                 "level_forecast", "utc_day_forecast", "utc_hour_forecast",
                 "utc_min_forecast", "duration", "spare"};                      
-                libais::Ais8_1_26_WaterLevel *rpt = reinterpret_cast<libais::Ais8_1_26_WaterLevel *>(msg->reports[curReport]);
+                libais::Ais8_1_26_WaterLevel *rpt = dynamic_cast<libais::Ais8_1_26_WaterLevel *>(msg->reports[curReport]);
                 mxArray *reportStruct;
                 
                 //Create the Matlab structure array.
@@ -6286,7 +6309,7 @@ void AIS_8_1_26_ToMatlab(libais::Ais8_1_26 *msg, mxArray **decodedMessage,mxArra
                 const char *reportFieldNames[numReportFields]={"report_type",
                 "utc_day", "utc_hr", "utc_min", "site_id", "type", "spare",
                 "currents"};                      
-                libais::Ais8_1_26_Curr2D *rpt = reinterpret_cast<libais::Ais8_1_26_Curr2D *>(msg->reports[curReport]);
+                libais::Ais8_1_26_Curr2D *rpt = dynamic_cast<libais::Ais8_1_26_Curr2D *>(msg->reports[curReport]);
                 const mwSize currentsDims[2] = {3,1};
                 const size_t numberOfCurrentFields=3;
                 const char *currentFieldNames[numberOfCurrentFields]={"speed",
@@ -6349,7 +6372,7 @@ void AIS_8_1_26_ToMatlab(libais::Ais8_1_26 *msg, mxArray **decodedMessage,mxArra
                 const char *reportFieldNames[numReportFields]={"report_type",
                 "utc_day", "utc_hr", "utc_min", "site_id", "type", "spare",
                 "currents"};                      
-                libais::Ais8_1_26_Curr3D *rpt = reinterpret_cast<libais::Ais8_1_26_Curr3D *>(msg->reports[curReport]);
+                libais::Ais8_1_26_Curr3D *rpt = dynamic_cast<libais::Ais8_1_26_Curr3D *>(msg->reports[curReport]);
                 const mwSize currentsDims[2] = {2,1};
                 const size_t numberOfCurrentFields=4;
                 const char *currentFieldNames[numberOfCurrentFields]={"north",
@@ -6413,7 +6436,7 @@ void AIS_8_1_26_ToMatlab(libais::Ais8_1_26 *msg, mxArray **decodedMessage,mxArra
                 const char *reportFieldNames[numReportFields]={"report_type",
                 "utc_day", "utc_hr", "utc_min", "site_id", "spare",
                 "currents"};                      
-                libais::Ais8_1_26_HorzFlow *rpt = reinterpret_cast<libais::Ais8_1_26_HorzFlow *>(msg->reports[curReport]);
+                libais::Ais8_1_26_HorzFlow *rpt = dynamic_cast<libais::Ais8_1_26_HorzFlow *>(msg->reports[curReport]);
                 const mwSize flowDims[2] = {2,1};
                 const size_t numberOfFlowFields=5;
                 const char *flowFieldNames[numberOfFlowFields]={"bearing",
@@ -6488,7 +6511,7 @@ void AIS_8_1_26_ToMatlab(libais::Ais8_1_26 *msg, mxArray **decodedMessage,mxArra
                 "water_temp", "water_temp_depth", "water_sensor_type",
                 "wave_height", "wave_period", "wave_dir", "wave_sensor_type",
                 "salinity"};                      
-                libais::Ais8_1_26_SeaState *rpt = reinterpret_cast<libais::Ais8_1_26_SeaState *>(msg->reports[curReport]);
+                libais::Ais8_1_26_SeaState *rpt = dynamic_cast<libais::Ais8_1_26_SeaState *>(msg->reports[curReport]);
                 mxArray *reportStruct;
                 
                 //Create the Matlab structure array.
@@ -6590,7 +6613,7 @@ void AIS_8_1_26_ToMatlab(libais::Ais8_1_26 *msg, mxArray **decodedMessage,mxArra
                 "utc_day", "utc_hr", "utc_min", "site_id", "water_temp",
                 "conductivity", "pressure", "salinity", "salinity_type",
                 "sensor_type", "spare"};                      
-                libais::Ais8_1_26_Salinity *rpt = reinterpret_cast<libais::Ais8_1_26_Salinity *>(msg->reports[curReport]);
+                libais::Ais8_1_26_Salinity *rpt = dynamic_cast<libais::Ais8_1_26_Salinity *>(msg->reports[curReport]);
                 mxArray *reportStruct;
                 
                 //Create the Matlab structure array.
@@ -6655,7 +6678,7 @@ void AIS_8_1_26_ToMatlab(libais::Ais8_1_26 *msg, mxArray **decodedMessage,mxArra
                 "air_temp_sensor_type", "precip", "horz_vis", "dew_point",
                 "dew_point_type", "air_pressure", "air_pressure_trend",
                 "air_pressor_type", "salinity", "spare"};                      
-                libais::Ais8_1_26_Wx *rpt = reinterpret_cast<libais::Ais8_1_26_Wx *>(msg->reports[curReport]);
+                libais::Ais8_1_26_Wx *rpt = dynamic_cast<libais::Ais8_1_26_Wx *>(msg->reports[curReport]);
                 mxArray *reportStruct;
                 
                 //Create the Matlab structure array.
@@ -6739,7 +6762,7 @@ void AIS_8_1_26_ToMatlab(libais::Ais8_1_26 *msg, mxArray **decodedMessage,mxArra
                 "utc_day", "utc_hr", "utc_min", "site_id", "draught", "gap",
                 "forecast_gap", "trend", "utc_day_forecast", "utc_hour_forecast",
                 "utc_min_forecast", "spare"};                      
-                libais::Ais8_1_26_AirDraught *rpt = reinterpret_cast<libais::Ais8_1_26_AirDraught *>(msg->reports[curReport]);
+                libais::Ais8_1_26_AirDraught *rpt = dynamic_cast<libais::Ais8_1_26_AirDraught *>(msg->reports[curReport]);
                 mxArray *reportStruct;
                 
                 //Create the Matlab structure array.
@@ -6812,7 +6835,7 @@ void AIS_8_1_26_ToMatlab(libais::Ais8_1_26 *msg, mxArray **decodedMessage,mxArra
                 const mwSize reportDims[2] = {1, 1};
                 const char *reportFieldNames[numReportFields]={"report_type",
                 "utc_day", "utc_hr", "utc_min", "site_id"};                      
-                libais::Ais8_1_26_SensorReport *rpt = reinterpret_cast<libais::Ais8_1_26_SensorReport*>(msg->reports[curReport]);
+                libais::Ais8_1_26_SensorReport *rpt = dynamic_cast<libais::Ais8_1_26_SensorReport*>(msg->reports[curReport]);
                 mxArray *reportStruct;
                 
                 //Create the Matlab structure array.

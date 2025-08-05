@@ -157,7 +157,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         idxRangeMATLAB=allocUnsignedSizeMatInMatlab(m, numPoints);
         
         distSquaredMATLAB=mxCreateNumericMatrix(m,numPoints,mxDOUBLE_CLASS,mxREAL);
-        if(sizeof(size_t)==4) {//32 bit
+        if constexpr(sizeof(size_t)==4) {//32 bit
             idxRange=(size_t*)mxGetUint32s(idxRangeMATLAB);
         } else {//64 bit
             idxRange=(size_t*)mxGetUint64s(idxRangeMATLAB);
@@ -192,18 +192,25 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         switch(nlhs) {
             case 8:
                 plhs[7]=doubleMat2Matlab(theTree->data,k, N);
+                [[fallthrough]];
             case 7:
                 plhs[6]=doubleMat2Matlab(theTree->BMax,k, N);
+                [[fallthrough]];
             case 6:
                 plhs[5]=doubleMat2Matlab(theTree->BMin,k, N);
+                [[fallthrough]];
             case 5:
                 plhs[4]=unsignedSizeMat2Matlab(theTree->subtreeSizes,N, 1);
+                [[fallthrough]];
             case 4:
                 plhs[3]=unsignedSizeMat2Matlab(theTree->DISC,N, 1);
+                [[fallthrough]];
             case 3:
                 plhs[2]=unsignedSizeMat2Matlab(theTree->DATAIDX,N, 1);
+                [[fallthrough]];
             case 2:
                 plhs[1]=signedSizeMat2Matlab(theTree->HISON,N, 1);
+                [[fallthrough]];
             default:
                 plhs[0]=signedSizeMat2Matlab(theTree->LOSON,N, 1);
         }

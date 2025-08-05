@@ -10,6 +10,12 @@
 **/
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+//Suppress a useless Spectre mitigation warning when compiling with Visual
+//Studio.
+#ifdef _MSC_VER
+#pragma warning(disable : 5045)
+#endif
+
 #include <cmath>
 #include "mathFuncs.hpp"
 

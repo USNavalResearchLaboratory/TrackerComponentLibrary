@@ -49,8 +49,23 @@
 */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4514 )
+#endif
+
 #include "matrix.h"
 #include "mex.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
+
+#ifdef _MSC_VER
+//Get rid of useless Spectre mitigation warnings.
+#pragma warning( disable : 5045 )
+#endif
+
 /* This header validates inputs and includes a header needed to handle
  * Matlab matrices.*/
 #include "MexValidation.h"

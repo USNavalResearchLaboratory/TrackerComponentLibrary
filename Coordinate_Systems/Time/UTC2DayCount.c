@@ -48,6 +48,11 @@
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+#ifdef _MSC_VER
+//Get rid of useless Spectre mitigation warnings.
+#pragma warning( disable : 5045 )
+#endif
+
 /*This header is required by Matlab.*/
 #include "mex.h"
 #include "MexValidation.h"

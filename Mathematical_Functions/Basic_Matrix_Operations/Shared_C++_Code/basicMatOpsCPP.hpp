@@ -191,7 +191,7 @@ bool allArrayElsEqual(T1 *v1, T2 *v2, const size_t numEls) {
  *October 2020 David F. Crouse, Naval Research Laboratory, Washington D.C.
  */
     for(size_t i=0;i<numEls;i++) {
-        if(v1[i]!=v2[i]) {
+        if(v1[i]!=static_cast<T1>(v2[i])) {
             return false;
         }
     }

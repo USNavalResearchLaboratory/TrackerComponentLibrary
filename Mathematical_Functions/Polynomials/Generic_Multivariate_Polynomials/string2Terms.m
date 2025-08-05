@@ -104,7 +104,7 @@ for curMonomial=1:numMonomials
     
     for curSplitMonomial=1:numSplitMonomials
         scanVals=sscanf(splitMonomial{curSplitMonomial},'x%i^%i');
-        if(length(scanVals)==1)
+        if(isscalar(scanVals))
             varIdxList(curSplitMonomial)=scanVals;
             degList(curSplitMonomial)=1;
         else

@@ -1,10 +1,9 @@
 function xyz=genEqAreaGridOnSphere(n,algorithm)
-%%GENEQAREAGRIDONSPHERE Generate a grid of Cartesian points on the
-%                        surface of a unit sphere based on equal-area
-%                        projections.
+%%GENEQAREAGRIDONSPHERE Generate a grid of Cartesian points on the surface
+%                       of a unit sphere based on equal-area projections.
 %
 %INPUTS: n This determines the number of points to generate. For
-%          algorithm=0, exectly n*n points will be generate.d For n=1,
+%          algorithm=0, exectly n*n points will be generated. For n=1,
 %          approximately n*n points will be generated,
 % algorithm This selects the algorithm to use. Possible values are:
 %          0 Use Lambert's azimuthal projection for the entire sphere. This

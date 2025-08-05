@@ -77,9 +77,10 @@ else
     az1=azBounds(1);
     az2=azBounds(2);
 end
+
 %Rotate everything so that az1=0. Everything is considered in terms of
-%increasing angle from 0.We have a special test for regions that span 2*pi,
-%so that we take the entire circle.
+%increasing angle from 0. We have a special test for regions that span
+%2*pi, so that we take the entire circle.
 if((boundType==0&&beamHalfwidth==pi)||az2-az1==2*pi)
     az2=2*pi;
 else

@@ -4,7 +4,7 @@ function [numMeasPerScan,measMap,invMeasMap]=getCompressedIdxMappings(theHypIdxH
 %       assignment, obtain a mapping of the indices of the measurements
 %       at each dimension to one that has no gaps. For example, if in
 %       the first dimension, hypotheses contain measurements 1, 3, 4,
-%       and 5, these would be remappted to indices 1,2,3, and 4 (the
+%       and 5, these would be remapped to indices 1,2,3, and 4 (the
 %       gap between 1 and 3 is eliminated). At the same time, create a
 %       matrix to perform the inverse mapping from the compressed
 %       indices to the spread out indices. The zero index is assumed to
@@ -24,7 +24,7 @@ function [numMeasPerScan,measMap,invMeasMap]=getCompressedIdxMappings(theHypIdxH
 %             numPartsPerSec(i) hypotheses. To see how this is used, look
 %             at the second example below.
 %
-%OUTPUTS: numMeasPerScan A numDimsX1 vector where numMeasPerScan(i) is
+%OUTPUTS: numMeasPerScan A 1XnumDims vector where numMeasPerScan(i) is
 %             the number of unique indices in theHypIdxHist(i,:). Zero
 %             indices present in theHypIdxHist do not count.
 %     measMap A max(numMeasPerScan)XnumDims matrix of how compressed
@@ -146,12 +146,11 @@ end
 %replace the nonzero elements with appropriate indices.
 invMeasMap=zeros(maxMeasPerScan,numDims);
 if(hasSkipSections)
-    invMeasMap=zeros(maxMeasPerScan,numDims);
-    for curDim=1:numDims
-        for curSec=1:numSec
-            startIdx=1+(curSec-1)*secLength;
-            
-            for hypIdx=startIdx:(startIdx+numPartsPerSec(curSec)-1)
+    for curSec=1:numSec
+        startIdx=1+(curSec-1)*secLength;
+        
+        for hypIdx=startIdx:(startIdx+numPartsPerSec(curSec)-1)
+            for curDim=1:numDims
                 idx=theHypIdxHist(curDim,hypIdx);
 
                 if(idx~=0)
@@ -177,18 +176,21 @@ end
 %at each scan.
 numMeasPerScan=sum(invMeasMap,1);
 
-%Next, we create a matrix such that measMat(i,curDim) will give the index
-%of the ith measurement from the specified scan. At the same time, we
-%replace the nonzero indices in invMeasMat with the corresponding indices
-%in measMat. This lets one map from the larger set of measurement values at
-%each scan in theHypIdxHist to a compressed set of values (no gaps).
-measMap=zeros(max(numMeasPerScan),numDims);
-for curDim=1:numDims
-    if(numMeasPerScan(curDim)>0)
-        measMap(1:numMeasPerScan(curDim),curDim)=find(invMeasMap(:,curDim));
-
-        for curMeas=1:numMeasPerScan(curDim)
-            invMeasMap(measMap(curMeas,curDim),curDim)=curMeas;
+if(nargout>1)
+    %Next, we create a matrix such that measMat(i,curDim) will give the
+    %index of the ith measurement from the specified scan. At the same
+    %time, replace the nonzero indices in invMeasMat with the corresponding
+    %indices in measMat. This lets one map from the larger set of
+    %measurement values at each scan in theHypIdxHist to a compressed set
+    %of values (no gaps).
+    measMap=zeros(max(numMeasPerScan),numDims);
+    for curDim=1:numDims
+        if(numMeasPerScan(curDim)>0)
+            measMap(1:numMeasPerScan(curDim),curDim)=find(invMeasMap(:,curDim));
+    
+            for curMeas=1:numMeasPerScan(curDim)
+                invMeasMap(measMap(curMeas,curDim),curDim)=curMeas;
+            end
         end
     end
 end

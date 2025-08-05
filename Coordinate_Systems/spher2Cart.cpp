@@ -95,9 +95,18 @@
 *February 2017 David F.Crouse, Naval Research Laboratory, Washington D.C.
 */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4514 )
+#endif
 
 #include "matrix.h"
 #include "mex.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
+
 /* This header validates inputs and includes a header needed to handle
  * Matlab matrices.*/
 #include "MexValidation.h"
@@ -105,8 +114,10 @@
 #include <cmath>
         
 void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray *prhs[]) {
-    double *points, *zTx, *zRx, *M;
-    int systemType;
+    double *points, *M;
+    double *zTx=NULL;//Initialize to avoid a warning in MinGW.
+    double *zRx=NULL;//Initialize to avoid a warning in MinGW.
+    size_t systemType;
     size_t i, N, numRows;
     //If multiple values are passed for zTx, zRx or M, then the three
     //offsets below are used to move to the next value when going through
@@ -125,7 +136,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     //typecast.
     double zeroVector[3]={0,0,0};
     double identMat[9]={1,0,0,0,1,0,0,0,1};
-    bool useHalfRange;
+    bool useHalfRange=false;//Initialize to avoid a warning in MinGW.
     bool flipNegRange=false;
 
     if(nrhs<1||nrhs>7) {
@@ -156,7 +167,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     if(nrhs<2||mxIsEmpty(prhs[1])) {
         systemType=0;
     } else {
-        systemType=getIntFromMatlab(prhs[1]);
+        systemType=getSizeTFromMatlab(prhs[1]);
         
         if(systemType!=0&&systemType!=1&&systemType!=2&&systemType!=3) {
             mexErrMsgTxt("Invalid system type specified.");

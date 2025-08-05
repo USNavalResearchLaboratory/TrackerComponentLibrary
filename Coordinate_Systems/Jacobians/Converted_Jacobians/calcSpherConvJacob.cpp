@@ -63,8 +63,18 @@
 */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4514 )
+#endif
+
 #include "matrix.h"
 #include "mex.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
+
 /* This header validates inputs and includes a header needed to handle
  * Matlab matrices.*/
 #include "MexValidation.h"
@@ -74,9 +84,9 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     double *retData;
     double *zSpher,*lTx,*lRx,*M;
     double lTxLocal[3],lRxLocal[3],MLocal[9];//Only used if not provided.
-    int systemType;
+    size_t systemType;
     size_t N,i;
-    bool useHalfRange;
+    bool useHalfRange=false;
     mxArray *retMat;
     
     if(nrhs<1||nrhs>6) {
@@ -102,7 +112,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     if(nrhs<2||mxIsEmpty(prhs[1])) {
         systemType=0;
     } else {
-        systemType=getIntFromMatlab(prhs[1]);
+        systemType=getSizeTFromMatlab(prhs[1]);
         
         if(systemType!=0&&systemType!=1&&systemType!=2&&systemType!=3) {
             mexErrMsgTxt("Invalid system type specified.");

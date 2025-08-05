@@ -14,6 +14,11 @@
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+//Get rid of useless Spectre mitigation warnings from Visual Studio.
+#ifdef _MSC_VER
+#pragma warning(disable : 5045)
+#endif
+
 #include "assignAlgs2D.h"
 
 /* string.h is needed for the memset function.*/

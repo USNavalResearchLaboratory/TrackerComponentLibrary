@@ -4,20 +4,24 @@
  *October 2024 David F. Crouse, Naval Research Laboratory, Washington D.C.
  */
 
+//Get rid of a useless Spectre mitigation warning from Visual Studio.
+#ifdef _MSC_VER
+#pragma warning(disable : 5045)
+#endif
+
 //Defines the size_t type
 #include <stddef.h>
 //For lgamma and limit
 #include <cmath>
 //For gcd.
 #include <numeric>
-//Where the totypes for this function are.
+//Where the types for this function are.
 #include "combinatorialFuns.hpp"
 
 //This function only works for 0<=n<=67 and 0<=k<=n. Inputs outside of that
 //range will make it read beyond the end of an array! This function looks
 //up the value of the binomial function from a table.
 uint64_t binomialFromTableCPP(const size_t n, const size_t k){
-
     if (k > n){
         return 0;
     }
@@ -2330,14 +2334,14 @@ uint64_t binomialFromTableCPP(const size_t n, const size_t k){
     4105075349580976232,
     5864393356544251760,
     7886597962249166160,
-    9989690752182277136,
-    11923179284862717872,
-    13413576695470557606,
-    14226520737620288370,
-    14226520737620288370,
-    13413576695470557606,
-    11923179284862717872,
-    9989690752182277136,
+    9989690752182277136ULL,//Adding the suffics gets rid of a GCC warning about the integer constant being so large it is unsigned.
+    11923179284862717872ULL,
+    13413576695470557606ULL,
+    14226520737620288370ULL,
+    14226520737620288370ULL,
+    13413576695470557606ULL,
+    11923179284862717872ULL,
+    9989690752182277136ULL,
     7886597962249166160,
     5864393356544251760,
     4105075349580976232,
@@ -2393,7 +2397,7 @@ double binomialCPP(const size_t n, size_t k) {
 
         if (n<=50) {
             val=static_cast<double>(binomialFromTableCPP(n, k));
-        } else if(n >=800&& k>=100){
+        } else if(n >=800 && k>=100){
             const double ndub = static_cast<double>(n);
             const double kdub = static_cast<double>(k);
             val = std::exp(std::lgamma(ndub+1)-std::lgamma(kdub+1)-std::lgamma(ndub-kdub+1));

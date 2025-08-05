@@ -50,7 +50,7 @@
 
 /*This header is required by Matlab.*/
 #include "mex.h"
-#if _MSC_VER
+#ifdef _MSC_VER
 //This header is needed for _controlfp_s under Windows in Visual Studio
 #include <float.h>
 #else
@@ -58,8 +58,10 @@
 #include <fenv.h>
 #endif
 #include "MexValidation.h"
-#pragma STDC FENV_ACCESS ON
+
+#ifdef _MSC_VER
 #pragma fenv_access (on)
+#endif
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 //Depending on the compiler, one of these pragmas will probably be

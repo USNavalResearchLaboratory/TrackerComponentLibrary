@@ -1,17 +1,20 @@
 function T=OSCFARThreshold4PFA(PFA,N,k)
 %%OSCFARTHRESHOLD4PFA Determine the threshold needed to obtain a chosen
-%           probability of false alarm in uniform clutter when using the
-%           order-statistics constant false alarm (OS-CFAR) detector with a
-%           simple exponential noise model as used in [1].
+%    probability of false alarm in uniform clutter when using the order-
+%    statistics constant false alarm (OS-CFAR) detector with a simple
+%    exponential noise model as used in [1]. This value is correct when the
+%    signal is sampled at the Nyquist frequency. Oversampling and
+%    mismatched filtering can change the noise statistics.
 %
 %INPUTS: PFA The desired probability of false alarm (0<PFA<1) to use for
 %          the CFAR detector. A matrix of values can be passed in which
 %          case the output is a matrix evaluated at each point.
-%        N The total number of cells that contribute to the test region.
-%          These are usually cells that are around the point being tested,
-%          some distance outside of a guard region.
+%        N The total number of cells that contribute to the OSCFAR tes
+%          region. For example, in 1D CFAR, there might be NA cells on each
+%          side of the guard interval, so this would be 2*NA. See below for
+%          how to handle 2D CFAR.
 %        k The integer order to use k. That is, the kth largest sample in
-%          the test region is used as the test statistic.
+%          the test region is used as the test statistic. 1<=k<=N
 %
 %OUTPUTS: T The threshold for the given parameters, T>0.
 %
@@ -21,17 +24,79 @@ function T=OSCFARThreshold4PFA(PFA,N,k)
 %expression is a polynomial. We just find the roots of the polynomial and
 %then throw out all solutions that are obviously wrong (complex, negative,
 %etc). Then if, there are any solutions left, we take the one that produces
-%a PFA closes to the desired value.
+%a PFA closest to the desired value.
 %
 %The function OSCFARPFA4Threshold is the inverse of this function.
 %
-%EXAMPLE:
+%Oversampling and windowing will change the PFA. This function assumes no
+%windowing and sampling at the Nyquist frequency.
+%
+%For 2D CFAR, if NG is a 2X1 vector holding the number of guard cells about
+%the test cell in each dimension and NA is a 2X1 vector specifying number
+%of averaging cells after the guard cells in each dimension, then the guard
+%cells (plus the test cell) define a rectangle of area prod(2*NG+1) and the
+%other cells define a larger rectangle. The difference between the
+%rectangle areas gives us the number of averaging cells used, so
+%N=prod(2*(NA+NG)+1)-prod(2*NG+1)
+%
+%EXAMPLE 1:
 %This example is notable, because with N and k so large, many other
 %techniques would fail to produce a result.
 % N=180;
 % k=179;
 % PFA=1e-8;
 % T=OSCFARThreshold4PFA(PFA,N,k)
+%
+%EXAMPLE 2:
+%Considering 1D filtering, this example shows via Monte Carlo simulation
+%that the threshold returned by this function produces the desired
+%probability of false alarm (PFA). The PFA is valid because Nyquist
+%sampling is performed without windowing. 
+% B=2e6;%2Mhz bandwidth.
+% %Baseband start and end frequencies.
+% fStart=-B/2;
+% fEnd=B/2;
+% %Sampling rate is the Nyquist rate.
+% T0=1/(2*fEnd);%Sampling period in seconds.
+% T=2e-5;%Chirp duration in seconds.
+% %The number of pulse repetition intervals. NB>=1.
+% NB=3;
+% 
+% PRF=2000;%Pulse repetition frequency (Hertz)
+% TB=1/PRF;%The pulse repetition period. TB=T means 100% duty cycle.
+% %The number of samples per PRI. The above parameters were chosen so that
+% %this is an integer. Fix just deals with finite precision errors.
+% Ns=fix(TB/T0);
+% 
+% %Generate the baseband reference signal. This is an up-chirp.
+% x=LFMChirp(T,fStart,fEnd,{T0});
+% x=x(:);
+% 
+% %Allocate space for the received signal. The first dimensions is "fast
+% %time"; the second dimension is "slow time".
+% numDetect=0;
+% numTotal=0;
+% parfor curRun=1:1e4
+%     %Create a Received signal that is all noise.
+%     y=zeros(Ns,NB);
+%     for i=0:(NB-1)
+%         y(:,i+1)=y(:,i+1)+ComplexGaussianD.rand(Ns).';
+%     end
+% 
+%     wRange=[];%No windowing. Windowing changes the statistics.
+%     matchedMag=delayPlot1DNBPulse(x,y,T0,wRange);
+%     numGuardCells=5;
+%     numAvgCells=4;
+%     PFA=5e-4;
+%     k=6;
+%     DetectionList=OSCFAR1D(matchedMag,numGuardCells,numAvgCells,k,PFA);
+% 
+%     if(~isempty(DetectionList))
+%         numDetect=numDetect+length(DetectionList.Index);
+%     end
+%     numTotal=numTotal+length(matchedMag);
+% end
+% PFAEmpir=numDetect/numTotal
 %
 %REFERENCES
 %[1] P. P. Gandhi and S. A. Kassam, "Analysis of CFAR processors in
@@ -40,6 +105,10 @@ function T=OSCFARThreshold4PFA(PFA,N,k)
 %
 %February 2017  David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+if(k>N)
+    error('k must be <=N.')
+end
 
 numVals=numel(PFA);
 T=zeros(size(PFA));

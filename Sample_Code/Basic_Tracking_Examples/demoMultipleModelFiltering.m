@@ -44,6 +44,8 @@ function demoMultipleModelFiltering()
 %June 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+%#ok<*UNRCH>
+
 %This can be changed to try other multiple model algorithms. If GPB1 is
 %selected, the multiple model filter using the coordinate dturn model is
 %not used, because the GPB1 requires that all models have the same

@@ -6,6 +6,11 @@
 #include <math.h>
 #include "direct-internal.h"
 
+#ifdef _MSC_VER
+//Get rid of Spectre mitigation and inlining warnings.
+#pragma warning( disable : 5045 4710 4711)
+#endif
+
 /* Table of constant values */
 
 static integer c__1 = 1;
@@ -1503,12 +1508,23 @@ L50:
 		 " Measure percentage wanted: %e\n",
 		 imainver, isubver, isubsubver, *n, *eps, *maxf, *maxt,
 		 *fglobal, *fglper, *volper, *sigmaper);
-	 fprintf(logfile, *iepschange == 1
-		 ? "Epsilon is changed using the Jones formula.\n"
-		 : "Epsilon is constant.\n");
-	 fprintf(logfile, *algmethod == 0
-		 ? "Jones original DIRECT algorithm is used.\n"
-		 : "Our modification of the DIRECT algorithm is used.\n");
+        if(*iepschange == 1) {
+	        fprintf(logfile,"Epsilon is changed using the Jones formula.\n");
+        } else {
+	        fprintf(logfile, "Epsilon is constant.\n");
+        }
+	// fprintf(logfile, *iepschange == 1
+	//	 ? "Epsilon is changed using the Jones formula.\n"
+	//	 : "Epsilon is constant.\n");
+        if(*algmethod == 0) {
+	        fprintf(logfile,"Jones original DIRECT algorithm is used.\n");
+        } else {
+	        fprintf(logfile,"Our modification of the DIRECT algorithm is used.\n");
+        }
+
+	 // fprintf(logfile, *algmethod == 0
+		//  ? "Jones original DIRECT algorithm is used.\n"
+		//  : "Our modification of the DIRECT algorithm is used.\n");
     }
 
     i__1 = *n;

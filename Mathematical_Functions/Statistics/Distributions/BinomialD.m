@@ -149,7 +149,7 @@ end
 
 function k=invCDF(probVals,n,p,choice)
 %%INVCDF Evaluate the inverse sumulative distribution function (CDF) of the
-%        binomial distirbution for given probabilities.
+%        binomial distribution for given probabilities.
 %
 %INPUTS: probVals The CDF probability value(s) at which the argument of the
 %          binomial CDF is to be determined. Note that 0<=prob<=1.

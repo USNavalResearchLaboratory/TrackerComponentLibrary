@@ -149,7 +149,7 @@ classdef BinaryHeapOfIndices < handle
             %become too large for its position in a min heap or too small
             %for its position in a max heap, then it has to be percolated
             %down. otherwise, it might have to be percolated up.
-            if((newKey>oldKey&&curHeap.isMinHeap)||(newKey<oldKey&&curHeap.isMaxHeap))
+            if((newKey>oldKey)||(newKey<oldKey&&curHeap.isMaxHeap))
                 curHeap.percolateDown(idx2Change);
             else%Otherwise, it has to be percolated up.
                 curHeap.percolateUp(idx2Change);

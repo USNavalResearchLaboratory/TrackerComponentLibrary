@@ -72,6 +72,12 @@
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+//Get rid of a warnings from Visual Studio. We are not missing a break
+//statement; the fall-through is intentional.
+#ifdef _MSC_VER
+#pragma warning(disable : 5262)
+#endif
+
 #include "mex.h"
 #include <algorithm>
 /* This header validates inputs and includes a header needed to handle
@@ -144,7 +150,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     row4colMATLAB=allocSignedSizeMatInMatlab(numCol,k);
 
     gainMATLAB = mxCreateNumericMatrix(k,1,mxDOUBLE_CLASS,mxREAL);
-    if(sizeof(ptrdiff_t)==4) {//32 bit
+    if constexpr(sizeof(ptrdiff_t)==4) {//32 bit
     	col4rowBest=(ptrdiff_t*)mxGetInt32s(col4rowMATLAB);
         row4colBest=(ptrdiff_t*)mxGetInt32s(row4colMATLAB);
     } else {//64 bit
@@ -193,30 +199,28 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
          * indices, zero all the row4colBest that were just padding. */
 
         switch(nlhs) {
-        case 3:
-            dims[0]=numFound;
-            dims[1]=1;
-        case 2:
-            mxSetDimensions(gainMATLAB, dims, numDims); 
-            
-            dims[0]=numRow;
-            dims[1]=numFound;
-            /*Convert the indices to Matlab indices*/
-            for(i=0;i<dims[0]*dims[1];i++) {
-                if(col4rowBest[i]<(ptrdiff_t)numCol){
-                    col4rowBest[i]+=1;
-                } else {
-                  col4rowBest[i]=0;  
+            case 3:
+                dims[0]=numFound;
+                dims[1]=1;
+                mxSetDimensions(gainMATLAB, dims, numDims); 
+            case 2:
+                dims[0]=numRow;
+                dims[1]=numFound;
+                /*Convert the indices to Matlab indices*/
+                for(i=0;i<dims[0]*dims[1];i++) {
+                    if(col4rowBest[i]<(ptrdiff_t)numCol){
+                        col4rowBest[i]+=1;
+                    } else {
+                      col4rowBest[i]=0;  
+                    }
                 }
-            }
-            mxSetDimensions(col4rowMATLAB, dims, numDims);
-        default:
-            dims[0]=numCol;
-            dims[1]=numFound;
-            /*Convert the indices to Matlab indices*/
-            for_each(row4colBest, row4colBest+dims[0]*dims[1], increment<ptrdiff_t>);
-
-            mxSetDimensions(row4colMATLAB, dims, numDims);
+                mxSetDimensions(col4rowMATLAB, dims, numDims);
+            default:
+                dims[0]=numCol;
+                dims[1]=numFound;
+                /*Convert the indices to Matlab indices*/
+                for_each(row4colBest, row4colBest+dims[0]*dims[1], increment<ptrdiff_t>);
+                mxSetDimensions(row4colMATLAB, dims, numDims);
         }
     }
 

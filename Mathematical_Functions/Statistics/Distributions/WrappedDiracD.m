@@ -30,7 +30,7 @@ function val=CDF(x,d,w,startingPoint)
 %
 %This function  basically just sums weights of the points that are less
 %than x when starting at startingPoint. Note that the CDF of a circular
-%distirbution is periodic.
+%distribution is periodic.
 %
 %April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
    
@@ -169,7 +169,7 @@ function [d,w]=params4TrigMoment(rhoList,numComp,lambda)
 %April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
     if(nargin<2||isempty(numComp))
-        if(length(rhoList)==1)
+        if(isscalar(rhoList))
             numComp=2;
         else
             numComp=5;
@@ -284,7 +284,7 @@ function vals=rand(N,d,w)
 %              from -pi to pi.
 %
 %Sampling a wrapped Dirac distribution is the same as sampling an empirical
-%distirbution and wrapping the result to the range -pi to pi. Thus, this
+%distribution and wrapping the result to the range -pi to pi. Thus, this
 %function just calls EmpiricalD.rand and wraps the result.
 %
 %April 2018 David F. Crouse, Naval Research Laboratory, Washington D.C.

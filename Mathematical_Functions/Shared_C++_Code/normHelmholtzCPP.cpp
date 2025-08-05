@@ -241,7 +241,7 @@ void normHelmHoltzDeriv3CPP(CountingClusterSetCPP<double> &d3HBardu3,const Count
                             mf=0.0;
                             k=sqrt(nf*(nf+1)/2);
                             kp1=sqrt((nf-(mf+1))*(nf+(mf+1)+1));
-                            kp2=sqrt((nf-(mf+2))*(n+(mf+2)+1));
+                            kp2=sqrt((nf-(mf+2))*(nf+(mf+2)+1));
                             d3HBardu3[n][m]=k*kp1*kp2*HBar[n][m+3];
                             
                             mf=1.0;

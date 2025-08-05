@@ -8,4 +8,7 @@ Spacetrack Report #3," AIAA/AAS Astrodynamics Specialist Conference and
 Exhibit, Guidance, Navigation, and Control and Co-located Conferences,
 Keystone Colorado, 21-24 August 2006.
 
-December 2024 David F. Crouse, Naval Research Laboratory, Washington D.C.
+Modifications have been made to make the code compile without warnings in
+Visual Studio and MinGW.
+
+May 2025 David F. Crouse, Naval Research Laboratory, Washington D.C.

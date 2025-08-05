@@ -123,7 +123,7 @@ nVals=size(C);
 %Deal with trailing singleton dimensions.
 if(length(nVals)==2)
     nVals=[nVals,1];
-elseif(length(nVals)==1)
+elseif(isscalar(nVals))
     nVals=[nVals,1,1];
 end
 

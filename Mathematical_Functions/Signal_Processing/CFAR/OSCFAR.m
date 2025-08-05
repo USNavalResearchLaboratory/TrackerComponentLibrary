@@ -1,27 +1,30 @@
-function DetectionList=OSCFAR(data2D,numGuardCells,numAvgCells,k,PFA)
+function DetectionList=OSCFAR(data2D,numGuardCells,numAvgCells,k,T)
 %%OSCFAR Perform order-statistic constant false alarm rate (OS-CFAR)
 %        detection on a two-dimensional grid. This can be, for example, a
 %        range-Doppler plot. This function just performs the detection, it
 %        does not centroid the detections.
 %
 %INPUTS: data2D The delay-Doppler plot or a set of delay-Doppler plots.
-%               This is a numRowsXnumColsXnumPlots set of numPlots 2D
-%               range-Doppler maps (or similar matrices on which CFAR
-%               should be performed). This can contain complex values.
-% numGuardCells The integer number of cells in each dimension around each
-%               test cell that are not considered in the average used for
-%               determining the changing detection threshold. This is a 2X1
-%               vector. If the same value is used in both directions, then
-%               a scalar can be passed.
-%   numAvgCells The width of the region in cells in each dimension after
-%               the guard cell region that define the average used for
-%               determinig the threshold. This is a 2X1 vector. If the same
-%               value is used in both directions, then a scalar can be
-%               passed.
-%             k The integer order to use k. That is, the kth largest sample
-%               in the test region is used as the test statistic.
-%           PFA The scalar probability of false alarm between 0 and 1 that
-%               determines the threshold for detection.
+%           This is a numRowsXnumColsXnumPlots set of numPlots 2D range-
+%           Doppler maps (or similar matrices on which CFAR should be
+%           performed). This can contain complex values.
+%        NG The integer number of cells in each dimension around each test
+%           cell that are not considered in the average used for
+%           determining the changing detection threshold. This is a 2X1
+%           vector. If the same value is used in both directions, then a
+%           scalar can be passed.
+%        NA The width of the region in cells in each dimension after the
+%           guard cell region that define the average used for determinig
+%           the threshold. This is a 2X1 vector. If the same value is used
+%           in both directions, then a scalar can be passed.
+%         k The integer order to use k. That is, the kth largest sample in
+%           the test region is used as the test statistic.
+%         T This is the fixed portion of the threshold. This times the
+%           sum of all of the average cells gives the actual threshold. A
+%           crude approximation of this value for a given false alarm rate
+%           can be obtained as using OSCFARThreshold4PFA(PFA,N) with
+%           N=prod(2*(NA+NG)+1)-prod(2*NG+1). See the comments to that
+%           function for more information.
 %
 %OUTPUTS: DetectionList A numPlotsX1 collection of structures.
 %               DetectionList(i).Index provides a 2XnumDetect set of the
@@ -32,6 +35,8 @@ function DetectionList=OSCFAR(data2D,numGuardCells,numAvgCells,k,PFA)
 %This implements the algorithm described in Section 4 of [1].
 %
 %EXAMPLE:
+%This is a simple matched filtering example that shows where the detections
+%are.
 % fc=1e9;%1GHz carrier frequency.
 % B=2e6;%2Mhz bandwidth.
 % %Baseband start and end frequencies.
@@ -76,7 +81,7 @@ function DetectionList=OSCFAR(data2D,numGuardCells,numAvgCells,k,PFA)
 % %each PRI. The same waveform is used in each PRI.
 % t=0:T0:((Ns-1)*T0);%Sample times
 % for i=0:(NB-1)
-%     
+% 
 %     for curTar=1:numTargets
 %         tCur=t-a(curTar)*t-tau(curTar)-i*TB;
 %         %The signal simulated with range migration.
@@ -84,7 +89,7 @@ function DetectionList=OSCFAR(data2D,numGuardCells,numAvgCells,k,PFA)
 %     end
 % 
 %     y(:,i+1)=y(:,i+1)+ComplexGaussianD.rand(Ns).';
-%     
+% 
 %     t=t+TB;%Increment to the next time step.
 % end
 % 
@@ -99,19 +104,24 @@ function DetectionList=OSCFAR(data2D,numGuardCells,numAvgCells,k,PFA)
 % 
 % [delayDopPlot,Doppler,delay]=delayDopplerPlotNBPulseDop(x,y,M1,M2,wDoppler,T0);
 % 
-% numGuardCells=[2;4];
-% numAvgCells=[5;3];
+% k=165;
+% 
+% NG=[2;4];%number of guard cells per dimension.
+% NA=[5;3];%number of averaging cells per dimension.
 % PFA=1e-7;
+% %Total number of averaging cells used in 2D.
+% N=prod(2*(NA+NG)+1)-prod(2*NG+1);
+% T=OSCFARThreshold4PFA(PFA,N,k);%A crude approximation.
 % 
 % range=c*delay;
-% rangeRate=Doppler*(c/fc);
+% rangeRate=-Doppler*(c/fc);
 % 
 % %Display the range-Doppler plot
 % figure(1)
 % clf
 % imagesc([rangeRate(1),rangeRate(end)],[range(1), range(end)]/1e3,10*log10(abs(delayDopPlot)));
 % set(gca,'YDir','normal')
-% caxis([-30 27])
+% clim([-30 27])
 % colormap(jet(256))
 % h1=xlabel('Range Rate (m/s)');
 % h2=ylabel('Range (km)');
@@ -119,8 +129,7 @@ function DetectionList=OSCFAR(data2D,numGuardCells,numAvgCells,k,PFA)
 % set(h1,'FontSize',14,'FontWeight','bold','FontName','Times')
 % set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
 % 
-% k=165;
-% DetectionList=OSCFAR(delayDopPlot,numGuardCells,numAvgCells,k,PFA);
+% DetectionList=OSCFAR(delayDopPlot,NG,NA,k,T);
 % idx=DetectionList(1).Index;
 % 
 % rVals=range(idx(1,:));
@@ -136,7 +145,7 @@ function DetectionList=OSCFAR(data2D,numGuardCells,numAvgCells,k,PFA)
 % set(gca,'FontSize',14,'FontWeight','bold','FontName','Times')
 % set(h1,'FontSize',14,'FontWeight','bold','FontName','Times')
 % set(h2,'FontSize',14,'FontWeight','bold','FontName','Times')
-% axis([rangeRate(end), rangeRate(1), range(1), range(end)])
+% axis([rangeRate(1), rangeRate(end), range(1), range(end)])
 %
 %REFERENCES
 %[1] P. P. Gandhi and S. A. Kassam, "Analysis of CFAR processors in
@@ -146,11 +155,11 @@ function DetectionList=OSCFAR(data2D,numGuardCells,numAvgCells,k,PFA)
 %February 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(length(numGuardCells)==1)
+if(isscalar(numGuardCells))
     numGuardCells=[numGuardCells;numGuardCells];
 end
 
-if(length(numAvgCells)==1)
+if(isscalar(numAvgCells))
     numAvgCells=[numAvgCells;numAvgCells];
 end
 
@@ -171,12 +180,6 @@ Mask1=ones(NMask(:)');
 Mask2=zeros(NMask(:)');
 Mask2((numAvgCells(1)+1):(numAvgCells(1)+2*numGuardCells(1)+1),(numAvgCells(2)+1):(numAvgCells(2)+2*numGuardCells(2)+1))=1;
 Mask=logical(Mask1-Mask2);
-
-%The number of cells in the mask
-NCFAR=prod(2*NFilter+1)-prod(2*numGuardCells+1); 
-
-%The threshold for detection.
-T=OSCFARThreshold4PFA(PFA,NCFAR,k);
 
 %Allocate space for the return variables.
 DetectionList(numPlots).Index=[];
@@ -214,7 +217,7 @@ for curPlot=1:numPlots
         rowSpan=rowSpan+1;
     end
     
-    %Shink to fit the actual detections.
+    %Shrink to fit the actual detections.
     indexR=indexR(1:numDet);
     indexD=indexD(1:numDet);
     

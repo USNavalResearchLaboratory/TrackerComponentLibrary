@@ -1,11 +1,10 @@
 function [delayDopPlot,Doppler,delay]=delayDopplerPlotNBPulseDop(x,y,M1,M2,wDoppler,T0,rangeIdxSpan)
 %%DELAYDOPPLERPLOTNBPULSEDOP This function produces the complex
-%               delay-Doppler plot for a narrowband signal assuming that
-%               the same waveform is repeated every single pulse or that
-%               each pulse ends with a region of non-broadcasting (>100%
-%               duty cycle) and the maximum delay is less than that
-%               duration. Range migration is not taken into account. Such
-%               plots can be used for detection.
+%   delay-Doppler plot for a narrowband signal assuming that the same
+%   waveform is repeated every single pulse or that each pulse ends with a
+%   region of non-broadcasting (<100% duty cycle) and the maximum delay is
+%   less than that duration. Range migration is not taken into account.
+%   Such plots can be used for detection.
 %
 %INPUTS: x The NPulseX1 complex baseband waveform that is repeated every
 %          pulse repetition interval (PRI). If NPulse<Ns, where Ns is the
@@ -28,34 +27,36 @@ function [delayDopPlot,Doppler,delay]=delayDopplerPlotNBPulseDop(x,y,M1,M2,wDopp
 %          such as mismatched filtering.
 %       T0 The sampling period. This parameter is only required if the
 %          outputs Doppler and delay are desired.
+% rangeIdxSpan If one only wishes to output a subset of the range bins
+%          generated, then these are the lower and upper indices of the
+%          bins. If omitted or an empty matrix is passed, then all of the
+%          range bins will be returned.
 %
 %OUTPUTS: delayDopPlot This is an (M1*Ns)X(M2*NB) complex range-Doppler
-%                      map. The values have been scaled so that peaks are
-%                      approximate representations of the correct complex
-%                      amplitude (not counting the effects of any
-%                      windowing). However, as demonstrated in the example
-%                      below, range migration will cause the complex
-%                      amplitude of the peak to be biased from the true
-%                      value.
-%              Doppler An (M2*NB)X1 vector holding the values of the
-%                      Doppler shifts used for each row on delayDopPlot.
-%                      This requires that T0 be passed. These are positive
-%                      and negative. These values are inverse time (e.g.
-%                      seconds). When divided by -fc, this is how much the
-%                      delay drifts per unit time due to the motion of the
-%                      target. The relation between Doppler shift and range
-%                      rate is discussed in [2]. A simple approximation for
-%                      the range rate is to multiply by the propagation
-%                      speed (e.g. c=Constants.speedOfLight) divided by the
-%                      carrier frequency fc. Even under Newtonian
-%                      mechanics, that is an approximation. Negative is
-%                      going away from the sensor (red shifted because the
-%                      frequency is reduced).
-%                delay An (M1*Ns)X1 vector holding the values of the delays
-%                      used for each columns on delayDopPlot. This requires
-%                      that T0 be passed. These are all non-negative.
-%                      Multiplied by the propagation speed c this gives the
-%                      range.
+%            map. The number of rows will be fewer if rangeIdxSpan didn't
+%            cover all of the rows. The values have been scaled so that
+%            peaks are approximate representations of the correct complex
+%            amplitude (not counting the effects of any windowing).
+%            However, as demonstrated in the example below, range migration
+%            will cause the complex amplitude of the peak to be biased from
+%            the true value.
+%    Doppler An (M2*NB)X1 vector holding the values of the Doppler shifts
+%            used for each column on delayDopPlot. This requires that T0 be
+%            passed. These are positive and negative. These values are
+%            inverse time (e.g. seconds). When divided by -fc, this is how
+%            much the delay drifts per unit time due to the motion of the
+%            target. The relation between Doppler shift and range rate is
+%            discussed in [2]. A simple approximation for the range rate is
+%            to multiply by the propagation speed (e.g.
+%            c=Constants.speedOfLight) divided by the carrier frequency fc.
+%            Even under Newtonian mechanics, that is an approximation.
+%            Negative is going away from the sensor (red shifted because
+%            the frequency is reduced).
+%      delay An (M1*Ns)X1 vector (or its length will match that given in
+%            rangeIdxSpan, if shorter) holding the values of the delays
+%            used for each row on delayDopPlot. This requires that T0
+%            be passed. These are all non-negative. Multiplied by the
+%            propagation speed c, this gives the range.
 %
 %Range-Doppler plots are discussed in many sources, but many aspects of the
 %approximations are often omitted, so a brief derivation is given here.

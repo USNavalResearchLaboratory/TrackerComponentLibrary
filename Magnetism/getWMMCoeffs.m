@@ -1,26 +1,21 @@
-function [C,S,a,c]=getWMMCoeffs(year,fullyNormalize)
-%%GETWMMCOEFFS Obtain spherical harmonic coefficients for the 2020 
-%              version of the DoD's World Magnetic Model (WMM) at a
-%              particular time or at the reference epoch (2020). The WMM
-%              predicts the Earth's core field forward in time from the
-%              reference epoch. Past field data, the International
-%              geomagnetic Reference Field (IGRF) is suggested. If a
-%              high precision prediction of a field reading at a point on
-%              the surface of the Earth is desired, then a crustal field is
-%              also necessary. In such an instance, the Enhanced Magnetic
-%              Model (EMM), which is a combined crustal and core field
-%              model, shoud be used instead. The WMM model is valid
-%              for altitudes from 1km underground to 850km above
-%              ground.
+function [C,S,a,c]=getWMMCoeffs(year,fullyNormalize,dataSet)
+%%GETWMMCOEFFS Obtain spherical harmonic coefficients for the 2025 
+%    version of the World Magnetic Model (WMM) or of the World Magnetic
+%    Model High Resolution (WMMHR) at a particular time or at the reference
+%    epoch (2025). The WMM and WMMHR predict the Earth's core field
+%    forward in time from the reference epoch. Past field data, the
+%    International geomagnetic Reference Field (IGRF) is suggested. The WMM
+%    model is valid for altitudes from 1km underground to 850km above
+%    ground.
 %
 %INPUTS: year A decimal number indicating a year in the Gregorian calendar
 %             as specified by universal coordinated time (UTC). For
 %             example, halfway through the year 2021 would be represented
 %             as 2021.5. The precision of the model is not sufficiently
 %             fine that leap seconds matter. If this parameter is omitted,
-%             then the reference year of 2020 is used. Years from 2020
-%             onward should be used, because past years are better modeled
-%             using the IGRF.
+%             then the reference year of 2025 is used. Years from 2025
+%             onward should be used, because past years are often better
+%             modeled using the IGRF.
 % fullyNormalize Geomagnetic models are normally given in terms of Schmidt
 %             semi-normalized Legendre functions with normalization term
 %             N(n,m)=sqrt((2-KDelta(m))*factorial(n-m)/factorial(n+m))
@@ -31,6 +26,10 @@ function [C,S,a,c]=getWMMCoeffs(year,fullyNormalize)
 %             If this parameter is omitted, the default value is true. The
 %             function changeSpherHarmonicNorm can be used to change the
 %             normalization afterwards.
+%     dataSet This selects the dataset to load. Possibel values are:
+%             0 Load the WMM.
+%             1 (The default if omitted or an empty matrix is passed) Load
+%               the WMMHR.
 %
 %OUTPUTS: C An array holding the coefficient terms that are multiplied by
 %           cosines in the harmonic expansion. This can be given to a
@@ -52,21 +51,22 @@ function [C,S,a,c]=getWMMCoeffs(year,fullyNormalize)
 %Documentation for the WMM is given in [1] and information on Schmidt semi-
 %normalized Legendre functions is given in [2].The coefficients are
 %distributed at:
-%http://www.ngdc.noaa.gov/geomag/WMM/DoDWMM.shtml
-%and being made by the U.S. Government are not subject to copyright
-%protection.
+%https://www.ngdc.noaa.gov/geomag/WMM/
+%and 
+%https://www.ncei.noaa.gov/products/world-magnetic-model-high-resolution
+%where it is ntoed that theNGA recommends using the WMMHR in DoD systems
+%instead of the WMM.
 %
 %EXAMPLE:
 %This shows how to get the magnetic field in the North-East-Down coordinate
 %system that is used in [1].
-% [C,S,a,c]=getWMMCoeffs(2017.5);
-% %(pi/180) converts degrees to radians.
-% pointLLA=[-80*(pi/180);240*(pi/180);100e3];
+% [C,S,a,c]=getWMMCoeffs(2025.0);
+% pointLLA=[deg2rad(-80);deg2rad(240);100e3];
 % point=ellips2Sphere(pointLLA);
 % 
 % [~,gradV]=spherHarmonicEval(C,S,point,a,c);
-% B=-gradV;Geomagnetic field vector from negative potential gradient.
-%
+% B=-gradV;%Geomagnetic field vector from negative potential gradient.
+% 
 % u=getENUAxes(pointLLA);
 % %1e9 constant converts Tesla to to nanotesla
 % NorthX=dot(u(:,2),B)*1e9
@@ -86,12 +86,20 @@ function [C,S,a,c]=getWMMCoeffs(year,fullyNormalize)
 %January 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<3||isempty(dataSet))
+    dataSet=1;
+end
+
 %Read the WMM data file, which should be located in a data folder that is
 %in the same folder as this file.
 ScriptPath=mfilename('fullpath');
 ScriptFolder = fileparts(ScriptPath);
 
-fileID=fopen([ScriptFolder,'/data/WMM.COF']);
+if(dataSet==0)
+    fileID=fopen([ScriptFolder,'/data/WMM.COF']);
+else
+    fileID=fopen([ScriptFolder,'/data/WMMHR.COF']);
+end
 data=textscan(fileID,'%s','CommentStyle','#','whitespace',' ','delimiter','\n');
 fclose(fileID);
 data=data{1};
@@ -107,8 +115,12 @@ for curRow=1:numRows
 end
 
 %The reference year
-yearRef=2020.0;
-M=12;%The maximum degree and order of the model.
+yearRef=2025.0;
+if(dataSet==0)
+    M=12;%The maximum degree and order of the model.
+else
+    M=133;%The maximum degree and order of the model.
+end
 
 %Allocate space for two sets of coefficients. these are needed so that
 %interpolation between the years can be performed, if necessary.

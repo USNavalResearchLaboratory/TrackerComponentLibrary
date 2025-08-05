@@ -12,7 +12,16 @@
 */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4514 )
+#endif
+
 #include "mex.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
 
 /* This header validates inputs and includes a header needed to handle
  * Matlab matrices.*/
@@ -42,32 +51,38 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     const size_t N=mxGetN(prhs[0]);
     
     if(mxIsComplex(prhs[0])) {
+        const auto ML=static_cast<Eigen::EigenBase<Eigen::MatrixXcd>::Index>(M);
+        const auto NL=static_cast<Eigen::EigenBase<Eigen::MatrixXcd>::Index>(N);
+
         std::complex<double> *X=reinterpret_cast<std::complex<double>*>(mxGetComplexDoubles(prhs[0]));
-        const Eigen::Map<Eigen::MatrixXcd> XEigen(X,M,N);
+        const Eigen::Map<Eigen::MatrixXcd> XEigen(X,ML,NL);
         Eigen::MatrixXcd pinvX;
 
         pinvX=pseudoInverse<Eigen::MatrixXcd>(XEigen, algorithm);
         mxArray *retMat=mxCreateDoubleMatrix(N,M,mxCOMPLEX);
         std::complex<double> *pRet=reinterpret_cast<std::complex<double>*>(mxGetComplexDoubles(retMat));
         
-        const size_t MN=M*N;
-        for(size_t k=0;k<MN;k++) {
-          pRet[k]=pinvX(k);  
+        const Eigen::EigenBase<Eigen::MatrixXcd>::Index MN=ML*NL;
+        for(Eigen::EigenBase<Eigen::MatrixXcd>::Index k=0;k<MN;k++) {
+          pRet[static_cast<size_t>(k)]=pinvX(k);  
         }
         
         plhs[0]=retMat;
     } else {
+        const auto ML=static_cast<Eigen::EigenBase<Eigen::MatrixXd>::Index>(M);
+        const auto NL=static_cast<Eigen::EigenBase<Eigen::MatrixXd>::Index>(N);
+
         double *X=mxGetDoubles(prhs[0]);
-        const Eigen::Map<Eigen::MatrixXd> XEigen(X,M,N);
+        const Eigen::Map<Eigen::MatrixXd> XEigen(X,ML,NL);
         Eigen::MatrixXd pinvX;
         
         pinvX=pseudoInverse<Eigen::MatrixXd>(XEigen, algorithm);
         mxArray *retMat=mxCreateDoubleMatrix(N,M,mxREAL);
         double *pRet=mxGetDoubles(retMat);
         
-        const size_t MN=M*N;
-        for(size_t k=0;k<MN;k++) {
-          pRet[k]=pinvX(k);  
+        const auto MN=ML*NL;
+        for(Eigen::EigenBase<Eigen::MatrixXd>::Index k=0;k<MN;k++) {
+          pRet[static_cast<size_t>(k)]=pinvX(k);  
         }
         plhs[0]=retMat;
     }

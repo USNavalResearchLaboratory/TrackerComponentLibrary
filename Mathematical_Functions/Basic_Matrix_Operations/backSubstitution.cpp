@@ -12,7 +12,16 @@
 */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4514 )
+#endif
+
 #include "mex.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
 
 /* This header validates inputs and includes a header needed to handle
  * Matlab matrices.*/
@@ -52,11 +61,12 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     
     double *L=mxGetDoubles(prhs[0]);
     const double *b=mxGetDoubles(prhs[1]);
-    const Eigen::Map<Eigen::MatrixXd> UEigen(L,N,N);
+    const auto NL=static_cast<Eigen::EigenBase<Eigen::MatrixXd>::Index>(N);
+    const Eigen::Map<Eigen::MatrixXd> UEigen(L,NL,NL);
 
     Eigen::MatrixXd bEigen(N,1);
     for(size_t k=0;k<N;k++) {
-        bEigen(k)=b[k];
+        bEigen(static_cast<Eigen::EigenBase<Eigen::MatrixXd>::Index>(k))=b[k];
     }
 
     switch(algorithm) {
@@ -76,7 +86,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     double *retBuff=mxGetDoubles(retVec);
     
     for(size_t k=0;k<N;k++) {
-        retBuff[k]=bEigen(k);
+        retBuff[k]=bEigen(static_cast<Eigen::EigenBase<Eigen::MatrixXd>::Index>(k));
     }
     
     plhs[0]=retVec;

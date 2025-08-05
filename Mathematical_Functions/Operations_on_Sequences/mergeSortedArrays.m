@@ -11,7 +11,8 @@ function z=mergeSortedArrays(x,y)
 %OUTPUTS: z An (xDim+yDim)X1 array containing all of the elements of x and
 %           y, in ascending order.
 %
-%The algorthm is taken from Chapter 5.2.4 of [1].
+%The algorthm is taken from Chapter 5.2.4 of [1]. This is algorithm M
+%(two-way merge).
 %
 %REFERENCES:
 %[1] D. Knuth, The Art of Computer Programming: Sorting and Searching, 2nd

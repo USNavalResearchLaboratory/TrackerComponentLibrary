@@ -181,7 +181,7 @@ bool getNextGrayCodeCPP(const size_t n, T* code, size_t &nCard, size_t &j) {
         } while(code[j-1]==0&&j<(n-1));
     }
     //Equivalent to code[j]=!code[j]; We turns 0 to 1 and 1 to 0.
-    code[j]=1-code[j];
+    code[j]=static_cast<T>(1-code[j]);
     nCard=nCard+2*static_cast<size_t>(code[j])-1;
     return nCard==static_cast<size_t>(code[n-1]);
 }
@@ -217,7 +217,7 @@ bool getNextGrayCodeCPP(const size_t n, T* code, size_t &nCard, size_t &j) {
  *October 2020 David F. Crouse, Naval Research Laboratory, Washington D.C.
  */
 template <class T>
-bool getNextTupleCPP(const ptrdiff_t numDim,T* tuple,const size_t *maxVals,const bool firstIsMostSig) {
+bool getNextTupleCPP(const size_t numDim,T* tuple,const size_t *maxVals,const bool firstIsMostSig) {
     ptrdiff_t curLevel;
     bool isAscending;
     //tuple is the previous tuple.
@@ -225,7 +225,7 @@ bool getNextTupleCPP(const ptrdiff_t numDim,T* tuple,const size_t *maxVals,const
     if(firstIsMostSig==false) {
         curLevel=0;
         isAscending=true;
-        while(curLevel<numDim) {
+        while(curLevel<static_cast<ptrdiff_t>(numDim)) {
             if(curLevel<0) {
                 //If we have gotten a complete new tuple.
                 return false;
@@ -247,10 +247,10 @@ bool getNextTupleCPP(const ptrdiff_t numDim,T* tuple,const size_t *maxVals,const
             }
         }
     } else {
-        curLevel=numDim-1;
+        curLevel=static_cast<ptrdiff_t>(numDim)-1;
         isAscending=true;
         while(curLevel>=0) {
-            if(curLevel>=numDim) {
+            if(curLevel>=static_cast<ptrdiff_t>(numDim)) {
                 //If we have gotten a complete new tuple.
                 return false;
             } else if(isAscending) {

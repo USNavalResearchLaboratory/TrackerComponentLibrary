@@ -2,10 +2,10 @@ function val=KDelta(x)
 %%KDELTA  The Kronecker delta function. This returns 1 if all elements of x
 %         are zero. Otherwise it returns zero.
 %
-%INPUTS:  x    A vector.
+%INPUTS: x A vector.
 %
-%OUTPUTS: val  This is 1 if all elements of x are zero. Otherwise, it
-%              returns zero
+%OUTPUTS: val This is 1 if all elements of x are zero. Otherwise, it
+%             returns zero
 %
 %October 2013 David F.Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

@@ -14,16 +14,7 @@ extern "C" {
 #endif
 
 #ifndef __cplusplus
-#if __STDC_VERSION__>=199901L
 #include <stdbool.h>
-#else
-#ifndef _bool_T
-#define false 0
-#define true 1
-#define bool int
-#define _bool_T
-#endif
-#endif
 #endif
 
 //Defines the size_t and ptrdiff_t types

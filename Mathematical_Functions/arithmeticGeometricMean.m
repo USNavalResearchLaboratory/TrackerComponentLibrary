@@ -33,6 +33,20 @@ function val=arithmeticGeometricMean(a,b)
 % val2=ellipke(x)
 %One will find that val1=val2.
 %
+%EXAMPLE 3:
+%In [1], they give a slightly different formula for expressing the complete
+%elliptic integrals K. We implement that, relating their alpha parameter to
+%the m parameter used in Matlab's built-in function ellipke, and we show
+%that the relative error between the estimates is functionally zero.
+% m=1/2;
+% alpha=asin(sqrt(m));
+% a=1;
+% b=cos(alpha);
+% c=sin(alpha);
+% ellipKVal=pi/(2*arithGeoMean(a,b,c));
+% ellipKValMatlab=ellipke(m);
+% RelErr=(ellipKValMatlab-ellipKVal)/ellipKValMatlab
+%
 %REFERENCES:
 %[1] Abramowitz, M. and Stegun, I. A. (Eds.). "The process of the
 %    arithmetic-geometric mean." in Ch. 17.6 in Handbook of Mathematical
@@ -71,7 +85,9 @@ while(1)
     a0=a1;
     b0=b1; 
 end
-val=a1;
+
+%Average in case it didn't perfectly converge.
+val=(1/2)*(a1+b1);
 end
 
 %LICENSE:

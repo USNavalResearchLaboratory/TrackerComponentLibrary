@@ -130,7 +130,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     orderListMATLAB=allocUnsignedSizeMatInMatlab(numTar,numHyp);
 
     MMOSPAEst=mxGetDoubles(MMOSPAEstMATLAB);
-    if(sizeof(size_t)==4) {//32 bit
+    if constexpr(sizeof(size_t)==4) {//32 bit
         orderList=reinterpret_cast<size_t*>(mxGetUint32s(orderListMATLAB));
     } else {//64 bit
         orderList=reinterpret_cast<size_t*>(mxGetUint64s(orderListMATLAB));

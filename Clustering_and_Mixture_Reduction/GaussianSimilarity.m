@@ -14,7 +14,7 @@ function distVal=GaussianSimilarity(mu1,Sigma1,mu2,Sigma2)
 %OUTPUTS: distVal The scalar distance between the two distributions.
 %
 %EXAMPLE:
-%We show the similairty of identical distirbutions, extremely different
+%We show the similairty of identical distribution, extremely different
 %distributions, and distributions that just differ a little bit.
 % mu1=[12;3];
 % mu2=[2000;8000];

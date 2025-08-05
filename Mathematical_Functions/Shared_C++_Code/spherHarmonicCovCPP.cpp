@@ -16,6 +16,12 @@
  **/
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+//Get rid of useless warnings in this file from Visual Studio that relate
+//to isFinite being inlined.
+#ifdef _MSC_VER
+#pragma warning(disable : 4711)
+#endif
+
 #include "mathFuncs.hpp"
 #include "CoordFuncs.hpp"
 

@@ -23,20 +23,9 @@ extern "C"
 {
 #endif
 
-//This is needed for the bool type to be defined in C.
-//C99 has stdbool, earlier versions do not.
+//This is needed for the bool type to be defined in C (introduced in C99).
 #ifndef __cplusplus
-#if __STDC_VERSION__>=199901L
 #include <stdbool.h>
-#else
-//This is for the bool that some functions might define
-#ifndef _bool_T
-#define false 0
-#define true 1
-#define bool int
-#define _bool_T
-#endif
-#endif
 #endif
 
 //Defines the size_t and ptrdiff_t types

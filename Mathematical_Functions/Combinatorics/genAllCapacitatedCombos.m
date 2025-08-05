@@ -1,13 +1,13 @@
 function allCombos=genAllCapacitatedCombos(numPerBin,numBins,totalItems)
 %%GENALLCAPACITATEDCOMBOS Given totalItems items, generate all combinations
-%               combinations of placing the items into numBins unlabeled
-%               bins where each bin can hold numPerBin items. If
-%               numPerBin=1, then this is just generating standard
-%               combinations of numBins items taken from a total of
-%               totalItems. The capacitated combinations are equivalent to
-%               putting totalItems labeled balls into numBins unlabeled
-%               bins such that each bin holds numPerBin items and the
-%               ordering of the items in the bins does not matter.
+%               of placing the items into numBins unlabeled bins where each
+%               bin can hold numPerBin items. If numPerBin=1, then this is
+%               just generating standard combinations of numBins items
+%               taken from a total of totalItems. The capacitated
+%               combinations are equivalent to putting totalItems labeled 
+%               balls into numBins unlabeled bins such that each bin holds
+%               numPerBin items and the ordering of the items in the bins
+%               does not matter.
 %
 %INPUTS: numPerBin The scalar integer capacity of the bins; numPerBin>=1.
 %          numBins The scalar integer number of bins; numBins>=1.

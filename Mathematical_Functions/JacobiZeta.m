@@ -9,7 +9,7 @@ function intVal=JacobiZeta(beta,m)
 %INPUTS: beta, m The two real or complex parameters of the Jacobi zeta
 %                function.
 %
-%OUTPUTS: intVal The scalar value fo the jacobi zeta function with the
+%OUTPUTS: intVal The scalar value of the Jacobi zeta function with the
 %                given parameters.
 %
 %This function implements the formula given in Equation 63 of [1].

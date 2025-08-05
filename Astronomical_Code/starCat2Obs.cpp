@@ -79,8 +79,22 @@
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
-/*This header is required by Matlab.*/
+#ifdef _MSC_VER
+//Get rid of Spectre and inlining warnings.
+#pragma warning( disable : 5045 4711 )
+#endif
+
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4514 )
+#endif
+
 #include "mex.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
+
 /*This header is for the SOFA library.*/
 #include "sofa.h"
 #include "MexValidation.h"
@@ -181,7 +195,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     //If any default values will be needed, load them.
     if(nrhs<=9||mxGetM(prhs[8])==0||mxGetM(prhs[9])==0){
         mxArray *retVals[3];
-        double *xpyp,*dXdY;
+        double *xpyp;
         mxArray *JulUTCMATLAB[2];
         double JulUTC[2];
         int retVal;
@@ -222,7 +236,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
             return;
         }
         xpyp=mxGetDoubles(retVals[0]);
-        dXdY=mxGetDoubles(retVals[1]);//The celestial pole offsets are not used.
+        //The celestial pole offsets in retVals[1] are not used.
         xp=xpyp[0];
         yp=xpyp[1];
         deltaT=getDoubleFromMatlab(retVals[2]);
@@ -273,14 +287,10 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     }
     
     {
-        double *uEast,*uNorth,*uUp;
         double *zRet;
         //This is only used if nlhs>1. It is initialized here to  avoid a
         //warning if compiled with -Wconditional-uninitialized
         double *uRet=NULL;
-        uEast=uENU;
-        uNorth=uENU+3;
-        uUp=uENU+6;
         
         zRet=mxGetDoubles(zSpherMATLAB);
         if(nlhs>1) {

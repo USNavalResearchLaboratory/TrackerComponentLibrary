@@ -14,7 +14,16 @@
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
  
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4514 )
+#endif
+
 #include "mex.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
 
 /* This header validates inputs and includes a header needed to handle
  * Matlab matrices.*/
@@ -24,8 +33,10 @@
 void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray *prhs[]) {
     int algorithm=0;
     mxArray *ComplexifiedArray=nullptr;
-    std::complex <double> *C1Complex, *C2Complex;
-    double *C1Real, *C2Real;
+    std::complex <double> *C1Complex=NULL;
+    std::complex <double> *C2Complex=NULL;
+    double *C1Real=NULL;
+    double *C2Real=NULL;
     bool isComplex;
     
     if(nrhs>3||nrhs<2){
@@ -40,7 +51,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
      
     checkDoubleArray(prhs[0]);
     checkDoubleArray(prhs[1]);
-    
+   
     const size_t N=mxGetM(prhs[0]);
     if(N!=mxGetN(prhs[0])||N!=mxGetM(prhs[1])||N!=mxGetN(prhs[1])) {
         mexErrMsgTxt("The matrix dimensions are inconsistent.");
@@ -77,11 +88,13 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     }
 
     mxArray *WMatlab;
+    
     if(isComplex) {
-        const Eigen::Map<Eigen::MatrixXcd> C1Eigen(C1Complex,N,N);
-        const Eigen::Map<Eigen::MatrixXcd> C2Eigen(C2Complex,N,N);
+        const auto NL=static_cast<Eigen::EigenBase<Eigen::MatrixXcd>::Index>(N);
+        const Eigen::Map<Eigen::MatrixXcd> C1Eigen(C1Complex,NL,NL);
+        const Eigen::Map<Eigen::MatrixXcd> C2Eigen(C2Complex,NL,NL);
         
-        Eigen::MatrixXcd WEigen(N,N);
+        Eigen::MatrixXcd WEigen(NL,NL);
         switch(algorithm) {
             case 0:
                 WEigen=twoMatDiagSVD<Eigen::MatrixXcd>(C1Eigen,C2Eigen);
@@ -97,14 +110,15 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         WMatlab=mxCreateDoubleMatrix(N,N,mxCOMPLEX);
         std::complex<double>* W=reinterpret_cast<std::complex<double>*>(mxGetComplexDoubles(WMatlab));
         for(size_t k=0;k<N*N;k++) {
-            W[k]=WEigen(k);
+            W[k]=WEigen(static_cast<Eigen::EigenBase<Eigen::MatrixXcd>::Index>(k));
         }
         
     }  else {
-        const Eigen::Map<Eigen::MatrixXd> C1Eigen(C1Real,N,N);
-        const Eigen::Map<Eigen::MatrixXd> C2Eigen(C2Real,N,N);
+        const auto NL=static_cast<Eigen::EigenBase<Eigen::MatrixXd>::Index>(N);
+        const Eigen::Map<Eigen::MatrixXd> C1Eigen(C1Real,NL,NL);
+        const Eigen::Map<Eigen::MatrixXd> C2Eigen(C2Real,NL,NL);
         
-        Eigen::MatrixXd WEigen(N,N);
+        Eigen::MatrixXd WEigen(NL,NL);
         switch(algorithm) {
             case 0:
                 WEigen=twoMatDiagSVD<Eigen::MatrixXd>(C1Eigen,C2Eigen);
@@ -120,7 +134,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         WMatlab=mxCreateDoubleMatrix(N,N,mxREAL);
         double *W=mxGetDoubles(WMatlab);
         for(size_t k=0;k<N*N;k++) {
-            W[k]=WEigen(k);
+            W[k]=WEigen(static_cast<Eigen::EigenBase<Eigen::MatrixXd>::Index>(k));
         }
     }
 

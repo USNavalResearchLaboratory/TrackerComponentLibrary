@@ -62,7 +62,7 @@ function [latLonEnd,azEnd]=directGeodeticProbGen(latLonStart,azStart,dist,height
 %faster if a zero height is used or if useHeightApprox=true, in which case
 %the approximation described in [2] is used.
 %
-%The algorithm is generally the opposite of indirectgeodeticProbGen.
+%The algorithm is generally the opposite of indirectGeodeticProbGen.
 %
 %REFERENCES:
 %[1] D. F. Crouse, "Simulating Aerial Targets in 3D Accounting for the
@@ -177,7 +177,7 @@ for curTraj=1:N
     headingEnd=vEnd/norm(vEnd);
     %Convert the unit vector into an azimuthal heading in radians East of
     %North.
-    azEnd(curTraj)=uVec2GeogHeading(plhEnd,headingEnd,a,f);
+    azEnd(curTraj)=uVec2GeogHeading(plhEnd,headingEnd);
 end
 end
 

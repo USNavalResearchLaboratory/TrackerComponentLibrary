@@ -101,8 +101,9 @@ NEES=zeros(1,N);
 for k=1:N
     for curSamp=1:numSamples
         diff=xTrue(:,k,curSamp)-xEst(:,k,curSamp);
-
-        NEES(k)=NEES(k)+invSymQuadForm(diff,PEst(:,:,k,curSamp));%=NEES+diff'*inv(PEst(:,:,k,curSamp))*diff;
+        
+        %We use pinv to better handle poor conditioning.
+        NEES(k)=NEES(k)+diff'*pinv(PEst(:,:,k,curSamp))*diff;%+invSymQuadForm(diff,PEst(:,:,k,curSamp),0,true);%=NEES+diff'*inv(PEst(:,:,k,curSamp))*diff;
     end
 end
 NEES=NEES/(xDim*numSamples);

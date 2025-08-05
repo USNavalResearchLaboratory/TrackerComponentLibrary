@@ -28,6 +28,12 @@ function drawAzBeam(azCenter,beamHalfwidth,range,systemType,lRx,M,closeEnds,vara
 %                 omitted or an empty matrix is passed, then it is assumed
 %                 that the local coordinate system is aligned with the
 %                 global and M=eye(2) --the identity matrix is used.
+%       closeEnds If the end of the beam should be drawn close, then this
+%                 should be true. If false, then the ends of the beams are
+%                 not drawn. The default if omitted or an empty matrix is
+%                 passed is true.
+%        varargin These are any desired comma-separted parameters that
+%                 should be passed to the plot function.
 %
 %OUTPUTS: None.
 %

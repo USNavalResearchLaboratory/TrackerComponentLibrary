@@ -26,7 +26,7 @@ classdef SwerlingISqLawD
 %noise as described below) and y can be compared to a threshold. Two
 %normalization are available. These are
 %Definition 1:
-%A is the SNR and the signal and noise model for a signle pulse is
+%A is the SNR and the signal and noise model for a single pulse is
 % zSignal=sqrt(A)*exp(1j*2*pi*rand(1)) 
 % zNoise=(randn(1)+1j*randn(1))/sqrt(2)
 % r=zSigma+zNoise.
@@ -96,8 +96,8 @@ function val=nthMoment(n,avgSNR,N,ampDef)
 % n=3;
 % numSamples=1e6;
 % ampDef=1;
-% meanVal=SwerlingISqLawD.nthMoment(n,avgSNR,N,ampDef)
-% meanSampVal=mean(SwerlingISqLawD.rand([numSamples,1],avgSNR,N,ampDef).^n)
+% analyticVal=SwerlingISqLawD.nthMoment(n,avgSNR,N,ampDef)
+% sampVal=mean(SwerlingISqLawD.rand([numSamples,1],avgSNR,N,ampDef).^n)
 %
 %REFERENCES:
 %[1] Rowland, Todd and Weisstein, Eric W. "Characteristic Function." From
@@ -130,7 +130,7 @@ switch(n)
     case 5
         val=N*(120*avgSNR^5*N^4+120*avgSNR^4*N^3*(4+N)+60*avgSNR^3*N^2*(3+N)*(4+N)+20*avgSNR^2*N*(2+N)*(3+N)*(4+N)+(1+N)*(2+N)*(3+N)*(4+N)+5*avgSNR*(1+N)*(2+N)*(3+N)*(4+N));
     case 6
-        val=N*(720*avgSNR^6*N^5+720*avgSNR^5*N^4*(5+N)+360*avgSNR^4*N^3*(4+N)*(5+N)+120*avgSNR^3*N^2*(3+N)*(4+N)*(5+N)+30*avgSNR^2*N*(2+N)*(3+N)*(4+N)*(5+N)+(1+N)*(2+N)*(3+N)*(4+N)*(5+N)+6*avgSNR*(1+N)*(2+N)*(3+N)*(4+N)*(5+N));
+       val=N*(720*avgSNR^6*N^5+720*avgSNR^5*N^4*(5+N)+360*avgSNR^4*N^3*(4+N)*(5+N)+120*avgSNR^3*N^2*(3+N)*(4+N)*(5+N)+30*avgSNR^2*N*(2+N)*(3+N)*(4+N)*(5+N)+(1+N)*(2+N)*(3+N)*(4+N)*(5+N)+6*avgSNR*(1+N)*(2+N)*(3+N)*(4+N)*(5+N));
     case 7
         val=N*(5040*avgSNR^7*N^6+5040*avgSNR^6*N^5*(6+N)+2520*avgSNR^5*N^4*(5+N)*(6+N)+840*avgSNR^4*N^3*(4+N)*(5+N)*(6+N)+210*avgSNR^3*N^2*(3+N)*(4+N)*(5+N)*(6+N)+42*avgSNR^2*N*(2+N)*(3+N)*(4+N)*(5+N)*(6+N)+(1+N)*(2+N)*(3+N)*(4+N)*(5+N)*(6+N)+7*avgSNR*(1+N)*(2+N)*(3+N)*(4+N)*(5+N)*(6+N));
     case 8
@@ -150,7 +150,7 @@ switch(n)
     case 15
         val=(-1+N)*N*(1+N)*(2+N)*(3+N)*(4+N)*(5+N)*(6+N)*(7+N)*(8+N)*(9+N)*(10+N)*(11+N)*(12+N)*(13+N)+15*(-1+N)*N*(1+N)*(2+N)*(3+N)*(4+N)*(5+N)*(6+N)*(7+N)*(8+N)*(9+N)*(10+N)*(11+N)*(12+N)*(1+avgSNR*N)+210*(-1+N)*N*(1+N)*(2+N)*(3+N)*(4+N)*(5+N)*(6+N)*(7+N)*(8+N)*(9+N)*(10+N)*(11+N)*(1+avgSNR*N)^2+2730*(-1+N)*N*(1+N)*(2+N)*(3+N)*(4+N)*(5+N)*(6+N)*(7+N)*(8+N)*(9+N)*(10+N)*(1+avgSNR*N)^3+32760*(-1+N)*N*(1+N)*(2+N)*(3+N)*(4+N)*(5+N)*(6+N)*(7+N)*(8+N)*(9+N)*(1+avgSNR*N)^4+360360*(-1+N)*N*(1+N)*(2+N)*(3+N)*(4+N)*(5+N)*(6+N)*(7+N)*(8+N)*(1+avgSNR*N)^5+3603600*(-1+N)*N*(1+N)*(2+N)*(3+N)*(4+N)*(5+N)*(6+N)*(7+N)*(1+avgSNR*N)^6+32432400*(-1+N)*N*(1+N)*(2+N)*(3+N)*(4+N)*(5+N)*(6+N)*(1+avgSNR*N)^7+259459200*(-1+N)*N*(1+N)*(2+N)*(3+N)*(4+N)*(5+N)*(1+avgSNR*N)^8+1816214400*(-1+N)*N*(1+N)*(2+N)*(3+N)*(4+N)*(1+avgSNR*N)^9+10897286400*(-1+N)*N*(1+N)*(2+N)*(3+N)*(1+avgSNR*N)^10+54486432000*(-1+N)*N*(1+N)*(2+N)*(1+avgSNR*N)^11+653837184000*(-1+N)*N*(1+avgSNR*N)^13+1307674368000*(-1+N)*(1+avgSNR*N)^14+1307674368000*(1+avgSNR*N)^15+217945728000*N*(1+avgSNR*N)^12*(-1+N^2);
     otherwise
-         error('The moment for the specified n is not supported.')
+        val=(avgSNR*N)^(-N)*(1+avgSNR*N)^(-1+n+N)*gamma(1+n)*(avgSNR*N-((avgSNR*N)^(-n)*gamma(n+N)*hypergeometric2F1(1+n,n+N,2+n,-(1/(avgSNR*N))))/(gamma(N-1)*gamma(2+n)));
 end
 
 if(ampDef==0)
@@ -158,7 +158,6 @@ if(ampDef==0)
 end
 
 end
-
 
 function val=logPDFSNRDeriv(v,avgSNR,N,ampDef)
 %%LOGPDFSNRDERIV Evaluate the first derivative of the natural logarithm
@@ -634,9 +633,9 @@ function val=var(avgSNR,N,ampDef)
     end
     
     if(ampDef==0)
-        val=4*N*(1+avgSNR*(2+N*avgSNR));
+        val=4*N*(1+avgSNR.*(2+N*avgSNR));
     else
-        val=N*(1+avgSNR*(2+N*avgSNR));
+        val=N*(1+avgSNR.*(2+N*avgSNR));
     end
 end
 
@@ -647,7 +646,7 @@ function val=logPDF(v,avgSNR,N,ampDef)
 %     detector.
 %
 %INPUTS: v The point or points at which the PDF should be evaluated. The
-%          support of the distirbution if v>0, so for anything else -Inf is
+%          support of the distribution if v>0, so for anything else -Inf is
 %          returned.
 %   avgSNR The average power signal to noise ratio of the target.
 %        N The number of pulses that are to be incoherently added for
@@ -667,7 +666,7 @@ function val=logPDF(v,avgSNR,N,ampDef)
 %Evaluate the natural logarithm of the PDF for a single pulse, which is
 %given in Equation III.4 of [1] and the PDF for multiple pulses is
 %Equation III.5 of [1] (Note the definition of the incomplete gamma 
-%unction there differs from gammainc in Matlab). However,
+%function there differs from gammainc in Matlab). However,
 %a clearer derivation is given in Chapter 11 of [2].
 %
 %EXAMPLE:
@@ -917,7 +916,9 @@ function PD=PD4Threshold(avgSNR,thresh,N,method,ampDef)
 %          should be used. For N=1, the exact method equals the
 %          approximation. Possible values are
 %          0 (The default if omitted or an empty matrix is passed) Use the
-%            exact solution of Equation II.1 of [1].
+%            exact solution of Equation II.1 of [1]. There can be a loss of
+%            precision for 0<avgSNR<eps(). However, it will function
+%            properly at 0.
 %          1 Use the approximate solution of Equation II.2 of [1]. This is
 %          only valid if N*avgSNR>1.
 %   ampDef This specified normalization (see help SwerlingISqLawD).
@@ -989,8 +990,17 @@ function PD=PD4Threshold(avgSNR,thresh,N,method,ampDef)
                     %second gammainc term a NaN.
                     PD=1;
                 else
-                    PD=gammaInc1+...
-                       ((1+1./(N*avgSNR)).^(N-1).*gammainc(thresh./(1+1./(N*avgSNR)),N-1).*exp(-thresh./(1+N*avgSNR)));
+                    if(avgSNR==0)
+                        PD=1-ThreshNoiseSqLawD.CDF(thresh,0,N,ampDef);
+                    else
+                        PD=gammaInc1+...
+                           ((1+1./(N*avgSNR)).^(N-1).*gammainc(thresh./(1+1./(N*avgSNR)),N-1).*exp(-thresh./(1+N*avgSNR)));
+                        
+                        %Use the value for  0 SNR.
+                        if(isnan(PD)&&avgSNR<eps())
+                            PD=1-ThreshNoiseSqLawD.CDF(thresh,0,N,ampDef);
+                        end
+                    end
                 end
             end
         case 1%The approximate solution in II.2
@@ -1071,29 +1081,49 @@ function PD=PD4PFA(avgSNR,PFA,N,method,ampDef)
     PD=SwerlingISqLawD.PD4Threshold(avgSNR,thresh,N,method,ampDef);
 end
 
-function avgSNR=avgSNR4PDThresh(PD,thresh,ampDef)
+function [avgSNR,exitCode]=avgSNR4PDThresh(PD,thresh,N,ampDef,convergParams)
 %%AVGSNR4PDTHRESH Given a detection probabilty and a normalized detection
 %       threshold (normalized in terms of the receiver noise having a unit
 %       covariance), determine the average power signal to noise ratio
-%       (SNR) of the target needed under a Swerling I model. This solution
-%       is only available for a single pulse (N=1) in a square-law
-%       detector.
+%       (SNR) of the target needed under a Swerling I model.
 %
 %INPUTS: PD The detection probability of the target , 0<=PD<1.
 %   thresh The scalar normalized detection threshold to use. This is the
 %          threshold to use if the noise variance is 1.
+%        N The number of pulses that are to be incoherently added for
+%          detection (in a square-law detector). In a Swerling I model, a
+%          single realization of the target power is used across all
+%          pulses, but the noise corrupting the pulses varies. If this
+%          parameter is omitted or an empty matrix is passed, N=1 is used.
 %   ampDef This specified normalization (see help SwerlingISqLawD).
 %          Possible values are:
 %          0 The expected value of the squared magnitude of the noise is 2.
 %          1 (The default if omitted or an empty matrix is passed) The
 %            expected value of the squared magnitude of the noise is 1.
 %            (A more common definition). 
+% convergParams An optional structure that is only used if N>1. It holds
+%          parameters that define how the algorithm converges. Possible
+%          members are:
+%          'XTol' and 'maxIter' These have the same name as the inputs in
+%           bisectionRootFind. See the comments to that function for
+%           details. Default values are eps() and 100.
+%          'maxIterSearch' This function uses a crude initial guess for an
+%           upper bound on the solution and keeps doubling it until the PD
+%           found is too large. This is the maximum number of doublings
+%           that can be performed before an error is returned. The initial
+%           guess is always avgSNR=100 and the default maximum number of
+%           doublings, is 50.
 %
 %OUTPUTS: avgSNR The average power signal to noise ratio needed to achieve
 %                the desired probability of detection at the given
-%                threshold. If this is negative, then for a given PD, the
-%                threshold is so low that due to the high false alarm
-%                rate, the desired PD is impossiblely low.
+%                threshold. If this is an empty matrix, then for a given
+%                PD, the threshold is so low that due to the high false
+%                alarm rate, the desired PD is impossibly low.
+%       exitCode If N=1 this is 0 unless no solution exists (the PD
+%                requested is less than the PD with avgSNR=0) in which case
+%                this is -1. Otherwise, this is the exit code returned by
+%                the bisectionRootFind function. See the comments to that
+%                function for more details.
 %
 %Equation II.1 in [1] gives an expression for PD in terms of thresh and the
 %average SNR. Here, we have simply inverted the expression for when N=1.
@@ -1103,15 +1133,21 @@ function avgSNR=avgSNR4PDThresh(PD,thresh,ampDef)
 %Thus, the threshold in this function is scaled appropriately according to
 %ampDef.
 %
+%For the case where N~=1, this function usesBisectionRootFind to invert PD
+%minus what is equivalent to the output of the PD4Threshold method.
+%
 %EXAMPLE:
-%Here, we show that the results are consistent.
+%Here, we show that the results are consistent with the PD as drawn from
+%random samples.
 %PD=0.75;
 % thresh=5;
-% ampDef=0;
-% avgSNR=SwerlingISqLawD.avgSNR4PDThresh(PD,thresh,ampDef);
-% PDBack=SwerlingISqLawD.PD4Threshold(avgSNR,thresh,1,[],ampDef)
+% ampDef=1;
+% PD=0.75;
+% N=6;
+% avgSNR=SwerlingISqLawD.avgSNR4PDThresh(PD,thresh,N,ampDef);
+% PDBack=SwerlingISqLawD.PD4Threshold(avgSNR,thresh,N,[],ampDef)
 % numSamples=1e5;
-% PDSamp=mean(SwerlingISqLawD.rand([numSamples,1],avgSNR,1,ampDef)>=thresh)
+% PDSamp=mean(SwerlingISqLawD.rand([numSamples,1],avgSNR,N,ampDef)>=thresh)
 %One will see that PDBack is the same as PD and about the same as PDSamp.
 %
 %REFERENCES:
@@ -1121,16 +1157,64 @@ function avgSNR=avgSNR4PDThresh(PD,thresh,ampDef)
 %    Inc., Rayliegh, NC: 2004.
 %
 %March 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
+    
+    maxIterSearch=50;
+    maxIter=100;
+    XTol=eps();
+    
+    if(nargin>4&&~isempty(convergParams))
+        if(isfield(convergParams,'maxIterSearch'))
+            maxIterSearch=convergParams.maxIterSearch;
+        end
+        if(isfield(convergParams,'maxIter'))
+            maxIter=convergParams.maxIter;
+        end
+        if(isfield(convergParams,'XTol'))
+            XTol=convergParams.XTol;
+        end
+    end
 
-    if(nargin<3||isempty(ampDef))
+    if(nargin<4||isempty(ampDef))
         ampDef=1;
     end
 
-    if(ampDef==0)
-        %The division by 2 deals with the scaling in Equation 10.4-4.
-        avgSNR=-(thresh/2)/log(PD)-1;
-    else
-        avgSNR=-thresh/log(PD)-1;
+    if(nargin<3||isempty(N))
+        N=1;
+    end
+
+    if(SwerlingISqLawD.PD4Threshold(0,thresh,N,[],ampDef)>PD)
+        %If the PD is below the PD obtained with a 0 SNR target, then no
+        %solution is possible.
+        avgSNR=[];
+        exitCode=-1;
+        return
+    end
+
+    if(N==1)
+        if(ampDef==0)
+            %The division by 2 deals with the scaling in Equation 10.4-4.
+            avgSNR=-(thresh/2)/log(PD)-1;
+        else
+            avgSNR=-thresh/log(PD)-1;
+        end
+        exitCode=0;
+    else        
+        %We need to find an upper bound. We start with an estimate of 100
+        %and then keep doubling it until we have found an upper bound.
+        avgSNRUpper=100;
+        PDComp=SwerlingISqLawD.PD4Threshold(avgSNRUpper,thresh,N,[],ampDef);
+        curIter=0;
+        while(PDComp<PD)
+            curIter=curIter+1;
+            if(curIter>maxIterSearch)
+                error('Unable to bracket a solution.')
+            end
+            avgSNRUpper=2*avgSNRUpper;
+            PDComp=SwerlingISqLawD.PD4Threshold(avgSNRUpper,thresh,N,[],ampDef);
+        end
+
+        f=@(avgSNR)(PD-SwerlingISqLawD.PD4Threshold(avgSNR,thresh,N,[],ampDef));
+        [avgSNR,~,exitCode]=bisectionRootFind(f,[0;avgSNRUpper],XTol,maxIter);
     end
 end
    
@@ -1151,9 +1235,9 @@ function avgSNR=avgSNR4PDPFA(PD,PFA,ampDef)
 %
 %OUTPUTS: avgSNR The average power signal to noise ratio needed to achieve
 %                the desired probability of detection at the given
-%                threshold. If this is negative, then for a given PD, the
-%                threshold is so low that due to the high false alarm
-%                rate, the desired PD is impossiblely low.
+%                threshold. If this is an empty matrix, then for a given
+%                PD, the threshold is so low that due to the high false
+%                alarm rate, the desired PD is impossibly low.
 %
 %Equation II.1 in [1] gives an expression for PD in terms of a normalized
 %threshold and the average SNR. Here, we call the function

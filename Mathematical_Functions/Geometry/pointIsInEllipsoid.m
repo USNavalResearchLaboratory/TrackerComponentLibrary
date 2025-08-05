@@ -6,9 +6,9 @@ function boolVals=pointIsInEllipsoid(xPts,xCen,A,matType,gamma)
 %       (x-xCen)'*A*(x-xCen)<=gamma if Type=2.
 %
 %INPUTS: xPts A numDimXN set of points to test.
-%        xCen The numDimX1 center of the ellipsoid.
-%           A The numDimXnumDim matrix defining the shape fo the ellipsoid.
-%             The form of A is determined by MatType.
+%     xCen The numDimX1 center of the ellipsoid.
+%        A The numDimXnumDim matrix defining the shape fo the ellipsoid.
+%          The form of A is determined by MatType.
 %  matType This optional parameter specified the type of matrix that M is.
 %          Possible values are
 %          0 (The default if omitted or an empty matrix is passed) A is the
@@ -16,6 +16,8 @@ function boolVals=pointIsInEllipsoid(xPts,xCen,A,matType,gamma)
 %          1 A is the matrix A in the form
 %            (x-xCen)'*inv(A*A')*(x-xCen)<=gamma.
 %          2 A is the matrix A in the form (x-xCen)'*A*(x-xCen)<=gamma.
+%    gamma A positive real threshold. The default if omitted or an empty
+%          matrix is passed is zero.
 %
 %OUTPUTS: boolVals A 1XN set of boolean values indicating whether or not
 %                  the point is in the ellipsoid.

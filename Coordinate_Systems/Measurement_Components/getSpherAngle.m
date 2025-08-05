@@ -77,26 +77,29 @@ for curPoint=1:N
 %The target location in the receiver's coordinate system.
     zCL=M(:,:,curPoint)*(zC(:,curPoint)-zRx(:,curPoint));
 
-%Perform the conversion.
-    r1=norm(zCL);%Receiver to target.
+    %Receiver to target distance; not needed when performing
+    %conversions with atan2.
+    %r1=norm(zCL);
     
+    %Perform the conversion.
     x=zCL(1);
     y=zCL(2);
     z=zCL(3);
-    
     switch(systemType)
         case 0
             azimuth=atan2(y,x);
-            elevation=asin(z./r1);
+            %The atan2 formulation is numerically more accurate than the
+            %asin formulation.
+            elevation=atan2(z,hypot(x,y));%=asin(z./r1)
         case 1
             azimuth=atan2(x,z);
-            elevation=asin(y./r1);
+            elevation=atan2(y,hypot(z,x));%=asin(y./r1);
         case 2
             azimuth=atan2(y,x);
-            elevation=pi/2-asin(z./r1);
+            elevation=pi/2-atan2(z,hypot(x,y));%=pi/2-asin(z./r1)
         case 3
             azimuth=atan2(x,y);
-            elevation=asin(z./r1);
+            elevation=atan2(z,hypot(x,y));%=asin(z./r1)
         otherwise
             error('Invalid system type specified')
     end

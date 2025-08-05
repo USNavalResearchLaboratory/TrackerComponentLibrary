@@ -1,18 +1,19 @@
-/**MISCFUNS A variety of miscellaneous functions.
+/**MISCFUNS A variety of miscellansous functions.
  *
  *October 2024 David F. Crouse, Naval Research Laboratory, Washington D.C.
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
-#ifndef MISC_FUNCS
-#define MISC_FUNCS
+#ifndef MISC_FUNS
+#define MISC_FUND
 
-#include <cstddef>
+#include<cstddef>
+
 //See the comments in index2NDimCPP.cpp for a description of the inputs.
 bool index2NDimCPP(const size_t numDim, const size_t numIdx,const size_t * const idx, const size_t * const maxVals, size_t *newIndices);
 bool index2NDimByDimCPP(const size_t numDim, const size_t numIdx,const size_t *idx, const size_t *dims, size_t *newIndices, size_t *tempSpace);
 
-#endif
+#endif 
 
 /*LICENSE:
 *

@@ -8,32 +8,42 @@
 #ifndef BASICMATOPSEIGENCPP
 #define BASICMATOPSEIGENCPP
 
+//Suppress Visual Studio warnings on standard libraries and on Eigen, which
+//has lots of warnings.
+#ifdef _MSC_VER
+#pragma warning(push, 0)
+#pragma warning( disable : 4710 4711 5045 4514)
+#endif
+#include "Eigen/Dense"
+#include "Eigen/SVD"
+#include "Eigen/Eigenvalues"
+
 //Has isfinite, NAN, isnan and nextafter
 #include <cmath>
 //Defines the size_t
 #include <cstddef>
 #include <vector>
-#include "Eigen/Dense"
-#include "Eigen/SVD"
-#include "Eigen/Eigenvalues"
 #include <complex>
 //For infinity
 #include <limits>
 //For max
 #include <algorithm>
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 /**ANYNONFINITEINMATRIX Given an Eigen matrix type, this returns true is
  *          any non-finite values are therein. Otherwise, it returns false.
  *
  *June 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
  **/
-template<class T>
+template<typename T>
 bool anyNonFiniteInMatrix(const T &theMat) {
-    const size_t numRow=theMat.rows();
-    const size_t numCol=theMat.cols();
-    const size_t numEls=numRow*numCol;
+    const typename Eigen::EigenBase<T>::Index numRow=theMat.rows();
+    const typename Eigen::EigenBase<T>::Index numCol=theMat.cols();
+    const typename Eigen::EigenBase<T>::Index numEls=numRow*numCol;
     
-    for(size_t k=0;k<numEls;k++) {
+    for(typename Eigen::EigenBase<T>::Index k=0;k<numEls;k++) {
         if(!std::isfinite(std::abs(theMat(k)))) {
             return true;
         }
@@ -55,7 +65,7 @@ TEig MatrixOfVal(const TVal val,const size_t numRows, const size_t numCols) {
     const size_t numEls=numRows*numCols;
     
     for(size_t k=0;k<numEls;k++) {
-       theMat(k)=val;
+       theMat(static_cast<typename Eigen::EigenBase<TEig>::Index>(k))=val;
     }
       
     return theMat;
@@ -101,21 +111,21 @@ TEig MatrixOfVal(const TVal val,const size_t numRows, const size_t numCols) {
  **/
 template<class T>
 size_t matrixRank(const T &X, const int algorithm,T &U, Eigen::MatrixXd &s, T &V) {
-    const size_t M=X.rows();
-    const size_t N=X.cols();
-    const size_t sLen=std::min(M,N);
+    const typename Eigen::EigenBase<T>::Index M=X.rows();
+    const typename Eigen::EigenBase<T>::Index N=X.cols();
+    const typename Eigen::EigenBase<T>::Index sLen=std::min(M,N);
     
     //Check for non-finite values. If any are found, return a bunch of NaNs
     //in U, s and V and a zero rank.
     if(anyNonFiniteInMatrix(X)) {
-        U=MatrixOfVal<T,double>(NAN,M,sLen);
-        V=MatrixOfVal<T,double>(NAN,N,sLen);
-        s=MatrixOfVal<Eigen::MatrixXd,double>(NAN,sLen,1);
+        U=MatrixOfVal<T,double>(NAN,static_cast<size_t>(M),static_cast<size_t>(sLen));
+        V=MatrixOfVal<T,double>(NAN,static_cast<size_t>(N),static_cast<size_t>(sLen));
+        s=MatrixOfVal<typename Eigen::MatrixXd,double>(NAN,static_cast<size_t>(sLen),1);
 
         return 0;
     }
     
-    Eigen::JacobiSVD<T> svdX(X, Eigen::ComputeFullU | Eigen::ComputeFullV);
+    typename Eigen::JacobiSVD<T> svdX(X, Eigen::ComputeFullU | Eigen::ComputeFullV);
     //The singular values are already sorted in decreasing order.
     s=svdX.singularValues();
     U=svdX.matrixU();
@@ -130,7 +140,7 @@ size_t matrixRank(const T &X, const int algorithm,T &U, Eigen::MatrixXd &s, T &V
             //column sum of the matrix.
             double normX=X.col(0).cwiseAbs().sum();
             
-            for(size_t i=1;i<N;i++) {
+            for(typename Eigen::EigenBase<T>::Index i=1;i<N;i++) {
                 const double curAbsColSum=X.col(i).cwiseAbs().sum();
                 normX=std::max(curAbsColSum,normX);
             }
@@ -148,7 +158,7 @@ size_t matrixRank(const T &X, const int algorithm,T &U, Eigen::MatrixXd &s, T &V
             //Get the 1-matrix norm of X. This is the maximum absolute
             //column sum of the matrix.
             double normX=X.col(0).cwiseAbs().sum();
-            for(size_t i=1;i<N;i++) {
+            for(typename Eigen::EigenBase<T>::Index i=1;i<N;i++) {
                 const double curAbsColSum=X.col(i).cwiseAbs().sum();
                 normX=std::max(curAbsColSum,normX);
             }
@@ -163,7 +173,7 @@ size_t matrixRank(const T &X, const int algorithm,T &U, Eigen::MatrixXd &s, T &V
     };
     
     size_t rankVal=0;
-    for(size_t k=0;k<sLen;k++) {
+    for(typename Eigen::EigenBase<T>::Index k=0;k<sLen;k++) {
         if(s(k)>limVal) {
             rankVal++;
         } else {
@@ -215,14 +225,14 @@ T pseudoInverse(const T X,const int algorithm) {
     Eigen::MatrixXd s;
     T V;
     
-    const size_t rankVal=matrixRank(X, algorithm, U, s, V);
+    const auto rankVal=static_cast<typename Eigen::EigenBase<T>::Index>(matrixRank(X, algorithm, U, s, V));
     
     //The singular values in S are in descending order.
-    const size_t N=s.rows();
-    for(size_t k=0;k<rankVal;k++) {
+    const typename Eigen::EigenBase<T>::Index N=s.rows();
+    for(typename Eigen::EigenBase<T>::Index k=0;k<rankVal;k++) {
         s(k)=1/s(k);
     }
-    for(size_t k=rankVal;k<N;k++) {
+    for(typename Eigen::EigenBase<T>::Index k=static_cast<typename Eigen::EigenBase<T>::Index>(rankVal);k<N;k++) {
         s(k)=0.0;
     }
     
@@ -251,11 +261,11 @@ T pseudoInverse(const T X,const int algorithm) {
  **/
 template<class T>
 void forwardSubstitutionByRow(const T &L, T &b) {
-    const size_t n=L.rows();
+    typename Eigen::EigenBase<T>::Index n=L.rows();
     b(0)=b(0)/L(0,0);
-    for(size_t k=1;k<n;k++) {
+    for(typename Eigen::EigenBase<T>::Index k=1;k<n;k++) {
         double sumVal=0;
-        for(size_t i=0;i<k;i++) {
+        for(typename Eigen::EigenBase<T>::Index i=0;i<k;i++) {
             sumVal+=L(k,i)*b(i);
         }        
         b(k)=(b(k)-sumVal)/L(k,k);
@@ -283,11 +293,11 @@ void forwardSubstitutionByRow(const T &L, T &b) {
  **/
 template<class T>
 void forwardSubstitutionByCol(const T &L, T &b) {
-    const size_t n=L.rows();
+    const typename Eigen::EigenBase<T>::Index n=L.rows();
     //Algorithm 3.1.3 in [1], column-oriented.
-    for(size_t k=0;k<n-1;k++) {
+    for(typename Eigen::EigenBase<T>::Index k=0;k<n-1;k++) {
         b(k)=b(k)/L(k,k);
-        for(size_t i=k+1;i<n;i++) {
+        for(typename Eigen::EigenBase<T>::Index i=k+1;i<n;i++) {
             b(i)-=L(i,k)*b(k);
         }
     }          
@@ -315,14 +325,14 @@ void forwardSubstitutionByCol(const T &L, T &b) {
  **/
 template<class T>
 void backSubstitutionByRow(const T &U, T &b) {
-    const size_t n=U.rows();
+    const typename Eigen::EigenBase<T>::Index n=U.rows();
     //Algorithm 3.1.2 in [1], row-oriented.
     b(n-1)=b(n-1)/U(n-1,n-1);
-    size_t k=n-1;
+    typename Eigen::EigenBase<T>::Index k=n-1;
     do {
         k--;
         double sumVal=0;
-        for(size_t i=k+1;i<n;i++) {
+        for(typename Eigen::EigenBase<T>::Index i=k+1;i<n;i++) {
             sumVal+=U(k,i)*b(i);
         }
         b(k)=(b(k)-sumVal)/U(k,k);
@@ -350,11 +360,11 @@ void backSubstitutionByRow(const T &U, T &b) {
  **/
 template<class T>
 void backSubstitutionByCol(const T &U, T &b) {
-    const size_t n=U.rows();
+    const typename Eigen::EigenBase<T>::Index n=U.rows();
     
-    for(size_t k=n-1;k>=1;k--) {
+    for(typename Eigen::EigenBase<T>::Index k=n-1;k>=1;k--) {
         b(k)=b(k)/U(k,k);
-        for(size_t i=0;i<k;i++) {
+        for(typename Eigen::EigenBase<T>::Index i=0;i<k;i++) {
             b(i)-=U(i,k)*b(k);
         }
     }
@@ -392,8 +402,8 @@ void backSubstitutionByCol(const T &U, T &b) {
  **/
 template <class T>
 T twoMatDiagSVD(const T &C1,const T &C2) {
-    const size_t N=C1.rows();
-    const size_t N2=N*N;
+    const typename Eigen::EigenBase<T>::Index N=C1.rows();
+    const typename Eigen::EigenBase<T>::Index N2=N*N;
 
     //Check that we are not passing JacobiSVD any NaNs or Inf values. If we
     //are, return a matrix of NaNs without calling JacobiSVD. This is done
@@ -403,18 +413,18 @@ T twoMatDiagSVD(const T &C1,const T &C2) {
     //must do this for all calls to JacobiSVD. We do not directly call
     //isfinite, because it won't work if the type here is complex. Thus, we
     //first take the absolute value of the input.
-    for(size_t k1=0;k1<N2;k1++) {
+    for(typename Eigen::EigenBase<T>::Index k1=0;k1<N2;k1++) {
         if(!std::isfinite(std::abs(C1(k1)))) {
             T retMat(N,N);
             
-            for(size_t i1=0;i1<N2;i1++) {
+            for(typename Eigen::EigenBase<T>::Index i1=0;i1<N2;i1++) {
                 retMat(i1)=NAN;
             }
             return retMat;
         }
     }
 
-    const Eigen::JacobiSVD<T> C1SVD(C1, Eigen::ComputeFullU);
+    const typename Eigen::JacobiSVD<T> C1SVD(C1, Eigen::ComputeFullU);
     T d=C1SVD.singularValues();
     const T U1=C1SVD.matrixU();
     
@@ -423,18 +433,18 @@ T twoMatDiagSVD(const T &C1,const T &C2) {
     T inputMat=temp.adjoint()*C2*temp;
     
     //Again, check that the input to JacobiSVD is valid.
-    for(size_t k1=0;k1<N2;k1++) {
+    for(typename Eigen::EigenBase<T>::Index k1=0;k1<N2;k1++) {
         if(!std::isfinite(std::abs(inputMat(k1)))) {
             T retMat(N,N);
             
-            for(size_t i1=0;i1<N2;i1++) {
+            for(typename Eigen::EigenBase<T>::Index i1=0;i1<N2;i1++) {
                 retMat(i1)=NAN;
             }
             return retMat;
         }
     }
 
-    const Eigen::JacobiSVD<T> SVD2(inputMat, Eigen::ComputeFullU);
+    const typename Eigen::JacobiSVD<T> SVD2(inputMat, Eigen::ComputeFullU);
     const T U2=SVD2.matrixU();
     
     //Equation 8a in [1].
@@ -471,8 +481,8 @@ T twoMatDiagEig(const T &C1,const T &C2) {};
 template <>
 Eigen::MatrixXcd twoMatDiagEig(const Eigen::MatrixXcd &C1,const Eigen::MatrixXcd &C2) {
     //Use the eigenvalue-based algorithm.
-    const size_t N=C1.rows();
-    const size_t N2=N*N;
+    const Eigen::EigenBase<Eigen::MatrixXcd>::Index N=C1.rows();
+    const Eigen::EigenBase<Eigen::MatrixXcd>::Index N2=N*N;
     
     //Check that we are not passing ComplexEigenSolver any NaNs or Inf
     //values. If we are, return a matrix of NaNs without calling
@@ -482,11 +492,11 @@ Eigen::MatrixXcd twoMatDiagEig(const Eigen::MatrixXcd &C1,const Eigen::MatrixXcd
     //access issues if one tries to use the result. We must do this for all
     //calls to ComplexEigenSolver. isfinite must be given the absolute
     //value of the quantity being tested, because it does not 
-    for(size_t k1=0;k1<N2;k1++) {
+    for(Eigen::EigenBase<Eigen::MatrixXcd>::Index k1=0;k1<N2;k1++) {
         if(!std::isfinite(std::abs(C1(k1)))) {
             Eigen::MatrixXcd retMat(N,N);
 
-            for(size_t i1=0;i1<N2;i1++) {
+            for(Eigen::EigenBase<Eigen::MatrixXcd>::Index i1=0;i1<N2;i1++) {
                 retMat(i1)=NAN;
             }
 
@@ -504,11 +514,11 @@ Eigen::MatrixXcd twoMatDiagEig(const Eigen::MatrixXcd &C1,const Eigen::MatrixXcd
     const Eigen::MatrixXcd inputMat=T1*C2*T1.adjoint();
     
     //Testing the input before using ComplexEigenSolver.
-    for(size_t k1=0;k1<N2;k1++) {
+    for(Eigen::EigenBase<Eigen::MatrixXcd>::Index k1=0;k1<N2;k1++) {
         if(!std::isfinite(std::abs(C1(k1)))) {
             Eigen::MatrixXcd retMat(N,N);
 
-            for(size_t i1=0;i1<N2;i1++) {
+            for(Eigen::EigenBase<Eigen::MatrixXcd>::Index i1=0;i1<N2;i1++) {
                 retMat(i1)=NAN;
             }
 
@@ -528,8 +538,8 @@ Eigen::MatrixXcd twoMatDiagEig(const Eigen::MatrixXcd &C1,const Eigen::MatrixXcd
 template <>
 Eigen::MatrixXd twoMatDiagEig(const Eigen::MatrixXd &C1,const Eigen::MatrixXd &C2) {
     //Use the eigenvalue-based algorithm.
-    const size_t N=C1.rows();
-    const size_t N2=N*N;
+    const Eigen::EigenBase<Eigen::MatrixXd>::Index N=C1.rows();
+    const Eigen::EigenBase<Eigen::MatrixXd>::Index N2=N*N;
     
     //Check that we are not passing EigenSolver any NaNs or Inf values. If
     //we are, return a matrix of NaNs without calling EigenSolver. This is
@@ -538,11 +548,11 @@ Eigen::MatrixXd twoMatDiagEig(const Eigen::MatrixXd &C1,const Eigen::MatrixXd &C
     //desired results and can have invalid memory access issues if one
     //tries to use the result. We must do this for all calls to
     //EigenSolver.
-    for(size_t k1=0;k1<N2;k1++) {
+    for(Eigen::EigenBase<Eigen::MatrixXd>::Index k1=0;k1<N2;k1++) {
         if(!std::isfinite(C1(k1))) {
             Eigen::MatrixXd retMat(N,N);
 
-            for(size_t i1=0;i1<N2;i1++) {
+            for(Eigen::EigenBase<Eigen::MatrixXd>::Index i1=0;i1<N2;i1++) {
                 retMat(i1)=NAN;
             }
 
@@ -559,11 +569,11 @@ Eigen::MatrixXd twoMatDiagEig(const Eigen::MatrixXd &C1,const Eigen::MatrixXd &C
     T1=T1.inverse().eval();
     const Eigen::MatrixXd inputMat=T1*C2*T1.adjoint();
     
-    for(size_t k1=0;k1<N2;k1++) {
+    for(Eigen::EigenBase<Eigen::MatrixXd>::Index k1=0;k1<N2;k1++) {
         if(!std::isfinite(inputMat(k1))) {
             Eigen::MatrixXd retMat(N,N);
 
-            for(size_t i1=0;i1<N2;i1++) {
+            for(Eigen::EigenBase<Eigen::MatrixXd>::Index i1=0;i1<N2;i1++) {
                 retMat(i1)=NAN;
             }
 
@@ -587,7 +597,7 @@ Eigen::MatrixXd twoMatDiagEig(const Eigen::MatrixXd &C1,const Eigen::MatrixXd &C
  *June 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
  **/
 static void computeFAndDCosts(const std::vector<Eigen::MatrixXd> &CVec,double &DCost, double &FCost) {
-    const size_t N=CVec[0].rows();
+    const Eigen::EigenBase<Eigen::MatrixXd>::Index N=CVec[0].rows();
     const size_t K=CVec.size();
     double ND=static_cast<double>(N);
     double NProd=(ND*(ND-1));
@@ -600,9 +610,9 @@ static void computeFAndDCosts(const std::vector<Eigen::MatrixXd> &CVec,double &D
         //FCost holds the cumulative squared Frobenius norm of the off-
         //diagonal elements an d DCost holds the norm of the diagonal
         //elements.
-        size_t curIdx=0;
-        for(size_t i=0;i<N;i++) {
-            for(size_t j=0;j<N;j++) {
+        Eigen::EigenBase<Eigen::MatrixXd>::Index curIdx=0;
+        for(Eigen::EigenBase<Eigen::MatrixXd>::Index i=0;i<N;i++) {
+            for(Eigen::EigenBase<Eigen::MatrixXd>::Index j=0;j<N;j++) {
                 if(i!=j) {
                     FCost+=CCur(curIdx)*CCur(curIdx);
                 } else {
@@ -648,7 +658,7 @@ static void computeFAndDCosts(const std::vector<Eigen::MatrixXd> &CVec,double &D
 *June 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
 */
 int JointMatDiagZieheAlg(const std::vector<Eigen::MatrixXd> &AVec,const size_t maxIter,const double RelTol,const double AbsTol, Eigen::MatrixXd &V, std::vector<Eigen::MatrixXd> &CVec, double &FCost) {
-const size_t N=AVec[0].rows();
+const Eigen::EigenBase<Eigen::MatrixXd>::Index N=AVec[0].rows();
 const size_t K=AVec.size();
 
 //The bound for the Frobenius norm of W. This is an arbitrary value <1.
@@ -669,8 +679,8 @@ for(size_t curIter=0;curIter<maxIter;curIter++) {
     //Implementation of y and z for Equation 17.
     z.setZero(N,N);
     y.setZero(N,N);
-    for(size_t i=0;i<N;i++) {
-        for(size_t j=0;j<N;j++) {
+    for(Eigen::EigenBase<Eigen::MatrixXd>::Index i=0;i<N;i++) {
+        for(Eigen::EigenBase<Eigen::MatrixXd>::Index j=0;j<N;j++) {
             for(size_t k=0;k<K;k++) {
                 z(i,j)=z(i,j)+CVec[k](i,i)*CVec[k](j,j);
                 y(i,j)=y(i,j)+CVec[k](j,j)*(CVec[k](i,j)+CVec[k](j,i))/2;
@@ -679,8 +689,8 @@ for(size_t curIter=0;curIter<maxIter;curIter++) {
     }
 
     //Equation 17
-    for(size_t i=0;i<N;i++) {
-        for(size_t j=(i+1);j<N;j++) {
+    for(Eigen::EigenBase<Eigen::MatrixXd>::Index i=0;i<N;i++) {
+        for(Eigen::EigenBase<Eigen::MatrixXd>::Index j=(i+1);j<N;j++) {
             const double denom=z(j,j)*z(i,i)-z(i,j)*z(i,j);
             
             W(i,j)=(z(i,j)*y(j,i)-z(i,i)*y(i,j))/denom;
@@ -746,7 +756,7 @@ return 1;
 *June 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
 */
 int JointMatDiagFrobVollAlg(const std::vector<Eigen::MatrixXd> &AVec,const Eigen::MatrixXd &w, const size_t maxIter,const double RelTol,const double AbsTol, Eigen::MatrixXd &W, std::vector<Eigen::MatrixXd> &CVec, double &FCost) {
-    const size_t N=AVec[0].rows();
+    const Eigen::EigenBase<Eigen::MatrixXd>::Index N=AVec[0].rows();
     const size_t K=AVec.size();
 
     //We just set C0=eye(N,N) and thus P=eye(N,N) so P'*C0*P=eye(N,N);
@@ -759,7 +769,7 @@ int JointMatDiagFrobVollAlg(const std::vector<Eigen::MatrixXd> &AVec,const Eigen
         const Eigen::MatrixXd M1=AVec[k];
         const Eigen::MatrixXd M1M1p=M1*M1.transpose();
     
-        M=M+w(k)*(M1M1p+M1M1p.transpose());
+        M=M+w(static_cast<Eigen::EigenBase<Eigen::MatrixXd>::Index>(k))*(M1M1p+M1M1p.transpose());
     }
         
     //Initialize.
@@ -769,20 +779,21 @@ int JointMatDiagFrobVollAlg(const std::vector<Eigen::MatrixXd> &AVec,const Eigen
     }
     
     for(size_t curIter=0;curIter<maxIter;curIter++) {
-        for(size_t i=0;i<N;i++) {
+        for(Eigen::EigenBase<Eigen::MatrixXd>::Index i=0;i<N;i++) {
             Eigen::MatrixXd wi=W.col(i);
             for(size_t k=0;k<K;k++) {
                 const Eigen::MatrixXd Ak=AVec[k];
                 const Eigen::MatrixXd m1=Ak*wi;
                 const Eigen::MatrixXd m2=Ak.transpose()*wi;
-                M=M-w(k)*(m1*m1.transpose()+m2*m2.transpose());
+                M=M-w(static_cast<Eigen::EigenBase<Eigen::MatrixXd>::Index>(k))*(m1*m1.transpose()+m2*m2.transpose());
             }
             
             //Test for non-finite values before calling EigenSolver.
             //Otherwise, EigenSolver won't set the outputs and one can read
             //past the end of the matrices.
             if(anyNonFiniteInMatrix(M)) {
-                W=MatrixOfVal<Eigen::MatrixXd,double>(NAN,N,N);
+                const size_t NS=static_cast<size_t>(N);
+                W=MatrixOfVal<Eigen::MatrixXd,double>(NAN,NS,NS);
                 FCost=NAN;
                 return 100;
             }
@@ -794,14 +805,14 @@ int JointMatDiagFrobVollAlg(const std::vector<Eigen::MatrixXd> &AVec,const Eigen
             size_t minIdx,otherIdx;
             d.cwiseAbs().minCoeff(&minIdx,&otherIdx);
             const Eigen::MatrixXcd V=eigenM.eigenvectors();
-            W.col(i)=V.col(minIdx).real();
+            W.col(i)=V.col(static_cast<Eigen::EigenBase<Eigen::MatrixXd>::Index>(minIdx)).real();
             wi=W.col(i);
 
             for(size_t k=0;k<K;k++) {
                 const Eigen::MatrixXd Ak=AVec[k];
                 const Eigen::MatrixXd m1=Ak*wi;
                 const Eigen::MatrixXd m2=Ak.transpose()*wi;
-                M=M+w(k)*(m1*m1.transpose()+m2*m2.transpose());
+                M=M+w(static_cast<Eigen::EigenBase<Eigen::MatrixXd>::Index>(k))*(m1*m1.transpose()+m2*m2.transpose());
             }
         }
     
@@ -853,7 +864,7 @@ int JointMatDiagFrobVollAlg(const std::vector<Eigen::MatrixXd> &AVec,const Eigen
  *June 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
  **/
 static double approxInvMat1Norm(const Eigen::MatrixXd &X, Eigen::MatrixXd &v) {
-    const size_t N=X.rows();
+    const Eigen::EigenBase<Eigen::MatrixXd>::Index N=X.rows();
     const double ND=static_cast<double>(N);
     
     const Eigen::FullPivLU<Eigen::MatrixXd> LUX(X);
@@ -867,7 +878,7 @@ static double approxInvMat1Norm(const Eigen::MatrixXd &X, Eigen::MatrixXd &v) {
     v=Eigen::MatrixXd(N,1);
     {
         const double NDInv=1/ND;
-        for(size_t k=0;k<N;k++) {
+        for(Eigen::EigenBase<Eigen::MatrixXd>::Index k=0;k<N;k++) {
             v(k)=NDInv;
         }
     }
@@ -885,7 +896,7 @@ static double approxInvMat1Norm(const Eigen::MatrixXd &X, Eigen::MatrixXd &v) {
     }
 
     Eigen::MatrixXd zeta(N,1);
-    for(size_t k=0;k<N;k++) {
+    for(Eigen::EigenBase<Eigen::MatrixXd>::Index k=0;k<N;k++) {
         //zeta is -1 or 1.
         zeta(k)=2.0*(v(k)>=0)-1.0;
     }
@@ -897,8 +908,8 @@ static double approxInvMat1Norm(const Eigen::MatrixXd &X, Eigen::MatrixXd &v) {
 
     //j is the index of the maximum absolute value of x.
     double maxVal=fabs(x(0));
-    size_t j=0;
-    for(size_t k=1;k<N;k++) {
+    Eigen::EigenBase<Eigen::MatrixXd>::Index j=0;
+    for(Eigen::EigenBase<Eigen::MatrixXd>::Index k=1;k<N;k++) {
         const double curVal=fabs(x(k));
         if(curVal>maxVal) {
             maxVal=curVal;
@@ -918,13 +929,13 @@ static double approxInvMat1Norm(const Eigen::MatrixXd &X, Eigen::MatrixXd &v) {
         backSubstitutionByCol<Eigen::MatrixXd>(U,v);
         gammaVal=v.lpNorm<1>();
         
-        for(size_t i=0;i<N;i++) {
+        for(Eigen::EigenBase<Eigen::MatrixXd>::Index i=0;i<N;i++) {
             //zetaNew is -1 or 1.
             zetaNew(i)=2.0*(v(i)>=0)-1.0;
         }
         
         bool allEqual=true;
-        for(size_t i=0;i<N;i++) {
+        for(Eigen::EigenBase<Eigen::MatrixXd>::Index i=0;i<N;i++) {
             if(zetaNew(i)!=zeta(i)) {
                 allEqual=false;
                 break;
@@ -949,8 +960,8 @@ static double approxInvMat1Norm(const Eigen::MatrixXd &X, Eigen::MatrixXd &v) {
         
         //This is [~,jNew]=max(abs(x));
         maxVal=fabs(x(0));
-        size_t jNew=0;
-        for(size_t i=1;i<N;i++) {
+        Eigen::EigenBase<Eigen::MatrixXd>::Index jNew=0;
+        for(Eigen::EigenBase<Eigen::MatrixXd>::Index i=1;i<N;i++) {
             const double curVal=fabs(x(i));
             if(curVal>maxVal) {
                 maxVal=curVal;
@@ -967,7 +978,7 @@ static double approxInvMat1Norm(const Eigen::MatrixXd &X, Eigen::MatrixXd &v) {
 
     double signVal=1.0;
     double idx=0;
-    for(size_t i=0;i<N;i++) {
+    for(Eigen::EigenBase<Eigen::MatrixXd>::Index i=0;i<N;i++) {
         x(i)=signVal*(1.0+idx/ND1);
         signVal=-signVal;
         idx++;
@@ -1011,7 +1022,7 @@ static double approxInvMat1Norm(const Eigen::MatrixXd &X, Eigen::MatrixXd &v) {
  *June 2021 David F. Crouse, Naval Research Laboratory, Washington D.C.
  **/
 double invCondNumberApprox(const Eigen::MatrixXd &X) {
-    const size_t N=X.rows();
+    Eigen::EigenBase<Eigen::MatrixXd>::Index N=X.rows();
  
     //Look for NaNs and Inf values in X. If any are found, then return NaN.
     if(anyNonFiniteInMatrix(X)) {
@@ -1021,7 +1032,7 @@ double invCondNumberApprox(const Eigen::MatrixXd &X) {
     //Get the 1-matrix norm of X. This is the maximum absolute column sum
     //of the matrix.
     double normX=X.col(0).cwiseAbs().sum();
-    for(size_t i=1;i<N;i++) {
+    for(Eigen::EigenBase<Eigen::MatrixXd>::Index i=1;i<N;i++) {
         const double curAbsColSum=X.col(i).cwiseAbs().sum();
         normX=std::max(curAbsColSum,normX);
     }

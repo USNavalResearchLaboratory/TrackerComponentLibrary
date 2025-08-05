@@ -4,8 +4,7 @@ classdef GammaD
 %Methods implemented for both central and noncentral distributions are:
 %        PDF, CDF
 %Methods only implemented for the central distribution are: mean, var
-%                                                           invCDF, rand,
-%                                                           entropy
+%                                 invCDF, rand, entropy.
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
@@ -25,6 +24,17 @@ function val=mean(k, theta, lambda)
 %OUTPUTS: val  The mean of the gamma distribution.
 %
 %Currently, the algorithm is only implemented for the case where lambda=0.
+%
+%EXAMPLE:
+%Here, we generate random samples and show that the mean of the samples for
+%the central gamma distribution is consistent with the output of this
+%function (agrees within a few digits).
+% numPts=1e5;
+% k=3.4;
+% theta=101.9;
+% x=GammaD.rand([numPts,1],k,theta);
+% mean(x)
+% GammaD.mean(k,theta)
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
@@ -52,7 +62,18 @@ function val=var(k,theta,lambda)
 %
 %OUTPUTS: val The variance of the gamma distribution.
 %
-%%Currently, the algorithm is only implemented for the case where lambda=0.
+%EXAMPLE:
+%Here, we generate random samples and show that the mean of the samples for
+%the central gamma distribution is consistent with the output of this
+%function (agrees within a few digits).
+% numPts=1e5;
+% k=3.4;
+% theta=101.9;
+% x=GammaD.rand([numPts,1],k,theta);
+% var(x)
+% GammaD.var(k,theta)
+%
+%Currently, the algorithm is only implemented for the case where lambda=0.
 %
 %October 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
@@ -61,7 +82,7 @@ if(nargin<3||isempty(lambda))
 end
 
 if(lambda == 0)
-    val=k*theta^2;
+    val=k.*theta.^2;
 else
     error('This function is not currently supported for noncentral gamma distributions.');
 end
@@ -93,6 +114,23 @@ function val=PDF(x,k,theta,lambda,errTol,maxIter)
 %approximations in [2]. This function implements the algorithm for
 %computation of the probability distribution function. When lambda is zero,
 %the central gamma case, a simple explicit formula is available.
+%
+%EXAMPLE:
+%This example demonstrates that the PDF returned by this function for the
+%central gamma distribution is consistent with a histogram of random
+%samples.
+% numSamp=1e5;
+% k=3.4;
+% theta=101.9;
+% ySamp=GammaD.rand([numSamp,1],k,theta);
+% numPts=1000;
+% x=linspace(0,1500,numPts);
+% yExp=GammaD.PDF(x,k,theta);
+% figure(1)
+% clf
+% hold on
+% histogram(ySamp,'normalization','pdf')
+% plot(x,yExp,'linewidth',2)
 %
 %REFERENCES:
 %[1] I.R.C. de Oliveria and D.F. Ferreira, "Computing the noncentral gamma
@@ -193,6 +231,25 @@ function prob=CDF(x,k,theta,lambda,errTol,maxIter)
 %approximations in [2]. This function implements the algorithm for
 %computation of the cumulative distribution function. When lambda is zero,
 %the central gamma case, a simple explicit formula is available.
+%
+%EXAMPLE
+%This demonstrates that the CDF returned by thsi function agrees to an
+%empirical distribution constructed from random samples of the Ggmma
+%distribution.
+% numSamp=1e5;
+% k=3.4;
+% theta=101.9;
+% numPts=1000;
+% x=linspace(0,1500,numPts);
+% ySamp=GammaD.rand([numSamp,1],k,theta);
+% yEmp=EmpiricalD.CDF(x,ySamp);
+% yExp=GammaD.CDF(x,k,theta);
+% figure(1)
+% clf
+% hold on
+% plot(x,yEmp,'linewidth',4)
+% plot(x,yExp,'linewidth',2)
+% legend('Empirical Distribution','Gamma Distribution')
 %
 %REFERENCES:
 %[1] I. R. C. de Oliveria and D. F. Ferreira, "Computing the noncentral
@@ -306,6 +363,17 @@ function val=invCDF(prob,k,theta,lambda)
 %
 %Currently, no implementation for the case of a nonzero noncentrality
 %parameter is provided.
+%
+%EXAMPLE:
+%This demonstrates that for the central gamma distribution, this function
+%agrees with the CDF to more than 15 digits (within finite precision
+%limits).
+% k=3.4;
+% theta=101.9;
+% prob=0.55;
+% x=GammaD.invCDF(prob,k,theta);
+% probBack=GammaD.CDF(x,k,theta);
+% RelErr=(probBack-prob)/prob
 %
 %REFERENCES:
 %[1] Weisstein, Eric W. "Gamma Distribution." From MathWorld--A Wolfram Web

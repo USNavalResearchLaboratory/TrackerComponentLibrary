@@ -132,10 +132,29 @@
  *December 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.*/
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+//Suppress warnings about padding being added.
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4820 )
+#endif
 /*This header is for the core SGP4 propagation routine.*/
 #include "SGP4.h"
-/*This header is required by Matlab.*/
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
+
+
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4514 )
+#endif
+
 #include "mex.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
 /*This is for input validation*/
 #include "MexValidation.h"
 //For max

@@ -100,7 +100,6 @@ T1 polyValGenCPP(const size_t numP, const T2 *p, const T3 x, const bool firstTer
             y=x*y+p[k];
         }
     }
-
     return y;
 }
 

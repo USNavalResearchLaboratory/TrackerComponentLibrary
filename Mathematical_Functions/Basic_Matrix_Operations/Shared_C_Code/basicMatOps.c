@@ -9,6 +9,11 @@
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+//Get rid of a Visual Studio warning about inlining.
+#ifdef _MSC_VER
+#pragma warning(disable : 4711)
+#endif
+
 #include "basicMatOps.h"
 
 //For memset.
@@ -28,22 +33,7 @@ static const uint64_t infVal=0x7ff0000000000000;
 #define INFINITY (*(double*)(&infVal))
 #endif
 
-//If using *NIX or Mac OS X, the fmin be defined without anything extra in
-//math.h
-#if __STDC_VERSION__>=199901L
 #include<math.h>
-#define fMin(a,b) fmin(a,b)
-#else
-    static double fMin(double a,double b) {
-    //Defined in the C99 standard, but not supported by Microsoft.
-        if(a>b) {
-            return b;
-        }
-        else {
-            return a;
-        }
-    }
-#endif
 
 void invPermuteRowsPtrDiffT(const size_t n1,const size_t n2,ptrdiff_t *  XPerm,const ptrdiff_t *  XOrig,const size_t *rowOrder) {
 /**INVPERMUTEROWSPTRDIFFT Given an n1Xn2 matrix of ptrdiff_t values stored
@@ -92,7 +82,7 @@ double vecMinD(const double*vec, const size_t numEls) {
     
     minVal=0;
     for(i=0;i<numEls;i++) {
-        minVal=fMin(minVal,vec[i]);
+        minVal=fmin(minVal,vec[i]);
     }
     return minVal;
 }

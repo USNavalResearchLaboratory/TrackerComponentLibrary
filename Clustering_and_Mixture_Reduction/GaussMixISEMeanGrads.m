@@ -11,7 +11,7 @@ function [gradISE,gradJhr,gradJrr]=GaussMixISEMeanGrads(w1,mu1,P1,w2,mu2,P2,PDFV
 %       mu1 The xDimXN1 set of mean vectors for the first Gaussian mixture
 %           distribution.
 %        P1 The xDimXxDimXN1 set of positive definite covariance matrices
-%           for the first Gaussian mixture distirbution.
+%           for the first Gaussian mixture distribution.
 % w2, mu2, P2, The length N2, xDimXN2, and xDimXxDimXN2 set of weights,
 %           mean vectors and positive-definite covariance matrices for the
 %           second Gaussian mixture distribution.

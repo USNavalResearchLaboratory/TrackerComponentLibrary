@@ -441,9 +441,9 @@ function avgSNR=avgSNR4PDThresh(PD,thresh,N,ampDef)
 %
 %OUTPUTS: avgSNR The average power signal to noise ratio needed to achieve
 %                the desired probability of detection at the given
-%                threshold. If this is negative, then for a given PD, the
-%                threshold is so low that due to the high false alarm
-%                rate, the desired PD is impossiblely low.
+%                threshold. If this is an empty matrix, then for a given
+%                PD, the threshold is so low that due to the high false
+%                alarm rate, the desired PD is impossibly low.
 %
 %Equation II.10 in [1] gives an expression for PD in terms of thresh and
 %the average SNR. Here, we have simply inverted the expression.
@@ -457,7 +457,7 @@ function avgSNR=avgSNR4PDThresh(PD,thresh,N,ampDef)
 % N=4;
 % PD=0.6;
 % thresh=1e5;
-% ampDef=0;
+% ampDef=1;
 % avgSNR=SwerlingIISqLawD.avgSNR4PDThresh(PD,thresh,N,ampDef);
 % PDBack=SwerlingIISqLawD.PD4Threshold(avgSNR,thresh,N,ampDef)
 % numSamples=1e5;
@@ -486,6 +486,11 @@ function avgSNR=avgSNR4PDThresh(PD,thresh,N,ampDef)
     else
         avgSNR=thresh/gammaincinv(1-PD,N)-1;
     end
+
+    if(avgSNR<0)
+        %No solution exists.
+        avgSNR=[];
+    end
 end
 
 function avgSNR=avgSNR4PDPFA(PD,PFA,N,ampDef)
@@ -510,9 +515,9 @@ function avgSNR=avgSNR4PDPFA(PD,PFA,N,ampDef)
 %
 %OUTPUTS: avgSNR The average power signal to noise ratio needed to achieve
 %                the desired probability of detection at the given
-%                threshold. If this is negative, then for a given PD, the
-%                threshold is so low that due to the high false alarm
-%                rate, the desired PD is impossiblely low.
+%                threshold. If this is an empty matrix, then for a given
+%                PD, the threshold is so low that due to the high false
+%                alarm rate, the desired PD is impossibly low.
 %
 %Equation II.10 in [1] gives an expression for PD in terms of a normalized
 %threshold and the average SNR. Here, we call the function

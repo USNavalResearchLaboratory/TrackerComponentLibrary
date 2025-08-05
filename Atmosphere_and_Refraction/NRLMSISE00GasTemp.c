@@ -140,7 +140,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     struct nrlmsise_output theOutput;
     struct nrlmsise_input theInput;
     struct ap_array theAPData;
-    double Jul1,Jul2, *latLonAlt,ap,f107,f107A;
+    double *latLonAlt,ap,f107,f107A;
     size_t i;
 
     //This activates everything and makes the output in meters.

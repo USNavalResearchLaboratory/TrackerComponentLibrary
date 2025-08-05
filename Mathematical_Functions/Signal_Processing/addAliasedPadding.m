@@ -61,7 +61,7 @@ if(nargin<3||isempty(dim))
     end
 end
 
-if(length(numPad)==1)
+if(isscalar(numPad))
     numPad=[numPad;numPad];
 end
 

@@ -5,7 +5,8 @@ function val=FibonacciNum(n)
 %               non-recursion expression is used here so that large
 %               Fibonacci numbers can be quickly found.
 %
-%INPUTS: n A scalar or matrix of integer Fibonacci number positions, n>0.
+%INPUTS: n A scalar or matrix of integer Fibonacci number positions, n>=0
+%          with FibonacciNum(0)=0.
 %
 %OUTPUTS: val The values of the Fibonacci numbers at the positions given in
 %             n. These should be exact for n<70.
@@ -82,12 +83,9 @@ val(sel)=fibNumFromTable(n(sel));
 y=n(~sel);
 %Deal with big numbers
 if(~isempty(y))
-    %The golden ratio.
-    phi=(1+sqrt(5))/2;
-
+    phi=Constants.GoldenRatio;
     val(~sel)=round(exp(y*log(phi)-log(sqrt(5))));
 end
-
 end
 
 function val=fibNumFromTable(n)

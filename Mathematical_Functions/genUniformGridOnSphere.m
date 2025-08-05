@@ -20,7 +20,7 @@ function z=genUniformGridOnSphere(numPts)
 %
 %REFERENCES:
 %[1] M. Deserno, "How to generate equidistributed points on the surface of
-%    a sphere," Max-Planck-INntitut fuer Polymerforschung, Tech. Rep., 28
+%    a sphere," Max-Planck-Institut fuer Polymerforschung, Tech. Rep., 28
 %    Sep. 2004. [Online]. Available:
 %    https://www.cmu.edu/biolphys/deserno/pdf/sphere_equi.pdf
 %

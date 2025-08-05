@@ -15,8 +15,8 @@ function [z,idxX,idxY]=mergeSortedArraysUniqueWithIdx(x,y)
 %      idxX An xDimX1 vector such that z(i)=x(idxX(i)).
 %      idxY A yDimX1 vector such that z(i)=y(idxY(i)).
 %
-%The algorthm is taken from Chapter 5.2.4 of [1] and modified to keep track
-%of the indices where the merged items land and to remove duplicates.
+%The algorithm is taken from Chapter 5.2.4 of [1] and modified to keep
+%track of the indices where the merged items land and to remove duplicates.
 %
 %REFERENCES:
 %[1] D. Knuth, The Art of Computer Programming: Sorting and Searching, 2nd

@@ -99,23 +99,43 @@ function val=PMF(x,lambda)
     
     val=zeros(size(x));
     sel=(x>=0);
-
-    val(sel)=(lambda.^x(sel)./factorial(x(sel)))*exp(-lambda);
+    xSel=x(sel);
+    %This line is equivalent to the commented line below, but can better
+    %handle finite precision limitations.
+    val(sel)=exp(xSel*log(lambda)-gammaln(xSel+1)-lambda);
+    %val(sel)=(lambda.^x(sel)./factorial(x(sel)))*exp(-lambda);
 end
 
-function [FVal,pVal]=CDF(x,lambda)
+function val=PMFDeriv(x,lambda)
+
+
+
+
+end
+
+
+
+function [FVal,pVal]=CDF(x,lambda,algorithm)
 %%CDF Evaluate the cumulative distribution function of the Poisson
 %     distribution at desired points.
 %
 %INPUTS: x The integer point(s) at which the Poisson CDF is evaluated.
 %   lambda The mean (and variance) of the Poisson distribution.
+% algorithm This selects the algorithm to use for the computation. Possible
+%          values are:
+%          0 (The default if omitted or an empty matrix is passed) Compute
+%            FVal as gammainc(lambda,floor(x+1),'upper'), accounting for
+%            x<0 being 0. pVal, if requested, is just computed with the PMF
+%            method of this class.
+%          1 Use the recursion implied by Chapter 4.2 of [1]. This
+%            generated pVal at the same time. However, for large values of
+%            lambda and x, FVal might incorrectly be 0 due to finite
+%            precision limitiations.
 %
 %OUTPUTS: FVal The CDF of the Poisson distribution evaluated at the desired
 %              point(s).
 %         pVal The value of the PMF of the Poisson distribution at the
 %              desired point(s).
-%
-%The recursion is from Chapter 4.2 of [1].
 %
 %EXAMPLE:
 %We validate the CDF value by comparing it to a value computed from random
@@ -132,24 +152,41 @@ function [FVal,pVal]=CDF(x,lambda)
 %
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
     
-    FVal=zeros(size(x));
-    pVal=zeros(size(x));
-    
-    x=floor(x);%In case decimals were passed.
-    numEls=numel(x);
+if(nargin<3||isempty(algorithm))
+    algorithm=0;
+end
 
-    for curEl=1:numEls
-        p=exp(-lambda);
-        F=p;
-        for I=1:fix(x(curEl))
-            p=p*lambda/I;
-            F=F+p;
+switch(algorithm)
+    case 0
+        FVal=zeros(size(x));
+        sel=x>=0;
+        FVal(sel)=gammainc(lambda,floor(x(sel)+1),'upper');
+
+        if(nargout>1)
+            pVal=PoissonD.PMF(x,lambda);
         end
-        FVal(curEl)=F;
-        pVal(curEl)=p;
-    end
-    FVal(x<0)=0;
-    pVal(x<0)=0;
+    case 1
+        FVal=zeros(size(x));
+        pVal=zeros(size(x));
+        
+        x=floor(x);%In case decimals were passed.
+        numEls=numel(x);
+    
+        for curEl=1:numEls
+            p=exp(-lambda);
+            F=p;
+            for I=1:fix(x(curEl))
+                p=p*lambda/I;
+                F=F+p;
+            end
+            FVal(curEl)=F;
+            pVal(curEl)=p;
+        end
+        FVal(x<0)=0;
+        pVal(x<0)=0;
+end
+%Address finite precision limitiations.
+FVal=min(1,FVal);
 end
 
 function momentVal=momentGenFun(lambda,numDerivs,t)

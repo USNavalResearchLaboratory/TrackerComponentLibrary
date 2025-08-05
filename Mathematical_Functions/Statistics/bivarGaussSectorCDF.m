@@ -1,5 +1,5 @@
 function M=bivarGaussSectorCDF(theta1,theta2,R)
-%%BIVARGAUSSECTORCDF Find the value of the cumulative distirbution function
+%%BIVARGAUSSECTORCDF Find the value of the cumulative distribution function
 %               (CDF) for an angular region spanning from theta1 to theta2
 %               over the zero-mean normal distribution with covariance
 %               matrix R. The sector considered always starts from the

@@ -3,6 +3,11 @@
 *November 2013 David F. Crouse, Naval Research Laboratory, Washington D.C*/
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+//Get rid of a warnings from Visual Studio related to inlining functions.
+#ifdef _MSC_VER
+#pragma warning(disable : 4711 4710)
+#endif
+
 #include <limits>
 #include <algorithm>
 #include "MMOSPAApproxCPP.hpp"
@@ -136,7 +141,7 @@ void MMOSPAApproxForward(double *MMOSPAEst,
         shortestPathCPP(problemSol,workMem,numTar, numTar, 0);
 
         /*Record this ordering in orderList.*/
-        copy(problemSol->col4row,problemSol->col4row+numTar,orderList+numTar*curHyp);
+        copy(problemSol->col4row,problemSol->col4row+numTar,reinterpret_cast<ptrdiff_t*>(orderList+numTar*curHyp));
 
         /*Add the term with the now known ordering to the MMOSPA estimate.*/
         for(curTar1=0;curTar1<numTar;curTar1++){
@@ -201,7 +206,7 @@ void doUpdate4Col(double *MMOSPAEst,
     shortestPathCPP(problemSol,workMem,numTar, numTar, 0);
     
     /*Record this ordering in orderList.*/
-    copy(problemSol->col4row,problemSol->col4row+numTar,orderList+curOrderOffset);
+    copy(problemSol->col4row,problemSol->col4row+numTar,reinterpret_cast<ptrdiff_t*>(orderList+curOrderOffset));
     
     /*Update the MMOSPA estimate*/
     //xMMOSPAEst=xOptCur+w(varHyp)*x(:,orderList(:,varHyp),varHyp);
@@ -215,7 +220,6 @@ void doUpdate4Col(double *MMOSPAEst,
         }
     }
 }
-
 
 void MMOSPAApproxCPP(double *MMOSPAEst,
                      size_t *orderList,

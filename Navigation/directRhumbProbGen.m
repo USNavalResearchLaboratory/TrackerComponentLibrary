@@ -130,7 +130,7 @@ else
     %system.
     xInit=[xyzInit;speed*uh];
     
-    aDyn=@(x,t)aPoly(x,t,3);%A constant velocity model.
+    aDyn=@(x,t)aPoly(x,3);%A constant velocity model.
 
     %When traveling along a rhumb-line, the local coordinate system is
     %known at all times: it is the local ENU coordinate system. The local

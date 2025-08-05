@@ -14,6 +14,12 @@
  **/
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+//Get rid of useless warnings in this file from Visual Studio that relate
+//to std::complex not being inlined.
+#ifdef _MSC_VER
+#pragma warning(disable : 4710)
+#endif
+
 #include "mathFuncs.hpp"
 #include "CoordFuncs.hpp"
 
@@ -24,6 +30,8 @@
 #include <cstring>
 //For the implementation in the complex domain.
 #include <complex>
+//For NULL
+#include <cstddef>
 
 using namespace std;
 
@@ -35,7 +43,8 @@ void spherHarmonicEvalCPPReal(double *V, double *gradV, double *HessianV,const C
     const size_t M1=C.numClust;
     const double pi=2.0*acos(0.0);
     size_t curPoint;
-    double rPrev, thetaPrev, crScal;
+    double rPrev, thetaPrev;
+    double crScal=0;
     CountingClusterSetCPP<double> FuncVals;
     CountingClusterSetCPP<double> FuncDerivs;
     CountingClusterSetCPP<double> FuncDerivs2;
@@ -49,7 +58,8 @@ void spherHarmonicEvalCPPReal(double *V, double *gradV, double *HessianV,const C
     double *nCoeff;//Length M+1
     //These are to store sin(m*lambda) and cos(m*lambda) for m=0->M for the
     //Legendre algorithm.
-    double *SinVec,*CosVec;//These are each length M+1.
+    double *SinVec=NULL;
+    double *CosVec=NULL;//These are each length M+1.
     //rm and im are never used at the same time as SinVec andCosVec,
     //because rm and im are used by Pines' algorithm. They will be the same
     //size as SinVec and CosVec, and thus will point to the same memory.
@@ -711,7 +721,7 @@ void spherHarmonicEvalCPPReal(double *V, double *gradV, double *HessianV,const C
                         //Table 14
                         const double Lmn=(nf+mf+1)*HVal+u*dHVal;
                         const double dLmn=(nf+mf+2)*dHVal+u*d2HVal;
-                        const double Omn=(nf+mf+1)*(n+m+2)*HVal+2.0*u*(nf+mf+2)*dHVal+u*u*d2HVal;
+                        const double Omn=(nf+mf+1)*(nf+mf+2)*HVal+2.0*u*(nf+mf+2)*dHVal+u*u*d2HVal;
 
                         const double rhoC=nCoeff[n]*C[n][m];
                         const double rhoS=nCoeff[n]*S[n][m];
@@ -771,16 +781,16 @@ void spherHarmonicEvalCPPReal(double *V, double *gradV, double *HessianV,const C
                 a44/=r2;
                 a22=-a11;
 
-                {
-                    double dxdr;
-                    double dxdAz;
-                    double dxdEl;
-                    double dydr;
-                    double dydAz;
-                    double dydEl;
-                    double dzdr;
-                    double dzdAz;
-                    double dzdEl;
+                {//Initialize to 0 to get rid of warnings.
+                    double dxdr=0;
+                    double dxdAz=0;
+                    double dxdEl=0;
+                    double dydr=0;
+                    double dydAz=0;
+                    double dydEl=0;
+                    double dzdr=0;
+                    double dzdAz=0;
+                    double dzdEl=0;
                     const double dVdx=crScal*(a1+s*a4);
                     const double dVdy=crScal*(a2+t*a4);
                     const double dVdz=crScal*(a3+u*a4);
@@ -949,7 +959,8 @@ void spherHarmonicEvalCPPComplex(complex<double> *VRet, complex<double> *gradVRe
     complex <double> *nCoeff;//Length M+1
     //These are to store sin(m*lambda) and cos(m*lambda) for m=0->M for the
     //Legendre algorithm.
-    double *SinVec,*CosVec;//These are each length M+1.
+    double *SinVec=NULL;
+    double *CosVec=NULL;//These are each length M+1.
     //rm and im are never used at the same time as SinVec andCosVec,
     //because rm and im are used by Pines' algorithm. They will be the same
     //size as SinVec and CosVec, and thus will point to the same memory.
@@ -971,7 +982,7 @@ void spherHarmonicEvalCPPComplex(complex<double> *VRet, complex<double> *gradVRe
     complex<double> *Arr=NULL;//Length M1
     complex<double> *Brr=NULL;//Length M1
     complex<double> *AThetar=NULL;//Length M1
-    complex<double> *BThetar;//Length M1
+    complex<double> *BThetar=NULL;//Length M1
 
     //Initialize the ClusterSet classes for the coefficients. The space
     //for the elements will be allocated shortly.
@@ -1639,7 +1650,7 @@ void spherHarmonicEvalCPPComplex(complex<double> *VRet, complex<double> *gradVRe
                         //Table 14
                         const double Lmn=(nf+mf+1)*HVal+u*dHVal;
                         const double dLmn=(nf+mf+2)*dHVal+u*d2HVal;
-                        const double Omn=(nf+mf+1)*(n+m+2)*HVal+2.0*u*(nf+mf+2)*dHVal+u*u*d2HVal;
+                        const double Omn=(nf+mf+1)*(nf+mf+2)*HVal+2.0*u*(nf+mf+2)*dHVal+u*u*d2HVal;
 
                         const complex <double> rhoC=nCoeff[n]*C[n][m];
                         const complex <double> rhoS=nCoeff[n]*S[n][m];
@@ -1699,16 +1710,16 @@ void spherHarmonicEvalCPPComplex(complex<double> *VRet, complex<double> *gradVRe
                 a44/=r2;
                 a22=-a11;
 
-                {
-                    double dxdr;
-                    double dxdAz;
-                    double dxdEl;
-                    double dydr;
-                    double dydAz;
-                    double dydEl;
-                    double dzdr;
-                    double dzdAz;
-                    double dzdEl;
+                {//Initialize to 0 to get rid of warnings.
+                    double dxdr=0;
+                    double dxdAz=0;
+                    double dxdEl=0;
+                    double dydr=0;
+                    double dydAz=0;
+                    double dydEl=0;
+                    double dzdr=0;
+                    double dzdAz=0;
+                    double dzdEl=0;
                     const complex<double> dVdx=crScal*(a1+s*a4);
                     const complex<double> dVdy=crScal*(a2+t*a4);
                     const complex<double> dVdz=crScal*(a3+u*a4);

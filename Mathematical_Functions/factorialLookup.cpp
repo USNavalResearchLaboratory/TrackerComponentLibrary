@@ -12,7 +12,17 @@
 */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4514 )
+#endif
+
 #include "matrix.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
+
 /*This header is required by Matlab.*/
 #include "mex.h"
 #include "MexValidation.h"

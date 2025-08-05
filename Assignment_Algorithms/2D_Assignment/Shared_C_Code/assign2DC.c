@@ -13,6 +13,11 @@
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+//Get rid of Visual Studio warnings about Spectre mitigation and inlining.
+#ifdef _MSC_VER
+#pragma warning(disable : 5045 4711)
+#endif
+
 #include "assignAlgs2D.h"
 
 /* string.h is needed for the memset function.*/

@@ -16,7 +16,7 @@ function [F,totalCost,exitCode]=minCostFlow(AMat,CMat,b,maxIter)
 %             required that sum(b)=0.
 %     maxIter An optional parameter specifying the maximum number of
 %             iterations that should be performed by the algorithm. If
-%             omitted, a maximum of 100+10N iterations is used.
+%             omitted, a maximum of 100+10*N iterations is used.
 %
 %OUTPUTS: F The flow matrix. F(i,j) is the amount of flow going from node i
 %           to node j. Note that F(i,j)=-F(j,i). If the algorithm could not

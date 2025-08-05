@@ -29,10 +29,6 @@ function val=binomial(n,k)
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-    if(n>2^53||k>2^53)
-        error('n and k must be less than 2^53.')
-    end
-
     if(k>n)
         val=0;
         return

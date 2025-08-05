@@ -478,7 +478,7 @@ end
 %derivative with respect to a single component is taken, then we treat it
 %as a special case, because unlike all other derivatives, it includes a mu
 %term.
-if(numDerivs(startIdx(1))==1&&length(startIdx)==1)
+if(numDerivs(startIdx(1))==1&&isscalar(startIdx))
     derivIdx=startIdx(1);
     for curPoint=1:numPoints
     	cumVal(curPoint)=mu(derivIdx)+(lambda/2)*(t(:,curPoint)'*Gamma(:,derivIdx)+Gamma(derivIdx,:)*t(:,curPoint))/(1-(lambda/2)*(t(:,curPoint)'*Gamma*t(:,curPoint)));

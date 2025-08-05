@@ -1,14 +1,14 @@
 function z=getUDirection3D(zC,zRx,M)
 %%GETUDIRECTION3D Convert a position into a single local direction cosines
-%         u. Direction cosines u and v are just the x and 
-%         coordinates of a unit vector from the receiver to the target in
-%         the coordinate system at the receiver. This assumes that the
-%         boresight direction of the receiver is the local z axis.
+%         u. Direction cosines u and v are just the x and y coordinates of
+%         a unit vector from the receiver to the target in the coordinate
+%         system at the receiver. This assumes that the boresight direction
+%         of the receiver is the local z axis.
 %
 %INPUTS: zC A 3XN matrix of Cartesian points in global [x;y;z] Cartesian
 %          coordinates.
 %      zRx The 3X1 [x;y;z] location vector of the receiver in Cartesian
-%          coordinates.  If this parameter is omitted or an empty matrix is
+%          coordinates. If this parameter is omitted or an empty matrix is
 %          passed, then the receiver is assumed to be at the origin.
 %        M A 3X3 rotation matrix to go from the alignment of the global
 %          coordinate system to that at the receiver. The z-axis of the
@@ -18,12 +18,12 @@ function z=getUDirection3D(zC,zRx,M)
 %          aligned with the global and M=eye(3) --the identity matrix is
 %          used.
 %
-%OUTPUTS: z The 1XN vector of the v direction cosines for the points in zC.
+%OUTPUTS: z The 1XN vector of the u direction cosines for the points in zC.
 %
 %Details of the conversion are given in [1].
 %
 %REFERENCES:
-%[1] David F. Crouse , "Basic tracking using nonlinear 3D monostatic and
+%[1] David F. Crouse, "Basic tracking using nonlinear 3D monostatic and
 %    bistatic measurements," IEEE Aerospace and Electronic Systems
 %    Magazine, vol. 29, no. 8, Part II, pp. 4-53, Aug. 2014.
 %

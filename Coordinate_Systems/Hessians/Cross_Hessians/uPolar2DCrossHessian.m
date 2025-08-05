@@ -1,7 +1,8 @@
 function H=uPolar2DCrossHessian(azimuth,systemType,includeV)
 %%UPOLAR2DCROSSHESSIAN Given a 2D azimuthal angle, obtain the second
 %              derivative of the direction cosine value u with respect to
-%              the azimuthal angle.
+%              the azimuthal angle. This is the second derivative of the
+%              output of polAng2U2D with respect to its input.
 %
 %INPUTS: azimuth A 1XN or NX1 set of N polar angles in radians.
 %   systemType An optional parameter specifying the axis from which the

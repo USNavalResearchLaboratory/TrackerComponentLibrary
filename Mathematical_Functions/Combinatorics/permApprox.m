@@ -77,7 +77,7 @@ if(isempty(Z))
     permApprox=1;
     bound=0;
     return; 
-elseif(numel(Z)==1) 
+elseif(isscalar(Z)) 
     permApprox=Z;
     bound=0;
     return; 
@@ -295,7 +295,7 @@ function retVal=permApproxS(A,numIter)
     if(isempty(A))
         retVal=1;
         return; 
-    elseif(numel(A)==1) 
+    elseif(isscalar(A)) 
         retVal=A; 
         return; 
     end 

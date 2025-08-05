@@ -1,5 +1,5 @@
 function [wAbs,wOrd,col4row]=lexBottleneckAssign(C)
-%%LEXBOTTLENECKASSIGN Solve the lexicogrpahic bottleneck assignment problem
+%%LEXBOTTLENECKASSIGN Solve the lexicographic bottleneck assignment problem
 %          for a square cost matrix. A linear bottleneck assignment
 %          problem can be formulated as
 %          gain=minimize_phi max_i C_{i,phi(i)} where phi is a permutation

@@ -16,7 +16,7 @@ function symMean=symmetricMean(x,orders)
 %OUTPUTS: symMean The value of the symmetric mean.
 %
 %This implements the formula given in [1]. For r=1, the mean value is
-%explicitely found. For r>1, the problem is equivalent to computing a
+%explicitly found. For r>1, the problem is equivalent to computing a
 %matrix permanent, so the perm algorithm is used rather than evaluating all
 %binomial(n,r)*factorial(r) terms in the sum.
 %

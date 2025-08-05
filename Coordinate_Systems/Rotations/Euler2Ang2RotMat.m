@@ -15,8 +15,8 @@ function M=Euler2Ang2RotMat(theta1,theta2,series,handed)
 %              the two rotations are taken. All possible combinations of
 %              axes without repeating an axis are valid. For example, 'xy'
 %              means rotate theta2 about the y axis, then rotate theta1
-%              about the rotated x axis. All possible combinations of values
-%              are: 'xy', 'xz', 'yx', 'yz', 'zx', and 'zy'.
+%              about the rotated x axis. All possible combinations of
+%              values are: 'xy', 'xz', 'yx', 'yz', 'zx', and 'zy'.
 %       handed The handedness of the rotation angle. If omitted, it is
 %              assumed that the rotation is right-handed (the standard).
 %              Possible values are:

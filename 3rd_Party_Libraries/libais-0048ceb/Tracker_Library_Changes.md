@@ -4,9 +4,10 @@ Unused code was placed into ./Unused Code.zip, ./src/Unused Code.zip, and
 
 In the file ./src/libais/Makefile-custom, the -fPIC C++ flag was added to
 eliminate compile problems on some systems. The -DNDEBUG flasg was also
-added to eliminate parts related to debugging.
+added to eliminate parts related to debugging. A number of modifications
+were made to get rid of warnings when compiling in Visual Studio and MinGW.
 
 The code was originally taken from
 https://github.com/schwehr/libais
 
-November 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
+May 2025 David F. Crouse, Naval Research Laboratory, Washington D.C.

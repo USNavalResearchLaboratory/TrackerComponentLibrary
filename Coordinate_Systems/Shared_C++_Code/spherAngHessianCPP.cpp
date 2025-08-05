@@ -104,7 +104,7 @@ void spherAngHessianCPP(double *H,const double *xG,const size_t systemType) {
         //dEldzdy
         H[14]=H[16];
     } else if(systemType==1) {
-        double x4,rxz, r4xz, rxz3, r4;
+        double rxz, r4xz, rxz3, r4;
 
         x4=x2*x2;
 
@@ -200,7 +200,7 @@ void spherAngHessianCPP(double *H,const double *xG,const size_t systemType) {
         //dEldzdy
         H[14]=H[16];
     }else {//systemType==2
-        double r4xy, r4, rxy, x4, y4,rxy3;
+        double r4xy, r4, rxy, y4,rxy3;
         
         r4xy=x2+y2;
         r4=(r4xy+z2);

@@ -46,7 +46,8 @@ function momentMat=findMomentsFromSamp(xSamp,wSamp,maxDeg,maxDegType,normalize)
 %Hence the reason introductory textbooks use a 1/(numSamp-1) in front of
 %variance computations. The bias in central moments (when just dividing by
 %numSamp) comes from using the sample mean in place of the true mean to
-%centralize the moment.
+%centralize the moment. To compute the first and second central unbiased
+%central moments of a sample, use findMomentsUnbiasedFromSamp.
 %
 %EXAMPLE:
 %This function can be used to verify the accuracy of cubature formula. For

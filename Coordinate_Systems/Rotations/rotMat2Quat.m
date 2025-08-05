@@ -26,7 +26,9 @@ function q=rotMat2Quat(R,handed)
 %solution is chosen so that when considering a left-handed rotation, the
 %sign of the largest magnitude element is positive. When considering a
 %right handed rotation, the sign of the largest element may or may not be
-%positive.
+%positive. Also, to help mitigate finite precision limitations, the
+%quaternion, which should have unit magnitude if the input matrix is truly
+%a rotation matrix, is normalized.
 %
 %A quaternion of form q(1)+i*q(2)+j*q(3)+k*q(4) that obeys right-handed
 %multiplication rules supports the following rules for multiplication of i,
@@ -73,23 +75,25 @@ q2=(1/4)*[1+R11+R22+R33;
 
 q2Max=max(q2);
 
+%The "max" operation has been added to deal with the unlikely event that
+%the diagonal R values sum to a value less than -1.
 if(q2Max==q2(1))
-    q0=0.5*sqrt(1+R11+R22+R33);
+    q0=0.5*sqrt(max(0,1+R11+R22+R33));
     q1=(1/(4*q0))*(R23-R32);
     q2=(1/(4*q0))*(R31-R13);
     q3=(1/(4*q0))*(R12-R21);
 elseif(q2Max==q2(2))
-    q1=0.5*sqrt(1+R11-R22-R33);
+    q1=0.5*sqrt(max(0,1+R11-R22-R33));
     q0=(1/(4*q1))*(R23-R32);
     q2=(1/(4*q1))*(R12+R21);
     q3=(1/(4*q1))*(R31+R13);
 elseif(q2Max==q2(3))
-    q2=0.5*sqrt(1-R11+R22-R33);
+    q2=0.5*sqrt(max(0,1-R11+R22-R33));
     q0=(1/(4*q2))*(R31-R13);
     q1=(1/(4*q2))*(R12+R21);
     q3=(1/(4*q2))*(R23+R32);
 else
-    q3=0.5*sqrt(1-R11-R22+R33);
+    q3=0.5*sqrt(max(0,1-R11-R22+R33));
     q0=(1/(4*q3))*(R12-R21);
     q1=(1/(4*q3))*(R31+R13);
     q2=(1/(4*q3))*(R23+R32);
@@ -106,6 +110,12 @@ switch(handed)
     otherwise
         error('Invalid handedness provided.')
 end
+
+%Normalize the quaternion. If the input is a rotation matrix, the
+%quaternion should already be normalized. However, this helps deal with
+%finite precision errors if the matrix.
+q=q/norm(q);
+
 end
 
 %LICENSE:

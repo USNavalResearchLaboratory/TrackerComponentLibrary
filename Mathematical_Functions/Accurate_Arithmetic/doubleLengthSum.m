@@ -4,12 +4,12 @@ function [z,ze]=doubleLengthSum(x,xe,y,ye)
 %       another doublelength value.
 %
 %INPUTS: x,xe A real doublelength floating point number. The exact number
-%              is x+xe (added with infinite precision) and
-%              abs(xe)<=abs(x+xe)*2^(-t)/(1+2^(-t)), where t is the number
-%              of bits in the mantissa, which is 53, since it is assumed
-%              that these values are floating point doubles.
-%        y, ye A second real doublelength floating point number that should
-%              be added to x,xe.
+%             is x+xe (added with infinite precision) and
+%             abs(xe)<=abs(x+xe)*2^(-t)/(1+2^(-t)), where t is the number
+%             of bits in the mantissa, which is 53, since it is assumed
+%             that these values are floating point doubles.
+%       y, ye A second real doublelength floating point number that should
+%             be added to x,xe.
 %
 %OUTPUTS: z, ze The doublelength floating point number that is the sum of
 %               (x,xe) and (y,ye). If the inputs satisfy the proper

@@ -179,7 +179,7 @@
  *    "A Limited Memory Algorithm for Bound Constrained Optimization".
  *    SIAM Journal on Scientific and Statistical Computing 16 (5):
  *    1190-1208. doi:10.1137/0916069.
- *[3] J. J. Mor� and D. J. Thuente, "Line search algorithms with
+ *[3] J. J. More and D. J. Thuente, "Line search algorithms with
  *    guaranteed sufficient decrease," ACM Transactions on Mathematical
  *    Software, vol. 20, no. 3, pp. 286-307, Sep. 1994.
  *
@@ -189,6 +189,13 @@
 
 /*This header is required by Matlab.*/
 #include "mex.h"
+
+#ifdef _MSC_VER
+//Get rid of useless Spectre mitigation, inlining, and padding warnings.
+//Also get rid of a warning about the step input of MatlabCallback not
+//being used.
+#pragma warning( disable : 5045 4820 4710 4100)
+#endif
 
 /*The header for the L-BFGS library with the definition making sure that
  *double precision floating point values are used.*/

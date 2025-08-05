@@ -44,7 +44,17 @@
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4514 )
+#endif
+
 #include "mex.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
+
 /* This header validates inputs and includes a header needed to handle
  * Matlab matrices.*/
 #include "MexValidation.h"
@@ -112,29 +122,29 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         mxSetProperty(CSRetVal,0,"numClust",numClustMATLAB);
 
         plhs[1]=CSRetVal;
-    }
-    
-    if(nlhs>2) {//Compute the second derivatives if they are desired.
-        mxArray *clusterEls2ndDerivMATLAB=mxCreateDoubleMatrix(numPBarU,1,mxREAL);
-        
-        d2PBarUValsdTheta2.numClust=M+1;
-        d2PBarUValsdTheta2.totalNumEl=numPBarU;
-        d2PBarUValsdTheta2.clusterEls=mxGetDoubles(clusterEls2ndDerivMATLAB);
-        
-        NALegendreCosRatDeriv2CPP(d2PBarUValsdTheta2, dPBarUValsdTheta, PBarUVals,theta);
-        
-        //Set the third return value
-        mexCallMATLAB(1,&CSRetVal,0, 0, "CountingClusterSet");
-        mxSetProperty(CSRetVal,0,"clusterEls",clusterEls2ndDerivMATLAB);
-        mxSetProperty(CSRetVal,0,"numClust",numClustMATLAB);
 
-        plhs[2]=CSRetVal;
-        mxDestroyArray(clusterEls2ndDerivMATLAB);
-        mxDestroyArray(clusterEls1stDerivMATLAB);
-    } else if(nlhs>1) {
-        mxDestroyArray(clusterEls1stDerivMATLAB);
-    }
+        if(nlhs>2) {//Compute the second derivatives if they are desired.
+            mxArray *clusterEls2ndDerivMATLAB=mxCreateDoubleMatrix(numPBarU,1,mxREAL);
+            
+            d2PBarUValsdTheta2.numClust=M+1;
+            d2PBarUValsdTheta2.totalNumEl=numPBarU;
+            d2PBarUValsdTheta2.clusterEls=mxGetDoubles(clusterEls2ndDerivMATLAB);
+            
+            NALegendreCosRatDeriv2CPP(d2PBarUValsdTheta2, dPBarUValsdTheta, PBarUVals,theta);
+            
+            //Set the third return value
+            mexCallMATLAB(1,&CSRetVal,0, 0, "CountingClusterSet");
+            mxSetProperty(CSRetVal,0,"clusterEls",clusterEls2ndDerivMATLAB);
+            mxSetProperty(CSRetVal,0,"numClust",numClustMATLAB);
     
+            plhs[2]=CSRetVal;
+            mxDestroyArray(clusterEls2ndDerivMATLAB);
+            mxDestroyArray(clusterEls1stDerivMATLAB);
+        } else if(nlhs>1) {
+            mxDestroyArray(clusterEls1stDerivMATLAB);
+        }
+    }
+        
     //Free the buffers. The mxSetProperty command copied the data.
     mxDestroyArray(clusterElsMATLAB);
     mxDestroyArray(numClustMATLAB);

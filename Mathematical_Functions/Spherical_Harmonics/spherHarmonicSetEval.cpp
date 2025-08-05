@@ -16,8 +16,18 @@
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4514 )
+#endif
+
 #include "matrix.h"
 #include "mex.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
+
 /* This header validates inputs and includes a header needed to handle
  * Matlab matrices.*/
 #include "MexValidation.h"
@@ -44,8 +54,8 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     size_t numPoints, pointDim;
     size_t M, totalNumEls;
     mxArray *VMATLAB;
-    mxArray *gradVMATLAB;
-    mxArray *HessianVMATLAB;
+    mxArray *gradVMATLAB=NULL;
+    mxArray *HessianVMATLAB=NULL;
     bool useComplexAlg=false;
     mxComplexity complexVal;
     size_t systemType;

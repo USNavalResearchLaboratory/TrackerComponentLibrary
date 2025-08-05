@@ -68,7 +68,7 @@ function [thirdMomentMat,idxMat]=computeSampleThirdMoments(x,w,isNormalized,isCe
 %EXAMPLE:
 %In this example, we show that the different algorithms used here are
 %consistent with each other. We generate 4D random samples of the
-%exponential distirbutions and compute the normalized, central moments with
+%exponential distributions and compute the normalized, central moments with
 %each algorithm. We then show that the matrices from algorithms 0 and 3 are
 %the same (within finite precision limits). Also, the values in the full
 %matrix are the same as extracting just the unique values with algorithm 1.

@@ -39,7 +39,7 @@ function [PSCI,xSCI]=covarianceIntersectSCI(CovHyp,covType,xHyp,u,numSamp)
 %
 %EXAMPLE:
 % This is similar to the example given in the paper for when standard
-% covariance intersection might be bad. , except the means are
+% covariance intersection might be bad, except the means are
 % not identical.
 % x=zeros(2,2);
 % P=zeros(2,2,2);
@@ -96,7 +96,7 @@ if(numHyp>0)
         P0=P0+PInvHyp(:,:,curHyp);
     end
     P0Inv=P0;
-    P0=P0\size(P0);
+    P0=P0\eye(size(P0));
 
     S0=chol(P0,'lower');
 

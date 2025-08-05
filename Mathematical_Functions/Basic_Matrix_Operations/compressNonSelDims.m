@@ -1,6 +1,6 @@
 function [C,selDims]=compressNonSelDims(C,selDims,justDims)
 %%COMPRESSNONSELDIMS Given a hypermatrix, reduce the number of dimensions
-%       keeping the selected dimensions as distrinct dimensions. For
+%       keeping the selected dimensions as distinct dimensions. For
 %       example, if selDim=3, then a matrix of the form
 %       C(:,:,selDim,:,:,:) (where we marked the selected dimensions), will
 %       be reduced to the form C(:,selDim,:).

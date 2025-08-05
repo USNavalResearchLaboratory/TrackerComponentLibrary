@@ -39,6 +39,12 @@
 */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+//Get rid of useless warnings in this file from Visual Studio that relate
+//to functions being inlined and Spectre mitigation
+#ifdef _MSC_VER
+#pragma warning(disable : 4711 5045)
+#endif
+
 #include "combinatorialFuns.hpp"
 
 //For the fill function
@@ -121,7 +127,7 @@ double permCPP(const double *A, const size_t numRow, const size_t numCol, size_t
     retVal=0;
     for(x=0;x<numRow;x++) {
         retVal+=SigmaS(A,curComb,numCol-numRow+x,numRow,numCol)*binomTerm;        
-        binomTerm=binomTerm*(1-numRow+numCol+x)/(1+x)*(-1);
+        binomTerm=binomTerm*static_cast<double>((x+1+numCol-numRow)/(1+x))*(-1.0);
     }
     
     return retVal;
@@ -148,7 +154,7 @@ double permCPPSkip(const double *A, const size_t numRowsTotal,const size_t * row
     retVal=0;
     for(x=0;x<numRowsKept;x++) {
         retVal+=SigmaSSkip(A,curComb,rows2Keep,cols2Keep,numColsKept-numRowsKept+x,numRowsTotal,numRowsKept,numColsKept)*binomTerm;        
-        binomTerm=binomTerm*(1-numRowsKept+numColsKept+x)/(1+x)*(-1);
+        binomTerm=binomTerm*static_cast<double>((x+1+numColsKept-numRowsKept)/(1+x))*(-1.0);
     }
     
     return retVal;

@@ -35,7 +35,6 @@ else
     
     sumTerm=0;
     n=0;
-    A=A0;
     fourProd=1;
     while(1)
         lambda=sqrt(x)*sqrt(y)+sqrt(x)*sqrt(z)+sqrt(y)*sqrt(z);

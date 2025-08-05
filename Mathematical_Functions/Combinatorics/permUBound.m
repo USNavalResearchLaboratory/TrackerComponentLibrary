@@ -59,7 +59,7 @@ end
 if(isempty(A))
     retVal=1;
     return; 
-elseif(numel(A)==1) 
+elseif(isscalar(A)) 
     retVal=A; 
     return; 
 end 

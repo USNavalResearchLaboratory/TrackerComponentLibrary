@@ -19,7 +19,8 @@ function coeffs=scalRotTransEllipsForm2Poly(A,B,h,k,phi)
 %               of an x1^(a1-1)*x2^(a2-1) term. This is the format used in
 %               polyValMultiDim.
 %
-%This function implements the expressions given in Equation 5 of [1]. The
+%This function implements the expressions given in Equation 5 of [1]. Note
+%that the ArXiv paper of the same name by the same authors is different.
 %
 %EXAMPLE:
 %This example demonstrates that this function is consistent with

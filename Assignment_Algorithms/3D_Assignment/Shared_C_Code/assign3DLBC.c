@@ -7,6 +7,11 @@
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+//Get rid of a Visual Studio warning about Spectre mitigation.
+#ifdef _MSC_VER
+#pragma warning(disable : 5045)
+#endif
+
 //Prototypes for the function implemented here.
 #include "assignAlgs3D.h"
 

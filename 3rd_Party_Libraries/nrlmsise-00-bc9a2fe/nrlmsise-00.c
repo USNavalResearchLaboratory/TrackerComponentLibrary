@@ -29,6 +29,11 @@
 /* ------------------------------ INCLUDES --------------------------- */
 /* ------------------------------------------------------------------- */
 
+#ifdef _MSC_VER
+//Get rid of useless Spectre mitigation and inlining warnings.
+#pragma warning( disable : 5045 4711 )
+#endif
+
 //DFC: Added for Matlab functions for memory allocation and display.
 #include <mex.h>
 
@@ -198,10 +203,12 @@ double scalh(double alt, double xm, double temp) {
 /* -------------------------------- DNET ----------------------------- */
 /* ------------------------------------------------------------------- */
 
-double dnet (double dd, double dm, double zhm, double xmm, double xm) {
+double dnet (double dde, double dm, double zhm, double xmm, double xm) {
+    //DFC: Changed dd to dde to avoid warnings about shadowing a global
+    //variable.
 /*       TURBOPAUSE CORRECTION FOR MSIS MODELS
  *        Root mean density
- *         DD - diffusive density
+ *         DDE - diffusive density
  *         DM - full mixed density
  *         ZHM - transition scale length
  *         XMM - full mixed molecular weight
@@ -211,21 +218,21 @@ double dnet (double dd, double dm, double zhm, double xmm, double xm) {
 	double a;
 	double ylog;
 	a  = zhm / (xmm-xm);
-	if (!((dm>0) && (dd>0))) {
-		mexPrintf("dnet log error %e %e %e\n",dm,dd,xm);
-		if ((dd==0) && (dm==0))
-			dd=1;
+	if (!((dm>0) && (dde>0))) {
+		mexPrintf("dnet log error %e %e %e\n",dm,dde,xm);
+		if ((dde==0) && (dm==0))
+			dde=1;
 		if (dm==0)
-			return dd;
-		if (dd==0)
+			return dde;
+		if (dde==0)
 			return dm;
 	} 
-	ylog = a * log(dm/dd);
+	ylog = a * log(dm/dde);
 	if (ylog<-10)
-		return dd;
+		return dde;
 	if (ylog>10)
 		return dm;
-	a = dd*pow((1.0 + exp(ylog)),(1.0/a));
+	a = dde*pow((1.0 + exp(ylog)),(1.0/a));
 	return a;
 }
 
@@ -1139,7 +1146,7 @@ double ghp7(struct nrlmsise_input *input, struct nrlmsise_flags *flags, struct n
 			z = z - sh * diff * 2.302;
 		else
 			z = z - sh * diff;
-	} while (1==1);
+	} while (1);
     return z;
 }
 
@@ -1182,7 +1189,9 @@ void gts7(struct nrlmsise_input *input, struct nrlmsise_flags *flags, struct nrl
 	double dr=1.72142E-2;
 	double alpha[9]={-0.38, 0.0, 0.0, 0.0, 0.17, 0.0, -0.38, 0.0, 0.0};
 	double altl[8]={200.0, 300.0, 160.0, 250.0, 240.0, 450.0, 320.0, 450.0};
-	double dd;
+    //DFC: Changed dd to dde to avoid warnings about shadowing a global
+    //variable.
+	double dde;
 	double hc216, hcc232;
 	za = pdl[1][15];
 	zn1[0] = za;
@@ -1238,7 +1247,7 @@ void gts7(struct nrlmsise_input *input, struct nrlmsise_flags *flags, struct nrl
 	db28 = pdm[2][0]*exp(g28)*pd[2][0];
 	/* Diffusive density at Alt */
 	output->d[2]=densu(z,db28,tinf,tlb,28.0,alpha[2],&output->t[1],ptm[5],s,mn1,zn1,meso_tn1,meso_tgn1);
-	dd=output->d[2];
+	dde=output->d[2];
 	/* Turbopause */
 	zh28=pdm[2][2]*zhf;
 	zhm28=pdm[2][3]*pdl[1][5]; 
@@ -1261,7 +1270,7 @@ void gts7(struct nrlmsise_input *input, struct nrlmsise_flags *flags, struct nrl
 	db04 = pdm[0][0]*exp(g4)*pd[0][0];
         /*  Diffusive density at Alt */
 	output->d[0]=densu(z,db04,tinf,tlb, 4.,alpha[0],&output->t[1],ptm[5],s,mn1,zn1,meso_tn1,meso_tgn1);
-	dd=output->d[0];
+	dde=output->d[0];
 	if ((flags->sw[15]) && (z<altl[0])) {
 		/*  Turbopause */
 		zh04=pdm[0][2];
@@ -1289,7 +1298,7 @@ void gts7(struct nrlmsise_input *input, struct nrlmsise_flags *flags, struct nrl
 	db16 =  pdm[1][0]*exp(g16)*pd[1][0];
         /*   Diffusive density at Alt */
 	output->d[1]=densu(z,db16,tinf,tlb, 16.,alpha[1],&output->t[1],ptm[5],s,mn1, zn1,meso_tn1,meso_tgn1);
-	dd=output->d[1];
+	dde=output->d[1];
 	if ((flags->sw[15]) && (z<=altl[1])) {
 		/*   Turbopause */
 		zh16=pdm[1][2];
@@ -1322,7 +1331,7 @@ void gts7(struct nrlmsise_input *input, struct nrlmsise_flags *flags, struct nrl
 	db32 = pdm[3][0]*exp(g32)*pd[4][0];
         /*   Diffusive density at Alt */
 	output->d[3]=densu(z,db32,tinf,tlb, 32.,alpha[3],&output->t[1],ptm[5],s,mn1, zn1,meso_tn1,meso_tgn1);
-	dd=output->d[3];
+	dde=output->d[3];
 	if (flags->sw[15]) {
 		if (z<=altl[3]) {
 			/*   Turbopause */
@@ -1358,7 +1367,7 @@ void gts7(struct nrlmsise_input *input, struct nrlmsise_flags *flags, struct nrl
 	db40 = pdm[4][0]*exp(g40)*pd[5][0];
 	/*   Diffusive density at Alt */
 	output->d[4]=densu(z,db40,tinf,tlb, 40.,alpha[4],&output->t[1],ptm[5],s,mn1,zn1,meso_tn1,meso_tgn1);
-	dd=output->d[4];
+	dde=output->d[4];
 	if ((flags->sw[15]) && (z<=altl[4])) {
 		/*   Turbopause */
 		zh40=pdm[4][2];
@@ -1386,7 +1395,7 @@ void gts7(struct nrlmsise_input *input, struct nrlmsise_flags *flags, struct nrl
 	db01 = pdm[5][0]*exp(g1)*pd[6][0];
         /*   Diffusive density at Alt */
 	output->d[6]=densu(z,db01,tinf,tlb,1.,alpha[6],&output->t[1],ptm[5],s,mn1,zn1,meso_tn1,meso_tgn1);
-	dd=output->d[6];
+	dde=output->d[6];
 	if ((flags->sw[15]) && (z<=altl[6])) {
 		/*   Turbopause */
 		zh01=pdm[5][2];
@@ -1419,7 +1428,7 @@ void gts7(struct nrlmsise_input *input, struct nrlmsise_flags *flags, struct nrl
 	db14 = pdm[6][0]*exp(g14)*pd[7][0];
         /*   Diffusive density at Alt */
 	output->d[7]=densu(z,db14,tinf,tlb,14.,alpha[7],&output->t[1],ptm[5],s,mn1,zn1,meso_tn1,meso_tgn1);
-	dd=output->d[7];
+	dde=output->d[7];
 	if ((flags->sw[15]) && (z<=altl[7])) {
 		/*   Turbopause */
 		zh14=pdm[6][2];
@@ -1449,11 +1458,11 @@ void gts7(struct nrlmsise_input *input, struct nrlmsise_flags *flags, struct nrl
 	g16h = flags->sw[21]*globe7(pd[8],input,flags);
 	db16h = pdm[7][0]*exp(g16h)*pd[8][0];
 	tho = pdm[7][9]*pdl[0][6];
-	dd=densu(z,db16h,tho,tho,16.,alpha[8],&output->t[1],ptm[5],s,mn1, zn1,meso_tn1,meso_tgn1);
+	dde=densu(z,db16h,tho,tho,16.,alpha[8],&output->t[1],ptm[5],s,mn1, zn1,meso_tn1,meso_tgn1);
 	zsht=pdm[7][5];
 	zmho=pdm[7][4];
 	zsho=scalh(zmho,16.0,tho);
-	output->d[8]=dd*exp(-zsht/zsho*(exp(-(z-zmho)/zsht)-1.));
+	output->d[8]=dde*exp(-zsht/zsho*(exp(-(z-zmho)/zsht)-1.));
 
 
 	/* total mass density */

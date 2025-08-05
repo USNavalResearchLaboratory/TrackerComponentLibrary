@@ -36,16 +36,7 @@
 #include <algorithm>
 //Needed for greater
 #include <functional>
-//If C++11 with type-generic versions of frexp and ldexp are supported.
-#if __cplusplus<=199711L
-//If no type generic version of frexp is available, then that means that
-//we just have to use cmath and deal with an increased possibility of
-//overflows
-#include <cmath>
-#else
-//Needed for type-generic frexp and ldexp
-#include <ctgmath>
-#endif
+#include<cmath>
 
 //Two helper functions for keeping things in order.
 template<typename T>
@@ -119,10 +110,10 @@ int exactSignOfSumCPP(const T *S, const size_t nS) {
             if (n==0&&m==0){
                 sg=0;
                 break;
-            } else if (n==0||(a[1]>n*b[1]&&m>0)){
+            } else if (n==0||(a[1]>static_cast<T>(n)*b[1]&&m>0)){
                 sg=1;
                 break;
-            } else if (m==0||(b[1]>m*a[1]&&n>0)){
+            } else if (m==0||(b[1]>static_cast<T>(m)*a[1]&&n>0)){
                 sg=-1;
                 break;
             }

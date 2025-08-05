@@ -15,7 +15,19 @@
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4514 )
+#endif
+
 #include "mex.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+//Get rid of inlining warnings.
+#pragma warning( disable : 4711 4710 )
+#endif
+
 /* This header validates inputs and includes a header needed to handle
  * Matlab matrices.*/
 #include "MexValidation.h"
@@ -90,7 +102,8 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         selDimsRetVal=mxDuplicateArray(prhs[1]);
         double *selDims=mxGetDoubles(selDimsRetVal);
         for(size_t k=0;k<numSel;k++) {
-            if(selDims[k]<1||selDims[k]>S) {
+            const size_t selDimsK=static_cast<size_t>(selDims[k]);
+            if(selDimsK<1||selDimsK>S) {
                 mexErrMsgTxt("selDims is invalid.");
                 return;
             }

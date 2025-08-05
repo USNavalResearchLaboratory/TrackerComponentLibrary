@@ -234,14 +234,14 @@ function val=PDF(x,nu,lambda,alpha,AbsTol,RelTol)
 %          the value in the more standard chi squared distribution in [1].
 % AbsTol, RelTol If lambda is not zero, then the ChiSquaredSumD.PDF is used
 %          and these correspond to the same-named inputs of that function.
-%          The defaults if omitted or empty matrices are passed are 1e-11
-%          and 1e-7.
+%          The defaults if omitted or empty matrices are passed are eps()
+%          and eps().
 %
 %OUTPUTS: val The value(s) of the chi squared PDF evaluated at x.
 %
 %The noncentral chi-squared distribution is described in [1].
 %
-%When lambda is zero, then the evaluate of the PDF is generally
+%When lambda is zero, then the evaluation of the PDF is generally
 %straightforward. When lambda is not zero, then the PDF expression in [1]
 %involving the besseli function can easily have overflow problems. Thus,
 %when lambda is not zero, the integration method of ChiSquaredSumD.PDF is
@@ -275,11 +275,11 @@ function val=PDF(x,nu,lambda,alpha,AbsTol,RelTol)
 %September 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
 
     if(nargin<6||isempty(RelTol))
-        RelTol=1e-7;
+        RelTol=eps();
     end
 
     if(nargin<6||isempty(AbsTol))
-        AbsTol=1e-11;
+        AbsTol=eps();
     end
 
     if(nargin<4||isempty(alpha))
@@ -296,8 +296,12 @@ function val=PDF(x,nu,lambda,alpha,AbsTol,RelTol)
         val=(1/(2^(nu/2)*gamma(nu/2))).*x.^((nu-2)/2).*exp(-x/2);
     else
         val=ChiSquaredSumD.PDF(x,1,nu,lambda,0,0,AbsTol,RelTol);
-        %The above is more stable than using something like.
-        %val=0.5*exp(-(x+lambda)/2+(nu/4-0.5)*(log(x)-log(lambda))).*besseli(nu/2-1,sqrt(lambda*x));
+        %The above is generally more stable than the expression below. We
+        %try the expression below if the above is exactly zero as that can
+        %indicate finite precision issues.
+        if(val==0)
+            val=max(0,0.5*exp(-(x+lambda)/2+(nu/4-0.5)*(log(x)-log(lambda))).*besseli(nu/2-1,sqrt(lambda*x)));
+        end
     end
     
     val=alpha*val;
@@ -336,7 +340,7 @@ function prob=CDF(x,nu,lambda,alpha,AbsTol,RelTol)
 %without the use of any toolboxes. When the noncentrality parameter is
 %nonzero, the CDF could be evaluated in terms of the equivalent noncentral
 %gamma distribution. However, it was found that ChiSquaredSumD.CDF is much
-%more numericallty stable for large lambda.
+%more numerically stable for large lambda.
 %
 %EXAMPLE:
 %In this example, we generate a bunch of random samples and display the

@@ -12,7 +12,10 @@ function h=drawEllipse(z,A,gammaVal,varargin)
 %            ChiSquareD.invCDF(0.9997,3)).
 %
 %INPUTS: z A 2XN or 3XN vector corresponding to the centers of the N
-%          ellipses or ellipsoids that should be drawn.
+%          ellipses or ellipsoids that should be drawn. If one wishes to
+%          plot into  particular uiaxis, then this should be a length 2
+%          cell array with z{1} being the uiaxis handle and z{2} being the
+%          centers.
 %        A A 2X2XN or 3X3XN set of N positive definite matrices that
 %          specify the size and shape of the ellipse or ellipsoids, where
 %          a point zp is on the ith ellipse/ ellipsoid if
@@ -52,14 +55,35 @@ function h=drawEllipse(z,A,gammaVal,varargin)
 %ellipsoid are sqrt(gammaVal/a), sqrt(gammaVal/b), and sqrt(gammaVal/c).
 %2501 vertices are used in the ellipsoids.
 %
+%EXAMPLE:
+%This draws 3 ellipses.
+% A=repmat([4,1;
+%           1,3],[1,1,3]);
+% z=10*randn(2,3);
+% figure(1)
+% clf
+% drawEllipse(z,A)
+%
 %July 2014 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+if(iscell(z))
+    uiAxis=z{1};
+    z=z{2};
+    hasUIAxis=true;
+else
+    hasUIAxis=false;
+end
 
 numEllipse=size(z,2);
 
 %Save the value of hold on the plot so that it can be reset to its previous
 %state after plotting all of the ellipses.
-holdVal=ishold();
+if(hasUIAxis)
+    ishold(uiAxis);
+else
+    holdVal=ishold();
+end
 
 numDim=size(z,1);
 
@@ -79,9 +103,18 @@ switch(numDim)
             
             %Make sure that all of the ellipses are printed.
             if(curEllip~=1)
-                hold on
+                if(hasUIAxis)
+                    hold(uiAxis,'on')
+                else
+                    hold on
+                end
             end
-            x=plot(zp(1,:),zp(2,:),varargin{:});
+
+            if(hasUIAxis)
+                x=plot(uiAxis,zp(1,:),zp(2,:),varargin{:});
+            else
+                x=plot(zp(1,:),zp(2,:),varargin{:});
+            end
             
             if(nargout>0)
                h{curEllip}=x;
@@ -125,13 +158,25 @@ switch(numDim)
 
                 %Make sure that all of the ellipses are printed.
                 if(curEllip~=1)
-                    hold on
+                    if(hasUIAxis)
+                        hold(uiAxis,'on')
+                    else
+                        hold on
+                    end
                 end
                 %Draw the ellipse as a filled shape.
-                if(isempty(varargin))
-                    x=fill3(zp(1,:),zp(2,:),zp(3,:),'k');
+                if(hasUIAxis)
+                    if(isempty(varargin))
+                        x=fill3(uiAxis,zp(1,:),zp(2,:),zp(3,:),'k');
+                    else
+                        x=fill3(uiAxis,zp(1,:),zp(2,:),zp(3,:),varargin{:});
+                    end
                 else
-                    x=fill3(zp(1,:),zp(2,:),zp(3,:),varargin{:});
+                    if(isempty(varargin))
+                        x=fill3(zp(1,:),zp(2,:),zp(3,:),'k');
+                    else
+                        x=fill3(zp(1,:),zp(2,:),zp(3,:),varargin{:});
+                    end
                 end
                 if(nargout>0)
                     h{curEllip}=x;
@@ -152,10 +197,18 @@ switch(numDim)
 
                 %Make sure that all of the ellipses are printed.
                 if(curEllip~=1)
-                    hold on
+                    if(hasUIAxis)
+                        hold(uiAxis,'on')
+                    else
+                        hold on
+                    end
                 end
-
-                x=surf(xp,yp,zp,varargin{:});
+                
+                if(hasUIAxis)
+                    x=surf(uiAxis,xp,yp,zp,varargin{:});
+                else
+                    x=surf(xp,yp,zp,varargin{:});
+                end
                 if(nargout>0)
                     h{curEllip}=x;
                 end
@@ -167,7 +220,11 @@ end
         
 %Restore the hold value to its original setting.
 if(~holdVal)
-    hold off
+    if(hasUIAxis)
+        hold(uiAxis,'off')
+    else
+        hold off
+    end
 end
 
 end

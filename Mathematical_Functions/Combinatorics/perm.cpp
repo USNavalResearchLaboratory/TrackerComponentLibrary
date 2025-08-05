@@ -34,13 +34,24 @@
 */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4514 )
+#endif
+
+#include "mex.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+//Get rid of inlining warnings.
+#pragma warning( disable : 4711 )
+#endif
+
 //For the swap and fill functions
 #include <algorithm>
 /* This header validates inputs and includes a header needed to handle
  * Matlab matrices.*/
 #include "MexValidation.h"
-/*This header is required by Matlab*/
-#include "mex.h"
 #include "combinatorialFuns.hpp"
 
 void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray *prhs[]) {

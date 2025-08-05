@@ -63,6 +63,12 @@
 #ifndef LIBAIS_VDM_H_
 #define LIBAIS_VDM_H_
 
+#ifdef _MSC_VER
+#pragma warning( push )
+//Get rid of warnings about missing operators. %DFC 2025
+#pragma warning( disable : 4626 5027 )
+#endif
+
 #include <deque>
 #include <memory>
 #include <string>
@@ -207,7 +213,7 @@ class VdmStream {
   // Returns nullptr if there are not decoded messages currently available.
   std::unique_ptr<libais::AisMsg> PopOldestMessage();
 
-  int size() const { return messages_.size(); }
+  int size() const { return static_cast<int>(messages_.size()); }
   bool empty() const { return messages_.empty(); }
 
  private:
@@ -222,5 +228,10 @@ class VdmStream {
 };
 
 }  // namespace libais
+
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
 
 #endif  // LIBAIS_VDM_H_

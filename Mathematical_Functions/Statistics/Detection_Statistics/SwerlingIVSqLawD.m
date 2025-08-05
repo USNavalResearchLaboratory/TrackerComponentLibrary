@@ -6,7 +6,8 @@ classdef SwerlingIVSqLawD
 %                instantiated). All values are with respect to a normalized
 %                noise model, of which two normalization are available.
 %
-%Implemented methods are: mean, var, PDF, CDF, PD4Threshold, PD4PFA, rand
+%Implemented methods are: mean, var, PDF, CDF, PD4Threshold,
+%                         avgSNR4PDThresh, PD4PFA, rand
 %
 %Swerling models are given in [1] and in Chapter 11 of [2]. The Swerling IV
 %model assumes that the observed power SNR of the target varies in terms of
@@ -367,7 +368,7 @@ function val=CDF(v,avgSNR,N,ampDef)
     val=1-SwerlingIVSqLawD.PD4Threshold(avgSNR,v,N,ampDef);
     val(v<=0)=0;
 end
-    
+
 function PD=PD4Threshold(avgSNR,thresh,N,ampDef)
 %%PD4THRESHOLD Determine the detection probability of a Swerling IV target
 %           given its signal to noise ratio and the value of the
@@ -397,7 +398,8 @@ function PD=PD4Threshold(avgSNR,thresh,N,ampDef)
 %This function implements the sum in Equations 11.5-19 in [1]. However, the
 %expression used is derived based on a scaled square-law detector, as in
 %Equation 10.4-4. Thus, the threshold in this function is scaled
-%appropriately.
+%appropriately depending on ampDef. There can be a loss of precision for
+%0<avgSNR<eps(), though the solution is correct at 0.
 %
 %EXAMPLE:
 %Here, we validate the results by comparing the PD from this function to
@@ -425,6 +427,11 @@ function PD=PD4Threshold(avgSNR,thresh,N,ampDef)
         N=1; 
     end
     
+    if(avgSNR==0)
+        PD=NonFlucSqLawD.PD4Threshold(0,thresh,N,ampDef);
+        return;
+    end
+
     if(ampDef==0)
         thresh=thresh/2;
     end
@@ -441,6 +448,135 @@ function PD=PD4Threshold(avgSNR,thresh,N,ampDef)
     end
 
     PD=1-sumVal;
+    if(~isfinite(PD)&&avgSNR<eps())
+        if(ampDef==0)
+            thresh=thresh*2;
+        end
+
+        PD=NonFlucSqLawD.PD4Threshold(0,thresh,N,ampDef);
+        return;
+    end
+end
+
+function [avgSNR,exitCode]=avgSNR4PDThresh(PD,thresh,N,ampDef,convergParams)
+%%AVGSNR4PDTHRESH Given a detection probabilty and a normalized detection
+%       threshold (normalized in terms of the receiver noise having a unit
+%       covariance), determine the average power signal to noise ratio
+%       (SNR) of the target needed under a Swerling IV model.
+%
+%INPUTS: PD The detection probability of the target , 0<=PD<1.
+%   thresh The scalar normalized detection threshold to use. This is the
+%          threshold to use if the noise variance is 1.
+%        N The number of pulses that are to be incoherently added for
+%          detection (in a square-law detector). In a Swerling I model, a
+%          single realization of the target power is used across all
+%          pulses, but the noise corrupting the pulses varies. If this
+%          parameter is omitted or an empty matrix is passed, N=1 is used.
+%   ampDef This specified normalization (see help SwerlingISqLawD).
+%          Possible values are:
+%          0 The expected value of the squared magnitude of the noise is 2.
+%          1 (The default if omitted or an empty matrix is passed) The
+%            expected value of the squared magnitude of the noise is 1.
+%            (A more common definition). 
+% convergParams An optional structure that is only used if N>1. It holds
+%          parameters that define how the algorithm converges. Possible
+%          members are:
+%          'XTol' and 'maxIter' These have the same name as the inputs in
+%           bisectionRootFind. See the comments to that function for
+%           details. Default values are eps() and 100.
+%          'maxIterSearch' This function uses a crude initial guess for an
+%           upper bound on the solution and keeps doubling it until the PD
+%           found is too large. This is the maximum number of doublings
+%           that can be performed before an error is returned. The initial
+%           guess is always avgSNR=100 and the default maximum number of
+%           doublings, is 50.
+%
+%OUTPUTS: avgSNR The average SNR to give the specified PD for the specified
+%                threshold. If no solution is possible (the PD is lower
+%                than the PD for noise-only), then an empty matrix is
+%                returne.
+%       exitCode If a solution exists, then this is the exit code returned
+%                by the bisectionRootFind function. Otherwise, this is -1.
+%                See the comments to bisectionRootFind for more details.
+%
+%This function usesBisectionRootFind to invert PD minus what is equivalent
+%to the output of the PD4Threshold method.
+%
+%EXAMPLE:
+%Here, we show that the results are consistent with the PD as drawn from
+%random samples.
+% thresh=5;
+% ampDef=1;
+% PD=0.75;
+% N=6;
+% avgSNR=SwerlingIVSqLawD.avgSNR4PDThresh(PD,thresh,N,ampDef);
+% PDBack=SwerlingIVSqLawD.PD4Threshold(avgSNR,thresh,N,ampDef)
+% numSamples=1e5;
+% PDSamp=mean(SwerlingIVSqLawD.rand([numSamples,1],avgSNR,N,ampDef)>=thresh)
+%
+%January 2024 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+maxIterSearch=50;
+maxIter=100;
+XTol=eps();
+
+if(nargin>4&&~isempty(convergParams))
+    if(isfield(convergParams,'maxIterSearch'))
+        maxIterSearch=convergParams.maxIterSearch;
+    end
+    if(isfield(convergParams,'maxIter'))
+        maxIter=convergParams.maxIter;
+    end
+    if(isfield(convergParams,'XTol'))
+        XTol=convergParams.XTol;
+    end
+end
+
+if(nargin<7||isempty(maxIterSearch))
+    maxIterSearch=50;
+end
+
+if(nargin<6||isempty(maxIter))
+    maxIter=100;
+end
+
+if(nargin<5||isempty(XTol))
+    XTol=eps();
+end
+
+if(nargin<4||isempty(ampDef))
+    ampDef=1;
+end
+
+if(nargin<3||isempty(N))
+    N=1;
+end
+
+if(NonFlucSqLawD.PD4Threshold(0,thresh,N,ampDef)>PD)
+    %If the PD is below the PD obtained with a 0 SNR target, then no
+    %solution is possible.
+    avgSNR=[];
+    exitCode=-1;
+    return
+end
+
+%We need to find an upper bound. We start with an estimate of 100 and then
+%keep doubling it until we have found an upper bound.
+avgSNRUpper=100;
+PDComp=SwerlingIVSqLawD.PD4Threshold(avgSNRUpper,thresh,N,ampDef);
+curIter=0;
+while(PDComp<PD)
+    curIter=curIter+1;
+    if(curIter>maxIterSearch)
+        error('Unable to bracket a solution.')
+    end
+    avgSNRUpper=2*avgSNRUpper;
+    PDComp=SwerlingIVSqLawD.PD4Threshold(avgSNRUpper,thresh,N,ampDef);
+end
+
+f=@(avgSNR)(PD-SwerlingIVSqLawD.PD4Threshold(avgSNR,thresh,N,ampDef));
+[avgSNR,~,exitCode]=bisectionRootFind(f,[0;avgSNRUpper],XTol,maxIter);
+
 end
 
 function PD=PD4PFA(avgSNR,PFA,N,ampDef)

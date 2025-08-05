@@ -2,16 +2,13 @@ classdef GaussianD
 %%GAUSSIAND Functions to handle the scalar and multivariate Gaussian
 %           distribution.
 %Implemented methods are: mean,cov, PDF, PDFI, PDFIDerivs (for multivariate
-%                         derivatives of the PDF), PDFS, logPDFS,
-%                         PDFSGradHessVechS (for the gradient and Hessian
-%                         of the elements of a lower-triangular square-root
-%                         of the covariance matrix), CDF (for scalar
-%                         distributions), invCDF (for scalar
-%                         distributions), normProdDist, normConvDist (for
-%                         scalar distributions), momentGenFun
-%                         (multivariate, including derivatives), cumGenFun
-%                         (multivariate, including derivatives), rand,
-%                         randS, integralOverRegion, entropy
+%       derivatives of the PDF), PDFS, logPDF, logPDFS, PDFSGradHessVechS
+%       (for the gradient and Hessian of the elements of a lower-triangular
+%       square-root of the covariance matrix), CDF (for scalar
+%       distributions), invCDF (for scalar distributions), normProdDist,
+%       normConvDist (for scalar distributions), momentGenFun
+%       (multivariate, including derivatives), cumGenFun (multivariate,
+%       including derivatives), rand, randS, integralOverRegion, entropy
 %
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
@@ -236,7 +233,11 @@ for i=1:numIdx
     %exponent in the multivariate normal PDF.
     
     %Allocate space for the polynomial and make it have the correct shape.
-    basePoly=reshape(zeros(2^numIdx,1),2*ones(1,numIdx));
+    if(numIdx==1)
+        basePoly=reshape(zeros(2,1),[2,1]);
+    else
+        basePoly=reshape(zeros(2^numIdx,1),2*ones(1,numIdx));
+    end
     
     %The additive term
     basePoly(1)=SigmaInv(i,:)*mu;

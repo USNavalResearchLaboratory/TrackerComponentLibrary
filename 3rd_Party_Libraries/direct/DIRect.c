@@ -6,6 +6,11 @@
 #include <math.h>
 #include "direct-internal.h"
 
+#ifdef _MSC_VER
+//Get rid of Spectre mitigation and inlining warnings.
+#pragma warning( disable : 5045 4710 4711)
+#endif
+
 /* Common Block Declarations */
 
 /* Table of constant values */
@@ -79,7 +84,7 @@
     doublereal *levels = 0, *thirds = 0;
     doublereal epsfix;
     integer oldpos, minpos, maxpos, tstart, actdeep, ifreeold, oldmaxf;
-    integer numfunc, version;
+    integer version, numfunc=0;//Initializing to get rid of a warning.
     integer jones;
 
     /* FIXME: change sizes dynamically? */

@@ -55,14 +55,14 @@ function f=evalContFrac(bFunc,aFunc,tinyVal,maxIter)
 %The floating point precision.
 epsVal=eps();
 
-if(nargin<3)
+if(nargin<3||isempty(tinyVal))
     tinyVal=2^(-100);
 end
 
 if(isa(bFunc,'double'))
     maxN=length(bFunc);
     maxIter=maxN-1;
-elseif(nargin<4)
+elseif(nargin<4||isempty(maxIter))
     maxIter=1000;
 end
 

@@ -31,11 +31,8 @@ public:
      *algorithm.*/
     size_t activeCol;
     bool *forbiddenActiveRows;
-    
-    MurtyHyp(){
-        buffer=NULL;
-    }
-    
+
+    //The constructor.
     MurtyHyp(const size_t numRow, const size_t numCol) {
        char *basePtr;
     /*To minimize the number of calls to memory allocation and deallocation
@@ -67,6 +64,11 @@ public:
  * algorithm must be called repeatedly. Some of the entries are only used
  * in the k-best implementation of the algorithm.
  */
+//Get rid of useless Visual studio warnings about ScratchSpace methods not
+//being called in this header.
+#ifdef _MSC_VER
+#pragma warning(disable : 4514)
+#endif
 class ScratchSpace {
 public:
     char *buffer;
@@ -83,11 +85,11 @@ public:
     ScratchSpace(){
         buffer=NULL;
     }
-    
+
     ScratchSpace(const size_t numRow,const size_t numCol){
         this->init(numRow,numCol);
     }
-    
+
     void init(const size_t numRow,const size_t numCol){
         char *basePtr;
     /*To minimize the number of calls to memory allocation and deallocation

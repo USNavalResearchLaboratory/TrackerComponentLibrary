@@ -1,6 +1,6 @@
 function val=hypergeometric2F1(a,b,c,z)
 %%HYPERGEOMETRIC2F1 Evaluate the Gaussian hypergeometric function
-%            2F2(a,b,c,z) for real arguments with z in the region -1<=z<=1.
+%            2F2(a,b,c,z) for real arguments with z in the region z<=1.
 %            The Gaussian hypergeometric function arises in a number of
 %            combinatorial problems.
 %
@@ -205,7 +205,7 @@ end
 
 function val=caseI(a,b,c,w,k,epsVal,maxNumTerms)
 %%CASEI This implements special case I of [1], which occurs when a-b is
-%%close to being an integer.
+%       close to being an integer.
 %
 %REFERENCES:
 %[1] R. C. Forrey, "Computing the hypergeometric function," Journal of

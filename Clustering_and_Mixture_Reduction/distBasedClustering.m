@@ -135,7 +135,7 @@ function [xClust,xCov,clusterList]=distBasedClustering(x,threshold,distFunc,merg
 %     end
 % 
 %     y(:,i+1)=y(:,i+1)+ComplexGaussianD.rand(Ns).';
-%     
+% 
 %     t=t+TB;%Increment to the next time step.
 % end
 % 
@@ -147,14 +147,17 @@ function [xClust,xCov,clusterList]=distBasedClustering(x,threshold,distFunc,merg
 % 
 % [delayDopPlot,Doppler,delay]=delayDopplerPlotNBPulseDop(x,y,1,1,wDoppler,T0);
 % 
-% numGuardCells=[2;4];
-% numAvgCells=[5;3];
+% NG=[2;4];%number of guard cells per dimension.
+% NA=[5;3];%number of averaging cells per dimension.
 % PFA=1e-7;
+% %Total number of averaging cells used in 2D.
+% N=prod(2*(NA+NG)+1)-prod(2*NG+1);
+% T=CACFARThreshold4PFA(PFA,N);%A crude approximation.
 % 
 % range=c*delay;
-% rangeRate=Doppler*(c/fc);
+% rangeRate=-Doppler*(c/fc);
 % 
-% DetectionList=CACFAR(delayDopPlot,numGuardCells,numAvgCells,PFA,[],0);
+% DetectionList=CACFAR(delayDopPlot,NG,NA,T,[],0);
 % idx=DetectionList(1).Index;
 % 
 % rVals=range(idx(1,:));

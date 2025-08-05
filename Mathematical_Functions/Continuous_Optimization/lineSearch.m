@@ -96,9 +96,10 @@ function [xMin,fMin,fGradMin,gMin,alpha,exitCode]=lineSearch(func,x,d,fInit,fGra
 %              0 or a positive number: The algorithm terminated
 %                successfully. The number is the number of iterations
 %                required. 
-%              -1001 A complex or non-finite value was encountered. This is
-%                    often a failure leading to the other outputs being
-%                    empty matrices.
+%              -1001 A complex or non-finite value was encountered and was
+%                    not avoided by reducing the stepsize up to maxIter
+%                    times. This is often a failure leading to the other
+%                    outputs being empty matrices.
 %              -1000 The line search step size was less than
 %                    lineSearchParams.minStepSize.
 %              -998 The maximum number of iterations was reached.
@@ -372,32 +373,42 @@ while(1)
     
     [f,fGrad]=func(xT);
 
-    if(~isfinite(f)||~isreal(f)||any(~isfinite(fGrad))||~isreal(fGrad))
-        xT=[];
-        f=[];
-        fGrad=[];
-        g=[];
-        stepSize=[];
-        exitCode=-1001;
-        return
-    end
-
     curIter=curIter+1;
-    %Check Armijo's rule (Chapter 1.2 of [1], pg. 36)
-    if(~(f>fInit+stepSize*fTol*gInit))
-        g=fGrad'*s;
-        exitCode=curIter;
-        return;
+    if(~isfinite(f)||~isreal(f)||any(~isfinite(fGrad))||~isreal(fGrad))
+        %Rather than immediately quitting when a step produces garbage, we
+        %mark it as failing and then it will adjust the scale factor. if
+        %the maximum number of iterations passes and it fails, then it will
+        %return that it failed.
+        stepFailed=true;
+    else
+        stepFailed=false;
+        %Check Armijo's rule (Chapter 1.2 of [1], pg. 36)
+        if(~(f>fInit+stepSize*fTol*gInit))
+            g=fGrad'*s;
+            exitCode=curIter;
+            return;
+        end
+    
+        if(stepSize<=minStepSize)
+            g=fGrad'*s;
+            exitCode=-1000;
+            return;  
+        end
+
     end
 
-    if(stepSize<=minStepSize)
-        g=fGrad'*s;
-        exitCode=-1000;
-        return;  
-    end
     if(curIter>=maxIter)
-        g=fGrad'*s;
-        exitCode=-998;
+        if(stepFailed)
+            xT=[];
+            f=[];
+            fGrad=[];
+            g=[];
+            stepSize=[];
+            exitCode=-1001;
+        else
+            g=fGrad'*s;
+            exitCode=-998;
+        end
         return
     end
 

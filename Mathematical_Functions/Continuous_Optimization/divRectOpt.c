@@ -158,6 +158,11 @@
 /*This header is required by Matlab.*/
 #include "mex.h"
 
+#ifdef _MSC_VER
+//Get rid of Spectre mitigation and inlining warnings.
+#pragma warning( disable : 5045 4710 4711)
+#endif
+
 //For the dividing rectangle optimization routines
 #include "direct.h"
 #include "MexValidation.h"
@@ -393,7 +398,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     if(nlhs>1) {
         plhs[1]=doubleMat2Matlab(&fVal,1,1);
         if(nlhs>2) {
-            plhs[2]=intMat2MatlabDoubles(&retVal,1,1);
+            const int retValInt=(int)(retVal);
+            plhs[2]=intMat2MatlabDoubles(&retValInt,1,1);
         }
     }
 }

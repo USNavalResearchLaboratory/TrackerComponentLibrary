@@ -21,7 +21,7 @@ function Q=quatMult(quat2,quat1,handed)
 %       quat1 A 4XN set of N quaternions that are to be left-multiplied by
 %             the corresponding quaternions in quat2.
 %     handed The handedness of the quaternions. If omitted or an empty
-%            matrix is passed,, it is assumed that the quaternions are
+%            matrix is passed, it is assumed that the quaternions are
 %            right-handed (the standard). Possible values are
 %            'right' The default if omitted. The quaternion multiplication
 %                    is assumed right-handed (standard).

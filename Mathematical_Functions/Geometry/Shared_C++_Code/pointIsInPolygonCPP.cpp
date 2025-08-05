@@ -9,6 +9,11 @@
 */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+//Get rid of useless warnings from Visual Studio related to inlining.
+#ifdef _MSC_VER
+#pragma warning(disable : 4711)
+#endif
+
 #include "mathGeometricFuncs.hpp"
 
 //Prototypes for subroutines used here.

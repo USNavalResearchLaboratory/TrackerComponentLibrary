@@ -11,7 +11,7 @@
 * xPerm=inversePermutation(xPerm,algorithm)
 *
 *October 2024 David F. Crouse, Naval Research Laboratory, Washington D.C.
-/*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release. */
+*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release. */
 
 #include "MexValidation.h"
 /*This header is required by Matlab*/

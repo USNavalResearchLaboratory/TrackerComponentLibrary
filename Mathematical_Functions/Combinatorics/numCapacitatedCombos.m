@@ -38,6 +38,9 @@ function prodVal=numCapacitatedCombos(numPerBin,numBins,totalItems)
 %which is the number of ways of choosing which subset of the totalItems
 %items will be put into the bins.
 %
+%This is equaivalent to calling multinomial(repList)/factorial(numBins)
+%with repList=[numPerBin*ones(1,numBins),totalItems-numPerBin*numBins] .
+%
 %July 2019 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 

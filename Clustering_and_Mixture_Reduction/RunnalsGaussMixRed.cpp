@@ -12,16 +12,35 @@
 */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
-#include "matrix.h"
-/*This header is required by Matlab.*/
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4514 )
+#endif
+
 #include "mex.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
+
 #include "MexValidation.h"
 
-//Using Eigen
+//The pragmas get rid of all warning in Visual Studio that arise in the
+//Eigen library. There are tons of them.
+#ifdef _MSC_VER
+#pragma warning(push, 0)
+#pragma warning( disable : 4710 4711 5045 )
+#endif
 #include "Eigen/Dense"
+#ifdef _MSC_VER
+#pragma warning(pop)
+//Get rid of inlining warnings.
+#pragma warning( disable : 4711 )
+#endif
+
 #include <limits.h>
-#include<cmath>
-#include<algorithm>
+#include <cmath>
+#include <algorithm>
 
 //Prototypes.
 size_t BDistBufferSize(const size_t xDim) {
@@ -57,7 +76,7 @@ void getSizes4ReturningSteps(const size_t N,const size_t K,const size_t KMax, si
     // numPerClusterAll is NXtotalRedHyps
 }
 
-void clusterInfo2MinCostClustPartition(const size_t N,const size_t KRed, const size_t maxInClust, const size_t *numPerCluster,const size_t * const clusterInfo,size_t *minCostClustPartition) {
+void clusterInfo2MinCostClustPartition(const size_t KRed, const size_t maxInClust, const size_t *numPerCluster,const size_t * const clusterInfo,size_t *minCostClustPartition) {
 
     for(size_t curCluster=0;curCluster<KRed;curCluster++ ) {
         const size_t numCur=numPerCluster[curCluster];
@@ -115,7 +134,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         } else {
             //All 3 are empty, so we will just return a bunch of empty matrices.
             plhs[0]=mxCreateDoubleMatrix(0,0,mxREAL);
-            for(size_t k=1;k<nlhs;k++) {
+            for(size_t k=1;k<static_cast<size_t>(nlhs);k++) {
                 plhs[k]=mxCreateDoubleMatrix(0,0,mxREAL);
             }
         }
@@ -169,11 +188,15 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         mexErrMsgTxt("Error allocating temporary buffer.");
     }
    
-    //If multiple steps should be saved.
-    mxArray *wAllMat,*muAllMat,*PAllMat;
+    //If multiple steps should be saved. Initialize to NULL to get rid of
+    //compiler warnings.
+    mxArray *wAllMat=NULL;
+    mxArray *muAllMat=NULL;
+    mxArray *PAllMat=NULL;
     double *wAll, *muAll, *PAll;
     size_t *clusterInfoAll, *numPerClusterAll;
-    size_t maxComp, totalRedHyps;
+    size_t maxComp=0;//This is just initialized to get rid of a warning.
+    size_t totalRedHyps;
     if(nlhs>6) {
         getSizes4ReturningSteps(N, K, KMax, maxComp, totalRedHyps);
         wAllMat=mxCreateDoubleMatrix(maxComp,totalRedHyps,mxREAL);
@@ -202,7 +225,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         std::fill_n(clusterInfoAll,N*maxComp*totalRedHyps,SIZE_MAX);
         //If the elements are not changed, then the number in the cluster
         //will be left at 0.
-        std::fill_n(numPerClusterAll,N*totalRedHyps,0);
+        std::fill_n(numPerClusterAll,N*totalRedHyps,static_cast<size_t>(0));
 
         if(clusterInfoAll==NULL||numPerClusterAll==NULL) {
             mexErrMsgTxt("Error allocating temporary buffer.");
@@ -285,7 +308,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
                     mexErrMsgTxt("Error allocating temporary buffer.");
                 }
 
-                clusterInfo2MinCostClustPartition(N,KCur,maxInClust,numPerCluster,clusterInfo,minCostClustPartition);
+                clusterInfo2MinCostClustPartition(KCur,maxInClust,numPerCluster,clusterInfo,minCostClustPartition);
 
                 //Copy into a double Matlab matrix to return.
                 mxArray *minCostClustPartitionMat=mxCreateDoubleMatrix(N,1,mxREAL);
@@ -397,7 +420,7 @@ void RunnalsGaussMixRedCPP(const size_t xDim,const size_t N, double *w , double 
 
     //If no reduction is necessary.
     if(N<=K) {
-        std::fill_n(numPerCluster,N,1);//numPerCluster=ones(N,1);
+        std::fill_n(numPerCluster,N,static_cast<size_t>(1));//numPerCluster=ones(N,1);
 
         maxInClust=1;
         for(size_t k=0;k<N;k++) {
@@ -419,8 +442,8 @@ void RunnalsGaussMixRedCPP(const size_t xDim,const size_t N, double *w , double 
     } else {
         //These variables are only used if all steps of the reduction
         //process are to be saved.
-        size_t totalRedHyps;
-        size_t maxComp;
+        size_t totalRedHyps=0;
+        size_t maxComp=0;
 
         if(wAll!=NULL) {
             //K is the minimum number of components.
@@ -443,8 +466,9 @@ void RunnalsGaussMixRedCPP(const size_t xDim,const size_t N, double *w , double 
         //Set the elements of N to Inf. Only one triangle of this matrix
         //will actually be used after this. This is the cost matrix.
         std::fill_n(M,N2,std::numeric_limits<double>::infinity());
+        const auto xDimL=static_cast<Eigen::EigenBase<Eigen::MatrixXd>::Index>(xDim);
         for(size_t k=0;k<N;k++) {
-            const Eigen::Map<Eigen::MatrixXd> PCurEigen(P+k*xDim2,xDim,xDim);
+            const Eigen::Map<Eigen::MatrixXd> PCurEigen(P+k*xDim2,xDimL,xDimL);
             const double detVal=PCurEigen.determinant();
           
             wLogDetPVals[k]=w[k]*std::log(std::fabs(detVal));
@@ -462,7 +486,7 @@ void RunnalsGaussMixRedCPP(const size_t xDim,const size_t N, double *w , double 
         //Setting the elements all to SIZE_MAX leaves a quick way to see if
         //an element was never changed.
         std::fill_n(clusterInfo,N2,SIZE_MAX);
-        std::fill_n(numPerCluster,N,1);
+        std::fill_n(numPerCluster,N,static_cast<size_t>(1));
         for(size_t k=0;k<N;k++) {
             //The first element in each columns of the NXN matrix.
             clusterInfo[k*N]=k;
@@ -537,7 +561,7 @@ void RunnalsGaussMixRedCPP(const size_t xDim,const size_t N, double *w , double 
             }
 
             //wLogDetPVals(minRow)=wSum*log(det(PMerged));   
-            const Eigen::Map<Eigen::MatrixXd> PMergedEigen(PMerged,xDim,xDim);
+            const Eigen::Map<Eigen::MatrixXd> PMergedEigen(PMerged,xDimL,xDimL);
             const double detVal=PMergedEigen.determinant();
             wLogDetPVals[minRow]=wSum*std::log(detVal);
 
@@ -652,7 +676,6 @@ void RunnalsGaussMixRedCPP(const size_t xDim,const size_t N, double *w , double 
 
                 size_t startIdx2Copy=xDim*idx2Copy2;
                 size_t startIdx=xDim*curIdx;
-                double sumVal=0;
                 for(size_t k=0;k<xDim;k++) {
                     mu[startIdx2Copy+k]=mu[startIdx+k];
                 }
@@ -714,7 +737,8 @@ double BDist(const size_t xDim,const double &w1,const double &w2,const double * 
         }
     }
 
-    const Eigen::Map<Eigen::MatrixXd> P12Eigen(P12,xDim,xDim);
+    const auto xDimL=static_cast<Eigen::EigenBase<Eigen::MatrixXd>::Index>(xDim);
+    const Eigen::Map<Eigen::MatrixXd> P12Eigen(P12,xDimL,xDimL);
     const double detP12=P12Eigen.determinant();
     double val=wSum*std::log(detP12)-wLogDetP1-wLogDetP2;
 

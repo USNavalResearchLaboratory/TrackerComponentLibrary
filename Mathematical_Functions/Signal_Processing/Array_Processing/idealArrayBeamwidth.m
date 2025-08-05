@@ -5,7 +5,7 @@ function [BW,HBWL,HBWR,Rsp,U]=idealArrayBeamwidth(T,xyPoints,BWType,lineParams,b
 %               tapered arrays, this function find the beamwidth via a
 %               brute-force search. The results are given in terms of
 %               direction cosines, because in an ideal array, such
-%               beamwidth are idependent of the steering direction, unlike
+%               beamwidth are independent of the steering direction, unlike
 %               when the results are given in terms of angles.          
 %
 %INPUTS: T The numSubarraysXnumElements tapering matrix of the array. The
@@ -77,7 +77,7 @@ function [BW,HBWL,HBWR,Rsp,U]=idealArrayBeamwidth(T,xyPoints,BWType,lineParams,b
 %
 %EXAMPLE 1:
 %We consider a uniform linear array consisting of N elements space a
-%half wavelenegth apart. All elements are uniformly weighted 1/N. In
+%half wavelength apart. All elements are uniformly weighted 1/N. In
 %Chapter 2.4 of [1], it is shown that the array response is real and as a
 %function of the direction cosine u is B=(1/N)*(sin(pi*u*N/2)/sin(pi*u/2))
 %over all valid u values (-1<=u<=1). From that, in Section 2.4.1, the

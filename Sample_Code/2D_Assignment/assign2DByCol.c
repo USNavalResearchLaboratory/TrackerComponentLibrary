@@ -58,6 +58,13 @@
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+#ifdef _MSC_VER
+//Get rid of useless Spectre mitigation warnings. Also, get rid of a
+//constant expression warning. This isn't C++, so the constexpr keyword is
+//not always known. Hence, we did not insert it.
+#pragma warning( disable : 5045 4127 )
+#endif
+
 /* string.h is needed for the memset function.*/
 #include <string.h>
 /*We need this for INFINITY to be defined, but if a compiler does not

@@ -14,6 +14,12 @@
  **/
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+//Get rid of useless warnings in this file from Visual Studio that relate
+//to std::complex not being inlined.
+#ifdef _MSC_VER
+#pragma warning(disable : 4710)
+#endif
+
 #include "mathFuncs.hpp"
 #include "CoordFuncs.hpp"
 
@@ -26,6 +32,8 @@
 #include <complex>
 //For max
 #include <algorithm>
+//For NULL
+#include <cstddef>
 
 using namespace std;
 
@@ -39,7 +47,7 @@ void spherHarmonicSetEvalCPPReal(double *V, double *gradV, double *HessianV,cons
     const size_t M1NumSets=M1*numSets;
     const double pi=2.0*acos(0.0);
     size_t curPoint;
-    double rPrev, thetaPrev, crScal;
+    double rPrev, thetaPrev, crScal=0;
     CountingClusterSetCPP<double> FuncVals;
     CountingClusterSetCPP<double> FuncDerivs;
     CountingClusterSetCPP<double> FuncDerivs2;
@@ -53,11 +61,13 @@ void spherHarmonicSetEvalCPPReal(double *V, double *gradV, double *HessianV,cons
     double *nCoeff;//Length M1
     //These are to store sin(m*lambda) and cos(m*lambda) for m=0->M for the
     //Legendre algorithm.
-    double *SinVec,*CosVec;//These are each length M+1.
+    double *SinVec=NULL;
+    double *CosVec=NULL;//These are each length M+1.
     //rm and im are never used at the same time as SinVec andCosVec,
     //because rm and im are used by Pines' algorithm. They will be the same
     //size as SinVec and CosVec, and thus will point to the same memory.
-    double *rm,*im;
+    double *rm=NULL;
+    double *im=NULL;
     //The following are needed if the Legendre algorithm is used.
     double *A=NULL;//Length M1NumSets
     double *B=NULL;//Length M1NumSets
@@ -77,10 +87,10 @@ void spherHarmonicSetEvalCPPReal(double *V, double *gradV, double *HessianV,cons
     double *BThetar=NULL;//Length M1NumSets
     //The following are only needed if Pines' algorithm is chosen and the
     //gradient and/or Hessian is desired
-    double *a1;//Length numSets
-    double *a2;//Length numSets
-    double *a3;//Length numSets
-    double *a4;//Length numSets
+    double *a1=NULL;//Length numSets
+    double *a2=NULL;//Length numSets
+    double *a3=NULL;//Length numSets
+    double *a4=NULL;//Length numSets
     double *A1=NULL;//Length numSets
     double *A2=NULL;//Length numSets
     double *A3=NULL;//Length numSets
@@ -664,34 +674,35 @@ void spherHarmonicSetEvalCPPReal(double *V, double *gradV, double *HessianV,cons
                 double d2VdrdLambda;
                 double d2VdThetadTheta;
                 double d2VdrdTheta;
-                double d2Vdrdr;                                                
-                double drdx;
-                double drdy;
-                double drdz;
-                double dLambdadx;
-                double dLambdady;
-                double dLambdadz;
-                double dPhidx;
-                double dPhidy;
-                double dPhidz;
-                double drdxdx;
-                double drdydy;
-                double drdzdz;
-                double drdxdy;
-                double drdxdz;
-                double drdydz;
-                double dLambdadxdx;
-                double dLambdadydy;
-                double dLambdadzdz;
-                double dLambdadxdy;
-                double dLambdadxdz;
-                double dLambdadydz;
-                double dPhidxdx;
-                double dPhidydy;
-                double dPhidzdz;
-                double dPhidxdy;
-                double dPhidxdz;
-                double dPhidydz;
+                double d2Vdrdr;
+                //Initialize to 0 to avoid warnings.
+                double drdx=0;
+                double drdy=0;
+                double drdz=0;
+                double dLambdadx=0;
+                double dLambdady=0;
+                double dLambdadz=0;
+                double dPhidx=0;
+                double dPhidy=0;
+                double dPhidz=0;
+                double drdxdx=0;
+                double drdydy=0;
+                double drdzdz=0;
+                double drdxdy=0;
+                double drdxdz=0;
+                double drdydz=0;
+                double dLambdadxdx=0;
+                double dLambdadydy=0;
+                double dLambdadzdz=0;
+                double dLambdadxdy=0;
+                double dLambdadxdz=0;
+                double dLambdadydz=0;
+                double dPhidxdx=0;
+                double dPhidydy=0;
+                double dPhidzdz=0;
+                double dPhidxdy=0;
+                double dPhidxdz=0;
+                double dPhidydz=0;
                 
                 if(spherDerivs==false) {
                     calcSpherConvJacobCPP(J, pointCur,0);
@@ -1046,7 +1057,7 @@ void spherHarmonicSetEvalCPPReal(double *V, double *gradV, double *HessianV,cons
                         //Table 14
                         const double Lmn=(nf+mf+1)*HVal+u*dHVal;
                         const double dLmn=(nf+mf+2)*dHVal+u*d2HVal;
-                        const double Omn=(nf+mf+1)*(n+m+2)*HVal+2.0*u*(nf+mf+2)*dHVal+u*u*d2HVal;
+                        const double Omn=(nf+mf+1)*(nf+mf+2)*HVal+2.0*u*(nf+mf+2)*dHVal+u*u*d2HVal;
                         
                         for(curSet=0;curSet<numSets;curSet++) {
                             const double rhoC=nCoeff[n]*C(n,m,curSet);
@@ -1096,34 +1107,34 @@ void spherHarmonicSetEvalCPPReal(double *V, double *gradV, double *HessianV,cons
                     mf++;
                 }
 
-                {
-                    double dxdr;
-                    double dxdAz;
-                    double dxdEl;
-                    double dydr;
-                    double dydAz;
-                    double dydEl;
-                    double dzdr;
-                    double dzdAz;
-                    double dzdEl;
-                    double d2xdrdr;
-                    double d2xdAzdAz;
-                    double d2xdEldEl;
-                    double d2xdrdAz;
-                    double d2xdrdEl;
-                    double d2xdAzdEl;
-                    double d2ydrdr;
-                    double d2ydAzdAz;
-                    double d2ydEldEl;
-                    double d2ydrdAz;
-                    double d2ydrdEl;
-                    double d2ydAzdEl;
-                    double d2zdrdr;
-                    double d2zdAzdAz;
-                    double d2zdEldEl;
-                    double d2zdrdAz;
-                    double d2zdrdEl;
-                    double d2zdAzdEl;
+                {//Initialize to 0 to get rid of warnings.
+                    double dxdr=0;
+                    double dxdAz=0;
+                    double dxdEl=0;
+                    double dydr=0;
+                    double dydAz=0;
+                    double dydEl=0;
+                    double dzdr=0;
+                    double dzdAz=0;
+                    double dzdEl=0;
+                    double d2xdrdr=0;
+                    double d2xdAzdAz=0;
+                    double d2xdEldEl=0;
+                    double d2xdrdAz=0;
+                    double d2xdrdEl=0;
+                    double d2xdAzdEl=0;
+                    double d2ydrdr=0;
+                    double d2ydAzdAz=0;
+                    double d2ydEldEl=0;
+                    double d2ydrdAz=0;
+                    double d2ydrdEl=0;
+                    double d2ydAzdEl=0;
+                    double d2zdrdr=0;
+                    double d2zdAzdAz=0;
+                    double d2zdEldEl=0;
+                    double d2zdrdAz=0;
+                    double d2zdrdEl=0;
+                    double d2zdAzdEl=0;
                     
                     if(spherDerivs) {
                         double J[9];
@@ -1313,11 +1324,13 @@ void spherHarmonicSetEvalCPPComplex(complex<double> *VRet, complex<double> *grad
     complex <double> *nCoeff;//Length M+1
     //These are to store sin(m*lambda) and cos(m*lambda) for m=0->M for the
     //Legendre algorithm.
-    double *SinVec,*CosVec;//These are each length M+1.
+    double *SinVec=NULL;
+    double *CosVec=NULL;//These are each length M+1.
     //rm and im are never used at the same time as SinVec andCosVec,
     //because rm and im are used by Pines' algorithm. They will be the same
     //size as SinVec and CosVec, and thus will point to the same memory.
-    double *rm,*im;
+    double *rm=NULL;
+    double *im=NULL;
     //The following are needed if the Legendre algorithm is used.
     complex<double> *A=NULL;//Length M1NumSets
     complex<double> *B=NULL;//Length M1NumSets
@@ -1334,13 +1347,13 @@ void spherHarmonicSetEvalCPPComplex(complex<double> *VRet, complex<double> *grad
     complex<double> *Arr=NULL;//Length M1NumSets
     complex<double> *Brr=NULL;//Length M1NumSets
     complex<double> *AThetar=NULL;//Length M1NumSets
-    complex<double> *BThetar;//Length M1NumSets
+    complex<double> *BThetar=NULL;//Length M1NumSets
     //The following are only needed if Pines' algorithm is chosen and the
     //gradient and/or Hessian is desired
-    complex<double> *a1;//Length numSets
-    complex<double> *a2;//Length numSets
-    complex<double> *a3;//Length numSets
-    complex<double> *a4;//Length numSets
+    complex<double> *a1=NULL;//Length numSets
+    complex<double> *a2=NULL;//Length numSets
+    complex<double> *a3=NULL;//Length numSets
+    complex<double> *a4=NULL;//Length numSets
     complex<double> *A1=NULL;//Length numSets
     complex<double> *A2=NULL;//Length numSets
     complex<double> *A3=NULL;//Length numSets
@@ -1929,15 +1942,16 @@ void spherHarmonicSetEvalCPPComplex(complex<double> *VRet, complex<double> *grad
             if(gradVRet!=NULL||HessianVRet!=NULL) {
                 double J[9];
                 double H[27];
-                double drdx;
-                double drdy;
-                double drdz;
-                double dLambdadx;
-                double dLambdady;
-                double dLambdadz;
-                double dPhidx;
-                double dPhidy;
-                double dPhidz;
+                //Initialize to 0 to get rid of warnings.
+                double drdx=0;
+                double drdy=0;
+                double drdz=0;
+                double dLambdadx=0;
+                double dLambdady=0;
+                double dLambdadz=0;
+                double dPhidx=0;
+                double dPhidy=0;
+                double dPhidz=0;
                 double drdxdx;
                 double drdydy;
                 double drdzdz;
@@ -2316,7 +2330,7 @@ void spherHarmonicSetEvalCPPComplex(complex<double> *VRet, complex<double> *grad
                         //Table 14
                         const double Lmn=(nf+mf+1)*HVal+u*dHVal;
                         const double dLmn=(nf+mf+2)*dHVal+u*d2HVal;
-                        const double Omn=(nf+mf+1)*(n+m+2)*HVal+2.0*u*(nf+mf+2)*dHVal+u*u*d2HVal;
+                        const double Omn=(nf+mf+1)*(nf+mf+2)*HVal+2.0*u*(nf+mf+2)*dHVal+u*u*d2HVal;
                         
                         for(curSet=0;curSet<numSets;curSet++) {
                             const complex <double> rhoC=nCoeff[n]*C(n,m,curSet);
@@ -2365,16 +2379,16 @@ void spherHarmonicSetEvalCPPComplex(complex<double> *VRet, complex<double> *grad
                     mf++;
                 }
                 
-                {
-                    double dxdr;
-                    double dxdAz;
-                    double dxdEl;
-                    double dydr;
-                    double dydAz;
-                    double dydEl;
-                    double dzdr;
-                    double dzdAz;
-                    double dzdEl;
+                {//Initialzie to 0 to get rid of warnings.
+                    double dxdr=0;
+                    double dxdAz=0;
+                    double dxdEl=0;
+                    double dydr=0;
+                    double dydAz=0;
+                    double dydEl=0;
+                    double dzdr=0;
+                    double dzdAz=0;
+                    double dzdEl=0;
                     double d2xdrdr;
                     double d2xdAzdAz;
                     double d2xdEldEl;

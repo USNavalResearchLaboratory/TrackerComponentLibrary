@@ -39,7 +39,7 @@ if(isempty(p))
 end
 
 %Special case, given a scalar.
-if(length(p)==1)
+if(isscalar(p))
     theRank=0;
    return; 
 end

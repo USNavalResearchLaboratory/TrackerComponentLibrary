@@ -7,6 +7,12 @@
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+//Get rid of useless Spectre mitigation warnings and inline warnings from
+//Visual Studio.
+#ifdef _MSC_VER
+#pragma warning(disable : 5045 4711)
+#endif
+
 #include "basicMatOps.h"
 
 //For memcpy

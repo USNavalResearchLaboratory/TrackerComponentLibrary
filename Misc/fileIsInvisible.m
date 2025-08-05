@@ -1,6 +1,6 @@
 function boolVal=fileIsInvisible(path)
 %%FILEISINVISIBLE  Given a full path to a file or folder, indicate whether
-%                  the path appears to go through invisible fodlers or
+%                  the path appears to go through invisible folders or
 %                  whether the folder/ file is invisible based on the names
 %                  of the folders in the path and the filename.
 %

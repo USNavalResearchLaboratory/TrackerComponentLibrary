@@ -249,6 +249,7 @@ function [xMin,fMin,exitCode]=NewtonsMethod(f,fHess,x0,epsilon,deltaTestDist,del
             end
         else%Take a step without a line search.
             xCur=xPrev+D;
+
             if(isempty(fHess))
                 [fValCur,gradFCur,fHessVal]=f(xCur);
             else

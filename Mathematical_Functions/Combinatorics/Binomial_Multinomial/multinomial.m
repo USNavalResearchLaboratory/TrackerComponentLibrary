@@ -14,7 +14,7 @@ function val=multinomial(repList)
 %
 %The multinomial coefficient is factorial(n)/prod(factorial(repList)).
 %However, that formulation is subject to overflow issues. Thus, it is
-%implemented here as a product of boinomial coefficients.
+%implemented here as a product of binomial coefficients.
 %
 %September 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

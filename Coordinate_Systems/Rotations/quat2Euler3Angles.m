@@ -19,13 +19,13 @@ function [theta1,theta2,theta3]=quat2Euler3Angles(q,series,rotMatHanded,quatHand
 %          theta1 about the rotated x axis. All possible combinations of
 %          values are: 'xzx', 'xyz', 'yxy', 'yzy', 'zyz', 'zxz', 'xzy',
 %          'xyz', 'yxz', 'yzx', 'zyx', and 'zxy'.
-%    handed The handedness of the Euler rotation angles. If omitted, it is
-%           assumed that the rotation is right-handed (the standard).
+% rotMatHanded The handedness of the Euler rotation angles. If omitted, it
+%           is assumed that the rotation is right-handed (the standard).
 %           Possible values are:
 %           'right' The default if omitted. The rotation is right-handed.
 %           'left'  The rotation is left-handed. The rotation angle is
 %                   clockwise when one is looking into the rotation axis.
-%    handed The handedness of the unit quaternion on the input. If omitted,
+% quatHanded The handedness of the unit quaternion on the input. If omitted,
 %           it is assumed that the quaternion is right-handed (the
 %           standard). Possible values are:
 %           'right' The default if omitted. The quaternion multiplication
@@ -43,7 +43,7 @@ function [theta1,theta2,theta3]=quat2Euler3Angles(q,series,rotMatHanded,quatHand
 %
 %EXAMPLE:
 %Here, the maximum error between an original rotation matrix from Euler
-%angles and that obtained by recreateating the Euler angles from a
+%angles and that obtained by recreating the Euler angles from a
 %quaternion is computed over 1000 Monte Carlo runs. One will see that the
 %absolute errors are on the order of what one might expect given finite
 %precision errors.
@@ -73,7 +73,7 @@ function [theta1,theta2,theta3]=quat2Euler3Angles(q,series,rotMatHanded,quatHand
 %May 2024 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-if(nargin<3||isempty(quatHanded))
+if(nargin<4||isempty(quatHanded))
     quatHanded='right';
 end
 
@@ -90,7 +90,7 @@ if(nargin<3||isempty(rotMatHanded))
     rotMatHanded='right';
 end
 
-series=char(series);%In case a straing object was passed.
+series=char(series);%In case a string object was passed.
 switch(series(1))
     case 'x'
         k=1;
@@ -154,16 +154,9 @@ end
 theta2=acos(2*(a^2+b^2)/(a^2+b^2+c^2+d^2)-1);
 thetaPlus=atan2(b,a);
 thetaMinus=atan2(d,c);
-% if(theta2==0)
-%     theta1=0;
-%     theta3=2*thetaPlus-theta1;
-% elseif(theta2==pi/2)
-%     theta1=0;
-%     theta3=2*thetaMinus+theta1;
-% else
-    theta1=thetaPlus-thetaMinus;
-    theta3=thetaPlus+thetaMinus;
-%end
+
+theta1=thetaPlus-thetaMinus;
+theta3=thetaPlus+thetaMinus;
 
 if(notProper)
     theta3=epsilon*theta3;

@@ -29,8 +29,17 @@
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
-//This header is required by Matlab.
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4514 )
+#endif
+
 #include "mex.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
+
 //This is for input validation
 #include "MexValidation.h"
 #include "mathGeometricFuncs.hpp"

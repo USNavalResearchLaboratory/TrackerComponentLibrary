@@ -48,9 +48,11 @@ function mapData=getGSHHGBoundaryData(latLonRecDeg,dataType,resolutionLevel,excl
 %                 This is  an array of values of the hierarchical_level
 %                 parameter, which is described below. An empty matrix
 %                 means that nothing should be omitted. If the excludeTypes
-%                 parameter itself is omitted, then if dataType=1 or 2,
-%                 then nothing is omitted and if dataType=0, then
-%                 excludeTypes=[2;3;4;6], which means that lakes and
+%                 parameter itself is omitted, then if dataType=2,
+%                 excludeTypes=[2,3] (only show country borders, not borders
+%                 borders within countries nor maritime borders), if
+%                 dataType=1, then nothing is omitted and if dataType=0,
+%                 then excludeTypes=[2;3;4;6], which means that lakes and
 %                 anything in them are omitted as well as the boundary
 %                 between the ground of Antarctica and the ice, since the
 %                 boundary between Antarctica's ice and the ocean should
@@ -200,9 +202,11 @@ function mapData=getGSHHGBoundaryData(latLonRecDeg,dataType,resolutionLevel,excl
     end
 
     if(nargin<4)
-       if(dataType~=0)
-           %Don't exclude anything when getting political boundaries or
-           %rivers.
+       if(dataType==2)
+           %Get rid of internal political borders and maritime borders.
+           excludeTypes=[2,3];
+       elseif(dataType==1)
+           %Do not exclude any of the river information.
            excludeTypes=[];
        else
            %Exclude islands in lakes and ponds on islands in lakes when
@@ -212,8 +216,10 @@ function mapData=getGSHHGBoundaryData(latLonRecDeg,dataType,resolutionLevel,excl
            excludeTypes=[2;3;4;6];
        end
     end
-    
-    clipToView=true;
+
+    %The option to change this from anything but true is here primarily for
+    %debugging purposes.
+    clipToView=true; %#ok<*UNRCH>
     
     %[latitude;longitude];
     boundRectMin=[latLonRecDeg(1);
@@ -522,7 +528,6 @@ function mapData=getGSHHGBoundaryData(latLonRecDeg,dataType,resolutionLevel,excl
 
     mapData.latLonRecDeg=latLonRecDeg;
 
-
     %Sort the vertices and First sort by level number. Levels 1, 5,and 6
     %stay at the top, then levels 2 and 3.
     if(dataType==0)
@@ -533,7 +538,7 @@ function mapData=getGSHHGBoundaryData(latLonRecDeg,dataType,resolutionLevel,excl
         headerInfo(3,fiveSel|sixSel)=1;
         
         %The number of things of types 1, 5 and 6.
-        numRootParents=sum(headerInfo(3,:)==1);
+        numRootParents=nnz(headerInfo(3,:)==1);
         
         %The number of polygons that could have possible children is all
         %those that are not of whatever the highest type is, not counting 5
@@ -614,6 +619,10 @@ function mapData=getGSHHGBoundaryData(latLonRecDeg,dataType,resolutionLevel,excl
         childStructureInfo.numChildList=int32(numChildList);
         childStructureInfo.firstChildIdx=int32(firstChildIdx);
         mapData.childStructureInfo=childStructureInfo;
+    else
+        mapData.vertices=vertices;
+        mapData.headerInfo=headerInfo;
+        mapData.shapeInfo=shapeInfo;
     end
 end
 

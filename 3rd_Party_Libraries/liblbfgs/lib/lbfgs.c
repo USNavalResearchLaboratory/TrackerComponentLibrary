@@ -61,6 +61,12 @@ distributing the effieicnt and explanatory implementation in an open source
 licence.
 */
 
+#ifdef _MSC_VER
+//Get rid of useless Spectre mitigation, inlining, and padding warnings.
+//Also get rid of the unreferenced formal parameter warning.
+#pragma warning( disable : 5045 4820 4710 4711 4100 )
+#endif
+
 #ifdef  HAVE_CONFIG_H
 #include <config.h>
 #endif/*HAVE_CONFIG_H*/
@@ -440,7 +446,8 @@ int lbfgs(
 
         /* Report the progress. */
         if (cd.proc_progress) {
-            if ((ret = cd.proc_progress(cd.instance, x, g, fx, xnorm, gnorm, step, cd.n, k, ls))) {
+            ret = cd.proc_progress(cd.instance, x, g, fx, xnorm, gnorm, step, cd.n, k, ls);
+            if (ret) {
                 goto lbfgs_exit;
             }
         }
@@ -1060,7 +1067,8 @@ int line_search_morethuente(
         }
     }
 
-    return LBFGSERR_LOGICERROR;
+    //Unreachable code commented out.
+   // return LBFGSERR_LOGICERROR;
 }
 
 

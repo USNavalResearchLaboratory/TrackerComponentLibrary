@@ -297,7 +297,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
                     plhs[3]=mxCreateDoubleMatrix(0,0,mxREAL);//u=[]
                     
                     if(nlhs>4) {
-                        plhs[4]=mxCreateDoubleScalar(exitCode);//exitCode
+                        plhs[4]=mxCreateDoubleScalar((double)(exitCode));//exitCode
                     }
                 }
             }
@@ -324,7 +324,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
                     plhs[3]=uMATLAB;
                     
                     if(nlhs>4) {
-                        plhs[4]=mxCreateDoubleScalar(exitCode);
+                        plhs[4]=mxCreateDoubleScalar((double)(exitCode));
                     }
                 } else {
                     mxDestroyArray(uMATLAB);

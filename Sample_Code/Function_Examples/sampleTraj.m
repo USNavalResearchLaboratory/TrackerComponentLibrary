@@ -51,6 +51,14 @@ function [traj,times,mT,mTi] = sampleTraj(dt,choice)
 %June 2022 Codie T. Lewis, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
+if(nargin<2||isempty(choice))
+    choice=0;
+end
+
+if(nargin<1||isempty(dt))
+    dt=1;
+end
+
 if ~isscalar(dt) || dt<=0
     error('Invalid time step was given.')
 end

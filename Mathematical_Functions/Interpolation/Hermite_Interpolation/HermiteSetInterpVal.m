@@ -22,15 +22,20 @@ function yInterp=HermiteSetInterpVal(pInterp,a,c,xRange,numDerivs)
 %
 %OUTPUTS: yInterp The (numDims*(numDerivs+1))XnumPoints set of interpolated
 %                 state values at the given points. All dimensions for a
-%                 particular deirvative value are given before later ones.
+%                 particular derivative value are given before later ones.
 %                 for example, for position and velocity in 3D, the
 %                 ordering is [x;y;z;xDot;yDot;zDot].
 %
-%This function uses binSearch on each point to find the region in xRange
-%indicating which values in a and c to use for the interpolation. The
-%function then performs interpolation using multiple calls to
-%polyValNewton. See the sample code in the comments to
-%findHermiteInterpPolySet for an example of how this function is used.
+%Hermite interpolation is discussed in Chapter 2 of 1[]. This function uses
+%binSearch on each point to find the region in xRange indicating which
+%values in a and c to use for the interpolation. The function then performs
+%interpolation using multiple calls to polyValNewton. See the sample code
+%in the comments to findHermiteInterpPolySet for an example of how this
+%function is used.
+%
+%REFERENCES:
+%[1] J. Stoer and R. Bulirsch, Introduction to Numerical Analysis, 3rd ed.
+%    New York: Springer, 2002.
 %
 %May 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

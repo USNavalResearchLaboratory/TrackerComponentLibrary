@@ -21,7 +21,7 @@ function [valuesSelected,costVal]=knapsack01DP(v,w,W)
 %                  problem is infeasible.
 %
 %The knapsack problem is NP-hard. The complexity of this algorithm
-%scaled with W. It is O(n*W) The algorithm is sovled via dynamic
+%scaled with W. It is O(n*W) The algorithm is solved via dynamic
 %programming. A development of the recursion in such a dynamic programming
 %approach is given in Chapter 5.4 of [1]. However, this is a very common
 %method for solving this problem and thus solutions can be found in a
@@ -32,7 +32,7 @@ function [valuesSelected,costVal]=knapsack01DP(v,w,W)
 % v=[2.1;3.125;66;4.3;6.2];
 % w=[1;2;3;4;5];
 % [valuesSelected,costVal]=knapsack01DP(v,w,W)
-%One will get vales 3, 2, and 1 selected. 
+%One will get values 3, 2, and 1 selected. 
 %
 %REFERENCES:
 %[1] L. A. Wolsey, Integer Programming. New York: Wiley-Interscience, 1998.

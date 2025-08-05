@@ -24,6 +24,12 @@
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+#ifdef _MSC_VER
+//Get rid of useless Spectre mitigation warnings and a warning about
+//conditional expressions beign constant.
+#pragma warning( disable : 5045 4127 )
+#endif
+
 #include "mex.h"
 /* This header validates inputs and includes a header needed to handle
  * Matlab matrices.*/

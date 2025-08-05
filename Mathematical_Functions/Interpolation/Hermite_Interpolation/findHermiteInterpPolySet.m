@@ -50,7 +50,8 @@ function [a,c,xRange]=findHermiteInterpPolySet(x,y,numDims,groupSize)
 %           the interpolating regions when using the HermiteSetInterpVal
 %           function. The vector has the same orientation as x.
 %
-%This function uses a sliding window of points for generating multivariate
+%Multivariate Hermite interpolation is discussedin Chapter 2 of [1]. This
+%function uses a sliding window of points for generating multivariate
 %Hermite interpolating polynomials using the HermiteInterpMultiPoly
 %function. The interpolating polynomials will match all given points. All
 %of the coefficients for the polynomials are stored in a and c. The values
@@ -169,6 +170,10 @@ function [a,c,xRange]=findHermiteInterpPolySet(x,y,numDims,groupSize)
 % set(gca,'FontSize',18,'FontWeight','bold','FontName','Times')
 % set(h1,'FontSize',20,'FontWeight','bold','FontName','Times')
 % set(h2,'FontSize',20,'FontWeight','bold','FontName','Times')
+%
+%REFERENCES:
+%[1] J. Stoer and R. Bulirsch, Introduction to Numerical Analysis, 3rd ed.
+%    New York: Springer, 2002.
 %
 %May 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

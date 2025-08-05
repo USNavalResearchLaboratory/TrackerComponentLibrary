@@ -7,7 +7,7 @@ function s=accurateSum(a,algorithm,sortVals)
 % algorithm An optional parameter that specifies the algorithm to use for
 %          the summation. Possible values are:
 %          0 (The default if omitted or an empty matrix is passed) Use the 
-%            improved Kahan-Babuska procedure as described in [1].
+%           improved Kahan-Babuska procedure as described in [1].
 %          1 Use the Kahan-Babuska procedure, which is in [1] and shown to
 %            be inferior to the improved procedure.
 %   doSort This parameter indicates whether the values in a should be

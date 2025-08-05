@@ -81,7 +81,6 @@ function [optCost,xOpt,exitCode]=linProgInteriorPoint(A,b,ALeq,bLeq,c,maximize,m
 %proven that the 0-1 constraint of assignments can be replaced with a
 %non-negaitvity constraint without changing the optimal point.
 %For example:
-% 
 % C=[Inf,  2,Inf,Inf,3;
 %      7,Inf, 23,Inf,Inf;
 %     17, 24,Inf,Inf,Inf;

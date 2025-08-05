@@ -279,6 +279,7 @@ function [sink, pred, u, v]=ShortestPath(curUnassCol,u,v,C,col4row,row4col)
     curCol=curUnassCol;
     shortestPathCost=Inf(numRow,1);
     
+    closestRowScan=0;
     while(sink==0)        
         %Mark the current column as having been visited.
         ScannedCols(curCol)=1;

@@ -2,6 +2,11 @@
  * December 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
  *(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+//Get rid of a warnings from Visual Studio about inlining 
+#ifdef _MSC_VER
+#pragma warning(disable : 4711 4710)
+#endif
+
 #include <limits>
 #include <algorithm>
 #include <cstring>

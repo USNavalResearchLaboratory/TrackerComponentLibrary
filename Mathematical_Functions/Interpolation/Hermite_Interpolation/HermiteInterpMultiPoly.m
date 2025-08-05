@@ -34,8 +34,13 @@ function [a,c]=HermiteInterpMultiPoly(x,y,numDims)
 %         c The numDimsX(numCoeff-1) matrix of control points for the
 %           interpolating polynomials.
 %
-%This function calls HermiteInterpPoly for each of the dimensions present
-%and stacks the results by dimension.
+%Multivariate Hermite interpolation is duscussed in [1]. This function
+%calls HermiteInterpPoly for each of the dimensions present and stacks the
+%results by dimension.
+%
+%REFERENCES:
+%[1] J. Stoer and R. Bulirsch, Introduction to Numerical Analysis, 3rd ed.
+%    New York: Springer, 2002.
 %
 %May 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.

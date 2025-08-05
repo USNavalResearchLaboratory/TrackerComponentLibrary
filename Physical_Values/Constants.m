@@ -81,7 +81,10 @@ classdef Constants
 %
 %The Euler-Mascheroni Constant is as mentioned in [13]. Khinchin's constant
 %is described in [14]. The golden ratio and golden angles are described in
-%[16] and [17].
+%[16] and [17]. The Fibonacci factorial constant is given in [18] and plays
+%a role in fibonorials. The tribonacci constant is the asymptotic ratio of
+%two adjacent tribonacci numbers and is given in [19]. Catalan's constant
+%can be found from a number of series expansions as in [20].
 %
 %REFERENCES:
 %[1] Department of Defense, "Department of Defense world geodetic system
@@ -139,6 +142,14 @@ classdef Constants
 %     Resource. https://mathworld.wolfram.com/GoldenRatio.html
 %[17] Weisstein, Eric W. "Golden Angle." From MathWorld--A Wolfram Web
 %     Resource. https://mathworld.wolfram.com/GoldenAngle.html
+%[18] Weisstein, Eric W. "Fibonacci Factorial Constant." From MathWorld--A
+%     Wolfram Web Resource.
+%     https://mathworld.wolfram.com/FibonacciFactorialConstant.html
+%[19] Weisstein, Eric W. "Tribonacci Constant." From MathWorld--A Wolfram
+%     Web Resource. https://mathworld.wolfram.com/TribonacciConstant.html
+%[20] Marichev, Oleg; Sondow, Jonathan; and Weisstein, Eric W. "Catalan's
+%     Constant." From MathWorld--A Wolfram Web Resource.
+%     https://mathworld.wolfram.com/CatalansConstant.html
 %
 %January 2015 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
@@ -340,6 +351,12 @@ properties (Constant)
     %Khinchin's constant to 128 places. This the the geometric mean of the
     %coefficients of almost all continued fractions.
     Khinchin=2.6854520010653064453097148354817956938203822939944629530511523455572188595371520028011411749318476979951534659052880900828976777;
+    %The Fibonacci factorial constant to 128 digits.
+    FibonacciFactorialConst=1.22674201072035324441763023045536165587140969044025041964329730121402213831531216845262156249479774125913323340041200274406641031;
+    %The tribonacci constant to 128 digits.
+    TribonacciConst=1.8392867552141611325518525646532866004241787460975922467787586394042032220819664257384354194283070141419798268592409741641784507;
+    %Catalan's constant to 128 digits.
+    CatalanConst=0.91596559417721901505460351493238411077414937428167213426649811962176301977625476947935651292611510624857442261919619957903589880;
 end
 
 methods(Static)

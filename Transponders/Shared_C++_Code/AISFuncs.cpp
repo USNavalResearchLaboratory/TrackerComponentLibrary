@@ -6,6 +6,11 @@
  **/
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+//Get rid of a useless warnings from Visual Studio about inlining.
+#ifdef _MSC_VER
+#pragma warning(disable : 4710 4711)
+#endif
+
 #include "AISFuncs.hpp"
 
 #include <limits>
@@ -87,6 +92,12 @@ double getEndTimestamp(const std::string &theString) {
     double timeStamp=std::numeric_limits<double>::quiet_NaN();
     size_t pos=theString.find_last_of(',',std::string::npos);
     
+    //Get rid of a warning from Visual Studio about the ia valiables not
+    //being used. We will just return a NaN if the timestamp is invalid.
+    #ifdef _MSC_VER
+    #pragma warning(disable : 4101)
+    #endif
+
     //If there is no comma in the string, then see if the whole string is
     //the timestamp. Otherwise, extract whatever is after the comma, if
     //anything.

@@ -85,12 +85,21 @@ if(nargin<6||isempty(epsAlpha))
     epsAlpha=10^4*eps(sqrt(gammaVal)); 
 end
 
-S=chol(A,'upper');
-pInTilde=pIn-zIn;
-maximize=false;
-zTilde=eqConstLSSpher(inv(S),pInTilde,sqrt(gammaVal),epsRed,maximize,epsAlpha);
-z=S\zTilde+zIn;
+numDim=size(A,1);
+N=size(pIn,2);
 
+sqrtGamma=sqrt(gammaVal);
+
+S=chol(A,'upper');
+invS=inv(S);
+pInTilde=bsxfun(@minus,pIn,zIn);
+maximize=false;
+
+z=zeros(numDim,N);
+for k=1:N
+    zTilde=eqConstLSSpher(invS,pInTilde(:,k),sqrtGamma,epsRed,maximize,epsAlpha);
+    z(:,k)=S\zTilde+zIn;
+end
 end
 
 %LICENSE:

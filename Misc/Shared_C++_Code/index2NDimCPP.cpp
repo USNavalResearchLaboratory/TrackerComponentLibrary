@@ -5,6 +5,12 @@
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+//Get rid of a useless warning in Visual Studio about inlining.
+#ifdef _MSC_VER
+#pragma warning( disable: 4711 )
+#endif
+
+#include <cstddef>  // for size_t
 #include "miscFuns.hpp"
 
 bool index2NDimCPP(const size_t numDim, const size_t numIdx,const size_t * const idx, const size_t * const maxVals, size_t *newIndices) {

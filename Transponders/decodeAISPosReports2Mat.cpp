@@ -199,14 +199,31 @@
 #define NDEBUG
 #endif
 
-//This header is required by Matlab.
-#include "mex.h"
-//Needed for mxIsClass
-#include "matrix.h"
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4514 )
+#endif
 
-//The AISLib headers.
+#include "mex.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
+
+//Suppress warnings about padding and unused functions in the AIS headers
+//and also warnings about inlining.
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4820 4514 4710 4711 )
+#endif
+
+//The AISLib headers
 #include "ais.h"
 #include "vdm.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
 
 //Functions for parsing some parts of the strings that is not handled by
 //AISLib.
@@ -303,15 +320,15 @@ void decodeCharacterStrings(const char*msgChars,bool hasEndTimeStamps,bool conve
     std::istringstream ss(allMsg);//To parse a bunch of AIS strings
     
     //The maximum possible number of messages to decode.
-    maxNumMessages=std::count(allMsg.begin(), allMsg.end(), '\n')+1;
+    maxNumMessages=static_cast<size_t>(std::count(allMsg.begin(), allMsg.end(), '\n'))+1;
     
     //Allocate space for the maximum possible number of items to return
     retMat=mxCreateDoubleMatrix(numRowsInOutput,maxNumMessages,mxREAL);
-    retData=reinterpret_cast<double*>(mxGetData(retMat));
+    retData=mxGetDoubles(retMat);
     
     if(hasEndTimeStamps) {
         timeMat=mxCreateDoubleMatrix(maxNumMessages,1,mxREAL);
-        timeData=reinterpret_cast<double*>(mxGetData(timeMat));
+        timeData=mxGetDoubles(timeMat);
     }
 
     //We will now feed all of the lines into the VdmStream object one
@@ -321,7 +338,7 @@ void decodeCharacterStrings(const char*msgChars,bool hasEndTimeStamps,bool conve
         //This marks no time stamp as available.
         double timeStamp=std::numeric_limits<double>::quiet_NaN();
         bool pushSucceeded;
-        size_t numBeforeAdd=decodedAISData.size();
+        size_t numBeforeAdd=static_cast<size_t>(decodedAISData.size());
         std::string messagePart, endPart;
                 
         //We want to separate everything that comes after the checksum (if
@@ -341,7 +358,7 @@ void decodeCharacterStrings(const char*msgChars,bool hasEndTimeStamps,bool conve
         if(pushSucceeded) {
             //If a complete message was decoded, then try to extact the
             //data and add it.
-            if(decodedAISData.size()!=numBeforeAdd) {
+            if(static_cast<size_t>(decodedAISData.size())!=numBeforeAdd) {
                 std::unique_ptr<libais::AisMsg> curAisMsg=decodedAISData.PopOldestMessage();
                 const size_t outputOffset=numRowsInOutput*numMsgDecoded;
                 bool decodingSucceeded;
@@ -407,7 +424,7 @@ bool extractSinglePosReport(std::unique_ptr<libais::AisMsg> &curAisMsg,double *r
         case 2://Class A position report, assigned.
         case 3://Class A position report, when interrogated.
         {
-            libais::Ais1_2_3 *msg=reinterpret_cast<libais::Ais1_2_3*>(curAisMsg.get());
+            libais::Ais1_2_3 *msg=dynamic_cast<libais::Ais1_2_3*>(curAisMsg.get());
 
             //MMSI number (An integer).
             retData[0]=static_cast<double>(msg->mmsi);
@@ -487,7 +504,7 @@ bool extractSinglePosReport(std::unique_ptr<libais::AisMsg> &curAisMsg,double *r
         }
         case 18://Standard class B equipment position report.
         {
-            libais::Ais18* msg=reinterpret_cast<libais::Ais18*>(curAisMsg.get());
+            libais::Ais18* msg=dynamic_cast<libais::Ais18*>(curAisMsg.get());
 
             //MMSI number (An integer).
             retData[0]=static_cast<double>(msg->mmsi);
@@ -558,7 +575,7 @@ bool extractSinglePosReport(std::unique_ptr<libais::AisMsg> &curAisMsg,double *r
         }
         case 19://Extended class B equipment position report.
         {
-            libais::Ais19*msg=reinterpret_cast<libais::Ais19*>(curAisMsg.get());
+            libais::Ais19*msg=dynamic_cast<libais::Ais19*>(curAisMsg.get());
 
             //MMSI number (An integer).
             retData[0]=static_cast<double>(msg->mmsi);
@@ -631,7 +648,7 @@ bool extractSinglePosReport(std::unique_ptr<libais::AisMsg> &curAisMsg,double *r
         case 27://Long-range automatic identification system
                 //broadcast message
         {
-            libais::Ais27*msg=reinterpret_cast<libais::Ais27*>(curAisMsg.get());
+            libais::Ais27*msg=dynamic_cast<libais::Ais27*>(curAisMsg.get());
 
             //MMSI number (An integer).
             retData[0]=static_cast<double>(msg->mmsi);

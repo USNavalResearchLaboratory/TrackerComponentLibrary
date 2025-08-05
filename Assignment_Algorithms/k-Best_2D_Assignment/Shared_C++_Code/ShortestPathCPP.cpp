@@ -11,6 +11,12 @@
  */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+//Get rid of useless warnings in this file from Visual Studio that relate
+//to function inlining .
+#ifdef _MSC_VER
+#pragma warning(disable : 4711 4710)
+#endif
+
 #include "ShortestPathCPP.hpp"
 #include <stdexcept>
 #include <queue>
@@ -486,7 +492,7 @@ size_t kBest2D(const size_t k,const size_t numRow,const size_t numCol,const bool
      * end. workMem.C must hold enough space for a numRowXnumRow matrix.
      * since numrow>=numCol, the extra columns will be set to zero.*/
     CDelta=makeCostMatrixSafe(workMem.C,C,numRow*numCol,maximize);
-    CDelta=CDelta*numCol;
+    CDelta=CDelta*static_cast<double>(numCol);
     //The rest of the entries in the working memory matrix are zero. 
     fill_n(workMem.C+numRow*numCol,numRow*(numRow-numCol),0);
 
@@ -561,7 +567,7 @@ int assign2D(const size_t numRow,const size_t numCol,const bool maximize,const d
      * positive. The delta is added back in when computing the gain in the
      * end. workMem.C must hold enough space for a numRowXnumCol matrix.*/
     CDelta=makeCostMatrixSafe(workMem.C,C,numRow*numCol,maximize);
-    CDelta=CDelta*numCol;
+    CDelta=CDelta*static_cast<double>(numCol);
     
     if(shortestPathCPP(problemSol,workMem,numRow,numCol,numCol)) {
     /*If the problem is infeasible, then identify it as such and return.

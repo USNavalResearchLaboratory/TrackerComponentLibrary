@@ -302,7 +302,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
         plhs[0]=mxCreateDoubleMatrix(0, 0, mxREAL);
         if(nlhs>1) {
             mxArray *nCardMat=allocUnsignedSizeMatInMatlab(1, 1);
-            if(sizeof(size_t)==4) {//32 bit
+            if constexpr(sizeof(size_t)==4) {//32 bit
                 *reinterpret_cast<size_t*>(mxGetUint32s(nCardMat))=n;
             } else {//64 bit
                 *reinterpret_cast<size_t*>(mxGetUint64s(nCardMat))=n;
@@ -327,7 +327,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     plhs[0]=codeArray;
     if(nlhs>1) {
         mxArray *nCardMat=allocUnsignedSizeMatInMatlab(1, 1);
-        if(sizeof(size_t)==4) {//32 bit
+        if constexpr(sizeof(size_t)==4) {//32 bit
             *reinterpret_cast<size_t*>(mxGetUint32s(nCardMat))=nCard;
         } else {//64 bit
             *reinterpret_cast<size_t*>(mxGetUint64s(nCardMat))=nCard;
@@ -343,7 +343,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
                 //Increment j to be an index for Matlab.
                 j++;
                 
-                if(sizeof(size_t)==4) {//32 bit
+                if constexpr(sizeof(size_t)==4) {//32 bit
                     *reinterpret_cast<size_t*>(mxGetUint32s(jMat))=j;
                 } else {//64 bit
                     *reinterpret_cast<size_t*>(mxGetUint64s(jMat))=j;

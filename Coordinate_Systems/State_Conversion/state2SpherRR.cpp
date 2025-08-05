@@ -84,8 +84,18 @@
 */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4514 )
+#endif
+
 #include "matrix.h"
 #include "mex.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
+
 /* This header validates inputs and includes a header needed to handle
  * Matlab matrices.*/
 #include "MexValidation.h"
@@ -93,7 +103,7 @@
         
 void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray *prhs[]) {
     double *points, *xTx, *xRx, *M;
-    int systemType;
+    size_t systemType;
     size_t i, N;
     //If multiple values are passed for xTx, xRx or M, then the three
     //offsets below are used to move to the next value when going through
@@ -139,7 +149,7 @@ void mexFunction(const int nlhs, mxArray *plhs[], const int nrhs, const mxArray 
     if(nrhs<2||mxIsEmpty(prhs[1])) {
         systemType=0;
     } else {
-        systemType=getIntFromMatlab(prhs[1]);
+        systemType=getSizeTFromMatlab(prhs[1]);
         
         if(systemType!=0&&systemType!=1&&systemType!=2&&systemType!=3) {
             mexErrMsgTxt("Invalid system type specified.");

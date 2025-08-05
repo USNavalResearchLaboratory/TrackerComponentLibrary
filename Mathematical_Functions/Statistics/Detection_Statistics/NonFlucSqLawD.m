@@ -10,7 +10,8 @@ classdef NonFlucSqLawD
 %   static (the class holds no information and does not need to be
 %   instantiated).
 %
-%Implemented methods are: mean, var, PDF, CDF, PD4Threshold, PD4PFA, rand
+%Implemented methods are: mean, var, PDF, CDF, avgSNR4PDThresh,
+%                         PD4Threshold, PD4PFA, rand
 %
 %This model considers detection of a non-fluctuating target with a constant
 %signal power to noise ratio via non-coherent integration of multiple
@@ -24,7 +25,7 @@ classdef NonFlucSqLawD
 %single sample,
 % zSignal=sqrt(A)*exp(1j*2*pi*rand(1)) %The signal has a random phase.
 % zNoise=(randn(1)+1j*randn(1))/sqrt(2)
-%Note that zNoise is a sample of a circular complex Gaussian distirbution.
+%Note that zNoise is a sample of a circular complex Gaussian distribution.
 %with unit variance. So E{zNoise*conj(zNoise)}=1. Similarly,
 %E{zSignal*conj(zSignal)}=A. Thus, A is the signal to noise ratio (SNR) of
 %the signal. The squared measurement would be 
@@ -38,7 +39,7 @@ classdef NonFlucSqLawD
 %The quantity within the parentheses is distributed noncentral chi squared
 %with 2 degrees of freedom and noncentrality parameter (2*A). Thus, y is
 %a transformed noncentral chi squared distribution. If X2(x,nu,lambda) is
-%the PDF on a noncentral chi-squared distirbution with nu degrees of
+%the PDF on a noncentral chi-squared distribution with nu degrees of
 %freedom and noncentrality parameter lambda, the PDF of y, y(x) is
 %2*X2(x*2,2,2*A).
 %Similarly, when considering the sum of N pulses, the PDF of y is
@@ -455,6 +456,145 @@ function val=CDF(x,avgSNR,N,ampDef)
     end
 end
 
+function [avgSNR,exitCode]=avgSNR4PDThresh(PD,thresh,N,ampDef,convergParams)
+%%AVGSNR4PDTHRESH Given a detection probability and the detection
+% threshold, determine the power signal to noise ratio (SNR) under a
+% non-fluctuating target model.
+%
+%INPUTS: PD The detection probability of the target , 0<=PD<1.
+%   thresh The detection threshold. thresh>0
+%        N The number of pulses that are to be incoherently added for
+%          detection (in a square-law detector). If this parameter is
+%          omitted or an empty matrix is passed, N=1 is used.
+%   ampDef This specified normalization (see help NonFlucSqLawD). Possible
+%          values are:
+%          0 The expected value of the squared magnitude of the noise is 2.
+%          1 (The default if omitted or an empty matrix is passed) The
+%            expected value of the squared magnitude of the noise is 1.
+%            (A more common definition).  
+% convergParams An optional structure holding parameters that define how
+%          the algorithm converges. Possible members are:
+%          'XTol' and 'maxIter' These have the same name as the inputs in
+%           bisectionRootFind. See the comments to that function for
+%           details. Default values are eps() and 100.
+%          'maxIterSearch' This function uses a crude initial guess for an
+%           upper bound on the solution and keeps doubling it until the PD
+%           found is too large. This is the maximum number of doublings
+%           that can be performed before an error is returned. The initial
+%           guess is always avgSNR=100 and the default maximum number of
+%           doublings, is 50.
+%
+%OUTPUTS: avgSNR The average SNR to give the specified PD for the specified
+%                threshold. If no solution is possible (the PD is lower
+%                than the PD for noise-only), then an empty matrix is
+%                returne.
+%       exitCode If a solution exists, then this is the exit code returned
+%                by the bisectionRootFind function. Otherwise, this is -1.
+%                See the comments to bisectionRootFind for more details.
+%
+%This function usesBisectionRootFind to invert PD minus what is equivalent
+%to the output of the PD4Threshold method.
+%
+%This detection probability is computed in terms of the MarcumQ
+%function. Equations 10.4-30 in [1], expresses the detection probability
+%in terms of an incomplete Toronto function. In [2], it is shown that the
+%incomplete Toronto function parameterized T_B(m,(m-1)/2,r) is expressed in
+%terms of the MarcumQ function as 1-MarcumQ((m+1)/2,r*sqrt(2),B*sqrt(2)).
+%
+%EXAMPLE:
+%This example demonstrates that the avgSNR computed using this method can
+%be plugged into the PD4Threshold to get the same PD back as was used in
+%this function (so the results are consistent). The relative error is on
+%the order of finite precision limitations.
+% thresh=12;
+% N=4;
+% ampDef=1;
+% PD=0.7;
+% avgSNR=NonFlucSqLawD.avgSNR4PDThresh(PD,thresh,N,ampDef);
+% PDBack=NonFlucSqLawD.PD4Threshold(avgSNR,thresh,N,ampDef);
+% RelErr=(PD-PDBack)/PD
+%
+%REFERENCES:
+%[1] J. V. Di Franco and W. L. Rubin, Radar Detection. SciTech Publishing
+%    Inc., Rayliegh, NC: 2004.
+%[2] P. C. Sofotasios and S. Freear, "New analytic results for the
+%    incomplete Toronto function and incomplete Lipschitz-Hankel
+%    integrals," in Proceedings from the SMBO/IEEE MTT-S International
+%    Microwave and Optoelectronics Conference, Natal, Brazil, 29 Oct. - 1
+%    Nov. 2011, pp. 44-47.
+%
+%December 2024 David F. Crouse, Naval Research Laboratory, Washington D.C.
+
+maxIterSearch=50;
+maxIter=100;
+XTol=eps();
+
+if(nargin>4&&~isempty(convergParams))
+    if(isfield(convergParams,'maxIterSearch'))
+        maxIterSearch=convergParams.maxIterSearch;
+    end
+    if(isfield(convergParams,'maxIter'))
+        maxIter=convergParams.maxIter;
+    end
+    if(isfield(convergParams,'XTol'))
+        XTol=convergParams.XTol;
+    end
+end
+
+if(nargin<7||isempty(maxIterSearch))
+    maxIterSearch=50;
+end
+
+if(nargin<6||isempty(maxIter))
+    maxIter=100;
+end
+
+if(nargin<5||isempty(XTol))
+    XTol=eps();
+end
+
+if(nargin<4||isempty(ampDef))
+    ampDef=1;
+end
+
+if(nargin<3||isempty(N))
+    N=1;
+end
+
+if(NonFlucSqLawD.PD4Threshold(0,thresh,N,ampDef)>PD)
+    %If the PD is below the PD obtained with a 0 SNR target, then no
+    %solution is possible.
+    avgSNR=[];
+    exitCode=-1;
+    return
+end
+
+if(ampDef==1)
+    thresh=2*thresh;
+end
+sthresh=sqrt(thresh);
+
+%We need to find an upper bound. We start with an estimate of 100 and then
+%keep doubling it until we have found an upper bound.
+avgSNRUpper=100;
+lambda=N*2*avgSNRUpper;
+PDComp=MarcumQ(N,sqrt(lambda),sthresh);
+curIter=0;
+while(PDComp<PD)
+    curIter=curIter+1;
+    if(curIter>maxIterSearch)
+        error('Unable to bracket a solution.')
+    end
+    avgSNRUpper=2*avgSNRUpper;
+    lambda=N*2*avgSNRUpper;
+    PDComp=MarcumQ(N,sqrt(lambda),sthresh);
+end
+
+f=@(avgSNR)(PD-MarcumQ(N,sqrt(N*2*avgSNR),sthresh));
+[avgSNR,~,exitCode]=bisectionRootFind(f,[0;avgSNRUpper],XTol,maxIter);
+
+end
+
 function PD=PD4Threshold(avgSNR,thresh,N,ampDef)
 %%PD4THRESHOLD Determine the detection probability of a target with a
 %           constant signal to noise ratio (SNR) given the SNR and the
@@ -480,13 +620,13 @@ function PD=PD4Threshold(avgSNR,thresh,N,ampDef)
 %
 %OUTPUTS: PD The detection probability of the target.
 %
-%This function implements the threshold in terms of the MarcumQ function. 
-%Equations 10.4-30 in [1], expresses the detection probability in terms of
-%an incomplete Toronto function. In [1], it is shown that the incomplete
-%Toronto function parameterized T_B(m,(m-1)/2,r) is expressed in terms of
-%the MarcumQ function as 1-MarcumQ((m+1)/2,r*sqrt(2),B*sqrt(2)). This is
-%the form in this problem. Thus, the MarcumQ function is used to evaluate
-%the detection probability.
+%This function implements the detection probability in terms of the MarcumQ
+%function. Equations 10.4-30 in [1], expresses the detection probability
+%in terms of an incomplete Toronto function. In [2], it is shown that the
+%incomplete Toronto function parameterized T_B(m,(m-1)/2,r) is expressed in
+%terms of the MarcumQ function as 1-MarcumQ((m+1)/2,r*sqrt(2),B*sqrt(2)).
+%This is the form in this problem. Thus, the MarcumQ function is used to
+%evaluate the detection probability.
 %
 %EXAMPLE:
 %Here, we validate the results by comparing the PD from this function to

@@ -1,6 +1,6 @@
 This code is taken from version 2.6.1 of the NLOpt library from
 http://ab-initio.mit.edu/wiki/index.php/NLopt
-The code has been modified to get rid of most of the warning when 
+The code has been modified to get rid of most of the warnings when 
 compiling. These include, for example, complaints that variables are unused
 or are used prior to being initialized. Also the memory allocation and
 freeing routines in the library have been changed to use the methods from

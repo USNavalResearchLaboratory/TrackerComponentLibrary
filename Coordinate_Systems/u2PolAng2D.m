@@ -1,4 +1,4 @@
-function azimuth=u2PolAng2D(uVals,systemType)
+function azimuth=u2PolAng2D(uVals,systemType,MP,MU)
 %%U2POLANG2D Convert the direction cosine value u in 2D into a polar
 %            angle. The "direction cosine" u is just the x coordinate of a
 %            unit vector from the receiver to the target in the coordinate
@@ -16,11 +16,62 @@ function azimuth=u2PolAng2D(uVals,systemType)
 %              0 (The default if omitted or an empty matrix is passed) The
 %                azimuth angle is counterclockwise from the x axis.
 %              1 The azimuth angle is measured clockwise from the y axis.
+%           MP Optionally, the rotation matrix that would rotate a vector
+%              in global coordinates into the local coordinate system
+%              defining polar coordinates. If omitted or an empty matrix
+%              is passed, it is assumed there is no rotation.
+%           MU Optionally, the rotation matrix that would rotate a vector
+%              in global coordinates into the local coordinate system
+%              into which the u cooridnate is computed. If omitted or an
+%              empty matrix is passed, it is assumed there is no rotation.
 %
 %OUTPUTS: azimuth The 1XN set of polar angles corresponding to u.
 %
+%EXAMPLE 1:
+%This demonstrates that this function is consistent with polAng2U2D.
+% %This angle specifies the rotation of the polar coordinate system
+% thetaP=2*pi*rand(1);
+% MP=rotMat2D(thetaP);
+% %This angle specifies the rotation of the u coordinate system.
+% thetaU=2*pi*rand(1);
+% MU=rotMat2D(thetaU);
+% systemType=1;
+% thetaPol=rand(1)*2*pi-pi;
+% includeV=true;
+% u=polAng2U2D(thetaPol,systemType,MP,MU,includeV);
+% thetaPolBack=u2PolAng2D(u,systemType,MP,MU);
+% RelErr=(thetaPolBack-thetaPol)/thetaPol
+%
+%EXAMPLE 2:
+%This example shows that for a given target location, the output of this
+%function is consistent with the directions obtained using getUDirection2D
+%and getPolAngle. The relative error is on the order of finite precision
+%limitations.
+% tarLoc=[13e3;26e3];
+% lRx=[12e3;4e3];
+% systemType=0;
+% includeV=true;
+% Mu=randRotMat(2);
+% MAz=randRotMat(2);
+% Az=getPolAngle(tarLoc,systemType,lRx,MAz);
+% uv=getUDirection2D(tarLoc,lRx,Mu,includeV);
+% AzConv=u2PolAng2D(uv,systemType,MAz,Mu);
+% RelErr=max(abs((AzConv-Az)./Az))
+%
 %June 2017 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
+
+if(nargin<4||isempty(MU))
+    thetaU=0;
+else
+    thetaU=rotMat2D2Angle(MU);
+end
+
+if(nargin<3||isempty(MP))
+    thetaP=0;
+else
+    thetaP=rotMat2D2Angle(MP);
+end
 
 if(nargin<2||isempty(systemType))
     systemType=0;
@@ -31,8 +82,10 @@ if(size(uVals,1)==1)%If it does not come with v
     switch(systemType)
         case 0
             azimuth=acos(u);
+            azimuth=azimuth+thetaP-thetaU;
         case 1
             azimuth=asin(u);
+            azimuth=azimuth-thetaP+thetaU;
         otherwise
             error('Invalid system type specified.')
     end
@@ -41,12 +94,15 @@ else
     switch(systemType)
         case 0
             azimuth=atan2(v,u);
+            azimuth=azimuth+thetaP-thetaU;
         case 1
             azimuth=atan2(u,v);
+            azimuth=azimuth-thetaP+thetaU;
         otherwise
             error('Invalid system type specified.')
     end
 end
+azimuth=wrapRange(azimuth,-pi,pi);
 end
 
 %LICENSE:

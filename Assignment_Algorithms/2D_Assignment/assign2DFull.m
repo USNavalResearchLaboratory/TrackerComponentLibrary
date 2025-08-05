@@ -45,7 +45,7 @@ function [tuples,gain,u,v]=assign2DFull(C,maximize,algorithm)
 %            C. Otherwise, the problem will be labeled as infeasible.
 %
 %OUTPUTS: tuples A 2XnumTuples set of assignment values. This is ordered
-%               [Row Index;Column Index]. the number of tuples ranges from
+%               [Row Index;Column Index]. The number of tuples ranges from
 %               max(numRow-1,numCol-1), for the case where as many things
 %               as possible are not assigned to the uncontrained values and
 %               C(1,1) is not assigned, to numRow+numCol-1 for the case
@@ -509,7 +509,8 @@ function [sink, pred, u, v]=ShortestPath(curUnassCol,u,v,C,col4row,row4col,zeroO
     delta=0;
     curCol=curUnassCol;
     shortestPathCost=ones(numRow,1)*Inf;
-    
+
+    closestRowScan=0;
     while(sink==0)
         %Mark the current column as having been visited.
         ScannedCols(curCol)=1;

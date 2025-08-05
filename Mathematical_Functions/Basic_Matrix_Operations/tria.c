@@ -29,7 +29,18 @@
 
 #include "mex.h"
 #include "MexValidation.h"
+
+#ifdef _MSC_VER
+#pragma warning( push )
+//Get rid of warnings in Matlab's lapack header.
+#pragma warning( disable : 4255 )
+#endif
+
 #include "lapack.h"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     ptrdiff_t numRows,numCols,lwork,info;
@@ -63,8 +74,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     A=mxMalloc((size_t)numRows*(size_t)numCols*sizeof(double));
     AOrig=mxGetDoubles(prhs[0]);
     
-    for(curRow=0;curRow<numRows;curRow++) {
-        for(curCol=0;curCol<numCols;curCol++) {
+    for(curRow=0;curRow<(size_t)(numRows);curRow++) {
+        for(curCol=0;curCol<(size_t)(numCols);curCol++) {
             A[curCol+numCols*curRow]=AOrig[curRow+numRows*curCol];
         }
     }
@@ -146,7 +157,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     RMat=mxCreateDoubleMatrix(numCols,tauLength,mxREAL);
     R=mxGetDoubles(RMat);
     for(curRow=0;curRow<tauLength;curRow++) {
-        for(curCol=0;curCol<numCols;curCol++) {
+        for(curCol=0;curCol<(size_t)(numCols);curCol++) {
             R[curCol+numCols*curRow]=A[curRow+numRows*curCol];
         }
     }
@@ -157,7 +168,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     //the entire column.
     for(curCol=0;curCol<tauLength;curCol++) {
         if(R[curCol+numCols*curCol]<0) {
-            for(curRow=curCol;curRow<numCols;curRow++) {
+            for(curRow=curCol;curRow<(size_t)(numCols);curRow++) {
                 R[curRow+numCols*curCol]*=-1.0;
             }
         }

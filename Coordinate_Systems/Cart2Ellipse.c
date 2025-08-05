@@ -61,6 +61,11 @@
 */
 /*(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.*/
 
+#ifdef _MSC_VER
+//Get rid of useless Spectre mitigation warnings.
+#pragma warning( disable : 5045 )
+#endif
+
 /*This header is required by Matlab.*/
 #include "mex.h"
 //Needed for sqrt, fabs, isfinite, fmax, fmin, copysign, and atan2
@@ -201,7 +206,7 @@ int SofairAlg(double *points,double *retData,size_t numVec,double a,double f) {
         c=u*u-1+2*t;
         //This condition prevents finite precision problems due to
         //subtraction within the square root.
-        c=fMax(c,0);
+        c=fmax(c,0);
         c=sqrt(c);
         w=(c-u)/2.0;
 
@@ -210,14 +215,14 @@ int SofairAlg(double *points,double *retData,size_t numVec,double a,double f) {
     //is nearly zero. The problems arise due to the subtraction within
     //the square root.
         z=sqrt(t*t+v)-u*w-t/2.0-1.0/4.0;
-        z=fMax(z,0);
-        z=copySign(sqrt(q)*(w+sqrt(z)),z0);
+        z=fmax(z,0);
+        z=copysign(sqrt(q)*(w+sqrt(z)),z0);
 
         Ne=a*sqrt(1+eps2*z*z/b2);
 
         //The min and max terms deals with finite precision problems.
-        val=fMin(z*(eps2+1)/Ne,1);
-        val=fMax(val,-1.0);
+        val=fmin(z*(eps2+1)/Ne,1);
+        val=fmax(val,-1.0);
         *phi=asin(val);
         *h=r0*cos(*phi)+z0*sin(*phi)-a*a/Ne;
     }
@@ -281,7 +286,7 @@ void FukishimaAlg(double *points,double *retData,size_t numVec,double a,double f
             COld=C;
 
             SNew=SNew/CNew;
-            if(!isFinite(SNew)) {
+            if(!isfinite(SNew)) {
                 S=SNew;
                 C=1;
                 A=sqrt(S*S+C*C);
@@ -298,25 +303,25 @@ void FukishimaAlg(double *points,double *retData,size_t numVec,double a,double f
         Cc=ec*C;
         //If the point is along the z-axis, then SNew and CNew will
         //both be zero, leading to a non-finite result.
-        if(!isFinite(S)) {
+        if(!isfinite(S)) {
             double temp=1.0;
-            temp=copySign(temp,z0);
+            temp=copysign(temp,z0);
             *phi=temp*pi/2;
             *h=fabs(z0)-b;
         } else {
             double temp=1.0;
-            temp=copySign(temp,z0);
+            temp=copysign(temp,z0);
             *phi=temp*atan(S/Cc);
             *h=(r0*Cc+fabs(z0)*S-b*A)/sqrt(Cc*Cc+S*S);
         }
     }
 }
 
-void OlsonAlg(double *points,double *retData,size_t numVec,double a,double f) {
+void OlsonAlg(double *points,double *retData,size_t numVec,double a,double fEllips) {
     size_t i;
     double e2, a1, a2, a3, a4, a5, a6;
     //The square of the eccentricity.
-    e2=2*f-f*f;
+    e2=2*fEllips-fEllips*fEllips;
 
     a1=a*e2;
     a2=a1*a1;

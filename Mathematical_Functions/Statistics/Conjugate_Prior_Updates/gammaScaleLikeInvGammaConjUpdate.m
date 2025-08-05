@@ -32,7 +32,7 @@ function [kEst,betaEst]=gammaScaleLikeInvGammaConjUpdate(xMeas,kMeas,kEst,betaEs
 %EXAMPLE:
 %The function needs a prior distribution to work. Here, we show how
 %estimation when given an uninformative prior yields consistent estimates
-%when given a few measurements. The estimates are consistent in terms fo
+%when given a few measurements. The estimates are consistent in terms of
 %the normalized estimation error squared (NEES) of the distribution implied
 %by the outputs of this function.
 % numMCRuns=1e5;
