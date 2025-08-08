@@ -2,24 +2,35 @@ function R=rotAxis2Vec(u,axisVal,method)
 %%ROTAXIS2VEC Get a rotation matrix that rotates the a coordinate axis
 %             (e.g. the z-axis) in the direction of a given vector u. That
 %             is, u=R*z. Another way to look at it for non-unit vectors
-%             when considering three dimensions is R'*u=[0;0;norm(u)]
-%             The solution to the problem is not unique, so two methods
-%             are given. This algorithm works with the number of
-%             dimensions>=1.
+%             when considering three dimensions is R'*u=[0;0;norm(u)], so
+%             one solves the inverse problem by transposing R. The solution
+%             to the problem is not unique, so two methods are given. This
+%             algorithm works with the number of dimensions>=1.
 %
 %INPUTS: u1 A numDimXN unit vector representing the direction into which
 %           the chosen axis is to be rotated. Non-unit vectors that are
 %           passed will be normalized. For N>1, multiple rotation matrices
 %           are returned.
 %   axisVal The axis that is chosen. This selection the index can be a
-%           number from 1 to numDim, or it can be 'x', 'y' or 'z' to select
-%           dimensions 1, 2, and 3. if this parameter is omitted and
-%           numDim=3, then axis=3 is used, otherwise axis=1 is used.
+%           number from 1 to numDim, which is required when using more than
+%           3 dimensions and one wishes to select a dimension over 3.
+%           Otherwise, it can be 'x', 'y' or 'z' to select dimensions 1, 2,
+%           and 3. If this parameter is omitted and numDim=3, then axis=3
+%           is used, otherwise axis=1 is used.
 %    method This selects the type of rotation used. Possible values are:
 %           0 (The default if omitted or an empty matrix is passed). Use a
 %             Householder rotation via the function HouseholderVec. This
-%             has the property that R*R is the identity matrix. This method
-%             is also numerically stabler than method 1.
+%             has the property that one obtains an orthogonal matrix such
+%             that R*R is the identity matrix and R has a determinant of 1
+%             or -1. However, if R has a determinant of -1, then it is not
+%             a valid rotation matrix. Thus, we mirror the first dimension
+%             of R' (so right multiply R by an identity matrix with the
+%             sign of the first element flipped) to get rid of the
+%             reflection. That leads to the nonzero element of R'*u being
+%             -1, not 1. So, we perform a 180 degree givens rotation of the
+%             first two dimensions (aplied to R', so we right-multiple R by
+%             the matrix), which provides a valid rotation matrix. This
+%             method is numerically stabler than method 1.
 %           1 This method only works for 3D vectors. Use the approach of
 %             Appendix C of [1] to obtain the rotation matrix corresponding
 %             to the shortest rotation angle between the axis and the
@@ -33,12 +44,19 @@ function R=rotAxis2Vec(u,axisVal,method)
 %           2, and [0;0;1] for z or 3.
 %
 %EXAMPLE:
+%Here we show that R times the selected axis equals u and that the
+%transpose of R times u equals the selected axis. We express it in terms of
+%relative errors, which end up being on the order of finite precision
+%limitiations.
 % uVec=[53;183;-225;86;31;-130;-43;34];
 % axisVal=5;
 % R=rotAxis2Vec(uVec,axisVal);
-% R'*uVec
-%One will see that the rotated uVec is about 
-%[0;0;0;0;339.3891571632777;0;0;0];
+% solExpected=[0;0;0;0;norm(uVec);0;0;0];
+% solObtained=R'*uVec;
+% RelErr=norm(solObtained-solExpected)/norm(solExpected)
+% solExpected=uVec/norm(uVec);
+% solObtained=R*[0;0;0;0;1;0;0;0];
+% RelErr=norm(solObtained-solExpected)/norm(solExpected)
 %
 %REFERENCES:
 %[1] D. F. Crouse, "On measurement-based light-time corrections for
@@ -90,6 +108,9 @@ function R=rotAxis2Vec(u,axisVal,method)
         return;
     end
 
+    %Normalize the vectors
+    u=bsxfun(@rdivide,u,sqrt(sum(u.*u,1)));
+
     R=zeros(numDim,numDim,numVec);
     switch(method)
         case 0%Use a Householder transformation.
@@ -102,17 +123,36 @@ function R=rotAxis2Vec(u,axisVal,method)
 
             for curVec=1:numVec
                 %The force sign option is true to make it be positive.
-                [v,beta]=HouseholderVec(u(permVec,curVec),true);
-
+                uPerm=u(permVec,curVec)/norm(u(permVec,curVec));
+                [v,beta]=HouseholderVec(uPerm,true);
                 R(:,:,curVec)=eye(numDim,numDim)-beta*(v*v');
+
+                %If the determinant is negative, then it is not a valid
+                %rotation matrix. So, mirror it about the x axis, which
+                %should flip the sign of the determinant. That makes the 
+                %first element of R'*uPerm be -1 instead of 1. Thus, rotate
+                %by 180 degrees in the plane of the first and second axes
+                %to make that positive again. That is a 180 degree Givens
+                %rotation.
+                if(det(R(:,:,curVec))<0)
+                    ITemp=eye(numDim,numDim);
+                    ITemp(1,1)=-1;
+                    %Mirror about the first axis. This should flip the sign
+                    %of the determinant
+                    R(:,:,curVec)=R(:,:,curVec)*ITemp;
+
+                    %Now rotate 180 degrees.
+                    ITemp(1,1)=-1;
+                    ITemp(2,2)=-1;
+                    R(:,:,curVec)=R(:,:,curVec)*ITemp;
+                end
+
                 R(:,:,curVec)=R(permVec,permVec,curVec);
             end
         case 1
             %Use the shortest rotation (not accurate for very small
             %rotations).
- 
-            %Normalize the vectors
-            u=bsxfun(@rdivide,u,sqrt(sum(u.*u,1)));
+
             switch(axisVal)
                 case 1
                     for curVec=1:numVec
