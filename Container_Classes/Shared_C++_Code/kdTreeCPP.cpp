@@ -18,7 +18,7 @@
 using namespace std;
 
 //Prototypes for functions not declared in external headers.
-double dist(const double *a, const double *b,const size_t numEl);
+double distSq(const double *a, const double *b,const size_t numEl);
 bool rectsIntersect(const double *rectMin1,const double *rectMax1,const double *rectMin2,const double *rectMax2,const size_t numEl);
 bool rectContained(const double *rectMin1,const double *rectMax1,const double *rectMin2,const double *rectMax2,const size_t numEl);
 bool inHyperrect(const double *P,const double *rectMin,const double *rectMax,const size_t numEl);
@@ -39,7 +39,7 @@ struct CompVal {
 };
 
 
-double dist(const double *a, const double *b,const size_t numEl) {
+double distSq(const double *a, const double *b,const size_t numEl) {
 //DIST Compute the squared Euclidean distance between two vectors.
     double temp,distVal=0;
     size_t i;
@@ -100,8 +100,6 @@ bool boundsIntersectBall(const double *point, const double rSquared,const double
     double cumDist=0;
 
     for(i=0;i<numEl;i++) {
-        double dist1, dist2;
-
         if(point[i]<rectMin[i]) {
             const double temp=(point[i]-rectMin[i]);
             cumDist+=temp*temp;
@@ -110,8 +108,9 @@ bool boundsIntersectBall(const double *point, const double rSquared,const double
             cumDist+=temp*temp;
         }
 
-        if(cumDist>rSquared)
+        if(cumDist>rSquared) {
             return false;
+        }
     }
 
     return true;
@@ -442,71 +441,70 @@ void kdTreeCPP::findmBestNN(size_t *idxRange,double *distSquared,const double *p
 }
 
 void kdTreeCPP::mBestRecur(const size_t curNodeIdx, priority_queue<pair<double,size_t> > &mBestQueue, const double *point,const size_t m) const {
-//First, go down the path on the nearest side of the splitting
-//dimension from this point.
-    double cost, *splitPoint;
-    size_t splitDim;
+    //Go down the path on the nearest side of the splitting dimension
+    //from this point.
     ptrdiff_t farNode;
-    
-    splitPoint=data+k*DATAIDX[curNodeIdx];
-    splitDim=DISC[curNodeIdx];
-        
-    if(point[splitDim]<splitPoint[splitDim]) {
-        ptrdiff_t lIdx=LOSON[curNodeIdx];
-        if(lIdx!=-1) {
+    double maxDist;
+    const size_t splitDim=DISC[curNodeIdx];        
+    const double *splitPoint=data+k*DATAIDX[curNodeIdx];
+    //Visit this node. The squared distance.
+    const double cost=distSq(point,splitPoint,k);
+    pair<double,size_t> curPair;
+
+    if(mBestQueue.empty()==true) {
+        //Since no nodes have been found to this point, the best node is
+        //the current one found thus far.
+        const pair<double,size_t> newPair(cost,curNodeIdx);
+        mBestQueue.push(newPair);
+        maxDist=cost;
+    } else {
+        //The point is only added to the queue if it is lower than the
+        //maximum cost point found thus far or if there are fewer than m
+        //points already in the queue.
+        curPair=mBestQueue.top();
+        maxDist=curPair.first;
+
+        if(cost<maxDist||mBestQueue.size()<m) {
+            pair<double,size_t> newPair(cost,curNodeIdx);
+
+            if(mBestQueue.size()==m) {
+                mBestQueue.pop();
+            }
+
+            mBestQueue.push(newPair);
+
+            curPair=mBestQueue.top();
+            maxDist=curPair.first;
+        }
+    }
+
+    if(point[splitDim]<=splitPoint[splitDim]) {
+        const ptrdiff_t lIdx=LOSON[curNodeIdx];
+        if(lIdx!=-1&&(mBestQueue.size()<m||boundsIntersectBall(point,maxDist,BMin+k*static_cast<size_t>(lIdx),BMax+k*static_cast<size_t>(lIdx),k))) {
             this->mBestRecur(static_cast<size_t>(lIdx),mBestQueue,point,m);
         }
 
         farNode=HISON[curNodeIdx];
     } else {
-        ptrdiff_t hIdx=HISON[curNodeIdx];
-        if(hIdx!=-1) {
+        const ptrdiff_t hIdx=HISON[curNodeIdx];
+        if(hIdx!=-1&&(mBestQueue.size()<m||boundsIntersectBall(point,maxDist,BMin+k*static_cast<size_t>(hIdx),BMax+k*static_cast<size_t>(hIdx),k))) {
             this->mBestRecur(static_cast<size_t>(hIdx),mBestQueue,point,m);
         }
 
         farNode=LOSON[curNodeIdx];
     }
-     
-    //Next, visit this node.
-    cost=dist(point,splitPoint,k);
-    if(mBestQueue.empty()==true) {
-        //Since no nodes have been found to this point, the best node is
-        //the current one found thus far. This path will only be visited
-        //at a leaf of the tree, so we can just return.
-        pair<double,size_t> newPair(cost,curNodeIdx);
-        mBestQueue.push(newPair);
-        return;
-    } else {
-        //The point is only added to the queue if it is lower than the
-        //maximum cost point found thus far or if there are fewer than k
-        //points already in the queue.
-        pair<double,size_t> curPair;
-        double maxDist;
-        
+
+    //See if it is necessary to visit the other branch of the tree. That is
+    //only the case if the bounding box intersects with a ball centered at
+    //the point to find whose squared radius is equal to maxDist or if
+    //there are fewer than m things in the queue.
+    if(farNode!=-1) {
         curPair=mBestQueue.top();
         maxDist=curPair.first;
-        
-        if(maxDist>cost || mBestQueue.size() <m) {
-            pair<double,size_t> newPair(cost,curNodeIdx);
-            if(mBestQueue.size()==m) {
-                mBestQueue.pop();
-            }
-            
-            mBestQueue.push(newPair);
-            maxDist=cost;
+        if(mBestQueue.size()<m||boundsIntersectBall(point,maxDist,BMin+k*static_cast<size_t>(farNode),BMax+k*static_cast<size_t>(farNode),k)) {
+            this->mBestRecur(static_cast<size_t>(farNode),mBestQueue,point,m);
         }
-        
-        //Now, see if it is necessary to visit the other branch of the
-        //tree. That is only the case if the bounding box intersects
-        //with a ball centered at the point to find whose squared radius
-        //is equal to maxDist or if there are fewer than k things in the
-        //queue.
-        if(farNode!=-1) {
-            if(mBestQueue.size()<m||boundsIntersectBall(point,maxDist,BMin+k*static_cast<size_t>(farNode),BMax+k*static_cast<size_t>(farNode),k)) {
-                this->mBestRecur(static_cast<size_t>(farNode),mBestQueue,point,m);
-            }
-        }
-    }
+    } 
 }
 
 void kdTreeCPP::getSubtreeIdx(const size_t nodeIdx, size_t *idxRange, size_t &numFound) const {

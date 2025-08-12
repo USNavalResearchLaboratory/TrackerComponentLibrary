@@ -271,7 +271,7 @@ methods
     %       rectMax The maximum bounds of the m hyperrectangles in which
     %               one is to search for data points.
     %
-    %OUTPUTS: numInRange The NX1 vvector of the integer number of entries
+    %OUTPUTS: numInRange The NX1 vector of the integer number of entries
     %                    in the kd-tree that fall into each hyperrectangle.
     %
     %This is essentially the same as the rangeQuery method, except entire
@@ -329,6 +329,39 @@ methods
     %                  points found in idxRange to the given point.
     %
     %This is essentially the algorithm described in [1].
+    %
+    %EXAMPLE:
+    %This demonstrates that the algorithm works and that requesting the m
+    %nearest neighbors of a point with respect to all the data can be
+    %faster than just sorting all of the data according to its distance
+    %from the point. This should still be faster regardless of whether one
+    %is using the compiled version of the kd tree or not. For small numbers
+    %of points, there is no speed advantage to the query. However, for
+    %large numbers there are. Construction of the kd tree is rather slow
+    %(but about 10X faster when using the compiled version), so the tree is
+    %primarily useful when many queries will be performed. Also, we verify
+    %that the output of the query is the same as one gets from sorting the
+    %data by distance and chosing the first m nearest points.
+    % numPoints=3e5;
+    % numDim=3;
+    % points=20*rand(numDim,numPoints)-10;
+    % 
+    % theTree=kdTree(numDim,numPoints);
+    % theTree.buildTreeFromBatch(points);
+    % 
+    % thePoint=[-1;2;0.1];
+    % m=5;
+    % tic
+    % idxRange=theTree.findmBestNN(thePoint,m);
+    % nearestPoints=theTree.data(:,idxRange);
+    % toc
+    % tic
+    % dist2Vals=sum(bsxfun(@minus,points,thePoint).^2);
+    % [~,idx]=sort(dist2Vals,'ascend');
+    % nearestPointsBF=points(:,idx(1:m));
+    % toc
+    % %This should be true
+    % all(nearestPointsBF(:)==nearestPoints(:))
     %
     %REFERENCES:
     %[1] J. H. Friedman, J. L. Bentley, and R. A. Finkel, "An algorithm for
@@ -445,7 +478,7 @@ methods(Access=private)
     %         data.
     %
     %December 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
- 
+
         k=size(theTree.data,1);
         NSubTree=length(idx);
         
@@ -489,7 +522,9 @@ methods(Access=private)
             theTree.LOSON(curNode)=nextFreeNode;
             nextNode=theTree.treeGrow(sortArray(:,(1:(midIdx-1))),idx(1:(midIdx-1)),nextLevel,nextFreeNode);
             
-            %Record the minimum and maximum values.
+            %Record the minimum and maximum values due to the children. The
+            %effects of sortArray(:,midIdx) will be included after
+            %traversing the HISON branch.
             theTree.BMin(:,curNode)=theTree.BMin(:,nextFreeNode);
             theTree.BMax(:,curNode)=theTree.BMax(:,nextFreeNode);
             nextFreeNode=nextNode;
@@ -615,68 +650,72 @@ methods(Access=private)
     %           points of a given point.
     %
     %December 2013 David F. Crouse, Naval Research Laboratory, Washington D.C.
-        
-        %First, go down the path on the nearest side of the splitting
-        %dimension from this point.
+
+        %Go down the path on the nearest side of the splitting dimension
+        %from this point.
         splitPoint=theTree.data(:,theTree.DATAIDX(curNodeIdx));
         splitDim=theTree.DISC(curNodeIdx);
-        
-        if(point(splitDim)<splitPoint(splitDim))
+
+        %Visit this node. The squared distance.
+        cost=distSq(point,splitPoint);
+
+        if(mBestQueue.heapSize==0)
+            %Since no nodes have been found to this point, the best node is
+            %the current one found thus far.
+            mBestQueue.insert(cost,curNodeIdx);
+            maxDist=cost;
+        else
+            %The point is only added to the queue if it is lower than the
+            %maximum cost point found thus far or if there are fewer than m
+            %points already in the queue.
+
+            keyValPair=mBestQueue.getTop();
+            maxDist=keyValPair.key;
+
+            if(cost<maxDist||mBestQueue.heapSize<m)
+                if(mBestQueue.heapSize==m)
+                    mBestQueue.deleteTop();
+                end
+                mBestQueue.insert(cost,curNodeIdx);
+                keyValPair=mBestQueue.getTop();
+                maxDist=keyValPair.key;
+            end
+        end
+
+        if(point(splitDim)<=splitPoint(splitDim))
             lIdx=theTree.LOSON(curNodeIdx);
-            if(lIdx~=-1)
+            if(lIdx~=-1&&(mBestQueue.heapSize<m||boundsIntersectBall(point,maxDist,theTree.BMin(:,lIdx),theTree.BMax(:,lIdx))))
                 theTree.mBestRecur(lIdx,mBestQueue,point,m);
             end
-            
+
             farNode=theTree.HISON(curNodeIdx);
         else
             hIdx=theTree.HISON(curNodeIdx);
-            if(hIdx~=-1)
+            if(hIdx~=-1&&(mBestQueue.heapSize<m||boundsIntersectBall(point,maxDist,theTree.BMin(:,hIdx),theTree.BMax(:,hIdx))))
                 theTree.mBestRecur(hIdx,mBestQueue,point,m);
             end
-            
+
             farNode=theTree.LOSON(curNodeIdx);
         end
-        
-        %Next, visit this node.
-        cost=dist(point,splitPoint);
-        
-        if(mBestQueue.heapSize==0)
-            %Since no nodes have been found to this point, the best node is
-            %the current one found thus far. This path will only be visited
-            %at a leaf of the tree, so we can just return.
-            mBestQueue.insert(cost,curNodeIdx);
-            return
-        else
-            %The point is only added to the queue if it is lower than the
-            %maximum cost point found thus far or if there are fewer than k
-            %points already in the queue.
+
+        %Now, see if it is necessary to visit the other branch of the
+        %tree. That is only the case if the bounding box intersects
+        %with a ball centered at the point to find whose squared radius
+        %is equal to maxDist or if there are fewer than m things in the
+        %queue.
+        if(farNode~=-1)
             keyValPair=mBestQueue.getTop();
             maxDist=keyValPair.key;
-            if(maxDist>cost||mBestQueue.heapSize<m)
-                if(mBestQueue.heapSize==m)
-                    mBestQueue.deleteTop;
-                end
-                mBestQueue.insert(cost,curNodeIdx);
-                maxDist=cost;
+
+            if(mBestQueue.heapSize<m||boundsIntersectBall(point,maxDist,theTree.BMin(:,farNode),theTree.BMax(:,farNode)))
+                theTree.mBestRecur(farNode,mBestQueue,point,m);
             end
-            
-            %Now, see if it is necessary to visit the other branch of the
-            %tree. That is only the case if the bounding box intersects
-            %with a ball centered at the point to find whose squared radius
-            %is equal to maxDist or if there are fewer than m things in the
-            %queue.
-            if(farNode~=-1)
-                if(mBestQueue.heapSize<m||boundsIntersectBall(point,maxDist,theTree.BMin(:,farNode),theTree.BMax(:,farNode)))
-                    theTree.mBestRecur(farNode,mBestQueue,point,m);
-                end
-            end
-        end       
+        end     
     end
-    
 end
 end
 
-function val=dist(a,b)
+function val=distSq(a,b)
     diff=a-b;
     val=dot(diff,diff);
 end
