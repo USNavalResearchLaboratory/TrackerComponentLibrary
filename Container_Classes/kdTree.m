@@ -517,7 +517,7 @@ methods(Access=private)
                 
         %If curNode and all of its children are in the box, then return the
         %tree and all of its children.
-        if(rectContainedInRect(theTree.BMin(:,curNode),theTree.BMax(:,curNode),rectMin,rectMax))
+        if(rect1ContainedInRect2(theTree.BMin(:,curNode),theTree.BMax(:,curNode),rectMin,rectMax))
             idxRange=returnSubtreeIdx(theTree,curNode);
             return;
         end
@@ -532,7 +532,7 @@ methods(Access=private)
         if(theTree.HISON(curNode)~=-1)
             childNode=theTree.HISON(curNode);
             %If points might be in the child nodes.
-            if(rectsIntersect(theTree.BMin(:,childNode),theTree.BMax(:,childNode),rectMin,rectMax))
+            if(rectsIntersect(theTree.BMin(:,childNode),theTree.BMax(:,childNode),rectMin,rectMax,true))
                 idxRange=[idxRange;theTree.rangeQueryRecur(childNode,rectMin,rectMax)];
             end
         end
@@ -540,7 +540,7 @@ methods(Access=private)
         if(theTree.LOSON(curNode)~=-1)
             childNode=theTree.LOSON(curNode);
             %If points might be in the child nodes.
-            if(rectsIntersect(theTree.BMin(:,childNode),theTree.BMax(:,childNode),rectMin,rectMax))
+            if(rectsIntersect(theTree.BMin(:,childNode),theTree.BMax(:,childNode),rectMin,rectMax,true))
                 idxRange=[idxRange;theTree.rangeQueryRecur(childNode,rectMin,rectMax)];
             end
         end
@@ -557,7 +557,7 @@ methods(Access=private)
                 
         %If curNode and all of its children are in the box, then return the
         %number of items in the whole subtree.
-        if(rectContainedInRect(theTree.BMin(:,curNode),theTree.BMax(:,curNode),rectMin,rectMax))
+        if(rect1ContainedInRect2(theTree.BMin(:,curNode),theTree.BMax(:,curNode),rectMin,rectMax))
             numInRange=numInRange+theTree.subtreeSizes(curNode);
             return;
         end
@@ -572,7 +572,7 @@ methods(Access=private)
         if(theTree.HISON(curNode)~=-1)
             childNode=theTree.HISON(curNode);
             %If points might be in the child nodes.
-            if(rectsIntersect(theTree.BMin(:,childNode),theTree.BMax(:,childNode),rectMin,rectMax))
+            if(rectsIntersect(theTree.BMin(:,childNode),theTree.BMax(:,childNode),rectMin,rectMax,true))
                 numInRange=numInRange+theTree.rangeCountRecur(childNode,rectMin,rectMax);
             end
         end
@@ -580,7 +580,7 @@ methods(Access=private)
         if(theTree.LOSON(curNode)~=-1)
             childNode=theTree.LOSON(curNode);
             %If points might be in the child nodes.
-            if(rectsIntersect(theTree.BMin(:,childNode),theTree.BMax(:,childNode),rectMin,rectMax))
+            if(rectsIntersect(theTree.BMin(:,childNode),theTree.BMax(:,childNode),rectMin,rectMax,true))
                 numInRange=numInRange+theTree.rangeCountRecur(childNode,rectMin,rectMax);
             end
         end
@@ -663,7 +663,7 @@ methods(Access=private)
             %Now, see if it is necessary to visit the other branch of the
             %tree. That is only the case if the bounding box intersects
             %with a ball centered at the point to find whose squared radius
-            %is equal to maxDist or if there are fewer than k things in the
+            %is equal to maxDist or if there are fewer than m things in the
             %queue.
             if(farNode~=-1)
                 if(mBestQueue.heapSize<m||boundsIntersectBall(point,maxDist,theTree.BMin(:,farNode),theTree.BMax(:,farNode)))
@@ -679,6 +679,30 @@ end
 function val=dist(a,b)
     diff=a-b;
     val=dot(diff,diff);
+end
+
+function isContained=rect1ContainedInRect2(rectMin1,rectMax1,rectMin2,rectMax2)
+%RECT1CONTAINEDINRECT2 Determine whether an axis-aligned rectangle (or a
+%                    more general axis-aligned hyperrectangle if the number
+%                    of dimensions is not two) is completely engulfed by
+%                    another rectangle. This is only true if rect1 is in
+%                    rect2, not the otherway around. Compare to
+%                    rectContainedInRect, which is true either way.
+
+k=length(rectMin1);
+
+isContained=true;
+for curIdx=1:k
+    if(rectMin1(curIdx)<rectMin2(curIdx))
+        isContained=false;
+        break;
+    end
+    
+    if(rectMax1(curIdx)>rectMax2(curIdx))
+       isContained=false;
+       break;
+    end
+end
 end
 
 %LICENSE:

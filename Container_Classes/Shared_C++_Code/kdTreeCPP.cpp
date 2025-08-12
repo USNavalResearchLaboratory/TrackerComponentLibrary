@@ -93,24 +93,22 @@ bool inHyperrect(const double *P,const double *rectMin,const double *rectMax,con
 
 bool boundsIntersectBall(const double *point, const double rSquared,const double *rectMin,const double *rectMax, const size_t numEl) {
 //BOUNDSINTERSECTBALL Determines whether a sphere of a given squared radius
-//                    centered at the given point intersects a
-//                    hyperrectangular region.
+//         centered at the given point intersects a hyperrectangular
+//         region. This also returns true if a circle is entirely within
+//         the rectangle without intersecting the edges.
     size_t i;
     double cumDist=0;
 
     for(i=0;i<numEl;i++) {
         double dist1, dist2;
 
-        dist1=point[i]-rectMin[i];
-        dist1=dist1*dist1;
-
-        dist2=point[i]-rectMax[i];
-        dist2=dist2*dist2;
-
-        if(dist1<rSquared && dist2 < rSquared)
-            continue;
-
-        cumDist+=min(dist1,dist2);
+        if(point[i]<rectMin[i]) {
+            const double temp=(point[i]-rectMin[i]);
+            cumDist+=temp*temp;
+        } else if(point[i]>rectMax[i]) {
+            const double temp=(point[i]-rectMax[i]);
+            cumDist+=temp*temp;
+        }
 
         if(cumDist>rSquared)
             return false;
