@@ -234,7 +234,7 @@ switch(algorithm)
         At=9.2e-5+5.5e-6*t+4.25e-7*t^2;
         
         %Equation 3, units of moles per gram
-        gammahdMh=0.04833+(relHumid-0.023*At);
+        gammahdMh=0.04833+(relHumid-0.023)*At;
         
         %Convert to moles per kilogram.
         gammahdMh=gammahdMh*1000;
