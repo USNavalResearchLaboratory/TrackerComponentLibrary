@@ -1,26 +1,24 @@
 function xShifted=fracCircShift(x,n0)
-%%FRACCIRCSHIFT Perform a circular shift of the elements in a vector (or
-%               independently in multiple vectors). Unlike the circshift
-%               function that is built into Matlab, this function allows
-%               for non-integer shifts (fractional circular shifts). The
-%               interpolation needed for this is performed using the
-%               relationship between time domain shifts and multiplication
-%               in the frequency domain. Integer shifts produce the same
-%               results as circshift, subject to finite precision
-%               limitations.
+%%FRACCIRCSHIFT Perform a circular shift of the elements in a matrix along
+% a chosen direction. Unlike the circshift function that is built into
+% Matlab, this function allows for non-integer shifts (fractional circular
+% shifts). The interpolation needed for this is performed using the
+% relationship between time domain shifts and multiplication in the
+% frequency domain. Integer shifts produce the same results as circshift,
+% subject to finite precision limitations.
 %
-%INPUTS: x The xDimXnumVecs set of numVecs column vectors that are to all
-%          to be circularly shifted.
+%INPUTS: x The matrix to which a circular shift will be applied.
 %       n0 The real number of steps that the vectors are to be circularly
-%          shifted. This can be an integer and can be negative.
+%          shifted. This can be a non-integer and can be negative. Positive
+%          shifts delay elements and negative shifts advance elements.
 %
-%OUTPUTS: xShifted The elements in all of the vectors in x circularlly
-%                  shifted b n0, with appropriate interpolation for non-
-%                  integer shifts.
+%OUTPUTS: xShifted The elements in all of the vectors in x circularly
+%                  shifted by n0 in dimension dim, with appropriate
+%                  interpolation for non-integer shifts.
 %
 %To make the shift direction clear, note that
 %fracCircShift([1;2;3;4],1)=[4;1;2;3].
-%fracCircShift([1;2;3;4],1)=[2;3;4;1].
+%fracCircShift([1;2;3;4],-1)=[2;3;4;1].
 %The relationship between circular shifts and the discrete Fourier
 %transform that is used to implement this function, is given in Equation
 %5.99 in Chapter 5.7 of [1].
@@ -38,19 +36,34 @@ function xShifted=fracCircShift(x,n0)
 %September 2016 David F. Crouse, Naval Research Laboratory, Washington D.C.
 %(UNCLASSIFIED) DISTRIBUTION STATEMENT A. Approved for public release.
 
-N=size(x,1);
-numVecs=size(x,2);
-
-offset=fix(N/2)+1;
-k=((1:N)-offset)/(N/2);
-W=ifftshift(exp(-1j*pi*n0*k).');
-
-xShifted=zeros(N,numVecs);
-for curVec=1:numVecs
-    %Applying the phase shift of Equation 5.99 to the frequency domain and
-    %then invert.
-    xShifted=ifft(fft(x(:,curVec)).*W);
+if(isempty(x))
+    xShifted=x;
+    return;
 end
+
+N=size(x,1);
+if(N<=1||n0==0)
+    xShifted=x;
+    return;
+end
+
+if(mod(N,2)==0)
+    %If even.
+    %Frequency bins k.
+    k=[0:(N/2-1),(-N/2):(-1)].';
+    W=exp(-1j*2*pi*n0*k/N);
+
+    %Bin N/2 + 1 corresponds to the Nyquist frequency at k=-N/2. This is
+    %set here to maintain Hermitian symmetry.
+    W(N/2+1)=cos(pi*n0);
+else
+    %Frequency bins in k
+    k=[0:((N-1)/2),(-(N-1)/2):-1].';
+    W=exp(-1j*2*pi*n0*k/N);
+end
+
+%Perform circular shift.
+xShifted=ifft(bsxfun(@times,fft(x),W));
 
 if(isreal(x))
     %Deal with finite precision errors. Shifted real signals should remain
