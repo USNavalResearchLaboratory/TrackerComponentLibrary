@@ -1,20 +1,22 @@
 function xShifted=fracCircShift(x,n0)
-%%FRACCIRCSHIFT Perform a circular shift of the elements in a matrix along
-% a chosen direction. Unlike the circshift function that is built into
-% Matlab, this function allows for non-integer shifts (fractional circular
-% shifts). The interpolation needed for this is performed using the
-% relationship between time domain shifts and multiplication in the
-% frequency domain. Integer shifts produce the same results as circshift,
-% subject to finite precision limitations.
+%%FRACCIRCSHIFT Perform a circular shift of the elements in a vector (or
+%               independently in multiple vectors). Unlike the circshift
+%               function that is built into Matlab, this function allows
+%               for non-integer shifts (fractional circular shifts). The
+%               interpolation needed for this is performed using the
+%               relationship between time domain shifts and multiplication
+%               in the frequency domain. Integer shifts produce the same
+%               results as circshift, subject to finite precision
+%               limitations.
 %
-%INPUTS: x The matrix to which a circular shift will be applied.
+%INPUTS: x The xDimXnumVecs set of numVecs column vectors that are to all
+%          to be circularly shifted.
 %       n0 The real number of steps that the vectors are to be circularly
-%          shifted. This can be a non-integer and can be negative. Positive
-%          shifts delay elements and negative shifts advance elements.
+%          shifted. This can be an integer and can be negative.
 %
 %OUTPUTS: xShifted The elements in all of the vectors in x circularly
-%                  shifted by n0 in dimension dim, with appropriate
-%                  interpolation for non-integer shifts.
+%                  shifted b n0, with appropriate interpolation for non-
+%                  integer shifts.
 %
 %To make the shift direction clear, note that
 %fracCircShift([1;2;3;4],1)=[4;1;2;3].
